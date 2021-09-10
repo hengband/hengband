@@ -1,11 +1,12 @@
 ﻿#include "player-info/resistance-info.h"
+#include "player-base/player-race.h"
+#include "player-info/race-info.h"
 #include "player-info/self-info-util.h"
-#include "player/player-race.h"
 #include "player/player-status-flags.h"
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
 
-void set_element_resistance_info(player_type* creature_ptr, self_info_type* self_ptr)
+void set_element_resistance_info(player_type *creature_ptr, self_info_type *self_ptr)
 {
     if (has_immune_acid(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは酸に対する完全なる免疫を持っている。", "You are completely immune to acid.");
@@ -65,26 +66,26 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
         self_ptr->info[self_ptr->line++] = _("あなたは暗黒に対する完全なる免疫を持っている。", "You are completely immune to darkness.");
     else if (has_resist_dark(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは暗黒への耐性を持っている。", "You are resistant to darkness.");
-    
+
     if (has_resist_conf(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは混乱への耐性を持っている。", "You are resistant to confusion.");
-    
+
     if (has_resist_sound(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは音波の衝撃への耐性を持っている。", "You are resistant to sonic attacks.");
-    
+
     if (has_resist_disen(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは劣化への耐性を持っている。", "You are resistant to disenchantment.");
-    
+
     if (has_resist_chaos(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたはカオスの力への耐性を持っている。", "You are resistant to chaos.");
-    
+
     if (has_resist_shard(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは破片の攻撃への耐性を持っている。", "You are resistant to blasts of shards.");
-    
+
     if (has_resist_nexus(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは因果混乱の攻撃への耐性を持っている。", "You are resistant to nexus attacks.");
 
-    if (is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
+    if (PlayerRace(creature_ptr).equals(player_race_type::SPECTRE))
         self_ptr->info[self_ptr->line++] = _("あなたは地獄の力を吸収できる。", "You can drain nether forces.");
     else if (has_resist_neth(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは地獄の力への耐性を持っている。", "You are resistant to nether forces.");

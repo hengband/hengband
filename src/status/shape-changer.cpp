@@ -11,7 +11,7 @@
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
 #include "mutation/mutation-investor-remover.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-damage.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"

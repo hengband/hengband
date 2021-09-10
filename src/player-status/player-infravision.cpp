@@ -1,7 +1,7 @@
 ﻿#include "player-status/player-infravision.h"
 #include "mutation/mutation-flag-types.h"
-#include "player/mimic-info-table.h"
-#include "player/player-race-types.h"
+#include "player-info/mimic-info-table.h"
+#include "player-info/race-types.h"
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
@@ -26,7 +26,7 @@ void PlayerInfravision::set_locals()
  */
 int16_t PlayerInfravision::race_value()
 {
-    const player_race *tmp_rp_ptr;
+    const player_race_info *tmp_rp_ptr;
 
     if (this->owner_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];

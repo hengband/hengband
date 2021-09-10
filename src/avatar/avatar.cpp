@@ -15,8 +15,8 @@
 #include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "game-option/text-display-options.h"
-#include "player/player-class.h"
-#include "player/player-race-types.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "realm/realm-names-table.h"
 #include "system/player-type-definition.h"
 

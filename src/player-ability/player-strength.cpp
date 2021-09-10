@@ -1,8 +1,8 @@
 ﻿#include "player-ability/player-strength.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
-#include "player/mimic-info-table.h"
-#include "player/player-class.h"
+#include "player-base/player-race.h"
+#include "realm/realm-types.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
@@ -31,7 +31,7 @@ int16_t PlayerStrength::race_value()
 {
     int16_t result = PlayerBasicStatistics::race_value();
 
-    if (is_specific_player_race(this->owner_ptr, player_race_type::ENT)) {
+    if (PlayerRace(this->owner_ptr).equals(player_race_type::ENT)) {
         if (this->owner_ptr->lev > 25)
             result++;
         if (this->owner_ptr->lev > 40)

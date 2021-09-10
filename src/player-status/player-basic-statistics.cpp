@@ -4,8 +4,8 @@
 #include "core/window-redrawer.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
-#include "player/mimic-info-table.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
+#include "player-info/mimic-info-table.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
@@ -46,7 +46,7 @@ int16_t PlayerBasicStatistics::get_value()
  */
 int16_t PlayerBasicStatistics::race_value()
 {
-    const player_race *tmp_rp_ptr;
+    const player_race_info *tmp_rp_ptr;
     if (this->owner_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];
     else
@@ -64,7 +64,7 @@ int16_t PlayerBasicStatistics::race_value()
  */
 int16_t PlayerBasicStatistics::class_value()
 {
-    const player_class *c_ptr = &class_info[this->owner_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[this->owner_ptr->pclass];
     return c_ptr->c_adj[this->ability_type];
 }
 

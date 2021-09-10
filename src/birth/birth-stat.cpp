@@ -1,14 +1,14 @@
 ﻿#include "birth/birth-stat.h"
 #include "birth/auto-roller.h"
 #include "core/player-redraw-types.h"
-#include "sv-definition/sv-weapon-types.h"
-#include "player/player-class.h"
-#include "player/player-personality.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player/player-personality-types.h"
-#include "player/player-race.h"
+#include "player/player-personality.h"
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
-#include "player/player-race-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "system/player-type-definition.h"
 
 /*! オートロール能力値の乱数分布 / emulate 5 + 1d3 + 1d4 + 1d5 by randint0(60) */
@@ -59,7 +59,7 @@ int adjust_stat(int value, int amount)
  * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
  * For efficiency, we include a chunk of "calc_bonuses()".\n
  */
-void get_stats(player_type* creature_ptr)
+void get_stats(player_type *creature_ptr)
 {
     while (true) {
         int sum = 0;
@@ -104,7 +104,7 @@ uint16_t get_expfact(player_type *creature_ptr)
 /*!
  * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
  */
-void get_extra(player_type* creature_ptr, bool roll_hitdie)
+void get_extra(player_type *creature_ptr, bool roll_hitdie)
 {
     creature_ptr->expfact = get_expfact(creature_ptr);
 
@@ -150,7 +150,7 @@ void get_extra(player_type* creature_ptr, bool roll_hitdie)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @details 新生の薬やステータスシャッフルでもこの関数が呼ばれる
  */
-void get_max_stats(player_type* creature_ptr)
+void get_max_stats(player_type *creature_ptr)
 {
     int dice[6];
     while (true) {

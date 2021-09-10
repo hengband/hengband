@@ -1,8 +1,8 @@
 ﻿#include "birth/birth-select-class.h"
 #include "birth/birth-util.h"
-#include "player/player-class.h"
-#include "player/player-race.h"
 #include "io/input-key-acceptor.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -121,7 +121,8 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
             break;
 
         char buf[80];
-        sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "), sym[0], sym[MAX_CLASS - 1]);
+        sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "),
+            sym[0], sym[MAX_CLASS - 1]);
 
         put_str(buf, 10, 6);
         char c = inkey();

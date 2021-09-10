@@ -21,8 +21,8 @@
 #include "core/show-file.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
-#include "player/player-class.h"
-#include "player/player-race.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 

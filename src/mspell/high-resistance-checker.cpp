@@ -2,7 +2,8 @@
 #include "monster-race/race-ability-flags.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"
-#include "player/player-race.h"
+#include "player-base/player-race.h"
+#include "player-info/race-info.h"
 #include "player/player-status-flags.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -57,7 +58,7 @@ static void check_nether_resistance(player_type *target_ptr, msr_type *msr_ptr)
     if (msr_ptr->smart.has_not(SM::RES_NETH))
         return;
 
-    if (is_specific_player_race(target_ptr, player_race_type::SPECTRE)) {
+    if (PlayerRace(target_ptr).equals(player_race_type::SPECTRE)) {
         msr_ptr->ability_flags.reset(RF_ABILITY::BR_NETH);
         msr_ptr->ability_flags.reset(RF_ABILITY::BA_NETH);
         msr_ptr->ability_flags.reset(RF_ABILITY::BO_NETH);

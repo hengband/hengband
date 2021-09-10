@@ -4,8 +4,8 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
+#include "player-base/player-race.h"
+#include "player-info/race-info.h"
 #include "player/special-defense-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -31,7 +31,7 @@ void player_immunity(player_type *creature_ptr, TrFlags &flags)
     if (player_race_has_flag(creature_ptr, TR_IM_FIRE))
         flags.set(TR_RES_FIRE);
 
-    if (is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
+    if (PlayerRace(creature_ptr).equals(player_race_type::SPECTRE))
         flags.set(TR_RES_NETHER);
     if (player_race_has_flag(creature_ptr, TR_IM_DARK))
         flags.set(TR_RES_DARK);

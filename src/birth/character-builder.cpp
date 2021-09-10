@@ -25,9 +25,9 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-elementalist.h"
 #include "monster-floor/monster-remover.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "player/patron.h"
-#include "player/player-class.h"
-#include "player/player-race-types.h"
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
 #include "store/store-owners.h"
@@ -43,7 +43,7 @@
  */
 static void write_birth_diary(player_type *creature_ptr)
 {
-    concptr indent = "                            ";                  
+    concptr indent = "                            ";
 
     message_add(" ");
     message_add("  ");
@@ -61,8 +61,8 @@ static void write_birth_diary(player_type *creature_ptr)
     sprintf(buf, _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[creature_ptr->pclass].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
     if (creature_ptr->realm1) {
-        sprintf(buf, _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent,
-            realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[creature_ptr->realm2]) : _("", " realm"));
+        sprintf(buf, _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[creature_ptr->realm1],
+            creature_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[creature_ptr->realm2]) : _("", " realm"));
         exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
     }
     if (creature_ptr->element) {

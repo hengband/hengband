@@ -1,6 +1,6 @@
 ﻿#include "core/turn-compensator.h"
 #include "floor/floor-town.h"
-#include "player/player-race-types.h"
+#include "player-info/race-types.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"

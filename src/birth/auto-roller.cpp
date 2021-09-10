@@ -4,9 +4,9 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "player/player-personality.h"
-#include "player/player-race.h"
 #include "player/player-sex.h"
 #include "player/player-status-table.h"
 #include "system/game-option-types.h"
@@ -309,8 +309,7 @@ bool get_stat_limits(player_type *creature_ptr)
             break;
         case '=':
             screen_save();
-            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH,
-                _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:

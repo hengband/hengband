@@ -13,7 +13,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "player-info/alignment.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
 #include "store/store-util.h"

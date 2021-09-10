@@ -1,5 +1,5 @@
 ﻿#include "world/world.h"
-#include "player/player-race-types.h"
+#include "player-info/race-types.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -13,11 +13,11 @@ world_type *current_world_ptr = &world;
  */
 bool is_daytime(void)
 {
-	int32_t len = TURNS_PER_TICK * TOWN_DAWN;
-	if ((current_world_ptr->game_turn % len) < (len / 2))
-		return true;
-	else
-		return false;
+    int32_t len = TURNS_PER_TICK * TOWN_DAWN;
+    if ((current_world_ptr->game_turn % len) < (len / 2))
+        return true;
+    else
+        return false;
 }
 
 /*!
@@ -30,23 +30,22 @@ bool is_daytime(void)
  */
 void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min)
 {
-	const int32_t A_DAY = TURNS_PER_TICK * TOWN_DAWN;
-	int32_t turn_in_today = (current_world_ptr->game_turn + A_DAY / 4) % A_DAY;
+    const int32_t A_DAY = TURNS_PER_TICK * TOWN_DAWN;
+    int32_t turn_in_today = (current_world_ptr->game_turn + A_DAY / 4) % A_DAY;
 
-	switch (player_ptr->start_race)
-	{
-	case player_race_type::VAMPIRE:
-	case player_race_type::SKELETON:
-	case player_race_type::ZOMBIE:
-	case player_race_type::SPECTRE:
-		*day = (current_world_ptr->game_turn - A_DAY * 3 / 4) / A_DAY + 1;
-		break;
-	default:
-		*day = (current_world_ptr->game_turn + A_DAY / 4) / A_DAY + 1;
-		break;
-	}
-	*hour = (24 * turn_in_today / A_DAY) % 24;
-	*min = (1440 * turn_in_today / A_DAY) % 60;
+    switch (player_ptr->start_race) {
+    case player_race_type::VAMPIRE:
+    case player_race_type::SKELETON:
+    case player_race_type::ZOMBIE:
+    case player_race_type::SPECTRE:
+        *day = (current_world_ptr->game_turn - A_DAY * 3 / 4) / A_DAY + 1;
+        break;
+    default:
+        *day = (current_world_ptr->game_turn + A_DAY / 4) / A_DAY + 1;
+        break;
+    }
+    *hour = (24 * turn_in_today / A_DAY) % 24;
+    *min = (1440 * turn_in_today / A_DAY) % 60;
 }
 
 /*!

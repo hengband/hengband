@@ -26,7 +26,7 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "monster/monster-update.h"
-#include "player/mimic-info-table.h"
+#include "player-info/mimic-info-table.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
@@ -88,4 +88,7 @@ void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
  * Determines if a map location is currently "on screen" -RAK-
  * Note that "panel_contains(Y,X)" always implies "in_bounds2(Y,X)".
  */
-bool panel_contains(POSITION y, POSITION x) { return (y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) && (x <= panel_col_max); }
+bool panel_contains(POSITION y, POSITION x)
+{
+    return (y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) && (x <= panel_col_max);
+}

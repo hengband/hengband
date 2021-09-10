@@ -7,21 +7,20 @@
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "player-ability/player-ability-types.h"
-#include "player/player-class-types.h"
-#include "player/player-race-types.h"
+#include "player-info/class-types.h"
+#include "player-info/race-types.h"
 #include "system/angband.h"
 
 /*
- * Constant for kinds of mimic
+ * @brief Constant for kinds of mimic
+ * @todo 後ほど時間がある時にenum classへ変換する.
  */
-#define MIMIC_NONE 0
-#define MIMIC_DEMON 1
-#define MIMIC_DEMON_LORD 2
-#define MIMIC_VAMPIRE 3
-
-#define MIMIC_IS_NONLIVING 0x00000001
-#define MIMIC_IS_DEMON 0x00000002
-#define MIMIC_IS_UNDEAD 0x00000004
+enum mimic_kind_type {
+    MIMIC_NONE = 0,
+    MIMIC_DEMON = 1,
+    MIMIC_DEMON_LORD = 2,
+    MIMIC_VAMPIRE = 3,
+};
 
 /*!
  * @brief プレイヤー種族の生命形態
@@ -66,9 +65,9 @@ struct player_race_condition {
 };
 
 /*!
- * @brief プレイヤー種族構造体 / Player racial info
+ * @brief プレイヤー種族情報構造体 / Player racial info
  */
-struct player_race {
+struct player_race_info {
     concptr title{}; //!< 種族名 / Title of race
 #ifdef JP
     concptr E_title{}; //!< 英語種族名
@@ -110,11 +109,10 @@ struct player_race {
     std::vector<player_race_condition> extra_flags;
 };
 
-extern const player_race *rp_ptr;
+extern const player_race_info *rp_ptr;
 
 struct player_type;
 SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr);
-bool is_specific_player_race(player_type *creature_ptr, player_race_type prace);
 bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_race = false);
 void add_player_race_flags(player_type *creature_ptr, TrFlags &flags, bool base_race = false);
 PlayerRaceLife player_race_life(player_type *creature_ptr, bool base_race = false);

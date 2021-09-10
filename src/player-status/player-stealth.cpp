@@ -1,11 +1,11 @@
 ﻿#include "player-status/player-stealth.h"
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
-#include "player/mimic-info-table.h"
-#include "player/player-class.h"
+#include "player-info/mimic-info-table.h"
+#include "player-info/race-types.h"
 #include "player/player-personality.h"
-#include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -24,7 +24,7 @@
  */
 int16_t PlayerStealth::race_value()
 {
-    const player_race *tmp_rp_ptr;
+    const player_race_info *tmp_rp_ptr;
 
     if (this->owner_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];
@@ -54,7 +54,7 @@ int16_t PlayerStealth::personality_value()
  */
 int16_t PlayerStealth::class_base_value()
 {
-    const player_class *c_ptr = &class_info[this->owner_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[this->owner_ptr->pclass];
     return c_ptr->c_stl + (c_ptr->x_stl * this->owner_ptr->lev / 10);
 }
 

@@ -25,7 +25,7 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-kind.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-skill.h"
 #include "room/rooms-vault.h"
 #include "system/angband-version.h"
@@ -47,7 +47,10 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
-errr init_misc(player_type *player_ptr) { return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0); }
+errr init_misc(player_type *player_ptr)
+{
+    return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
+}
 
 /*!
  * @brief ヘッダ構造体の更新

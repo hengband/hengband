@@ -11,8 +11,8 @@
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-info.h"
 #include "mind/mind-types.h"
+#include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
-#include "player/player-class.h"
 #include "player/player-status-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -230,9 +230,9 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
 
         prt("", y, x);
         put_str(_("名前", "Name"), y, x + 5);
-        put_str(
-            format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((this->use_mind == mind_kind_type::BERSERKER) || (this->use_mind == mind_kind_type::NINJUTSU)) ? "HP" : "MP"), y,
-            x + 35);
+        put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
+                    ((this->use_mind == mind_kind_type::BERSERKER) || (this->use_mind == mind_kind_type::NINJUTSU)) ? "HP" : "MP"),
+            y, x + 35);
         display_each_mind_chance();
         prt("", y + this->index + 1, x);
         return true;

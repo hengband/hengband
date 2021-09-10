@@ -22,7 +22,7 @@
 #include "io/report.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"

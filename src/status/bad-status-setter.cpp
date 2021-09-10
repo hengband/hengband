@@ -7,8 +7,9 @@
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "mind/mind-sniper.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player/attack-defense-types.h"
-#include "player/player-race.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
@@ -387,7 +388,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
     if (creature_ptr->is_dead)
         return false;
-    if (is_specific_player_race(creature_ptr, player_race_type::GOLEM) || ((creature_ptr->pclass == CLASS_BERSERKER) && (creature_ptr->lev > 34)))
+    if (PlayerRace(creature_ptr).equals(player_race_type::GOLEM) || PlayerClass(creature_ptr).can_resist_stun())
         v = 0;
 
     if (creature_ptr->stun > 100) {

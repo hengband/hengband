@@ -34,9 +34,9 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "player/player-personality-types.h"
-#include "player/player-race-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -158,7 +158,7 @@ static void print_monster_dead_by_monster(player_type *player_ptr, mam_pp_type *
         return;
     }
 
-        sound(SOUND_KILL);
+    sound(SOUND_KILL);
     msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
 }
 

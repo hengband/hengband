@@ -24,13 +24,13 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-race.h"
+#include "player-info/class-info.h"
+#include "player-info/mimic-info-table.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
-#include "player/mimic-info-table.h"
-#include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-race-types.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
@@ -325,7 +325,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         return;
     }
 
-    if (is_specific_player_race(creature_ptr, player_race_type::SKELETON)) {
+    if (PlayerRace(creature_ptr).equals(player_race_type::SKELETON)) {
         if (!((o_ptr->sval == SV_FOOD_WAYBREAD) || (o_ptr->sval < SV_FOOD_BISCUIT))) {
             object_type forge;
             object_type *q_ptr = &forge;

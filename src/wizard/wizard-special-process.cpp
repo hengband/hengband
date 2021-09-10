@@ -54,13 +54,13 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/digestion-processor.h"
 #include "player/patron.h"
-#include "player/player-class.h"
-#include "player/player-race.h"
-#include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
@@ -222,7 +222,7 @@ void wiz_create_named_art(player_type *caster_ptr, ARTIFACT_IDX a_idx)
         char tmp_val[10] = "";
         if (!get_string(tmp, tmp_val, 3))
             return;
-    
+
         a_idx = (ARTIFACT_IDX)atoi(tmp_val);
     }
 
@@ -426,7 +426,7 @@ static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
 static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dungeon_type)
 {
     if (command_arg > 0) {
-        return true;    
+        return true;
     }
 
     while (true) {

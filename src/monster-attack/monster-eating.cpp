@@ -19,8 +19,8 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
+#include "player-base/player-race.h"
 #include "player/digestion-processor.h"
-#include "player/mimic-info-table.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "status/experience.h"
@@ -244,7 +244,7 @@ bool check_drain_hp(player_type *target_ptr, const int32_t d)
 {
     bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
     if (target_ptr->mimic_form) {
-        return any_bits(mimic_info[target_ptr->mimic_form].choice, MIMIC_IS_NONLIVING) ? true : resist_drain;
+        return PlayerRace(target_ptr).is_mimic_nonliving() ? true : resist_drain;
     }
 
     switch (target_ptr->prace) {

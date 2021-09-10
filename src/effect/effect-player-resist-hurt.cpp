@@ -15,9 +15,9 @@
 #include "mutation/mutation-investor-remover.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-broken.h"
+#include "player-base/player-race.h"
+#include "player-info/race-info.h"
 #include "player/player-damage.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
 #include "spell-kind/spells-equipment.h"
@@ -164,7 +164,7 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
 
     bool evaded = check_multishadow(target_ptr);
 
-    if (is_specific_player_race(target_ptr, player_race_type::SPECTRE)) {
+    if (PlayerRace(target_ptr).equals(player_race_type::SPECTRE)) {
         if (!evaded) {
             msg_print(_("気分がよくなった。", "You feel invigorated!"));
             hp_player(target_ptr, ep_ptr->dam / 4);

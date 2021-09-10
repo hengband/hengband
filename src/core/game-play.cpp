@@ -62,9 +62,9 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "player/player-personality-types.h"
-#include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
@@ -183,7 +183,7 @@ static void init_world_floor_info(player_type *player_ptr)
 }
 
 /*!
- * @brief フロア情報をゲームロード時に復帰 
+ * @brief フロア情報をゲームロード時に復帰
  * @todo 3.0.Xで削除予定
  * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
  * もう不要だが、以前のセーブファイルとの互換のために残しておく。

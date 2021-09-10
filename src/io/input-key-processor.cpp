@@ -61,10 +61,10 @@
 #include "game-option/input-options.h"
 #include "game-option/runtime-arguments.h"
 #include "io-dump/random-art-info-dumper.h"
-#include "io/record-play-movie.h"
 #include "io/command-repeater.h"
 #include "io/files-util.h"
 #include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
+#include "io/record-play-movie.h"
 #include "io/write-diary.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
@@ -75,15 +75,15 @@
 #include "mind/mind-magic-eater.h"
 #include "mind/mind-sniper.h"
 #include "mind/snipe-types.h"
+#include "player-info/class-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
-#include "player/player-class.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
-#include "store/home.h"
 #include "store/cmd-store.h"
+#include "store/home.h"
 #include "store/store-util.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
@@ -382,14 +382,14 @@ void process_command(player_type *creature_ptr)
             msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
             break;
         }
-        
+
         if (floor_ptr->dun_level && d_info[creature_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER)
             && (creature_ptr->pclass != CLASS_SMITH)) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(nullptr);
             break;
         }
-        
+
         if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH)) {
             concptr which_power = _("魔法", "magic");
             switch (creature_ptr->pclass) {
@@ -421,7 +421,7 @@ void process_command(player_type *creature_ptr)
             PlayerEnergy(creature_ptr).reset_player_turn();
             break;
         }
-        
+
         if (is_shero(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER)) {
             msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
             PlayerEnergy(creature_ptr).reset_player_turn();

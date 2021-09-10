@@ -36,11 +36,11 @@
 #include "monster/smart-learn-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
+#include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
@@ -261,17 +261,10 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
-                (f_ptr->flags.has_none_of({FF::MOVE, FF::CAN_FLY})
-                    || f_ptr->flags.has_none_of({FF::LOS, FF::TREE}))
-                    ? "中"
-                    : "上");
+                (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY }) || f_ptr->flags.has_none_of({ FF::LOS, FF::TREE })) ? "中" : "上");
 #else
             msg_format("This monster is %s the %s.",
-                (f_ptr->flags.has_none_of({FF::MOVE, FF::CAN_FLY})
-                    || f_ptr->flags.has_none_of({FF::LOS, FF::TREE}))
-                    ? "in"
-                    : "on",
-                f_ptr->name.c_str());
+                (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY }) || f_ptr->flags.has_none_of({ FF::LOS, FF::TREE })) ? "in" : "on", f_ptr->name.c_str());
 #endif
 
             return false;

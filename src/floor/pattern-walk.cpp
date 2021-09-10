@@ -11,14 +11,13 @@
 #include "grid/feature.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "player-base/player-race.h"
 #include "player-status/player-energy.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
 #include "player/player-status.h"
-#include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
@@ -26,8 +25,8 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 #include "world/world-movement-processor.h"
+#include "world/world.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
@@ -106,7 +105,7 @@ bool pattern_effect(player_type *creature_ptr)
     if (!pattern_tile(floor_ptr, creature_ptr->y, creature_ptr->x))
         return false;
 
-    if ((is_specific_player_race(creature_ptr, player_race_type::AMBERITE)) && (creature_ptr->cut > 0) && one_in_(10)) {
+    if ((PlayerRace(creature_ptr).equals(player_race_type::AMBERITE)) && (creature_ptr->cut > 0) && one_in_(10)) {
         wreck_the_pattern(creature_ptr);
     }
 
@@ -143,7 +142,7 @@ bool pattern_effect(player_type *creature_ptr)
         break;
 
     default:
-        if (is_specific_player_race(creature_ptr, player_race_type::AMBERITE) && !one_in_(2))
+        if (PlayerRace(creature_ptr).equals(player_race_type::AMBERITE) && !one_in_(2))
             return true;
         else if (!is_invuln(creature_ptr))
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"));
