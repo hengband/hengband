@@ -206,13 +206,13 @@ static void locate_connected_stairs(player_type *player_ptr, floor_type *floor_p
 /*!
  * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
  */
-static void get_out_monster(player_type *protected_ptr)
+static void get_out_monster(player_type *player_ptr)
 {
     int tries = 0;
     POSITION dis = 1;
-    POSITION oy = protected_ptr->y;
-    POSITION ox = protected_ptr->x;
-    floor_type *floor_ptr = protected_ptr->current_floor_ptr;
+    POSITION oy = player_ptr->y;
+    POSITION ox = player_ptr->x;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
     if (m_idx == 0)
         return;
@@ -228,7 +228,7 @@ static void get_out_monster(player_type *protected_ptr)
         if (tries > 20 * dis * dis)
             dis++;
 
-        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || floor_ptr->grid_array[ny][nx].is_rune_protection()
+        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(player_ptr, ny, nx) || floor_ptr->grid_array[ny][nx].is_rune_protection()
             || floor_ptr->grid_array[ny][nx].is_rune_explosion() || pattern_tile(floor_ptr, ny, nx))
             continue;
 
