@@ -555,7 +555,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
  * @param dam_func ダメージ処理を行う関数の参照ポインタ
  * @param message オーラダメージを受けた際のメッセージ
  */
-static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, uint32_t aura_flag,
+static void process_aura_damage(monster_type *m_ptr, player_type *player_ptr, bool immune, int flags_offset, int r_flags_offset, uint32_t aura_flag,
     HIT_POINT (*dam_func)(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura), concptr message)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -565,27 +565,27 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
     GAME_TEXT mon_name[MAX_NLEN];
     int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
-    monster_desc(touched_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
+    monster_desc(player_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
     msg_print(message);
-    dam_func(touched_ptr, aura_damage, mon_name, true);
+    dam_func(player_ptr, aura_damage, mon_name, true);
 
-    if (is_original_ap_and_seen(touched_ptr, m_ptr))
+    if (is_original_ap_and_seen(player_ptr, m_ptr))
         atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
 
-    handle_stuff(touched_ptr);
+    handle_stuff(player_ptr);
 }
 
 /*!
  * @brief 敵オーラによるプレイヤーのダメージ処理
  * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
- * @param touched_ptr オーラを持つ相手に振れたクリーチャーの参照ポインタ
+ * @param player_ptr オーラを持つ相手に振れたクリーチャーの参照ポインタ
  */
-void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
+void touch_zap_player(monster_type *m_ptr, player_type *player_ptr)
 {
-    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_fire(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
+    process_aura_damage(m_ptr, player_ptr, (bool)has_immune_fire(player_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
         fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
-    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_cold(touched_ptr), offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
+    process_aura_damage(m_ptr, player_ptr, (bool)has_immune_cold(player_ptr), offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
         cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
-    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_elec(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
+    process_aura_damage(m_ptr, player_ptr, (bool)has_immune_elec(player_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
         elec_dam, _("電撃をくらった！", "You get zapped!"));
 }
