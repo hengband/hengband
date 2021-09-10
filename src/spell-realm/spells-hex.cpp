@@ -3,12 +3,18 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "effect/effect-characteristics.h"
+#include "effect/effect-processor.h"
+#include "monster-attack/monster-attack-util.h"
 #include "monster-race/monster-race.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
+#include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-song.h"
 #include "spell/spell-info.h"
+#include "spell/spell-types.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
@@ -20,6 +26,12 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+
+#ifdef JP
+#else
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#endif
 
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
@@ -37,6 +49,12 @@ RealmHex::RealmHex(player_type *caster_ptr)
     if (this->casting_spells.size() > MAX_KEEP) {
         throw("Invalid numbers of hex magics keep!");
     }
+}
+
+RealmHex::RealmHex(player_type *caster_ptr, monap_type *monap_ptr)
+    : caster_ptr(caster_ptr)
+    , monap_ptr(monap_ptr)
+{
 }
 
 /*!
@@ -367,4 +385,53 @@ bool RealmHex::is_spelling_specific(int hex) const
 bool RealmHex::is_spelling_any() const
 {
     return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0);
+}
+
+/*!
+ * @brief 呪術「目には目を」の効果処理
+ * @param this->caster_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ */
+void RealmHex::eyes_on_eyes()
+{
+    if (this->monap_ptr == nullptr) {
+        throw("Invalid constructor was used!");
+    }
+
+    const auto is_eyeeye_finished = (this->caster_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE);
+    if (is_eyeeye_finished || (this->monap_ptr->get_damage == 0) || this->caster_ptr->is_dead) {
+        return;
+    }
+
+#ifdef JP
+    msg_format("攻撃が%s自身を傷つけた！", this->monap_ptr->m_name);
+#else
+    GAME_TEXT m_name_self[MAX_MONSTER_NAME];
+    monster_desc(this->caster_ptr, m_name_self, this->monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+    msg_format("The attack of %s has wounded %s!", this->monap_ptr->m_name, m_name_self);
+#endif
+    const auto y = this->monap_ptr->m_ptr->fy;
+    const auto x = this->monap_ptr->m_ptr->fx;
+    project(this->caster_ptr, 0, 0, y, x, this->monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
+    if (this->caster_ptr->tim_eyeeye) {
+        set_tim_eyeeye(this->caster_ptr, this->caster_ptr->tim_eyeeye - 5, true);
+    }
+}
+
+void RealmHex::thief_teleport()
+{
+    if (this->monap_ptr == nullptr) {
+        throw("Invalid constructor was used!");
+    }
+
+    if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->caster_ptr->is_dead) {
+        return;
+    }
+
+    if (this->check_hex_barrier(this->monap_ptr->m_idx, HEX_ANTI_TELE)) {
+        msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
+    } else {
+        msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
+        teleport_away(this->caster_ptr, this->monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+    }
 }
