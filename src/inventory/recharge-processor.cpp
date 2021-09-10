@@ -19,7 +19,7 @@
  * If player has inscribed the object with "!!", let him know when it's recharged. -LM-
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  */
-static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
+static void recharged_notice(player_type *player_ptr, object_type *o_ptr)
 {
     if (!o_ptr->inscription)
         return;
@@ -28,7 +28,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
     while (s) {
         if (s[1] == '!') {
             GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
             msg_format("%sは再充填された。", o_name);
 #else
@@ -37,7 +37,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
             else
                 msg_format("Your %s is recharged.", o_name);
 #endif
-            disturb(owner_ptr, false, false);
+            disturb(player_ptr, false, false);
             return;
         }
 

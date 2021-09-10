@@ -108,7 +108,7 @@ bool artifact_scroll(player_type *caster_ptr)
 /*!
  * @brief アイテム凡庸化のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に凡庸化をを行ったならばTRUEを返す
  * @details
@@ -118,7 +118,7 @@ bool artifact_scroll(player_type *caster_ptr)
  * Returns TRUE if something was mundanified, else FALSE.
  * </pre>
  */
-bool mundane_spell(player_type *owner_ptr, bool only_equip)
+bool mundane_spell(player_type *player_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester = std::make_unique<AllMatchItemTester>();
     if (only_equip)
@@ -129,7 +129,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     concptr q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
     concptr s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
 
-    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
 
@@ -146,6 +146,6 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     o_ptr->marked = marked;
     o_ptr->inscription = inscription;
 
-    calc_android_exp(owner_ptr);
+    calc_android_exp(player_ptr);
     return true;
 }

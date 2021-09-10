@@ -14,25 +14,25 @@
 /*!
  * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理
  */
-void pack_overflow(player_type *owner_ptr)
+void pack_overflow(player_type *player_ptr)
 {
-    if (owner_ptr->inventory_list[INVEN_PACK].k_idx == 0)
+    if (player_ptr->inventory_list[INVEN_PACK].k_idx == 0)
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
     object_type *o_ptr;
-    update_creature(owner_ptr);
-    if (!owner_ptr->inventory_list[INVEN_PACK].k_idx)
+    update_creature(player_ptr);
+    if (!player_ptr->inventory_list[INVEN_PACK].k_idx)
         return;
 
-    o_ptr = &owner_ptr->inventory_list[INVEN_PACK];
-    disturb(owner_ptr, false, true);
+    o_ptr = &player_ptr->inventory_list[INVEN_PACK];
+    disturb(player_ptr, false, true);
     msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
 
-    describe_flavor(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
-    (void)drop_near(owner_ptr, o_ptr, 0, owner_ptr->y, owner_ptr->x);
+    (void)drop_near(player_ptr, o_ptr, 0, player_ptr->y, player_ptr->x);
 
-    vary_item(owner_ptr, INVEN_PACK, -255);
-    handle_stuff(owner_ptr);
+    vary_item(player_ptr, INVEN_PACK, -255);
+    handle_stuff(player_ptr);
 }

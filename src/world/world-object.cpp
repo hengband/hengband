@@ -50,7 +50,7 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
 /*!
  * @brief オブジェクト生成テーブルからアイテムを取得する /
  * Choose an object kind that seems "appropriate" to the given level
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param level 生成階
  * @return 選ばれたオブジェクトベースID
  * @details
@@ -66,14 +66,14 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
+OBJECT_IDX get_obj_num(player_type *player_ptr, DEPTH level, BIT_FLAGS mode)
 {
     alloc_entry *table = alloc_kind_table;
 
     if (level > MAX_DEPTH - 1)
         level = MAX_DEPTH - 1;
 
-    if ((level > 0) && d_info[owner_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
+    if ((level > 0) && d_info[player_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
         if (one_in_(GREAT_OBJ)) {
             level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
         }

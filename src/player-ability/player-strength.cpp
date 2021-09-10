@@ -31,12 +31,12 @@ int16_t PlayerStrength::race_value()
 {
     int16_t result = PlayerBasicStatistics::race_value();
 
-    if (PlayerRace(this->owner_ptr).equals(player_race_type::ENT)) {
-        if (this->owner_ptr->lev > 25)
+    if (PlayerRace(this->player_ptr).equals(player_race_type::ENT)) {
+        if (this->player_ptr->lev > 25)
             result++;
-        if (this->owner_ptr->lev > 40)
+        if (this->player_ptr->lev > 40)
             result++;
-        if (this->owner_ptr->lev > 45)
+        if (this->player_ptr->lev > 45)
             result++;
     }
 
@@ -56,8 +56,8 @@ int16_t PlayerStrength::time_effect_value()
 {
     int16_t result = 0;
 
-    if (this->owner_ptr->realm1 == REALM_HEX) {
-        RealmHex realm_hex(this->owner_ptr);
+    if (this->player_ptr->realm1 == REALM_HEX) {
+        RealmHex realm_hex(this->player_ptr);
         if (realm_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
             result += 4;
         }
@@ -66,7 +66,7 @@ int16_t PlayerStrength::time_effect_value()
         }
     }
 
-    if (this->owner_ptr->tsuyoshi) {
+    if (this->player_ptr->tsuyoshi) {
         result += 4;
     }
 
@@ -86,13 +86,13 @@ int16_t PlayerStrength::battleform_value()
 {
     int16_t result = 0;
 
-    if (any_bits(this->owner_ptr->special_defense, KATA_KOUKIJIN)) {
+    if (any_bits(this->player_ptr->special_defense, KATA_KOUKIJIN)) {
         result += 5;
     }
 
-    if (any_bits(this->owner_ptr->special_defense, KAMAE_BYAKKO)) {
+    if (any_bits(this->player_ptr->special_defense, KAMAE_BYAKKO)) {
         result += 2;
-    } else if (any_bits(this->owner_ptr->special_defense, KAMAE_SUZAKU)) {
+    } else if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU)) {
         result -= 2;
     }
 
@@ -111,12 +111,12 @@ int16_t PlayerStrength::mutation_value()
 {
     int16_t result = 0;
 
-    if (this->owner_ptr->muta.any()) {
-        if (this->owner_ptr->muta.has(MUTA::HYPER_STR)) {
+    if (this->player_ptr->muta.any()) {
+        if (this->player_ptr->muta.has(MUTA::HYPER_STR)) {
             result += 4;
         }
 
-        if (this->owner_ptr->muta.has(MUTA::PUNY)) {
+        if (this->player_ptr->muta.has(MUTA::PUNY)) {
             result -= 4;
         }
     }

@@ -33,13 +33,13 @@ int16_t PlayerIntelligence::battleform_value()
 {
     int16_t result = 0;
 
-    if (any_bits(this->owner_ptr->special_defense, KATA_KOUKIJIN)) {
+    if (any_bits(this->player_ptr->special_defense, KATA_KOUKIJIN)) {
         result += 5;
     }
 
-    if (any_bits(this->owner_ptr->special_defense, KAMAE_GENBU)) {
+    if (any_bits(this->player_ptr->special_defense, KAMAE_GENBU)) {
         result -= 1;
-    } else if (any_bits(this->owner_ptr->special_defense, KAMAE_SUZAKU)) {
+    } else if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU)) {
         result += 1;
     }
 
@@ -57,12 +57,12 @@ int16_t PlayerIntelligence::battleform_value()
 int16_t PlayerIntelligence::mutation_value()
 {
     int16_t result = 0;
-    if (this->owner_ptr->muta.any()) {
-        if (this->owner_ptr->muta.has(MUTA::HYPER_INT)) {
+    if (this->player_ptr->muta.any()) {
+        if (this->player_ptr->muta.has(MUTA::HYPER_INT)) {
             result += 4;
         }
 
-        if (this->owner_ptr->muta.has(MUTA::MORONIC)) {
+        if (this->player_ptr->muta.has(MUTA::MORONIC)) {
             result -= 4;
         }
     }

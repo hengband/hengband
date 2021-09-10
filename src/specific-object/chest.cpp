@@ -49,7 +49,7 @@
  * on the level on which the chest is generated.
  * </pre>
  */
-void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
+void chest_death(player_type *player_ptr, bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
     int number;
 
@@ -59,7 +59,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
     object_type forge;
     object_type *q_ptr;
 
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     object_type *o_ptr = &floor_ptr->o_list[o_idx];
 
     /* Small chests often hold "gold" */
@@ -90,14 +90,14 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
         /* Small chests often drop gold */
         if (small && (randint0(100) < 25)) {
             /* Make some gold */
-            if (!make_gold(owner_ptr, q_ptr))
+            if (!make_gold(player_ptr, q_ptr))
                 continue;
         }
 
         /* Otherwise drop an item */
         else {
             /* Make a good object */
-            if (!make_object(owner_ptr, q_ptr, mode))
+            if (!make_object(player_ptr, q_ptr, mode))
                 continue;
         }
 
@@ -110,11 +110,11 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
                 x = randint0(MAX_WID);
 
                 /* Must be an empty floor. */
-                if (!is_cave_empty_bold(owner_ptr, y, x))
+                if (!is_cave_empty_bold(player_ptr, y, x))
                     continue;
 
                 /* Place the object there. */
-                (void)drop_near(owner_ptr, q_ptr, -1, y, x);
+                (void)drop_near(player_ptr, q_ptr, -1, y, x);
 
                 /* Done. */
                 break;
@@ -122,7 +122,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
         }
         /* Normally, drop object near the chest. */
         else
-            (void)drop_near(owner_ptr, q_ptr, -1, y, x);
+            (void)drop_near(player_ptr, q_ptr, -1, y, x);
     }
 
     /* Reset the object level */

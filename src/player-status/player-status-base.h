@@ -5,7 +5,7 @@
 struct player_type;
 class PlayerStatusBase {
 public:
-    PlayerStatusBase(player_type *owner_ptr);
+    PlayerStatusBase(player_type *player_ptr);
     PlayerStatusBase() = delete;
     virtual ~PlayerStatusBase() = default;
     virtual int16_t get_value();
@@ -17,7 +17,7 @@ protected:
     int16_t default_value;
     int16_t min_value;
     int16_t max_value;
-    player_type *owner_ptr;
+    player_type *player_ptr;
     tr_type tr_flag;
     tr_type tr_bad_flag;
     virtual void set_locals();

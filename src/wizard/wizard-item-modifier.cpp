@@ -491,7 +491,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
  * Apply magic to an item or turn it into an artifact. -Bernd-
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
  */
-static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
+static void wiz_reroll_item(player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->is_artifact())
         return;
@@ -504,7 +504,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
     char ch;
     bool changed = false;
     while (true) {
-        wiz_display_item(owner_ptr, q_ptr);
+        wiz_display_item(player_ptr, q_ptr);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (q_ptr->is_fixed_artifact()) {
                 a_info[q_ptr->name1].cur_num = 0;
@@ -529,34 +529,34 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         /* Apply bad magic, but first clear object */
         case 'w':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
             break;
         /* Apply bad magic, but first clear object */
         case 'c':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
             break;
         /* Apply normal magic, but first clear object */
         case 'n':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
             break;
         /* Apply good magic, but first clear object */
         case 'g':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
             break;
         /* Apply great magic, but first clear object */
         case 'e':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
             break;
         /* Apply special magic, but first clear object */
         case 's':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
             if (!q_ptr->is_artifact())
-                become_random_artifact(owner_ptr, q_ptr, false);
+                become_random_artifact(player_ptr, q_ptr, false);
 
             break;
         default:
@@ -572,8 +572,8 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         return;
 
     o_ptr->copy_from(q_ptr);
-    set_bits(owner_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(owner_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 }
 
 /*!

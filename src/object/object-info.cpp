@@ -202,25 +202,25 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-int16_t wield_slot(player_type *owner_ptr, const object_type *o_ptr)
+int16_t wield_slot(player_type *player_ptr, const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_DIGGING:
     case TV_HAFTED:
     case TV_POLEARM:
     case TV_SWORD: {
-        if (!owner_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
+        if (!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
             return (INVEN_MAIN_HAND);
-        if (owner_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
             return (INVEN_MAIN_HAND);
         return (INVEN_SUB_HAND);
     }
     case TV_CAPTURE:
     case TV_CARD:
     case TV_SHIELD: {
-        if (!owner_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
+        if (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
             return (INVEN_SUB_HAND);
-        if (owner_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
             return (INVEN_SUB_HAND);
         return (INVEN_MAIN_HAND);
     }
@@ -228,7 +228,7 @@ int16_t wield_slot(player_type *owner_ptr, const object_type *o_ptr)
         return (INVEN_BOW);
     }
     case TV_RING: {
-        if (!owner_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
+        if (!player_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
             return (INVEN_MAIN_RING);
 
         return (INVEN_SUB_RING);
@@ -273,24 +273,24 @@ int16_t wield_slot(player_type *owner_ptr, const object_type *o_ptr)
  * @param book_sval ベースアイテムのsval
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
-bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
+bool check_book_realm(player_type *player_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
 {
     if (book_tval < TV_LIFE_BOOK)
         return false;
-    if (owner_ptr->pclass == CLASS_SORCERER) {
+    if (player_ptr->pclass == CLASS_SORCERER) {
         return is_magic(tval2realm(book_tval));
-    } else if (owner_ptr->pclass == CLASS_RED_MAGE) {
+    } else if (player_ptr->pclass == CLASS_RED_MAGE) {
         if (is_magic(tval2realm(book_tval)))
             return ((book_tval == TV_ARCANE_BOOK) || (book_sval < 2));
     }
 
-    return (get_realm1_book(owner_ptr) == book_tval || get_realm2_book(owner_ptr) == book_tval);
+    return (get_realm1_book(player_ptr) == book_tval || get_realm2_book(player_ptr) == book_tval);
 }
 
-object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item)
+object_type *ref_item(player_type *player_ptr, INVENTORY_IDX item)
 {
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
-    return item >= 0 ? &owner_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    return item >= 0 ? &player_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
 }
 
 /*

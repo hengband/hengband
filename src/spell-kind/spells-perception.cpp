@@ -51,14 +51,14 @@ void identify_pack(player_type *player_ptr)
 /*!
  * @brief アイテム鑑定処理 /
  * Identify an object
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
  * @return 実際に鑑定できたらTRUEを返す
  */
-bool identify_item(player_type *owner_ptr, object_type *o_ptr)
+bool identify_item(player_type *player_ptr, object_type *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
 
     bool old_known = false;
     if (any_bits(o_ptr->ident, IDENT_KNOWN))
@@ -66,25 +66,25 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 
     if (!o_ptr->is_fully_known()) {
         if (o_ptr->is_artifact() || one_in_(5))
-            chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
+            chg_virtue(player_ptr, V_KNOWLEDGE, 1);
     }
 
-    object_aware(owner_ptr, o_ptr);
+    object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
     set_bits(o_ptr->marked, OM_TOUCHED);
 
-    set_bits(owner_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(owner_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     strcpy(record_o_name, o_name);
     record_turn = current_world_ptr->game_turn;
 
-    describe_flavor(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
     if (record_fix_art && !old_known && o_ptr->is_fixed_artifact())
-        exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
+        exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
     if (record_rand_art && !old_known && o_ptr->art_name)
-        exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
+        exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
 
     return old_known;
 }

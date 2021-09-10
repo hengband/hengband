@@ -23,7 +23,7 @@
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS mode, const ItemTester& item_tester)
+COMMAND_CODE show_inventory(player_type *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     COMMAND_CODE i;
     int k, l, z = 0;
@@ -41,20 +41,20 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
     term_get_size(&wid, &hgt);
     int len = wid - col - 1;
     for (i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &owner_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
         z = i + 1;
     }
 
-    prepare_label_string(owner_ptr, inven_label, USE_INVEN, item_tester);
+    prepare_label_string(player_ptr, inven_label, USE_INVEN, item_tester);
     for (k = 0, i = 0; i < z; i++) {
-        o_ptr = &owner_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!item_tester.okay(o_ptr) && !(mode & USE_FULL))
             continue;
 
-        describe_flavor(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
         out_color[k] = tval_to_attr[o_ptr->tval % 128];
         if (o_ptr->timeout)
@@ -82,7 +82,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
     int j;
     for (j = 0; j < k; j++) {
         i = out_index[j];
-        o_ptr = &owner_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         prt("", j + 1, col ? col - 2 : col);
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
@@ -126,7 +126,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
  * @brief 所持アイテム一覧を表示する /
  * Choice window "shadow" of the "show_inven()" function
  */
-void display_inventory(player_type *owner_ptr, const ItemTester& item_tester)
+void display_inventory(player_type *player_ptr, const ItemTester& item_tester)
 {
     int i, n, z = 0;
     TERM_COLOR attr = TERM_WHITE;
@@ -134,13 +134,13 @@ void display_inventory(player_type *owner_ptr, const ItemTester& item_tester)
     GAME_TEXT o_name[MAX_NLEN];
     TERM_LEN wid, hgt;
 
-    if (!owner_ptr || !owner_ptr->inventory_list)
+    if (!player_ptr || !player_ptr->inventory_list)
         return;
 
     term_get_size(&wid, &hgt);
 
     for (i = 0; i < INVEN_PACK; i++) {
-        auto o_ptr = &owner_ptr->inventory_list[i];
+        auto o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         z = i + 1;
@@ -150,7 +150,7 @@ void display_inventory(player_type *owner_ptr, const ItemTester& item_tester)
         if (i >= hgt)
             break;
 
-        auto o_ptr = &owner_ptr->inventory_list[i];
+        auto o_ptr = &player_ptr->inventory_list[i];
         auto do_disp = item_tester.okay(o_ptr);
         strcpy(tmp_val, "   ");
         if (do_disp) {
@@ -161,7 +161,7 @@ void display_inventory(player_type *owner_ptr, const ItemTester& item_tester)
         int cur_col = 3;
         term_erase(cur_col, i, 255);
         term_putstr(0, i, cur_col, TERM_WHITE, tmp_val);
-        describe_flavor(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
         n = strlen(o_name);
         attr = tval_to_attr[o_ptr->tval % 128];
         if (o_ptr->timeout) {

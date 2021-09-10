@@ -212,17 +212,17 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_armor(player_type *owner_ptr)
+bool curse_armor(player_type *player_ptr)
 {
     /* Curse the body armor */
     object_type *o_ptr;
-    o_ptr = &owner_ptr->inventory_list[INVEN_BODY];
+    o_ptr = &player_ptr->inventory_list[INVEN_BODY];
 
     if (!o_ptr->k_idx)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
     /* Attempt a saving throw for artifacts */
     if (o_ptr->is_artifact() && (randint0(100) < 50)) {
@@ -237,7 +237,7 @@ bool curse_armor(player_type *owner_ptr)
 
     /* not artifact or failed save... */
     msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-    chg_virtue(owner_ptr, V_ENCHANT, -5);
+    chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Blast the armor */
     o_ptr->name1 = 0;
@@ -256,27 +256,27 @@ bool curse_armor(player_type *owner_ptr)
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
-    owner_ptr->update |= (PU_BONUS | PU_MANA);
-    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    player_ptr->update |= (PU_BONUS | PU_MANA);
+    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
     return true;
 }
 
 /*!
  * @brief 武器呪縛処理 /
  * Curse the players weapon
- * @param owner_ptr 所持者の参照ポインタ
+ * @param player_ptr 所持者の参照ポインタ
  * @param force 無条件に呪縛を行うならばTRUE
  * @param o_ptr 呪縛する武器のアイテム情報参照ポインタ
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
+bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr)
 {
     if (!o_ptr->k_idx)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
     /* Attempt a saving throw */
     if (o_ptr->is_artifact() && (randint0(100) < 50) && !force) {
@@ -291,7 +291,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
     /* not artifact or failed save... */
     if (!force)
         msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-    chg_virtue(owner_ptr, V_ENCHANT, -5);
+    chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Shatter the weapon */
     o_ptr->name1 = 0;
@@ -310,8 +310,8 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
-    owner_ptr->update |= (PU_BONUS | PU_MANA);
-    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    player_ptr->update |= (PU_BONUS | PU_MANA);
+    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
     return true;
 }
 

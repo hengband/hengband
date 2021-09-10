@@ -63,19 +63,19 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
  * Scan inventry in reverse order to prevent
  * skipping after inven_item_optimize()
  */
-void autopick_delayed_alter(player_type *owner_ptr)
+void autopick_delayed_alter(player_type *player_ptr)
 {
     for (INVENTORY_IDX item = INVEN_TOTAL - 1; item >= 0; item--)
-        autopick_delayed_alter_aux(owner_ptr, item);
+        autopick_delayed_alter_aux(player_ptr, item);
 
-    auto &grid = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
+    auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
         INVENTORY_IDX item = *it++;
-        autopick_delayed_alter_aux(owner_ptr, -item);
+        autopick_delayed_alter_aux(player_ptr, -item);
     }
 
     // PW_FLOOR_ITEM_LISTは遅れるので即時更新
-    fix_floor_item_list(owner_ptr, owner_ptr->y, owner_ptr->x);
+    fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
 }
 
 /*!
