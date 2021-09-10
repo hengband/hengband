@@ -271,33 +271,33 @@ int summon_cyber(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION 
     return count;
 }
 
-void mitokohmon(player_type *kohmon_ptr)
+void mitokohmon(player_type *player_ptr)
 {
     int count = 0;
     concptr sukekakusan = "";
-    if (summon_named_creature(kohmon_ptr, 0, kohmon_ptr->y, kohmon_ptr->x, MON_SUKE, PM_FORCE_PET)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MON_SUKE, PM_FORCE_PET)) {
         msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
         sukekakusan = "Suke-san";
         count++;
     }
 
-    if (summon_named_creature(kohmon_ptr, 0, kohmon_ptr->y, kohmon_ptr->x, MON_KAKU, PM_FORCE_PET)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MON_KAKU, PM_FORCE_PET)) {
         msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
         sukekakusan = "Kaku-san";
         count++;
     }
 
     if (!count) {
-        for (int i = kohmon_ptr->current_floor_ptr->m_max - 1; i > 0; i--) {
+        for (int i = player_ptr->current_floor_ptr->m_max - 1; i > 0; i--) {
             monster_type *m_ptr;
-            m_ptr = &kohmon_ptr->current_floor_ptr->m_list[i];
+            m_ptr = &player_ptr->current_floor_ptr->m_list[i];
             if (!monster_is_valid(m_ptr))
                 continue;
             if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU)))
                 continue;
-            if (!los(kohmon_ptr, m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x))
+            if (!los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x))
                 continue;
-            if (!projectable(kohmon_ptr, m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x))
+            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x))
                 continue;
             count++;
             break;
@@ -313,10 +313,10 @@ void mitokohmon(player_type *kohmon_ptr)
         _("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」", "%^s says 'WHO do you think this person is! Bow your head, down to your knees!'"),
         sukekakusan);
     sukekaku = true;
-    stun_monsters(kohmon_ptr, 120);
-    confuse_monsters(kohmon_ptr, 120);
-    turn_monsters(kohmon_ptr, 120);
-    stasis_monsters(kohmon_ptr, 120);
+    stun_monsters(player_ptr, 120);
+    confuse_monsters(player_ptr, 120);
+    turn_monsters(player_ptr, 120);
+    stasis_monsters(player_ptr, 120);
     sukekaku = false;
 }
 
