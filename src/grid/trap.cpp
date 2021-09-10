@@ -250,7 +250,7 @@ void place_trap(player_type *trapped_ptr, POSITION y, POSITION x)
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match trap power against player armor.
  */
-static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
+static int check_hit_from_monster_to_player(player_type *player_ptr, int power)
 {
     int k;
     ARMOUR_CLASS ac;
@@ -262,7 +262,7 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
     if (k < 10)
         return (k < 5);
 
-    if (target_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->pseikaku == PERSONALITY_LAZY)
         if (one_in_(20))
             return true;
 
@@ -271,7 +271,7 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
         return false;
 
     /* Total armor */
-    ac = target_ptr->ac + target_ptr->to_a;
+    ac = player_ptr->ac + player_ptr->to_a;
 
     /* Power competes against Armor */
     if (randint1(power) > ((ac * 3) / 4))
@@ -341,14 +341,14 @@ static void hit_trap_pit(player_type *trapped_ptr, enum trap_type trap_feat_type
  * @brief ダーツ系トラップ（通常ダメージ）の判定とプレイヤーの被害処理
  * @return ダーツが命中した場合TRUEを返す
  */
-static bool hit_trap_dart(player_type *target_ptr)
+static bool hit_trap_dart(player_type *player_ptr)
 {
     bool hit = false;
 
-    if (check_hit_from_monster_to_player(target_ptr, 125)) {
+    if (check_hit_from_monster_to_player(player_ptr, 125)) {
         msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
-        take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
-        if (!check_multishadow(target_ptr))
+        take_hit(player_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
+        if (!check_multishadow(player_ptr))
             hit = true;
     } else {
         msg_print(_("小さなダーツが飛んできた！が、運良く当たらなかった。", "A small dart barely misses you."));
@@ -361,20 +361,20 @@ static bool hit_trap_dart(player_type *target_ptr)
  * @brief ダーツ系トラップ（通常ダメージ＋能力値減少）の判定とプレイヤーの被害処理
  * @param stat 低下する能力値ID
  */
-static void hit_trap_lose_stat(player_type *target_ptr, int stat)
+static void hit_trap_lose_stat(player_type *player_ptr, int stat)
 {
-    if (hit_trap_dart(target_ptr)) {
-        do_dec_stat(target_ptr, stat);
+    if (hit_trap_dart(player_ptr)) {
+        do_dec_stat(player_ptr, stat);
     }
 }
 
 /*!
  * @brief ダーツ系トラップ（通常ダメージ＋減速）の判定とプレイヤーの被害処理
  */
-static void hit_trap_slow(player_type *target_ptr)
+static void hit_trap_slow(player_type *player_ptr)
 {
-    if (hit_trap_dart(target_ptr)) {
-        set_slow(target_ptr, target_ptr->slow + randint0(20) + 20, false);
+    if (hit_trap_dart(player_ptr)) {
+        set_slow(player_ptr, player_ptr->slow + randint0(20) + 20, false);
     }
 }
 

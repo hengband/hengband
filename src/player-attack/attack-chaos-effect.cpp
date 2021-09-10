@@ -241,16 +241,16 @@ static void attack_polymorph(player_type *attacker_ptr, player_attack_type *pa_p
 static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
-    monster_type *target_ptr = &floor_ptr->m_list[pa_ptr->m_idx];
-    if (target_ptr->hold_o_idx_list.empty())
+    monster_type *player_ptr = &floor_ptr->m_list[pa_ptr->m_idx];
+    if (player_ptr->hold_o_idx_list.empty())
         return;
 
-    object_type *q_ptr = &floor_ptr->o_list[target_ptr->hold_o_idx_list.front()];
+    object_type *q_ptr = &floor_ptr->o_list[player_ptr->hold_o_idx_list.front()];
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(attacker_ptr, o_name, q_ptr, OD_NAME_ONLY);
     q_ptr->held_m_idx = 0;
     q_ptr->marked = OM_TOUCHED;
-    target_ptr->hold_o_idx_list.pop_front();
+    player_ptr->hold_o_idx_list.pop_front();
     msg_format(_("%sを奪った。", "You snatched %s."), o_name);
     store_item_to_inventory(attacker_ptr, q_ptr);
 }

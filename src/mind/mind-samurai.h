@@ -14,4 +14,4 @@ void concentration(player_type *player_ptr);
 bool choose_kata(player_type* player_ptr);
 int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr);
 void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr);
-void musou_counterattack(player_type *target_ptr, monap_type *monap_ptr);
+void musou_counterattack(player_type *player_ptr, monap_type *monap_ptr);

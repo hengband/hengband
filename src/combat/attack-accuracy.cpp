@@ -63,7 +63,7 @@ PERCENTAGE hit_chance(player_type *attacker_ptr, int reli, ARMOUR_CLASS ac)
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
  */
-bool check_hit_from_monster_to_player(player_type *target_ptr, int power, DEPTH level, int stun)
+bool check_hit_from_monster_to_player(player_type *player_ptr, int power, DEPTH level, int stun)
 {
     int k = randint0(100);
     if (stun && one_in_(2))
@@ -72,9 +72,9 @@ bool check_hit_from_monster_to_player(player_type *target_ptr, int power, DEPTH 
         return (k < 5);
     int i = (power + (level * 3));
 
-    int ac = target_ptr->ac + target_ptr->to_a;
-    if (target_ptr->special_attack & ATTACK_SUIKEN)
-        ac += (target_ptr->lev * 2);
+    int ac = player_ptr->ac + player_ptr->to_a;
+    if (player_ptr->special_attack & ATTACK_SUIKEN)
+        ac += (player_ptr->lev * 2);
 
     if ((i > 0) && (randint1(i) > ((ac * 3) / 4)))
         return true;

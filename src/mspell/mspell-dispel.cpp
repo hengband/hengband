@@ -98,33 +98,33 @@ static void dispel_player(player_type *player_ptr)
 /*!
  * @brief RF4_DISPELの処理。魔力消去。 /
  * @param m_idx 呪文を唱えるモンスターID
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
 
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-    monster_name(target_ptr, m_idx, m_name);
-    monster_name(target_ptr, t_idx, t_name);
+    monster_name(player_ptr, m_idx, m_name);
+    monster_name(player_ptr, t_idx, t_name);
 
-    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+    monspell_message(player_ptr, m_idx, t_idx, _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
         _("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), _("%^sが%sに対して魔力消去の呪文を念じた。", "%^s invokes a dispel magic at %s."),
         TARGET_TYPE);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        dispel_player(target_ptr);
-        if (target_ptr->riding)
-            dispel_monster_status(target_ptr, target_ptr->riding);
+        dispel_player(player_ptr);
+        if (player_ptr->riding)
+            dispel_monster_status(player_ptr, player_ptr->riding);
 
-        if (is_echizen(target_ptr))
+        if (is_echizen(player_ptr))
             msg_print(_("やりやがったな！", ""));
-        else if (is_chargeman(target_ptr)) {
+        else if (is_chargeman(player_ptr)) {
             if (randint0(2) == 0)
                 msg_print(_("ジュラル星人め！", ""));
             else
@@ -135,10 +135,10 @@ MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, 
     }
 
     if (TARGET_TYPE == MONSTER_TO_MONSTER) {
-        if (t_idx == target_ptr->riding)
-            dispel_player(target_ptr);
+        if (t_idx == player_ptr->riding)
+            dispel_player(player_ptr);
 
-        dispel_monster_status(target_ptr, t_idx);
+        dispel_monster_status(player_ptr, t_idx);
     }
 
     return res;

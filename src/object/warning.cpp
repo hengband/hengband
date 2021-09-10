@@ -77,7 +77,7 @@ object_type *choose_warning_item(player_type *player_ptr)
  * @param dam 基本ダメージ
  * @param max 算出した最大ダメージを返すポインタ
  */
-static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int *max)
+static void spell_damcalc(player_type *player_ptr, monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int *max)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = r_ptr->level;
@@ -86,36 +86,36 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     /* Vulnerability, resistance and immunity */
     switch (typ) {
     case GF_ELEC:
-        if (has_immune_elec(target_ptr)) {
+        if (has_immune_elec(player_ptr)) {
             ignore_wraith_form = true;
         }
-        dam = dam * calc_elec_damage_rate(target_ptr) / 100;
+        dam = dam * calc_elec_damage_rate(player_ptr) / 100;
         break;
 
     case GF_POIS:
-        dam = dam * calc_pois_damage_rate(target_ptr) / 100;
+        dam = dam * calc_pois_damage_rate(player_ptr) / 100;
         break;
 
     case GF_ACID:
-        if (has_immune_acid(target_ptr)) {
+        if (has_immune_acid(player_ptr)) {
             ignore_wraith_form = true;
         }
-        dam = dam * calc_acid_damage_rate(target_ptr) / 100;
+        dam = dam * calc_acid_damage_rate(player_ptr) / 100;
         break;
 
     case GF_COLD:
     case GF_ICE:
-        if (has_immune_cold(target_ptr)) {
+        if (has_immune_cold(player_ptr)) {
             ignore_wraith_form = true;
         }
-        dam = dam * calc_cold_damage_rate(target_ptr) / 100;
+        dam = dam * calc_cold_damage_rate(player_ptr) / 100;
         break;
 
     case GF_FIRE:
-        if (has_immune_fire(target_ptr)) {
+        if (has_immune_fire(player_ptr)) {
             ignore_wraith_form = true;
         }
-        dam = dam * calc_fire_damage_rate(target_ptr) / 100;
+        dam = dam * calc_fire_damage_rate(player_ptr) / 100;
         break;
 
     case GF_PSY_SPEAR:
@@ -123,87 +123,87 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_ARROW:
-        if (!target_ptr->blind && (has_invuln_arrow(target_ptr))) {
+        if (!player_ptr->blind && (has_invuln_arrow(player_ptr))) {
             dam = 0;
             ignore_wraith_form = true;
         }
         break;
 
     case GF_LITE:
-        dam = dam * calc_lite_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_lite_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_DARK:
-        dam = dam * calc_dark_damage_rate(target_ptr, CALC_MAX) / 100;
-        if (has_immune_dark(target_ptr) || target_ptr->wraith_form)
+        dam = dam * calc_dark_damage_rate(player_ptr, CALC_MAX) / 100;
+        if (has_immune_dark(player_ptr) || player_ptr->wraith_form)
             ignore_wraith_form = true;
         break;
 
     case GF_SHARDS:
-        dam = dam * calc_shards_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_shards_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_SOUND:
-        dam = dam * calc_sound_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_sound_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_CONFUSION:
-        dam = dam * calc_conf_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_conf_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_CHAOS:
-        dam = dam * calc_chaos_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_chaos_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NETHER:
-        dam = dam * calc_nether_damage_rate(target_ptr, CALC_MAX) / 100;
-        if (PlayerRace(target_ptr).equals(player_race_type::SPECTRE)) {
+        dam = dam * calc_nether_damage_rate(player_ptr, CALC_MAX) / 100;
+        if (PlayerRace(player_ptr).equals(player_race_type::SPECTRE)) {
             ignore_wraith_form = true;
             dam = 0;
         }
         break;
 
     case GF_DISENCHANT:
-        dam = dam * calc_disenchant_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_disenchant_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NEXUS:
-        dam = dam * calc_nexus_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_nexus_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_TIME:
-        dam = dam * calc_time_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_time_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_GRAVITY:
-        dam = dam * calc_gravity_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_gravity_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_ROCKET:
-        dam = dam * calc_rocket_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_rocket_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NUKE:
-        dam = dam * calc_nuke_damage_rate(target_ptr) / 100;
+        dam = dam * calc_nuke_damage_rate(player_ptr) / 100;
         break;
 
     case GF_DEATH_RAY:
-        dam = dam * calc_deathray_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_deathray_damage_rate(player_ptr, CALC_MAX) / 100;
         if (dam == 0)
             ignore_wraith_form = true;
         break;
 
     case GF_HOLY_FIRE:
-        dam = dam * calc_holy_fire_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_holy_fire_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_HELL_FIRE:
-        dam = dam * calc_hell_fire_damage_rate(target_ptr, CALC_MAX) / 100;
+        dam = dam * calc_hell_fire_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case GF_MIND_BLAST:
     case GF_BRAIN_SMASH:
-        if (100 + rlev / 2 <= MAX(5, target_ptr->skill_sav)) {
+        if (100 + rlev / 2 <= MAX(5, player_ptr->skill_sav)) {
             dam = 0;
             ignore_wraith_form = true;
         }
@@ -214,7 +214,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_CAUSE_2:
     case GF_CAUSE_3:
     case GF_HAND_DOOM:
-        if (100 + rlev / 2 <= target_ptr->skill_sav) {
+        if (100 + rlev / 2 <= player_ptr->skill_sav) {
             dam = 0;
             ignore_wraith_form = true;
         }
@@ -222,7 +222,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_CAUSE_4:
-        if ((100 + rlev / 2 <= target_ptr->skill_sav) && (m_ptr->r_idx != MON_KENSHIROU)) {
+        if ((100 + rlev / 2 <= player_ptr->skill_sav) && (m_ptr->r_idx != MON_KENSHIROU)) {
             dam = 0;
             ignore_wraith_form = true;
         }
@@ -230,7 +230,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
     }
 
-    if (target_ptr->wraith_form && !ignore_wraith_form) {
+    if (player_ptr->wraith_form && !ignore_wraith_form) {
         dam /= 2;
         if (!dam)
             dam = 1;
@@ -262,19 +262,19 @@ static void spell_damcalc_by_spellnum(player_type *player_ptr, RF_ABILITY ms_typ
  * @param blow_ptr モンスターの打撃能力の構造体参照ポインタ
  * @return 算出された最大ダメージを返す。
  */
-static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_blow *blow_ptr)
+static int blow_damcalc(monster_type *m_ptr, player_type *player_ptr, monster_blow *blow_ptr)
 {
     int dam = blow_ptr->d_dice * blow_ptr->d_side;
     int dummy_max = 0;
 
     if (blow_ptr->method == RBM_EXPLODE) {
         dam = (dam + 1) / 2;
-        spell_damcalc(target_ptr, m_ptr, mbe_info[blow_ptr->effect].explode_type, dam, &dummy_max);
+        spell_damcalc(player_ptr, m_ptr, mbe_info[blow_ptr->effect].explode_type, dam, &dummy_max);
         dam = dummy_max;
         return dam;
     }
 
-    ARMOUR_CLASS ac = target_ptr->ac + target_ptr->to_a;
+    ARMOUR_CLASS ac = player_ptr->ac + player_ptr->to_a;
     bool check_wraith_form = true;
     switch (blow_ptr->effect) {
     case RBE_SUPERHURT: {
@@ -289,25 +289,25 @@ static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_bl
         break;
 
     case RBE_ACID:
-        spell_damcalc(target_ptr, m_ptr, GF_ACID, dam, &dummy_max);
+        spell_damcalc(player_ptr, m_ptr, GF_ACID, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
     case RBE_ELEC:
-        spell_damcalc(target_ptr, m_ptr, GF_ELEC, dam, &dummy_max);
+        spell_damcalc(player_ptr, m_ptr, GF_ELEC, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
     case RBE_FIRE:
-        spell_damcalc(target_ptr, m_ptr, GF_FIRE, dam, &dummy_max);
+        spell_damcalc(player_ptr, m_ptr, GF_FIRE, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
     case RBE_COLD:
-        spell_damcalc(target_ptr, m_ptr, GF_COLD, dam, &dummy_max);
+        spell_damcalc(player_ptr, m_ptr, GF_COLD, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
@@ -321,7 +321,7 @@ static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_bl
         break;
     }
 
-    if (check_wraith_form && target_ptr->wraith_form) {
+    if (check_wraith_form && player_ptr->wraith_form) {
         dam /= 2;
         if (!dam)
             dam = 1;

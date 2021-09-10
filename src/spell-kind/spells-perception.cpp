@@ -34,17 +34,17 @@
  * @brief 全所持アイテム鑑定処理 /
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void identify_pack(player_type *target_ptr)
+void identify_pack(player_type *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &target_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
-        identify_item(target_ptr, o_ptr);
-        autopick_alter_item(target_ptr, i, false);
+        identify_item(player_ptr, o_ptr);
+        autopick_alter_item(player_ptr, i, false);
     }
 }
 

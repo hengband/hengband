@@ -402,40 +402,40 @@ void teleport_player(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
 /*!
  * @brief プレイヤーのテレポートアウェイ処理 /
  * @param m_idx アウェイを試みたモンスターID
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dis テレポート距離
  * @param is_quantum_effect 量子的効果によるテレポートアウェイならばTRUE
  */
-void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis, bool is_quantum_effect)
+void teleport_player_away(MONSTER_IDX m_idx, player_type *player_ptr, POSITION dis, bool is_quantum_effect)
 {
-    if (target_ptr->phase_out)
+    if (player_ptr->phase_out)
         return;
 
-    const POSITION oy = target_ptr->y;
-    const POSITION ox = target_ptr->x;
+    const POSITION oy = player_ptr->y;
+    const POSITION ox = player_ptr->x;
 
-    if (!teleport_player_aux(target_ptr, dis, is_quantum_effect, TELEPORT_PASSIVE))
+    if (!teleport_player_aux(player_ptr, dis, is_quantum_effect, TELEPORT_PASSIVE))
         return;
 
     /* Monsters with teleport ability may follow the player */
     for (POSITION xx = -1; xx < 2; xx++) {
         for (POSITION yy = -1; yy < 2; yy++) {
-            MONSTER_IDX tmp_m_idx = target_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
+            MONSTER_IDX tmp_m_idx = player_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
             bool is_teleportable = tmp_m_idx > 0;
-            is_teleportable &= target_ptr->riding != tmp_m_idx;
+            is_teleportable &= player_ptr->riding != tmp_m_idx;
             is_teleportable &= m_idx != tmp_m_idx;
             if (!is_teleportable) {
                 continue;
             }
 
-            monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[tmp_m_idx];
+            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
             bool can_follow = r_ptr->ability_flags.has(RF_ABILITY::TPORT);
             can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
             can_follow &= monster_csleep_remaining(m_ptr) == 0;
             if (can_follow) {
-                teleport_monster_to(target_ptr, tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
+                teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
             }
         }
     }

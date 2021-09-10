@@ -8,48 +8,48 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
+void add_cheat_remove_flags_element(player_type *player_ptr, msr_type *msr_ptr)
 {
-    if (has_resist_acid(target_ptr))
+    if (has_resist_acid(player_ptr))
         msr_ptr->smart.set(SM::RES_ACID);
 
-    if (is_oppose_acid(target_ptr))
+    if (is_oppose_acid(player_ptr))
         msr_ptr->smart.set(SM::OPP_ACID);
 
-    if (has_immune_acid(target_ptr))
+    if (has_immune_acid(player_ptr))
         msr_ptr->smart.set(SM::IMM_ACID);
 
-    if (has_resist_elec(target_ptr))
+    if (has_resist_elec(player_ptr))
         msr_ptr->smart.set(SM::RES_ELEC);
 
-    if (is_oppose_elec(target_ptr))
+    if (is_oppose_elec(player_ptr))
         msr_ptr->smart.set(SM::OPP_ELEC);
 
-    if (has_immune_elec(target_ptr))
+    if (has_immune_elec(player_ptr))
         msr_ptr->smart.set(SM::IMM_ELEC);
 
-    if (has_resist_fire(target_ptr))
+    if (has_resist_fire(player_ptr))
         msr_ptr->smart.set(SM::RES_FIRE);
 
-    if (is_oppose_fire(target_ptr))
+    if (is_oppose_fire(player_ptr))
         msr_ptr->smart.set(SM::OPP_FIRE);
 
-    if (has_immune_fire(target_ptr))
+    if (has_immune_fire(player_ptr))
         msr_ptr->smart.set(SM::IMM_FIRE);
 
-    if (has_resist_cold(target_ptr))
+    if (has_resist_cold(player_ptr))
         msr_ptr->smart.set(SM::RES_COLD);
 
-    if (is_oppose_cold(target_ptr))
+    if (is_oppose_cold(player_ptr))
         msr_ptr->smart.set(SM::OPP_COLD);
 
-    if (has_immune_cold(target_ptr))
+    if (has_immune_cold(player_ptr))
         msr_ptr->smart.set(SM::IMM_COLD);
 
-    if (has_resist_pois(target_ptr))
+    if (has_resist_pois(player_ptr))
         msr_ptr->smart.set(SM::RES_POIS);
 
-    if (is_oppose_pois(target_ptr))
+    if (is_oppose_pois(player_ptr))
         msr_ptr->smart.set(SM::OPP_POIS);
 }
 

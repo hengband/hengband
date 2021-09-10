@@ -40,7 +40,7 @@
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
  * Determine if a beam spell will hit the target.
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 始点のY座標
  * @param x1 始点のX座標
  * @param y2 目標のY座標
@@ -48,11 +48,11 @@
  * @param m_ptr 使用するモンスターの構造体参照ポインタ
  * @return ビームが到達可能ならばTRUEを返す
  */
-bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
+bool direct_beam(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
-    int grid_n = projection_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, PROJECT_THRU);
+    int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, PROJECT_THRU);
     if (!grid_n)
         return false;
 
@@ -65,11 +65,11 @@ bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2,
 
         if (y == y2 && x == x2)
             hit2 = true;
-        else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 && !are_enemies(target_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx])) {
+        else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 && !are_enemies(player_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx])) {
             return false;
         }
 
-        if (is_friend && player_bold(target_ptr, y, x))
+        if (is_friend && player_bold(player_ptr, y, x))
             return false;
     }
 
@@ -178,23 +178,23 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
 /*!
  * @brief モンスターが特殊能力の目標地点を決める処理 /
  * Get the actual center point of ball spells (rad > 1) (originally from TOband)
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sy 始点のY座標
  * @param sx 始点のX座標
  * @param ty 目標Y座標を返す参照ポインタ
  * @param tx 目標X座標を返す参照ポインタ
  * @param flg 判定のフラグ配列
  */
-void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
+void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
     uint16_t path_g[128];
-    int path_n = projection_path(target_ptr, path_g, get_max_range(target_ptr), sy, sx, *ty, *tx, flg);
+    int path_n = projection_path(player_ptr, path_g, get_max_range(player_ptr), sy, sx, *ty, *tx, flg);
     *ty = sy;
     *tx = sx;
     for (int i = 0; i < path_n; i++) {
         sy = get_grid_y(path_g[i]);
         sx = get_grid_x(path_g[i]);
-        if (!cave_has_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF::PROJECT))
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, sy, sx, FF::PROJECT))
             break;
 
         *ty = sy;
@@ -205,21 +205,21 @@ void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITI
 /*!
  * @brief モンスターが敵モンスターに魔力消去を使うかどうかを返す /
  * Check should monster cast dispel spell at other monster.
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx 術者のモンスターID
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。
  */
-bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+bool dispel_check_monster(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-    monster_type *t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
+    monster_type *t_ptr = &player_ptr->current_floor_ptr->m_list[t_idx];
     if (monster_invulner_remaining(t_ptr))
         return true;
 
     if ((t_ptr->mspeed < 135) && monster_fast_remaining(t_ptr))
         return true;
 
-    if ((t_idx == target_ptr->riding) && dispel_check(target_ptr, m_idx))
+    if ((t_idx == player_ptr->riding) && dispel_check(player_ptr, m_idx))
         return true;
 
     return false;

@@ -55,7 +55,7 @@ typedef struct um_type {
 
 /*!
  * @brief 騎乗中のモンスター情報を更新する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param oy 移動前の、モンスターのY座標
@@ -64,60 +64,60 @@ typedef struct um_type {
  * @param ox 移動後の、モンスターのX座標
  * @return アイテム等に影響を及ぼしたらTRUE
  */
-bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
+bool update_riding_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-    grid_type *g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
-    monster_type *y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    monster_type *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (turn_flags_ptr->is_riding_mon)
-        return move_player_effect(target_ptr, ny, nx, MPE_DONT_PICKUP);
+        return move_player_effect(player_ptr, ny, nx, MPE_DONT_PICKUP);
 
-    target_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
+    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
     if (g_ptr->m_idx) {
         y_ptr->fy = oy;
         y_ptr->fx = ox;
-        update_monster(target_ptr, g_ptr->m_idx, true);
+        update_monster(player_ptr, g_ptr->m_idx, true);
     }
 
     g_ptr->m_idx = m_idx;
     m_ptr->fy = ny;
     m_ptr->fx = nx;
-    update_monster(target_ptr, m_idx, true);
+    update_monster(player_ptr, m_idx, true);
 
-    lite_spot(target_ptr, oy, ox);
-    lite_spot(target_ptr, ny, nx);
+    lite_spot(player_ptr, oy, ox);
+    lite_spot(player_ptr, ny, nx);
     return true;
 }
 
 /*!
  * @brief updateフィールドを更新する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  */
-void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
+void update_player_type(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
 {
     if (turn_flags_ptr->do_view) {
-        target_ptr->update |= PU_FLOW;
-        target_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+        player_ptr->update |= PU_FLOW;
+        player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
     if (turn_flags_ptr->do_move
         && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
-            || ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !target_ptr->phase_out))) {
-        target_ptr->update |= PU_MON_LITE;
+            || ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !player_ptr->phase_out))) {
+        player_ptr->update |= PU_MON_LITE;
     }
 }
 
 /*!
  * @brief モンスターのフラグを更新する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  */
-void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
+void update_monster_race_flags(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!is_original_ap_and_seen(target_ptr, m_ptr))
+    if (!is_original_ap_and_seen(player_ptr, m_ptr))
         return;
 
     if (turn_flags_ptr->did_open_door)
@@ -148,16 +148,16 @@ void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_p
  * @param window ウィンドウフラグ
  * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
  */
-void update_player_window(player_type *target_ptr, old_race_flags *old_race_flags_ptr)
+void update_player_window(player_type *player_ptr, old_race_flags *old_race_flags_ptr)
 {
     monster_race *r_ptr;
-    r_ptr = &r_info[target_ptr->monster_race_idx];
+    r_ptr = &r_info[player_ptr->monster_race_idx];
     if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) || (old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2)
         || (old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) || (old_race_flags_ptr->old_r_ability_flags != r_ptr->r_ability_flags)
         || (old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) || (old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0])
         || (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2])
         || (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell)) {
-        target_ptr->window_flags |= PW_MONSTER;
+        player_ptr->window_flags |= PW_MONSTER;
     }
 }
 
