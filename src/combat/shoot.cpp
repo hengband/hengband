@@ -77,7 +77,7 @@
  * @return スレイ倍率をかけたダメージ量
  */
 static MULTIPLY calc_shot_damage_with_slay(
-    player_type *sniper_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
+    player_type *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
 {
     MULTIPLY mult = 10;
 
@@ -95,7 +95,7 @@ static MULTIPLY calc_shot_damage_with_slay(
     case TV_ARROW:
     case TV_BOLT: {
         if ((flags.has(TR_SLAY_ANIMAL)) && any_bits(race_ptr->flags3, RF3_ANIMAL)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_ANIMAL);
             }
             if (mult < 17)
@@ -103,7 +103,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_ANIMAL)) && any_bits(race_ptr->flags3, RF3_ANIMAL)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_ANIMAL);
             }
             if (mult < 27)
@@ -111,7 +111,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_EVIL)) && any_bits(race_ptr->flags3, RF3_EVIL)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_EVIL);
             }
             if (mult < 15)
@@ -119,7 +119,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_EVIL)) && any_bits(race_ptr->flags3, RF3_EVIL)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_EVIL);
             }
             if (mult < 25)
@@ -127,7 +127,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_GOOD)) && any_bits(race_ptr->flags3, RF3_GOOD)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_GOOD);
             }
             if (mult < 15)
@@ -135,7 +135,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_GOOD)) && any_bits(race_ptr->flags3, RF3_GOOD)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_GOOD);
             }
             if (mult < 25)
@@ -143,7 +143,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_HUMAN)) && any_bits(race_ptr->flags2, RF2_HUMAN)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags2, RF2_HUMAN);
             }
             if (mult < 17)
@@ -151,7 +151,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_HUMAN)) && any_bits(race_ptr->flags2, RF2_HUMAN)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags2, RF2_HUMAN);
             }
             if (mult < 27)
@@ -159,7 +159,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_UNDEAD)) && any_bits(race_ptr->flags3, RF3_UNDEAD)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_UNDEAD);
             }
             if (mult < 20)
@@ -167,7 +167,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_UNDEAD)) && any_bits(race_ptr->flags3, RF3_UNDEAD)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_UNDEAD);
             }
             if (mult < 30)
@@ -175,7 +175,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_DEMON)) && any_bits(race_ptr->flags3, RF3_DEMON)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_DEMON);
             }
             if (mult < 20)
@@ -183,7 +183,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_DEMON)) && any_bits(race_ptr->flags3, RF3_DEMON)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_DEMON);
             }
             if (mult < 30)
@@ -191,7 +191,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_ORC)) && any_bits(race_ptr->flags3, RF3_ORC)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_ORC);
             }
             if (mult < 20)
@@ -199,7 +199,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_ORC)) && any_bits(race_ptr->flags3, RF3_ORC)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_ORC);
             }
             if (mult < 30)
@@ -207,7 +207,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_TROLL)) && any_bits(race_ptr->flags3, RF3_TROLL)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_TROLL);
             }
 
@@ -216,7 +216,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_TROLL)) && any_bits(race_ptr->flags3, RF3_TROLL)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_TROLL);
             }
             if (mult < 30)
@@ -224,7 +224,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_GIANT)) && any_bits(race_ptr->flags3, RF3_GIANT)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_GIANT);
             }
             if (mult < 20)
@@ -232,7 +232,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_GIANT)) && any_bits(race_ptr->flags3, RF3_GIANT)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_GIANT);
             }
             if (mult < 30)
@@ -240,7 +240,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_SLAY_DRAGON)) && any_bits(race_ptr->flags3, RF3_DRAGON)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_DRAGON);
             }
             if (mult < 20)
@@ -248,19 +248,19 @@ static MULTIPLY calc_shot_damage_with_slay(
         }
 
         if ((flags.has(TR_KILL_DRAGON)) && any_bits(race_ptr->flags3, RF3_DRAGON)) {
-            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_DRAGON);
             }
             if (mult < 30)
                 mult = 30;
-            if ((arrow_ptr->name1 == ART_BARD_ARROW) && (monster_ptr->r_idx == MON_SMAUG) && (sniper_ptr->inventory_list[INVEN_BOW].name1 == ART_BARD))
+            if ((arrow_ptr->name1 == ART_BARD_ARROW) && (monster_ptr->r_idx == MON_SMAUG) && (player_ptr->inventory_list[INVEN_BOW].name1 == ART_BARD))
                 mult *= 5;
         }
 
         if (flags.has(TR_BRAND_ACID)) {
             /* Notice immunity */
             if (any_bits(race_ptr->flagsr, RFR_EFF_IM_ACID_MASK)) {
-                if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                     set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_ACID_MASK));
                 }
             } else {
@@ -272,7 +272,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         if (flags.has(TR_BRAND_ELEC)) {
             /* Notice immunity */
             if (any_bits(race_ptr->flagsr, RFR_EFF_IM_ELEC_MASK)) {
-                if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                     set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_ELEC_MASK));
                 }
             } else {
@@ -284,7 +284,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         if (flags.has(TR_BRAND_FIRE)) {
             /* Notice immunity */
             if (any_bits(race_ptr->flagsr, RFR_EFF_IM_FIRE_MASK)) {
-                if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                     set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_FIRE_MASK));
                 }
             }
@@ -293,7 +293,7 @@ static MULTIPLY calc_shot_damage_with_slay(
                 if (any_bits(race_ptr->flags3, RF3_HURT_FIRE)) {
                     if (mult < 25)
                         mult = 25;
-                    if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                    if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                         set_bits(race_ptr->r_flags3, RF3_HURT_FIRE);
                     }
                 } else if (mult < 17)
@@ -304,7 +304,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         if (flags.has(TR_BRAND_COLD)) {
             /* Notice immunity */
             if (any_bits(race_ptr->flagsr, RFR_EFF_IM_COLD_MASK)) {
-                if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                     set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_COLD_MASK));
                 }
             }
@@ -313,7 +313,7 @@ static MULTIPLY calc_shot_damage_with_slay(
                 if (any_bits(race_ptr->flags3, RF3_HURT_COLD)) {
                     if (mult < 25)
                         mult = 25;
-                    if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                    if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                         set_bits(race_ptr->r_flags3, RF3_HURT_COLD);
                     }
                 } else if (mult < 17)
@@ -324,7 +324,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         if (flags.has(TR_BRAND_POIS)) {
             /* Notice immunity */
             if (any_bits(race_ptr->flagsr, RFR_EFF_IM_POIS_MASK)) {
-                if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                     set_bits(race_ptr->r_flagsr, race_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
                 }
             }
@@ -335,9 +335,9 @@ static MULTIPLY calc_shot_damage_with_slay(
             }
         }
 
-        if ((flags.has(TR_FORCE_WEAPON)) && (sniper_ptr->csp > (sniper_ptr->msp / 30))) {
-            sniper_ptr->csp -= (1 + (sniper_ptr->msp / 30));
-            set_bits(sniper_ptr->redraw, PR_MANA);
+        if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
+            player_ptr->csp -= (1 + (player_ptr->msp / 30));
+            set_bits(player_ptr->redraw, PR_MANA);
             mult = mult * 5 / 2;
         }
         break;
@@ -349,7 +349,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 
     /* Sniper */
     if (snipe_type)
-        mult = calc_snipe_damage_with_slay(sniper_ptr, mult, monster_ptr, snipe_type);
+        mult = calc_snipe_damage_with_slay(player_ptr, mult, monster_ptr, snipe_type);
 
     /* Return the total damage */
     return (tdam * mult / 10);
