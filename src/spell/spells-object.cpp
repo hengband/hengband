@@ -83,13 +83,13 @@ static amuse_type amuse_info[]
 
 /*!
  * @brief 誰得ドロップを行う。
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 配置したいフロアのY座標
  * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, bool known)
+void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
     int t = 0;
     for (int n = 0; amuse_info[n].tval != 0; n++) {
@@ -144,7 +144,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         i_ptr->prep(k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
-        apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
+        apply_magic_to_object(player_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
             if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE)
@@ -157,7 +157,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
             i_ptr->number = randint1(99);
 
         if (known) {
-            object_aware(creature_ptr, i_ptr);
+            object_aware(player_ptr, i_ptr);
             object_known(i_ptr);
         }
 
@@ -165,7 +165,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         if (!(i_ptr->k_idx))
             continue;
 
-        (void)drop_near(creature_ptr, i_ptr, -1, y1, x1);
+        (void)drop_near(player_ptr, i_ptr, -1, y1, x1);
 
         num--;
     }

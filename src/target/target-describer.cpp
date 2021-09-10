@@ -97,10 +97,10 @@ static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, PO
 /*
  * Evaluate number of kill needed to gain level
  */
-static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_type *m_ptr)
+static void evaluate_monster_exp(player_type *player_ptr, char *buf, monster_type *m_ptr)
 {
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-    if ((creature_ptr->lev >= PY_MAX_LEVEL) || (creature_ptr->prace == player_race_type::ANDROID)) {
+    if ((player_ptr->lev >= PY_MAX_LEVEL) || (player_ptr->prace == player_race_type::ANDROID)) {
         sprintf(buf, "**");
         return;
     }
@@ -114,13 +114,13 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
 
     int32_t exp_mon = ap_r_ptr->mexp * ap_r_ptr->level;
     uint32_t exp_mon_frac = 0;
-    s64b_div(&exp_mon, &exp_mon_frac, 0, (creature_ptr->max_plv + 2));
+    s64b_div(&exp_mon, &exp_mon_frac, 0, (player_ptr->max_plv + 2));
 
-    int32_t exp_adv = player_exp[creature_ptr->lev - 1] * creature_ptr->expfact;
+    int32_t exp_adv = player_exp[player_ptr->lev - 1] * player_ptr->expfact;
     uint32_t exp_adv_frac = 0;
     s64b_div(&exp_adv, &exp_adv_frac, 0, 100);
 
-    s64b_sub(&exp_adv, &exp_adv_frac, creature_ptr->exp, creature_ptr->exp_frac);
+    s64b_sub(&exp_adv, &exp_adv_frac, player_ptr->exp, player_ptr->exp_frac);
 
     s64b_add(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
     s64b_sub(&exp_adv, &exp_adv_frac, 0, 1);

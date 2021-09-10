@@ -162,7 +162,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 /*!
  * @brief プレイヤーがオブジェクトを拾った際のメッセージ表示処理 /
  * Helper routine for py_pickup() and py_pickup_floor().
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_idx 取得したオブジェクトの参照ID
  * @details
  * アイテムを拾った際に「２つのケーキを持っている」
@@ -232,38 +232,38 @@ void describe_pickup_item(player_type *owner_ptr, OBJECT_IDX o_idx)
 
 /*!
  * @brief プレイヤーがオブジェクト上に乗った際の表示処理 / Player "wants" to pick up an object or gold.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param pickup 自動拾い処理を行うならばTRUEとする
  */
-void carry(player_type *creature_ptr, bool pickup)
+void carry(player_type *player_ptr, bool pickup)
 {
-    verify_panel(creature_ptr);
-    creature_ptr->update |= PU_MONSTERS;
-    creature_ptr->redraw |= PR_MAP;
-    creature_ptr->window_flags |= PW_OVERHEAD;
-    handle_stuff(creature_ptr);
-    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
-    autopick_pickup_items(creature_ptr, g_ptr);
+    verify_panel(player_ptr);
+    player_ptr->update |= PU_MONSTERS;
+    player_ptr->redraw |= PR_MAP;
+    player_ptr->window_flags |= PW_OVERHEAD;
+    handle_stuff(player_ptr);
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    autopick_pickup_items(player_ptr, g_ptr);
     if (easy_floor) {
-        py_pickup_floor(creature_ptr, pickup);
+        py_pickup_floor(player_ptr, pickup);
         return;
     }
 
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
         object_type *o_ptr;
-        o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
+        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(creature_ptr, o_name, o_ptr, 0);
-        disturb(creature_ptr, false, false);
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        disturb(player_ptr, false, false);
         if (o_ptr->tval == TV_GOLD) {
             int value = (long)o_ptr->pval;
-            delete_object_idx(creature_ptr, this_o_idx);
+            delete_object_idx(player_ptr, this_o_idx);
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, o_name);
             sound(SOUND_SELL);
-            creature_ptr->au += value;
-            creature_ptr->redraw |= (PR_GOLD);
-            creature_ptr->window_flags |= (PW_PLAYER);
+            player_ptr->au += value;
+            player_ptr->redraw |= (PR_GOLD);
+            player_ptr->window_flags |= (PW_PLAYER);
             continue;
         }
 
@@ -277,7 +277,7 @@ void carry(player_type *creature_ptr, bool pickup)
             continue;
         }
 
-        if (!check_store_item_to_inventory(creature_ptr, o_ptr)) {
+        if (!check_store_item_to_inventory(player_ptr, o_ptr)) {
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
             continue;
         }
@@ -290,7 +290,7 @@ void carry(player_type *creature_ptr, bool pickup)
         }
 
         if (is_pickup_successful) {
-            describe_pickup_item(creature_ptr, this_o_idx);
+            describe_pickup_item(player_ptr, this_o_idx);
         }
     }
 }

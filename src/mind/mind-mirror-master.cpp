@@ -46,34 +46,34 @@
 /*
  * @brief Multishadow effects is determined by turn
  */
-bool check_multishadow(player_type *creature_ptr) { return (creature_ptr->multishadow != 0) && ((current_world_ptr->game_turn & 1) != 0); }
+bool check_multishadow(player_type *player_ptr) { return (player_ptr->multishadow != 0) && ((current_world_ptr->game_turn & 1) != 0); }
 
 /*!
  * 静水
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return ペットを操っている場合を除きTRUE
  */
-bool mirror_concentration(player_type *creature_ptr)
+bool mirror_concentration(player_type *player_ptr)
 {
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
         return false;
     }
 
-    if (!creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].is_mirror()) {
+    if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].is_mirror()) {
         msg_print(_("鏡の上でないと集中できない！", "There's no mirror here!"));
         return true;
     }
 
     msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
 
-    creature_ptr->csp += (5 + creature_ptr->lev * creature_ptr->lev / 100);
-    if (creature_ptr->csp >= creature_ptr->msp) {
-        creature_ptr->csp = creature_ptr->msp;
-        creature_ptr->csp_frac = 0;
+    player_ptr->csp += (5 + player_ptr->lev * player_ptr->lev / 100);
+    if (player_ptr->csp >= player_ptr->msp) {
+        player_ptr->csp = player_ptr->msp;
+        player_ptr->csp_frac = 0;
     }
 
-    creature_ptr->redraw |= PR_MANA;
+    player_ptr->redraw |= PR_MANA;
     return true;
 }
 
@@ -248,17 +248,17 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 
 /*!
  * 幻惑の光 @ 鏡使いだけでなく混沌の戦士も使える
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 常にTRUE
  */
-bool confusing_light(player_type *creature_ptr)
+bool confusing_light(player_type *player_ptr)
 {
     msg_print(_("辺りを睨んだ...", "You glare at nearby monsters..."));
-    slow_monsters(creature_ptr, creature_ptr->lev);
-    stun_monsters(creature_ptr, creature_ptr->lev * 4);
-    confuse_monsters(creature_ptr, creature_ptr->lev * 4);
-    turn_monsters(creature_ptr, creature_ptr->lev * 4);
-    stasis_monsters(creature_ptr, creature_ptr->lev * 4);
+    slow_monsters(player_ptr, player_ptr->lev);
+    stun_monsters(player_ptr, player_ptr->lev * 4);
+    confuse_monsters(player_ptr, player_ptr->lev * 4);
+    turn_monsters(player_ptr, player_ptr->lev * 4);
+    stasis_monsters(player_ptr, player_ptr->lev * 4);
     return true;
 }
 
@@ -308,39 +308,39 @@ bool mirror_tunnel(player_type *caster_ptr)
 /*
  * Set "multishadow", notice observable changes
  */
-bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_multishadow(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->multishadow && !do_dec) {
-            if (creature_ptr->multishadow > v)
+        if (player_ptr->multishadow && !do_dec) {
+            if (player_ptr->multishadow > v)
                 return false;
-        } else if (!creature_ptr->multishadow) {
+        } else if (!player_ptr->multishadow) {
             msg_print(_("あなたの周りに幻影が生まれた。", "Your Shadow enveloped you."));
             notice = true;
         }
     } else {
-        if (creature_ptr->multishadow) {
+        if (player_ptr->multishadow) {
             msg_print(_("幻影が消えた。", "Your Shadow disappears."));
             notice = true;
         }
     }
 
-    creature_ptr->multishadow = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->multishadow = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -350,39 +350,39 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_dustrobe(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->dustrobe && !do_dec) {
-            if (creature_ptr->dustrobe > v)
+        if (player_ptr->dustrobe && !do_dec) {
+            if (player_ptr->dustrobe > v)
                 return false;
-        } else if (!creature_ptr->dustrobe) {
+        } else if (!player_ptr->dustrobe) {
             msg_print(_("体が鏡のオーラで覆われた。", "You are enveloped by mirror shards."));
             notice = true;
         }
     } else {
-        if (creature_ptr->dustrobe) {
+        if (player_ptr->dustrobe) {
             msg_print(_("鏡のオーラが消えた。", "The mirror shards disappear."));
             notice = true;
         }
     }
 
-    creature_ptr->dustrobe = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->dustrobe = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 

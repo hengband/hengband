@@ -11,16 +11,16 @@
 
 /*!
  * @brief 装備の解呪処理 / Removes curses from items in inventory
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param all 軽い呪いまでの解除ならば0
  * @return 解呪されたアイテムの数
  * @details 永遠の呪いは解呪できない
  */
-static int exe_curse_removal(player_type *creature_ptr, int all)
+static int exe_curse_removal(player_type *player_ptr, int all)
 {
     int cnt = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (!o_ptr->is_cursed())
@@ -36,8 +36,8 @@ static int exe_curse_removal(player_type *creature_ptr, int all)
         o_ptr->ident |= IDENT_SENSE;
         o_ptr->feeling = FEEL_NONE;
 
-        creature_ptr->update |= (PU_BONUS);
-        creature_ptr->window_flags |= (PW_EQUIP);
+        player_ptr->update |= (PU_BONUS);
+        player_ptr->window_flags |= (PW_EQUIP);
         cnt++;
     }
 

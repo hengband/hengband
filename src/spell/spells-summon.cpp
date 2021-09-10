@@ -114,20 +114,20 @@ bool cast_summon_demon(player_type *caster_ptr, int power)
     return true;
 }
 
-bool cast_summon_undead(player_type *creature_ptr, int power)
+bool cast_summon_undead(player_type *player_ptr, int power)
 {
     bool pet = one_in_(3);
-    summon_type type = (creature_ptr->lev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
+    summon_type type = (player_ptr->lev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
 
     BIT_FLAGS mode = 0L;
-    if (!pet || ((creature_ptr->lev > 24) && one_in_(3)))
+    if (!pet || ((player_ptr->lev > 24) && one_in_(3)))
         mode |= PM_ALLOW_GROUP;
     if (pet)
         mode |= PM_FORCE_PET;
     else
         mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-    if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, type, mode)) {
+    if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, type, mode)) {
         msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
             "Cold winds begin to blow around you, carrying with them the stench of decay..."));
         if (pet)
@@ -138,7 +138,7 @@ bool cast_summon_undead(player_type *creature_ptr, int power)
     return true;
 }
 
-bool cast_summon_hound(player_type *creature_ptr, int power)
+bool cast_summon_hound(player_type *player_ptr, int power)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     bool pet = !one_in_(5);
@@ -147,7 +147,7 @@ bool cast_summon_hound(player_type *creature_ptr, int power)
     else
         mode |= PM_NO_PET;
 
-    if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_HOUND, mode)) {
+    if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, SUMMON_HOUND, mode)) {
         if (pet)
             msg_print(_("ハウンドがあなたの下僕として出現した。", "A group of hounds appear as your servants."));
         else
@@ -157,18 +157,18 @@ bool cast_summon_hound(player_type *creature_ptr, int power)
     return true;
 }
 
-bool cast_summon_elemental(player_type *creature_ptr, int power)
+bool cast_summon_elemental(player_type *player_ptr, int power)
 {
     bool pet = one_in_(3);
     BIT_FLAGS mode = 0L;
-    if (!(pet && (creature_ptr->lev < 50)))
+    if (!(pet && (player_ptr->lev < 50)))
         mode |= PM_ALLOW_GROUP;
     if (pet)
         mode |= PM_FORCE_PET;
     else
         mode |= PM_NO_PET;
 
-    if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_ELEMENTAL, mode)) {
+    if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, SUMMON_ELEMENTAL, mode)) {
         msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
         if (pet)
             msg_print(_("あなたに服従しているようだ。", "It seems obedient to you."));
@@ -179,13 +179,13 @@ bool cast_summon_elemental(player_type *creature_ptr, int power)
     return true;
 }
 
-bool cast_summon_octopus(player_type *creature_ptr)
+bool cast_summon_octopus(player_type *player_ptr)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     bool pet = !one_in_(5);
     if (pet)
         mode |= PM_FORCE_PET;
-    if (summon_named_creature(creature_ptr, 0, creature_ptr->y, creature_ptr->x, MON_JIZOTAKO, mode)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MON_JIZOTAKO, mode)) {
         if (pet)
             msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servants."));
         else
@@ -232,12 +232,12 @@ bool cast_summon_greater_demon(player_type *caster_ptr)
  * @param mode 召喚オプション
  * @return ターンを消費した場合TRUEを返す
  */
-bool summon_kin_player(player_type *creature_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
+bool summon_kin_player(player_type *player_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     bool pet = (bool)(mode & PM_FORCE_PET);
     if (!pet)
         mode |= PM_NO_PET;
-    return summon_specific(creature_ptr, (pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
+    return summon_specific(player_ptr, (pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
 }
 
 /*!
@@ -248,11 +248,11 @@ bool summon_kin_player(player_type *creature_ptr, DEPTH level, POSITION y, POSIT
  * @param x 召喚位置X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-int summon_cyber(player_type *creature_ptr, MONSTER_IDX who, POSITION y, POSITION x)
+int summon_cyber(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (who > 0) {
         monster_type *m_ptr = &floor_ptr->m_list[who];
         if (is_pet(m_ptr))
@@ -265,7 +265,7 @@ int summon_cyber(player_type *creature_ptr, MONSTER_IDX who, POSITION y, POSITIO
 
     int count = 0;
     for (int i = 0; i < max_cyber; i++) {
-        count += summon_specific(creature_ptr, who, y, x, 100, SUMMON_CYBER, mode);
+        count += summon_specific(player_ptr, who, y, x, 100, SUMMON_CYBER, mode);
     }
 
     return count;

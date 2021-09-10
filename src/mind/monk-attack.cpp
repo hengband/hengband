@@ -239,14 +239,14 @@ void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
     print_stun_effect(attacker_ptr, pa_ptr, stun_effect, resist_stun);
 }
 
-bool double_attack(player_type *creature_ptr)
+bool double_attack(player_type *player_ptr)
 {
     DIRECTION dir;
-    if (!get_rep_dir(creature_ptr, &dir, false))
+    if (!get_rep_dir(player_ptr, &dir, false))
         return false;
-    POSITION y = creature_ptr->y + ddy[dir];
-    POSITION x = creature_ptr->x + ddx[dir];
-    if (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+    POSITION y = player_ptr->y + ddy[dir];
+    POSITION x = player_ptr->x + ddx[dir];
+    if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
         msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
         msg_print(nullptr);
         return true;
@@ -259,12 +259,12 @@ bool double_attack(player_type *creature_ptr)
     else
         msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！", "Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
 
-    do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
-    if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-        handle_stuff(creature_ptr);
-        do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
+    do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+    if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+        handle_stuff(player_ptr);
+        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
     }
 
-    creature_ptr->energy_need += ENERGY_NEED();
+    player_ptr->energy_need += ENERGY_NEED();
     return true;
 }

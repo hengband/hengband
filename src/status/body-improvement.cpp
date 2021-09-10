@@ -19,39 +19,39 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_protevil(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->protevil && !do_dec) {
-            if (creature_ptr->protevil > v)
+        if (player_ptr->protevil && !do_dec) {
+            if (player_ptr->protevil > v)
                 return false;
-        } else if (!creature_ptr->protevil) {
+        } else if (!player_ptr->protevil) {
             msg_print(_("邪悪なる存在から守られているような感じがする！", "You feel safe from evil!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->protevil) {
+        if (player_ptr->protevil) {
             msg_print(_("邪悪なる存在から守られている感じがなくなった。", "You no longer feel safe from evil."));
             notice = true;
         }
     }
 
-    creature_ptr->protevil = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->protevil = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 
-    handle_stuff(creature_ptr);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -61,57 +61,57 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_invuln(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->invuln && !do_dec) {
-            if (creature_ptr->invuln > v)
+        if (player_ptr->invuln && !do_dec) {
+            if (player_ptr->invuln > v)
                 return false;
-        } else if (!is_invuln(creature_ptr)) {
+        } else if (!is_invuln(player_ptr)) {
             msg_print(_("無敵だ！", "Invulnerability!"));
             notice = true;
 
-            chg_virtue(creature_ptr, V_UNLIFE, -2);
-            chg_virtue(creature_ptr, V_HONOUR, -2);
-            chg_virtue(creature_ptr, V_SACRIFICE, -3);
-            chg_virtue(creature_ptr, V_VALOUR, -5);
+            chg_virtue(player_ptr, V_UNLIFE, -2);
+            chg_virtue(player_ptr, V_HONOUR, -2);
+            chg_virtue(player_ptr, V_SACRIFICE, -3);
+            chg_virtue(player_ptr, V_VALOUR, -5);
 
-            creature_ptr->redraw |= (PR_MAP);
-            creature_ptr->update |= (PU_MONSTERS);
+            player_ptr->redraw |= (PR_MAP);
+            player_ptr->update |= (PU_MONSTERS);
 
-            creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     } else {
-        if (creature_ptr->invuln && !music_singing(creature_ptr, MUSIC_INVULN)) {
+        if (player_ptr->invuln && !music_singing(player_ptr, MUSIC_INVULN)) {
             msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
             notice = true;
 
-            creature_ptr->redraw |= (PR_MAP);
-            creature_ptr->update |= (PU_MONSTERS);
+            player_ptr->redraw |= (PR_MAP);
+            player_ptr->update |= (PU_MONSTERS);
 
-            creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
-            creature_ptr->energy_need += ENERGY_NEED();
+            player_ptr->energy_need += ENERGY_NEED();
         }
     }
 
-    creature_ptr->invuln = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->invuln = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -121,40 +121,40 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_regen(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_regen && !do_dec) {
-            if (creature_ptr->tim_regen > v)
+        if (player_ptr->tim_regen && !do_dec) {
+            if (player_ptr->tim_regen > v)
                 return false;
-        } else if (!creature_ptr->tim_regen) {
+        } else if (!player_ptr->tim_regen) {
             msg_print(_("回復力が上がった！", "You feel yourself regenerating quickly!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->tim_regen) {
+        if (player_ptr->tim_regen) {
             msg_print(_("素早く回復する感じがなくなった。", "You feel you are no longer regenerating quickly."));
             notice = true;
         }
     }
 
-    creature_ptr->tim_regen = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_regen = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -164,40 +164,40 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_reflect(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_reflect && !do_dec) {
-            if (creature_ptr->tim_reflect > v)
+        if (player_ptr->tim_reflect && !do_dec) {
+            if (player_ptr->tim_reflect > v)
                 return false;
-        } else if (!creature_ptr->tim_reflect) {
+        } else if (!player_ptr->tim_reflect) {
             msg_print(_("体の表面が滑かになった気がする。", "Your body becames smooth."));
             notice = true;
         }
     } else {
-        if (creature_ptr->tim_reflect) {
+        if (player_ptr->tim_reflect) {
             msg_print(_("体の表面が滑かでなくなった。", "Your body is no longer smooth."));
             notice = true;
         }
     }
 
-    creature_ptr->tim_reflect = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_reflect = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -207,39 +207,39 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_pass_wall(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_pass_wall(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_pass_wall && !do_dec) {
-            if (creature_ptr->tim_pass_wall > v)
+        if (player_ptr->tim_pass_wall && !do_dec) {
+            if (player_ptr->tim_pass_wall > v)
                 return false;
-        } else if (!creature_ptr->tim_pass_wall) {
+        } else if (!player_ptr->tim_pass_wall) {
             msg_print(_("体が半物質の状態になった。", "You became ethereal."));
             notice = true;
         }
     } else {
-        if (creature_ptr->tim_pass_wall) {
+        if (player_ptr->tim_pass_wall) {
             msg_print(_("体が物質化した。", "You are no longer ethereal."));
             notice = true;
         }
     }
 
-    creature_ptr->tim_pass_wall = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_pass_wall = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }

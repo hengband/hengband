@@ -104,9 +104,9 @@ void wiz_identify_full_inventory(player_type *caster_ptr);
 
 /*!
     * @brief ゲーム設定コマンドの入力を受け付ける
-    * @param creature_ptr プレイヤーの情報へのポインタ
+    * @param player_ptr プレイヤーの情報へのポインタ
        */
-void wizard_item_modifier(player_type *creature_ptr)
+void wizard_item_modifier(player_type *player_ptr)
 {
     screen_save();
     display_wizard_sub_menu();
@@ -131,37 +131,37 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, true, false, true);
+        acquirement(player_ptr, player_ptr->y, player_ptr->x, command_arg, true, false, true);
         break;
     case 'f':
-        identify_fully(creature_ptr, false);
+        identify_fully(player_ptr, false);
         break;
     case 'g':
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, false, false, true);
+        acquirement(player_ptr, player_ptr->y, player_ptr->x, command_arg, false, false, true);
         break;
     case 'i':
-        (void)ident_spell(creature_ptr, false);
+        (void)ident_spell(player_ptr, false);
         break;
     case 'I':
-        wiz_identify_full_inventory(creature_ptr);
+        wiz_identify_full_inventory(player_ptr);
         break;
     case 'l':
-        wiz_learn_items_all(creature_ptr);
+        wiz_learn_items_all(player_ptr);
         break;
     case 's':
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, true, true, true);
+        acquirement(player_ptr, player_ptr->y, player_ptr->x, command_arg, true, true, true);
         break;
     case 'U':
-        wiz_modify_item_activation(creature_ptr);
+        wiz_modify_item_activation(player_ptr);
         break;
     case 'w':
-        do_cmd_wishing(creature_ptr, -1, true, true, true);
+        do_cmd_wishing(player_ptr, -1, true, true, true);
         break;
     }
 }
@@ -655,13 +655,13 @@ static void wiz_quantity_item(object_type *o_ptr)
  *   - Change properties (via wiz_tweak_item)<br>
  *   - Change the number of items (via wiz_quantity_item)<br>
  */
-void wiz_modify_item(player_type *creature_ptr)
+void wiz_modify_item(player_type *player_ptr)
 {
     concptr q = "Play with which object? ";
     concptr s = "You have nothing to play with.";
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(creature_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr)
         return;
 
@@ -674,7 +674,7 @@ void wiz_modify_item(player_type *creature_ptr)
     char ch;
     bool changed = false;
     while (true) {
-        wiz_display_item(creature_ptr, q_ptr);
+        wiz_display_item(player_ptr, q_ptr);
         if (!get_com("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, false)) {
             changed = false;
             break;
@@ -686,15 +686,15 @@ void wiz_modify_item(player_type *creature_ptr)
         }
 
         if (ch == 's' || ch == 'S') {
-            wiz_statistics(creature_ptr, q_ptr);
+            wiz_statistics(player_ptr, q_ptr);
         }
 
         if (ch == 'r' || ch == 'R') {
-            wiz_reroll_item(creature_ptr, q_ptr);
+            wiz_reroll_item(player_ptr, q_ptr);
         }
 
         if (ch == 't' || ch == 'T') {
-            wiz_tweak_item(creature_ptr, q_ptr);
+            wiz_tweak_item(player_ptr, q_ptr);
         }
 
         if (ch == 'q' || ch == 'Q') {
@@ -707,8 +707,8 @@ void wiz_modify_item(player_type *creature_ptr)
         msg_print("Changes accepted.");
 
         o_ptr->copy_from(q_ptr);
-        set_bits(creature_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-        set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+        set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+        set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
     } else {
         msg_print("Changes ignored.");
     }

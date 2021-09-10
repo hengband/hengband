@@ -38,7 +38,7 @@ typedef struct debug_spell_command {
 
 extern debug_spell_command debug_spell_commands_list[SPELL_MAX];
 
-bool wiz_debug_spell(player_type *creature_ptr);
+bool wiz_debug_spell(player_type *player_ptr);
 void wiz_dimension_door(player_type *caster_ptr);
 void wiz_summon_horde(player_type *caster_ptr);
 void wiz_teleport_back(player_type *caster_ptr);

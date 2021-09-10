@@ -59,10 +59,10 @@ struct rc_type {
 
     /*!
      * @brief コンストラクタ
-     * @param creature_ptr プレイヤー情報への参照ポインタ
+     * @param player_ptr プレイヤー情報への参照ポインタ
      * @return 管理構造体
      */
-    rc_type(player_type *creature_prt);
+    rc_type(player_type *player_ptr);
 
     /*!
      * @brief レイシャル/クラスパワー定義を追加

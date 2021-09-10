@@ -4,10 +4,10 @@
 
 struct object_type;;
 struct player_type;
-void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, bool known);
+void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool known);
 void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
 bool curse_armor(player_type *owner_ptr);
-bool curse_weapon_object(player_type *creature_ptr, bool force, object_type *o_ptr);
+bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr);
 void brand_bolts(player_type *caster_ptr);
 bool perilous_secrets(player_type *user_ptr);
 

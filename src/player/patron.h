@@ -47,5 +47,5 @@ enum patron_reward {
 extern const concptr chaos_patrons[MAX_PATRON];
 
 struct player_type;
-void gain_level_reward(player_type *creature_ptr, int chosen_reward);
-void admire_from_patron(player_type *creature_ptr);
+void gain_level_reward(player_type *player_ptr, int chosen_reward);
+void admire_from_patron(player_type *player_ptr);

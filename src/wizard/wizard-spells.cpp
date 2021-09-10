@@ -47,7 +47,7 @@ debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
  * @brief コマンド入力により任意にスペル効果を起こす / Wizard spells
  * @return 実際にテレポートを行ったらTRUEを返す
  */
-bool wiz_debug_spell(player_type *creature_ptr)
+bool wiz_debug_spell(player_type *player_ptr)
 {
     char tmp_val[50] = "\0";
     int tmp_int;
@@ -61,7 +61,7 @@ bool wiz_debug_spell(player_type *creature_ptr)
 
         switch (debug_spell_commands_list[i].type) {
         case 2:
-            (*(debug_spell_commands_list[i].command_function.spell2.spell_function))(creature_ptr);
+            (*(debug_spell_commands_list[i].command_function.spell2.spell_function))(player_ptr);
             return true;
             break;
         case 3:
@@ -69,15 +69,15 @@ bool wiz_debug_spell(player_type *creature_ptr)
             if (!get_string("POWER:", tmp_val, 32))
                 return false;
             tmp_int = atoi(tmp_val);
-            (*(debug_spell_commands_list[i].command_function.spell3.spell_function))(creature_ptr, tmp_int);
+            (*(debug_spell_commands_list[i].command_function.spell3.spell_function))(player_ptr, tmp_int);
             return true;
             break;
         case 4:
-            (*(debug_spell_commands_list[i].command_function.spell4.spell_function))(creature_ptr, true, &tmp_int);
+            (*(debug_spell_commands_list[i].command_function.spell4.spell_function))(player_ptr, true, &tmp_int);
             return true;
             break;
         case 5:
-            (*(debug_spell_commands_list[i].command_function.spell5.spell_function))(creature_ptr);
+            (*(debug_spell_commands_list[i].command_function.spell5.spell_function))(player_ptr);
             return true;
             break;
         default:

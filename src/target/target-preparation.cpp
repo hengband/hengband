@@ -38,23 +38,23 @@
  * Future versions may restrict the ability to target "trappers"
  * and "mimics", but the semantics is a little bit weird.
  */
-bool target_able(player_type *creature_ptr, MONSTER_IDX m_idx)
+bool target_able(player_type *player_ptr, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     if (!monster_is_valid(m_ptr))
         return false;
 
-    if (creature_ptr->image)
+    if (player_ptr->image)
         return false;
 
     if (!m_ptr->ml)
         return false;
 
-    if (creature_ptr->riding && (creature_ptr->riding == m_idx))
+    if (player_ptr->riding && (player_ptr->riding == m_idx))
         return true;
 
-    if (!projectable(creature_ptr, creature_ptr->y, creature_ptr->x, m_ptr->fy, m_ptr->fx))
+    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))
         return false;
 
     return true;
@@ -63,16 +63,16 @@ bool target_able(player_type *creature_ptr, MONSTER_IDX m_idx)
 /*
  * Determine if a given location is "interesting"
  */
-static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
+static bool target_set_accept(player_type *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
         return false;
 
-    if (player_bold(creature_ptr, y, x))
+    if (player_bold(player_ptr, y, x))
         return true;
 
-    if (creature_ptr->image)
+    if (player_ptr->image)
         return false;
 
     grid_type *g_ptr;
@@ -103,21 +103,21 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief "interesting" な座標たちを ys, xs に返す。
- * @param creature_ptr
+ * @param player_ptr
  * @param ys y座標たちを格納する配列 (POSITION 型)
  * @param xs x座標たちを格納する配列 (POSITION 型)
  * @param mode
  *
  * ys, xs は処理開始時にクリアされる。
  */
-void target_set_prepare(player_type *creature_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs, const BIT_FLAGS mode)
+void target_set_prepare(player_type *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs, const BIT_FLAGS mode)
 {
     POSITION min_hgt, max_hgt, min_wid, max_wid;
     if (mode & TARGET_KILL) {
-        min_hgt = MAX((creature_ptr->y - get_max_range(creature_ptr)), 0);
-        max_hgt = MIN((creature_ptr->y + get_max_range(creature_ptr)), creature_ptr->current_floor_ptr->height - 1);
-        min_wid = MAX((creature_ptr->x - get_max_range(creature_ptr)), 0);
-        max_wid = MIN((creature_ptr->x + get_max_range(creature_ptr)), creature_ptr->current_floor_ptr->width - 1);
+        min_hgt = MAX((player_ptr->y - get_max_range(player_ptr)), 0);
+        max_hgt = MIN((player_ptr->y + get_max_range(player_ptr)), player_ptr->current_floor_ptr->height - 1);
+        min_wid = MAX((player_ptr->x - get_max_range(player_ptr)), 0);
+        max_wid = MIN((player_ptr->x + get_max_range(player_ptr)), player_ptr->current_floor_ptr->width - 1);
     } else {
         min_hgt = panel_row_min;
         max_hgt = panel_row_max;
@@ -131,14 +131,14 @@ void target_set_prepare(player_type *creature_ptr, std::vector<POSITION> &ys, st
     for (POSITION y = min_hgt; y <= max_hgt; y++) {
         for (POSITION x = min_wid; x <= max_wid; x++) {
             grid_type *g_ptr;
-            if (!target_set_accept(creature_ptr, y, x))
+            if (!target_set_accept(player_ptr, y, x))
                 continue;
 
-            g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-            if ((mode & (TARGET_KILL)) && !target_able(creature_ptr, g_ptr->m_idx))
+            g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            if ((mode & (TARGET_KILL)) && !target_able(player_ptr, g_ptr->m_idx))
                 continue;
 
-            if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx]))
+            if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&player_ptr->current_floor_ptr->m_list[g_ptr->m_idx]))
                 continue;
 
             ys.emplace_back(y);
@@ -147,14 +147,14 @@ void target_set_prepare(player_type *creature_ptr, std::vector<POSITION> &ys, st
     }
 
     if (mode & (TARGET_KILL)) {
-        ang_sort(creature_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_distance, ang_sort_swap_position);
+        ang_sort(player_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_distance, ang_sort_swap_position);
     } else {
-        ang_sort(creature_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_importance, ang_sort_swap_position);
+        ang_sort(player_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_importance, ang_sort_swap_position);
     }
 
     // 乗っているモンスターがターゲットリストの先頭にならないようにする調整。
 
-    if (creature_ptr->riding == 0 || !target_pet || (size(ys) <= 1) || !(mode & (TARGET_KILL)))
+    if (player_ptr->riding == 0 || !target_pet || (size(ys) <= 1) || !(mode & (TARGET_KILL)))
         return;
 
     // 0 番目と 1 番目を入れ替える。
@@ -162,16 +162,16 @@ void target_set_prepare(player_type *creature_ptr, std::vector<POSITION> &ys, st
     std::swap(xs[0], xs[1]);
 }
 
-void target_sensing_monsters_prepare(player_type *creature_ptr, std::vector<MONSTER_IDX> &monster_list)
+void target_sensing_monsters_prepare(player_type *player_ptr, std::vector<MONSTER_IDX> &monster_list)
 {
     monster_list.clear();
 
     // 幻覚時は正常に感知できない
-    if (creature_ptr->image)
+    if (player_ptr->image)
         return;
 
-    for (MONSTER_IDX i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
+    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
             continue;
 
@@ -182,7 +182,7 @@ void target_sensing_monsters_prepare(player_type *creature_ptr, std::vector<MONS
         monster_list.push_back(i);
     }
 
-    auto comp_importance = [floor_ptr = creature_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
+    auto comp_importance = [floor_ptr = player_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
         auto m_ptr1 = &floor_ptr->m_list[idx1];
         auto m_ptr2 = &floor_ptr->m_list[idx2];
         auto ap_r_ptr1 = &r_info[m_ptr1->ap_r_idx];

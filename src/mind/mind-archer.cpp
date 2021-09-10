@@ -89,25 +89,25 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
  * Hook to determine if an object is contertible in an arrow/bolt
  * @return 製造を実際に行ったらTRUE、キャンセルしたらFALSEを返す
  */
-bool create_ammo(player_type *creature_ptr)
+bool create_ammo(player_type *player_ptr)
 {
-    if (cmd_limit_confused(creature_ptr) || cmd_limit_blind(creature_ptr))
+    if (cmd_limit_confused(player_ptr) || cmd_limit_blind(player_ptr))
         return false;
 
     ammo_creation_type ext = AMMO_NONE;
 
-    if (!select_ammo_creation_type(ext, creature_ptr->lev))
+    if (!select_ammo_creation_type(ext, player_ptr->lev))
         return false;
 
     switch (ext) {
     case AMMO_SHOT: {
         DIRECTION dir;
-        if (!get_rep_dir(creature_ptr, &dir, false))
+        if (!get_rep_dir(player_ptr, &dir, false))
             return false;
 
-        POSITION y = creature_ptr->y + ddy[dir];
-        POSITION x = creature_ptr->x + ddx[dir];
-        grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+        POSITION y = player_ptr->y + ddy[dir];
+        POSITION x = player_ptr->x + ddx[dir];
+        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FF::CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return false;
@@ -120,46 +120,46 @@ bool create_ammo(player_type *creature_ptr)
 
         object_type forge;
         object_type *q_ptr = &forge;
-        q_ptr->prep(lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+        q_ptr->prep(lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(15, 30);
-        object_aware(creature_ptr, q_ptr);
+        object_aware(player_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
-        int16_t slot = store_item_to_inventory(creature_ptr, q_ptr);
+        int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(creature_ptr, o_name, q_ptr, 0);
+        describe_flavor(player_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
         if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, false);
+            autopick_alter_item(player_ptr, slot, false);
 
-        cave_alter_feat(creature_ptr, y, x, FF::HURT_ROCK);
-        creature_ptr->update |= PU_FLOW;
+        cave_alter_feat(player_ptr, y, x, FF::HURT_ROCK);
+        player_ptr->update |= PU_FLOW;
         return true;
     }
     case AMMO_ARROW: {
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::is_convertible));
+        object_type *q_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::is_convertible));
         if (!q_ptr)
             return false;
 
         object_type forge;
         q_ptr = &forge;
-        q_ptr->prep(lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+        q_ptr->prep(lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(5, 10);
-        object_aware(creature_ptr, q_ptr);
+        object_aware(player_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(creature_ptr, o_name, q_ptr, 0);
+        describe_flavor(player_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
-        vary_item(creature_ptr, item, -1);
-        int16_t slot = store_item_to_inventory(creature_ptr, q_ptr);
+        vary_item(player_ptr, item, -1);
+        int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, false);
+            autopick_alter_item(player_ptr, slot, false);
 
         return true;
     }
@@ -167,25 +167,25 @@ bool create_ammo(player_type *creature_ptr)
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_convertible));
+        object_type *q_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_convertible));
         if (!q_ptr)
             return false;
 
         object_type forge;
         q_ptr = &forge;
-        q_ptr->prep(lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+        q_ptr->prep(lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(4, 8);
-        object_aware(creature_ptr, q_ptr);
+        object_aware(player_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(creature_ptr, o_name, q_ptr, 0);
+        describe_flavor(player_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
-        vary_item(creature_ptr, item, -1);
-        int16_t slot = store_item_to_inventory(creature_ptr, q_ptr);
+        vary_item(player_ptr, item, -1);
+        int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, false);
+            autopick_alter_item(player_ptr, slot, false);
 
         return true;
     }

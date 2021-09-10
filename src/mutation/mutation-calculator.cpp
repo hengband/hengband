@@ -19,9 +19,9 @@
  * @brief 現在プレイヤー得ている突然変異の数を返す。
  * @return 現在得ている突然変異の数
  */
-static int count_mutations(player_type *creature_ptr)
+static int count_mutations(player_type *player_ptr)
 {
-    return creature_ptr->muta.count();
+    return player_ptr->muta.count();
 }
 
 /*!
@@ -32,15 +32,15 @@ static int count_mutations(player_type *creature_ptr)
  * Beastman get 10 "free" mutations and only 5% decrease per additional mutation.
  * Max 90% decrease in regeneration speed.
  */
-int calc_mutant_regenerate_mod(player_type *creature_ptr)
+int calc_mutant_regenerate_mod(player_type *player_ptr)
 {
     int regen;
     int mod = 10;
-    int count = count_mutations(creature_ptr);
-    if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
+    int count = count_mutations(player_ptr);
+    if (player_ptr->pseikaku == PERSONALITY_LUCKY)
         count--;
 
-    if (creature_ptr->prace == player_race_type::BEASTMAN) {
+    if (player_ptr->prace == player_race_type::BEASTMAN) {
         count -= 10;
         mod = 5;
     }

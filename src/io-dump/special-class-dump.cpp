@@ -26,10 +26,10 @@ typedef struct {
 
 /*!
  * @brief 魔力喰いを持つクラスの情報をダンプする
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
+static void dump_magic_eater(player_type *player_ptr, FILE *fff)
 {
     char s[EATER_EXT][MAX_NLEN];
     fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
@@ -54,7 +54,7 @@ static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
         int eat_num = 0;
         for (OBJECT_SUBTYPE_VALUE i = 0; i < EATER_EXT; i++) {
             int idx = EATER_EXT * ext + i;
-            int magic_num = creature_ptr->magic_num2[idx];
+            int magic_num = player_ptr->magic_num2[idx];
             if (!magic_num)
                 continue;
 
@@ -86,10 +86,10 @@ static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
 
 /*!
  * @brief 鍛冶師のエッセンス情報をダンプする
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_smith(player_type *creature_ptr, FILE *fff)
+static void dump_smith(player_type *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [手に入れたエッセンス]\n\n", "\n\n  [Get Essence]\n\n"));
     fprintf(fff, _("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "));
@@ -98,7 +98,7 @@ static void dump_smith(player_type *creature_ptr, FILE *fff)
     auto n = essences.size();
     std::vector<int> amounts;
     std::transform(essences.begin(), essences.end(), std::back_inserter(amounts),
-        [smith = Smith(creature_ptr)](SmithEssence e) { return smith.get_essence_num_of_posessions(e); });
+        [smith = Smith(player_ptr)](SmithEssence e) { return smith.get_essence_num_of_posessions(e); });
 
     auto row = n / 3 + 1;
     for (auto i = 0U; i < row; i++) {
@@ -149,10 +149,10 @@ static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_
 
 /*!
  * @brief 青魔道士の学習済魔法をダンプする
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
+static void dump_blue_mage(player_type *player_ptr, FILE *fff)
 {
     char p[60][80];
     for (int i = 0; i < 60; i++) {
@@ -176,7 +176,7 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 
         for (auto spell : learnt_spells) {
             const int spellnum = enum2i(spell);
-            if (creature_ptr->magic_num2[spellnum] == 0)
+            if (player_ptr->magic_num2[spellnum] == 0)
                 continue;
 
             pcol = true;
@@ -214,22 +214,22 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 
 /*!
  * @brief プレイヤーの職業能力情報をファイルにダンプする
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
+void dump_aux_class_special(player_type *player_ptr, FILE *fff)
 {
-    switch (creature_ptr->pclass) {
+    switch (player_ptr->pclass) {
     case CLASS_MAGIC_EATER: {
-        dump_magic_eater(creature_ptr, fff);
+        dump_magic_eater(player_ptr, fff);
         return;
     }
     case CLASS_SMITH: {
-        dump_smith(creature_ptr, fff);
+        dump_smith(player_ptr, fff);
         return;
     }
     case CLASS_BLUE_MAGE: {
-        dump_blue_mage(creature_ptr, fff);
+        dump_blue_mage(player_ptr, fff);
         return;
     }
     default:

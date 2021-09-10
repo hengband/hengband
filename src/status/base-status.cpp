@@ -31,34 +31,34 @@ static concptr desc_stat_neg[]
  * Note that this function (used by stat potions) now restores\n
  * the stat BEFORE increasing it.\n
  */
-bool inc_stat(player_type *creature_ptr, int stat)
+bool inc_stat(player_type *player_ptr, int stat)
 {
     BASE_STATUS gain;
-    BASE_STATUS value = creature_ptr->stat_cur[stat];
-    if (value >= creature_ptr->stat_max_max[stat])
+    BASE_STATUS value = player_ptr->stat_cur[stat];
+    if (value >= player_ptr->stat_max_max[stat])
         return false;
 
     if (value < 18) {
         gain = ((randint0(100) < 75) ? 1 : 2);
         value += gain;
-    } else if (value < (creature_ptr->stat_max_max[stat] - 2)) {
-        gain = (((creature_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
+    } else if (value < (player_ptr->stat_max_max[stat] - 2)) {
+        gain = (((player_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
         if (gain < 1)
             gain = 1;
 
         value += randint1(gain) + gain / 2;
-        if (value > (creature_ptr->stat_max_max[stat] - 1))
-            value = creature_ptr->stat_max_max[stat] - 1;
+        if (value > (player_ptr->stat_max_max[stat] - 1))
+            value = player_ptr->stat_max_max[stat] - 1;
     } else {
         value++;
     }
 
-    creature_ptr->stat_cur[stat] = value;
-    if (value > creature_ptr->stat_max[stat]) {
-        creature_ptr->stat_max[stat] = value;
+    player_ptr->stat_cur[stat] = value;
+    if (value > player_ptr->stat_max[stat]) {
+        player_ptr->stat_max[stat] = value;
     }
 
-    creature_ptr->update |= PU_BONUS;
+    player_ptr->update |= PU_BONUS;
     return true;
 }
 
@@ -79,11 +79,11 @@ bool inc_stat(player_type *creature_ptr, int stat)
  * if your stat is already drained, the "max" value will not drop all\n
  * the way down to the "cur" value.\n
  */
-bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
+bool dec_stat(player_type *player_ptr, int stat, int amount, int permanent)
 {
     bool res = false;
-    BASE_STATUS cur = creature_ptr->stat_cur[stat];
-    BASE_STATUS max = creature_ptr->stat_max[stat];
+    BASE_STATUS cur = player_ptr->stat_cur[stat];
+    BASE_STATUS max = player_ptr->stat_max[stat];
     int same = (cur == max);
     if (cur > 3) {
         if (cur <= 18) {
@@ -111,14 +111,14 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
         if (cur < 3)
             cur = 3;
 
-        if (cur != creature_ptr->stat_cur[stat])
+        if (cur != player_ptr->stat_cur[stat])
             res = true;
     }
 
     if (permanent && (max > 3)) {
-        chg_virtue(creature_ptr, V_SACRIFICE, 1);
+        chg_virtue(player_ptr, V_SACRIFICE, 1);
         if (stat == A_WIS || stat == A_INT)
-            chg_virtue(creature_ptr, V_ENLIGHTEN, -2);
+            chg_virtue(player_ptr, V_ENLIGHTEN, -2);
 
         if (max <= 18) {
             if (amount > 90)
@@ -142,15 +142,15 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
         if (same || (max < cur))
             max = cur;
 
-        if (max != creature_ptr->stat_max[stat])
+        if (max != player_ptr->stat_max[stat])
             res = true;
     }
 
     if (res) {
-        creature_ptr->stat_cur[stat] = cur;
-        creature_ptr->stat_max[stat] = max;
-        creature_ptr->redraw |= (PR_STATS);
-        creature_ptr->update |= (PU_BONUS);
+        player_ptr->stat_cur[stat] = cur;
+        player_ptr->stat_max[stat] = max;
+        player_ptr->redraw |= (PR_STATS);
+        player_ptr->update |= (PU_BONUS);
     }
 
     return (res);
@@ -161,12 +161,12 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
  * @param stat 回復ステータスID
  * @return 実際に回復した場合TRUEを返す。
  */
-bool res_stat(player_type *creature_ptr, int stat)
+bool res_stat(player_type *player_ptr, int stat)
 {
-    if (creature_ptr->stat_cur[stat] != creature_ptr->stat_max[stat]) {
-        creature_ptr->stat_cur[stat] = creature_ptr->stat_max[stat];
-        creature_ptr->update |= (PU_BONUS);
-        creature_ptr->redraw |= (PR_STATS);
+    if (player_ptr->stat_cur[stat] != player_ptr->stat_max[stat]) {
+        player_ptr->stat_cur[stat] = player_ptr->stat_max[stat];
+        player_ptr->update |= (PU_BONUS);
+        player_ptr->redraw |= (PR_STATS);
         return true;
     }
 
@@ -176,32 +176,32 @@ bool res_stat(player_type *creature_ptr, int stat)
 /*
  * Lose a "point"
  */
-bool do_dec_stat(player_type *creature_ptr, int stat)
+bool do_dec_stat(player_type *player_ptr, int stat)
 {
     bool sust = false;
     switch (stat) {
     case A_STR:
-        if (has_sustain_str(creature_ptr))
+        if (has_sustain_str(player_ptr))
             sust = true;
         break;
     case A_INT:
-        if (has_sustain_int(creature_ptr))
+        if (has_sustain_int(player_ptr))
             sust = true;
         break;
     case A_WIS:
-        if (has_sustain_wis(creature_ptr))
+        if (has_sustain_wis(player_ptr))
             sust = true;
         break;
     case A_DEX:
-        if (has_sustain_dex(creature_ptr))
+        if (has_sustain_dex(player_ptr))
             sust = true;
         break;
     case A_CON:
-        if (has_sustain_con(creature_ptr))
+        if (has_sustain_con(player_ptr))
             sust = true;
         break;
     case A_CHR:
-        if (has_sustain_chr(creature_ptr))
+        if (has_sustain_chr(player_ptr))
             sust = true;
         break;
     }
@@ -211,7 +211,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
         return true;
     }
 
-    if (dec_stat(creature_ptr, stat, 10, (ironman_nightmare && !randint0(13)))) {
+    if (dec_stat(player_ptr, stat, 10, (ironman_nightmare && !randint0(13)))) {
         msg_format(_("ひどく%sなった気がする。", "You feel %s."), desc_stat_neg[stat]);
         return true;
     }
@@ -222,9 +222,9 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 /*
  * Restore lost "points" in a stat
  */
-bool do_res_stat(player_type *creature_ptr, int stat)
+bool do_res_stat(player_type *player_ptr, int stat)
 {
-    if (res_stat(creature_ptr, stat)) {
+    if (res_stat(player_ptr, stat)) {
         msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
         return true;
     }
@@ -235,18 +235,18 @@ bool do_res_stat(player_type *creature_ptr, int stat)
 /*
  * Gain a "point" in a stat
  */
-bool do_inc_stat(player_type *creature_ptr, int stat)
+bool do_inc_stat(player_type *player_ptr, int stat)
 {
-    bool res = res_stat(creature_ptr, stat);
-    if (inc_stat(creature_ptr, stat)) {
+    bool res = res_stat(player_ptr, stat);
+    if (inc_stat(player_ptr, stat)) {
         if (stat == A_WIS) {
-            chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
-            chg_virtue(creature_ptr, V_FAITH, 1);
+            chg_virtue(player_ptr, V_ENLIGHTEN, 1);
+            chg_virtue(player_ptr, V_FAITH, 1);
         } else if (stat == A_INT) {
-            chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
-            chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
+            chg_virtue(player_ptr, V_KNOWLEDGE, 1);
+            chg_virtue(player_ptr, V_ENLIGHTEN, 1);
         } else if (stat == A_CON)
-            chg_virtue(creature_ptr, V_VITALITY, 1);
+            chg_virtue(player_ptr, V_VITALITY, 1);
 
         msg_format(_("ワーオ！とても%sなった！", "Wow! You feel %s!"), desc_stat_pos[stat]);
         return true;
@@ -263,12 +263,12 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 /*
  * Forget everything
  */
-bool lose_all_info(player_type *creature_ptr)
+bool lose_all_info(player_type *player_ptr)
 {
-    chg_virtue(creature_ptr, V_KNOWLEDGE, -5);
-    chg_virtue(creature_ptr, V_ENLIGHTEN, -5);
+    chg_virtue(player_ptr, V_KNOWLEDGE, -5);
+    chg_virtue(player_ptr, V_ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->k_idx == 0) || o_ptr->is_fully_known())
             continue;
 
@@ -278,8 +278,8 @@ bool lose_all_info(player_type *creature_ptr)
         o_ptr->ident &= ~(IDENT_SENSE);
     }
 
-    set_bits(creature_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
-    wiz_dark(creature_ptr);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    wiz_dark(player_ptr);
     return true;
 }

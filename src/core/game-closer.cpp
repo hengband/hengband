@@ -133,7 +133,7 @@ static void kingly(player_type *winner_ptr)
 /*!
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @details
  * <pre>
  * This function is called only from "main.c" and "signals.c".

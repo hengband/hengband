@@ -342,7 +342,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 /*
  * Dungeon
  */
-void do_cmd_knowledge_dungeon(player_type *creature_ptr)
+void do_cmd_knowledge_dungeon(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -366,6 +366,6 @@ void do_cmd_knowledge_dungeon(player_type *creature_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, true, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
     fd_kill(file_name);
 }

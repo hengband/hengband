@@ -90,4 +90,4 @@ extern std::vector<dungeon_type> d_info;
 
 struct player_type;
 DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);
-bool is_in_dungeon(player_type *creature_ptr);
+bool is_in_dungeon(player_type *player_ptr);

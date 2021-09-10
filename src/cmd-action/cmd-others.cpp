@@ -42,54 +42,54 @@
 /*!
  * @brief 探索コマンドのメインルーチン / Simple command to "search" for one turn
  */
-void do_cmd_search(player_type *creature_ptr)
+void do_cmd_search(player_type *player_ptr)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
-        creature_ptr->redraw |= PR_STATE;
+        player_ptr->redraw |= PR_STATE;
         command_arg = 0;
     }
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    search(creature_ptr);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
+    search(player_ptr);
 
-    if (creature_ptr->action == ACTION_SEARCH)
-        search(creature_ptr);
+    if (player_ptr->action == ACTION_SEARCH)
+        search(player_ptr);
 }
 
-static bool exe_alter(player_type *creature_ptr)
+static bool exe_alter(player_type *player_ptr)
 {
     DIRECTION dir;
-    if (!get_rep_dir(creature_ptr, &dir, true))
+    if (!get_rep_dir(player_ptr, &dir, true))
         return false;
 
-    POSITION y = creature_ptr->y + ddy[dir];
-    POSITION x = creature_ptr->x + ddx[dir];
+    POSITION y = player_ptr->y + ddy[dir];
+    POSITION x = player_ptr->x + ddx[dir];
     grid_type *g_ptr;
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr;
     f_ptr = &f_info[feat];
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (g_ptr->m_idx) {
-        do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
+        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         return false;
     }
     
     if (f_ptr->flags.has(FF::OPEN))
-        return exe_open(creature_ptr, y, x);
+        return exe_open(player_ptr, y, x);
     
     if (f_ptr->flags.has(FF::BASH))
-        return exe_bash(creature_ptr, y, x, dir);
+        return exe_bash(player_ptr, y, x, dir);
     
     if (f_ptr->flags.has(FF::TUNNEL))
-        return exe_tunnel(creature_ptr, y, x);
+        return exe_tunnel(player_ptr, y, x);
     
     if (f_ptr->flags.has(FF::CLOSE))
-        return exe_close(creature_ptr, y, x);
+        return exe_close(player_ptr, y, x);
     
     if (f_ptr->flags.has(FF::DISARM))
-        return exe_disarm(creature_ptr, y, x, dir);
+        return exe_disarm(player_ptr, y, x, dir);
 
     msg_print(_("何もない空中を攻撃した。", "You attack the empty air."));
     return false;
@@ -99,19 +99,19 @@ static bool exe_alter(player_type *creature_ptr)
  * @brief 特定のマスに影響を及ぼすための汎用的コマンド / Manipulate an adjacent grid in some way
  * @details
  */
-void do_cmd_alter(player_type *creature_ptr)
+void do_cmd_alter(player_type *player_ptr)
 {
-    if (creature_ptr->special_defense & KATA_MUSOU)
-        set_action(creature_ptr, ACTION_NONE);
+    if (player_ptr->special_defense & KATA_MUSOU)
+        set_action(player_ptr, ACTION_NONE);
 
     if (command_arg) {
         command_rep = command_arg - 1;
-        creature_ptr->redraw |= PR_STATE;
+        player_ptr->redraw |= PR_STATE;
         command_arg = 0;
     }
 
-    if (!exe_alter(creature_ptr))
-        disturb(creature_ptr, false, false);
+    if (!exe_alter(player_ptr))
+        disturb(player_ptr, false, false);
 }
 
 /*!
@@ -131,7 +131,7 @@ static bool decide_suicide(void)
     return i == '@';
 }
 
-static void accept_winner_message(player_type *creature_ptr)
+static void accept_winner_message(player_type *player_ptr)
 {
     if (!current_world_ptr->total_winner || !last_words)
         return;
@@ -141,11 +141,11 @@ static void accept_winner_message(player_type *creature_ptr)
     do {
         while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf)))
             ;
-    } while (!get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
+    } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
     if (buf[0]) {
-        creature_ptr->last_message = string_make(buf);
-        msg_print(creature_ptr->last_message);
+        player_ptr->last_message = string_make(buf);
+        msg_print(player_ptr->last_message);
     }
 }
 
@@ -154,11 +154,11 @@ static void accept_winner_message(player_type *creature_ptr)
  * commit suicide
  * @details
  */
-void do_cmd_suicide(player_type *creature_ptr)
+void do_cmd_suicide(player_type *player_ptr)
 {
     flush();
     if (current_world_ptr->total_winner) {
-        if (!get_check_strict(creature_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY))
+        if (!get_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY))
             return;
     } else {
         if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? ")))
@@ -168,22 +168,22 @@ void do_cmd_suicide(player_type *creature_ptr)
     if (!decide_suicide())
         return;
 
-    if (creature_ptr->last_message)
-        string_free(creature_ptr->last_message);
+    if (player_ptr->last_message)
+        string_free(player_ptr->last_message);
 
-    creature_ptr->last_message = nullptr;
-    creature_ptr->playing = false;
-    creature_ptr->is_dead = true;
-    creature_ptr->leaving = true;
+    player_ptr->last_message = nullptr;
+    player_ptr->playing = false;
+    player_ptr->is_dead = true;
+    player_ptr->leaving = true;
     if (current_world_ptr->total_winner) {
-        accept_winner_message(creature_ptr);
-        add_retired_class(creature_ptr->pclass);
+        accept_winner_message(player_ptr);
+        add_retired_class(player_ptr->pclass);
     } else {
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
-        exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "gave up all hope to commit suicide."));
-        exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-        exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "gave up all hope to commit suicide."));
+        exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
     }
 
-    (void)strcpy(creature_ptr->died_from, _("途中終了", "Quitting"));
+    (void)strcpy(player_ptr->died_from, _("途中終了", "Quitting"));
 }

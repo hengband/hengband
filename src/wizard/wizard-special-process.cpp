@@ -97,11 +97,11 @@
  * @brief プレイヤーを完全回復する /
  * Cure everything instantly
  */
-void wiz_cure_all(player_type *creature_ptr)
+void wiz_cure_all(player_type *player_ptr)
 {
-    (void)life_stream(creature_ptr, false, false);
-    (void)restore_mana(creature_ptr, true);
-    (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
+    (void)life_stream(player_ptr, false, false);
+    (void)restore_mana(player_ptr, true);
+    (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 }
 
 /*!
@@ -237,26 +237,26 @@ void wiz_create_named_art(player_type *caster_ptr, ARTIFACT_IDX a_idx)
 
 /*!
  * @brief プレイヤーの現能力値を調整する / Change various "permanent" player variables.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void wiz_change_status(player_type *creature_ptr)
+void wiz_change_status(player_type *player_ptr)
 {
     int tmp_int;
     char tmp_val[160];
     char ppp[80];
     for (int i = 0; i < A_MAX; i++) {
-        sprintf(ppp, "%s (3-%d): ", stat_names[i], creature_ptr->stat_max_max[i]);
-        sprintf(tmp_val, "%d", creature_ptr->stat_max[i]);
+        sprintf(ppp, "%s (3-%d): ", stat_names[i], player_ptr->stat_max_max[i]);
+        sprintf(tmp_val, "%d", player_ptr->stat_max[i]);
         if (!get_string(ppp, tmp_val, 3))
             return;
 
         tmp_int = atoi(tmp_val);
-        if (tmp_int > creature_ptr->stat_max_max[i])
-            tmp_int = creature_ptr->stat_max_max[i];
+        if (tmp_int > player_ptr->stat_max_max[i])
+            tmp_int = player_ptr->stat_max_max[i];
         else if (tmp_int < 3)
             tmp_int = 3;
 
-        creature_ptr->stat_cur[i] = creature_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
+        player_ptr->stat_cur[i] = player_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
     }
 
     sprintf(tmp_val, "%d", WEAPON_EXP_MASTER);
@@ -272,26 +272,26 @@ void wiz_change_status(player_type *creature_ptr)
 
     for (int j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++) {
         for (int i = 0; i < 64; i++) {
-            creature_ptr->weapon_exp[j][i] = tmp_s16b;
-            if (creature_ptr->weapon_exp[j][i] > s_info[creature_ptr->pclass].w_max[j][i])
-                creature_ptr->weapon_exp[j][i] = s_info[creature_ptr->pclass].w_max[j][i];
+            player_ptr->weapon_exp[j][i] = tmp_s16b;
+            if (player_ptr->weapon_exp[j][i] > s_info[player_ptr->pclass].w_max[j][i])
+                player_ptr->weapon_exp[j][i] = s_info[player_ptr->pclass].w_max[j][i];
         }
     }
 
     for (int j = 0; j < 10; j++) {
-        creature_ptr->skill_exp[j] = tmp_s16b;
-        if (creature_ptr->skill_exp[j] > s_info[creature_ptr->pclass].s_max[j])
-            creature_ptr->skill_exp[j] = s_info[creature_ptr->pclass].s_max[j];
+        player_ptr->skill_exp[j] = tmp_s16b;
+        if (player_ptr->skill_exp[j] > s_info[player_ptr->pclass].s_max[j])
+            player_ptr->skill_exp[j] = s_info[player_ptr->pclass].s_max[j];
     }
 
     int k;
     for (k = 0; k < 32; k++)
-        creature_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
+        player_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
 
     for (; k < 64; k++)
-        creature_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
+        player_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
 
-    sprintf(tmp_val, "%ld", (long)(creature_ptr->au));
+    sprintf(tmp_val, "%ld", (long)(player_ptr->au));
     if (!get_string("Gold: ", tmp_val, 9))
         return;
 
@@ -299,8 +299,8 @@ void wiz_change_status(player_type *creature_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    creature_ptr->au = tmp_long;
-    sprintf(tmp_val, "%ld", (long)(creature_ptr->max_exp));
+    player_ptr->au = tmp_long;
+    sprintf(tmp_val, "%ld", (long)(player_ptr->max_exp));
     if (!get_string("Experience: ", tmp_val, 9))
         return;
 
@@ -308,13 +308,13 @@ void wiz_change_status(player_type *creature_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (creature_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == player_race_type::ANDROID)
         return;
 
-    creature_ptr->max_exp = tmp_long;
-    creature_ptr->exp = tmp_long;
-    check_experience(creature_ptr);
-    do_cmd_redraw(creature_ptr);
+    player_ptr->max_exp = tmp_long;
+    player_ptr->exp = tmp_long;
+    check_experience(player_ptr);
+    do_cmd_redraw(player_ptr);
 }
 
 /*!
@@ -322,14 +322,14 @@ void wiz_change_status(player_type *creature_ptr)
  * Create desired feature
  * @param creaturer_ptr プレーヤーへの参照ポインタ
  */
-void wiz_create_feature(player_type *creature_ptr)
+void wiz_create_feature(player_type *player_ptr)
 {
     POSITION y, x;
-    if (!tgt_pt(creature_ptr, &x, &y))
+    if (!tgt_pt(player_ptr, &x, &y))
         return;
 
     grid_type *g_ptr;
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     static int prev_feat = 0;
     char tmp_val[160];
     sprintf(tmp_val, "%d", prev_feat);
@@ -355,7 +355,7 @@ void wiz_create_feature(player_type *creature_ptr)
     else if (tmp_mimic >= max_f_idx)
         tmp_mimic = max_f_idx - 1;
 
-    cave_set_feat(creature_ptr, y, x, tmp_feat);
+    cave_set_feat(player_ptr, y, x, tmp_feat);
     g_ptr->mimic = (int16_t)tmp_mimic;
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
@@ -365,22 +365,22 @@ void wiz_create_feature(player_type *creature_ptr)
     else if (f_ptr->flags.has(FF::MIRROR))
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
 
-    note_spot(creature_ptr, y, x);
-    lite_spot(creature_ptr, y, x);
-    creature_ptr->update |= PU_FLOW;
+    note_spot(player_ptr, y, x);
+    lite_spot(player_ptr, y, x);
+    player_ptr->update |= PU_FLOW;
     prev_feat = tmp_feat;
     prev_mimic = tmp_mimic;
 }
 
 /*
  * @brief 選択したダンジョンの任意フロアを選択する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dungeon_type ダンジョン番号
  * @return フロアを選択したらtrue、キャンセルならfalse
  * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
  * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
  */
-static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
+static bool select_debugging_floor(player_type *player_ptr, int dungeon_type)
 {
     auto max_depth = d_info[dungeon_type].maxdepth;
     if ((max_depth == 0) || (dungeon_type > current_world_ptr->max_d_idx)) {
@@ -392,7 +392,7 @@ static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
         char ppp[80];
         char tmp_val[160];
         sprintf(ppp, "Jump to level (0, %d-%d): ", min_depth, max_depth);
-        sprintf(tmp_val, "%d", (int)creature_ptr->current_floor_ptr->dun_level);
+        sprintf(tmp_val, "%d", (int)player_ptr->current_floor_ptr->dun_level);
         if (!get_string(ppp, tmp_val, 10)) {
             return false;
         }
@@ -420,10 +420,10 @@ static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
 
 /*!
  * @brief デバッグ帰還のダンジョンを選ぶ
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @details 範囲外の値が選択されたら再入力を促す
  */
-static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dungeon_type)
+static bool select_debugging_dungeon(player_type *player_ptr, DUNGEON_IDX *dungeon_type)
 {
     if (command_arg > 0) {
         return true;
@@ -433,7 +433,7 @@ static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dun
         char ppp[80];
         char tmp_val[160];
         sprintf(ppp, "Jump which dungeon : ");
-        sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
+        sprintf(tmp_val, "%d", player_ptr->dungeon_idx);
         if (!get_string(ppp, tmp_val, 2)) {
             return false;
         }
@@ -452,14 +452,14 @@ static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dun
  * @brief 任意のダンジョン及び階層に飛ぶtための選択処理
  * Go to any level
  */
-void wiz_jump_to_dungeon(player_type *creature_ptr)
+void wiz_jump_to_dungeon(player_type *player_ptr)
 {
     DUNGEON_IDX dungeon_type = 1;
-    if (!select_debugging_dungeon(creature_ptr, &dungeon_type)) {
+    if (!select_debugging_dungeon(player_ptr, &dungeon_type)) {
         return;
     }
 
-    if (!select_debugging_floor(creature_ptr, dungeon_type)) {
+    if (!select_debugging_floor(player_ptr, dungeon_type)) {
         return;
     }
 
@@ -471,9 +471,9 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
 
     msg_format("You jump to dungeon level %d.", command_arg);
     if (autosave_l)
-        do_cmd_save_game(creature_ptr, true);
+        do_cmd_save_game(player_ptr, true);
 
-    jump_floor(creature_ptr, dungeon_type, command_arg);
+    jump_floor(player_ptr, dungeon_type, command_arg);
 }
 
 /*!
@@ -498,13 +498,13 @@ void wiz_learn_items_all(player_type *caster_ptr)
 /*!
  * @brief プレイヤーの種族を変更する
  */
-void wiz_reset_race(player_type *creature_ptr)
+void wiz_reset_race(player_type *player_ptr)
 {
     char ppp[80];
     sprintf(ppp, "Race (0-%d): ", MAX_RACES - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", enum2i(creature_ptr->prace));
+    sprintf(tmp_val, "%d", enum2i(player_ptr->prace));
 
     if (!get_string(ppp, tmp_val, 2))
         return;
@@ -513,26 +513,26 @@ void wiz_reset_race(player_type *creature_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_RACES)
         return;
 
-    creature_ptr->prace = static_cast<player_race_type>(tmp_int);
-    rp_ptr = &race_info[enum2i(creature_ptr->prace)];
+    player_ptr->prace = static_cast<player_race_type>(tmp_int);
+    rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
-    creature_ptr->window_flags |= PW_PLAYER;
-    creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    creature_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
-    handle_stuff(creature_ptr);
+    player_ptr->window_flags |= PW_PLAYER;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
+    handle_stuff(player_ptr);
 }
 
 /*!
  * @brief プレイヤーの職業を変更する
  * @todo 魔法領域の再選択などがまだ不完全、要実装。
  */
-void wiz_reset_class(player_type *creature_ptr)
+void wiz_reset_class(player_type *player_ptr)
 {
     char ppp[80];
     sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", creature_ptr->pclass);
+    sprintf(tmp_val, "%d", player_ptr->pclass);
 
     if (!get_string(ppp, tmp_val, 2))
         return;
@@ -541,46 +541,46 @@ void wiz_reset_class(player_type *creature_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_CLASS)
         return;
 
-    creature_ptr->pclass = static_cast<player_class_type>(tmp_int);
-    cp_ptr = &class_info[creature_ptr->pclass];
-    mp_ptr = &m_info[creature_ptr->pclass];
-    creature_ptr->window_flags |= PW_PLAYER;
-    creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    creature_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
-    handle_stuff(creature_ptr);
+    player_ptr->pclass = static_cast<player_class_type>(tmp_int);
+    cp_ptr = &class_info[player_ptr->pclass];
+    mp_ptr = &m_info[player_ptr->pclass];
+    player_ptr->window_flags |= PW_PLAYER;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
+    handle_stuff(player_ptr);
 }
 
 /*!
  * @brief プレイヤーの領域を変更する
  * @todo 存在有無などは未判定。そのうちすべき。
  */
-void wiz_reset_realms(player_type *creature_ptr)
+void wiz_reset_realms(player_type *player_ptr)
 {
     char ppp[80];
     char tmp_val[160];
 
     sprintf(ppp, "1st Realm (None=0, 1-%d): ", MAX_REALM - 1);
-    sprintf(tmp_val, "%d", creature_ptr->realm1);
+    sprintf(tmp_val, "%d", player_ptr->realm1);
     if (!get_string(ppp, tmp_val, 2))
         return;
 
-    creature_ptr->realm1 = static_cast<int16_t>(atoi(tmp_val));
+    player_ptr->realm1 = static_cast<int16_t>(atoi(tmp_val));
 
     sprintf(ppp, "2st Realm (None=0, 1-%d): ", MAX_REALM - 1);
-    sprintf(tmp_val, "%d", creature_ptr->realm2);
+    sprintf(tmp_val, "%d", player_ptr->realm2);
     if (!get_string(ppp, tmp_val, 2))
         return;
 
-    creature_ptr->realm2 = static_cast<int16_t>(atoi(tmp_val));
-    creature_ptr->window_flags |= PW_PLAYER;
-    creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    creature_ptr->redraw |= PR_BASIC;
-    handle_stuff(creature_ptr);
+    player_ptr->realm2 = static_cast<int16_t>(atoi(tmp_val));
+    player_ptr->window_flags |= PW_PLAYER;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    player_ptr->redraw |= PR_BASIC;
+    handle_stuff(player_ptr);
 }
 
 /*!
  * @brief 現在のオプション設定をダンプ出力する /
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- Dump option bits usage
  */
 void wiz_dump_options(void)
@@ -695,54 +695,54 @@ void wiz_zap_floor_monsters(player_type *caster_ptr)
     }
 }
 
-void cheat_death(player_type *creature_ptr)
+void cheat_death(player_type *player_ptr)
 {
-    if (creature_ptr->sc)
-        creature_ptr->sc = creature_ptr->age = 0;
-    creature_ptr->age++;
+    if (player_ptr->sc)
+        player_ptr->sc = player_ptr->age = 0;
+    player_ptr->age++;
 
     current_world_ptr->noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
     msg_print(nullptr);
 
-    creature_ptr->is_dead = false;
-    (void)life_stream(creature_ptr, false, false);
-    (void)restore_mana(creature_ptr, true);
-    (void)recall_player(creature_ptr, 0);
-    reserve_alter_reality(creature_ptr, 0);
+    player_ptr->is_dead = false;
+    (void)life_stream(player_ptr, false, false);
+    (void)restore_mana(player_ptr, true);
+    (void)recall_player(player_ptr, 0);
+    reserve_alter_reality(player_ptr, 0);
 
-    (void)strcpy(creature_ptr->died_from, _("死の欺き", "Cheating death"));
-    (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
+    (void)strcpy(player_ptr->died_from, _("死の欺き", "Cheating death"));
+    (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->inside_arena = false;
-    creature_ptr->phase_out = false;
+    player_ptr->phase_out = false;
     leaving_quest = 0;
     floor_ptr->inside_quest = 0;
-    if (creature_ptr->dungeon_idx)
-        creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
-    creature_ptr->dungeon_idx = 0;
+    if (player_ptr->dungeon_idx)
+        player_ptr->recall_dungeon = player_ptr->dungeon_idx;
+    player_ptr->dungeon_idx = 0;
     if (lite_town || vanilla_town) {
-        creature_ptr->wilderness_y = 1;
-        creature_ptr->wilderness_x = 1;
+        player_ptr->wilderness_y = 1;
+        player_ptr->wilderness_x = 1;
         if (vanilla_town) {
-            creature_ptr->oldpy = 10;
-            creature_ptr->oldpx = 34;
+            player_ptr->oldpy = 10;
+            player_ptr->oldpx = 34;
         } else {
-            creature_ptr->oldpy = 33;
-            creature_ptr->oldpx = 131;
+            player_ptr->oldpy = 33;
+            player_ptr->oldpx = 131;
         }
     } else {
-        creature_ptr->wilderness_y = 48;
-        creature_ptr->wilderness_x = 5;
-        creature_ptr->oldpy = 33;
-        creature_ptr->oldpx = 131;
+        player_ptr->wilderness_y = 48;
+        player_ptr->wilderness_x = 5;
+        player_ptr->oldpy = 33;
+        player_ptr->oldpx = 131;
     }
 
-    creature_ptr->wild_mode = false;
-    creature_ptr->leaving = true;
+    player_ptr->wild_mode = false;
+    player_ptr->leaving = true;
 
-    exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, _("                            しかし、生き返った。", "                            but revived."));
-    leave_floor(creature_ptr);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, _("                            しかし、生き返った。", "                            but revived."));
+    leave_floor(player_ptr);
 }

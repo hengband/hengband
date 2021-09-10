@@ -71,19 +71,19 @@ void torch_lost_fuel(object_type *o_ptr)
  * @details
  * SWD: Experimental modification: multiple light sources have additive effect.
  */
-void update_lite_radius(player_type *creature_ptr)
+void update_lite_radius(player_type *player_ptr)
 {
-    creature_ptr->cur_lite = 0;
+    player_ptr->cur_lite = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
-        o_ptr = &creature_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         auto flgs = object_flags(o_ptr);
 
         if (!o_ptr->k_idx)
             continue;
 
         if (o_ptr->name2 == EGO_LITE_SHINE)
-            creature_ptr->cur_lite++;
+            player_ptr->cur_lite++;
 
         if (flgs.has_not(TR_DARK_SOURCE)) {
             if (o_ptr->tval == TV_LITE) {
@@ -114,29 +114,29 @@ void update_lite_radius(player_type *creature_ptr)
         if (flgs.has(TR_LITE_M3))
             rad -= 3;
 
-        creature_ptr->cur_lite += rad;
+        player_ptr->cur_lite += rad;
     }
 
-    if (d_info[creature_ptr->dungeon_idx].flags.has(DF::DARKNESS) && creature_ptr->cur_lite > 1)
-        creature_ptr->cur_lite = 1;
+    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS) && player_ptr->cur_lite > 1)
+        player_ptr->cur_lite = 1;
 
-    if (creature_ptr->cur_lite <= 0 && creature_ptr->lite)
-        creature_ptr->cur_lite++;
+    if (player_ptr->cur_lite <= 0 && player_ptr->lite)
+        player_ptr->cur_lite++;
 
-    if (creature_ptr->cur_lite > 14)
-        creature_ptr->cur_lite = 14;
+    if (player_ptr->cur_lite > 14)
+        player_ptr->cur_lite = 14;
 
-    if (creature_ptr->cur_lite < 0)
-        creature_ptr->cur_lite = 0;
+    if (player_ptr->cur_lite < 0)
+        player_ptr->cur_lite = 0;
 
-    if (creature_ptr->old_lite == creature_ptr->cur_lite)
+    if (player_ptr->old_lite == player_ptr->cur_lite)
         return;
 
-    creature_ptr->update |= PU_LITE | PU_MON_LITE | PU_MONSTERS;
-    creature_ptr->old_lite = creature_ptr->cur_lite;
+    player_ptr->update |= PU_LITE | PU_MON_LITE | PU_MONSTERS;
+    player_ptr->old_lite = player_ptr->cur_lite;
 
-    if ((creature_ptr->cur_lite > 0) && (creature_ptr->special_defense & NINJA_S_STEALTH))
-        set_superstealth(creature_ptr, false);
+    if ((player_ptr->cur_lite > 0) && (player_ptr->special_defense & NINJA_S_STEALTH))
+        set_superstealth(player_ptr, false);
 }
 
 /*

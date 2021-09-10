@@ -231,105 +231,105 @@ bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
  * @param m_idx モンスターの構造体配列ID
  * @return 魔力消去をかけるべきならTRUEを返す。
  */
-bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
+bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
 {
-    if (is_invuln(creature_ptr))
+    if (is_invuln(player_ptr))
         return true;
 
-    if (creature_ptr->wraith_form)
+    if (player_ptr->wraith_form)
         return true;
 
-    if (creature_ptr->shield)
+    if (player_ptr->shield)
         return true;
 
-    if (creature_ptr->magicdef)
+    if (player_ptr->magicdef)
         return true;
 
-    if (creature_ptr->multishadow)
+    if (player_ptr->multishadow)
         return true;
 
-    if (creature_ptr->dustrobe)
+    if (player_ptr->dustrobe)
         return true;
 
-    if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
+    if (player_ptr->shero && (player_ptr->pclass != CLASS_BERSERKER))
         return true;
 
-    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
+    if (player_ptr->mimic_form == MIMIC_DEMON_LORD)
         return true;
 
-    monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_ACID)) {
-        if (!has_immune_acid(creature_ptr) && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
-        if (creature_ptr->special_defense & DEFENSE_ACID)
+        if (player_ptr->special_defense & DEFENSE_ACID)
             return true;
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_FIRE)) {
-        if (!((creature_ptr->prace == player_race_type::BALROG) && creature_ptr->lev > 44)) {
-            if (!has_immune_fire(creature_ptr) && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!((player_ptr->prace == player_race_type::BALROG) && player_ptr->lev > 44)) {
+            if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)))
                 return true;
 
-            if (creature_ptr->special_defense & DEFENSE_FIRE)
+            if (player_ptr->special_defense & DEFENSE_FIRE)
                 return true;
         }
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_ELEC)) {
-        if (!has_immune_elec(creature_ptr) && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_elec(player_ptr) && (player_ptr->oppose_elec || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
-        if (creature_ptr->special_defense & DEFENSE_ELEC)
+        if (player_ptr->special_defense & DEFENSE_ELEC)
             return true;
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_COLD)) {
-        if (!has_immune_cold(creature_ptr) && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_cold(player_ptr) && (player_ptr->oppose_cold || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
-        if (creature_ptr->special_defense & DEFENSE_COLD)
-            return true;
-    }
-
-    if (r_ptr->ability_flags.has_any_of({ RF_ABILITY::BR_POIS, RF_ABILITY::BR_NUKE }) && !((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44))) {
-        if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST))
-            return true;
-
-        if (creature_ptr->special_defense & DEFENSE_POIS)
+        if (player_ptr->special_defense & DEFENSE_COLD)
             return true;
     }
 
-    if (creature_ptr->ult_res)
+    if (r_ptr->ability_flags.has_any_of({ RF_ABILITY::BR_POIS, RF_ABILITY::BR_NUKE }) && !((player_ptr->pclass == CLASS_NINJA) && (player_ptr->lev > 44))) {
+        if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST))
+            return true;
+
+        if (player_ptr->special_defense & DEFENSE_POIS)
+            return true;
+    }
+
+    if (player_ptr->ult_res)
         return true;
 
-    if (creature_ptr->tsuyoshi)
+    if (player_ptr->tsuyoshi)
         return true;
 
-    if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
+    if ((player_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
         return true;
 
-    if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
+    if ((player_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
         return true;
 
-    if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
+    if ((player_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
         return true;
 
-    if ((creature_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
+    if ((player_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
         return true;
 
-    if ((creature_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
+    if ((player_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
         return true;
 
-    if ((creature_ptr->pspeed < 145) && is_fast(creature_ptr))
+    if ((player_ptr->pspeed < 145) && is_fast(player_ptr))
         return true;
 
-    if (creature_ptr->lightspeed && (m_ptr->mspeed < 136))
+    if (player_ptr->lightspeed && (m_ptr->mspeed < 136))
         return true;
 
-    if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135)
-        && monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding]))
+    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135)
+        && monster_fast_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding]))
         return true;
 
     return false;

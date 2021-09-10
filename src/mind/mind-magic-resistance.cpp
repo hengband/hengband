@@ -13,38 +13,38 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_resist_magic(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->resist_magic && !do_dec) {
-            if (creature_ptr->resist_magic > v)
+        if (player_ptr->resist_magic && !do_dec) {
+            if (player_ptr->resist_magic > v)
                 return false;
-        } else if (!creature_ptr->resist_magic) {
+        } else if (!player_ptr->resist_magic) {
             msg_print(_("魔法への耐性がついた。", "You have been protected from magic!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->resist_magic) {
+        if (player_ptr->resist_magic) {
             msg_print(_("魔法に弱くなった。", "You are no longer protected from magic."));
             notice = true;
         }
     }
 
-    creature_ptr->resist_magic = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->resist_magic = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }

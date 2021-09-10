@@ -64,7 +64,7 @@ void set_current_ki(player_type *caster_ptr, bool is_reset, int32_t ki)
     caster_ptr->magic_num1[0] += ki;
 }
 
-bool clear_mind(player_type *creature_ptr)
+bool clear_mind(player_type *player_ptr)
 {
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
@@ -73,13 +73,13 @@ bool clear_mind(player_type *creature_ptr)
 
     msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
 
-    creature_ptr->csp += (3 + creature_ptr->lev / 20);
-    if (creature_ptr->csp >= creature_ptr->msp) {
-        creature_ptr->csp = creature_ptr->msp;
-        creature_ptr->csp_frac = 0;
+    player_ptr->csp += (3 + player_ptr->lev / 20);
+    if (player_ptr->csp >= player_ptr->msp) {
+        player_ptr->csp = player_ptr->msp;
+        player_ptr->csp_frac = 0;
     }
 
-    creature_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MANA);
     return true;
 }
 
@@ -88,43 +88,43 @@ bool clear_mind(player_type *creature_ptr)
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  */
-void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+void set_lightspeed(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return;
 
-    if (creature_ptr->wild_mode)
+    if (player_ptr->wild_mode)
         v = 0;
 
     if (v) {
-        if (creature_ptr->lightspeed && !do_dec) {
-            if (creature_ptr->lightspeed > v)
+        if (player_ptr->lightspeed && !do_dec) {
+            if (player_ptr->lightspeed > v)
                 return;
-        } else if (!creature_ptr->lightspeed) {
+        } else if (!player_ptr->lightspeed) {
             msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely fast!"));
             notice = true;
-            chg_virtue(creature_ptr, V_PATIENCE, -1);
-            chg_virtue(creature_ptr, V_DILIGENCE, 1);
+            chg_virtue(player_ptr, V_PATIENCE, -1);
+            chg_virtue(player_ptr, V_DILIGENCE, 1);
         }
     } else {
-        if (creature_ptr->lightspeed) {
+        if (player_ptr->lightspeed) {
             msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
             notice = true;
         }
     }
 
-    creature_ptr->lightspeed = v;
+    player_ptr->lightspeed = v;
 
     if (!notice)
         return;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
 }
 
 /*!
@@ -133,38 +133,38 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_force(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_sh_force(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_sh_touki && !do_dec) {
-            if (creature_ptr->tim_sh_touki > v)
+        if (player_ptr->tim_sh_touki && !do_dec) {
+            if (player_ptr->tim_sh_touki > v)
                 return false;
-        } else if (!creature_ptr->tim_sh_touki) {
+        } else if (!player_ptr->tim_sh_touki) {
             msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by an aura of the Force!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->tim_sh_touki) {
+        if (player_ptr->tim_sh_touki) {
             msg_print(_("闘気が消えた。", "The aura of the Force disappeared."));
             notice = true;
         }
     }
 
-    creature_ptr->tim_sh_touki = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_sh_touki = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    handle_stuff(player_ptr);
     return true;
 }
 

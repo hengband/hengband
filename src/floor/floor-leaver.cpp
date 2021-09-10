@@ -142,7 +142,7 @@ static void preserve_pet(player_type *master_ptr)
  * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  */
-static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
+static void locate_connected_stairs(player_type *player_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
 {
     POSITION sx = 0;
     POSITION sy = 0;
@@ -185,22 +185,22 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
     }
 
     if (sx) {
-        creature_ptr->y = sy;
-        creature_ptr->x = sx;
+        player_ptr->y = sy;
+        player_ptr->x = sx;
         return;
     }
 
     if (num == 0) {
-        prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE | CFM_NO_RETURN);
-        if (!feat_uses_special(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat))
-            floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].special = 0;
+        prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE | CFM_NO_RETURN);
+        if (!feat_uses_special(floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat))
+            floor_ptr->grid_array[player_ptr->y][player_ptr->x].special = 0;
 
         return;
     }
 
     int i = randint0(num);
-    creature_ptr->y = y_table[i];
-    creature_ptr->x = x_table[i];
+    player_ptr->y = y_table[i];
+    player_ptr->x = x_table[i];
 }
 
 /*!
@@ -243,22 +243,22 @@ static void get_out_monster(player_type *protected_ptr)
 
 /*!
  * @brief クエスト・フロア内のモンスター・インベントリ情報を保存する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-static void preserve_info(player_type *creature_ptr)
+static void preserve_info(player_type *player_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
     for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
         if ((quest[i].status == QUEST_STATUS_TAKEN) && ((quest[i].type == QUEST_TYPE_KILL_LEVEL) || (quest[i].type == QUEST_TYPE_RANDOM))
-            && (quest[i].level == creature_ptr->current_floor_ptr->dun_level) && (creature_ptr->dungeon_idx == quest[i].dungeon)
+            && (quest[i].level == player_ptr->current_floor_ptr->dun_level) && (player_ptr->dungeon_idx == quest[i].dungeon)
             && !(quest[i].flags & QUEST_FLAG_PRESET)) {
             quest_r_idx = quest[i].r_idx;
         }
     }
 
-    for (DUNGEON_IDX i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
+    for (DUNGEON_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         monster_race *r_ptr;
-        monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (quest_r_idx != m_ptr->r_idx))
             continue;
 
@@ -266,11 +266,11 @@ static void preserve_info(player_type *creature_ptr)
         if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
             continue;
 
-        delete_monster_idx(creature_ptr, i);
+        delete_monster_idx(player_ptr, i);
     }
 
     for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid())
             continue;
 
@@ -279,172 +279,172 @@ static void preserve_info(player_type *creature_ptr)
     }
 }
 
-static void set_grid_by_leaving_floor(player_type *creature_ptr, grid_type **g_ptr)
+static void set_grid_by_leaving_floor(player_type *player_ptr, grid_type **g_ptr)
 {
-    if ((creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0)
+    if ((player_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0)
         return;
 
-    *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+    *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr =  &f_info[(*g_ptr)->feat];
     if ((*g_ptr)->special && f_ptr->flags.has_not(FF::SPECIAL) && get_sf_ptr((*g_ptr)->special))
         new_floor_id = (*g_ptr)->special;
 
     if (f_ptr->flags.has_all_of({FF::STAIRS, FF::SHAFT}))
-        prepare_change_floor_mode(creature_ptr, CFM_SHAFT);
+        prepare_change_floor_mode(player_ptr, CFM_SHAFT);
 }
 
-static void jump_floors(player_type *creature_ptr)
+static void jump_floors(player_type *player_ptr)
 {
-    if (none_bits(creature_ptr->change_floor_mode, CFM_DOWN | CFM_UP)) {
+    if (none_bits(player_ptr->change_floor_mode, CFM_DOWN | CFM_UP)) {
         return;
     }
 
     auto move_num = 0;
-    if (any_bits(creature_ptr->change_floor_mode, CFM_DOWN)) {
+    if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
         move_num = 1;
-    } else if (any_bits(creature_ptr->change_floor_mode, CFM_UP)) {
+    } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
         move_num = -1;
     }
 
-    if (any_bits(creature_ptr->change_floor_mode, CFM_SHAFT)) {
+    if (any_bits(player_ptr->change_floor_mode, CFM_SHAFT)) {
         move_num *= 2;
     }
 
-    if (any_bits(creature_ptr->change_floor_mode, CFM_DOWN)) {
-        if (!is_in_dungeon(creature_ptr)) {
-            move_num = d_info[creature_ptr->dungeon_idx].mindepth;
+    if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
+        if (!is_in_dungeon(player_ptr)) {
+            move_num = d_info[player_ptr->dungeon_idx].mindepth;
         }
-    } else if (any_bits(creature_ptr->change_floor_mode, CFM_UP)) {
-        if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth) {
-            move_num = -creature_ptr->current_floor_ptr->dun_level;
+    } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
+        if (player_ptr->current_floor_ptr->dun_level + move_num < d_info[player_ptr->dungeon_idx].mindepth) {
+            move_num = -player_ptr->current_floor_ptr->dun_level;
         }
     }
 
-    creature_ptr->current_floor_ptr->dun_level += move_num;
+    player_ptr->current_floor_ptr->dun_level += move_num;
 }
 
-static void exit_to_wilderness(player_type *creature_ptr)
+static void exit_to_wilderness(player_type *player_ptr)
 {
-    if (is_in_dungeon(creature_ptr) || (creature_ptr->dungeon_idx == 0))
+    if (is_in_dungeon(player_ptr) || (player_ptr->dungeon_idx == 0))
         return;
 
-    creature_ptr->leaving_dungeon = true;
+    player_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
-        creature_ptr->wilderness_y = d_info[creature_ptr->dungeon_idx].dy;
-        creature_ptr->wilderness_x = d_info[creature_ptr->dungeon_idx].dx;
+        player_ptr->wilderness_y = d_info[player_ptr->dungeon_idx].dy;
+        player_ptr->wilderness_x = d_info[player_ptr->dungeon_idx].dx;
     }
 
-    creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
-    creature_ptr->word_recall = 0;
-    creature_ptr->dungeon_idx = 0;
-    creature_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
+    player_ptr->recall_dungeon = player_ptr->dungeon_idx;
+    player_ptr->word_recall = 0;
+    player_ptr->dungeon_idx = 0;
+    player_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
 }
 
-static void kill_saved_floors(player_type *creature_ptr, saved_floor_type *sf_ptr)
+static void kill_saved_floors(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-    if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
+    if (!(player_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
         for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++)
-            kill_saved_floor(creature_ptr, &saved_floors[i]);
+            kill_saved_floor(player_ptr, &saved_floors[i]);
 
         latest_visit_mark = 1;
         return;
     }
     
-    if (creature_ptr->change_floor_mode & CFM_NO_RETURN)
-        kill_saved_floor(creature_ptr, sf_ptr);
+    if (player_ptr->change_floor_mode & CFM_NO_RETURN)
+        kill_saved_floor(player_ptr, sf_ptr);
 }
 
-static void refresh_new_floor_id(player_type *creature_ptr, grid_type *g_ptr)
+static void refresh_new_floor_id(player_type *player_ptr, grid_type *g_ptr)
 {
     if (new_floor_id != 0)
         return;
 
-    new_floor_id = get_new_floor_id(creature_ptr);
+    new_floor_id = get_new_floor_id(player_ptr);
     if ((g_ptr != nullptr) && !feat_uses_special(g_ptr->feat))
         g_ptr->special = new_floor_id;
 }
 
-static void update_upper_lower_or_floor_id(player_type *creature_ptr, saved_floor_type *sf_ptr)
+static void update_upper_lower_or_floor_id(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-    if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) == 0)
+    if ((player_ptr->change_floor_mode & CFM_RAND_CONNECT) == 0)
         return;
 
-    if (creature_ptr->change_floor_mode & CFM_UP)
+    if (player_ptr->change_floor_mode & CFM_UP)
         sf_ptr->upper_floor_id = new_floor_id;
-    else if (creature_ptr->change_floor_mode & CFM_DOWN)
+    else if (player_ptr->change_floor_mode & CFM_DOWN)
         sf_ptr->lower_floor_id = new_floor_id;
 }
 
-static void exe_leave_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
+static void exe_leave_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
     grid_type *g_ptr = nullptr;
-    set_grid_by_leaving_floor(creature_ptr, &g_ptr);
-    jump_floors(creature_ptr);
-    exit_to_wilderness(creature_ptr);
-    kill_saved_floors(creature_ptr, sf_ptr);
-    if (creature_ptr->floor_id == 0)
+    set_grid_by_leaving_floor(player_ptr, &g_ptr);
+    jump_floors(player_ptr);
+    exit_to_wilderness(player_ptr);
+    kill_saved_floors(player_ptr, sf_ptr);
+    if (player_ptr->floor_id == 0)
         return;
 
-    refresh_new_floor_id(creature_ptr, g_ptr);
-    update_upper_lower_or_floor_id(creature_ptr, sf_ptr);
-    if (((creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0) || ((creature_ptr->change_floor_mode & CFM_NO_RETURN) != 0))
+    refresh_new_floor_id(player_ptr, g_ptr);
+    update_upper_lower_or_floor_id(player_ptr, sf_ptr);
+    if (((player_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0) || ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0))
         return;
 
-    get_out_monster(creature_ptr);
+    get_out_monster(player_ptr);
     sf_ptr->last_visit = current_world_ptr->game_turn;
-    forget_lite(creature_ptr->current_floor_ptr);
-    forget_view(creature_ptr->current_floor_ptr);
-    clear_mon_lite(creature_ptr->current_floor_ptr);
-    if (save_floor(creature_ptr, sf_ptr, 0))
+    forget_lite(player_ptr->current_floor_ptr);
+    forget_view(player_ptr->current_floor_ptr);
+    clear_mon_lite(player_ptr->current_floor_ptr);
+    if (save_floor(player_ptr, sf_ptr, 0))
         return;
 
-    prepare_change_floor_mode(creature_ptr, CFM_NO_RETURN);
-    kill_saved_floor(creature_ptr, get_sf_ptr(creature_ptr->floor_id));
+    prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
+    kill_saved_floor(player_ptr, get_sf_ptr(player_ptr->floor_id));
 }
 
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void leave_floor(player_type *creature_ptr)
+void leave_floor(player_type *player_ptr)
 {
-    preserve_pet(creature_ptr);
-    remove_all_mirrors(creature_ptr, false);
-    if (creature_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(creature_ptr, false);
+    preserve_pet(player_ptr);
+    remove_all_mirrors(player_ptr, false);
+    if (player_ptr->special_defense & NINJA_S_STEALTH)
+        set_superstealth(player_ptr, false);
 
     new_floor_id = 0;
 
-    preserve_info(creature_ptr);
-    saved_floor_type *sf_ptr = get_sf_ptr(creature_ptr->floor_id);
-    if (creature_ptr->change_floor_mode & CFM_RAND_CONNECT)
-        locate_connected_stairs(creature_ptr, creature_ptr->current_floor_ptr, sf_ptr, creature_ptr->change_floor_mode);
+    preserve_info(player_ptr);
+    saved_floor_type *sf_ptr = get_sf_ptr(player_ptr->floor_id);
+    if (player_ptr->change_floor_mode & CFM_RAND_CONNECT)
+        locate_connected_stairs(player_ptr, player_ptr->current_floor_ptr, sf_ptr, player_ptr->change_floor_mode);
 
-    exe_leave_floor(creature_ptr, sf_ptr);
+    exe_leave_floor(player_ptr, sf_ptr);
 }
 
 /*!
  * @brief 任意のダンジョン及び階層に飛ぶ
  * Go to any level
  */
-void jump_floor(player_type *creature_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
+void jump_floor(player_type *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
-    creature_ptr->dungeon_idx = dun_idx;
-    creature_ptr->current_floor_ptr->dun_level = depth;
-    prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
-    if (!is_in_dungeon(creature_ptr))
-        creature_ptr->dungeon_idx = 0;
+    player_ptr->dungeon_idx = dun_idx;
+    player_ptr->current_floor_ptr->dun_level = depth;
+    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
+    if (!is_in_dungeon(player_ptr))
+        player_ptr->dungeon_idx = 0;
 
-    creature_ptr->current_floor_ptr->inside_arena = false;
-    creature_ptr->wild_mode = false;
-    leave_quest_check(creature_ptr);
+    player_ptr->current_floor_ptr->inside_arena = false;
+    player_ptr->wild_mode = false;
+    leave_quest_check(player_ptr);
     if (record_stair)
-        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, nullptr);
+        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
 
-    creature_ptr->current_floor_ptr->inside_quest = 0;
-    PlayerEnergy(creature_ptr).reset_player_turn();
-    creature_ptr->energy_need = 0;
-    prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-    creature_ptr->leaving = true;
+    player_ptr->current_floor_ptr->inside_quest = 0;
+    PlayerEnergy(player_ptr).reset_player_turn();
+    player_ptr->energy_need = 0;
+    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    player_ptr->leaving = true;
 }

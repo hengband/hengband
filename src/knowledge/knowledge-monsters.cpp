@@ -43,13 +43,13 @@
 
 /*!
  * @brief 特定の与えられた条件に応じてモンスターのIDリストを作成する / Build a list of monster indexes in the given group.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param grp_cur グループ種別。リスト表記中の左一覧（各シンボル及び/ユニーク(-1)/騎乗可能モンスター(-2)/賞金首(-3)/アンバーの王族(-4)）を参照できる
  * @param mon_idx[] ID一覧を返す配列参照
  * @param mode 思い出の扱いに関するモード
  * @return 得られたモンスターIDの数 / The number of monsters in the group
  */
-static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
+static IDX collect_monsters(player_type *player_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
 {
     concptr group_char = monster_group_char[grp_cur];
     bool grp_unique = (monster_group_char[grp_cur] == (char *)-1L);
@@ -75,7 +75,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
             bool wanted = false;
             for (int j = 0; j < MAX_BOUNTY; j++) {
                 if (current_world_ptr->bounty_r_idx[j] == i || current_world_ptr->bounty_r_idx[j] - 10000 == i
-                    || (creature_ptr->today_mon && creature_ptr->today_mon == i)) {
+                    || (player_ptr->today_mon && player_ptr->today_mon == i)) {
                     wanted = true;
                     break;
                 }
@@ -100,16 +100,16 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 
     mon_idx[mon_cnt] = -1;
     int dummy_why;
-    ang_sort(creature_ptr, mon_idx, &dummy_why, mon_cnt, ang_sort_comp_monster_level, ang_sort_swap_hook);
+    ang_sort(player_ptr, mon_idx, &dummy_why, mon_cnt, ang_sort_comp_monster_level, ang_sort_swap_hook);
     return mon_cnt;
 }
 
 /*!
  * @brief 現在のペットを表示するコマンドのメインルーチン /
  * Display current pets
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_knowledge_pets(player_type *creature_ptr)
+void do_cmd_knowledge_pets(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -119,17 +119,17 @@ void do_cmd_knowledge_pets(player_type *creature_ptr)
     monster_type *m_ptr;
     GAME_TEXT pet_name[MAX_NLEN];
     int t_friends = 0;
-    for (int i = creature_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
+    for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
+        m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr))
             continue;
 
         t_friends++;
-        monster_desc(creature_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        monster_desc(player_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
         fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
     }
 
-    int show_upkeep = calculate_upkeep(creature_ptr);
+    int show_upkeep = calculate_upkeep(player_ptr);
 
     fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
@@ -140,17 +140,17 @@ void do_cmd_knowledge_pets(player_type *creature_ptr)
     fprintf(fff, _(" 維持コスト: %d%% MP\n", "   Upkeep: %d%% mana.\n"), show_upkeep);
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, true, file_name, _("現在のペット", "Current Pets"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("現在のペット", "Current Pets"), 0, 0);
     fd_kill(file_name);
 }
 
 /*!
  * @brief 現在までに倒したモンスターを表示するコマンドのメインルーチン /
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Total kill count
  * @note the player ghosts are ignored.
  */
-void do_cmd_knowledge_kill_count(player_type *creature_ptr)
+void do_cmd_knowledge_kill_count(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -197,7 +197,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     uint16_t why = 2;
     char buf[80];
-    ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int k = 0; k < n; k++) {
         monster_race *r_ptr = &r_info[who[k]];
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
@@ -249,7 +249,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     C_KILL(who, max_r_idx, int16_t);
     angband_fclose(fff);
-    (void)show_file(creature_ptr, true, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -288,13 +288,13 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
 
 /*!
  * Display known monsters.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param need_redraw 画面の再描画が必要な時TRUE
  * @param visual_only ？？？
  * @param direct_r_idx モンスターID
  * @todo 引数の詳細について加筆求む
  */
-void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
+void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -318,7 +318,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
             if (len > max)
                 max = len;
 
-            if ((monster_group_char[i] == ((char *)-1L)) || collect_monsters(creature_ptr, i, mon_idx, mode)) {
+            if ((monster_group_char[i] == ((char *)-1L)) || collect_monsters(player_ptr, i, mon_idx, mode)) {
                 grp_idx[grp_cnt++] = i;
             }
         }
@@ -378,7 +378,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
             display_group_list(0, 6, max, browser_rows, grp_idx, monster_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                mon_cnt = collect_monsters(creature_ptr, grp_idx[grp_cur], mon_idx, mode);
+                mon_cnt = collect_monsters(player_ptr, grp_idx[grp_cur], mon_idx, mode);
             }
 
             while (mon_cur < mon_top)
@@ -411,8 +411,8 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 
             if (!visual_only) {
                 if (mon_cnt)
-                    monster_race_track(creature_ptr, mon_idx[mon_cur]);
-                handle_stuff(creature_ptr);
+                    monster_race_track(player_ptr, mon_idx[mon_cur]);
+                handle_stuff(player_ptr);
             }
 
             if (visual_list) {
@@ -448,7 +448,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
         case 'R':
         case 'r': {
             if (!visual_list && !visual_only && (mon_idx[mon_cur] > 0)) {
-                screen_roff(creature_ptr, mon_idx[mon_cur], MONSTER_LORE_NORMAL);
+                screen_roff(player_ptr, mon_idx[mon_cur], MONSTER_LORE_NORMAL);
 
                 (void)inkey();
 
@@ -471,9 +471,9 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 
 /*
  * List wanted monsters
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_knowledge_bounty(player_type *creature_ptr)
+void do_cmd_knowledge_bounty(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -481,7 +481,7 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
         return;
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        (creature_ptr->today_mon ? r_info[creature_ptr->today_mon].name.c_str() : _("不明", "unknown")));
+        (player_ptr->today_mon ? r_info[player_ptr->today_mon].name.c_str() : _("不明", "unknown")));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
@@ -498,6 +498,6 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
         fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There are no more wanted monster."));
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, true, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
     fd_kill(file_name);
 }

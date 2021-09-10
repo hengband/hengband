@@ -19,49 +19,49 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool android_inside_weapon(player_type *creature_ptr)
+bool android_inside_weapon(player_type *player_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(creature_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    if (creature_ptr->lev < 10) {
+    if (player_ptr->lev < 10) {
         msg_print(_("レイガンを発射した。", "You fire your ray gun."));
-        fire_bolt(creature_ptr, GF_MISSILE, dir, (creature_ptr->lev + 1) / 2);
+        fire_bolt(player_ptr, GF_MISSILE, dir, (player_ptr->lev + 1) / 2);
         return true;
     }
 
-    if (creature_ptr->lev < 25) {
+    if (player_ptr->lev < 25) {
         msg_print(_("ブラスターを発射した。", "You fire your blaster."));
-        fire_bolt(creature_ptr, GF_MISSILE, dir, creature_ptr->lev);
+        fire_bolt(player_ptr, GF_MISSILE, dir, player_ptr->lev);
         return true;
     }
 
-    if (creature_ptr->lev < 35) {
+    if (player_ptr->lev < 35) {
         msg_print(_("バズーカを発射した。", "You fire your bazooka."));
-        fire_ball(creature_ptr, GF_MISSILE, dir, creature_ptr->lev * 2, 2);
+        fire_ball(player_ptr, GF_MISSILE, dir, player_ptr->lev * 2, 2);
         return true;
     }
 
-    if (creature_ptr->lev < 45) {
+    if (player_ptr->lev < 45) {
         msg_print(_("ビームキャノンを発射した。", "You fire a beam cannon."));
-        fire_beam(creature_ptr, GF_MISSILE, dir, creature_ptr->lev * 2);
+        fire_beam(player_ptr, GF_MISSILE, dir, player_ptr->lev * 2);
         return true;
     }
 
     msg_print(_("ロケットを発射した。", "You fire a rocket."));
-    fire_rocket(creature_ptr, GF_ROCKET, dir, creature_ptr->lev * 5, 2);
+    fire_rocket(player_ptr, GF_ROCKET, dir, player_ptr->lev * 5, 2);
     return true;
 }
 
-void calc_android_exp(player_type *creature_ptr)
+void calc_android_exp(player_type *player_ptr)
 {
     uint32_t total_exp = 0;
-    if (creature_ptr->is_dead || (creature_ptr->prace != player_race_type::ANDROID))
+    if (player_ptr->is_dead || (player_ptr->prace != player_race_type::ANDROID))
         return;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         object_type forge;
         object_type *q_ptr = &forge;
         uint32_t value, exp;
@@ -108,7 +108,7 @@ void calc_android_exp(player_type *creature_ptr)
         value = object_value_real(q_ptr);
         if (value <= 0)
             continue;
-        if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (creature_ptr->pseikaku != PERSONALITY_SEXY))
+        if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->pseikaku != PERSONALITY_SEXY))
             value /= 32;
         if (value > 5000000L)
             value = 5000000L;
@@ -132,7 +132,7 @@ void calc_android_exp(player_type *creature_ptr)
             if (value > 100000L)
                 exp += (value - 100000L) / 4 * level;
         }
-        if ((((i == INVEN_MAIN_HAND) || (i == INVEN_SUB_HAND)) && (has_melee_weapon(creature_ptr, i))) || (i == INVEN_BOW))
+        if ((((i == INVEN_MAIN_HAND) || (i == INVEN_SUB_HAND)) && (has_melee_weapon(player_ptr, i))) || (i == INVEN_BOW))
             total_exp += exp / 48;
         else
             total_exp += exp / 16;
@@ -140,6 +140,6 @@ void calc_android_exp(player_type *creature_ptr)
             total_exp += exp / 32;
     }
 
-    creature_ptr->exp = creature_ptr->max_exp = total_exp;
-    check_experience(creature_ptr);
+    player_ptr->exp = player_ptr->max_exp = total_exp;
+    check_experience(player_ptr);
 }

@@ -34,64 +34,64 @@
 /*!
  * @brief プレイヤーに魔力消去効果を与える。
  */
-static void dispel_player(player_type *creature_ptr)
+static void dispel_player(player_type *player_ptr)
 {
-    (void)set_fast(creature_ptr, 0, true);
-    set_lightspeed(creature_ptr, 0, true);
-    (void)set_slow(creature_ptr, 0, true);
-    (void)set_shield(creature_ptr, 0, true);
-    (void)set_blessed(creature_ptr, 0, true);
-    (void)set_tsuyoshi(creature_ptr, 0, true);
-    (void)set_hero(creature_ptr, 0, true);
-    (void)set_shero(creature_ptr, 0, true);
-    (void)set_protevil(creature_ptr, 0, true);
-    (void)set_invuln(creature_ptr, 0, true);
-    (void)set_wraith_form(creature_ptr, 0, true);
-    (void)set_pass_wall(creature_ptr, 0, true);
-    (void)set_tim_res_nether(creature_ptr, 0, true);
-    (void)set_tim_res_time(creature_ptr, 0, true);
-    (void)set_tim_reflect(creature_ptr, 0, true);
-    (void)set_multishadow(creature_ptr, 0, true);
-    (void)set_dustrobe(creature_ptr, 0, true);
+    (void)set_fast(player_ptr, 0, true);
+    set_lightspeed(player_ptr, 0, true);
+    (void)set_slow(player_ptr, 0, true);
+    (void)set_shield(player_ptr, 0, true);
+    (void)set_blessed(player_ptr, 0, true);
+    (void)set_tsuyoshi(player_ptr, 0, true);
+    (void)set_hero(player_ptr, 0, true);
+    (void)set_shero(player_ptr, 0, true);
+    (void)set_protevil(player_ptr, 0, true);
+    (void)set_invuln(player_ptr, 0, true);
+    (void)set_wraith_form(player_ptr, 0, true);
+    (void)set_pass_wall(player_ptr, 0, true);
+    (void)set_tim_res_nether(player_ptr, 0, true);
+    (void)set_tim_res_time(player_ptr, 0, true);
+    (void)set_tim_reflect(player_ptr, 0, true);
+    (void)set_multishadow(player_ptr, 0, true);
+    (void)set_dustrobe(player_ptr, 0, true);
 
-    (void)set_tim_invis(creature_ptr, 0, true);
-    (void)set_tim_infra(creature_ptr, 0, true);
-    (void)set_tim_esp(creature_ptr, 0, true);
-    (void)set_tim_regen(creature_ptr, 0, true);
-    (void)set_tim_stealth(creature_ptr, 0, true);
-    (void)set_tim_levitation(creature_ptr, 0, true);
-    (void)set_tim_sh_force(creature_ptr, 0, true);
-    (void)set_tim_sh_fire(creature_ptr, 0, true);
-    (void)set_tim_sh_holy(creature_ptr, 0, true);
-    (void)set_tim_eyeeye(creature_ptr, 0, true);
-    (void)set_magicdef(creature_ptr, 0, true);
-    (void)set_resist_magic(creature_ptr, 0, true);
-    (void)set_oppose_acid(creature_ptr, 0, true);
-    (void)set_oppose_elec(creature_ptr, 0, true);
-    (void)set_oppose_fire(creature_ptr, 0, true);
-    (void)set_oppose_cold(creature_ptr, 0, true);
-    (void)set_oppose_pois(creature_ptr, 0, true);
-    (void)set_ultimate_res(creature_ptr, 0, true);
-    (void)set_mimic(creature_ptr, 0, 0, true);
-    (void)set_ele_attack(creature_ptr, 0, 0);
-    (void)set_ele_immune(creature_ptr, 0, 0);
+    (void)set_tim_invis(player_ptr, 0, true);
+    (void)set_tim_infra(player_ptr, 0, true);
+    (void)set_tim_esp(player_ptr, 0, true);
+    (void)set_tim_regen(player_ptr, 0, true);
+    (void)set_tim_stealth(player_ptr, 0, true);
+    (void)set_tim_levitation(player_ptr, 0, true);
+    (void)set_tim_sh_force(player_ptr, 0, true);
+    (void)set_tim_sh_fire(player_ptr, 0, true);
+    (void)set_tim_sh_holy(player_ptr, 0, true);
+    (void)set_tim_eyeeye(player_ptr, 0, true);
+    (void)set_magicdef(player_ptr, 0, true);
+    (void)set_resist_magic(player_ptr, 0, true);
+    (void)set_oppose_acid(player_ptr, 0, true);
+    (void)set_oppose_elec(player_ptr, 0, true);
+    (void)set_oppose_fire(player_ptr, 0, true);
+    (void)set_oppose_cold(player_ptr, 0, true);
+    (void)set_oppose_pois(player_ptr, 0, true);
+    (void)set_ultimate_res(player_ptr, 0, true);
+    (void)set_mimic(player_ptr, 0, 0, true);
+    (void)set_ele_attack(player_ptr, 0, 0);
+    (void)set_ele_immune(player_ptr, 0, 0);
 
-    if (creature_ptr->special_attack & ATTACK_CONFUSE) {
-        creature_ptr->special_attack &= ~(ATTACK_CONFUSE);
+    if (player_ptr->special_attack & ATTACK_CONFUSE) {
+        player_ptr->special_attack &= ~(ATTACK_CONFUSE);
         msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
     }
 
-    if (music_singing_any(creature_ptr) || RealmHex(creature_ptr).is_spelling_any()) {
-        concptr str = (music_singing_any(creature_ptr)) ? _("歌", "singing") : _("呪文", "casting");
-        set_interrupting_song_effect(creature_ptr, get_singing_song_effect(creature_ptr));
-        set_singing_song_effect(creature_ptr, MUSIC_NONE);
+    if (music_singing_any(player_ptr) || RealmHex(player_ptr).is_spelling_any()) {
+        concptr str = (music_singing_any(player_ptr)) ? _("歌", "singing") : _("呪文", "casting");
+        set_interrupting_song_effect(player_ptr, get_singing_song_effect(player_ptr));
+        set_singing_song_effect(player_ptr, MUSIC_NONE);
         msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
 
-        creature_ptr->action = ACTION_NONE;
-        creature_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
-        creature_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-        creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-        creature_ptr->energy_need += ENERGY_NEED();
+        player_ptr->action = ACTION_NONE;
+        player_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
+        player_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+        player_ptr->energy_need += ENERGY_NEED();
     }
 }
 

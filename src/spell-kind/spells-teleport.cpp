@@ -263,7 +263,7 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 /*!
  * @brief プレイヤーのテレポート先選定と移動処理 /
  * Teleport the player to a location up to "dis" grids away.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dis 基本移動距離
  * @param is_quantum_effect 量子的効果 (反テレポ無効)によるテレポートアウェイならばTRUE
  * @param mode オプション
@@ -284,11 +284,11 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
  * of candidates has equal possibility to be choosen as a destination.
  * </pre>
  */
-bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode)
+bool teleport_player_aux(player_type *player_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode)
 {
-    if (creature_ptr->wild_mode)
+    if (player_ptr->wild_mode)
         return false;
-    if (!is_quantum_effect && creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL)) {
+    if (!is_quantum_effect && player_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL)) {
         msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
         return false;
     }
@@ -300,17 +300,17 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantu
     if (dis > MAX_TELEPORT_DISTANCE)
         dis = MAX_TELEPORT_DISTANCE;
 
-    int left = MAX(1, creature_ptr->x - dis);
-    int right = MIN(creature_ptr->current_floor_ptr->width - 2, creature_ptr->x + dis);
-    int top = MAX(1, creature_ptr->y - dis);
-    int bottom = MIN(creature_ptr->current_floor_ptr->height - 2, creature_ptr->y + dis);
+    int left = MAX(1, player_ptr->x - dis);
+    int right = MIN(player_ptr->current_floor_ptr->width - 2, player_ptr->x + dis);
+    int top = MAX(1, player_ptr->y - dis);
+    int bottom = MIN(player_ptr->current_floor_ptr->height - 2, player_ptr->y + dis);
     int total_candidates = 0;
     for (POSITION y = top; y <= bottom; y++) {
         for (POSITION x = left; x <= right; x++) {
-            if (!cave_player_teleportable_bold(creature_ptr, y, x, mode))
+            if (!cave_player_teleportable_bold(player_ptr, y, x, mode))
                 continue;
 
-            int d = distance(creature_ptr->y, creature_ptr->x, y, x);
+            int d = distance(player_ptr->y, player_ptr->x, y, x);
             if (d > dis)
                 continue;
 
@@ -336,10 +336,10 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantu
     POSITION yy, xx = 0;
     for (yy = top; yy <= bottom; yy++) {
         for (xx = left; xx <= right; xx++) {
-            if (!cave_player_teleportable_bold(creature_ptr, yy, xx, mode))
+            if (!cave_player_teleportable_bold(player_ptr, yy, xx, mode))
                 continue;
 
-            int d = distance(creature_ptr->y, creature_ptr->x, yy, xx);
+            int d = distance(player_ptr->y, player_ptr->x, yy, xx);
             if (d > dis)
                 continue;
             if (d < min)
@@ -354,45 +354,45 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantu
             break;
     }
 
-    if (player_bold(creature_ptr, yy, xx))
+    if (player_bold(player_ptr, yy, xx))
         return false;
 
     sound(SOUND_TELEPORT);
 #ifdef JP
-    if (is_echizen(creature_ptr))
-        msg_format("『こっちだぁ、%s』", creature_ptr->name);
+    if (is_echizen(player_ptr))
+        msg_format("『こっちだぁ、%s』", player_ptr->name);
 #endif
-    (void)move_player_effect(creature_ptr, yy, xx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+    (void)move_player_effect(player_ptr, yy, xx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
     return true;
 }
 
 /*!
  * @brief プレイヤーのテレポート処理メインルーチン
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dis 基本移動距離
  * @param mode オプション
  */
-void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
+void teleport_player(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
 {
-    const POSITION oy = creature_ptr->y;
-    const POSITION ox = creature_ptr->x;
+    const POSITION oy = player_ptr->y;
+    const POSITION ox = player_ptr->x;
 
-    if (!teleport_player_aux(creature_ptr, dis, false, static_cast<teleport_flags>(mode)))
+    if (!teleport_player_aux(player_ptr, dis, false, static_cast<teleport_flags>(mode)))
         return;
 
     /* Monsters with teleport ability may follow the player */
     for (POSITION xx = -1; xx < 2; xx++) {
         for (POSITION yy = -1; yy < 2; yy++) {
-            MONSTER_IDX tmp_m_idx = creature_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
-            if (tmp_m_idx && (creature_ptr->riding != tmp_m_idx)) {
-                monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[tmp_m_idx];
+            MONSTER_IDX tmp_m_idx = player_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
+            if (tmp_m_idx && (player_ptr->riding != tmp_m_idx)) {
+                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
                 monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
                 bool can_follow = r_ptr->ability_flags.has(RF_ABILITY::TPORT);
                 can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
                 can_follow &= monster_csleep_remaining(m_ptr) == 0;
                 if (can_follow) {
-                    teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
+                    teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
                 }
             }
         }
@@ -444,7 +444,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
 /*!
  * @brief プレイヤーを指定位置近辺にテレポートさせる
  * Teleport player to a grid near the given location
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param ny 目標Y座標
  * @param nx 目標X座標
  * @param mode オプションフラグ
@@ -454,9 +454,9 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
  * This function allows teleporting into vaults (!)
  * </pre>
  */
-void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, teleport_flags mode)
+void teleport_player_to(player_type *player_ptr, POSITION ny, POSITION nx, teleport_flags mode)
 {
-    if (creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL)) {
+    if (player_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL)) {
         msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
         return;
     }
@@ -468,18 +468,18 @@ void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, tel
         while (true) {
             y = (POSITION)rand_spread(ny, dis);
             x = (POSITION)rand_spread(nx, dis);
-            if (in_bounds(creature_ptr->current_floor_ptr, y, x))
+            if (in_bounds(player_ptr->current_floor_ptr, y, x))
                 break;
         }
 
         bool is_anywhere = current_world_ptr->wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
         is_anywhere
-            &= (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || creature_ptr->current_floor_ptr->grid_array[y][x].m_idx == creature_ptr->riding;
+            &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
         if (is_anywhere)
             break;
 
-        if (cave_player_teleportable_bold(creature_ptr, y, x, mode))
+        if (cave_player_teleportable_bold(player_ptr, y, x, mode))
             break;
 
         if (++ctr > (4 * dis * dis + 4 * dis + 1)) {
@@ -489,7 +489,7 @@ void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, tel
     }
 
     sound(SOUND_TELEPORT);
-    (void)move_player_effect(creature_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+    (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
 void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)

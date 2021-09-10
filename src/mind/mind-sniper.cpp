@@ -128,16 +128,16 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
  * @brief スナイパーの集中度加算
  * @return 常にTRUEを返す
  */
-static bool snipe_concentrate(player_type *creature_ptr)
+static bool snipe_concentrate(player_type *player_ptr)
 {
-    if ((int)creature_ptr->concent < (2 + (creature_ptr->lev + 5) / 10))
-        creature_ptr->concent++;
+    if ((int)player_ptr->concent < (2 + (player_ptr->lev + 5) / 10))
+        player_ptr->concent++;
 
-    msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), creature_ptr->concent);
-    creature_ptr->reset_concent = false;
+    msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), player_ptr->concent);
+    player_ptr->reset_concent = false;
 
-    creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->update |= (PU_BONUS | PU_MONSTERS);
+    player_ptr->redraw |= (PR_STATUS);
     return true;
 }
 
@@ -145,17 +145,17 @@ static bool snipe_concentrate(player_type *creature_ptr)
  * @brief スナイパーの集中度リセット
  * @param msg TRUEならばメッセージを表示する
  */
-void reset_concentration(player_type *creature_ptr, bool msg)
+void reset_concentration(player_type *player_ptr, bool msg)
 {
     if (msg) {
         msg_print(_("集中力が途切れてしまった。", "Stop concentrating."));
     }
 
-    creature_ptr->concent = 0;
-    creature_ptr->reset_concent = false;
+    player_ptr->concent = 0;
+    player_ptr->reset_concent = false;
 
-    creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->update |= (PU_BONUS | PU_MONSTERS);
+    player_ptr->redraw |= (PR_STATUS);
 }
 
 /*!
@@ -163,9 +163,9 @@ void reset_concentration(player_type *creature_ptr, bool msg)
  * @param tdam 算出中のダメージ
  * @return 集中度修正を加えたダメージ
  */
-int boost_concentration_damage(player_type *creature_ptr, int tdam)
+int boost_concentration_damage(player_type *player_ptr, int tdam)
 {
-    tdam *= (10 + creature_ptr->concent);
+    tdam *= (10 + player_ptr->concent);
     tdam /= 10;
 
     return (tdam);

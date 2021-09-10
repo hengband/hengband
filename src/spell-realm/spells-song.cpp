@@ -84,66 +84,66 @@ void check_music(player_type *caster_ptr)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_stealth(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_stealth && !do_dec) {
-            if (creature_ptr->tim_stealth > v)
+        if (player_ptr->tim_stealth && !do_dec) {
+            if (player_ptr->tim_stealth > v)
                 return false;
-        } else if (!is_time_limit_stealth(creature_ptr)) {
+        } else if (!is_time_limit_stealth(player_ptr)) {
             msg_print(_("足音が小さくなった！", "You begin to walk silently!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->tim_stealth && !music_singing(creature_ptr, MUSIC_STEALTH)) {
+        if (player_ptr->tim_stealth && !music_singing(player_ptr, MUSIC_STEALTH)) {
             msg_print(_("足音が大きくなった。", "You no longer walk silently."));
             notice = true;
         }
     }
 
-    creature_ptr->tim_stealth = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_stealth = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
 /*!
  * @brief 歌の停止を処理する / Stop singing if the player is a Bard
  */
-void stop_singing(player_type *creature_ptr)
+void stop_singing(player_type *player_ptr)
 {
-    if (creature_ptr->pclass != CLASS_BARD)
+    if (player_ptr->pclass != CLASS_BARD)
         return;
 
-    if (get_interrupting_song_effect(creature_ptr) != 0) {
-        set_interrupting_song_effect(creature_ptr, MUSIC_NONE);
+    if (get_interrupting_song_effect(player_ptr) != 0) {
+        set_interrupting_song_effect(player_ptr, MUSIC_NONE);
         return;
     }
 
-    if (get_singing_song_effect(creature_ptr) == 0)
+    if (get_singing_song_effect(player_ptr) == 0)
         return;
 
-    if (creature_ptr->action == ACTION_SING)
-        set_action(creature_ptr, ACTION_NONE);
+    if (player_ptr->action == ACTION_SING)
+        set_action(player_ptr, ACTION_NONE);
 
-    (void)exe_spell(creature_ptr, REALM_MUSIC, get_singing_song_id(creature_ptr), SPELL_STOP);
-    set_singing_song_effect(creature_ptr, MUSIC_NONE);
-    set_singing_song_id(creature_ptr, 0);
-    set_bits(creature_ptr->update, PU_BONUS);
-    set_bits(creature_ptr->redraw, PR_STATUS);
+    (void)exe_spell(player_ptr, REALM_MUSIC, get_singing_song_id(player_ptr), SPELL_STOP);
+    set_singing_song_effect(player_ptr, MUSIC_NONE);
+    set_singing_song_id(player_ptr, 0);
+    set_bits(player_ptr->update, PU_BONUS);
+    set_bits(player_ptr->redraw, PR_STATUS);
 }
 
 bool music_singing(player_type *caster_ptr, int music_songs)
@@ -151,47 +151,47 @@ bool music_singing(player_type *caster_ptr, int music_songs)
     return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs);
 }
 
-bool music_singing_any(player_type *creature_ptr)
+bool music_singing_any(player_type *player_ptr)
 {
-    return (creature_ptr->pclass == CLASS_BARD) && (creature_ptr->magic_num1[0] != 0);
+    return (player_ptr->pclass == CLASS_BARD) && (player_ptr->magic_num1[0] != 0);
 }
 
-int32_t get_singing_song_effect(const player_type *creature_ptr)
+int32_t get_singing_song_effect(const player_type *player_ptr)
 {
-    return creature_ptr->magic_num1[0];
+    return player_ptr->magic_num1[0];
 }
 
-void set_singing_song_effect(player_type *creature_ptr, const int32_t magic_num)
+void set_singing_song_effect(player_type *player_ptr, const int32_t magic_num)
 {
-    creature_ptr->magic_num1[0] = magic_num;
+    player_ptr->magic_num1[0] = magic_num;
 }
 
-int32_t get_interrupting_song_effect(const player_type *creature_ptr)
+int32_t get_interrupting_song_effect(const player_type *player_ptr)
 {
-    return creature_ptr->magic_num1[1];
+    return player_ptr->magic_num1[1];
 }
 
-void set_interrupting_song_effect(player_type *creature_ptr, const int32_t magic_num)
+void set_interrupting_song_effect(player_type *player_ptr, const int32_t magic_num)
 {
-    creature_ptr->magic_num1[1] = magic_num;
+    player_ptr->magic_num1[1] = magic_num;
 }
 
-int32_t get_singing_count(const player_type *creature_ptr)
+int32_t get_singing_count(const player_type *player_ptr)
 {
-    return creature_ptr->magic_num1[2];
+    return player_ptr->magic_num1[2];
 }
 
-void set_singing_count(player_type *creature_ptr, const int32_t magic_num)
+void set_singing_count(player_type *player_ptr, const int32_t magic_num)
 {
-    creature_ptr->magic_num1[2] = magic_num;
+    player_ptr->magic_num1[2] = magic_num;
 }
 
-byte get_singing_song_id(const player_type *creature_ptr)
+byte get_singing_song_id(const player_type *player_ptr)
 {
-    return creature_ptr->magic_num2[0];
+    return player_ptr->magic_num2[0];
 }
 
-void set_singing_song_id(player_type *creature_ptr, const byte magic_num)
+void set_singing_song_id(player_type *player_ptr, const byte magic_num)
 {
-    creature_ptr->magic_num2[0] = magic_num;
+    player_ptr->magic_num2[0] = magic_num;
 }

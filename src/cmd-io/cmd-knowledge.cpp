@@ -22,7 +22,7 @@
 /*
  * Interact with "knowledge"
  */
-void do_cmd_knowledge(player_type *creature_ptr)
+void do_cmd_knowledge(player_type *player_ptr)
 {
     int i, p = 0;
     bool need_redraw = false;
@@ -70,35 +70,35 @@ void do_cmd_knowledge(player_type *creature_ptr)
             p = 1 - p;
             break;
         case '1': /* Artifacts */
-            do_cmd_knowledge_artifacts(creature_ptr);
+            do_cmd_knowledge_artifacts(player_ptr);
             break;
         case '2': /* Objects */
-            do_cmd_knowledge_objects(creature_ptr, &need_redraw, false, -1);
+            do_cmd_knowledge_objects(player_ptr, &need_redraw, false, -1);
             break;
         case '3': /* Uniques */
-            do_cmd_knowledge_uniques(creature_ptr, true);
+            do_cmd_knowledge_uniques(player_ptr, true);
             break;
         case '4': /* Uniques */
-            do_cmd_knowledge_uniques(creature_ptr, false);
+            do_cmd_knowledge_uniques(player_ptr, false);
             break;
         case '5': /* Monsters */
-            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, false, -1);
+            do_cmd_knowledge_monsters(player_ptr, &need_redraw, false, -1);
             break;
         case '6': /* Kill count  */
-            do_cmd_knowledge_kill_count(creature_ptr);
+            do_cmd_knowledge_kill_count(player_ptr);
             break;
         case '7': /* wanted */
             if (!vanilla_town)
-                do_cmd_knowledge_bounty(creature_ptr);
+                do_cmd_knowledge_bounty(player_ptr);
             break;
         case '8': /* Pets */
-            do_cmd_knowledge_pets(creature_ptr);
+            do_cmd_knowledge_pets(player_ptr);
             break;
         case '9': /* Home */
-            do_cmd_knowledge_home(creature_ptr);
+            do_cmd_knowledge_home(player_ptr);
             break;
         case '0': /* Resist list */
-            do_cmd_knowledge_inventory(creature_ptr);
+            do_cmd_knowledge_inventory(player_ptr);
             break;
         /* Next page */
         case 'a': /* Feature list */
@@ -108,31 +108,31 @@ void do_cmd_knowledge(player_type *creature_ptr)
             break;
         }
         case 'b': /* Max stat */
-            do_cmd_knowledge_stat(creature_ptr);
+            do_cmd_knowledge_stat(player_ptr);
             break;
         case 'c': /* Mutations */
-            do_cmd_knowledge_mutations(creature_ptr);
+            do_cmd_knowledge_mutations(player_ptr);
             break;
         case 'd': /* weapon-exp */
-            do_cmd_knowledge_weapon_exp(creature_ptr);
+            do_cmd_knowledge_weapon_exp(player_ptr);
             break;
         case 'e': /* spell-exp */
-            do_cmd_knowledge_spell_exp(creature_ptr);
+            do_cmd_knowledge_spell_exp(player_ptr);
             break;
         case 'f': /* skill-exp */
-            do_cmd_knowledge_skill_exp(creature_ptr);
+            do_cmd_knowledge_skill_exp(player_ptr);
             break;
         case 'g': /* Virtues */
-            do_cmd_knowledge_virtues(creature_ptr);
+            do_cmd_knowledge_virtues(player_ptr);
             break;
         case 'h': /* Dungeon */
-            do_cmd_knowledge_dungeon(creature_ptr);
+            do_cmd_knowledge_dungeon(player_ptr);
             break;
         case 'i': /* Quests */
-            do_cmd_knowledge_quests(creature_ptr);
+            do_cmd_knowledge_quests(player_ptr);
             break;
         case 'k': /* Autopick */
-            do_cmd_knowledge_autopick(creature_ptr);
+            do_cmd_knowledge_autopick(player_ptr);
             break;
         default: /* Unknown option */
             bell();
@@ -143,5 +143,5 @@ void do_cmd_knowledge(player_type *creature_ptr)
 
     screen_load();
     if (need_redraw)
-        do_cmd_redraw(creature_ptr);
+        do_cmd_redraw(player_ptr);
 }

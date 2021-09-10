@@ -8,4 +8,4 @@
 struct object_type;;
 struct player_type;
 
-void inventory_damage(player_type *creature_ptr, const ObjectBreaker& breaker, int perc);
+void inventory_damage(player_type *player_ptr, const ObjectBreaker& breaker, int perc);

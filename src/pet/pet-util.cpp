@@ -24,37 +24,37 @@ int total_friends = 0;
  * @param now_riding trueなら下馬処理、falseならば騎乗処理
  * @return 可能ならばtrueを返す
  */
-bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_riding)
+bool can_player_ride_pet(player_type *player_ptr, grid_type *g_ptr, bool now_riding)
 {
     bool old_character_xtra = current_world_ptr->character_xtra;
-    MONSTER_IDX old_riding = creature_ptr->riding;
-    bool old_riding_two_hands = creature_ptr->riding_ryoute;
-    bool old_old_riding_two_hands = creature_ptr->old_riding_ryoute;
-    bool old_pf_two_hands = (creature_ptr->pet_extra_flags & PF_TWO_HANDS) ? true : false;
+    MONSTER_IDX old_riding = player_ptr->riding;
+    bool old_riding_two_hands = player_ptr->riding_ryoute;
+    bool old_old_riding_two_hands = player_ptr->old_riding_ryoute;
+    bool old_pf_two_hands = (player_ptr->pet_extra_flags & PF_TWO_HANDS) ? true : false;
     current_world_ptr->character_xtra = true;
 
     if (now_riding)
-        creature_ptr->riding = g_ptr->m_idx;
+        player_ptr->riding = g_ptr->m_idx;
     else {
-        creature_ptr->riding = 0;
-        creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = false;
+        player_ptr->riding = 0;
+        player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+        player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     }
 
-    creature_ptr->update |= PU_BONUS;
-    handle_stuff(creature_ptr);
+    player_ptr->update |= PU_BONUS;
+    handle_stuff(player_ptr);
 
-    bool p_can_enter = player_can_enter(creature_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
-    creature_ptr->riding = old_riding;
+    bool p_can_enter = player_can_enter(player_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+    player_ptr->riding = old_riding;
     if (old_pf_two_hands)
-        creature_ptr->pet_extra_flags |= (PF_TWO_HANDS);
+        player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
     else
-        creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+        player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
 
-    creature_ptr->riding_ryoute = old_riding_two_hands;
-    creature_ptr->old_riding_ryoute = old_old_riding_two_hands;
-    creature_ptr->update |= PU_BONUS;
-    handle_stuff(creature_ptr);
+    player_ptr->riding_ryoute = old_riding_two_hands;
+    player_ptr->old_riding_ryoute = old_old_riding_two_hands;
+    player_ptr->update |= PU_BONUS;
+    handle_stuff(player_ptr);
 
     current_world_ptr->character_xtra = old_character_xtra;
     return p_can_enter;
@@ -64,13 +64,13 @@ bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_r
  * @brief ペットの維持コスト計算
  * @return 維持コスト(%)
  */
-PERCENTAGE calculate_upkeep(player_type *creature_ptr)
+PERCENTAGE calculate_upkeep(player_type *player_ptr)
 {
     bool has_a_unique = false;
     DEPTH total_friend_levels = 0;
     total_friends = 0;
-    for (auto m_idx = creature_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
-        auto *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
+    for (auto m_idx = player_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
         if (!monster_is_valid(m_ptr))
             continue;
         auto *r_ptr = &r_info[m_ptr->r_idx];
@@ -85,12 +85,12 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
             continue;
         }
 
-        if (creature_ptr->pclass != CLASS_CAVALRY) {
+        if (player_ptr->pclass != CLASS_CAVALRY) {
             total_friend_levels += (r_ptr->level + 5) * 10;
             continue;
         }
 
-        if (creature_ptr->riding == m_idx)
+        if (player_ptr->riding == m_idx)
             total_friend_levels += (r_ptr->level + 5) * 2;
         else if (!has_a_unique && any_bits(r_info[m_ptr->r_idx].flags7, RF7_RIDING))
             total_friend_levels += (r_ptr->level + 5) * 7 / 2;
@@ -104,7 +104,7 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
         return 0;
     }
 
-    int upkeep_factor = (total_friend_levels - (creature_ptr->lev * 80 / (cp_ptr->pet_upkeep_div)));
+    int upkeep_factor = (total_friend_levels - (player_ptr->lev * 80 / (cp_ptr->pet_upkeep_div)));
     if (upkeep_factor < 0) {
         upkeep_factor = 0;
     }

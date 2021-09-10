@@ -23,7 +23,7 @@
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
  * Hack -- redraw the screen
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @details
  * <pre>
  * This command performs various low level updates, clears all the "extra"
@@ -35,26 +35,26 @@
  * the "TERM_XTRA_REACT" hook before redrawing the windows.
  * </pre>
  */
-void do_cmd_redraw(player_type *creature_ptr)
+void do_cmd_redraw(player_type *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
 
-    creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->update |= (PU_TORCH);
-    creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-    creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    creature_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-    creature_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->update |= (PU_TORCH);
+    player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+    player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+    player_ptr->update |= (PU_MONSTERS);
 
-    creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
-    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-    creature_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+    player_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
     update_playtime();
-    handle_stuff(creature_ptr);
-    if (creature_ptr->prace == player_race_type::ANDROID)
-        calc_android_exp(creature_ptr);
+    handle_stuff(player_ptr);
+    if (player_ptr->prace == player_race_type::ANDROID)
+        calc_android_exp(player_ptr);
 
     term_type *old = Term;
     for (int j = 0; j < 8; j++) {
@@ -71,18 +71,18 @@ void do_cmd_redraw(player_type *creature_ptr)
 /*!
  * @brief プレイヤーのステータス表示
  */
-void do_cmd_player_status(player_type *creature_ptr)
+void do_cmd_player_status(player_type *player_ptr)
 {
     int mode = 0;
     char tmp[160];
     screen_save();
     while (true) {
         update_playtime();
-        display_player(creature_ptr, mode);
+        display_player(player_ptr, mode);
 
         if (mode == 5) {
             mode = 0;
-            display_player(creature_ptr, mode);
+            display_player(player_ptr, mode);
         }
 
         term_putstr(2, 23, -1, TERM_WHITE,
@@ -92,14 +92,14 @@ void do_cmd_player_status(player_type *creature_ptr)
             break;
 
         if (c == 'c') {
-            get_name(creature_ptr);
-            process_player_name(creature_ptr);
+            get_name(player_ptr);
+            process_player_name(player_ptr);
         } else if (c == 'f') {
-            sprintf(tmp, "%s.txt", creature_ptr->base_name);
+            sprintf(tmp, "%s.txt", player_ptr->base_name);
             if (get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
                 if (tmp[0] && (tmp[0] != ' ')) {
                     update_playtime();
-                    file_character(creature_ptr, tmp, display_player);
+                    file_character(player_ptr, tmp, display_player);
                 }
             }
         } else if (c == 'h') {
@@ -112,8 +112,8 @@ void do_cmd_player_status(player_type *creature_ptr)
     }
 
     screen_load();
-    creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-    handle_stuff(creature_ptr);
+    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+    handle_stuff(player_ptr);
 }
 
 /*!

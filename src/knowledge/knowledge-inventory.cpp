@@ -135,16 +135,16 @@ static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
 
 /*!
  * @brief アイテム1つ当たりの耐性を表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff 一時ファイルへの参照ポインタ
  * @param o_ptr アイテムへの参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  */
-static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, char *where)
+static void do_cmd_knowledge_inventory_aux(player_type *player_ptr, FILE *fff, object_type *o_ptr, char *where)
 {
     int i = 0;
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     while (o_name[i] && (i < 26)) {
 #ifdef JP
         if (iskanji(o_name[i]))
@@ -206,54 +206,54 @@ static void reset_label_number(int *label_number, FILE *fff)
 
 /*!
  * 装備中のアイテムについて、耐性を表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_wearing_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
+static void show_wearing_equipment_resistances(player_type *player_ptr, tval_type tval, int *label_number, FILE *fff)
 {
     char where[32];
     strcpy(where, _("装", "E "));
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 
-        do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, o_ptr, where);
         add_res_label(label_number, fff);
     }
 }
 
 /*!
  * 手持ち中のアイテムについて、耐性を表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_holding_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
+static void show_holding_equipment_resistances(player_type *player_ptr, tval_type tval, int *label_number, FILE *fff)
 {
     char where[32];
     strcpy(where, _("持", "I "));
     for (int i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 
-        do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, o_ptr, where);
         add_res_label(label_number, fff);
     }
 }
 
 /*!
  * 我が家のアイテムについて、耐性を表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_home_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
+static void show_home_equipment_resistances(player_type *player_ptr, tval_type tval, int *label_number, FILE *fff)
 {
     store_type *store_ptr;
     store_ptr = &town_info[1].store[STORE_HOME];
@@ -264,16 +264,16 @@ static void show_home_equipment_resistances(player_type *creature_ptr, tval_type
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 
-        do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, o_ptr, where);
         add_res_label(label_number, fff);
     }
 }
 
 /*
  * @brief Display *ID* ed weapons/armors's resistances
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_knowledge_inventory(player_type *creature_ptr)
+void do_cmd_knowledge_inventory(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -284,12 +284,12 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
     int label_number = 0;
     for (int tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++) {
         reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(creature_ptr, static_cast<tval_type>(tval), &label_number, fff);
-        show_holding_equipment_resistances(creature_ptr, static_cast<tval_type>(tval), &label_number, fff);
-        show_home_equipment_resistances(creature_ptr, static_cast<tval_type>(tval), &label_number, fff);
+        show_wearing_equipment_resistances(player_ptr, static_cast<tval_type>(tval), &label_number, fff);
+        show_holding_equipment_resistances(player_ptr, static_cast<tval_type>(tval), &label_number, fff);
+        show_home_equipment_resistances(player_ptr, static_cast<tval_type>(tval), &label_number, fff);
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, true, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
     fd_kill(file_name);
 }

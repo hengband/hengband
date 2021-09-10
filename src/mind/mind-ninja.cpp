@@ -262,25 +262,25 @@ void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *
 
 /*!
  * @brief 速駆け処理
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 常にTRUE
  */
-bool hayagake(player_type *creature_ptr)
+bool hayagake(player_type *player_ptr)
 {
-    PlayerEnergy energy(creature_ptr);
-    if (creature_ptr->action == ACTION_HAYAGAKE) {
-        set_action(creature_ptr, ACTION_NONE);
+    PlayerEnergy energy(player_ptr);
+    if (player_ptr->action == ACTION_HAYAGAKE) {
+        set_action(player_ptr, ACTION_NONE);
         energy.reset_player_turn();
         return true;
     }
 
-    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
-    if (f_ptr->flags.has_not(FF::PROJECT) || (!creature_ptr->levitation && f_ptr->flags.has(FF::DEEP))) {
+    if (f_ptr->flags.has_not(FF::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FF::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
     } else {
-        set_action(creature_ptr, ACTION_HAYAGAKE);
+        set_action(player_ptr, ACTION_HAYAGAKE);
     }
 
     energy.reset_player_turn();
@@ -292,40 +292,40 @@ bool hayagake(player_type *creature_ptr)
  * @param set TRUEならば超隠密状態になる。
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_superstealth(player_type *creature_ptr, bool set)
+bool set_superstealth(player_type *player_ptr, bool set)
 {
     bool notice = false;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (set) {
-        if (!(creature_ptr->special_defense & NINJA_S_STEALTH)) {
-            if (creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_MNLT) {
+        if (!(player_ptr->special_defense & NINJA_S_STEALTH)) {
+            if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_MNLT) {
                 msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
-                creature_ptr->monlite = creature_ptr->old_monlite = true;
+                player_ptr->monlite = player_ptr->old_monlite = true;
             } else {
                 msg_print(_("敵の目から影の中に覆い隠された！", "You are mantled in shadow from ordinary eyes!"));
-                creature_ptr->monlite = creature_ptr->old_monlite = false;
+                player_ptr->monlite = player_ptr->old_monlite = false;
             }
 
             notice = true;
-            creature_ptr->special_defense |= NINJA_S_STEALTH;
+            player_ptr->special_defense |= NINJA_S_STEALTH;
         }
     } else {
-        if (creature_ptr->special_defense & NINJA_S_STEALTH) {
+        if (player_ptr->special_defense & NINJA_S_STEALTH) {
             msg_print(_("再び敵の目にさらされるようになった。", "You are exposed to common sight once more."));
             notice = true;
-            creature_ptr->special_defense &= ~(NINJA_S_STEALTH);
+            player_ptr->special_defense &= ~(NINJA_S_STEALTH);
         }
     }
 
     if (!notice)
         return false;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
     return true;
 }
 

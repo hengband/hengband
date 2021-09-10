@@ -9,11 +9,11 @@
 
 static const char p2 = ')';
 
-static void enumerate_personality_list(player_type *creature_ptr, concptr *str, char *sym)
+static void enumerate_personality_list(player_type *player_ptr, concptr *str, char *sym)
 {
     char buf[80];
     for (int n = 0; n < MAX_PERSONALITIES; n++) {
-        if (personality_info[n].sex && (personality_info[n].sex != (creature_ptr->psex + 1)))
+        if (personality_info[n].sex && (personality_info[n].sex != (player_ptr->psex + 1)))
             continue;
 
         ap_ptr = &personality_info[n];
@@ -65,12 +65,12 @@ static void display_personality_stat(int cs, int *os, concptr *str, char *cur, c
     *os = cs;
 }
 
-static void interpret_personality_select_key_move(player_type *creature_ptr, char c, int *cs)
+static void interpret_personality_select_key_move(player_type *player_ptr, char c, int *cs)
 {
     if (c == '8') {
         if (*cs >= 4)
             *cs -= 4;
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (creature_ptr->psex + 1))) {
+        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs - 4) > 0)
                 *cs -= 4;
             else
@@ -81,7 +81,7 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
     if (c == '4') {
         if (*cs > 0)
             (*cs)--;
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (creature_ptr->psex + 1))) {
+        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs - 1) > 0)
                 (*cs)--;
             else
@@ -92,7 +92,7 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
     if (c == '6') {
         if (*cs < MAX_PERSONALITIES)
             (*cs)++;
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (creature_ptr->psex + 1))) {
+        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs + 1) <= MAX_PERSONALITIES)
                 (*cs)++;
             else
@@ -103,7 +103,7 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
     if (c == '2') {
         if ((*cs + 4) <= MAX_PERSONALITIES)
             *cs += 4;
-        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (creature_ptr->psex + 1))) {
+        if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
             if ((*cs + 4) <= MAX_PERSONALITIES)
                 *cs += 4;
             else
@@ -112,11 +112,11 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
     }
 }
 
-static bool select_personality(player_type *creature_ptr, int *k, concptr *str, char *sym)
+static bool select_personality(player_type *player_ptr, int *k, concptr *str, char *sym)
 {
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    int cs = creature_ptr->pseikaku;
+    int cs = player_ptr->pseikaku;
     int os = MAX_PERSONALITIES;
     while (true) {
         display_personality_stat(cs, &os, str, cur, sym);
@@ -138,7 +138,7 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
             if (cs == MAX_PERSONALITIES) {
                 do {
                     *k = randint0(MAX_PERSONALITIES);
-                } while (personality_info[*k].sex && (personality_info[*k].sex != (creature_ptr->psex + 1)));
+                } while (personality_info[*k].sex && (personality_info[*k].sex != (player_ptr->psex + 1)));
 
                 cs = *k;
                 continue;
@@ -148,11 +148,11 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
             }
         }
 
-        interpret_personality_select_key_move(creature_ptr, c, &cs);
+        interpret_personality_select_key_move(player_ptr, c, &cs);
         if (c == '*') {
             do {
                 *k = randint0(MAX_PERSONALITIES);
-            } while (personality_info[*k].sex && (personality_info[*k].sex != (creature_ptr->psex + 1)));
+            } while (personality_info[*k].sex && (personality_info[*k].sex != (player_ptr->psex + 1)));
 
             cs = *k;
             continue;
@@ -160,7 +160,7 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
 
         *k = (islower(c) ? A2I(c) : -1);
         if ((*k >= 0) && (*k < MAX_PERSONALITIES)) {
-            if ((personality_info[*k].sex == 0) || (personality_info[*k].sex == (creature_ptr->psex + 1))) {
+            if ((personality_info[*k].sex == 0) || (personality_info[*k].sex == (player_ptr->psex + 1))) {
                 cs = *k;
                 continue;
             }
@@ -168,14 +168,14 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
 
         *k = (isupper(c) ? (26 + c - 'A') : -1);
         if ((*k >= 26) && (*k < MAX_PERSONALITIES)) {
-            if ((personality_info[*k].sex == 0) || (personality_info[*k].sex == (creature_ptr->psex + 1))) {
+            if ((personality_info[*k].sex == 0) || (personality_info[*k].sex == (player_ptr->psex + 1))) {
                 cs = *k;
                 continue;
             }
         } else
             *k = -1;
 
-        birth_help_option(creature_ptr, c, BK_PERSONALITY);
+        birth_help_option(player_ptr, c, BK_PERSONALITY);
     }
 
     return true;
@@ -184,7 +184,7 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
 /*!
  * @brief プレイヤーの性格選択を行う / Player Player seikaku
  */
-bool get_player_personality(player_type *creature_ptr)
+bool get_player_personality(player_type *player_ptr)
 {
     clear_from(10);
     put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."),
@@ -193,13 +193,13 @@ bool get_player_personality(player_type *creature_ptr)
 
     concptr str;
     char sym[MAX_PERSONALITIES];
-    enumerate_personality_list(creature_ptr, &str, sym);
+    enumerate_personality_list(player_ptr, &str, sym);
     int k = -1;
-    if (!select_personality(creature_ptr, &k, &str, sym))
+    if (!select_personality(player_ptr, &k, &str, sym))
         return false;
 
-    creature_ptr->pseikaku = (player_personality_type)k;
-    ap_ptr = &personality_info[creature_ptr->pseikaku];
+    player_ptr->pseikaku = (player_personality_type)k;
+    ap_ptr = &personality_info[player_ptr->pseikaku];
     char tmp[64];
 #ifdef JP
     strcpy(tmp, ap_ptr->title);
@@ -209,7 +209,7 @@ bool get_player_personality(player_type *creature_ptr)
     strcpy(tmp, ap_ptr->title);
     strcat(tmp, " ");
 #endif
-    strcat(tmp, creature_ptr->name);
+    strcat(tmp, player_ptr->name);
     c_put_str(TERM_L_BLUE, tmp, 1, 34);
     return true;
 }

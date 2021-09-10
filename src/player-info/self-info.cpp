@@ -29,147 +29,147 @@
 #include "term/screen-processor.h"
 #include "view/display-self-info.h"
 
-static void set_bad_status_info(player_type *creature_ptr, self_info_type *self_ptr)
+static void set_bad_status_info(player_type *player_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->blind)
+    if (player_ptr->blind)
         self_ptr->info[self_ptr->line++] = _("あなたは目が見えない。", "You cannot see.");
 
-    if (creature_ptr->confused)
+    if (player_ptr->confused)
         self_ptr->info[self_ptr->line++] = _("あなたは混乱している。", "You are confused.");
 
-    if (creature_ptr->afraid)
+    if (player_ptr->afraid)
         self_ptr->info[self_ptr->line++] = _("あなたは恐怖に侵されている。", "You are terrified.");
 
-    if (creature_ptr->cut)
+    if (player_ptr->cut)
         self_ptr->info[self_ptr->line++] = _("あなたは出血している。", "You are bleeding.");
 
-    if (creature_ptr->stun)
+    if (player_ptr->stun)
         self_ptr->info[self_ptr->line++] = _("あなたはもうろうとしている。", "You are stunned.");
 
-    if (creature_ptr->poisoned)
+    if (player_ptr->poisoned)
         self_ptr->info[self_ptr->line++] = _("あなたは毒に侵されている。", "You are poisoned.");
 
-    if (creature_ptr->image)
+    if (player_ptr->image)
         self_ptr->info[self_ptr->line++] = _("あなたは幻覚を見ている。", "You are hallucinating.");
 }
 
-static void set_curse_info(player_type *creature_ptr, self_info_type *self_ptr)
+static void set_curse_info(player_type *player_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->cursed.has(TRC::TY_CURSE))
+    if (player_ptr->cursed.has(TRC::TY_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたは邪悪な怨念に包まれている。", "You carry an ancient foul curse.");
 
-    if (has_aggravate(creature_ptr))
+    if (has_aggravate(player_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたはモンスターを怒らせている。", "You aggravate monsters.");
 
-    if (creature_ptr->cursed.has(TRC::DRAIN_EXP))
+    if (player_ptr->cursed.has(TRC::DRAIN_EXP))
         self_ptr->info[self_ptr->line++] = _("あなたは経験値を吸われている。", "You occasionally lose experience for no reason.");
 
-    if (creature_ptr->cursed.has(TRC::SLOW_REGEN))
+    if (player_ptr->cursed.has(TRC::SLOW_REGEN))
         self_ptr->info[self_ptr->line++] = _("あなたの回復力は非常に遅い。", "You regenerate slowly.");
 
-    if (creature_ptr->cursed.has(TRC::ADD_L_CURSE))
+    if (player_ptr->cursed.has(TRC::ADD_L_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたの弱い呪いは増える。", "Your weak curses multiply."); /* 暫定的 -- henkma */
 
-    if (creature_ptr->cursed.has(TRC::ADD_H_CURSE))
+    if (player_ptr->cursed.has(TRC::ADD_H_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたの強い呪いは増える。", "Your heavy curses multiply."); /* 暫定的 -- henkma */
 
-    if (creature_ptr->cursed.has(TRC::CALL_ANIMAL))
+    if (player_ptr->cursed.has(TRC::CALL_ANIMAL))
         self_ptr->info[self_ptr->line++] = _("あなたは動物に狙われている。", "You attract animals.");
 
-    if (creature_ptr->cursed.has(TRC::CALL_DEMON))
+    if (player_ptr->cursed.has(TRC::CALL_DEMON))
         self_ptr->info[self_ptr->line++] = _("あなたは悪魔に狙われている。", "You attract demons.");
 
-    if (creature_ptr->cursed.has(TRC::CALL_DRAGON))
+    if (player_ptr->cursed.has(TRC::CALL_DRAGON))
         self_ptr->info[self_ptr->line++] = _("あなたはドラゴンに狙われている。", "You attract dragons.");
 
-    if (creature_ptr->cursed.has(TRC::COWARDICE))
+    if (player_ptr->cursed.has(TRC::COWARDICE))
         self_ptr->info[self_ptr->line++] = _("あなたは時々臆病になる。", "You are subject to cowardice.");
 
-    if (creature_ptr->cursed.has(TRC::BERS_RAGE))
+    if (player_ptr->cursed.has(TRC::BERS_RAGE))
         self_ptr->info[self_ptr->line++] = _("あなたは狂戦士化の発作を起こす。", "You are subject to berserker fits.");
 
-    if (creature_ptr->cursed.has(TRC::TELEPORT))
+    if (player_ptr->cursed.has(TRC::TELEPORT))
         self_ptr->info[self_ptr->line++] = _("あなたの位置はひじょうに不安定だ。", "Your position is very uncertain.");
 
-    if (creature_ptr->cursed.has(TRC::LOW_MELEE))
+    if (player_ptr->cursed.has(TRC::LOW_MELEE))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は攻撃を外しやすい。", "Your weapon causes you to miss blows.");
 
-    if (creature_ptr->cursed.has(TRC::LOW_AC))
+    if (player_ptr->cursed.has(TRC::LOW_AC))
         self_ptr->info[self_ptr->line++] = _("あなたは攻撃を受けやすい。", "You are subject to be hit.");
 
-    if (creature_ptr->cursed.has(TRC::HARD_SPELL))
+    if (player_ptr->cursed.has(TRC::HARD_SPELL))
         self_ptr->info[self_ptr->line++] = _("あなたは魔法を失敗しやすい。", "Your spells fail more frequently.");
 
-    if (creature_ptr->cursed.has(TRC::FAST_DIGEST))
+    if (player_ptr->cursed.has(TRC::FAST_DIGEST))
         self_ptr->info[self_ptr->line++] = _("あなたはすぐお腹がへる。", "You have a good appetite.");
 
-    if (creature_ptr->cursed.has(TRC::DRAIN_HP))
+    if (player_ptr->cursed.has(TRC::DRAIN_HP))
         self_ptr->info[self_ptr->line++] = _("あなたは体力を吸われている。", "You occasionally lose hit points for no reason.");
 
-    if (creature_ptr->cursed.has(TRC::DRAIN_MANA))
+    if (player_ptr->cursed.has(TRC::DRAIN_MANA))
         self_ptr->info[self_ptr->line++] = _("あなたは魔力を吸われている。", "You occasionally lose spell points for no reason.");
 }
 
-static void set_special_attack_info(player_type *creature_ptr, self_info_type *self_ptr)
+static void set_special_attack_info(player_type *player_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->special_attack & ATTACK_CONFUSE)
+    if (player_ptr->special_attack & ATTACK_CONFUSE)
         self_ptr->info[self_ptr->line++] = _("あなたの手は赤く輝いている。", "Your hands are glowing dull red.");
 
-    if (creature_ptr->special_attack & ATTACK_FIRE)
+    if (player_ptr->special_attack & ATTACK_FIRE)
         self_ptr->info[self_ptr->line++] = _("あなたの手は火炎に覆われている。", "You can strike the enemy with flame.");
 
-    if (creature_ptr->special_attack & ATTACK_COLD)
+    if (player_ptr->special_attack & ATTACK_COLD)
         self_ptr->info[self_ptr->line++] = _("あなたの手は冷気に覆われている。", "You can strike the enemy with cold.");
 
-    if (creature_ptr->special_attack & ATTACK_ACID)
+    if (player_ptr->special_attack & ATTACK_ACID)
         self_ptr->info[self_ptr->line++] = _("あなたの手は酸に覆われている。", "You can strike the enemy with acid.");
 
-    if (creature_ptr->special_attack & ATTACK_ELEC)
+    if (player_ptr->special_attack & ATTACK_ELEC)
         self_ptr->info[self_ptr->line++] = _("あなたの手は電撃に覆われている。", "You can strike the enemy with electoric shock.");
 
-    if (creature_ptr->special_attack & ATTACK_POIS)
+    if (player_ptr->special_attack & ATTACK_POIS)
         self_ptr->info[self_ptr->line++] = _("あなたの手は毒に覆われている。", "You can strike the enemy with poison.");
 }
 
-static void set_esp_info(player_type *creature_ptr, self_info_type *self_ptr)
+static void set_esp_info(player_type *player_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->telepathy)
+    if (player_ptr->telepathy)
         self_ptr->info[self_ptr->line++] = _("あなたはテレパシー能力を持っている。", "You have ESP.");
 
-    if (creature_ptr->esp_animal)
+    if (player_ptr->esp_animal)
         self_ptr->info[self_ptr->line++] = _("あなたは自然界の生物の存在を感じる能力を持っている。", "You sense natural creatures.");
 
-    if (creature_ptr->esp_undead)
+    if (player_ptr->esp_undead)
         self_ptr->info[self_ptr->line++] = _("あなたはアンデッドの存在を感じる能力を持っている。", "You sense undead.");
 
-    if (creature_ptr->esp_demon)
+    if (player_ptr->esp_demon)
         self_ptr->info[self_ptr->line++] = _("あなたは悪魔の存在を感じる能力を持っている。", "You sense demons.");
 
-    if (creature_ptr->esp_orc)
+    if (player_ptr->esp_orc)
         self_ptr->info[self_ptr->line++] = _("あなたはオークの存在を感じる能力を持っている。", "You sense orcs.");
 
-    if (creature_ptr->esp_troll)
+    if (player_ptr->esp_troll)
         self_ptr->info[self_ptr->line++] = _("あなたはトロルの存在を感じる能力を持っている。", "You sense trolls.");
 
-    if (creature_ptr->esp_giant)
+    if (player_ptr->esp_giant)
         self_ptr->info[self_ptr->line++] = _("あなたは巨人の存在を感じる能力を持っている。", "You sense giants.");
 
-    if (creature_ptr->esp_dragon)
+    if (player_ptr->esp_dragon)
         self_ptr->info[self_ptr->line++] = _("あなたはドラゴンの存在を感じる能力を持っている。", "You sense dragons.");
 
-    if (creature_ptr->esp_human)
+    if (player_ptr->esp_human)
         self_ptr->info[self_ptr->line++] = _("あなたは人間の存在を感じる能力を持っている。", "You sense humans.");
 
-    if (creature_ptr->esp_evil)
+    if (player_ptr->esp_evil)
         self_ptr->info[self_ptr->line++] = _("あなたは邪悪な生き物の存在を感じる能力を持っている。", "You sense evil creatures.");
 
-    if (creature_ptr->esp_good)
+    if (player_ptr->esp_good)
         self_ptr->info[self_ptr->line++] = _("あなたは善良な生き物の存在を感じる能力を持っている。", "You sense good creatures.");
 
-    if (creature_ptr->esp_nonliving)
+    if (player_ptr->esp_nonliving)
         self_ptr->info[self_ptr->line++] = _("あなたは活動する無生物体の存在を感じる能力を持っている。", "You sense non-living creatures.");
 
-    if (creature_ptr->esp_unique)
+    if (player_ptr->esp_unique)
         self_ptr->info[self_ptr->line++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
 }
 
@@ -190,42 +190,42 @@ static void set_esp_info(player_type *creature_ptr, self_info_type *self_ptr)
  * Use the "show_file()" method, perhaps.
  * </pre>
  */
-void self_knowledge(player_type *creature_ptr)
+void self_knowledge(player_type *player_ptr)
 {
     self_info_type tmp_si;
     self_info_type *self_ptr = initialize_self_info_type(&tmp_si);
-    display_life_rating(creature_ptr, self_ptr);
-    chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
-    chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
-    display_max_base_status(creature_ptr, self_ptr);
-    display_virtue(creature_ptr, self_ptr);
+    display_life_rating(player_ptr, self_ptr);
+    chg_virtue(player_ptr, V_KNOWLEDGE, 1);
+    chg_virtue(player_ptr, V_ENLIGHTEN, 1);
+    display_max_base_status(player_ptr, self_ptr);
+    display_virtue(player_ptr, self_ptr);
     self_ptr->info[self_ptr->line++] = "";
-    if (creature_ptr->mimic_form)
-        display_mimic_race_ability(creature_ptr, self_ptr);
+    if (player_ptr->mimic_form)
+        display_mimic_race_ability(player_ptr, self_ptr);
     else
-        set_race_ability_info(creature_ptr, self_ptr);
+        set_race_ability_info(player_ptr, self_ptr);
 
-    set_class_ability_info(creature_ptr, self_ptr);
-    set_mutation_info(creature_ptr, self_ptr);
-    set_bad_status_info(creature_ptr, self_ptr);
-    set_curse_info(creature_ptr, self_ptr);
-    set_body_improvement_info_1(creature_ptr, self_ptr);
-    set_special_attack_info(creature_ptr, self_ptr);
-    switch (creature_ptr->action) {
+    set_class_ability_info(player_ptr, self_ptr);
+    set_mutation_info(player_ptr, self_ptr);
+    set_bad_status_info(player_ptr, self_ptr);
+    set_curse_info(player_ptr, self_ptr);
+    set_body_improvement_info_1(player_ptr, self_ptr);
+    set_special_attack_info(player_ptr, self_ptr);
+    switch (player_ptr->action) {
     case ACTION_SEARCH:
         self_ptr->info[self_ptr->line++] = _("あなたはひじょうに注意深く周囲を見渡している。", "You are looking around very carefully.");
         break;
     }
 
-    set_body_improvement_info_2(creature_ptr, self_ptr);
-    set_esp_info(creature_ptr, self_ptr);
-    set_body_improvement_info_3(creature_ptr, self_ptr);
-    set_element_resistance_info(creature_ptr, self_ptr);
-    set_high_resistance_info(creature_ptr, self_ptr);
-    set_body_improvement_info_4(creature_ptr, self_ptr);
-    set_status_sustain_info(creature_ptr, self_ptr);
-    set_equipment_influence(creature_ptr, self_ptr);
-    set_weapon_effect_info(creature_ptr, self_ptr);
+    set_body_improvement_info_2(player_ptr, self_ptr);
+    set_esp_info(player_ptr, self_ptr);
+    set_body_improvement_info_3(player_ptr, self_ptr);
+    set_element_resistance_info(player_ptr, self_ptr);
+    set_high_resistance_info(player_ptr, self_ptr);
+    set_body_improvement_info_4(player_ptr, self_ptr);
+    set_status_sustain_info(player_ptr, self_ptr);
+    set_equipment_influence(player_ptr, self_ptr);
+    set_weapon_effect_info(player_ptr, self_ptr);
     display_self_info(self_ptr);
 }
 
@@ -260,108 +260,108 @@ static concptr report_magic_durations[] = { _("ごく短い間", "for a short ti
 /*!
  * @brief 現在の一時的効果一覧を返す / Report all currently active magical effects.
  */
-void report_magics(player_type *creature_ptr)
+void report_magics(player_type *player_ptr)
 {
     int i = 0;
     concptr info[128];
     int info2[128];
-    if (creature_ptr->blind) {
-        info2[i] = report_magics_aux(creature_ptr->blind);
+    if (player_ptr->blind) {
+        info2[i] = report_magics_aux(player_ptr->blind);
         info[i++] = _("あなたは目が見えない", "You cannot see");
     }
 
-    if (creature_ptr->confused) {
-        info2[i] = report_magics_aux(creature_ptr->confused);
+    if (player_ptr->confused) {
+        info2[i] = report_magics_aux(player_ptr->confused);
         info[i++] = _("あなたは混乱している", "You are confused");
     }
 
-    if (creature_ptr->afraid) {
-        info2[i] = report_magics_aux(creature_ptr->afraid);
+    if (player_ptr->afraid) {
+        info2[i] = report_magics_aux(player_ptr->afraid);
         info[i++] = _("あなたは恐怖に侵されている", "You are terrified");
     }
 
-    if (creature_ptr->poisoned) {
-        info2[i] = report_magics_aux(creature_ptr->poisoned);
+    if (player_ptr->poisoned) {
+        info2[i] = report_magics_aux(player_ptr->poisoned);
         info[i++] = _("あなたは毒に侵されている", "You are poisoned");
     }
 
-    if (creature_ptr->image) {
-        info2[i] = report_magics_aux(creature_ptr->image);
+    if (player_ptr->image) {
+        info2[i] = report_magics_aux(player_ptr->image);
         info[i++] = _("あなたは幻覚を見ている", "You are hallucinating");
     }
 
-    if (creature_ptr->blessed) {
-        info2[i] = report_magics_aux(creature_ptr->blessed);
+    if (player_ptr->blessed) {
+        info2[i] = report_magics_aux(player_ptr->blessed);
         info[i++] = _("あなたは高潔さを感じている", "You feel rightous");
     }
 
-    if (creature_ptr->hero) {
-        info2[i] = report_magics_aux(creature_ptr->hero);
+    if (player_ptr->hero) {
+        info2[i] = report_magics_aux(player_ptr->hero);
         info[i++] = _("あなたはヒーロー気分だ", "You feel heroic");
     }
 
-    if (is_shero(creature_ptr)) {
-        info2[i] = report_magics_aux(creature_ptr->shero);
+    if (is_shero(player_ptr)) {
+        info2[i] = report_magics_aux(player_ptr->shero);
         info[i++] = _("あなたは戦闘狂だ", "You are in a battle rage");
     }
 
-    if (creature_ptr->protevil) {
-        info2[i] = report_magics_aux(creature_ptr->protevil);
+    if (player_ptr->protevil) {
+        info2[i] = report_magics_aux(player_ptr->protevil);
         info[i++] = _("あなたは邪悪なる存在から守られている", "You are protected from evil");
     }
 
-    if (creature_ptr->shield) {
-        info2[i] = report_magics_aux(creature_ptr->shield);
+    if (player_ptr->shield) {
+        info2[i] = report_magics_aux(player_ptr->shield);
         info[i++] = _("あなたは神秘のシールドで守られている", "You are protected by a mystic shield");
     }
 
-    if (creature_ptr->invuln) {
-        info2[i] = report_magics_aux(creature_ptr->invuln);
+    if (player_ptr->invuln) {
+        info2[i] = report_magics_aux(player_ptr->invuln);
         info[i++] = _("あなたは無敵だ", "You are invulnerable");
     }
 
-    if (creature_ptr->wraith_form) {
-        info2[i] = report_magics_aux(creature_ptr->wraith_form);
+    if (player_ptr->wraith_form) {
+        info2[i] = report_magics_aux(player_ptr->wraith_form);
         info[i++] = _("あなたは幽体化している", "You are incorporeal");
     }
 
-    if (creature_ptr->special_attack & ATTACK_CONFUSE) {
+    if (player_ptr->special_attack & ATTACK_CONFUSE) {
         info2[i] = 7;
         info[i++] = _("あなたの手は赤く輝いている", "Your hands are glowing dull red.");
     }
 
-    if (creature_ptr->word_recall) {
-        info2[i] = report_magics_aux(creature_ptr->word_recall);
+    if (player_ptr->word_recall) {
+        info2[i] = report_magics_aux(player_ptr->word_recall);
         info[i++] = _("この後帰還の詔が発動する", "You are waiting to be recalled");
     }
 
-    if (creature_ptr->alter_reality) {
-        info2[i] = report_magics_aux(creature_ptr->alter_reality);
+    if (player_ptr->alter_reality) {
+        info2[i] = report_magics_aux(player_ptr->alter_reality);
         info[i++] = _("この後現実変容が発動する", "You waiting to be altered");
     }
 
-    if (creature_ptr->oppose_acid) {
-        info2[i] = report_magics_aux(creature_ptr->oppose_acid);
+    if (player_ptr->oppose_acid) {
+        info2[i] = report_magics_aux(player_ptr->oppose_acid);
         info[i++] = _("あなたは酸への耐性を持っている", "You are resistant to acid");
     }
 
-    if (creature_ptr->oppose_elec) {
-        info2[i] = report_magics_aux(creature_ptr->oppose_elec);
+    if (player_ptr->oppose_elec) {
+        info2[i] = report_magics_aux(player_ptr->oppose_elec);
         info[i++] = _("あなたは電撃への耐性を持っている", "You are resistant to lightning");
     }
 
-    if (creature_ptr->oppose_fire) {
-        info2[i] = report_magics_aux(creature_ptr->oppose_fire);
+    if (player_ptr->oppose_fire) {
+        info2[i] = report_magics_aux(player_ptr->oppose_fire);
         info[i++] = _("あなたは火への耐性を持っている", "You are resistant to fire");
     }
 
-    if (creature_ptr->oppose_cold) {
-        info2[i] = report_magics_aux(creature_ptr->oppose_cold);
+    if (player_ptr->oppose_cold) {
+        info2[i] = report_magics_aux(player_ptr->oppose_cold);
         info[i++] = _("あなたは冷気への耐性を持っている", "You are resistant to cold");
     }
 
-    if (creature_ptr->oppose_pois) {
-        info2[i] = report_magics_aux(creature_ptr->oppose_pois);
+    if (player_ptr->oppose_pois) {
+        info2[i] = report_magics_aux(player_ptr->oppose_pois);
         info[i++] = _("あなたは毒への耐性を持っている", "You are resistant to poison");
     }
 

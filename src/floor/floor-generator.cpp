@@ -202,15 +202,15 @@ static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 /*!
  * @brief モンスター闘技場への導入処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
  */
-static void generate_gambling_arena(player_type *creature_ptr)
+static void generate_gambling_arena(player_type *player_ptr)
 {
     POSITION y, x;
     POSITION qy = 0;
     POSITION qx = 0;
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (y = 0; y < MAX_HGT; y++)
         for (x = 0; x < MAX_WID; x++) {
-            place_bold(creature_ptr, y, x, GB_SOLID_PERM);
+            place_bold(player_ptr, y, x, GB_SOLID_PERM);
             floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
         }
 
@@ -218,11 +218,11 @@ static void generate_gambling_arena(player_type *creature_ptr)
         for (x = qx + 1; x < qx + SCREEN_WID - 1; x++)
             floor_ptr->grid_array[y][x].feat = feat_floor;
 
-    build_battle(creature_ptr, &y, &x);
-    player_place(creature_ptr, y, x);
+    build_battle(player_ptr, &y, &x);
+    player_place(player_ptr, y, x);
     for (MONSTER_IDX i = 0; i < 4; i++) {
-        place_monster_aux(creature_ptr, 0, creature_ptr->y + 8 + (i / 2) * 4, creature_ptr->x - 2 + (i % 2) * 4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
-        set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[creature_ptr->y + 8 + (i / 2) * 4][creature_ptr->x - 2 + (i % 2) * 4].m_idx]);
+        place_monster_aux(player_ptr, 0, player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
+        set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[player_ptr->y + 8 + (i / 2) * 4][player_ptr->x - 2 + (i % 2) * 4].m_idx]);
     }
 
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
@@ -231,7 +231,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
             continue;
 
         m_ptr->mflag2.set({ MFLAG2::MARK, MFLAG2::SHOW });
-        update_monster(creature_ptr, i, false);
+        update_monster(player_ptr, i, false);
     }
 }
 

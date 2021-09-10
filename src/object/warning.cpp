@@ -45,18 +45,18 @@
  * Calculate spell damages
  * @return 警告を行う
  */
-object_type *choose_warning_item(player_type *creature_ptr)
+object_type *choose_warning_item(player_type *player_ptr)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
 
     /* Paranoia -- Player has no warning ability */
-    if (!creature_ptr->warning)
+    if (!player_ptr->warning)
         return nullptr;
 
     /* Search Inventory */
     int number = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
 
         auto flgs = object_flags(o_ptr);
         if (flgs.has(TR_WARNING)) {
@@ -66,7 +66,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
     }
 
     /* Choice one of them */
-    return number ? &creature_ptr->inventory_list[choices[randint0(number)]] : nullptr;
+    return number ? &player_ptr->inventory_list[choices[randint0(number)]] : nullptr;
 }
 
 /*!
@@ -248,11 +248,11 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
  * @param m_idx 魔法を行使するモンスターのID
  * @param max 算出した最大ダメージを返すポインタ
  */
-static void spell_damcalc_by_spellnum(player_type *creature_ptr, RF_ABILITY ms_type, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
+static void spell_damcalc_by_spellnum(player_type *player_ptr, RF_ABILITY ms_type, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
 {
-    monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
-    HIT_POINT dam = monspell_damage(creature_ptr, ms_type, m_idx, DAM_MAX);
-    spell_damcalc(creature_ptr, m_ptr, typ, dam, max);
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    HIT_POINT dam = monspell_damage(player_ptr, ms_type, m_idx, DAM_MAX);
+    spell_damcalc(player_ptr, m_ptr, typ, dam, max);
 }
 
 /*!
@@ -337,7 +337,7 @@ static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_bl
  * @param yy 危険性を調査するマスのY座標
  * @return 警告を無視して進むことを選択するかか問題が無ければTRUE、警告に従ったならFALSEを返す。
  */
-bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
+bool process_warning(player_type *player_ptr, POSITION xx, POSITION yy)
 {
     POSITION mx, my;
     grid_type *g_ptr;
@@ -353,15 +353,15 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
             monster_type *m_ptr;
             monster_race *r_ptr;
 
-            if (!in_bounds(creature_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE))
+            if (!in_bounds(player_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE))
                 continue;
 
-            g_ptr = &creature_ptr->current_floor_ptr->grid_array[my][mx];
+            g_ptr = &player_ptr->current_floor_ptr->grid_array[my][mx];
 
             if (!g_ptr->m_idx)
                 continue;
 
-            m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+            m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
             if (monster_csleep_remaining(m_ptr))
                 continue;
@@ -371,74 +371,74 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
             r_ptr = &r_info[m_ptr->r_idx];
 
             /* Monster spells (only powerful ones)*/
-            if (projectable(creature_ptr, my, mx, yy, xx)) {
+            if (projectable(player_ptr, my, mx, yy, xx)) {
                 const auto flags = r_ptr->ability_flags;
 
-                if (d_info[creature_ptr->dungeon_idx].flags.has_not(DF::NO_MAGIC)) {
+                if (d_info[player_ptr->dungeon_idx].flags.has_not(DF::NO_MAGIC)) {
                     if (flags.has(RF_ABILITY::BA_CHAO))
-                        spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BA_CHAO, GF_CHAOS, g_ptr->m_idx, &dam_max0);
+                        spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BA_CHAO, GF_CHAOS, g_ptr->m_idx, &dam_max0);
                     if (flags.has(RF_ABILITY::BA_MANA))
-                        spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BA_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
+                        spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BA_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
                     if (flags.has(RF_ABILITY::BA_DARK))
-                        spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BA_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
+                        spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BA_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
                     if (flags.has(RF_ABILITY::BA_LITE))
-                        spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BA_LITE, GF_LITE, g_ptr->m_idx, &dam_max0);
+                        spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BA_LITE, GF_LITE, g_ptr->m_idx, &dam_max0);
                     if (flags.has(RF_ABILITY::HAND_DOOM))
-                        spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::HAND_DOOM, GF_HAND_DOOM, g_ptr->m_idx, &dam_max0);
+                        spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::HAND_DOOM, GF_HAND_DOOM, g_ptr->m_idx, &dam_max0);
                     if (flags.has(RF_ABILITY::PSY_SPEAR))
-                        spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::PSY_SPEAR, GF_PSY_SPEAR, g_ptr->m_idx, &dam_max0);
+                        spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::PSY_SPEAR, GF_PSY_SPEAR, g_ptr->m_idx, &dam_max0);
                 }
 
                 if (flags.has(RF_ABILITY::ROCKET))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::ROCKET, GF_ROCKET, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::ROCKET, GF_ROCKET, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_ACID))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_ACID, GF_ACID, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_ACID, GF_ACID, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_ELEC))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_ELEC, GF_ELEC, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_ELEC, GF_ELEC, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_FIRE))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_FIRE, GF_FIRE, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_FIRE, GF_FIRE, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_COLD))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_COLD, GF_COLD, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_COLD, GF_COLD, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_POIS))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_POIS, GF_POIS, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_POIS, GF_POIS, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_NETH))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_NETH, GF_NETHER, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_NETH, GF_NETHER, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_LITE))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_LITE, GF_LITE, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_LITE, GF_LITE, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_DARK))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_CONF))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_CONF, GF_CONFUSION, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_CONF, GF_CONFUSION, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_SOUN))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_SOUN, GF_SOUND, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_SOUN, GF_SOUND, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_CHAO))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_CHAO, GF_CHAOS, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_CHAO, GF_CHAOS, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_DISE))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_DISE, GF_DISENCHANT, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_DISE, GF_DISENCHANT, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_NEXU))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_NEXU, GF_NEXUS, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_NEXU, GF_NEXUS, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_TIME))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_TIME, GF_TIME, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_TIME, GF_TIME, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_INER))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_INER, GF_INERTIAL, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_INER, GF_INERTIAL, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_GRAV))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_GRAV, GF_GRAVITY, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_GRAV, GF_GRAVITY, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_SHAR))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_SHAR, GF_SHARDS, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_SHAR, GF_SHARDS, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_PLAS))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_PLAS, GF_PLASMA, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_PLAS, GF_PLASMA, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_FORC))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_FORC, GF_FORCE, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_FORC, GF_FORCE, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_MANA))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_NUKE))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_NUKE, GF_NUKE, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_NUKE, GF_NUKE, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_DISI))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_DISI, GF_DISINTEGRATE, g_ptr->m_idx, &dam_max0);
+                    spell_damcalc_by_spellnum(player_ptr, RF_ABILITY::BR_DISI, GF_DISINTEGRATE, g_ptr->m_idx, &dam_max0);
             }
 
             /* Monster melee attacks */
-            if ((r_ptr->flags1 & RF1_NEVER_BLOW) || d_info[creature_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
+            if ((r_ptr->flags1 & RF1_NEVER_BLOW) || d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
                 dam_max += dam_max0;
                 continue;
             }
@@ -455,7 +455,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
                     continue;
 
                 /* Extract the attack info */
-                dam_melee += blow_damcalc(m_ptr, creature_ptr, &r_ptr->blow[m]);
+                dam_melee += blow_damcalc(m_ptr, player_ptr, &r_ptr->blow[m]);
                 if (r_ptr->blow[m].method == RBM_EXPLODE)
                     break;
             }
@@ -470,33 +470,33 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
     if (dam_max > old_damage) {
         old_damage = dam_max * 3 / 2;
 
-        if (dam_max > creature_ptr->chp / 2) {
-            object_type *o_ptr = choose_warning_item(creature_ptr);
+        if (dam_max > player_ptr->chp / 2) {
+            object_type *o_ptr = choose_warning_item(player_ptr);
 
             if (o_ptr)
-                describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+                describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             else
                 strcpy(o_name, _("体", "body")); /* Warning ability without item */
             msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
 
-            disturb(creature_ptr, false, true);
+            disturb(player_ptr, false, true);
             return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
         }
     } else
         old_damage = old_damage / 2;
 
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
-    bool is_warning = (!easy_disarm && is_trap(creature_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat));
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[yy][xx];
+    bool is_warning = (!easy_disarm && is_trap(player_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat));
     is_warning &= !one_in_(13);
     if (!is_warning)
         return true;
 
-    object_type *o_ptr = choose_warning_item(creature_ptr);
+    object_type *o_ptr = choose_warning_item(player_ptr);
     if (o_ptr != nullptr)
-        describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     else
         strcpy(o_name, _("体", "body")); /* Warning ability without item */
     msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
-    disturb(creature_ptr, false, true);
+    disturb(player_ptr, false, true);
     return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 }

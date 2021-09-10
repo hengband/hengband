@@ -208,7 +208,7 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
 /*!
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
 void print_tomb(player_type *dead_ptr)
 {
@@ -246,26 +246,26 @@ void print_tomb(player_type *dead_ptr)
 
 /*!
  * @brief 死亡/引退/切腹時にインベントリ内のアイテムを*鑑定*する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-static void inventory_aware(player_type *creature_ptr)
+static void inventory_aware(player_type *player_ptr)
 {
     object_type *o_ptr;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
-        object_aware(creature_ptr, o_ptr);
+        object_aware(player_ptr, o_ptr);
         object_known(o_ptr);
     }
 }
 
 /*!
  * @brief 死亡/引退/切腹時に我が家のアイテムを*鑑定*する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-static void home_aware(player_type *creature_ptr)
+static void home_aware(player_type *player_ptr)
 {
     object_type *o_ptr;
     store_type *store_ptr;
@@ -276,7 +276,7 @@ static void home_aware(player_type *creature_ptr)
             if (!o_ptr->k_idx)
                 continue;
 
-            object_aware(creature_ptr, o_ptr);
+            object_aware(player_ptr, o_ptr);
             object_known(o_ptr);
         }
     }
@@ -284,22 +284,22 @@ static void home_aware(player_type *creature_ptr)
 
 /*!
  * @brief プレーヤーの持ち物を表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return Escキーでゲームを終了する時TRUE
  */
-static bool show_dead_player_items(player_type *creature_ptr)
+static bool show_dead_player_items(player_type *player_ptr)
 {
-    if (creature_ptr->equip_cnt) {
+    if (player_ptr->equip_cnt) {
         term_clear();
-        (void)show_equipment(creature_ptr, 0, USE_FULL, AllMatchItemTester());
+        (void)show_equipment(player_ptr, 0, USE_FULL, AllMatchItemTester());
         prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
         if (inkey() == ESCAPE)
             return true;
     }
 
-    if (creature_ptr->inven_cnt) {
+    if (player_ptr->inven_cnt) {
         term_clear();
-        (void)show_inventory(creature_ptr, 0, USE_FULL, AllMatchItemTester());
+        (void)show_inventory(player_ptr, 0, USE_FULL, AllMatchItemTester());
         prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
         if (inkey() == ESCAPE)
@@ -311,9 +311,9 @@ static bool show_dead_player_items(player_type *creature_ptr)
 
 /*!
  * @brief 我が家にあったアイテムを表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-static void show_dead_home_items(player_type *creature_ptr)
+static void show_dead_home_items(player_type *player_ptr)
 {
     for (int l = 1; l < max_towns; l++) {
         store_type *store_ptr;
@@ -330,7 +330,7 @@ static void show_dead_home_items(player_type *creature_ptr)
                 o_ptr = &store_ptr->stock[i];
                 sprintf(tmp_val, "%c) ", I2A(j));
                 prt(tmp_val, j + 2, 4);
-                describe_flavor(creature_ptr, o_name, o_ptr, 0);
+                describe_flavor(player_ptr, o_name, o_ptr, 0);
                 c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
             }
 
@@ -343,10 +343,10 @@ static void show_dead_home_items(player_type *creature_ptr)
 
 /*!
  * @brief キャラクタ情報をファイルに書き出す
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param file_character ステータスダンプへのコールバック
  */
-static void export_player_info(player_type *creature_ptr, display_player_pf display_player)
+static void export_player_info(player_type *player_ptr, display_player_pf display_player)
 {
     prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
     prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
@@ -360,7 +360,7 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
             break;
 
         screen_save();
-        (void)file_character(creature_ptr, out_val, display_player);
+        (void)file_character(player_ptr, out_val, display_player);
         screen_load();
     }
 }
@@ -368,7 +368,7 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
 /*!
  * @brief 自動的にプレイヤーステータスをファイルダンプ出力する
  */
-static void file_character_auto(player_type *creature_ptr, display_player_pf display_player)
+static void file_character_auto(player_type *player_ptr, display_player_pf display_player)
 {
     time_t now_t = time(nullptr);
     struct tm *now_tm = localtime(&now_t);
@@ -380,35 +380,35 @@ static void file_character_auto(player_type *creature_ptr, display_player_pf dis
     strnfmt(filename, sizeof(filename), "%s_Autodump_%s.txt", p_ptr->name, datetime);
 
     screen_save();
-    (void)file_character(creature_ptr, filename, display_player);
+    (void)file_character(player_ptr, filename, display_player);
     screen_load();
 }
 
 /*!
  * @brief 死亡、引退時の簡易ステータス表示
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param display_player ステータス表示へのコールバック
  */
-void show_death_info(player_type *creature_ptr, display_player_pf display_player)
+void show_death_info(player_type *player_ptr, display_player_pf display_player)
 {
-    inventory_aware(creature_ptr);
-    home_aware(creature_ptr);
+    inventory_aware(player_ptr);
+    home_aware(player_ptr);
 
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     flush();
     msg_erase();
 
     if (auto_dump)
-        file_character_auto(creature_ptr, display_player);
+        file_character_auto(player_ptr, display_player);
 
-    export_player_info(creature_ptr, display_player);
-    (*display_player)(creature_ptr, 0);
+    export_player_info(player_ptr, display_player);
+    (*display_player)(player_ptr, 0);
     prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
     if (inkey() == ESCAPE)
         return;
-    if (show_dead_player_items(creature_ptr))
+    if (show_dead_player_items(player_ptr))
         return;
 
-    show_dead_home_items(creature_ptr);
+    show_dead_home_items(player_ptr);
 }

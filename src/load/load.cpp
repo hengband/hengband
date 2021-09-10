@@ -49,10 +49,10 @@
 
 /*!
  * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
-static errr load_town_quest(player_type *creature_ptr)
+static errr load_town_quest(player_type *player_ptr)
 {
     if (h_older_than(2, 1, 3))
         return 0;
@@ -67,7 +67,7 @@ static errr load_town_quest(player_type *creature_ptr)
     if (load_quest_result != 0)
         return load_quest_result;
 
-    analyze_quests(creature_ptr, max_quests_load, max_rquests_load);
+    analyze_quests(player_ptr, max_quests_load, max_rquests_load);
 
     /* Quest 18 was removed */
     if (h_older_than(1, 7, 0, 6)) {
@@ -75,7 +75,7 @@ static errr load_town_quest(player_type *creature_ptr)
         quest[OLD_QUEST_WATER_CAVE].status = QUEST_STATUS_UNTAKEN;
     }
 
-    load_wilderness_info(creature_ptr);
+    load_wilderness_info(player_ptr);
     return analyze_wilderness();
 }
 
@@ -102,26 +102,26 @@ static void rd_winner_class()
     rd_FlagGroup(current_world_ptr->sf_retired, rd_byte);
 }
 
-static void load_player_world(player_type *creature_ptr)
+static void load_player_world(player_type *player_ptr)
 {
     rd_total_play_time();
     rd_winner_class();
-    rd_base_info(creature_ptr);
-    rd_player_info(creature_ptr);
+    rd_base_info(player_ptr);
+    rd_player_info(player_ptr);
     rd_byte((byte *)&preserve_mode);
-    rd_byte((byte *)&creature_ptr->wait_report_score);
+    rd_byte((byte *)&player_ptr->wait_report_score);
     rd_dummy2();
-    rd_global_configurations(creature_ptr);
-    rd_extra(creature_ptr);
+    rd_global_configurations(player_ptr);
+    rd_extra(player_ptr);
 
-    if (creature_ptr->energy_need < -999)
-        creature_ptr->timewalk = true;
+    if (player_ptr->energy_need < -999)
+        player_ptr->timewalk = true;
 
     if (arg_fiddle)
         load_note(_("特別情報をロードしました", "Loaded extra information"));
 }
 
-static errr load_hp(player_type *creature_ptr)
+static errr load_hp(player_type *player_ptr)
 {
     uint16_t tmp16u;
     rd_u16b(&tmp16u);
@@ -133,30 +133,30 @@ static errr load_hp(player_type *creature_ptr)
     for (int i = 0; i < tmp16u; i++) {
         int16_t tmp16s;
         rd_s16b(&tmp16s);
-        creature_ptr->player_hp[i] = (HIT_POINT)tmp16s;
+        player_ptr->player_hp[i] = (HIT_POINT)tmp16s;
     }
 
     return 0;
 }
 
-static void load_spells(player_type *creature_ptr)
+static void load_spells(player_type *player_ptr)
 {
-    rd_u32b(&creature_ptr->spell_learned1);
-    rd_u32b(&creature_ptr->spell_learned2);
-    rd_u32b(&creature_ptr->spell_worked1);
-    rd_u32b(&creature_ptr->spell_worked2);
-    rd_u32b(&creature_ptr->spell_forgotten1);
-    rd_u32b(&creature_ptr->spell_forgotten2);
+    rd_u32b(&player_ptr->spell_learned1);
+    rd_u32b(&player_ptr->spell_learned2);
+    rd_u32b(&player_ptr->spell_worked1);
+    rd_u32b(&player_ptr->spell_worked2);
+    rd_u32b(&player_ptr->spell_forgotten1);
+    rd_u32b(&player_ptr->spell_forgotten2);
 
     if (h_older_than(0, 0, 5))
-        set_zangband_learnt_spells(creature_ptr);
+        set_zangband_learnt_spells(player_ptr);
     else
-        rd_s16b(&creature_ptr->learned_spells);
+        rd_s16b(&player_ptr->learned_spells);
 
     if (h_older_than(0, 0, 6))
-        creature_ptr->add_spells = 0;
+        player_ptr->add_spells = 0;
     else
-        rd_s16b(&creature_ptr->add_spells);
+        rd_s16b(&player_ptr->add_spells);
 }
 
 static errr verify_checksum()
@@ -187,7 +187,7 @@ static errr verify_encoded_checksum()
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
  */
-static errr exe_reading_savefile(player_type *creature_ptr)
+static errr exe_reading_savefile(player_type *player_ptr)
 {
     rd_version_info();
     rd_dummy3();
@@ -201,7 +201,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (load_item_result != 0)
         return load_item_result;
 
-    errr load_town_quest_result = load_town_quest(creature_ptr);
+    errr load_town_quest_result = load_town_quest(player_ptr);
     if (load_town_quest_result != 0)
         return load_town_quest_result;
 
@@ -212,36 +212,36 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (load_artifact_result != 0)
         return load_artifact_result;
 
-    load_player_world(creature_ptr);
-    errr load_hp_result = load_hp(creature_ptr);
+    load_player_world(player_ptr);
+    errr load_hp_result = load_hp(player_ptr);
     if (load_hp_result != 0)
         return load_hp_result;
 
-    sp_ptr = &sex_info[creature_ptr->psex];
-    rp_ptr = &race_info[enum2i(creature_ptr->prace)];
-    cp_ptr = &class_info[creature_ptr->pclass];
-    ap_ptr = &personality_info[creature_ptr->pseikaku];
+    sp_ptr = &sex_info[player_ptr->psex];
+    rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    cp_ptr = &class_info[player_ptr->pclass];
+    ap_ptr = &personality_info[player_ptr->pseikaku];
 
-    set_zangband_class(creature_ptr);
-    mp_ptr = &m_info[creature_ptr->pclass];
+    set_zangband_class(player_ptr);
+    mp_ptr = &m_info[player_ptr->pclass];
 
-    load_spells(creature_ptr);
-    if (creature_ptr->pclass == CLASS_MINDCRAFTER)
-        creature_ptr->add_spells = 0;
+    load_spells(player_ptr);
+    if (player_ptr->pclass == CLASS_MINDCRAFTER)
+        player_ptr->add_spells = 0;
 
-    errr load_inventory_result = load_inventory(creature_ptr);
+    errr load_inventory_result = load_inventory(player_ptr);
     if (load_inventory_result != 0)
         return load_inventory_result;
 
-    errr load_store_result = load_store(creature_ptr);
+    errr load_store_result = load_store(player_ptr);
     if (load_store_result != 0)
         return load_store_result;
 
-    rd_s16b(&creature_ptr->pet_follow_distance);
+    rd_s16b(&player_ptr->pet_follow_distance);
     if (h_older_than(0, 4, 10))
-        set_zangband_pet(creature_ptr);
+        set_zangband_pet(player_ptr);
     else
-        rd_u16b(&creature_ptr->pet_extra_flags);
+        rd_u16b(&player_ptr->pet_extra_flags);
 
     if (!h_older_than(1, 0, 9)) {
         char *buf;
@@ -252,12 +252,12 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         C_KILL(buf, SCREEN_BUF_MAX_SIZE, char);
     }
 
-    errr restore_dungeon_result = restore_dungeon(creature_ptr);
+    errr restore_dungeon_result = restore_dungeon(player_ptr);
     if (restore_dungeon_result != 0)
         return restore_dungeon_result;
 
     if (h_older_than(1, 7, 0, 6))
-        remove_water_cave(creature_ptr);
+        remove_water_cave(player_ptr);
 
     errr checksum_result = verify_checksum();
     if (checksum_result != 0)
@@ -305,7 +305,7 @@ static bool can_takeover_savefile(const player_type *player_ptr)
 /*!
  * @brief セーブデータ読み込みのメインルーチン /
  * Attempt to Load a "savefile"
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param new_game セーブデータの新規作成が必要か否か
  * @return セーブデータが読み込めればtrue
  */

@@ -1060,13 +1060,13 @@ process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect
  * @details
  * レベルに応じて取得する耐性などの判定に使用する
  */
-bool has_element_resist(player_type *creature_ptr, ElementRealm realm, PLAYER_LEVEL lev)
+bool has_element_resist(player_type *player_ptr, ElementRealm realm, PLAYER_LEVEL lev)
 {
-    if (creature_ptr->pclass != CLASS_ELEMENTALIST)
+    if (player_ptr->pclass != CLASS_ELEMENTALIST)
         return false;
 
-    auto prealm = static_cast<ElementRealm>(creature_ptr->element);
-    return (prealm == realm && creature_ptr->lev >= lev);
+    auto prealm = static_cast<ElementRealm>(player_ptr->element);
+    return (prealm == realm && player_ptr->lev >= lev);
 }
 
 /*!
@@ -1125,11 +1125,11 @@ static int interpret_realm_select_key(int cs, int n, char c)
 
 /*!
  * @brief 領域選択ループ処理
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static int get_element_realm(player_type *creature_ptr, int is, int n)
+static int get_element_realm(player_type *player_ptr, int is, int n)
 {
     int cs = MAX(0, is);
     int os = cs;
@@ -1180,7 +1180,7 @@ static int get_element_realm(player_type *creature_ptr, int is, int n)
 
         if (c == '=') {
             screen_save();
-            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
         } else if (c != '2' && c != '4' && c != '6' && c != '8')
             bell();
@@ -1192,10 +1192,10 @@ static int get_element_realm(player_type *creature_ptr, int is, int n)
 
 /*!
  * @brief 領域選択
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 領域番号
  */
-byte select_element_realm(player_type *creature_ptr)
+byte select_element_realm(player_type *player_ptr)
 {
     clear_from(10);
 
@@ -1211,7 +1211,7 @@ byte select_element_realm(player_type *creature_ptr)
             display_realm_cursor(i, realm_max - 1, TERM_WHITE);
         }
 
-        realm_idx = get_element_realm(creature_ptr, realm_idx - 1, realm_max - 1);
+        realm_idx = get_element_realm(player_ptr, realm_idx - 1, realm_max - 1);
         if (realm_idx == 255)
             break;
 
@@ -1226,7 +1226,7 @@ byte select_element_realm(player_type *creature_ptr)
             t += strlen(t) + 1;
         }
 
-        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         clear_from(row);
@@ -1238,13 +1238,13 @@ byte select_element_realm(player_type *creature_ptr)
 
 /*!
  * @brief クラスパワー情報を追加
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  */
-void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
+void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
 {
-    auto plev = creature_ptr->lev;
-    auto realm = static_cast<ElementRealm>(creature_ptr->element);
+    auto plev = player_ptr->lev;
+    auto realm = static_cast<ElementRealm>(player_ptr->element);
     rpi_type rpi;
     switch (realm) {
     case ElementRealm::FIRE:
@@ -1335,43 +1335,43 @@ static bool door_to_darkness(player_type *caster_ptr, POSITION dist);
 
 /*!
  * @brief クラスパワーを実行
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 実行したらTRUE、しなかったらFALSE
  */
-bool switch_element_execution(player_type *creature_ptr)
+bool switch_element_execution(player_type *player_ptr)
 {
-    auto realm = static_cast<ElementRealm>(creature_ptr->element);
-    PLAYER_LEVEL plev = creature_ptr->lev;
+    auto realm = static_cast<ElementRealm>(player_ptr->element);
+    PLAYER_LEVEL plev = player_ptr->lev;
     DIRECTION dir;
 
     switch (realm) {
     case ElementRealm::FIRE:
-        (void)lite_area(creature_ptr, damroll(2, plev / 2), plev / 10);
+        (void)lite_area(player_ptr, damroll(2, plev / 2), plev / 10);
         break;
     case ElementRealm::ICE:
-        (void)project(creature_ptr, 0, 5, creature_ptr->y, creature_ptr->x, 1, GF_COLD, PROJECT_ITEM);
-        (void)project_all_los(creature_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
+        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, GF_COLD, PROJECT_ITEM);
+        (void)project_all_los(player_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
         break;
     case ElementRealm::SKY:
-        (void)recharge(creature_ptr, 120);
+        (void)recharge(player_ptr, 120);
         break;
     case ElementRealm::SEA:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
-        (void)wall_to_mud(creature_ptr, dir, plev * 3 / 2);
+        (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
         break;
     case ElementRealm::DARKNESS:
-        return door_to_darkness(creature_ptr, 15 + plev / 2);
+        return door_to_darkness(player_ptr, 15 + plev / 2);
         break;
     case ElementRealm::CHAOS:
-        reserve_alter_reality(creature_ptr, randint0(21) + 15);
+        reserve_alter_reality(player_ptr, randint0(21) + 15);
         break;
     case ElementRealm::EARTH:
-        (void)earthquake(creature_ptr, creature_ptr->y, creature_ptr->x, 10, 0);
+        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
         break;
     case ElementRealm::DEATH:
-        if (creature_ptr->current_floor_ptr->num_repro <= MAX_REPRO)
-            creature_ptr->current_floor_ptr->num_repro += MAX_REPRO;
+        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRO)
+            player_ptr->current_floor_ptr->num_repro += MAX_REPRO;
         break;
     default:
         return false;
