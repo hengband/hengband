@@ -40,7 +40,6 @@
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
-#include "realm/realm-hex-numbers.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-neighbor.h"
@@ -100,7 +99,7 @@ static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, const ob
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はnullptr文字列を返す。
  */
-concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type mode)
 {
     bool name = mode == SPELL_NAME;
     bool desc = mode == SPELL_DESC;
@@ -116,7 +115,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 
     switch (spell) {
         /*** 1st book (0-7) ***/
-    case 0:
+    case HEX_BLESS:
         if (name)
             return _("邪なる祝福", "Evily blessing");
         if (desc)
@@ -133,7 +132,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 1:
+    case HEX_CURE_LIGHT:
         if (name)
             return _("軽傷の治癒", "Cure light wounds");
         if (desc)
@@ -147,7 +146,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
             (void)cure_light_wounds(player_ptr, 1, 10);
         break;
 
-    case 2:
+    case HEX_DEMON_AURA:
         if (name)
             return _("悪魔のオーラ", "Demonic aura");
         if (desc)
@@ -160,7 +159,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 3:
+    case HEX_STINKING_MIST:
         if (name)
             return _("悪臭霧", "Stinking mist");
         if (desc)
@@ -173,7 +172,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 4:
+    case HEX_XTRA_MIGHT:
         if (name)
             return _("腕力強化", "Extra might");
         if (desc)
@@ -183,7 +182,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 5:
+    case HEX_CURSE_WEAPON:
         if (name)
             return _("武器呪縛", "Curse weapon");
         if (desc)
@@ -257,7 +256,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 6:
+    case HEX_DETECT_EVIL:
         if (name)
             return _("邪悪感知", "Evil detection");
         if (desc)
@@ -269,7 +268,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 7:
+    case HEX_PATIENCE:
         if (name)
             return _("我慢", "Patience");
         if (desc)
@@ -317,7 +316,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         break;
 
         /*** 2nd book (8-15) ***/
-    case 8:
+    case HEX_ICE_ARMOR:
         if (name)
             return _("氷の鎧", "Armor of ice");
         if (desc)
@@ -330,7 +329,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 9:
+    case HEX_CURE_SERIOUS:
         if (name)
             return _("重傷の治癒", "Cure serious wounds");
         if (desc)
@@ -344,20 +343,20 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
             (void)cure_serious_wounds(player_ptr, 2, 10);
         break;
 
-    case 10:
+    case HEX_INHALE:
         if (name)
             return _("薬品吸入", "Inhale potion");
         if (desc)
             return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling spell casting.");
         if (cast) {
-            casting_hex_flags(player_ptr) |= (1UL << HEX_INHAIL);
+            casting_hex_flags(player_ptr) |= (1UL << HEX_INHALE);
             do_cmd_quaff_potion(player_ptr);
-            casting_hex_flags(player_ptr) &= ~(1UL << HEX_INHAIL);
+            casting_hex_flags(player_ptr) &= ~(1UL << HEX_INHALE);
             add = false;
         }
         break;
 
-    case 11:
+    case HEX_VAMP_MIST:
         if (name)
             return _("衰弱の霧", "Hypodynamic mist");
         if (desc)
@@ -370,7 +369,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 12:
+    case HEX_RUNESWORD:
         if (name)
             return _("魔剣化", "Swords to runeswords");
         if (desc)
@@ -395,7 +394,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 13:
+    case HEX_CONFUSION:
         if (name)
             return _("混乱の手", "Touch of confusion");
         if (desc)
@@ -408,7 +407,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 14:
+    case HEX_BUILDING:
         if (name)
             return _("肉体強化", "Building up");
         if (desc)
@@ -419,7 +418,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 15:
+    case HEX_ANTI_TELE:
         if (name)
             return _("反テレポート結界", "Anti teleport barrier");
         if (desc)
@@ -433,7 +432,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         break;
 
         /*** 3rd book (16-23) ***/
-    case 16:
+    case HEX_SHOCK_CLOAK:
         if (name)
             return _("衝撃のクローク", "Cloak of shock");
         if (desc)
@@ -446,7 +445,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 17:
+    case HEX_CURE_CRITICAL:
         if (name)
             return _("致命傷の治癒", "Cure critical wounds");
         if (desc)
@@ -460,7 +459,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
             (void)cure_critical_wounds(player_ptr, damroll(4, 10));
         break;
 
-    case 18:
+    case HEX_RECHARGE:
         if (name)
             return _("呪力封入", "Recharging");
         if (desc)
@@ -475,7 +474,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 19:
+    case HEX_RAISE_DEAD:
         if (name)
             return _("死者復活", "Animate Dead");
         if (desc)
@@ -488,7 +487,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 20:
+    case HEX_CURSE_ARMOUR:
         if (name)
             return _("防具呪縛", "Curse armor");
         if (desc)
@@ -564,7 +563,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 21:
+    case HEX_SHADOW_CLOAK:
         if (name)
             return _("影のクローク", "Cloak of shadow");
         if (desc)
@@ -598,7 +597,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 22:
+    case HEX_PAIN_TO_MANA:
         if (name)
             return _("苦痛を魔力に", "Pain to mana");
         if (desc)
@@ -611,7 +610,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 23:
+    case HEX_EYE_FOR_EYE:
         if (name)
             return _("目には目を", "Eye for an eye");
         if (desc)
@@ -622,7 +621,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         break;
 
         /*** 4th book (24-31) ***/
-    case 24:
+    case HEX_ANTI_MULTI:
         if (name)
             return _("反増殖結界", "Anti multiply barrier");
         if (desc)
@@ -632,7 +631,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 25:
+    case HEX_RESTORE:
         if (name)
             return _("全復活", "Restoration");
         if (desc)
@@ -688,7 +687,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 26:
+    case HEX_DRAIN_CURSE:
         if (name)
             return _("呪力吸収", "Drain curse power");
         if (desc)
@@ -729,7 +728,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 27:
+    case HEX_VAMP_BLADE:
         if (name)
             return _("吸血の刃", "Swords to vampires");
         if (desc)
@@ -753,7 +752,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 28:
+    case HEX_STUN_MONSTERS:
         if (name)
             return _("朦朧の言葉", "Word of stun");
         if (desc)
@@ -766,7 +765,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 29:
+    case HEX_SHADOW_MOVE:
         if (name)
             return _("影移動", "Moving into shadow");
         if (desc)
@@ -810,7 +809,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 30:
+    case HEX_ANTI_MAGIC:
         if (name)
             return _("反魔法結界", "Anti magic barrier");
         if (desc)
@@ -823,7 +822,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 31:
+    case HEX_REVENGE:
         if (name)
             return _("復讐の宣告", "Revenge sentence");
         if (desc)

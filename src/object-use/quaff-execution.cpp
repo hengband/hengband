@@ -135,7 +135,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
         stop_singing(player_ptr);
 
     SpellHex spell_hex(player_ptr);
-    if (spell_hex.is_spelling_any() && !spell_hex.is_spelling_specific(HEX_INHAIL)) {
+    if (spell_hex.is_spelling_any() && !spell_hex.is_spelling_specific(HEX_INHALE)) {
         (void)SpellHex(player_ptr).stop_all_spells();
     }
 

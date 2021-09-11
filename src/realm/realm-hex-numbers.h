@@ -13,7 +13,7 @@ enum spell_hex_type {
 	/* 2nd book */
     HEX_ICE_ARMOR = 8,
     HEX_CURE_SERIOUS = 9,
-    HEX_INHAIL = 10,
+    HEX_INHALE = 10,
     HEX_VAMP_MIST = 11,
     HEX_RUNESWORD = 12,
     HEX_CONFUSION = 13,
