@@ -27,6 +27,7 @@ public:
     void reset_casting_flag(spell_hex_type type);
     int32_t get_casting_num() const;
     void add_casting_num(bool is_incremental);
+    int32_t get_revenge_power() const;
 
 private:
     player_type *player_ptr;

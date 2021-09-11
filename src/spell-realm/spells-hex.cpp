@@ -468,3 +468,8 @@ void SpellHex::add_casting_num(bool is_incremental)
         this->player_ptr->magic_num2[0]--;
     }
 }
+
+int32_t SpellHex::get_revenge_power() const
+{
+    return this->player_ptr->magic_num1[2];
+}

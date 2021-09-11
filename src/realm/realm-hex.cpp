@@ -274,7 +274,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
         if (desc)
             return _(
                 "数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", "Bursts hell fire strongly after enduring damage for a few turns.");
-        power = MIN(200, (hex_revenge_power(player_ptr) * 2));
+        power = MIN(200, (SpellHex(player_ptr).get_revenge_power() * 2));
         if (info)
             return info_damage(0, 0, power);
         if (cast) {
@@ -839,7 +839,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
         if (desc)
             return _(
                 "数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", "Fires a ball of hell fire to try avenging damage from a few turns.");
-        power = hex_revenge_power(player_ptr);
+        power = SpellHex(player_ptr).get_revenge_power();
         if (info)
             return info_damage(0, 0, power);
         if (cast) {
