@@ -53,7 +53,7 @@ extern const int chest_traps[64];
 
 struct player_type;
 void init_normal_traps(void);
-FEAT_IDX choose_random_trap(player_type *trapped_ptr);
-void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x);
-void place_trap(player_type *trapped_ptr, POSITION y, POSITION x);
-void hit_trap(player_type *trapped_ptr, bool break_trap);
+FEAT_IDX choose_random_trap(player_type *player_ptr);
+void disclose_grid(player_type *player_ptr, POSITION y, POSITION x);
+void place_trap(player_type *player_ptr, POSITION y, POSITION x);
+void hit_trap(player_type *player_ptr, bool break_trap);

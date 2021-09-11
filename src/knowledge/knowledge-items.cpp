@@ -221,7 +221,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 /*
  * Describe fake object
  */
-static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
+static void desc_obj_fake(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 {
     object_type *o_ptr;
     object_type object_type_body;
@@ -230,9 +230,9 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
     o_ptr->prep(k_idx);
 
     o_ptr->ident |= IDENT_KNOWN;
-    handle_stuff(creature_ptr);
+    handle_stuff(player_ptr);
 
-    if (screen_object(creature_ptr, o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL))
+    if (screen_object(player_ptr, o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL))
         return;
 
     msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
@@ -242,7 +242,7 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
 /**
  * @brief Display known objects
  */
-void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool visual_only, KIND_OBJECT_IDX direct_k_idx)
+void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool visual_only, KIND_OBJECT_IDX direct_k_idx)
 {
     KIND_OBJECT_IDX object_old, object_top;
     KIND_OBJECT_IDX grp_idx[100];
@@ -387,10 +387,10 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
 
         if (!visual_only) {
             if (object_cnt)
-                object_kind_track(creature_ptr, object_idx[object_cur]);
+                object_kind_track(player_ptr, object_idx[object_cur]);
 
             if (object_old != object_idx[object_cur]) {
-                handle_stuff(creature_ptr);
+                handle_stuff(player_ptr);
                 object_old = object_idx[object_cur];
             }
         }
@@ -427,7 +427,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
         case 'R':
         case 'r': {
             if (!visual_list && !visual_only && (grp_cnt > 0)) {
-                desc_obj_fake(creature_ptr, object_idx[object_cur]);
+                desc_obj_fake(player_ptr, object_idx[object_cur]);
                 redraw = true;
             }
 

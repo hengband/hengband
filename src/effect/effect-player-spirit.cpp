@@ -13,15 +13,15 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-void effect_player_drain_mana(player_type *target_ptr, effect_player_type *ep_ptr)
+void effect_player_drain_mana(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (check_multishadow(target_ptr)) {
+    if (check_multishadow(player_ptr)) {
         msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
         ep_ptr->dam = 0;
         return;
     }
 
-    if (target_ptr->csp == 0) {
+    if (player_ptr->csp == 0) {
         ep_ptr->dam = 0;
         return;
     }
@@ -31,16 +31,16 @@ void effect_player_drain_mana(player_type *target_ptr, effect_player_type *ep_pt
     else
         msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drained!"));
 
-    if (ep_ptr->dam >= target_ptr->csp) {
-        ep_ptr->dam = target_ptr->csp;
-        target_ptr->csp = 0;
-        target_ptr->csp_frac = 0;
+    if (ep_ptr->dam >= player_ptr->csp) {
+        ep_ptr->dam = player_ptr->csp;
+        player_ptr->csp = 0;
+        player_ptr->csp_frac = 0;
     } else {
-        target_ptr->csp -= ep_ptr->dam;
+        player_ptr->csp -= ep_ptr->dam;
     }
 
-    target_ptr->redraw |= (PR_MANA);
-    target_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
+    player_ptr->redraw |= (PR_MANA);
+    player_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 
     if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
         ep_ptr->dam = 0;
@@ -51,10 +51,10 @@ void effect_player_drain_mana(player_type *target_ptr, effect_player_type *ep_pt
     if (ep_ptr->m_ptr->hp > ep_ptr->m_ptr->maxhp)
         ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
 
-    if (target_ptr->health_who == ep_ptr->who)
-        target_ptr->redraw |= (PR_HEALTH);
-    if (target_ptr->riding == ep_ptr->who)
-        target_ptr->redraw |= (PR_UHEALTH);
+    if (player_ptr->health_who == ep_ptr->who)
+        player_ptr->redraw |= (PR_HEALTH);
+    if (player_ptr->riding == ep_ptr->who)
+        player_ptr->redraw |= (PR_UHEALTH);
 
     if (ep_ptr->m_ptr->ml) {
         msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), ep_ptr->m_name);
@@ -63,79 +63,79 @@ void effect_player_drain_mana(player_type *target_ptr, effect_player_type *ep_pt
     ep_ptr->dam = 0;
 }
 
-void effect_player_mind_blast(player_type *target_ptr, effect_player_type *ep_ptr)
+void effect_player_mind_blast(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !check_multishadow(target_ptr)) {
+    if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, player_ptr->skill_sav)) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         return;
     }
 
-    if (check_multishadow(target_ptr)) {
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
+    if (check_multishadow(player_ptr)) {
+        ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
         return;
     }
 
     msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
-    if (!has_resist_conf(target_ptr)) {
-        (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
+    if (!has_resist_conf(player_ptr)) {
+        (void)set_confused(player_ptr, player_ptr->confused + randint0(4) + 4);
     }
 
-    if (!has_resist_chaos(target_ptr) && one_in_(3)) {
-        (void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
+    if (!has_resist_chaos(player_ptr) && one_in_(3)) {
+        (void)set_image(player_ptr, player_ptr->image + randint0(250) + 150);
     }
 
-    target_ptr->csp -= 50;
-    if (target_ptr->csp < 0) {
-        target_ptr->csp = 0;
-        target_ptr->csp_frac = 0;
+    player_ptr->csp -= 50;
+    if (player_ptr->csp < 0) {
+        player_ptr->csp = 0;
+        player_ptr->csp_frac = 0;
     }
 
-    target_ptr->redraw |= PR_MANA;
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
+    player_ptr->redraw |= PR_MANA;
+    ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
 
-void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_ptr)
+void effect_player_brain_smash(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !check_multishadow(target_ptr)) {
+    if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, player_ptr->skill_sav)) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         return;
     }
 
-    if (!check_multishadow(target_ptr)) {
+    if (!check_multishadow(player_ptr)) {
         msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
 
-        target_ptr->csp -= 100;
-        if (target_ptr->csp < 0) {
-            target_ptr->csp = 0;
-            target_ptr->csp_frac = 0;
+        player_ptr->csp -= 100;
+        if (player_ptr->csp < 0) {
+            player_ptr->csp = 0;
+            player_ptr->csp_frac = 0;
         }
-        target_ptr->redraw |= PR_MANA;
+        player_ptr->redraw |= PR_MANA;
     }
 
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
-    if (check_multishadow(target_ptr))
+    ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
+    if (check_multishadow(player_ptr))
         return;
 
-    if (!has_resist_blind(target_ptr)) {
-        (void)set_blind(target_ptr, target_ptr->blind + 8 + randint0(8));
+    if (!has_resist_blind(player_ptr)) {
+        (void)set_blind(player_ptr, player_ptr->blind + 8 + randint0(8));
     }
 
-    if (!has_resist_conf(target_ptr)) {
-        (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
+    if (!has_resist_conf(player_ptr)) {
+        (void)set_confused(player_ptr, player_ptr->confused + randint0(4) + 4);
     }
 
-    if (!target_ptr->free_act) {
-        (void)set_paralyzed(target_ptr, target_ptr->paralyzed + randint0(4) + 4);
+    if (!player_ptr->free_act) {
+        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(4) + 4);
     }
 
-    (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, false);
+    (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
 
-    while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
-        (void)do_dec_stat(target_ptr, A_INT);
-    while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
-        (void)do_dec_stat(target_ptr, A_WIS);
+    while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, player_ptr->skill_sav)))
+        (void)do_dec_stat(player_ptr, A_INT);
+    while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, player_ptr->skill_sav)))
+        (void)do_dec_stat(player_ptr, A_WIS);
 
-    if (!has_resist_chaos(target_ptr)) {
-        (void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
+    if (!has_resist_chaos(player_ptr)) {
+        (void)set_image(player_ptr, player_ptr->image + randint0(250) + 150);
     }
 }

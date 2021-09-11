@@ -8,13 +8,13 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-void acquire_chaos_weapon(player_type *creature_ptr)
+void acquire_chaos_weapon(player_type *player_ptr)
 {
     object_type forge;
     object_type *q_ptr = &forge;
     tval_type dummy = TV_SWORD;
     OBJECT_SUBTYPE_VALUE dummy2;
-    switch (randint1(creature_ptr->lev)) {
+    switch (randint1(player_ptr->lev)) {
     case 0:
     case 1:
         dummy2 = SV_DAGGER;
@@ -113,9 +113,9 @@ void acquire_chaos_weapon(player_type *creature_ptr)
     }
 
     q_ptr->prep(lookup_kind(dummy, dummy2));
-    q_ptr->to_h = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
-    q_ptr->to_d = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
+    q_ptr->to_h = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
+    q_ptr->to_d = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     one_resistance(q_ptr);
     q_ptr->name2 = EGO_CHAOTIC;
-    (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
+    (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
 }

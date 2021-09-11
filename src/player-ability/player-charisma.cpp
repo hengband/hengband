@@ -31,7 +31,7 @@ int16_t PlayerCharisma::battleform_value()
 {
     int16_t result = 0;
 
-    if (any_bits(this->owner_ptr->special_defense, KATA_KOUKIJIN)) {
+    if (any_bits(this->player_ptr->special_defense, KATA_KOUKIJIN)) {
         result += 5;
     }
 
@@ -53,20 +53,20 @@ int16_t PlayerCharisma::mutation_value()
 {
     int16_t result = 0;
 
-    if (this->owner_ptr->muta.any()) {
-        if (this->owner_ptr->muta.has(MUTA::FLESH_ROT)) {
+    if (this->player_ptr->muta.any()) {
+        if (this->player_ptr->muta.has(MUTA::FLESH_ROT)) {
             result -= 1;
         }
-        if (this->owner_ptr->muta.has(MUTA::SILLY_VOI)) {
+        if (this->player_ptr->muta.has(MUTA::SILLY_VOI)) {
             result -= 4;
         }
-        if (this->owner_ptr->muta.has(MUTA::BLANK_FAC)) {
+        if (this->player_ptr->muta.has(MUTA::BLANK_FAC)) {
             result -= 1;
         }
-        if (this->owner_ptr->muta.has(MUTA::WART_SKIN)) {
+        if (this->player_ptr->muta.has(MUTA::WART_SKIN)) {
             result -= 2;
         }
-        if (this->owner_ptr->muta.has(MUTA::SCALES)) {
+        if (this->player_ptr->muta.has(MUTA::SCALES)) {
             result -= 1;
         }
     }
@@ -78,7 +78,7 @@ int16_t PlayerCharisma::set_exception_value(int16_t value)
 {
     int16_t result = value;
 
-    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
         result = 0;
     }
 
@@ -89,7 +89,7 @@ BIT_FLAGS PlayerCharisma::get_all_flags()
 {
     BIT_FLAGS flags = PlayerStatusBase::get_all_flags();
 
-    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
@@ -100,7 +100,7 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
 {
     BIT_FLAGS flags = PlayerStatusBase::get_bad_flags();
 
-    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
@@ -117,10 +117,10 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
  */
 int16_t PlayerCharisma::set_exception_use_status(int16_t value)
 {
-    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
         /* 10 to 18/90 charisma, guaranteed, based on level */
-        if (value < 8 + 2 * this->owner_ptr->lev) {
-            value = 8 + 2 * this->owner_ptr->lev;
+        if (value < 8 + 2 * this->player_ptr->lev) {
+            value = 8 + 2 * this->player_ptr->lev;
         }
     }
     return value;

@@ -11,13 +11,13 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
+static void add_cheat_remove_flags(player_type *player_ptr, msr_type *msr_ptr)
 {
     if (!smart_cheat)
         return;
 
-    add_cheat_remove_flags_element(target_ptr, msr_ptr);
-    add_cheat_remove_flags_others(target_ptr, msr_ptr);
+    add_cheat_remove_flags_element(player_ptr, msr_ptr);
+    add_cheat_remove_flags_others(player_ptr, msr_ptr);
 }
 
 /*!
@@ -28,17 +28,17 @@ static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
  * @param f5p モンスター魔法のフラグリスト2
  * @param f6p モンスター魔法のフラグリスト3
  */
-void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, EnumClassFlagGroup<RF_ABILITY> &ability_flags)
+void remove_bad_spells(MONSTER_IDX m_idx, player_type *player_ptr, EnumClassFlagGroup<RF_ABILITY> &ability_flags)
 {
     msr_type tmp_msr;
-    msr_type *msr_ptr = initialize_msr_type(target_ptr, &tmp_msr, m_idx, ability_flags);
+    msr_type *msr_ptr = initialize_msr_type(player_ptr, &tmp_msr, m_idx, ability_flags);
     if (msr_ptr->r_ptr->flags2 & RF2_STUPID)
         return;
 
     if (!smart_cheat && !smart_learn)
         return;
 
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (smart_learn) {
         /* 時々学習情報を忘れる */
         if (randint0(100) < 1)
@@ -47,11 +47,11 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, EnumClassFlag
         msr_ptr->smart = m_ptr->smart;
     }
 
-    add_cheat_remove_flags(target_ptr, msr_ptr);
+    add_cheat_remove_flags(player_ptr, msr_ptr);
     if (msr_ptr->smart.none())
         return;
 
     check_element_resistance(msr_ptr);
-    check_high_resistances(target_ptr, msr_ptr);
+    check_high_resistances(player_ptr, msr_ptr);
     ability_flags = msr_ptr->ability_flags;
 }

@@ -27,21 +27,21 @@
 
 /*!
  * @brief Check on the status of an active quest
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_checkquest(player_type *creature_ptr)
+void do_cmd_checkquest(player_type *player_ptr)
 {
     screen_save();
-    do_cmd_knowledge_quests(creature_ptr);
+    do_cmd_knowledge_quests(player_ptr);
     screen_load();
 }
 
 /*!
  * @brief Print all active quests
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
  */
-static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff)
+static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
 {
     char tmp_str[1024];
     char rand_tmp_str[512] = "\0";
@@ -59,15 +59,15 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
         if (!is_print)
             continue;
 
-        QUEST_IDX old_quest = creature_ptr->current_floor_ptr->inside_quest;
+        QUEST_IDX old_quest = player_ptr->current_floor_ptr->inside_quest;
         for (int j = 0; j < 10; j++)
             quest_text[j][0] = '\0';
 
         quest_text_line = 0;
-        creature_ptr->current_floor_ptr->inside_quest = i;
+        player_ptr->current_floor_ptr->inside_quest = i;
         init_flags = INIT_SHOW_TEXT;
-        parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-        creature_ptr->current_floor_ptr->inside_quest = old_quest;
+        parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+        player_ptr->current_floor_ptr->inside_quest = old_quest;
         if (quest[i].flags & QUEST_FLAG_SILENT)
             continue;
 
@@ -101,7 +101,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
                         q_ptr->prep(k_idx);
                         q_ptr->name1 = quest[i].k_idx;
                         q_ptr->ident = IDENT_STORE;
-                        describe_flavor(creature_ptr, name, q_ptr, OD_NAME_ONLY);
+                        describe_flavor(player_ptr, name, q_ptr, OD_NAME_ONLY);
                     }
                     sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find %s."), name);
                     break;
@@ -214,11 +214,11 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 
 /*
  * Print all finished quests
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[])
+void do_cmd_knowledge_quests_completed(player_type *player_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
     fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
     QUEST_IDX total = 0;
@@ -226,7 +226,7 @@ void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUE
         QUEST_IDX q_idx = quest_num[i];
         quest_type *const q_ptr = &quest[q_idx];
 
-        if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(creature_ptr, fff, q_idx)) {
+        if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
         }
     }
@@ -237,11 +237,11 @@ void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUE
 
 /*
  * Print all failed quests
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[])
+void do_cmd_knowledge_quests_failed(player_type *player_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
     fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
     QUEST_IDX total = 0;
@@ -249,7 +249,7 @@ void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_
         QUEST_IDX q_idx = quest_num[i];
         quest_type *const q_ptr = &quest[q_idx];
 
-        if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) && do_cmd_knowledge_quests_aux(creature_ptr, fff, q_idx)) {
+        if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
         }
     }
@@ -283,9 +283,9 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
 /*
  * Print quest status of all active quests
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_knowledge_quests(player_type *creature_ptr)
+void do_cmd_knowledge_quests(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -299,20 +299,20 @@ void do_cmd_knowledge_quests(player_type *creature_ptr)
         quest_num[i] = i;
 
     int dummy;
-    ang_sort(creature_ptr, quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
+    ang_sort(player_ptr, quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
-    do_cmd_knowledge_quests_current(creature_ptr, fff);
+    do_cmd_knowledge_quests_current(player_ptr, fff);
     fputc('\n', fff);
-    do_cmd_knowledge_quests_completed(creature_ptr, fff, quest_num);
+    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_num);
     fputc('\n', fff);
-    do_cmd_knowledge_quests_failed(creature_ptr, fff, quest_num);
+    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_num);
     if (current_world_ptr->wizard) {
         fputc('\n', fff);
         do_cmd_knowledge_quests_wiz_random(fff);
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, true, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
     fd_kill(file_name);
     C_KILL(quest_num, max_q_idx, QUEST_IDX);
 }

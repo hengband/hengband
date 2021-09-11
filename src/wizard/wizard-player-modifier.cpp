@@ -52,9 +52,9 @@ void display_wizard_player_modifier_menu()
 
 /*!
  * @brief プレイヤー設定コマンドの入力を受け付ける
- * @param creature_ptr プレイヤーの情報へのポインタ
+ * @param player_ptr プレイヤーの情報へのポインタ
  */
-void wizard_player_modifier(player_type *creature_ptr)
+void wizard_player_modifier(player_type *player_ptr)
 {
     screen_save();
     display_wizard_player_modifier_menu();
@@ -70,28 +70,28 @@ void wizard_player_modifier(player_type *creature_ptr)
     case '\r':
         break;
     case 'a':
-        msg_format("Your alignment is %d.", creature_ptr->alignment);
+        msg_format("Your alignment is %d.", player_ptr->alignment);
         break;
     case 'c':
-        wiz_reset_class(creature_ptr);
+        wiz_reset_class(player_ptr);
         break;
     case 'e':
-        wiz_change_status(creature_ptr);
+        wiz_change_status(player_ptr);
         break;
     case 'k':
-        self_knowledge(creature_ptr);
+        self_knowledge(player_ptr);
         break;
     case 'm':
-        (void)gain_mutation(creature_ptr, command_arg);
+        (void)gain_mutation(player_ptr, command_arg);
         break;
     case 'n':
-        roll_hitdice(creature_ptr, static_cast<spell_operation>(SPOP_DISPLAY_MES | SPOP_DEBUG));
+        roll_hitdice(player_ptr, static_cast<spell_operation>(SPOP_DISPLAY_MES | SPOP_DEBUG));
         break;
     case 'r':
-        wiz_reset_race(creature_ptr);
+        wiz_reset_race(player_ptr);
         break;
     case 'R':
-        wiz_reset_realms(creature_ptr);
+        wiz_reset_realms(player_ptr);
         break;
     default:
         msg_print("That is not a valid debug command.");

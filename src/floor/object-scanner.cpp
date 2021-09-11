@@ -28,9 +28,9 @@
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester& item_tester)
+ITEM_NUMBER scan_floor_items(player_type *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester& item_tester)
 {
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return 0;
 
@@ -90,7 +90,7 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester& item_tester)
+COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester& item_tester)
 {
     COMMAND_CODE i, m;
     int j, k, l;
@@ -108,11 +108,11 @@ COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION 
     bool dont_need_to_show_weights = true;
     term_get_size(&wid, &hgt);
     int len = MAX((*min_width), 20);
-    floor_num = scan_floor_items(owner_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         o_ptr = &floor_ptr->o_list[floor_list[i]];
-        describe_flavor(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
         out_color[k] = tval_to_attr[o_ptr->tval & 0x7F];
         strcpy(out_desc[k], o_name);

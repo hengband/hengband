@@ -246,7 +246,7 @@ bool ObjectBreaker::can_destroy(object_type *o_ptr) const
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
+bool potion_smash_effect(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
 {
     int radius = 2;
     int dt = 0;
@@ -381,7 +381,7 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
         break;
     }
 
-    (void)project(owner_ptr, who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL));
+    (void)project(player_ptr, who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL));
     return angry;
 }
 
@@ -393,7 +393,7 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
  * @details
  * Note that artifacts never break, see the "drop_near()" function.
  */
-PERCENTAGE breakage_chance(player_type *owner_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
+PERCENTAGE breakage_chance(player_type *player_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
 {
     /* Examine the snipe type */
     if (snipe_type) {
@@ -414,7 +414,7 @@ PERCENTAGE breakage_chance(player_type *owner_ptr, object_type *o_ptr, bool has_
     }
 
     /* Examine the item type */
-    PERCENTAGE archer_bonus = (has_archer_bonus ? (PERCENTAGE)(owner_ptr->lev - 1) / 7 + 4 : 0);
+    PERCENTAGE archer_bonus = (has_archer_bonus ? (PERCENTAGE)(player_ptr->lev - 1) / 7 + 4 : 0);
     switch (o_ptr->tval) {
         /* Always break */
     case TV_FLASK:

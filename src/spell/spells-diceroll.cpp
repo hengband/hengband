@@ -21,22 +21,22 @@
  * @param m_ptr 対象モンスター
  * @return 魅了に抵抗したらTRUE
  */
-bool common_saving_throw_charm(player_type *operator_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (operator_ptr->current_floor_ptr->inside_arena)
+    if (player_ptr->current_floor_ptr->inside_arena)
         return true;
 
     /* Memorize a flag */
     if (r_ptr->flagsr & RFR_RES_ALL) {
-        if (is_original_ap_and_seen(operator_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flagsr |= (RFR_RES_ALL);
         return true;
     }
 
     if (r_ptr->flags3 & RF3_NO_CONF) {
-        if (is_original_ap_and_seen(operator_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flags3 |= (RF3_NO_CONF);
         return true;
     }
@@ -44,7 +44,7 @@ bool common_saving_throw_charm(player_type *operator_ptr, HIT_POINT pow, monster
     if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET))
         return true;
 
-    pow += (adj_chr_chm[operator_ptr->stat_index[A_CHR]] - 1);
+    pow += (adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1);
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
         pow = pow * 2 / 3;
     return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
@@ -56,16 +56,16 @@ bool common_saving_throw_charm(player_type *operator_ptr, HIT_POINT pow, monster
  * @param m_ptr 対象モンスター
  * @return 服従に抵抗したらTRUE
  */
-bool common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (operator_ptr->current_floor_ptr->inside_arena)
+    if (player_ptr->current_floor_ptr->inside_arena)
         return true;
 
     /* Memorize a flag */
     if (r_ptr->flagsr & RFR_RES_ALL) {
-        if (is_original_ap_and_seen(operator_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flagsr |= (RFR_RES_ALL);
         return true;
     }
@@ -73,7 +73,7 @@ bool common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, monst
     if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET))
         return true;
 
-    pow += adj_chr_chm[operator_ptr->stat_index[A_CHR]] - 1;
+    pow += adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1;
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
         pow = pow * 2 / 3;
     return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
@@ -86,12 +86,12 @@ bool common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, monst
  * ハードコーティングによる実装が行われている。
  * メイジは(レベル)%、ハイメイジ、スペルマスターは(レベル)%、それ以外の職業は(レベル/2)%
  */
-PERCENTAGE beam_chance(player_type *caster_ptr)
+PERCENTAGE beam_chance(player_type *player_ptr)
 {
-    if (caster_ptr->pclass == CLASS_MAGE)
-        return (PERCENTAGE)(caster_ptr->lev);
-    if (caster_ptr->pclass == CLASS_HIGH_MAGE || caster_ptr->pclass == CLASS_SORCERER)
-        return (PERCENTAGE)(caster_ptr->lev + 10);
+    if (player_ptr->pclass == CLASS_MAGE)
+        return (PERCENTAGE)(player_ptr->lev);
+    if (player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_SORCERER)
+        return (PERCENTAGE)(player_ptr->lev + 10);
 
-    return (PERCENTAGE)(caster_ptr->lev / 2);
+    return (PERCENTAGE)(player_ptr->lev / 2);
 }

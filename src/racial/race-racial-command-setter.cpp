@@ -4,10 +4,10 @@
 #include "racial/racial-util.h"
 #include "system/player-type-definition.h"
 
-void set_mimic_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
+void set_mimic_racial_command(player_type *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
-    switch (creature_ptr->mimic_form) {
+    switch (player_ptr->mimic_form) {
     case MIMIC_DEMON:
     case MIMIC_DEMON_LORD:
         rpi = rpi_type(_("地獄/火炎のブレス", "Nether or Fire Breath"));
@@ -33,10 +33,10 @@ void set_mimic_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
     }
 }
 
-void set_race_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
+void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
-    switch (creature_ptr->prace) {
+    switch (player_ptr->prace) {
     case player_race_type::DWARF:
         rpi = rpi_type(_("ドアと罠 感知", "Detect Doors+Traps"));
         rpi.text = _("近くの全ての扉と罠、階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
@@ -307,28 +307,28 @@ void set_race_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case player_race_type::ANDROID:
-        if (creature_ptr->lev < 10) {
+        if (player_ptr->lev < 10) {
             rpi = rpi_type(_("レイガン", "Ray Gun"));
             rpi.info = format("%s%d", KWD_DAM, (rc_ptr->lvl + 1) / 2);
             rpi.text = _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
             rpi.min_level = 1;
             rpi.cost = 7;
             rpi.fail = 8;
-        } else if (creature_ptr->lev < 25) {
+        } else if (player_ptr->lev < 25) {
             rpi = rpi_type(_("ブラスター", "Blaster"));
             rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
             rpi.text = _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
             rpi.min_level = 10;
             rpi.cost = 13;
             rpi.fail = 10;
-        } else if (creature_ptr->lev < 35) {
+        } else if (player_ptr->lev < 35) {
             rpi = rpi_type(_("バズーカ", "Bazooka"));
             rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
             rpi.text = _("弱い魔法のボールを放つ。", "Fires a weak ball of magic.");
             rpi.min_level = 25;
             rpi.cost = 26;
             rpi.fail = 12;
-        } else if (creature_ptr->lev < 45) {
+        } else if (player_ptr->lev < 45) {
             rpi = rpi_type(_("ビームキャノン", "Beam Cannon"));
             rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
             rpi.text = _("弱い魔法のビームを放つ。", "Fires a beam bolt of magic.");

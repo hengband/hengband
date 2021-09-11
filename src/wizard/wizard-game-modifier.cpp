@@ -26,8 +26,8 @@
 #include <vector>
 #include <sstream>
 
-void wiz_enter_quest(player_type *creature_ptr);
-void wiz_complete_quest(player_type *creature_ptr);
+void wiz_enter_quest(player_type *player_ptr);
+void wiz_complete_quest(player_type *player_ptr);
 void wiz_restore_monster_max_num();
 
 /*!
@@ -61,9 +61,9 @@ void display_wizard_game_modifier_menu()
 
 /*!
  * @brief ゲーム設定コマンドの入力を受け付ける
- * @param creature_ptr プレイヤーの情報へのポインタ
+ * @param player_ptr プレイヤーの情報へのポインタ
  */
-void wizard_game_modifier(player_type *creature_ptr)
+void wizard_game_modifier(player_type *player_ptr)
 {
     screen_save();
     display_wizard_game_modifier_menu();
@@ -79,13 +79,13 @@ void wizard_game_modifier(player_type *creature_ptr)
     case '\r':
         break;
     case 'g':
-        update_gambling_monsters(creature_ptr);
+        update_gambling_monsters(player_ptr);
         break;
     case 'q':
-        wiz_complete_quest(creature_ptr);
+        wiz_complete_quest(player_ptr);
         break;
     case 'Q':
-        wiz_enter_quest(creature_ptr);
+        wiz_enter_quest(player_ptr);
         break;
     case 'u':
         wiz_restore_monster_max_num();
@@ -100,7 +100,7 @@ void wizard_game_modifier(player_type *creature_ptr)
  * @brief 指定したクエストに突入する
  * @param プレイヤーの情報へのポインタ
  */
-void wiz_enter_quest(player_type* creature_ptr)
+void wiz_enter_quest(player_type* player_ptr)
 {
     char ppp[30];
     char tmp_val[5];
@@ -116,27 +116,27 @@ void wiz_enter_quest(player_type* creature_ptr)
         return;
 
     init_flags = static_cast<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
-    creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
-    parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+    player_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
+    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     quest[tmp_int].status = QUEST_STATUS_TAKEN;
     if (quest[tmp_int].dungeon == 0)
-        exe_enter_quest(creature_ptr, (QUEST_IDX)tmp_int);
+        exe_enter_quest(player_ptr, (QUEST_IDX)tmp_int);
 }
 
 /*!
  * @brief 指定したクエストを完了させる
  * @param プレイヤーの情報へのポインタ
  */
-void wiz_complete_quest(player_type *creature_ptr)
+void wiz_complete_quest(player_type *player_ptr)
 {
-    if (!creature_ptr->current_floor_ptr->inside_quest) {
+    if (!player_ptr->current_floor_ptr->inside_quest) {
         msg_print("No current quest");
         msg_print(nullptr);
         return;
     }
 
-    if (quest[creature_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
-        complete_quest(creature_ptr, creature_ptr->current_floor_ptr->inside_quest);
+    if (quest[player_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
+        complete_quest(player_ptr, player_ptr->current_floor_ptr->inside_quest);
 }
 
 void wiz_restore_monster_max_num()

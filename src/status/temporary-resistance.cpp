@@ -13,149 +13,149 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_levitation(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_levitation && !do_dec) {
-            if (creature_ptr->tim_levitation > v)
+        if (player_ptr->tim_levitation && !do_dec) {
+            if (player_ptr->tim_levitation > v)
                 return false;
-        } else if (!creature_ptr->tim_levitation) {
+        } else if (!player_ptr->tim_levitation) {
             msg_print(_("体が宙に浮き始めた。", "You begin to fly!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->tim_levitation) {
+        if (player_ptr->tim_levitation) {
             msg_print(_("もう宙に浮かべなくなった。", "You stop flying."));
             notice = true;
         }
     }
 
-    creature_ptr->tim_levitation = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_levitation = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
-bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_ultimate_res(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->ult_res && !do_dec) {
-            if (creature_ptr->ult_res > v)
+        if (player_ptr->ult_res && !do_dec) {
+            if (player_ptr->ult_res > v)
                 return false;
-        } else if (!creature_ptr->ult_res) {
+        } else if (!player_ptr->ult_res) {
             msg_print(_("あらゆることに対して耐性がついた気がする！", "You feel resistant!"));
             notice = true;
         }
     }
 
     else {
-        if (creature_ptr->ult_res) {
+        if (player_ptr->ult_res) {
             msg_print(_("あらゆることに対する耐性が薄れた気がする。", "You feel less resistant"));
             notice = true;
         }
     }
 
-    creature_ptr->ult_res = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->ult_res = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
 
     return true;
 }
 
-bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_res_nether(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_res_nether && !do_dec) {
-            if (creature_ptr->tim_res_nether > v)
+        if (player_ptr->tim_res_nether && !do_dec) {
+            if (player_ptr->tim_res_nether > v)
                 return false;
-        } else if (!creature_ptr->tim_res_nether) {
+        } else if (!player_ptr->tim_res_nether) {
             msg_print(_("地獄の力に対して耐性がついた気がする！", "You feel nether-resistant!"));
             notice = true;
         }
     }
 
     else {
-        if (creature_ptr->tim_res_nether) {
+        if (player_ptr->tim_res_nether) {
             msg_print(_("地獄の力に対する耐性が薄れた気がする。", "You feel less nether-resistant"));
             notice = true;
         }
     }
 
-    creature_ptr->tim_res_nether = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_res_nether = v;
+    player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
-bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_res_time(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->tim_res_time && !do_dec) {
-            if (creature_ptr->tim_res_time > v)
+        if (player_ptr->tim_res_time && !do_dec) {
+            if (player_ptr->tim_res_time > v)
                 return false;
-        } else if (!creature_ptr->tim_res_time) {
+        } else if (!player_ptr->tim_res_time) {
             msg_print(_("時間逆転の力に対して耐性がついた気がする！", "You feel time-resistant!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->tim_res_time) {
+        if (player_ptr->tim_res_time) {
             msg_print(_("時間逆転の力に対する耐性が薄れた気がする。", "You feel less time-resistant"));
             notice = true;
         }
     }
 
-    creature_ptr->tim_res_time = v;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->tim_res_time = v;
+    player_ptr->redraw |= (PR_STATUS);
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     return true;
 }

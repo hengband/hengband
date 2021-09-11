@@ -21,24 +21,24 @@
 /*!
  * @brief ペット爆破処理 /
  */
-void discharge_minion(player_type *caster_ptr)
+void discharge_minion(player_type *player_ptr)
 {
     bool okay = true;
-    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
+    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!m_ptr->r_idx || !is_pet(m_ptr))
             continue;
         if (m_ptr->nickname)
             okay = false;
     }
 
-    if (!okay || caster_ptr->riding) {
+    if (!okay || player_ptr->riding) {
         if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? ")))
             return;
     }
 
-    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
+    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!m_ptr->r_idx || !is_pet(m_ptr))
             continue;
 
@@ -46,9 +46,9 @@ void discharge_minion(player_type *caster_ptr)
         r_ptr = &r_info[m_ptr->r_idx];
         if (r_ptr->flags1 & RF1_UNIQUE) {
             GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(caster_ptr, m_name, m_ptr, 0x00);
+            monster_desc(player_ptr, m_name, m_ptr, 0x00);
             msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists being blasted and runs away."), m_name);
-            delete_monster_idx(caster_ptr, i);
+            delete_monster_idx(player_ptr, i);
             continue;
         }
 
@@ -59,15 +59,15 @@ void discharge_minion(player_type *caster_ptr)
             dam = (dam - 400) / 2 + 400;
         if (dam > 800)
             dam = 800;
-        project(caster_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        project(player_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
         if (record_named_pet && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
 
-            monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
+            monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
         }
 
-        delete_monster_idx(caster_ptr, i);
+        delete_monster_idx(player_ptr, i);
     }
 }

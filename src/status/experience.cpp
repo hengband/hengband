@@ -6,51 +6,51 @@
 /*
  * Gain experience
  */
-void gain_exp_64(player_type *creature_ptr, int32_t amount, uint32_t amount_frac)
+void gain_exp_64(player_type *player_ptr, int32_t amount, uint32_t amount_frac)
 {
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return;
-    if (creature_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == player_race_type::ANDROID)
         return;
 
-    s64b_add(&(creature_ptr->exp), &(creature_ptr->exp_frac), amount, amount_frac);
+    s64b_add(&(player_ptr->exp), &(player_ptr->exp_frac), amount, amount_frac);
 
-    if (creature_ptr->exp < creature_ptr->max_exp) {
-        creature_ptr->max_exp += amount / 5;
+    if (player_ptr->exp < player_ptr->max_exp) {
+        player_ptr->max_exp += amount / 5;
     }
 
-    check_experience(creature_ptr);
+    check_experience(player_ptr);
 }
 
 /*
  * Gain experience
  */
-void gain_exp(player_type *creature_ptr, int32_t amount) { gain_exp_64(creature_ptr, amount, 0L); }
+void gain_exp(player_type *player_ptr, int32_t amount) { gain_exp_64(player_ptr, amount, 0L); }
 
 /*
  * Lose experience
  */
-void lose_exp(player_type *creature_ptr, int32_t amount)
+void lose_exp(player_type *player_ptr, int32_t amount)
 {
-    if (creature_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == player_race_type::ANDROID)
         return;
-    if (amount > creature_ptr->exp)
-        amount = creature_ptr->exp;
+    if (amount > player_ptr->exp)
+        amount = player_ptr->exp;
 
-    creature_ptr->exp -= amount;
+    player_ptr->exp -= amount;
 
-    check_experience(creature_ptr);
+    check_experience(player_ptr);
 }
 
 /*
  * Restores any drained experience
  */
-bool restore_level(player_type *creature_ptr)
+bool restore_level(player_type *player_ptr)
 {
-    if (creature_ptr->exp < creature_ptr->max_exp) {
+    if (player_ptr->exp < player_ptr->max_exp) {
         msg_print(_("経験値が戻ってきた気がする。", "You feel your experience returning."));
-        creature_ptr->exp = creature_ptr->max_exp;
-        check_experience(creature_ptr);
+        player_ptr->exp = player_ptr->max_exp;
+        check_experience(player_ptr);
         return true;
     }
 
@@ -61,22 +61,22 @@ bool restore_level(player_type *creature_ptr)
  * Drain experience
  * If resisted to draining, return FALSE
  */
-bool drain_exp(player_type *creature_ptr, int32_t drain, int32_t slip, int hold_exp_prob)
+bool drain_exp(player_type *player_ptr, int32_t drain, int32_t slip, int hold_exp_prob)
 {
-    if (creature_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == player_race_type::ANDROID)
         return false;
 
-    if (creature_ptr->hold_exp && (randint0(100) < hold_exp_prob)) {
+    if (player_ptr->hold_exp && (randint0(100) < hold_exp_prob)) {
         msg_print(_("しかし自己の経験値を守りきった！", "You keep hold of your experience!"));
         return false;
     }
 
-    if (creature_ptr->hold_exp) {
+    if (player_ptr->hold_exp) {
         msg_print(_("経験値を少し吸い取られた気がする！", "You feel your experience slipping away!"));
-        lose_exp(creature_ptr, slip);
+        lose_exp(player_ptr, slip);
     } else {
         msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away!"));
-        lose_exp(creature_ptr, drain);
+        lose_exp(player_ptr, drain);
     }
 
     return true;

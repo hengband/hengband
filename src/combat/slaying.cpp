@@ -148,25 +148,25 @@ MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs,
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
+HIT_POINT calc_attack_damage_with_slay(player_type *player_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
 {
     auto flgs = object_flags(o_ptr);
     torch_flags(o_ptr, flgs); /* torches has secret flags */
 
     if (!thrown) {
-        if (attacker_ptr->special_attack & (ATTACK_ACID))
+        if (player_ptr->special_attack & (ATTACK_ACID))
             flgs.set(TR_BRAND_ACID);
-        if (attacker_ptr->special_attack & (ATTACK_COLD))
+        if (player_ptr->special_attack & (ATTACK_COLD))
             flgs.set(TR_BRAND_COLD);
-        if (attacker_ptr->special_attack & (ATTACK_ELEC))
+        if (player_ptr->special_attack & (ATTACK_ELEC))
             flgs.set(TR_BRAND_ELEC);
-        if (attacker_ptr->special_attack & (ATTACK_FIRE))
+        if (player_ptr->special_attack & (ATTACK_FIRE))
             flgs.set(TR_BRAND_FIRE);
-        if (attacker_ptr->special_attack & (ATTACK_POIS))
+        if (player_ptr->special_attack & (ATTACK_POIS))
             flgs.set(TR_BRAND_POIS);
     }
 
-    if (RealmHex(attacker_ptr).is_spelling_specific(HEX_RUNESWORD))
+    if (RealmHex(player_ptr).is_spelling_specific(HEX_RUNESWORD))
         flgs.set(TR_SLAY_GOOD);
 
     MULTIPLY mult = 10;
@@ -179,17 +179,17 @@ HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o
     case TV_SWORD:
     case TV_DIGGING:
     case TV_LITE: {
-        mult = mult_slaying(attacker_ptr, mult, flgs, m_ptr);
+        mult = mult_slaying(player_ptr, mult, flgs, m_ptr);
 
-        mult = mult_brand(attacker_ptr, mult, flgs, m_ptr);
+        mult = mult_brand(player_ptr, mult, flgs, m_ptr);
 
-        if (attacker_ptr->pclass == CLASS_SAMURAI) {
-            mult = mult_hissatsu(attacker_ptr, mult, flgs, m_ptr, mode);
+        if (player_ptr->pclass == CLASS_SAMURAI) {
+            mult = mult_hissatsu(player_ptr, mult, flgs, m_ptr, mode);
         }
 
-        if ((attacker_ptr->pclass != CLASS_SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (attacker_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
-            attacker_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
-            attacker_ptr->redraw |= (PR_MANA);
+        if ((player_ptr->pclass != CLASS_SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+            player_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
+            player_ptr->redraw |= (PR_MANA);
             mult = mult * 3 / 2 + 20;
         }
 

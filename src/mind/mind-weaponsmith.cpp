@@ -50,7 +50,7 @@ static concptr const kaji_tips[5] = {
 /*!
  * @brief 所持しているエッセンス一覧を表示する
  */
-static void display_essence(player_type *creature_ptr)
+static void display_essence(player_type *player_ptr)
 {
     int i, num = 0;
 
@@ -59,7 +59,7 @@ static void display_essence(player_type *creature_ptr)
         prt("", i, 0);
     }
     prt(_("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "), 1, 8);
-    Smith smith(creature_ptr);
+    Smith smith(player_ptr);
     for (const auto &essence : Smith::get_essence_list()) {
         auto name = Smith::get_essence_name(essence);
         auto amount = smith.get_essence_num_of_posessions(essence);
@@ -74,28 +74,28 @@ static void display_essence(player_type *creature_ptr)
 
 /*!
  * @brief エッセンスの抽出処理
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-static void drain_essence(player_type *creature_ptr)
+static void drain_essence(player_type *player_ptr)
 {
     auto q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     auto s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
     OBJECT_IDX item;
-    auto o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_weapon_armour_ammo));
+    auto o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_weapon_armour_ammo));
     if (!o_ptr)
         return;
 
     if (o_ptr->is_known() && !o_ptr->is_nameless()) {
         GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name)))
             return;
     }
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    auto drain_result = Smith(creature_ptr).drain_essence(o_ptr);
+    auto drain_result = Smith(player_ptr).drain_essence(o_ptr);
 
     if (drain_result.empty()) {
         msg_print(_("エッセンスは抽出できませんでした。", "You were not able to extract any essence."));
@@ -110,9 +110,9 @@ static void drain_essence(player_type *creature_ptr)
     }
 
     /* Apply autodestroy/inscription to the drained item */
-    autopick_alter_item(creature_ptr, item, true);
-    creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window_flags |= (PW_INVEN);
+    autopick_alter_item(player_ptr, item, true);
+    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVEN);
 }
 
 /*!
@@ -207,7 +207,7 @@ static COMMAND_CODE choose_essence(void)
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *creature_ptr, SmithCategory mode)
+static void add_essence(player_type *player_ptr, SmithCategory mode)
 {
     OBJECT_IDX item;
     COMMAND_CODE i;
@@ -220,7 +220,7 @@ static void add_essence(player_type *creature_ptr, SmithCategory mode)
     GAME_TEXT o_name[MAX_NLEN];
     int menu_line = (use_menu ? 1 : 0);
 
-    Smith smith(creature_ptr);
+    Smith smith(player_ptr);
 
     auto smith_effect_list = Smith::get_effect_list(mode);
     const auto smith_effect_list_max = static_cast<int>(smith_effect_list.size());
@@ -409,7 +409,7 @@ static void add_essence(player_type *creature_ptr, SmithCategory mode)
     q = _("どのアイテムを改良しますか？", "Improve which item? ");
     s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return;
 
@@ -418,7 +418,7 @@ static void add_essence(player_type *creature_ptr, SmithCategory mode)
         return;
     }
 
-    describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     const auto use_essence = Smith::get_essence_consumption(effect, o_ptr);
     if (o_ptr->number > 1) {
@@ -457,7 +457,7 @@ static void add_essence(player_type *creature_ptr, SmithCategory mode)
         add_essence_count = o_ptr->pval;
     } else if (effect == SmithEffect::SLAY_GLOVE) {
         char tmp_val[8] = "1";
-        const auto max_val = creature_ptr->lev / 7 + 3;
+        const auto max_val = player_ptr->lev / 7 + 3;
         if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {
             return;
         }
@@ -471,7 +471,7 @@ static void add_essence(player_type *creature_ptr, SmithCategory mode)
         return;
     }
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     if (!smith.add_essence(effect, o_ptr, add_essence_count)) {
         msg_print(_("改良に失敗した。", "You failed to enchant."));
@@ -481,14 +481,14 @@ static void add_essence(player_type *creature_ptr, SmithCategory mode)
     auto effect_name = Smith::get_effect_name(effect);
 
     _(msg_format("%sに%sの能力を付加しました。", o_name, effect_name), msg_format("You have added ability of %s to %s.", effect_name, o_name));
-    creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window_flags |= (PW_INVEN);
+    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVEN);
 }
 
 /*!
  * @brief エッセンスを消去する
  */
-static void erase_essence(player_type *creature_ptr)
+static void erase_essence(player_type *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;
@@ -498,28 +498,28 @@ static void erase_essence(player_type *creature_ptr)
     q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
     s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_smith));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_smith));
     if (!o_ptr)
         return;
 
-    describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name)))
         return;
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    Smith(creature_ptr).erase_essence(o_ptr);
+    Smith(player_ptr).erase_essence(o_ptr);
 
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
-    creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window_flags |= (PW_INVEN);
+    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVEN);
 }
 
 /*!
  * @brief 鍛冶コマンドのメインルーチン
  * @param only_browse TRUEならばエッセンス一覧の表示のみを行う
  */
-void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
+void do_cmd_kaji(player_type *player_ptr, bool only_browse)
 {
     COMMAND_CODE mode = 0;
     char choice;
@@ -527,11 +527,11 @@ void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
     COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
     if (!only_browse) {
-        if (cmd_limit_confused(creature_ptr))
+        if (cmd_limit_confused(player_ptr))
             return;
-        if (cmd_limit_blind(creature_ptr))
+        if (cmd_limit_blind(player_ptr))
             return;
-        if (cmd_limit_image(creature_ptr))
+        if (cmd_limit_image(player_ptr))
             return;
     }
 
@@ -654,22 +654,22 @@ void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
     }
     switch (mode) {
     case 1:
-        display_essence(creature_ptr);
+        display_essence(player_ptr);
         break;
     case 2:
-        drain_essence(creature_ptr);
+        drain_essence(player_ptr);
         break;
     case 3:
-        erase_essence(creature_ptr);
+        erase_essence(player_ptr);
         break;
     case 4:
         mode = choose_essence();
         if (mode == 0)
             break;
-        add_essence(creature_ptr, static_cast<SmithCategory>(mode));
+        add_essence(player_ptr, static_cast<SmithCategory>(mode));
         break;
     case 5:
-        add_essence(creature_ptr, SmithCategory::ENCHANT);
+        add_essence(player_ptr, SmithCategory::ENCHANT);
         break;
     }
 }

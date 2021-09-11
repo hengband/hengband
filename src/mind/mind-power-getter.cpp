@@ -19,8 +19,8 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
-MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
-    : caster_ptr(caster_ptr)
+MindPowerGetter::MindPowerGetter(player_type *player_ptr)
+    : player_ptr(player_ptr)
     , menu_line(use_menu ? 1 : 0)
 {
 }
@@ -51,7 +51,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
     }
 
     for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
-        if (mind_ptr->info[this->index].min_lev <= this->caster_ptr->lev) {
+        if (mind_ptr->info[this->index].min_lev <= this->player_ptr->lev) {
             this->num++;
         }
     }
@@ -75,8 +75,8 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         screen_load();
     }
 
-    this->caster_ptr->window_flags |= PW_SPELL;
-    handle_stuff(this->caster_ptr);
+    this->player_ptr->window_flags |= PW_SPELL;
+    handle_stuff(this->player_ptr);
     if (!this->flag) {
         return false;
     }
@@ -91,7 +91,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
  */
 void MindPowerGetter::select_mind_description()
 {
-    switch (this->caster_ptr->pclass)
+    switch (this->player_ptr->pclass)
     case CLASS_MINDCRAFTER: {
         this->use_mind = mind_kind_type::MINDCRAFTER;
         this->mind_description = _("超能力", "mindcraft");
@@ -134,7 +134,7 @@ bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
     }
 
     *sn = (SPELL_IDX)code;
-    return mind_ptr->info[*sn].min_lev <= this->caster_ptr->lev;
+    return mind_ptr->info[*sn].min_lev <= this->player_ptr->lev;
 }
 
 bool MindPowerGetter::decide_mind_choice(char *out_val, const bool only_browse)
@@ -250,17 +250,17 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
 void MindPowerGetter::display_each_mind_chance()
 {
     bool has_weapon[2];
-    has_weapon[0] = has_melee_weapon(this->caster_ptr, INVEN_MAIN_HAND);
-    has_weapon[1] = has_melee_weapon(this->caster_ptr, INVEN_SUB_HAND);
+    has_weapon[0] = has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND);
+    has_weapon[1] = has_melee_weapon(this->player_ptr, INVEN_SUB_HAND);
     for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
         this->spell = &mind_ptr->info[this->index];
-        if (this->spell->min_lev > this->caster_ptr->lev) {
+        if (this->spell->min_lev > this->player_ptr->lev) {
             break;
         }
 
         calculate_mind_chance(has_weapon);
         char comment[80];
-        mindcraft_info(this->caster_ptr, comment, this->use_mind, this->index);
+        mindcraft_info(this->player_ptr, comment, this->use_mind, this->index);
         char psi_desc[80];
         if (use_menu) {
             if (this->index == (this->menu_line - 1)) {
@@ -287,22 +287,22 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
         return;
     }
 
-    this->chance -= 3 * (this->caster_ptr->lev - this->spell->min_lev);
-    this->chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+    this->chance -= 3 * (this->player_ptr->lev - this->spell->min_lev);
+    this->chance -= 3 * (adj_mag_stat[this->player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     calculate_ki_chance(has_weapon);
-    if ((this->use_mind != mind_kind_type::BERSERKER) && (this->use_mind != mind_kind_type::NINJUTSU) && (this->mana_cost > this->caster_ptr->csp)) {
-        this->chance += 5 * (this->mana_cost - this->caster_ptr->csp);
+    if ((this->use_mind != mind_kind_type::BERSERKER) && (this->use_mind != mind_kind_type::NINJUTSU) && (this->mana_cost > this->player_ptr->csp)) {
+        this->chance += 5 * (this->mana_cost - this->player_ptr->csp);
     }
 
-    this->chance += this->caster_ptr->to_m_chance;
-    PERCENTAGE minfail = adj_mag_fail[this->caster_ptr->stat_index[mp_ptr->spell_stat]];
+    this->chance += this->player_ptr->to_m_chance;
+    PERCENTAGE minfail = adj_mag_fail[this->player_ptr->stat_index[mp_ptr->spell_stat]];
     if (this->chance < minfail) {
         this->chance = minfail;
     }
 
-    if (this->caster_ptr->stun > 50) {
+    if (this->player_ptr->stun > 50) {
         this->chance += 25;
-    } else if (this->caster_ptr->stun) {
+    } else if (this->player_ptr->stun) {
         this->chance += 15;
     }
 
@@ -318,23 +318,23 @@ void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
         return;
     }
 
-    if (heavy_armor(this->caster_ptr))
+    if (heavy_armor(this->player_ptr))
         this->chance += 20;
 
-    if (this->caster_ptr->is_icky_wield[0]) {
+    if (this->player_ptr->is_icky_wield[0]) {
         this->chance += 20;
     } else if (has_weapon[0]) {
         this->chance += 10;
     }
 
-    if (this->caster_ptr->is_icky_wield[1]) {
+    if (this->player_ptr->is_icky_wield[1]) {
         chance += 20;
     } else if (has_weapon[1]) {
         this->chance += 10;
     }
 
     if (this->index == 5) {
-        for (auto j = 0; j < get_current_ki(this->caster_ptr) / 50; j++) {
+        for (auto j = 0; j < get_current_ki(this->player_ptr) / 50; j++) {
             this->mana_cost += (j + 1) * 3 / 2;
         }
     }
@@ -346,15 +346,15 @@ void MindPowerGetter::add_ki_chance()
         return;
     }
 
-    if (heavy_armor(this->caster_ptr)) {
+    if (heavy_armor(this->player_ptr)) {
         this->chance += 5;
     }
 
-    if (this->caster_ptr->is_icky_wield[0]) {
+    if (this->player_ptr->is_icky_wield[0]) {
         this->chance += 5;
     }
 
-    if (this->caster_ptr->is_icky_wield[1]) {
+    if (this->player_ptr->is_icky_wield[1]) {
         this->chance += 5;
     }
 }

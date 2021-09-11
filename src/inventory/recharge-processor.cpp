@@ -19,7 +19,7 @@
  * If player has inscribed the object with "!!", let him know when it's recharged. -LM-
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  */
-static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
+static void recharged_notice(player_type *player_ptr, object_type *o_ptr)
 {
     if (!o_ptr->inscription)
         return;
@@ -28,7 +28,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
     while (s) {
         if (s[1] == '!') {
             GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
             msg_format("%sは再充填された。", o_name);
 #else
@@ -37,7 +37,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
             else
                 msg_format("Your %s is recharged.", o_name);
 #endif
-            disturb(owner_ptr, false, false);
+            disturb(player_ptr, false, false);
             return;
         }
 
@@ -49,27 +49,27 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
  * @brief 10ゲームターンが進行するごとに魔道具の自然充填を行う処理
  * / Handle recharging objects once every 10 game turns
  */
-void recharge_magic_items(player_type *creature_ptr)
+void recharge_magic_items(player_type *player_ptr)
 {
     int i;
     bool changed;
 
     for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
         if (o_ptr->timeout > 0) {
             o_ptr->timeout--;
             if (!o_ptr->timeout) {
-                recharged_notice(creature_ptr, o_ptr);
+                recharged_notice(player_ptr, o_ptr);
                 changed = true;
             }
         }
     }
 
     if (changed) {
-        creature_ptr->window_flags |= (PW_EQUIP);
+        player_ptr->window_flags |= (PW_EQUIP);
         wild_regen = 20;
     }
 
@@ -79,7 +79,7 @@ void recharge_magic_items(player_type *creature_ptr)
      * one per turn. -LM-
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
         if (!o_ptr->k_idx)
             continue;
@@ -94,7 +94,7 @@ void recharge_magic_items(player_type *creature_ptr)
                 o_ptr->timeout = 0;
 
             if (!(o_ptr->timeout)) {
-                recharged_notice(creature_ptr, o_ptr);
+                recharged_notice(player_ptr, o_ptr);
                 changed = true;
             } else if (o_ptr->timeout % k_ptr->pval) {
                 changed = true;
@@ -103,12 +103,12 @@ void recharge_magic_items(player_type *creature_ptr)
     }
 
     if (changed) {
-        creature_ptr->window_flags |= (PW_INVEN);
+        player_ptr->window_flags |= (PW_INVEN);
         wild_regen = 20;
     }
 
-    for (i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
-        object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
+    for (i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
+        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
 

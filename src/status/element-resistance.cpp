@@ -17,37 +17,37 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_acid(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->oppose_acid && !do_dec) {
-            if (creature_ptr->oppose_acid > v)
+        if (player_ptr->oppose_acid && !do_dec) {
+            if (player_ptr->oppose_acid > v)
                 return false;
-        } else if (!is_oppose_acid(creature_ptr)) {
+        } else if (!is_oppose_acid(player_ptr)) {
             msg_print(_("酸への耐性がついた気がする！", "You feel resistant to acid!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->oppose_acid && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU)) {
+        if (player_ptr->oppose_acid && !music_singing(player_ptr, MUSIC_RESIST) && !(player_ptr->special_defense & KATA_MUSOU)) {
             msg_print(_("酸への耐性が薄れた気がする。", "You feel less resistant to acid."));
             notice = true;
         }
     }
 
-    creature_ptr->oppose_acid = v;
+    player_ptr->oppose_acid = v;
 
     if (!notice)
         return false;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -57,38 +57,38 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_elec(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->oppose_elec && !do_dec) {
-            if (creature_ptr->oppose_elec > v)
+        if (player_ptr->oppose_elec && !do_dec) {
+            if (player_ptr->oppose_elec > v)
                 return false;
-        } else if (!is_oppose_elec(creature_ptr)) {
+        } else if (!is_oppose_elec(player_ptr)) {
             msg_print(_("電撃への耐性がついた気がする！", "You feel resistant to electricity!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->oppose_elec && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU)) {
+        if (player_ptr->oppose_elec && !music_singing(player_ptr, MUSIC_RESIST) && !(player_ptr->special_defense & KATA_MUSOU)) {
             msg_print(_("電撃への耐性が薄れた気がする。", "You feel less resistant to electricity."));
             notice = true;
         }
     }
 
-    creature_ptr->oppose_elec = v;
+    player_ptr->oppose_elec = v;
 
     if (!notice)
         return false;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -98,39 +98,39 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_fire(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
-    if ((PlayerRace(creature_ptr).equals(player_race_type::BALROG) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON))
+    if ((PlayerRace(player_ptr).equals(player_race_type::BALROG) && (player_ptr->lev > 44)) || (player_ptr->mimic_form == MIMIC_DEMON))
         v = 1;
     if (v) {
-        if (creature_ptr->oppose_fire && !do_dec) {
-            if (creature_ptr->oppose_fire > v)
+        if (player_ptr->oppose_fire && !do_dec) {
+            if (player_ptr->oppose_fire > v)
                 return false;
-        } else if (!is_oppose_fire(creature_ptr)) {
+        } else if (!is_oppose_fire(player_ptr)) {
             msg_print(_("火への耐性がついた気がする！", "You feel resistant to fire!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->oppose_fire && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU)) {
+        if (player_ptr->oppose_fire && !music_singing(player_ptr, MUSIC_RESIST) && !(player_ptr->special_defense & KATA_MUSOU)) {
             msg_print(_("火への耐性が薄れた気がする。", "You feel less resistant to fire."));
             notice = true;
         }
     }
 
-    creature_ptr->oppose_fire = v;
+    player_ptr->oppose_fire = v;
 
     if (!notice)
         return false;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -140,37 +140,37 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_cold(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->oppose_cold && !do_dec) {
-            if (creature_ptr->oppose_cold > v)
+        if (player_ptr->oppose_cold && !do_dec) {
+            if (player_ptr->oppose_cold > v)
                 return false;
-        } else if (!is_oppose_cold(creature_ptr)) {
+        } else if (!is_oppose_cold(player_ptr)) {
             msg_print(_("冷気への耐性がついた気がする！", "You feel resistant to cold!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->oppose_cold && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU)) {
+        if (player_ptr->oppose_cold && !music_singing(player_ptr, MUSIC_RESIST) && !(player_ptr->special_defense & KATA_MUSOU)) {
             msg_print(_("冷気への耐性が薄れた気がする。", "You feel less resistant to cold."));
             notice = true;
         }
     }
 
-    creature_ptr->oppose_cold = v;
+    player_ptr->oppose_cold = v;
 
     if (!notice)
         return false;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -180,65 +180,65 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_pois(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if ((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44))
+    if ((player_ptr->pclass == CLASS_NINJA) && (player_ptr->lev > 44))
         v = 1;
-    if (creature_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (creature_ptr->oppose_pois && !do_dec) {
-            if (creature_ptr->oppose_pois > v)
+        if (player_ptr->oppose_pois && !do_dec) {
+            if (player_ptr->oppose_pois > v)
                 return false;
-        } else if (!is_oppose_pois(creature_ptr)) {
+        } else if (!is_oppose_pois(player_ptr)) {
             msg_print(_("毒への耐性がついた気がする！", "You feel resistant to poison!"));
             notice = true;
         }
     } else {
-        if (creature_ptr->oppose_pois && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU)) {
+        if (player_ptr->oppose_pois && !music_singing(player_ptr, MUSIC_RESIST) && !(player_ptr->special_defense & KATA_MUSOU)) {
             msg_print(_("毒への耐性が薄れた気がする。", "You feel less resistant to poison."));
             notice = true;
         }
     }
 
-    creature_ptr->oppose_pois = v;
+    player_ptr->oppose_pois = v;
     if (!notice)
         return false;
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    handle_stuff(player_ptr);
     return true;
 }
 
-bool is_oppose_acid(player_type *creature_ptr)
+bool is_oppose_acid(player_type *player_ptr)
 {
-    return creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
+    return player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST) || (player_ptr->special_defense & KATA_MUSOU);
 }
 
-bool is_oppose_elec(player_type *creature_ptr)
+bool is_oppose_elec(player_type *player_ptr)
 {
-    return creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
+    return player_ptr->oppose_elec || music_singing(player_ptr, MUSIC_RESIST) || (player_ptr->special_defense & KATA_MUSOU);
 }
 
-bool is_oppose_fire(player_type *creature_ptr)
+bool is_oppose_fire(player_type *player_ptr)
 {
-    return creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)
-        || (creature_ptr->special_defense & KATA_MUSOU || (creature_ptr->mimic_form == MIMIC_DEMON)
-            || (PlayerRace(creature_ptr).equals(player_race_type::BALROG) && creature_ptr->lev > 44));
+    return player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)
+        || (player_ptr->special_defense & KATA_MUSOU || (player_ptr->mimic_form == MIMIC_DEMON)
+            || (PlayerRace(player_ptr).equals(player_race_type::BALROG) && player_ptr->lev > 44));
 }
 
-bool is_oppose_cold(player_type *creature_ptr)
+bool is_oppose_cold(player_type *player_ptr)
 {
-    return creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
+    return player_ptr->oppose_cold || music_singing(player_ptr, MUSIC_RESIST) || (player_ptr->special_defense & KATA_MUSOU);
 }
 
-bool is_oppose_pois(player_type *creature_ptr)
+bool is_oppose_pois(player_type *player_ptr)
 {
-    return creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST)
-        || (creature_ptr->special_defense & KATA_MUSOU || (creature_ptr->pclass == CLASS_NINJA && creature_ptr->lev > 44));
+    return player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST)
+        || (player_ptr->special_defense & KATA_MUSOU || (player_ptr->pclass == CLASS_NINJA && player_ptr->lev > 44));
 }

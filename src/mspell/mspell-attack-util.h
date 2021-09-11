@@ -39,4 +39,4 @@ typedef struct msa_type {
 } msa_type;
 
 struct player_type;
-msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx);
+msa_type *initialize_msa_type(player_type *player_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx);

@@ -8,7 +8,7 @@ struct object_type;
 struct player_type;
 class ShieldEnchanter : AbstractProtectorEnchanter {
 public:
-    ShieldEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power);
+    ShieldEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power);
     ShieldEnchanter() = delete;
     virtual ~ShieldEnchanter() = default;
     void apply_magic() override;
@@ -20,5 +20,5 @@ protected:
     void give_cursed() override{};
 
 private:
-    player_type *owner_ptr;
+    player_type *player_ptr;
 };

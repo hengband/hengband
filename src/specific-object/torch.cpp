@@ -71,19 +71,19 @@ void torch_lost_fuel(object_type *o_ptr)
  * @details
  * SWD: Experimental modification: multiple light sources have additive effect.
  */
-void update_lite_radius(player_type *creature_ptr)
+void update_lite_radius(player_type *player_ptr)
 {
-    creature_ptr->cur_lite = 0;
+    player_ptr->cur_lite = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
-        o_ptr = &creature_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         auto flgs = object_flags(o_ptr);
 
         if (!o_ptr->k_idx)
             continue;
 
         if (o_ptr->name2 == EGO_LITE_SHINE)
-            creature_ptr->cur_lite++;
+            player_ptr->cur_lite++;
 
         if (flgs.has_not(TR_DARK_SOURCE)) {
             if (o_ptr->tval == TV_LITE) {
@@ -114,29 +114,29 @@ void update_lite_radius(player_type *creature_ptr)
         if (flgs.has(TR_LITE_M3))
             rad -= 3;
 
-        creature_ptr->cur_lite += rad;
+        player_ptr->cur_lite += rad;
     }
 
-    if (d_info[creature_ptr->dungeon_idx].flags.has(DF::DARKNESS) && creature_ptr->cur_lite > 1)
-        creature_ptr->cur_lite = 1;
+    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS) && player_ptr->cur_lite > 1)
+        player_ptr->cur_lite = 1;
 
-    if (creature_ptr->cur_lite <= 0 && creature_ptr->lite)
-        creature_ptr->cur_lite++;
+    if (player_ptr->cur_lite <= 0 && player_ptr->lite)
+        player_ptr->cur_lite++;
 
-    if (creature_ptr->cur_lite > 14)
-        creature_ptr->cur_lite = 14;
+    if (player_ptr->cur_lite > 14)
+        player_ptr->cur_lite = 14;
 
-    if (creature_ptr->cur_lite < 0)
-        creature_ptr->cur_lite = 0;
+    if (player_ptr->cur_lite < 0)
+        player_ptr->cur_lite = 0;
 
-    if (creature_ptr->old_lite == creature_ptr->cur_lite)
+    if (player_ptr->old_lite == player_ptr->cur_lite)
         return;
 
-    creature_ptr->update |= PU_LITE | PU_MON_LITE | PU_MONSTERS;
-    creature_ptr->old_lite = creature_ptr->cur_lite;
+    player_ptr->update |= PU_LITE | PU_MON_LITE | PU_MONSTERS;
+    player_ptr->old_lite = player_ptr->cur_lite;
 
-    if ((creature_ptr->cur_lite > 0) && (creature_ptr->special_defense & NINJA_S_STEALTH))
-        set_superstealth(creature_ptr, false);
+    if ((player_ptr->cur_lite > 0) && (player_ptr->special_defense & NINJA_S_STEALTH))
+        set_superstealth(player_ptr, false);
 }
 
 /*
@@ -163,13 +163,13 @@ void update_lite_radius(player_type *creature_ptr)
  *                 ***         *****
  *                              ***
  */
-void update_lite(player_type *subject_ptr)
+void update_lite(player_type *player_ptr)
 {
     // 前回照らされていた座標たちを格納する配列。
     std::vector<Pos2D> points;
 
-    POSITION p = subject_ptr->cur_lite;
-    floor_type *const floor_ptr = subject_ptr->current_floor_ptr;
+    POSITION p = player_ptr->cur_lite;
+    floor_type *const floor_ptr = player_ptr->current_floor_ptr;
 
     // 前回照らされていた座標たちを記録。
     for (int i = 0; i < floor_ptr->lite_n; i++) {
@@ -184,40 +184,40 @@ void update_lite(player_type *subject_ptr)
 
     floor_ptr->lite_n = 0;
     if (p >= 1) {
-        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x);
-        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x);
-        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x);
-        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x + 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x - 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1);
+        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x);
+        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x);
+        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x);
+        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x + 1);
+        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x - 1);
+        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x + 1);
+        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x - 1);
+        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x + 1);
+        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x - 1);
     }
 
     if (p >= 2) {
-        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x + 1);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x - 1);
+        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x)) {
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x);
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x + 1);
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x + 1);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x - 1);
+        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x)) {
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x);
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x + 1);
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y, subject_ptr->x + 1)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x + 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y, player_ptr->x + 1)) {
+            cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x + 2);
+            cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x + 2);
+            cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y, subject_ptr->x - 1)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x - 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y, player_ptr->x - 1)) {
+            cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x - 2);
+            cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x - 2);
+            cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x - 2);
         }
     }
 
@@ -226,38 +226,38 @@ void update_lite(player_type *subject_ptr)
         if (p > 14)
             p = 14;
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x + 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x + 1))
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x + 2);
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x - 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x - 1))
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x - 2);
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x + 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x + 1))
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x + 2);
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x - 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x - 1))
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x - 2);
 
-        POSITION min_y = subject_ptr->y - p;
+        POSITION min_y = player_ptr->y - p;
         if (min_y < 0)
             min_y = 0;
 
-        POSITION max_y = subject_ptr->y + p;
+        POSITION max_y = player_ptr->y + p;
         if (max_y > floor_ptr->height - 1)
             max_y = floor_ptr->height - 1;
 
-        POSITION min_x = subject_ptr->x - p;
+        POSITION min_x = player_ptr->x - p;
         if (min_x < 0)
             min_x = 0;
 
-        POSITION max_x = subject_ptr->x + p;
+        POSITION max_x = player_ptr->x + p;
         if (max_x > floor_ptr->width - 1)
             max_x = floor_ptr->width - 1;
 
         for (POSITION y = min_y; y <= max_y; y++) {
             for (POSITION x = min_x; x <= max_x; x++) {
-                int dy = (subject_ptr->y > y) ? (subject_ptr->y - y) : (y - subject_ptr->y);
-                int dx = (subject_ptr->x > x) ? (subject_ptr->x - x) : (x - subject_ptr->x);
+                int dy = (player_ptr->y > y) ? (player_ptr->y - y) : (y - player_ptr->y);
+                int dx = (player_ptr->x > x) ? (player_ptr->x - x) : (x - player_ptr->x);
                 if ((dy <= 2) && (dx <= 2))
                     continue;
 
@@ -291,5 +291,5 @@ void update_lite(player_type *subject_ptr)
         cave_redraw_later(floor_ptr, y, x);
     }
 
-    subject_ptr->update |= PU_DELAY_VIS;
+    player_ptr->update |= PU_DELAY_VIS;
 }

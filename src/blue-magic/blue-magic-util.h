@@ -20,6 +20,6 @@ typedef struct bmc_type {
 } bmc_type;
 
 struct player_type;
-typedef PLAYER_LEVEL (*get_pseudo_monstetr_level_pf)(player_type *caster_ptr);
+typedef PLAYER_LEVEL (*get_pseudo_monstetr_level_pf)(player_type *player_ptr);
 bmc_type *initialize_blue_magic_type(
-    player_type *caster_ptr, bmc_type *bmc_ptr, const bool success, get_pseudo_monstetr_level_pf get_pseudo_monstetr_level);
+    player_type *player_ptr, bmc_type *bmc_ptr, const bool success, get_pseudo_monstetr_level_pf get_pseudo_monstetr_level);

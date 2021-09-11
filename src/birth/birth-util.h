@@ -13,5 +13,5 @@ enum birth_kind
 
 struct player_type;
 void birth_quit(void);
-void show_help(player_type* creature_ptr, concptr helpfile);
-void birth_help_option(player_type *creature_ptr, char c, birth_kind bk);
+void show_help(player_type* player_ptr, concptr helpfile);
+void birth_help_option(player_type *player_ptr, char c, birth_kind bk);

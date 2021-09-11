@@ -8,57 +8,57 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
+void add_cheat_remove_flags_others(player_type *player_ptr, msr_type *msr_ptr)
 {
-    if (has_resist_neth(target_ptr))
+    if (has_resist_neth(player_ptr))
         msr_ptr->smart.set(SM::RES_NETH);
 
-    if (has_resist_lite(target_ptr))
+    if (has_resist_lite(player_ptr))
         msr_ptr->smart.set(SM::RES_LITE);
 
-    if (has_resist_dark(target_ptr))
+    if (has_resist_dark(player_ptr))
         msr_ptr->smart.set(SM::RES_DARK);
 
-    if (has_resist_fear(target_ptr))
+    if (has_resist_fear(player_ptr))
         msr_ptr->smart.set(SM::RES_FEAR);
 
-    if (has_resist_conf(target_ptr))
+    if (has_resist_conf(player_ptr))
         msr_ptr->smart.set(SM::RES_CONF);
 
-    if (has_resist_chaos(target_ptr))
+    if (has_resist_chaos(player_ptr))
         msr_ptr->smart.set(SM::RES_CHAOS);
 
-    if (has_resist_disen(target_ptr))
+    if (has_resist_disen(player_ptr))
         msr_ptr->smart.set(SM::RES_DISEN);
 
-    if (has_resist_blind(target_ptr))
+    if (has_resist_blind(player_ptr))
         msr_ptr->smart.set(SM::RES_BLIND);
 
-    if (has_resist_nexus(target_ptr))
+    if (has_resist_nexus(player_ptr))
         msr_ptr->smart.set(SM::RES_NEXUS);
 
-    if (has_resist_sound(target_ptr))
+    if (has_resist_sound(player_ptr))
         msr_ptr->smart.set(SM::RES_SOUND);
 
-    if (has_resist_shard(target_ptr))
+    if (has_resist_shard(player_ptr))
         msr_ptr->smart.set(SM::RES_SHARD);
 
-    if (has_reflect(target_ptr))
+    if (has_reflect(player_ptr))
         msr_ptr->smart.set(SM::IMM_REFLECT);
 
-    if (target_ptr->free_act)
+    if (player_ptr->free_act)
         msr_ptr->smart.set(SM::IMM_FREE);
 
-    if (!target_ptr->msp)
+    if (!player_ptr->msp)
         msr_ptr->smart.set(SM::IMM_MANA);
 }
 
-static void check_nether_resistance(player_type *target_ptr, msr_type *msr_ptr)
+static void check_nether_resistance(player_type *player_ptr, msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has_not(SM::RES_NETH))
         return;
 
-    if (PlayerRace(target_ptr).equals(player_race_type::SPECTRE)) {
+    if (PlayerRace(player_ptr).equals(player_race_type::SPECTRE)) {
         msr_ptr->ability_flags.reset(RF_ABILITY::BR_NETH);
         msr_ptr->ability_flags.reset(RF_ABILITY::BA_NETH);
         msr_ptr->ability_flags.reset(RF_ABILITY::BO_NETH);
@@ -87,12 +87,12 @@ static void check_lite_resistance(msr_type *msr_ptr)
         msr_ptr->ability_flags.reset(RF_ABILITY::BA_LITE);
 }
 
-static void check_dark_resistance(player_type *target_ptr, msr_type *msr_ptr)
+static void check_dark_resistance(player_type *player_ptr, msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has_not(SM::RES_DARK))
         return;
 
-    if (player_race_has_flag(target_ptr, TR_IM_DARK)) {
+    if (player_race_has_flag(player_ptr, TR_IM_DARK)) {
         msr_ptr->ability_flags.reset(RF_ABILITY::BR_DARK);
         msr_ptr->ability_flags.reset(RF_ABILITY::BA_DARK);
         return;
@@ -174,11 +174,11 @@ static void check_reflection(msr_type *msr_ptr)
         msr_ptr->ability_flags.reset(RF_ABILITY::MISSILE);
 }
 
-void check_high_resistances(player_type *target_ptr, msr_type *msr_ptr)
+void check_high_resistances(player_type *player_ptr, msr_type *msr_ptr)
 {
-    check_nether_resistance(target_ptr, msr_ptr);
+    check_nether_resistance(player_ptr, msr_ptr);
     check_lite_resistance(msr_ptr);
-    check_dark_resistance(target_ptr, msr_ptr);
+    check_dark_resistance(player_ptr, msr_ptr);
     if (msr_ptr->smart.has(SM::RES_FEAR))
         msr_ptr->ability_flags.reset(RF_ABILITY::SCARE);
 

@@ -13,78 +13,78 @@
 
 /*!
  * @brief プレイヤーの職業/種族による免疫フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param flags フラグを保管する配列
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void player_immunity(player_type *creature_ptr, TrFlags &flags)
+void player_immunity(player_type *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    if (player_race_has_flag(creature_ptr, TR_IM_ACID))
+    if (player_race_has_flag(player_ptr, TR_IM_ACID))
         flags.set(TR_RES_ACID);
-    if (player_race_has_flag(creature_ptr, TR_IM_COLD))
+    if (player_race_has_flag(player_ptr, TR_IM_COLD))
         flags.set(TR_RES_COLD);
-    if (player_race_has_flag(creature_ptr, TR_IM_ELEC))
+    if (player_race_has_flag(player_ptr, TR_IM_ELEC))
         flags.set(TR_RES_ELEC);
-    if (player_race_has_flag(creature_ptr, TR_IM_FIRE))
+    if (player_race_has_flag(player_ptr, TR_IM_FIRE))
         flags.set(TR_RES_FIRE);
 
-    if (PlayerRace(creature_ptr).equals(player_race_type::SPECTRE))
+    if (PlayerRace(player_ptr).equals(player_race_type::SPECTRE))
         flags.set(TR_RES_NETHER);
-    if (player_race_has_flag(creature_ptr, TR_IM_DARK))
+    if (player_race_has_flag(player_ptr, TR_IM_DARK))
         flags.set(TR_RES_DARK);
 
-    if (creature_ptr->pclass == CLASS_ELEMENTALIST) {
-        if (has_element_resist(creature_ptr, ElementRealm::FIRE, 30))
+    if (player_ptr->pclass == CLASS_ELEMENTALIST) {
+        if (has_element_resist(player_ptr, ElementRealm::FIRE, 30))
             flags.set(TR_RES_FIRE);
-        if (has_element_resist(creature_ptr, ElementRealm::SKY, 30))
+        if (has_element_resist(player_ptr, ElementRealm::SKY, 30))
             flags.set(TR_RES_ELEC);
-        if (has_element_resist(creature_ptr, ElementRealm::SEA, 30))
+        if (has_element_resist(player_ptr, ElementRealm::SEA, 30))
             flags.set(TR_RES_ACID);
-        if (has_element_resist(creature_ptr, ElementRealm::ICE, 30))
+        if (has_element_resist(player_ptr, ElementRealm::ICE, 30))
             flags.set(TR_RES_COLD);
     }
 }
 
 /*!
  * @brief プレイヤーの一時的魔法効果による免疫フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param flags フラグを保管する配列
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void tim_player_immunity(player_type *creature_ptr, TrFlags &flags)
+void tim_player_immunity(player_type *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    if (creature_ptr->special_defense & DEFENSE_ACID)
+    if (player_ptr->special_defense & DEFENSE_ACID)
         flags.set(TR_RES_ACID);
-    if (creature_ptr->special_defense & DEFENSE_ELEC)
+    if (player_ptr->special_defense & DEFENSE_ELEC)
         flags.set(TR_RES_ELEC);
-    if (creature_ptr->special_defense & DEFENSE_FIRE)
+    if (player_ptr->special_defense & DEFENSE_FIRE)
         flags.set(TR_RES_FIRE);
-    if (creature_ptr->special_defense & DEFENSE_COLD)
+    if (player_ptr->special_defense & DEFENSE_COLD)
         flags.set(TR_RES_COLD);
-    if (creature_ptr->wraith_form)
+    if (player_ptr->wraith_form)
         flags.set(TR_RES_DARK);
 }
 
 /*!
  * @brief プレイヤーの装備による免疫フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param flags フラグを保管する配列
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
+void known_obj_immunity(player_type *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
-        o_ptr = &creature_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -102,30 +102,30 @@ void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
 
 /*!
  * @brief プレイヤーの種族による弱点フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param flags フラグを保管する配列
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void player_vulnerability_flags(player_type *creature_ptr, TrFlags &flags)
+void player_vulnerability_flags(player_type *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    if (creature_ptr->muta.has(MUTA::VULN_ELEM) || (creature_ptr->special_defense & KATA_KOUKIJIN)) {
+    if (player_ptr->muta.has(MUTA::VULN_ELEM) || (player_ptr->special_defense & KATA_KOUKIJIN)) {
         flags.set(TR_RES_ACID);
         flags.set(TR_RES_ELEC);
         flags.set(TR_RES_FIRE);
         flags.set(TR_RES_COLD);
     }
 
-    if (player_race_has_flag(creature_ptr, TR_VUL_ACID))
+    if (player_race_has_flag(player_ptr, TR_VUL_ACID))
         flags.set(TR_RES_ACID);
-    if (player_race_has_flag(creature_ptr, TR_VUL_COLD))
+    if (player_race_has_flag(player_ptr, TR_VUL_COLD))
         flags.set(TR_RES_COLD);
-    if (player_race_has_flag(creature_ptr, TR_VUL_ELEC))
+    if (player_race_has_flag(player_ptr, TR_VUL_ELEC))
         flags.set(TR_RES_ELEC);
-    if (player_race_has_flag(creature_ptr, TR_VUL_FIRE))
+    if (player_race_has_flag(player_ptr, TR_VUL_FIRE))
         flags.set(TR_RES_FIRE);
-    if (player_race_has_flag(creature_ptr, TR_VUL_LITE))
+    if (player_race_has_flag(player_ptr, TR_VUL_LITE))
         flags.set(TR_RES_LITE);
 }

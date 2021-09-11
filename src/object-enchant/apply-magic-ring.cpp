@@ -18,13 +18,13 @@
 
 /*
  * @brief コンストラクタ
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
  */
-RingEnchanter::RingEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
-    : owner_ptr(owner_ptr)
+RingEnchanter::RingEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power)
+    : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , level(level)
     , power(power)
@@ -34,7 +34,7 @@ RingEnchanter::RingEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH l
 /*!
  * @brief 指輪に生成ランクごとの強化を与える
  * Apply magic to an item known to be a "ring" or "amulet"
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
@@ -50,7 +50,7 @@ void RingEnchanter::apply_magic()
     this->enchant();
     if ((one_in_(400) && (this->power > 0) && !this->o_ptr->is_cursed() && (this->level > 79)) || (this->power > 2)) {
         this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
-        become_random_artifact(this->owner_ptr, this->o_ptr, false);
+        become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;
     }
 

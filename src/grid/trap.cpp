@@ -162,12 +162,12 @@ void init_normal_traps(void)
  * Actually, it is not this routine, but the "trap instantiation"\n
  * code, which should also check for "trap doors" on quest levels.\n
  */
-FEAT_IDX choose_random_trap(player_type *trapped_ptr)
+FEAT_IDX choose_random_trap(player_type *player_ptr)
 {
     FEAT_IDX feat;
 
     /* Pick a trap */
-    floor_type *floor_ptr = trapped_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         /* Hack -- pick a trap */
         feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
@@ -177,7 +177,7 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
             break;
 
         /* Hack -- no trap doors on special levels */
-        if (floor_ptr->inside_arena || quest_number(trapped_ptr, floor_ptr->dun_level))
+        if (floor_ptr->inside_arena || quest_number(player_ptr, floor_ptr->dun_level))
             continue;
 
         /* Hack -- no trap doors on the deepest level */
@@ -197,19 +197,19 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
  * @param y 秘匿したいマスのY座標
  * @param x 秘匿したいマスのX座標
  */
-void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
+void disclose_grid(player_type *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     if (g_ptr->cave_has_flag(FF::SECRET)) {
         /* No longer hidden */
-        cave_alter_feat(trapped_ptr, y, x, FF::SECRET);
+        cave_alter_feat(player_ptr, y, x, FF::SECRET);
     } else if (g_ptr->mimic) {
         /* No longer hidden */
         g_ptr->mimic = 0;
 
-        note_spot(trapped_ptr, y, x);
-        lite_spot(trapped_ptr, y, x);
+        note_spot(player_ptr, y, x);
+        lite_spot(player_ptr, y, x);
     }
 }
 
@@ -223,9 +223,9 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
  * when they are "discovered" (by detecting them or setting them off),\n
  * the trap is "instantiated" as a visible, "typed", trap.\n
  */
-void place_trap(player_type *trapped_ptr, POSITION y, POSITION x)
+void place_trap(player_type *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = trapped_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
     /* Paranoia -- verify location */
@@ -238,7 +238,7 @@ void place_trap(player_type *trapped_ptr, POSITION y, POSITION x)
 
     /* Place an invisible trap */
     g_ptr->mimic = g_ptr->feat;
-    g_ptr->feat = choose_random_trap(trapped_ptr);
+    g_ptr->feat = choose_random_trap(player_ptr);
 }
 
 /*!
@@ -250,7 +250,7 @@ void place_trap(player_type *trapped_ptr, POSITION y, POSITION x)
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match trap power against player armor.
  */
-static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
+static int check_hit_from_monster_to_player(player_type *player_ptr, int power)
 {
     int k;
     ARMOUR_CLASS ac;
@@ -262,7 +262,7 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
     if (k < 10)
         return (k < 5);
 
-    if (target_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->pseikaku == PERSONALITY_LAZY)
         if (one_in_(20))
             return true;
 
@@ -271,7 +271,7 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
         return false;
 
     /* Total armor */
-    ac = target_ptr->ac + target_ptr->to_a;
+    ac = player_ptr->ac + player_ptr->to_a;
 
     /* Power competes against Armor */
     if (randint1(power) > ((ac * 3) / 4))
@@ -285,7 +285,7 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
  * @brief 落とし穴系トラップの判定とプレイヤーの被害処理
  * @param trap_feat_type トラップの種別ID
  */
-static void hit_trap_pit(player_type *trapped_ptr, enum trap_type trap_feat_type)
+static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
 {
     HIT_POINT dam;
     concptr trap_name = "";
@@ -307,7 +307,7 @@ static void hit_trap_pit(player_type *trapped_ptr, enum trap_type trap_feat_type
         return;
     }
 
-    if (trapped_ptr->levitation) {
+    if (player_ptr->levitation) {
         msg_format(_("%sを飛び越えた。", "You fly over %s."), trap_name);
         return;
     }
@@ -322,33 +322,33 @@ static void hit_trap_pit(player_type *trapped_ptr, enum trap_type trap_feat_type
         msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
 
         dam = dam * 2;
-        (void)set_cut(trapped_ptr, trapped_ptr->cut + randint1(dam));
+        (void)set_cut(player_ptr, player_ptr->cut + randint1(dam));
 
         if (trap_feat_type == TRAP_POISON_PIT) {
-            if (has_resist_pois(trapped_ptr) || is_oppose_pois(trapped_ptr)) {
+            if (has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) {
                 msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
             } else {
                 dam = dam * 2;
-                (void)set_poisoned(trapped_ptr, trapped_ptr->poisoned + randint1(dam));
+                (void)set_poisoned(player_ptr, player_ptr->poisoned + randint1(dam));
             }
         }
     }
 
-    take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, trap_name);
+    take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
 }
 
 /*!
  * @brief ダーツ系トラップ（通常ダメージ）の判定とプレイヤーの被害処理
  * @return ダーツが命中した場合TRUEを返す
  */
-static bool hit_trap_dart(player_type *target_ptr)
+static bool hit_trap_dart(player_type *player_ptr)
 {
     bool hit = false;
 
-    if (check_hit_from_monster_to_player(target_ptr, 125)) {
+    if (check_hit_from_monster_to_player(player_ptr, 125)) {
         msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
-        take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
-        if (!check_multishadow(target_ptr))
+        take_hit(player_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
+        if (!check_multishadow(player_ptr))
             hit = true;
     } else {
         msg_print(_("小さなダーツが飛んできた！が、運良く当たらなかった。", "A small dart barely misses you."));
@@ -361,20 +361,20 @@ static bool hit_trap_dart(player_type *target_ptr)
  * @brief ダーツ系トラップ（通常ダメージ＋能力値減少）の判定とプレイヤーの被害処理
  * @param stat 低下する能力値ID
  */
-static void hit_trap_lose_stat(player_type *target_ptr, int stat)
+static void hit_trap_lose_stat(player_type *player_ptr, int stat)
 {
-    if (hit_trap_dart(target_ptr)) {
-        do_dec_stat(target_ptr, stat);
+    if (hit_trap_dart(player_ptr)) {
+        do_dec_stat(player_ptr, stat);
     }
 }
 
 /*!
  * @brief ダーツ系トラップ（通常ダメージ＋減速）の判定とプレイヤーの被害処理
  */
-static void hit_trap_slow(player_type *target_ptr)
+static void hit_trap_slow(player_type *player_ptr)
 {
-    if (hit_trap_dart(target_ptr)) {
-        set_slow(target_ptr, target_ptr->slow + randint0(20) + 20, false);
+    if (hit_trap_dart(player_ptr)) {
+        set_slow(player_ptr, player_ptr->slow + randint0(20) + 20, false);
     }
 }
 
@@ -385,11 +385,11 @@ static void hit_trap_slow(player_type *target_ptr)
  * @param set_status 状態異常を指定する関数ポインタ
  * @param turn_aux 状態異常の追加ターン量
  */
-static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr trap_message, bool resist, bool (*set_status)(player_type *, IDX), IDX turn_aux)
+static void hit_trap_set_abnormal_status_p(player_type *player_ptr, concptr trap_message, bool resist, bool (*set_status)(player_type *, IDX), IDX turn_aux)
 {
     msg_print(trap_message);
     if (!resist) {
-        set_status(trapped_ptr, turn_aux);
+        set_status(player_ptr, turn_aux);
     }
 }
 
@@ -399,44 +399,44 @@ static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr tra
  * @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
  * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
-void hit_trap(player_type *trapped_ptr, bool break_trap)
+void hit_trap(player_type *player_ptr, bool break_trap)
 {
     int i, num, dam;
-    POSITION x = trapped_ptr->x, y = trapped_ptr->y;
-    grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
+    POSITION x = player_ptr->x, y = player_ptr->y;
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     enum trap_type trap_feat_type = f_ptr->flags.has(FF::TRAP) ? (enum trap_type)f_ptr->subtype : NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
-    disturb(trapped_ptr, false, true);
+    disturb(player_ptr, false, true);
 
-    cave_alter_feat(trapped_ptr, y, x, FF::HIT_TRAP);
+    cave_alter_feat(player_ptr, y, x, FF::HIT_TRAP);
 
     /* Analyze */
     switch (trap_feat_type) {
     case TRAP_TRAPDOOR: {
-        if (trapped_ptr->levitation) {
+        if (player_ptr->levitation) {
             msg_print(_("落とし戸を飛び越えた。", "You fly over a trap door."));
         } else {
             msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
-            if (is_echizen(trapped_ptr))
+            if (is_echizen(player_ptr))
                 msg_print(_("くっそ～！", ""));
-            else if (is_chargeman(trapped_ptr))
+            else if (is_chargeman(player_ptr))
                 msg_print(_("ジュラル星人の仕業に違いない！", ""));
 
             sound(SOUND_FALL);
             dam = damroll(2, 8);
             name = _("落とし戸", "a trap door");
 
-            take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, name);
+            take_hit(player_ptr, DAMAGE_NOESCAPE, dam, name);
 
             /* Still alive and autosave enabled */
-            if (autosave_l && (trapped_ptr->chp >= 0))
-                do_cmd_save_game(trapped_ptr, true);
+            if (autosave_l && (player_ptr->chp >= 0))
+                do_cmd_save_game(player_ptr, true);
 
-            exe_write_diary(trapped_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
-            prepare_change_floor_mode(trapped_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-            trapped_ptr->leaving = true;
+            exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
+            prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+            player_ptr->leaving = true;
         }
         break;
     }
@@ -444,7 +444,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     case TRAP_PIT:
     case TRAP_SPIKED_PIT:
     case TRAP_POISON_PIT: {
-        hit_trap_pit(trapped_ptr, trap_feat_type);
+        hit_trap_pit(player_ptr, trap_feat_type);
         break;
     }
 
@@ -452,16 +452,16 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
         msg_print(_("何かがピカッと光った！", "There is a flash of shimmering light!"));
         num = 2 + randint1(3);
         for (i = 0; i < num; i++) {
-            (void)summon_specific(trapped_ptr, 0, y, x, trapped_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            (void)summon_specific(player_ptr, 0, y, x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
 
-        if (trapped_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
+        if (player_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
         {
             bool stop_ty = false;
             int count = 0;
 
             do {
-                stop_ty = activate_ty_curse(trapped_ptr, stop_ty, &count);
+                stop_ty = activate_ty_curse(player_ptr, stop_ty, &count);
             } while (one_in_(6));
         }
         break;
@@ -469,74 +469,74 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
     case TRAP_TELEPORT: {
         msg_print(_("テレポート・トラップにひっかかった！", "You hit a teleport trap!"));
-        teleport_player(trapped_ptr, 100, TELEPORT_PASSIVE);
+        teleport_player(player_ptr, 100, TELEPORT_PASSIVE);
         break;
     }
 
     case TRAP_FIRE: {
         msg_print(_("炎に包まれた！", "You are enveloped in flames!"));
         dam = damroll(4, 6);
-        (void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), false);
+        (void)fire_dam(player_ptr, dam, _("炎のトラップ", "a fire trap"), false);
         break;
     }
 
     case TRAP_ACID: {
         msg_print(_("酸が吹きかけられた！", "You are splashed with acid!"));
         dam = damroll(4, 6);
-        (void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), false);
+        (void)acid_dam(player_ptr, dam, _("酸のトラップ", "an acid trap"), false);
         break;
     }
 
     case TRAP_SLOW: {
-        hit_trap_slow(trapped_ptr);
+        hit_trap_slow(player_ptr);
         break;
     }
 
     case TRAP_LOSE_STR: {
-        hit_trap_lose_stat(trapped_ptr, A_STR);
+        hit_trap_lose_stat(player_ptr, A_STR);
         break;
     }
 
     case TRAP_LOSE_DEX: {
-        hit_trap_lose_stat(trapped_ptr, A_DEX);
+        hit_trap_lose_stat(player_ptr, A_DEX);
         break;
     }
 
     case TRAP_LOSE_CON: {
-        hit_trap_lose_stat(trapped_ptr, A_CON);
+        hit_trap_lose_stat(player_ptr, A_CON);
         break;
     }
 
     case TRAP_BLIND: {
-        hit_trap_set_abnormal_status_p(trapped_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), (has_resist_blind(trapped_ptr) != 0),
-            set_blind, trapped_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
+        hit_trap_set_abnormal_status_p(player_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), (has_resist_blind(player_ptr) != 0),
+            set_blind, player_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
         break;
     }
 
     case TRAP_CONFUSE: {
-        hit_trap_set_abnormal_status_p(trapped_ptr, _("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
-            (has_resist_conf(trapped_ptr) != 0), set_confused, trapped_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
+        hit_trap_set_abnormal_status_p(player_ptr, _("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
+            (has_resist_conf(player_ptr) != 0), set_confused, player_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
         break;
     }
 
     case TRAP_POISON: {
-        hit_trap_set_abnormal_status_p(trapped_ptr, _("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
-            has_resist_pois(trapped_ptr) || is_oppose_pois(trapped_ptr), set_poisoned, trapped_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+        hit_trap_set_abnormal_status_p(player_ptr, _("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
+            has_resist_pois(player_ptr) || is_oppose_pois(player_ptr), set_poisoned, player_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
         break;
     }
 
     case TRAP_SLEEP: {
         msg_print(_("奇妙な白い霧に包まれた！", "A strange white mist surrounds you!"));
-        if (!trapped_ptr->free_act) {
+        if (!player_ptr->free_act) {
             msg_print(_("あなたは眠りに就いた。", "You fall asleep."));
 
             if (ironman_nightmare) {
                 msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
 
                 /* Have some nightmares */
-                sanity_blast(trapped_ptr, nullptr, false);
+                sanity_blast(player_ptr, nullptr, false);
             }
-            (void)set_paralyzed(trapped_ptr, trapped_ptr->paralyzed + randint0(10) + 5);
+            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(10) + 5);
         }
         break;
     }
@@ -544,7 +544,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     case TRAP_TRAPS: {
         msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
         /* Make some new traps */
-        project(trapped_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
+        project(player_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
 
         break;
     }
@@ -552,17 +552,17 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     case TRAP_ALARM: {
         msg_print(_("けたたましい音が鳴り響いた！", "An alarm sounds!"));
 
-        aggravate_monsters(trapped_ptr, 0);
+        aggravate_monsters(player_ptr, 0);
 
         break;
     }
 
     case TRAP_OPEN: {
         msg_print(_("大音響と共にまわりの壁が崩れた！", "Suddenly, surrounding walls are opened!"));
-        (void)project(trapped_ptr, 0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
-        (void)project(trapped_ptr, 0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
-        (void)project(trapped_ptr, 0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
-        aggravate_monsters(trapped_ptr, 0);
+        (void)project(player_ptr, 0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        aggravate_monsters(player_ptr, 0);
 
         break;
     }
@@ -575,30 +575,30 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
         msg_print(_("突然天界の戦争に巻き込まれた！", "Suddenly, you are surrounded by immotal beings!"));
 
         /* Summon Demons and Angels */
-        for (lev = trapped_ptr->current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16) {
+        for (lev = player_ptr->current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16) {
             num = levs[MIN(lev / 10, 9)];
             for (i = 0; i < num; i++) {
                 POSITION x1 = rand_spread(x, 7);
                 POSITION y1 = rand_spread(y, 5);
 
-                if (!in_bounds(trapped_ptr->current_floor_ptr, y1, x1))
+                if (!in_bounds(player_ptr->current_floor_ptr, y1, x1))
                     continue;
 
                 /* Require line of projection */
-                if (!projectable(trapped_ptr, trapped_ptr->y, trapped_ptr->x, y1, x1))
+                if (!projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1))
                     continue;
 
-                if (summon_specific(trapped_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
+                if (summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
                     evil_idx = hack_m_idx_ii;
 
-                if (summon_specific(trapped_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
+                if (summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
                     good_idx = hack_m_idx_ii;
                 }
 
                 /* Let them fight each other */
                 if (evil_idx && good_idx) {
-                    monster_type *evil_ptr = &trapped_ptr->current_floor_ptr->m_list[evil_idx];
-                    monster_type *good_ptr = &trapped_ptr->current_floor_ptr->m_list[good_idx];
+                    monster_type *evil_ptr = &player_ptr->current_floor_ptr->m_list[evil_idx];
+                    monster_type *good_ptr = &player_ptr->current_floor_ptr->m_list[good_idx];
                     evil_ptr->target_y = good_ptr->fy;
                     evil_ptr->target_x = good_ptr->fx;
                     good_ptr->target_y = evil_ptr->fy;
@@ -614,12 +614,12 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
         msg_print(_("突然壁から水が溢れ出した！ピラニアがいる！", "Suddenly, the room is filled with water with piranhas!"));
 
         /* Water fills room */
-        fire_ball_hide(trapped_ptr, GF_WATER_FLOW, 0, 1, 10);
+        fire_ball_hide(player_ptr, GF_WATER_FLOW, 0, 1, 10);
 
         /* Summon Piranhas */
-        num = 1 + trapped_ptr->current_floor_ptr->dun_level / 20;
+        num = 1 + player_ptr->current_floor_ptr->dun_level / 20;
         for (i = 0; i < num; i++) {
-            (void)summon_specific(trapped_ptr, 0, y, x, trapped_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
+            (void)summon_specific(player_ptr, 0, y, x, player_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
         }
         break;
     }
@@ -628,8 +628,8 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
         break;
     }
 
-    if (break_trap && is_trap(trapped_ptr, g_ptr->feat)) {
-        cave_alter_feat(trapped_ptr, y, x, FF::DISARM);
+    if (break_trap && is_trap(player_ptr, g_ptr->feat)) {
+        cave_alter_feat(player_ptr, y, x, FF::DISARM);
         msg_print(_("トラップを粉砕した。", "You destroyed the trap."));
     }
 }

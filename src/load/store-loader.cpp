@@ -118,12 +118,12 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 
 /*!
  * @brief 店舗情報を読み込む
- * @param creature_ptr プレイヤー情報への参照ポインタ(未使用)
+ * @param player_ptr プレイヤー情報への参照ポインタ(未使用)
  * @return 読み込み終わったら0、失敗したら22
  */
-errr load_store(player_type *creature_ptr)
+errr load_store(player_type *player_ptr)
 {
-    (void)creature_ptr;
+    (void)player_ptr;
 
     uint16_t tmp16u;
     rd_u16b(&tmp16u);
@@ -134,7 +134,7 @@ errr load_store(player_type *creature_ptr)
 
     for (int town_idx = 1; town_idx < town_count; town_idx++)
         for (int store_idx = 0; store_idx < store_count; store_idx++)
-            if (rd_store(creature_ptr, town_idx, store_idx))
+            if (rd_store(player_ptr, town_idx, store_idx))
                 return 22;
 
     return 0;

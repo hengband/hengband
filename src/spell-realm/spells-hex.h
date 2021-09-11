@@ -8,8 +8,8 @@ struct player_type;
 class RealmHex {
 public:
     RealmHex() = delete;
-    RealmHex(player_type *caster_ptr);
-    RealmHex(player_type *caster_ptr, monap_type *monap_ptr);
+    RealmHex(player_type *player_ptr);
+    RealmHex(player_type *player_ptr, monap_type *monap_ptr);
     virtual ~RealmHex() = default;
 
     bool stop_one_spell();
@@ -25,7 +25,7 @@ public:
     void thief_teleport();
 
 private:
-    player_type *caster_ptr;
+    player_type *player_ptr;
     std::vector<int> casting_spells;
     monap_type *monap_ptr = nullptr;
     

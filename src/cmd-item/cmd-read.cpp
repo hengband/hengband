@@ -23,24 +23,24 @@
  * @brief 読むコマンドのメインルーチン /
  * Eat some food (from the pack or floor)
  */
-void do_cmd_read_scroll(player_type *creature_ptr)
+void do_cmd_read_scroll(player_type *player_ptr)
 {
-    if (creature_ptr->wild_mode || cmd_limit_arena(creature_ptr))
+    if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(creature_ptr, ACTION_NONE);
+    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+        set_action(player_ptr, ACTION_NONE);
 
-    if (cmd_limit_blind(creature_ptr) || cmd_limit_confused(creature_ptr))
+    if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
         return;
 
     concptr q = _("どの巻物を読みますか? ", "Read which scroll? ");
     concptr s = _("読める巻物がない。", "You have no scrolls to read.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::is_readable));
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::is_readable));
     if (!o_ptr)
         return;
 
-    exe_read(creature_ptr, item, o_ptr->is_aware());
+    exe_read(player_ptr, item, o_ptr->is_aware());
 }

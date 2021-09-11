@@ -93,7 +93,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する（サブルーチン）
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dy 変更先のフロアY座標
  * @param dx 変更先のフロアX座標
  * Handle a request to change the current panel

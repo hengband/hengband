@@ -260,10 +260,10 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
 
 /*!
  * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 射程
  */
-int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }
+int get_max_range(player_type *player_ptr) { return player_ptr->phase_out ? 36 : 18; }
 
 /*
  * Convert a "grid" (G) into a "location" (Y)

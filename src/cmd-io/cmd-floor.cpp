@@ -21,12 +21,12 @@
  * @brief ターゲットを設定するコマンドのメインルーチン
  * Target command
  */
-void do_cmd_target(player_type *creature_ptr)
+void do_cmd_target(player_type *player_ptr)
 {
-    if (creature_ptr->wild_mode)
+    if (player_ptr->wild_mode)
         return;
 
-    if (target_set(creature_ptr, TARGET_KILL))
+    if (target_set(player_ptr, TARGET_KILL))
         msg_print(_("ターゲット決定。", "Target Selected."));
     else
         msg_print(_("ターゲット解除。", "Target Aborted."));
@@ -36,11 +36,11 @@ void do_cmd_target(player_type *creature_ptr)
  * @brief 周囲を見渡すコマンドのメインルーチン
  * Look command
  */
-void do_cmd_look(player_type *creature_ptr)
+void do_cmd_look(player_type *player_ptr)
 {
-    set_bits(creature_ptr->window_flags, PW_MONSTER_LIST | PW_FLOOR_ITEM_LIST);
-    handle_stuff(creature_ptr);
-    if (target_set(creature_ptr, TARGET_LOOK))
+    set_bits(player_ptr->window_flags, PW_MONSTER_LIST | PW_FLOOR_ITEM_LIST);
+    handle_stuff(player_ptr);
+    if (target_set(player_ptr, TARGET_LOOK))
         msg_print(_("ターゲット決定。", "Target Selected."));
 }
 
@@ -48,7 +48,7 @@ void do_cmd_look(player_type *creature_ptr)
  * @brief 位置を確認するコマンドのメインルーチン
  * Allow the player to examine other sectors on the map
  */
-void do_cmd_locate(player_type *creature_ptr)
+void do_cmd_locate(player_type *player_ptr)
 {
     DIRECTION dir;
     POSITION y1, x1;
@@ -82,15 +82,15 @@ void do_cmd_locate(player_type *creature_ptr)
         if (!dir)
             break;
 
-        if (change_panel(creature_ptr, ddy[dir], ddx[dir])) {
+        if (change_panel(player_ptr, ddy[dir], ddx[dir])) {
             y2 = panel_row_min;
             x2 = panel_col_min;
         }
     }
 
-    verify_panel(creature_ptr);
-    creature_ptr->update |= PU_MONSTERS;
-    creature_ptr->redraw |= PR_MAP;
-    creature_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-    handle_stuff(creature_ptr);
+    verify_panel(player_ptr);
+    player_ptr->update |= PU_MONSTERS;
+    player_ptr->redraw |= PR_MAP;
+    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    handle_stuff(player_ptr);
 }

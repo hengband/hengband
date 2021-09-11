@@ -13,5 +13,5 @@ struct ProjectResult {
 struct effect_player_type;
 struct player_type;
 ProjectResult project(
-    player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
+    player_type *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
     BIT_FLAGS flag);

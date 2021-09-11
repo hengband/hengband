@@ -128,16 +128,16 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
  * @brief スナイパーの集中度加算
  * @return 常にTRUEを返す
  */
-static bool snipe_concentrate(player_type *creature_ptr)
+static bool snipe_concentrate(player_type *player_ptr)
 {
-    if ((int)creature_ptr->concent < (2 + (creature_ptr->lev + 5) / 10))
-        creature_ptr->concent++;
+    if ((int)player_ptr->concent < (2 + (player_ptr->lev + 5) / 10))
+        player_ptr->concent++;
 
-    msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), creature_ptr->concent);
-    creature_ptr->reset_concent = false;
+    msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), player_ptr->concent);
+    player_ptr->reset_concent = false;
 
-    creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->update |= (PU_BONUS | PU_MONSTERS);
+    player_ptr->redraw |= (PR_STATUS);
     return true;
 }
 
@@ -145,17 +145,17 @@ static bool snipe_concentrate(player_type *creature_ptr)
  * @brief スナイパーの集中度リセット
  * @param msg TRUEならばメッセージを表示する
  */
-void reset_concentration(player_type *creature_ptr, bool msg)
+void reset_concentration(player_type *player_ptr, bool msg)
 {
     if (msg) {
         msg_print(_("集中力が途切れてしまった。", "Stop concentrating."));
     }
 
-    creature_ptr->concent = 0;
-    creature_ptr->reset_concent = false;
+    player_ptr->concent = 0;
+    player_ptr->reset_concent = false;
 
-    creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
-    creature_ptr->redraw |= (PR_STATUS);
+    player_ptr->update |= (PU_BONUS | PU_MONSTERS);
+    player_ptr->redraw |= (PR_STATUS);
 }
 
 /*!
@@ -163,9 +163,9 @@ void reset_concentration(player_type *creature_ptr, bool msg)
  * @param tdam 算出中のダメージ
  * @return 集中度修正を加えたダメージ
  */
-int boost_concentration_damage(player_type *creature_ptr, int tdam)
+int boost_concentration_damage(player_type *player_ptr, int tdam)
 {
-    tdam *= (10 + creature_ptr->concent);
+    tdam *= (10 + player_ptr->concent);
     tdam /= 10;
 
     return (tdam);
@@ -174,12 +174,12 @@ int boost_concentration_damage(player_type *creature_ptr, int tdam)
 /*!
  * @brief スナイパーの技能リストを表示する
  */
-void display_snipe_list(player_type *sniper_ptr)
+void display_snipe_list(player_type *player_ptr)
 {
     int i;
     TERM_LEN y = 1;
     TERM_LEN x = 1;
-    PLAYER_LEVEL plev = sniper_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     snipe_power spell;
     char psi_desc[80];
 
@@ -196,7 +196,7 @@ void display_snipe_list(player_type *sniper_ptr)
 
         sprintf(psi_desc, "  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
-        if (spell.mana_cost > (int)sniper_ptr->concent)
+        if (spell.mana_cost > (int)player_ptr->concent)
             term_putstr(x, y + i + 1, -1, TERM_SLATE, psi_desc);
         else
             term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
@@ -222,13 +222,13 @@ void display_snipe_list(player_type *sniper_ptr)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_browse)
+static int get_snipe_power(player_type *player_ptr, COMMAND_CODE *sn, bool only_browse)
 {
     COMMAND_CODE i;
     int num = 0;
     TERM_LEN y = 1;
     TERM_LEN x = 20;
-    PLAYER_LEVEL plev = sniper_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     int ask;
     char choice;
     char out_val[160];
@@ -245,7 +245,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
     /* Get the spell, if available */
     if (repeat_pull(sn)) {
         /* Verify the spell */
-        if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= (int)sniper_ptr->concent)) {
+        if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= (int)player_ptr->concent)) {
             /* Success */
             return true;
         }
@@ -255,7 +255,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
     redraw = false;
 
     for (i = 0; i < MAX_SNIPE_POWERS; i++) {
-        if ((snipe_powers[i].min_lev <= plev) && ((only_browse) || (snipe_powers[i].mana_cost <= (int)sniper_ptr->concent))) {
+        if ((snipe_powers[i].min_lev <= plev) && ((only_browse) || (snipe_powers[i].mana_cost <= (int)player_ptr->concent))) {
             num = i;
         }
     }
@@ -309,7 +309,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 
                     if (spell.min_lev > plev)
                         tcol = TERM_SLATE;
-                    else if (spell.mana_cost > (int)sniper_ptr->concent)
+                    else if (spell.mana_cost > (int)player_ptr->concent)
                         tcol = TERM_L_BLUE;
 
                     term_putstr(x, y + i + 1, -1, tcol, psi_index);
@@ -343,7 +343,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
         i = (islower(choice) ? A2I(choice) : -1);
 
         /* Totally Illegal */
-        if ((i < 0) || (i > num) || (!only_browse && (snipe_powers[i].mana_cost > (int)sniper_ptr->concent))) {
+        if ((i < 0) || (i > num) || (!only_browse && (snipe_powers[i].mana_cost > (int)player_ptr->concent))) {
             bell();
             continue;
         }
@@ -369,8 +369,8 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
     if (redraw && !only_browse)
         screen_load();
 
-    sniper_ptr->window_flags |= (PW_SPELL);
-    handle_stuff(sniper_ptr);
+    player_ptr->window_flags |= (PW_SPELL);
+    handle_stuff(player_ptr);
 
     /* Abort if needed */
     if (!flag)
@@ -392,15 +392,15 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
+MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool seen = is_seen(sniper_ptr, m_ptr);
+    bool seen = is_seen(player_ptr, m_ptr);
 
     switch (snipe_type) {
     case SP_LITE:
         if (r_ptr->flags3 & (RF3_HURT_LITE)) {
-            MULTIPLY n = 20 + sniper_ptr->concent;
+            MULTIPLY n = 20 + player_ptr->concent;
             if (seen)
                 r_ptr->r_flags3 |= (RF3_HURT_LITE);
             if (mult < n)
@@ -414,11 +414,11 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
         } else {
             MULTIPLY n;
             if (r_ptr->flags3 & RF3_HURT_FIRE) {
-                n = 22 + (sniper_ptr->concent * 4);
+                n = 22 + (player_ptr->concent * 4);
                 r_ptr->r_flags3 |= RF3_HURT_FIRE;
             }
             else
-                n = 15 + (sniper_ptr->concent * 3);
+                n = 15 + (player_ptr->concent * 3);
 
             if (mult < n)
                 mult = n;
@@ -431,11 +431,11 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
         } else {
             MULTIPLY n;
             if (r_ptr->flags3 & RF3_HURT_COLD) {
-                n = 22 + (sniper_ptr->concent * 4);
+                n = 22 + (player_ptr->concent * 4);
                 r_ptr->r_flags3 |= RF3_HURT_COLD;
             }
             else
-                n = 15 + (sniper_ptr->concent * 3);
+                n = 15 + (player_ptr->concent * 3);
 
             if (mult < n)
                 mult = n;
@@ -446,20 +446,20 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
             if (seen)
                 r_ptr->r_flagsr |= RFR_IM_ELEC;
         } else {
-            MULTIPLY n = 18 + (sniper_ptr->concent * 4);
+            MULTIPLY n = 18 + (player_ptr->concent * 4);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_KILL_WALL:
         if (r_ptr->flags3 & RF3_HURT_ROCK) {
-            MULTIPLY n = 15 + (sniper_ptr->concent * 2);
+            MULTIPLY n = 15 + (player_ptr->concent * 2);
             if (seen)
                 r_ptr->r_flags3 |= RF3_HURT_ROCK;
             if (mult < n)
                 mult = n;
         } else if (r_ptr->flags3 & RF3_NONLIVING) {
-            MULTIPLY n = 15 + (sniper_ptr->concent * 2);
+            MULTIPLY n = 15 + (player_ptr->concent * 2);
             if (seen)
                 r_ptr->r_flags3 |= RF3_NONLIVING;
             if (mult < n)
@@ -468,7 +468,7 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
         break;
     case SP_EVILNESS:
         if (r_ptr->flags3 & RF3_GOOD) {
-            MULTIPLY n = 15 + (sniper_ptr->concent * 4);
+            MULTIPLY n = 15 + (player_ptr->concent * 4);
             if (seen)
                 r_ptr->r_flags3 |= RF3_GOOD;
             if (mult < n)
@@ -477,11 +477,11 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
         break;
     case SP_HOLYNESS:
         if (r_ptr->flags3 & RF3_EVIL) {
-            MULTIPLY n = 12 + (sniper_ptr->concent * 3);
+            MULTIPLY n = 12 + (player_ptr->concent * 3);
             if (seen)
                 r_ptr->r_flags3 |= RF3_EVIL;
             if (r_ptr->flags3 & (RF3_HURT_LITE)) {
-                n += (sniper_ptr->concent * 3);
+                n += (player_ptr->concent * 3);
                 if (seen)
                     r_ptr->r_flags3 |= (RF3_HURT_LITE);
             }
@@ -504,9 +504,9 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
+static bool cast_sniper_spell(player_type *player_ptr, int spell)
 {
-    object_type *o_ptr = &sniper_ptr->inventory_list[INVEN_BOW];
+    object_type *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     SPELL_IDX snipe_type = SP_NONE;
 
     if (o_ptr->tval != TV_BOW) {
@@ -518,9 +518,9 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
     switch (spell) {
     case 0: /* Concentration */
         sound(SOUND_ZAP);
-        if (!snipe_concentrate(sniper_ptr))
+        if (!snipe_concentrate(player_ptr))
             return false;
-        PlayerEnergy(sniper_ptr).set_player_turn_energy(100);
+        PlayerEnergy(player_ptr).set_player_turn_energy(100);
         return true;
     case 1:
         snipe_type = SP_LITE;
@@ -572,42 +572,42 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
     }
 
     command_cmd = 'f';
-    do_cmd_fire(sniper_ptr, snipe_type);
+    do_cmd_fire(player_ptr, snipe_type);
 
-    return (sniper_ptr->is_fired);
+    return (player_ptr->is_fired);
 }
 
 /*!
  * @brief スナイパー技能コマンドのメインルーチン /
  */
-void do_cmd_snipe(player_type *sniper_ptr)
+void do_cmd_snipe(player_type *player_ptr)
 {
     COMMAND_CODE n = 0;
     bool cast;
 
-    if (cmd_limit_confused(sniper_ptr))
+    if (cmd_limit_confused(player_ptr))
         return;
-    if (cmd_limit_image(sniper_ptr))
+    if (cmd_limit_image(player_ptr))
         return;
-    if (cmd_limit_stun(sniper_ptr))
-        return;
-
-    if (!get_snipe_power(sniper_ptr, &n, false))
+    if (cmd_limit_stun(player_ptr))
         return;
 
-    cast = cast_sniper_spell(sniper_ptr, n);
+    if (!get_snipe_power(player_ptr, &n, false))
+        return;
+
+    cast = cast_sniper_spell(player_ptr, n);
 
     if (!cast)
         return;
-    sniper_ptr->redraw |= (PR_HP | PR_MANA);
-    sniper_ptr->window_flags |= (PW_PLAYER);
-    sniper_ptr->window_flags |= (PW_SPELL);
+    player_ptr->redraw |= (PR_HP | PR_MANA);
+    player_ptr->window_flags |= (PW_PLAYER);
+    player_ptr->window_flags |= (PW_SPELL);
 }
 
 /*!
  * @brief スナイパー技能コマンドの表示 /
  */
-void do_cmd_snipe_browse(player_type *sniper_ptr)
+void do_cmd_snipe_browse(player_type *player_ptr)
 {
     COMMAND_CODE n = 0;
     int j, line;
@@ -616,7 +616,7 @@ void do_cmd_snipe_browse(player_type *sniper_ptr)
     screen_save();
 
     while (true) {
-        if (!get_snipe_power(sniper_ptr, &n, true)) {
+        if (!get_snipe_power(player_ptr, &n, true)) {
             screen_load();
             return;
         }

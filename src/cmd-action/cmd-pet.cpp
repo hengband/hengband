@@ -68,7 +68,7 @@
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
  */
-void do_cmd_pet_dismiss(player_type *creature_ptr)
+void do_cmd_pet_dismiss(player_type *player_ptr)
 {
     monster_type *m_ptr;
     bool all_pets = false;
@@ -90,12 +90,12 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
     C_MAKE(who, current_world_ptr->max_m_idx, MONSTER_IDX);
 
     /* Process the monsters (backwards) */
-    for (pet_ctr = creature_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-        if (is_pet(&creature_ptr->current_floor_ptr->m_list[pet_ctr]))
+    for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
+        if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr]))
             who[max_pet++] = pet_ctr;
     }
 
-    ang_sort(creature_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
+    ang_sort(player_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
 
     /* Process the monsters (backwards) */
     for (i = 0; i < max_pet; i++) {
@@ -104,16 +104,16 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
         bool kakunin;
 
         pet_ctr = who[i];
-        m_ptr = &creature_ptr->current_floor_ptr->m_list[pet_ctr];
+        m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
 
         delete_this = false;
-        kakunin = ((pet_ctr == creature_ptr->riding) || (m_ptr->nickname));
-        monster_desc(creature_ptr, friend_name, m_ptr, MD_ASSUME_VISIBLE);
+        kakunin = ((pet_ctr == player_ptr->riding) || (m_ptr->nickname));
+        monster_desc(player_ptr, friend_name, m_ptr, MD_ASSUME_VISIBLE);
 
         if (!all_pets) {
             /* Hack -- health bar for this monster */
-            health_track(creature_ptr, pet_ctr);
-            handle_stuff(creature_ptr);
+            health_track(player_ptr, pet_ctr);
+            handle_stuff(player_ptr);
 
             msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
 
@@ -151,25 +151,25 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
             if (record_named_pet && m_ptr->nickname) {
                 GAME_TEXT m_name[MAX_NLEN];
 
-                monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
+                monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
             }
 
-            if (pet_ctr == creature_ptr->riding) {
+            if (pet_ctr == player_ptr->riding) {
                 msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name);
 
-                creature_ptr->riding = 0;
+                player_ptr->riding = 0;
 
-                creature_ptr->update |= (PU_MONSTERS);
-                creature_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
+                player_ptr->update |= (PU_MONSTERS);
+                player_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
             }
 
             /* HACK : Add the line to message buffer */
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name);
-            creature_ptr->update |= (PU_BONUS);
-            creature_ptr->window_flags |= (PW_MESSAGE);
+            player_ptr->update |= (PU_BONUS);
+            player_ptr->window_flags |= (PW_MESSAGE);
 
-            delete_monster_idx(creature_ptr, pet_ctr);
+            delete_monster_idx(player_ptr, pet_ctr);
             Dismissed++;
         }
     }
@@ -188,7 +188,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
     if (Dismissed == 0 && all_pets)
         msg_print(_("'U'nnamed は、乗馬以外の名前のないペットだけを全て解放します。", "'U'nnamed means all your pets except named pets and your mount."));
 
-    handle_stuff(creature_ptr);
+    handle_stuff(player_ptr);
 }
 
 /*!
@@ -196,49 +196,49 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
  * @param force 強制的に騎乗/下馬するならばTRUE
  * @return 騎乗/下馬できたらTRUE
  */
-bool do_cmd_riding(player_type *creature_ptr, bool force)
+bool do_cmd_riding(player_type *player_ptr, bool force)
 {
     POSITION x, y;
     DIRECTION dir = 0;
     grid_type *g_ptr;
     monster_type *m_ptr;
 
-    if (!get_direction(creature_ptr, &dir, false, false))
+    if (!get_direction(player_ptr, &dir, false, false))
         return false;
-    y = creature_ptr->y + ddy[dir];
-    x = creature_ptr->x + ddx[dir];
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    y = player_ptr->y + ddy[dir];
+    x = player_ptr->x + ddx[dir];
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-    if (creature_ptr->special_defense & KATA_MUSOU)
-        set_action(creature_ptr, ACTION_NONE);
+    if (player_ptr->special_defense & KATA_MUSOU)
+        set_action(player_ptr, ACTION_NONE);
 
-    if (creature_ptr->riding) {
+    if (player_ptr->riding) {
         /* Skip non-empty grids */
-        if (!can_player_ride_pet(creature_ptr, g_ptr, false)) {
+        if (!can_player_ride_pet(player_ptr, g_ptr, false)) {
             msg_print(_("そちらには降りられません。", "You cannot go that direction."));
             return false;
         }
 
-        if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x))
+        if (!pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x))
             return false;
 
         if (g_ptr->m_idx) {
-            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+            PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
-            do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
+            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
             return false;
         }
 
-        creature_ptr->riding = 0;
-        creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = false;
+        player_ptr->riding = 0;
+        player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+        player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
-        if (cmd_limit_confused(creature_ptr))
+        if (cmd_limit_confused(player_ptr))
             return false;
 
-        m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+        m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
         if (!g_ptr->m_idx || !m_ptr->ml) {
             msg_print(_("その場所にはモンスターはいません。", "There is no monster here."));
@@ -253,10 +253,10 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             return false;
         }
 
-        if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x))
+        if (!pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x))
             return false;
 
-        if (!can_player_ride_pet(creature_ptr, g_ptr, true)) {
+        if (!can_player_ride_pet(player_ptr, g_ptr, true)) {
             /* Feature code (applying "mimic" field) */
             feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 #ifdef JP
@@ -269,38 +269,38 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
             return false;
         }
-        if (r_info[m_ptr->r_idx].level > randint1((creature_ptr->skill_exp[SKILL_RIDING] / 50 + creature_ptr->lev / 2 + 20))) {
+        if (r_info[m_ptr->r_idx].level > randint1((player_ptr->skill_exp[SKILL_RIDING] / 50 + player_ptr->lev / 2 + 20))) {
             msg_print(_("うまく乗れなかった。", "You failed to ride."));
-            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+            PlayerEnergy(player_ptr).set_player_turn_energy(100);
             return false;
         }
 
         if (monster_csleep_remaining(m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(creature_ptr, m_name, m_ptr, 0);
-            (void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
+            monster_desc(player_ptr, m_name, m_ptr, 0);
+            (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
             msg_format(_("%sを起こした。", "You have woken %s up."), m_name);
         }
 
-        if (creature_ptr->action == ACTION_KAMAE)
-            set_action(creature_ptr, ACTION_NONE);
+        if (player_ptr->action == ACTION_KAMAE)
+            set_action(player_ptr, ACTION_NONE);
 
-        creature_ptr->riding = g_ptr->m_idx;
+        player_ptr->riding = g_ptr->m_idx;
 
         /* Hack -- remove tracked monster */
-        if (creature_ptr->riding == creature_ptr->health_who)
-            health_track(creature_ptr, 0);
+        if (player_ptr->riding == player_ptr->health_who)
+            health_track(player_ptr, 0);
     }
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     /* Mega-Hack -- Forget the view and lite */
-    creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    creature_ptr->update |= (PU_BONUS);
-    creature_ptr->redraw |= (PR_MAP | PR_EXTRA);
-    creature_ptr->redraw |= (PR_UHEALTH);
+    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+    player_ptr->update |= (PU_BONUS);
+    player_ptr->redraw |= (PR_MAP | PR_EXTRA);
+    player_ptr->redraw |= (PR_UHEALTH);
 
-    (void)move_player_effect(creature_ptr, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+    (void)move_player_effect(player_ptr, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
     return true;
 }
@@ -308,7 +308,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 /*!
  * @brief ペットに名前をつけるコマンドのメインルーチン
  */
-static void do_name_pet(player_type *creature_ptr)
+static void do_name_pet(player_type *player_ptr)
 {
     monster_type *m_ptr;
     char out_val[20];
@@ -317,15 +317,15 @@ static void do_name_pet(player_type *creature_ptr)
     bool old_target_pet = target_pet;
 
     target_pet = true;
-    if (!target_set(creature_ptr, TARGET_KILL)) {
+    if (!target_set(player_ptr, TARGET_KILL)) {
         target_pet = old_target_pet;
         return;
     }
 
     target_pet = old_target_pet;
 
-    if (creature_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) {
-        m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
+    if (player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) {
+        m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 
         if (!is_pet(m_ptr)) {
             msg_print(_("そのモンスターはペットではない。", "This monster is not a pet."));
@@ -335,7 +335,7 @@ static void do_name_pet(player_type *creature_ptr)
             msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
             return;
         }
-        monster_desc(creature_ptr, m_name, m_ptr, 0);
+        monster_desc(player_ptr, m_name, m_ptr, 0);
 
         msg_format(_("%sに名前をつける。", "Name %s."), m_name);
         msg_print(nullptr);
@@ -356,13 +356,13 @@ static void do_name_pet(player_type *creature_ptr)
                 /* Save the inscription */
                 m_ptr->nickname = quark_add(out_val);
                 if (record_named_pet) {
-                    monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                    exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
+                    monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+                    exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
                 }
             } else {
                 if (record_named_pet && old_name) {
-                    monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                    exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
+                    monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+                    exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
                 }
                 m_ptr->nickname = 0;
             }
@@ -374,7 +374,7 @@ static void do_name_pet(player_type *creature_ptr)
  * @brief ペットに関するコマンドリストのメインルーチン /
  * Issue a pet command
  */
-void do_cmd_pet(player_type *creature_ptr)
+void do_cmd_pet(player_type *player_ptr)
 {
     COMMAND_CODE i = 0;
     int num;
@@ -395,7 +395,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
     num = 0;
 
-    if (creature_ptr->wild_mode)
+    if (player_ptr->wild_mode)
         return;
 
     power_desc[num] = _("ペットを放す", "dismiss pets");
@@ -403,86 +403,86 @@ void do_cmd_pet(player_type *creature_ptr)
 
 #ifdef JP
     sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
-        (creature_ptr->pet_t_m_idx
-                ? (creature_ptr->image ? "何か奇妙な物" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+        (player_ptr->pet_t_m_idx
+                ? (player_ptr->image ? "何か奇妙な物" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                 : "指定なし"));
 #else
     sprintf(target_buf, "specify a target of pet (now:%s)",
-        (creature_ptr->pet_t_m_idx
-                ? (creature_ptr->image ? "something strange" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+        (player_ptr->pet_t_m_idx
+                ? (player_ptr->image ? "something strange" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                 : "nothing"));
 #endif
     power_desc[num] = target_buf;
     powers[num++] = PET_TARGET;
     power_desc[num] = _("近くにいろ", "stay close");
 
-    if (creature_ptr->pet_follow_distance == PET_CLOSE_DIST)
+    if (player_ptr->pet_follow_distance == PET_CLOSE_DIST)
         command_idx = num;
     powers[num++] = PET_STAY_CLOSE;
     power_desc[num] = _("ついて来い", "follow me");
 
-    if (creature_ptr->pet_follow_distance == PET_FOLLOW_DIST)
+    if (player_ptr->pet_follow_distance == PET_FOLLOW_DIST)
         command_idx = num;
     powers[num++] = PET_FOLLOW_ME;
     power_desc[num] = _("敵を見つけて倒せ", "seek and destroy");
 
-    if (creature_ptr->pet_follow_distance == PET_DESTROY_DIST)
+    if (player_ptr->pet_follow_distance == PET_DESTROY_DIST)
         command_idx = num;
     powers[num++] = PET_SEEK_AND_DESTROY;
     power_desc[num] = _("少し離れていろ", "give me space");
 
-    if (creature_ptr->pet_follow_distance == PET_SPACE_DIST)
+    if (player_ptr->pet_follow_distance == PET_SPACE_DIST)
         command_idx = num;
     powers[num++] = PET_ALLOW_SPACE;
     power_desc[num] = _("離れていろ", "stay away");
 
-    if (creature_ptr->pet_follow_distance == PET_AWAY_DIST)
+    if (player_ptr->pet_follow_distance == PET_AWAY_DIST)
         command_idx = num;
     powers[num++] = PET_STAY_AWAY;
 
-    if (creature_ptr->pet_extra_flags & PF_OPEN_DOORS) {
+    if (player_ptr->pet_extra_flags & PF_OPEN_DOORS) {
         power_desc[num] = _("ドアを開ける (現在:ON)", "pets open doors (now On)");
     } else {
         power_desc[num] = _("ドアを開ける (現在:OFF)", "pets open doors (now Off)");
     }
     powers[num++] = PET_OPEN_DOORS;
 
-    if (creature_ptr->pet_extra_flags & PF_PICKUP_ITEMS) {
+    if (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) {
         power_desc[num] = _("アイテムを拾う (現在:ON)", "pets pick up items (now On)");
     } else {
         power_desc[num] = _("アイテムを拾う (現在:OFF)", "pets pick up items (now Off)");
     }
     powers[num++] = PET_TAKE_ITEMS;
 
-    if (creature_ptr->pet_extra_flags & PF_TELEPORT) {
+    if (player_ptr->pet_extra_flags & PF_TELEPORT) {
         power_desc[num] = _("テレポート系魔法を使う (現在:ON)", "allow teleport (now On)");
     } else {
         power_desc[num] = _("テレポート系魔法を使う (現在:OFF)", "allow teleport (now Off)");
     }
     powers[num++] = PET_TELEPORT;
 
-    if (creature_ptr->pet_extra_flags & PF_ATTACK_SPELL) {
+    if (player_ptr->pet_extra_flags & PF_ATTACK_SPELL) {
         power_desc[num] = _("攻撃魔法を使う (現在:ON)", "allow cast attack spell (now On)");
     } else {
         power_desc[num] = _("攻撃魔法を使う (現在:OFF)", "allow cast attack spell (now Off)");
     }
     powers[num++] = PET_ATTACK_SPELL;
 
-    if (creature_ptr->pet_extra_flags & PF_SUMMON_SPELL) {
+    if (player_ptr->pet_extra_flags & PF_SUMMON_SPELL) {
         power_desc[num] = _("召喚魔法を使う (現在:ON)", "allow cast summon spell (now On)");
     } else {
         power_desc[num] = _("召喚魔法を使う (現在:OFF)", "allow cast summon spell (now Off)");
     }
     powers[num++] = PET_SUMMON_SPELL;
 
-    if (creature_ptr->pet_extra_flags & PF_BALL_SPELL) {
+    if (player_ptr->pet_extra_flags & PF_BALL_SPELL) {
         power_desc[num] = _("プレイヤーを巻き込む範囲魔法を使う (現在:ON)", "allow involve player in area spell (now On)");
     } else {
         power_desc[num] = _("プレイヤーを巻き込む範囲魔法を使う (現在:OFF)", "allow involve player in area spell (now Off)");
     }
     powers[num++] = PET_BALL_SPELL;
 
-    if (creature_ptr->riding) {
+    if (player_ptr->riding) {
         power_desc[num] = _("ペットから降りる", "get off a pet");
     } else {
         power_desc[num] = _("ペットに乗る", "ride a pet");
@@ -491,12 +491,12 @@ void do_cmd_pet(player_type *creature_ptr)
     power_desc[num] = _("ペットに名前をつける", "name pets");
     powers[num++] = PET_NAME;
 
-    if (creature_ptr->riding) {
-        if ((can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB)
-                && creature_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding())
-            || (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN)
-                && creature_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding())) {
-            if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
+    if (player_ptr->riding) {
+        if ((can_attack_with_main_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB)
+                && player_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding())
+            || (can_attack_with_sub_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN)
+                && player_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding())) {
+            if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                 power_desc[num] = _("武器を片手で持つ", "use one hand to control the pet you are riding");
             } else {
                 power_desc[num] = _("武器を両手で持つ", "use both hands for a weapon");
@@ -504,21 +504,21 @@ void do_cmd_pet(player_type *creature_ptr)
 
             powers[num++] = PET_TWO_HANDS;
         } else {
-            switch (creature_ptr->pclass) {
+            switch (player_ptr->pclass) {
             case CLASS_MONK:
             case CLASS_FORCETRAINER:
             case CLASS_BERSERKER:
-                if (empty_hands(creature_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
-                    if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
+                if (empty_hands(player_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
+                    if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("片手で格闘する", "use one hand to control the pet you are riding");
                     } else {
                         power_desc[num] = _("両手で格闘する", "use both hands for melee");
                     }
 
                     powers[num++] = PET_TWO_HANDS;
-                } else if ((empty_hands(creature_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
-                    && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
-                    if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
+                } else if ((empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND)
+                    && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
+                    if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("格闘を行わない", "use one hand to control the pet you are riding");
                     } else {
                         power_desc[num] = _("格闘を行う", "use one hand for melee");
@@ -674,7 +674,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
         /* Abort if needed */
         if (!flag) {
-            PlayerEnergy(creature_ptr).reset_player_turn();
+            PlayerEnergy(player_ptr).reset_player_turn();
             return;
         }
 
@@ -684,9 +684,9 @@ void do_cmd_pet(player_type *creature_ptr)
     case PET_DISMISS: /* Dismiss pets */
     {
         /* Check pets (backwards) */
-        for (pet_ctr = creature_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
+        for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
             /* Player has pet */
-            if (is_pet(&creature_ptr->current_floor_ptr->m_list[pet_ctr]))
+            if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr]))
                 break;
         }
 
@@ -694,21 +694,21 @@ void do_cmd_pet(player_type *creature_ptr)
             msg_print(_("ペットがいない！", "You have no pets!"));
             break;
         }
-        do_cmd_pet_dismiss(creature_ptr);
-        (void)calculate_upkeep(creature_ptr);
+        do_cmd_pet_dismiss(player_ptr);
+        (void)calculate_upkeep(player_ptr);
         break;
     }
     case PET_TARGET: {
         project_length = -1;
-        if (!target_set(creature_ptr, TARGET_KILL))
-            creature_ptr->pet_t_m_idx = 0;
+        if (!target_set(player_ptr, TARGET_KILL))
+            player_ptr->pet_t_m_idx = 0;
         else {
-            grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[target_row][target_col];
-            if (g_ptr->m_idx && (creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)) {
-                creature_ptr->pet_t_m_idx = creature_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
-                creature_ptr->pet_follow_distance = PET_DESTROY_DIST;
+            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[target_row][target_col];
+            if (g_ptr->m_idx && (player_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)) {
+                player_ptr->pet_t_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+                player_ptr->pet_follow_distance = PET_DESTROY_DIST;
             } else
-                creature_ptr->pet_t_m_idx = 0;
+                player_ptr->pet_t_m_idx = 0;
         }
         project_length = 0;
 
@@ -716,105 +716,105 @@ void do_cmd_pet(player_type *creature_ptr)
     }
     /* Call pets */
     case PET_STAY_CLOSE: {
-        creature_ptr->pet_follow_distance = PET_CLOSE_DIST;
-        creature_ptr->pet_t_m_idx = 0;
+        player_ptr->pet_follow_distance = PET_CLOSE_DIST;
+        player_ptr->pet_t_m_idx = 0;
         break;
     }
     /* "Follow Me" */
     case PET_FOLLOW_ME: {
-        creature_ptr->pet_follow_distance = PET_FOLLOW_DIST;
-        creature_ptr->pet_t_m_idx = 0;
+        player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
+        player_ptr->pet_t_m_idx = 0;
         break;
     }
     /* "Seek and destoy" */
     case PET_SEEK_AND_DESTROY: {
-        creature_ptr->pet_follow_distance = PET_DESTROY_DIST;
+        player_ptr->pet_follow_distance = PET_DESTROY_DIST;
         break;
     }
     /* "Give me space" */
     case PET_ALLOW_SPACE: {
-        creature_ptr->pet_follow_distance = PET_SPACE_DIST;
+        player_ptr->pet_follow_distance = PET_SPACE_DIST;
         break;
     }
     /* "Stay away" */
     case PET_STAY_AWAY: {
-        creature_ptr->pet_follow_distance = PET_AWAY_DIST;
+        player_ptr->pet_follow_distance = PET_AWAY_DIST;
         break;
     }
     /* flag - allow pets to open doors */
     case PET_OPEN_DOORS: {
-        if (creature_ptr->pet_extra_flags & PF_OPEN_DOORS)
-            creature_ptr->pet_extra_flags &= ~(PF_OPEN_DOORS);
+        if (player_ptr->pet_extra_flags & PF_OPEN_DOORS)
+            player_ptr->pet_extra_flags &= ~(PF_OPEN_DOORS);
         else
-            creature_ptr->pet_extra_flags |= (PF_OPEN_DOORS);
+            player_ptr->pet_extra_flags |= (PF_OPEN_DOORS);
         break;
     }
     /* flag - allow pets to pickup items */
     case PET_TAKE_ITEMS: {
-        if (creature_ptr->pet_extra_flags & PF_PICKUP_ITEMS) {
-            creature_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
-            for (pet_ctr = creature_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-                m_ptr = &creature_ptr->current_floor_ptr->m_list[pet_ctr];
+        if (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) {
+            player_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
+            for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
+                m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
 
                 if (is_pet(m_ptr)) {
-                    monster_drop_carried_objects(creature_ptr, m_ptr);
+                    monster_drop_carried_objects(player_ptr, m_ptr);
                 }
             }
         } else
-            creature_ptr->pet_extra_flags |= (PF_PICKUP_ITEMS);
+            player_ptr->pet_extra_flags |= (PF_PICKUP_ITEMS);
 
         break;
     }
     /* flag - allow pets to teleport */
     case PET_TELEPORT: {
-        if (creature_ptr->pet_extra_flags & PF_TELEPORT)
-            creature_ptr->pet_extra_flags &= ~(PF_TELEPORT);
+        if (player_ptr->pet_extra_flags & PF_TELEPORT)
+            player_ptr->pet_extra_flags &= ~(PF_TELEPORT);
         else
-            creature_ptr->pet_extra_flags |= (PF_TELEPORT);
+            player_ptr->pet_extra_flags |= (PF_TELEPORT);
         break;
     }
     /* flag - allow pets to cast attack spell */
     case PET_ATTACK_SPELL: {
-        if (creature_ptr->pet_extra_flags & PF_ATTACK_SPELL)
-            creature_ptr->pet_extra_flags &= ~(PF_ATTACK_SPELL);
+        if (player_ptr->pet_extra_flags & PF_ATTACK_SPELL)
+            player_ptr->pet_extra_flags &= ~(PF_ATTACK_SPELL);
         else
-            creature_ptr->pet_extra_flags |= (PF_ATTACK_SPELL);
+            player_ptr->pet_extra_flags |= (PF_ATTACK_SPELL);
         break;
     }
     /* flag - allow pets to cast attack spell */
     case PET_SUMMON_SPELL: {
-        if (creature_ptr->pet_extra_flags & PF_SUMMON_SPELL)
-            creature_ptr->pet_extra_flags &= ~(PF_SUMMON_SPELL);
+        if (player_ptr->pet_extra_flags & PF_SUMMON_SPELL)
+            player_ptr->pet_extra_flags &= ~(PF_SUMMON_SPELL);
         else
-            creature_ptr->pet_extra_flags |= (PF_SUMMON_SPELL);
+            player_ptr->pet_extra_flags |= (PF_SUMMON_SPELL);
         break;
     }
     /* flag - allow pets to cast attack spell */
     case PET_BALL_SPELL: {
-        if (creature_ptr->pet_extra_flags & PF_BALL_SPELL)
-            creature_ptr->pet_extra_flags &= ~(PF_BALL_SPELL);
+        if (player_ptr->pet_extra_flags & PF_BALL_SPELL)
+            player_ptr->pet_extra_flags &= ~(PF_BALL_SPELL);
         else
-            creature_ptr->pet_extra_flags |= (PF_BALL_SPELL);
+            player_ptr->pet_extra_flags |= (PF_BALL_SPELL);
         break;
     }
 
     case PET_RIDING: {
-        (void)do_cmd_riding(creature_ptr, false);
+        (void)do_cmd_riding(player_ptr, false);
         break;
     }
 
     case PET_NAME: {
-        do_name_pet(creature_ptr);
+        do_name_pet(player_ptr);
         break;
     }
 
     case PET_TWO_HANDS: {
-        if (creature_ptr->pet_extra_flags & PF_TWO_HANDS)
-            creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+        if (player_ptr->pet_extra_flags & PF_TWO_HANDS)
+            player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         else
-            creature_ptr->pet_extra_flags |= (PF_TWO_HANDS);
-        creature_ptr->update |= (PU_BONUS);
-        handle_stuff(creature_ptr);
+            player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
+        player_ptr->update |= (PU_BONUS);
+        handle_stuff(player_ptr);
         break;
     }
     }

@@ -31,12 +31,12 @@ int16_t PlayerConstitution::race_value()
 {
     int16_t result = PlayerBasicStatistics::race_value();
 
-    if (PlayerRace(this->owner_ptr).equals(player_race_type::ENT)) {
-        if (this->owner_ptr->lev > 25)
+    if (PlayerRace(this->player_ptr).equals(player_race_type::ENT)) {
+        if (this->player_ptr->lev > 25)
             result++;
-        if (this->owner_ptr->lev > 40)
+        if (this->player_ptr->lev > 40)
             result++;
-        if (this->owner_ptr->lev > 45)
+        if (this->player_ptr->lev > 45)
             result++;
     }
 
@@ -54,8 +54,8 @@ int16_t PlayerConstitution::time_effect_value()
 {
     int16_t result = 0;
 
-    if (this->owner_ptr->realm1 == REALM_HEX) {
-        if (RealmHex(this->owner_ptr).is_spelling_specific(HEX_BUILDING)) {
+    if (this->player_ptr->realm1 == REALM_HEX) {
+        if (RealmHex(this->player_ptr).is_spelling_specific(HEX_BUILDING)) {
             result += 4;
         }
     }
@@ -78,18 +78,18 @@ int16_t PlayerConstitution::battleform_value()
 {
     int16_t result = 0;
 
-    if (any_bits(this->owner_ptr->special_defense, KATA_KOUKIJIN)) {
+    if (any_bits(this->player_ptr->special_defense, KATA_KOUKIJIN)) {
         result += 5;
     }
 
-    if (any_bits(this->owner_ptr->special_defense, KAMAE_BYAKKO)) {
+    if (any_bits(this->player_ptr->special_defense, KAMAE_BYAKKO)) {
         result -= 3;
-    } else if (any_bits(this->owner_ptr->special_defense, KAMAE_GENBU)) {
+    } else if (any_bits(this->player_ptr->special_defense, KAMAE_GENBU)) {
         result += 3;
-    } else if (any_bits(this->owner_ptr->special_defense, KAMAE_SUZAKU)) {
+    } else if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU)) {
         result -= 2;
     }
-    if (this->owner_ptr->tsuyoshi) {
+    if (this->player_ptr->tsuyoshi) {
         result += 4;
     }
 
@@ -110,20 +110,20 @@ int16_t PlayerConstitution::mutation_value()
 {
     int16_t result = 0;
 
-    if (this->owner_ptr->muta.any()) {
-        if (this->owner_ptr->muta.has(MUTA::RESILIENT)) {
+    if (this->player_ptr->muta.any()) {
+        if (this->player_ptr->muta.has(MUTA::RESILIENT)) {
             result += 4;
         }
 
-        if (this->owner_ptr->muta.has(MUTA::ALBINO)) {
+        if (this->player_ptr->muta.has(MUTA::ALBINO)) {
             result -= 4;
         }
 
-        if (this->owner_ptr->muta.has(MUTA::XTRA_FAT)) {
+        if (this->player_ptr->muta.has(MUTA::XTRA_FAT)) {
             result += 2;
         }
 
-        if (this->owner_ptr->muta.has(MUTA::FLESH_ROT)) {
+        if (this->player_ptr->muta.has(MUTA::FLESH_ROT)) {
             result -= 2;
         }
     }

@@ -86,7 +86,7 @@
  * @param only_browse 閲覧するだけならばTRUE
  * @return 選択した魔力のID、キャンセルならば-1を返す
  */
-static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool only_browse)
+static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *player_ptr, bool only_browse)
 {
     OBJECT_SUBTYPE_VALUE ext = 0;
     char choice;
@@ -102,14 +102,14 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
     if (repeat_pull(&sn)) {
         /* Verify the spell */
         if (sn >= EATER_EXT * 2
-            && !(creature_ptr->magic_num1[sn] > k_info[lookup_kind(TV_ROD, sn - EATER_EXT * 2)].pval * (creature_ptr->magic_num2[sn] - 1) * EATER_ROD_CHARGE))
+            && !(player_ptr->magic_num1[sn] > k_info[lookup_kind(TV_ROD, sn - EATER_EXT * 2)].pval * (player_ptr->magic_num2[sn] - 1) * EATER_ROD_CHARGE))
             return sn;
-        else if (sn < EATER_EXT * 2 && !(creature_ptr->magic_num1[sn] < EATER_CHARGE))
+        else if (sn < EATER_EXT * 2 && !(player_ptr->magic_num1[sn] < EATER_CHARGE))
             return sn;
     }
 
     for (i = 0; i < MAX_SPELLS; i++) {
-        if (creature_ptr->magic_num2[i])
+        if (player_ptr->magic_num2[i])
             break;
     }
 
@@ -193,7 +193,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
         }
     }
     for (i = ext; i < ext + EATER_EXT; i++) {
-        if (creature_ptr->magic_num2[i]) {
+        if (player_ptr->magic_num2[i]) {
             if (use_menu)
                 menu_line = i - ext + 1;
             break;
@@ -247,7 +247,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 
             /* Print list */
             for (ctr = 0; ctr < EATER_EXT; ctr++) {
-                if (!creature_ptr->magic_num2[ctr + ext])
+                if (!player_ptr->magic_num2[ctr + ext])
                     continue;
 
                 k_idx = lookup_kind(tval, ctr);
@@ -271,23 +271,23 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                 y1 = ((ctr < EATER_EXT / 2) ? y + ctr : y + ctr - EATER_EXT / 2);
                 level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
                 chance = level * 4 / 5 + 20;
-                chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+                chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
                 level /= 2;
-                if (creature_ptr->lev > level) {
-                    chance -= 3 * (creature_ptr->lev - level);
+                if (player_ptr->lev > level) {
+                    chance -= 3 * (player_ptr->lev - level);
                 }
-                chance = mod_spell_chance_1(creature_ptr, chance);
-                chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
+                chance = mod_spell_chance_1(player_ptr, chance);
+                chance = MAX(chance, adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]]);
                 /* Stunning makes spells harder */
-                if (creature_ptr->stun > 50)
+                if (player_ptr->stun > 50)
                     chance += 25;
-                else if (creature_ptr->stun)
+                else if (player_ptr->stun)
                     chance += 15;
 
                 if (chance > 95)
                     chance = 95;
 
-                chance = mod_spell_chance_2(creature_ptr, chance);
+                chance = mod_spell_chance_2(player_ptr, chance);
 
                 col = TERM_WHITE;
 
@@ -295,16 +295,16 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     if (tval == TV_ROD) {
                         strcat(dummy,
                             format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), k_info[k_idx].name.c_str(),
-                                creature_ptr->magic_num1[ctr + ext] ? (creature_ptr->magic_num1[ctr + ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) + 1
+                                player_ptr->magic_num1[ctr + ext] ? (player_ptr->magic_num1[ctr + ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) + 1
                                                                     : 0,
-                                creature_ptr->magic_num2[ctr + ext], chance));
-                        if (creature_ptr->magic_num1[ctr + ext] > k_info[k_idx].pval * (creature_ptr->magic_num2[ctr + ext] - 1) * EATER_ROD_CHARGE)
+                                player_ptr->magic_num2[ctr + ext], chance));
+                        if (player_ptr->magic_num1[ctr + ext] > k_info[k_idx].pval * (player_ptr->magic_num2[ctr + ext] - 1) * EATER_ROD_CHARGE)
                             col = TERM_RED;
                     } else {
                         strcat(dummy,
-                            format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (int16_t)(creature_ptr->magic_num1[ctr + ext] / EATER_CHARGE),
-                                creature_ptr->magic_num2[ctr + ext], chance));
-                        if (creature_ptr->magic_num1[ctr + ext] < EATER_CHARGE)
+                            format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (int16_t)(player_ptr->magic_num1[ctr + ext] / EATER_CHARGE),
+                                player_ptr->magic_num2[ctr + ext], chance));
+                        if (player_ptr->magic_num1[ctr + ext] < EATER_CHARGE)
                             col = TERM_RED;
                     }
                 } else
@@ -330,7 +330,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     menu_line += EATER_EXT - 1;
                     if (menu_line > EATER_EXT)
                         menu_line -= EATER_EXT;
-                } while (!creature_ptr->magic_num2[menu_line + ext - 1]);
+                } while (!player_ptr->magic_num2[menu_line + ext - 1]);
                 break;
             }
 
@@ -341,7 +341,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     menu_line++;
                     if (menu_line > EATER_EXT)
                         menu_line -= EATER_EXT;
-                } while (!creature_ptr->magic_num2[menu_line + ext - 1]);
+                } while (!player_ptr->magic_num2[menu_line + ext - 1]);
                 break;
             }
 
@@ -359,7 +359,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     reverse = true;
                 } else
                     menu_line += EATER_EXT / 2;
-                while (!creature_ptr->magic_num2[menu_line + ext - 1]) {
+                while (!player_ptr->magic_num2[menu_line + ext - 1]) {
                     if (reverse) {
                         menu_line--;
                         if (menu_line < 2)
@@ -421,7 +421,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
         }
 
         /* Totally Illegal */
-        if ((i < 0) || (i > EATER_EXT) || !creature_ptr->magic_num2[i + ext]) {
+        if ((i < 0) || (i > EATER_EXT) || !player_ptr->magic_num2[i + ext]) {
             bell();
             continue;
         }
@@ -439,7 +439,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     continue;
             }
             if (tval == TV_ROD) {
-                if (creature_ptr->magic_num1[ext + i] > k_info[lookup_kind(tval, i)].pval * (creature_ptr->magic_num2[ext + i] - 1) * EATER_ROD_CHARGE) {
+                if (player_ptr->magic_num1[ext + i] > k_info[lookup_kind(tval, i)].pval * (player_ptr->magic_num2[ext + i] - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(nullptr);
                     if (use_menu)
@@ -447,7 +447,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     continue;
                 }
             } else {
-                if (creature_ptr->magic_num1[ext + i] < EATER_CHARGE) {
+                if (player_ptr->magic_num1[ext + i] < EATER_CHARGE) {
                     msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
                     msg_print(nullptr);
                     if (use_menu)
@@ -496,17 +496,17 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
  * @param powerful 強力発動中の処理ならばTRUE
  * @return 実際にコマンドを実行したならばTRUEを返す。
  */
-bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerful)
+bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful)
 {
     tval_type tval;
     OBJECT_SUBTYPE_VALUE sval;
     bool use_charge = true;
 
-    if (cmd_limit_confused(creature_ptr))
+    if (cmd_limit_confused(player_ptr))
         return false;
 
-    auto item = select_magic_eater(creature_ptr, only_browse);
-    PlayerEnergy energy(creature_ptr);
+    auto item = select_magic_eater(player_ptr, only_browse);
+    PlayerEnergy energy(player_ptr);
     if (item == -1) {
         energy.reset_player_turn();
         return false;
@@ -525,23 +525,23 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
     auto k_idx = lookup_kind(tval, sval);
     auto level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
     auto chance = level * 4 / 5 + 20;
-    chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     level /= 2;
-    if (creature_ptr->lev > level) {
-        chance -= 3 * (creature_ptr->lev - level);
+    if (player_ptr->lev > level) {
+        chance -= 3 * (player_ptr->lev - level);
     }
-    chance = mod_spell_chance_1(creature_ptr, chance);
-    chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
+    chance = mod_spell_chance_1(player_ptr, chance);
+    chance = MAX(chance, adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]]);
     /* Stunning makes spells harder */
-    if (creature_ptr->stun > 50)
+    if (player_ptr->stun > 50)
         chance += 25;
-    else if (creature_ptr->stun)
+    else if (player_ptr->stun)
         chance += 15;
 
     if (chance > 95)
         chance = 95;
 
-    chance = mod_spell_chance_2(creature_ptr, chance);
+    chance = mod_spell_chance_2(player_ptr, chance);
 
     if (randint0(100) < chance) {
         if (flush_failure)
@@ -550,7 +550,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
         msg_print(_("呪文をうまく唱えられなかった！", "You failed to get the magic off!"));
         sound(SOUND_FAIL);
         if (randint1(100) >= chance)
-            chg_virtue(creature_ptr, V_CHANCE, -1);
+            chg_virtue(player_ptr, V_CHANCE, -1);
         energy.set_player_turn_energy(100);
 
         return true;
@@ -559,29 +559,29 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
 
         if (tval == TV_ROD) {
             if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
-                if (!get_aim_dir(creature_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return false;
-            rod_effect(creature_ptr, sval, dir, &use_charge, powerful, true);
+            rod_effect(player_ptr, sval, dir, &use_charge, powerful, true);
             if (!use_charge)
                 return false;
         } else if (tval == TV_WAND) {
-            if (!get_aim_dir(creature_ptr, &dir))
+            if (!get_aim_dir(player_ptr, &dir))
                 return false;
-            wand_effect(creature_ptr, sval, dir, powerful, true);
+            wand_effect(player_ptr, sval, dir, powerful, true);
         } else {
-            staff_effect(creature_ptr, sval, &use_charge, powerful, true, true);
+            staff_effect(player_ptr, sval, &use_charge, powerful, true, true);
             if (!use_charge)
                 return false;
         }
         if (randint1(100) < chance)
-            chg_virtue(creature_ptr, V_CHANCE, 1);
+            chg_virtue(player_ptr, V_CHANCE, 1);
     }
 
     energy.set_player_turn_energy(100);
     if (tval == TV_ROD)
-        creature_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
+        player_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
     else
-        creature_ptr->magic_num1[item] -= EATER_CHARGE;
+        player_ptr->magic_num1[item] -= EATER_CHARGE;
 
     return true;
 }

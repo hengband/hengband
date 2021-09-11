@@ -326,12 +326,12 @@ spells_type get_element_type(int realm_idx, int n)
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
-static spells_type get_element_spells_type(player_type *caster_ptr, int n)
+static spells_type get_element_spells_type(player_type *player_ptr, int n)
 {
-    auto realm = element_types.at(static_cast<ElementRealm>(caster_ptr->element));
+    auto realm = element_types.at(static_cast<ElementRealm>(player_ptr->element));
     auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
-        if (randint0(100) < caster_ptr->lev * 2)
+        if (randint0(100) < player_ptr->lev * 2)
             return realm.extra.at(t);
     }
     return t;
@@ -361,13 +361,13 @@ concptr get_element_name(int realm_idx, int n)
 
 /*!
  * @brief 元素魔法の説明文を取得
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static concptr get_element_tip(player_type *caster_ptr, int spell_idx)
+static concptr get_element_tip(player_type *player_ptr, int spell_idx)
 {
-    auto realm = static_cast<ElementRealm>(caster_ptr->element);
+    auto realm = static_cast<ElementRealm>(player_ptr->element);
     auto spell = static_cast<ElementSpells>(spell_idx);
     auto elem = element_powers.at(spell).elem;
     return format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
@@ -375,40 +375,40 @@ static concptr get_element_tip(player_type *caster_ptr, int spell_idx)
 
 /*!
  * @brief 元素魔法の説明文を取得
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static int get_elemental_elem(player_type *caster_ptr, int spell_idx)
+static int get_elemental_elem(player_type *player_ptr, int spell_idx)
 {
-    (void)caster_ptr;
+    (void)player_ptr;
     auto spell = static_cast<ElementSpells>(spell_idx);
     return element_powers.at(spell).elem;
 }
 
 /*!
  * @brief 元素魔法呪文の難易度データを取得
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static mind_type get_elemental_info(player_type *caster_ptr, int spell_idx)
+static mind_type get_elemental_info(player_type *player_ptr, int spell_idx)
 {
-    (void)caster_ptr;
+    (void)player_ptr;
     auto spell = static_cast<ElementSpells>(spell_idx);
     return element_powers.at(spell).info;
 }
 
 /*!
  * @brief 元素魔法呪文の効果表示文字列を取得
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @param p バッファ
  * @return なし(pを更新)
  */
-void get_element_effect_info(player_type *caster_ptr, int spell_idx, char *p)
+void get_element_effect_info(player_type *player_ptr, int spell_idx, char *p)
 {
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     auto spell = static_cast<ElementSpells>(spell_idx);
     int dam = 0;
 
@@ -464,149 +464,149 @@ void get_element_effect_info(player_type *caster_ptr, int spell_idx, char *p)
 
 /*!
  * @brief 元素魔法呪文を実行する
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @return 実行したらTRUE、キャンセルならFALSE
  */
-static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
+static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
 {
     auto spell = static_cast<ElementSpells>(spell_idx);
     auto power = element_powers.at(spell);
     spells_type typ;
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     HIT_POINT dam;
     POSITION y, x;
     int num;
 
     switch (spell) {
     case ElementSpells::BOLT_1ST:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
         dam = damroll(3 + ((plev - 1) / 5), 4);
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        (void)fire_bolt(caster_ptr, typ, dir, dam);
+        typ = get_element_spells_type(player_ptr, power.elem);
+        (void)fire_bolt(player_ptr, typ, dir, dam);
         break;
     case ElementSpells::MON_DETECT:
-        (void)detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
-        (void)detect_monsters_invis(caster_ptr, DETECT_RAD_DEFAULT);
+        (void)detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
+        (void)detect_monsters_invis(player_ptr, DETECT_RAD_DEFAULT);
         break;
     case ElementSpells::PERCEPT:
-        return psychometry(caster_ptr);
+        return psychometry(player_ptr);
     case ElementSpells::CURE:
-        (void)hp_player(caster_ptr, damroll(2, 8));
-        (void)set_cut(caster_ptr, caster_ptr->cut - 10);
+        (void)hp_player(player_ptr, damroll(2, 8));
+        (void)set_cut(player_ptr, player_ptr->cut - 10);
         break;
     case ElementSpells::BOLT_2ND:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
         dam = damroll(8 + ((plev - 5) / 4), 8);
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        if (fire_bolt_or_beam(caster_ptr, plev, typ, dir, dam)) {
+        typ = get_element_spells_type(player_ptr, power.elem);
+        if (fire_bolt_or_beam(player_ptr, plev, typ, dir, dam)) {
             if (typ == GF_HYPODYNAMIA) {
-                (void)hp_player(caster_ptr, dam / 2);
+                (void)hp_player(player_ptr, dam / 2);
             }
         }
         break;
     case ElementSpells::MAG_DETECT:
-        (void)detect_objects_magic(caster_ptr, DETECT_RAD_DEFAULT);
+        (void)detect_objects_magic(player_ptr, DETECT_RAD_DEFAULT);
         break;
     case ElementSpells::BALL_3RD:
         project_length = 4;
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
-        typ = get_element_spells_type(caster_ptr, power.elem);
+        typ = get_element_spells_type(player_ptr, power.elem);
         dam = 50 + plev * 2;
-        (void)fire_ball(caster_ptr, typ, dir, dam, 1);
+        (void)fire_ball(player_ptr, typ, dir, dam, 1);
         project_length = 0;
         break;
     case ElementSpells::BALL_1ST:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
         dam = 55 + plev;
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        (void)fire_ball(caster_ptr, typ, dir, dam, 2);
+        typ = get_element_spells_type(player_ptr, power.elem);
+        (void)fire_ball(player_ptr, typ, dir, dam, 2);
         break;
     case ElementSpells::BREATH_2ND:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
-        dam = MIN(150, caster_ptr->chp / 2);
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        if (fire_breath(caster_ptr, typ, dir, dam, 3)) {
+        dam = MIN(150, player_ptr->chp / 2);
+        typ = get_element_spells_type(player_ptr, power.elem);
+        if (fire_breath(player_ptr, typ, dir, dam, 3)) {
             if (typ == GF_HYPODYNAMIA) {
-                (void)hp_player(caster_ptr, dam / 2);
+                (void)hp_player(player_ptr, dam / 2);
             }
         }
         break;
     case ElementSpells::ANNIHILATE:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(caster_ptr, GF_E_GENOCIDE, dir, plev + 50, 0);
+        fire_ball_hide(player_ptr, GF_E_GENOCIDE, dir, plev + 50, 0);
         break;
     case ElementSpells::BOLT_3RD:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
         dam = damroll(12 + ((plev - 5) / 4), 8);
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        fire_bolt_or_beam(caster_ptr, plev, typ, dir, dam);
+        typ = get_element_spells_type(player_ptr, power.elem);
+        fire_bolt_or_beam(player_ptr, plev, typ, dir, dam);
         break;
     case ElementSpells::WAVE_1ST:
         dam = 50 + randint1(plev * 3);
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        project_all_los(caster_ptr, typ, dam);
+        typ = get_element_spells_type(player_ptr, power.elem);
+        project_all_los(player_ptr, typ, dam);
         break;
     case ElementSpells::BALL_2ND:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
         dam = 75 + plev * 3 / 2;
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        if (fire_ball(caster_ptr, typ, dir, dam, 3)) {
+        typ = get_element_spells_type(player_ptr, power.elem);
+        if (fire_ball(player_ptr, typ, dir, dam, 3)) {
             if (typ == GF_HYPODYNAMIA) {
-                (void)hp_player(caster_ptr, dam / 2);
+                (void)hp_player(player_ptr, dam / 2);
             }
         }
         break;
     case ElementSpells::BURST_1ST:
-        y = caster_ptr->y;
-        x = caster_ptr->x;
+        y = player_ptr->y;
+        x = player_ptr->x;
         num = damroll(4, 3);
-        typ = get_element_spells_type(caster_ptr, power.elem);
+        typ = get_element_spells_type(player_ptr, power.elem);
         for (int k = 0; k < num; k++) {
             int attempts = 1000;
             while (attempts--) {
-                scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
-                if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF::PROJECT))
+                scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
+                if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT))
                     continue;
-                if (!player_bold(caster_ptr, y, x))
+                if (!player_bold(player_ptr, y, x))
                     break;
             }
-            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
+            project(player_ptr, 0, 0, y, x, damroll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
         break;
     case ElementSpells::STORM_2ND:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
         dam = 115 + plev * 5 / 2;
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        if (fire_ball(caster_ptr, typ, dir, dam, 4)) {
+        typ = get_element_spells_type(player_ptr, power.elem);
+        if (fire_ball(player_ptr, typ, dir, dam, 4)) {
             if (typ == GF_HYPODYNAMIA) {
-                (void)hp_player(caster_ptr, dam / 2);
+                (void)hp_player(player_ptr, dam / 2);
             }
         }
         break;
     case ElementSpells::BREATH_1ST:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
-        dam = caster_ptr->chp * 2 / 3;
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        (void)fire_breath(caster_ptr, typ, dir, dam, 3);
+        dam = player_ptr->chp * 2 / 3;
+        typ = get_element_spells_type(player_ptr, power.elem);
+        (void)fire_breath(player_ptr, typ, dir, dam, 3);
         break;
     case ElementSpells::STORM_3ND:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
         dam = 300 + plev * 5;
-        typ = get_element_spells_type(caster_ptr, power.elem);
-        (void)fire_ball(caster_ptr, typ, dir, dam, 5);
+        typ = get_element_spells_type(player_ptr, power.elem);
+        (void)fire_ball(player_ptr, typ, dir, dam, 5);
         break;
     default:
         return false;
@@ -617,34 +617,34 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
 
 /*!
  * @brief 元素魔法呪文の失敗率を計算
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @return 失敗率
  */
-static PERCENTAGE decide_element_chance(player_type *caster_ptr, mind_type spell)
+static PERCENTAGE decide_element_chance(player_type *player_ptr, mind_type spell)
 {
     PERCENTAGE chance = spell.fail;
 
-    chance -= 3 * (caster_ptr->lev - spell.min_lev);
-    chance += caster_ptr->to_m_chance;
-    chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[A_WIS]] - 1);
+    chance -= 3 * (player_ptr->lev - spell.min_lev);
+    chance += player_ptr->to_m_chance;
+    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[A_WIS]] - 1);
 
-    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_index[A_WIS]];
+    PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[A_WIS]];
     if (chance < minfail)
         chance = minfail;
 
-    if (caster_ptr->stun > 50)
+    if (player_ptr->stun > 50)
         chance += 25;
-    else if (caster_ptr->stun)
+    else if (player_ptr->stun)
         chance += 15;
 
-    if (heavy_armor(caster_ptr))
+    if (heavy_armor(player_ptr))
         chance += 5;
 
-    if (caster_ptr->is_icky_wield[0])
+    if (player_ptr->is_icky_wield[0])
         chance += 5;
 
-    if (caster_ptr->is_icky_wield[1])
+    if (player_ptr->is_icky_wield[1])
         chance += 5;
 
     if (chance > 95)
@@ -655,30 +655,30 @@ static PERCENTAGE decide_element_chance(player_type *caster_ptr, mind_type spell
 
 /*!
  * @brief 元素魔法呪文の消費MPを計算
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @return 消費MP
  */
-static MANA_POINT decide_element_mana_cost(player_type *caster_ptr, mind_type spell)
+static MANA_POINT decide_element_mana_cost(player_type *player_ptr, mind_type spell)
 {
-    (void)caster_ptr;
+    (void)player_ptr;
     return spell.mana_cost;
 }
 
 /*!
  * @brief 元素魔法呪文を選択して取得
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param sn 呪文番号
  * @param only_browse 閲覧モードかどうか
  * @return 選んだらTRUE、選ばなかったらFALSE
  */
-bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
+bool get_element_power(player_type *player_ptr, SPELL_IDX *sn, bool only_browse)
 {
     SPELL_IDX i;
     int num = 0;
     TERM_LEN y = 1;
     TERM_LEN x = 10;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     int ask = true;
     char choice;
     char out_val[160];
@@ -690,7 +690,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
     *sn = -1;
     if (repeat_pull(&code)) {
         *sn = (SPELL_IDX)code;
-        if (get_elemental_info(caster_ptr, *sn).min_lev <= plev)
+        if (get_elemental_info(player_ptr, *sn).min_lev <= plev)
             return true;
     }
 
@@ -699,7 +699,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
     redraw = false;
 
     for (i = 0; i < static_cast<SPELL_IDX>(ElementSpells::MAX); i++) {
-        if (get_elemental_info(caster_ptr, i).min_lev <= plev)
+        if (get_elemental_info(player_ptr, i).min_lev <= plev)
             num++;
     }
 
@@ -764,15 +764,15 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                 put_str(_("名前", "Name"), y, x + 5);
                 put_str(_("Lv   MP   失率 効果", "Lv   MP   Fail Info"), y, x + 35);
                 for (i = 0; i < spell_max; i++) {
-                    elem = get_elemental_elem(caster_ptr, i);
-                    spell = get_elemental_info(caster_ptr, i);
+                    elem = get_elemental_elem(player_ptr, i);
+                    spell = get_elemental_info(player_ptr, i);
 
                     if (spell.min_lev > plev)
                         break;
 
-                    PERCENTAGE chance = decide_element_chance(caster_ptr, spell);
-                    int mana_cost = decide_element_mana_cost(caster_ptr, spell);
-                    get_element_effect_info(caster_ptr, i, comment);
+                    PERCENTAGE chance = decide_element_chance(player_ptr, spell);
+                    int mana_cost = decide_element_mana_cost(player_ptr, spell);
+                    get_element_effect_info(player_ptr, i, comment);
 
                     if (use_menu) {
                         if (i == (menu_line - 1))
@@ -782,7 +782,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                     } else
                         sprintf(desc, "  %c) ", I2A(i));
 
-                    concptr s = get_element_name(caster_ptr->element, elem);
+                    concptr s = get_element_name(player_ptr->element, elem);
                     sprintf(name, spell.name, s);
                     strcat(desc, format("%-30s%2d %4d %3d%%%s", name, spell.min_lev, mana_cost, chance, comment));
                     prt(desc, y + i + 1, x);
@@ -813,9 +813,9 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
         if (ask) {
             char name[80];
             char tmp_val[160];
-            elem = get_elemental_elem(caster_ptr, i);
-            spell = get_elemental_info(caster_ptr, i);
-            (void)sprintf(name, spell.name, get_element_name(caster_ptr->element, elem));
+            elem = get_elemental_elem(player_ptr, i);
+            spell = get_elemental_info(player_ptr, i);
+            (void)sprintf(name, spell.name, get_element_name(player_ptr->element, elem));
             (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), name);
             if (!get_check(tmp_val))
                 continue;
@@ -827,8 +827,8 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
     if (redraw && !only_browse)
         screen_load();
 
-    set_bits(caster_ptr->window_flags, PW_SPELL);
-    handle_stuff(caster_ptr);
+    set_bits(player_ptr->window_flags, PW_SPELL);
+    handle_stuff(player_ptr);
     if (!flag)
         return false;
 
@@ -839,13 +839,13 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
 
 /*!
  * @brief 元素魔法呪文をMPがなくても挑戦するか確認する
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param mana_cost 消費MP
  * @return 詠唱するならTRUE、しないならFALSE
  */
-static bool check_element_mp_sufficiency(player_type *caster_ptr, int mana_cost)
+static bool check_element_mp_sufficiency(player_type *player_ptr, int mana_cost)
 {
-    if (mana_cost <= caster_ptr->csp)
+    if (mana_cost <= player_ptr->csp)
         return true;
 
     msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
@@ -857,16 +857,16 @@ static bool check_element_mp_sufficiency(player_type *caster_ptr, int mana_cost)
 
 /*!
  * @brief 元素魔法呪文の詠唱を試み、成功なら詠唱し、失敗ならファンブルする
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
  * @param chance 失敗率
  * @return 詠唱して実行したらTRUE、されなかったらFALSE
  */
-static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
+static bool try_cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
 {
     if (randint0(100) >= chance) {
         sound(SOUND_ZAP);
-        return cast_element_spell(caster_ptr, spell_idx);
+        return cast_element_spell(player_ptr, spell_idx);
     }
 
     if (flush_failure)
@@ -876,15 +876,15 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
     sound(SOUND_FAIL);
 
     if (randint1(100) < chance / 2) {
-        int plev = caster_ptr->lev;
+        int plev = player_ptr->lev;
         msg_print(_("元素の力が制御できない氾流となって解放された！", "Elemental power unleashes its power in an uncontrollable storm!"));
-        project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, caster_ptr->y, caster_ptr->x, plev * 2, get_element_types(caster_ptr->element)[0],
+        project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, player_ptr->y, player_ptr->x, plev * 2, get_element_types(player_ptr->element)[0],
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
-        caster_ptr->csp = MAX(0, caster_ptr->csp - caster_ptr->msp * 10 / (20 + randint1(10)));
+        player_ptr->csp = MAX(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
 
-        PlayerEnergy(caster_ptr).set_player_turn_energy(100);
-        set_bits(caster_ptr->redraw, PR_MANA);
-        set_bits(caster_ptr->window_flags, PW_PLAYER | PW_SPELL);
+        PlayerEnergy(player_ptr).set_player_turn_energy(100);
+        set_bits(player_ptr->redraw, PR_MANA);
+        set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 
         return false;
     }
@@ -894,57 +894,57 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
 
 /*!
  * @brief 元素魔法コマンドのメインルーチン
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  */
-void do_cmd_element(player_type *caster_ptr)
+void do_cmd_element(player_type *player_ptr)
 {
     SPELL_IDX i;
-    if (cmd_limit_confused(caster_ptr) || !get_element_power(caster_ptr, &i, false))
+    if (cmd_limit_confused(player_ptr) || !get_element_power(player_ptr, &i, false))
         return;
 
-    mind_type spell = get_elemental_info(caster_ptr, i);
-    PERCENTAGE chance = decide_element_chance(caster_ptr, spell);
-    int mana_cost = decide_element_mana_cost(caster_ptr, spell);
+    mind_type spell = get_elemental_info(player_ptr, i);
+    PERCENTAGE chance = decide_element_chance(player_ptr, spell);
+    int mana_cost = decide_element_mana_cost(player_ptr, spell);
 
-    if (!check_element_mp_sufficiency(caster_ptr, mana_cost))
+    if (!check_element_mp_sufficiency(player_ptr, mana_cost))
         return;
 
-    if (!try_cast_element_spell(caster_ptr, i, chance))
+    if (!try_cast_element_spell(player_ptr, i, chance))
         return;
 
-    if (mana_cost <= caster_ptr->csp) {
-        caster_ptr->csp -= mana_cost;
+    if (mana_cost <= player_ptr->csp) {
+        player_ptr->csp -= mana_cost;
     } else {
         int oops = mana_cost;
-        caster_ptr->csp = 0;
-        caster_ptr->csp_frac = 0;
+        player_ptr->csp = 0;
+        player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-        (void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(5 * oops + 1));
-        chg_virtue(caster_ptr, V_KNOWLEDGE, -10);
+        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(5 * oops + 1));
+        chg_virtue(player_ptr, V_KNOWLEDGE, -10);
         if (randint0(100) < 50) {
             bool perm = (randint0(100) < 25);
             msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
-            (void)dec_stat(caster_ptr, A_CON, 15 + randint1(10), perm);
+            (void)dec_stat(player_ptr, A_CON, 15 + randint1(10), perm);
         }
     }
 
-    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
-    set_bits(caster_ptr->redraw, PR_MANA);
-    set_bits(caster_ptr->window_flags, PW_PLAYER | PW_SPELL);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
+    set_bits(player_ptr->redraw, PR_MANA);
+    set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 }
 
 /*!
  * @brief 現在プレイヤーが使用可能な元素魔法の一覧表示
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  */
-void do_cmd_element_browse(player_type *caster_ptr)
+void do_cmd_element_browse(player_type *player_ptr)
 {
     SPELL_IDX n = 0;
     char temp[62 * 5];
 
     screen_save();
     while (true) {
-        if (!get_element_power(caster_ptr, &n, true)) {
+        if (!get_element_power(player_ptr, &n, true)) {
             screen_load();
             return;
         }
@@ -955,7 +955,7 @@ void do_cmd_element_browse(player_type *caster_ptr)
         term_erase(12, 18, 255);
         term_erase(12, 17, 255);
         term_erase(12, 16, 255);
-        shape_buffer(get_element_tip(caster_ptr, n), 62, temp, sizeof(temp));
+        shape_buffer(get_element_tip(player_ptr, n), 62, temp, sizeof(temp));
         for (int j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
             prt(&temp[j], line, 15);
             line++;
@@ -1016,14 +1016,14 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
 
 /*!
  * @brief 元素魔法の単体抹殺の効果を発動する
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
  */
-process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_elemental_genocide(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    auto type = get_element_type(caster_ptr->element, 0);
-    auto name = get_element_name(caster_ptr->element, 0);
+    auto type = get_element_type(player_ptr->element, 0);
+    auto name = get_element_name(player_ptr->element, 0);
     bool b = is_elemental_genocide_effective(em_ptr->r_ptr, type);
 
     if (em_ptr->seen_msg)
@@ -1039,11 +1039,11 @@ process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect
         return PROCESS_TRUE;
     }
 
-    if (genocide_aux(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
+    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
         if (em_ptr->seen_msg)
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
         em_ptr->dam = 0;
-        chg_virtue(caster_ptr, V_VITALITY, -1);
+        chg_virtue(player_ptr, V_VITALITY, -1);
         return PROCESS_TRUE;
     }
 
@@ -1053,20 +1053,20 @@ process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect
 
 /*!
  * @brief 元素領域とレベルの条件に見合うかチェックする
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param realm 領域
  * @param lev プレイヤーレベル
  * @return 見合うならTRUE、そうでなければFALSE
  * @details
  * レベルに応じて取得する耐性などの判定に使用する
  */
-bool has_element_resist(player_type *creature_ptr, ElementRealm realm, PLAYER_LEVEL lev)
+bool has_element_resist(player_type *player_ptr, ElementRealm realm, PLAYER_LEVEL lev)
 {
-    if (creature_ptr->pclass != CLASS_ELEMENTALIST)
+    if (player_ptr->pclass != CLASS_ELEMENTALIST)
         return false;
 
-    auto prealm = static_cast<ElementRealm>(creature_ptr->element);
-    return (prealm == realm && creature_ptr->lev >= lev);
+    auto prealm = static_cast<ElementRealm>(player_ptr->element);
+    return (prealm == realm && player_ptr->lev >= lev);
 }
 
 /*!
@@ -1125,11 +1125,11 @@ static int interpret_realm_select_key(int cs, int n, char c)
 
 /*!
  * @brief 領域選択ループ処理
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static int get_element_realm(player_type *creature_ptr, int is, int n)
+static int get_element_realm(player_type *player_ptr, int is, int n)
 {
     int cs = MAX(0, is);
     int os = cs;
@@ -1180,7 +1180,7 @@ static int get_element_realm(player_type *creature_ptr, int is, int n)
 
         if (c == '=') {
             screen_save();
-            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
         } else if (c != '2' && c != '4' && c != '6' && c != '8')
             bell();
@@ -1192,10 +1192,10 @@ static int get_element_realm(player_type *creature_ptr, int is, int n)
 
 /*!
  * @brief 領域選択
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 領域番号
  */
-byte select_element_realm(player_type *creature_ptr)
+byte select_element_realm(player_type *player_ptr)
 {
     clear_from(10);
 
@@ -1211,7 +1211,7 @@ byte select_element_realm(player_type *creature_ptr)
             display_realm_cursor(i, realm_max - 1, TERM_WHITE);
         }
 
-        realm_idx = get_element_realm(creature_ptr, realm_idx - 1, realm_max - 1);
+        realm_idx = get_element_realm(player_ptr, realm_idx - 1, realm_max - 1);
         if (realm_idx == 255)
             break;
 
@@ -1226,7 +1226,7 @@ byte select_element_realm(player_type *creature_ptr)
             t += strlen(t) + 1;
         }
 
-        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         clear_from(row);
@@ -1238,13 +1238,13 @@ byte select_element_realm(player_type *creature_ptr)
 
 /*!
  * @brief クラスパワー情報を追加
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  */
-void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
+void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
 {
-    auto plev = creature_ptr->lev;
-    auto realm = static_cast<ElementRealm>(creature_ptr->element);
+    auto plev = player_ptr->lev;
+    auto realm = static_cast<ElementRealm>(player_ptr->element);
     rpi_type rpi;
     switch (realm) {
     case ElementRealm::FIRE:
@@ -1331,47 +1331,47 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
 /*!
  * @todo 宣言だけ。後日適切な場所に移動
  */
-static bool door_to_darkness(player_type *caster_ptr, POSITION dist);
+static bool door_to_darkness(player_type *player_ptr, POSITION dist);
 
 /*!
  * @brief クラスパワーを実行
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 実行したらTRUE、しなかったらFALSE
  */
-bool switch_element_execution(player_type *creature_ptr)
+bool switch_element_execution(player_type *player_ptr)
 {
-    auto realm = static_cast<ElementRealm>(creature_ptr->element);
-    PLAYER_LEVEL plev = creature_ptr->lev;
+    auto realm = static_cast<ElementRealm>(player_ptr->element);
+    PLAYER_LEVEL plev = player_ptr->lev;
     DIRECTION dir;
 
     switch (realm) {
     case ElementRealm::FIRE:
-        (void)lite_area(creature_ptr, damroll(2, plev / 2), plev / 10);
+        (void)lite_area(player_ptr, damroll(2, plev / 2), plev / 10);
         break;
     case ElementRealm::ICE:
-        (void)project(creature_ptr, 0, 5, creature_ptr->y, creature_ptr->x, 1, GF_COLD, PROJECT_ITEM);
-        (void)project_all_los(creature_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
+        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, GF_COLD, PROJECT_ITEM);
+        (void)project_all_los(player_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
         break;
     case ElementRealm::SKY:
-        (void)recharge(creature_ptr, 120);
+        (void)recharge(player_ptr, 120);
         break;
     case ElementRealm::SEA:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
-        (void)wall_to_mud(creature_ptr, dir, plev * 3 / 2);
+        (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
         break;
     case ElementRealm::DARKNESS:
-        return door_to_darkness(creature_ptr, 15 + plev / 2);
+        return door_to_darkness(player_ptr, 15 + plev / 2);
         break;
     case ElementRealm::CHAOS:
-        reserve_alter_reality(creature_ptr, randint0(21) + 15);
+        reserve_alter_reality(player_ptr, randint0(21) + 15);
         break;
     case ElementRealm::EARTH:
-        (void)earthquake(creature_ptr, creature_ptr->y, creature_ptr->x, 10, 0);
+        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
         break;
     case ElementRealm::DEATH:
-        if (creature_ptr->current_floor_ptr->num_repro <= MAX_REPRO)
-            creature_ptr->current_floor_ptr->num_repro += MAX_REPRO;
+        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRO)
+            player_ptr->current_floor_ptr->num_repro += MAX_REPRO;
         break;
     default:
         return false;
@@ -1423,26 +1423,26 @@ static bool is_target_grid_dark(floor_type *f_ptr, POSITION y, POSITION x)
 
 /*!
  * @breif 暗いところ限定での次元の扉
- * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  */
-static bool door_to_darkness(player_type *caster_ptr, POSITION dist)
+static bool door_to_darkness(player_type *player_ptr, POSITION dist)
 {
-    POSITION y = caster_ptr->y;
-    POSITION x = caster_ptr->x;
+    POSITION y = player_ptr->y;
+    POSITION x = player_ptr->x;
     floor_type *f_ptr;
 
     for (int i = 0; i < 3; i++) {
-        if (!tgt_pt(caster_ptr, &x, &y))
+        if (!tgt_pt(player_ptr, &x, &y))
             return false;
 
-        f_ptr = caster_ptr->current_floor_ptr;
+        f_ptr = player_ptr->current_floor_ptr;
 
-        if (distance(y, x, caster_ptr->y, caster_ptr->x) > dist) {
+        if (distance(y, x, player_ptr->y, player_ptr->x) > dist) {
             msg_print(_("遠すぎる！", "There is too far!"));
             continue;
         }
 
-        if (!is_cave_empty_bold(caster_ptr, y, x) || f_ptr->grid_array[y][x].is_icky()) {
+        if (!is_cave_empty_bold(player_ptr, y, x) || f_ptr->grid_array[y][x].is_icky()) {
             msg_print(_("そこには移動できない。", "Can not teleport to there."));
             continue;
         }
@@ -1450,9 +1450,9 @@ static bool door_to_darkness(player_type *caster_ptr, POSITION dist)
         break;
     }
 
-    bool flag = cave_player_teleportable_bold(caster_ptr, y, x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(f_ptr, y, x);
+    bool flag = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(f_ptr, y, x);
     if (flag) {
-        teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
+        teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
     } else {
         msg_print(_("闇の扉は開かなかった！", "Door to darkness does not open!"));
     }

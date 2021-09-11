@@ -61,17 +61,17 @@ static void inscribe_nickname(ae_type *ae_ptr)
     ae_ptr->o_ptr->inscription = quark_add(buf);
 }
 
-static bool set_activation_target(player_type *user_ptr, ae_type *ae_ptr)
+static bool set_activation_target(player_type *player_ptr, ae_type *ae_ptr)
 {
     bool old_target_pet = target_pet;
     target_pet = true;
-    if (!get_aim_dir(user_ptr, &ae_ptr->dir)) {
+    if (!get_aim_dir(player_ptr, &ae_ptr->dir)) {
         target_pet = old_target_pet;
         return false;
     }
 
     target_pet = old_target_pet;
-    if (!fire_ball(user_ptr, GF_CAPTURE, ae_ptr->dir, 0, 0))
+    if (!fire_ball(player_ptr, GF_CAPTURE, ae_ptr->dir, 0, 0))
         return true;
 
     ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
@@ -82,7 +82,7 @@ static bool set_activation_target(player_type *user_ptr, ae_type *ae_ptr)
     return true;
 }
 
-static void add_quark_to_inscription(player_type *user_ptr, ae_type *ae_ptr, concptr t, char *buf)
+static void add_quark_to_inscription(player_type *player_ptr, ae_type *ae_ptr, concptr t, char *buf)
 {
     if (!*t)
         return;
@@ -111,7 +111,7 @@ static void add_quark_to_inscription(player_type *user_ptr, ae_type *ae_ptr, con
 #endif
 
     *s = '\0';
-    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
+    player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
     t = quark_str(ae_ptr->o_ptr->inscription);
     s = buf;
     while (*t && (*t != '#')) {
@@ -124,7 +124,7 @@ static void add_quark_to_inscription(player_type *user_ptr, ae_type *ae_ptr, con
     ae_ptr->o_ptr->inscription = quark_add(buf);
 }
 
-static void check_inscription_value(player_type *user_ptr, ae_type *ae_ptr)
+static void check_inscription_value(player_type *player_ptr, ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->inscription == 0)
         return;
@@ -138,18 +138,18 @@ static void check_inscription_value(player_type *user_ptr, ae_type *ae_ptr)
 #endif
     }
 
-    add_quark_to_inscription(user_ptr, ae_ptr, t, buf);
+    add_quark_to_inscription(player_ptr, ae_ptr, t, buf);
 }
 
-static void check_monster_ball_use(player_type *user_ptr, ae_type *ae_ptr)
+static void check_monster_ball_use(player_type *player_ptr, ae_type *ae_ptr)
 {
-    if (!monster_can_enter(user_ptr, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0))
+    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0))
         return;
 
-    if (!place_monster_aux(user_ptr, 0, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE))
+    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE))
         return;
 
-    floor_type *floor_ptr = user_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (ae_ptr->o_ptr->xtra3)
         floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->xtra3;
 
@@ -160,7 +160,7 @@ static void check_monster_ball_use(player_type *user_ptr, ae_type *ae_ptr)
         floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
 
     floor_ptr->m_list[hack_m_idx_ii].maxhp = floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
-    check_inscription_value(user_ptr, ae_ptr);
+    check_inscription_value(player_ptr, ae_ptr);
     ae_ptr->o_ptr->pval = 0;
     ae_ptr->o_ptr->xtra3 = 0;
     ae_ptr->o_ptr->xtra4 = 0;
@@ -168,28 +168,28 @@ static void check_monster_ball_use(player_type *user_ptr, ae_type *ae_ptr)
     ae_ptr->success = true;
 }
 
-bool exe_monster_capture(player_type *user_ptr, ae_type *ae_ptr)
+bool exe_monster_capture(player_type *player_ptr, ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->tval != TV_CAPTURE)
         return false;
 
     if (ae_ptr->o_ptr->pval == 0) {
-        if (!set_activation_target(user_ptr, ae_ptr))
+        if (!set_activation_target(player_ptr, ae_ptr))
             return true;
 
-        calc_android_exp(user_ptr);
+        calc_android_exp(player_ptr);
         return true;
     }
 
     ae_ptr->success = false;
-    if (!get_direction(user_ptr, &ae_ptr->dir, false, false))
+    if (!get_direction(player_ptr, &ae_ptr->dir, false, false))
         return true;
 
-    check_monster_ball_use(user_ptr, ae_ptr);
+    check_monster_ball_use(player_ptr, ae_ptr);
     if (!ae_ptr->success)
         msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 
-    calculate_upkeep(user_ptr);
-    calc_android_exp(user_ptr);
+    calculate_upkeep(player_ptr);
+    calc_android_exp(player_ptr);
     return true;
 }

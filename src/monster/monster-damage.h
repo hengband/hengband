@@ -11,13 +11,13 @@ struct player_type;
 typedef std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> combined_uniques;
 class MonsterDamageProcessor {
 public:
-    MonsterDamageProcessor(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear);
+    MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear);
     MonsterDamageProcessor() = delete;
     virtual ~MonsterDamageProcessor() = default;
     bool mon_take_hit(concptr note);
 
 private:
-    player_type *target_ptr;
+    player_type *player_ptr;
     MONSTER_IDX m_idx;
     HIT_POINT dam;
     bool *fear;

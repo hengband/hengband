@@ -31,18 +31,18 @@ static TERM_COLOR likert_color = TERM_WHITE;
 
 /*!
  * @brief
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 装備中の弓への参照ポインタ
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
  */
-static void calc_shot_params(player_type *creature_ptr, object_type *o_ptr, int *shots, int *shot_frac)
+static void calc_shot_params(player_type *player_ptr, object_type *o_ptr, int *shots, int *shot_frac)
 {
     if (o_ptr->k_idx == 0)
         return;
 
     ENERGY energy_fire = bow_energy(o_ptr->sval);
-    *shots = creature_ptr->num_fire * 100;
+    *shots = player_ptr->num_fire * 100;
     *shot_frac = ((*shots) * 100 / energy_fire) % 100;
     *shots = (*shots) / energy_fire;
     if (o_ptr->name1 != ART_CRIMSON)
@@ -50,39 +50,39 @@ static void calc_shot_params(player_type *creature_ptr, object_type *o_ptr, int 
 
     *shots = 1;
     *shot_frac = 0;
-    if (creature_ptr->pclass != CLASS_ARCHER)
+    if (player_ptr->pclass != CLASS_ARCHER)
         return;
 
-    if (creature_ptr->lev >= 10)
+    if (player_ptr->lev >= 10)
         (*shots)++;
-    if (creature_ptr->lev >= 30)
+    if (player_ptr->lev >= 30)
         (*shots)++;
-    if (creature_ptr->lev >= 45)
+    if (player_ptr->lev >= 45)
         (*shots)++;
 }
 
 /*!
  * @brief 武器装備に制限のあるクラスで、直接攻撃のダメージを計算する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param hand 手 (利き手が0、反対の手が1…のはず)
  * @param damage 直接攻撃のダメージ
  * @param basedam 素手における直接攻撃のダメージ
  * @param o_ptr 装備中の武器への参照ポインタ
  * @return 利き手ならTRUE、反対の手ならFALSE
  */
-static bool calc_weapon_damage_limit(player_type *creature_ptr, int hand, int *damage, int *basedam, object_type *o_ptr)
+static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *damage, int *basedam, object_type *o_ptr)
 {
-    PLAYER_LEVEL level = creature_ptr->lev;
+    PLAYER_LEVEL level = player_ptr->lev;
     if (hand > 0) {
         damage[hand] = 0;
         return false;
     }
 
-    if (creature_ptr->pclass == CLASS_FORCETRAINER)
+    if (player_ptr->pclass == CLASS_FORCETRAINER)
         level = MAX(1, level - 3);
-    if (creature_ptr->special_defense & KAMAE_BYAKKO)
+    if (player_ptr->special_defense & KAMAE_BYAKKO)
         *basedam = monk_ave_damage[level][1];
-    else if (creature_ptr->special_defense & (KAMAE_GENBU | KAMAE_SUZAKU))
+    else if (player_ptr->special_defense & (KAMAE_GENBU | KAMAE_SUZAKU))
         *basedam = monk_ave_damage[level][2];
     else
         *basedam = monk_ave_damage[level][0];
@@ -122,13 +122,13 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
 
 /*!
  * @brief ヴォーパル武器等によるダメージ強化
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 装備中の武器への参照ポインタ
  * @param basedam 素手における直接攻撃のダメージ
  * @param flgs オブジェクトフラグ群
  * @return 強化後の素手ダメージ
  */
-static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int basedam, const TrFlags &flgs)
+static int strengthen_basedam(player_type *player_ptr, object_type *o_ptr, int basedam, const TrFlags &flgs)
 {
     if (o_ptr->is_fully_known() && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))) {
         /* vorpal blade */
@@ -141,9 +141,9 @@ static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int
     }
 
     // 理力
-    bool is_force = creature_ptr->pclass != CLASS_SAMURAI;
+    bool is_force = player_ptr->pclass != CLASS_SAMURAI;
     is_force &= flgs.has(TR_FORCE_WEAPON);
-    is_force &= creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
+    is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
     if (is_force)
         basedam = basedam * 7 / 2;
 
@@ -237,26 +237,26 @@ static concptr likert(int x, int y)
 
 /*!
  * @brief 弓＋両手の武器それぞれについてダメージを計算する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param damage 直接攻撃のダメージ
  * @param to_h 命中補正
  */
-static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
+static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
 {
     object_type *o_ptr;
-    o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+    o_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     for (int i = 0; i < 2; i++) {
         int basedam;
-        damage[i] = creature_ptr->dis_to_d[i] * 100;
-        if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, true) & EMPTY_HAND_MAIN)) {
-            if (!calc_weapon_damage_limit(creature_ptr, i, damage, &basedam, o_ptr))
+        damage[i] = player_ptr->dis_to_d[i] * 100;
+        if (((player_ptr->pclass == CLASS_MONK) || (player_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
+            if (!calc_weapon_damage_limit(player_ptr, i, damage, &basedam, o_ptr))
                 break;
 
             continue;
         }
 
-        o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
+        o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
         if (!calc_weapon_one_hand(o_ptr, i, damage, &basedam))
             continue;
 
@@ -269,12 +269,12 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
             to_h[i] += o_ptr->to_h;
         }
 
-        basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
+        basedam = ((o_ptr->dd + player_ptr->to_dd[i]) * (o_ptr->ds + player_ptr->to_ds[i] + 1)) * 50;
         auto flgs = object_flags_known(o_ptr);
 
-        bool impact = creature_ptr->impact != 0;
-        basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle, impact);
-        basedam = strengthen_basedam(creature_ptr, o_ptr, basedam, flgs);
+        bool impact = player_ptr->impact != 0;
+        basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);
+        basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flgs);
         damage[i] += basedam;
         if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
             damage[i] = 1;
@@ -285,38 +285,38 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
 
 /*!
  * @brief キャラ基本情報及び技能値をメインウィンドウに表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param xthb 武器等を含めた最終命中率
  * @param damage 打撃修正
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
  * @param display_player_one_line 1行表示用のコールバック関数
  */
-static void display_first_page(player_type *creature_ptr, int xthb, int *damage, int shots, int shot_frac)
+static void display_first_page(player_type *player_ptr, int xthb, int *damage, int shots, int shot_frac)
 {
-    int xthn = creature_ptr->skill_thn + (creature_ptr->to_h_m * BTH_PLUS_ADJ);
+    int xthn = player_ptr->skill_thn + (player_ptr->to_h_m * BTH_PLUS_ADJ);
 
     int muta_att = 0;
-    if (creature_ptr->muta.has(MUTA::HORNS))
+    if (player_ptr->muta.has(MUTA::HORNS))
         muta_att++;
-    if (creature_ptr->muta.has(MUTA::SCOR_TAIL))
+    if (player_ptr->muta.has(MUTA::SCOR_TAIL))
         muta_att++;
-    if (creature_ptr->muta.has(MUTA::BEAK))
+    if (player_ptr->muta.has(MUTA::BEAK))
         muta_att++;
-    if (creature_ptr->muta.has(MUTA::TRUNK))
+    if (player_ptr->muta.has(MUTA::TRUNK))
         muta_att++;
-    if (creature_ptr->muta.has(MUTA::TENTACLES))
+    if (player_ptr->muta.has(MUTA::TENTACLES))
         muta_att++;
 
-    int blows1 = can_attack_with_main_hand(creature_ptr) ? creature_ptr->num_blow[0] : 0;
-    int blows2 = can_attack_with_sub_hand(creature_ptr) ? creature_ptr->num_blow[1] : 0;
-    int xdis = creature_ptr->skill_dis;
-    int xdev = creature_ptr->skill_dev;
-    int xsav = creature_ptr->skill_sav;
-    int xstl = creature_ptr->skill_stl;
-    int xsrh = creature_ptr->skill_srh;
-    int xfos = creature_ptr->skill_fos;
-    int xdig = creature_ptr->skill_dig;
+    int blows1 = can_attack_with_main_hand(player_ptr) ? player_ptr->num_blow[0] : 0;
+    int blows2 = can_attack_with_sub_hand(player_ptr) ? player_ptr->num_blow[1] : 0;
+    int xdis = player_ptr->skill_dis;
+    int xdev = player_ptr->skill_dev;
+    int xsav = player_ptr->skill_sav;
+    int xstl = player_ptr->skill_stl;
+    int xsrh = player_ptr->skill_srh;
+    int xfos = player_ptr->skill_fos;
+    int xdig = player_ptr->skill_dig;
 
     concptr desc = likert(xthn, 12);
     display_player_one_line(ENTRY_SKILL_FIGHT, desc, likert_color);
@@ -361,29 +361,29 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
         desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
 
     display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
-    display_player_one_line(ENTRY_INFRA, format("%d feet", creature_ptr->see_infra * 10), TERM_WHITE);
+    display_player_one_line(ENTRY_INFRA, format("%d feet", player_ptr->see_infra * 10), TERM_WHITE);
 }
 
 /*!
  * @brief プレイヤーステータスの1ページ目各種詳細をまとめて表示する
  * Prints ratings on certain abilities
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param display_player_one_line 1行表示用のコールバック関数
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */
-void display_player_various(player_type *creature_ptr)
+void display_player_various(player_type *player_ptr)
 {
     object_type *o_ptr;
-    o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
-    int tmp = creature_ptr->to_h_b + o_ptr->to_h;
-    int xthb = creature_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
+    o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    int tmp = player_ptr->to_h_b + o_ptr->to_h;
+    int xthb = player_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
     int shots = 0;
     int shot_frac = 0;
-    calc_shot_params(creature_ptr, o_ptr, &shots, &shot_frac);
+    calc_shot_params(player_ptr, o_ptr, &shots, &shot_frac);
 
     int damage[2];
     int to_h[2];
-    calc_two_hands(creature_ptr, damage, to_h);
-    display_first_page(creature_ptr, xthb, damage, shots, shot_frac);
+    calc_two_hands(player_ptr, damage, to_h);
+    display_first_page(player_ptr, xthb, damage, shots, shot_frac);
 }

@@ -6,14 +6,14 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool demonic_breath(player_type *creature_ptr)
+bool demonic_breath(player_type *player_ptr)
 {
     DIRECTION dir;
     int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
-    if (!get_aim_dir(creature_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
-    stop_mouth(creature_ptr);
+    stop_mouth(player_ptr);
     msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), ((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
-    fire_breath(creature_ptr, type, dir, creature_ptr->lev * 3, (creature_ptr->lev / 15) + 1);
+    fire_breath(player_ptr, type, dir, player_ptr->lev * 3, (player_ptr->lev / 15) + 1);
     return true;
 }

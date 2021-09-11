@@ -100,7 +100,7 @@ static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, const ob
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はnullptr文字列を返す。
  */
-concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = mode == SPELL_NAME;
     bool desc = mode == SPELL_DESC;
@@ -111,7 +111,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
     bool add = true;
 
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     HIT_POINT power;
 
     switch (spell) {
@@ -122,12 +122,12 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (desc)
             return _("祝福により攻撃精度と防御力が上がる。", "Attempts to increase +to_hit of a weapon and AC");
         if (cast) {
-            if (!caster_ptr->blessed) {
+            if (!player_ptr->blessed) {
                 msg_print(_("高潔な気分になった！", "You feel righteous!"));
             }
         }
         if (stop) {
-            if (!caster_ptr->blessed) {
+            if (!player_ptr->blessed) {
                 msg_print(_("高潔な気分が消え失せた。", "The prayer has expired."));
             }
         }
@@ -144,7 +144,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             msg_print(_("気分が良くなってくる。", "You feel a little better."));
         }
         if (cast || cont)
-            (void)cure_light_wounds(caster_ptr, 1, 10);
+            (void)cure_light_wounds(player_ptr, 1, 10);
         break;
 
     case 2:
@@ -169,7 +169,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (info)
             return info_damage(1, power, 0);
         if (cast || cont) {
-            project_all_los(caster_ptr, GF_POIS, randint1(power));
+            project_all_los(player_ptr, GF_POIS, randint1(power));
         }
         break;
 
@@ -197,11 +197,11 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どれを呪いますか？", "Which weapon do you curse?");
             s = _("武器を装備していない。", "You're not wielding a weapon.");
 
-            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(item_tester_hook_weapon_except_bow, caster_ptr));
+            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(item_tester_hook_weapon_except_bow, player_ptr));
             if (!o_ptr)
                 return "";
 
-            describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
             auto f = object_flags(o_ptr);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
@@ -252,7 +252,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
-            caster_ptr->update |= (PU_BONUS);
+            player_ptr->update |= (PU_BONUS);
             add = false;
         }
         break;
@@ -275,33 +275,33 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (desc)
             return _(
                 "数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", "Bursts hell fire strongly after enduring damage for a few turns.");
-        power = MIN(200, (hex_revenge_power(caster_ptr) * 2));
+        power = MIN(200, (hex_revenge_power(player_ptr) * 2));
         if (info)
             return info_damage(0, 0, power);
         if (cast) {
-            int a = 3 - (caster_ptr->pspeed - 100) / 10;
+            int a = 3 - (player_ptr->pspeed - 100) / 10;
             byte r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
-            if (hex_revenge_turn(caster_ptr) > 0) {
+            if (hex_revenge_turn(player_ptr) > 0) {
                 msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
                 return nullptr;
             }
 
-            hex_revenge_type(caster_ptr) = 1;
-            hex_revenge_turn(caster_ptr) = r;
-            hex_revenge_power(caster_ptr) = 0;
+            hex_revenge_type(player_ptr) = 1;
+            hex_revenge_turn(player_ptr) = r;
+            hex_revenge_power(player_ptr) = 0;
             msg_print(_("じっと耐えることにした。", "You decide to endure damage for future retribution."));
             add = false;
         }
         if (cont) {
             POSITION rad = 2 + (power / 50);
 
-            hex_revenge_turn(caster_ptr)--;
+            hex_revenge_turn(player_ptr)--;
 
-            if ((hex_revenge_turn(caster_ptr) <= 0) || (power >= 200)) {
+            if ((hex_revenge_turn(player_ptr) <= 0) || (power >= 200)) {
                 msg_print(_("我慢が解かれた！", "My patience is at an end!"));
                 if (power) {
-                    project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
+                    project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
 
                 if (current_world_ptr->wizard) {
@@ -309,9 +309,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 }
 
                 /* Reset */
-                hex_revenge_type(caster_ptr) = 0;
-                hex_revenge_turn(caster_ptr) = 0;
-                hex_revenge_power(caster_ptr) = 0;
+                hex_revenge_type(player_ptr) = 0;
+                hex_revenge_turn(player_ptr) = 0;
+                hex_revenge_power(player_ptr) = 0;
             }
         }
         break;
@@ -341,7 +341,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             msg_print(_("気分が良くなってくる。", "You feel better."));
         }
         if (cast || cont)
-            (void)cure_serious_wounds(caster_ptr, 2, 10);
+            (void)cure_serious_wounds(player_ptr, 2, 10);
         break;
 
     case 10:
@@ -350,9 +350,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (desc)
             return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling spell casting.");
         if (cast) {
-            casting_hex_flags(caster_ptr) |= (1UL << HEX_INHAIL);
-            do_cmd_quaff_potion(caster_ptr);
-            casting_hex_flags(caster_ptr) &= ~(1UL << HEX_INHAIL);
+            casting_hex_flags(player_ptr) |= (1UL << HEX_INHAIL);
+            do_cmd_quaff_potion(player_ptr);
+            casting_hex_flags(player_ptr) &= ~(1UL << HEX_INHAIL);
             add = false;
         }
         break;
@@ -366,7 +366,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (info)
             return info_damage(1, power, 0);
         if (cast || cont) {
-            project_all_los(caster_ptr, GF_HYPODYNAMIA, randint1(power));
+            project_all_los(player_ptr, GF_HYPODYNAMIA, randint1(power));
         }
         break;
 
@@ -380,7 +380,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("あなたの武器が黒く輝いた。");
 #else
-            if (!empty_hands(caster_ptr, false))
+            if (!empty_hands(player_ptr, false))
                 msg_print("Your weapons glow bright black.");
             else
                 msg_print("Your weapon glows bright black.");
@@ -390,7 +390,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("武器の輝きが消え去った。");
 #else
-            msg_format("Your weapon%s.", (empty_hands(caster_ptr, false)) ? " no longer glows" : "s no longer glow");
+            msg_format("Your weapon%s.", (empty_hands(player_ptr, false)) ? " no longer glows" : "s no longer glow");
 #endif
         }
         break;
@@ -457,7 +457,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             msg_print(_("気分が良くなってくる。", "You feel much better."));
         }
         if (cast || cont)
-            (void)cure_critical_wounds(caster_ptr, damroll(4, 10));
+            (void)cure_critical_wounds(player_ptr, damroll(4, 10));
         break;
 
     case 18:
@@ -469,7 +469,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (info)
             return info_power(power);
         if (cast) {
-            if (!recharge(caster_ptr, power))
+            if (!recharge(player_ptr, power))
                 return nullptr;
             add = false;
         }
@@ -484,7 +484,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             msg_print(_("死者への呼びかけを始めた。", "You start to call the dead.!"));
         }
         if (cast || cont) {
-            animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
+            animate_dead(player_ptr, 0, player_ptr->y, player_ptr->x);
         }
         break;
 
@@ -502,12 +502,12 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             s = _("防具を装備していない。", "You're not wearing any armor.");
 
-            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_armour));
+            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_armour));
             if (!o_ptr)
                 return "";
 
-            o_ptr = &caster_ptr->inventory_list[item];
-            describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            o_ptr = &player_ptr->inventory_list[item];
+            describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
             auto f = object_flags(o_ptr);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
@@ -559,7 +559,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
-            caster_ptr->update |= (PU_BONUS);
+            player_ptr->update |= (PU_BONUS);
             add = false;
         }
         break;
@@ -570,7 +570,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (desc)
             return _("影のオーラを身にまとい、敵に影のダメージを与える。", "Gives aura of shadow.");
         if (cast) {
-            object_type *o_ptr = &caster_ptr->inventory_list[INVEN_OUTER];
+            object_type *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if (!o_ptr->k_idx) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
@@ -583,14 +583,14 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             }
         }
         if (cont) {
-            object_type *o_ptr = &caster_ptr->inventory_list[INVEN_OUTER];
+            object_type *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
-                exe_spell(caster_ptr, REALM_HEX, spell, SPELL_STOP);
-                casting_hex_flags(caster_ptr) &= ~(1UL << spell);
-                casting_hex_num(caster_ptr)--;
-                if (get_singing_song_id(caster_ptr) == 0)
-                    set_action(caster_ptr, ACTION_NONE);
+                exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
+                casting_hex_flags(player_ptr) &= ~(1UL << spell);
+                casting_hex_num(player_ptr)--;
+                if (get_singing_song_id(player_ptr) == 0)
+                    set_action(player_ptr, ACTION_NONE);
             }
         }
         if (stop) {
@@ -607,7 +607,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (info)
             return info_damage(1, power, 0);
         if (cast || cont) {
-            project_all_los(caster_ptr, GF_PSI_DRAIN, randint1(power));
+            project_all_los(player_ptr, GF_PSI_DRAIN, randint1(power));
         }
         break;
 
@@ -642,46 +642,46 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         }
         if (cast || cont) {
             bool flag = false;
-            int d = (caster_ptr->max_exp - caster_ptr->exp);
-            int r = (caster_ptr->exp / 20);
+            int d = (player_ptr->max_exp - player_ptr->exp);
+            int r = (player_ptr->exp / 20);
             int i;
 
             if (d > 0) {
                 if (d < r)
-                    caster_ptr->exp = caster_ptr->max_exp;
+                    player_ptr->exp = player_ptr->max_exp;
                 else
-                    caster_ptr->exp += r;
+                    player_ptr->exp += r;
 
                 /* Check the experience */
-                check_experience(caster_ptr);
+                check_experience(player_ptr);
 
                 flag = true;
             }
             for (i = A_STR; i < A_MAX; i++) {
-                if (caster_ptr->stat_cur[i] < caster_ptr->stat_max[i]) {
-                    if (caster_ptr->stat_cur[i] < 18)
-                        caster_ptr->stat_cur[i]++;
+                if (player_ptr->stat_cur[i] < player_ptr->stat_max[i]) {
+                    if (player_ptr->stat_cur[i] < 18)
+                        player_ptr->stat_cur[i]++;
                     else
-                        caster_ptr->stat_cur[i] += 10;
+                        player_ptr->stat_cur[i] += 10;
 
-                    if (caster_ptr->stat_cur[i] > caster_ptr->stat_max[i])
-                        caster_ptr->stat_cur[i] = caster_ptr->stat_max[i];
-                    caster_ptr->update |= (PU_BONUS);
+                    if (player_ptr->stat_cur[i] > player_ptr->stat_max[i])
+                        player_ptr->stat_cur[i] = player_ptr->stat_max[i];
+                    player_ptr->update |= (PU_BONUS);
 
                     flag = true;
                 }
             }
 
             if (!flag) {
-                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(caster_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
-                casting_hex_flags(caster_ptr) &= ~(1UL << HEX_RESTORE);
+                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
+                casting_hex_flags(player_ptr) &= ~(1UL << HEX_RESTORE);
                 if (cont)
-                    casting_hex_num(caster_ptr)--;
-                if (casting_hex_num(caster_ptr))
-                    caster_ptr->action = ACTION_NONE;
+                    casting_hex_num(player_ptr)--;
+                if (casting_hex_num(player_ptr))
+                    player_ptr->action = ACTION_NONE;
 
-                caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-                caster_ptr->redraw |= (PR_EXTRA);
+                player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+                player_ptr->redraw |= (PR_EXTRA);
 
                 return "";
             }
@@ -701,17 +701,17 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
             s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
-            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_cursed));
+            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_cursed));
             if (!o_ptr)
                 return "";
 
             auto f = object_flags(o_ptr);
 
-            caster_ptr->csp += (caster_ptr->lev / 5) + randint1(caster_ptr->lev / 5);
+            player_ptr->csp += (player_ptr->lev / 5) + randint1(player_ptr->lev / 5);
             if (f.has(TR_TY_CURSE) || o_ptr->curse_flags.has(TRC::TY_CURSE))
-                caster_ptr->csp += randint1(5);
-            if (caster_ptr->csp > caster_ptr->msp)
-                caster_ptr->csp = caster_ptr->msp;
+                player_ptr->csp += randint1(5);
+            if (player_ptr->csp > player_ptr->msp)
+                player_ptr->csp = player_ptr->msp;
 
             if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
                 /* Nothing */
@@ -738,7 +738,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("あなたの武器が血を欲している。");
 #else
-            if (!empty_hands(caster_ptr, false))
+            if (!empty_hands(player_ptr, false))
                 msg_print("Your weapons want more blood now.");
             else
                 msg_print("Your weapon wants more blood now.");
@@ -748,7 +748,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("武器の渇望が消え去った。");
 #else
-            msg_format("Your weapon%s less thirsty now.", (empty_hands(caster_ptr, false)) ? " is" : "s are");
+            msg_format("Your weapon%s less thirsty now.", (empty_hands(player_ptr, false)) ? " is" : "s are");
 #endif
         }
         break;
@@ -762,7 +762,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (info)
             return info_power(power);
         if (cast || cont) {
-            stun_monsters(caster_ptr, power);
+            stun_monsters(player_ptr, power);
         }
         break;
 
@@ -777,7 +777,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             bool flag;
 
             for (i = 0; i < 3; i++) {
-                if (!tgt_pt(caster_ptr, &x, &y))
+                if (!tgt_pt(player_ptr, &x, &y))
                     return "";
 
                 flag = false;
@@ -787,12 +787,12 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                     int dx = x + ddx_ddd[dir];
                     if (dir == 5)
                         continue;
-                    if (caster_ptr->current_floor_ptr->grid_array[dy][dx].m_idx)
+                    if (player_ptr->current_floor_ptr->grid_array[dy][dx].m_idx)
                         flag = true;
                 }
 
-                if (!is_cave_empty_bold(caster_ptr, y, x) || caster_ptr->current_floor_ptr->grid_array[y][x].is_icky()
-                    || (distance(y, x, caster_ptr->y, caster_ptr->x) > plev + 2)) {
+                if (!is_cave_empty_bold(player_ptr, y, x) || player_ptr->current_floor_ptr->grid_array[y][x].is_icky()
+                    || (distance(y, x, player_ptr->y, player_ptr->x) > plev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }
@@ -800,10 +800,10 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             }
 
             if (flag && randint0(plev * plev / 2)) {
-                teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
+                teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
             } else {
                 msg_print(_("おっと！", "Oops!"));
-                teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
+                teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
             }
 
             add = false;
@@ -829,28 +829,28 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (desc)
             return _(
                 "数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", "Fires a ball of hell fire to try avenging damage from a few turns.");
-        power = hex_revenge_power(caster_ptr);
+        power = hex_revenge_power(player_ptr);
         if (info)
             return info_damage(0, 0, power);
         if (cast) {
             byte r;
-            int a = 3 - (caster_ptr->pspeed - 100) / 10;
+            int a = 3 - (player_ptr->pspeed - 100) / 10;
             r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
-            if (hex_revenge_turn(caster_ptr) > 0) {
+            if (hex_revenge_turn(player_ptr) > 0) {
                 msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));
                 return nullptr;
             }
 
-            hex_revenge_type(caster_ptr) = 2;
-            hex_revenge_turn(caster_ptr) = r;
+            hex_revenge_type(player_ptr) = 2;
+            hex_revenge_turn(player_ptr) = r;
             msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
             add = false;
         }
         if (cont) {
-            hex_revenge_turn(caster_ptr)--;
+            hex_revenge_turn(player_ptr)--;
 
-            if (hex_revenge_turn(caster_ptr) <= 0) {
+            if (hex_revenge_turn(player_ptr) <= 0) {
                 DIRECTION dir;
 
                 if (power) {
@@ -858,9 +858,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
                     do {
                         msg_print(_("復讐の時だ！", "Time for revenge!"));
-                    } while (!get_aim_dir(caster_ptr, &dir));
+                    } while (!get_aim_dir(player_ptr, &dir));
 
-                    fire_ball(caster_ptr, GF_HELL_FIRE, dir, power, 1);
+                    fire_ball(player_ptr, GF_HELL_FIRE, dir, power, 1);
 
                     if (current_world_ptr->wizard) {
                         msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
@@ -868,7 +868,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 } else {
                     msg_print(_("復讐する気が失せた。", "You are not in the mood for revenge."));
                 }
-                hex_revenge_power(caster_ptr) = 0;
+                hex_revenge_power(player_ptr) = 0;
             }
         }
         break;
@@ -877,16 +877,16 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
     /* start casting */
     if ((cast) && (add)) {
         /* add spell */
-        casting_hex_flags(caster_ptr) |= 1UL << (spell);
-        casting_hex_num(caster_ptr)++;
+        casting_hex_flags(player_ptr) |= 1UL << (spell);
+        casting_hex_num(player_ptr)++;
 
-        if (caster_ptr->action != ACTION_SPELL)
-            set_action(caster_ptr, ACTION_SPELL);
+        if (player_ptr->action != ACTION_SPELL)
+            set_action(player_ptr, ACTION_SPELL);
     }
 
     if (!info) {
-        caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-        caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+        player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+        player_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
     }
 
     return "";

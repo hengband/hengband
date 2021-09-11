@@ -7,10 +7,10 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-void set_equipment_influence(player_type *creature_ptr, self_info_type *self_ptr)
+void set_equipment_influence(player_type *player_ptr, self_info_type *self_ptr)
 {
     for (int k = INVEN_MAIN_HAND; k < INVEN_TOTAL; k++) {
-        object_type *o_ptr = &creature_ptr->inventory_list[k];
+        object_type *o_ptr = &player_ptr->inventory_list[k];
         if (o_ptr->k_idx == 0)
             continue;
 
@@ -55,24 +55,24 @@ void set_equipment_influence(player_type *creature_ptr, self_info_type *self_ptr
         self_ptr->info[self_ptr->line++] = _("あなたの攻撃速度は装備によって影響を受けている。", "Your attack speed is affected by your equipment.");
 }
 
-void set_status_sustain_info(player_type *creature_ptr, self_info_type *self_ptr)
+void set_status_sustain_info(player_type *player_ptr, self_info_type *self_ptr)
 {
-    if (has_sustain_str(creature_ptr)) {
+    if (has_sustain_str(player_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの腕力は維持されている。", "Your strength is sustained.");
     }
-    if (has_sustain_int(creature_ptr)) {
+    if (has_sustain_int(player_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの知能は維持されている。", "Your intelligence is sustained.");
     }
-    if (has_sustain_wis(creature_ptr)) {
+    if (has_sustain_wis(player_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの賢さは維持されている。", "Your wisdom is sustained.");
     }
-    if (has_sustain_con(creature_ptr)) {
+    if (has_sustain_con(player_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの耐久力は維持されている。", "Your constitution is sustained.");
     }
-    if (has_sustain_dex(creature_ptr)) {
+    if (has_sustain_dex(player_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの器用さは維持されている。", "Your dexterity is sustained.");
     }
-    if (has_sustain_chr(creature_ptr)) {
+    if (has_sustain_chr(player_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの魅力は維持されている。", "Your charisma is sustained.");
     }
 }

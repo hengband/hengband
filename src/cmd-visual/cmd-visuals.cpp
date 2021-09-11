@@ -75,7 +75,7 @@ static void print_visuals_menu(concptr choice_msg)
 /*
  * Interact with "visuals"
  */
-void do_cmd_visuals(player_type *creature_ptr)
+void do_cmd_visuals(player_type *player_ptr)
 {
     FILE *auto_dump_stream;
     char tmp[160];
@@ -97,11 +97,11 @@ void do_cmd_visuals(player_type *creature_ptr)
         case '0': {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", creature_ptr->base_name);
+            sprintf(tmp, "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70))
                 continue;
 
-            (void)process_pref_file(creature_ptr, tmp, true);
+            (void)process_pref_file(player_ptr, tmp, true);
             need_redraw = true;
             break;
         }
@@ -109,7 +109,7 @@ void do_cmd_visuals(player_type *creature_ptr)
             static concptr mark = "Monster attr/chars";
             prt(_("コマンド: モンスターの[色/文字]をファイルに書き出します", "Command: Dump monster attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", creature_ptr->base_name);
+            sprintf(tmp, "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70))
                 continue;
 
@@ -135,7 +135,7 @@ void do_cmd_visuals(player_type *creature_ptr)
             static concptr mark = "Object attr/chars";
             prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", creature_ptr->base_name);
+            sprintf(tmp, "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70))
                 continue;
 
@@ -155,7 +155,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                 } else {
                     object_type dummy;
                     dummy.prep(k_idx);
-                    describe_flavor(creature_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
+                    describe_flavor(player_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", o_name);
@@ -170,7 +170,7 @@ void do_cmd_visuals(player_type *creature_ptr)
             static concptr mark = "Feature attr/chars";
             prt(_("コマンド: 地形の[色/文字]をファイルに書き出します", "Command: Dump feature attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", creature_ptr->base_name);
+            sprintf(tmp, "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70))
                 continue;
 
@@ -254,7 +254,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                     need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_monsters(creature_ptr, &need_redraw, true, r);
+                    do_cmd_knowledge_monsters(player_ptr, &need_redraw, true, r);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -324,7 +324,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                     need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_objects(creature_ptr, &need_redraw, true, k);
+                    do_cmd_knowledge_objects(player_ptr, &need_redraw, true, k);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -414,10 +414,10 @@ void do_cmd_visuals(player_type *creature_ptr)
             break;
         }
         case '7':
-            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, true, -1);
+            do_cmd_knowledge_monsters(player_ptr, &need_redraw, true, -1);
             break;
         case '8':
-            do_cmd_knowledge_objects(creature_ptr, &need_redraw, true, -1);
+            do_cmd_knowledge_objects(player_ptr, &need_redraw, true, -1);
             break;
         case '9': {
             IDX lighting_level = F_LIT_STANDARD;
@@ -426,7 +426,7 @@ void do_cmd_visuals(player_type *creature_ptr)
         }
         case 'R':
         case 'r':
-            reset_visuals(creature_ptr);
+            reset_visuals(player_ptr);
             msg_print(_("画面上の[色/文字]を初期値にリセットしました。", "Visual attr/char tables reset."));
             need_redraw = true;
             break;
@@ -440,5 +440,5 @@ void do_cmd_visuals(player_type *creature_ptr)
 
     screen_load();
     if (need_redraw)
-        do_cmd_redraw(creature_ptr);
+        do_cmd_redraw(player_ptr);
 }

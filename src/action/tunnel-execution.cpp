@@ -53,18 +53,18 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
  * Do not use twall anymore
  * Returns TRUE if repeated commands may continue
  */
-bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
+bool exe_tunnel(player_type *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     feature_type *f_ptr, *mimic_f_ptr;
     int power;
     concptr name;
     bool more = false;
-    if (!do_cmd_tunnel_test(creature_ptr->current_floor_ptr, y, x))
+    if (!do_cmd_tunnel_test(player_ptr->current_floor_ptr, y, x))
         return false;
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     f_ptr = &f_info[g_ptr->feat];
     power = f_ptr->power;
     mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
@@ -76,35 +76,35 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
         else
             msg_print(_("そこは掘れない!", "You can't tunnel through that!"));
     } else if (f_ptr->flags.has(FF::CAN_DIG)) {
-        if (creature_ptr->skill_dig > randint0(20 * power)) {
+        if (player_ptr->skill_dig > randint0(20 * power)) {
             msg_format(_("%sをくずした。", "You have removed the %s."), name);
-            cave_alter_feat(creature_ptr, y, x, FF::TUNNEL);
-            creature_ptr->update |= PU_FLOW;
+            cave_alter_feat(player_ptr, y, x, FF::TUNNEL);
+            player_ptr->update |= PU_FLOW;
         } else {
             msg_format(_("%sをくずしている。", "You dig into the %s."), name);
             more = true;
         }
     } else {
         bool tree = mimic_f_ptr->flags.has(FF::TREE);
-        if (creature_ptr->skill_dig > power + randint0(40 * power)) {
+        if (player_ptr->skill_dig > power + randint0(40 * power)) {
             if (tree)
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
             else {
                 msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
-                creature_ptr->update |= (PU_FLOW);
+                player_ptr->update |= (PU_FLOW);
             }
 
             if (f_ptr->flags.has(FF::GLASS))
                 sound(SOUND_GLASS);
 
-            cave_alter_feat(creature_ptr, y, x, FF::TUNNEL);
-            chg_virtue(creature_ptr, V_DILIGENCE, 1);
-            chg_virtue(creature_ptr, V_NATURE, -1);
+            cave_alter_feat(player_ptr, y, x, FF::TUNNEL);
+            chg_virtue(player_ptr, V_DILIGENCE, 1);
+            chg_virtue(player_ptr, V_NATURE, -1);
         } else {
             if (tree) {
                 msg_format(_("%sを切っている。", "You chop away at the %s."), name);
                 if (randint0(100) < 25)
-                    search(creature_ptr);
+                    search(player_ptr);
             } else {
                 msg_format(_("%sに穴を掘っている。", "You tunnel into the %s."), name);
             }
@@ -113,8 +113,8 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
         }
     }
 
-    if (is_hidden_door(creature_ptr, g_ptr) && (randint0(100) < 25))
-        search(creature_ptr);
+    if (is_hidden_door(player_ptr, g_ptr) && (randint0(100) < 25))
+        search(player_ptr);
 
     return more;
 }

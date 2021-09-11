@@ -111,9 +111,9 @@ static void interpret_class_select_key_move(char c, int *cs)
     }
 }
 
-static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k)
+static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
 {
-    int cs = creature_ptr->pclass;
+    int cs = player_ptr->pclass;
     int os = MAX_CLASS;
     while (true) {
         display_class_stat(cs, &os, cur, sym);
@@ -163,7 +163,7 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
         } else
             *k = -1;
 
-        birth_help_option(creature_ptr, c, BK_CLASS);
+        birth_help_option(player_ptr, c, BK_CLASS);
     }
 
     return true;
@@ -172,7 +172,7 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
 /*!
  * @brief プレイヤーの職業選択を行う / Player class
  */
-bool get_player_class(player_type *creature_ptr)
+bool get_player_class(player_type *player_ptr)
 {
     clear_from(10);
     put_str(
@@ -187,12 +187,12 @@ bool get_player_class(player_type *creature_ptr)
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int k = -1;
-    if (!select_class(creature_ptr, cur, sym, &k))
+    if (!select_class(player_ptr, cur, sym, &k))
         return false;
 
-    creature_ptr->pclass = static_cast<player_class_type>(k);
-    cp_ptr = &class_info[creature_ptr->pclass];
-    mp_ptr = &m_info[creature_ptr->pclass];
+    player_ptr->pclass = static_cast<player_class_type>(k);
+    cp_ptr = &class_info[player_ptr->pclass];
+    mp_ptr = &m_info[player_ptr->pclass];
     c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
     return true;
 }

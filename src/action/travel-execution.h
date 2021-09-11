@@ -20,5 +20,5 @@ extern travel_type travel;
 
 struct floor_type;
 struct player_type;
-void travel_step(player_type *creature_ptr);
+void travel_step(player_type *player_ptr);
 void forget_travel_flow(floor_type *floor_ptr);

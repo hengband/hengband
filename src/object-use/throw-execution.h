@@ -18,7 +18,7 @@ class ObjectThrowEntity {
 public:
     ObjectThrowEntity() = default;
     ObjectThrowEntity(
-        player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
+        player_type *player_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
     virtual ~ObjectThrowEntity() = default;
 
     object_type *q_ptr;
@@ -45,7 +45,7 @@ public:
     void drop_thrown_item();
 
 private:
-    player_type *creature_ptr;
+    player_type *player_ptr;
     OBJECT_IDX shuriken;
     int mult;
     int msec;
