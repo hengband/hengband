@@ -52,22 +52,54 @@ static concptr const kaji_tips[5] = {
  */
 static void display_essence(player_type *player_ptr)
 {
-    int i, num = 0;
+    constexpr auto row_count = 21U;
+    constexpr auto column_width = 22U;
+    constexpr auto essence_num_per_page = row_count * 3;
+    int page = 0;
+    const auto &essences = Smith::get_essence_list();
+    const int page_max = (essences.size() - 1) / (row_count * 3) + 1;
+
+    Smith smith(player_ptr);
 
     screen_save();
-    for (i = 1; i < 22; i++) {
-        prt("", i, 0);
+    while (true) {
+        for (auto i = 1U; i <= row_count + 1; i++) {
+            prt("", i, 0);
+        }
+        prt(_("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "), 1, 8);
+
+        for (auto num = 0U, ei = page * essence_num_per_page;
+             num < essence_num_per_page && ei < essences.size();
+             ++num, ++ei) {
+            auto name = Smith::get_essence_name(essences[ei]);
+            auto amount = smith.get_essence_num_of_posessions(essences[ei]);
+            prt(format("%-11s %5d", name, amount), 2 + num % row_count, 8 + (num / row_count) * column_width);
+        }
+        prt(format(_("現在所持しているエッセンス %d/%d", "List of all essences you have. %d/%d"), (page + 1), page_max), 0, 0);
+
+        auto key = inkey();
+        if (key == ESCAPE) {
+            break;
+        }
+
+        switch (key) {
+        case ' ':
+            page++;
+            break;
+        case '-':
+            page--;
+            break;
+        default:
+            bell();
+            break;
+        }
+        if (page < 0) {
+            page = page_max - 1;
+        }
+        if (page >= page_max) {
+            page = 0;
+        }
     }
-    prt(_("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "), 1, 8);
-    Smith smith(player_ptr);
-    for (const auto &essence : Smith::get_essence_list()) {
-        auto name = Smith::get_essence_name(essence);
-        auto amount = smith.get_essence_num_of_posessions(essence);
-        prt(format("%-11s %5d", name, amount), 2 + num % 21, 8 + num / 21 * 22);
-        num++;
-    }
-    prt(_("現在所持しているエッセンス", "List of all essences you have."), 0, 0);
-    (void)inkey();
     screen_load();
     return;
 }
@@ -203,6 +235,61 @@ static COMMAND_CODE choose_essence(void)
     return mode;
 }
 
+/**
+ * @brief 鍛冶効果の一覧を表示する
+ *
+ * @param smith 鍛冶情報を得るのに使用するSmithクラスのオブジェクトの参照
+ * @param smith_effect_list 表示する鍛冶効果のリスト
+ * @param menu_line use_menuがtrueの時にカーソルを表示する行番号
+ * @param start_idx smith_effect_list の表示開始インデックス
+ * @param line_max 表示する最大行数
+ */
+static void display_smith_effect_list(const Smith &smith, const std::vector<SmithEffect> &smith_effect_list, int menu_line, int start_idx, int line_max)
+{
+    auto x = 10;
+
+    for (auto y = 1; y < line_max + 2; y++)
+        prt("", y, x);
+
+#ifdef JP
+    prt(format("   %-45s %6s/%s", "能力(必要エッセンス)", "所持数", "必要数"), 1, x);
+#else
+    prt(format("   %-44s %7s/%s", "Ability (needed essence)", "Possess", "Needs"), 1, x);
+#endif
+
+    for (int ctr = 0U, ei = start_idx; ctr < line_max && ei < static_cast<int>(smith_effect_list.size()); ++ctr, ++ei) {
+        auto effect = smith_effect_list[ei];
+        std::stringstream title;
+
+        if (use_menu) {
+            if (ctr == (menu_line - 1))
+                title << _("》 ", ">  ");
+            else
+                title << "   ";
+
+        } else {
+            title << static_cast<char>(I2A(ctr)) << ") ";
+        }
+
+        title << Smith::get_effect_name(effect);
+        title << "(" << Smith::get_need_essences_desc(effect) << ")";
+
+        char str[160];
+        auto consumption = Smith::get_essence_consumption(effect);
+        auto need_essences = Smith::get_need_essences(effect);
+        if (need_essences.size() == 1) {
+            auto essence = need_essences.front();
+            auto amount = smith.get_essence_num_of_posessions(essence);
+            snprintf(str, sizeof(str), "%-49s %5d/%d", title.str().c_str(), amount, consumption);
+        } else {
+            snprintf(str, sizeof(str), "%-49s  (\?\?)/%d", title.str().c_str(), consumption);
+        }
+
+        auto col = (smith.get_addable_count(effect, 1) > 0) ? TERM_WHITE : TERM_RED;
+        c_prt(col, str, ctr + 2, x);
+    }
+}
+
 /*!
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
@@ -210,8 +297,7 @@ static COMMAND_CODE choose_essence(void)
 static void add_essence(player_type *player_ptr, SmithCategory mode)
 {
     OBJECT_IDX item;
-    COMMAND_CODE i;
-    bool flag, redraw;
+    bool flag;
     char choice;
     concptr q, s;
     object_type *o_ptr;
@@ -224,20 +310,29 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
 
     auto smith_effect_list = Smith::get_effect_list(mode);
     const auto smith_effect_list_max = static_cast<int>(smith_effect_list.size());
+    auto page = 0;
+    constexpr auto effect_num_per_page = 22;
+    const int page_max = (smith_effect_list.size() - 1) / effect_num_per_page + 1;
 
-    if (!repeat_pull(&i) || i < 0 || i >= smith_effect_list_max) {
+    COMMAND_CODE i;
+    COMMAND_CODE effect_idx;
+
+    if (!repeat_pull(&effect_idx) || effect_idx < 0 || effect_idx >= smith_effect_list_max) {
         flag = false;
-        redraw = false;
 
-        (void)strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの能力を付加しますか？", "(*=List, ESC=exit) Add which ability? "));
-        if (use_menu)
-            screen_save();
+        screen_save();
 
-        choice = (always_show_list || use_menu) ? ESCAPE : 1;
         while (!flag) {
-            if (choice == ESCAPE)
-                choice = ' ';
-            else if (!get_com(out_val, &choice, false))
+            if (page_max > 1) {
+                std::string page_str = format("%d/%d", page + 1, page_max);
+                strnfmt(out_val, 78, _("(SPACEで次ページ, ESCで中断) どの能力を付加しますか？ %s", "(SPACE=next, ESC=exit) Add which ability? %s"), page_str.c_str());
+            } else {
+                strnfmt(out_val, 78, _("(ESCで中断) どの能力を付加しますか？", "(ESC=exit) Add which ability? "));
+            }
+
+            display_smith_effect_list(smith, smith_effect_list, menu_line, page * effect_num_per_page, effect_num_per_page);
+
+            if (!get_com(out_val, &choice, false))
                 break;
 
             if (use_menu && choice != ' ') {
@@ -283,77 +378,16 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
                     break;
                 }
                 }
+
                 if (menu_line > smith_effect_list_max)
                     menu_line -= smith_effect_list_max;
             }
+
             /* Request redraw */
             if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
-                /* Show the list */
-                if (!redraw || use_menu) {
-                    byte y, x = 10;
-                    int ctr;
-                    byte col;
-
-                    redraw = true;
-                    if (!use_menu)
-                        screen_save();
-
-                    for (y = 1; y < 24; y++)
-                        prt("", y, x);
-
-                        /* Print header(s) */
-#ifdef JP
-                    prt(format("   %-45s %6s/%s", "能力(必要エッセンス)", "所持数", "必要数"), 1, x);
-
-#else
-                    prt(format("   %-44s %7s/%s", "Ability (needed essence)", "Possess", "Needs"), 1, x);
-#endif
-                    /* Print list */
-                    for (ctr = 0; ctr < smith_effect_list_max; ctr++) {
-                        auto effect = smith_effect_list[ctr];
-                        std::stringstream title;
-
-                        if (use_menu) {
-                            if (ctr == (menu_line - 1))
-                                title << _("》 ", ">  ");
-                            else
-                                title << "   ";
-
-                        }
-                        /* letter/number for power selection */
-                        else {
-                            title << static_cast<char>(I2A(ctr)) << ") ";
-                        }
-
-                        title << Smith::get_effect_name(effect);
-
-                        col = TERM_WHITE;
-
-                        title << "(" << Smith::get_need_essences_desc(effect) << ")";
-
-                        if (smith.get_addable_count(effect, 1) <= 0)
-                            col = TERM_RED;
-
-                        char str[160];
-                        auto consumption = Smith::get_essence_consumption(effect);
-                        auto need_essences = Smith::get_need_essences(effect);
-                        if (need_essences.size() == 1) {
-                            auto essence = need_essences.front();
-                            auto amount = smith.get_essence_num_of_posessions(essence);
-                            snprintf(str, sizeof(str), "%-49s %5d/%d", title.str().c_str(), amount, consumption);
-                        } else {
-                            snprintf(str, sizeof(str), "%-49s  (\?\?)/%d", title.str().c_str(), consumption);
-                        }
-
-                        c_prt(col, str, ctr + 2, x);
-                    }
-                }
-
-                /* Hide the list */
-                else {
-                    /* Hide list */
-                    redraw = false;
-                    screen_load();
+                page++;
+                if (page >= page_max) {
+                    page = 0;
                 }
 
                 /* Redo asking */
@@ -372,8 +406,9 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
                 i = (islower(choice) ? A2I(choice) : -1);
             }
 
+            effect_idx = page * effect_num_per_page + i;
             /* Totally Illegal */
-            if ((i < 0) || (i >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[i], 1) <= 0) {
+            if ((effect_idx < 0) || (effect_idx >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[effect_idx], 1) <= 0) {
                 bell();
                 continue;
             }
@@ -393,16 +428,16 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
             /* Stop the loop */
             flag = true;
         }
-        if (redraw)
-            screen_load();
+
+        screen_load();
 
         if (!flag)
             return;
 
-        repeat_push(i);
+        repeat_push(effect_idx);
     }
 
-    auto effect = smith_effect_list[i];
+    auto effect = smith_effect_list[effect_idx];
 
     auto item_tester = Smith::get_item_tester(effect);
 
