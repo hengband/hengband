@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <optional>
+#include <unordered_map>
 
 struct object_type;
 struct player_type;
