@@ -66,7 +66,7 @@ bool SpellHex::stop_all_spells()
         exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_STOP);
     }
 
-    casting_hex_flags(this->player_ptr) = 0;
+    this->player_ptr->magic_num1[0] = 0;
     casting_hex_num(this->player_ptr) = 0;
     if (this->player_ptr->action == ACTION_SPELL) {
         set_action(this->player_ptr, ACTION_NONE);
