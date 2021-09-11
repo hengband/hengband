@@ -43,6 +43,7 @@ void wiz_dimension_door(player_type *player_ptr);
 void wiz_summon_horde(player_type *player_ptr);
 void wiz_teleport_back(player_type *player_ptr);
 void wiz_learn_blue_magic_all(player_type *player_ptr);
+void wiz_fillup_all_smith_essences(player_type *player_ptr);
 void wiz_summon_random_enemy(player_type *player_ptr, int num);
 void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx);
 void wiz_summon_pet(player_type *player_ptr, MONRACE_IDX r_idx);

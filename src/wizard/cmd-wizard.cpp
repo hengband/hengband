@@ -51,7 +51,7 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "d", _("全感知", "Detection all") },
     { "D", _("次元の扉", "Dimension door") },
     { "e", _("能力値変更", "Modify player status") },
-    { "E", _("青魔法を全取得", "Make all blue magic learned") },
+    { "E", _("青魔法を全取得/エッセンスを全取得", "Learn all blue magics / Obtain all essences") },
     { "f", _("*鑑定*", "*Idenfity*") },
     { "F", _("地形ID変更", "Modify feature type under player") },
     { "G", _("ゲーム設定コマンドメニュー", "Modify game configurations") },
@@ -106,7 +106,7 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
         ss << debug_menu_table[pos][0] << ") " << debug_menu_table[pos][1];
         put_str(ss.str().c_str(), r++, c);
     }
-    if (max_page > 0)
+    if (max_page > 1)
         put_str("-- more --", r++, c);
 }
 
@@ -150,9 +150,16 @@ bool exe_cmd_debug(player_type *player_ptr, char cmd)
         wiz_change_status(player_ptr);
         break;
     case 'E':
-        if (player_ptr->pclass == CLASS_BLUE_MAGE)
+        switch (player_ptr->pclass) {
+        case CLASS_BLUE_MAGE:
             wiz_learn_blue_magic_all(player_ptr);
-
+            break;
+        case CLASS_SMITH:
+            wiz_fillup_all_smith_essences(player_ptr);
+            break;
+        default:
+            break;
+        }
         break;
     case 'f':
         identify_fully(player_ptr, false);
