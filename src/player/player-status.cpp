@@ -182,7 +182,7 @@ int riding_exp_level(int riding_exp)
 }
 
 /*!
- * @brief クリーチャーの呪文レベルの抽象的ランクを返す。 / Return proficiency level of spells
+ * @brief プレイヤーの呪文レベルの抽象的ランクを返す。 / Return proficiency level of spells
  * @param spell_exp 経験値
  * @return ランク値
  */
@@ -242,7 +242,7 @@ static bool is_heavy_shoot(player_type *player_ptr, object_type *o_ptr)
 
 /*!
  * @brief 所持品総重量を計算する
- * @param player_ptr 計算対象となるクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 総重量
  */
 WEIGHT calc_inventory_weight(player_type *player_ptr)
@@ -1044,7 +1044,7 @@ int16_t calc_num_fire(player_type *player_ptr, object_type *o_ptr)
 
 /*!
  * @brief 解除能力計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 解除能力
  * @details
  * * 種族/職業/性格による加算
@@ -1073,7 +1073,7 @@ static ACTION_SKILL_POWER calc_disarming(player_type *player_ptr)
 
 /*!
  * @brief 魔道具使用能力計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 魔道具使用能力
  * @details
  * * 種族/職業/性格による加算
@@ -1117,7 +1117,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *player_ptr)
 
 /*!
  * @brief 魔法防御計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 魔法防御
  * @details
  * * 種族/職業/性格による加算
@@ -1178,7 +1178,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *player_ptr)
 
 /*!
  * @brief 探索深度計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 探索深度
  * @details
  * * 種族/職業/性格による加算
@@ -1225,7 +1225,7 @@ static ACTION_SKILL_POWER calc_search(player_type *player_ptr)
 
 /*!
  * @brief 探索頻度計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 探索頻度
  * @details
  * * 種族/職業/性格による加算
@@ -1272,7 +1272,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *player_ptr)
 
 /*!
  * @brief 打撃命中能力計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 打撃命中能力
  * @details
  * * 種族/職業/性格による加算とレベルによる追加加算
@@ -1296,7 +1296,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *player_ptr)
 
 /*!
  * @brief 射撃命中能力計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 射撃命中能力
  * @details
  * * 種族/職業/性格による加算とレベルによる追加加算
@@ -1320,7 +1320,7 @@ static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *player_ptr)
 
 /*!
  * @brief 投擲命中能力計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 投擲命中能力
  * @details
  * * 種族/職業/性格による加算とレベルによる追加加算
@@ -1350,7 +1350,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(player_type *player_ptr)
 
 /*!
  * @brief 掘削能力計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 掘削能力値
  * @details
  * * エントが素手の場合のプラス修正
@@ -1545,7 +1545,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
 
 /*!
  * @brief 魔法失敗値計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 魔法失敗値
  * @details
  * * 性格なまけものなら加算(+10)
@@ -1767,7 +1767,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
 
 /*!
  * @brief 二刀流ペナルティ量計算
- * @param player_ptr 計算するクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param slot ペナルティ量を計算する武器スロット
  * @return 二刀流ペナルティ量
  * @details

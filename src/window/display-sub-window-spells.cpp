@@ -18,10 +18,8 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief クリーチャー全既知呪文を表示する /
- * Hack -- Display all known spells in a window
- * @param player_ptr 術者の参照ポインタ
- * return なし
+ * @brief プレイヤーの全既知呪文を表示する / Display all known spells in a window
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Need to analyze size of the window.
  * Need more color coding.

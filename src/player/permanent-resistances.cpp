@@ -268,7 +268,7 @@ static void add_kata_flags(player_type *player_ptr, TrFlags &flags)
 /*!
  * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
  * Prints ratings on certain abilities
- * @param player_ptr 参照元クリーチャーポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags フラグを保管する配列
  * @details
  * Obtain the "flags" for the player as if he was an item

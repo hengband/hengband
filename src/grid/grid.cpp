@@ -67,7 +67,7 @@
 
 /*!
  * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
- * @param player_ptr 配置したいクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 配置に成功したらTRUEを返す
  */
 bool new_player_spot(player_type *player_ptr)
@@ -183,7 +183,7 @@ bool check_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 指定された座標の照明状態を更新する / Update "local" illumination
- * @param player_ptr 視界元のクリーチャー
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 視界先y座標
  * @param x 視界先x座標
  */

@@ -22,7 +22,7 @@
 
 /*!
  * @brief モンスターによる光量状態更新 / Add a square to the changes array
- * @param player_ptr 主観となるクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param points 座標たちを記録する配列
  * @param y Y座標
  * @param x X座標
