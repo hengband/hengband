@@ -435,3 +435,10 @@ void SpellHex::thief_teleport()
         teleport_away(this->player_ptr, this->monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
     }
 }
+
+void SpellHex::set_casting_flag(spell_hex_type type)
+{
+    auto value = static_cast<uint>(this->player_ptr->magic_num1[0]);
+    set_bits(value, 1U << type);
+    this->player_ptr->magic_num1[0] = value;
+}

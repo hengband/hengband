@@ -23,6 +23,7 @@ public:
     bool is_spelling_any() const;
     void eyes_on_eyes();
     void thief_teleport();
+    void set_casting_flag(spell_hex_type type);
 
 private:
     player_type *player_ptr;

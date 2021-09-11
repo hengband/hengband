@@ -343,19 +343,25 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             (void)cure_serious_wounds(player_ptr, 2, 10);
         break;
 
-    case HEX_INHALE:
-        if (name)
+    case HEX_INHALE: {
+        if (name) {
             return _("薬品吸入", "Inhale potion");
-        if (desc)
+        }
+
+        if (desc) {
             return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling spell casting.");
+        }
+
+        SpellHex spell_hex(player_ptr);
         if (cast) {
-            casting_hex_flags(player_ptr) |= (1UL << HEX_INHALE);
+            spell_hex.set_casting_flag(HEX_INHALE);
             do_cmd_quaff_potion(player_ptr);
             casting_hex_flags(player_ptr) &= ~(1UL << HEX_INHALE);
             add = false;
         }
-        break;
 
+        break;
+    }    
     case HEX_VAMP_MIST:
         if (name)
             return _("衰弱の霧", "Hypodynamic mist");
@@ -874,9 +880,9 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
     }
 
     /* start casting */
-    if ((cast) && (add)) {
-        /* add spell */
-        casting_hex_flags(player_ptr) |= 1UL << (spell);
+    if (cast && add) {
+        SpellHex spell_hex(player_ptr);
+        spell_hex.set_casting_flag(spell);
         casting_hex_num(player_ptr)++;
 
         if (player_ptr->action != ACTION_SPELL)
