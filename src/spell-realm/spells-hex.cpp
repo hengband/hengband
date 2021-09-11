@@ -67,7 +67,7 @@ bool SpellHex::stop_all_spells()
     }
 
     this->player_ptr->magic_num1[0] = 0;
-    casting_hex_num(this->player_ptr) = 0;
+    this->player_ptr->magic_num2[0] = 0;
     if (this->player_ptr->action == ACTION_SPELL) {
         set_action(this->player_ptr, ACTION_NONE);
     }
@@ -87,13 +87,14 @@ bool SpellHex::stop_one_spell()
         return false;
     }
 
-    if ((casting_hex_num(this->player_ptr) == 1) || (this->player_ptr->lev < 35)) {
+    auto casting_num = this->player_ptr->magic_num2[0];
+    if ((casting_num == 1) || (this->player_ptr->lev < 35)) {
         return this->stop_all_spells();
     }
 
     char out_val[160];
     strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
-        I2A(0), I2A(casting_hex_num(this->player_ptr) - 1));
+        I2A(0), I2A(casting_num - 1));
     screen_save();
     char choice = 0;
     auto is_selected = select_spell_stopping(out_val, choice);
@@ -135,7 +136,7 @@ bool SpellHex::select_spell_stopping(char *out_val, char &choice)
             return this->stop_all_spells();
         }
 
-        if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(this->player_ptr) - 1))) {
+        if ((choice < I2A(0)) || (choice > I2A(this->player_ptr->magic_num2[0] - 1))) {
             continue;
         }
 
@@ -198,7 +199,7 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     auto need_mana = this->calc_need_mana();
     uint need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-    need_mana += (casting_hex_num(this->player_ptr) - 1);
+    need_mana += this->player_ptr->magic_num2[0] - 1;
 
     auto enough_mana = s64b_cmp(this->player_ptr->csp, this->player_ptr->csp_frac, need_mana, need_mana_frac) >= 0;
     if (!enough_mana) {
@@ -326,7 +327,7 @@ bool SpellHex::is_casting_full_capacity() const
 {
     auto k_max = (this->player_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
-    return casting_hex_num(this->player_ptr) >= k_max;
+    return this->player_ptr->magic_num2[0] >= k_max;
 }
 
 /*!
