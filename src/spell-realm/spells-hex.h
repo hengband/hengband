@@ -28,6 +28,7 @@ public:
     int32_t get_casting_num() const;
     void add_casting_num(bool is_incremental);
     int32_t get_revenge_power() const;
+    void set_revenge_power(int32_t power, bool substitution);
 
 private:
     player_type *player_ptr;
@@ -45,6 +46,5 @@ private:
     void gain_exp_master(const int spell);
 };
 
-#define hex_revenge_power(P_PTR) ((P_PTR)->magic_num1[2])
 #define hex_revenge_turn(P_PTR) ((P_PTR)->magic_num2[2])
 #define hex_revenge_type(P_PTR) ((P_PTR)->magic_num2[1])

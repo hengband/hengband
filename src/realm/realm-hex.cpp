@@ -268,13 +268,17 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
         }
         break;
 
-    case HEX_PATIENCE:
-        if (name)
+    case HEX_PATIENCE: {
+        if (name) {
             return _("我慢", "Patience");
-        if (desc)
-            return _(
-                "数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", "Bursts hell fire strongly after enduring damage for a few turns.");
-        power = MIN(200, (SpellHex(player_ptr).get_revenge_power() * 2));
+        }
+
+        if (desc) {
+            return _("数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", "Bursts hell fire strongly after enduring damage for a few turns.");
+        }
+
+        SpellHex spell_hex(player_ptr);
+        power = MIN(200, spell_hex.get_revenge_power() * 2);
         if (info)
             return info_damage(0, 0, power);
         if (cast) {
@@ -288,7 +292,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
             hex_revenge_type(player_ptr) = 1;
             hex_revenge_turn(player_ptr) = r;
-            hex_revenge_power(player_ptr) = 0;
+            spell_hex.set_revenge_power(0, true);
             msg_print(_("じっと耐えることにした。", "You decide to endure damage for future retribution."));
             add = false;
         }
@@ -310,10 +314,11 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 /* Reset */
                 hex_revenge_type(player_ptr) = 0;
                 hex_revenge_turn(player_ptr) = 0;
-                hex_revenge_power(player_ptr) = 0;
+                spell_hex.set_revenge_power(0, true);
             }
         }
         break;
+    }
 
         /*** 2nd book (8-15) ***/
     case HEX_ICE_ARMOR:
@@ -833,15 +838,21 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
         }
         break;
 
-    case HEX_REVENGE:
-        if (name)
+    case HEX_REVENGE: {
+        if (name) {
             return _("復讐の宣告", "Revenge sentence");
-        if (desc)
-            return _(
-                "数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", "Fires a ball of hell fire to try avenging damage from a few turns.");
-        power = SpellHex(player_ptr).get_revenge_power();
-        if (info)
+        }
+
+        if (desc) {
+            return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", "Fires a ball of hell fire to try avenging damage from a few turns.");
+        }
+
+        SpellHex spell_hex(player_ptr);
+        power = spell_hex.get_revenge_power();
+        if (info) {
             return info_damage(0, 0, power);
+        }
+
         if (cast) {
             byte r;
             int a = 3 - (player_ptr->pspeed - 100) / 10;
@@ -857,9 +868,9 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
             add = false;
         }
+
         if (cont) {
             hex_revenge_turn(player_ptr)--;
-
             if (hex_revenge_turn(player_ptr) <= 0) {
                 DIRECTION dir;
 
@@ -878,10 +889,13 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 } else {
                     msg_print(_("復讐する気が失せた。", "You are not in the mood for revenge."));
                 }
-                hex_revenge_power(player_ptr) = 0;
+
+                spell_hex.set_revenge_power(0, true);
             }
         }
+
         break;
+    }
     }
 
     /* start casting */

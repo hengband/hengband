@@ -361,7 +361,7 @@ void SpellHex::store_vengeful_damage(HIT_POINT dam)
         return;
     }
 
-    hex_revenge_power(this->player_ptr) += dam;
+    this->set_revenge_power(dam, false);
 }
 
 /*!
@@ -472,4 +472,13 @@ void SpellHex::add_casting_num(bool is_incremental)
 int32_t SpellHex::get_revenge_power() const
 {
     return this->player_ptr->magic_num1[2];
+}
+
+void SpellHex::set_revenge_power(int32_t power, bool substitution)
+{
+    if (substitution) {
+        this->player_ptr->magic_num1[2] = power;
+    } else {
+        this->player_ptr->magic_num1[2] += power;
+    }
 }
