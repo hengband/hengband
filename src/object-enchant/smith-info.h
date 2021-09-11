@@ -18,9 +18,9 @@ struct object_type;
 /*!
  * @brief 鍛冶効果の情報の基底クラス
  */
-class smith_info_base {
+class ISmithInfo {
 public:
-    virtual ~smith_info_base() = default;
+    virtual ~ISmithInfo() = default;
 
     /*!
      * @brief 鍛冶効果を付与する
@@ -62,16 +62,16 @@ public:
     int consumption; //!< 能力を与えるのに必要な消費量(need_essencesに含まれるエッセンスそれぞれについてこの量を消費)
 
 protected:
-    smith_info_base(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
+    ISmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
 };
 
 /*!
  * @brief 基本的な鍛冶効果の情報クラス
  * 多くの鍛冶効果が該当する、指定した特性フラグを与える鍛冶の情報を扱う
  */
-class basic_smith_info : public smith_info_base {
+class BasicSmithInfo : public ISmithInfo {
 public:
-    basic_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags);
+    BasicSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags);
     virtual bool add_essence(player_type *player_ptr, object_type *o_ptr, int number) const override;
     virtual void erase_essence(object_type *o_ptr) const override;
     virtual TrFlags tr_flags() const override;
@@ -84,9 +84,9 @@ private:
  * @brief 発動効果を付与する鍛冶効果の情報クラス
  * 発動効果を付与する（かつ、特性フラグを与える場合もある）鍛冶の情報を扱う
  */
-class activation_smith_info : public basic_smith_info {
+class ActivationSmithInfo : public BasicSmithInfo {
 public:
-    activation_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags, random_art_activation_type act_idx);
+    ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags, random_art_activation_type act_idx);
     virtual TrFlags tr_flags() const override;
     virtual std::optional<random_art_activation_type> activation_index() const override;
 
@@ -98,9 +98,9 @@ private:
  * @brief 武器強化を行う鍛冶情報のクラス
  * 武器の命中/ダメージ修正を強化する。鍛冶効果とは別枠で行うので鍛冶師の銘付きにはならない。
  */
-class enchant_weapon_smith_info : public smith_info_base {
+class EnchantWeaponSmithInfo : public ISmithInfo {
 public:
-    enchant_weapon_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
+    EnchantWeaponSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
     virtual bool add_essence(player_type *player_ptr, object_type *o_ptr, int number) const override;
     virtual void erase_essence(object_type *) const override {}
 };
@@ -109,9 +109,9 @@ public:
  * @brief 防具強化を行う鍛冶情報のクラス
  * 防具のAC修正を強化する。鍛冶効果とは別枠で行うので鍛冶師の銘付きにはならない。
  */
-class enchant_armour_smith_info : public smith_info_base {
+class EnchantArmourSmithInfo : public ISmithInfo {
 public:
-    enchant_armour_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
+    EnchantArmourSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
     virtual bool add_essence(player_type *player_ptr, object_type *o_ptr, int number) const override;
     virtual void erase_essence(object_type *) const override {}
 };
@@ -120,9 +120,9 @@ public:
  * @brief 装備保持を行う鍛冶情報のクラス
  * 四元素属性で破壊されないフラグを付与する。鍛冶効果とは別枠で行うので鍛冶師の銘付きにはならない。
  */
-class sustain_smith_info : public smith_info_base {
+class SustainSmithInfo : public ISmithInfo {
 public:
-    sustain_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
+    SustainSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
     virtual bool add_essence(player_type *player_ptr, object_type *o_ptr, int number) const override;
     virtual void erase_essence(object_type *) const override {}
 };
@@ -131,9 +131,9 @@ public:
  * @brief 殺戮の小手を作成する鍛冶情報のクラス
  * 小手に殺戮修正を付ける。(もともと殺戮修正のある小手は修正をさらに強化する)
  */
-class slaying_gloves_smith_info : public basic_smith_info {
+class SlayingGlovesSmithInfo : public BasicSmithInfo {
 public:
-    slaying_gloves_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
+    SlayingGlovesSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption);
     virtual bool add_essence(player_type *player_ptr, object_type *o_ptr, int number) const override;
     virtual void erase_essence(object_type *) const override;
 };

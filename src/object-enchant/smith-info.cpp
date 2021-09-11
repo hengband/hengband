@@ -3,7 +3,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-smith_info_base::smith_info_base(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
+ISmithInfo::ISmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
     : effect(effect)
     , name(name)
     , category(category)
@@ -12,30 +12,30 @@ smith_info_base::smith_info_base(SmithEffect effect, concptr name, SmithCategory
 {
 }
 
-TrFlags smith_info_base::tr_flags() const
+TrFlags ISmithInfo::tr_flags() const
 {
     return {};
 }
 
-std::optional<random_art_activation_type> smith_info_base::activation_index() const
+std::optional<random_art_activation_type> ISmithInfo::activation_index() const
 {
     return std::nullopt;
 }
 
-basic_smith_info::basic_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags)
-    : smith_info_base(effect, name, category, std::move(need_essences), consumption)
+BasicSmithInfo::BasicSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags)
+    : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
     , add_flags(add_flags)
 {
 }
 
-bool basic_smith_info::add_essence(player_type *, object_type *o_ptr, int) const
+bool BasicSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
 {
     o_ptr->xtra3 = static_cast<decltype(o_ptr->xtra3)>(effect);
 
     return true;
 }
 
-void basic_smith_info::erase_essence(object_type *o_ptr) const
+void BasicSmithInfo::erase_essence(object_type *o_ptr) const
 {
     o_ptr->xtra3 = 0;
     auto flgs = object_flags(o_ptr);
@@ -43,33 +43,33 @@ void basic_smith_info::erase_essence(object_type *o_ptr) const
         o_ptr->pval = 0;
 }
 
-TrFlags basic_smith_info::tr_flags() const
+TrFlags BasicSmithInfo::tr_flags() const
 {
     return this->add_flags;
 }
 
-activation_smith_info::activation_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags, random_art_activation_type act_idx)
-    : basic_smith_info(effect, name, category, std::move(need_essences), consumption, std::move(add_flags))
+ActivationSmithInfo::ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags, random_art_activation_type act_idx)
+    : BasicSmithInfo(effect, name, category, std::move(need_essences), consumption, std::move(add_flags))
     , act_idx(act_idx)
 {
 }
 
-TrFlags activation_smith_info::tr_flags() const
+TrFlags ActivationSmithInfo::tr_flags() const
 {
-    return basic_smith_info::tr_flags().set(TR_ACTIVATE);
+    return BasicSmithInfo::tr_flags().set(TR_ACTIVATE);
 }
 
-std::optional<random_art_activation_type> activation_smith_info::activation_index() const
+std::optional<random_art_activation_type> ActivationSmithInfo::activation_index() const
 {
     return this->act_idx;
 }
 
-enchant_weapon_smith_info::enchant_weapon_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
-    : smith_info_base(effect, name, category, std::move(need_essences), consumption)
+EnchantWeaponSmithInfo::EnchantWeaponSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
+    : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
 {
 }
 
-bool enchant_weapon_smith_info::add_essence(player_type *player_ptr, object_type *o_ptr, int) const
+bool EnchantWeaponSmithInfo::add_essence(player_type *player_ptr, object_type *o_ptr, int) const
 {
     const auto max_val = player_ptr->lev / 5 + 5;
     if ((o_ptr->to_h >= max_val) && (o_ptr->to_d >= max_val)) {
@@ -82,12 +82,12 @@ bool enchant_weapon_smith_info::add_essence(player_type *player_ptr, object_type
     return true;
 }
 
-enchant_armour_smith_info::enchant_armour_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
-    : smith_info_base(effect, name, category, std::move(need_essences), consumption)
+EnchantArmourSmithInfo::EnchantArmourSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
+    : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
 {
 }
 
-bool enchant_armour_smith_info::add_essence(player_type *player_ptr, object_type *o_ptr, int) const
+bool EnchantArmourSmithInfo::add_essence(player_type *player_ptr, object_type *o_ptr, int) const
 {
     const auto max_val = player_ptr->lev / 5 + 5;
     if (o_ptr->to_a >= max_val) {
@@ -99,12 +99,12 @@ bool enchant_armour_smith_info::add_essence(player_type *player_ptr, object_type
     return true;
 }
 
-sustain_smith_info::sustain_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
-    : smith_info_base(effect, name, category, std::move(need_essences), consumption)
+SustainSmithInfo::SustainSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
+    : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
 {
 }
 
-bool sustain_smith_info::add_essence(player_type *, object_type *o_ptr, int) const
+bool SustainSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
 {
     o_ptr->art_flags.set(TR_IGNORE_ACID);
     o_ptr->art_flags.set(TR_IGNORE_ELEC);
@@ -114,14 +114,14 @@ bool sustain_smith_info::add_essence(player_type *, object_type *o_ptr, int) con
     return true;
 }
 
-slaying_gloves_smith_info::slaying_gloves_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
-    : basic_smith_info(effect, name, category, std::move(need_essences), consumption, {})
+SlayingGlovesSmithInfo::SlayingGlovesSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
+    : BasicSmithInfo(effect, name, category, std::move(need_essences), consumption, {})
 {
 }
 
-bool slaying_gloves_smith_info::add_essence(player_type *player_ptr, object_type *o_ptr, int number) const
+bool SlayingGlovesSmithInfo::add_essence(player_type *player_ptr, object_type *o_ptr, int number) const
 {
-    basic_smith_info::add_essence(player_ptr, o_ptr, number);
+    BasicSmithInfo::add_essence(player_ptr, o_ptr, number);
 
     HIT_PROB get_to_h = ((number + 1) / 2 + randint0(number / 2 + 1));
     HIT_POINT get_to_d = ((number + 1) / 2 + randint0(number / 2 + 1));
@@ -132,9 +132,9 @@ bool slaying_gloves_smith_info::add_essence(player_type *player_ptr, object_type
     return true;
 }
 
-void slaying_gloves_smith_info::erase_essence(object_type *o_ptr) const
+void SlayingGlovesSmithInfo::erase_essence(object_type *o_ptr) const
 {
-    basic_smith_info::erase_essence(o_ptr);
+    BasicSmithInfo::erase_essence(o_ptr);
 
     o_ptr->to_h -= (o_ptr->xtra4 >> 8);
     o_ptr->to_d -= (o_ptr->xtra4 & 0x000f);

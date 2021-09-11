@@ -56,10 +56,10 @@ Smith::Smith(player_type *player_ptr)
  * @param effect 情報を得る鍛冶効果
  * @return 鍛冶情報構造体へのポインタを保持する std::optional オブジェクトを返す
  */
-std::optional<const smith_info_base *> Smith::find_smith_info(SmithEffect effect)
+std::optional<const ISmithInfo *> Smith::find_smith_info(SmithEffect effect)
 {
     // 何度も呼ぶので線形探索を避けるため鍛冶効果から鍛冶情報のテーブルを引けるmapを作成しておく。
-    static std::unordered_map<SmithEffect, const smith_info_base *> search_map;
+    static std::unordered_map<SmithEffect, const ISmithInfo *> search_map;
     if (search_map.empty()) {
         for (const auto &info : smith_info_table) {
             search_map.emplace(info->effect, info.get());

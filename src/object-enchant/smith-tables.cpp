@@ -333,14 +333,14 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
 namespace {
 
 template <typename T, typename... Args>
-std::shared_ptr<smith_info_base> make_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, Args&&... args)
+std::shared_ptr<ISmithInfo> make_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, Args&&... args)
 {
     return std::make_shared<T>(effect, name, category, std::move(need_essences), consumption, std::forward<Args>(args)...);
 }
 
-std::shared_ptr<smith_info_base> make_basic_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags)
+std::shared_ptr<ISmithInfo> make_basic_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags)
 {
-    return make_info<basic_smith_info>(effect, name, category, std::move(need_essences), consumption, std::move(add_flags));
+    return make_info<BasicSmithInfo>(effect, name, category, std::move(need_essences), consumption, std::move(add_flags));
 }
 
 }
@@ -348,7 +348,7 @@ std::shared_ptr<smith_info_base> make_basic_smith_info(SmithEffect effect, concp
 /*!
  * @brief 鍛冶情報テーブル
  */
-const std::vector<std::shared_ptr<smith_info_base>> Smith::smith_info_table = {
+const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::NONE, _("なし", "None"), SmithCategory::NONE, std::vector<SmithEssence>{ SmithEssence::NONE }, 0, {}),
 
     make_basic_smith_info(SmithEffect::STR, _("腕力", "strength"), SmithCategory::PVAL, { SmithEssence::STR }, 20, { TR_STR }),
@@ -445,19 +445,19 @@ const std::vector<std::shared_ptr<smith_info_base>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::ESP_DRAGON, _("竜ESP", "sense dragon"), SmithCategory::ESP, { SmithEssence::SLAY_DRAGON }, 40, { TR_ESP_DRAGON }),
     make_basic_smith_info(SmithEffect::ESP_HUMAN, _("人間ESP", "sense human"), SmithCategory::ESP, { SmithEssence::SLAY_HUMAN }, 40, { TR_ESP_HUMAN }),
 
-    make_info<activation_smith_info>(SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, TrFlags{ TR_EARTHQUAKE }, ACT_QUAKE),
-    make_info<activation_smith_info>(SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, TrFlags{ TR_RES_ACID }, ACT_RESIST_ACID),
-    make_info<activation_smith_info>(SmithEffect::TMP_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ETC, { SmithEssence::RES_ELEC }, 50, TrFlags{ TR_RES_ELEC }, ACT_RESIST_ELEC),
-    make_info<activation_smith_info>(SmithEffect::TMP_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ETC, { SmithEssence::RES_FIRE }, 50, TrFlags{ TR_RES_FIRE }, ACT_RESIST_FIRE),
-    make_info<activation_smith_info>(SmithEffect::TMP_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ETC, { SmithEssence::RES_COLD }, 50, TrFlags{ TR_RES_COLD }, ACT_RESIST_COLD),
+    make_info<ActivationSmithInfo>(SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, TrFlags{ TR_EARTHQUAKE }, ACT_QUAKE),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, TrFlags{ TR_RES_ACID }, ACT_RESIST_ACID),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ETC, { SmithEssence::RES_ELEC }, 50, TrFlags{ TR_RES_ELEC }, ACT_RESIST_ELEC),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ETC, { SmithEssence::RES_FIRE }, 50, TrFlags{ TR_RES_FIRE }, ACT_RESIST_FIRE),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ETC, { SmithEssence::RES_COLD }, 50, TrFlags{ TR_RES_COLD }, ACT_RESIST_COLD),
     make_basic_smith_info(SmithEffect::SH_FIRE, _("火炎オーラ", "fiery sheath"), SmithCategory::ETC, { SmithEssence::RES_FIRE, SmithEssence::BRAND_FIRE }, 50, { TR_RES_FIRE, TR_SH_FIRE }),
     make_basic_smith_info(SmithEffect::SH_ELEC, _("電撃オーラ", "electric sheath"), SmithCategory::ETC, { SmithEssence::RES_ELEC, SmithEssence::BRAND_ELEC }, 50, { TR_RES_ELEC, TR_SH_ELEC }),
     make_basic_smith_info(SmithEffect::SH_COLD, _("冷気オーラ", "sheath of coldness"), SmithCategory::ETC, { SmithEssence::RES_COLD, SmithEssence::BRAND_COLD }, 50, { TR_RES_COLD, TR_SH_COLD }),
 
     make_basic_smith_info(SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD }),
-    make_info<slaying_gloves_smith_info>(SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200),
+    make_info<SlayingGlovesSmithInfo>(SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200),
 
-    make_info<enchant_weapon_smith_info>(SmithEffect::ATTACK, _("攻撃", "weapon enchant"), SmithCategory::ENCHANT, { SmithEssence::ATTACK }, 30),
-    make_info<enchant_armour_smith_info>(SmithEffect::AC, _("防御", "armor enchant"), SmithCategory::ENCHANT, { SmithEssence::AC }, 15),
-    make_info<sustain_smith_info>(SmithEffect::SUSTAIN, _("装備保持", "elements proof"), SmithCategory::ENCHANT, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 10),
+    make_info<EnchantWeaponSmithInfo>(SmithEffect::ATTACK, _("攻撃", "weapon enchant"), SmithCategory::ENCHANT, { SmithEssence::ATTACK }, 30),
+    make_info<EnchantArmourSmithInfo>(SmithEffect::AC, _("防御", "armor enchant"), SmithCategory::ENCHANT, { SmithEssence::AC }, 15),
+    make_info<SustainSmithInfo>(SmithEffect::SUSTAIN, _("装備保持", "elements proof"), SmithCategory::ENCHANT, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 10),
 };
