@@ -592,8 +592,9 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
             if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
-                SpellHex(player_ptr).reset_casting_flag(spell);
-                casting_hex_num(player_ptr)--;
+                SpellHex spell_hex(player_ptr);
+                spell_hex.reset_casting_flag(spell);
+                spell_hex.add_casting_num(false);
                 if (get_singing_song_id(player_ptr) == 0)
                     set_action(player_ptr, ACTION_NONE);
             }
@@ -682,7 +683,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
                 if (cont) {
-                    casting_hex_num(player_ptr)--;
+                    spell_hex.add_casting_num(false);
                 }
 
                 if (spell_hex.get_casting_num() > 0) {
@@ -887,7 +888,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
     if (cast && add) {
         SpellHex spell_hex(player_ptr);
         spell_hex.set_casting_flag(spell);
-        casting_hex_num(player_ptr)++;
+        spell_hex.add_casting_num(true);
 
         if (player_ptr->action != ACTION_SPELL)
             set_action(player_ptr, ACTION_SPELL);

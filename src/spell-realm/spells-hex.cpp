@@ -103,7 +103,7 @@ bool SpellHex::stop_one_spell()
         auto n = this->casting_spells[A2I(choice)];
         exe_spell(this->player_ptr, REALM_HEX, n, SPELL_STOP);
         this->reset_casting_flag(static_cast<spell_hex_type>(n));
-        casting_hex_num(this->player_ptr)--;
+        this->add_casting_num(false);
     }
 
     this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
@@ -454,4 +454,17 @@ void SpellHex::reset_casting_flag(spell_hex_type type)
 int32_t SpellHex::get_casting_num() const
 {
     return this->player_ptr->magic_num2[0];
+}
+
+/*!
+ * @brief 詠唱番号の加減算を行う
+ * @param is_incremental 加算ならtrue、減算ならfalse
+ */
+void SpellHex::add_casting_num(bool is_incremental)
+{
+    if (is_incremental) {
+        this->player_ptr->magic_num2[0]++;
+    } else {
+        this->player_ptr->magic_num2[0]--;
+    }
 }
