@@ -36,7 +36,7 @@
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
 
-RealmHex::RealmHex(player_type *player_ptr)
+SpellHex::SpellHex(player_type *player_ptr)
     : player_ptr(player_ptr)
 {
     constexpr int max_realm_spells = 32;
@@ -51,7 +51,7 @@ RealmHex::RealmHex(player_type *player_ptr)
     }
 }
 
-RealmHex::RealmHex(player_type *player_ptr, monap_type *monap_ptr)
+SpellHex::SpellHex(player_type *player_ptr, monap_type *monap_ptr)
     : player_ptr(player_ptr)
     , monap_ptr(monap_ptr)
 {
@@ -60,7 +60,7 @@ RealmHex::RealmHex(player_type *player_ptr, monap_type *monap_ptr)
 /*!
  * @brief プレイヤーが詠唱中の全呪術を停止する
  */
-bool RealmHex::stop_all_spells()
+bool SpellHex::stop_all_spells()
 {
     for (auto spell : this->casting_spells) {
         exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_STOP);
@@ -80,7 +80,7 @@ bool RealmHex::stop_all_spells()
 /*!
  * @brief プレイヤーが詠唱中の呪術から一つを選んで停止する
  */
-bool RealmHex::stop_one_spell()
+bool SpellHex::stop_one_spell()
 {
     if (!this->is_spelling_any()) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
@@ -117,7 +117,7 @@ bool RealmHex::stop_one_spell()
  * @param choice 選択した呪文
  * @return 選択が完了したらtrue、キャンセルならばfalse
  */
-bool RealmHex::select_spell_stopping(char *out_val, char &choice)
+bool SpellHex::select_spell_stopping(char *out_val, char &choice)
 {
     while (true) {
         this->display_casting_spells_list();
@@ -143,7 +143,7 @@ bool RealmHex::select_spell_stopping(char *out_val, char &choice)
     }
 }
 
-void RealmHex::display_casting_spells_list()
+void SpellHex::display_casting_spells_list()
 {
     constexpr auto y = 1;
     constexpr auto x = 20;
@@ -161,7 +161,7 @@ void RealmHex::display_casting_spells_list()
 /*!
  * @brief 一定時間毎に呪術で消費するMPを処理する
  */
-void RealmHex::decrease_mana()
+void SpellHex::decrease_mana()
 {
     if (this->player_ptr->realm1 != REALM_HEX) {
         return;
@@ -193,7 +193,7 @@ void RealmHex::decrease_mana()
  * @return MPが足りているか否か
  * @todo 64ビットの割り算をしなければいけない箇所には見えない. 調査の後不要ならば消すこと.
  */
-bool RealmHex::process_mana_cost(const bool need_restart)
+bool SpellHex::process_mana_cost(const bool need_restart)
 {
     auto need_mana = this->calc_need_mana();
     uint need_mana_frac = 0;
@@ -221,7 +221,7 @@ bool RealmHex::process_mana_cost(const bool need_restart)
     return true;
 }
 
-bool RealmHex::check_restart()
+bool SpellHex::check_restart()
 {
     if (this->player_ptr->magic_num1[1] == 0) {
         return false;
@@ -232,7 +232,7 @@ bool RealmHex::check_restart()
     return true;
 }
 
-int RealmHex::calc_need_mana()
+int SpellHex::calc_need_mana()
 {
     auto need_mana = 0;
     for (auto spell : this->casting_spells) {
@@ -243,7 +243,7 @@ int RealmHex::calc_need_mana()
     return need_mana;
 }
 
-void RealmHex::gain_exp_from_hex()
+void SpellHex::gain_exp_from_hex()
 {
     for (auto spell : this->casting_spells) {
         if (!this->is_spelling_specific(spell)) {
@@ -267,7 +267,7 @@ void RealmHex::gain_exp_from_hex()
     }
 }
 
-bool RealmHex::gain_exp_skilled(const int spell)
+bool SpellHex::gain_exp_skilled(const int spell)
 {
     if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_SKILLED) {
         return false;
@@ -284,7 +284,7 @@ bool RealmHex::gain_exp_skilled(const int spell)
     return true;
 }
 
-bool RealmHex::gain_exp_expert(const int spell)
+bool SpellHex::gain_exp_expert(const int spell)
 {
     if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_EXPERT) {
         return false;
@@ -302,7 +302,7 @@ bool RealmHex::gain_exp_expert(const int spell)
     return true;
 }
 
-void RealmHex::gain_exp_master(const int spell)
+void SpellHex::gain_exp_master(const int spell)
 {
     if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_MASTER) {
         return;
@@ -322,7 +322,7 @@ void RealmHex::gain_exp_master(const int spell)
  * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
  * @return すでに全枠を利用しているならTRUEを返す
  */
-bool RealmHex::is_casting_full_capacity() const
+bool SpellHex::is_casting_full_capacity() const
 {
     auto k_max = (this->player_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
@@ -332,7 +332,7 @@ bool RealmHex::is_casting_full_capacity() const
 /*!
  * @brief 一定ゲームターン毎に復讐処理の残り期間の判定を行う
  */
-void RealmHex::continue_revenge()
+void SpellHex::continue_revenge()
 {
     if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
         return;
@@ -354,7 +354,7 @@ void RealmHex::continue_revenge()
  * @brief 復讐ダメージの追加を行う
  * @param dam 蓄積されるダメージ量
  */
-void RealmHex::store_vengeful_damage(HIT_POINT dam)
+void SpellHex::store_vengeful_damage(HIT_POINT dam)
 {
     if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
         return;
@@ -369,20 +369,20 @@ void RealmHex::store_vengeful_damage(HIT_POINT dam)
  * @return 呪術の効果が適用されるならTRUEを返す
  * @details v3.0.0現在は反テレポート・反魔法・反増殖の3種類
  */
-bool RealmHex::check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const
+bool SpellHex::check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const
 {
     const auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[m_idx];
     const auto *r_ptr = &r_info[m_ptr->r_idx];
     return this->is_spelling_specific(type) && ((this->player_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
-bool RealmHex::is_spelling_specific(int hex) const
+bool SpellHex::is_spelling_specific(int hex) const
 {
     auto check = static_cast<uint32_t>(this->player_ptr->magic_num1[0]);
     return (this->player_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
 }
 
-bool RealmHex::is_spelling_any() const
+bool SpellHex::is_spelling_any() const
 {
     return (this->player_ptr->realm1 == REALM_HEX) && (this->player_ptr->magic_num1[0] != 0);
 }
@@ -392,7 +392,7 @@ bool RealmHex::is_spelling_any() const
  * @param this->player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void RealmHex::eyes_on_eyes()
+void SpellHex::eyes_on_eyes()
 {
     if (this->monap_ptr == nullptr) {
         throw("Invalid constructor was used!");
@@ -418,7 +418,7 @@ void RealmHex::eyes_on_eyes()
     }
 }
 
-void RealmHex::thief_teleport()
+void SpellHex::thief_teleport()
 {
     if (this->monap_ptr == nullptr) {
         throw("Invalid constructor was used!");

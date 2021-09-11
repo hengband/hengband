@@ -5,12 +5,12 @@
 
 struct monap_type;
 struct player_type;
-class RealmHex {
+class SpellHex {
 public:
-    RealmHex() = delete;
-    RealmHex(player_type *player_ptr);
-    RealmHex(player_type *player_ptr, monap_type *monap_ptr);
-    virtual ~RealmHex() = default;
+    SpellHex() = delete;
+    SpellHex(player_type *player_ptr);
+    SpellHex(player_type *player_ptr, monap_type *monap_ptr);
+    virtual ~SpellHex() = default;
 
     bool stop_one_spell();
     void decrease_mana();
@@ -18,7 +18,7 @@ public:
     bool is_casting_full_capacity() const;
     void continue_revenge();
     void store_vengeful_damage(HIT_POINT dam);
-    bool check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const;
+    bool check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const;
     bool is_spelling_specific(int hex) const;
     bool is_spelling_any() const;
     void eyes_on_eyes();

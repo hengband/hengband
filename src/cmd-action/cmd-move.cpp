@@ -396,9 +396,9 @@ void do_cmd_rest(player_type *player_ptr)
     if ((player_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(player_ptr) != 0) || (get_interrupting_song_effect(player_ptr) != 0)))
         stop_singing(player_ptr);
 
-    RealmHex realm_hex(player_ptr);
-    if (realm_hex.is_spelling_any()) {
-        (void)realm_hex.stop_all_spells();
+    SpellHex spell_hex(player_ptr);
+    if (spell_hex.is_spelling_any()) {
+        (void)spell_hex.stop_all_spells();
     }
 
     if (command_arg <= 0) {

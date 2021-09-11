@@ -394,9 +394,9 @@ void process_world_aux_mutation(player_type *player_ptr)
         if (music_singing_any(player_ptr))
             stop_singing(player_ptr);
 
-        RealmHex realm_hex(player_ptr);
-        if (realm_hex.is_spelling_any()) {
-            (void)realm_hex.stop_all_spells();
+        SpellHex spell_hex(player_ptr);
+        if (spell_hex.is_spelling_any()) {
+            (void)spell_hex.stop_all_spells();
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum realm_hex_type {
+enum spell_hex_type {
 	/* 1st book */
 	HEX_BLESS = 0,
     HEX_CURE_LIGHT = 1,
