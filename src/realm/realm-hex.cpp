@@ -679,11 +679,15 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
             if (!flag) {
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
-                SpellHex(player_ptr).reset_casting_flag(HEX_RESTORE);
-                if (cont)
+                SpellHex spell_hex(player_ptr);
+                spell_hex.reset_casting_flag(HEX_RESTORE);
+                if (cont) {
                     casting_hex_num(player_ptr)--;
-                if (casting_hex_num(player_ptr))
+                }
+
+                if (spell_hex.get_casting_num() > 0) {
                     player_ptr->action = ACTION_NONE;
+                }
 
                 player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
                 player_ptr->redraw |= (PR_EXTRA);

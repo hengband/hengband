@@ -25,6 +25,7 @@ public:
     void thief_teleport();
     void set_casting_flag(spell_hex_type type);
     void reset_casting_flag(spell_hex_type type);
+    int32_t get_casting_num() const;
 
 private:
     player_type *player_ptr;

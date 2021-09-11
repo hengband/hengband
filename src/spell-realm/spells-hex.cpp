@@ -450,3 +450,8 @@ void SpellHex::reset_casting_flag(spell_hex_type type)
     reset_bits(value, 1U << type);
     this->player_ptr->magic_num1[0] = value;
 }
+
+int32_t SpellHex::get_casting_num() const
+{
+    return this->player_ptr->magic_num2[0];
+}
