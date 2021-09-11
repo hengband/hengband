@@ -20,6 +20,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-processor.h"
+#include "object-enchant/object-smith.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-random.h"
@@ -146,6 +147,16 @@ void wiz_learn_blue_magic_all(player_type *player_ptr)
         for (auto spell : spells) {
             player_ptr->magic_num2[enum2i(spell)] = 1;
         }
+    }
+}
+
+/*!
+ * @brief 鍛冶師の全てのエッセンスを最大所持量にする
+ */
+void wiz_fillup_all_smith_essences(player_type *player_ptr)
+{
+    for (auto essence : Smith::get_essence_list()) {
+        player_ptr->magic_num1[enum2i(essence)] = Smith::ESSENCE_AMOUNT_MAX;
     }
 }
 

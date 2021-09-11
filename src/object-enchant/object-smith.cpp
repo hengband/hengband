@@ -418,7 +418,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
         }
 
         auto i = enum2i(essence);
-        this->player_ptr->magic_num1[i] = std::min(20000, this->player_ptr->magic_num1[i] + drain_value);
+        this->player_ptr->magic_num1[i] = std::min(Smith::ESSENCE_AMOUNT_MAX, this->player_ptr->magic_num1[i] + drain_value);
         result.emplace_back(essence, drain_value);
     }
 
