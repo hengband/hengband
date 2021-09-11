@@ -106,7 +106,7 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
         ss << debug_menu_table[pos][0] << ") " << debug_menu_table[pos][1];
         put_str(ss.str().c_str(), r++, c);
     }
-    if (max_page > 0)
+    if (max_page > 1)
         put_str("-- more --", r++, c);
 }
 
