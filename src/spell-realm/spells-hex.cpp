@@ -82,7 +82,7 @@ bool RealmHex::stop_all_spells()
  */
 bool RealmHex::stop_one_spell()
 {
-    if (!RealmHex(this->player_ptr).is_spelling_any()) {
+    if (!this->is_spelling_any()) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return false;
     }
@@ -163,12 +163,11 @@ void RealmHex::display_casting_spells_list()
  */
 void RealmHex::decrease_mana()
 {
-    /* Spells spelled by player */
     if (this->player_ptr->realm1 != REALM_HEX) {
         return;
     }
 
-    if (!casting_hex_flags(this->player_ptr) && !this->player_ptr->magic_num1[1]) {
+    if (!this->is_spelling_any() && !this->player_ptr->magic_num1[1]) {
         return;
     }
 
@@ -192,6 +191,7 @@ void RealmHex::decrease_mana()
  * @brief 継続的な呪文の詠唱が可能な程度にMPが残っているか確認し、残量に応じて継続・中断を行う
  * @param need_restart 詠唱を再開するか否か
  * @return MPが足りているか否か
+ * @todo 64ビットの割り算をしなければいけない箇所には見えない. 調査の後不要ならば消すこと.
  */
 bool RealmHex::process_mana_cost(const bool need_restart)
 {
@@ -384,7 +384,7 @@ bool RealmHex::is_spelling_specific(int hex) const
 
 bool RealmHex::is_spelling_any() const
 {
-    return (player_ptr->realm1 == REALM_HEX) && (player_ptr->magic_num1[0] != 0);
+    return (this->player_ptr->realm1 == REALM_HEX) && (this->player_ptr->magic_num1[0] != 0);
 }
 
 /*!
