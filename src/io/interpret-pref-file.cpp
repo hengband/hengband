@@ -277,7 +277,7 @@ static errr interpret_v_token(char *buf)
 
 /*!
  * @brief X/Yトークンの解釈
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf バッファ
  * @return エラーコード
  * @details
@@ -452,7 +452,7 @@ static errr interpret_t_token(char *buf)
 /*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf データテキストの参照ポインタ
  * @return エラーコード
  * @details

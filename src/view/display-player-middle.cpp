@@ -27,7 +27,7 @@
 
 /*!
  * @brief プレイヤーの打撃能力修正を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param hand 武器の装備部位ID
  * @param hand_entry 項目ID
  */
@@ -57,7 +57,7 @@ static void display_player_melee_bonus(player_type *player_ptr, int hand, int ha
 
 /*!
  * @brief 右手に比べて左手の表示ルーチンが複雑なので分離
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_sub_hand(player_type *player_ptr)
 {
@@ -87,7 +87,7 @@ static void display_sub_hand(player_type *player_ptr)
 
 /*!
  * @brief 武器による命中率とダメージの補正を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_hit_damage(player_type *player_ptr)
 {
@@ -111,7 +111,7 @@ static void display_hit_damage(player_type *player_ptr)
 
 /*!
  * @brief 射撃武器倍率を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_shoot_magnification(player_type *player_ptr)
 {
@@ -128,9 +128,9 @@ static void display_shoot_magnification(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーの速度から表示色を決める
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param base_speed プレーヤーの速度
+ * @brief プレイヤーの速度から表示色を決める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param base_speed プレイヤーの速度
  */
 static TERM_COLOR decide_speed_color(player_type *player_ptr, const int base_speed)
 {
@@ -157,8 +157,8 @@ static TERM_COLOR decide_speed_color(player_type *player_ptr, const int base_spe
 
 /*!
  * @brief 何らかの効果による一時的な速度変化を計算する
- * @param player_ptr プレーヤーへの参照ポインタ
- * @return プレーヤーの速度
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return プレイヤーの速度
  */
 static int calc_temporary_speed(player_type *player_ptr)
 {
@@ -181,10 +181,10 @@ static int calc_temporary_speed(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーの最終的な速度を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの最終的な速度を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param attr 表示色
- * @param base_speed プレーヤーの素の速度
+ * @param base_speed プレイヤーの素の速度
  * @param tmp_speed アイテム等で一時的に変化した速度量
  */
 static void display_player_speed(player_type *player_ptr, TERM_COLOR attr, int base_speed, int tmp_speed)
@@ -216,8 +216,8 @@ static void display_player_speed(player_type *player_ptr, TERM_COLOR attr, int b
 }
 
 /*!
- * @brief プレーヤーの現在経験値・最大経験値・次のレベルまでに必要な経験値を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの現在経験値・最大経験値・次のレベルまでに必要な経験値を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_player_exp(player_type *player_ptr)
 {
@@ -242,7 +242,7 @@ static void display_player_exp(player_type *player_ptr)
 
 /*!
  * @brief ゲーム内の経過時間を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_playtime_in_game(player_type *player_ptr)
 {
@@ -287,7 +287,7 @@ static void display_real_playtime(void)
 
 /*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Prints the following information on the screen.
  */
 void display_player_middle(player_type *player_ptr)

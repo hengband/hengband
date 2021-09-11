@@ -16,7 +16,7 @@
 
 /*!
  * @brief クエストに関わるモンスターの配置を行う / Place quest monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功したならばTRUEを返す
  */
 bool place_quest_monsters(player_type *player_ptr)

@@ -17,7 +17,7 @@
 
 /*!
  * @brief 宿屋で食事を摂る
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 満腹ならFALSE、そうでないならTRUE
  */
 static bool buy_food(player_type *player_ptr)
@@ -34,7 +34,7 @@ static bool buy_food(player_type *player_ptr)
 
 /*!
  * @brief 健康体しか宿屋に泊めない処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 毒でも切り傷でもないならTRUE、そうでないならFALSE
  */
 static bool is_healthy_stay(player_type *player_ptr)
@@ -57,7 +57,7 @@ static bool is_player_undead(player_type *player_ptr)
 
 /*!
  * @brief 宿屋に泊まったことを日記に残す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param prev_hour 宿屋に入った直後のゲーム内時刻
  */
 static void write_diary_stay_inn(player_type *player_ptr, int prev_hour)
@@ -90,7 +90,7 @@ static void pass_game_turn_by_stay(void)
 
 /*!
  * @brief 悪夢モードなら悪夢を見せる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 悪夢モードならばTRUE
  */
 static bool has_a_nightmare(player_type *player_ptr)
@@ -113,7 +113,7 @@ static bool has_a_nightmare(player_type *player_ptr)
 
 /*!
  * @brief 体調を元に戻す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void back_to_health(player_type *player_ptr)
 {
@@ -126,7 +126,7 @@ static void back_to_health(player_type *player_ptr)
 
 /*!
  * @brief 魔力喰いの残り回数回復(本当？ 要調査)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void charge_magic_eating_energy(player_type *player_ptr)
 {
@@ -145,7 +145,7 @@ static void charge_magic_eating_energy(player_type *player_ptr)
 
 /*!
  * @brief リフレッシュ結果を画面に表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param prev_hour 宿屋に入った直後のゲーム内時刻
  */
 static void display_stay_result(player_type *player_ptr, int prev_hour)
@@ -170,7 +170,7 @@ static void display_stay_result(player_type *player_ptr, int prev_hour)
 
 /*!
  * @brief 宿屋への宿泊実行処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 泊まれたらTRUE
  */
 static bool stay_inn(player_type *player_ptr)
@@ -203,7 +203,7 @@ static bool stay_inn(player_type *player_ptr)
 
 /*!
  * @brief 宿屋を利用する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param cmd 宿屋の利用施設ID
  * @return 施設の利用が実際に行われたらTRUE
  * @details inn commands

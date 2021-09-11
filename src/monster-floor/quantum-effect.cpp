@@ -20,7 +20,7 @@
 
 /*!
  * @brief ユニークでない量子生物を消滅させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
  */
@@ -41,15 +41,15 @@ static void vanish_nonunique(player_type *player_ptr, MONSTER_IDX m_idx, bool se
 
 /*!
  * @brief 量子生物ユニークの量子的効果 (ショート・テレポートまたは距離10のテレポート・アウェイ)を実行する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
  * @details
- * プレーヤーが量子生物を観測しているか、量子生物がプレーヤーを観測している場合、互いの相対的な位置を確定させる
+ * プレイヤーが量子生物を観測しているか、量子生物がプレイヤーを観測している場合、互いの相対的な位置を確定させる
  * 波動関数の収縮はテレポートではないので反テレポート無効
  * @notes
  * パターンは収縮どころか拡散しているが、この際気にしてはいけない
- * @todo ユニークとプレーヤーとの間でしか効果が発生しない。ユニークとその他のモンスター間では何もしなくてよい？
+ * @todo ユニークとプレイヤーとの間でしか効果が発生しない。ユニークとその他のモンスター間では何もしなくてよい？
  */
 static void produce_quantum_effect(player_type *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
@@ -74,7 +74,7 @@ static void produce_quantum_effect(player_type *player_ptr, MONSTER_IDX m_idx, b
 
 /*!
  * @brief 量子生物の量子的効果を実行する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
  * @return モンスターが量子的効果により消滅したらTRUE

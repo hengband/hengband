@@ -115,7 +115,7 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(object_type *j
 /*!
  * @brief 店舗の品揃え変化のためにアイテムを追加する /
  * Creates a random item and gives it to a store
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * <pre>
  * This algorithm needs to be rethought.  A lot.

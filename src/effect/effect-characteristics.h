@@ -14,7 +14,7 @@ enum effect_characteristics {
     PROJECT_KILL = 0x0040, /*!< 射程内のモンスターに影響を及ぼす / Affect each monster in the "blast area" in some way */
     PROJECT_HIDE = 0x0080, /*!< 画面上にフィードバック表示させない / Disable "visual" feedback from projection */
     PROJECT_DISI = 0x0100, /*!< 永久壁でない壁を破壊する / Disintegrate non-permanent features */
-    PROJECT_PLAYER = 0x0200, /*!< プレーヤー自身をターゲットにする (騎乗中) / Main target is player (used for riding player) */
+    PROJECT_PLAYER = 0x0200, /*!< プレイヤー自身をターゲットにする (騎乗中) / Main target is player (used for riding player) */
     PROJECT_AIMED = 0x0400, /*!<  / Target is only player or monster, so don't affect another. Depend on PROJECT_PLAYER. (used for minimum (rad == 0) balls on riding player) */
     PROJECT_REFLECTABLE = 0x0800, /*!< 反射可能(ボルト系魔法に利用) / Refrectable spell attacks (used for "bolts") */
     PROJECT_NO_HANGEKI = 0x1000, /*!< 反撃させない / Avoid counter attacks of monsters */

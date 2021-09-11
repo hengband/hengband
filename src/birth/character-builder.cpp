@@ -38,8 +38,8 @@
 #include "world/world.h"
 
 /*!
- * @brief プレーヤーキャラの作成結果を日記に書く
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーキャラの作成結果を日記に書く
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void write_birth_diary(player_type *player_ptr)
 {

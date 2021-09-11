@@ -11,7 +11,7 @@
 
 /*!
  * @brief セーブデータに領域情報を書き込む / Write player realms
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void wr_relams(player_type *player_ptr)
 {
@@ -23,8 +23,8 @@ static void wr_relams(player_type *player_ptr)
 }
 
 /*!
- * @brief セーブデータにプレーヤー情報を書き込む / Write some "player" info
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief セーブデータにプレイヤー情報を書き込む / Write some "player" info
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wr_player(player_type *player_ptr)
 {

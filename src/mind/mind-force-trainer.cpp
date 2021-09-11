@@ -40,7 +40,7 @@
 
 /*!
  * @brief 練気術師が「練気」で溜めた気の量を返す
- * @param player_ptr プレーヤーの参照ポインタ
+ * @param player_ptr プレイヤーの参照ポインタ
  * @return 現在溜まっている気の量
  */
 int32_t get_current_ki(player_type *player_ptr)
@@ -50,7 +50,7 @@ int32_t get_current_ki(player_type *player_ptr)
 
 /*!
  * @brief 練気術師において、気を溜める
- * @param player_ptr プレーヤーの参照ポインタ
+ * @param player_ptr プレイヤーの参照ポインタ
  * @param is_reset TRUEなら気の量をkiにセットし、FALSEなら加減算を行う
  * @param ki 気の量
  */
@@ -170,7 +170,7 @@ bool set_tim_sh_force(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 
 /*!
  * @brief 衝波
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 命中したらTRUE
  */
 bool shock_power(player_type *player_ptr)

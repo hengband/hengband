@@ -55,7 +55,7 @@ TRC get_curse(int power, object_type *o_ptr)
 
 /*!
  * @brief 装備への呪い付加判定と付加処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param chance 呪いの基本確率
  * @param heavy_chance さらに重い呪いとなる確率
  */

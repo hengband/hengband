@@ -68,7 +68,7 @@ static errr get_obj_num_prep(void)
 
 /*!
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
  */
 static void object_mention(player_type *player_ptr, object_type *o_ptr)
@@ -85,7 +85,7 @@ static void object_mention(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
  * @return 生成に成功したらTRUEを返す。
@@ -173,7 +173,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
 /*!
  * @brief フロア中のアイテムを全て削除する / Deletes all objects at given location
  * Delete a dungeon object
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 削除したフロアマスのY座標
  * @param x 削除したフロアマスのX座標
  */
@@ -223,7 +223,7 @@ void floor_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBE
 /*!
  * @brief 床上の数の無くなったアイテムスロットを消去する /
  * Optimize an item on the floor (destroy "empty" items)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 消去したいアイテムの所持スロット
  */
 void floor_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
@@ -242,7 +242,7 @@ void floor_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
 /*!
  * @brief オブジェクトを削除する /
  * Delete a dungeon object
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  * @details
  * Handle "stacks" of objects correctly.
@@ -297,7 +297,7 @@ ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx
 /*!
  * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
  * Let an object fall to the ground at or near a location.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ
  * @param chance ドロップの消滅率(%)
  * @param y 配置したいフロアのY座標

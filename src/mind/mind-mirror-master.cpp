@@ -50,7 +50,7 @@ bool check_multishadow(player_type *player_ptr) { return (player_ptr->multishado
 
 /*!
  * 静水
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return ペットを操っている場合を除きTRUE
  */
 bool mirror_concentration(player_type *player_ptr)
@@ -79,7 +79,7 @@ bool mirror_concentration(player_type *player_ptr)
 
 /*!
  * @brief 全鏡の消去 / Remove all mirrors in this floor
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param explode 爆発処理を伴うならばTRUE
  */
 void remove_all_mirrors(player_type *player_ptr, bool explode)
@@ -248,7 +248,7 @@ void seal_of_mirror(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * 幻惑の光 @ 鏡使いだけでなく混沌の戦士も使える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
 bool confusing_light(player_type *player_ptr)
@@ -290,7 +290,7 @@ bool place_mirror(player_type *player_ptr)
 /*!
  * @brief 鏡抜け処理のメインルーチン /
  * Mirror Master's Dimension Door
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return ターンを消費した場合TRUEを返す
  */
 bool mirror_tunnel(player_type *player_ptr)

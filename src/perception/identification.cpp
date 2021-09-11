@@ -27,7 +27,7 @@
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /
  * Describe a "fully identified" item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr *鑑定*情報を取得する元のオブジェクト構造体参照ポインタ
  * @param mode 表示オプション
  * @return 特筆すべき情報が一つでもあった場合TRUE、一つもなく表示がキャンセルされた場合FALSEを返す。

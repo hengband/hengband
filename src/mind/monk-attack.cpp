@@ -62,7 +62,7 @@ static int calc_stun_resistance(player_attack_type *pa_ptr)
 
 /*!
  * @brief 技のランダム選択回数を決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 技のランダム選択回数
  * @details ランダム選択は一番強い技が最終的に選択されるので、回数が多いほど有利
  */
@@ -81,8 +81,8 @@ static int calc_max_blow_selection_times(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーのレベルと技の難度を加味しつつ、確率で一番強い技を選ぶ
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーのレベルと技の難度を加味しつつ、確率で一番強い技を選ぶ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 技のランダム選択回数
  * @return 技の行使に必要な最低レベル
  */
@@ -149,7 +149,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
 
 /*!
  * @brief 攻撃の重さ (修行僧と練気術師における武器重量)を決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 重さ
  */
 static WEIGHT calc_monk_attack_weight(player_type *player_ptr)
@@ -169,7 +169,7 @@ static WEIGHT calc_monk_attack_weight(player_type *player_ptr)
 
 /*!
  * @brief 急所攻撃による追加効果を与える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param stun_effect 朦朧の残りターン
  * @param resist_stun 朦朧への抵抗値
@@ -195,7 +195,7 @@ static void process_attack_vital_spot(player_type *player_ptr, player_attack_typ
 
 /*!
  * @brief 朦朧効果を受けたモンスターのステータス表示
- * @param player_ptr プレーヤーの参照ポインタ
+ * @param player_ptr プレイヤーの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
  * @param stun_effect 朦朧の残りターン
@@ -217,7 +217,7 @@ static void print_stun_effect(player_type *player_ptr, player_attack_type *pa_pt
 
 /*!
  * @brief 強力な素手攻撃ができる職業 (修行僧、狂戦士、練気術師)の素手攻撃処理メインルーチン
- * @param player_ptr プレーヤーの参照ポインタ
+ * @param player_ptr プレイヤーの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
  */

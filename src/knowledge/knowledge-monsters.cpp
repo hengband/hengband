@@ -43,7 +43,7 @@
 
 /*!
  * @brief 特定の与えられた条件に応じてモンスターのIDリストを作成する / Build a list of monster indexes in the given group.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param grp_cur グループ種別。リスト表記中の左一覧（各シンボル及び/ユニーク(-1)/騎乗可能モンスター(-2)/賞金首(-3)/アンバーの王族(-4)）を参照できる
  * @param mon_idx[] ID一覧を返す配列参照
  * @param mode 思い出の扱いに関するモード
@@ -107,7 +107,7 @@ static IDX collect_monsters(player_type *player_ptr, IDX grp_cur, IDX mon_idx[],
 /*!
  * @brief 現在のペットを表示するコマンドのメインルーチン /
  * Display current pets
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_knowledge_pets(player_type *player_ptr)
 {
@@ -146,7 +146,7 @@ void do_cmd_knowledge_pets(player_type *player_ptr)
 
 /*!
  * @brief 現在までに倒したモンスターを表示するコマンドのメインルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Total kill count
  * @note the player ghosts are ignored.
  */
@@ -288,7 +288,7 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
 
 /*!
  * Display known monsters.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param need_redraw 画面の再描画が必要な時TRUE
  * @param visual_only ？？？
  * @param direct_r_idx モンスターID
@@ -471,7 +471,7 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
 
 /*
  * List wanted monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_knowledge_bounty(player_type *player_ptr)
 {

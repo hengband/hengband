@@ -18,7 +18,7 @@
 
 /*
  * @brief コンストラクタ
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
@@ -34,7 +34,7 @@ AmuletEnchanter::AmuletEnchanter(player_type *player_ptr, object_type *o_ptr, DE
 /*!
  * @brief アミュレットに生成ランクごとの強化を与える
  * Apply magic to an item known to be a "ring" or "amulet"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク

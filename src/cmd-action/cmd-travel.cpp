@@ -18,7 +18,7 @@
 
 /*!
  * @brief トラベル処理中に地形に応じた移動コスト基準を返す
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param y 該当地点のY座標
  * @param x 該当地点のX座標
  * @return コスト値
@@ -61,7 +61,7 @@ static int travel_flow_cost(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief トラベル処理の到達地点までの行程を得る処理のサブルーチン
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  * @param n 現在のコスト
@@ -107,7 +107,7 @@ static void travel_flow_aux(player_type *player_ptr, POSITION y, POSITION x, int
 
 /*!
  * @brief トラベル処理の到達地点までの行程を得る処理のメインルーチン
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param ty 目標地点のY座標
  * @param tx 目標地点のX座標
  */

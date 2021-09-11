@@ -40,7 +40,7 @@
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @param price 最終価格を返す参照ポインタ
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
@@ -173,7 +173,7 @@ static void switch_store_stock(player_type *player_ptr, const int i, const COMMA
 /*!
  * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void store_purchase(player_type *player_ptr)
 {

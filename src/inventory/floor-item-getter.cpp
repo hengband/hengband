@@ -36,7 +36,7 @@
 
 /*!
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
@@ -69,7 +69,7 @@ static bool check_floor_item_tag_aux(player_type *player_ptr, fis_type *fis_ptr,
 
 /*!
  * @brief インベントリのアイテムにタグ付けを試みる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
@@ -99,7 +99,7 @@ static bool get_floor_item_tag_inventory(player_type *player_ptr, fis_type *fis_
 
 /*!
  * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
@@ -123,7 +123,7 @@ static bool check_floor_item_tag_inventory(player_type *player_ptr, fis_type *fi
 
 /*!
  * @brief 床上アイテムにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
@@ -146,7 +146,7 @@ static bool check_floor_item_tag(player_type *player_ptr, fis_type *fis_ptr, cha
 
 /*!
  * @brief インベントリ内のアイテムが妥当かを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
 static void test_inventory_floor(player_type *player_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
@@ -166,7 +166,7 @@ static void test_inventory_floor(player_type *player_ptr, fis_type *fis_ptr, con
 
 /*!
  * @brief 装備品がが妥当かを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
 static void test_equipment_floor(player_type *player_ptr, fis_type *fis_ptr, const ItemTester& item_tester)

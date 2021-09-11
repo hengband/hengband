@@ -198,7 +198,7 @@ static void add_cave_info(grid_type *g_ptr, int cave_mask)
 
 /*!
  * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * A monster nest is a "big" room, with an "inner" room, containing\n
  * a "collection" of monsters of a given type strewn about the room.\n

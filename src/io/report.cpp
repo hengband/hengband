@@ -231,7 +231,7 @@ static bool http_post(concptr url, BUF *buf)
 
 /*!
  * @brief キャラクタダンプを作って BUFに保存
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
@@ -400,7 +400,7 @@ concptr make_screen_dump(player_type *player_ptr)
 
 /*!
  * @brief スコア転送処理のメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 正常にスコアを送信できたらtrue、失敗時に送信を中止したらfalse
  */
 bool report_score(player_type *player_ptr, display_player_pf display_player)

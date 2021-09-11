@@ -12,7 +12,7 @@
 
 /*!
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void edit_history(player_type *player_ptr)
 {

@@ -83,7 +83,7 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bcost 基本修復費用
  * @return 実際にかかった費用
  */
@@ -273,7 +273,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 /*!
  * @brief アイテム修復処理の過渡ルーチン / Repair broken weapon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bcost 基本鑑定費用
  * @return 実際にかかった費用
  */

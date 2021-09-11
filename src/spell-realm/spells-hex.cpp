@@ -389,8 +389,8 @@ bool RealmHex::is_spelling_any() const
 
 /*!
  * @brief 呪術「目には目を」の効果処理
- * @param this->player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param this->player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void RealmHex::eyes_on_eyes()
 {

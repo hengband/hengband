@@ -15,7 +15,7 @@
 
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void rd_extra(player_type *player_ptr)
 {

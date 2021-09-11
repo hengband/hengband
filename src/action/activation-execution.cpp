@@ -134,7 +134,7 @@ static bool check_activation_conditions(player_type *player_ptr, ae_type *ae_ptr
 
 /*!
  * @brief アイテムの発動効果を処理する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */

@@ -50,7 +50,7 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
 
 /*!
  * @brief モンスターによる壁の透過・破壊を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
@@ -97,7 +97,7 @@ static bool process_wall(player_type *player_ptr, turn_flags *turn_flags_ptr, mo
 
 /*!
  * @brief モンスターが普通のドアを開ける処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
@@ -132,7 +132,7 @@ static bool bash_normal_door(player_type *player_ptr, turn_flags *turn_flags_ptr
 
 /*!
  * @brief モンスターがガラスのドアを開ける処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
@@ -163,7 +163,7 @@ static void bash_glass_door(player_type *player_ptr, turn_flags *turn_flags_ptr,
 
 /*!
  * @brief モンスターによるドアの開放・破壊を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
@@ -208,7 +208,7 @@ static bool process_door(player_type *player_ptr, turn_flags *turn_flags_ptr, mo
 
 /*!
  * @brief 守りのルーンによるモンスターの移動制限を処理する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
@@ -241,7 +241,7 @@ static bool process_protection_rune(player_type *player_ptr, turn_flags *turn_fl
 
 /*!
  * @brief 爆発のルーンを処理する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
@@ -286,7 +286,7 @@ static bool process_explosive_rune(player_type *player_ptr, turn_flags *turn_fla
 
 /*!
  * @brief モンスターが壁を掘った後続処理を実行する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
@@ -329,7 +329,7 @@ static bool process_post_dig_wall(player_type *player_ptr, turn_flags *turn_flag
 
 /*!
  * @brief モンスターの移動に関するメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param mm モンスターの移動方向
@@ -444,11 +444,11 @@ bool process_monster_movement(player_type *player_ptr, turn_flags *turn_flags_pt
 
 /*!
  * @brief モンスターを喋らせたり足音を立てたりする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param oy モンスターが元々いたY座標
  * @param ox モンスターが元々いたX座標
- * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
+ * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  */
 void process_speak_sound(player_type *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {

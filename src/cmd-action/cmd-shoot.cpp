@@ -18,7 +18,7 @@
 
 /*!
  * @brief 射撃処理のメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param snipe_type ？？？
  * @todo Doxygenの加筆求む
  */

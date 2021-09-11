@@ -45,7 +45,7 @@
 
 /*!
  * @brief 死亡時召喚処理 (今のところ自分自身のみ)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
  * @param type 召喚タイプ
  * @param probability 召喚確率 (計算式：1 - 1/probability)
@@ -128,7 +128,7 @@ static void on_dead_raal(player_type *player_ptr, monster_death_type *md_ptr)
 
 /*!
  * @brief 6/7の確率で、20マス以内に暁の戦士自身を召喚する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
  */
 static void on_dead_dawn(player_type *player_ptr, monster_death_type *md_ptr)
@@ -263,7 +263,7 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
 
 /*!
  * @brief 7/8の確率で、5マス以内にトーテムモアイ自身を召喚する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
  */
 static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_ptr)
@@ -332,7 +332,7 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
 
 /*
  * @brief 装備品の生成を試みる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param q_ptr 生成中アイテムへの参照ポインタ
  * @param drop_mode ドロップ品の質
  * @param is_object_hook_null アイテム種別が何でもありならtrue、指定されていればfalse
@@ -374,7 +374,7 @@ static bool make_equipment(player_type *player_ptr, object_type *q_ptr, const BI
 
 /*
  * @brief 死亡時ドロップとしてランダムアーティファクトのみを生成する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
  * @param object_hook_pf アイテム種別指定、特になければnullptrで良い
  * @return なし

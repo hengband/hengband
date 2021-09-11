@@ -394,7 +394,7 @@ static bool select_learnt_spells(player_type *player_ptr, learnt_magic_type *lm_
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sn 選択したモンスター攻撃ID、キャンセルの場合-1、不正な選択の場合-2を返す
  * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
  * @details

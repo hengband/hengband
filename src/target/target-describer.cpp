@@ -494,7 +494,7 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
 
 /*!
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 指定グリッドのY座標
  * @param x 指定グリッドのX座標
  * @param mode x (KILL)かl (LOOK)

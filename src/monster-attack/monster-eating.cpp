@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレーヤーのHP/MP、アイテム、お金・明かりの残りターン、充填魔力を盗んだり減少させたりする処理
+ * @brief プレイヤーのHP/MP、アイテム、お金・明かりの残りターン、充填魔力を盗んだり減少させたりする処理
  * @date 2020/05/31
  * @author Hourier
  */
@@ -72,7 +72,7 @@ void process_eat_gold(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 盗み打撃の時にアイテムが盗まれるかどうかを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  * @return 盗まれたらTRUE、何も盗まれなかったらFALSE
  */
@@ -95,8 +95,8 @@ bool check_eat_item(player_type *player_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief プレーヤーが持っているアイテムをモンスターに移す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーが持っているアイテムをモンスターに移す
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  */
 static void move_item_to_monster(player_type *player_ptr, monap_type *monap_ptr, const OBJECT_IDX o_idx)
@@ -120,7 +120,7 @@ static void move_item_to_monster(player_type *player_ptr, monap_type *monap_ptr,
 
 /*!
  * @brief アイテム盗み処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  * @details eatとあるがお金や食べ物と違ってなくならない、盗んだモンスターを倒せば取り戻せる
  */
@@ -196,7 +196,7 @@ void process_eat_lite(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief モンスターからの攻撃による充填魔力吸収処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  * @return 吸収されたらTRUE、されなかったらFALSE
  * @details 魔道具使用能力向上フラグがあれば、吸収量は全部ではない
@@ -300,7 +300,7 @@ void process_drain_mana(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief モンスターからの空腹進行処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  * @details 空腹、衰弱の一歩手前で止める優しさは残す。
  */

@@ -48,7 +48,7 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 
 /*!
  * @brief ランダムアーティファクト内容をスポイラー出力するサブルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param i 出力したい記録ランダムアーティファクトID
  */

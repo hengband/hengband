@@ -56,7 +56,7 @@
 
 /*!
  * @brief 杖の効果を発動する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sval オブジェクトのsval
  * @param use_charge 使用回数を消費したかどうかを返す参照ポインタ
  * @param powerful 強力発動上の処理ならばTRUE

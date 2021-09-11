@@ -55,7 +55,7 @@
 
 /*!
  * @brief プレイヤーの変異要素による打撃処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 攻撃目標となったモンスターの参照ID
  * @param attack 変異要素による攻撃要素の種類
  * @param fear 攻撃を受けたモンスターが恐慌状態に陥ったかを返す参照ポインタ

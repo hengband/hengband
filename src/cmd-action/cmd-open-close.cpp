@@ -326,7 +326,7 @@ static bool get_spike(player_type *player_ptr, INVENTORY_IDX *ip)
 /*!
  * @brief 「くさびを打つ」動作コマンドのメインルーチン /
  * Jam a closed door with a spike
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * <pre>
  * This command may NOT be repeated

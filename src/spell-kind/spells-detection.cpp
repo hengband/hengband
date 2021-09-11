@@ -31,7 +31,7 @@
 
 /*!
  * @brief プレイヤー周辺の地形を感知する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @param flag 特定地形ID
  * @param known 地形から危険フラグを外すならTRUE
@@ -76,7 +76,7 @@ static bool detect_feat_flag(player_type *player_ptr, POSITION range, FF flag, b
 
 /*!
  * @brief プレイヤー周辺のトラップを感知する / Detect all traps on current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @return 効力があった場合TRUEを返す
@@ -103,7 +103,7 @@ bool detect_traps(player_type *player_ptr, POSITION range, bool known)
 
 /*!
  * @brief プレイヤー周辺のドアを感知する / Detect all doors on current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -122,7 +122,7 @@ bool detect_doors(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief プレイヤー周辺の階段を感知する / Detect all stairs on current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -141,7 +141,7 @@ bool detect_stairs(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief プレイヤー周辺の地形財宝を感知する / Detect any treasure on the current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -159,7 +159,7 @@ bool detect_treasure(player_type *player_ptr, POSITION range)
 }
 /*!
  * @brief プレイヤー周辺のアイテム財宝を感知する / Detect all "gold" objects on the current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -207,7 +207,7 @@ bool detect_objects_gold(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 通常のアイテムオブジェクトを感知する / Detect all "normal" objects on the current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -254,7 +254,7 @@ bool detect_objects_normal(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 魔法効果のあるのアイテムオブジェクトを感知する / Detect all "magic" objects on the current panel.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  * @details
@@ -308,7 +308,7 @@ bool detect_objects_magic(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 一般のモンスターを感知する / Detect all "normal" monsters on the current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -347,7 +347,7 @@ bool detect_monsters_normal(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 不可視のモンスターを感知する / Detect all "invisible" monsters around the player
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -392,7 +392,7 @@ bool detect_monsters_invis(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 邪悪なモンスターを感知する / Detect all "evil" monsters on current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -437,7 +437,7 @@ bool detect_monsters_evil(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 無生命のモンスターを感知する(アンデッド、悪魔系を含む) / Detect all "nonliving", "undead" or "demonic" monsters on current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -477,7 +477,7 @@ bool detect_monsters_nonliving(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 精神のあるモンスターを感知する / Detect all monsters it has mind on current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -519,7 +519,7 @@ bool detect_monsters_mind(player_type *player_ptr, POSITION range)
 
 /*!
  * @brief 該当シンボルのモンスターを感知する / Detect all (string) monsters on current panel
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
  * @return 効力があった場合TRUEを返す
@@ -564,7 +564,7 @@ bool detect_monsters_string(player_type *player_ptr, POSITION range, concptr Mat
 
 /*!
  * @brief flags3に対応するモンスターを感知する / A "generic" detect monsters routine, tagged to flags3
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @param match_flag 感知フラグ
  * @return 効力があった場合TRUEを返す
@@ -621,7 +621,7 @@ bool detect_monsters_xxx(player_type *player_ptr, POSITION range, uint32_t match
 
 /*!
  * @brief 全感知処理 / Detect everything
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */

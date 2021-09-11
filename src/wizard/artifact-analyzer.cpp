@@ -271,7 +271,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
  * @brief アーティファクトの情報全体を構造体に収める /
  * Fill in an object description structure for a given object
  * and its value in gold pieces
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  */
@@ -293,7 +293,7 @@ void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *
 /*!
  * @brief ランダムアーティファクト１件を解析する /
  * Fill in an object description structure for a given object
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
  */

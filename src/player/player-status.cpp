@@ -2932,7 +2932,7 @@ long calc_score(player_type *player_ptr)
 }
 
 /*!
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 祝福状態ならばTRUE
  */
 bool is_blessed(player_type *player_ptr)
@@ -2962,7 +2962,7 @@ bool is_time_limit_stealth(player_type *player_ptr)
 
 /*!
  * @brief 口を使う継続的な処理を中断する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void stop_mouth(player_type *player_ptr)
 {

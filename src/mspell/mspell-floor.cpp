@@ -44,7 +44,7 @@
 /*!
  * @brief RF4_SHRIEKの処理。叫び。 /
  * @param m_idx 呪文を唱えるモンスターID
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
@@ -73,7 +73,7 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *player_ptr, 
 
 /*!
  * @brief RF6_WORLDの処理。時を止める。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  *
  * ラーニング不可。
@@ -91,7 +91,7 @@ MonsterSpellResult spell_RF6_WORLD(player_type *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief RF6_BLINKの処理。ショート・テレポート。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param is_quantum_effect 量子的効果によるショート・テレポートの場合時TRUE
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
@@ -127,7 +127,7 @@ MonsterSpellResult spell_RF6_BLINK(player_type *player_ptr, MONSTER_IDX m_idx, i
 
 /*!
  * @brief RF6_TPORTの処理。テレポート。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
@@ -158,7 +158,7 @@ MonsterSpellResult spell_RF6_TPORT(player_type *player_ptr, MONSTER_IDX m_idx, i
 
 /*!
  * @brief RF6_TELE_TOの処理。テレポート・バック。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
@@ -224,7 +224,7 @@ MonsterSpellResult spell_RF6_TELE_TO(player_type *player_ptr, MONSTER_IDX m_idx,
 
 /*!
  * @brief RF6_TELE_AWAYの処理。テレポート・アウェイ。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
@@ -298,7 +298,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *player_ptr, MONSTER_IDX m_id
 
 /*!
  * @brief RF6_TELE_LEVELの処理。テレポート・レベル。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
@@ -348,7 +348,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(player_type *player_ptr, MONSTER_IDX m_i
 
 /*!
  * @brief RF6_DARKNESSの処理。暗闇or閃光。 /
- * @param target_type プレーヤーへの参照ポインタ
+ * @param target_type プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -415,7 +415,7 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSIT
 
 /*!
  * @brief RF6_TRAPSの処理。トラップ。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -443,7 +443,7 @@ MonsterSpellResult spell_RF6_TRAPS(player_type *player_ptr, POSITION y, POSITION
 
 /*!
  * @brief RF6_RAISE_DEADの処理。死者復活。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER

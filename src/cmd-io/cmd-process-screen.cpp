@@ -333,7 +333,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 
 /*!
  * @brief 記念撮影のためにグラフィック使用をOFFにする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 記念撮影直前のグラフィックオプション
  */
 static bool update_use_graphics(player_type *player_ptr)
@@ -350,7 +350,7 @@ static bool update_use_graphics(player_type *player_ptr)
 
 /*
  * Save a screen dump to a file
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_save_screen(player_type *player_ptr)
 {

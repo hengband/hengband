@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレーヤーの耐性と能力値を表示する
+ * @brief プレイヤーの耐性と能力値を表示する
  * @date 2020/02/27
  * @author Hourier
  * @details
@@ -25,8 +25,8 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief プレーヤーのパラメータ基礎値 (腕力等)を18以下になるようにして返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーのパラメータ基礎値 (腕力等)を18以下になるようにして返す
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param stat_num 能力値番号
  * @return 基礎値
  * @details 最大が18になるのはD&D由来
@@ -51,7 +51,7 @@ static int calc_basic_stat(player_type *player_ptr, int stat_num)
 
 /*!
  * @brief 特殊な種族の時、腕力等の基礎パラメータを変動させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param stat_num 能力値番号
  * @return 補正後の基礎パラメータ
  */
@@ -86,7 +86,7 @@ static int compensate_special_race(player_type *player_ptr, int stat_num)
 
 /*!
  * @brief 能力値名を(もし一時的減少なら'x'を付けて)表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param stat_num 能力値番号
  * @param row 行数
  * @param stat_col 列数
@@ -101,7 +101,7 @@ static void display_basic_stat_name(player_type *player_ptr, int stat_num, int r
 
 /*!
  * @brief 能力値を、基本・種族補正・職業補正・性格補正・装備補正・合計・現在 (一時的減少のみ) の順で表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param stat_num 能力値番号
  * @param r_adj 補正後の基礎パラメータ
  * @param e_adj 種族補正値
@@ -134,7 +134,7 @@ static void display_basic_stat_value(player_type *player_ptr, int stat_num, int 
 
 /*!
  * @brief 能力値を補正しつつ表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param row 行数
  * @param stat_col 列数
  */
@@ -191,7 +191,7 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
 
 /*!
  * @brief 装備品を走査してpval付きのものをそれと分かるように表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags 装備品に立っているフラグ
  * @param row 行数
  * @param col 列数
@@ -221,7 +221,7 @@ static void display_equipments_compensation(player_type *player_ptr, int row, in
 
 /*!
  * @brief 各能力値の補正
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param stat 能力値番号
  */
 static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
@@ -290,7 +290,7 @@ static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
 
 /*!
  * @brief 突然変異 (と、つよしスペシャル)による能力値の補正有無で表示する記号を変える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param stat 能力値番号
  * @param c 補正後の表示記号
  * @param a 表示色
@@ -317,7 +317,7 @@ static void change_display_by_mutation(player_type *player_ptr, int stat, char *
 
 /*!
  * @brief 能力値を走査し、突然変異 (と、つよしスペシャル)で補正をかける必要があればかける
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param col 列数
  * @param row 行数
  */
@@ -343,7 +343,7 @@ static void display_mutation_compensation(player_type *player_ptr, int row, int 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * <pre>
  * How to print out the modifications and sustains.

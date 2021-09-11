@@ -714,7 +714,7 @@ void do_cmd_browse(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの第二魔法領域を変更する /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
  */
 static void change_realm2(player_type *player_ptr, int16_t next_realm)
@@ -974,7 +974,7 @@ void do_cmd_study(player_type *player_ptr)
 /*!
  * @brief 魔法を詠唱するコマンドのメインルーチン /
  * Cast a spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 詠唱したらtrue
  */
 bool do_cmd_cast(player_type *player_ptr)

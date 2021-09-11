@@ -14,7 +14,7 @@
 
 /*!
  * @brief カジノ1プレイごとのメインルーチン / gamble_comm
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param cmd プレイするゲームID
  * @return プレイ成立やルール説明のみ等ならTRUE、賭け金不足で不成立ならFALSE
  */

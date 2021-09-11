@@ -19,7 +19,7 @@
 
 /*!
  * @brief 日記のタイトル表記と内容出力
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_diary(player_type *player_ptr)
 {
@@ -108,7 +108,7 @@ static void do_cmd_erase_diary(void)
 
 /*!
  * @brief 日記コマンド
- * @param crerature_ptr プレーヤーへの参照ポインタ
+ * @param crerature_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_diary(player_type *player_ptr)
 {

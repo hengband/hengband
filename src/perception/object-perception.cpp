@@ -39,7 +39,7 @@ void object_known(object_type *o_ptr)
 /*!
  * @brief オブジェクトを＊鑑定＊済にする /
  * The player is now aware of the effects of the given object.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ＊鑑定＊済にするオブジェクトの構造体参照ポインタ
  */
 void object_aware(player_type *player_ptr, object_type *o_ptr)

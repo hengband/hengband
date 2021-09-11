@@ -157,7 +157,7 @@ object_type *choose_cursed_obj_name(player_type *player_ptr, TRC flag)
 
 /*!
  * @brief 呪われている、トランプエゴ等による装備品由来のテレポートを実行する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void curse_teleport(player_type *player_ptr)
 {
@@ -395,7 +395,7 @@ static void occur_curse_effects(player_type *player_ptr)
 /*!
  * @brief 10ゲームターンが進行するごとに装備効果の発動判定を行う処理
  * / Handle curse effects once every 10 game turns
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void execute_cursed_items_effect(player_type *player_ptr)
 {

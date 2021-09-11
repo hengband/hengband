@@ -266,7 +266,7 @@ MonsterSpellResult monspell_to_player(player_type *player_ptr, RF_ABILITY ms_typ
 
 /*!
  * @brief モンスターからモンスターへの魔法使用。ラーニング処理も行う。
- * @param player_ptr プレーヤーへの参照ポインタ (monster_spell_typeのenum値とは異なる)
+ * @param player_ptr プレイヤーへの参照ポインタ (monster_spell_typeのenum値とは異なる)
  * @param ms_type モンスター魔法ID
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標

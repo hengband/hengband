@@ -46,7 +46,7 @@ static void check_item_selection_mode(item_selection_type *item_selection_ptr)
 
 /*!
  * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item_selection_ptr アイテムへの参照ポインタ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
@@ -68,7 +68,7 @@ static bool check_item_tag_aux(player_type *player_ptr, item_selection_type *ite
 
 /*!
  * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
@@ -111,7 +111,7 @@ static bool check_item_tag_inventory(player_type *player_ptr, item_selection_typ
 
 /*!
  * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item_selection_ptr アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
@@ -134,7 +134,7 @@ static bool check_item_tag(player_type *player_ptr, item_selection_type *item_se
 
 /*!
  * @brief インベントリ内のアイテムが妥当かを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
  */
 static void test_inventory(player_type *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
@@ -154,7 +154,7 @@ static void test_inventory(player_type *player_ptr, item_selection_type *item_se
 
 /*!
  * @brief 装備品が妥当かを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
  */
 static void test_equipment(player_type *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
@@ -179,7 +179,7 @@ static void test_equipment(player_type *player_ptr, item_selection_type *item_se
 /*!
  * @brief オブジェクト選択の汎用関数 / General function for the selection of item
  * Let the user select an item, save its "index"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param cp 選択したオブジェクトのID
  * @param pmt 選択目的のメッセージ
  * @param str 選択できるオブジェクトがない場合のキャンセルメッセージ

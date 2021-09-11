@@ -13,7 +13,7 @@
  * @brief 取引成功時の店主のメッセージ処理 /
  * ブラックマーケットのときは別のメッセージを出す
  * Successful haggle.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void store_owner_says_comment(player_type *player_ptr)
 {

@@ -34,7 +34,7 @@ void vary_item(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 /*!
  * @brief アイテムを増減させ残り所持数メッセージを表示する /
  * Increase the "number" of an item in the inventory
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
  * @param num 増やしたい量
  */
@@ -70,7 +70,7 @@ void inven_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBE
 /*!
  * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する /
  * Erase an inventory slot if it has no more items
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 消去したいプレイヤーのアイテム所持スロット
  */
 void inven_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
@@ -107,7 +107,7 @@ void inven_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
 /*!
  * @brief 所持スロットから床下にオブジェクトを落とすメインルーチン /
  * Drop (some of) a non-cursed inventory/equipment item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 所持テーブルのID
  * @param amt 落としたい個数
  * @details
@@ -217,7 +217,7 @@ void combine_pack(player_type *player_ptr)
 /*!
  * @brief プレイヤーの所持スロットに存在するオブジェクトを並び替える /
  * Reorder items in the pack
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Note special handling of the "overflow" slot
  */
@@ -344,7 +344,7 @@ int16_t store_item_to_inventory(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
@@ -368,7 +368,7 @@ bool check_store_item_to_inventory(player_type *player_ptr, const object_type *o
 /*!
  * @brief 装備スロットからオブジェクトを外すメインルーチン /
  * Take off (some of) a non-cursed equipment item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item オブジェクトを外したい所持テーブルのID
  * @param amt 外したい個数
  * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。

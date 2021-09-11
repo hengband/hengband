@@ -328,7 +328,7 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
 /*!
  * @brief アイテムの詳細ステータスを表示する /
  * Change various "permanent" player variables.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
  */
 static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
@@ -394,7 +394,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief 検査対象のアイテムを基準とした生成テストを行う /
  * Try to create an item again. Output some statistics.    -Bernd-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成テストの基準となるアイテム情報の参照ポインタ
  * The statistics are correct now.  We acquire a clean grid, and then
  * repeatedly place an object in this grid, copying it into an item
@@ -578,7 +578,7 @@ static void wiz_reroll_item(player_type *player_ptr, object_type *o_ptr)
 
 /*!
  * @briefアイテムの基礎能力値を調整する / Tweak an item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 調整するアイテムの参照ポインタ
  */
 static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
@@ -620,7 +620,7 @@ static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief 検査対象のアイテムの数を変更する /
  * Change the quantity of a the item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
  */
 static void wiz_quantity_item(object_type *o_ptr)

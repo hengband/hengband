@@ -84,7 +84,7 @@ bool decide_process_continue(player_type *player_ptr, monster_type *m_ptr);
 /*!
  * @brief モンスター単体の1ターン行動処理メインルーチン /
  * Process a monster
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 行動モンスターの参照ID
  * @details
  * The monster is known to be within 100 grids of the player\n
@@ -184,9 +184,9 @@ void process_monster(player_type *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief 超隠密処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @return モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
+ * @return モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  */
 bool process_stealth(player_type *player_ptr, MONSTER_IDX m_idx)
 {
@@ -210,7 +210,7 @@ bool process_stealth(player_type *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief 死亡したモンスターが乗馬中のモンスターだった場合に落馬処理を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param is_riding_mon 騎乗中であればTRUE
  */
@@ -234,7 +234,7 @@ void decide_drop_from_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool i
 
 /*!
  * @brief 召喚の親元が消滅した時、子供も消滅させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
  * @return 召喚モンスターが消滅したらTRUE
@@ -268,7 +268,7 @@ bool vanish_summoned_children(player_type *player_ptr, MONSTER_IDX m_idx, bool s
 
 /*!
  * @brief 寝ているモンスターの起床を判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @return 寝たままならFALSE、起きているor起きたらTRUE
  */
@@ -297,7 +297,7 @@ bool awake_monster(player_type *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief モンスターの怒り状態を判定する (怒っていたら敵に回す)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
  */
@@ -341,7 +341,7 @@ void process_angar(player_type *player_ptr, MONSTER_IDX m_idx, bool see_m)
 
 /*!
  * @brief 手榴弾の爆発処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @return 爆死したらTRUE
  */
@@ -358,7 +358,7 @@ bool explode_grenade(player_type *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief モンスター依存の特別な行動を取らせる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  */
 void process_special(player_type *player_ptr, MONSTER_IDX m_idx)
@@ -386,7 +386,7 @@ void process_special(player_type *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief モンスターを分裂させるかどうかを決定する (分裂もさせる)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param oy 分裂元モンスターのY座標
  * @param ox 分裂元モンスターのX座標
@@ -427,9 +427,9 @@ bool decide_monster_multiplication(player_type *player_ptr, MONSTER_IDX m_idx, P
 
 /*!
  * @brief モンスターに魔法を試行させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
+ * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 魔法を唱えられなければ強制的にFALSE、その後モンスターが実際に魔法を唱えればTRUE
  */
 bool cast_spell(player_type *player_ptr, MONSTER_IDX m_idx, bool aware)
@@ -461,10 +461,10 @@ bool cast_spell(player_type *player_ptr, MONSTER_IDX m_idx, bool aware)
 
 /*!
  * @brief モンスターの恐怖状態を処理する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
- * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
+ * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return モンスターが戦いを決意したらTRUE
  */
 bool process_monster_fear(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
@@ -534,7 +534,7 @@ void process_monsters(player_type *player_ptr)
 
 /*!
  * @brief フロア内のモンスターについてターン終了時の処理を繰り返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void sweep_monster_process(player_type *player_ptr)
 {
@@ -576,7 +576,7 @@ void sweep_monster_process(player_type *player_ptr)
 
 /*!
  * @brief 後続のモンスター処理が必要かどうか判定する (要調査)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @return 後続処理が必要ならTRUE
  */

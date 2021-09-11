@@ -421,7 +421,7 @@ static bool racial_power_reduce_mana(player_type *player_ptr, rc_type *rc_ptr)
 
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_racial_power(player_type *player_ptr)
 {

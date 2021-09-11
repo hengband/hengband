@@ -31,7 +31,7 @@ static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
 
 /*!
  * @brief 特殊な部屋地形向けにモンスターを配置する / Place some sleeping monsters near the given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 モンスターを配置したいマスの中心Y座標
  * @param x1 モンスターを配置したいマスの中心X座標
  * @param num 配置したいモンスターの数
@@ -60,7 +60,7 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 配置したい中心マスのY座標
  * @param x 配置したい中心マスのX座標
  * @param num 配置したい数
@@ -143,7 +143,7 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
 
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y トラップを配置したいマスの中心Y座標
  * @param x トラップを配置したいマスの中心X座標
  * @param yd Y方向の配置分散マス数

@@ -12,7 +12,7 @@
 /*!
  * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
  * Places a treasure (Gold or Gems) at given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらTRUEを返す。
@@ -56,7 +56,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 /*!
  * @brief フロアの指定位置に生成階に応じたベースアイテムの生成を行う。
  * Attempt to place an object (normal or good/great) at the given location.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @param mode オプションフラグ

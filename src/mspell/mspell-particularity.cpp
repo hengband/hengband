@@ -22,7 +22,7 @@
 
 /*!
  * @brief RF4_ROCKETの処理。ロケット。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -49,7 +49,7 @@ MonsterSpellResult spell_RF4_ROCKET(player_type *player_ptr, POSITION y, POSITIO
 
 /*!
  * @brief RF6_HAND_DOOMの処理。破滅の手。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID

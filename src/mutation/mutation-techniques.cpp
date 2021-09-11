@@ -23,7 +23,7 @@
 
 /*!
  * 岩石食い
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return コマンドの入力方向に地形があればTRUE
  */
 bool eat_rock(player_type *player_ptr)

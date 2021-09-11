@@ -58,7 +58,7 @@
 
 /*!
  * @brief 剣術の各処理を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 剣術ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。

@@ -86,7 +86,7 @@ bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX 
 /*!
  * @brief 所持/装備オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
  * Find the "first" inventory object with the given "tag".
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param cp 対応するタグIDを与える参照ポインタ
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
  * @param mode 所持、装備の切り替え
@@ -180,7 +180,7 @@ bool get_item_okay(player_type *player_ptr, OBJECT_IDX i, const ItemTester& item
 
 /*!
  * @brief 選択したアイテムの確認処理のメインルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
@@ -214,7 +214,7 @@ bool get_item_allow(player_type *player_ptr, INVENTORY_IDX item)
 
 /*!
  * @brief 選択アルファベットラベルからプレイヤーの装備オブジェクトIDを返す /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
@@ -237,7 +237,7 @@ INVENTORY_IDX label_to_equipment(player_type *player_ptr, int c)
 /*!
  * @brief 選択アルファベットラベルからプレイヤーの所持オブジェクトIDを返す /
  * Convert a label into the index of an item in the "inven"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param c 選択されたアルファベット
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  * @details Note that the label does NOT distinguish inven/equip.
@@ -255,7 +255,7 @@ INVENTORY_IDX label_to_inventory(player_type *player_ptr, int c)
 /*!
  * @brief 選択したアイテムの確認処理の補助 /
  * Verify the choice of an item.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param prompt メッセージ表示の一部
  * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
@@ -279,7 +279,7 @@ bool verify(player_type *player_ptr, concptr prompt, INVENTORY_IDX item)
 /*!
  * @brief タグIDにあわせてタグアルファベットのリストを返す /
  * Move around label characters with correspond tags
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param label ラベルリストを取得する文字列参照ポインタ
  * @param mode 所持品リストか装備品リストかの切り替え
  */

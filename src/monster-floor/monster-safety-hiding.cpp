@@ -23,7 +23,7 @@
 
 /*!
  * @brief モンスターが逃げ込める地点を走査する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param y_offsets
  * @param x_offsets
@@ -75,7 +75,7 @@ static coordinate_candidate sweep_safe_coordinate(player_type *player_ptr, MONST
 /*!
  * @brief モンスターが逃げ込める安全な地点を返す /
  * Choose a "safe" location near a monster for it to run toward.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ
@@ -117,7 +117,7 @@ bool find_safety(player_type *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
 
 /*!
  * @brief モンスターが隠れられる地点を走査する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param y_offsets
  * @param x_offsets
@@ -149,7 +149,7 @@ static void sweep_hiding_candidate(
 /*!
  * @brief モンスターが隠れ潜める地点を返す /
  * Choose a good hiding place near a monster for it to run toward.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ

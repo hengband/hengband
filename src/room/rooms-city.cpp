@@ -96,7 +96,7 @@ static void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITI
 
 /*!
  * @brief タイプ16の部屋…地下都市生成のサブルーチン / Actually create buildings
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param ltcy 生成基準Y座標
  * @param ltcx 生成基準X座標
  * @param stotes[] 生成する店舗のリスト

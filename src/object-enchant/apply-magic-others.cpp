@@ -32,7 +32,7 @@
 /*!
  * @brief その他雑多のオブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be "boring"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param power 生成ランク
  * @details

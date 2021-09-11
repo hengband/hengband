@@ -24,7 +24,7 @@
 
 /*!
  * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void cast_shuffle(player_type *player_ptr)
 {

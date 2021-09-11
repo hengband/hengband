@@ -112,7 +112,7 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
 
 /*!
  * @brief デバッグコマンド選択処理への分岐
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param cmd コマンドキー
  * @return コマンド終了ならTRUE、ページ送りならFALSE
  */
@@ -267,7 +267,7 @@ bool exe_cmd_debug(player_type *player_ptr, char cmd)
  * @brief デバッグコマンドを選択する処理のメインルーチン /
  * Ask for and parse a "debug command"
  * The "command_arg" may have been set.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * 番号を指定するには、それをN及びデバッグコマンドをXとしてとして「0N^aX」とする
  */

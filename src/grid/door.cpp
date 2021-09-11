@@ -56,7 +56,7 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 
 /*!
  * @brief 隠しドアを配置する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
@@ -94,7 +94,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 
 /*!
  * @brief 鍵のかかったドアを配置する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  */
@@ -113,7 +113,7 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param room 部屋に接している場合向けのドア生成か否か
@@ -171,7 +171,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 
 /*!
  * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param type ドアの地形ID

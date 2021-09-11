@@ -29,7 +29,7 @@
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param heavy 重度の擬似鑑定を行うならばTRUE
  */
 static void sense_inventory_aux(player_type *player_ptr, INVENTORY_IDX slot, bool heavy)

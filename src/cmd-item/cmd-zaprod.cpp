@@ -46,7 +46,7 @@
 
 /*!
  * @brief ロッドの効果を発動する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sval オブジェクトのsval
  * @param dir 発動目標の方向ID
  * @param use_charge チャージを消費したかどうかを返す参照ポインタ
@@ -277,7 +277,7 @@ int rod_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir
 /*!
  * @brief ロッドを使うコマンドのサブルーチン /
  * Activate (zap) a Rod
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 使うオブジェクトの所持品ID
  * @details
  * <pre>
@@ -408,7 +408,7 @@ void exe_zap_rod(player_type *player_ptr, INVENTORY_IDX item)
 
 /*!
  * @brief ロッドを使うコマンドのメインルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_zap_rod(player_type *player_ptr)
 {

@@ -46,7 +46,7 @@ static int auto_dump_line_num;
 /*!
  * @brief process_pref_fileのサブルーチン /
  * Open the "user pref file" and parse it.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param name 読み込むファイル名
  * @param preftype prefファイルのタイプ
  * @return エラーコード
@@ -138,7 +138,7 @@ static errr process_pref_file_aux(player_type *player_ptr, concptr name, int pre
 /*!
  * @brief pref設定ファイルを読み込み設定を反映させる /
  * Process the "user pref file" with the given name
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param name 読み込むファイル名
  * @param only_user_dir trueを指定するとANGBAND_DIR_USERからの読み込みのみ行う
  * @return エラーコード
@@ -171,7 +171,7 @@ errr process_pref_file(player_type *player_ptr, concptr name, bool only_user_dir
 
 /*!
  * @brief 自動拾いファイルを読み込む /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param name ファイル名
  * @details
  */
@@ -186,7 +186,7 @@ errr process_autopick_file(player_type *player_ptr, concptr name)
 /*!
  * @brief プレイヤーの生い立ちファイルを読み込む /
  * Process file for player's history editor.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param name ファイル名
  * @return エラーコード
  * @details
@@ -269,7 +269,7 @@ void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 
 /*!
  * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
- * @paaram player_ptr プレーヤーへの参照ポインタ
+ * @paaram player_ptr プレイヤーへの参照ポインタ
  * @note
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.

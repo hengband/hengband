@@ -47,7 +47,7 @@ void get_bloody_moon_flags(object_type *o_ptr)
 
 /*!
  * @brief Let's dance a RONDO!!
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ブラッディ・ムーンへの参照ポインタ
  * @return オブジェクト情報に異常がない限りTRUE
  */

@@ -25,7 +25,7 @@ static const int extra_min_magic_fail_rate = 2;
 /*!
  * @brief 呪文の経験値を返す /
  * Returns experience of a spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 呪文ID
  * @param use_realm 魔法領域
  * @return 経験値
@@ -47,7 +47,7 @@ EXP experience_of_spell(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
 /*!
  * @brief 呪文の消費MPを返す /
  * Modify mana consumption rate using spell exp and dec_mana
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param need_mana 基本消費MP
  * @param spell 呪文ID
  * @param realm 魔法領域
@@ -80,7 +80,7 @@ MANA_POINT mod_need_mana(player_type *player_ptr, MANA_POINT need_mana, SPELL_ID
  * @brief 呪文の失敗率修正処理1(呪い、消費魔力減少、呪文簡易化) /
  * Modify spell fail rate
  * Using to_m_chance, dec_mana, easy_spell and heavy_spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param chance 修正前失敗率
  * @return 失敗率(%)
  * @todo 統合を検討
@@ -106,7 +106,7 @@ PERCENTAGE mod_spell_chance_1(player_type *player_ptr, PERCENTAGE chance)
  * @brief 呪文の失敗率修正処理2(消費魔力減少、呪い、負値修正) /
  * Modify spell fail rate
  * Using to_m_chance, dec_mana, easy_spell and heavy_spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param chance 修正前失敗率
  * @return 失敗率(%)
  * Modify spell fail rate (as "suffix" process)
@@ -126,7 +126,7 @@ PERCENTAGE mod_spell_chance_2(player_type *player_ptr, PERCENTAGE chance)
 /*!
  * @brief 呪文の失敗率計算メインルーチン /
  * Returns spell chance of failure for spell -RAK-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 呪文ID
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)

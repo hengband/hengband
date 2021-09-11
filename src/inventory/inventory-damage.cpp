@@ -17,7 +17,7 @@
 /*!
  * @brief 手持ちのアイテムを指定確率で破損させる /
  * Destroys a type of item on a given percent chance
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 破損判定関数ポインタ
  * @param perc 基本確率
  * @details

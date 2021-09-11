@@ -26,7 +26,7 @@ travel_type travel;
 /*!
  * @brief トラベル機能の判定処理 /
  * Test for traveling
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param prev_dir 前回移動を行った元の方角ID
  * @return 次の方向
  */
@@ -89,7 +89,7 @@ static DIRECTION travel_test(player_type *player_ptr, DIRECTION prev_dir)
 /*!
  * @brief トラベル機能の実装 /
  * Travel command
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  */
 void travel_step(player_type *player_ptr)
 {
@@ -117,7 +117,7 @@ void travel_step(player_type *player_ptr)
 
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  */
 void forget_travel_flow(floor_type *floor_ptr)
 {

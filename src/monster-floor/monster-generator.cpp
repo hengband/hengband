@@ -56,7 +56,7 @@ static MONSTER_IDX place_monster_m_idx = 0;
 
 /*!
  * @brief モンスター1体を目標地点に可能な限り近い位置に生成する / improved version of scatter() for place monster
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
  * @param yp 結果生成位置y座標
  * @param xp 結果生成位置x座標
@@ -123,7 +123,7 @@ bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSIT
 
 /*!
  * @brief モンスターを増殖生成する / Let the given monster attempt to reproduce.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 増殖するモンスター情報ID
  * @param clone クローン・モンスター処理ならばtrue
  * @param mode 生成オプション
@@ -254,7 +254,7 @@ static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief 一般的なモンスター生成処理のサブルーチン / Attempt to place a monster of the given race at the given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
  * @param y 生成地点y座標
  * @param x 生成地点x座標
@@ -328,7 +328,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
 /*!
  * @brief 一般的なモンスター生成処理のメインルーチン / Attempt to place a monster of the given race at the given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 生成地点y座標
  * @param x 生成地点x座標
  * @param mode 生成オプション
@@ -355,7 +355,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
 
 /*!
  * @brief 指定地点に1種類のモンスター種族による群れを生成する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 生成地点y座標
  * @param x 生成地点x座標
  * @return 生成に成功したらtrue
@@ -415,7 +415,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
 
 /*!
  * @brief ダンジョンの主生成を試みる / Put the Guardian
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param def_val 現在の主の生成状態
  * @return 生成に成功したらtrue
  */

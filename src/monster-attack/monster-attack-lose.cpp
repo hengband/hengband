@@ -13,8 +13,8 @@
 
 /*!
  * @brief 病気ダメージを計算する (毒耐性があれば、(1d4 + 4) / 9になる。二重耐性なら更に(1d4 + 4) / 9)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @details 10% (毒の一次耐性があれば4%、二重耐性ならば1.6%)の確率で耐久が低下し、更に1/10の確率で永久低下する
  */
 void calc_blow_disease(player_type *player_ptr, monap_type *monap_ptr)
@@ -45,8 +45,8 @@ void calc_blow_disease(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 腕力低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void calc_blow_lose_strength(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -63,8 +63,8 @@ void calc_blow_lose_strength(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 知能低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void calc_blow_lose_intelligence(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -81,8 +81,8 @@ void calc_blow_lose_intelligence(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 賢さ低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void calc_blow_lose_wisdom(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -99,8 +99,8 @@ void calc_blow_lose_wisdom(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 器用低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void calc_blow_lose_dexterity(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -117,8 +117,8 @@ void calc_blow_lose_dexterity(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 耐久低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void calc_blow_lose_constitution(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -135,8 +135,8 @@ void calc_blow_lose_constitution(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 魅力低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void calc_blow_lose_charisma(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -153,8 +153,8 @@ void calc_blow_lose_charisma(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 全能力低下ダメージを計算する (維持があれば、1つに付き-3%軽減する)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void calc_blow_lose_all(player_type *player_ptr, monap_type *monap_ptr)
 {

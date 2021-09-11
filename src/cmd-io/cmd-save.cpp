@@ -14,7 +14,7 @@
 /*!
  * @brief セーブするコマンドのメインルーチン
  * Save the game
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_autosave オートセーブ中の処理ならばTRUE
  * @details
  */

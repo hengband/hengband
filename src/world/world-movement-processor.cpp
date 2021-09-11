@@ -22,7 +22,7 @@
 
 /*!
  * @brief プレイヤーの現在ダンジョンIDと階層に応じて、ダンジョン内ランクエの自動放棄を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void check_random_quest_auto_failure(player_type *player_ptr)
 {
@@ -44,7 +44,7 @@ void check_random_quest_auto_failure(player_type *player_ptr)
 /*!
  * @brief 10ゲームターンが進行するごとに帰還の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Autosave BEFORE resetting the recall counter (rr9)
  * The player is yanked up/down as soon as he loads the autosaved game.
@@ -123,7 +123,7 @@ void execute_recall(player_type *player_ptr)
 /*!
  * @brief 10ゲームターンが進行するごとにフロア・リセット/現実変容の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void execute_floor_reset(player_type *player_ptr)
 {

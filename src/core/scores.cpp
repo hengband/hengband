@@ -132,7 +132,7 @@ static int highscore_add(high_score *score)
 
 /*!
  * @brief スコアサーバへの転送処理
- * @param current_player_ptr プレーヤーへの参照ポインタ
+ * @param current_player_ptr プレイヤーへの参照ポインタ
  * @param do_send 実際に転送ア処置を行うか否か
  * @return 転送が成功したらTRUEを返す
  */

@@ -14,7 +14,7 @@
 /*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf セーブファイル名に合わせた修正を行うならばTRUE
  * @details
  * Extract a clean "base name".
@@ -121,7 +121,7 @@ void process_player_name(player_type *player_ptr, bool is_new_savefile)
 /*!
  * @brief プレイヤーの名前を変更するコマンドのメインルーチン
  * Gets a name for the character, reacting to name changes.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * <pre>
  * Assumes that "display_player()" has just been called

@@ -486,7 +486,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
 
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 表記を返すための文字列参照ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @param mode 表記に関するオプション指定

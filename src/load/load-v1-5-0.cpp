@@ -336,7 +336,7 @@ void rd_item_old(object_type *o_ptr)
 
 /*!
  * @brief モンスターを読み込む / Read a monster
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
 void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
@@ -534,7 +534,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
 
 /*!
  * @brief ダンジョン情報を読み込む / Read the dungeon (old method)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.

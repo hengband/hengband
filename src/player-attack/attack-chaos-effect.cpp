@@ -41,7 +41,7 @@
 
 /*!
  * @brief 打撃でモンスターを混乱させる処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param can_resist レベルで抵抗可能ならTRUE、できないならFALSE
  * @details
@@ -71,7 +71,7 @@ static void attack_confuse(player_type *player_ptr, player_attack_type *pa_ptr, 
 
 /*!
  * @brief 打撃でモンスターを朦朧とさせる処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param can_resist レベルで抵抗可能ならTRUE、できないならFALSE
  * @details
@@ -94,7 +94,7 @@ static void attack_stun(player_type *player_ptr, player_attack_type *pa_ptr, boo
 
 /*!
  * @brief 打撃でモンスターを恐怖させる処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param can_resist レベルで抵抗可能ならTRUE、できないならFALSE
  * @details
@@ -117,7 +117,7 @@ static void attack_scare(player_type *player_ptr, player_attack_type *pa_ptr, bo
 
 /*!
  * @brief 打撃でモンスターを無力化する処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @details
  * 魔術属性
@@ -145,7 +145,7 @@ static void attack_dispel(player_type *player_ptr, player_attack_type *pa_ptr)
 
 /*!
  * @brief 打撃でモンスターを調査する処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @details
  * 魔術属性
@@ -163,7 +163,7 @@ static void attack_probe(player_type *player_ptr, player_attack_type *pa_ptr)
 
 /*!
  * @breif カオス武器でのテレポート・アウェイを行うか判定する (抵抗されたら無効)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return 抵抗されたらTRUE、アウェイされるならFALSE
  */
@@ -194,7 +194,7 @@ static bool judge_tereprt_resistance(player_type *player_ptr, player_attack_type
 
 /*!
  * @brief カオス武器でのテレポート・アウェイを実行する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param num 現在の攻撃回数 (テレポートしてしまったら追加攻撃できないのでその補正)
  */
@@ -211,7 +211,7 @@ static void attack_teleport_away(player_type *player_ptr, player_attack_type *pa
 
 /*!
  * @brief カオス武器でのテレポート・アウェイを実行する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param y モンスターのY座標
  * @param x モンスターのX座標
@@ -235,7 +235,7 @@ static void attack_polymorph(player_type *player_ptr, player_attack_type *pa_ptr
 
 /*!
  * @brief ゴールデンハンマーによるアイテム奪取処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 static void attack_golden_hammer(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -257,7 +257,7 @@ static void attack_golden_hammer(player_type *player_ptr, player_attack_type *pa
 
 /*!
  * @brief カオス武器その他でモンスターのステータスを変化させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param y モンスターのY座標
  * @param x モンスターのX座標

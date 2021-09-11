@@ -29,7 +29,7 @@
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 最後に保存されたフロアへの参照ポインタ
  * @return info読み込みエラーコード
  * @details
@@ -222,7 +222,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 /*!
  * @brief 保存フロア読み込みのサブ関数 / Actually load and verify a floor save data
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 保存フロア読み込み先
  * @return 成功したらtrue
  */
@@ -268,7 +268,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 /*!
  * @brief 一時保存フロア情報を読み込む / Attempt to load the temporarily saved-floor data
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 保存フロア読み込み先
  * @param mode オプション
  * @return 成功したらtrue

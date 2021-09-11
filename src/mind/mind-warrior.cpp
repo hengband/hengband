@@ -10,7 +10,7 @@
 
 /*!
  * 戦士と盗賊における、ヒット＆アウェイのレイシャルパワー/突然変異
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return コマンドの入力先にモンスターがいたらTRUE
  */
 bool hit_and_away(player_type *player_ptr)
@@ -36,7 +36,7 @@ bool hit_and_away(player_type *player_ptr)
 
 /*!
  * 剣の舞い
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
 bool sword_dancing(player_type *player_ptr)

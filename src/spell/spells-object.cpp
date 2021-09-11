@@ -83,7 +83,7 @@ static amuse_type amuse_info[]
 
 /*!
  * @brief 誰得ドロップを行う。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 配置したいフロアのY座標
  * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
@@ -174,7 +174,7 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
 /*!
  * @brief 獲得ドロップを行う。
  * Scatter some "great" objects near the player
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 配置したいフロアのY座標
  * @param x1 配置したいフロアのX座標
  * @param num 獲得の処理回数
@@ -318,7 +318,7 @@ bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr
 /*!
  * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void brand_bolts(player_type *player_ptr)
 {
@@ -420,7 +420,7 @@ static void break_curse(object_type *o_ptr)
 /*!
  * @brief 装備修正強化処理 /
  * Enchants a plus onto an item. -RAK-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化するアイテムの参照ポインタ
  * @param n 強化基本量
  * @param eflag 強化オプション(命中/ダメージ/AC)
@@ -533,7 +533,7 @@ bool enchant_equipment(player_type *player_ptr, object_type *o_ptr, int n, int e
 /*!
  * @brief 装備修正強化処理のメインルーチン /
  * Enchant an item (in the inventory or on the floor)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param num_hit 命中修正量
  * @param num_dam ダメージ修正量
  * @param num_ac AC修正量
@@ -595,7 +595,7 @@ bool enchant_spell(player_type *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 /*!
  * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
  */
 void brand_weapon(player_type *player_ptr, int brand_type)

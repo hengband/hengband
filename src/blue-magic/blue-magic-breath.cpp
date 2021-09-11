@@ -247,7 +247,7 @@ bool cast_blue_breath_nuke(player_type *player_ptr, bmc_type *bmc_ptr)
 
 /*!
  * @brief 分解のブレスの青魔法
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bmc_ptr 青魔法詠唱への参照ポインタ
  * @details 永久の刻は過ぎ去れリ.
  */

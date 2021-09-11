@@ -60,7 +60,7 @@ DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief モンスターに与えたダメージの修正処理 /
  * Modify the physical damage done to the monster.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr ダメージを受けるモンスターの構造体参照ポインタ
  * @param dam ダメージ基本値
  * @param is_psy_spear 攻撃手段が光の剣ならばTRUE
@@ -336,7 +336,7 @@ static void process_monsters_mtimed_aux(player_type *player_ptr, MONSTER_IDX m_i
 /*!
  * @brief 全モンスターの各種状態値を時間経過により更新するメインルーチン
  * @param mtimed_idx 更新するモンスターの時限ステータスID
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Process the counters of monsters (once per 10 game turns)\n
  * These functions are to process monsters' counters same as player's.
@@ -359,7 +359,7 @@ void process_monsters_mtimed(player_type *player_ptr, int mtimed_idx)
 
 /*!
  * @brief モンスターへの魔力消去処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 魔力消去を受けるモンスターの参照ID
  */
 void dispel_monster_status(player_type *player_ptr, MONSTER_IDX m_idx)
@@ -389,7 +389,7 @@ void dispel_monster_status(player_type *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief モンスターの経験値取得処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 経験値を得るモンスターの参照ID
  * @param s_idx 撃破されたモンスター種族の参照ID
  */

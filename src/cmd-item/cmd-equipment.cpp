@@ -85,7 +85,7 @@ void do_cmd_equip(player_type *player_ptr)
 
 /*!
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_wield(player_type *player_ptr)
 {

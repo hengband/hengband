@@ -68,7 +68,7 @@
 /*!
  * @brief 巻物を読むコマンドのサブルーチン
  * Read a scroll (from the pack or floor).
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 読むオブジェクトの所持品ID
  * @param known 判明済ならばTRUE
  * @details

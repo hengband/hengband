@@ -14,7 +14,7 @@
 
 /*!
  * @brief ドア生成処理(プレイヤー中心に周囲1マス) / Hooks -- affect adjacent grids (radius 1 ball attack)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool door_creation(player_type *player_ptr, POSITION y, POSITION x)
@@ -25,7 +25,7 @@ bool door_creation(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief トラップ生成処理(起点から周囲1マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 起点Y座標
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
@@ -38,7 +38,7 @@ bool trap_creation(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 森林生成処理(プレイヤー中心に周囲1マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool tree_creation(player_type *player_ptr, POSITION y, POSITION x)
@@ -49,7 +49,7 @@ bool tree_creation(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 魔法のルーン生成処理(プレイヤー中心に周囲1マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool create_rune_protection_area(player_type *player_ptr, POSITION y, POSITION x)
@@ -60,7 +60,7 @@ bool create_rune_protection_area(player_type *player_ptr, POSITION y, POSITION x
 
 /*!
  * @brief 壁生成処理(プレイヤー中心に周囲1マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool wall_stone(player_type *player_ptr)
@@ -74,7 +74,7 @@ bool wall_stone(player_type *player_ptr)
 
 /*!
  * @brief ドア破壊処理(プレイヤー中心に周囲1マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool destroy_doors_touch(player_type *player_ptr)
@@ -85,7 +85,7 @@ bool destroy_doors_touch(player_type *player_ptr)
 
 /*!
  * @brief トラップ解除処理(プレイヤー中心に周囲1マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool disarm_traps_touch(player_type *player_ptr)
@@ -96,7 +96,7 @@ bool disarm_traps_touch(player_type *player_ptr)
 
 /*!
  * @brief スリープモンスター処理(プレイヤー中心に周囲1マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool sleep_monsters_touch(player_type *player_ptr)
@@ -107,7 +107,7 @@ bool sleep_monsters_touch(player_type *player_ptr)
 
 /*!
  * @brief 死者復活処理(起点より周囲5マス)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 術者モンスターID(0ならばプレイヤー)
  * @param y 起点Y座標
  * @param x 起点X座標
@@ -121,7 +121,7 @@ bool animate_dead(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION
 
 /*!
  * @brief 周辺破壊効果(プレイヤー中心)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wall_breaker(player_type *player_ptr)
 {

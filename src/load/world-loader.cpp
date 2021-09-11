@@ -37,7 +37,7 @@ void rd_dungeons(player_type *player_ptr)
 
 /*!
  * @brief 現実変容処理の有無及びその残りターン数を読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void rd_alter_reality(player_type *player_ptr)
 {

@@ -42,7 +42,7 @@
 /*!
  * @brief 地震処理
  * Induce an "earthquake" of the given radius at the given location.
- * @param player_ptrプレーヤーへの参照ポインタ
+ * @param player_ptrプレイヤーへの参照ポインタ
  * @param cy 中心Y座標
  * @param cx 中心X座標
  * @param r 効果半径

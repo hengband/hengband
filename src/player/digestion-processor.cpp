@@ -20,7 +20,7 @@
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーの腹を減らす
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void starve_player(player_type *player_ptr)
 {

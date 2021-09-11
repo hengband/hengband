@@ -38,7 +38,7 @@ void get_ahw(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの初期所持金を決める。 / Get the player's starting money
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void get_money(player_type *player_ptr)
 {

@@ -280,7 +280,7 @@ void do_cmd_use(player_type *player_ptr)
 
 /*!
  * @brief 装備を発動するコマンドのメインルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_activate(player_type *player_ptr)
 {

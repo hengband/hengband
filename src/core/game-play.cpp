@@ -393,7 +393,7 @@ static void process_game_turn(player_type *player_ptr)
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param new_game 新規にゲームを始めたかどうか
  * @param browsing_movie ムービーモードか
  * @note

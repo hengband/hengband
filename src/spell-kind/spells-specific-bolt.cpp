@@ -6,7 +6,7 @@
 
 /*!
  * @brief 衰弱ボルト処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
@@ -19,7 +19,7 @@ bool hypodynamic_bolt(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
 
 /*!
  * @brief 死の光線処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(効力はplev*200)
  * @return 作用が実際にあった場合TRUEを返す

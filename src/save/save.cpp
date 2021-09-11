@@ -44,7 +44,7 @@
 /*!
  * @brief セーブデータの書き込み /
  * Actually write a save-file
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功すればtrue
  */
 static bool wr_savefile_new(player_type *player_ptr, save_type type)
@@ -225,7 +225,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
 /*!
  * @brief セーブデータ書き込みのサブルーチン /
  * Medium level player saver
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功すればtrue
  * @details
  * Angband 2.8.0 will use "fd" instead of "fff" if possible
@@ -270,7 +270,7 @@ static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
 /*!
  * @brief セーブデータ書き込みのメインルーチン /
  * Attempt to save the player in a savefile
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功すればtrue
  */
 bool save_player(player_type *player_ptr, save_type type)

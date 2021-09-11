@@ -291,7 +291,7 @@ static void remember_mspell(msa_type *msa_ptr)
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター構造体配列のID
  * @return 実際に特殊技能を利用したらTRUEを返す
  */

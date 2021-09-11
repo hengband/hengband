@@ -19,7 +19,7 @@
 
 /*!
  * @brief RF4_BA_NUKEの処理。放射能球。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -46,7 +46,7 @@ MonsterSpellResult spell_RF4_BA_NUKE(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF4_BA_CHAOの処理。純ログルス。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -73,7 +73,7 @@ MonsterSpellResult spell_RF4_BA_CHAO(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_ACIDの処理。アシッド・ボール。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -102,7 +102,7 @@ MonsterSpellResult spell_RF5_BA_ACID(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_ELECの処理。サンダー・ボール。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -131,7 +131,7 @@ MonsterSpellResult spell_RF5_BA_ELEC(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_FIREの処理。ファイア・ボール。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -167,7 +167,7 @@ MonsterSpellResult spell_RF5_BA_FIRE(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_COLDの処理。アイス・ボール。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -196,7 +196,7 @@ MonsterSpellResult spell_RF5_BA_COLD(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_POISの処理。悪臭雲。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -223,7 +223,7 @@ MonsterSpellResult spell_RF5_BA_POIS(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_NETHの処理。地獄球。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -250,7 +250,7 @@ MonsterSpellResult spell_RF5_BA_NETH(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_WATEの処理。ウォーター・ボール。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -288,7 +288,7 @@ MonsterSpellResult spell_RF5_BA_WATE(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_MANAの処理。魔力の嵐。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -314,7 +314,7 @@ MonsterSpellResult spell_RF5_BA_MANA(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_DARKの処理。暗黒の嵐。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -342,7 +342,7 @@ MonsterSpellResult spell_RF5_BA_DARK(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BA_LITEの処理。スターバースト。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID

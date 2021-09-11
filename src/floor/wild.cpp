@@ -271,7 +271,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint32_
 /*!
  * @brief 荒野フロア生成のメインルーチン /
  * Load a town or generate a terrain level using "plasma" fractals.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 広域Y座標
  * @param x 広域X座標
  * @param border 広域マップの辺部分としての生成ならばTRUE
@@ -373,7 +373,7 @@ static border_type border;
  * @brief 広域マップの生成 /
  * Build the wilderness area outside of the town.
  * @todo 広域マップは恒常生成にする予定、player_typeによる処理分岐は最終的に排除する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wilderness_gen(player_type *player_ptr)
 {

@@ -27,7 +27,7 @@
 
 /*!
  * @brief Check on the status of an active quest
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_checkquest(player_type *player_ptr)
 {
@@ -38,7 +38,7 @@ void do_cmd_checkquest(player_type *player_ptr)
 
 /*!
  * @brief Print all active quests
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
  */
 static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
@@ -214,7 +214,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 
 /*
  * Print all finished quests
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
@@ -237,7 +237,7 @@ void do_cmd_knowledge_quests_completed(player_type *player_ptr, FILE *fff, QUEST
 
 /*
  * Print all failed quests
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
@@ -283,7 +283,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
 /*
  * Print quest status of all active quests
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_knowledge_quests(player_type *player_ptr)
 {

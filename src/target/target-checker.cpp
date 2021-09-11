@@ -32,7 +32,7 @@ POSITION target_row;
 
 /*!
  * @brief マップ描画のフォーカスを当てるべき座標を更新する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Given an row (y) and col (x), this routine detects when a move
  * off the screen has occurred and figures new borders. -RAK-

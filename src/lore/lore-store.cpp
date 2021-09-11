@@ -16,7 +16,7 @@
 
 /*!
  * @brief モンスターの調査による思い出補完処理 / Learn about a monster (by "probing" it)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param r_idx 補完されるモンスター種族ID
  * @return 明らかになった情報の度数
  * @details
@@ -91,7 +91,7 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief モンスターの撃破に伴うドロップ情報の記憶処理 / Take note that the given monster just dropped some treasure
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター情報のID
  * @param num_item 手に入れたアイテム数
  * @param num_gold 手に入れた財宝の単位数

@@ -2047,7 +2047,7 @@ bool is_wielding_icky_weapon(player_type *player_ptr, int i)
 
 /*!
  * @brief 乗馬にふさわしくない武器を持って乗馬しているかどうかを返す.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param i 武器を持っている手。0ならば利き手、1ならば反対の手
  */
 bool is_wielding_icky_riding_weapon(player_type *player_ptr, int i)

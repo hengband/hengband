@@ -70,7 +70,7 @@ static void add_negative_flags(object_type *o_ptr)
  * 祝福を無効。確率に応じて、永遠の呪い、太古の怨念、経験値吸収、弱い呪いの継続的付加、強い呪いの継続的付加、HP吸収の呪い、
  * MP吸収の呪い、乱テレポート、反テレポート、反魔法をつける。
  * @attention プレイヤーの職業依存処理あり。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
 void curse_artifact(player_type *player_ptr, object_type *o_ptr)

@@ -15,7 +15,7 @@
 
 /*!
  * @brief RF5_CAUSE_* の処理関数
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param GF_TYPE 攻撃に使用する属性
  * @param dam 攻撃に使用するダメージ量
  * @param y 対象の地点のy座標
@@ -63,7 +63,7 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *player_ptr, int GF_TYPE, 
 
 /*!
  * @brief RF5_CAUSE_1の処理。軽傷の呪い。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -85,7 +85,7 @@ MonsterSpellResult spell_RF5_CAUSE_1(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_CAUSE_2の処理。重傷の呪い。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -107,7 +107,7 @@ MonsterSpellResult spell_RF5_CAUSE_2(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_CAUSE_3の処理。致命傷の呪い。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -129,7 +129,7 @@ MonsterSpellResult spell_RF5_CAUSE_3(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_CAUSE_4の処理。秘孔を突く。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID

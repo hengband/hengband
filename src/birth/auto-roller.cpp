@@ -193,7 +193,7 @@ static void display_autoroller_chance(int *cval)
 
 /*!
  * @brief オートローラで得たい能力値の基準を決める。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 bool get_stat_limits(player_type *player_ptr)
 {

@@ -36,7 +36,7 @@ bool monster_near_player(floor_type* floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
 /*!
  * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数 /
-* @param player_ptr プレーヤーへの参照ポインタ
+* @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param msg1 msg_flagがTRUEで、プレイヤーを対象とする場合のメッセージ
@@ -88,7 +88,7 @@ bool monspell_message_base(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。盲目時と通常時のメッセージを切り替える。 /
-* @param player_ptr プレーヤーへの参照ポインタ
+* @param player_ptr プレイヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param msg1 プレイヤーが盲目状態のメッセージ
@@ -104,7 +104,7 @@ bool monspell_message(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_
 
 /*!
 * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。対モンスターと対プレイヤーのメッセージを切り替える。 /
-* @param player_ptr プレーヤーへの参照ポインタ
+* @param player_ptr プレイヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param msg1 プレイヤーを対象とする場合のメッセージ

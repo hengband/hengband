@@ -68,7 +68,7 @@ static void print_chainsword_noise(object_type *o_ptr)
 
 /*!
  * @brief ヴォーパル武器利用時の処理メインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param vorpal_cut メッタ斬りにできるかどうか
  * @param vorpal_chance ヴォーパル倍率上昇の機会値

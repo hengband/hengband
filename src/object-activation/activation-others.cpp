@@ -248,7 +248,7 @@ bool activate_fully_identification(player_type *player_ptr)
 
 /*!
  * @brief switch_activation() から個々のスペルへの依存性をなくすためのシンタックスシュガー
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 発動に成功したらTRUE
  */
 bool activate_identification(player_type *player_ptr)
@@ -265,7 +265,7 @@ bool activate_pesticide(player_type *player_ptr)
 
 /*!
  * @brief switch_activation() から個々のスペルへの依存性をなくすためのシンタックスシュガー
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 発動に成功したらTRUE
  */
 bool activate_whirlwind(player_type *player_ptr)

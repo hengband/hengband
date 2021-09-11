@@ -91,7 +91,7 @@ static bool is_dead_summoning(summon_type type)
 
 /*!
  * @brief 荒野のレベルを含めた階層レベルを返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 階層レベル
  * @details
  * ダンジョン及びクエストはdun_level>0となる。
@@ -108,7 +108,7 @@ DEPTH get_dungeon_or_wilderness_level(player_type *player_ptr)
 
 /*!
  * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
  * @param y1 目標地点y座標
  * @param x1 目標地点x座標
@@ -172,7 +172,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 
 /*!
  * @brief 特定モンスター種族を召喚により生成する / A "dangerous" function, creates a pet of the specified type
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
  * @param oy 目標地点y座標
  * @param ox 目標地点x座標

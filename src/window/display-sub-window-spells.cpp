@@ -172,7 +172,7 @@ static void display_spell_list(player_type *player_ptr)
 
 /*!
  * @brief 現在の習得済魔法をサブウィンドウに表示する /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Hack -- display spells in sub-windows
  */
 void fix_spell(player_type *player_ptr)

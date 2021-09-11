@@ -233,9 +233,9 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 
 /*!
  * @brief Is the monster seen by the player?
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 個々のモンスターへの参照ポインタ
- * @return 個々のモンスターがプレーヤーが見えたらTRUE
+ * @return 個々のモンスターがプレイヤーが見えたらTRUE
  * @todo is_seen() の関数マクロをバラそうとしたがインクルード関係のコンパイルエラーで失敗
  */
 bool is_seen(player_type *player_ptr, monster_type *m_ptr)

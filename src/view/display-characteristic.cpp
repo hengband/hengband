@@ -255,7 +255,7 @@ static void process_inventory_characteristic(player_type *player_ptr, tr_type fl
 
 /*!
  * @brief プレイヤーの特性フラグ一種表示を処理するメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param row コンソール表示位置の左上行
  * @param col コンソール表示位置の左上列
  * @param header コンソール上で表示する特性名
@@ -312,8 +312,8 @@ static void process_one_characteristic(player_type *player_ptr, TERM_LEN row, TE
 }
 
 /*!
- * @brief プレーヤーの基本耐性を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの基本耐性を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -338,8 +338,8 @@ static void display_basic_resistance_info(
 }
 
 /*!
- * @brief プレーヤーの上位耐性を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの上位耐性を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -363,8 +363,8 @@ static void display_advanced_resistance_info(
 }
 
 /*!
- * @brief プレーヤーのその他耐性を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーのその他耐性を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -390,7 +390,7 @@ static void display_other_resistance_info(
 
 /*!
  * @brief プレイヤーの特性フラグを集計する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @todo 将来的には装備系とまとめたいが、乗馬による特性変化や一時能力変化等の扱いがあるので据え置き。
  */
  all_player_flags get_player_state_flags(player_type *player_ptr)
@@ -408,7 +408,7 @@ static void display_other_resistance_info(
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示1
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * Special display, part 1
  */
@@ -423,7 +423,7 @@ void display_player_flag_info_1(player_type *player_ptr, void (*display_player_e
 
 /*!
  * @brief スレイ系の特性フラグを表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -448,7 +448,7 @@ static void display_slay_info(player_type *player_ptr, void (*display_player_equ
 
 /*!
  * @brief ブランド系の特性フラグを表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -476,7 +476,7 @@ static void display_brand_info(player_type *player_ptr, void (*display_player_eq
 
 /*!
  * @brief その他の特性フラグを表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -507,7 +507,7 @@ static void display_tval_misc_info(
 
 /*!
  * @brief ESPの特性フラグを表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -535,7 +535,7 @@ static void display_esc_info(player_type *player_ptr, void (*display_player_equi
 
 /*!
  * @brief ESP/能力維持の特性フラグを表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -562,7 +562,7 @@ static void display_stustain_aura_info(
 
 /*!
  * @brief その他の特性フラグを表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
  * @param f 特性フラグへの参照ポインタ
  */
@@ -593,7 +593,7 @@ static void display_curse_info(player_type *player_ptr, void (*display_player_eq
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示2
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Special display, part 2
  */
 void display_player_flag_info_2(player_type *player_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16))
@@ -608,7 +608,7 @@ void display_player_flag_info_2(player_type *player_ptr, void (*display_player_e
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示3
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Special display, part 3
  */
 void display_player_flag_info_3(player_type *player_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16))

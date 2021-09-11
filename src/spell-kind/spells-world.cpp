@@ -42,7 +42,7 @@
 
 /*!
  * @brief テレポート・レベルが効かないモンスターであるかどうかを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param idx テレポート・レベル対象のモンスター
  * @todo 変数名が実態と合っているかどうかは要確認
  */
@@ -61,7 +61,7 @@ bool is_teleport_level_ineffective(player_type *player_ptr, MONSTER_IDX idx)
 /*!
  * @brief プレイヤー及びモンスターをレベルテレポートさせる /
  * Teleport the player one level up or down (random when legal)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
@@ -244,7 +244,7 @@ bool teleport_level_other(player_type *player_ptr)
 
 /*!
  * @brief 町間のテレポートを行うメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return テレポート処理を決定したか否か
  */
 bool tele_town(player_type *player_ptr)
@@ -317,7 +317,7 @@ bool tele_town(player_type *player_ptr)
 
 /*!
  * @brief 現実変容処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void reserve_alter_reality(player_type *player_ptr, TIME_EFFECT turns)
 {
@@ -341,7 +341,7 @@ void reserve_alter_reality(player_type *player_ptr, TIME_EFFECT turns)
 /*!
  * @brief プレイヤーの帰還発動及び中止処理 /
  * Recall the player to town or dungeon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turns 発動までのターン数
  * @return 常にTRUEを返す
  */
@@ -425,7 +425,7 @@ bool free_level_recall(player_type *player_ptr)
 
 /*!
  * @brief フロア・リセット処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return リセット処理が実際に行われたらTRUEを返す
  */
 bool reset_recall(player_type *player_ptr)

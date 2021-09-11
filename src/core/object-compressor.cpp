@@ -38,7 +38,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 /*!
  * @brief グローバルオブジェクト配列から優先度の低いものを削除し、データを圧縮する。 /
  * Compact and Reorder the object list.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param size 最低でも減らしたいオブジェクト数の水準
  * @details
  * （危険なので使用には注意すること）

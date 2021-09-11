@@ -34,7 +34,7 @@
  * @brief 全所持アイテム鑑定処理 /
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void identify_pack(player_type *player_ptr)
 {
@@ -51,7 +51,7 @@ void identify_pack(player_type *player_ptr)
 /*!
  * @brief アイテム鑑定処理 /
  * Identify an object
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
  * @return 実際に鑑定できたらTRUEを返す
  */
@@ -92,7 +92,7 @@ bool identify_item(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief アイテム鑑定のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
@@ -141,7 +141,7 @@ bool ident_spell(player_type *player_ptr, bool only_equip)
 /*!
  * @brief アイテム*鑑定*のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
