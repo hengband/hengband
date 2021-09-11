@@ -30,8 +30,8 @@
 
 /*!
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 void check_fall_off_horse(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -46,7 +46,7 @@ void check_fall_off_horse(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 落馬する可能性を計算する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 落馬判定を発した際に受けたダメージ量
  * @param force TRUEならば強制的に落馬する
  * @param 乗馬中のモンスターのレベル

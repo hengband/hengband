@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレーヤーのステータス (麻痺等)に影響を与えるモンスターの打撃処理
+ * @brief プレイヤーのステータス (麻痺等)に影響を与えるモンスターの打撃処理
  * @date 2020/05/31
  * @author Hourier
  */
@@ -132,7 +132,7 @@ void process_stun_attack(player_type *player_ptr, monap_type *monap_ptr)
 
 /*!
  * @brief 時間逆転攻撃による能力低下
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  */
 static void describe_disability(player_type *player_ptr, monap_type *monap_ptr)

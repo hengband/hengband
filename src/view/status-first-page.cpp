@@ -31,7 +31,7 @@ static TERM_COLOR likert_color = TERM_WHITE;
 
 /*!
  * @brief
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 装備中の弓への参照ポインタ
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
@@ -63,7 +63,7 @@ static void calc_shot_params(player_type *player_ptr, object_type *o_ptr, int *s
 
 /*!
  * @brief 武器装備に制限のあるクラスで、直接攻撃のダメージを計算する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param hand 手 (利き手が0、反対の手が1…のはず)
  * @param damage 直接攻撃のダメージ
  * @param basedam 素手における直接攻撃のダメージ
@@ -122,7 +122,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
 
 /*!
  * @brief ヴォーパル武器等によるダメージ強化
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 装備中の武器への参照ポインタ
  * @param basedam 素手における直接攻撃のダメージ
  * @param flgs オブジェクトフラグ群
@@ -237,7 +237,7 @@ static concptr likert(int x, int y)
 
 /*!
  * @brief 弓＋両手の武器それぞれについてダメージを計算する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param damage 直接攻撃のダメージ
  * @param to_h 命中補正
  */
@@ -285,7 +285,7 @@ static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
 
 /*!
  * @brief キャラ基本情報及び技能値をメインウィンドウに表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param xthb 武器等を含めた最終命中率
  * @param damage 打撃修正
  * @param shots 射撃回数
@@ -367,7 +367,7 @@ static void display_first_page(player_type *player_ptr, int xthb, int *damage, i
 /*!
  * @brief プレイヤーステータスの1ページ目各種詳細をまとめて表示する
  * Prints ratings on certain abilities
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player_one_line 1行表示用のコールバック関数
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.

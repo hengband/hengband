@@ -32,7 +32,7 @@
 
 /*!
  * @brief 恐怖の仮面への特殊処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  * @return 追加能力/耐性がもらえるならtrue、もらえないならfalse
  * @details
@@ -61,7 +61,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
 
 /*!
  * @brief 戦乙女ミリムの危ない水着への特殊処理 (セクシーギャルのみpval追加)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  */
 static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
@@ -82,7 +82,7 @@ static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
  * @brief 特定の固定アーティファクトの条件付き追加能力/耐性を付加する
  * @attention プレイヤーの各種ステータスに依存した処理がある。
  * @todo 折を見て関数名を変更すること。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @param a_ptr 生成する固定アーティファクト構造体ポインタ
  * @details
@@ -199,7 +199,7 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_
 
 /*!
  * @brief オブジェクトに指定した固定アーティファクトをオブジェクトに割り当てる。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
@@ -225,7 +225,7 @@ artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief フロアの指定された位置に固定アーティファクトを生成する。 / Create the artifact of the specified number
  * @details 固定アーティファクト構造体から基本ステータスをコピーした後、所定の座標でdrop_item()で落とす。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param a_idx 生成する固定アーティファクト構造体のID
  * @param y アイテムを落とす地点のy座標
  * @param x アイテムを落とす地点のx座標
@@ -257,7 +257,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 /*!
  * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  * @details
@@ -314,7 +314,7 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  * @details

@@ -6,7 +6,7 @@
 
 /*!
  * @brief 岩石溶解処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
@@ -19,7 +19,7 @@ bool wall_to_mud(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
 
 /*!
  * @brief 魔法の施錠処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -31,7 +31,7 @@ bool wizard_lock(player_type *player_ptr, DIRECTION dir)
 
 /*!
  * @brief ドア破壊処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -43,7 +43,7 @@ bool destroy_door(player_type *player_ptr, DIRECTION dir)
 
 /*!
  * @brief トラップ解除処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */

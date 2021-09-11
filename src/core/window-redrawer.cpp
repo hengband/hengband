@@ -44,7 +44,7 @@ void redraw_window(void)
 
 /*!
  * @brief 現在のマップ名を描画する / Print dungeon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void print_dungeon(player_type *player_ptr)
 {
@@ -219,7 +219,7 @@ void redraw_stuff(player_type *player_ptr)
 
 /*!
  * @brief player_ptr->window のフラグに応じた更新をまとめて行う / Handle "player_ptr->window"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details 更新処理の対象はサブウィンドウ全般
  */
 void window_stuff(player_type *player_ptr)

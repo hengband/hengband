@@ -1,8 +1,8 @@
 ﻿/*!
- * @brief プレーヤーのステータスを下げるか、モンスター自身のステータスを上げるスペル類の処理
+ * @brief プレイヤーのステータスを下げるか、モンスター自身のステータスを上げるスペル類の処理
  * @date 2020/05/16
  * @author Hourier
- * @todo やや過密気味。モンスター自身のステータスとプレーヤーのステータスで分けてもいいかもしれない.
+ * @todo やや過密気味。モンスター自身のステータスとプレイヤーのステータスで分けてもいいかもしれない.
  */
 
 #include "mspell/mspell-status.h"
@@ -39,7 +39,7 @@
 
 /*!
  * @brief 状態異常呪文のメッセージ処理関数。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param msg1 対プレイヤーなら盲目時メッセージ。対モンスターなら通常時メッセージ。
@@ -104,7 +104,7 @@ void spell_badstatus_message(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER
 
 /*!
  * @brief RF5_DRAIN_MANAの処理。魔力吸収。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -139,7 +139,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *player_ptr, POSITION y, POS
 
 /*!
  * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -177,7 +177,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *player_ptr, POSITION y, POS
 
 /*!
  * @brief RF5_BRAIN_SMASHの処理。脳攻撃。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -429,7 +429,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *player_ptr, MO
 
 /*!
  * @brief RF6_HASTEの処理。加速。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
@@ -520,7 +520,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *player_ptr, MO
 
 /*!
  * @brief RF6_HEALの処理。治癒。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
@@ -579,7 +579,7 @@ MonsterSpellResult spell_RF6_HEAL(player_type *player_ptr, MONSTER_IDX m_idx, MO
 
 /*!
  * @brief RF6_INVULNERの処理。無敵。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
@@ -621,7 +621,7 @@ MonsterSpellResult spell_RF6_INVULNER(player_type *player_ptr, MONSTER_IDX m_idx
 
 /*!
  * @brief RF6_FORGETの処理。記憶消去。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  *
  * ラーニング可。

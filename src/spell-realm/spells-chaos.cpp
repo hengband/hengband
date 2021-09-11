@@ -27,7 +27,7 @@
 
 /*!
  * @brief 虚無招来処理 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Sorry, it becomes not (void)...
  */
@@ -97,7 +97,7 @@ void call_the_void(player_type *player_ptr)
 /*!
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param player_ptr 術者の参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
@@ -186,7 +186,7 @@ bool vanish_dungeon(player_type *player_ptr)
 /*!
  * @brief カオス魔法「流星群」/トランプ魔法「隕石のカード」の処理としてプレイヤーを中心に隕石落下処理を10+1d10回繰り返す。
  * / Drop 10+1d10 meteor ball at random places near the player
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam ダメージ
  * @param rad 効力の半径
  * @details このファイルにいるのは、spells-trump.c と比べて行数が少なかったため。それ以上の意図はない

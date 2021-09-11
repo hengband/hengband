@@ -15,7 +15,7 @@ void birth_quit(void)
 
 /*!
  * @brief 指定されたヘルプファイルを表示する / Show specific help file
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param helpfile ファイル名
  */
 void show_help(player_type* player_ptr, concptr helpfile)

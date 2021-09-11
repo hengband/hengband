@@ -46,7 +46,7 @@
 
 /*!
  * @brief モンスターとの位置交換処理 / Switch position with a monster.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -99,7 +99,7 @@ bool teleport_swap(player_type *player_ptr, DIRECTION dir)
 
 /*!
  * @brief モンスター用テレポート処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param distance 移動距離
  * @return 作用が実際にあった場合TRUEを返す
@@ -113,7 +113,7 @@ bool teleport_monster(player_type *player_ptr, DIRECTION dir, int distance)
 /*!
  * @brief モンスターのテレポートアウェイ処理 /
  * Teleport a monster, normally up to "dis" grids away.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param dis テレポート距離
  * @param mode オプション
@@ -192,7 +192,7 @@ bool teleport_away(player_type *player_ptr, MONSTER_IDX m_idx, POSITION dis, tel
 /*!
  * @brief モンスターを指定された座標付近にテレポートする /
  * Teleport monster next to a grid near the given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param ty 目安Y座標
  * @param tx 目安X座標
@@ -263,7 +263,7 @@ void teleport_monster_to(player_type *player_ptr, MONSTER_IDX m_idx, POSITION ty
 /*!
  * @brief プレイヤーのテレポート先選定と移動処理 /
  * Teleport the player to a location up to "dis" grids away.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dis 基本移動距離
  * @param is_quantum_effect 量子的効果 (反テレポ無効)によるテレポートアウェイならばTRUE
  * @param mode オプション
@@ -368,7 +368,7 @@ bool teleport_player_aux(player_type *player_ptr, POSITION dis, bool is_quantum_
 
 /*!
  * @brief プレイヤーのテレポート処理メインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dis 基本移動距離
  * @param mode オプション
  */
@@ -402,7 +402,7 @@ void teleport_player(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
 /*!
  * @brief プレイヤーのテレポートアウェイ処理 /
  * @param m_idx アウェイを試みたモンスターID
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dis テレポート距離
  * @param is_quantum_effect 量子的効果によるテレポートアウェイならばTRUE
  */
@@ -444,7 +444,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *player_ptr, POSITION d
 /*!
  * @brief プレイヤーを指定位置近辺にテレポートさせる
  * Teleport player to a grid near the given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param ny 目標Y座標
  * @param nx 目標X座標
  * @param mode オプションフラグ
@@ -547,7 +547,7 @@ void teleport_away_followable(player_type *player_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief 次元の扉処理 /
  * Dimension Door
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param x テレポート先のX座標
  * @param y テレポート先のY座標
  * @return 目標に指定通りテレポートできたならばTRUEを返す
@@ -571,7 +571,7 @@ bool exe_dimension_door(player_type *player_ptr, POSITION x, POSITION y)
 
 /*!
  * @brief 次元の扉処理のメインルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Dimension Door
  * @return ターンを消費した場合TRUEを返す
  */

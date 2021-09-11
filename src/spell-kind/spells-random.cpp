@@ -80,7 +80,7 @@ void call_chaos(player_type *player_ptr)
 
 /*!
  * @brief TY_CURSE処理発動 / Activate the evil Topi Ylinen curse
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param stop_ty 再帰処理停止フラグ
  * @param count 発動回数
  * @return 作用が実際にあった場合TRUEを返す
@@ -231,7 +231,7 @@ bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
 
 /*!
  * @brief 運命の輪、並びにカオス的な効果の発動
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell ランダムな効果を選択するための基準ID
  */
 void wild_magic(player_type *player_ptr, int spell)
@@ -336,7 +336,7 @@ void wild_magic(player_type *player_ptr, int spell)
 
 /*!
  * @brief 「ワンダー」のランダムな効果を決定して処理する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向ID
  * @details
  * This spell should become more useful (more controlled) as the\n

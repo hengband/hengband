@@ -34,7 +34,7 @@ bool test_hit_norm(player_type *player_ptr, int chance, ARMOUR_CLASS ac, bool vi
 
 /*!
  * @brief モンスターへの命中率の計算
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param to_h 命中値
  * @param ac 敵AC
  * @return 命中確率
@@ -105,7 +105,7 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
 
 /*!
  * @brief 攻撃が当たるかどうかを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param chance 基本命中値
  */
@@ -137,7 +137,7 @@ static bool decide_attack_hit(player_type *player_ptr, player_attack_type *pa_pt
 
 /*!
  * @brief 直接攻撃の命中を処理するメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param chance 基本命中値
  * @return 当たればTRUE、外れればFALSE

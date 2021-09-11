@@ -55,7 +55,7 @@ POSITION temp2_y[MAX_SHORT];
 /*!
  * @brief 地形やその上のアイテムの隠された要素を全て明かす /
  * Search for hidden things
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
  */
@@ -93,7 +93,7 @@ static void discover_hidden_things(player_type *player_ptr, POSITION y, POSITION
 
 /*!
  * @brief プレイヤーの探索処理判定
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void search(player_type *player_ptr)
 {
@@ -111,7 +111,7 @@ void search(player_type *player_ptr)
 
 /*!
  * @brief 移動に伴うプレイヤーのステータス変化処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param ny 移動先Y座標
  * @param nx 移動先X座標
  * @param mpe_mode 移動オプションフラグ
@@ -267,7 +267,7 @@ bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_F
 
 /*!
  * @brief 該当地形のトラップがプレイヤーにとって無効かどうかを判定して返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param feat 地形ID
  * @return トラップが自動的に無効ならばTRUEを返す
  */

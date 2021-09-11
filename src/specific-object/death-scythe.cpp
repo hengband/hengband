@@ -26,7 +26,7 @@
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 倍率 (実際は1/10になる)
  */
 static int calc_death_scythe_reflection_magnification_mimic_none(player_type *player_ptr)
@@ -61,7 +61,7 @@ static int calc_death_scythe_reflection_magnification_mimic_none(player_type *pl
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、変身中の種族も考慮したダメージ倍率を返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 倍率 (実際は1/10になる)
  */
 static int calc_death_scythe_reflection_magnification(player_type *player_ptr)
@@ -80,7 +80,7 @@ static int calc_death_scythe_reflection_magnification(player_type *player_ptr)
 
 /*!
  * @brief 耐性等に応じて死の大鎌による反射ダメージ倍率を補正する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param magnification ダメージ倍率
  * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
  */
@@ -130,7 +130,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
 
 /*!
  * @brief 死の大鎌によるダメージ反射のメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 void process_death_scythe_reflection(player_type *player_ptr, player_attack_type *pa_ptr)

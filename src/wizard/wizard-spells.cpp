@@ -92,7 +92,7 @@ bool wiz_debug_spell(player_type *player_ptr)
 
 /*!
  * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wiz_dimension_door(player_type *player_ptr)
 {
@@ -105,7 +105,7 @@ void wiz_dimension_door(player_type *player_ptr)
 
 /*!
  * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wiz_summon_horde(player_type *player_ptr)
 {
@@ -163,7 +163,7 @@ void wiz_fillup_all_smith_essences(player_type *player_ptr)
 /*!
  * @brief 現在のフロアに合ったモンスターをランダムに召喚する /
  * Summon some creatures
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param num 生成処理回数
  */
 void wiz_summon_random_enemy(player_type *player_ptr, int num)

@@ -87,7 +87,7 @@ static int get_history_chart(player_type *player_ptr)
 
 /*!
  * @brief 生い立ちを画面に表示しつつ、種族から社会的地位を決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 生い立ち情報のバッファ
  * @details 画面表示と社会的地位の決定が密結合していて分離できない
  */

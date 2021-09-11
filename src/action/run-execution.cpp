@@ -49,7 +49,7 @@ static bool find_breakleft;
 /*!
  * @brief ダッシュ移動処理中、移動先のマスが既知の壁かどうかを判定する /
  * Hack -- Check for a "known wall" (see below)
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 想定する移動方向ID
  * @param y 移動元のY座標
  * @param x 移動元のX座標
@@ -85,7 +85,7 @@ static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITIO
 /*!
  * @brief ダッシュ処理の導入 /
  * Initialize the running algorithm for a new direction.
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 導入の移動先
  * @details
  * Diagonal Corridor -- allow diaginal entry into corridors.\n
@@ -158,7 +158,7 @@ static void run_init(player_type *player_ptr, DIRECTION dir)
 /*!
  * @brief ダッシュ移動処理中、移動先のマスか未知の地形かどうかを判定する /
  * Hack -- Check for an "unknown corner" (see below)
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 想定する移動方向ID
  * @param y 移動元のY座標
  * @param x 移動元のX座標
@@ -185,7 +185,7 @@ static bool see_nothing(player_type *player_ptr, DIRECTION dir, POSITION y, POSI
 /*!
  * @brief ダッシュ移動が継続できるかどうかの判定 /
  * Update the current "run" path
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @return 立ち止まるべき条件が満たされたらTRUE
  * ダッシュ移動が継続できるならばTRUEを返す。
  * Return TRUE if the running should be stopped
@@ -355,7 +355,7 @@ static bool run_test(player_type *player_ptr)
 /*!
  * @brief 継続的なダッシュ処理 /
  * Take one step along the current "run" path
- * @param player_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
  */
 void run_step(player_type *player_ptr, DIRECTION dir)

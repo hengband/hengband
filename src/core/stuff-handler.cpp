@@ -39,7 +39,7 @@ void object_kind_track(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 
 /*
  * Track a new monster
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx トラッキング対象のモンスターID。0の時キャンセル
  * @param なし
  */

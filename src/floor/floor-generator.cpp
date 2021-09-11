@@ -57,7 +57,7 @@
 
 /*!
  * @brief 闘技場用のアリーナ地形を作成する / Builds the on_defeat_arena_monster after it is entered -KMW-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *start_x)
 {
@@ -141,7 +141,7 @@ static void generate_challenge_arena(player_type *player_ptr)
 
 /*!
  * @brief モンスター闘技場のフロア生成 / Builds the on_defeat_arena_monster after it is entered -KMW-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 {
@@ -237,7 +237,7 @@ static void generate_gambling_arena(player_type *player_ptr)
 
 /*!
  * @brief 固定マップクエストのフロア生成 / Generate a quest level
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void generate_fixed_floor(player_type *player_ptr)
 {
@@ -260,7 +260,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 
 /*!
  * @brief ダンジョン時のランダムフロア生成 / Make a real level
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param concptr
  * @return フロアの生成に成功したらTRUE
  */
@@ -326,7 +326,7 @@ void wipe_generate_random_floor_flags(floor_type *floor_ptr)
 
 /*!
  * @brief フロアの全情報を初期化する / Clear and empty floor.
- * @parama player_ptr プレーヤーへの参照ポインタ
+ * @parama player_ptr プレイヤーへの参照ポインタ
  */
 void clear_cave(player_type *player_ptr)
 {
@@ -450,7 +450,7 @@ static bool floor_is_connected(const floor_type *const floor_ptr, const IsWallFu
 
 /*!
  * ダンジョンのランダムフロアを生成する / Generates a random dungeon level -RAK-
- * @parama player_ptr プレーヤーへの参照ポインタ
+ * @parama player_ptr プレイヤーへの参照ポインタ
  * @note Hack -- regenerate any "overflow" levels
  */
 void generate_floor(player_type *player_ptr)

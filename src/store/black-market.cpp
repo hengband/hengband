@@ -8,7 +8,7 @@
 /*!
  * @brief ブラックマーケット用の無価値品の排除判定 /
  * This function will keep 'crap' out of the black market.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return ブラックマーケットにとって無価値な品ならばTRUEを返す
  * @details

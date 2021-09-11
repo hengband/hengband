@@ -22,7 +22,7 @@ PlayerAlignment::PlayerAlignment(player_type *player_ptr)
 }
 
 /*!
- * @brief クリーチャーの抽象的善悪アライメントの表記を返す。 / Return alignment title
+ * @brief プレイヤーの抽象的善悪アライメントの表記を返す。 / Return alignment title
  * @param with_value 徳の情報と一緒に表示する時だけtrue
  * @return アライメントの表記を返す。
  */
@@ -142,8 +142,8 @@ void PlayerAlignment::reset_alignment()
 }
 
 /*!
- * @brief クリーチャーの抽象的善悪アライメントの表記名のみを返す。 / Return only alignment title
- * @param player_ptr 算出するクリーチャーの参照ポインタ。
+ * @brief プレイヤーの抽象的善悪アライメントの表記名のみを返す。 / Return only alignment title
+ * @param player_ptr プレイヤーへの参照ポインタ。
  * @return アライメントの表記名
  */
 concptr PlayerAlignment::alignment_label()

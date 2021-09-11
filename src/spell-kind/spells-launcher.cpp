@@ -8,7 +8,7 @@
 
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -41,7 +41,7 @@ bool fire_ball(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 
 /*!
  * @brief ブレス系スペルの発動 / Cast a breath spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -61,7 +61,7 @@ bool fire_breath(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
 
 /*!
  * @brief ロケット系スペルの発動(詳細な差は確認中) / Cast a ball spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -89,7 +89,7 @@ bool fire_rocket(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
 
 /*!
  * @brief ボール(ハイド)系スペルの発動 / Cast a ball spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -118,7 +118,7 @@ bool fire_ball_hide(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
 
 /*!
  * @brief メテオ系スペルの発動 / Cast a meteor spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who スぺル詠唱者のモンスターID(0=プレイヤー)
  * @param typ 効果属性
  * @param dam 威力
@@ -143,7 +143,7 @@ bool fire_meteor(player_type *player_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITI
 
 /*!
  * @brief ブラスト系スペルの発動 / Cast a blast spell
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dd 威力ダイス数
@@ -191,7 +191,7 @@ bool fire_blast(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
 
 /*!
  * @brief ボルト系スペルの発動 / Cast a bolt spell.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -212,7 +212,7 @@ bool fire_bolt(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 
 /*!
  * @brief ビーム系スペルの発動 / Cast a beam spell.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -231,7 +231,7 @@ bool fire_beam(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 
 /*!
  * @brief 確率に応じたボルト系/ビーム系スペルの発動 / Cast a bolt spell, or rarely, a beam spell.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param prob ビーム化する確率(%)
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
@@ -254,7 +254,7 @@ bool fire_bolt_or_beam(player_type *player_ptr, PERCENTAGE prob, EFFECT_ID typ, 
 
 /*!
  * @brief 指定方向に飛び道具を飛ばす (フラグ任意指定) / Apply a "project()" in a direction (or at the target)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力

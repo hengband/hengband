@@ -81,7 +81,7 @@ MONSTER_IDX m_pop(floor_type *floor_ptr)
 
 /*!
  * @brief 生成モンスター種族を1種生成テーブルから選択する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param min_level 最小生成階
  * @param max_level 最大生成階
  * @return 選択されたモンスター生成種族
@@ -190,7 +190,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
 }
 
 /*!
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
@@ -272,7 +272,7 @@ static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief モンスターの変身処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 変身処理を受けるモンスター情報のID
  * @param born 生成時の初変身先指定ならばtrue
  * @param r_idx 旧モンスター種族のID
@@ -395,7 +395,7 @@ SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
 /*!
  * @brief 指定したモンスターに隣接しているモンスターの数を返す。
  * / Count number of adjacent monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */

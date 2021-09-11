@@ -53,7 +53,7 @@
 
 /*!
  * @brief 酔っ払いの薬
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return カオス耐性があるかその他の一部確率でFALSE、それ以外はTRUE
  */
 static bool booze(player_type *player_ptr)
@@ -94,7 +94,7 @@ static bool booze(player_type *player_ptr)
 
 /*!
  * @brief 爆発の薬の効果処理 / Fumble ramble
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
 static bool detonation(player_type *player_ptr)
@@ -109,7 +109,7 @@ static bool detonation(player_type *player_ptr)
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /
  * Quaff a potion (from the pack or the floor)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 飲む薬オブジェクトの所持品ID
  * @details
  * 効果発動のあと、食料タイプによって空腹度を少し充足する。

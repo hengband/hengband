@@ -43,7 +43,7 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
 
 /*!
  * @brief 部屋間のトンネルを生成する / Constructs a tunnel between two points
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param row1 始点Y座標
  * @param col1 始点X座標
  * @param row2 終点Y座標
@@ -152,7 +152,7 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
 
 /*!
  * @brief トンネル生成のための基準点を指定する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param x 基準点を指定するX座標の参照ポインタ、適時値が修正される。
  * @param y 基準点を指定するY座標の参照ポインタ、適時値が修正される。
  * @param affectwall (調査中)
@@ -226,7 +226,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
 
 /*!
  * @brief 外壁を削って「カタコンベ状」の通路を作成する / This routine creates the catacomb-like tunnels by removing extra rock.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param x 基準点のX座標
  * @param y 基準点のY座標
  */
@@ -251,7 +251,7 @@ static void create_cata_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, P
 
 /*!
  * @brief トンネル生成処理（詳細調査中）/ This routine does the bulk of the work in creating the new types of tunnels.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @todo 詳細用調査
  */
 static void short_seg_hack(

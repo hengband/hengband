@@ -48,7 +48,7 @@ static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief 救援召喚の通常処理。同シンボルのモンスターを召喚する。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param rlev 呪文を唱えるモンスターのレベル
@@ -101,7 +101,7 @@ static void decide_summon_kin_caster(
 
 /*!
  * @brief RF6_S_KINの処理。救援召喚。使用するモンスターの種類により、実処理に分岐させる。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -198,7 +198,7 @@ MonsterSpellResult spell_RF6_S_KIN(player_type *player_ptr, POSITION y, POSITION
 
 /*!
  * @brief RF6_S_CYBERの処理。サイバー・デーモン召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -240,7 +240,7 @@ MonsterSpellResult spell_RF6_S_CYBER(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF6_S_MONSTERの処理。モンスター一体召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -281,7 +281,7 @@ MonsterSpellResult spell_RF6_S_MONSTER(player_type *player_ptr, POSITION y, POSI
 
 /*!
  * @brief RF6_S_MONSTERSの処理。モンスター複数召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -323,7 +323,7 @@ MonsterSpellResult spell_RF6_S_MONSTERS(player_type *player_ptr, POSITION y, POS
 
 /*!
  * @brief RF6_S_ANTの処理。アリ召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -360,7 +360,7 @@ MonsterSpellResult spell_RF6_S_ANT(player_type *player_ptr, POSITION y, POSITION
 
 /*!
  * @brief RF6_S_SPIDERの処理。クモ召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -397,7 +397,7 @@ MonsterSpellResult spell_RF6_S_SPIDER(player_type *player_ptr, POSITION y, POSIT
 
 /*!
  * @brief RF6_S_HOUNDの処理。ハウンド召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -435,7 +435,7 @@ MonsterSpellResult spell_RF6_S_HOUND(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF6_S_HYDRAの処理。ヒドラ召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -472,7 +472,7 @@ MonsterSpellResult spell_RF6_S_HYDRA(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF6_S_ANGELの処理。天使一体召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -520,7 +520,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF6_S_DEMONの処理。デーモン一体召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -557,7 +557,7 @@ MonsterSpellResult spell_RF6_S_DEMON(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF6_S_UNDEADの処理。アンデッド一体召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -594,7 +594,7 @@ MonsterSpellResult spell_RF6_S_UNDEAD(player_type *player_ptr, POSITION y, POSIT
 
 /*!
  * @brief RF6_S_DRAGONの処理。ドラゴン一体召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -634,7 +634,7 @@ MonsterSpellResult spell_RF6_S_DRAGON(player_type *player_ptr, POSITION y, POSIT
 
 /*!
  * @brief RF6_S_HI_UNDEADの処理。強力なアンデッド召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -688,7 +688,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(player_type *player_ptr, POSITION y, PO
 
 /*!
  * @brief RF6_S_HI_DRAGONの処理。古代ドラゴン召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -731,7 +731,7 @@ MonsterSpellResult spell_RF6_S_HI_DRAGON(player_type *player_ptr, POSITION y, PO
 
 /*!
  * @brief RF6_S_AMBERITESの処理。アンバーの王族召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -770,7 +770,7 @@ MonsterSpellResult spell_RF6_S_AMBERITES(player_type *player_ptr, POSITION y, PO
 
 /*!
  * @brief RF6_S_UNIQUEの処理。ユニーク・モンスター召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID

@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレーヤーからモンスターへの打撃処理
+ * @brief プレイヤーからモンスターへの打撃処理
  * @date 2020/05/22
  * @author Hourier
  */
@@ -85,7 +85,7 @@ static player_attack_type *initialize_player_attack_type(
 
 /*!
  * @brief 一部職業で攻撃に倍率がかかったりすることの処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 static void attack_classify(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -108,7 +108,7 @@ static void attack_classify(player_type *player_ptr, player_attack_type *pa_ptr)
 
 /*!
  * @brief マーシャルアーツの技能値を増加させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 static void get_bare_knuckle_exp(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -132,7 +132,7 @@ static void get_bare_knuckle_exp(player_type *player_ptr, player_attack_type *pa
 
 /*!
  * @brief 装備している武器の技能値を増加させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 static void get_weapon_exp(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -159,7 +159,7 @@ static void get_weapon_exp(player_type *player_ptr, player_attack_type *pa_ptr)
 
 /*!
  * @brief 直接攻撃に伴う技能値の上昇処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 static void get_attack_exp(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -179,7 +179,7 @@ static void get_attack_exp(player_type *player_ptr, player_attack_type *pa_ptr)
 
 /*!
  * @brief 攻撃回数を決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @details 毒針は確定で1回
  */
@@ -199,7 +199,7 @@ static void calc_num_blow(player_type *player_ptr, player_attack_type *pa_ptr)
 
 /*!
  * @brief 混沌属性の武器におけるカオス効果を決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return カオス効果
  * @details
@@ -228,7 +228,7 @@ static chaotic_effect select_chaotic_effect(player_type *player_ptr, player_atta
 
 /*!
  * @brief 魔術属性による追加ダイス数を返す
- * @param player_ptr プレーヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param pa_ptr プレイヤー攻撃情報への参照ポインタ
  * @return 魔術属性効果
  */
@@ -325,7 +325,7 @@ static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *
 
 /*!
  * @brief 武器による直接攻撃メインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param vorpal_cut メッタ斬りにできるかどうか
  * @param vorpal_chance ヴォーパル倍率上昇の機会値
@@ -355,7 +355,7 @@ static void process_weapon_attack(player_type *player_ptr, player_attack_type *p
 
 /*!
  * @brief 武器または素手による攻撃ダメージを計算する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param do_quake 攻撃の結果、地震を起こすことになったらTRUE、それ以外はFALSE
  * @param vorpal_cut メッタ斬りにできるかどうか
@@ -378,7 +378,7 @@ static void calc_attack_damage(player_type *player_ptr, player_attack_type *pa_p
 
 /*!
  * @brief 武器のダメージボーナスや剣術家の技によってダメージにボーナスを与える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 static void apply_damage_bonus(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -398,7 +398,7 @@ static void apply_damage_bonus(player_type *player_ptr, player_attack_type *pa_p
 
 /*!
  * @brief 特殊な条件でダメージが減ったり0になったりする処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param is_zantetsu_nullified 斬鉄剣で切れないならばTRUE
  * @param is_ej_nullified 蜘蛛相手ならばTRUE
@@ -430,7 +430,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
 
 /*!
  * @brief モンスターのHPを減らした後、恐怖させるか死なす (フロアから消滅させる)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return 死んだらTRUE、生きていたらFALSE
  */
@@ -467,7 +467,7 @@ static bool check_fear_death(player_type *player_ptr, player_attack_type *pa_ptr
 
 /*!
  * @brief 直接攻撃が当たった時の処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param do_quake 攻撃後に地震を起こすかどうか
  * @param is_zantetsu_nullified 斬鉄剣で切れないならばTRUE
@@ -504,7 +504,7 @@ static void apply_actual_attack(
 
 /*!
  * @brief 地震を起こす
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param do_quake 攻撃後に地震を起こすかどうか
  * @param y モンスターのY座標
@@ -591,7 +591,7 @@ void exe_player_attack_to_monster(player_type *player_ptr, POSITION y, POSITION 
 
 /*!
  * @brief 皆殺し(全方向攻撃)処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void massacre(player_type *player_ptr)
 {

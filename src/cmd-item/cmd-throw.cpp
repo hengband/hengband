@@ -25,7 +25,7 @@ ThrowCommand::ThrowCommand(player_type *player_ptr)
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
  * @param mult 威力の倍率
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param boomerang ブーメラン処理ならばTRUE
  * @param shuriken 忍者の手裏剣処理ならばTRUE ← 間違い、-1が渡されてくることがある。要調査.
  * @return ターンを消費した場合TRUEを返す

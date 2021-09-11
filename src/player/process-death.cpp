@@ -49,7 +49,7 @@ static void center_string(char *buf, concptr str)
 
 /*!
  * @brief 墓に基本情報を表示
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  */
 static void show_basic_params(player_type *player_ptr, char *buf)
@@ -70,8 +70,8 @@ static void show_basic_params(player_type *player_ptr, char *buf)
 
 #ifdef JP
 /*!
- * @brief プレーヤーを殺したモンスターを表示する (日本語版専用)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーを殺したモンスターを表示する (日本語版専用)
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @param tomb_message 墓碑に刻む言葉
  * @return 追加の行数
@@ -116,7 +116,7 @@ static int show_killing_monster(player_type *player_ptr, char *buf, char *tomb_m
 
 /*!
  * @brief どこで死んだかを表示する (日本語版専用)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @param tomb_message 表示する文字列
  * @param extra_line 追加の行数
@@ -147,7 +147,7 @@ static void show_dead_place(player_type *player_ptr, char *buf, char *tomb_messa
 
 /*!
  * @brief 墓に刻む言葉を細かく表示 (日本語版専用)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  */
 static void show_tomb_detail(player_type *player_ptr, char *buf)
@@ -208,7 +208,7 @@ static void show_tomb_detail(player_type *player_ptr, char *buf)
 /*!
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_tomb(player_type *player_ptr)
 {
@@ -246,7 +246,7 @@ void print_tomb(player_type *player_ptr)
 
 /*!
  * @brief 死亡/引退/切腹時にインベントリ内のアイテムを*鑑定*する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void inventory_aware(player_type *player_ptr)
 {
@@ -263,7 +263,7 @@ static void inventory_aware(player_type *player_ptr)
 
 /*!
  * @brief 死亡/引退/切腹時に我が家のアイテムを*鑑定*する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void home_aware(player_type *player_ptr)
 {
@@ -283,8 +283,8 @@ static void home_aware(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーの持ち物を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの持ち物を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return Escキーでゲームを終了する時TRUE
  */
 static bool show_dead_player_items(player_type *player_ptr)
@@ -311,7 +311,7 @@ static bool show_dead_player_items(player_type *player_ptr)
 
 /*!
  * @brief 我が家にあったアイテムを表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void show_dead_home_items(player_type *player_ptr)
 {
@@ -343,7 +343,7 @@ static void show_dead_home_items(player_type *player_ptr)
 
 /*!
  * @brief キャラクタ情報をファイルに書き出す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param file_character ステータスダンプへのコールバック
  */
 static void export_player_info(player_type *player_ptr, display_player_pf display_player)
@@ -386,7 +386,7 @@ static void file_character_auto(player_type *player_ptr, display_player_pf displ
 
 /*!
  * @brief 死亡、引退時の簡易ステータス表示
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player ステータス表示へのコールバック
  */
 void show_death_info(player_type *player_ptr, display_player_pf display_player)

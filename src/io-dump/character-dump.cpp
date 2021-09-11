@@ -49,7 +49,7 @@
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_pet(player_type *player_ptr, FILE *fff)
@@ -104,7 +104,7 @@ static void dump_aux_pet(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief クエスト情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_quest(player_type *player_ptr, FILE *fff)
@@ -129,7 +129,7 @@ static void dump_aux_quest(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief 死の直前メッセージ並びに遺言をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_last_message(player_type *player_ptr, FILE *fff)
@@ -233,7 +233,7 @@ static void dump_aux_options(FILE *fff)
 
 /*!
  * @brief 闘技場の情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_arena(player_type *player_ptr, FILE *fff)
@@ -365,7 +365,7 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief 元種族情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_race_history(player_type *player_ptr, FILE *fff)
@@ -393,7 +393,7 @@ static void dump_aux_race_history(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief 元魔法領域情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_realm_history(player_type *player_ptr, FILE *fff)
@@ -413,7 +413,7 @@ static void dump_aux_realm_history(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief 徳の情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_virtues(player_type *player_ptr, FILE *fff)
@@ -451,7 +451,7 @@ static void dump_aux_virtues(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief 突然変異の情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_mutations(player_type *player_ptr, FILE *fff)
@@ -464,7 +464,7 @@ static void dump_aux_mutations(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief 所持品の情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_aux_equipment_inventory(player_type *player_ptr, FILE *fff)
@@ -558,7 +558,7 @@ static concptr get_check_sum(void)
 /*!
  * @brief ダンプ出力のメインルーチン
  * Output the character dump to a file
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return エラーコード
  */

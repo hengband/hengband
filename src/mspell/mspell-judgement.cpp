@@ -40,7 +40,7 @@
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
  * Determine if a beam spell will hit the target.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 始点のY座標
  * @param x1 始点のX座標
  * @param y2 目標のY座標
@@ -178,7 +178,7 @@ bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y
 /*!
  * @brief モンスターが特殊能力の目標地点を決める処理 /
  * Get the actual center point of ball spells (rad > 1) (originally from TOband)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sy 始点のY座標
  * @param sx 始点のX座標
  * @param ty 目標Y座標を返す参照ポインタ
@@ -205,7 +205,7 @@ void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITI
 /*!
  * @brief モンスターが敵モンスターに魔力消去を使うかどうかを返す /
  * Check should monster cast dispel spell at other monster.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 術者のモンスターID
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。

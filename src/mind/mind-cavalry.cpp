@@ -23,7 +23,7 @@
 
 /*!
  * 荒馬慣らし
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 結果はどうあれ騎乗したらTRUE
  */
 bool rodeo(player_type *player_ptr)

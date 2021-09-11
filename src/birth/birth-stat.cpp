@@ -54,7 +54,7 @@ int adjust_stat(int value, int amount)
 
 /*!
  * @brief プレイヤーの能力値を一通りロールする。 / Roll for a characters stats
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
  * For efficiency, we include a chunk of "calc_bonuses()".\n
@@ -147,7 +147,7 @@ void get_extra(player_type *player_ptr, bool roll_hitdie)
 
 /*!
  * @brief プレイヤーの限界ステータスを決める。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details 新生の薬やステータスシャッフルでもこの関数が呼ばれる
  */
 void get_max_stats(player_type *player_ptr)

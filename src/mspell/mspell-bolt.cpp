@@ -16,7 +16,7 @@
 
 /*!
  * @brief RF4_SHOOTの処理。射撃。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -46,7 +46,7 @@ MonsterSpellResult spell_RF4_SHOOT(player_type *player_ptr, POSITION y, POSITION
 
 /*!
  * @brief RF5_BO_ACIDの処理。アシッド・ボルト。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -76,7 +76,7 @@ MonsterSpellResult spell_RF5_BO_ACID(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_ELECの処理。サンダー・ボルト。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -106,7 +106,7 @@ MonsterSpellResult spell_RF5_BO_ELEC(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_FIREの処理。ファイア・ボルト。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -136,7 +136,7 @@ MonsterSpellResult spell_RF5_BO_FIRE(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_COLDの処理。アイス・ボルト。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -166,7 +166,7 @@ MonsterSpellResult spell_RF5_BO_COLD(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_NETHの処理。地獄の矢。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -195,7 +195,7 @@ MonsterSpellResult spell_RF5_BO_NETH(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_WATEの処理。ウォーター・ボルト。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -224,7 +224,7 @@ MonsterSpellResult spell_RF5_BO_WATE(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_MANAの処理。魔力の矢。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -252,7 +252,7 @@ MonsterSpellResult spell_RF5_BO_MANA(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_PLASの処理。プラズマ・ボルト。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -281,7 +281,7 @@ MonsterSpellResult spell_RF5_BO_PLAS(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_BO_ICEEの処理。極寒の矢。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -310,7 +310,7 @@ MonsterSpellResult spell_RF5_BO_ICEE(player_type *player_ptr, POSITION y, POSITI
 
 /*!
  * @brief RF5_MISSILEの処理。マジック・ミサイル。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID

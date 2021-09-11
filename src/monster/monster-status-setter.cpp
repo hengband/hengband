@@ -29,7 +29,7 @@
 
 /*!
  * @brief モンスターをペットにする
- * @param player_type プレーヤーへの参照ポインタ
+ * @param player_type プレイヤーへの参照ポインタ
  * @param m_ptr モンスター情報構造体の参照ポインタ
  */
 void set_pet(player_type *player_ptr, monster_type *m_ptr)
@@ -89,7 +89,7 @@ static void mproc_remove(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_typ
 /*!
  * @brief モンスターの睡眠状態値をセットする。0で起きる。 /
  * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
@@ -133,7 +133,7 @@ bool set_monster_csleep(player_type *player_ptr, MONSTER_IDX m_idx, int v)
 /*!
  * @brief モンスターの加速状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_FAST]", notice observable changes
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
@@ -200,7 +200,7 @@ bool set_monster_slow(player_type *player_ptr, MONSTER_IDX m_idx, int v)
 /*!
  * @brief モンスターの朦朧状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_STUNNED]", notice observable changes
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
@@ -230,7 +230,7 @@ bool set_monster_stunned(player_type *player_ptr, MONSTER_IDX m_idx, int v)
 /*!
  * @brief モンスターの混乱状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_CONFUSED]", notice observable changes
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
@@ -260,7 +260,7 @@ bool set_monster_confused(player_type *player_ptr, MONSTER_IDX m_idx, int v)
 /*!
  * @brief モンスターの恐慌状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_MONFEAR]", notice observable changes
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
@@ -302,7 +302,7 @@ bool set_monster_monfear(player_type *player_ptr, MONSTER_IDX m_idx, int v)
 /*!
  * @brief モンスターの無敵状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_INVULNER]", notice observable changes
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @param energy_need TRUEならば無敵解除時に行動ターン消費を行う
@@ -345,7 +345,7 @@ bool set_monster_invulner(player_type *player_ptr, MONSTER_IDX m_idx, int v, boo
 
 /*!
  * @brief モンスターの時間停止処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param num 時間停止を行った敵が行動できる回数
  * @param who 時間停止を行う敵の種族番号
  * @param vs_player TRUEならば時間停止開始処理を行う

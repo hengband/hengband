@@ -48,7 +48,7 @@ void interrupt_scene(int type, int val) {
 
 /*!
  * @brief 現在のフロアに合ったBGM選曲
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void refresh_scene_table(player_type *player_ptr)
 {
@@ -61,7 +61,7 @@ void refresh_scene_table(player_type *player_ptr)
 
 /*!
  * @brief 見かけたモンスターを含め、現在のフロアに合ったBGM選曲
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param monster_list 視界内モンスターリスト
  */
 void refresh_scene_table(player_type *player_ptr, const std::vector<MONSTER_IDX> &monster_list)

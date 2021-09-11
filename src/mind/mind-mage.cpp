@@ -22,7 +22,7 @@
 
 /*!
  * @brief 魔力食い処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param power 基本効力
  * @return ターンを消費した場合TRUEを返す
  */

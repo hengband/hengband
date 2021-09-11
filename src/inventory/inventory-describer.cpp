@@ -9,7 +9,7 @@
 /*!
  * @brief 所持/装備オブジェクトIDの部位表現を返す /
  * Return a string mentioning how a given item is carried
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 部位表現の文字列ポインタ
  */

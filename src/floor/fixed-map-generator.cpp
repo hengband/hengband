@@ -396,7 +396,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 文字列
  * @param ymin 詳細不明
  * @param xmin 詳細不明

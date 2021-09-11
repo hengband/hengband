@@ -24,8 +24,8 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief モンスターが移動した結果、そこにプレーヤーがいたら直接攻撃を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief モンスターが移動した結果、そこにプレイヤーがいたら直接攻撃を行う
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param ny 移動後の、モンスターのY座標
@@ -66,7 +66,7 @@ void exe_monster_attack_to_player(player_type *player_ptr, turn_flags *turn_flag
 
 /*!
  * @brief モンスターからモンスターへの直接攻撃を実行する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param g_ptr グリッドへの参照ポインタ
  */
@@ -101,7 +101,7 @@ static bool exe_monster_attack_to_monster(player_type *player_ptr, MONSTER_IDX m
 
 /*!
  * @brief モンスターからモンスターへの攻撃処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param g_ptr グリッドへの参照ポインタ

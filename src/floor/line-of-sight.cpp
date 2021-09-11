@@ -5,7 +5,7 @@
 
 /*!
  * @brief LOS(Line Of Sight / 視線が通っているか)の判定を行う。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 始点のy座標
  * @param x1 始点のx座標
  * @param y2 終点のy座標

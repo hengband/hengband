@@ -60,7 +60,7 @@
 
 /*!
  * @brief 変わり身処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param success 判定成功上の処理ならばTRUE
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -106,7 +106,7 @@ bool kawarimi(player_type *player_ptr, bool success)
 
 /*!
  * @brief 入身処理 / "Rush Attack" routine for Samurai or Ninja
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mdeath 目標モンスターが死亡したかを返す
  * @return 作用が実際にあった場合TRUEを返す /  Return value is for checking "done"
  */
@@ -200,7 +200,7 @@ bool rush_attack(player_type *player_ptr, bool *mdeath)
 
 /*!
  * @brief 盗賊と忍者における不意打ち
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 void process_surprise_attack(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -241,7 +241,7 @@ void print_surprise_attack(player_attack_type *pa_ptr)
 
 /*!
  * @brief 盗賊と忍者における不意打ちのダメージ計算
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 void calc_surprise_attack_damage(player_type *player_ptr, player_attack_type *pa_ptr)
@@ -262,7 +262,7 @@ void calc_surprise_attack_damage(player_type *player_ptr, player_attack_type *pa
 
 /*!
  * @brief 速駆け処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
 bool hayagake(player_type *player_ptr)
@@ -332,7 +332,7 @@ bool set_superstealth(player_type *player_ptr, bool set)
 /*!
  * @brief 忍術の発動 /
  * do_cmd_cast calls this function if the player's class is 'ninja'.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */

@@ -111,7 +111,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 /*!
  * @brief ファイル内容をコンソールに出力する
  * Recursive file perusal.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param show_version TRUEならばコンソール上にゲームのバージョンを表示する
  * @param name ファイル名の文字列
  * @param what 内容キャプションの文字列

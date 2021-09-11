@@ -115,7 +115,7 @@ static void set_pet_params(player_type *player_ptr, monster_race **r_ptr, const 
 
 /*!
  * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void place_pet(player_type *player_ptr)
 {
@@ -360,7 +360,7 @@ static void update_floor(player_type *player_ptr)
 
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * If the floor is an old saved floor, it will be\n
  * restored from the temporary file.  If the floor is new one, new floor\n

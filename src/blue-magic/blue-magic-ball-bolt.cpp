@@ -104,7 +104,7 @@ bool cast_blue_ball_chaos(player_type *player_ptr, bmc_type *bmc_ptr)
 /*!
  * @brief ウォーター・ボールの青魔法
  * @brief 分解のブレスの青魔法
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bmc_ptr 青魔法詠唱への参照ポインタ
  * @details All my worries are blown away.
  */

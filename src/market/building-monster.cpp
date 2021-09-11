@@ -18,7 +18,7 @@
 
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUEを返す。
  * @todo 返り値が意味不明なので直した方が良いかもしれない。
  */

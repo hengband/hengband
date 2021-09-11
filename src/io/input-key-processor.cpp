@@ -97,7 +97,7 @@
 /*!
  * @brief ウィザードモードへの導入処理
  * / Verify use of "wizard" mode
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 実際にウィザードモードへ移行したらTRUEを返す。
  */
 bool enter_wizard_mode(player_type *player_ptr)
@@ -126,7 +126,7 @@ bool enter_wizard_mode(player_type *player_ptr)
 /*!
  * @brief デバッグコマンドへの導入処理
  * / Verify use of "debug" commands
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 実際にデバッグコマンドへ移行したらTRUEを返す。
  */
 static bool enter_debug_mode(player_type *player_ptr)

@@ -61,7 +61,7 @@
 /*!
  * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 判定を行いたいマスのY座標
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
@@ -91,7 +91,7 @@ bool summon_possible(player_type *player_ptr, POSITION y1, POSITION x1)
 /*!
  * @brief モンスターにとって死者復活を行うべき状態かどうかを返す /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
@@ -127,7 +127,7 @@ bool raise_possible(player_type *player_ptr, monster_type *m_ptr)
 /*!
  * @brief モンスターにとってボルト型魔法が有効な状態かを返す /
  * Determine if a bolt spell will hit the player.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 ボルト魔法発射地点のY座標
  * @param x1 ボルト魔法発射地点のX座標
  * @param y2 ボルト魔法目標地点のY座標
@@ -178,7 +178,7 @@ bool clean_shot(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
 /*!
  * @brief モンスターのボルト型魔法処理 /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -207,7 +207,7 @@ ProjectResult bolt(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
 
 /*!
  * @brief モンスターのビーム型魔法処理 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -234,7 +234,7 @@ ProjectResult beam(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
 /*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  * @param m_idx モンスターのID

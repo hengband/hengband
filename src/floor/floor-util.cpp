@@ -177,7 +177,7 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
 
 /*!
  * @brief 現在のマップ名を返す /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return マップ名の文字列参照ポインタ
  */
 concptr map_name(player_type *player_ptr)

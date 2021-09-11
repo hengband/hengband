@@ -39,7 +39,7 @@
 
 /*!
  * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  */
 static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(player_type *player_ptr, MONSTER_IDX m_idx)
@@ -102,7 +102,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(player_type *player_ptr,
 
 /*!
  * @brief ロレントのRF6_SPECIALの処理。手榴弾の召喚。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -130,7 +130,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(player_type *player_ptr, POS
 
 /*!
  * @brief BシンボルのRF6_SPECIALの処理。投げ落とす攻撃。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -205,7 +205,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *player_ptr, POSITION 
 
 /*!
  * @brief RF6_SPECIALの処理。モンスターの種類によって実処理に振り分ける。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID

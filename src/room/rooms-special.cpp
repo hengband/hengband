@@ -25,7 +25,7 @@
 
 /*!
  * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 bool build_type15(player_type *player_ptr, dun_data_type *dd_ptr)
 {

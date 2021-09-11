@@ -121,7 +121,7 @@ int calc_monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
 
 /*!
  * @brief 忍者ヒットで急所を突く
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @details 闇討ち＆追討ちを実施した後に致命傷チェックを行う
  * チェックを通ったら、ユニークならば2倍ダメージ、それ以外は一撃死
@@ -157,7 +157,7 @@ static void ninja_critical(player_type *player_ptr, player_attack_type *pa_ptr)
 
 /*!
  * @brief 急所を突く
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
 void critical_attack(player_type *player_ptr, player_attack_type *pa_ptr)

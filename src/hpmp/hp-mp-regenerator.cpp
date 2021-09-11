@@ -157,7 +157,7 @@ void regenmagic(player_type *player_ptr, int regen_amount)
 
 /*!
  * @brief 100ゲームターン毎のモンスターのHP自然回復処理 / Regenerate the monsters (once per 100 game turns)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @note Should probably be done during monster turns.
  */
 void regenerate_monsters(player_type *player_ptr)
@@ -192,7 +192,7 @@ void regenerate_monsters(player_type *player_ptr)
 
 /*!
  * @brief 30ゲームターン毎のボール中モンスターのHP自然回復処理 / Regenerate the captured monsters (once per 30 game turns)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @note Should probably be done during monster turns.
  */
 void regenerate_captured_monsters(player_type *player_ptr)

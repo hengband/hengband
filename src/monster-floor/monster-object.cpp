@@ -89,7 +89,7 @@ static void update_object_flags(const TrFlags &flgs, BIT_FLAGS *flg2, BIT_FLAGS 
 
 /*!
  * @brief モンスターがアイテムを拾うか壊す処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param o_ptr オブジェクトへの参照ポインタ
@@ -143,7 +143,7 @@ static void monster_pickup_object(player_type *player_ptr, turn_flags *turn_flag
 
 /*!
  * @brief モンスターの移動に伴うオブジェクト処理 (アイテム破壊等)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param ny 移動後の、モンスターのY座標
@@ -182,7 +182,7 @@ void update_object_by_monster_movement(player_type *player_ptr, turn_flags *turn
 
 /*!
  * @brief モンスターが盗みや拾いで確保していたアイテムを全てドロップさせる / Drop all items carried by a monster
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター参照ポインタ
  */
 void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)

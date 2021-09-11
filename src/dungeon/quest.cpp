@@ -115,7 +115,7 @@ void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, int16_t stat
 
 /*!
  * @brief クエストを達成状態にする /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param quest_num 達成状態にしたいクエストのID
  */
 void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
@@ -146,7 +146,7 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
 /*!
  * @brief 特定のアーティファクトを入手した際のクエスト達成処理 /
  * Check for "Quest" completion when a quest monster is killed or charmed.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
  */
 void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr)
@@ -201,7 +201,7 @@ void quest_discovery(QUEST_IDX q_idx)
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す。
  * / Hack -- Check if a level is a "quest" level
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
@@ -225,7 +225,7 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
 
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されているランダムクエストを探し出しIDを返す。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
@@ -246,7 +246,7 @@ QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
 
 /*!
  * @brief クエスト階層から離脱する際の処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void leave_quest_check(player_type *player_ptr)
 {
@@ -323,7 +323,7 @@ void exe_enter_quest(player_type *player_ptr, QUEST_IDX quest_idx)
 
 /*!
  * @brief クエスト入り口にプレイヤーが乗った際の処理 / Do building commands
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_quest(player_type *player_ptr)
 {

@@ -248,7 +248,7 @@ static void strengthen_pval(object_type *o_ptr)
 
 /*!
  * @brief 防具ならばAC修正、武具なら殺戮修正を付与する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
  */
 static void invest_positive_modified_value(object_type *o_ptr)
@@ -269,7 +269,7 @@ static void invest_positive_modified_value(object_type *o_ptr)
 
 /*!
  * @brief 防具のAC修正が高すぎた場合に弱化させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
  */
 static void invest_negative_modified_value(object_type *o_ptr)
@@ -391,7 +391,7 @@ static void generate_unnatural_random_artifact(
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @param a_scroll アーティファクト生成の巻物上の処理。呪いのアーティファクトが生成対象外となる。
  * @return 常にTRUE(1)を返す

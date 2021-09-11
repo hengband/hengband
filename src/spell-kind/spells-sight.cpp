@@ -79,7 +79,7 @@ bool project_all_los(player_type *player_ptr, EFFECT_ID typ, HIT_POINT dam)
 
 /*!
  * @brief 視界内モンスターを加速する処理 / Speed monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool speed_monsters(player_type *player_ptr)
@@ -89,7 +89,7 @@ bool speed_monsters(player_type *player_ptr)
 
 /*!
  * @brief 視界内モンスターを加速する処理 / Slow monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool slow_monsters(player_type *player_ptr, int power)
@@ -99,7 +99,7 @@ bool slow_monsters(player_type *player_ptr, int power)
 
 /*!
  * @brief 視界内モンスターを眠らせる処理 / Sleep monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool sleep_monsters(player_type *player_ptr, int power)
@@ -109,7 +109,7 @@ bool sleep_monsters(player_type *player_ptr, int power)
 
 /*!
  * @brief 視界内の邪悪なモンスターをテレポート・アウェイさせる処理 / Banish evil monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool banish_evil(player_type *player_ptr, int dist)
@@ -131,7 +131,7 @@ bool turn_undead(player_type *player_ptr)
 
 /*!
  * @brief 視界内のアンデッド・モンスターにダメージを与える処理 / Dispel undead monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_undead(player_type *player_ptr, HIT_POINT dam)
@@ -144,7 +144,7 @@ bool dispel_undead(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 視界内の邪悪なモンスターにダメージを与える処理 / Dispel evil monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_evil(player_type *player_ptr, HIT_POINT dam)
@@ -154,7 +154,7 @@ bool dispel_evil(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 視界内の善良なモンスターにダメージを与える処理 / Dispel good monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_good(player_type *player_ptr, HIT_POINT dam)
@@ -164,7 +164,7 @@ bool dispel_good(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 視界内のあらゆるモンスターにダメージを与える処理 / Dispel all monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_monsters(player_type *player_ptr, HIT_POINT dam)
@@ -174,7 +174,7 @@ bool dispel_monsters(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 視界内の生命のあるモンスターにダメージを与える処理 / Dispel 'living' monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_living(player_type *player_ptr, HIT_POINT dam)
@@ -184,7 +184,7 @@ bool dispel_living(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 視界内の悪魔系モンスターにダメージを与える処理 / Dispel 'living' monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_demons(player_type *player_ptr, HIT_POINT dam)
@@ -194,7 +194,7 @@ bool dispel_demons(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 視界内のモンスターに「聖戦」効果を与える処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool crusade(player_type *player_ptr)
@@ -204,7 +204,7 @@ bool crusade(player_type *player_ptr)
 
 /*!
  * @brief 視界内モンスターを怒らせる処理 / Wake up all monsters, and speed up "los" monsters.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
  */
 void aggravate_monsters(player_type *player_ptr, MONSTER_IDX who)
@@ -246,7 +246,7 @@ void aggravate_monsters(player_type *player_ptr, MONSTER_IDX who)
 
 /*!
  * @brief パニック・モンスター効果(プレイヤー視界範囲内) / Confuse monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -257,7 +257,7 @@ bool confuse_monsters(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief チャーム・モンスター効果(プレイヤー視界範囲内) / Charm monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -268,7 +268,7 @@ bool charm_monsters(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 動物魅了効果(プレイヤー視界範囲内) / Charm Animals
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -279,7 +279,7 @@ bool charm_animals(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief モンスター朦朧効果(プレイヤー視界範囲内) / Stun monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -290,7 +290,7 @@ bool stun_monsters(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief モンスター停止効果(プレイヤー視界範囲内) / Stasis monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -301,7 +301,7 @@ bool stasis_monsters(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief モンスター精神攻撃効果(プレイヤー視界範囲内) / Mindblast monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -312,7 +312,7 @@ bool mindblast_monsters(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief モンスター追放効果(プレイヤー視界範囲内) / Banish all monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dist 効力（距離）
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -323,7 +323,7 @@ bool banish_monsters(player_type *player_ptr, int dist)
 
 /*!
  * @brief 邪悪退散効果(プレイヤー視界範囲内) / Turn evil
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -334,7 +334,7 @@ bool turn_evil(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 全モンスター退散効果(プレイヤー視界範囲内) / Turn everyone
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -345,7 +345,7 @@ bool turn_monsters(player_type *player_ptr, HIT_POINT dam)
 
 /*!
  * @brief 死の光線(プレイヤー視界範囲内) / Death-ray all monsters (note: OBSCENELY powerful)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool deathray_monsters(player_type *player_ptr)
@@ -355,7 +355,7 @@ bool deathray_monsters(player_type *player_ptr)
 
 /*!
  * @brief 調査したモンスターの情報を表示する
- * @param player_ptr プレーヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param m_ptr モンスター情報への参照ポインタ
  * @param r_ptr モンスター種族への参照ポインタ
  */

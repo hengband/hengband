@@ -14,8 +14,8 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief プレーヤーの職業による耐性フラグを返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの職業による耐性フラグを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
@@ -148,7 +148,7 @@ static void add_class_flags(player_type *player_ptr, TrFlags &flags)
 
 /*!
  * @brief 突然変異による耐性フラグを返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
@@ -182,7 +182,7 @@ static void add_mutation_flags(player_type *player_ptr, TrFlags &flags)
 
 /*!
  * @brief 性格による耐性フラグを返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
@@ -207,7 +207,7 @@ static void add_personality_flags(player_type *player_ptr, TrFlags &flags)
 
 /*!
  * @brief 剣術家の型による耐性フラグを返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
@@ -268,7 +268,7 @@ static void add_kata_flags(player_type *player_ptr, TrFlags &flags)
 /*!
  * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
  * Prints ratings on certain abilities
- * @param player_ptr 参照元クリーチャーポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags フラグを保管する配列
  * @details
  * Obtain the "flags" for the player as if he was an item

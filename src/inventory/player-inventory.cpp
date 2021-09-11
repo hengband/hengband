@@ -162,7 +162,7 @@ void py_pickup_floor(player_type *player_ptr, bool pickup)
 /*!
  * @brief プレイヤーがオブジェクトを拾った際のメッセージ表示処理 /
  * Helper routine for py_pickup() and py_pickup_floor().
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_idx 取得したオブジェクトの参照ID
  * @details
  * アイテムを拾った際に「２つのケーキを持っている」
@@ -232,7 +232,7 @@ void describe_pickup_item(player_type *player_ptr, OBJECT_IDX o_idx)
 
 /*!
  * @brief プレイヤーがオブジェクト上に乗った際の表示処理 / Player "wants" to pick up an object or gold.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup 自動拾い処理を行うならばTRUEとする
  */
 void carry(player_type *player_ptr, bool pickup)

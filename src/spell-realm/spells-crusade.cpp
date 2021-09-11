@@ -29,7 +29,7 @@
 
 /*!
  * @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam ダメージ
  * @param rad 効力の半径
  * @return ターゲットを指定し、実行したならばTRUEを返す。

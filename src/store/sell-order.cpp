@@ -44,7 +44,7 @@
 
 /*!
  * @brief プレイヤーが売却する時の確認プロンプト / Prompt to sell for the price
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
  */
@@ -65,7 +65,7 @@ static std::optional<PRICE> prompt_to_sell(player_type *player_ptr, object_type 
 /*!
  * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void store_sell(player_type *player_ptr)
 {

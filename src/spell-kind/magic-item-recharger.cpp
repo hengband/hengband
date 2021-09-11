@@ -30,7 +30,7 @@
  * @brief 魔力充填処理 /
  * Recharge a wand/staff/rod from the pack or on the floor.
  * This function has been rewritten in Oangband and ZAngband.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param power 充填パワー
  * @return ターン消費を要する処理まで進んだらTRUEを返す
  *

@@ -301,7 +301,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
 /*!
  * @brief ものまね処理の発動 /
  * do_cmd_cast calls this function if the player's class is 'imitator'.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 発動するモンスター攻撃のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */

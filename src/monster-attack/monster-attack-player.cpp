@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief モンスターからプレーヤーへの直接攻撃処理
+ * @brief モンスターからプレイヤーへの直接攻撃処理
  * @date 2020/05/23
  * @author Hourier
  */
@@ -68,9 +68,9 @@ static bool check_no_blow(player_type *player_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief プレーヤー死亡等でモンスターからプレーヤーへの直接攻撃処理を途中で打ち切るかどうかを判定する
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @brief プレイヤー死亡等でモンスターからプレイヤーへの直接攻撃処理を途中で打ち切るかどうかを判定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @return 攻撃続行ならばTRUE、打ち切りになったらFALSE
  */
 static bool check_monster_continuous_attack(player_type *player_ptr, monap_type *monap_ptr)
@@ -91,8 +91,8 @@ static bool check_monster_continuous_attack(player_type *player_ptr, monap_type 
 
 /*!
  * @brief 対邪悪結界が効いている状態で邪悪なモンスターから直接攻撃を受けた時の処理
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @return briefに書いた条件＋確率が満たされたらTRUE、それ以外はFALSE
  */
 static bool effect_protecion_from_evil(player_type *player_ptr, monap_type *monap_ptr)
@@ -147,7 +147,7 @@ static void describe_silly_attacks(monap_type *monap_ptr)
 
 /*!
  * @brief 切り傷と朦朧が同時に発生した時、片方を無効にする
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 static void select_cut_stun(monap_type *monap_ptr)
 {
@@ -306,8 +306,8 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
 /*!
  * @brief モンスターから直接攻撃を1回受けた時の処理
  * @return 対邪悪結界により攻撃が当たらなかったらFALSE、それ以外はTRUE
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @details 最大4 回/モンスター/ターン、このルーチンを通る
  */
 static bool process_monster_attack_hit(player_type *player_ptr, monap_type *monap_ptr)
@@ -338,8 +338,8 @@ static bool process_monster_attack_hit(player_type *player_ptr, monap_type *mona
 
 /*!
  * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 static void process_monster_attack_evasion(player_type *player_ptr, monap_type *monap_ptr)
 {
@@ -367,8 +367,8 @@ static void process_monster_attack_evasion(player_type *player_ptr, monap_type *
 
 /*!
  * @brief モンスターの打撃情報を蓄積させる
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @param ap_cnt モンスターの打撃 N回目
  * @details どの敵が何をしてきたか正しく認識できていなければ情報を蓄積しない.
  * 非自明な類の打撃については、そのダメージが 0 ならば基本的に知識が増えない.

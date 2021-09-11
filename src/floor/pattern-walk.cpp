@@ -30,7 +30,7 @@
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void pattern_teleport(player_type *player_ptr)
 {
@@ -154,7 +154,7 @@ bool pattern_effect(player_type *player_ptr)
 
 /*!
  * @brief パターンによる移動制限処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param c_y プレイヤーの移動元Y座標
  * @param c_x プレイヤーの移動元X座標
  * @param n_y プレイヤーの移動先Y座標

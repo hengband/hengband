@@ -164,7 +164,7 @@ void do_cmd_go_up(player_type *player_ptr)
 
 /*!
  * @brief 階段を使って階層を降りる処理 / Go down one level
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_go_down(player_type *player_ptr)
 {
@@ -292,7 +292,7 @@ void do_cmd_go_down(player_type *player_ptr)
 /*!
  * @brief 「歩く」動作コマンドのメインルーチン /
  * Support code for the "Walk" and "Jump" commands
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  */
 void do_cmd_walk(player_type *player_ptr, bool pickup)
@@ -345,7 +345,7 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
 /*!
  * @brief 「走る」動作コマンドのメインルーチン /
  * Start running.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_run(player_type *player_ptr)
 {
@@ -366,7 +366,7 @@ void do_cmd_run(player_type *player_ptr)
  * @brief 「留まる」動作コマンドのメインルーチン /
  * Stay still.  Search.  Enter stores.
  * Pick up treasure if "pickup" is true.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  */
 void do_cmd_stay(player_type *player_ptr, bool pickup)
@@ -388,7 +388,7 @@ void do_cmd_stay(player_type *player_ptr, bool pickup)
 /*!
  * @brief 「休む」動作コマンドのメインルーチン /
  * Resting allows a player to safely restore his hp	-RAK-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_rest(player_type *player_ptr)
 {

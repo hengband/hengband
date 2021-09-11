@@ -67,7 +67,7 @@
 
 /*!
  * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
- * @param player_ptr 配置したいクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 配置に成功したらTRUEを返す
  */
 bool new_player_spot(player_type *player_ptr)
@@ -131,7 +131,7 @@ bool new_player_spot(player_type *player_ptr)
 
 /*!
  * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param g_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
@@ -183,7 +183,7 @@ bool check_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 指定された座標の照明状態を更新する / Update "local" illumination
- * @param player_ptr 視界元のクリーチャー
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 視界先y座標
  * @param x 視界先x座標
  */
@@ -829,7 +829,7 @@ void remove_mirror(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param y 移動先Y座標
  * @param x 移動先X座標
@@ -867,7 +867,7 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
 
 /*!
  * @brief 指定されたマスにプレイヤーがテレポート可能かどうかを判定する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 移動先Y座標
  * @param x 移動先X座標
  * @param mode オプション
@@ -1043,7 +1043,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 
 /*!
  * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
  * @return 照明が消されている地形ならばTRUE
  */

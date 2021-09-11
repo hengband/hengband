@@ -63,7 +63,7 @@ static void display_initial_birth_message(player_type *player_ptr)
 
 /*!
  * @prief 性別選択画面でヘルプを表示させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param c 入力したコマンド
  * @details 他の関数名と被りそうだったので少し眺め
  */
@@ -81,7 +81,7 @@ static void display_help_on_sex_select(player_type *player_ptr, char c)
 
 /*!
  * @brief プレイヤーの性別選択を行う / Player sex
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @buf 表示用バッファ
  * @return やり直すならFALSE、それ以外はTRUE
  */
@@ -474,7 +474,7 @@ static bool display_auto_roller_result(player_type *player_ptr, bool prev, char 
 
 /*
  * @brief オートロールを回して結果を表示し、その数値に決めるかさらに回すか確認する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param chara_limit 社会的地位の要求水準
  * @details 2つめの結果以降は、'p'キーで1つ前のロール結果に戻せる。
  */
@@ -522,7 +522,7 @@ static bool display_auto_roller(player_type *player_ptr, chara_limit_type chara_
 
 /*!
  * @brief 名前と生い立ちを設定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details ついでにステータス限界もここで決めている
  */
 static void set_name_history(player_type *player_ptr)
@@ -537,7 +537,7 @@ static void set_name_history(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーキャラ作成ウィザード
+ * @brief プレイヤーキャラ作成ウィザード
  * @details
  * The delay may be reduced, but is recommended to keep players
  * from continuously rolling up characters, which can be VERY

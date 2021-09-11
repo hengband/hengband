@@ -75,7 +75,7 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @brief モンスターの表層IDを設定する / Set initial racial appearance of a monster
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
@@ -103,7 +103,7 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
 
 /*!
  * @brief ユニークが生成可能か評価する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
  * @return ユニークの生成が不可能な条件ならFALSE、それ以外はTRUE
  */
@@ -138,7 +138,7 @@ static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief クエスト内に生成可能か評価する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
  * @return 生成が可能ならTRUE、不可能ならFALSE
  */
@@ -169,7 +169,7 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief 守りのルーン上にモンスターの配置を試みる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
  * @param y 生成位置y座標
  * @param x 生成位置x座標
@@ -231,7 +231,7 @@ static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 召喚を行ったモンスターID
  * @param y 生成位置y座標
  * @param x 生成位置x座標

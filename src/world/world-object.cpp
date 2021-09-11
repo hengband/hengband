@@ -50,7 +50,7 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
 /*!
  * @brief オブジェクト生成テーブルからアイテムを取得する /
  * Choose an object kind that seems "appropriate" to the given level
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param level 生成階
  * @return 選ばれたオブジェクトベースID
  * @details

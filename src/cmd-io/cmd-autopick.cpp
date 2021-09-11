@@ -78,7 +78,7 @@ static int analyze_move_key(text_body_type *tb, int skey)
 
 /*
  * In-game editor of Object Auto-picker/Destoryer
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_edit_autopick(player_type *player_ptr)
 {

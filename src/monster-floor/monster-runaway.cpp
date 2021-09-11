@@ -28,7 +28,7 @@
 
 /*!
  * @brief HPが1/3未満になった有効的なユニークモンスターの逃走処理を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_riding_mon 騎乗状態ならばTRUE
  * @param m_ptr モンスターへの参照ポインタ
  * @param m_name モンスター名称
@@ -61,7 +61,7 @@ static void escape_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, 
 
 /*!
  * @brief ペットや友好的なモンスターがフロアから逃げる処理を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param is_riding_mon 騎乗状態ならばTRUE
  * @param see_m モンスターが視界内にいたらTRUE

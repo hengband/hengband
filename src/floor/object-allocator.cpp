@@ -48,7 +48,7 @@ static int next_to_walls(floor_type *floor_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う / Helper function for alloc_stairs(). Is this a good location for stairs?
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 基準のy座標
  * @param x 基準のx座標
  * @param walls 最低減隣接させたい外壁の数
@@ -66,7 +66,7 @@ static bool alloc_stairs_aux(player_type *player_ptr, POSITION y, POSITION x, in
 
 /*!
  * @brief 外壁に隣接させて階段を生成する / Places some staircases near walls
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param feat 配置したい地形ID
  * @param num 配置したい階段の数
  * @param walls 最低減隣接させたい外壁の数

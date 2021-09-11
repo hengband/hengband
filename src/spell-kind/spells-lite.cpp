@@ -35,7 +35,7 @@ using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
 
 /*!
  * @brief 指定した座標全てを照らす。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param points 明るくすべき座標たち
  * @details
  * <pre>
@@ -88,7 +88,7 @@ static void cave_temp_room_lite(player_type *player_ptr, const std::vector<Pos2D
 
 /*!
  * @brief 指定した座標全てを暗くする。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param points 暗くすべき座標たち
  * @details
  * <pre>
@@ -201,7 +201,7 @@ static int next_to_walls_adj(floor_type *floor_ptr, const POSITION cy, const POS
 
 /*!
  * @brief (y,x) が指定条件を満たすなら points に加える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param points 座標記録用配列
  * @param y 部屋内のy座標1点
  * @param x 部屋内のx座標1点
@@ -247,7 +247,7 @@ static void cave_temp_room_aux(
 
 /*!
  * @brief (y,x) が明るくすべきマスなら points に加える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param points 座標記録用配列
  * @param y 指定Y座標
  * @param x 指定X座標
@@ -268,7 +268,7 @@ static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) {
 
 /*!
  * @brief (y,x) が暗くすべきマスなら points に加える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 指定Y座標
  * @param x 指定X座標
  */
@@ -279,7 +279,7 @@ static void cave_temp_unlite_room_aux(player_type *player_ptr, std::vector<Pos2D
 
 /*!
  * @brief (y1,x1) を含む全ての部屋を照らす。 / Illuminate any room containing the given location.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 指定Y座標
  * @param x1 指定X座標
  *
@@ -326,7 +326,7 @@ void lite_room(player_type *player_ptr, const POSITION y1, const POSITION x1)
 
 /*!
  * @brief (y1,x1) を含む全ての部屋を暗くする。 / Darken all rooms containing the given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 指定Y座標
  * @param x1 指定X座標
  */
@@ -365,7 +365,7 @@ void unlite_room(player_type *player_ptr, const POSITION y1, const POSITION x1)
 
 /*!
  * @brief スターライトの効果を発生させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param magic 魔法による効果であればTRUE、スターライトの杖による効果であればFALSE
  * @return 常にTRUE
  */
@@ -398,7 +398,7 @@ bool starlight(player_type *player_ptr, bool magic)
 
 /*!
  * @brief プレイヤー位置を中心にLITE_WEAK属性を通じた照明処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 威力
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
@@ -424,7 +424,7 @@ bool lite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
 
 /*!
  * @brief プレイヤー位置を中心にLITE_DARK属性を通じた消灯処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 威力
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
@@ -445,7 +445,7 @@ bool unlite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
 
 /*!
  * @brief LITE_WEAK属性による光源ビーム処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す

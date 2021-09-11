@@ -71,7 +71,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 
 /*!
  * @brief フロア情報を日記に追加する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return クエストID
  */
 static QUEST_IDX write_floor(player_type *player_ptr, concptr *note_level, char *note_level_buf)

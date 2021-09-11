@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレーヤーのステータス表示メインルーチン群
+ * @brief プレイヤーのステータス表示メインルーチン群
  * @date 2020/02/25
  * @author Hourier
  * @details
@@ -44,7 +44,7 @@
 
 /*!
  * @brief
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mode ステータス表示モード
  * @return どれかの処理をこなしたらTRUE、何もしなかったらFALSE
  */
@@ -77,7 +77,7 @@ static bool display_player_info(player_type *player_ptr, int mode)
 
 /*!
  * @brief 名前、性別、種族、職業を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_player_basic_info(player_type *player_ptr)
 {
@@ -96,7 +96,7 @@ static void display_player_basic_info(player_type *player_ptr)
 
 /*!
  * @brief 魔法領域を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_magic_realms(player_type *player_ptr)
 {
@@ -116,7 +116,7 @@ static void display_magic_realms(player_type *player_ptr)
 
 /*!
  * @ brief 年齢、身長、体重、社会的地位を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * 日本語版では、身長はcmに、体重はkgに変更してある
  */
@@ -139,7 +139,7 @@ static void display_phisique(player_type *player_ptr)
 
 /*!
  * @brief 能力値を (減少していたら色を変えて)表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_player_stats(player_type *player_ptr)
 {
@@ -166,7 +166,7 @@ static void display_player_stats(player_type *player_ptr)
 
 /*!
  * @brief ゲームオーバーの原因を探る (生きていたら何もしない)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
  * @return 生きていたらFALSE、死んでいたらTRUE
  */
@@ -216,7 +216,7 @@ static bool search_death_cause(player_type *player_ptr, char *statmsg)
 
 /*!
  * @brief クエストフロアで生きている場合、クエスト名をバッファに詰める
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
  * @return クエスト内であればTRUE、いなければFALSE
  */
@@ -238,7 +238,7 @@ static bool decide_death_in_quest(player_type *player_ptr, char *statmsg)
 
 /*!
  * @brief 現在いるフロアを、または死んでいたらどこでどう死んだかをバッファに詰める
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
  */
 static void decide_current_floor(player_type *player_ptr, char *statmsg)
@@ -286,7 +286,7 @@ static void display_current_floor(char *statmsg)
 /*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mode 表示モードID
  * @details
  * <pre>
@@ -340,7 +340,7 @@ void display_player(player_type *player_ptr, int mode)
 /*!
  * @brief プレイヤーの装備一覧をシンボルで並べる
  * Equippy chars
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 表示するコンソールの行
  * @param x 表示するコンソールの列
  * @param mode オプション

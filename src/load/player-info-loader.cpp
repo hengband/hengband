@@ -22,7 +22,7 @@
 
 /*!
  * @brief セーブデータから領域情報を読み込む / Read player realms
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void rd_realms(player_type *player_ptr)
 {
@@ -42,7 +42,7 @@ static void rd_realms(player_type *player_ptr)
 
 /*!
  * @brief セーブデータからプレイヤー基本情報を読み込む / Read player's basic info
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void rd_base_info(player_type *player_ptr)
 {
@@ -181,7 +181,7 @@ void rd_bounty_uniques(player_type *player_ptr)
 
 /*!
  * @brief 腕力などの基本ステータス情報を読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void rd_base_status(player_type *player_ptr)
 {
@@ -280,8 +280,8 @@ static void rd_arena(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーの最大HP/現在HPを読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの最大HP/現在HPを読み込む
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void rd_hp(player_type *player_ptr)
 {
@@ -296,8 +296,8 @@ static void rd_hp(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーの最大MP/現在MPを読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの最大MP/現在MPを読み込む
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void rd_mana(player_type *player_ptr)
 {
@@ -312,8 +312,8 @@ static void rd_mana(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーのバッドステータス (と空腹)を読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーのバッドステータス (と空腹)を読み込む
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void rd_bad_status(player_type *player_ptr)
 {
@@ -338,8 +338,8 @@ static void rd_energy(player_type *player_ptr)
 }
 
 /*!
- * @brief プレーヤーのグッド/バッドステータスを読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーのグッド/バッドステータスを読み込む
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @todo 明らかに関数名がビッグワードだが他に思いつかなかった
  */
 static void rd_status(player_type *player_ptr)
@@ -437,7 +437,7 @@ static void set_virtues(player_type *player_ptr)
 
 /*!
  * @brief 各種時限効果を読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void rd_timed_effects(player_type *player_ptr)
 {

@@ -159,7 +159,7 @@ void print_sp(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの所持金を表示する / Prints current gold
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_gold(player_type *player_ptr)
 {
@@ -171,7 +171,7 @@ void print_gold(player_type *player_ptr)
 
 /*!
  * @brief 現在のフロアの深さを表示する / Prints depth in stat area
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_depth(player_type *player_ptr)
 {
@@ -242,7 +242,7 @@ void print_depth(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_frame_basic(player_type *player_ptr)
 {

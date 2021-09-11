@@ -1101,7 +1101,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
 
 /*!
  * @brief 射撃時クリティカルによるダメージ期待値修正計算（スナイパーの集中処理と武器経験値） / critical happens at i / 10000
- * @param player_ptr 射撃を行うクリーチャー参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param plus_ammo 矢弾のダメージ修正
  * @param plus_bow 弓のダメージ修正
  * @return ダメージ期待値
@@ -1177,7 +1177,7 @@ HIT_POINT calc_expect_crit_shot(player_type *player_ptr, WEIGHT weight, int plus
 
 /*!
  * @brief 攻撃時クリティカルによるダメージ期待値修正計算（重量と毒針処理） / critical happens at i / 10000
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param weight 武器の重量
  * @param plus 武器のダメージ修正
  * @param dam 基本ダメージ

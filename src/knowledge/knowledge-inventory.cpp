@@ -135,7 +135,7 @@ static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
 
 /*!
  * @brief アイテム1つ当たりの耐性を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff 一時ファイルへの参照ポインタ
  * @param o_ptr アイテムへの参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
@@ -206,7 +206,7 @@ static void reset_label_number(int *label_number, FILE *fff)
 
 /*!
  * 装備中のアイテムについて、耐性を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
@@ -227,7 +227,7 @@ static void show_wearing_equipment_resistances(player_type *player_ptr, tval_typ
 
 /*!
  * 手持ち中のアイテムについて、耐性を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
@@ -248,7 +248,7 @@ static void show_holding_equipment_resistances(player_type *player_ptr, tval_typ
 
 /*!
  * 我が家のアイテムについて、耐性を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
@@ -271,7 +271,7 @@ static void show_home_equipment_resistances(player_type *player_ptr, tval_type t
 
 /*
  * @brief Display *ID* ed weapons/armors's resistances
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_knowledge_inventory(player_type *player_ptr)
 {

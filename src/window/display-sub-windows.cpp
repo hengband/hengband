@@ -63,7 +63,7 @@ FixItemTesterSetter::~FixItemTesterSetter()
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_inventory(player_type *player_ptr)
 {
@@ -195,7 +195,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
 
 /*!
  * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_monster_list(player_type *player_ptr)
 {
@@ -302,7 +302,7 @@ static void display_equipment(player_type *player_ptr, const ItemTester& item_te
 /*!
  * @brief 現在の装備品をサブウィンドウに表示する /
  * Hack -- display equipment in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_equip(player_type *player_ptr)
 {
@@ -322,7 +322,7 @@ void fix_equip(player_type *player_ptr)
 
 /*!
  * @brief 現在のプレイヤーステータスをサブウィンドウに表示する /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Hack -- display character in sub-windows
  */
 void fix_player(player_type *player_ptr)
@@ -377,7 +377,7 @@ void fix_message(void)
  * @brief 簡易マップをサブウィンドウに表示する /
  * Hack -- display overhead view in sub-windows
  * Adjust for width and split messages
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Note that the "player" symbol does NOT appear on the map.
  */
@@ -443,7 +443,7 @@ static void display_dungeon(player_type *player_ptr)
 
 /*!
  * @brief 自分の周辺のダンジョンの地形をサブウィンドウに表示する / display dungeon view around player in a sub window
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_dungeon(player_type *player_ptr)
 {
@@ -465,7 +465,7 @@ void fix_dungeon(player_type *player_ptr)
 /*!
  * @brief モンスターの思い出をサブウィンドウに表示する /
  * Hack -- display dungeon view in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_monster(player_type *player_ptr)
 {
@@ -489,7 +489,7 @@ void fix_monster(player_type *player_ptr)
 /*!
  * @brief ベースアイテム情報をサブウィンドウに表示する /
  * Hack -- display object recall in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_object(player_type *player_ptr)
 {

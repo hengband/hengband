@@ -51,7 +51,7 @@ void object_type::copy_from(object_type *j_ptr)
 /*!
  * @brief オブジェクト構造体にベースアイテムを作成する
  * Prepare an object based on an object kind.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param k_idx 新たに作成したいベースアイテム情報のID
  */
 void object_type::prep(KIND_OBJECT_IDX ko_idx)

@@ -46,7 +46,7 @@ static void check_saved_tmp_files(const int fd, bool *force)
 
 /*!
  * @brief 保存フロア配列を初期化する / Initialize saved_floors array.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除するフラグ
  * @details Make sure that old temporary files are not remaining as gurbages.
  */
@@ -78,7 +78,7 @@ void init_saved_floors(player_type *player_ptr, bool force)
 /*!
  * @brief 保存フロア用テンポラリファイルを削除する / Kill temporary files
  * @details Should be called just before the game quit.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void clear_saved_floor_files(player_type *player_ptr)
 {
@@ -116,7 +116,7 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
 
 /*!
  * @brief 参照ポインタ先の保存フロアを抹消する / kill a saved floor and get an empty space
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 保存フロアの参照ポインタ
  */
 void kill_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
@@ -157,7 +157,7 @@ static FLOOR_IDX find_oldest_floor_idx(player_type *player_ptr)
 
 /*!
  * @brief 新規に利用可能な保存フロアを返す / Initialize new saved floor and get its floor id.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 利用可能な保存フロアID
  * @details
  * If number of saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
@@ -195,7 +195,7 @@ FLOOR_IDX get_new_floor_id(player_type *player_ptr)
 
 /*!
  * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * To prevent multiple generation of unique monster who is the minion of player
  */

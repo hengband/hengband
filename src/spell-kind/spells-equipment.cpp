@@ -15,7 +15,7 @@
 /*!
  * @brief プレイヤーの装備劣化処理 /
  * Apply disenchantment to the player's stuff
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mode 最下位ビットが1ならば劣化処理が若干低減される
  * @return 劣化処理に関するメッセージが発せられた場合はTRUEを返す /
  * Return "TRUE" if the player notices anything

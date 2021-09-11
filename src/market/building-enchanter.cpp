@@ -15,7 +15,7 @@
 
 /*!
  * @brief アイテムの強化を行う。 / Enchant item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param cost 1回毎の費用
  * @param to_hit 命中をアップさせる量
  * @param to_dam ダメージをアップさせる量

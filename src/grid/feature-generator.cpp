@@ -153,7 +153,7 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 設置を行いたいマスのY座標
  * @param x 設置を行いたいマスのX座標
  */

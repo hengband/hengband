@@ -19,7 +19,7 @@
 
 /*!
  * @brief 鷹召喚の処理。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param rlev 呪文を唱えるモンスターのレベル
@@ -39,7 +39,7 @@ MONSTER_NUMBER summon_EAGLE(player_type *player_ptr, POSITION y, POSITION x, int
 
 /*!
  * @brief エッヂ召喚の処理。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param rlev 呪文を唱えるモンスターのレベル
@@ -58,7 +58,7 @@ MONSTER_NUMBER summon_EDGE(player_type *player_ptr, POSITION y, POSITION x, int 
 
 /*!
  * @brief ダンジョンの主召喚の処理。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param rlev 呪文を唱えるモンスターのレベル
@@ -93,7 +93,7 @@ MONSTER_NUMBER summon_guardian(player_type *player_ptr, POSITION y, POSITION x, 
 
 /*!
  * @brief ロックのクローン召喚の処理。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -112,7 +112,7 @@ MONSTER_NUMBER summon_LOCKE_CLONE(player_type *player_ptr, POSITION y, POSITION 
 
 /*!
  * @brief シラミ召喚の処理。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param rlev 呪文を唱えるモンスターのレベル
@@ -159,7 +159,7 @@ MONSTER_NUMBER summon_DEMON_SLAYER(player_type *player_ptr, POSITION y, POSITION
 
 /*!
  * @brief ナズグル戦隊召喚の処理。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
@@ -280,7 +280,7 @@ MONSTER_NUMBER summon_THUNDERS(player_type *player_ptr, POSITION y, POSITION x, 
 
 /*!
  * @brief イェンダーの魔法使いの召喚の処理。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID

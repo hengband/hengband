@@ -19,7 +19,7 @@
 /*!
  * @brief affect_monster() に亘ってきた引数をeffect_monster_type構造体に代入する
  * @param em_ptr モンスター効果構造体への参照ポインタ
- * @param who 魔法を発動したモンスター (0ならばプレーヤー)
+ * @param who 魔法を発動したモンスター (0ならばプレイヤー)
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標y座標 / Target y location (or location to travel "towards")
  * @param x 目標x座標 / Target x location (or location to travel "towards")
@@ -43,9 +43,9 @@ static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX w
 
 /*!
  * @brief effect_monster_type構造体を初期化する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
- * @param who 魔法を発動したモンスター (0ならばプレーヤー)
+ * @param who 魔法を発動したモンスター (0ならばプレイヤー)
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標y座標 / Target y location (or location to travel "towards")
  * @param x 目標x座標 / Target x location (or location to travel "towards")

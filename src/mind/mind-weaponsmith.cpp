@@ -74,7 +74,7 @@ static void display_essence(player_type *player_ptr)
 
 /*!
  * @brief エッセンスの抽出処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void drain_essence(player_type *player_ptr)
 {

@@ -23,7 +23,7 @@ bool is_daytime(void)
 /*!
  * @brief 現在の日数、時刻を返す /
  * Extract day, hour, min
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param day 日数を返すための参照ポインタ
  * @param hour 時数を返すための参照ポインタ
  * @param min 分数を返すための参照ポインタ

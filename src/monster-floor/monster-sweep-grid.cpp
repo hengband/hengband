@@ -31,7 +31,7 @@
 
 /*
  * @brief コンストラクタ
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 逃走するモンスターの参照ID
  * @param mm 移動方向を返す方向IDの参照ポインタ
  */

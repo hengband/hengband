@@ -18,7 +18,7 @@ void clear_bldg(int min_row, int max_row)
 
 /*!
  * @brief 所持金を表示する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void building_prt_gold(player_type *player_ptr)
 {

@@ -13,7 +13,7 @@
 
 /*!
  * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the inventory of the "Home"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param store_ptr 店舗の参照ポインタ
  * @param o_ptr アイテムオブジェクト参照ポインタ
  * @details
@@ -57,7 +57,7 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
 
 /*!
  * @brief 店舗情報を読み込む / Read a store
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param town_number 街ID
  * @param store_number 店舗ID
  * @return エラーID

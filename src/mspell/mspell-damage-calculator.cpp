@@ -53,7 +53,7 @@ static HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side
 
 /*!
  * @brief モンスターの使う呪文の威力を返す /
- * @param player_ptr プレーヤーへの参照ポインタ (破滅の手用)
+ * @param player_ptr プレイヤーへの参照ポインタ (破滅の手用)
  * @param SPELL_NUM 呪文番号
  * @param hp 呪文を唱えるモンスターの体力
  * @param rlev 呪文を唱えるモンスターのレベル
@@ -443,7 +443,7 @@ void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
 
 /*!
  * @brief モンスターの使う呪文の威力を返す /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param ms_type 呪文番号
  * @param m_idx 呪文を唱えるモンスターID
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
@@ -464,7 +464,7 @@ HIT_POINT monspell_damage(player_type *player_ptr, RF_ABILITY ms_type, MONSTER_I
 
 /*!
  * @brief モンスターの使う所属としての呪文の威力を返す /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param ms_type 呪文番号
  * @param r_idx 呪文を唱えるモンスターの種族ID
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
@@ -484,7 +484,7 @@ HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONR
 
 /*!
  * @brief 青魔導師の使う呪文の威力を返す /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param SPELL_NUM 呪文番号
  * @param plev 使用するレベル。2倍して扱う。
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。

@@ -47,7 +47,7 @@ void do_cmd_knowledge_virtues(player_type *player_ptr)
 
 /*!
  * @brief 自分に関する情報を画面に表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_yourself(player_type *player_ptr, FILE *fff)
@@ -205,7 +205,7 @@ void do_cmd_knowledge_stat(player_type *player_ptr)
 
 /*
  * List my home
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_knowledge_home(player_type *player_ptr)
 {

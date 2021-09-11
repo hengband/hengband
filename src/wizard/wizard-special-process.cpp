@@ -212,7 +212,7 @@ void wiz_create_item(player_type *player_ptr)
 
 /*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
 {
@@ -237,7 +237,7 @@ void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
 
 /*!
  * @brief プレイヤーの現能力値を調整する / Change various "permanent" player variables.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wiz_change_status(player_type *player_ptr)
 {
@@ -320,7 +320,7 @@ void wiz_change_status(player_type *player_ptr)
 /*!
  * @brief 指定された地点の地形IDを変更する /
  * Create desired feature
- * @param creaturer_ptr プレーヤーへの参照ポインタ
+ * @param creaturer_ptr プレイヤーへの参照ポインタ
  */
 void wiz_create_feature(player_type *player_ptr)
 {
@@ -374,7 +374,7 @@ void wiz_create_feature(player_type *player_ptr)
 
 /*
  * @brief 選択したダンジョンの任意フロアを選択する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dungeon_type ダンジョン番号
  * @return フロアを選択したらtrue、キャンセルならfalse
  * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
@@ -420,7 +420,7 @@ static bool select_debugging_floor(player_type *player_ptr, int dungeon_type)
 
 /*!
  * @brief デバッグ帰還のダンジョンを選ぶ
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details 範囲外の値が選択されたら再入力を促す
  */
 static bool select_debugging_dungeon(player_type *player_ptr, DUNGEON_IDX *dungeon_type)
@@ -479,7 +479,7 @@ void wiz_jump_to_dungeon(player_type *player_ptr)
 /*!
  * @brief 全ベースアイテムを鑑定済みにする /
  * Become aware of a lot of objects
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wiz_learn_items_all(player_type *player_ptr)
 {
@@ -580,7 +580,7 @@ void wiz_reset_realms(player_type *player_ptr)
 
 /*!
  * @brief 現在のオプション設定をダンプ出力する /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Hack -- Dump option bits usage
  */
 void wiz_dump_options(void)

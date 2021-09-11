@@ -54,7 +54,7 @@
 
 /*!
  * @brief モンスター回復処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
@@ -67,7 +67,7 @@ bool heal_monster(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
 
 /*!
  * @brief モンスター加速処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
@@ -80,7 +80,7 @@ bool speed_monster(player_type *player_ptr, DIRECTION dir, int power)
 
 /*!
  * @brief モンスター減速処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
@@ -93,7 +93,7 @@ bool slow_monster(player_type *player_ptr, DIRECTION dir, int power)
 
 /*!
  * @brief モンスター催眠処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
@@ -106,7 +106,7 @@ bool sleep_monster(player_type *player_ptr, DIRECTION dir, int power)
 
 /*!
  * @brief モンスター拘束(STASIS)処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
@@ -118,7 +118,7 @@ bool stasis_monster(player_type *player_ptr, DIRECTION dir)
 
 /*!
  * @brief 邪悪なモンスター拘束(STASIS)処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
@@ -130,7 +130,7 @@ bool stasis_evil(player_type *player_ptr, DIRECTION dir)
 
 /*!
  * @brief モンスター混乱処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
@@ -143,7 +143,7 @@ bool confuse_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 
 /*!
  * @brief モンスター朦朧処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
@@ -156,7 +156,7 @@ bool stun_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 
 /*!
  * @brief チェンジモンスター処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
@@ -172,7 +172,7 @@ bool poly_monster(player_type *player_ptr, DIRECTION dir, int power)
 
 /*!
  * @brief クローンモンスター処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -184,7 +184,7 @@ bool clone_monster(player_type *player_ptr, DIRECTION dir)
 
 /*!
  * @brief モンスター恐慌処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
@@ -217,7 +217,7 @@ bool time_walk(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーのヒットダイスを振る / Role Hitpoints
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param options スペル共通オプション
  */
 void roll_hitdice(player_type *player_ptr, spell_operation options)
@@ -568,7 +568,7 @@ void apply_nexus(monster_type *m_ptr, player_type *player_ptr)
 
 /*!
  * @brief プレイヤーのステータスシャッフル処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void status_shuffle(player_type *player_ptr)
 {

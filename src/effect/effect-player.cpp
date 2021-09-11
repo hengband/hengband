@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief 魔法によるプレーヤーへの効果まとめ
+ * @brief 魔法によるプレイヤーへの効果まとめ
  * @date 2020/04/29
  * @author Hourier
  */
@@ -155,7 +155,7 @@ enum ep_check_result {
 /*!
  * @brief effect_player_type構造体を初期化する
  * @param ep_ptr 初期化前の構造体
- * @param who 魔法を唱えたモンスター (0ならプレーヤー自身)
+ * @param who 魔法を唱えたモンスター (0ならプレイヤー自身)
  * @param dam 基本威力
  * @param effect_type 効果属性
  * @param flag 効果フラグ
@@ -176,8 +176,8 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
 
 /*!
  * @brief ボルト魔法を反射する
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param ep_ptr プレーヤー効果構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param ep_ptr プレイヤー効果構造体への参照ポインタ
  * @return 当たったらFALSE、反射したらTRUE
  */
 static bool process_bolt_reflection(player_type *player_ptr, effect_player_type *ep_ptr, project_func project)
@@ -224,8 +224,8 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
 
 /*!
  * @brief 反射・忍者の変わり身などでそもそも当たらない状況を判定する
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param ep_ptr プレーヤー効果構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param ep_ptr プレイヤー効果構造体への参照ポインタ
  * @param y 目標Y座標
  * @param x 目標X座標
  * @return 当たらなかったらFALSE、反射したらTRUE、当たったらCONTINUE
@@ -250,8 +250,8 @@ static ep_check_result check_continue_player_effect(player_type *player_ptr, eff
 
 /*!
  * @brief 魔法を発したモンスター名を記述する
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param ep_ptr プレーヤー効果構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param ep_ptr プレイヤー効果構造体への参照ポインタ
  * @param who_name モンスター名
  */
 static void describe_effect_source(player_type *player_ptr, effect_player_type *ep_ptr, concptr who_name)

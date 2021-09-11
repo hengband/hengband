@@ -42,7 +42,7 @@
 /*!
  * @brief 生成されたベースアイテムに魔法的な強化を与えるメインルーチン
  * Complete the "creation" of an object by applying "magic" to the item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param lev 生成基準階
  * @param mode 生成オプション

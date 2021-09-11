@@ -284,7 +284,7 @@ void store_shuffle(player_type *player_ptr, int which)
 /*!
  * @brief 店の品揃えを変化させる /
  * Maintain the inventory at the stores.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param town_num 町のID
  * @param store_num 店舗種類のID
  * @param chance 更新商品数

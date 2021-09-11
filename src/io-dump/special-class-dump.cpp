@@ -26,7 +26,7 @@ typedef struct {
 
 /*!
  * @brief 魔力喰いを持つクラスの情報をダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_magic_eater(player_type *player_ptr, FILE *fff)
@@ -86,7 +86,7 @@ static void dump_magic_eater(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief 鍛冶師のエッセンス情報をダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_smith(player_type *player_ptr, FILE *fff)
@@ -149,7 +149,7 @@ static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_
 
 /*!
  * @brief 青魔道士の学習済魔法をダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 static void dump_blue_mage(player_type *player_ptr, FILE *fff)
@@ -214,7 +214,7 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
 
 /*!
  * @brief プレイヤーの職業能力情報をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
 void dump_aux_class_special(player_type *player_ptr, FILE *fff)

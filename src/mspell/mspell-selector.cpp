@@ -194,7 +194,7 @@ static bool spell_world(RF_ABILITY spell)
 /*!
  * @brief ID値が特別効果のモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell special.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
@@ -242,7 +242,7 @@ static bool spell_dispel(RF_ABILITY spell)
 /*!
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの構造体配列ID
  * @param spells 候補魔法IDをまとめた配列
  * @param num spellsの長さ

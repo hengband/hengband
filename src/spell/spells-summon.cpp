@@ -225,7 +225,7 @@ bool cast_summon_greater_demon(player_type *player_ptr)
 
 /*!
  * @brief 同族召喚(援軍)処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param level 召喚基準レベル
  * @param y 召喚先Y座標
  * @param x 召喚先X座標
@@ -242,7 +242,7 @@ bool summon_kin_player(player_type *player_ptr, DEPTH level, POSITION y, POSITIO
 
 /*!
  * @brief サイバーデーモンの召喚
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 召喚主のモンスターID(0ならばプレイヤー)
  * @param y 召喚位置Y座標
  * @param x 召喚位置X座標
@@ -322,7 +322,7 @@ void mitokohmon(player_type *player_ptr)
 
 /*!
  * @brief HI_SUMMON(上級召喚)処理発動
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 召喚位置Y座標
  * @param x 召喚位置X座標
  * @param can_pet プレイヤーのペットとなる可能性があるならばTRUEにする
@@ -420,7 +420,7 @@ int activate_hi_summon(player_type *player_ptr, POSITION y, POSITION x, bool can
 
 /*!
  * @brief 「悪霊召喚」のランダムな効果を決定して処理する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向ID
  */
 void cast_invoke_spirits(player_type *player_ptr, DIRECTION dir)

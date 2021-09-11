@@ -41,7 +41,7 @@ bool leave_store = false;
 /*!
  * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
- * @param player_ptr 顧客となるクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @note
  * <pre>
  * Note that we must allow the use of a few "special" commands

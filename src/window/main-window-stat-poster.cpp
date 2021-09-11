@@ -130,7 +130,7 @@ void print_stun(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの空腹状態を表示する / Prints status of hunger
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_hunger(player_type *player_ptr)
 {
@@ -167,7 +167,7 @@ void print_hunger(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Display is always exactly 10 characters wide (see below)
  * This function was a major bottleneck when resting, so a lot of
@@ -270,7 +270,7 @@ void print_state(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの行動速度を表示する / Prints the speed_value of a character.			-CJS-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_speed(player_type *player_ptr)
 {
@@ -327,7 +327,7 @@ void print_speed(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの呪文学習可能状態を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_study(player_type *player_ptr)
 {
@@ -345,7 +345,7 @@ void print_study(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーのものまね可能状態を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_imitation(player_type *player_ptr)
 {
@@ -368,7 +368,7 @@ void print_imitation(player_type *player_ptr)
 
 /*!
  * @brief 画面下部に表示すべき呪術の呪文をリストアップする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @bar_flags 表示可否を決めるためのフラグ群
  */
 static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
@@ -671,7 +671,7 @@ void print_status(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_frame_extra(player_type *player_ptr)
 {

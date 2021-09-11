@@ -9,7 +9,7 @@
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示2a /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Special display, part 2a
  */
 void display_player_misc_info(player_type *player_ptr)

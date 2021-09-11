@@ -37,7 +37,7 @@ bool create_rune_protection_one(player_type *player_ptr)
 /*!
  * @brief 爆発のルーン設置処理 /
  * Leave an "explosive rune" which prevents monster movement
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 設置場所
  * @param x 設置場所
  * @return 実際に設置が行われた場合TRUEを返す

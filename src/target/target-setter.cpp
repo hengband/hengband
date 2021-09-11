@@ -65,7 +65,7 @@ static ts_type *initialize_target_set_type(player_type *player_ptr, ts_type *ts_
 
 /*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 変更先のフロアY座標
  * @param x 変更先のフロアX座標
  * @details

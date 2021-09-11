@@ -58,7 +58,7 @@ static MONRACE_IDX poly_r_idx(player_type *player_ptr, MONRACE_IDX r_idx)
 /*!
  * @brief 指定座標にいるモンスターを変身させる /
  * Helper function -- return a "nearby" race for polymorphing
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 指定のY座標
  * @param x 指定のX座標
  * @return 実際に変身したらTRUEを返す

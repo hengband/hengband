@@ -2,7 +2,7 @@
 
 /*
  * @file player-status.h
- * @brief プレーヤーのステータスに関する状態取得処理ヘッダ
+ * @brief プレイヤーのステータスに関する状態取得処理ヘッダ
  */
 
 #include "system/angband.h"

@@ -12,7 +12,7 @@
 
 /*!
  * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param 換算レベル
  */
 PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr)
@@ -42,7 +42,7 @@ static void set_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLA
 
 /*!
  * @brief 受け取ったモンスター魔法のIDに応じて青魔法の効果情報をまとめたフォーマットを返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param p 情報を返す文字列参照ポインタ
  * @param power モンスター魔法のID
  */

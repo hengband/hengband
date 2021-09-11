@@ -55,7 +55,7 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
 
 /*!
  * @brief 攻撃時の期待値計算（スレイ→重量クリティカル→切れ味効果）
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 基本ダメージ
  * @param mult スレイ倍率（掛け算部分）
  * @param div スレイ倍率（割り算部分）
@@ -296,7 +296,7 @@ static void compare_weapon_aux(player_type *player_ptr, object_type *o_ptr, int 
 
 /*!
  * @brief 武器匠における武器一つ毎の完全情報を表示する。
- * @param player_type プレーヤーへの参照ポインタ
+ * @param player_type プレイヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @param row 表示する列の左端
  * @param col 表示する行の上端

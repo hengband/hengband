@@ -14,7 +14,7 @@
 /*!
  * @brief 魔道具の使用回数の残量を示すメッセージを表示する /
  * Describe the charges on an item in the inventory.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  */
 void inven_item_charges(player_type *player_ptr, INVENTORY_IDX item)
@@ -45,7 +45,7 @@ void inven_item_charges(player_type *player_ptr, INVENTORY_IDX item)
 /*!
  * @brief アイテムの残り所持数メッセージを表示する /
  * Describe an item in the inventory.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  */
 void inven_item_describe(player_type *player_ptr, INVENTORY_IDX item)
@@ -67,7 +67,7 @@ void inven_item_describe(player_type *player_ptr, INVENTORY_IDX item)
 /*!
  * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する /
  * Hack -- display an object kind in the current window
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param k_idx ベースアイテムの参照ID
  * @details
  * Include list of usable spells for readible books

@@ -14,8 +14,8 @@ PlayerEnergy::PlayerEnergy(player_type *player_ptr)
 }
 
 /*
- * @brief プレーヤーの行動エネルギーを更新する
- * @param player_ptr プレーヤーの参照ポインタ
+ * @brief プレイヤーの行動エネルギーを更新する
+ * @param player_ptr プレイヤーの参照ポインタ
  * @param need_cost 行動エネルギー
  * @param ut_type 現在値に対する演算方法
  */
@@ -46,7 +46,7 @@ void PlayerEnergy::div_player_turn_energy(ENERGY need_cost)
 
 /*
  * @brief ターン消費をなくす (主にコマンド実行に失敗した場合)
- * @param player_type プレーヤーへの参照ポインタ
+ * @param player_type プレイヤーへの参照ポインタ
  */
 void PlayerEnergy::reset_player_turn()
 {

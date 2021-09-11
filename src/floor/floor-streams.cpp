@@ -262,7 +262,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief ダンジョンの壁部にストリーマー（地質の変化）を与える /
  * Places "streamers" of rock through dungeon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param feat ストリーマー地形ID
  * @param chance 生成密度
  * @details

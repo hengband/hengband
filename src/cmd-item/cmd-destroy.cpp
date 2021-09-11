@@ -103,7 +103,7 @@ static bool select_destroying_item(player_type *player_ptr, destroy_type *destro
 
 /*!
  * @brief 一部職業で高位魔法書の破壊による経験値上昇の判定
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param destory_ptr アイテム破壊構造体への参照ポインタ
  * return 魔法書の破壊によって経験値が入るならばTRUE
  */
@@ -190,7 +190,7 @@ static void exe_destroy_item(player_type *player_ptr, destroy_type *destroy_ptr)
 
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_destroy(player_type *player_ptr)
 {

@@ -2,7 +2,7 @@
 
 /*!
  * @brief 画面番号を指定してダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @param display_player 画面表示へのコールバック
  * @param screen_num 画面番号
@@ -47,7 +47,7 @@ static void dump_player_status_with_screen_num(
 
 /*!
  * @brief プレイヤーのステータス表示をファイルにダンプする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @param display_player 画面表示へのコールバック
  */

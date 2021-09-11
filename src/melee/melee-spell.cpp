@@ -106,7 +106,7 @@ static void describe_melee_spell(player_type *player_ptr, melee_spell_type *ms_p
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 術者のモンスターID
  * @return 実際に特殊能力を使った場合TRUEを返す
  * @details

@@ -29,7 +29,7 @@
 /*!
  * @brief アイテム引き寄せ処理 /
  * Fetch an item (teleport it right underneath the caster)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 魔法の発動方向
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE

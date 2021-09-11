@@ -126,7 +126,7 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
 
 /*!
  * @brief 既知の生きているユニークまたは撃破済ユニークの一覧を表示させる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
  */
 void do_cmd_knowledge_uniques(player_type *player_ptr, bool is_alive)

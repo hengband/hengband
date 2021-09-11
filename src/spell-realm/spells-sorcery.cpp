@@ -17,7 +17,7 @@
 /*!
  * @brief アイテムの価値に応じた錬金術処理 /
  * Turns an object into gold, gain some of its value in a shop
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 処理が実際に行われたらTRUEを返す
  */
 bool alchemy(player_type *player_ptr)

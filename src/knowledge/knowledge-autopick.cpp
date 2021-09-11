@@ -17,7 +17,7 @@
 
 /*!
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_reload_autopick(player_type *player_ptr)
 {

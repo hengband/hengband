@@ -46,7 +46,7 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, int GF_TYPE, con
 
 /*!
  * @brief RF4_BR_*の処理。各種ブレス。 /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param GF_TYPE ブレスの属性
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標

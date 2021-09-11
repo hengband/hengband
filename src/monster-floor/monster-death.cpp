@@ -142,7 +142,7 @@ static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
 
 /*!
  * @brief アーティファクトのドロップ判定処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター死亡構造体への参照ポインタ
  * @return 何かドロップするなら1以上、何もドロップしないなら0
  */

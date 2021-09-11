@@ -13,7 +13,7 @@
 /*!
  * @brief 『一つの指輪』の効果処理 /
  * Hack -- activate the ring of power
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 発動の方向ID
  */
 static void exe_ring_of_power(player_type *player_ptr, DIRECTION dir)

@@ -24,7 +24,7 @@
 
 /*!
  * @brief ペットが敵に接近するための方向を決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 移動を試みているモンスターへの参照ポインタ
  * @param t_ptr 移動先モンスターへの参照ポインタ
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
@@ -49,7 +49,7 @@ static bool decide_pet_approch_direction(player_type *player_ptr, monster_type *
 
 /*!
  * @brief モンスターが敵に接近するための方向を決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param start モンスターIDの開始
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
@@ -96,7 +96,7 @@ static void decide_enemy_approch_direction(player_type *player_ptr, MONSTER_IDX 
 /*!
  * @brief モンスターが敵に接近するための方向を計算するメインルーチン
  * Calculate the direction to the next enemy
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param mm 移動するべき方角IDを返す参照ポインタ
  * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
@@ -139,7 +139,7 @@ bool get_enemy_dir(player_type *player_ptr, MONSTER_IDX m_idx, int *mm)
 
 /*!
  * @brief 不規則歩行フラグを持つモンスターの移動方向をその確率に基づいて決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_ptr モンスターへの参照ポインタ
  * @return 不規則な方向へ歩くことになったらTRUE
@@ -177,7 +177,7 @@ static bool random_walk(player_type *player_ptr, DIRECTION *mm, monster_type *m_
 
 /*!
  * @brief ペットや友好的なモンスターがフロアから逃げる処理を行う
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
  * @return モンスターがペットであればTRUE
@@ -213,10 +213,10 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 
 /*!
  * @brief モンスターの移動パターンを決定する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
- * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
+ * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 移動先が存在すればTRUE
  */
 bool decide_monster_movement_direction(player_type *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)

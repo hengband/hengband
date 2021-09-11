@@ -50,7 +50,7 @@ char debug_savefile[1024];
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する
  * Hack -- Dump a character description file
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param name 出力ファイル名
  * @return エラーコード
  * @details
@@ -194,7 +194,7 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
 
 /*!
  * @brief ファイル位置をシーク /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fd ファイルディスクリプタ
  * @param where ファイルバイト位置
  * @param flag FALSEならば現ファイルを超えた位置へシーク時エラー、TRUEなら足りない間を0で埋め尽くす
@@ -238,7 +238,7 @@ static errr counts_seek(player_type *player_ptr, int fd, uint32_t where, bool fl
 
 /*!
  * @brief ファイル位置を読み込む
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param where ファイルバイト位置
  * @return エラーコード
  * @details
@@ -260,7 +260,7 @@ uint32_t counts_read(player_type *player_ptr, int where)
 
 /*!
  * @brief ファイル位置に書き込む /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param where ファイルバイト位置
  * @param count 書き込む値
  * @return エラーコード

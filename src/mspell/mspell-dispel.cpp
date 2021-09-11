@@ -98,7 +98,7 @@ static void dispel_player(player_type *player_ptr)
 /*!
  * @brief RF4_DISPELの処理。魔力消去。 /
  * @param m_idx 呪文を唱えるモンスターID
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
