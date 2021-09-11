@@ -1,9 +1,13 @@
 ﻿#include "object-enchant/smith-tables.h"
+#include "artifact/random-art-effects.h"
 #include "object-enchant/object-smith.h"
+#include "object-enchant/smith-info.h"
 #include "object-enchant/smith-types.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 
+#include <memory>
+#include <unordered_map>
 #include <vector>
 
 /*!
@@ -326,119 +330,134 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_IM_DARK, {}, 0 },
 };
 
+namespace {
+
+template <typename T, typename... Args>
+std::shared_ptr<ISmithInfo> make_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, Args&&... args)
+{
+    return std::make_shared<T>(effect, name, category, std::move(need_essences), consumption, std::forward<Args>(args)...);
+}
+
+std::shared_ptr<ISmithInfo> make_basic_smith_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags)
+{
+    return make_info<BasicSmithInfo>(effect, name, category, std::move(need_essences), consumption, std::move(add_flags));
+}
+
+}
+
 /*!
  * @brief 鍛冶情報テーブル
  */
-const std::vector<smith_info_type> Smith::smith_info_table = {
-    { SmithEffect::NONE, _("なし", "None"), SmithCategory::NONE, { SmithEssence::NONE }, 0, {} },
+const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
+    make_basic_smith_info(SmithEffect::NONE, _("なし", "None"), SmithCategory::NONE, std::vector<SmithEssence>{ SmithEssence::NONE }, 0, {}),
 
-    { SmithEffect::STR, _("腕力", "strength"), SmithCategory::PVAL, { SmithEssence::STR }, 20, { TR_STR } },
-    { SmithEffect::INT, _("知能", "intelligence"), SmithCategory::PVAL, { SmithEssence::INT }, 20, { TR_INT } },
-    { SmithEffect::WIS, _("賢さ", "wisdom"), SmithCategory::PVAL, { SmithEssence::WIS }, 20, { TR_WIS } },
-    { SmithEffect::DEX, _("器用さ", "dexterity"), SmithCategory::PVAL, { SmithEssence::DEX }, 20, { TR_DEX } },
-    { SmithEffect::CON, _("耐久力", "constitution"), SmithCategory::PVAL, { SmithEssence::CON }, 20, { TR_CON } },
-    { SmithEffect::CHR, _("魅力", "charisma"), SmithCategory::PVAL, { SmithEssence::CHR }, 20, { TR_CHR } },
+    make_basic_smith_info(SmithEffect::STR, _("腕力", "strength"), SmithCategory::PVAL, { SmithEssence::STR }, 20, { TR_STR }),
+    make_basic_smith_info(SmithEffect::INT, _("知能", "intelligence"), SmithCategory::PVAL, { SmithEssence::INT }, 20, { TR_INT }),
+    make_basic_smith_info(SmithEffect::WIS, _("賢さ", "wisdom"), SmithCategory::PVAL, { SmithEssence::WIS }, 20, { TR_WIS }),
+    make_basic_smith_info(SmithEffect::DEX, _("器用さ", "dexterity"), SmithCategory::PVAL, { SmithEssence::DEX }, 20, { TR_DEX }),
+    make_basic_smith_info(SmithEffect::CON, _("耐久力", "constitution"), SmithCategory::PVAL, { SmithEssence::CON }, 20, { TR_CON }),
+    make_basic_smith_info(SmithEffect::CHR, _("魅力", "charisma"), SmithCategory::PVAL, { SmithEssence::CHR }, 20, { TR_CHR }),
 
-    { SmithEffect::SUST_STR, _("腕力維持", "sustain strength"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_STR } },
-    { SmithEffect::SUST_INT, _("知能維持", "sustain intelligence"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_INT } },
-    { SmithEffect::SUST_WIS, _("賢さ維持", "sustain wisdom"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_WIS } },
-    { SmithEffect::SUST_DEX, _("器用さ維持", "sustain dexterity"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_DEX } },
-    { SmithEffect::SUST_CON, _("耐久力維持", "sustain constitution"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CON } },
-    { SmithEffect::SUST_CHR, _("魅力維持", "sustain charisma"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CHR } },
+    make_basic_smith_info(SmithEffect::SUST_STR, _("腕力維持", "sustain strength"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_STR }),
+    make_basic_smith_info(SmithEffect::SUST_INT, _("知能維持", "sustain intelligence"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_INT }),
+    make_basic_smith_info(SmithEffect::SUST_WIS, _("賢さ維持", "sustain wisdom"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_WIS }),
+    make_basic_smith_info(SmithEffect::SUST_DEX, _("器用さ維持", "sustain dexterity"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_DEX }),
+    make_basic_smith_info(SmithEffect::SUST_CON, _("耐久力維持", "sustain constitution"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CON }),
+    make_basic_smith_info(SmithEffect::SUST_CHR, _("魅力維持", "sustain charisma"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CHR }),
 
-    { SmithEffect::MAGIC_MASTERY, _("魔力支配", "magic mastery"), SmithCategory::PVAL, { SmithEssence::MAGIC_MASTERY }, 20, { TR_MAGIC_MASTERY } },
-    { SmithEffect::STEALTH, _("隠密", "stealth"), SmithCategory::PVAL, { SmithEssence::STEALTH }, 40, { TR_STEALTH } },
-    { SmithEffect::SEARCH, _("探索", "searching"), SmithCategory::PVAL, { SmithEssence::SEARCH }, 15, { TR_SEARCH } },
-    { SmithEffect::INFRA, _("赤外線視力", "infravision"), SmithCategory::PVAL, { SmithEssence::INFRA }, 15, { TR_INFRA } },
-    { SmithEffect::TUNNEL, _("採掘", "digging"), SmithCategory::PVAL, { SmithEssence::TUNNEL }, 15, { TR_TUNNEL } },
-    { SmithEffect::SPEED, _("スピード", "speed"), SmithCategory::PVAL, { SmithEssence::SPEED }, 12, { TR_SPEED } },
-    { SmithEffect::BLOWS, _("追加攻撃", "extra attack"), SmithCategory::WEAPON_ATTR, { SmithEssence::BLOWS }, 20, { TR_BLOWS } },
+    make_basic_smith_info(SmithEffect::MAGIC_MASTERY, _("魔力支配", "magic mastery"), SmithCategory::PVAL, { SmithEssence::MAGIC_MASTERY }, 20, { TR_MAGIC_MASTERY }),
+    make_basic_smith_info(SmithEffect::STEALTH, _("隠密", "stealth"), SmithCategory::PVAL, { SmithEssence::STEALTH }, 40, { TR_STEALTH }),
+    make_basic_smith_info(SmithEffect::SEARCH, _("探索", "searching"), SmithCategory::PVAL, { SmithEssence::SEARCH }, 15, { TR_SEARCH }),
+    make_basic_smith_info(SmithEffect::INFRA, _("赤外線視力", "infravision"), SmithCategory::PVAL, { SmithEssence::INFRA }, 15, { TR_INFRA }),
+    make_basic_smith_info(SmithEffect::TUNNEL, _("採掘", "digging"), SmithCategory::PVAL, { SmithEssence::TUNNEL }, 15, { TR_TUNNEL }),
+    make_basic_smith_info(SmithEffect::SPEED, _("スピード", "speed"), SmithCategory::PVAL, { SmithEssence::SPEED }, 12, { TR_SPEED }),
+    make_basic_smith_info(SmithEffect::BLOWS, _("追加攻撃", "extra attack"), SmithCategory::WEAPON_ATTR, { SmithEssence::BLOWS }, 20, { TR_BLOWS }),
 
-    { SmithEffect::CHAOTIC, _("カオス攻撃", "chaos brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::CHAOTIC }, 15, { TR_CHAOTIC } },
-    { SmithEffect::VAMPIRIC, _("吸血攻撃", "vampiric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::VAMPIRIC }, 60, { TR_VAMPIRIC } },
-    { SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, { TR_EARTHQUAKE, TR_ACTIVATE } },
-    { SmithEffect::BRAND_POIS, _("毒殺", "poison brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_POIS }, 20, { TR_BRAND_POIS } },
-    { SmithEffect::BRAND_ACID, _("溶解", "acid brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ACID }, 20, { TR_BRAND_ACID } },
-    { SmithEffect::BRAND_ELEC, _("電撃", "electric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ELEC }, 20, { TR_BRAND_ELEC } },
-    { SmithEffect::BRAND_FIRE, _("焼棄", "fire brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_FIRE }, 20, { TR_BRAND_FIRE } },
-    { SmithEffect::BRAND_COLD, _("凍結", "cold brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_COLD }, 20, { TR_BRAND_COLD } },
+    make_basic_smith_info(SmithEffect::CHAOTIC, _("カオス攻撃", "chaos brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::CHAOTIC }, 15, { TR_CHAOTIC }),
+    make_basic_smith_info(SmithEffect::VAMPIRIC, _("吸血攻撃", "vampiric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::VAMPIRIC }, 60, { TR_VAMPIRIC }),
+    make_basic_smith_info(SmithEffect::BRAND_POIS, _("毒殺", "poison brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_POIS }, 20, { TR_BRAND_POIS }),
+    make_basic_smith_info(SmithEffect::BRAND_ACID, _("溶解", "acid brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ACID }, 20, { TR_BRAND_ACID }),
+    make_basic_smith_info(SmithEffect::BRAND_ELEC, _("電撃", "electric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ELEC }, 20, { TR_BRAND_ELEC }),
+    make_basic_smith_info(SmithEffect::BRAND_FIRE, _("焼棄", "fire brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_FIRE }, 20, { TR_BRAND_FIRE }),
+    make_basic_smith_info(SmithEffect::BRAND_COLD, _("凍結", "cold brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_COLD }, 20, { TR_BRAND_COLD }),
 
-    { SmithEffect::IM_ACID, _("酸免疫", "acid immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ACID } },
-    { SmithEffect::IM_ELEC, _("電撃免疫", "electric immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ELEC } },
-    { SmithEffect::IM_FIRE, _("火炎免疫", "fire immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_FIRE } },
-    { SmithEffect::IM_COLD, _("冷気免疫", "cold immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_COLD } },
-    { SmithEffect::REFLECT, _("反射", "reflection"), SmithCategory::RESISTANCE, { SmithEssence::REFLECT }, 20, { TR_REFLECT } },
+    make_basic_smith_info(SmithEffect::IM_ACID, _("酸免疫", "acid immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ACID }),
+    make_basic_smith_info(SmithEffect::IM_ELEC, _("電撃免疫", "electric immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ELEC }),
+    make_basic_smith_info(SmithEffect::IM_FIRE, _("火炎免疫", "fire immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_FIRE }),
+    make_basic_smith_info(SmithEffect::IM_COLD, _("冷気免疫", "cold immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_COLD }),
+    make_basic_smith_info(SmithEffect::REFLECT, _("反射", "reflection"), SmithCategory::RESISTANCE, { SmithEssence::REFLECT }, 20, { TR_REFLECT }),
 
-    { SmithEffect::RES_ACID, _("耐酸", "resistance to acid"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID }, 15, { TR_RES_ACID } },
-    { SmithEffect::RES_ELEC, _("耐電撃", "resistance to electric"), SmithCategory::RESISTANCE, { SmithEssence::RES_ELEC }, 15, { TR_RES_ELEC } },
-    { SmithEffect::RES_FIRE, _("耐火炎", "resistance to fire"), SmithCategory::RESISTANCE, { SmithEssence::RES_FIRE }, 15, { TR_RES_FIRE } },
-    { SmithEffect::RES_COLD, _("耐冷気", "resistance to cold"), SmithCategory::RESISTANCE, { SmithEssence::RES_COLD }, 15, { TR_RES_COLD } },
-    { SmithEffect::RES_POIS, _("耐毒", "resistance to poison"), SmithCategory::RESISTANCE, { SmithEssence::RES_POIS }, 25, { TR_RES_POIS } },
-    { SmithEffect::RES_FEAR, _("耐恐怖", "resistance to fear"), SmithCategory::RESISTANCE, { SmithEssence::RES_FEAR }, 20, { TR_RES_FEAR } },
-    { SmithEffect::RES_LITE, _("耐閃光", "resistance to light"), SmithCategory::RESISTANCE, { SmithEssence::RES_LITE }, 20, { TR_RES_LITE } },
-    { SmithEffect::RES_DARK, _("耐暗黒", "resistance to dark"), SmithCategory::RESISTANCE, { SmithEssence::RES_DARK }, 20, { TR_RES_DARK } },
-    { SmithEffect::RES_BLIND, _("耐盲目", "resistance to blind"), SmithCategory::RESISTANCE, { SmithEssence::RES_BLIND }, 20, { TR_RES_BLIND } },
-    { SmithEffect::RES_CONF, _("耐混乱", "resistance to confusion"), SmithCategory::RESISTANCE, { SmithEssence::RES_CONF }, 20, { TR_RES_CONF } },
-    { SmithEffect::RES_SOUND, _("耐轟音", "resistance to sound"), SmithCategory::RESISTANCE, { SmithEssence::RES_SOUND }, 20, { TR_RES_SOUND } },
-    { SmithEffect::RES_SHARDS, _("耐破片", "resistance to shard"), SmithCategory::RESISTANCE, { SmithEssence::RES_SHARDS }, 20, { TR_RES_SHARDS } },
-    { SmithEffect::RES_NETHER, _("耐地獄", "resistance to nether"), SmithCategory::RESISTANCE, { SmithEssence::RES_NETHER }, 20, { TR_RES_NETHER } },
-    { SmithEffect::RES_NEXUS, _("耐因果混乱", "resistance to nexus"), SmithCategory::RESISTANCE, { SmithEssence::RES_NEXUS }, 20, { TR_RES_NEXUS } },
-    { SmithEffect::RES_CHAOS, _("耐カオス", "resistance to chaos"), SmithCategory::RESISTANCE, { SmithEssence::RES_CHAOS }, 20, { TR_RES_CHAOS } },
-    { SmithEffect::RES_DISEN, _("耐劣化", "resistance to disenchantment"), SmithCategory::RESISTANCE, { SmithEssence::RES_DISEN }, 20, { TR_RES_DISEN } },
+    make_basic_smith_info(SmithEffect::RES_ACID, _("耐酸", "resistance to acid"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID }, 15, { TR_RES_ACID }),
+    make_basic_smith_info(SmithEffect::RES_ELEC, _("耐電撃", "resistance to electric"), SmithCategory::RESISTANCE, { SmithEssence::RES_ELEC }, 15, { TR_RES_ELEC }),
+    make_basic_smith_info(SmithEffect::RES_FIRE, _("耐火炎", "resistance to fire"), SmithCategory::RESISTANCE, { SmithEssence::RES_FIRE }, 15, { TR_RES_FIRE }),
+    make_basic_smith_info(SmithEffect::RES_COLD, _("耐冷気", "resistance to cold"), SmithCategory::RESISTANCE, { SmithEssence::RES_COLD }, 15, { TR_RES_COLD }),
+    make_basic_smith_info(SmithEffect::RES_POIS, _("耐毒", "resistance to poison"), SmithCategory::RESISTANCE, { SmithEssence::RES_POIS }, 25, { TR_RES_POIS }),
+    make_basic_smith_info(SmithEffect::RES_FEAR, _("耐恐怖", "resistance to fear"), SmithCategory::RESISTANCE, { SmithEssence::RES_FEAR }, 20, { TR_RES_FEAR }),
+    make_basic_smith_info(SmithEffect::RES_LITE, _("耐閃光", "resistance to light"), SmithCategory::RESISTANCE, { SmithEssence::RES_LITE }, 20, { TR_RES_LITE }),
+    make_basic_smith_info(SmithEffect::RES_DARK, _("耐暗黒", "resistance to dark"), SmithCategory::RESISTANCE, { SmithEssence::RES_DARK }, 20, { TR_RES_DARK }),
+    make_basic_smith_info(SmithEffect::RES_BLIND, _("耐盲目", "resistance to blind"), SmithCategory::RESISTANCE, { SmithEssence::RES_BLIND }, 20, { TR_RES_BLIND }),
+    make_basic_smith_info(SmithEffect::RES_CONF, _("耐混乱", "resistance to confusion"), SmithCategory::RESISTANCE, { SmithEssence::RES_CONF }, 20, { TR_RES_CONF }),
+    make_basic_smith_info(SmithEffect::RES_SOUND, _("耐轟音", "resistance to sound"), SmithCategory::RESISTANCE, { SmithEssence::RES_SOUND }, 20, { TR_RES_SOUND }),
+    make_basic_smith_info(SmithEffect::RES_SHARDS, _("耐破片", "resistance to shard"), SmithCategory::RESISTANCE, { SmithEssence::RES_SHARDS }, 20, { TR_RES_SHARDS }),
+    make_basic_smith_info(SmithEffect::RES_NETHER, _("耐地獄", "resistance to nether"), SmithCategory::RESISTANCE, { SmithEssence::RES_NETHER }, 20, { TR_RES_NETHER }),
+    make_basic_smith_info(SmithEffect::RES_NEXUS, _("耐因果混乱", "resistance to nexus"), SmithCategory::RESISTANCE, { SmithEssence::RES_NEXUS }, 20, { TR_RES_NEXUS }),
+    make_basic_smith_info(SmithEffect::RES_CHAOS, _("耐カオス", "resistance to chaos"), SmithCategory::RESISTANCE, { SmithEssence::RES_CHAOS }, 20, { TR_RES_CHAOS }),
+    make_basic_smith_info(SmithEffect::RES_DISEN, _("耐劣化", "resistance to disenchantment"), SmithCategory::RESISTANCE, { SmithEssence::RES_DISEN }, 20, { TR_RES_DISEN }),
 
-    { SmithEffect::HOLD_EXP, _("経験値維持", "hold experience"), SmithCategory::ABILITY, { SmithEssence::HOLD_EXP }, 20, { TR_HOLD_EXP } },
-    { SmithEffect::FREE_ACT, _("麻痺知らず", "free action"), SmithCategory::ABILITY, { SmithEssence::FREE_ACT }, 20, { TR_FREE_ACT } },
-    { SmithEffect::WARNING, _("警告", "warning"), SmithCategory::ABILITY, { SmithEssence::WARNING }, 20, { TR_WARNING } },
-    { SmithEffect::LEVITATION, _("浮遊", "levitation"), SmithCategory::ABILITY, { SmithEssence::LEVITATION }, 20, { TR_LEVITATION } },
-    { SmithEffect::SEE_INVIS, _("可視透明", "see invisible"), SmithCategory::ABILITY, { SmithEssence::SEE_INVIS }, 20, { TR_SEE_INVIS } },
-    { SmithEffect::SLOW_DIGEST, _("遅消化", "slow digestion"), SmithCategory::ABILITY, { SmithEssence::SLOW_DIGEST }, 15, { TR_SLOW_DIGEST } },
-    { SmithEffect::REGEN, _("急速回復", "regeneration"), SmithCategory::ABILITY, { SmithEssence::REGEN }, 20, { TR_REGEN } },
-    { SmithEffect::TELEPORT, _("テレポート", "teleport"), SmithCategory::ABILITY, { SmithEssence::TELEPORT }, 25, { TR_TELEPORT } },
-    { SmithEffect::NO_MAGIC, _("反魔法", "anti magic"), SmithCategory::ABILITY, { SmithEssence::NO_MAGIC }, 15, { TR_NO_MAGIC } },
-    { SmithEffect::LITE, _("永久光源", "permanent light"), SmithCategory::ABILITY, { SmithEssence::LITE }, 15, { TR_LITE_1 } },
+    make_basic_smith_info(SmithEffect::HOLD_EXP, _("経験値維持", "hold experience"), SmithCategory::ABILITY, { SmithEssence::HOLD_EXP }, 20, { TR_HOLD_EXP }),
+    make_basic_smith_info(SmithEffect::FREE_ACT, _("麻痺知らず", "free action"), SmithCategory::ABILITY, { SmithEssence::FREE_ACT }, 20, { TR_FREE_ACT }),
+    make_basic_smith_info(SmithEffect::WARNING, _("警告", "warning"), SmithCategory::ABILITY, { SmithEssence::WARNING }, 20, { TR_WARNING }),
+    make_basic_smith_info(SmithEffect::LEVITATION, _("浮遊", "levitation"), SmithCategory::ABILITY, { SmithEssence::LEVITATION }, 20, { TR_LEVITATION }),
+    make_basic_smith_info(SmithEffect::SEE_INVIS, _("可視透明", "see invisible"), SmithCategory::ABILITY, { SmithEssence::SEE_INVIS }, 20, { TR_SEE_INVIS }),
+    make_basic_smith_info(SmithEffect::SLOW_DIGEST, _("遅消化", "slow digestion"), SmithCategory::ABILITY, { SmithEssence::SLOW_DIGEST }, 15, { TR_SLOW_DIGEST }),
+    make_basic_smith_info(SmithEffect::REGEN, _("急速回復", "regeneration"), SmithCategory::ABILITY, { SmithEssence::REGEN }, 20, { TR_REGEN }),
+    make_basic_smith_info(SmithEffect::TELEPORT, _("テレポート", "teleport"), SmithCategory::ABILITY, { SmithEssence::TELEPORT }, 25, { TR_TELEPORT }),
+    make_basic_smith_info(SmithEffect::NO_MAGIC, _("反魔法", "anti magic"), SmithCategory::ABILITY, { SmithEssence::NO_MAGIC }, 15, { TR_NO_MAGIC }),
+    make_basic_smith_info(SmithEffect::LITE, _("永久光源", "permanent light"), SmithCategory::ABILITY, { SmithEssence::LITE }, 15, { TR_LITE_1 }),
 
-    { SmithEffect::SLAY_EVIL, _("邪悪倍打", "slay evil"), SmithCategory::SLAYING, { SmithEssence::SLAY_EVIL }, 100, { TR_SLAY_EVIL } },
-    { SmithEffect::SLAY_ANIMAL, _("動物倍打", "slay animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 20, { TR_SLAY_ANIMAL } },
-    { SmithEffect::SLAY_UNDEAD, _("不死倍打", "slay undead"), SmithCategory::SLAYING, { SmithEssence::SLAY_UNDEAD }, 20, { TR_SLAY_UNDEAD } },
-    { SmithEffect::SLAY_DEMON, _("悪魔倍打", "slay demon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DEMON }, 20, { TR_SLAY_DEMON } },
-    { SmithEffect::SLAY_ORC, _("オーク倍打", "slay orc"), SmithCategory::SLAYING, { SmithEssence::SLAY_ORC }, 20, { TR_SLAY_ORC } },
-    { SmithEffect::SLAY_TROLL, _("トロル倍打", "slay troll"), SmithCategory::SLAYING, { SmithEssence::SLAY_TROLL }, 20, { TR_SLAY_TROLL } },
-    { SmithEffect::SLAY_GIANT, _("巨人倍打", "slay giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 20, { TR_SLAY_GIANT } },
-    { SmithEffect::SLAY_DRAGON, _("竜倍打", "slay dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 20, { TR_SLAY_DRAGON } },
-    { SmithEffect::SLAY_HUMAN, _("人間倍打", "slay human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 20, { TR_SLAY_HUMAN } },
+    make_basic_smith_info(SmithEffect::SLAY_EVIL, _("邪悪倍打", "slay evil"), SmithCategory::SLAYING, { SmithEssence::SLAY_EVIL }, 100, { TR_SLAY_EVIL }),
+    make_basic_smith_info(SmithEffect::SLAY_ANIMAL, _("動物倍打", "slay animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 20, { TR_SLAY_ANIMAL }),
+    make_basic_smith_info(SmithEffect::SLAY_UNDEAD, _("不死倍打", "slay undead"), SmithCategory::SLAYING, { SmithEssence::SLAY_UNDEAD }, 20, { TR_SLAY_UNDEAD }),
+    make_basic_smith_info(SmithEffect::SLAY_DEMON, _("悪魔倍打", "slay demon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DEMON }, 20, { TR_SLAY_DEMON }),
+    make_basic_smith_info(SmithEffect::SLAY_ORC, _("オーク倍打", "slay orc"), SmithCategory::SLAYING, { SmithEssence::SLAY_ORC }, 20, { TR_SLAY_ORC }),
+    make_basic_smith_info(SmithEffect::SLAY_TROLL, _("トロル倍打", "slay troll"), SmithCategory::SLAYING, { SmithEssence::SLAY_TROLL }, 20, { TR_SLAY_TROLL }),
+    make_basic_smith_info(SmithEffect::SLAY_GIANT, _("巨人倍打", "slay giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 20, { TR_SLAY_GIANT }),
+    make_basic_smith_info(SmithEffect::SLAY_DRAGON, _("竜倍打", "slay dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 20, { TR_SLAY_DRAGON }),
+    make_basic_smith_info(SmithEffect::SLAY_HUMAN, _("人間倍打", "slay human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 20, { TR_SLAY_HUMAN }),
 
-    { SmithEffect::KILL_EVIL, _("邪悪倍倍打", "kill evil"), SmithCategory::NONE, { SmithEssence::SLAY_EVIL }, 0, { TR_KILL_EVIL } }, // 強力すぎるため無効(SmithCategory::NONE)
-    { SmithEffect::KILL_ANIMAL, _("動物倍倍打", "kill animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 60, { TR_KILL_ANIMAL } },
-    { SmithEffect::KILL_UNDEAD, _("不死倍倍打", "kill undead"), SmithCategory::SLAYING, { SmithEssence::SLAY_UNDEAD }, 60, { TR_KILL_UNDEAD } },
-    { SmithEffect::KILL_DEMON, _("悪魔倍倍打", "kill demon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DEMON }, 60, { TR_KILL_DEMON } },
-    { SmithEffect::KILL_ORC, _("オーク倍倍打", "kill orc"), SmithCategory::SLAYING, { SmithEssence::SLAY_ORC }, 60, { TR_KILL_ORC } },
-    { SmithEffect::KILL_TROLL, _("トロル倍倍打", "kill troll"), SmithCategory::SLAYING, { SmithEssence::SLAY_TROLL }, 60, { TR_KILL_TROLL } },
-    { SmithEffect::KILL_GIANT, _("巨人倍倍打", "kill giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 60, { TR_KILL_GIANT } },
-    { SmithEffect::KILL_DRAGON, _("竜倍倍打", "kill dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 60, { TR_KILL_DRAGON } },
-    { SmithEffect::KILL_HUMAN, _("人間倍倍打", "kill human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 60, { TR_KILL_HUMAN } },
+    make_basic_smith_info(SmithEffect::KILL_EVIL, _("邪悪倍倍打", "kill evil"), SmithCategory::NONE, { SmithEssence::SLAY_EVIL }, 0, { TR_KILL_EVIL }), // 強力すぎるため無効(SmithCategory:NONE)
+    make_basic_smith_info(SmithEffect::KILL_ANIMAL, _("動物倍倍打", "kill animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 60, { TR_KILL_ANIMAL }),
+    make_basic_smith_info(SmithEffect::KILL_UNDEAD, _("不死倍倍打", "kill undead"), SmithCategory::SLAYING, { SmithEssence::SLAY_UNDEAD }, 60, { TR_KILL_UNDEAD }),
+    make_basic_smith_info(SmithEffect::KILL_DEMON, _("悪魔倍倍打", "kill demon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DEMON }, 60, { TR_KILL_DEMON }),
+    make_basic_smith_info(SmithEffect::KILL_ORC, _("オーク倍倍打", "kill orc"), SmithCategory::SLAYING, { SmithEssence::SLAY_ORC }, 60, { TR_KILL_ORC }),
+    make_basic_smith_info(SmithEffect::KILL_TROLL, _("トロル倍倍打", "kill troll"), SmithCategory::SLAYING, { SmithEssence::SLAY_TROLL }, 60, { TR_KILL_TROLL }),
+    make_basic_smith_info(SmithEffect::KILL_GIANT, _("巨人倍倍打", "kill giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 60, { TR_KILL_GIANT }),
+    make_basic_smith_info(SmithEffect::KILL_DRAGON, _("竜倍倍打", "kill dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 60, { TR_KILL_DRAGON }),
+    make_basic_smith_info(SmithEffect::KILL_HUMAN, _("人間倍倍打", "kill human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 60, { TR_KILL_HUMAN }),
 
-    { SmithEffect::TELEPATHY, _("テレパシー", "telepathy"), SmithCategory::ESP, { SmithEssence::TELEPATHY }, 15, { TR_TELEPATHY } },
-    { SmithEffect::ESP_ANIMAL, _("動物ESP", "sense animal"), SmithCategory::ESP, { SmithEssence::SLAY_ANIMAL }, 40, { TR_ESP_ANIMAL } },
-    { SmithEffect::ESP_UNDEAD, _("不死ESP", "sense undead"), SmithCategory::ESP, { SmithEssence::SLAY_UNDEAD }, 40, { TR_ESP_UNDEAD } },
-    { SmithEffect::ESP_DEMON, _("悪魔ESP", "sense demon"), SmithCategory::ESP, { SmithEssence::SLAY_DEMON }, 40, { TR_ESP_DEMON } },
-    { SmithEffect::ESP_ORC, _("オークESP", "sense orc"), SmithCategory::ESP, { SmithEssence::SLAY_ORC }, 40, { TR_ESP_ORC } },
-    { SmithEffect::ESP_TROLL, _("トロルESP", "sense troll"), SmithCategory::ESP, { SmithEssence::SLAY_TROLL }, 40, { TR_ESP_TROLL } },
-    { SmithEffect::ESP_GIANT, _("巨人ESP", "sense giant"), SmithCategory::ESP, { SmithEssence::SLAY_GIANT }, 40, { TR_ESP_GIANT } },
-    { SmithEffect::ESP_DRAGON, _("竜ESP", "sense dragon"), SmithCategory::ESP, { SmithEssence::SLAY_DRAGON }, 40, { TR_ESP_DRAGON } },
-    { SmithEffect::ESP_HUMAN, _("人間ESP", "sense human"), SmithCategory::ESP, { SmithEssence::SLAY_HUMAN }, 40, { TR_ESP_HUMAN } },
+    make_basic_smith_info(SmithEffect::TELEPATHY, _("テレパシー", "telepathy"), SmithCategory::ESP, { SmithEssence::TELEPATHY }, 15, { TR_TELEPATHY }),
+    make_basic_smith_info(SmithEffect::ESP_ANIMAL, _("動物ESP", "sense animal"), SmithCategory::ESP, { SmithEssence::SLAY_ANIMAL }, 40, { TR_ESP_ANIMAL }),
+    make_basic_smith_info(SmithEffect::ESP_UNDEAD, _("不死ESP", "sense undead"), SmithCategory::ESP, { SmithEssence::SLAY_UNDEAD }, 40, { TR_ESP_UNDEAD }),
+    make_basic_smith_info(SmithEffect::ESP_DEMON, _("悪魔ESP", "sense demon"), SmithCategory::ESP, { SmithEssence::SLAY_DEMON }, 40, { TR_ESP_DEMON }),
+    make_basic_smith_info(SmithEffect::ESP_ORC, _("オークESP", "sense orc"), SmithCategory::ESP, { SmithEssence::SLAY_ORC }, 40, { TR_ESP_ORC }),
+    make_basic_smith_info(SmithEffect::ESP_TROLL, _("トロルESP", "sense troll"), SmithCategory::ESP, { SmithEssence::SLAY_TROLL }, 40, { TR_ESP_TROLL }),
+    make_basic_smith_info(SmithEffect::ESP_GIANT, _("巨人ESP", "sense giant"), SmithCategory::ESP, { SmithEssence::SLAY_GIANT }, 40, { TR_ESP_GIANT }),
+    make_basic_smith_info(SmithEffect::ESP_DRAGON, _("竜ESP", "sense dragon"), SmithCategory::ESP, { SmithEssence::SLAY_DRAGON }, 40, { TR_ESP_DRAGON }),
+    make_basic_smith_info(SmithEffect::ESP_HUMAN, _("人間ESP", "sense human"), SmithCategory::ESP, { SmithEssence::SLAY_HUMAN }, 40, { TR_ESP_HUMAN }),
 
-    { SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, { TR_RES_ACID, TR_ACTIVATE } },
-    { SmithEffect::TMP_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ETC, { SmithEssence::RES_ELEC }, 50, { TR_RES_ELEC, TR_ACTIVATE } },
-    { SmithEffect::TMP_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ETC, { SmithEssence::RES_FIRE }, 50, { TR_RES_FIRE, TR_ACTIVATE } },
-    { SmithEffect::TMP_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ETC, { SmithEssence::RES_COLD }, 50, { TR_RES_COLD, TR_ACTIVATE } },
-    { SmithEffect::SH_FIRE, _("火炎オーラ", "fiery sheath"), SmithCategory::ETC, { SmithEssence::RES_FIRE, SmithEssence::BRAND_FIRE }, 50, { TR_RES_FIRE, TR_SH_FIRE } },
-    { SmithEffect::SH_ELEC, _("電撃オーラ", "electric sheath"), SmithCategory::ETC, { SmithEssence::RES_ELEC, SmithEssence::BRAND_ELEC }, 50, { TR_RES_ELEC, TR_SH_ELEC } },
-    { SmithEffect::SH_COLD, _("冷気オーラ", "sheath of coldness"), SmithCategory::ETC, { SmithEssence::RES_COLD, SmithEssence::BRAND_COLD }, 50, { TR_RES_COLD, TR_SH_COLD } },
+    make_info<ActivationSmithInfo>(SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, TrFlags{ TR_EARTHQUAKE }, ACT_QUAKE),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, TrFlags{ TR_RES_ACID }, ACT_RESIST_ACID),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ETC, { SmithEssence::RES_ELEC }, 50, TrFlags{ TR_RES_ELEC }, ACT_RESIST_ELEC),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ETC, { SmithEssence::RES_FIRE }, 50, TrFlags{ TR_RES_FIRE }, ACT_RESIST_FIRE),
+    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ETC, { SmithEssence::RES_COLD }, 50, TrFlags{ TR_RES_COLD }, ACT_RESIST_COLD),
+    make_basic_smith_info(SmithEffect::SH_FIRE, _("火炎オーラ", "fiery sheath"), SmithCategory::ETC, { SmithEssence::RES_FIRE, SmithEssence::BRAND_FIRE }, 50, { TR_RES_FIRE, TR_SH_FIRE }),
+    make_basic_smith_info(SmithEffect::SH_ELEC, _("電撃オーラ", "electric sheath"), SmithCategory::ETC, { SmithEssence::RES_ELEC, SmithEssence::BRAND_ELEC }, 50, { TR_RES_ELEC, TR_SH_ELEC }),
+    make_basic_smith_info(SmithEffect::SH_COLD, _("冷気オーラ", "sheath of coldness"), SmithCategory::ETC, { SmithEssence::RES_COLD, SmithEssence::BRAND_COLD }, 50, { TR_RES_COLD, TR_SH_COLD }),
 
-    { SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD } },
-    { SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200, {} },
+    make_basic_smith_info(SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD }),
+    make_info<SlayingGlovesSmithInfo>(SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200),
 
-    { SmithEffect::ATTACK, _("攻撃", "weapon enchant"), SmithCategory::ENCHANT, { SmithEssence::ATTACK }, 30, {} },
-    { SmithEffect::AC, _("防御", "armor enchant"), SmithCategory::ENCHANT, { SmithEssence::AC }, 15, {} },
-    { SmithEffect::SUSTAIN, _("装備保持", "elements proof"), SmithCategory::ENCHANT, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 10, {} },
+    make_info<EnchantWeaponSmithInfo>(SmithEffect::ATTACK, _("攻撃", "weapon enchant"), SmithCategory::ENCHANT, { SmithEssence::ATTACK }, 30),
+    make_info<EnchantArmourSmithInfo>(SmithEffect::AC, _("防御", "armor enchant"), SmithCategory::ENCHANT, { SmithEssence::AC }, 15),
+    make_info<SustainSmithInfo>(SmithEffect::SUSTAIN, _("装備保持", "elements proof"), SmithCategory::ENCHANT, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 10),
 };

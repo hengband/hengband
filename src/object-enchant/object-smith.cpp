@@ -1,5 +1,5 @@
 ﻿#include "object-enchant/object-smith.h"
-#include "artifact/random-art-effects.h"
+#include "object-enchant/smith-info.h"
 #include "object-enchant/smith-tables.h"
 #include "object-enchant/smith-types.h"
 #include "object-enchant/special-object-flags.h"
@@ -56,13 +56,13 @@ Smith::Smith(player_type *player_ptr)
  * @param effect 情報を得る鍛冶効果
  * @return 鍛冶情報構造体へのポインタを保持する std::optional オブジェクトを返す
  */
-std::optional<const smith_info_type *> Smith::find_smith_info(SmithEffect effect)
+std::optional<const ISmithInfo *> Smith::find_smith_info(SmithEffect effect)
 {
     // 何度も呼ぶので線形探索を避けるため鍛冶効果から鍛冶情報のテーブルを引けるmapを作成しておく。
-    static std::unordered_map<SmithEffect, const smith_info_type *> search_map;
+    static std::unordered_map<SmithEffect, const ISmithInfo *> search_map;
     if (search_map.empty()) {
         for (const auto &info : smith_info_table) {
-            search_map.emplace(info.effect, &info);
+            search_map.emplace(info->effect, info.get());
         }
     }
 
@@ -216,7 +216,7 @@ TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
         return {};
     }
 
-    return info.value()->add_flags;
+    return info.value()->tr_flags();
 }
 
 /*!
@@ -228,20 +228,12 @@ TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
  */
 std::optional<random_art_activation_type> Smith::get_effect_activation(SmithEffect effect)
 {
-    switch (effect) {
-    case SmithEffect::TMP_RES_ACID:
-        return ACT_RESIST_ACID;
-    case SmithEffect::TMP_RES_ELEC:
-        return ACT_RESIST_ELEC;
-    case SmithEffect::TMP_RES_FIRE:
-        return ACT_RESIST_FIRE;
-    case SmithEffect::TMP_RES_COLD:
-        return ACT_RESIST_COLD;
-    case SmithEffect::EARTHQUAKE:
-        return ACT_QUAKE;
-    default:
+    auto info = find_smith_info(effect);
+    if (!info.has_value()) {
         return std::nullopt;
     }
+
+    return info.value()->activation_index();
 }
 
 /*!
@@ -272,8 +264,8 @@ std::vector<SmithEffect> Smith::get_effect_list(SmithCategory category)
     std::vector<SmithEffect> result;
 
     for (const auto &info : smith_info_table) {
-        if (info.category == category) {
-            result.push_back(info.effect);
+        if (info->category == category) {
+            result.push_back(info->effect);
         }
     }
 
@@ -453,39 +445,7 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
         this->player_ptr->magic_num1[enum2i(essence)] -= total_consumption;
     }
 
-    if (effect == SmithEffect::SLAY_GLOVE) {
-        HIT_PROB get_to_h = ((number + 1) / 2 + randint0(number / 2 + 1));
-        HIT_POINT get_to_d = ((number + 1) / 2 + randint0(number / 2 + 1));
-        o_ptr->xtra4 = (get_to_h << 8) + get_to_d;
-        o_ptr->to_h += get_to_h;
-        o_ptr->to_d += get_to_d;
-    }
-
-    if (effect == SmithEffect::ATTACK) {
-        const auto max_val = this->player_ptr->lev / 5 + 5;
-        if ((o_ptr->to_h >= max_val) && (o_ptr->to_d >= max_val)) {
-            return false;
-        } else {
-            o_ptr->to_h = static_cast<HIT_PROB>(std::min(o_ptr->to_h + 1, max_val));
-            o_ptr->to_d = static_cast<HIT_POINT>(std::min(o_ptr->to_d + 1, max_val));
-        }
-    } else if (effect == SmithEffect::AC) {
-        const auto max_val = this->player_ptr->lev / 5 + 5;
-        if (o_ptr->to_a >= max_val) {
-            return false;
-        } else {
-            o_ptr->to_a = static_cast<ARMOUR_CLASS>(std::min(o_ptr->to_a + 1, max_val));
-        }
-    } else if (effect == SmithEffect::SUSTAIN) {
-        o_ptr->art_flags.set(TR_IGNORE_ACID);
-        o_ptr->art_flags.set(TR_IGNORE_ELEC);
-        o_ptr->art_flags.set(TR_IGNORE_FIRE);
-        o_ptr->art_flags.set(TR_IGNORE_COLD);
-    } else {
-        o_ptr->xtra3 = static_cast<decltype(o_ptr->xtra3)>(effect);
-    }
-
-    return true;
+    return info.value()->add_essence(this->player_ptr, o_ptr, number);
 }
 
 /*!
@@ -496,17 +456,13 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
 void Smith::erase_essence(object_type *o_ptr) const
 {
     auto effect = Smith::object_effect(o_ptr);
-    if (effect == SmithEffect::SLAY_GLOVE) {
-        o_ptr->to_h -= (o_ptr->xtra4 >> 8);
-        o_ptr->to_d -= (o_ptr->xtra4 & 0x000f);
-        o_ptr->xtra4 = 0;
-        if (o_ptr->to_h < 0)
-            o_ptr->to_h = 0;
-        if (o_ptr->to_d < 0)
-            o_ptr->to_d = 0;
+    if (!effect.has_value()) {
+        return;
     }
-    o_ptr->xtra3 = 0;
-    auto flgs = object_flags(o_ptr);
-    if (flgs.has_none_of(TR_PVAL_FLAG_MASK))
-        o_ptr->pval = 0;
+    auto info = find_smith_info(effect.value());
+    if (!info.has_value()) {
+        return;
+    }
+
+    info.value()->erase_essence(o_ptr);
 }
