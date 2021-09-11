@@ -356,7 +356,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
         if (cast) {
             spell_hex.set_casting_flag(HEX_INHALE);
             do_cmd_quaff_potion(player_ptr);
-            casting_hex_flags(player_ptr) &= ~(1UL << HEX_INHALE);
+            spell_hex.reset_casting_flag(HEX_INHALE);
             add = false;
         }
 
@@ -592,7 +592,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
             if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
-                casting_hex_flags(player_ptr) &= ~(1UL << spell);
+                SpellHex(player_ptr).reset_casting_flag(spell);
                 casting_hex_num(player_ptr)--;
                 if (get_singing_song_id(player_ptr) == 0)
                     set_action(player_ptr, ACTION_NONE);
@@ -679,7 +679,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
             if (!flag) {
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
-                casting_hex_flags(player_ptr) &= ~(1UL << HEX_RESTORE);
+                SpellHex(player_ptr).reset_casting_flag(HEX_RESTORE);
                 if (cont)
                     casting_hex_num(player_ptr)--;
                 if (casting_hex_num(player_ptr))

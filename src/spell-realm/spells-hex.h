@@ -24,6 +24,7 @@ public:
     void eyes_on_eyes();
     void thief_teleport();
     void set_casting_flag(spell_hex_type type);
+    void reset_casting_flag(spell_hex_type type);
 
 private:
     player_type *player_ptr;
@@ -41,7 +42,6 @@ private:
     void gain_exp_master(const int spell);
 };
 
-#define casting_hex_flags(P_PTR) ((P_PTR)->magic_num1[0])
 #define casting_hex_num(P_PTR) ((P_PTR)->magic_num2[0])
 #define hex_revenge_power(P_PTR) ((P_PTR)->magic_num1[2])
 #define hex_revenge_turn(P_PTR) ((P_PTR)->magic_num2[2])

@@ -101,7 +101,7 @@ bool SpellHex::stop_one_spell()
     if (is_selected) {
         auto n = this->casting_spells[A2I(choice)];
         exe_spell(this->player_ptr, REALM_HEX, n, SPELL_STOP);
-        casting_hex_flags(this->player_ptr) &= ~(1UL << n);
+        this->reset_casting_flag(static_cast<spell_hex_type>(n));
         casting_hex_num(this->player_ptr)--;
     }
 
@@ -440,5 +440,12 @@ void SpellHex::set_casting_flag(spell_hex_type type)
 {
     auto value = static_cast<uint>(this->player_ptr->magic_num1[0]);
     set_bits(value, 1U << type);
+    this->player_ptr->magic_num1[0] = value;
+}
+
+void SpellHex::reset_casting_flag(spell_hex_type type)
+{
+    auto value = static_cast<uint>(this->player_ptr->magic_num1[0]);
+    reset_bits(value, 1U << type);
     this->player_ptr->magic_num1[0] = value;
 }
