@@ -37,6 +37,7 @@ enum class SmithEffect {
     BRAND_ELEC = 45, //!< 電撃
     BRAND_FIRE = 46, //!< 焼棄
     BRAND_COLD = 47, //!< 凍結
+    VORPAL = 48, //!< 切れ味
 
     IM_ACID = 60, //!< 酸免疫
     IM_ELEC = 61, //!< 電撃免疫

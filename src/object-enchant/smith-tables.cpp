@@ -388,6 +388,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::BRAND_ELEC, _("電撃", "electric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ELEC }, 20, { TR_BRAND_ELEC }),
     make_basic_smith_info(SmithEffect::BRAND_FIRE, _("焼棄", "fire brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_FIRE }, 20, { TR_BRAND_FIRE }),
     make_basic_smith_info(SmithEffect::BRAND_COLD, _("凍結", "cold brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_COLD }, 20, { TR_BRAND_COLD }),
+    make_basic_smith_info(SmithEffect::VORPAL, _("切れ味", "sharpness"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ACID, SmithEssence::BRAND_ELEC, SmithEssence::BRAND_FIRE, SmithEssence::BRAND_COLD }, 10, { TR_VORPAL }),
 
     make_basic_smith_info(SmithEffect::IM_ACID, _("酸免疫", "acid immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ACID }),
     make_basic_smith_info(SmithEffect::IM_ELEC, _("電撃免疫", "electric immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ELEC }),
