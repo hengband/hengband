@@ -340,10 +340,10 @@ void SpellHex::continue_revenge()
     }
 
     switch (this->get_revenge_type()) {
-    case 1:
+    case SpellHexRevengeType::PATIENCE:
         exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
         return;
-    case 2:
+    case SpellHexRevengeType::REVENGE:
         exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT);
         return;
     default:
@@ -502,12 +502,12 @@ void SpellHex::set_revenge_turn(byte turn, bool substitution)
     }
 }
 
-byte SpellHex::get_revenge_type() const
+SpellHexRevengeType SpellHex::get_revenge_type() const
 {
-    return this->player_ptr->magic_num2[1];
+    return static_cast <SpellHexRevengeType>(this->player_ptr->magic_num2[1]);
 }
 
-void SpellHex::set_revenge_type(byte type)
+void SpellHex::set_revenge_type(SpellHexRevengeType type)
 {
-    this->player_ptr->magic_num2[1] = type;
+    this->player_ptr->magic_num2[1] = enum2i(type);
 }

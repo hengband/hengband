@@ -446,11 +446,11 @@ static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
 
     if (spell_hex.get_revenge_turn() > 0) {
         auto revenge_type = spell_hex.get_revenge_type();
-        if (revenge_type == 1) {
+        if (revenge_type == SpellHexRevengeType::PATIENCE) {
             ADD_BAR_FLAG(BAR_PATIENCE);
         }
 
-        if (revenge_type == 2) {
+        if (revenge_type == SpellHexRevengeType::REVENGE) {
             ADD_BAR_FLAG(BAR_REVENGE);
         }
     }

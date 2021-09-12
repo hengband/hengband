@@ -3,6 +3,12 @@
 #include "system/angband.h"
 #include "realm/realm-hex-numbers.h"
 
+enum class SpellHexRevengeType : byte {
+    NONE = 0,
+    PATIENCE = 1,
+    REVENGE = 2,
+};
+
 struct monap_type;
 struct player_type;
 class SpellHex {
@@ -31,8 +37,8 @@ public:
     void set_revenge_power(int32_t power, bool substitution);
     byte get_revenge_turn() const;
     void set_revenge_turn(byte power, bool substitution);
-    byte get_revenge_type() const;
-    void set_revenge_type(byte type);
+    SpellHexRevengeType get_revenge_type() const;
+    void set_revenge_type(SpellHexRevengeType type);
 
 private:
     player_type *player_ptr;
