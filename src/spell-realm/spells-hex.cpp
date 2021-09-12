@@ -506,3 +506,8 @@ byte SpellHex::get_revenge_type() const
 {
     return this->player_ptr->magic_num2[1];
 }
+
+void SpellHex::set_revenge_type(byte type)
+{
+    this->player_ptr->magic_num2[1] = type;
+}

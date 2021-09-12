@@ -292,7 +292,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 return nullptr;
             }
 
-            hex_revenge_type(player_ptr) = 1;
+            spell_hex.set_revenge_type(1);
             spell_hex.set_revenge_turn(r, true);
             spell_hex.set_revenge_power(0, true);
             msg_print(_("じっと耐えることにした。", "You decide to endure damage for future retribution."));
@@ -312,8 +312,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                 }
 
-                /* Reset */
-                hex_revenge_type(player_ptr) = 0;
+                spell_hex.set_revenge_type(0);
                 spell_hex.set_revenge_turn(0, true);
                 spell_hex.set_revenge_power(0, true);
             }
@@ -864,7 +863,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 return nullptr;
             }
 
-            hex_revenge_type(player_ptr) = 2;
+            spell_hex.set_revenge_type(2);
             spell_hex.set_revenge_turn(r, true);
             msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
             add = false;

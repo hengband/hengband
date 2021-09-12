@@ -32,6 +32,7 @@ public:
     byte get_revenge_turn() const;
     void set_revenge_turn(byte power, bool substitution);
     byte get_revenge_type() const;
+    void set_revenge_type(byte type);
 
 private:
     player_type *player_ptr;
