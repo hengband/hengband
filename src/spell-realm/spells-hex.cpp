@@ -339,7 +339,7 @@ void SpellHex::continue_revenge()
         return;
     }
 
-    switch (hex_revenge_type(this->player_ptr)) {
+    switch (this->get_revenge_type()) {
     case 1:
         exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
         return;
@@ -500,4 +500,9 @@ void SpellHex::set_revenge_turn(byte turn, bool substitution)
     } else {
         this->player_ptr->magic_num2[2] -= turn;
     }
+}
+
+byte SpellHex::get_revenge_type() const
+{
+    return this->player_ptr->magic_num2[1];
 }

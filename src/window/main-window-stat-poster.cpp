@@ -445,10 +445,14 @@ static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
     }
 
     if (spell_hex.get_revenge_turn() > 0) {
-        if (hex_revenge_type(player_ptr) == 1)
+        auto revenge_type = spell_hex.get_revenge_type();
+        if (revenge_type == 1) {
             ADD_BAR_FLAG(BAR_PATIENCE);
-        if (hex_revenge_type(player_ptr) == 2)
+        }
+
+        if (revenge_type == 2) {
             ADD_BAR_FLAG(BAR_REVENGE);
+        }
     }
 }
 
