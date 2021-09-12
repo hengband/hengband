@@ -101,8 +101,12 @@ bool EnchantWeaponSmithInfo::add_essence(player_type *player_ptr, object_type *o
         return false;
     }
 
-    o_ptr->to_h = static_cast<HIT_PROB>(std::min(o_ptr->to_h + 1, max_val));
-    o_ptr->to_d = static_cast<HIT_POINT>(std::min(o_ptr->to_d + 1, max_val));
+    if (o_ptr->to_h < max_val) {
+        o_ptr->to_h++;
+    }
+    if (o_ptr->to_d < max_val) {
+        o_ptr->to_d++;
+    }
 
     return true;
 }
