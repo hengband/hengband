@@ -487,3 +487,17 @@ byte SpellHex::get_revenge_turn() const
 {
     return this->player_ptr->magic_num2[2];
 }
+
+/*!
+ * @brief 復讐の残りターンをセットするか、残りターン数を減らす
+ * @param turn 残りターン (非負整数であること)
+ * @param substitution セットならtrue、ターン減少ならfalse
+ */
+void SpellHex::set_revenge_turn(byte turn, bool substitution)
+{
+    if (substitution) {
+        this->player_ptr->magic_num2[2] = turn;
+    } else {
+        this->player_ptr->magic_num2[2] -= turn;
+    }
+}

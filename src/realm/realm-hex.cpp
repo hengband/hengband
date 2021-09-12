@@ -279,8 +279,10 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
         SpellHex spell_hex(player_ptr);
         power = MIN(200, spell_hex.get_revenge_power() * 2);
-        if (info)
+        if (info) {
             return info_damage(0, 0, power);
+        }
+
         if (cast) {
             int a = 3 - (player_ptr->pspeed - 100) / 10;
             byte r = 3 + randint1(3) + MAX(0, MIN(3, a));
@@ -291,16 +293,15 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             }
 
             hex_revenge_type(player_ptr) = 1;
-            hex_revenge_turn(player_ptr) = r;
+            spell_hex.set_revenge_turn(r, true);
             spell_hex.set_revenge_power(0, true);
             msg_print(_("じっと耐えることにした。", "You decide to endure damage for future retribution."));
             add = false;
         }
+
         if (cont) {
             POSITION rad = 2 + (power / 50);
-
-            hex_revenge_turn(player_ptr)--;
-
+            spell_hex.set_revenge_turn(1, false);
             if ((spell_hex.get_revenge_turn() == 0) || (power >= 200)) {
                 msg_print(_("我慢が解かれた！", "My patience is at an end!"));
                 if (power) {
@@ -313,7 +314,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
                 /* Reset */
                 hex_revenge_type(player_ptr) = 0;
-                hex_revenge_turn(player_ptr) = 0;
+                spell_hex.set_revenge_turn(0, true);
                 spell_hex.set_revenge_power(0, true);
             }
         }
@@ -864,13 +865,13 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             }
 
             hex_revenge_type(player_ptr) = 2;
-            hex_revenge_turn(player_ptr) = r;
+            spell_hex.set_revenge_turn(r, true);
             msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
             add = false;
         }
 
         if (cont) {
-            hex_revenge_turn(player_ptr)--;
+            spell_hex.set_revenge_turn(1, false);
             if (spell_hex.get_revenge_turn() == 0) {
                 DIRECTION dir;
 
