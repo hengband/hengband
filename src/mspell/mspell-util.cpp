@@ -21,6 +21,11 @@ mspell_cast_msg_blind::mspell_cast_msg_blind(concptr blind, concptr to_player, c
     , to_mons(to_mons)
  {}
 
+mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mons)
+     : to_player(to_player)
+     , to_mons(to_mons)
+ {}
+
 /*!
 * @brief プレイヤーがモンスターを見ることができるかの判定 /
 * @param floor_ptr 現在フロアへの参照ポインタ
@@ -115,11 +120,11 @@ bool monspell_message(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_
 * @param player_ptr プレイヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param msg1 プレイヤーを対象とする場合のメッセージ
-* @param msg2 モンスター対象とする場合のメッセージ
+* @param msgs メッセージの構造体
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void simple_monspell_message(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, int TARGET_TYPE)
+void simple_monspell_message(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int TARGET_TYPE)
 {
-    monspell_message_base(player_ptr, m_idx, t_idx, msg1, msg2, msg1, msg2, player_ptr->blind > 0, TARGET_TYPE);
+    monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.to_player, msgs.to_mons,
+        msgs.to_player, msgs.to_mons), player_ptr->blind > 0, TARGET_TYPE);
 }

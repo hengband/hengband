@@ -31,8 +31,15 @@ struct mspell_cast_msg_blind {
     concptr to_mons; /*!< 対モンスター*/
 };
 
+struct mspell_cast_msg_simple {
+    mspell_cast_msg_simple(concptr to_player, concptr to_mons);
+    mspell_cast_msg_simple() = default;
+    concptr to_player; /*!< プレイヤー対象*/
+    concptr to_mons; /*!< モンスター対象*/
+};
+
 bool see_monster(player_type *player_ptr, MONSTER_IDX m_idx);
 bool monster_near_player(floor_type *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx);
 bool monspell_message_base(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int TARGET_TYPE);
 bool monspell_message(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int TARGET_TYPE);
-void simple_monspell_message(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, int TARGET_TYPE);
+void simple_monspell_message(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int TARGET_TYPE);

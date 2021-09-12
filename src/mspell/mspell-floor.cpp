@@ -52,8 +52,10 @@
  */
 MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int target_type)
 {
-    simple_monspell_message(player_ptr, m_idx, t_idx, _("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
-        _("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), target_type);
+    mspell_cast_msg_simple msg(_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
+        _("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."));
+
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto result = MonsterSpellResult::make_valid();
@@ -175,8 +177,10 @@ MonsterSpellResult spell_RF6_TELE_TO(player_type *player_ptr, MONSTER_IDX m_idx,
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
-    simple_monspell_message(player_ptr, m_idx, t_idx, _("%^sがあなたを引き戻した。", "%^s commands you to return."),
-        _("%^sが%sを引き戻した。", "%^s commands %s to return."), TARGET_TYPE);
+    mspell_cast_msg_simple msg(_("%^sがあなたを引き戻した。", "%^s commands you to return."),
+        _("%^sが%sを引き戻した。", "%^s commands %s to return."));
+
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
@@ -240,8 +244,10 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *player_ptr, MONSTER_IDX m_id
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
-    simple_monspell_message(player_ptr, m_idx, t_idx, _("%^sにテレポートさせられた。", "%^s teleports you away."),
-        _("%^sは%sをテレポートさせた。", "%^s teleports %s away."), TARGET_TYPE);
+    mspell_cast_msg_simple msg(_("%^sにテレポートさせられた。", "%^s teleports you away."),
+        _("%^sは%sをテレポートさせた。", "%^s teleports %s away."));
+
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         if (is_echizen(player_ptr))

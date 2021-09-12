@@ -62,8 +62,10 @@ MonsterSpellResult spell_RF4_ROCKET(player_type *player_ptr, POSITION y, POSITIO
  */
 MonsterSpellResult spell_RF6_HAND_DOOM(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    simple_monspell_message(player_ptr, m_idx, t_idx, _("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
-        _("%^sが%sに<破滅の手>を放った！", "%^s invokes the Hand of Doom upon %s!"), TARGET_TYPE);
+    mspell_cast_msg_simple msg(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
+        _("%^sが%sに<破滅の手>を放った！", "%^s invokes the Hand of Doom upon %s!"));
+
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     ProjectResult proj_res;
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
