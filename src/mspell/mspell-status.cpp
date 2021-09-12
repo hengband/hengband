@@ -37,33 +37,44 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
+mspell_cast_msg_bad_status_to_player::mspell_cast_msg_bad_status_to_player(concptr blind, concptr not_blind, concptr resist, concptr saved_throw)
+    :   blind(blind)
+    ,   not_blind(not_blind)
+    ,   resist(resist)
+    ,   saved_throw(saved_throw)
+{}
+
+mspell_cast_msg_bad_status_to_monster::mspell_cast_msg_bad_status_to_monster(concptr default_msg, concptr resist, concptr saved_throw, concptr success)
+    :   default_msg(default_msg)
+    ,   resist(resist)
+    ,   saved_throw(saved_throw)
+    ,   success(success)
+{}
+
 /*!
  * @brief 状態異常呪文のメッセージ処理関数。 /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
- * @param msg1 盲目時メッセージ。
- * @param msg2 非盲目時メッセージ。
- * @param msg3 耐性有メッセージ。
- * @param msg4 抵抗時メッセージ。
+ * @param msgs メッセージの構造体
  * @param resist 耐性の有無を判別するフラグ
- * @param saving_throw 抵抗に成功したか判別するフラグ
+ * @param saved_throw 抵抗に成功したか判別するフラグ
  */
-void spell_badstatus_message_to_player(player_type *player_ptr, MONSTER_IDX m_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist,
-    bool saving_throw)
+void spell_badstatus_message_to_player(player_type *player_ptr, MONSTER_IDX m_idx, const mspell_cast_msg_bad_status_to_player &msgs, bool resist,
+    bool saved_throw)
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
 
     disturb(player_ptr, true, true);
     if (player_ptr->blind)
-        msg_format(msg1, m_name);
+        msg_format(msgs.blind, m_name);
     else
-        msg_format(msg2, m_name);
+        msg_format(msgs.not_blind, m_name);
 
     if (resist) {
-        msg_print(msg3);
-    } else if (saving_throw) {
-        msg_print(msg4);
+        msg_print(msgs.resist);
+    } else if (saved_throw) {
+        msg_print(msgs.saved_throw);
     }
 
     return;
@@ -74,15 +85,12 @@ void spell_badstatus_message_to_player(player_type *player_ptr, MONSTER_IDX m_id
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param msg1 通常時メッセージ。
- * @param msg2 耐性有メッセージ。
- * @param msg3 抵抗時メッセージ。
- * @param msg4 成功時メッセージ。
+ * @param msgs メッセージの構造体
  * @param resist 耐性の有無を判別するフラグ
- * @param saving_throw 抵抗に成功したか判別するフラグ
+ * @param saved_throw 抵抗に成功したか判別するフラグ
  */
-void spell_badstatus_message_to_mons(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist,
-    bool saving_throw)
+void spell_badstatus_message_to_mons(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_bad_status_to_monster &msgs, bool resist,
+    bool saved_throw)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
@@ -94,7 +102,7 @@ void spell_badstatus_message_to_mons(player_type *player_ptr, MONSTER_IDX m_idx,
 
     if (known) {
         if (see_either) {
-            msg_format(msg1, m_name, t_name);
+            msg_format(msgs.default_msg, m_name, t_name);
         } else {
             floor_ptr->monster_noise = true;
         }
@@ -102,13 +110,13 @@ void spell_badstatus_message_to_mons(player_type *player_ptr, MONSTER_IDX m_idx,
 
     if (resist) {
         if (see_t)
-            msg_format(msg2, t_name);
-    } else if (saving_throw) {
+            msg_format(msgs.resist, t_name);
+    } else if (saved_throw) {
         if (see_t)
-            msg_format(msg3, t_name);
+            msg_format(msgs.saved_throw, t_name);
     } else {
         if (see_t)
-            msg_format(msg4, t_name);
+            msg_format(msgs.success, t_name);
     }
 
     set_monster_csleep(player_ptr, t_idx, 0);
@@ -247,9 +255,12 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *player_ptr, M
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = (has_resist_fear(player_ptr) != 0);
         saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
-        spell_badstatus_message_to_player(player_ptr, m_idx, _("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."),
+        
+        mspell_cast_msg_bad_status_to_player msg(_("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."),
             _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion."), _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
-            _("しかし恐怖に侵されなかった。", "You refuse to be frightened."), resist, saving_throw);
+            _("しかし恐怖に侵されなかった。", "You refuse to be frightened."));
+
+        spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
             (void)BadStatusSetter(player_ptr).mod_afraidness(randint0(4) + 4);
@@ -265,9 +276,11 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *player_ptr, M
     resist = ((tr_ptr->flags3 & RF3_NO_FEAR) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion in front of %s."),
+    mspell_cast_msg_bad_status_to_monster msg(_("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion in front of %s."),
         _("%^sは恐怖を感じない。", "%^s refuses to be frightened."), _("%^sは恐怖を感じない。", "%^s refuses to be frightened."),
-        _("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), resist, saving_throw);
+        _("%^sは恐怖して逃げ出した！", "%^s flees in terror!"));
+    
+    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
         set_monster_monfear(player_ptr, t_idx, monster_fear_remaining(t_ptr) + randint0(4) + 4);
@@ -298,9 +311,12 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *player_ptr, M
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = (has_resist_blind(player_ptr) != 0);
         saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
-        spell_badstatus_message_to_player(player_ptr, m_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
+
+        mspell_cast_msg_bad_status_to_player msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
             _("%^sが呪文を唱えてあなたの目をくらました！", "%^s casts a spell, burning your eyes!"), _("しかし効果がなかった！", "You are unaffected!"),
-            _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw);
+            _("しかし効力を跳ね返した！", "You resist the effects!"));
+       
+        spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
             (void)BadStatusSetter(player_ptr).blindness(12 + randint0(4));
@@ -313,21 +329,23 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *player_ptr, M
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    concptr msg1;
+    concptr msg_default;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
     if (streq(t_name, "it")) {
-        msg1 = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %ss eyes.");
+        msg_default = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %ss eyes.");
     } else {
-        msg1 = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %s's eyes.");
+        msg_default = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %s's eyes.");
     }
 
     resist = ((tr_ptr->flags3 & RF3_NO_CONF) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg1, _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sは目が見えなくなった！ ", "%^s is blinded!"), resist, saving_throw);
+    mspell_cast_msg_bad_status_to_monster msg(msg_default, _("%^sには効果がなかった。", "%^s is unaffected."),
+        _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sは目が見えなくなった！ ", "%^s is blinded!"));
+
+    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
         (void)set_monster_confused(player_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
@@ -358,10 +376,13 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, player_type *player_ptr, MO
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = (has_resist_conf(player_ptr) != 0);
         saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
-        spell_badstatus_message_to_player(player_ptr, m_idx, _("%^sが何かをつぶやくと、頭を悩ます音がした。", "%^s mumbles, and you hear puzzling noises."),
+        
+        mspell_cast_msg_bad_status_to_player msg(_("%^sが何かをつぶやくと、頭を悩ます音がした。", "%^s mumbles, and you hear puzzling noises."),
             _("%^sが誘惑的な幻覚を作り出した。", "%^s creates a mesmerising illusion."),
             _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."),
-            _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."), resist, saving_throw);
+            _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."));
+        
+        spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
             (void)BadStatusSetter(player_ptr).mod_confusion(randint0(4) + 4);
@@ -377,9 +398,11 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, player_type *player_ptr, MO
     resist = ((tr_ptr->flags3 & RF3_NO_CONF) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, _("%^sが%sの前に幻惑的な幻をつくり出した。", "%^s casts a mesmerizing illusion in front of %s."),
+    mspell_cast_msg_bad_status_to_monster msg(_("%^sが%sの前に幻惑的な幻をつくり出した。", "%^s casts a mesmerizing illusion in front of %s."),
         _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."), _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."),
-        _("%^sは混乱したようだ。", "%^s seems confused."), resist, saving_throw);
+        _("%^sは混乱したようだ。", "%^s seems confused."));
+
+    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
         (void)set_monster_confused(player_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
@@ -410,9 +433,12 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *player_ptr, MO
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = (player_ptr->free_act != 0);
         saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
-        spell_badstatus_message_to_player(player_ptr, m_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        
+        mspell_cast_msg_bad_status_to_player msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
             _("%^sがあなたの目をじっと見つめた！", "%^s stares deep into your eyes!"), _("しかし効果がなかった！", "You are unaffected!"),
-            _("しかし効力を跳ね返した！", "You resist the effects!"), (bool)resist, saving_throw);
+            _("しかし効力を跳ね返した！", "You resist the effects!"));
+        
+        spell_badstatus_message_to_player(player_ptr, m_idx, msg, (bool)resist, saving_throw);
 
         if (!resist && !saving_throw) {
             (void)BadStatusSetter(player_ptr).mod_paralysis(randint0(4) + 4);
@@ -428,9 +454,10 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *player_ptr, MO
     resist = ((tr_ptr->flags1 & RF1_UNIQUE) != 0 || (tr_ptr->flags3 & RF3_NO_STUN) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, _("%^sは%sをじっと見つめた。", "%^s stares intently at %s."),
-        _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sは麻痺した！", "%^s is paralyzed!"),
-        (bool)resist, saving_throw);
+    mspell_cast_msg_bad_status_to_monster msg(_("%^sは%sをじっと見つめた。", "%^s stares intently at %s."),
+        _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sは麻痺した！", "%^s is paralyzed!"));
+
+    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, (bool)resist, saving_throw);
 
     if (!resist && !saving_throw) {
         (void)set_monster_stunned(player_ptr, t_idx, monster_stunned_remaining(t_ptr) + randint1(4) + 4);
@@ -494,9 +521,12 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *player_ptr, MO
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = (has_resist_conf(player_ptr) != 0);
         saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
-        spell_badstatus_message_to_player(player_ptr, m_idx, _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
+        
+        mspell_cast_msg_bad_status_to_player msg(_("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
             _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"), _("しかし効果がなかった！", "You are unaffected!"),
-            _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw);
+            _("しかし効力を跳ね返した！", "You resist the effects!"));
+        
+        spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
             (void)BadStatusSetter(player_ptr).mod_slowness(randint0(4) + 4, false);
@@ -509,21 +539,23 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *player_ptr, MO
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    concptr msg1;
+    concptr msg_default;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
     if (streq(t_name, "it")) {
-        msg1 = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %ss muscles.");
+        msg_default = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %ss muscles.");
     } else {
-        msg1 = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %s's muscles.");
+        msg_default = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %s's muscles.");
     }
 
     resist = ((tr_ptr->flags1 & RF1_UNIQUE) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg1, _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%^sには効果がなかった。", "%^s is unaffected."), _("%sの動きが遅くなった。", "%^s starts moving slower."), resist, saving_throw);
+    mspell_cast_msg_bad_status_to_monster msg(msg_default, _("%^sには効果がなかった。", "%^s is unaffected."),
+        _("%^sには効果がなかった。", "%^s is unaffected."), _("%sの動きが遅くなった。", "%^s starts moving slower."));
+
+    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
         set_monster_slow(player_ptr, t_idx, monster_slow_remaining(t_ptr) + 50);

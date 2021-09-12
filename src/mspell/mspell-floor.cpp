@@ -318,9 +318,12 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(player_type *player_ptr, MONSTER_IDX m_i
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = (has_resist_nexus(player_ptr) != 0);
         saving_throw = (randint0(100 + rlev / 2) < player_ptr->skill_sav);
-        spell_badstatus_message_to_player(player_ptr, m_idx, _("%^sが何か奇妙な言葉をつぶやいた。", "%^s mumbles strangely."),
+
+        mspell_cast_msg_bad_status_to_player msg(_("%^sが何か奇妙な言葉をつぶやいた。", "%^s mumbles strangely."),
             _("%^sがあなたの足を指さした。", "%^s gestures at your feet."), _("しかし効果がなかった！", "You are unaffected!"),
-            _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw);
+            _("しかし効力を跳ね返した！", "You resist the effects!"));
+
+        spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
             teleport_level(player_ptr, 0);
@@ -336,8 +339,10 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(player_type *player_ptr, MONSTER_IDX m_i
     resist = tr_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE);
     saving_throw = (tr_ptr->flags1 & RF1_QUESTOR) || (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, _("%^sが%sの足を指さした。", "%^s gestures at %s's feet."),
-        _("%^sには効果がなかった。", "%^s is unaffected!"), _("%^sは効力を跳ね返した！", "%^s resist the effects!"), "", resist, saving_throw);
+    mspell_cast_msg_bad_status_to_monster msg(_("%^sが%sの足を指さした。", "%^s gestures at %s's feet."),
+        _("%^sには効果がなかった。", "%^s is unaffected!"), _("%^sは効力を跳ね返した！", "%^s resist the effects!"), "");
+
+    spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
         teleport_level(player_ptr, (t_idx == player_ptr->riding) ? 0 : t_idx);
