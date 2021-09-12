@@ -335,7 +335,7 @@ bool SpellHex::is_casting_full_capacity() const
  */
 void SpellHex::continue_revenge()
 {
-    if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
+    if ((this->player_ptr->realm1 != REALM_HEX) || (this->get_revenge_turn() == 0)) {
         return;
     }
 
@@ -357,7 +357,7 @@ void SpellHex::continue_revenge()
  */
 void SpellHex::store_vengeful_damage(HIT_POINT dam)
 {
-    if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
+    if ((this->player_ptr->realm1 != REALM_HEX) || (this->get_revenge_turn() == 0)) {
         return;
     }
 
@@ -481,4 +481,9 @@ void SpellHex::set_revenge_power(int32_t power, bool substitution)
     } else {
         this->player_ptr->magic_num1[2] += power;
     }
+}
+
+byte SpellHex::get_revenge_turn() const
+{
+    return this->player_ptr->magic_num2[2];
 }

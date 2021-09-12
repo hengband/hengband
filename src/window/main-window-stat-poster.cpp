@@ -444,7 +444,7 @@ static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
         ADD_BAR_FLAG(BAR_CURE);
     }
 
-    if (hex_revenge_turn(player_ptr)) {
+    if (spell_hex.get_revenge_turn() > 0) {
         if (hex_revenge_type(player_ptr) == 1)
             ADD_BAR_FLAG(BAR_PATIENCE);
         if (hex_revenge_type(player_ptr) == 2)

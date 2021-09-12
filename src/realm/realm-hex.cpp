@@ -285,7 +285,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             int a = 3 - (player_ptr->pspeed - 100) / 10;
             byte r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
-            if (hex_revenge_turn(player_ptr) > 0) {
+            if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
                 return nullptr;
             }
@@ -301,7 +301,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
             hex_revenge_turn(player_ptr)--;
 
-            if ((hex_revenge_turn(player_ptr) <= 0) || (power >= 200)) {
+            if ((spell_hex.get_revenge_turn() == 0) || (power >= 200)) {
                 msg_print(_("我慢が解かれた！", "My patience is at an end!"));
                 if (power) {
                     project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
@@ -858,7 +858,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             int a = 3 - (player_ptr->pspeed - 100) / 10;
             r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
-            if (hex_revenge_turn(player_ptr) > 0) {
+            if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));
                 return nullptr;
             }
@@ -871,7 +871,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
         if (cont) {
             hex_revenge_turn(player_ptr)--;
-            if (hex_revenge_turn(player_ptr) <= 0) {
+            if (spell_hex.get_revenge_turn() == 0) {
                 DIRECTION dir;
 
                 if (power) {

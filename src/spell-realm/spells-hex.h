@@ -29,6 +29,7 @@ public:
     void add_casting_num(bool is_incremental);
     int32_t get_revenge_power() const;
     void set_revenge_power(int32_t power, bool substitution);
+    byte get_revenge_turn() const;
 
 private:
     player_type *player_ptr;
