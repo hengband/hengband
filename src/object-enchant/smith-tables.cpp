@@ -59,6 +59,9 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::RES_NEXUS,
     SmithEssence::RES_CHAOS,
     SmithEssence::RES_DISEN,
+    SmithEssence::RES_WATER,
+    SmithEssence::RES_TIME,
+    SmithEssence::RES_CURSE,
 
     SmithEssence::HOLD_EXP,
     SmithEssence::FREE_ACT,
@@ -81,6 +84,7 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::SLAY_GIANT,
     SmithEssence::SLAY_DRAGON,
     SmithEssence::SLAY_HUMAN,
+    SmithEssence::SLAY_GOOD,
 
     SmithEssence::ATTACK,
     SmithEssence::AC,
@@ -135,6 +139,9 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::RES_NEXUS, _("耐因果混乱", "res. nexus") },
     { SmithEssence::RES_CHAOS, _("耐カオス", "res. chaos") },
     { SmithEssence::RES_DISEN, _("耐劣化", "res. disen.") },
+    { SmithEssence::RES_WATER, _("耐水", "res. water") },
+    { SmithEssence::RES_TIME, _("耐時間逆転", "res. time") },
+    { SmithEssence::RES_CURSE, _("耐呪力", "res. curse") },
 
     { SmithEssence::HOLD_EXP, _("経験値維持", "hold exp") },
     { SmithEssence::FREE_ACT, _("麻痺知らず", "free action") },
@@ -157,6 +164,7 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::SLAY_GIANT, _("巨人倍打", "slay giant") },
     { SmithEssence::SLAY_DRAGON, _("竜倍打", "slay dragon") },
     { SmithEssence::SLAY_HUMAN, _("人間倍打", "slay human") },
+    { SmithEssence::SLAY_GOOD, _("善良倍打", "slay good") },
 
     { SmithEssence::ATTACK, _("攻撃", "weapon enc.") },
     { SmithEssence::AC, _("防御", "armor enc.") },
@@ -243,7 +251,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_WARNING, { SmithEssence::WARNING }, 10 },
     { TR_HIDE_TYPE, {}, 0 },
     { TR_SHOW_MODS, {}, 0 },
-    { TR_SLAY_GOOD, {}, 0 }, // todo
+    { TR_SLAY_GOOD, { SmithEssence::SLAY_GOOD }, 10 },
     { TR_LEVITATION, { SmithEssence::LEVITATION }, 10 },
     { TR_LITE_1, { SmithEssence::LITE }, 10 },
     { TR_SEE_INVIS, { SmithEssence::SEE_INVIS }, 10 },
@@ -263,7 +271,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_BLESSED, {}, 0 },
     { TR_ES_ATTACK, {}, 0 },
     { TR_ES_AC, {}, 0 },
-    { TR_KILL_GOOD, {}, 0 }, // todo
+    { TR_KILL_GOOD, { SmithEssence::SLAY_GOOD }, 10 },
 
     { TR_KILL_ANIMAL, { SmithEssence::SLAY_ANIMAL }, 10 },
     { TR_KILL_EVIL, { SmithEssence::SLAY_EVIL }, 10 },
@@ -282,7 +290,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_ESP_DRAGON, { SmithEssence::SLAY_DRAGON }, 10 },
     { TR_ESP_HUMAN, { SmithEssence::SLAY_HUMAN }, 10 },
     { TR_ESP_EVIL, { SmithEssence::SLAY_EVIL }, 10 },
-    { TR_ESP_GOOD, {}, 0 }, // TODO
+    { TR_ESP_GOOD, { SmithEssence::SLAY_GOOD }, 10 },
     { TR_ESP_NONLIVING, {}, 0 }, // TODO
     { TR_ESP_UNIQUE, {}, 0 }, // TODO
     { TR_FULL_NAME, {}, 0 },
@@ -313,12 +321,12 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_DOWN_SAVING, {}, 0 },
     { TR_NO_AC, {}, 0 },
     { TR_HEAVY_SPELL, {}, 0 },
-    { TR_RES_TIME, {}, 0 }, // TODO
-    { TR_RES_WATER, {}, 0 }, // TODO
+    { TR_RES_TIME, { SmithEssence::RES_TIME }, 10 },
+    { TR_RES_WATER, { SmithEssence::RES_WATER }, 10 },
     { TR_INVULN_ARROW, {}, 0 },
     { TR_DARK_SOURCE, {}, 0 },
     { TR_SUPPORTIVE, {}, 0 },
-    { TR_RES_CURSE, {}, 0 }, // TODO
+    { TR_RES_CURSE, { SmithEssence::RES_CURSE }, 10 },
     { TR_BERS_RAGE, {}, 0 },
     { TR_BRAND_MAGIC, {}, 0 },
     { TR_IMPACT, {}, 0 },
@@ -333,7 +341,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
 namespace {
 
 template <typename T, typename... Args>
-std::shared_ptr<ISmithInfo> make_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, Args&&... args)
+std::shared_ptr<ISmithInfo> make_info(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, Args &&...args)
 {
     return std::make_shared<T>(effect, name, category, std::move(need_essences), consumption, std::forward<Args>(args)...);
 }
@@ -403,6 +411,9 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::RES_NEXUS, _("耐因果混乱", "resistance to nexus"), SmithCategory::RESISTANCE, { SmithEssence::RES_NEXUS }, 20, { TR_RES_NEXUS }),
     make_basic_smith_info(SmithEffect::RES_CHAOS, _("耐カオス", "resistance to chaos"), SmithCategory::RESISTANCE, { SmithEssence::RES_CHAOS }, 20, { TR_RES_CHAOS }),
     make_basic_smith_info(SmithEffect::RES_DISEN, _("耐劣化", "resistance to disenchantment"), SmithCategory::RESISTANCE, { SmithEssence::RES_DISEN }, 20, { TR_RES_DISEN }),
+    make_basic_smith_info(SmithEffect::RES_WATER, _("耐水", "resistance to water"), SmithCategory::RESISTANCE, { SmithEssence::RES_WATER }, 20, { TR_RES_WATER }),
+    make_basic_smith_info(SmithEffect::RES_TIME, _("耐時間逆転", "resistance to time"), SmithCategory::RESISTANCE, { SmithEssence::RES_TIME }, 20, { TR_RES_TIME }),
+    make_basic_smith_info(SmithEffect::RES_CURSE, _("耐呪力", "resistance to curse"), SmithCategory::RESISTANCE, { SmithEssence::RES_CURSE }, 20, { TR_RES_CURSE }),
 
     make_basic_smith_info(SmithEffect::HOLD_EXP, _("経験値維持", "hold experience"), SmithCategory::ABILITY, { SmithEssence::HOLD_EXP }, 20, { TR_HOLD_EXP }),
     make_basic_smith_info(SmithEffect::FREE_ACT, _("麻痺知らず", "free action"), SmithCategory::ABILITY, { SmithEssence::FREE_ACT }, 20, { TR_FREE_ACT }),
@@ -424,6 +435,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::SLAY_GIANT, _("巨人倍打", "slay giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 20, { TR_SLAY_GIANT }),
     make_basic_smith_info(SmithEffect::SLAY_DRAGON, _("竜倍打", "slay dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 20, { TR_SLAY_DRAGON }),
     make_basic_smith_info(SmithEffect::SLAY_HUMAN, _("人間倍打", "slay human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 20, { TR_SLAY_HUMAN }),
+    make_basic_smith_info(SmithEffect::SLAY_GOOD, _("善良倍打", "slay good"), SmithCategory::SLAYING, { SmithEssence::SLAY_GOOD }, 20, { TR_SLAY_GOOD }),
 
     make_basic_smith_info(SmithEffect::KILL_EVIL, _("邪悪倍倍打", "kill evil"), SmithCategory::NONE, { SmithEssence::SLAY_EVIL }, 0, { TR_KILL_EVIL }), // 強力すぎるため無効(SmithCategory:NONE)
     make_basic_smith_info(SmithEffect::KILL_ANIMAL, _("動物倍倍打", "kill animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 60, { TR_KILL_ANIMAL }),
@@ -434,6 +446,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::KILL_GIANT, _("巨人倍倍打", "kill giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 60, { TR_KILL_GIANT }),
     make_basic_smith_info(SmithEffect::KILL_DRAGON, _("竜倍倍打", "kill dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 60, { TR_KILL_DRAGON }),
     make_basic_smith_info(SmithEffect::KILL_HUMAN, _("人間倍倍打", "kill human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 60, { TR_KILL_HUMAN }),
+    make_basic_smith_info(SmithEffect::KILL_GOOD, _("善良倍倍打", "kill good"), SmithCategory::SLAYING, { SmithEssence::SLAY_GOOD }, 60, { TR_KILL_GOOD }),
 
     make_basic_smith_info(SmithEffect::TELEPATHY, _("テレパシー", "telepathy"), SmithCategory::ESP, { SmithEssence::TELEPATHY }, 15, { TR_TELEPATHY }),
     make_basic_smith_info(SmithEffect::ESP_ANIMAL, _("動物ESP", "sense animal"), SmithCategory::ESP, { SmithEssence::SLAY_ANIMAL }, 40, { TR_ESP_ANIMAL }),
@@ -444,6 +457,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::ESP_GIANT, _("巨人ESP", "sense giant"), SmithCategory::ESP, { SmithEssence::SLAY_GIANT }, 40, { TR_ESP_GIANT }),
     make_basic_smith_info(SmithEffect::ESP_DRAGON, _("竜ESP", "sense dragon"), SmithCategory::ESP, { SmithEssence::SLAY_DRAGON }, 40, { TR_ESP_DRAGON }),
     make_basic_smith_info(SmithEffect::ESP_HUMAN, _("人間ESP", "sense human"), SmithCategory::ESP, { SmithEssence::SLAY_HUMAN }, 40, { TR_ESP_HUMAN }),
+    make_basic_smith_info(SmithEffect::ESP_GOOD, _("善良ESP", "sense good"), SmithCategory::ESP, { SmithEssence::SLAY_GOOD }, 40, { TR_ESP_GOOD }),
 
     make_info<ActivationSmithInfo>(SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, TrFlags{ TR_EARTHQUAKE }, ACT_QUAKE),
     make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, TrFlags{ TR_RES_ACID }, ACT_RESIST_ACID),

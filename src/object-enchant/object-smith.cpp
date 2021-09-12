@@ -182,25 +182,15 @@ int Smith::get_essence_consumption(SmithEffect effect, const object_type *o_ptr)
  */
 std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffect effect)
 {
-    auto category = SmithCategory::NONE;
-    if (auto info = find_smith_info(effect); info.has_value()) {
-        category = info.value()->category;
+    auto info = find_smith_info(effect);
+    if (!info.has_value()) {
+        return std::make_unique<TvalItemTester>(TV_NONE);
     }
 
-    if (effect == SmithEffect::SLAY_GLOVE) {
-        return std::make_unique<TvalItemTester>(TV_GLOVES);
-    }
-    if (category == SmithCategory::WEAPON_ATTR || category == SmithCategory::SLAYING) {
-        return std::make_unique<FuncItemTester>(&object_type::is_melee_ammo);
-    }
-    if (effect == SmithEffect::ATTACK) {
-        return std::make_unique<FuncItemTester>(&object_type::allow_enchant_weapon);
-    }
-    if (effect == SmithEffect::AC) {
-        return std::make_unique<FuncItemTester>(&object_type::is_armour);
-    }
-
-    return std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
+    auto tester_func = [i = info.value()](const object_type *o_ptr) {
+        return i->can_give_smith_effect(o_ptr);
+    };
+    return std::make_unique<FuncItemTester>(tester_func);
 }
 
 /*!

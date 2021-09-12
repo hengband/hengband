@@ -60,6 +60,9 @@ enum class SmithEffect {
     RES_NEXUS = 83, //!< 耐因果混乱
     RES_CHAOS = 84, //!< 耐カオス
     RES_DISEN = 85, //!< 耐劣化
+    RES_WATER = 86, //!< 耐水
+    RES_TIME = 87, //!< 耐時間逆転
+    RES_CURSE = 88, //!< 耐呪力
 
     HOLD_EXP = 100, //!< 経験値維持
     FREE_ACT = 101, //!< 麻痺知らず
@@ -81,7 +84,7 @@ enum class SmithEffect {
     SLAY_GIANT = 126, //!< 巨人倍打
     SLAY_DRAGON = 127, //!< 竜倍打
     SLAY_HUMAN = 128, //!< 人間倍打
-    /* @todo GOOD */
+    SLAY_GOOD = 129, //!< 善良倍打
 
     KILL_EVIL = 140, //!< 邪悪倍倍打
     KILL_ANIMAL = 141, //!< 動物倍倍打
@@ -92,6 +95,7 @@ enum class SmithEffect {
     KILL_GIANT = 146, //!< 巨人倍倍打
     KILL_DRAGON = 147, //!< 竜倍倍打
     KILL_HUMAN = 148, //!< 人間倍倍打
+    KILL_GOOD = 149, //!< 善良倍倍打
 
     TELEPATHY = 160, //!< テレパシー
     ESP_ANIMAL = 161, //!< 動物ESP
@@ -102,6 +106,7 @@ enum class SmithEffect {
     ESP_GIANT = 166, //!< 巨人ESP
     ESP_DRAGON = 167, //!< 竜ESP
     ESP_HUMAN = 168, //!< 人間ESP
+    ESP_GOOD = 169, //!< 善良ESP
 
     TMP_RES_ACID = 200, //!< 酸耐性発動
     TMP_RES_ELEC = 201, //!< 電撃耐性発動
@@ -202,6 +207,11 @@ enum class SmithEssence {
     SLAY_GIANT = 58, //!< 巨人倍打
     SLAY_DRAGON = 59, //!< 竜倍打
     SLAY_HUMAN = 60, //!< 人間倍打
+    SLAY_GOOD = 61, //!< 善良倍打
+
+    RES_WATER = 62, //!< 耐水
+    RES_TIME = 63, //!< 耐時間逆転
+    RES_CURSE = 64, //!< 耐呪力
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御
