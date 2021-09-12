@@ -330,8 +330,8 @@ BIT_FLAGS get_player_flags(player_type *player_ptr, tr_type tr_flag)
         return 0;
     case TR_BLESSED:
         return has_bless_blade(player_ptr);
-    case TR_ES_ATTACK:
-    case TR_ES_AC:
+    case TR_XXX_93:
+    case TR_XXX_94:
     case TR_KILL_GOOD:
     case TR_KILL_ANIMAL:
     case TR_KILL_EVIL:

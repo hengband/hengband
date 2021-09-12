@@ -103,8 +103,8 @@ enum tr_type : int32_t {
     TR_TELEPORT = 90, /* Item teleports player */
     TR_AGGRAVATE = 91, /* Item aggravates monsters */
     TR_BLESSED = 92, /* Item is Blessed */
-    TR_ES_ATTACK = 93, /* Fake flag for Smith */
-    TR_ES_AC = 94, /* Fake flag for Smith */
+    TR_XXX_93 = 93, //!< 未使用 / Unused
+    TR_XXX_94 = 94, //!< 未使用 / Unused
     TR_KILL_GOOD = 95, //!< 善良スレイ(X善)
 
     TR_KILL_ANIMAL = 96,

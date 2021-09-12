@@ -269,8 +269,8 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_TELEPORT, { SmithEssence::TELEPORT }, 10 },
     { TR_AGGRAVATE, {}, -1 },
     { TR_BLESSED, {}, 0 },
-    { TR_ES_ATTACK, {}, 0 },
-    { TR_ES_AC, {}, 0 },
+    { TR_XXX_93, {}, 0 },
+    { TR_XXX_94, {}, 0 },
     { TR_KILL_GOOD, { SmithEssence::SLAY_GOOD }, 10 },
 
     { TR_KILL_ANIMAL, { SmithEssence::SLAY_ANIMAL }, 10 },
