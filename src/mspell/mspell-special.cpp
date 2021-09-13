@@ -114,9 +114,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(player_type *player_ptr, POS
     int count = 0, k;
     int num = 1 + randint1(3);
     BIT_FLAGS mode = 0L;
+    mspell_cast_msg_blind msg(_("%^sが何か大量に投げた。", "%^s spreads something."),
+        _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."));
 
-    monspell_message(player_ptr, m_idx, t_idx, _("%^sが何か大量に投げた。", "%^s spreads something."),
-        _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), TARGET_TYPE);
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     for (k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_GRENADE, mode);

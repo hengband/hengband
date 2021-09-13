@@ -359,6 +359,8 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(player_type *player_ptr, MONSTER_IDX m_i
  */
 MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    mspell_cast_msg_blind msg;
+    concptr msg_done;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
@@ -379,19 +381,23 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSIT
     res.learnable = monster_to_player && !can_use_lite_area;
 
     if (can_use_lite_area) {
-        monspell_message(player_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
-            _("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."), _("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."), TARGET_TYPE);
+        msg.blind = _("%^sが何かをつぶやいた。", "%^s mumbles.");
+        msg.to_player = _("%^sが辺りを明るく照らした。", "%^s cast a spell to light up.");
+        msg.to_mons = _("%^sが辺りを明るく照らした。", "%^s cast a spell to light up.");
 
-        if (see_monster(player_ptr, t_idx) && monster_to_monster) {
-            msg_format(_("%^sは白い光に包まれた。", "%^s is surrounded by a white light."), t_name);
-        }
+        msg_done = _("%^sは白い光に包まれた。", "%^s is surrounded by a white light.");
     } else {
-        monspell_message(player_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."),
-            _("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."), TARGET_TYPE);
+        msg.blind = _("%^sが何かをつぶやいた。", "%^s mumbles.");
+        msg.to_player = _("%^sが暗闇の中で手を振った。", "%^s gestures in shadow.");
+        msg.to_mons = _("%^sが暗闇の中で手を振った。", "%^s gestures in shadow.");
 
-        if (see_monster(player_ptr, t_idx) && monster_to_monster) {
-            msg_format(_("%^sは暗闇に包まれた。", "%^s is surrounded by darkness."), t_name);
-        }
+        msg_done = _("%^sは暗闇に包まれた。", "%^s is surrounded by darkness.");
+    }
+
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+
+    if (see_monster(player_ptr, t_idx) && monster_to_monster) {
+        msg_format(msg_done, t_name);
     }
 
     if (monster_to_player) {
@@ -453,10 +459,10 @@ MonsterSpellResult spell_RF6_TRAPS(player_type *player_ptr, POSITION y, POSITION
 MonsterSpellResult spell_RF6_RAISE_DEAD(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."), _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."));
 
-    monspell_message(player_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."), _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."),
-        TARGET_TYPE);
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     animate_dead(player_ptr, m_idx, m_ptr->fy, m_ptr->fx);
 

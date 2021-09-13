@@ -445,10 +445,12 @@ MonsterSpellResult spell_RF6_HASTE(player_type *player_ptr, MONSTER_IDX m_idx, M
     char m_poss[10];
     monster_desc(player_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-    monspell_message_base(player_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    mspell_cast_msg msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
-        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)), player_ptr->blind > 0, TARGET_TYPE);
+        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)));
+
+    monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->blind > 0, TARGET_TYPE);
 
     if (set_monster_fast(player_ptr, m_idx, monster_fast_remaining(m_ptr) + 100)) {
         if (TARGET_TYPE == MONSTER_TO_PLAYER || (TARGET_TYPE == MONSTER_TO_MONSTER && see_m))
@@ -531,6 +533,7 @@ MonsterSpellResult spell_RF6_HEAL(player_type *player_ptr, MONSTER_IDX m_idx, MO
 {
     const auto res = MonsterSpellResult::make_valid();
 
+    mspell_cast_msg msg;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
@@ -542,24 +545,30 @@ MonsterSpellResult spell_RF6_HEAL(player_type *player_ptr, MONSTER_IDX m_idx, MO
 
     disturb(player_ptr, true, true);
 
-    monspell_message_base(player_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
-        _("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
-        _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)), player_ptr->blind > 0, TARGET_TYPE);
+    msg.to_player_true = _("%^sが何かをつぶやいた。", "%^s mumbles.");
+    msg.to_mons_true = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss));
+    msg.to_player_false = _("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss));
+    msg.to_mons_false = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss));
+
+    monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->blind > 0, TARGET_TYPE);
 
     m_ptr->hp += (rlev * 6);
     if (m_ptr->hp >= m_ptr->maxhp) {
         /* Fully healed */
         m_ptr->hp = m_ptr->maxhp;
 
-        monspell_message_base(player_ptr, m_idx, t_idx, _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
-            _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"), _("%^sは完全に治った！", "%^s looks completely healed!"),
-            _("%^sは完全に治った！", "%^s looks completely healed!"), !seen, TARGET_TYPE);
+        msg.to_player_true = _("%^sは完全に治ったようだ！", "%^s sounds completely healed!");
+        msg.to_mons_true = _("%^sは完全に治ったようだ！", "%^s sounds completely healed!");
+        msg.to_player_false = _("%^sは完全に治った！", "%^s looks completely healed!");
+        msg.to_mons_false = _("%^sは完全に治った！", "%^s looks completely healed!");
     } else {
-        monspell_message_base(player_ptr, m_idx, t_idx, _("%^sは体力を回復したようだ。", "%^s sounds healthier."),
-            _("%^sは体力を回復したようだ。", "%^s sounds healthier."), _("%^sは体力を回復したようだ。", "%^s looks healthier."),
-            _("%^sは体力を回復したようだ。", "%^s looks healthier."), !seen, TARGET_TYPE);
+        msg.to_player_true = _("%^sは体力を回復したようだ。", "%^s sounds healthier.");
+        msg.to_mons_true = _("%^sは体力を回復したようだ。", "%^s sounds healthier.");
+        msg.to_player_false = _("%^sは体力を回復したようだ。", "%^s looks healthier.");
+        msg.to_mons_false = _("%^sは体力を回復したようだ。", "%^s looks healthier.");
     }
+
+    monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, TARGET_TYPE);
 
     if (player_ptr->health_who == m_idx)
         player_ptr->redraw |= (PR_HEALTH);
@@ -590,10 +599,11 @@ MonsterSpellResult spell_RF6_INVULNER(player_type *player_ptr, MONSTER_IDX m_idx
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->blind && m_ptr->ml);
-
-    monspell_message_base(player_ptr, m_idx, t_idx, _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+    mspell_cast_msg msg(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
         _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
-        _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."), !seen, TARGET_TYPE);
+        _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."));
+
+    monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, TARGET_TYPE);
 
     if (m_ptr->ml) {
         MONRACE_IDX r_idx = m_ptr->r_idx;

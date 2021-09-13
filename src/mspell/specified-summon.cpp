@@ -274,7 +274,7 @@ MONSTER_NUMBER summon_THUNDERS(player_type *player_ptr, POSITION y, POSITION x, 
     for (auto k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_ANTI_TIGERS, PM_NONE);
     }
-    
+
     return count;
 }
 
@@ -311,7 +311,7 @@ MONSTER_NUMBER summon_PLASMA(player_type *player_ptr, POSITION y, POSITION x, in
     for (auto k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_PLASMA_VORTEX, PM_NONE);
     }
-    
+
     msg_print(_("プーラーズーマーッ！！", "P--la--s--ma--!!"));
     return count;
 }
