@@ -90,6 +90,7 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
 
     SmithEssence::EASY2_WEAPON,
     SmithEssence::STRENGTHEN_BOW,
+    SmithEssence::UNIQUE,
 
     SmithEssence::ATTACK,
     SmithEssence::AC,
@@ -175,6 +176,7 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
 
     { SmithEssence::EASY2_WEAPON, _("二刀流", "two weapons") },
     { SmithEssence::STRENGTHEN_BOW, _("射撃強化", "enc. ranged") },
+    { SmithEssence::UNIQUE, _("ユニーク", "unique") },
 
     { SmithEssence::ATTACK, _("攻撃", "weapon enc.") },
     { SmithEssence::AC, _("防御", "armor enc.") },
@@ -302,7 +304,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_ESP_EVIL, { SmithEssence::SLAY_EVIL }, 10 },
     { TR_ESP_GOOD, { SmithEssence::SLAY_GOOD }, 10 },
     { TR_ESP_NONLIVING, {}, 0 }, // TODO
-    { TR_ESP_UNIQUE, {}, 0 }, // TODO
+    { TR_ESP_UNIQUE, { SmithEssence::UNIQUE }, 20 },
     { TR_FULL_NAME, {}, 0 },
     { TR_FIXED_FLAVOR, {}, 0 },
     { TR_ADD_L_CURSE, {}, -1 },
@@ -473,6 +475,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::ESP_DRAGON, _("竜ESP", "sense dragon"), SmithCategory::ESP, { SmithEssence::SLAY_DRAGON }, 40, { TR_ESP_DRAGON }),
     make_basic_smith_info(SmithEffect::ESP_HUMAN, _("人間ESP", "sense human"), SmithCategory::ESP, { SmithEssence::SLAY_HUMAN }, 40, { TR_ESP_HUMAN }),
     make_basic_smith_info(SmithEffect::ESP_GOOD, _("善良ESP", "sense good"), SmithCategory::ESP, { SmithEssence::SLAY_GOOD }, 40, { TR_ESP_GOOD }),
+    make_basic_smith_info(SmithEffect::ESP_UNIQUE, _("ユニークESP", "sense unique"), SmithCategory::ESP, { SmithEssence::UNIQUE }, 100, { TR_ESP_UNIQUE }),
 
     make_info<ActivationSmithInfo>(SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, TrFlags{ TR_EARTHQUAKE }, ACT_QUAKE),
     make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, TrFlags{ TR_RES_ACID }, ACT_RESIST_ACID),

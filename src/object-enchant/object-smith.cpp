@@ -342,6 +342,8 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
         }
     }
 
+    const auto is_artifact = o_ptr->is_artifact();
+
     // アイテムをエッセンス抽出後の状態にする
     const object_type old_o = *o_ptr;
     o_ptr->prep(o_ptr->k_idx);
@@ -373,6 +375,10 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
                 drain_values[essence] += info.amount * std::max(pval, 1);
             }
         }
+    }
+
+    if (is_artifact) {
+        drain_values[SmithEssence::UNIQUE] += 10;
     }
 
     // ダイス/命中/ダメージ/ACからの抽出

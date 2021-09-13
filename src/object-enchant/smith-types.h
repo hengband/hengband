@@ -113,6 +113,7 @@ enum class SmithEffect {
     ESP_DRAGON = 167, //!< 竜ESP
     ESP_HUMAN = 168, //!< 人間ESP
     ESP_GOOD = 169, //!< 善良ESP
+    ESP_UNIQUE = 170, //!< ユニークESP
 
     TMP_RES_ACID = 200, //!< 酸耐性発動
     TMP_RES_ELEC = 201, //!< 電撃耐性発動
@@ -222,6 +223,7 @@ enum class SmithEssence {
     EASY2_WEAPON = 66, //!< 二刀流
     STRENGTHEN_BOW = 67, //!< 弓強化
     BRAND_MAGIC = 68, //!< 魔術属性攻撃
+    UNIQUE = 69, //!< ユニーク
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御
