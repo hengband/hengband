@@ -40,6 +40,7 @@ enum class SmithEffect {
     VORPAL = 48, //!< 切れ味
     XTRA_MIGHT = 49, //!< 強力射
     XTRA_SHOTS = 50, //!< 強速射
+    BRAND_MAGIC = 51, //!< 魔術属性攻撃
 
     IM_ACID = 60, //!< 酸免疫
     IM_ELEC = 61, //!< 電撃免疫
@@ -220,6 +221,7 @@ enum class SmithEssence {
     NO_TELE = 65, //!< 反テレポート
     EASY2_WEAPON = 66, //!< 二刀流
     STRENGTHEN_BOW = 67, //!< 弓強化
+    BRAND_MAGIC = 68, //!< 魔術属性攻撃
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御

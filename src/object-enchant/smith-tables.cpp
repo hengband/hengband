@@ -39,6 +39,7 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::BRAND_ELEC,
     SmithEssence::BRAND_FIRE,
     SmithEssence::BRAND_COLD,
+    SmithEssence::BRAND_MAGIC,
 
     SmithEssence::IMMUNITY,
     SmithEssence::REFLECT,
@@ -123,6 +124,7 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::BRAND_ELEC, _("電撃", "elec. brand") },
     { SmithEssence::BRAND_FIRE, _("焼棄", "fire brand") },
     { SmithEssence::BRAND_COLD, _("凍結", "cold brand") },
+    { SmithEssence::BRAND_MAGIC, _("魔術", "magic brand") },
 
     { SmithEssence::IMMUNITY, _("免疫", "immunity") },
     { SmithEssence::REFLECT, _("反射", "reflection") },
@@ -222,7 +224,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_SUST_CON, { SmithEssence::SUST_STATUS }, 10 },
     { TR_SUST_CHR, { SmithEssence::SUST_STATUS }, 10 },
     { TR_RIDING, {}, 0 },
-    { TR_EASY_SPELL, {}, 0 },
+    { TR_EASY_SPELL, { SmithEssence::BRAND_MAGIC }, 10 },
     { TR_IM_ACID, { SmithEssence::IMMUNITY }, 100 },
     { TR_IM_ELEC, { SmithEssence::IMMUNITY }, 100 },
     { TR_IM_FIRE, { SmithEssence::IMMUNITY }, 100 },
@@ -336,7 +338,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_SUPPORTIVE, { SmithEssence::EASY2_WEAPON }, 5 },
     { TR_RES_CURSE, { SmithEssence::RES_CURSE }, 10 },
     { TR_BERS_RAGE, {}, -1 },
-    { TR_BRAND_MAGIC, {}, 0 },
+    { TR_BRAND_MAGIC, { SmithEssence::BRAND_MAGIC }, 10 },
     { TR_IMPACT, {}, 0 },
     { TR_VUL_ACID, {}, -1 },
     { TR_VUL_COLD, {}, -1 },
@@ -397,6 +399,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::BRAND_FIRE, _("焼棄", "fire brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_FIRE }, 20, { TR_BRAND_FIRE }),
     make_basic_smith_info(SmithEffect::BRAND_COLD, _("凍結", "cold brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_COLD }, 20, { TR_BRAND_COLD }),
     make_basic_smith_info(SmithEffect::VORPAL, _("切れ味", "sharpness"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ACID, SmithEssence::BRAND_ELEC, SmithEssence::BRAND_FIRE, SmithEssence::BRAND_COLD }, 10, { TR_VORPAL }),
+    make_basic_smith_info(SmithEffect::BRAND_MAGIC, _("魔術属性攻撃", "magic brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_MAGIC }, 20, { TR_BRAND_MAGIC }),
     make_basic_smith_info(SmithEffect::XTRA_MIGHT, _("射撃倍率強化", "enhance firing power"), SmithCategory::WEAPON_ATTR, { SmithEssence::STRENGTHEN_BOW }, 50, { TR_XTRA_MIGHT }),
     make_basic_smith_info(SmithEffect::XTRA_SHOTS, _("射撃速度強化", "enhance firing rate"), SmithCategory::WEAPON_ATTR, { SmithEssence::STRENGTHEN_BOW }, 50, { TR_XTRA_SHOTS }),
 
