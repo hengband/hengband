@@ -88,6 +88,7 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::SLAY_GOOD,
 
     SmithEssence::EASY2_WEAPON,
+    SmithEssence::STRENGTHEN_BOW,
 
     SmithEssence::ATTACK,
     SmithEssence::AC,
@@ -171,6 +172,7 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::SLAY_GOOD, _("善良倍打", "slay good") },
 
     { SmithEssence::EASY2_WEAPON, _("二刀流", "two weapons") },
+    { SmithEssence::STRENGTHEN_BOW, _("射撃強化", "enc. ranged") },
 
     { SmithEssence::ATTACK, _("攻撃", "weapon enc.") },
     { SmithEssence::AC, _("防御", "armor enc.") },
@@ -264,8 +266,8 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_TELEPATHY, { SmithEssence::TELEPATHY }, 10 },
     { TR_SLOW_DIGEST, { SmithEssence::SLOW_DIGEST }, 10 },
     { TR_REGEN, { SmithEssence::REGEN }, 10 },
-    { TR_XTRA_MIGHT, { SmithEssence::STR }, 10 },
-    { TR_XTRA_SHOTS, { SmithEssence::DEX }, 10 },
+    { TR_XTRA_MIGHT, { SmithEssence::STRENGTHEN_BOW }, 10 },
+    { TR_XTRA_SHOTS, { SmithEssence::STRENGTHEN_BOW }, 10 },
     { TR_IGNORE_ACID, {}, 0 },
     { TR_IGNORE_ELEC, {}, 0 },
     { TR_IGNORE_FIRE, {}, 0 },
@@ -395,6 +397,8 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::BRAND_FIRE, _("焼棄", "fire brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_FIRE }, 20, { TR_BRAND_FIRE }),
     make_basic_smith_info(SmithEffect::BRAND_COLD, _("凍結", "cold brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_COLD }, 20, { TR_BRAND_COLD }),
     make_basic_smith_info(SmithEffect::VORPAL, _("切れ味", "sharpness"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ACID, SmithEssence::BRAND_ELEC, SmithEssence::BRAND_FIRE, SmithEssence::BRAND_COLD }, 10, { TR_VORPAL }),
+    make_basic_smith_info(SmithEffect::XTRA_MIGHT, _("射撃倍率強化", "enhance firing power"), SmithCategory::WEAPON_ATTR, { SmithEssence::STRENGTHEN_BOW }, 50, { TR_XTRA_MIGHT }),
+    make_basic_smith_info(SmithEffect::XTRA_SHOTS, _("射撃速度強化", "enhance firing rate"), SmithCategory::WEAPON_ATTR, { SmithEssence::STRENGTHEN_BOW }, 50, { TR_XTRA_SHOTS }),
 
     make_basic_smith_info(SmithEffect::IM_ACID, _("酸免疫", "acid immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY, SmithEssence::RES_ACID }, 200, { TR_IM_ACID }),
     make_basic_smith_info(SmithEffect::IM_ELEC, _("電撃免疫", "electric immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY, SmithEssence::RES_ELEC }, 200, { TR_IM_ELEC }),

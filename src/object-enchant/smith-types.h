@@ -38,6 +38,8 @@ enum class SmithEffect {
     BRAND_FIRE = 46, //!< 焼棄
     BRAND_COLD = 47, //!< 凍結
     VORPAL = 48, //!< 切れ味
+    XTRA_MIGHT = 49, //!< 強力射
+    XTRA_SHOTS = 50, //!< 強速射
 
     IM_ACID = 60, //!< 酸免疫
     IM_ELEC = 61, //!< 電撃免疫
@@ -217,6 +219,7 @@ enum class SmithEssence {
     RES_CURSE = 64, //!< 耐呪力
     NO_TELE = 65, //!< 反テレポート
     EASY2_WEAPON = 66, //!< 二刀流
+    STRENGTHEN_BOW = 67, //!< 弓強化
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御

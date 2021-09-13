@@ -67,6 +67,9 @@ bool BasicSmithInfo::can_give_smith_effect(const object_type *o_ptr) const
 
 bool BasicSmithInfo::can_give_smith_effect_impl(const object_type *o_ptr) const
 {
+    if (this->effect == SmithEffect::XTRA_MIGHT || this->effect == SmithEffect::XTRA_SHOTS) {
+        return o_ptr->tval == TV_BOW;
+    }
     if (this->effect == SmithEffect::VORPAL) {
         return (o_ptr->tval == TV_SWORD) && (o_ptr->sval != SV_POISON_NEEDLE);
     }
