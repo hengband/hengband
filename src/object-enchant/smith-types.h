@@ -75,6 +75,7 @@ enum class SmithEffect {
     TELEPORT = 107, //!< テレポート
     NO_MAGIC = 108, //!< 反魔法
     LITE = 109, //!< 永久光源
+    NO_TELE = 110, //!< テレポート
 
     SLAY_EVIL = 120, //!< 邪悪倍打
     SLAY_ANIMAL = 121, //!< 動物倍打
@@ -213,6 +214,7 @@ enum class SmithEssence {
     RES_WATER = 62, //!< 耐水
     RES_TIME = 63, //!< 耐時間逆転
     RES_CURSE = 64, //!< 耐呪力
+    NO_TELE = 65, //!< 反テレポート
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御

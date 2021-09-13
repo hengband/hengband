@@ -73,6 +73,7 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::TELEPORT,
     SmithEssence::NO_MAGIC,
     SmithEssence::LITE,
+    SmithEssence::NO_TELE,
     SmithEssence::TELEPATHY,
 
     SmithEssence::SLAY_EVIL,
@@ -154,6 +155,7 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::TELEPORT, _("テレポート", "teleport") },
     { SmithEssence::NO_MAGIC, _("反魔法", "anti magic") },
     { SmithEssence::LITE, _("永久光源", "perm. light") },
+    { SmithEssence::NO_TELE, _("反テレポ", "no teleport") },
 
     { SmithEssence::SLAY_EVIL, _("邪悪倍打", "slay animal") },
     { SmithEssence::SLAY_ANIMAL, _("動物倍打", "slay evil") },
@@ -244,7 +246,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_SH_ELEC, { SmithEssence::BRAND_ELEC, SmithEssence::RES_ELEC }, 10 },
     { TR_SLAY_HUMAN, { SmithEssence::SLAY_HUMAN }, 10 },
     { TR_SH_COLD, { SmithEssence::BRAND_COLD, SmithEssence::RES_COLD }, 10 },
-    { TR_NO_TELE, {}, -1 },
+    { TR_NO_TELE, { SmithEssence::NO_TELE }, 10 },
     { TR_NO_MAGIC, { SmithEssence::NO_MAGIC }, 10 },
     { TR_DEC_MANA, { SmithEssence::INT }, 10 },
     { TR_TY_CURSE, {}, -1 },
@@ -426,6 +428,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::TELEPORT, _("テレポート", "teleport"), SmithCategory::ABILITY, { SmithEssence::TELEPORT }, 25, { TR_TELEPORT }),
     make_basic_smith_info(SmithEffect::NO_MAGIC, _("反魔法", "anti magic"), SmithCategory::ABILITY, { SmithEssence::NO_MAGIC }, 15, { TR_NO_MAGIC }),
     make_basic_smith_info(SmithEffect::LITE, _("永久光源", "permanent light"), SmithCategory::ABILITY, { SmithEssence::LITE }, 15, { TR_LITE_1 }),
+    make_basic_smith_info(SmithEffect::NO_TELE, _("反テレポート", "prevent teleportation"), SmithCategory::ABILITY, { SmithEssence::NO_TELE }, 15, { TR_NO_TELE }),
 
     make_basic_smith_info(SmithEffect::SLAY_EVIL, _("邪悪倍打", "slay evil"), SmithCategory::SLAYING, { SmithEssence::SLAY_EVIL }, 100, { TR_SLAY_EVIL }),
     make_basic_smith_info(SmithEffect::SLAY_ANIMAL, _("動物倍打", "slay animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 20, { TR_SLAY_ANIMAL }),
