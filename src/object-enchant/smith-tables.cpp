@@ -87,6 +87,8 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::SLAY_HUMAN,
     SmithEssence::SLAY_GOOD,
 
+    SmithEssence::EASY2_WEAPON,
+
     SmithEssence::ATTACK,
     SmithEssence::AC,
 };
@@ -167,6 +169,8 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::SLAY_DRAGON, _("竜倍打", "slay dragon") },
     { SmithEssence::SLAY_HUMAN, _("人間倍打", "slay human") },
     { SmithEssence::SLAY_GOOD, _("善良倍打", "slay good") },
+
+    { SmithEssence::EASY2_WEAPON, _("二刀流", "two weapons") },
 
     { SmithEssence::ATTACK, _("攻撃", "weapon enc.") },
     { SmithEssence::AC, _("防御", "armor enc.") },
@@ -319,7 +323,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_FAST_DIGEST, {}, -1 },
     { TR_SLOW_REGEN, {}, -1 },
     { TR_MIGHTY_THROW, {}, 0 },
-    { TR_EASY2_WEAPON, { SmithEssence::DEX }, 20 },
+    { TR_EASY2_WEAPON, { SmithEssence::EASY2_WEAPON }, 10 },
     { TR_DOWN_SAVING, {}, -1 },
     { TR_NO_AC, {}, -1 },
     { TR_HEAVY_SPELL, {}, -1 },
@@ -327,7 +331,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_RES_WATER, { SmithEssence::RES_WATER }, 10 },
     { TR_INVULN_ARROW, {}, 0 },
     { TR_DARK_SOURCE, {}, 0 },
-    { TR_SUPPORTIVE, {}, 0 },
+    { TR_SUPPORTIVE, { SmithEssence::EASY2_WEAPON }, 5 },
     { TR_RES_CURSE, { SmithEssence::RES_CURSE }, 10 },
     { TR_BERS_RAGE, {}, -1 },
     { TR_BRAND_MAGIC, {}, 0 },
@@ -474,6 +478,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
 
     make_basic_smith_info(SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD }),
     make_info<SlayingGlovesSmithInfo>(SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200),
+    make_basic_smith_info(SmithEffect::EASY_2WEAPON, _("源氏の小手", "guantlets of Genji"), SmithCategory::WEAPON_ATTR, { SmithEssence::EASY2_WEAPON }, 20, { TR_EASY2_WEAPON }),
 
     make_info<EnchantWeaponSmithInfo>(SmithEffect::ATTACK, _("攻撃", "weapon enchant"), SmithCategory::ENCHANT, { SmithEssence::ATTACK }, 30),
     make_info<EnchantArmourSmithInfo>(SmithEffect::AC, _("防御", "armor enchant"), SmithCategory::ENCHANT, { SmithEssence::AC }, 15),

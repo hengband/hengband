@@ -70,6 +70,9 @@ bool BasicSmithInfo::can_give_smith_effect_impl(const object_type *o_ptr) const
     if (this->effect == SmithEffect::VORPAL) {
         return (o_ptr->tval == TV_SWORD) && (o_ptr->sval != SV_POISON_NEEDLE);
     }
+    if (this->effect == SmithEffect::EASY_2WEAPON) {
+        return (o_ptr->tval == TV_GLOVES);
+    }
     if (this->category == SmithCategory::WEAPON_ATTR || this->category == SmithCategory::SLAYING) {
         return o_ptr->is_melee_ammo();
     }
