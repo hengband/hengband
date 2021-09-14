@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "system/system-variables.h"
 
@@ -115,13 +115,9 @@ enum class SmithEffect {
     ESP_GOOD = 169, //!< 善良ESP
     ESP_UNIQUE = 170, //!< ユニークESP
 
-    TMP_RES_ACID = 200, //!< 酸耐性発動
-    TMP_RES_ELEC = 201, //!< 電撃耐性発動
-    TMP_RES_FIRE = 202, //!< 火炎耐性発動
-    TMP_RES_COLD = 203, //!< 冷気耐性発動
-    SH_FIRE = 204, //!< 火炎オーラ
-    SH_ELEC = 205, //!< 電撃オーラ
-    SH_COLD = 206, //!< 冷気オーラ
+    SH_FIRE = 200, //!< 火炎オーラ
+    SH_ELEC = 201, //!< 電撃オーラ
+    SH_COLD = 202, //!< 冷気オーラ
 
     RESISTANCE = 220, //!< 全耐性
     SLAY_GLOVE = 221, //!< 殺戮の小手
@@ -130,6 +126,12 @@ enum class SmithEffect {
 
     //! @note これ以降は鍛冶師の銘付きアイテムになる鍛冶効果ではないので、効果番号を保存しなくてよい。
     //  鍛冶効果のリストを管理するためだけのものである。したがって SAVE_EFFECT_MAX 以降に自動的に番号の割り振りを行う
+    ACT_QUAKE, //!< 地震発動
+    ACT_RES_ACID, //!< 酸耐性発動
+    ACT_RES_ELEC, //!< 電撃耐性発動
+    ACT_RES_FIRE, //!< 火炎耐性発動
+    ACT_RES_COLD, //!< 冷気耐性発動
+
     ATTACK, //!< 命中/ダメージ強化
     AC, //!< AC強化
     SUSTAIN, //!< 装備保持
@@ -147,6 +149,7 @@ enum class SmithCategory {
     SLAYING = 5, //!< スレイ
     ESP = 6, //!< ESP
     ETC = 7, //!< その他
+    ACTIVATION = 8, //!< 発動
     ENCHANT = 10, //!< 武器防具強化
 };
 

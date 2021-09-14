@@ -210,20 +210,15 @@ TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
 }
 
 /*!
- * @brief 鍛冶効果により得られる発動IDを得る
+ * @brief アイテムに付与されている発動効果の発動IDを得る
  *
- * @param effect 鍛冶効果
- * @return 鍛冶効果により得られる発動ID(random_art_activation_type型)
- * 鍛冶効果により得られる発動効果が無い場合は std::nullopt
+ * @param o_ptr アイテム構造体へのポインタ
+ * @return アイテムに付与されている発動効果の発動ID(random_art_activation_type型)
+ * 付与されている発動効果が無い場合は std::nullopt
  */
-std::optional<random_art_activation_type> Smith::get_effect_activation(SmithEffect effect)
+std::optional<random_art_activation_type> Smith::object_activation(const object_type *o_ptr)
 {
-    auto info = find_smith_info(effect);
-    if (!info.has_value()) {
-        return std::nullopt;
-    }
-
-    return info.value()->activation_index();
+    return o_ptr->smith_act_idx;
 }
 
 /*!
@@ -446,6 +441,8 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
  */
 void Smith::erase_essence(object_type *o_ptr) const
 {
+    o_ptr->smith_act_idx = std::nullopt;
+
     auto effect = Smith::object_effect(o_ptr);
     if (!effect.has_value()) {
         return;

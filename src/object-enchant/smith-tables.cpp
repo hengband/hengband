@@ -395,6 +395,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
 
     make_basic_smith_info(SmithEffect::CHAOTIC, _("カオス攻撃", "chaos brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::CHAOTIC }, 15, { TR_CHAOTIC }),
     make_basic_smith_info(SmithEffect::VAMPIRIC, _("吸血攻撃", "vampiric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::VAMPIRIC }, 60, { TR_VAMPIRIC }),
+    make_basic_smith_info(SmithEffect::EARTHQUAKE, _("地震攻撃", "quake brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::EATHQUAKE }, 15, { TR_EARTHQUAKE }),
     make_basic_smith_info(SmithEffect::BRAND_POIS, _("毒殺", "poison brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_POIS }, 20, { TR_BRAND_POIS }),
     make_basic_smith_info(SmithEffect::BRAND_ACID, _("溶解", "acid brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ACID }, 20, { TR_BRAND_ACID }),
     make_basic_smith_info(SmithEffect::BRAND_ELEC, _("電撃", "electric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ELEC }, 20, { TR_BRAND_ELEC }),
@@ -477,11 +478,6 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::ESP_GOOD, _("善良ESP", "sense good"), SmithCategory::ESP, { SmithEssence::SLAY_GOOD }, 40, { TR_ESP_GOOD }),
     make_basic_smith_info(SmithEffect::ESP_UNIQUE, _("ユニークESP", "sense unique"), SmithCategory::ESP, { SmithEssence::UNIQUE }, 100, { TR_ESP_UNIQUE }),
 
-    make_info<ActivationSmithInfo>(SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, TrFlags{ TR_EARTHQUAKE }, ACT_QUAKE),
-    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, TrFlags{ TR_RES_ACID }, ACT_RESIST_ACID),
-    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ETC, { SmithEssence::RES_ELEC }, 50, TrFlags{ TR_RES_ELEC }, ACT_RESIST_ELEC),
-    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ETC, { SmithEssence::RES_FIRE }, 50, TrFlags{ TR_RES_FIRE }, ACT_RESIST_FIRE),
-    make_info<ActivationSmithInfo>(SmithEffect::TMP_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ETC, { SmithEssence::RES_COLD }, 50, TrFlags{ TR_RES_COLD }, ACT_RESIST_COLD),
     make_basic_smith_info(SmithEffect::SH_FIRE, _("火炎オーラ", "fiery sheath"), SmithCategory::ETC, { SmithEssence::RES_FIRE, SmithEssence::BRAND_FIRE }, 50, { TR_RES_FIRE, TR_SH_FIRE }),
     make_basic_smith_info(SmithEffect::SH_ELEC, _("電撃オーラ", "electric sheath"), SmithCategory::ETC, { SmithEssence::RES_ELEC, SmithEssence::BRAND_ELEC }, 50, { TR_RES_ELEC, TR_SH_ELEC }),
     make_basic_smith_info(SmithEffect::SH_COLD, _("冷気オーラ", "sheath of coldness"), SmithCategory::ETC, { SmithEssence::RES_COLD, SmithEssence::BRAND_COLD }, 50, { TR_RES_COLD, TR_SH_COLD }),
@@ -489,6 +485,12 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD }),
     make_info<SlayingGlovesSmithInfo>(SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200),
     make_basic_smith_info(SmithEffect::EASY_2WEAPON, _("源氏の小手", "guantlets of Genji"), SmithCategory::WEAPON_ATTR, { SmithEssence::EASY2_WEAPON }, 20, { TR_EASY2_WEAPON }),
+
+    make_info<ActivationSmithInfo>(SmithEffect::ACT_QUAKE, _("地震発動", "quake activation"), SmithCategory::ACTIVATION, { SmithEssence::EATHQUAKE }, 15, ACT_QUAKE),
+    make_info<ActivationSmithInfo>(SmithEffect::ACT_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ACTIVATION, { SmithEssence::RES_ACID }, 30, ACT_RESIST_ACID),
+    make_info<ActivationSmithInfo>(SmithEffect::ACT_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ACTIVATION, { SmithEssence::RES_ELEC }, 30, ACT_RESIST_ELEC),
+    make_info<ActivationSmithInfo>(SmithEffect::ACT_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ACTIVATION, { SmithEssence::RES_FIRE }, 30, ACT_RESIST_FIRE),
+    make_info<ActivationSmithInfo>(SmithEffect::ACT_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ACTIVATION, { SmithEssence::RES_COLD }, 30, ACT_RESIST_COLD),
 
     make_info<EnchantWeaponSmithInfo>(SmithEffect::ATTACK, _("攻撃", "weapon enchant"), SmithCategory::ENCHANT, { SmithEssence::ATTACK }, 30),
     make_info<EnchantArmourSmithInfo>(SmithEffect::AC, _("防御", "armor enchant"), SmithCategory::ENCHANT, { SmithEssence::AC }, 15),

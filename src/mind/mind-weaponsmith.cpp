@@ -158,11 +158,11 @@ static COMMAND_CODE choose_essence(void)
     COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
 #ifdef JP
-    concptr menu_name[] = { "武器属性", "耐性", "能力", "数値", "スレイ", "ESP", "その他" };
+    concptr menu_name[] = { "武器属性", "耐性", "能力", "数値", "スレイ", "ESP", "その他", "発動" };
 #else
-    concptr menu_name[] = { "Brand weapon", "Resistance", "Ability", "Magic number", "Slay", "ESP", "Others" };
+    concptr menu_name[] = { "Brand weapon", "Resistance", "Ability", "Magic number", "Slay", "ESP", "Others", "Activation" };
 #endif
-    const COMMAND_CODE mode_max = 7;
+    const COMMAND_CODE mode_max = 8;
 
     if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max)
         return mode;
@@ -447,11 +447,6 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return;
-
-    if ((mode != SmithCategory::ENCHANT) && (o_ptr->is_artifact() || o_ptr->is_smith())) {
-        msg_print(_("そのアイテムはこれ以上改良できない。", "This item can not be improved any further."));
-        return;
-    }
 
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
