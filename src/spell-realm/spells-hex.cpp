@@ -33,6 +33,8 @@
 #include "monster/monster-description-types.h"
 #endif
 
+#include <bitset>
+
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
 
@@ -67,7 +69,6 @@ void SpellHex::stop_all_spells()
     }
 
     this->player_ptr->magic_num1[0] = 0;
-    this->player_ptr->magic_num2[0] = 0;
     if (this->player_ptr->action == ACTION_SPELL) {
         set_action(this->player_ptr, ACTION_NONE);
     }
@@ -87,7 +88,7 @@ bool SpellHex::stop_spells_with_selection()
         return false;
     }
 
-    auto casting_num = this->player_ptr->magic_num2[0];
+    auto casting_num = this->get_casting_num();
     if ((casting_num == 1) || (this->player_ptr->lev < 35)) {
         this->stop_all_spells();
         return true;
@@ -97,8 +98,7 @@ bool SpellHex::stop_spells_with_selection()
     strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
         I2A(0), I2A(casting_num - 1));
     screen_save();
-    char choice = 0;
-    auto [is_all, is_selected] = select_spell_stopping(out_val, choice);
+    auto [is_all, is_selected, choice] = select_spell_stopping(out_val);
     if (is_all) {
         return true;
     }
@@ -108,7 +108,6 @@ bool SpellHex::stop_spells_with_selection()
         auto n = this->casting_spells[A2I(choice)];
         exe_spell(this->player_ptr, REALM_HEX, n, SPELL_STOP);
         this->reset_casting_flag(static_cast<spell_hex_type>(n));
-        this->add_casting_num(false);
     }
 
     this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
@@ -118,19 +117,19 @@ bool SpellHex::stop_spells_with_selection()
 
 /*!
  * @brief 中断する呪術を選択する
- * @param spells 詠唱中の呪術リスト
  * @param out_val 呪文名
- * @param choice 選択した呪文
  * @return
  * Item1: 全ての呪文を中断するならばtrue、1つの呪文を中断するならばfalse
  * Item2: 選択が完了したらtrue、キャンセルならばfalse
+ * Item3: 選択した呪文番号 (a～d、lの5択)
  */
-std::tuple<bool, bool> SpellHex::select_spell_stopping(char *out_val, char &choice)
+std::tuple<bool, bool, char> SpellHex::select_spell_stopping(char *out_val)
 {
     while (true) {
+        char choice = 0;
         this->display_casting_spells_list();
         if (!get_com(out_val, &choice, true)) {
-            return std::make_tuple(false, false);
+            return std::make_tuple(false, false, choice);
         }
 
         if (isupper(choice)) {
@@ -140,14 +139,14 @@ std::tuple<bool, bool> SpellHex::select_spell_stopping(char *out_val, char &choi
         if (choice == 'l') {
             screen_load();
             this->stop_all_spells();
-            return std::make_tuple(true, true);
+            return std::make_tuple(true, true, choice);
         }
 
-        if ((choice < I2A(0)) || (choice > I2A(this->player_ptr->magic_num2[0] - 1))) {
+        if ((choice < I2A(0)) || (choice > I2A(this->get_casting_num() - 1))) {
             continue;
         }
 
-        return std::make_tuple(false, true);
+        return std::make_tuple(false, true, choice);
     }
 }
 
@@ -206,7 +205,7 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     auto need_mana = this->calc_need_mana();
     uint need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-    need_mana += this->player_ptr->magic_num2[0] - 1;
+    need_mana += this->get_casting_num() - 1;
 
     auto enough_mana = s64b_cmp(this->player_ptr->csp, this->player_ptr->csp_frac, need_mana, need_mana_frac) >= 0;
     if (!enough_mana) {
@@ -334,7 +333,7 @@ bool SpellHex::is_casting_full_capacity() const
 {
     auto k_max = (this->player_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
-    return this->player_ptr->magic_num2[0] >= k_max;
+    return this->get_casting_num() >= k_max;
 }
 
 /*!
@@ -392,7 +391,7 @@ bool SpellHex::is_spelling_specific(int hex) const
 
 bool SpellHex::is_spelling_any() const
 {
-    return (this->player_ptr->realm1 == REALM_HEX) && (this->player_ptr->magic_num1[0] != 0);
+    return (this->player_ptr->realm1 == REALM_HEX) && (this->get_casting_num() > 0);
 }
 
 /*!
@@ -460,20 +459,7 @@ void SpellHex::reset_casting_flag(spell_hex_type type)
 
 int32_t SpellHex::get_casting_num() const
 {
-    return this->player_ptr->magic_num2[0];
-}
-
-/*!
- * @brief 詠唱番号の加減算を行う
- * @param is_incremental 加算ならtrue、減算ならfalse
- */
-void SpellHex::add_casting_num(bool is_incremental)
-{
-    if (is_incremental) {
-        this->player_ptr->magic_num2[0]++;
-    } else {
-        this->player_ptr->magic_num2[0]--;
-    }
+    return std::bitset<32>(this->player_ptr->magic_num1[0]).count();
 }
 
 int32_t SpellHex::get_revenge_power() const

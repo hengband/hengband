@@ -588,7 +588,6 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);
-                spell_hex.add_casting_num(false);
                 if (get_singing_song_id(player_ptr) == 0)
                     set_action(player_ptr, ACTION_NONE);
             }
@@ -676,10 +675,6 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
-                if (continuation) {
-                    spell_hex.add_casting_num(false);
-                }
-
                 if (spell_hex.get_casting_num() > 0) {
                     player_ptr->action = ACTION_NONE;
                 }
@@ -890,7 +885,6 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
     if (cast && should_continue) {
         SpellHex spell_hex(player_ptr);
         spell_hex.set_casting_flag(spell);
-        spell_hex.add_casting_num(true);
         if (player_ptr->action != ACTION_SPELL) {
             set_action(player_ptr, ACTION_SPELL);
         }

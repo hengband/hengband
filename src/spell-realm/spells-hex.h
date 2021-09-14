@@ -33,7 +33,6 @@ public:
     void set_casting_flag(spell_hex_type type);
     void reset_casting_flag(spell_hex_type type);
     int32_t get_casting_num() const;
-    void add_casting_num(bool is_incremental);
     int32_t get_revenge_power() const;
     void set_revenge_power(int32_t power, bool substitution);
     byte get_revenge_turn() const;
@@ -46,7 +45,7 @@ private:
     std::vector<int> casting_spells;
     monap_type *monap_ptr = nullptr;
     
-    std::tuple<bool, bool> select_spell_stopping(char *out_val, char &choice);
+    std::tuple<bool, bool, char> select_spell_stopping(char *out_val);
     void display_casting_spells_list();
     bool process_mana_cost(const bool need_restart);
     bool check_restart();
