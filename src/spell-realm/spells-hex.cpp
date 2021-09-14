@@ -188,7 +188,7 @@ void SpellHex::decrease_mana()
         return;
     }
 
-    this->gain_exp_from_hex();
+    this->gain_exp();
     for (auto spell : this->casting_spells) {
         exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_CONTNUATION);
     }
@@ -250,7 +250,7 @@ int SpellHex::calc_need_mana()
     return need_mana;
 }
 
-void SpellHex::gain_exp_from_hex()
+void SpellHex::gain_exp()
 {
     for (auto spell : this->casting_spells) {
         if (!this->is_spelling_specific(spell)) {
@@ -497,7 +497,7 @@ void SpellHex::set_revenge_turn(byte turn, bool substitution)
 
 SpellHexRevengeType SpellHex::get_revenge_type() const
 {
-    return static_cast <SpellHexRevengeType>(this->player_ptr->magic_num2[1]);
+    return static_cast<SpellHexRevengeType>(this->player_ptr->magic_num2[1]);
 }
 
 void SpellHex::set_revenge_type(SpellHexRevengeType type)
