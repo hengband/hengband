@@ -184,7 +184,7 @@ void SpellHex::decrease_mana()
 
     this->gain_exp_from_hex();
     for (auto spell : this->casting_spells) {
-        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_CONT);
+        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_CONTNUATION);
     }
 }
 
@@ -341,10 +341,10 @@ void SpellHex::continue_revenge()
 
     switch (this->get_revenge_type()) {
     case SpellHexRevengeType::PATIENCE:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
+        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONTNUATION);
         return;
     case SpellHexRevengeType::REVENGE:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT);
+        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONTNUATION);
         return;
     default:
         return;

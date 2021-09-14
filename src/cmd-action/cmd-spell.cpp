@@ -702,7 +702,7 @@ void do_cmd_browse(player_type *player_ptr)
         term_erase(14, 12, 255);
         term_erase(14, 11, 255);
 
-        shape_buffer(exe_spell(player_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
+        shape_buffer(exe_spell(player_ptr, use_realm, spell, SPELL_DESCRIPTION), 62, temp, sizeof(temp));
 
         for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j])) {
             prt(&temp[j], line, 15);
