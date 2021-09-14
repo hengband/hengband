@@ -60,7 +60,7 @@ SpellHex::SpellHex(player_type *player_ptr, monap_type *monap_ptr)
 /*!
  * @brief プレイヤーが詠唱中の全呪術を停止する
  */
-bool SpellHex::stop_all_spells()
+void SpellHex::stop_all_spells()
 {
     for (auto spell : this->casting_spells) {
         exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_STOP);
@@ -74,13 +74,13 @@ bool SpellHex::stop_all_spells()
 
     this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
-    return true;
 }
 
 /*!
- * @brief プレイヤーが詠唱中の呪術から一つを選んで停止する
+ * @brief プレイヤーが詠唱中の呪術から選択式で一つまたは全てを停止する
+ * @return 停止したらtrue、停止をキャンセルしたらfalse
  */
-bool SpellHex::stop_one_spell()
+bool SpellHex::stop_spells_with_selection()
 {
     if (!this->is_spelling_any()) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
@@ -89,7 +89,8 @@ bool SpellHex::stop_one_spell()
 
     auto casting_num = this->player_ptr->magic_num2[0];
     if ((casting_num == 1) || (this->player_ptr->lev < 35)) {
-        return this->stop_all_spells();
+        this->stop_all_spells();
+        return true;
     }
 
     char out_val[160];
@@ -97,7 +98,11 @@ bool SpellHex::stop_one_spell()
         I2A(0), I2A(casting_num - 1));
     screen_save();
     char choice = 0;
-    auto is_selected = select_spell_stopping(out_val, choice);
+    auto [is_all, is_selected] = select_spell_stopping(out_val, choice);
+    if (is_all) {
+        return true;
+    }
+
     screen_load();
     if (is_selected) {
         auto n = this->casting_spells[A2I(choice)];
@@ -116,31 +121,33 @@ bool SpellHex::stop_one_spell()
  * @param spells 詠唱中の呪術リスト
  * @param out_val 呪文名
  * @param choice 選択した呪文
- * @return 選択が完了したらtrue、キャンセルならばfalse
+ * @return
+ * Item1: 全ての呪文を中断するならばtrue、1つの呪文を中断するならばfalse
+ * Item2: 選択が完了したらtrue、キャンセルならばfalse
  */
-bool SpellHex::select_spell_stopping(char *out_val, char &choice)
+std::tuple<bool, bool> SpellHex::select_spell_stopping(char *out_val, char &choice)
 {
     while (true) {
         this->display_casting_spells_list();
         if (!get_com(out_val, &choice, true)) {
-            return false;
+            return std::make_tuple(false, false);
         }
 
         if (isupper(choice)) {
             choice = static_cast<char>(tolower(choice));
         }
 
-        /* All */
         if (choice == 'l') {
             screen_load();
-            return this->stop_all_spells();
+            this->stop_all_spells();
+            return std::make_tuple(true, true);
         }
 
         if ((choice < I2A(0)) || (choice > I2A(this->player_ptr->magic_num2[0] - 1))) {
             continue;
         }
 
-        return true;
+        return std::make_tuple(false, true);
     }
 }
 

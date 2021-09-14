@@ -1020,7 +1020,7 @@ bool do_cmd_cast(player_type *player_ptr)
             msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not cast more spells."));
             flush();
             if (player_ptr->lev >= 35) {
-                flag = SpellHex(player_ptr).stop_one_spell();
+                flag = SpellHex(player_ptr).stop_spells_with_selection();
             }
 
             if (!flag) {

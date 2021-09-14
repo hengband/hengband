@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "realm/realm-hex-numbers.h"
+#include <tuple>
 
 enum class SpellHexRevengeType : byte {
     NONE = 0,
@@ -18,9 +19,9 @@ public:
     SpellHex(player_type *player_ptr, monap_type *monap_ptr);
     virtual ~SpellHex() = default;
 
-    bool stop_one_spell();
+    bool stop_spells_with_selection();
     void decrease_mana();
-    bool stop_all_spells();
+    void stop_all_spells();
     bool is_casting_full_capacity() const;
     void continue_revenge();
     void store_vengeful_damage(HIT_POINT dam);
@@ -45,7 +46,7 @@ private:
     std::vector<int> casting_spells;
     monap_type *monap_ptr = nullptr;
     
-    bool select_spell_stopping(char *out_val, char &choice);
+    std::tuple<bool, bool> select_spell_stopping(char *out_val, char &choice);
     void display_casting_spells_list();
     bool process_mana_cost(const bool need_restart);
     bool check_restart();
