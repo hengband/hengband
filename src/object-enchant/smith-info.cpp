@@ -33,14 +33,14 @@ BasicSmithInfo::BasicSmithInfo(SmithEffect effect, concptr name, SmithCategory c
 
 bool BasicSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
 {
-    o_ptr->xtra3 = static_cast<decltype(o_ptr->xtra3)>(effect);
+    o_ptr->smith_effect = effect;
 
     return true;
 }
 
 void BasicSmithInfo::erase_essence(object_type *o_ptr) const
 {
-    o_ptr->xtra3 = 0;
+    o_ptr->smith_effect = std::nullopt;
     auto flgs = object_flags(o_ptr);
     if (flgs.has_none_of(TR_PVAL_FLAG_MASK))
         o_ptr->pval = 0;

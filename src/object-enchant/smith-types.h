@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "system/system-variables.h"
 
@@ -126,7 +126,7 @@ enum class SmithEffect {
     RESISTANCE = 220, //!< 全耐性
     SLAY_GLOVE = 221, //!< 殺戮の小手
 
-    SAVE_EFFECT_MAX = 256, //!< 鍛冶師の銘付きアイテムに付与された鍛冶効果の保存領域が1バイトなので、この値未満を割り当てる必要あり
+    SAVE_EFFECT_MAX = 8192, //!< 鍛冶師の銘付きアイテムに付与された鍛冶効果の保存領域は2バイト。とりあえず余裕を持って8192としておく。
 
     //! @note これ以降は鍛冶師の銘付きアイテムになる鍛冶効果ではないので、効果番号を保存しなくてよい。
     //  鍛冶効果のリストを管理するためだけのものである。したがって SAVE_EFFECT_MAX 以降に自動的に番号の割り振りを行う

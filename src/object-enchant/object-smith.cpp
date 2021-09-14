@@ -235,12 +235,7 @@ std::optional<random_art_activation_type> Smith::get_effect_activation(SmithEffe
  */
 std::optional<SmithEffect> Smith::object_effect(const object_type *o_ptr)
 {
-    auto effect = i2enum<SmithEffect>(o_ptr->xtra3);
-    if (!o_ptr->is_weapon_armour_ammo() || effect == SmithEffect::NONE) {
-        return std::nullopt;
-    }
-
-    return effect;
+    return o_ptr->smith_effect;
 }
 
 /*!

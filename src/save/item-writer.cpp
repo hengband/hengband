@@ -3,6 +3,7 @@
 #include "object/object-kind.h"
 #include "save/save-util.h"
 #include "system/object-type-definition.h"
+#include "util/enum-converter.h"
 #include "util/quarks.h"
 
 static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
@@ -85,6 +86,10 @@ static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->stack_idx)
         *flags |= SAVE_ITEM_STACK_IDX;
 
+    if (o_ptr->is_smith()) {
+        *flags |= SAVE_ITEM_SMITH;
+    }
+
     wr_u32b(*flags);
 }
 
@@ -153,6 +158,19 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
 
     if (flags & SAVE_ITEM_STACK_IDX)
         wr_s16b(o_ptr->stack_idx);
+
+    if (flags & SAVE_ITEM_SMITH) {
+        if (o_ptr->smith_effect.has_value()){
+            wr_s16b(enum2i(o_ptr->smith_effect.value()));
+        } else {
+            wr_s16b(0);
+        }
+        if (o_ptr->smith_act_idx.has_value()) {
+            wr_s16b(enum2i(o_ptr->smith_act_idx.value()));
+        } else {
+            wr_s16b(0);
+        }
+    }
 }
 
 /*!
