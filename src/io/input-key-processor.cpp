@@ -102,7 +102,7 @@
 bool enter_wizard_mode(player_type *player_ptr)
 {
     if (!w_ptr->noscore) {
-        if (!allow_debug_opts) {
+        if (!allow_debug_options) {
             msg_print(_("ウィザードモードは許可されていません。 ", "Wizard mode is not permitted."));
             return false;
         }
@@ -131,7 +131,7 @@ bool enter_wizard_mode(player_type *player_ptr)
 static bool enter_debug_mode(player_type *player_ptr)
 {
     if (!w_ptr->noscore) {
-        if (!allow_debug_opts) {
+        if (!allow_debug_options) {
             msg_print(_("デバッグコマンドは許可されていません。 ", "Use of debug command is not permitted."));
             return false;
         }

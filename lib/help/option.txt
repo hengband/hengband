@@ -439,12 +439,12 @@ Send score dump to the world score server    [send_score]
     record of your character to the world score board on the Internet
     when your character dies.
 
-***** <allow_debug_opts>
-Allow use of debug/cheat options  [allow_debug_opts]
+***** <allow_debug_options>
+Allow use of debug/cheat options  [allow_debug_options]
     Since use of debug command(^A), wizard mode(^W), and Cheating
     options ('C' in options panel) mark the player as a "Cheater"
     who can't register their score, these debug/cheat options are
-    forbidden to use on default.  The allow_debug_opts option removes
+    forbidden to use on default.  The allow_debug_options option removes
     these restrictions, and allow the player to become a "Cheater".
 
 
