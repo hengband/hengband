@@ -37,6 +37,10 @@ enum class SmithEffect {
     BRAND_ELEC = 45, //!< 電撃
     BRAND_FIRE = 46, //!< 焼棄
     BRAND_COLD = 47, //!< 凍結
+    VORPAL = 48, //!< 切れ味
+    XTRA_MIGHT = 49, //!< 強力射
+    XTRA_SHOTS = 50, //!< 強速射
+    BRAND_MAGIC = 51, //!< 魔術属性攻撃
 
     IM_ACID = 60, //!< 酸免疫
     IM_ELEC = 61, //!< 電撃免疫
@@ -74,6 +78,8 @@ enum class SmithEffect {
     TELEPORT = 107, //!< テレポート
     NO_MAGIC = 108, //!< 反魔法
     LITE = 109, //!< 永久光源
+    NO_TELE = 110, //!< テレポート
+    EASY_2WEAPON = 111, //!< 二刀流
 
     SLAY_EVIL = 120, //!< 邪悪倍打
     SLAY_ANIMAL = 121, //!< 動物倍打
@@ -107,6 +113,7 @@ enum class SmithEffect {
     ESP_DRAGON = 167, //!< 竜ESP
     ESP_HUMAN = 168, //!< 人間ESP
     ESP_GOOD = 169, //!< 善良ESP
+    ESP_UNIQUE = 170, //!< ユニークESP
 
     TMP_RES_ACID = 200, //!< 酸耐性発動
     TMP_RES_ELEC = 201, //!< 電撃耐性発動
@@ -119,11 +126,13 @@ enum class SmithEffect {
     RESISTANCE = 220, //!< 全耐性
     SLAY_GLOVE = 221, //!< 殺戮の小手
 
-    ATTACK = 250, //!< 命中/ダメージ強化
-    AC = 251, //!< AC強化
-    SUSTAIN = 252, //!< 装備保持
+    SAVE_EFFECT_MAX = 256, //!< 鍛冶師の銘付きアイテムに付与された鍛冶効果の保存領域が1バイトなので、この値未満を割り当てる必要あり
 
-    MAX = 256, //!< 鍛冶アイテムの保存領域が1バイトなので、この値未満を割り当てる必要あり
+    //! @note これ以降は鍛冶師の銘付きアイテムになる鍛冶効果ではないので、効果番号を保存しなくてよい。
+    //  鍛冶効果のリストを管理するためだけのものである。したがって SAVE_EFFECT_MAX 以降に自動的に番号の割り振りを行う
+    ATTACK, //!< 命中/ダメージ強化
+    AC, //!< AC強化
+    SUSTAIN, //!< 装備保持
 };
 
 /**
@@ -212,6 +221,11 @@ enum class SmithEssence {
     RES_WATER = 62, //!< 耐水
     RES_TIME = 63, //!< 耐時間逆転
     RES_CURSE = 64, //!< 耐呪力
+    NO_TELE = 65, //!< 反テレポート
+    EASY2_WEAPON = 66, //!< 二刀流
+    STRENGTHEN_BOW = 67, //!< 弓強化
+    BRAND_MAGIC = 68, //!< 魔術属性攻撃
+    UNIQUE = 69, //!< ユニーク
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御
