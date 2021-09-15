@@ -217,26 +217,6 @@ static void reset_world_info(player_type *player_ptr)
     record_o_name[0] = '\0';
 }
 
-static void set_wizard_mode_by_argument(player_type *player_ptr)
-{
-    if (!arg_wizard)
-        return;
-
-    if (enter_wizard_mode(player_ptr)) {
-        current_world_ptr->wizard = true;
-        if (player_ptr->is_dead || !player_ptr->y || !player_ptr->x) {
-            init_saved_floors(player_ptr, true);
-            player_ptr->current_floor_ptr->inside_quest = 0;
-            player_ptr->y = player_ptr->x = 10;
-        }
-
-        return;
-    }
-
-    if (player_ptr->is_dead)
-        quit("Already dead.");
-}
-
 static void generate_wilderness(player_type *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -290,7 +270,6 @@ static void generate_world(player_type *player_ptr, bool new_game)
     flavor_init();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();
-    set_wizard_mode_by_argument(player_ptr);
     generate_wilderness(player_ptr);
     change_floor_if_error(player_ptr);
     current_world_ptr->character_generated = true;
