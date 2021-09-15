@@ -519,8 +519,8 @@ void do_cmd_options(player_type *player_ptr)
         case 'B':
         case 'b': {
             do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
-                (!w_ptr->wizard || !allow_debug_options) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
-                                                                  : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+                allow_debug_options ? _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score")
+                                    : _("初期オプション(参照のみ)", "Birth Options(browse only)"));
             break;
         }
         case 'C': {
@@ -641,7 +641,7 @@ void do_cmd_options_aux(player_type *player_ptr, game_option_types page, concptr
     int i, k = 0, n = 0, l;
     int opt[24];
     char buf[80];
-    bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && (!w_ptr->wizard || !allow_debug_options);
+    bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && !allow_debug_options;
     for (i = 0; i < 24; i++)
         opt[i] = 0;
 

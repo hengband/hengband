@@ -9,6 +9,7 @@
 #include "effect/effect-processor.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "lore/lore-store.h"
@@ -156,8 +157,13 @@ static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_t
 
         a_idx = md_ptr->r_ptr->artifact_id[i];
         chance = md_ptr->r_ptr->artifact_percent[i];
-        if ((randint0(100) >= chance) && !w_ptr->wizard)
+        if (allow_debug_options) {
+            // continue process.
+            // @todo ここより下の処理は関数分割で何とかしたい.
+            // 処理を送るだけのif文は気持ち悪い.
+        } else if (randint0(100) >= chance) {
             continue;
+        }
 
         artifact_type *a_ptr = &a_info[a_idx];
         if (a_ptr->cur_num == 1)

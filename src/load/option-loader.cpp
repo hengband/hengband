@@ -42,9 +42,6 @@ void rd_options(void)
     uint16_t c;
     rd_u16b(&c);
 
-    if (c & 0x0002)
-        w_ptr->wizard = true;
-
     cheat_peek = (c & 0x0100) ? true : false;
     cheat_hear = (c & 0x0200) ? true : false;
     cheat_room = (c & 0x0400) ? true : false;

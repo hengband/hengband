@@ -10,6 +10,7 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "game-option/game-play-options.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "locale/english.h"
@@ -23,7 +24,6 @@
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/sort.h"
-#include "world/world.h"
 
 #include <numeric>
 
@@ -305,7 +305,7 @@ void do_cmd_knowledge_quests(player_type *player_ptr)
     do_cmd_knowledge_quests_completed(player_ptr, fff, quest_num.data());
     fputc('\n', fff);
     do_cmd_knowledge_quests_failed(player_ptr, fff, quest_num.data());
-    if (w_ptr->wizard) {
+    if (allow_debug_options) {
         fputc('\n', fff);
         do_cmd_knowledge_quests_wiz_random(fff);
     }
