@@ -150,7 +150,7 @@ static bool get_player_sex(player_type *player_ptr, char *buf)
         display_help_on_sex_select(player_ptr, c);
     }
 
-    player_ptr->psex = static_cast<player_sex>(k);
+    player_ptr->psex = i2enum<player_sex>(k);
     sp_ptr = &sex_info[player_ptr->psex];
     c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 15);
     return true;

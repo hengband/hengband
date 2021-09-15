@@ -380,7 +380,7 @@ static void racial_power_cast_power(player_type *player_ptr, rc_type *rc_ptr)
         if (rpi_ptr->number < 0)
             rc_ptr->cast = exe_racial_power(player_ptr, rpi_ptr->number);
         else
-            rc_ptr->cast = exe_mutation_power(player_ptr, static_cast<MUTA>(rpi_ptr->number));
+            rc_ptr->cast = exe_mutation_power(player_ptr, i2enum<MUTA>(rpi_ptr->number));
         break;
     case RACIAL_FAILURE:
         rc_ptr->cast = true;

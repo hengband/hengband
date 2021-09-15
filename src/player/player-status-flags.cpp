@@ -93,7 +93,7 @@ BIT_FLAGS check_equipment_flags(player_type *player_ptr, tr_type tr_flag)
         auto flgs = object_flags(o_ptr);
 
         if (flgs.has(tr_flag))
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
     }
     return result;
 }
@@ -769,7 +769,7 @@ BIT_FLAGS has_warning(player_type *player_ptr)
 
         if (flgs.has(TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
-                set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
+                set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
         }
     }
     return result;

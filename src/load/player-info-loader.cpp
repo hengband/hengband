@@ -71,7 +71,7 @@ void rd_base_info(player_type *player_ptr)
     player_ptr->pseikaku = (player_personality_type)tmp8u;
 
     rd_byte(&tmp8u);
-    player_ptr->psex = static_cast<player_sex>(tmp8u);
+    player_ptr->psex = i2enum<player_sex>(tmp8u);
 
     rd_realms(player_ptr);
 
@@ -228,7 +228,7 @@ static void set_imitation(player_type *player_ptr)
     for (int i = 0; i < MAX_MANE; i++) {
         int16_t tmp16s;
         rd_s16b(&tmp16s);
-        player_ptr->mane_spell[i] = static_cast<RF_ABILITY>(tmp16s);
+        player_ptr->mane_spell[i] = i2enum<RF_ABILITY>(tmp16s);
         rd_s16b(&tmp16s);
         player_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
     }

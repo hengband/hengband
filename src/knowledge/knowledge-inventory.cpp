@@ -284,9 +284,9 @@ void do_cmd_knowledge_inventory(player_type *player_ptr)
     int label_number = 0;
     for (int tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++) {
         reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(player_ptr, static_cast<tval_type>(tval), &label_number, fff);
-        show_holding_equipment_resistances(player_ptr, static_cast<tval_type>(tval), &label_number, fff);
-        show_home_equipment_resistances(player_ptr, static_cast<tval_type>(tval), &label_number, fff);
+        show_wearing_equipment_resistances(player_ptr, i2enum<tval_type>(tval), &label_number, fff);
+        show_holding_equipment_resistances(player_ptr, i2enum<tval_type>(tval), &label_number, fff);
+        show_home_equipment_resistances(player_ptr, i2enum<tval_type>(tval), &label_number, fff);
     }
 
     angband_fclose(fff);

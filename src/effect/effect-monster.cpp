@@ -468,7 +468,7 @@ static void effect_damage_makes_teleport(player_type *player_ptr, effect_monster
     if (!em_ptr->who)
         chg_virtue(player_ptr, V_VALOUR, -1);
 
-    teleport_flags tflag = static_cast<teleport_flags>((!em_ptr->who ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
+    teleport_flags tflag = i2enum<teleport_flags>((!em_ptr->who ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
     teleport_away(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_dist, tflag);
 
     em_ptr->y = em_ptr->m_ptr->fy;

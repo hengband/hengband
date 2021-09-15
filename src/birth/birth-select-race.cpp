@@ -166,7 +166,7 @@ bool get_player_race(player_type *player_ptr)
     if (!select_race(player_ptr, sym, &k))
         return false;
 
-    player_ptr->prace = static_cast<player_race_type>(k);
+    player_ptr->prace = i2enum<player_race_type>(k);
     rp_ptr = &race_info[k];
     c_put_str(TERM_L_BLUE, rp_ptr->title, 4, 15);
     return true;

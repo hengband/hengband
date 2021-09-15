@@ -170,9 +170,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *player_ptr, POSITION 
     HIT_POINT dam = damroll(4, 8);
 
     if (monster_to_player || t_idx == player_ptr->riding)
-        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
     else
-        teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+        teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
 
     if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && (tr_ptr->flags7 & RF7_CAN_FLY))) {
         simple_monspell_message(player_ptr, m_idx, t_idx, _("あなたは静かに着地した。", "You float gently down to the ground."),

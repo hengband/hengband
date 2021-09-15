@@ -107,7 +107,7 @@ bool SpellHex::stop_spells_with_selection()
     if (is_selected) {
         auto n = this->casting_spells[A2I(choice)];
         exe_spell(this->player_ptr, REALM_HEX, n, SPELL_STOP);
-        this->reset_casting_flag(static_cast<spell_hex_type>(n));
+        this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
     this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
@@ -497,7 +497,7 @@ void SpellHex::set_revenge_turn(byte turn, bool substitution)
 
 SpellHexRevengeType SpellHex::get_revenge_type() const
 {
-    return static_cast<SpellHexRevengeType>(this->player_ptr->magic_num2[1]);
+    return i2enum<SpellHexRevengeType>(this->player_ptr->magic_num2[1]);
 }
 
 void SpellHex::set_revenge_type(SpellHexRevengeType type)

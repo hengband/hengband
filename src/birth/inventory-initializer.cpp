@@ -186,7 +186,7 @@ void player_outfit(player_type *player_ptr)
         add_outfit(player_ptr, q_ptr);
     } else if (player_ptr->pclass == CLASS_SORCERER) {
         for (auto book_tval = enum2i(TV_LIFE_BOOK); book_tval <= enum2i(TV_LIFE_BOOK) + enum2i(MAX_MAGIC) - 1; book_tval++) {
-            q_ptr->prep(lookup_kind(static_cast<tval_type>(book_tval), 0));
+            q_ptr->prep(lookup_kind(i2enum<tval_type>(book_tval), 0));
             q_ptr->number = 1;
             add_outfit(player_ptr, q_ptr);
         }
@@ -259,7 +259,7 @@ void player_outfit(player_type *player_ptr)
         }
 
         q_ptr = &forge;
-        q_ptr->prep(lookup_kind(static_cast<tval_type>(tv), sv));
+        q_ptr->prep(lookup_kind(i2enum<tval_type>(tv), sv));
         if ((tv == TV_SWORD || tv == TV_HAFTED)
             && (player_ptr->pclass == CLASS_ROGUE && player_ptr->realm1 == REALM_DEATH)) /* Only assassins get a poisoned weapon */
             q_ptr->name2 = EGO_BRAND_POIS;

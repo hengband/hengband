@@ -377,7 +377,7 @@ void teleport_player(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
     const POSITION oy = player_ptr->y;
     const POSITION ox = player_ptr->x;
 
-    if (!teleport_player_aux(player_ptr, dis, false, static_cast<teleport_flags>(mode)))
+    if (!teleport_player_aux(player_ptr, dis, false, i2enum<teleport_flags>(mode)))
         return;
 
     /* Monsters with teleport ability may follow the player */

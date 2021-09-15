@@ -101,7 +101,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 
         rd_item(q_ptr);
 
-        auto stock_max = store_get_stock_max(static_cast<STORE_TYPE_IDX>(store_number));
+        auto stock_max = store_get_stock_max(i2enum<STORE_TYPE_IDX>(store_number));
         if (store_ptr->stock_num >= stock_max)
             continue;
 

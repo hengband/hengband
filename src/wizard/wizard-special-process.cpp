@@ -137,7 +137,7 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
     if ((num < 0) || (num >= max_num))
         return 0;
 
-    tval_type tval = static_cast<tval_type>(tvals[num].tval);
+    tval_type tval = i2enum<tval_type>(tvals[num].tval);
     concptr tval_desc = tvals[num].desc;
     term_clear();
     num = 0;
@@ -513,7 +513,7 @@ void wiz_reset_race(player_type *player_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_RACES)
         return;
 
-    player_ptr->prace = static_cast<player_race_type>(tmp_int);
+    player_ptr->prace = i2enum<player_race_type>(tmp_int);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
     player_ptr->window_flags |= PW_PLAYER;
@@ -541,7 +541,7 @@ void wiz_reset_class(player_type *player_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_CLASS)
         return;
 
-    player_ptr->pclass = static_cast<player_class_type>(tmp_int);
+    player_ptr->pclass = i2enum<player_class_type>(tmp_int);
     cp_ptr = &class_info[player_ptr->pclass];
     mp_ptr = &m_info[player_ptr->pclass];
     player_ptr->window_flags |= PW_PLAYER;

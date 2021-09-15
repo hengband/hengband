@@ -115,7 +115,7 @@ void wiz_enter_quest(player_type* player_ptr)
     if ((tmp_int < 0) || (tmp_int >= max_q_idx))
         return;
 
-    init_flags = static_cast<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
+    init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     quest[tmp_int].status = QUEST_STATUS_TAKEN;

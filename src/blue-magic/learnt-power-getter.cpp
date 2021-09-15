@@ -178,7 +178,7 @@ static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
 
 static bool sweep_learnt_spells(player_type *player_ptr, learnt_magic_type *lm_ptr)
 {
-    set_rf_masks(lm_ptr->ability_flags, static_cast<blue_magic_type>(lm_ptr->mode));
+    set_rf_masks(lm_ptr->ability_flags, i2enum<blue_magic_type>(lm_ptr->mode));
 
     std::vector<RF_ABILITY> spells;
     EnumClassFlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
@@ -310,7 +310,7 @@ static void describe_blue_magic_name(player_type *player_ptr, learnt_magic_type 
 
         lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
         calculate_blue_magic_success_probability(player_ptr, lm_ptr);
-        learnt_info(player_ptr, lm_ptr->comment, static_cast<RF_ABILITY>(lm_ptr->blue_magics[lm_ptr->blue_magic_num]));
+        learnt_info(player_ptr, lm_ptr->comment, i2enum<RF_ABILITY>(lm_ptr->blue_magics[lm_ptr->blue_magic_num]));
         close_blue_magic_name(lm_ptr);
         strcat(lm_ptr->psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
         prt(lm_ptr->psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);

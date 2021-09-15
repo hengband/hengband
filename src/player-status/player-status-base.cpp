@@ -195,7 +195,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
         auto flgs = object_flags(o_ptr);
 
         if (flgs.has(check_flag))
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
     }
     return result;
 }
@@ -218,7 +218,7 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 
         if (flgs.has(check_flag)) {
             if (o_ptr->pval < 0) {
-                set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
+                set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
             }
         }
     }

@@ -449,7 +449,7 @@ process_result switch_effects_monster(player_type *player_ptr, effect_monster_ty
     case GF_CAPTURE:
         return effect_monster_capture(player_ptr, em_ptr);
     case GF_ATTACK:
-        return (process_result)do_cmd_attack(player_ptr, em_ptr->y, em_ptr->x, static_cast<combat_options>(em_ptr->dam));
+        return (process_result)do_cmd_attack(player_ptr, em_ptr->y, em_ptr->x, i2enum<combat_options>(em_ptr->dam));
     case GF_ENGETSU:
         return effect_monster_engetsu(player_ptr, em_ptr);
     case GF_GENOCIDE:
