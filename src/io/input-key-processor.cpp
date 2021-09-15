@@ -58,7 +58,6 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
-#include "game-option/runtime-arguments.h"
 #include "io-dump/random-art-info-dumper.h"
 #include "io/command-repeater.h"
 #include "io/files-util.h"
@@ -103,7 +102,7 @@
 bool enter_wizard_mode(player_type *player_ptr)
 {
     if (!current_world_ptr->noscore) {
-        if (!allow_debug_opts || arg_wizard) {
+        if (!allow_debug_opts) {
             msg_print(_("ウィザードモードは許可されていません。 ", "Wizard mode is not permitted."));
             return false;
         }

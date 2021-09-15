@@ -13,7 +13,6 @@
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
-#include "game-option/runtime-arguments.h"
 #include "io/files-util.h"
 #include "io/report.h"
 #include "io/uid-checker.h"
@@ -399,11 +398,6 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
 
     if (player_ptr->is_dead) {
         *new_game = true;
-        if (arg_wizard) {
-            current_world_ptr->character_loaded = true;
-            return true;
-        }
-
         player_ptr->is_dead = false;
         current_world_ptr->sf_lives++;
         return true;
