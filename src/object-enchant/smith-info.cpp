@@ -76,6 +76,9 @@ bool BasicSmithInfo::can_give_smith_effect_impl(const object_type *o_ptr) const
     if (this->effect == SmithEffect::EASY_2WEAPON) {
         return (o_ptr->tval == TV_GLOVES);
     }
+    if (this->category == SmithCategory::WEAPON_ATTR && o_ptr->is_ammo()) {
+        return this->add_flags.has_any_of({ TR_BRAND_ACID, TR_BRAND_ELEC, TR_BRAND_FIRE, TR_BRAND_COLD, TR_BRAND_POIS });
+    }
     if (this->category == SmithCategory::WEAPON_ATTR || this->category == SmithCategory::SLAYING) {
         return o_ptr->is_melee_ammo();
     }
