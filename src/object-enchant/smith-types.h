@@ -131,6 +131,30 @@ enum class SmithEffect {
     ACT_RES_ELEC, //!< 電撃耐性発動
     ACT_RES_FIRE, //!< 火炎耐性発動
     ACT_RES_COLD, //!< 冷気耐性発動
+    ACT_RES_POIS, //!< 毒耐性発動
+    ACT_PHASE_DOOR, //!< ショート・テレポート発動
+    ACT_TELEPORT, //!< テレポート発動
+    ACT_SPEED, //!< 加速発動
+    ACT_STONE_MUD, //!< 岩石溶解発動
+    ACT_LIGHT, //!< イルミネーション発動
+    ACT_REST_EXP, //!< 経験値復活発動
+    ACT_REST_ALL, //!< 全ステータスと経験値復活発動
+    ACT_PROT_EVIL, //!< 対邪悪結界発動
+    ACT_DISP_EVIL, //!< 邪悪退散発動
+    ACT_DISP_GOOD, //!< 善良退散発動
+    ACT_PESTICIDE, //!< 害虫駆除発動
+    ACT_BA_ACID, //!< アシッド・ボール発動
+    ACT_BA_ELEC, //!< サンダー・ボール発動
+    ACT_BA_FIRE, //!< ファイア・ボール発動
+    ACT_BA_COLD, //!< アイス・ボール発動
+    ACT_BA_NUKE, //!< 放射能球発動
+    ACT_SUNLIGHT, //!< 太陽光線発動
+    ACT_DRAIN, //!< 吸血の矢発動
+    ACT_CONFUSE, //!< パニック・モンスター発動
+    ACT_DETECT_ALL, //!< 全感知発動
+    ACT_MAP_LIGHT, //!< 魔法の地図と光発動
+    ACT_SATIATE, //!< 空腹充足発動
+    ACT_CURE_700, //!< 体力回復発動
 
     ATTACK, //!< 命中/ダメージ強化
     AC, //!< AC強化
