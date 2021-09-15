@@ -2,7 +2,6 @@
 
 #include "system/angband.h"
 
-extern bool arg_fiddle;
 extern bool arg_wizard;
 extern bool arg_music;
 extern bool arg_sound;

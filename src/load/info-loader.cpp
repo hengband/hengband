@@ -90,14 +90,9 @@ void rd_system_info(void)
 {
     rd_byte(&kanji_code);
     rd_randomizer();
-    if (arg_fiddle)
-        load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
-
+    load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
     rd_options();
-    if (arg_fiddle)
-        load_note(_("オプションをロードしました", "Loaded Option Flags"));
-
+    load_note(_("オプションをロードしました", "Loaded Option Flags"));
     rd_messages();
-    if (arg_fiddle)
-        load_note(_("メッセージをロードしました", "Loaded Messages"));
+    load_note(_("メッセージをロードしました", "Loaded Messages"));
 }

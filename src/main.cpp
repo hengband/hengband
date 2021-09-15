@@ -402,11 +402,6 @@ int main(int argc, char *argv[])
             new_game = true;
             break;
         }
-        case 'F':
-        case 'f': {
-            arg_fiddle = true;
-            break;
-        }
         case 'W':
         case 'w': {
             arg_wizard = true;
