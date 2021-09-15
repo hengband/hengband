@@ -40,7 +40,6 @@
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
-#include "realm/realm-hex-numbers.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-neighbor.h"
@@ -74,24 +73,17 @@
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @return 呪縛可能な武器ならばTRUEを返す
  */
-static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, const object_type *o_ptr)
+static bool item_tester_hook_weapon_except_bow(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     switch (o_ptr->tval) {
     case TV_SWORD:
     case TV_HAFTED:
     case TV_POLEARM:
-    case TV_DIGGING: {
+    case TV_DIGGING:
         return true;
-    }
-
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 /*!
@@ -100,26 +92,22 @@ static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, const ob
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はnullptr文字列を返す。
  */
-concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESC;
-    bool info = mode == SPELL_INFO;
-    bool cast = mode == SPELL_CAST;
-    bool cont = mode == SPELL_CONT;
-    bool stop = mode == SPELL_STOP;
-
-    bool add = true;
-
-    PLAYER_LEVEL plev = player_ptr->lev;
+    auto name = mode == SPELL_NAME;
+    auto description = mode == SPELL_DESCRIPTION;
+    auto info = mode == SPELL_INFO;
+    auto cast = mode == SPELL_CAST;
+    auto continuation = mode == SPELL_CONTNUATION;
+    auto stop = mode == SPELL_STOP;
+    auto should_continue = true;
     HIT_POINT power;
-
     switch (spell) {
         /*** 1st book (0-7) ***/
-    case 0:
+    case HEX_BLESS:
         if (name)
             return _("邪なる祝福", "Evily blessing");
-        if (desc)
+        if (description)
             return _("祝福により攻撃精度と防御力が上がる。", "Attempts to increase +to_hit of a weapon and AC");
         if (cast) {
             if (!player_ptr->blessed) {
@@ -133,24 +121,24 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 1:
+    case HEX_CURE_LIGHT:
         if (name)
             return _("軽傷の治癒", "Cure light wounds");
-        if (desc)
+        if (description)
             return _("HPや傷を少し回復させる。", "Heals cuts and HP a little.");
         if (info)
             return info_heal(1, 10, 0);
         if (cast) {
             msg_print(_("気分が良くなってくる。", "You feel a little better."));
         }
-        if (cast || cont)
+        if (cast || continuation)
             (void)cure_light_wounds(player_ptr, 1, 10);
         break;
 
-    case 2:
+    case HEX_DEMON_AURA:
         if (name)
             return _("悪魔のオーラ", "Demonic aura");
-        if (desc)
+        if (description)
             return _("炎のオーラを身にまとい、回復速度が速くなる。", "Gives fire aura and regeneration.");
         if (cast) {
             msg_print(_("体が炎のオーラで覆われた。", "You are enveloped by a fiery aura!"));
@@ -160,33 +148,33 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 3:
+    case HEX_STINKING_MIST:
         if (name)
             return _("悪臭霧", "Stinking mist");
-        if (desc)
+        if (description)
             return _("視界内のモンスターに微弱量の毒のダメージを与える。", "Deals a little poison damage to all monsters in your sight.");
-        power = plev / 2 + 5;
+        power = player_ptr->lev / 2 + 5;
         if (info)
             return info_damage(1, power, 0);
-        if (cast || cont) {
+        if (cast || continuation) {
             project_all_los(player_ptr, GF_POIS, randint1(power));
         }
         break;
 
-    case 4:
+    case HEX_XTRA_MIGHT:
         if (name)
             return _("腕力強化", "Extra might");
-        if (desc)
+        if (description)
             return _("術者の腕力を上昇させる。", "Attempts to increase your strength.");
         if (cast) {
             msg_print(_("何だか力が湧いて来る。", "You feel stronger."));
         }
         break;
 
-    case 5:
+    case HEX_CURSE_WEAPON:
         if (name)
             return _("武器呪縛", "Curse weapon");
-        if (desc)
+        if (description)
             return _("装備している武器を呪う。", "Curses your weapon.");
         if (cast) {
             OBJECT_IDX item;
@@ -197,7 +185,7 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どれを呪いますか？", "Which weapon do you curse?");
             s = _("武器を装備していない。", "You're not wielding a weapon.");
 
-            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(item_tester_hook_weapon_except_bow, player_ptr));
+            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(item_tester_hook_weapon_except_bow));
             if (!o_ptr)
                 return "";
 
@@ -253,14 +241,14 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
             }
 
             player_ptr->update |= (PU_BONUS);
-            add = false;
+            should_continue = false;
         }
         break;
 
-    case 6:
+    case HEX_DETECT_EVIL:
         if (name)
             return _("邪悪感知", "Evil detection");
-        if (desc)
+        if (description)
             return _("周囲の邪悪なモンスターを感知する。", "Detects evil monsters.");
         if (info)
             return info_range(MAX_SIGHT);
@@ -269,36 +257,41 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 7:
-        if (name)
+    case HEX_PATIENCE: {
+        if (name) {
             return _("我慢", "Patience");
-        if (desc)
-            return _(
-                "数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", "Bursts hell fire strongly after enduring damage for a few turns.");
-        power = MIN(200, (hex_revenge_power(player_ptr) * 2));
-        if (info)
+        }
+
+        if (description) {
+            return _("数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", "Bursts hell fire strongly after enduring damage for a few turns.");
+        }
+
+        SpellHex spell_hex(player_ptr);
+        power = MIN(200, spell_hex.get_revenge_power() * 2);
+        if (info) {
             return info_damage(0, 0, power);
+        }
+
         if (cast) {
             int a = 3 - (player_ptr->pspeed - 100) / 10;
             byte r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
-            if (hex_revenge_turn(player_ptr) > 0) {
+            if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
                 return nullptr;
             }
 
-            hex_revenge_type(player_ptr) = 1;
-            hex_revenge_turn(player_ptr) = r;
-            hex_revenge_power(player_ptr) = 0;
+            spell_hex.set_revenge_type(SpellHexRevengeType::PATIENCE);
+            spell_hex.set_revenge_turn(r, true);
+            spell_hex.set_revenge_power(0, true);
             msg_print(_("じっと耐えることにした。", "You decide to endure damage for future retribution."));
-            add = false;
+            should_continue = false;
         }
-        if (cont) {
+
+        if (continuation) {
             POSITION rad = 2 + (power / 50);
-
-            hex_revenge_turn(player_ptr)--;
-
-            if ((hex_revenge_turn(player_ptr) <= 0) || (power >= 200)) {
+            spell_hex.set_revenge_turn(1, false);
+            if ((spell_hex.get_revenge_turn() == 0) || (power >= 200)) {
                 msg_print(_("我慢が解かれた！", "My patience is at an end!"));
                 if (power) {
                     project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
@@ -308,19 +301,19 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                 }
 
-                /* Reset */
-                hex_revenge_type(player_ptr) = 0;
-                hex_revenge_turn(player_ptr) = 0;
-                hex_revenge_power(player_ptr) = 0;
+                spell_hex.set_revenge_type(SpellHexRevengeType::NONE);
+                spell_hex.set_revenge_turn(0, true);
+                spell_hex.set_revenge_power(0, true);
             }
         }
         break;
+    }
 
         /*** 2nd book (8-15) ***/
-    case 8:
+    case HEX_ICE_ARMOR:
         if (name)
             return _("氷の鎧", "Armor of ice");
-        if (desc)
+        if (description)
             return _("氷のオーラを身にまとい、防御力が上昇する。", "Surrounds you with an icy aura and gives a bonus to AC.");
         if (cast) {
             msg_print(_("体が氷の鎧で覆われた。", "You are enveloped by icy armor!"));
@@ -330,50 +323,56 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 9:
+    case HEX_CURE_SERIOUS:
         if (name)
             return _("重傷の治癒", "Cure serious wounds");
-        if (desc)
+        if (description)
             return _("体力や傷を多少回復させる。", "Heals cuts and HP.");
         if (info)
             return info_heal(2, 10, 0);
         if (cast) {
             msg_print(_("気分が良くなってくる。", "You feel better."));
         }
-        if (cast || cont)
+        if (cast || continuation)
             (void)cure_serious_wounds(player_ptr, 2, 10);
         break;
 
-    case 10:
-        if (name)
+    case HEX_INHALE: {
+        if (name) {
             return _("薬品吸入", "Inhale potion");
-        if (desc)
-            return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling spell casting.");
-        if (cast) {
-            casting_hex_flags(player_ptr) |= (1UL << HEX_INHAIL);
-            do_cmd_quaff_potion(player_ptr);
-            casting_hex_flags(player_ptr) &= ~(1UL << HEX_INHAIL);
-            add = false;
         }
-        break;
 
-    case 11:
+        if (description) {
+            return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling spell casting.");
+        }
+
+        SpellHex spell_hex(player_ptr);
+        if (cast) {
+            spell_hex.set_casting_flag(HEX_INHALE);
+            do_cmd_quaff_potion(player_ptr);
+            spell_hex.reset_casting_flag(HEX_INHALE);
+            should_continue = false;
+        }
+
+        break;
+    }    
+    case HEX_VAMP_MIST:
         if (name)
             return _("衰弱の霧", "Hypodynamic mist");
-        if (desc)
+        if (description)
             return _("視界内のモンスターに微弱量の衰弱属性のダメージを与える。", "Deals a little life-draining damage to all monsters in your sight.");
-        power = (plev / 2) + 5;
+        power = (player_ptr->lev / 2) + 5;
         if (info)
             return info_damage(1, power, 0);
-        if (cast || cont) {
+        if (cast || continuation) {
             project_all_los(player_ptr, GF_HYPODYNAMIA, randint1(power));
         }
         break;
 
-    case 12:
+    case HEX_RUNESWORD:
         if (name)
             return _("魔剣化", "Swords to runeswords");
-        if (desc)
+        if (description)
             return _("武器の攻撃力を上げる。切れ味を得、呪いに応じて与えるダメージが上昇し、善良なモンスターに対するダメージが2倍になる。",
                 "Gives vorpal ability to your weapon. Increases damage from your weapon acccording to curse of your weapon.");
         if (cast) {
@@ -395,10 +394,10 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 13:
+    case HEX_CONFUSION:
         if (name)
             return _("混乱の手", "Touch of confusion");
-        if (desc)
+        if (description)
             return _("攻撃した際モンスターを混乱させる。", "Confuses a monster when you attack.");
         if (cast) {
             msg_print(_("あなたの手が赤く輝き始めた。", "Your hands glow bright red."));
@@ -408,10 +407,10 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 14:
+    case HEX_BUILDING:
         if (name)
             return _("肉体強化", "Building up");
-        if (desc)
+        if (description)
             return _(
                 "術者の腕力、器用さ、耐久力を上昇させる。攻撃回数の上限を 1 増加させる。", "Attempts to increases your strength, dexterity and constitusion.");
         if (cast) {
@@ -419,12 +418,12 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 15:
+    case HEX_ANTI_TELE:
         if (name)
             return _("反テレポート結界", "Anti teleport barrier");
-        if (desc)
+        if (description)
             return _("視界内のモンスターのテレポートを阻害するバリアを張る。", "Obstructs all teleportations by monsters in your sight.");
-        power = plev * 3 / 2;
+        power = player_ptr->lev * 3 / 2;
         if (info)
             return info_power(power);
         if (cast) {
@@ -433,10 +432,10 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         break;
 
         /*** 3rd book (16-23) ***/
-    case 16:
+    case HEX_SHOCK_CLOAK:
         if (name)
             return _("衝撃のクローク", "Cloak of shock");
-        if (desc)
+        if (description)
             return _("電気のオーラを身にまとい、動きが速くなる。", "Gives lightning aura and a bonus to speed.");
         if (cast) {
             msg_print(_("体が稲妻のオーラで覆われた。", "You are enveloped by an electrical aura!"));
@@ -446,52 +445,52 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 17:
+    case HEX_CURE_CRITICAL:
         if (name)
             return _("致命傷の治癒", "Cure critical wounds");
-        if (desc)
+        if (description)
             return _("体力や傷を回復させる。", "Heals cuts and HP greatly.");
         if (info)
             return info_heal(4, 10, 0);
         if (cast) {
             msg_print(_("気分が良くなってくる。", "You feel much better."));
         }
-        if (cast || cont)
+        if (cast || continuation)
             (void)cure_critical_wounds(player_ptr, damroll(4, 10));
         break;
 
-    case 18:
+    case HEX_RECHARGE:
         if (name)
             return _("呪力封入", "Recharging");
-        if (desc)
+        if (description)
             return _("魔法の道具に魔力を再充填する。", "Recharges a magic device.");
-        power = plev * 2;
+        power = player_ptr->lev * 2;
         if (info)
             return info_power(power);
         if (cast) {
             if (!recharge(player_ptr, power))
                 return nullptr;
-            add = false;
+            should_continue = false;
         }
         break;
 
-    case 19:
+    case HEX_RAISE_DEAD:
         if (name)
             return _("死者復活", "Animate Dead");
-        if (desc)
+        if (description)
             return _("死体を蘇らせてペットにする。", "Raises corpses and skeletons from dead.");
         if (cast) {
             msg_print(_("死者への呼びかけを始めた。", "You start to call the dead.!"));
         }
-        if (cast || cont) {
+        if (cast || continuation) {
             animate_dead(player_ptr, 0, player_ptr->y, player_ptr->x);
         }
         break;
 
-    case 20:
+    case HEX_CURSE_ARMOUR:
         if (name)
             return _("防具呪縛", "Curse armor");
-        if (desc)
+        if (description)
             return _("装備している防具に呪いをかける。", "Curse a piece of armour that you are wielding.");
         if (cast) {
             OBJECT_IDX item;
@@ -560,14 +559,14 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
             }
 
             player_ptr->update |= (PU_BONUS);
-            add = false;
+            should_continue = false;
         }
         break;
 
-    case 21:
+    case HEX_SHADOW_CLOAK:
         if (name)
             return _("影のクローク", "Cloak of shadow");
-        if (desc)
+        if (description)
             return _("影のオーラを身にまとい、敵に影のダメージを与える。", "Gives aura of shadow.");
         if (cast) {
             object_type *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
@@ -582,13 +581,13 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
                 msg_print(_("影のオーラを身にまとった。", "You are enveloped by a shadowy aura!"));
             }
         }
-        if (cont) {
+        if (continuation) {
             object_type *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
-                casting_hex_flags(player_ptr) &= ~(1UL << spell);
-                casting_hex_num(player_ptr)--;
+                SpellHex spell_hex(player_ptr);
+                spell_hex.reset_casting_flag(spell);
                 if (get_singing_song_id(player_ptr) == 0)
                     set_action(player_ptr, ACTION_NONE);
             }
@@ -598,23 +597,23 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 22:
+    case HEX_PAIN_TO_MANA:
         if (name)
             return _("苦痛を魔力に", "Pain to mana");
-        if (desc)
+        if (description)
             return _("視界内のモンスターに精神ダメージ与え、魔力を吸い取る。", "Deals psychic damage to all monsters in sight and drains some mana.");
-        power = plev * 3 / 2;
+        power = player_ptr->lev * 3 / 2;
         if (info)
             return info_damage(1, power, 0);
-        if (cast || cont) {
+        if (cast || continuation) {
             project_all_los(player_ptr, GF_PSI_DRAIN, randint1(power));
         }
         break;
 
-    case 23:
+    case HEX_EYE_FOR_EYE:
         if (name)
             return _("目には目を", "Eye for an eye");
-        if (desc)
+        if (description)
             return _("打撃や魔法で受けたダメージを、攻撃元のモンスターにも与える。", "Returns same damage which you got to the monster which damaged you.");
         if (cast) {
             msg_print(_("復讐したい欲望にかられた。", "You feel very vengeful."));
@@ -622,25 +621,25 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         break;
 
         /*** 4th book (24-31) ***/
-    case 24:
+    case HEX_ANTI_MULTI:
         if (name)
             return _("反増殖結界", "Anti multiply barrier");
-        if (desc)
+        if (description)
             return _("その階の増殖するモンスターの増殖を阻止する。", "Obstructs all multiplying by monsters on entire floor.");
         if (cast) {
             msg_print(_("増殖を阻止する呪いをかけた。", "You feel anyone can not multiply."));
         }
         break;
 
-    case 25:
+    case HEX_RESTORE:
         if (name)
             return _("全復活", "Restoration");
-        if (desc)
+        if (description)
             return _("経験値を徐々に復活し、減少した能力値を回復させる。", "Restores experience and status.");
         if (cast) {
             msg_print(_("体が元の活力を取り戻し始めた。", "You feel your lost status starting to return."));
         }
-        if (cast || cont) {
+        if (cast || continuation) {
             bool flag = false;
             int d = (player_ptr->max_exp - player_ptr->exp);
             int r = (player_ptr->exp / 20);
@@ -674,11 +673,11 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 
             if (!flag) {
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
-                casting_hex_flags(player_ptr) &= ~(1UL << HEX_RESTORE);
-                if (cont)
-                    casting_hex_num(player_ptr)--;
-                if (casting_hex_num(player_ptr))
+                SpellHex spell_hex(player_ptr);
+                spell_hex.reset_casting_flag(HEX_RESTORE);
+                if (spell_hex.get_casting_num() > 0) {
                     player_ptr->action = ACTION_NONE;
+                }
 
                 player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
                 player_ptr->redraw |= (PR_EXTRA);
@@ -688,10 +687,10 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 26:
+    case HEX_DRAIN_CURSE:
         if (name)
             return _("呪力吸収", "Drain curse power");
-        if (desc)
+        if (description)
             return _("呪われた装備品の呪いを吸収して魔力を回復する。", "Drains curse on your equipment and heals SP a little.");
         if (cast) {
             OBJECT_IDX item;
@@ -725,14 +724,14 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
                 o_ptr->curse_flags.clear();
             }
 
-            add = false;
+            should_continue = false;
         }
         break;
 
-    case 27:
+    case HEX_VAMP_BLADE:
         if (name)
             return _("吸血の刃", "Swords to vampires");
-        if (desc)
+        if (description)
             return _("吸血属性で攻撃する。", "Gives vampiric ability to your weapon.");
         if (cast) {
 #ifdef JP
@@ -753,23 +752,23 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 28:
+    case HEX_STUN_MONSTERS:
         if (name)
             return _("朦朧の言葉", "Word of stun");
-        if (desc)
+        if (description)
             return _("視界内のモンスターを朦朧とさせる。", "Stuns all monsters in your sight.");
-        power = plev * 4;
+        power = player_ptr->lev * 4;
         if (info)
             return info_power(power);
-        if (cast || cont) {
+        if (cast || continuation) {
             stun_monsters(player_ptr, power);
         }
         break;
 
-    case 29:
+    case HEX_SHADOW_MOVE:
         if (name)
             return _("影移動", "Moving into shadow");
-        if (desc)
+        if (description)
             return _("モンスターの隣のマスに瞬間移動する。", "Teleports you close to a monster.");
         if (cast) {
             int i, dir;
@@ -792,30 +791,30 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
                 }
 
                 if (!is_cave_empty_bold(player_ptr, y, x) || player_ptr->current_floor_ptr->grid_array[y][x].is_icky()
-                    || (distance(y, x, player_ptr->y, player_ptr->x) > plev + 2)) {
+                    || (distance(y, x, player_ptr->y, player_ptr->x) > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }
                 break;
             }
 
-            if (flag && randint0(plev * plev / 2)) {
+            if (flag && randint0(player_ptr->lev * player_ptr->lev / 2)) {
                 teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
             } else {
                 msg_print(_("おっと！", "Oops!"));
                 teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
             }
 
-            add = false;
+            should_continue = false;
         }
         break;
 
-    case 30:
+    case HEX_ANTI_MAGIC:
         if (name)
             return _("反魔法結界", "Anti magic barrier");
-        if (desc)
+        if (description)
             return _("視界内のモンスターの魔法を阻害するバリアを張る。", "Obstructs all magic spells of monsters in your sight.");
-        power = plev * 3 / 2;
+        power = player_ptr->lev * 3 / 2;
         if (info)
             return info_power(power);
         if (cast) {
@@ -823,34 +822,40 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
         }
         break;
 
-    case 31:
-        if (name)
+    case HEX_REVENGE: {
+        if (name) {
             return _("復讐の宣告", "Revenge sentence");
-        if (desc)
-            return _(
-                "数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", "Fires a ball of hell fire to try avenging damage from a few turns.");
-        power = hex_revenge_power(player_ptr);
-        if (info)
+        }
+
+        if (description) {
+            return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", "Fires a ball of hell fire to try avenging damage from a few turns.");
+        }
+
+        SpellHex spell_hex(player_ptr);
+        power = spell_hex.get_revenge_power();
+        if (info) {
             return info_damage(0, 0, power);
+        }
+
         if (cast) {
             byte r;
             int a = 3 - (player_ptr->pspeed - 100) / 10;
             r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
-            if (hex_revenge_turn(player_ptr) > 0) {
+            if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));
                 return nullptr;
             }
 
-            hex_revenge_type(player_ptr) = 2;
-            hex_revenge_turn(player_ptr) = r;
+            spell_hex.set_revenge_type(SpellHexRevengeType::REVENGE);
+            spell_hex.set_revenge_turn(r, true);
             msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
-            add = false;
+            should_continue = false;
         }
-        if (cont) {
-            hex_revenge_turn(player_ptr)--;
 
-            if (hex_revenge_turn(player_ptr) <= 0) {
+        if (continuation) {
+            spell_hex.set_revenge_turn(1, false);
+            if (spell_hex.get_revenge_turn() == 0) {
                 DIRECTION dir;
 
                 if (power) {
@@ -868,20 +873,21 @@ concptr do_hex_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
                 } else {
                     msg_print(_("復讐する気が失せた。", "You are not in the mood for revenge."));
                 }
-                hex_revenge_power(player_ptr) = 0;
+
+                spell_hex.set_revenge_power(0, true);
             }
         }
+
         break;
     }
+    }
 
-    /* start casting */
-    if ((cast) && (add)) {
-        /* add spell */
-        casting_hex_flags(player_ptr) |= 1UL << (spell);
-        casting_hex_num(player_ptr)++;
-
-        if (player_ptr->action != ACTION_SPELL)
+    if (cast && should_continue) {
+        SpellHex spell_hex(player_ptr);
+        spell_hex.set_casting_flag(spell);
+        if (player_ptr->action != ACTION_SPELL) {
             set_action(player_ptr, ACTION_SPELL);
+        }
     }
 
     if (!info) {

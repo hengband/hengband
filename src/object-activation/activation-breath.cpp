@@ -46,8 +46,8 @@ bool activate_dragon_breath(player_type *player_ptr, object_type *o_ptr)
     if (music_singing_any(player_ptr))
         stop_singing(player_ptr);
 
-    if (RealmHex(player_ptr).is_spelling_any()) {
-        (void)RealmHex(player_ptr).stop_all_spells();
+    if (SpellHex(player_ptr).is_spelling_any()) {
+        (void)SpellHex(player_ptr).stop_all_spells();
     }
 
     int t = randint0(n);

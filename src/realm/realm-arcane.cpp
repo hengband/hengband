@@ -35,7 +35,7 @@
 concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
     bool info = (mode == SPELL_INFO) ? true : false;
     bool cast = (mode == SPELL_CAST) ? true : false;
 

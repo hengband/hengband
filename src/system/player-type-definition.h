@@ -188,6 +188,7 @@ typedef struct player_type {
     SUB_EXP weapon_exp[5][64]{}; /* Proficiency of weapons */
     SUB_EXP skill_exp[MAX_SKILLS]{}; /* Proficiency of misc. skill */
 
+    // @todo uint32_tで定義したいが可能か？
     int32_t magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
     byte magic_num2[MAX_SPELLS]{}; /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
 

@@ -425,13 +425,13 @@ void process_upkeep_with_speed(player_type *player_ptr)
             check_music(player_ptr);
         }
 
-        RealmHex realm_hex(player_ptr);
+        SpellHex spell_hex(player_ptr);
         if (!load) {
-            realm_hex.decrease_mana();
+            spell_hex.decrease_mana();
         }
 
         if (!load) {
-            realm_hex.continue_revenge();
+            spell_hex.continue_revenge();
         }
 
         player_ptr->enchant_energy_need += ENERGY_NEED();

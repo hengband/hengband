@@ -89,8 +89,8 @@ bool activate_scare(player_type *player_ptr)
     if (music_singing_any(player_ptr))
         stop_singing(player_ptr);
 
-    if (RealmHex(player_ptr).is_spelling_any()) {
-        (void)RealmHex(player_ptr).stop_all_spells();
+    if (SpellHex(player_ptr).is_spelling_any()) {
+        (void)SpellHex(player_ptr).stop_all_spells();
     }
 
     msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!", "You wind a mighty blast; your enemies tremble!"));

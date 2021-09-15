@@ -30,7 +30,7 @@ void decide_blood_sucking(player_type *player_ptr, player_attack_type *pa_ptr)
     bool is_blood_sucker = pa_ptr->flags.has(TR_VAMPIRIC);
     is_blood_sucker |= pa_ptr->chaos_effect == CE_VAMPIRIC;
     is_blood_sucker |= pa_ptr->mode == HISSATSU_DRAIN;
-    is_blood_sucker |= RealmHex(player_ptr).is_spelling_specific(HEX_VAMP_BLADE);
+    is_blood_sucker |= SpellHex(player_ptr).is_spelling_specific(HEX_VAMP_BLADE);
     if (!is_blood_sucker)
         return;
 
@@ -103,7 +103,7 @@ static void drain_result(player_type *player_ptr, player_attack_type *pa_ptr, bo
 
     int drain_heal = damroll(2, pa_ptr->drain_result / 6);
 
-    if (RealmHex(player_ptr).is_spelling_specific(HEX_VAMP_BLADE))
+    if (SpellHex(player_ptr).is_spelling_specific(HEX_VAMP_BLADE))
         drain_heal *= 2;
 
     if (cheat_xtra) {

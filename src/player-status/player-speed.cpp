@@ -210,7 +210,7 @@ int16_t PlayerSpeed::time_effect_value()
     }
 
     if (this->player_ptr->realm1 == REALM_HEX) {
-        if (RealmHex(this->player_ptr).is_spelling_specific(HEX_SHOCK_CLOAK)) {
+        if (SpellHex(this->player_ptr).is_spelling_specific(HEX_SHOCK_CLOAK)) {
             result += 3;
         }
     }

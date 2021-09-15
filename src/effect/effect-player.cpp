@@ -308,8 +308,8 @@ bool affect_player(MONSTER_IDX who, player_type *player_ptr, concptr who_name, i
     describe_effect_source(player_ptr, ep_ptr, who_name);
     switch_effects_player(player_ptr, ep_ptr);
 
-    RealmHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
-    if ((player_ptr->tim_eyeeye || RealmHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && (ep_ptr->who > 0)) {
+    SpellHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
+    if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && (ep_ptr->who > 0)) {
         GAME_TEXT m_name_self[MAX_MONSTER_NAME];
         monster_desc(player_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);

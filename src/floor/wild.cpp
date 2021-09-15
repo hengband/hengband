@@ -887,9 +887,9 @@ bool change_wild_mode(player_type *player_ptr, bool encount)
     energy.set_player_turn_energy(1000);
     player_ptr->oldpx = player_ptr->x;
     player_ptr->oldpy = player_ptr->y;
-    RealmHex realm_hex(player_ptr);
-    if (realm_hex.is_spelling_any()) {
-        realm_hex.stop_all_spells();
+    SpellHex spell_hex(player_ptr);
+    if (spell_hex.is_spelling_any()) {
+        spell_hex.stop_all_spells();
     }
 
     set_action(player_ptr, ACTION_NONE);

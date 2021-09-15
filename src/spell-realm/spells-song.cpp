@@ -75,7 +75,7 @@ void check_music(player_type *player_ptr)
             player_ptr->spell_exp[spell] += 1;
     }
 
-    exe_spell(player_ptr, REALM_MUSIC, spell, SPELL_CONT);
+    exe_spell(player_ptr, REALM_MUSIC, spell, SPELL_CONTNUATION);
 }
 
 /*!

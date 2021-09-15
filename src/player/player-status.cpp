@@ -491,9 +491,9 @@ static void update_max_hitpoints(player_type *player_ptr)
         mhp += 30;
     if (player_ptr->tsuyoshi)
         mhp += 50;
-    if (RealmHex(player_ptr).is_spelling_specific(HEX_XTRA_MIGHT))
+    if (SpellHex(player_ptr).is_spelling_specific(HEX_XTRA_MIGHT))
         mhp += 15;
-    if (RealmHex(player_ptr).is_spelling_specific(HEX_BUILDING))
+    if (SpellHex(player_ptr).is_spelling_specific(HEX_BUILDING))
         mhp += 60;
     if (player_ptr->mhp == mhp)
         return;
@@ -1442,7 +1442,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
                 mul = 4;
             }
 
-            if (RealmHex(player_ptr).is_spelling_specific(HEX_XTRA_MIGHT) || RealmHex(player_ptr).is_spelling_specific(HEX_BUILDING)) {
+            if (SpellHex(player_ptr).is_spelling_specific(HEX_XTRA_MIGHT) || SpellHex(player_ptr).is_spelling_specific(HEX_BUILDING)) {
                 num++;
                 wgt /= 2;
                 mul += 2;
@@ -1710,7 +1710,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
     }
 
     if (player_ptr->realm1 == REALM_HEX) {
-        if (RealmHex(player_ptr).is_spelling_specific(HEX_ICE_ARMOR)) {
+        if (SpellHex(player_ptr).is_spelling_specific(HEX_ICE_ARMOR)) {
             ac += 30;
         }
 
@@ -1995,7 +1995,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
     }
 
     if ((player_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
-        if (RealmHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
+        if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
             if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 damage += 5;
             }
@@ -2937,7 +2937,7 @@ long calc_score(player_type *player_ptr)
  */
 bool is_blessed(player_type *player_ptr)
 {
-    return player_ptr->blessed || music_singing(player_ptr, MUSIC_BLESS) || RealmHex(player_ptr).is_spelling_specific(HEX_BLESS);
+    return player_ptr->blessed || music_singing(player_ptr, MUSIC_BLESS) || SpellHex(player_ptr).is_spelling_specific(HEX_BLESS);
 }
 
 bool is_tim_esp(player_type *player_ptr)
@@ -2969,8 +2969,8 @@ void stop_mouth(player_type *player_ptr)
     if (music_singing_any(player_ptr))
         stop_singing(player_ptr);
 
-    if (RealmHex(player_ptr).is_spelling_any()) {
-        (void)RealmHex(player_ptr).stop_all_spells();
+    if (SpellHex(player_ptr).is_spelling_any()) {
+        (void)SpellHex(player_ptr).stop_all_spells();
     }
 }
 

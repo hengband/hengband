@@ -57,11 +57,11 @@ int16_t PlayerStrength::time_effect_value()
     int16_t result = 0;
 
     if (this->player_ptr->realm1 == REALM_HEX) {
-        RealmHex realm_hex(this->player_ptr);
-        if (realm_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
+        SpellHex spell_hex(this->player_ptr);
+        if (spell_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
             result += 4;
         }
-        if (realm_hex.is_spelling_specific(HEX_BUILDING)) {
+        if (spell_hex.is_spelling_specific(HEX_BUILDING)) {
             result += 4;
         }
     }

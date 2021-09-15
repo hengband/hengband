@@ -55,7 +55,7 @@ int16_t PlayerDexterity::time_effect_value()
     int16_t result = 0;
 
     if (this->player_ptr->realm1 == REALM_HEX) {
-        if (RealmHex(this->player_ptr).is_spelling_specific(HEX_BUILDING)) {
+        if (SpellHex(this->player_ptr).is_spelling_specific(HEX_BUILDING)) {
             result += 4;
         }
     }

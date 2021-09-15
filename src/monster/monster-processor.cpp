@@ -410,7 +410,7 @@ bool decide_monster_multiplication(player_type *player_ptr, MONSTER_IDX m_idx, P
         }
     }
 
-    if (RealmHex(player_ptr).check_hex_barrier(m_idx, HEX_ANTI_MULTI))
+    if (SpellHex(player_ptr).check_hex_barrier(m_idx, HEX_ANTI_MULTI))
         k = 8;
 
     if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ))) {

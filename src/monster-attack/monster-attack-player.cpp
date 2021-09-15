@@ -462,11 +462,11 @@ static bool process_monster_blows(player_type *player_ptr, monap_type *monap_ptr
 
 static void postprocess_monster_blows(player_type *player_ptr, monap_type *monap_ptr)
 {
-    RealmHex realm_hex(player_ptr, monap_ptr);
-    realm_hex.store_vengeful_damage(monap_ptr->get_damage);
-    realm_hex.eyes_on_eyes();
+    SpellHex spell_hex(player_ptr, monap_ptr);
+    spell_hex.store_vengeful_damage(monap_ptr->get_damage);
+    spell_hex.eyes_on_eyes();
     musou_counterattack(player_ptr, monap_ptr);
-    realm_hex.thief_teleport();
+    spell_hex.thief_teleport();
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (player_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !player_ptr->current_floor_ptr->inside_arena) {
         r_ptr->r_deaths++;

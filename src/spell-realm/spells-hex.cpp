@@ -33,10 +33,12 @@
 #include "monster/monster-description-types.h"
 #endif
 
+#include <bitset>
+
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
 
-RealmHex::RealmHex(player_type *player_ptr)
+SpellHex::SpellHex(player_type *player_ptr)
     : player_ptr(player_ptr)
 {
     constexpr int max_realm_spells = 32;
@@ -51,7 +53,7 @@ RealmHex::RealmHex(player_type *player_ptr)
     }
 }
 
-RealmHex::RealmHex(player_type *player_ptr, monap_type *monap_ptr)
+SpellHex::SpellHex(player_type *player_ptr, monap_type *monap_ptr)
     : player_ptr(player_ptr)
     , monap_ptr(monap_ptr)
 {
@@ -60,49 +62,52 @@ RealmHex::RealmHex(player_type *player_ptr, monap_type *monap_ptr)
 /*!
  * @brief プレイヤーが詠唱中の全呪術を停止する
  */
-bool RealmHex::stop_all_spells()
+void SpellHex::stop_all_spells()
 {
     for (auto spell : this->casting_spells) {
         exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_STOP);
     }
 
-    casting_hex_flags(this->player_ptr) = 0;
-    casting_hex_num(this->player_ptr) = 0;
+    this->player_ptr->magic_num1[0] = 0;
     if (this->player_ptr->action == ACTION_SPELL) {
         set_action(this->player_ptr, ACTION_NONE);
     }
 
     this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
-    return true;
 }
 
 /*!
- * @brief プレイヤーが詠唱中の呪術から一つを選んで停止する
+ * @brief プレイヤーが詠唱中の呪術から選択式で一つまたは全てを停止する
+ * @return 停止したらtrue、停止をキャンセルしたらfalse
  */
-bool RealmHex::stop_one_spell()
+bool SpellHex::stop_spells_with_selection()
 {
-    if (!RealmHex(this->player_ptr).is_spelling_any()) {
+    if (!this->is_spelling_any()) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return false;
     }
 
-    if ((casting_hex_num(this->player_ptr) == 1) || (this->player_ptr->lev < 35)) {
-        return this->stop_all_spells();
+    auto casting_num = this->get_casting_num();
+    if ((casting_num == 1) || (this->player_ptr->lev < 35)) {
+        this->stop_all_spells();
+        return true;
     }
 
     char out_val[160];
     strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
-        I2A(0), I2A(casting_hex_num(this->player_ptr) - 1));
+        I2A(0), I2A(casting_num - 1));
     screen_save();
-    char choice = 0;
-    auto is_selected = select_spell_stopping(out_val, choice);
+    auto [is_all, is_selected, choice] = select_spell_stopping(out_val);
+    if (is_all) {
+        return true;
+    }
+
     screen_load();
     if (is_selected) {
         auto n = this->casting_spells[A2I(choice)];
         exe_spell(this->player_ptr, REALM_HEX, n, SPELL_STOP);
-        casting_hex_flags(this->player_ptr) &= ~(1UL << n);
-        casting_hex_num(this->player_ptr)--;
+        this->reset_casting_flag(static_cast<spell_hex_type>(n));
     }
 
     this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
@@ -112,38 +117,40 @@ bool RealmHex::stop_one_spell()
 
 /*!
  * @brief 中断する呪術を選択する
- * @param spells 詠唱中の呪術リスト
  * @param out_val 呪文名
- * @param choice 選択した呪文
- * @return 選択が完了したらtrue、キャンセルならばfalse
+ * @return
+ * Item1: 全ての呪文を中断するならばtrue、1つの呪文を中断するならばfalse
+ * Item2: 選択が完了したらtrue、キャンセルならばfalse
+ * Item3: 選択した呪文番号 (a～d、lの5択)
  */
-bool RealmHex::select_spell_stopping(char *out_val, char &choice)
+std::tuple<bool, bool, char> SpellHex::select_spell_stopping(char *out_val)
 {
     while (true) {
+        char choice = 0;
         this->display_casting_spells_list();
         if (!get_com(out_val, &choice, true)) {
-            return false;
+            return std::make_tuple(false, false, choice);
         }
 
         if (isupper(choice)) {
             choice = static_cast<char>(tolower(choice));
         }
 
-        /* All */
         if (choice == 'l') {
             screen_load();
-            return this->stop_all_spells();
+            this->stop_all_spells();
+            return std::make_tuple(true, true, choice);
         }
 
-        if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(this->player_ptr) - 1))) {
+        if ((choice < I2A(0)) || (choice > I2A(this->get_casting_num() - 1))) {
             continue;
         }
 
-        return true;
+        return std::make_tuple(false, true, choice);
     }
 }
 
-void RealmHex::display_casting_spells_list()
+void SpellHex::display_casting_spells_list()
 {
     constexpr auto y = 1;
     constexpr auto x = 20;
@@ -161,14 +168,13 @@ void RealmHex::display_casting_spells_list()
 /*!
  * @brief 一定時間毎に呪術で消費するMPを処理する
  */
-void RealmHex::decrease_mana()
+void SpellHex::decrease_mana()
 {
-    /* Spells spelled by player */
     if (this->player_ptr->realm1 != REALM_HEX) {
         return;
     }
 
-    if (!casting_hex_flags(this->player_ptr) && !this->player_ptr->magic_num1[1]) {
+    if (!this->is_spelling_any() && !this->player_ptr->magic_num1[1]) {
         return;
     }
 
@@ -182,9 +188,9 @@ void RealmHex::decrease_mana()
         return;
     }
 
-    this->gain_exp_from_hex();
+    this->gain_exp();
     for (auto spell : this->casting_spells) {
-        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_CONT);
+        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_CONTNUATION);
     }
 }
 
@@ -192,13 +198,14 @@ void RealmHex::decrease_mana()
  * @brief 継続的な呪文の詠唱が可能な程度にMPが残っているか確認し、残量に応じて継続・中断を行う
  * @param need_restart 詠唱を再開するか否か
  * @return MPが足りているか否か
+ * @todo 64ビットの割り算をしなければいけない箇所には見えない. 調査の後不要ならば消すこと.
  */
-bool RealmHex::process_mana_cost(const bool need_restart)
+bool SpellHex::process_mana_cost(const bool need_restart)
 {
     auto need_mana = this->calc_need_mana();
     uint need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-    need_mana += (casting_hex_num(this->player_ptr) - 1);
+    need_mana += this->get_casting_num() - 1;
 
     auto enough_mana = s64b_cmp(this->player_ptr->csp, this->player_ptr->csp_frac, need_mana, need_mana_frac) >= 0;
     if (!enough_mana) {
@@ -221,7 +228,7 @@ bool RealmHex::process_mana_cost(const bool need_restart)
     return true;
 }
 
-bool RealmHex::check_restart()
+bool SpellHex::check_restart()
 {
     if (this->player_ptr->magic_num1[1] == 0) {
         return false;
@@ -232,7 +239,7 @@ bool RealmHex::check_restart()
     return true;
 }
 
-int RealmHex::calc_need_mana()
+int SpellHex::calc_need_mana()
 {
     auto need_mana = 0;
     for (auto spell : this->casting_spells) {
@@ -243,7 +250,7 @@ int RealmHex::calc_need_mana()
     return need_mana;
 }
 
-void RealmHex::gain_exp_from_hex()
+void SpellHex::gain_exp()
 {
     for (auto spell : this->casting_spells) {
         if (!this->is_spelling_specific(spell)) {
@@ -267,7 +274,7 @@ void RealmHex::gain_exp_from_hex()
     }
 }
 
-bool RealmHex::gain_exp_skilled(const int spell)
+bool SpellHex::gain_exp_skilled(const int spell)
 {
     if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_SKILLED) {
         return false;
@@ -284,7 +291,7 @@ bool RealmHex::gain_exp_skilled(const int spell)
     return true;
 }
 
-bool RealmHex::gain_exp_expert(const int spell)
+bool SpellHex::gain_exp_expert(const int spell)
 {
     if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_EXPERT) {
         return false;
@@ -302,7 +309,7 @@ bool RealmHex::gain_exp_expert(const int spell)
     return true;
 }
 
-void RealmHex::gain_exp_master(const int spell)
+void SpellHex::gain_exp_master(const int spell)
 {
     if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_MASTER) {
         return;
@@ -322,28 +329,28 @@ void RealmHex::gain_exp_master(const int spell)
  * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
  * @return すでに全枠を利用しているならTRUEを返す
  */
-bool RealmHex::is_casting_full_capacity() const
+bool SpellHex::is_casting_full_capacity() const
 {
     auto k_max = (this->player_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
-    return casting_hex_num(this->player_ptr) >= k_max;
+    return this->get_casting_num() >= k_max;
 }
 
 /*!
  * @brief 一定ゲームターン毎に復讐処理の残り期間の判定を行う
  */
-void RealmHex::continue_revenge()
+void SpellHex::continue_revenge()
 {
-    if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
+    if ((this->player_ptr->realm1 != REALM_HEX) || (this->get_revenge_turn() == 0)) {
         return;
     }
 
-    switch (hex_revenge_type(this->player_ptr)) {
-    case 1:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
+    switch (this->get_revenge_type()) {
+    case SpellHexRevengeType::PATIENCE:
+        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONTNUATION);
         return;
-    case 2:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT);
+    case SpellHexRevengeType::REVENGE:
+        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONTNUATION);
         return;
     default:
         return;
@@ -354,13 +361,13 @@ void RealmHex::continue_revenge()
  * @brief 復讐ダメージの追加を行う
  * @param dam 蓄積されるダメージ量
  */
-void RealmHex::store_vengeful_damage(HIT_POINT dam)
+void SpellHex::store_vengeful_damage(HIT_POINT dam)
 {
-    if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
+    if ((this->player_ptr->realm1 != REALM_HEX) || (this->get_revenge_turn() == 0)) {
         return;
     }
 
-    hex_revenge_power(this->player_ptr) += dam;
+    this->set_revenge_power(dam, false);
 }
 
 /*!
@@ -369,22 +376,22 @@ void RealmHex::store_vengeful_damage(HIT_POINT dam)
  * @return 呪術の効果が適用されるならTRUEを返す
  * @details v3.0.0現在は反テレポート・反魔法・反増殖の3種類
  */
-bool RealmHex::check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const
+bool SpellHex::check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const
 {
     const auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[m_idx];
     const auto *r_ptr = &r_info[m_ptr->r_idx];
     return this->is_spelling_specific(type) && ((this->player_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
-bool RealmHex::is_spelling_specific(int hex) const
+bool SpellHex::is_spelling_specific(int hex) const
 {
     auto check = static_cast<uint32_t>(this->player_ptr->magic_num1[0]);
     return (this->player_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
 }
 
-bool RealmHex::is_spelling_any() const
+bool SpellHex::is_spelling_any() const
 {
-    return (player_ptr->realm1 == REALM_HEX) && (player_ptr->magic_num1[0] != 0);
+    return (this->player_ptr->realm1 == REALM_HEX) && (this->get_casting_num() > 0);
 }
 
 /*!
@@ -392,7 +399,7 @@ bool RealmHex::is_spelling_any() const
  * @param this->player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void RealmHex::eyes_on_eyes()
+void SpellHex::eyes_on_eyes()
 {
     if (this->monap_ptr == nullptr) {
         throw("Invalid constructor was used!");
@@ -418,7 +425,7 @@ void RealmHex::eyes_on_eyes()
     }
 }
 
-void RealmHex::thief_teleport()
+void SpellHex::thief_teleport()
 {
     if (this->monap_ptr == nullptr) {
         throw("Invalid constructor was used!");
@@ -434,4 +441,66 @@ void RealmHex::thief_teleport()
         msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
         teleport_away(this->player_ptr, this->monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
     }
+}
+
+void SpellHex::set_casting_flag(spell_hex_type type)
+{
+    auto value = static_cast<uint>(this->player_ptr->magic_num1[0]);
+    set_bits(value, 1U << type);
+    this->player_ptr->magic_num1[0] = value;
+}
+
+void SpellHex::reset_casting_flag(spell_hex_type type)
+{
+    auto value = static_cast<uint>(this->player_ptr->magic_num1[0]);
+    reset_bits(value, 1U << type);
+    this->player_ptr->magic_num1[0] = value;
+}
+
+int32_t SpellHex::get_casting_num() const
+{
+    return std::bitset<32>(this->player_ptr->magic_num1[0]).count();
+}
+
+int32_t SpellHex::get_revenge_power() const
+{
+    return this->player_ptr->magic_num1[2];
+}
+
+void SpellHex::set_revenge_power(int32_t power, bool substitution)
+{
+    if (substitution) {
+        this->player_ptr->magic_num1[2] = power;
+    } else {
+        this->player_ptr->magic_num1[2] += power;
+    }
+}
+
+byte SpellHex::get_revenge_turn() const
+{
+    return this->player_ptr->magic_num2[2];
+}
+
+/*!
+ * @brief 復讐の残りターンをセットするか、残りターン数を減らす
+ * @param turn 残りターン (非負整数であること)
+ * @param substitution セットならtrue、ターン減少ならfalse
+ */
+void SpellHex::set_revenge_turn(byte turn, bool substitution)
+{
+    if (substitution) {
+        this->player_ptr->magic_num2[2] = turn;
+    } else {
+        this->player_ptr->magic_num2[2] -= turn;
+    }
+}
+
+SpellHexRevengeType SpellHex::get_revenge_type() const
+{
+    return static_cast<SpellHexRevengeType>(this->player_ptr->magic_num2[1]);
+}
+
+void SpellHex::set_revenge_type(SpellHexRevengeType type)
+{
+    this->player_ptr->magic_num2[1] = enum2i(type);
 }

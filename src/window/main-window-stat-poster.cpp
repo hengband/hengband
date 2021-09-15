@@ -377,78 +377,82 @@ static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
         return;
     }
 
-    RealmHex realm_hex(player_ptr);
-    if (realm_hex.is_spelling_specific(HEX_BLESS)) {
+    SpellHex spell_hex(player_ptr);
+    if (spell_hex.is_spelling_specific(HEX_BLESS)) {
         ADD_BAR_FLAG(BAR_BLESSED);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_DEMON_AURA)) {
+    if (spell_hex.is_spelling_specific(HEX_DEMON_AURA)) {
         ADD_BAR_FLAG(BAR_SHFIRE);
         ADD_BAR_FLAG(BAR_REGENERATION);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
+    if (spell_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
         ADD_BAR_FLAG(BAR_MIGHT);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_DETECT_EVIL)) {
+    if (spell_hex.is_spelling_specific(HEX_DETECT_EVIL)) {
         ADD_BAR_FLAG(BAR_ESP_EVIL);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_ICE_ARMOR)) {
+    if (spell_hex.is_spelling_specific(HEX_ICE_ARMOR)) {
         ADD_BAR_FLAG(BAR_SHCOLD);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_RUNESWORD)) {
+    if (spell_hex.is_spelling_specific(HEX_RUNESWORD)) {
         ADD_BAR_FLAG(BAR_RUNESWORD);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_BUILDING)) {
+    if (spell_hex.is_spelling_specific(HEX_BUILDING)) {
         ADD_BAR_FLAG(BAR_BUILD);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_ANTI_TELE)) {
+    if (spell_hex.is_spelling_specific(HEX_ANTI_TELE)) {
         ADD_BAR_FLAG(BAR_ANTITELE);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_SHOCK_CLOAK)) {
+    if (spell_hex.is_spelling_specific(HEX_SHOCK_CLOAK)) {
         ADD_BAR_FLAG(BAR_SHELEC);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_SHADOW_CLOAK)) {
+    if (spell_hex.is_spelling_specific(HEX_SHADOW_CLOAK)) {
         ADD_BAR_FLAG(BAR_SHSHADOW);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_CONFUSION)) {
+    if (spell_hex.is_spelling_specific(HEX_CONFUSION)) {
         ADD_BAR_FLAG(BAR_ATTKCONF);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_EYE_FOR_EYE)) {
+    if (spell_hex.is_spelling_specific(HEX_EYE_FOR_EYE)) {
         ADD_BAR_FLAG(BAR_EYEEYE);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_ANTI_MULTI)) {
+    if (spell_hex.is_spelling_specific(HEX_ANTI_MULTI)) {
         ADD_BAR_FLAG(BAR_ANTIMULTI);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_VAMP_BLADE)) {
+    if (spell_hex.is_spelling_specific(HEX_VAMP_BLADE)) {
         ADD_BAR_FLAG(BAR_VAMPILIC);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_ANTI_MAGIC)) {
+    if (spell_hex.is_spelling_specific(HEX_ANTI_MAGIC)) {
         ADD_BAR_FLAG(BAR_ANTIMAGIC);
     }
 
-    if (realm_hex.is_spelling_specific(HEX_CURE_LIGHT) || realm_hex.is_spelling_specific(HEX_CURE_SERIOUS)
-        || realm_hex.is_spelling_specific(HEX_CURE_CRITICAL)) {
+    if (spell_hex.is_spelling_specific(HEX_CURE_LIGHT) || spell_hex.is_spelling_specific(HEX_CURE_SERIOUS)
+        || spell_hex.is_spelling_specific(HEX_CURE_CRITICAL)) {
         ADD_BAR_FLAG(BAR_CURE);
     }
 
-    if (hex_revenge_turn(player_ptr)) {
-        if (hex_revenge_type(player_ptr) == 1)
+    if (spell_hex.get_revenge_turn() > 0) {
+        auto revenge_type = spell_hex.get_revenge_type();
+        if (revenge_type == SpellHexRevengeType::PATIENCE) {
             ADD_BAR_FLAG(BAR_PATIENCE);
-        if (hex_revenge_type(player_ptr) == 2)
+        }
+
+        if (revenge_type == SpellHexRevengeType::REVENGE) {
             ADD_BAR_FLAG(BAR_REVENGE);
+        }
     }
 }
 

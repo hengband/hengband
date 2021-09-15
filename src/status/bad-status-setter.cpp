@@ -120,9 +120,9 @@ bool set_confused(player_type *player_ptr, TIME_EFFECT v)
             if (player_ptr->concent)
                 reset_concentration(player_ptr, true);
 
-            RealmHex realm_hex(player_ptr);
-            if (realm_hex.is_spelling_any()) {
-                (void)realm_hex.stop_all_spells();
+            SpellHex spell_hex(player_ptr);
+            if (spell_hex.is_spelling_any()) {
+                (void)spell_hex.stop_all_spells();
             }
 
             notice = true;
@@ -255,9 +255,9 @@ bool set_paralyzed(player_type *player_ptr, TIME_EFFECT v)
             if (player_ptr->concent)
                 reset_concentration(player_ptr, true);
 
-            RealmHex realm_hex(player_ptr);
-            if (realm_hex.is_spelling_any()) {
-                (void)realm_hex.stop_all_spells();
+            SpellHex spell_hex(player_ptr);
+            if (spell_hex.is_spelling_any()) {
+                (void)spell_hex.stop_all_spells();
             }
 
             player_ptr->counter = false;
@@ -454,9 +454,9 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
         if (player_ptr->concent)
             reset_concentration(player_ptr, true);
 
-        RealmHex realm_hex(player_ptr);
-        if (realm_hex.is_spelling_any()) {
-            (void)realm_hex.stop_all_spells();
+        SpellHex spell_hex(player_ptr);
+        if (spell_hex.is_spelling_any()) {
+            (void)spell_hex.stop_all_spells();
         }
 
         notice = true;
