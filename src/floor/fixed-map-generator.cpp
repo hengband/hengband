@@ -439,7 +439,7 @@ parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qt
         return PARSE_ERROR_NONE;
     }
 
-    parse_error_type parse_result_Q = static_cast<parse_error_type>(parse_qtw_Q(qtwg_ptr, zz));
+    parse_error_type parse_result_Q = i2enum<parse_error_type>(parse_qtw_Q(qtwg_ptr, zz));
     if (parse_result_Q != PARSE_CONTINUE)
         return parse_result_Q;
 

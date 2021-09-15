@@ -176,7 +176,7 @@ static void do_cmd_options_autosave(player_type *player_ptr, concptr info)
  */
 static bool has_window_flag(int x, int y)
 {
-    auto flag = static_cast<window_redraw_type>(1UL << y);
+    auto flag = i2enum<window_redraw_type>(1UL << y);
     return any_bits(window_flag[x], flag);
 }
 
@@ -189,7 +189,7 @@ static bool has_window_flag(int x, int y)
  */
 static void set_window_flag(int x, int y)
 {
-    auto flag = static_cast<window_redraw_type>(1UL << y);
+    auto flag = i2enum<window_redraw_type>(1UL << y);
     if (any_bits(PW_ALL, flag))
         set_bits(window_flag[x], flag);
 }
@@ -202,7 +202,7 @@ static void clear_window_flag(int x, int y)
 {
     window_flag[x] = 0;
 
-    auto flag = static_cast<window_redraw_type>(1UL << y);
+    auto flag = i2enum<window_redraw_type>(1UL << y);
     for (int i = 0; i < 8; i++) {
         reset_bits(window_flag[i], flag);
     }

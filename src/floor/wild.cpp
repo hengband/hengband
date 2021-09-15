@@ -297,7 +297,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
     if (player_ptr->town_num) {
         init_buildings();
         if (border || corner)
-            init_flags = static_cast<init_flags_type>(INIT_CREATE_DUNGEON | INIT_ONLY_FEATURES);
+            init_flags = i2enum<init_flags_type>(INIT_CREATE_DUNGEON | INIT_ONLY_FEATURES);
         else
             init_flags = INIT_CREATE_DUNGEON;
 
@@ -648,7 +648,7 @@ parse_error_type parse_line_wilderness(player_type *player_ptr, char *buf, int x
             int index = zz[0][0];
 
             if (num > 1)
-                w_letter[index].terrain = static_cast<wt_type>(atoi(zz[1]));
+                w_letter[index].terrain = i2enum<wt_type>(atoi(zz[1]));
             else
                 w_letter[index].terrain = TERRAIN_EDGE;
 

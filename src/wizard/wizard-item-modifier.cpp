@@ -337,7 +337,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     auto get_seq_32bits = [](const TrFlags &flgs, uint start) {
         BIT_FLAGS result = 0U;
         for (auto i = 0U; i < 32 && start + i < flgs.size(); i++) {
-            if (flgs.has(static_cast<tr_type>(start + i))) {
+            if (flgs.has(i2enum<tr_type>(start + i))) {
                 result |= 1U << i;
             }
         }

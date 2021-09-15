@@ -140,7 +140,7 @@ void wiz_learn_blue_magic_all(player_type *player_ptr)
 {
     EnumClassFlagGroup<RF_ABILITY> ability_flags;
     for (int j = 1; j < A_MAX; j++) {
-        set_rf_masks(ability_flags, static_cast<blue_magic_type>(j));
+        set_rf_masks(ability_flags, i2enum<blue_magic_type>(j));
 
         std::vector<RF_ABILITY> spells;
         EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));

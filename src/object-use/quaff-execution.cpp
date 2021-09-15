@@ -83,7 +83,7 @@ static bool booze(player_type *player_ptr)
         else
             wiz_dark(player_ptr);
 
-        (void)teleport_player_aux(player_ptr, 100, false, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+        (void)teleport_player_aux(player_ptr, 100, false, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
         wiz_dark(player_ptr);
         msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
         msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));

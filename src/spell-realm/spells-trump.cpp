@@ -95,7 +95,7 @@ void cast_shuffle(player_type *player_ptr)
     if (die < 30) {
         msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
         trump_summoning(player_ptr, 1, false, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3 / 2),
-            static_cast<summon_type>(SUMMON_UNIQUE + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+            i2enum<summon_type>(SUMMON_UNIQUE + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
         return;
     }
 

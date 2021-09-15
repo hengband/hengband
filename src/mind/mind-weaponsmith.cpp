@@ -701,7 +701,7 @@ void do_cmd_kaji(player_type *player_ptr, bool only_browse)
         mode = choose_essence();
         if (mode == 0)
             break;
-        add_essence(player_ptr, static_cast<SmithCategory>(mode));
+        add_essence(player_ptr, i2enum<SmithCategory>(mode));
         break;
     case 5:
         add_essence(player_ptr, SmithCategory::ENCHANT);

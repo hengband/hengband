@@ -165,7 +165,7 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
     for (int spell_type = 1; spell_type < 6; spell_type++) {
         col++;
         learnt_spell_table learnt_magic;
-        add_monster_spell_type(p, col, static_cast<blue_magic_type>(spell_type), &learnt_magic);
+        add_monster_spell_type(p, col, i2enum<blue_magic_type>(spell_type), &learnt_magic);
 
         std::vector<RF_ABILITY> learnt_spells;
         EnumClassFlagGroup<RF_ABILITY>::get_flags(learnt_magic.ability_flags, std::back_inserter(learnt_spells));

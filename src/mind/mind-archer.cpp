@@ -37,7 +37,7 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
 {
     COMMAND_CODE code;
     if (repeat_pull(&code)) {
-        type = static_cast<ammo_creation_type>(code);
+        type = i2enum<ammo_creation_type>(code);
         switch (type) {
         case AMMO_SHOT:
         case AMMO_ARROW:

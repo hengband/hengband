@@ -294,7 +294,7 @@ static element_text_list element_texts = {
  */
 concptr get_element_title(int realm_idx)
 {
-    auto realm = static_cast<ElementRealm>(realm_idx);
+    auto realm = i2enum<ElementRealm>(realm_idx);
     return element_types.at(realm).title.data();
 }
 
@@ -305,7 +305,7 @@ concptr get_element_title(int realm_idx)
  */
 static std::array<spells_type, 3> get_element_types(int realm_idx)
 {
-    auto realm = static_cast<ElementRealm>(realm_idx);
+    auto realm = i2enum<ElementRealm>(realm_idx);
     return element_types.at(realm).type;
 }
 
@@ -328,7 +328,7 @@ spells_type get_element_type(int realm_idx, int n)
  */
 static spells_type get_element_spells_type(player_type *player_ptr, int n)
 {
-    auto realm = element_types.at(static_cast<ElementRealm>(player_ptr->element));
+    auto realm = element_types.at(i2enum<ElementRealm>(player_ptr->element));
     auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
         if (randint0(100) < player_ptr->lev * 2)
@@ -344,7 +344,7 @@ static spells_type get_element_spells_type(player_type *player_ptr, int n)
  */
 static std::array<std::string_view, 3> get_element_names(int realm_idx)
 {
-    auto realm = static_cast<ElementRealm>(realm_idx);
+    auto realm = i2enum<ElementRealm>(realm_idx);
     return element_types.at(realm).name;
 }
 
@@ -367,8 +367,8 @@ concptr get_element_name(int realm_idx, int n)
  */
 static concptr get_element_tip(player_type *player_ptr, int spell_idx)
 {
-    auto realm = static_cast<ElementRealm>(player_ptr->element);
-    auto spell = static_cast<ElementSpells>(spell_idx);
+    auto realm = i2enum<ElementRealm>(player_ptr->element);
+    auto spell = i2enum<ElementSpells>(spell_idx);
     auto elem = element_powers.at(spell).elem;
     return format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
 }
@@ -382,7 +382,7 @@ static concptr get_element_tip(player_type *player_ptr, int spell_idx)
 static int get_elemental_elem(player_type *player_ptr, int spell_idx)
 {
     (void)player_ptr;
-    auto spell = static_cast<ElementSpells>(spell_idx);
+    auto spell = i2enum<ElementSpells>(spell_idx);
     return element_powers.at(spell).elem;
 }
 
@@ -395,7 +395,7 @@ static int get_elemental_elem(player_type *player_ptr, int spell_idx)
 static mind_type get_elemental_info(player_type *player_ptr, int spell_idx)
 {
     (void)player_ptr;
-    auto spell = static_cast<ElementSpells>(spell_idx);
+    auto spell = i2enum<ElementSpells>(spell_idx);
     return element_powers.at(spell).info;
 }
 
@@ -409,7 +409,7 @@ static mind_type get_elemental_info(player_type *player_ptr, int spell_idx)
 void get_element_effect_info(player_type *player_ptr, int spell_idx, char *p)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
-    auto spell = static_cast<ElementSpells>(spell_idx);
+    auto spell = i2enum<ElementSpells>(spell_idx);
     int dam = 0;
 
     switch (spell) {
@@ -470,7 +470,7 @@ void get_element_effect_info(player_type *player_ptr, int spell_idx, char *p)
  */
 static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
 {
-    auto spell = static_cast<ElementSpells>(spell_idx);
+    auto spell = i2enum<ElementSpells>(spell_idx);
     auto power = element_powers.at(spell);
     spells_type typ;
     DIRECTION dir;
@@ -1065,7 +1065,7 @@ bool has_element_resist(player_type *player_ptr, ElementRealm realm, PLAYER_LEVE
     if (player_ptr->pclass != CLASS_ELEMENTALIST)
         return false;
 
-    auto prealm = static_cast<ElementRealm>(player_ptr->element);
+    auto prealm = i2enum<ElementRealm>(player_ptr->element);
     return (prealm == realm && player_ptr->lev >= lev);
 }
 
@@ -1085,7 +1085,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
         name = _("ランダム", "Random");
     } else {
         sym = I2A(i);
-        name = element_types.at(static_cast<ElementRealm>(i + 1)).title.data();
+        name = element_types.at(i2enum<ElementRealm>(i + 1)).title.data();
     }
     sprintf(cur, "%c) %s", sym, name);
 
@@ -1215,7 +1215,7 @@ byte select_element_realm(player_type *player_ptr)
         if (realm_idx == 255)
             break;
 
-        auto realm = static_cast<ElementRealm>(realm_idx);
+        auto realm = i2enum<ElementRealm>(realm_idx);
         char temp[80 * 5];
         shape_buffer(element_texts.at(realm).data(), 74, temp, sizeof(temp));
         concptr t = temp;
@@ -1244,7 +1244,7 @@ byte select_element_realm(player_type *player_ptr)
 void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
 {
     auto plev = player_ptr->lev;
-    auto realm = static_cast<ElementRealm>(player_ptr->element);
+    auto realm = i2enum<ElementRealm>(player_ptr->element);
     rpi_type rpi;
     switch (realm) {
     case ElementRealm::FIRE:
@@ -1340,7 +1340,7 @@ static bool door_to_darkness(player_type *player_ptr, POSITION dist);
  */
 bool switch_element_execution(player_type *player_ptr)
 {
-    auto realm = static_cast<ElementRealm>(player_ptr->element);
+    auto realm = i2enum<ElementRealm>(player_ptr->element);
     PLAYER_LEVEL plev = player_ptr->lev;
     DIRECTION dir;
 

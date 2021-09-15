@@ -315,7 +315,7 @@ void wild_magic(player_type *player_ptr, int spell)
     case 35:
         for (int counter = 0; counter < 8; counter++) {
             (void)summon_specific(
-                player_ptr, 0, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3) / 2, static_cast<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
+                player_ptr, 0, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3) / 2, i2enum<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
         }
 
         break;

@@ -14,9 +14,9 @@ static const char p2 = ')';
 static TERM_COLOR birth_class_color(int cs)
 {
     if (cs < MAX_CLASS) {
-        if (is_retired_class(static_cast<player_class_type>(cs)))
+        if (is_retired_class(i2enum<player_class_type>(cs)))
             return TERM_L_DARK;
-        if (is_winner_class(static_cast<player_class_type>(cs)))
+        if (is_winner_class(i2enum<player_class_type>(cs)))
             return TERM_SLATE;
     }
     return TERM_WHITE;
@@ -190,7 +190,7 @@ bool get_player_class(player_type *player_ptr)
     if (!select_class(player_ptr, cur, sym, &k))
         return false;
 
-    player_ptr->pclass = static_cast<player_class_type>(k);
+    player_ptr->pclass = i2enum<player_class_type>(k);
     cp_ptr = &class_info[player_ptr->pclass];
     mp_ptr = &m_info[player_ptr->pclass];
     c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);

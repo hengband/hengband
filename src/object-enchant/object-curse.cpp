@@ -31,7 +31,7 @@ TRC get_curse(int power, object_type *o_ptr)
     TRC new_curse;
 
     while (true) {
-        new_curse = static_cast<TRC>(rand_range(enum2i(TRC::TY_CURSE), enum2i(TRC::MAX) - 1));
+        new_curse = i2enum<TRC>(rand_range(enum2i(TRC::TY_CURSE), enum2i(TRC::MAX) - 1));
         if (power == 2) {
             if (TRC_HEAVY_MASK.has_not(new_curse))
                 continue;

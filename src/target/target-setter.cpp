@@ -515,7 +515,7 @@ static void sweep_target_grids(player_type *player_ptr, ts_type *ts_ptr)
         fix_floor_item_list(player_ptr, ts_ptr->y, ts_ptr->x);
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
-        while ((ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, static_cast<target_type>(ts_ptr->mode | TARGET_LOOK), ts_ptr->info)) == 0)
+        while ((ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, i2enum<target_type>(ts_ptr->mode | TARGET_LOOK), ts_ptr->info)) == 0)
             ;
 
         ts_ptr->distance = 0;

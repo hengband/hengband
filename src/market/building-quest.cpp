@@ -35,7 +35,7 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 
     init_flags = INIT_SHOW_TEXT;
     if (do_init)
-        init_flags = static_cast<init_flags_type>(init_flags | INIT_ASSIGN);
+        init_flags = i2enum<init_flags_type>(init_flags | INIT_ASSIGN);
 
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->inside_quest = old_quest;

@@ -79,7 +79,7 @@ bool do_cmd_cast_learned(player_type *player_ptr)
         chance = 95;
 
     chance = mod_spell_chance_2(player_ptr, chance);
-    const auto spell_type = static_cast<RF_ABILITY>(n);
+    const auto spell_type = i2enum<RF_ABILITY>(n);
     if (randint0(100) < chance) {
         if (flush_failure)
             flush();

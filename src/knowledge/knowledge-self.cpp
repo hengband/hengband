@@ -139,13 +139,13 @@ static void dump_winner_classes(FILE *fff)
     std::string s = "";
     std::string l = "";
     for (int c = 0; c < MAX_CLASS; c++) {
-        if (current_world_ptr->sf_winner.has_not(static_cast<player_class_type>(c)))
+        if (current_world_ptr->sf_winner.has_not(i2enum<player_class_type>(c)))
             continue;
 
         auto &cl = class_info[c];
         auto t = std::string(cl.title);
 
-        if (current_world_ptr->sf_retired.has_not(static_cast<player_class_type>(c)))
+        if (current_world_ptr->sf_retired.has_not(i2enum<player_class_type>(c)))
             t = "(" + t + ")";
 
         if (l.size() + t.size() + 2 > max_len) {

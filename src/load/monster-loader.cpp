@@ -126,7 +126,7 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
             m_ptr->mflag2[MFLAG2::CLONED] = rd_bits[22];
             m_ptr->mflag2[MFLAG2::PET] = rd_bits[23];
             m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits[28];
-            m_ptr->smart.reset(static_cast<SM>(22)).reset(static_cast<SM>(23)).reset(static_cast<SM>(28));
+            m_ptr->smart.reset(i2enum<SM>(22)).reset(i2enum<SM>(23)).reset(i2enum<SM>(28));
         } else {
             rd_FlagGroup(m_ptr->smart, rd_byte);
         }

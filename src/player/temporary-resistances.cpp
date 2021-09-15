@@ -42,7 +42,7 @@ void tim_player_flags(player_type *player_ptr, TrFlags &flags)
         flags.set(TR_RES_POIS);
 
     for (int test_flag = 0; test_flag < TR_FLAG_MAX; test_flag++) {
-        if (any_bits(get_player_flags(player_ptr, static_cast<tr_type>(test_flag)), tmp_effect_flag))
-            flags.set(static_cast<tr_type>(test_flag));
+        if (any_bits(get_player_flags(player_ptr, i2enum<tr_type>(test_flag)), tmp_effect_flag))
+            flags.set(i2enum<tr_type>(test_flag));
     }
 }
