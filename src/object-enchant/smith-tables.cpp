@@ -483,8 +483,8 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_basic_smith_info(SmithEffect::SH_COLD, _("冷気オーラ", "sheath of coldness"), SmithCategory::ETC, { SmithEssence::RES_COLD, SmithEssence::BRAND_COLD }, 50, { TR_RES_COLD, TR_SH_COLD }),
 
     make_basic_smith_info(SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD }),
-    make_info<SlayingGlovesSmithInfo>(SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200),
-    make_basic_smith_info(SmithEffect::EASY_2WEAPON, _("源氏の小手", "guantlets of Genji"), SmithCategory::WEAPON_ATTR, { SmithEssence::EASY2_WEAPON }, 20, { TR_EASY2_WEAPON }),
+    make_info<SlayingGlovesSmithInfo>(SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::ETC, { SmithEssence::ATTACK }, 200),
+    make_basic_smith_info(SmithEffect::EASY_2WEAPON, _("源氏の小手", "guantlets of Genji"), SmithCategory::ETC, { SmithEssence::EASY2_WEAPON }, 20, { TR_EASY2_WEAPON }),
 
     make_info<ActivationSmithInfo>(SmithEffect::ACT_QUAKE, _("地震", "quake"), SmithCategory::ACTIVATION, { SmithEssence::EATHQUAKE }, 15, ACT_QUAKE),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_RES_ACID, _("酸耐性", "resist acid"), SmithCategory::ACTIVATION, { SmithEssence::RES_ACID }, 30, ACT_RESIST_ACID),
