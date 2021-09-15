@@ -304,9 +304,7 @@ errr load_item(void)
         k_ptr->tried = (tmp8u & 0x02) ? true : false;
     }
 
-    if (arg_fiddle)
-        load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
-
+    load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
     return 0;
 }
 
@@ -340,8 +338,6 @@ errr load_artifact(void)
         }
     }
 
-    if (arg_fiddle)
-        load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
-
+    load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
     return 0;
 }

@@ -117,8 +117,7 @@ static void load_player_world(player_type *player_ptr)
     if (player_ptr->energy_need < -999)
         player_ptr->timewalk = true;
 
-    if (arg_fiddle)
-        load_note(_("特別情報をロードしました", "Loaded extra information"));
+    load_note(_("特別情報をロードしました", "Loaded extra information"));
 }
 
 static errr load_hp(player_type *player_ptr)
@@ -205,9 +204,7 @@ static errr exe_reading_savefile(player_type *player_ptr)
     if (load_town_quest_result != 0)
         return load_town_quest_result;
 
-    if (arg_fiddle)
-        load_note(_("クエスト情報をロードしました", "Loaded Quests"));
-
+    load_note(_("クエスト情報をロードしました", "Loaded Quests"));
     errr load_artifact_result = load_artifact();
     if (load_artifact_result != 0)
         return load_artifact_result;
