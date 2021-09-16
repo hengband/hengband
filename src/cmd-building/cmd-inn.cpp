@@ -78,14 +78,14 @@ static void write_diary_stay_inn(player_type *player_ptr, int prev_hour)
  */
 static void pass_game_turn_by_stay(void)
 {
-    int32_t oldturn = current_world_ptr->game_turn;
-    current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
-    if (current_world_ptr->dungeon_turn >= current_world_ptr->dungeon_turn_limit)
+    int32_t oldturn = w_ptr->game_turn;
+    w_ptr->game_turn = (w_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
+    if (w_ptr->dungeon_turn >= w_ptr->dungeon_turn_limit)
         return;
 
-    current_world_ptr->dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
-    if (current_world_ptr->dungeon_turn > current_world_ptr->dungeon_turn_limit)
-        current_world_ptr->dungeon_turn = current_world_ptr->dungeon_turn_limit;
+    w_ptr->dungeon_turn += MIN((w_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
+    if (w_ptr->dungeon_turn > w_ptr->dungeon_turn_limit)
+        w_ptr->dungeon_turn = w_ptr->dungeon_turn_limit;
 }
 
 /*!

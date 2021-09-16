@@ -980,7 +980,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
         }
     }
 
-    if (current_world_ptr->wizard && (a_ids.size() > 1 || e_ids.size() > 1)) {
+    if (w_ptr->wizard && (a_ids.size() > 1 || e_ids.size() > 1)) {
         msg_print(_("候補が多すぎる！", "Too many matches!"));
         return WishResult::FAIL;
     }
@@ -989,7 +989,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
         ARTIFACT_IDX a_idx = a_ids.back();
         if (must || (ok_art && !a_info[a_idx].cur_num)) {
             create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
-            if (!current_world_ptr->wizard)
+            if (!w_ptr->wizard)
                 a_info[a_idx].cur_num = 1;
         }
         else
@@ -1022,7 +1022,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
             a_ptr = &a_info[a_idx];
             if (must || (ok_art && !a_ptr->cur_num)) {
                 create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
-                if (!current_world_ptr->wizard)
+                if (!w_ptr->wizard)
                     a_info[a_idx].cur_num = 1;
             }
             else

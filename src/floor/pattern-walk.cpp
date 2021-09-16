@@ -234,7 +234,7 @@ bool pattern_seq(player_type *player_ptr, POSITION c_y, POSITION c_x, POSITION n
         ok_move = PATTERN_TILE_1;
         break;
     default:
-        if (current_world_ptr->wizard)
+        if (w_ptr->wizard)
             msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
         return true;
     }

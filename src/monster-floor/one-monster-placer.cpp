@@ -197,7 +197,7 @@ static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, PO
 
 static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    if (!player_ptr->warning || !current_world_ptr->character_dungeon)
+    if (!player_ptr->warning || !w_ptr->character_dungeon)
         return;
 
     monster_race *r_ptr = &r_info[r_idx];
@@ -385,7 +385,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
-    if (current_world_ptr->character_dungeon && (any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)))
+    if (w_ptr->character_dungeon && (any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)))
         real_r_ptr(m_ptr)->floor_id = player_ptr->floor_id;
 
     if (any_bits(r_ptr->flags2, RF2_MULTIPLY))

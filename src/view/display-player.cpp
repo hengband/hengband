@@ -176,7 +176,7 @@ static bool search_death_cause(player_type *player_ptr, char *statmsg)
     if (!player_ptr->is_dead)
         return false;
 
-    if (current_world_ptr->total_winner) {
+    if (w_ptr->total_winner) {
         sprintf(statmsg, _("…あなたは勝利の後%sした。", "...You %s after winning."),
             streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
 
@@ -245,7 +245,7 @@ static void decide_current_floor(player_type *player_ptr, char *statmsg)
 {
     if (search_death_cause(player_ptr, statmsg))
         return;
-    if (!current_world_ptr->character_dungeon)
+    if (!w_ptr->character_dungeon)
         return;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;

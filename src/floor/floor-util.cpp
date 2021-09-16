@@ -123,7 +123,7 @@ void wipe_o_list(floor_type *floor_ptr)
         if (!o_ptr->is_valid())
             continue;
 
-        if (!current_world_ptr->character_dungeon || preserve_mode) {
+        if (!w_ptr->character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
                 a_info[o_ptr->name1].cur_num = 0;
             }

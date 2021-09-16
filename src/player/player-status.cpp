@@ -442,7 +442,7 @@ static void update_bonuses(player_type *player_ptr)
         set_bits(player_ptr->window_flags, PW_PLAYER);
     }
 
-    if (current_world_ptr->character_xtra)
+    if (w_ptr->character_xtra)
         return;
 
     put_equipment_warning(player_ptr);
@@ -526,9 +526,9 @@ static void update_num_of_spells(player_type *player_ptr)
 {
     if (!mp_ptr->spell_book)
         return;
-    if (!current_world_ptr->character_generated)
+    if (!w_ptr->character_generated)
         return;
-    if (current_world_ptr->character_xtra)
+    if (w_ptr->character_xtra)
         return;
     if ((player_ptr->pclass == CLASS_SORCERER) || (player_ptr->pclass == CLASS_RED_MAGE)) {
         player_ptr->new_spells = 0;
@@ -954,7 +954,7 @@ static void update_max_mana(player_type *player_ptr)
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
     }
 
-    if (current_world_ptr->character_xtra)
+    if (w_ptr->character_xtra)
         return;
 
     if (player_ptr->old_cumber_glove != player_ptr->cumber_glove) {
@@ -1905,7 +1905,7 @@ void put_equipment_warning(player_type *player_ptr)
 
         if (player_ptr->is_icky_wield[i]) {
             msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
-            if (current_world_ptr->is_loading_now) {
+            if (w_ptr->is_loading_now) {
                 chg_virtue(player_ptr, V_FAITH, -1);
             }
         } else if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
@@ -1939,7 +1939,7 @@ void put_equipment_warning(player_type *player_ptr)
         && (heavy_armor(player_ptr) != player_ptr->monk_notify_aux)) {
         if (heavy_armor(player_ptr)) {
             msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
-            if (current_world_ptr->is_loading_now) {
+            if (w_ptr->is_loading_now) {
                 chg_virtue(player_ptr, V_HARMONY, -1);
             }
         } else {
@@ -2544,9 +2544,9 @@ void update_creature(player_type *player_ptr)
         update_num_of_spells(player_ptr);
     }
 
-    if (!current_world_ptr->character_generated)
+    if (!w_ptr->character_generated)
         return;
-    if (current_world_ptr->character_icky_depth > 0)
+    if (w_ptr->character_icky_depth > 0)
         return;
     if (any_bits(player_ptr->update, (PU_UN_LITE))) {
         reset_bits(player_ptr->update, PU_UN_LITE);
@@ -2892,7 +2892,7 @@ long calc_score(player_type *player_ptr)
         mult = 5;
 
     DEPTH max_dl = 0;
-    for (int i = 0; i < current_world_ptr->max_d_idx; i++)
+    for (int i = 0; i < w_ptr->max_d_idx; i++)
         if (max_dlv[i] > max_dl)
             max_dl = max_dlv[i];
 
@@ -2921,7 +2921,7 @@ long calc_score(player_type *player_ptr)
 
     if ((player_ptr->pseikaku == PERSONALITY_MUNCHKIN) && point) {
         point = 1;
-        if (current_world_ptr->total_winner)
+        if (w_ptr->total_winner)
             point = 2;
     }
 

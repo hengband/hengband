@@ -110,7 +110,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     if (r_ptr->flags1 & RF1_UNIQUE) {
         bool is_bounty = false;
         for (int i = 0; i < MAX_BOUNTY; i++) {
-            if (current_world_ptr->bounty_r_idx[i] == r_idx) {
+            if (w_ptr->bounty_r_idx[i] == r_idx) {
                 is_bounty = true;
                 break;
             }
@@ -428,7 +428,7 @@ static void display_dungeon(player_type *player_ptr)
             map_info(player_ptr, y, x, &a, &c, &ta, &tc);
 
             if (!use_graphics) {
-                if (current_world_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx)
                     a = TERM_DARK;
                 else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;

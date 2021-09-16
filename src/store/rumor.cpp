@@ -98,7 +98,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         DUNGEON_IDX d_idx;
         dungeon_type *d_ptr;
         while (true) {
-            d_idx = rumor_num(zz[1], current_world_ptr->max_d_idx);
+            d_idx = rumor_num(zz[1], w_ptr->max_d_idx);
             d_ptr = &d_info[d_idx];
             if (!d_ptr->name.empty())
                 break;

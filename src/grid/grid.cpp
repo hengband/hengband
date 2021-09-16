@@ -252,7 +252,7 @@ void print_rel(player_type *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y,
     if (panel_contains(y, x)) {
         /* Hack -- fake monochrome */
         if (!use_graphics) {
-            if (current_world_ptr->timewalk_m_idx)
+            if (w_ptr->timewalk_m_idx)
                 a = TERM_DARK;
             else if (is_invuln(player_ptr) || player_ptr->timewalk)
                 a = TERM_WHITE;
@@ -396,7 +396,7 @@ void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
 
         /* Hack -- fake monochrome */
         if (!use_graphics) {
-            if (current_world_ptr->timewalk_m_idx)
+            if (w_ptr->timewalk_m_idx)
                 a = TERM_DARK;
             else if (is_invuln(player_ptr) || player_ptr->timewalk)
                 a = TERM_WHITE;
@@ -788,7 +788,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
             found = true;
         }
 
-        if (found && current_world_ptr->character_dungeon && player_can_see_bold(player_ptr, y, x)) {
+        if (found && w_ptr->character_dungeon && player_can_see_bold(player_ptr, y, x)) {
             msg_print(_("何かを発見した！", "You have found something!"));
         }
     }
@@ -796,7 +796,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
     if (feature_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
         feature_type *old_f_ptr = &f_info[oldfeat];
 
-        if (old_f_ptr->flags.has(FF::GLASS) && current_world_ptr->character_dungeon) {
+        if (old_f_ptr->flags.has(FF::GLASS) && w_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(floor_ptr->dun_level, 100) / 4, GF_SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }

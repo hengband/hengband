@@ -191,7 +191,7 @@ static bool activate_whistle(player_type *player_ptr, ae_type *ae_ptr)
     MONSTER_IDX pet_ctr;
     MONSTER_IDX *who;
     int max_pet = 0;
-    C_MAKE(who, current_world_ptr->max_m_idx, MONSTER_IDX);
+    C_MAKE(who, w_ptr->max_m_idx, MONSTER_IDX);
     for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
         if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr]) && (player_ptr->riding != pet_ctr))
             who[max_pet++] = pet_ctr;
@@ -203,7 +203,7 @@ static bool activate_whistle(player_type *player_ptr, ae_type *ae_ptr)
         teleport_monster_to(player_ptr, pet_ctr, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
     }
 
-    C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
+    C_KILL(who, w_ptr->max_m_idx, MONSTER_IDX);
     ae_ptr->o_ptr->timeout = 100 + randint1(100);
     return true;
 }

@@ -477,10 +477,10 @@ void generate_floor(player_type *player_ptr)
         else
             okay = level_gen(player_ptr, &why);
 
-        if (floor_ptr->o_max >= current_world_ptr->max_o_idx) {
+        if (floor_ptr->o_max >= w_ptr->max_o_idx) {
             why = _("アイテムが多すぎる", "too many objects");
             okay = false;
-        } else if (floor_ptr->m_max >= current_world_ptr->max_m_idx) {
+        } else if (floor_ptr->m_max >= w_ptr->max_m_idx) {
             why = _("モンスターが多すぎる", "too many monsters");
             okay = false;
         }

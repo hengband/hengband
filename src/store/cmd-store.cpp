@@ -83,24 +83,24 @@ void do_cmd_store(player_type *player_ptr)
         player_ptr->town_num = NO_TOWN;
     inner_town_num = player_ptr->town_num;
 
-    if ((town_info[player_ptr->town_num].store[which].store_open >= current_world_ptr->game_turn) || ironman_shops) {
+    if ((town_info[player_ptr->town_num].store[which].store_open >= w_ptr->game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
         player_ptr->town_num = old_town_num;
         return;
     }
 
-    int maintain_num = (current_world_ptr->game_turn - town_info[player_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
+    int maintain_num = (w_ptr->game_turn - town_info[player_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
     if (maintain_num > 10)
         maintain_num = 10;
     if (maintain_num) {
         store_maintenance(player_ptr, player_ptr->town_num, which, maintain_num);
 
-        town_info[player_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
+        town_info[player_ptr->town_num].store[which].last_visit = w_ptr->game_turn;
     }
 
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
-    current_world_ptr->character_icky_depth = 1;
+    w_ptr->character_icky_depth = 1;
     command_arg = 0;
     command_rep = 0;
     command_new = 0;
@@ -148,7 +148,7 @@ void do_cmd_store(player_type *player_ptr)
         store_process_command(player_ptr);
 
         bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? true : false;
-        current_world_ptr->character_icky_depth = 1;
+        w_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
             INVENTORY_IDX item = INVEN_PACK;
@@ -187,7 +187,7 @@ void do_cmd_store(player_type *player_ptr)
         if (need_redraw_store_inv)
             display_store_inventory(player_ptr);
 
-        if (st_ptr->store_open >= current_world_ptr->game_turn)
+        if (st_ptr->store_open >= w_ptr->game_turn)
             leave_store = true;
     }
 
@@ -196,7 +196,7 @@ void do_cmd_store(player_type *player_ptr)
 
     select_floor_music(player_ptr);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    current_world_ptr->character_icky_depth = 0;
+    w_ptr->character_icky_depth = 0;
     command_new = 0;
     command_see = false;
     get_com_no_macros = false;

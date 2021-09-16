@@ -57,7 +57,7 @@
 MONSTER_IDX m_pop(floor_type *floor_ptr)
 {
     /* Normal allocation */
-    if (floor_ptr->m_max < current_world_ptr->max_m_idx) {
+    if (floor_ptr->m_max < w_ptr->max_m_idx) {
         MONSTER_IDX i = floor_ptr->m_max;
         floor_ptr->m_max++;
         floor_ptr->m_cnt++;
@@ -74,7 +74,7 @@ MONSTER_IDX m_pop(floor_type *floor_ptr)
         return i;
     }
 
-    if (current_world_ptr->character_dungeon)
+    if (w_ptr->character_dungeon)
         msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
     return 0;
 }
@@ -104,7 +104,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
 
     /* +1 per day after the base date */
     /* base dates : day5(1F), day18(10F,0F), day34(30F), day53(60F), day69(90F) */
-    over_days = MAX(0, current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
+    over_days = MAX(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
 
     /* starts from 1/25, reaches 1/3 after 44days from a max_level dependent base date */
     pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - over_days / 2);

@@ -134,7 +134,7 @@ void print_stun(player_type *player_ptr)
  */
 void print_hunger(player_type *player_ptr)
 {
-    if (current_world_ptr->wizard && player_ptr->current_floor_ptr->inside_arena)
+    if (w_ptr->wizard && player_ptr->current_floor_ptr->inside_arena)
         return;
 
     if (player_ptr->food < PY_FOOD_FAINT) {

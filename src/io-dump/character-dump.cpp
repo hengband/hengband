@@ -137,7 +137,7 @@ static void dump_aux_last_message(player_type *player_ptr, FILE *fff)
     if (!player_ptr->is_dead)
         return;
 
-    if (!current_world_ptr->total_winner) {
+    if (!w_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
         for (int i = MIN(message_num(), 30); i >= 0; i--) {
             fprintf(fff, "> %s\n", message_str((int16_t)i));
@@ -161,7 +161,7 @@ static void dump_aux_last_message(player_type *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    for (int y = 1; y < current_world_ptr->max_d_idx; y++) {
+    for (int y = 1; y < w_ptr->max_d_idx; y++) {
         bool seiha = false;
 
         if (!d_info[y].maxdepth)
@@ -225,7 +225,7 @@ static void dump_aux_options(FILE *fff)
 
     fputc('\n', fff);
 
-    if (current_world_ptr->noscore)
+    if (w_ptr->noscore)
         fprintf(fff, _("\n 何か不正なことをしてしまっています。\n", "\n You have done something illegal.\n"));
 
     fputc('\n', fff);

@@ -199,7 +199,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     auto *f_ptr = &f_info[feat];
-    if (!current_world_ptr->character_dungeon) {
+    if (!w_ptr->character_dungeon) {
         g_ptr->mimic = 0;
         g_ptr->feat = feat;
         if (f_ptr->flags.has(FF::GLOW) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS)) {

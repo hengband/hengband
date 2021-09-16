@@ -55,7 +55,7 @@ static concptr basic_key_at(int index, char *buf)
 
 static inline DUNGEON_IDX get_dungeon_count()
 {
-    return current_world_ptr->max_d_idx;
+    return w_ptr->max_d_idx;
 }
 
 /*!

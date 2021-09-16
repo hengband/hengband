@@ -58,7 +58,7 @@ bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
 bool is_cave_empty_bold2(player_type *player_ptr, POSITION y, POSITION x)
 {
     bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
-    is_empty_grid &= current_world_ptr->character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::TREE);
+    is_empty_grid &= w_ptr->character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::TREE);
     return is_empty_grid;
 }
 

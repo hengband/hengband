@@ -55,12 +55,12 @@ errr init_other(player_type *player_ptr)
 {
     player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    C_MAKE(floor_ptr->o_list, current_world_ptr->max_o_idx, object_type);
-    C_MAKE(floor_ptr->m_list, current_world_ptr->max_m_idx, monster_type);
+    C_MAKE(floor_ptr->o_list, w_ptr->max_o_idx, object_type);
+    C_MAKE(floor_ptr->m_list, w_ptr->max_m_idx, monster_type);
     for (int i = 0; i < MAX_MTIMED; i++)
-        C_MAKE(floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, int16_t);
+        C_MAKE(floor_ptr->mproc_list[i], w_ptr->max_m_idx, int16_t);
 
-    C_MAKE(max_dlv, current_world_ptr->max_d_idx, DEPTH);
+    C_MAKE(max_dlv, w_ptr->max_d_idx, DEPTH);
     for (int i = 0; i < MAX_HGT; i++)
         C_MAKE(floor_ptr->grid_array[i], MAX_WID, grid_type);
 

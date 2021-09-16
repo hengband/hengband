@@ -24,7 +24,7 @@
  */
 OBJECT_IDX o_pop(floor_type *floor_ptr)
 {
-    if (floor_ptr->o_max < current_world_ptr->max_o_idx) {
+    if (floor_ptr->o_max < w_ptr->max_o_idx) {
         OBJECT_IDX i = floor_ptr->o_max;
         floor_ptr->o_max++;
         floor_ptr->o_cnt++;
@@ -41,7 +41,7 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
         return i;
     }
 
-    if (current_world_ptr->character_dungeon)
+    if (w_ptr->character_dungeon)
         msg_print(_("アイテムが多すぎる！", "Too many objects!"));
 
     return 0;

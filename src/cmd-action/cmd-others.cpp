@@ -121,7 +121,7 @@ void do_cmd_alter(player_type *player_ptr)
  */
 static bool decide_suicide(void)
 {
-    if (current_world_ptr->noscore)
+    if (w_ptr->noscore)
         return true;
 
     prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
@@ -133,7 +133,7 @@ static bool decide_suicide(void)
 
 static void accept_winner_message(player_type *player_ptr)
 {
-    if (!current_world_ptr->total_winner || !last_words)
+    if (!w_ptr->total_winner || !last_words)
         return;
 
     char buf[1024] = "";
@@ -157,7 +157,7 @@ static void accept_winner_message(player_type *player_ptr)
 void do_cmd_suicide(player_type *player_ptr)
 {
     flush();
-    if (current_world_ptr->total_winner) {
+    if (w_ptr->total_winner) {
         if (!get_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY))
             return;
     } else {
@@ -175,7 +175,7 @@ void do_cmd_suicide(player_type *player_ptr)
     player_ptr->playing = false;
     player_ptr->is_dead = true;
     player_ptr->leaving = true;
-    if (current_world_ptr->total_winner) {
+    if (w_ptr->total_winner) {
         accept_winner_message(player_ptr);
         add_retired_class(player_ptr->pclass);
     } else {

@@ -172,7 +172,7 @@ static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type
 
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
         a_ptr->cur_num = 1;
-        if (current_world_ptr->character_dungeon)
+        if (w_ptr->character_dungeon)
             a_ptr->floor_id = player_ptr->floor_id;
 
         return;

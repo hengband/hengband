@@ -33,7 +33,7 @@
  */
 void redraw_window(void)
 {
-    if (!current_world_ptr->character_dungeon)
+    if (!w_ptr->character_dungeon)
         return;
 
     p_ptr->window_flags = PW_ALL;
@@ -66,10 +66,10 @@ void redraw_stuff(player_type *player_ptr)
     if (!player_ptr->redraw)
         return;
 
-    if (!current_world_ptr->character_generated)
+    if (!w_ptr->character_generated)
         return;
 
-    if (current_world_ptr->character_icky_depth > 0)
+    if (w_ptr->character_icky_depth > 0)
         return;
 
     if (player_ptr->redraw & (PR_WIPE)) {

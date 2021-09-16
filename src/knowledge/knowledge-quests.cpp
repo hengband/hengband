@@ -306,7 +306,7 @@ void do_cmd_knowledge_quests(player_type *player_ptr)
     do_cmd_knowledge_quests_completed(player_ptr, fff, quest_num);
     fputc('\n', fff);
     do_cmd_knowledge_quests_failed(player_ptr, fff, quest_num);
-    if (current_world_ptr->wizard) {
+    if (w_ptr->wizard) {
         fputc('\n', fff);
         do_cmd_knowledge_quests_wiz_random(fff);
     }

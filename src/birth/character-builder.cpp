@@ -85,7 +85,7 @@ static void write_birth_diary(player_type *player_ptr)
  */
 void player_birth(player_type *player_ptr)
 {
-    current_world_ptr->play_time = 0;
+    w_ptr->play_time = 0;
     wipe_monsters_list(player_ptr);
     player_wipe_without_name(player_ptr);
     if (!ask_quick_start(player_ptr)) {

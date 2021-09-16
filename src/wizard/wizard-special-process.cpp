@@ -383,7 +383,7 @@ void wiz_create_feature(player_type *player_ptr)
 static bool select_debugging_floor(player_type *player_ptr, int dungeon_type)
 {
     auto max_depth = d_info[dungeon_type].maxdepth;
-    if ((max_depth == 0) || (dungeon_type > current_world_ptr->max_d_idx)) {
+    if ((max_depth == 0) || (dungeon_type > w_ptr->max_d_idx)) {
         dungeon_type = DUNGEON_ANGBAND;
     }
 
@@ -639,18 +639,18 @@ void set_gametime(void)
 {
     int tmp_int = 0;
     char ppp[80], tmp_val[40];
-    sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)current_world_ptr->dungeon_turn_limit);
-    sprintf(tmp_val, "%ld", (long)current_world_ptr->dungeon_turn);
+    sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)w_ptr->dungeon_turn_limit);
+    sprintf(tmp_val, "%ld", (long)w_ptr->dungeon_turn);
     if (!get_string(ppp, tmp_val, 10))
         return;
 
     tmp_int = atoi(tmp_val);
-    if (tmp_int >= current_world_ptr->dungeon_turn_limit)
-        tmp_int = current_world_ptr->dungeon_turn_limit - 1;
+    if (tmp_int >= w_ptr->dungeon_turn_limit)
+        tmp_int = w_ptr->dungeon_turn_limit - 1;
     else if (tmp_int < 0)
         tmp_int = 0;
 
-    current_world_ptr->dungeon_turn = current_world_ptr->game_turn = tmp_int;
+    w_ptr->dungeon_turn = w_ptr->game_turn = tmp_int;
 }
 
 /*!
@@ -701,7 +701,7 @@ void cheat_death(player_type *player_ptr)
         player_ptr->sc = player_ptr->age = 0;
     player_ptr->age++;
 
-    current_world_ptr->noscore |= 0x0001;
+    w_ptr->noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
     msg_print(nullptr);
 

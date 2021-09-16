@@ -29,7 +29,7 @@ void starve_player(player_type *player_ptr)
 
     if (player_ptr->food >= PY_FOOD_MAX) {
         (void)set_food(player_ptr, player_ptr->food - 100);
-    } else if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 5))) {
+    } else if (!(w_ptr->game_turn % (TURNS_PER_TICK * 5))) {
         int digestion = SPEED_TO_ENERGY(player_ptr->pspeed);
         if (player_ptr->regenerate)
             digestion += 20;

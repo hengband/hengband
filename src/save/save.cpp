@@ -53,9 +53,9 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     compact_monsters(player_ptr, 0);
 
     uint32_t now = (uint32_t)time((time_t *)0);
-    current_world_ptr->sf_system = 0L;
-    current_world_ptr->sf_when = now;
-    current_world_ptr->sf_saves++;
+    w_ptr->sf_system = 0L;
+    w_ptr->sf_when = now;
+    w_ptr->sf_saves++;
     save_xor_byte = 0;
     wr_byte(FAKE_VER_MAJOR);
     save_xor_byte = 0;
@@ -73,10 +73,10 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     wr_byte(H_VER_PATCH);
     wr_byte(H_VER_MINOR);
     wr_byte(H_VER_MAJOR);
-    wr_u32b(current_world_ptr->sf_system);
-    wr_u32b(current_world_ptr->sf_when);
-    wr_u16b(current_world_ptr->sf_lives);
-    wr_u16b(current_world_ptr->sf_saves);
+    wr_u32b(w_ptr->sf_system);
+    wr_u32b(w_ptr->sf_when);
+    wr_u16b(w_ptr->sf_lives);
+    wr_u16b(w_ptr->sf_saves);
 
     wr_u32b(SAVEFILE_VERSION);
     wr_u16b(0);
@@ -148,10 +148,10 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     wr_s32b(player_ptr->wilderness_y);
     wr_byte(player_ptr->wild_mode);
     wr_byte(player_ptr->ambush_flag);
-    wr_s32b(current_world_ptr->max_wild_x);
-    wr_s32b(current_world_ptr->max_wild_y);
-    for (int i = 0; i < current_world_ptr->max_wild_x; i++)
-        for (int j = 0; j < current_world_ptr->max_wild_y; j++)
+    wr_s32b(w_ptr->max_wild_x);
+    wr_s32b(w_ptr->max_wild_y);
+    for (int i = 0; i < w_ptr->max_wild_x; i++)
+        for (int j = 0; j < w_ptr->max_wild_y; j++)
             wr_u32b(wilderness[j][i].seed);
 
     tmp16u = max_a_idx;
@@ -162,9 +162,9 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
         wr_s16b(a_ptr->floor_id);
     }
 
-    wr_u32b(current_world_ptr->sf_play_time);
-    wr_FlagGroup(current_world_ptr->sf_winner, wr_byte);
-    wr_FlagGroup(current_world_ptr->sf_retired, wr_byte);
+    wr_u32b(w_ptr->sf_play_time);
+    wr_FlagGroup(w_ptr->sf_winner, wr_byte);
+    wr_FlagGroup(w_ptr->sf_retired, wr_byte);
 
     wr_player(player_ptr);
     tmp16u = PY_MAX_LEVEL;
@@ -262,8 +262,8 @@ static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
     if (!is_save_successful)
         return false;
 
-    counts_write(player_ptr, 0, current_world_ptr->play_time);
-    current_world_ptr->character_saved = true;
+    counts_write(player_ptr, 0, w_ptr->play_time);
+    w_ptr->character_saved = true;
     return true;
 }
 
@@ -300,15 +300,15 @@ bool save_player(player_type *player_ptr, save_type type)
         fd_move(safe, filename);
         fd_kill(temp);
         safe_setuid_drop();
-        current_world_ptr->character_loaded = true;
+        w_ptr->character_loaded = true;
         result = true;
     }
 
     if (type != SAVE_TYPE_CLOSE_GAME) {
-        current_world_ptr->is_loading_now = false;
+        w_ptr->is_loading_now = false;
         update_creature(player_ptr);
         mproc_init(player_ptr->current_floor_ptr);
-        current_world_ptr->is_loading_now = true;
+        w_ptr->is_loading_now = true;
     }
 
     return result;

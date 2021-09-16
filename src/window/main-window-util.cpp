@@ -98,7 +98,7 @@ void print_map(player_type *player_ptr)
             SYMBOL_CODE tc;
             map_info(player_ptr, y, x, &a, &c, &ta, &tc);
             if (!use_graphics) {
-                if (current_world_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx)
                     a = TERM_DARK;
                 else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;
@@ -287,7 +287,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
             ta = ma[y][x];
             tc = mc[y][x];
             if (!use_graphics) {
-                if (current_world_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx)
                     ta = TERM_DARK;
                 else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     ta = TERM_WHITE;

@@ -35,7 +35,7 @@ void check_random_quest_auto_failure(player_type *player_ptr)
             q_ptr->status = QUEST_STATUS_FAILED;
             q_ptr->complev = (byte)player_ptr->lev;
             update_playtime();
-            q_ptr->comptime = current_world_ptr->play_time;
+            q_ptr->comptime = w_ptr->play_time;
             r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
         }
     }

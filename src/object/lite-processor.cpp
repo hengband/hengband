@@ -25,7 +25,7 @@ void reduce_lite_life(player_type* player_ptr)
         return;
 
     if (o_ptr->name2 == EGO_LITE_LONG) {
-        if (current_world_ptr->game_turn % (TURNS_PER_TICK * 2))
+        if (w_ptr->game_turn % (TURNS_PER_TICK * 2))
             o_ptr->xtra4--;
     } else
         o_ptr->xtra4--;
@@ -54,7 +54,7 @@ void notice_lite_change(player_type* player_ptr, object_type* o_ptr)
         player_ptr->update |= (PU_BONUS);
     } else if (o_ptr->name2 == EGO_LITE_LONG) {
         if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5))
-            && (current_world_ptr->game_turn % (TURNS_PER_TICK * 2))) {
+            && (w_ptr->game_turn % (TURNS_PER_TICK * 2))) {
             if (disturb_minor)
                 disturb(player_ptr, false, true);
             msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));

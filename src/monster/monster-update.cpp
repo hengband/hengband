@@ -214,7 +214,7 @@ static bool update_weird_telepathy(player_type *player_ptr, um_type *um_ptr, MON
     if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0)
         return false;
 
-    if ((m_idx % 10) != (current_world_ptr->game_turn % 10))
+    if ((m_idx % 10) != (w_ptr->game_turn % 10))
         return true;
 
     um_ptr->flag = true;
@@ -449,7 +449,7 @@ static void update_invisible_monster(player_type *player_ptr, um_type *um_ptr, M
             r_ptr->r_sights++;
     }
 
-    if (current_world_ptr->is_loading_now && current_world_ptr->character_dungeon && !player_ptr->phase_out
+    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !player_ptr->phase_out
         && r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
         um_ptr->m_ptr->mflag.set(MFLAG::SANITY_BLAST);
 

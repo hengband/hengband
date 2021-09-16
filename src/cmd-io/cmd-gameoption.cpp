@@ -369,11 +369,11 @@ static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
         case 'y':
         case 'Y':
         case '6': {
-            if (!current_world_ptr->noscore)
+            if (!w_ptr->noscore)
                 exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0,
                     _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
 
-            current_world_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
+            w_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
             (*cheat_info[k].o_var) = true;
             k = (k + 1) % n;
             break;
@@ -434,7 +434,7 @@ void do_cmd_options(player_type *player_ptr)
     screen_save();
     while (true) {
         int n = OPT_NUM;
-        if (!current_world_ptr->noscore && !allow_debug_opts)
+        if (!w_ptr->noscore && !allow_debug_opts)
             n--;
 
         term_clear();
@@ -519,12 +519,12 @@ void do_cmd_options(player_type *player_ptr)
         case 'B':
         case 'b': {
             do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
-                (!current_world_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
+                (!w_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
                                                                   : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             break;
         }
         case 'C': {
-            if (!current_world_ptr->noscore && !allow_debug_opts) {
+            if (!w_ptr->noscore && !allow_debug_opts) {
                 bell();
                 break;
             }
@@ -641,7 +641,7 @@ void do_cmd_options_aux(player_type *player_ptr, game_option_types page, concptr
     int i, k = 0, n = 0, l;
     int opt[24];
     char buf[80];
-    bool browse_only = (page == OPT_PAGE_BIRTH) && current_world_ptr->character_generated && (!current_world_ptr->wizard || !allow_debug_opts);
+    bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && (!w_ptr->wizard || !allow_debug_opts);
 
     for (i = 0; i < 24; i++)
         opt[i] = 0;

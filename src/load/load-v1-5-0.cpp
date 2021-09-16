@@ -730,7 +730,7 @@ errr rd_dungeon_old(player_type *player_ptr)
 
     uint16_t limit;
     rd_u16b(&limit);
-    if (limit > current_world_ptr->max_o_idx) {
+    if (limit > w_ptr->max_o_idx) {
         load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
         return (151);
     }
@@ -751,7 +751,7 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     rd_u16b(&limit);
-    if (limit > current_world_ptr->max_m_idx) {
+    if (limit > w_ptr->max_m_idx) {
         load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
         return (161);
     }
@@ -774,9 +774,9 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
-        current_world_ptr->character_dungeon = false;
+        w_ptr->character_dungeon = false;
     else
-        current_world_ptr->character_dungeon = true;
+        w_ptr->character_dungeon = true;
 
     return 0;
 }

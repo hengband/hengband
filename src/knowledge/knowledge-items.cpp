@@ -138,7 +138,7 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
             continue;
 
         if (!(mode & 0x02)) {
-            if (!current_world_ptr->wizard) {
+            if (!w_ptr->wizard) {
                 if (!k_ptr->flavor)
                     continue;
                 if (!k_ptr->aware)
@@ -200,10 +200,10 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 
         c_prt(attr, o_name, row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (current_world_ptr->wizard || visual_only) ? 64 : 68);
+            c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }
 
-        if (current_world_ptr->wizard || visual_only) {
+        if (w_ptr->wizard || visual_only) {
             c_prt(attr, format("%d", k_idx), row + i, 70);
         }
 
@@ -315,7 +315,7 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
             if (direct_k_idx < 0)
                 prt("グループ", 4, 0);
             prt("名前", 4, max + 3);
-            if (current_world_ptr->wizard || visual_only)
+            if (w_ptr->wizard || visual_only)
                 prt("Idx", 4, 70);
             prt("文字", 4, 74);
 #else
@@ -323,7 +323,7 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
             if (direct_k_idx < 0)
                 prt("Group", 4, 0);
             prt("Name", 4, max + 3);
-            if (current_world_ptr->wizard || visual_only)
+            if (w_ptr->wizard || visual_only)
                 prt("Idx", 4, 70);
             prt("Sym", 4, 75);
 #endif

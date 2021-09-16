@@ -55,7 +55,7 @@ void wr_options(save_type type)
 
     /*** Cheating options ***/
     uint16_t c = 0;
-    if (current_world_ptr->wizard)
+    if (w_ptr->wizard)
         c |= 0x0002;
 
     if (cheat_sight)
@@ -171,7 +171,7 @@ void save_quick_start(void)
 
     /* UNUSED : Was number of random quests */
     wr_byte(0);
-    if (current_world_ptr->noscore)
+    if (w_ptr->noscore)
         previous_char.quick_ok = false;
 
     wr_byte((byte)previous_char.quick_ok);

@@ -256,7 +256,7 @@ void store_purchase(player_type *player_ptr)
     msg_print(nullptr);
 
     auto res = prompt_to_buy(player_ptr, j_ptr);
-    if (st_ptr->store_open >= current_world_ptr->game_turn)
+    if (st_ptr->store_open >= w_ptr->game_turn)
         return;
     if (!res)
         return;
@@ -283,7 +283,7 @@ void store_purchase(player_type *player_ptr)
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), o_name, (long)price);
 
     strcpy(record_o_name, o_name);
-    record_turn = current_world_ptr->game_turn;
+    record_turn = w_ptr->game_turn;
 
     if (record_buy)
         exe_write_diary(player_ptr, DIARY_BUY, 0, o_name);

@@ -26,12 +26,12 @@ int total_friends = 0;
  */
 bool can_player_ride_pet(player_type *player_ptr, grid_type *g_ptr, bool now_riding)
 {
-    bool old_character_xtra = current_world_ptr->character_xtra;
+    bool old_character_xtra = w_ptr->character_xtra;
     MONSTER_IDX old_riding = player_ptr->riding;
     bool old_riding_two_hands = player_ptr->riding_ryoute;
     bool old_old_riding_two_hands = player_ptr->old_riding_ryoute;
     bool old_pf_two_hands = (player_ptr->pet_extra_flags & PF_TWO_HANDS) ? true : false;
-    current_world_ptr->character_xtra = true;
+    w_ptr->character_xtra = true;
 
     if (now_riding)
         player_ptr->riding = g_ptr->m_idx;
@@ -56,7 +56,7 @@ bool can_player_ride_pet(player_type *player_ptr, grid_type *g_ptr, bool now_rid
     player_ptr->update |= PU_BONUS;
     handle_stuff(player_ptr);
 
-    current_world_ptr->character_xtra = old_character_xtra;
+    w_ptr->character_xtra = old_character_xtra;
     return p_can_enter;
 }
 

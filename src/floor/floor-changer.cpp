@@ -258,10 +258,10 @@ static void new_floor_allocation(player_type *player_ptr, saved_floor_type *sf_p
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
     int alloc_chance = d_info[player_ptr->dungeon_idx].max_m_alloc_chance;
-    while (tmp_last_visit > current_world_ptr->game_turn)
+    while (tmp_last_visit > w_ptr->game_turn)
         tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
 
-    GAME_TURN absence_ticks = (current_world_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
+    GAME_TURN absence_ticks = (w_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
     reset_unique_by_floor_change(player_ptr);
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
@@ -306,7 +306,7 @@ static void update_new_floor_feature(player_type *player_ptr, saved_floor_type *
     }
 
     check_dead_end(player_ptr, sf_ptr);
-    sf_ptr->last_visit = current_world_ptr->game_turn;
+    sf_ptr->last_visit = w_ptr->game_turn;
     sf_ptr->dun_level = player_ptr->current_floor_ptr->dun_level;
     if ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0)
         return;
@@ -368,7 +368,7 @@ static void update_floor(player_type *player_ptr)
  */
 void change_floor(player_type *player_ptr)
 {
-    current_world_ptr->character_dungeon = false;
+    w_ptr->character_dungeon = false;
     player_ptr->dtrap = false;
     panel_row_min = 0;
     panel_row_max = 0;
@@ -380,11 +380,11 @@ void change_floor(player_type *player_ptr)
     forget_travel_flow(player_ptr->current_floor_ptr);
     update_unique_artifact(player_ptr->current_floor_ptr, new_floor_id);
     player_ptr->floor_id = new_floor_id;
-    current_world_ptr->character_dungeon = true;
+    w_ptr->character_dungeon = true;
     if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN)
         wiz_lite(player_ptr, (bool)(player_ptr->pclass == CLASS_NINJA));
 
-    player_ptr->current_floor_ptr->generated_turn = current_world_ptr->game_turn;
+    player_ptr->current_floor_ptr->generated_turn = w_ptr->game_turn;
     player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
     player_ptr->feeling = 0;
     player_ptr->change_floor_mode = 0L;

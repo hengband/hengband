@@ -106,7 +106,7 @@ static void evaluate_monster_exp(player_type *player_ptr, char *buf, monster_typ
     }
 
     if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MFLAG2::KAGE)) {
-        if (!current_world_ptr->wizard) {
+        if (!w_ptr->wizard) {
             sprintf(buf, "??");
             return;
         }
@@ -467,7 +467,7 @@ static concptr decide_target_floor(player_type *player_ptr, eg_type *eg_ptr)
 
 static void describe_grid_monster_all(eg_type *eg_ptr)
 {
-    if (!current_world_ptr->wizard) {
+    if (!w_ptr->wizard) {
 #ifdef JP
         sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else

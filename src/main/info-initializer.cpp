@@ -175,7 +175,7 @@ errr init_r_info()
  */
 errr init_d_info()
 {
-    init_header(&d_head, current_world_ptr->max_d_idx);
+    init_header(&d_head, w_ptr->max_d_idx);
     return init_info("d_info", d_head, d_info, parse_d_info, nullptr);
 }
 

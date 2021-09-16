@@ -424,7 +424,7 @@ bool report_score(player_type *player_ptr, display_player_pf display_player)
     buf_sprintf(score, "maxlv: %d\n", player_ptr->max_plv);
     buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
     buf_sprintf(score, "au: %d\n", player_ptr->au);
-    buf_sprintf(score, "turns: %d\n", turn_real(player_ptr, current_world_ptr->game_turn));
+    buf_sprintf(score, "turns: %d\n", turn_real(player_ptr, w_ptr->game_turn));
     buf_sprintf(score, "sex: %d\n", player_ptr->psex);
     buf_sprintf(score, "race: %s\n", rp_ptr->title);
     buf_sprintf(score, "class: %s\n", cp_ptr->title);

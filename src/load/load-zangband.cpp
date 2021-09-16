@@ -117,8 +117,8 @@ void set_zangband_bounty_uniques(player_type *player_ptr)
     determine_bounty_uniques(player_ptr);
     for (int i = 0; i < MAX_BOUNTY; i++) {
         /* Is this bounty unique already dead? */
-        if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num)
-            current_world_ptr->bounty_r_idx[i] += 10000;
+        if (!r_info[w_ptr->bounty_r_idx[i]].max_num)
+            w_ptr->bounty_r_idx[i] += 10000;
     }
 }
 
@@ -154,8 +154,8 @@ void set_zangband_game_turns(player_type *player_ptr)
 {
     player_ptr->current_floor_ptr->generated_turn /= 2;
     player_ptr->feeling_turn /= 2;
-    current_world_ptr->game_turn /= 2;
-    current_world_ptr->dungeon_turn /= 2;
+    w_ptr->game_turn /= 2;
+    w_ptr->dungeon_turn /= 2;
 }
 
 void set_zangband_gambling_monsters(int i)

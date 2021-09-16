@@ -367,7 +367,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
         } else {
             QUEST_IDX q_idx = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
             bool seppuku = streq(hit_from, "Seppuku");
-            bool winning_seppuku = current_world_ptr->total_winner && seppuku;
+            bool winning_seppuku = w_ptr->total_winner && seppuku;
 
             play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
@@ -394,7 +394,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
                 angband_strcpy(player_ptr->died_from, dummy, sizeof player_ptr->died_from);
             }
 
-            current_world_ptr->total_winner = false;
+            w_ptr->total_winner = false;
             if (winning_seppuku) {
                 add_retired_class(player_ptr->pclass);
                 exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));

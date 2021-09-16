@@ -46,7 +46,7 @@
 /*
  * @brief Multishadow effects is determined by turn
  */
-bool check_multishadow(player_type *player_ptr) { return (player_ptr->multishadow != 0) && ((current_world_ptr->game_turn & 1) != 0); }
+bool check_multishadow(player_type *player_ptr) { return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0); }
 
 /*!
  * 静水

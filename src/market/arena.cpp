@@ -171,7 +171,7 @@ void update_gambling_monsters(player_type *player_ptr)
     int power[4];
     bool tekitou;
 
-    for (i = 0; i < current_world_ptr->max_d_idx; i++) {
+    for (i = 0; i < w_ptr->max_d_idx; i++) {
         if (max_dl < max_dlv[i])
             max_dl = max_dlv[i];
     }
@@ -279,9 +279,9 @@ bool monster_arena_comm(player_type *player_ptr)
     char out_val[MAX_MONSTER_NAME], tmp_str[80];
     concptr p;
 
-    if ((current_world_ptr->game_turn - current_world_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
+    if ((w_ptr->game_turn - w_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
         update_gambling_monsters(player_ptr);
-        current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
+        w_ptr->arena_start_turn = w_ptr->game_turn;
     }
 
     screen_save();

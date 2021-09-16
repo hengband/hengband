@@ -56,7 +56,7 @@ WorldTurnProcessor::WorldTurnProcessor(player_type *player_ptr)
 void WorldTurnProcessor::process_world()
 {
     const int32_t a_day = TURNS_PER_TICK * TOWN_DAWN;
-    int32_t prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
+    int32_t prev_turn_in_today = ((w_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
     int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
 
     int dummy_day;
@@ -64,7 +64,7 @@ void WorldTurnProcessor::process_world()
     update_dungeon_feeling(this->player_ptr);
     process_downward();
     process_monster_arena();
-    if (current_world_ptr->game_turn % TURNS_PER_TICK) {
+    if (w_ptr->game_turn % TURNS_PER_TICK) {
         return;
     }
 
@@ -189,7 +189,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
 void WorldTurnProcessor::process_monster_arena_draw()
 {
     auto turn = this->player_ptr->current_floor_ptr->generated_turn;
-    if (current_world_ptr->game_turn - turn != 150 * TURNS_PER_TICK) {
+    if (w_ptr->game_turn - turn != 150 * TURNS_PER_TICK) {
         return;
     }
 
@@ -208,7 +208,7 @@ void WorldTurnProcessor::decide_auto_save()
 
     auto should_save = autosave_t;
     should_save &= !this->player_ptr->phase_out;
-    should_save &= current_world_ptr->game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
+    should_save &= w_ptr->game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
     if (should_save) {
         do_cmd_save_game(this->player_ptr, true);
     }
@@ -218,8 +218,8 @@ void WorldTurnProcessor::process_change_daytime_night()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
-        if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
-            auto dawn = current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
+        if (!(w_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
+            auto dawn = w_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
             if (dawn) {
                 day_break(this->player_ptr);
             } else {
@@ -237,7 +237,7 @@ void WorldTurnProcessor::process_change_daytime_night()
         return;
     }
 
-    if ((current_world_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS)) != 0) {
+    if ((w_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS)) != 0) {
         return;
     }
 
@@ -247,11 +247,11 @@ void WorldTurnProcessor::process_change_daytime_night()
 void WorldTurnProcessor::process_world_monsters()
 {
     decide_alloc_monster();
-    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
+    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
         regenerate_monsters(this->player_ptr);
     }
 
-    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) {
+    if (!(w_ptr->game_turn % (TURNS_PER_TICK * 3))) {
         regenerate_captured_monsters(this->player_ptr);
     }
 

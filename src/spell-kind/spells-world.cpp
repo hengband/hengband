@@ -94,7 +94,7 @@ void teleport_level(player_type *player_ptr, MONSTER_IDX m_idx)
     else
         go_up = false;
 
-    if ((m_idx <= 0) && current_world_ptr->wizard) {
+    if ((m_idx <= 0) && w_ptr->wizard) {
         if (get_check("Force to go up? "))
             go_up = true;
         else if (get_check("Force to go down? "))
@@ -299,8 +299,8 @@ bool tele_town(player_type *player_ptr)
         break;
     }
 
-    for (POSITION y = 0; y < current_world_ptr->max_wild_y; y++) {
-        for (POSITION x = 0; x < current_world_ptr->max_wild_x; x++) {
+    for (POSITION y = 0; y < w_ptr->max_wild_y; y++) {
+        for (POSITION x = 0; x < w_ptr->max_wild_x; x++) {
             if (wilderness[y][x].town == (i - 'a' + 1)) {
                 player_ptr->wilderness_y = y;
                 player_ptr->wilderness_x = x;

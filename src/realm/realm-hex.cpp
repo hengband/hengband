@@ -297,7 +297,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                     project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
 
-                if (current_world_ptr->wizard) {
+                if (w_ptr->wizard) {
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                 }
 
@@ -867,7 +867,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
                     fire_ball(player_ptr, GF_HELL_FIRE, dir, power, 1);
 
-                    if (current_world_ptr->wizard) {
+                    if (w_ptr->wizard) {
                         msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                     }
                 } else {

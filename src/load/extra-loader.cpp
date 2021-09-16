@@ -31,9 +31,9 @@ void rd_extra(player_type *player_ptr)
 
     rd_dummy_monsters(player_ptr);
     if (h_older_than(0, 1, 2))
-        current_world_ptr->play_time = 0;
+        w_ptr->play_time = 0;
     else
-        rd_u32b(&current_world_ptr->play_time);
+        rd_u32b(&w_ptr->play_time);
 
     rd_visited_towns(player_ptr);
     if (!h_older_than(1, 0, 5))

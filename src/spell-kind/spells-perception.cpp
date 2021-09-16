@@ -77,7 +77,7 @@ bool identify_item(player_type *player_ptr, object_type *o_ptr)
     set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     strcpy(record_o_name, o_name);
-    record_turn = current_world_ptr->game_turn;
+    record_turn = w_ptr->game_turn;
 
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
