@@ -67,6 +67,30 @@ int PlayerStun::decrease_chance() const
     }
 }
 
+/*!
+ * @brief 朦朧ランクに応じてダメージ量 or 命中率を下げる.
+ * @return 朦朧ならば5、ひどく朦朧ならば20.
+ * @details
+ * 呼び出し元で減算しているのでこのメソッドでは正値.
+ * 意識不明瞭ならばそもそも動けないのでこのメソッドを通らない.
+ * しかし今後の拡張を考慮して100としておく.
+ */
+short PlayerStun::decrease_damage() const
+{
+    switch (this->get_rank()) {
+    case StunRank::NONE:
+        return 0;
+    case StunRank::NORMAL:
+        return 5;
+    case StunRank::HARD:
+        return 20;
+    case StunRank::UNCONSCIOUS:
+        return 100;
+    default:
+        throw("Invalid stun rank is specified!");
+    }
+}
+
 bool PlayerStun::is_stunned() const
 {
     return this->get_rank() > StunRank::NONE;
