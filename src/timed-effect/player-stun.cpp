@@ -52,4 +52,10 @@ int PlayerStun::decrease_chance() const
 
 void PlayerStun::set(short value)
 {
+    this->stun = value;
+}
+
+void PlayerStun::reset()
+{
+    this->set(0);
 }
