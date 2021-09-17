@@ -71,7 +71,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
             }
 
             if (!use_graphics) {
-                if (current_world_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx)
                     a = TERM_DARK;
                 else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;

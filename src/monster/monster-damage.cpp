@@ -87,7 +87,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
     }
 
-    if (current_world_ptr->wizard) {
+    if (w_ptr->wizard) {
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
     }
 
@@ -389,7 +389,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
     }
 
     for (auto i = 0; i < MAX_BOUNTY; i++) {
-        if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
+        if ((w_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
             msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
             break;
         }

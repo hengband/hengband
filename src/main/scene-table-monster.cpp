@@ -46,8 +46,8 @@ void clear_scene_target_monster()
 
 static GAME_TURN get_game_turn()
 {
-    GAME_TURN ret = current_world_ptr->game_turn;
-    if (ret == current_world_ptr->game_turn_limit) {
+    GAME_TURN ret = w_ptr->game_turn;
+    if (ret == w_ptr->game_turn_limit) {
         ret = 0;
     }
     return ret;

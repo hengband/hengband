@@ -226,7 +226,7 @@ void flavor_init(void)
 {
     uint32_t state_backup[4];
     Rand_state_backup(state_backup);
-    Rand_state_set(current_world_ptr->seed_flavor);
+    Rand_state_set(w_ptr->seed_flavor);
     for (KIND_OBJECT_IDX i = 0; i < max_k_idx; i++) {
         object_kind *k_ptr = &k_info[i];
         if (k_ptr->flavor_name.empty())

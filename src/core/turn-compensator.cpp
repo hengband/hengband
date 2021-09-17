@@ -35,25 +35,25 @@ int32_t turn_real(player_type *player_ptr, int32_t hoge)
  */
 void prevent_turn_overflow(player_type *player_ptr)
 {
-    if (current_world_ptr->game_turn < current_world_ptr->game_turn_limit)
+    if (w_ptr->game_turn < w_ptr->game_turn_limit)
         return;
 
-    int rollback_days = 1 + (current_world_ptr->game_turn - current_world_ptr->game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
+    int rollback_days = 1 + (w_ptr->game_turn - w_ptr->game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
     int32_t rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
 
-    if (current_world_ptr->game_turn > rollback_turns)
-        current_world_ptr->game_turn -= rollback_turns;
+    if (w_ptr->game_turn > rollback_turns)
+        w_ptr->game_turn -= rollback_turns;
     else
-        current_world_ptr->game_turn = 1;
+        w_ptr->game_turn = 1;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->generated_turn > rollback_turns)
         floor_ptr->generated_turn -= rollback_turns;
     else
         floor_ptr->generated_turn = 1;
-    if (current_world_ptr->arena_start_turn > rollback_turns)
-        current_world_ptr->arena_start_turn -= rollback_turns;
+    if (w_ptr->arena_start_turn > rollback_turns)
+        w_ptr->arena_start_turn -= rollback_turns;
     else
-        current_world_ptr->arena_start_turn = 1;
+        w_ptr->arena_start_turn = 1;
     if (player_ptr->feeling_turn > rollback_turns)
         player_ptr->feeling_turn -= rollback_turns;
     else

@@ -45,7 +45,7 @@
  */
 void resize_map()
 {
-    if (!current_world_ptr->character_dungeon)
+    if (!w_ptr->character_dungeon)
         return;
 
     panel_row_max = 0;

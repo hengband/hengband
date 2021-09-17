@@ -279,9 +279,9 @@ static void display_playtime_in_game(player_type *player_ptr)
  */
 static void display_real_playtime(void)
 {
-    uint32_t play_hour = current_world_ptr->play_time / (60 * 60);
-    uint32_t play_min = (current_world_ptr->play_time / 60) % 60;
-    uint32_t play_sec = current_world_ptr->play_time % 60;
+    uint32_t play_hour = w_ptr->play_time / (60 * 60);
+    uint32_t play_min = (w_ptr->play_time / 60) % 60;
+    uint32_t play_sec = w_ptr->play_time % 60;
     display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", play_hour, play_min, play_sec), TERM_L_GREEN);
 }
 

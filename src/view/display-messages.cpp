@@ -273,7 +273,7 @@ void msg_print(concptr msg)
     char *t;
     char buf[1024];
 
-    if (current_world_ptr->timewalk_m_idx)
+    if (w_ptr->timewalk_m_idx)
         return;
 
     if (!msg_flag) {
@@ -296,11 +296,11 @@ void msg_print(concptr msg)
     if (!cheat_turn) {
         strcpy(buf, msg);
     } else {
-        sprintf(buf, ("T:%d - %s"), (int)current_world_ptr->game_turn, msg);
+        sprintf(buf, ("T:%d - %s"), (int)w_ptr->game_turn, msg);
     }
 
     n = strlen(buf);
-    if (current_world_ptr->character_generated)
+    if (w_ptr->character_generated)
         message_add(buf);
 
     t = buf;

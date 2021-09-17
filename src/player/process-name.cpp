@@ -23,7 +23,7 @@
 void process_player_name(player_type *player_ptr, bool is_new_savefile)
 {
     char old_player_base[32] = "";
-    if (current_world_ptr->character_generated)
+    if (w_ptr->character_generated)
         strcpy(old_player_base, player_ptr->base_name);
 
     for (int i = 0; player_ptr->name[i]; i++) {
@@ -113,7 +113,7 @@ void process_player_name(player_type *player_ptr, bool is_new_savefile)
 #endif
     }
 
-    if (current_world_ptr->character_generated && !streq(old_player_base, player_ptr->base_name)) {
+    if (w_ptr->character_generated && !streq(old_player_base, player_ptr->base_name)) {
         autopick_load_pref(player_ptr, false);
     }
 }

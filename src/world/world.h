@@ -67,7 +67,7 @@ struct world_type {
     DUNGEON_IDX max_d_idx{};
 };
 
-extern world_type *current_world_ptr;
+extern world_type *w_ptr;
 
 struct player_type;
 bool is_daytime(void);

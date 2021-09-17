@@ -26,7 +26,7 @@
  */
 void exit_game_panic(player_type *player_ptr)
 {
-	if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
+	if (!w_ptr->character_generated || w_ptr->character_saved)
 		quit(_("緊急事態", "panic"));
 	msg_flag = false;
 

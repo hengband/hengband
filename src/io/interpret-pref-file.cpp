@@ -296,8 +296,8 @@ static errr interpret_xy_token(player_type *player_ptr, char *buf)
 		int os = option_info[i].o_set;
 		int ob = option_info[i].o_bit;
 
-		if ((player_ptr->playing || current_world_ptr->character_xtra) &&
-			(OPT_PAGE_BIRTH == option_info[i].o_page) && !current_world_ptr->wizard)
+		if ((player_ptr->playing || w_ptr->character_xtra) &&
+			(OPT_PAGE_BIRTH == option_info[i].o_page) && !w_ptr->wizard)
 		{
 			msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
 			msg_print(nullptr);

@@ -144,7 +144,7 @@ void update_mon_lite(player_type *player_ptr)
         g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
     }
 
-    if (!current_world_ptr->timewalk_m_idx) {
+    if (!w_ptr->timewalk_m_idx) {
         monster_type *m_ptr;
         monster_race *r_ptr;
         for (int i = 1; i < floor_ptr->m_max; i++) {

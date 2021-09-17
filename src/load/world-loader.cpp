@@ -13,7 +13,7 @@
 
 static void rd_hengband_dungeons(void)
 {
-    byte max = (byte)current_world_ptr->max_d_idx;
+    byte max = (byte)w_ptr->max_d_idx;
     rd_byte(&max);
     int16_t tmp16s;
     for (int i = 0; i < max; i++) {
@@ -84,10 +84,10 @@ static void set_undead_turn_limit(player_type *player_ptr)
     case player_race_type::SKELETON:
     case player_race_type::ZOMBIE:
     case player_race_type::SPECTRE:
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
         break;
     default:
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
         break;
     }
 }
@@ -95,31 +95,31 @@ static void set_undead_turn_limit(player_type *player_ptr)
 static void rd_world_info(player_type *player_ptr)
 {
     set_undead_turn_limit(player_ptr);
-    current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     rd_s32b(&player_ptr->current_floor_ptr->generated_turn);
     if (h_older_than(1, 7, 0, 4))
         player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
     else
         rd_s32b(&player_ptr->feeling_turn);
 
-    rd_s32b(&current_world_ptr->game_turn);
+    rd_s32b(&w_ptr->game_turn);
     if (h_older_than(0, 3, 12))
-        current_world_ptr->dungeon_turn = current_world_ptr->game_turn;
+        w_ptr->dungeon_turn = w_ptr->game_turn;
     else
-        rd_s32b(&current_world_ptr->dungeon_turn);
+        rd_s32b(&w_ptr->dungeon_turn);
 
     if (h_older_than(1, 0, 13))
         set_zangband_game_turns(player_ptr);
 
     if (h_older_than(0, 3, 13))
-        current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
+        w_ptr->arena_start_turn = w_ptr->game_turn;
     else
-        rd_s32b(&current_world_ptr->arena_start_turn);
+        rd_s32b(&w_ptr->arena_start_turn);
 
     if (h_older_than(0, 0, 3))
         determine_daily_bounty(player_ptr, true);
     else {
-        rd_s16b(&current_world_ptr->today_mon);
+        rd_s16b(&w_ptr->today_mon);
         rd_s16b(&player_ptr->today_mon);
     }
 }
@@ -143,12 +143,12 @@ void rd_visited_towns(player_type *player_ptr)
 
 void rd_global_configurations(player_type *player_ptr)
 {
-    rd_u32b(&current_world_ptr->seed_flavor);
-    rd_u32b(&current_world_ptr->seed_town);
+    rd_u32b(&w_ptr->seed_flavor);
+    rd_u32b(&w_ptr->seed_town);
 
     rd_u16b(&player_ptr->panic_save);
-    rd_u16b(&current_world_ptr->total_winner);
-    rd_u16b(&current_world_ptr->noscore);
+    rd_u16b(&w_ptr->total_winner);
+    rd_u16b(&w_ptr->noscore);
 
     byte tmp8u;
     rd_byte(&tmp8u);
@@ -185,7 +185,7 @@ errr analyze_wilderness(void)
     rd_s32b(&wild_x_size);
     rd_s32b(&wild_y_size);
 
-    if ((wild_x_size > current_world_ptr->max_wild_x) || (wild_y_size > current_world_ptr->max_wild_y)) {
+    if ((wild_x_size > w_ptr->max_wild_x) || (wild_y_size > w_ptr->max_wild_y)) {
         load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
         return (23);
     }

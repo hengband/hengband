@@ -238,7 +238,7 @@ void update_dungeon_feeling(player_type *player_ptr)
         return;
 
     int delay = MAX(10, 150 - player_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
-    if (current_world_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra)
+    if (w_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra)
         return;
 
     int quest_num = quest_number(player_ptr, floor_ptr->dun_level);
@@ -247,7 +247,7 @@ void update_dungeon_feeling(player_type *player_ptr)
         return;
 
     byte new_feeling = get_dungeon_feeling(player_ptr);
-    player_ptr->feeling_turn = current_world_ptr->game_turn;
+    player_ptr->feeling_turn = w_ptr->game_turn;
     if (player_ptr->feeling == new_feeling)
         return;
 

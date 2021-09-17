@@ -222,7 +222,7 @@ static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powe
             random_slay(o_ptr);
             break;
         default:
-            if (current_world_ptr->wizard)
+            if (w_ptr->wizard)
                 msg_print("Switch error in become_random_artifact!");
 
             (*powers)++;

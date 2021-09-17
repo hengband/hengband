@@ -377,17 +377,17 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
     } else if (zz[0][0] == 'E') {
         max_e_idx = (EGO_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'D') {
-        current_world_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
+        w_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'O') {
-        current_world_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
+        w_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'M') {
-        current_world_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
+        w_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'W') {
         if (zz[0][1] == 'X')
-            current_world_ptr->max_wild_x = (POSITION)atoi(zz[1]);
+            w_ptr->max_wild_x = (POSITION)atoi(zz[1]);
 
         if (zz[0][1] == 'Y')
-            current_world_ptr->max_wild_y = (POSITION)atoi(zz[1]);
+            w_ptr->max_wild_y = (POSITION)atoi(zz[1]);
     }
 
     return true;

@@ -472,7 +472,7 @@ void teleport_player_to(player_type *player_ptr, POSITION ny, POSITION nx, telep
                 break;
         }
 
-        bool is_anywhere = current_world_ptr->wizard;
+        bool is_anywhere = w_ptr->wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
         is_anywhere
             &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
@@ -504,7 +504,7 @@ void teleport_away_followable(player_type *player_ptr, MONSTER_IDX m_idx)
 
     bool is_followable = old_ml;
     is_followable &= old_cdis <= MAX_SIGHT;
-    is_followable &= current_world_ptr->timewalk_m_idx == 0;
+    is_followable &= w_ptr->timewalk_m_idx == 0;
     is_followable &= !player_ptr->phase_out;
     is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);
     if (!is_followable)

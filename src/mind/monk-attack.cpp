@@ -105,7 +105,7 @@ static int select_blow(player_type *player_ptr, player_attack_type *pa_ptr, int 
         }
 
         old_ptr = pa_ptr->ma_ptr;
-        if (current_world_ptr->wizard && cheat_xtra)
+        if (w_ptr->wizard && cheat_xtra)
             msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
     }
 

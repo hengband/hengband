@@ -147,7 +147,7 @@ void close_game(player_type *player_ptr)
     flush();
     signals_ignore_tstp();
 
-    current_world_ptr->character_icky_depth = 1;
+    w_ptr->character_icky_depth = 1;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     safe_setuid_grab(player_ptr);
@@ -157,12 +157,12 @@ void close_game(player_type *player_ptr)
     if (!check_death(player_ptr))
         return;
 
-    if (current_world_ptr->total_winner)
+    if (w_ptr->total_winner)
         kingly(player_ptr);
 
     if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
         update_playtime();
-        current_world_ptr->sf_play_time += current_world_ptr->play_time;
+        w_ptr->sf_play_time += w_ptr->play_time;
 
         if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
             msg_print(_("セーブ失敗！", "death save failed!"));

@@ -74,7 +74,7 @@ static IDX collect_monsters(player_type *player_ptr, IDX grp_cur, IDX mon_idx[],
         } else if (grp_wanted) {
             bool wanted = false;
             for (int j = 0; j < MAX_BOUNTY; j++) {
-                if (current_world_ptr->bounty_r_idx[j] == i || current_world_ptr->bounty_r_idx[j] - 10000 == i
+                if (w_ptr->bounty_r_idx[j] == i || w_ptr->bounty_r_idx[j] - 10000 == i
                     || (player_ptr->today_mon && player_ptr->today_mon == i)) {
                     wanted = true;
                     break;
@@ -266,9 +266,9 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, (r_ptr->name.c_str()), row + i, col);
         if (per_page == 1)
-            c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (current_world_ptr->wizard || visual_only) ? 56 : 61);
+            c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
 
-        if (current_world_ptr->wizard || visual_only)
+        if (w_ptr->wizard || visual_only)
             c_prt(attr, format("%d", r_idx), row + i, 62);
 
         term_erase(69, row + i, 255);
@@ -350,7 +350,7 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
             if (direct_r_idx < 0)
                 prt(_("グループ", "Group"), 4, 0);
             prt(_("名前", "Name"), 4, max + 3);
-            if (current_world_ptr->wizard || visual_only)
+            if (w_ptr->wizard || visual_only)
                 prt("Idx", 4, 62);
             prt(_("文字", "Sym"), 4, 67);
             if (!visual_only)
@@ -488,8 +488,8 @@ void do_cmd_knowledge_bounty(player_type *player_ptr)
 
     bool listed = false;
     for (int i = 0; i < MAX_BOUNTY; i++) {
-        if (current_world_ptr->bounty_r_idx[i] <= 10000) {
-            fprintf(fff, "%s\n", r_info[current_world_ptr->bounty_r_idx[i]].name.c_str());
+        if (w_ptr->bounty_r_idx[i] <= 10000) {
+            fprintf(fff, "%s\n", r_info[w_ptr->bounty_r_idx[i]].name.c_str());
             listed = true;
         }
     }

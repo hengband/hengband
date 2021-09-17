@@ -201,7 +201,7 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
         sprintf(tmp, "%d", quest[atoi(b + 6)].status);
         v = tmp;
     } else if (prefix(b + 1, "RANDOM")) {
-        sprintf(tmp, "%d", (int)(current_world_ptr->seed_town % atoi(b + 7)));
+        sprintf(tmp, "%d", (int)(w_ptr->seed_town % atoi(b + 7)));
         v = tmp;
     } else if (streq(b + 1, "VARIANT")) {
         v = variant;

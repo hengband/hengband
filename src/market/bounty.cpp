@@ -102,14 +102,14 @@ bool exchange_cash(player_type *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE)
-            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[current_world_ptr->today_mon].name.c_str()))) {
+            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
                 msg_format(
-                    _("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[current_world_ptr->today_mon].level * 50 + 100) * o_ptr->number));
-                player_ptr->au += (r_info[current_world_ptr->today_mon].level * 50 + 100) * o_ptr->number;
+                    _("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[w_ptr->today_mon].level * 50 + 100) * o_ptr->number));
+                player_ptr->au += (r_info[w_ptr->today_mon].level * 50 + 100) * o_ptr->number;
                 player_ptr->redraw |= (PR_GOLD);
                 vary_item(player_ptr, i, -o_ptr->number);
             }
@@ -122,13 +122,13 @@ bool exchange_cash(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
 
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON)
-            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[current_world_ptr->today_mon].name.c_str()))) {
+            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
-                msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[current_world_ptr->today_mon].level * 30 + 60) * o_ptr->number));
-                player_ptr->au += (r_info[current_world_ptr->today_mon].level * 30 + 60) * o_ptr->number;
+                msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[w_ptr->today_mon].level * 30 + 60) * o_ptr->number));
+                player_ptr->au += (r_info[w_ptr->today_mon].level * 30 + 60) * o_ptr->number;
                 player_ptr->redraw |= (PR_GOLD);
                 vary_item(player_ptr, i, -o_ptr->number);
             }
@@ -140,7 +140,7 @@ bool exchange_cash(player_type *player_ptr)
     for (int j = 0; j < MAX_BOUNTY; j++) {
         for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--) {
             o_ptr = &player_ptr->inventory_list[i];
-            if ((o_ptr->tval != TV_CORPSE) || (o_ptr->pval != current_world_ptr->bounty_r_idx[j]))
+            if ((o_ptr->tval != TV_CORPSE) || (o_ptr->pval != w_ptr->bounty_r_idx[j]))
                 continue;
 
             char buf[MAX_NLEN + 20];
@@ -155,10 +155,10 @@ bool exchange_cash(player_type *player_ptr)
 
             vary_item(player_ptr, i, -o_ptr->number);
             chg_virtue(player_ptr, V_JUSTICE, 5);
-            current_world_ptr->bounty_r_idx[j] += 10000;
+            w_ptr->bounty_r_idx[j] += 10000;
 
             for (num = 0, k = 0; k < MAX_BOUNTY; k++) {
-                if (current_world_ptr->bounty_r_idx[k] >= 10000)
+                if (w_ptr->bounty_r_idx[k] >= 10000)
                     num++;
             }
 
@@ -200,7 +200,7 @@ bool exchange_cash(player_type *player_ptr)
 void today_target(player_type *player_ptr)
 {
     char buf[160];
-    monster_race *r_ptr = &r_info[current_world_ptr->today_mon];
+    monster_race *r_ptr = &r_info[w_ptr->today_mon];
 
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
@@ -210,7 +210,7 @@ void today_target(player_type *player_ptr)
     prt(buf, 8, 10);
     sprintf(buf, _("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60);
     prt(buf, 9, 10);
-    player_ptr->today_mon = current_world_ptr->today_mon;
+    player_ptr->today_mon = w_ptr->today_mon;
 }
 
 /*!
@@ -241,9 +241,9 @@ void show_bounty(void)
         byte color;
         concptr done_mark;
         monster_race *r_ptr
-            = &r_info[(current_world_ptr->bounty_r_idx[i] > 10000 ? current_world_ptr->bounty_r_idx[i] - 10000 : current_world_ptr->bounty_r_idx[i])];
+            = &r_info[(w_ptr->bounty_r_idx[i] > 10000 ? w_ptr->bounty_r_idx[i] - 10000 : w_ptr->bounty_r_idx[i])];
 
-        if (current_world_ptr->bounty_r_idx[i] > 10000) {
+        if (w_ptr->bounty_r_idx[i] > 10000) {
             color = TERM_RED;
             done_mark = _("(済)", "(done)");
         } else {
@@ -272,7 +272,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 {
     int max_dl = 3, i;
     if (!conv_old) {
-        for (i = 0; i < current_world_ptr->max_d_idx; i++) {
+        for (i = 0; i < w_ptr->max_d_idx; i++) {
             if (max_dlv[i] < d_info[i].mindepth)
                 continue;
             if (max_dl < max_dlv[i])
@@ -285,9 +285,9 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
     get_mon_num_prep_bounty(player_ptr);
 
     while (true) {
-        current_world_ptr->today_mon = get_mon_num(player_ptr, MIN(max_dl / 2, 40), max_dl, GMN_ARENA);
+        w_ptr->today_mon = get_mon_num(player_ptr, MIN(max_dl / 2, 40), max_dl, GMN_ARENA);
         monster_race *r_ptr;
-        r_ptr = &r_info[current_world_ptr->today_mon];
+        r_ptr = &r_info[w_ptr->today_mon];
 
         if (cheat_hear) {
             msg_format("日替わり候補: %s ", r_ptr->name.c_str());
@@ -320,9 +320,9 @@ void determine_bounty_uniques(player_type *player_ptr)
 
     for (int i = 0; i < MAX_BOUNTY; i++) {
         while (true) {
-            current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
+            w_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
             monster_race *r_ptr;
-            r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
+            r_ptr = &r_info[w_ptr->bounty_r_idx[i]];
 
             if (!(r_ptr->flags1 & RF1_UNIQUE))
                 continue;
@@ -333,12 +333,12 @@ void determine_bounty_uniques(player_type *player_ptr)
             if (r_ptr->rarity > 100)
                 continue;
 
-            if (no_questor_or_bounty_uniques(current_world_ptr->bounty_r_idx[i]))
+            if (no_questor_or_bounty_uniques(w_ptr->bounty_r_idx[i]))
                 continue;
 
             int j;
             for (j = 0; j < i; j++) {
-                if (current_world_ptr->bounty_r_idx[i] == current_world_ptr->bounty_r_idx[j])
+                if (w_ptr->bounty_r_idx[i] == w_ptr->bounty_r_idx[j])
                     break;
             }
 
@@ -350,10 +350,10 @@ void determine_bounty_uniques(player_type *player_ptr)
     for (int i = 0; i < MAX_BOUNTY - 1; i++) {
         for (int j = i; j < MAX_BOUNTY; j++) {
             MONRACE_IDX tmp;
-            if (r_info[current_world_ptr->bounty_r_idx[i]].level > r_info[current_world_ptr->bounty_r_idx[j]].level) {
-                tmp = current_world_ptr->bounty_r_idx[i];
-                current_world_ptr->bounty_r_idx[i] = current_world_ptr->bounty_r_idx[j];
-                current_world_ptr->bounty_r_idx[j] = tmp;
+            if (r_info[w_ptr->bounty_r_idx[i]].level > r_info[w_ptr->bounty_r_idx[j]].level) {
+                tmp = w_ptr->bounty_r_idx[i];
+                w_ptr->bounty_r_idx[i] = w_ptr->bounty_r_idx[j];
+                w_ptr->bounty_r_idx[j] = tmp;
             }
         }
     }

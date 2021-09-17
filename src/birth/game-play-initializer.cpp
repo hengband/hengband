@@ -127,17 +127,17 @@ void player_wipe_without_name(player_type *player_ptr)
     cheat_turn = false;
     cheat_immortal = false;
 
-    current_world_ptr->total_winner = false;
+    w_ptr->total_winner = false;
     player_ptr->timewalk = false;
     player_ptr->panic_save = 0;
 
-    current_world_ptr->noscore = 0;
-    current_world_ptr->wizard = false;
+    w_ptr->noscore = 0;
+    w_ptr->wizard = false;
     player_ptr->wait_report_score = false;
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
-    for (int i = 0; i < current_world_ptr->max_d_idx; i++)
+    for (int i = 0; i < w_ptr->max_d_idx; i++)
         max_dlv[i] = 0;
 
     player_ptr->visit = 1;
@@ -222,13 +222,13 @@ void init_dungeon_quests(player_type *player_ptr)
 void init_turn(player_type *player_ptr)
 {
     if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD) {
-        current_world_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
+        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     } else {
-        current_world_ptr->game_turn = 1;
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        w_ptr->game_turn = 1;
+        w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     }
 
-    current_world_ptr->dungeon_turn = 1;
-    current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    w_ptr->dungeon_turn = 1;
+    w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 }

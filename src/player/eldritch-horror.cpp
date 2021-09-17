@@ -86,7 +86,7 @@ static void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
  */
 void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 {
-    if (player_ptr->phase_out || !current_world_ptr->character_dungeon)
+    if (player_ptr->phase_out || !w_ptr->character_dungeon)
         return;
 
     int power = 100;
@@ -101,7 +101,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
         } else
             power *= 2;
 
-        if (!current_world_ptr->is_loading_now)
+        if (!w_ptr->is_loading_now)
             return;
 
         if (!m_ptr->ml)

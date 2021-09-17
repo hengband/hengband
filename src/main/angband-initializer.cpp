@@ -297,7 +297,7 @@ void init_angband(player_type *player_ptr, bool no_term)
     if (init_d_info())
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
 
-    for (int i = 1; i < current_world_ptr->max_d_idx; i++)
+    for (int i = 1; i < w_ptr->max_d_idx; i++)
         if (d_info[i].final_guardian)
             r_info[d_info[i].final_guardian].flags7 |= RF7_GUARDIAN;
 

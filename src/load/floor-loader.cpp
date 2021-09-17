@@ -182,7 +182,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
     C_KILL(templates, limit, grid_template_type);
     rd_u16b(&limit);
-    if (limit > current_world_ptr->max_o_idx)
+    if (limit > w_ptr->max_o_idx)
         return 151;
     for (int i = 1; i < limit; i++) {
         OBJECT_IDX o_idx;
@@ -199,7 +199,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     }
 
     rd_u16b(&limit);
-    if (limit > current_world_ptr->max_m_idx)
+    if (limit > w_ptr->max_m_idx)
         return 161;
 
     for (int i = 1; i < limit; i++) {
@@ -238,10 +238,10 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     v_check = 0L;
     x_check = 0L;
 
-    current_world_ptr->h_ver_extra = H_VER_EXTRA;
-    current_world_ptr->h_ver_patch = H_VER_PATCH;
-    current_world_ptr->h_ver_minor = H_VER_MINOR;
-    current_world_ptr->h_ver_major = H_VER_MAJOR;
+    w_ptr->h_ver_extra = H_VER_EXTRA;
+    w_ptr->h_ver_patch = H_VER_PATCH;
+    w_ptr->h_ver_minor = H_VER_MINOR;
+    w_ptr->h_ver_major = H_VER_MAJOR;
     loading_savefile_version = SAVEFILE_VERSION;
 
     uint32_t tmp32u;
@@ -304,10 +304,10 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
         old_xor_byte = load_xor_byte;
         old_v_check = v_check;
         old_x_check = x_check;
-        old_h_ver_major = current_world_ptr->h_ver_major;
-        old_h_ver_minor = current_world_ptr->h_ver_minor;
-        old_h_ver_patch = current_world_ptr->h_ver_patch;
-        old_h_ver_extra = current_world_ptr->h_ver_extra;
+        old_h_ver_major = w_ptr->h_ver_major;
+        old_h_ver_minor = w_ptr->h_ver_minor;
+        old_h_ver_patch = w_ptr->h_ver_patch;
+        old_h_ver_extra = w_ptr->h_ver_extra;
         old_loading_savefile_version = loading_savefile_version;
     }
 
@@ -340,10 +340,10 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
         load_xor_byte = old_xor_byte;
         v_check = old_v_check;
         x_check = old_x_check;
-        current_world_ptr->h_ver_major = old_h_ver_major;
-        current_world_ptr->h_ver_minor = old_h_ver_minor;
-        current_world_ptr->h_ver_patch = old_h_ver_patch;
-        current_world_ptr->h_ver_extra = old_h_ver_extra;
+        w_ptr->h_ver_major = old_h_ver_major;
+        w_ptr->h_ver_minor = old_h_ver_minor;
+        w_ptr->h_ver_patch = old_h_ver_patch;
+        w_ptr->h_ver_extra = old_h_ver_extra;
         loading_savefile_version = old_loading_savefile_version;
     }
 

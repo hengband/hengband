@@ -119,7 +119,7 @@ int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
  */
 void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
-    if (floor_ptr->mproc_max[mproc_type] < current_world_ptr->max_m_idx) {
+    if (floor_ptr->mproc_max[mproc_type] < w_ptr->max_m_idx) {
         floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (int16_t)m_idx;
     }
 }

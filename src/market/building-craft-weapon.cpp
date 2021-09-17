@@ -352,7 +352,7 @@ PRICE compare_weapons(player_type *player_ptr, PRICE bcost)
     object_type *i_ptr;
     TERM_LEN row = 2;
     TERM_LEN wid = 38, mgn = 2;
-    bool old_character_xtra = current_world_ptr->character_xtra;
+    bool old_character_xtra = w_ptr->character_xtra;
     char ch;
     PRICE total = 0;
     PRICE cost = 0; /* First time no price */
@@ -377,7 +377,7 @@ PRICE compare_weapons(player_type *player_ptr, PRICE bcost)
 
     while (true) {
         clear_bldg(0, 22);
-        current_world_ptr->character_xtra = true;
+        w_ptr->character_xtra = true;
         for (int i = 0; i < n; i++) {
             int col = (wid * i + mgn);
             if (o_ptr[i] != i_ptr)
@@ -394,7 +394,7 @@ PRICE compare_weapons(player_type *player_ptr, PRICE bcost)
         player_ptr->update |= PU_BONUS;
         handle_stuff(player_ptr);
 
-        current_world_ptr->character_xtra = old_character_xtra;
+        w_ptr->character_xtra = old_character_xtra;
 #ifdef JP
         put_str(format("[ 比較対象: 's'で変更 ($%d) ]", cost), 1, (wid + mgn));
         put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);

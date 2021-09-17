@@ -193,14 +193,14 @@ errr process_autopick_file(player_type *player_ptr, concptr name)
  */
 errr process_histpref_file(player_type *player_ptr, concptr name)
 {
-    bool old_character_xtra = current_world_ptr->character_xtra;
+    bool old_character_xtra = w_ptr->character_xtra;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
     /* Hack -- prevent modification birth options in this file */
-    current_world_ptr->character_xtra = true;
+    w_ptr->character_xtra = true;
     errr err = process_pref_file_aux(player_ptr, buf, PREF_TYPE_HISTPREF);
-    current_world_ptr->character_xtra = old_character_xtra;
+    w_ptr->character_xtra = old_character_xtra;
     return err;
 }
 

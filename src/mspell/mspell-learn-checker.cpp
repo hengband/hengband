@@ -20,5 +20,5 @@ bool spell_learnable(player_type *player_ptr, MONSTER_IDX m_idx)
     bool seen = (!player_ptr->blind && m_ptr->ml);
 
     bool maneable = player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
-    return (seen && maneable && !current_world_ptr->timewalk_m_idx);
+    return (seen && maneable && !w_ptr->timewalk_m_idx);
 }

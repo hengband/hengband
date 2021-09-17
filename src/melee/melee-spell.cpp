@@ -54,7 +54,7 @@ static void process_special_melee_spell(player_type *player_ptr, melee_spell_typ
 {
     bool is_special_magic = ms_ptr->m_ptr->ml;
     is_special_magic &= ms_ptr->maneable;
-    is_special_magic &= current_world_ptr->timewalk_m_idx == 0;
+    is_special_magic &= w_ptr->timewalk_m_idx == 0;
     is_special_magic &= !player_ptr->blind;
     is_special_magic &= player_ptr->pclass == CLASS_IMITATOR;
     is_special_magic &= ms_ptr->thrown_spell != RF_ABILITY::SPECIAL;

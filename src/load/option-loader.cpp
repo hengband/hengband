@@ -43,7 +43,7 @@ void rd_options(void)
     rd_u16b(&c);
 
     if (c & 0x0002)
-        current_world_ptr->wizard = true;
+        w_ptr->wizard = true;
 
     cheat_peek = (c & 0x0100) ? true : false;
     cheat_hear = (c & 0x0200) ? true : false;

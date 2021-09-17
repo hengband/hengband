@@ -129,7 +129,7 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
  */
 static void dump_winner_classes(FILE *fff)
 {
-    int n = current_world_ptr->sf_winner.count();
+    int n = w_ptr->sf_winner.count();
     concptr ss = n > 1 ? _("", "s") : "";
     fprintf(fff, _("*勝利*済みの職業%s : %d\n", "Class of *Winner%s* : %d\n"), ss, n);
     if (n == 0)
@@ -139,13 +139,13 @@ static void dump_winner_classes(FILE *fff)
     std::string s = "";
     std::string l = "";
     for (int c = 0; c < MAX_CLASS; c++) {
-        if (current_world_ptr->sf_winner.has_not(i2enum<player_class_type>(c)))
+        if (w_ptr->sf_winner.has_not(i2enum<player_class_type>(c)))
             continue;
 
         auto &cl = class_info[c];
         auto t = std::string(cl.title);
 
-        if (current_world_ptr->sf_retired.has_not(i2enum<player_class_type>(c)))
+        if (w_ptr->sf_retired.has_not(i2enum<player_class_type>(c)))
             t = "(" + t + ")";
 
         if (l.size() + t.size() + 2 > max_len) {
@@ -173,8 +173,8 @@ void do_cmd_knowledge_stat(player_type *player_ptr)
         return;
 
     update_playtime();
-    uint32_t play_time = current_world_ptr->play_time;
-    uint32_t all_time = current_world_ptr->sf_play_time + play_time;
+    uint32_t play_time = w_ptr->play_time;
+    uint32_t all_time = w_ptr->sf_play_time + play_time;
     fprintf(fff, _("現在のプレイ時間 : %d:%02d:%02d\n", "Current Play Time is %d:%02d:%02d\n"), play_time / (60 * 60), (play_time / 60) % 60, play_time % 60);
     fprintf(fff, _("合計のプレイ時間 : %d:%02d:%02d\n", "  Total play Time is %d:%02d:%02d\n"), all_time / (60 * 60), (all_time / 60) % 60, all_time % 60);
     fputs("\n", fff);
@@ -209,7 +209,7 @@ void do_cmd_knowledge_stat(player_type *player_ptr)
  */
 void do_cmd_knowledge_home(player_type *player_ptr)
 {
-    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
 
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

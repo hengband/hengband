@@ -176,7 +176,7 @@ void rd_bounty_uniques(player_type *player_ptr)
     }
 
     for (int i = 0; i < MAX_BOUNTY; i++)
-        rd_s16b(&current_world_ptr->bounty_r_idx[i]);
+        rd_s16b(&w_ptr->bounty_r_idx[i]);
 }
 
 /*!

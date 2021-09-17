@@ -354,7 +354,7 @@ bool set_monster_invulner(player_type *player_ptr, MONSTER_IDX m_idx, int v, boo
 bool set_monster_timewalk(player_type *player_ptr, int num, MONRACE_IDX who, bool vs_player)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx];
-    if (current_world_ptr->timewalk_m_idx)
+    if (w_ptr->timewalk_m_idx)
         return false;
 
     if (vs_player) {
@@ -381,7 +381,7 @@ bool set_monster_timewalk(player_type *player_ptr, int num, MONRACE_IDX who, boo
         msg_print(nullptr);
     }
 
-    current_world_ptr->timewalk_m_idx = hack_m_idx;
+    w_ptr->timewalk_m_idx = hack_m_idx;
     if (vs_player)
         do_cmd_redraw(player_ptr);
 
@@ -389,7 +389,7 @@ bool set_monster_timewalk(player_type *player_ptr, int num, MONRACE_IDX who, boo
         if (!monster_is_valid(m_ptr))
             break;
 
-        process_monster(player_ptr, current_world_ptr->timewalk_m_idx);
+        process_monster(player_ptr, w_ptr->timewalk_m_idx);
         reset_target(m_ptr);
         handle_stuff(player_ptr);
         if (vs_player)
@@ -399,7 +399,7 @@ bool set_monster_timewalk(player_type *player_ptr, int num, MONRACE_IDX who, boo
     player_ptr->redraw |= PR_MAP;
     player_ptr->update |= PU_MONSTERS;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-    current_world_ptr->timewalk_m_idx = 0;
+    w_ptr->timewalk_m_idx = 0;
     if (vs_player || (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))) {
         concptr mes;
         switch (who) {

@@ -226,7 +226,7 @@ void describe_pickup_item(player_type *player_ptr, OBJECT_IDX o_idx)
     msg_format("You have %s (%c).", o_name, index_to_label(slot));
     strcpy(record_o_name, o_name);
 #endif
-    record_turn = current_world_ptr->game_turn;
+    record_turn = w_ptr->game_turn;
     check_find_art_quest_completion(player_ptr, o_ptr);
 }
 

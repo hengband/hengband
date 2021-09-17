@@ -73,11 +73,11 @@ static void do_cmd_last_get(player_type *player_ptr)
     if (!get_check(buf))
         return;
 
-    GAME_TURN turn_tmp = current_world_ptr->game_turn;
-    current_world_ptr->game_turn = record_turn;
+    GAME_TURN turn_tmp = w_ptr->game_turn;
+    w_ptr->game_turn = record_turn;
     sprintf(buf, _("%sを手に入れた。", "discover %s."), record_o_name);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
-    current_world_ptr->game_turn = turn_tmp;
+    w_ptr->game_turn = turn_tmp;
 }
 
 /*!

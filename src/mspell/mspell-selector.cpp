@@ -322,7 +322,7 @@ RF_ABILITY choose_attack_spell(player_type *player_ptr, msa_type *msa_ptr)
             dispel.push_back(msa_ptr->mspells[i]);
     }
 
-    if (!world.empty() && (randint0(100) < 15) && !current_world_ptr->timewalk_m_idx)
+    if (!world.empty() && (randint0(100) < 15) && !w_ptr->timewalk_m_idx)
         return (world[randint0(world.size())]);
 
     if (!special.empty()) {
@@ -376,7 +376,7 @@ RF_ABILITY choose_attack_spell(player_type *player_ptr, msa_type *msa_ptr)
     }
 
     if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(RF_ABILITY::TRAPS)) && (randint0(100) < 75)
-        && !current_world_ptr->timewalk_m_idx) {
+        && !w_ptr->timewalk_m_idx) {
         if (!tactic.empty())
             return (tactic[randint0(tactic.size())]);
     }
@@ -403,7 +403,7 @@ RF_ABILITY choose_attack_spell(player_type *player_ptr, msa_type *msa_ptr)
         return (attack[randint0(attack.size())]);
     }
 
-    if (!tactic.empty() && (randint0(100) < 50) && !current_world_ptr->timewalk_m_idx)
+    if (!tactic.empty() && (randint0(100) < 50) && !w_ptr->timewalk_m_idx)
         return (tactic[randint0(tactic.size())]);
 
     if (!invul.empty() && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50))

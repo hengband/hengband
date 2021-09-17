@@ -338,7 +338,7 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (current_world_ptr->wizard)
+        if (w_ptr->wizard)
             msg_print(_("(破損)", "(breakage)"));
 
         return 0;
@@ -407,7 +407,7 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (current_world_ptr->wizard)
+        if (w_ptr->wizard)
             msg_print(_("(床スペースがない)", "(no floor space)"));
 
         return 0;
@@ -445,7 +445,7 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
             msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-            if (current_world_ptr->wizard)
+            if (w_ptr->wizard)
                 msg_print(_("(床スペースがない)", "(no floor space)"));
 
             if (preserve_mode) {
@@ -495,7 +495,7 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (current_world_ptr->wizard)
+        if (w_ptr->wizard)
             msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
         if (j_ptr->is_fixed_artifact()) {

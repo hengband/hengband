@@ -126,7 +126,7 @@ static errr rd_dungeon(player_type *player_ptr)
         break;
     }
 
-    current_world_ptr->character_dungeon = true;
+    w_ptr->character_dungeon = true;
     return err;
 }
 

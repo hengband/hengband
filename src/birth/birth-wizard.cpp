@@ -529,7 +529,7 @@ static void set_name_history(player_type *player_ptr)
 {
     clear_from(23);
     get_name(player_ptr);
-    process_player_name(player_ptr, current_world_ptr->creating_savefile);
+    process_player_name(player_ptr, w_ptr->creating_savefile);
     edit_history(player_ptr);
     get_max_stats(player_ptr);
     initialize_virtues(player_ptr);

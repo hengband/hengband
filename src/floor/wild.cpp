@@ -352,7 +352,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
     bool is_winner = wilderness[y][x].entrance > 0;
     is_winner &= (wilderness[y][x].town == 0);
     bool is_wild_winner = d_info[wilderness[y][x].entrance].flags.has_not(DF::WINNER);
-    is_winner &= ((current_world_ptr->total_winner != 0) || is_wild_winner);
+    is_winner &= ((w_ptr->total_winner != 0) || is_wild_winner);
     if (!is_winner)
         return;
 
@@ -382,7 +382,7 @@ void wilderness_gen(player_type *player_ptr)
     floor_ptr->width = MAX_WID;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
-    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
     POSITION x = player_ptr->wilderness_x;
     POSITION y = player_ptr->wilderness_y;
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
@@ -559,9 +559,9 @@ void wilderness_gen_small(player_type *player_ptr)
         for (int j = 0; j < MAX_HGT; j++)
             floor_ptr->grid_array[j][i].feat = feat_permanent;
 
-    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-    for (int i = 0; i < current_world_ptr->max_wild_x; i++) {
-        for (int j = 0; j < current_world_ptr->max_wild_y; j++) {
+    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
+    for (int i = 0; i < w_ptr->max_wild_x; i++) {
+        for (int j = 0; j < w_ptr->max_wild_y; j++) {
             if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN)) {
                 floor_ptr->grid_array[j][i].feat = (int16_t)feat_town;
                 floor_ptr->grid_array[j][i].special = (int16_t)wilderness[j][i].town;
@@ -575,7 +575,7 @@ void wilderness_gen_small(player_type *player_ptr)
                 continue;
             }
 
-            if (wilderness[j][i].entrance && (current_world_ptr->total_winner || d_info[wilderness[j][i].entrance].flags.has_not(DF::WINNER))) {
+            if (wilderness[j][i].entrance && (w_ptr->total_winner || d_info[wilderness[j][i].entrance].flags.has_not(DF::WINNER))) {
                 floor_ptr->grid_array[j][i].feat = feat_entrance;
                 floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
                 floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
@@ -587,8 +587,8 @@ void wilderness_gen_small(player_type *player_ptr)
         }
     }
 
-    floor_ptr->height = (int16_t)current_world_ptr->max_wild_y;
-    floor_ptr->width = (int16_t)current_world_ptr->max_wild_x;
+    floor_ptr->height = (int16_t)w_ptr->max_wild_y;
+    floor_ptr->width = (int16_t)w_ptr->max_wild_x;
     if (floor_ptr->height > MAX_HGT)
         floor_ptr->height = MAX_HGT;
 
@@ -712,8 +712,8 @@ parse_error_type parse_line_wilderness(player_type *player_ptr, char *buf, int x
         player_ptr->wilderness_y = atoi(zz[0]);
         player_ptr->wilderness_x = atoi(zz[1]);
 
-        if ((player_ptr->wilderness_x < 1) || (player_ptr->wilderness_x > current_world_ptr->max_wild_x) || (player_ptr->wilderness_y < 1)
-            || (player_ptr->wilderness_y > current_world_ptr->max_wild_y)) {
+        if ((player_ptr->wilderness_x < 1) || (player_ptr->wilderness_x > w_ptr->max_wild_x) || (player_ptr->wilderness_y < 1)
+            || (player_ptr->wilderness_y > w_ptr->max_wild_y)) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
         }
 
@@ -724,7 +724,7 @@ parse_error_type parse_line_wilderness(player_type *player_ptr, char *buf, int x
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
 
-    for (int i = 1; i < current_world_ptr->max_d_idx; i++) {
+    for (int i = 1; i < w_ptr->max_d_idx; i++) {
         if (!d_info[i].maxdepth)
             continue;
         wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte)i;
@@ -742,8 +742,8 @@ parse_error_type parse_line_wilderness(player_type *player_ptr, char *buf, int x
  */
 void seed_wilderness(void)
 {
-    for (POSITION x = 0; x < current_world_ptr->max_wild_x; x++)
-        for (POSITION y = 0; y < current_world_ptr->max_wild_y; y++) {
+    for (POSITION x = 0; x < w_ptr->max_wild_x; x++)
+        for (POSITION y = 0; y < w_ptr->max_wild_y; y++) {
             wilderness[y][x].seed = randint0(0x10000000);
             wilderness[y][x].entrance = 0;
         }
@@ -759,10 +759,10 @@ typedef wilderness_type *wilderness_type_ptr;
  */
 errr init_wilderness(void)
 {
-    C_MAKE(wilderness, current_world_ptr->max_wild_y, wilderness_type_ptr);
-    C_MAKE(wilderness[0], current_world_ptr->max_wild_x * current_world_ptr->max_wild_y, wilderness_type);
-    for (int i = 1; i < current_world_ptr->max_wild_y; i++)
-        wilderness[i] = wilderness[0] + i * current_world_ptr->max_wild_x;
+    C_MAKE(wilderness, w_ptr->max_wild_y, wilderness_type_ptr);
+    C_MAKE(wilderness[0], w_ptr->max_wild_x * w_ptr->max_wild_y, wilderness_type);
+    for (int i = 1; i < w_ptr->max_wild_y; i++)
+        wilderness[i] = wilderness[0] + i * w_ptr->max_wild_x;
 
     generate_encounter = false;
     return 0;
