@@ -442,15 +442,17 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
         notice = true;
     }
 
-    player_ptr->stun = v;
-
-    if (!notice)
+    player_stun->set(v);
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->redraw |= (PR_STUN);
+    }
+
+    player_ptr->update |= PU_BONUS;
+    player_ptr->redraw |= PR_STUN;
     handle_stuff(player_ptr);
     return true;
 }

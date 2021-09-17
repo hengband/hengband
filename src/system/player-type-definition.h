@@ -98,8 +98,7 @@ public:
     TIME_EFFECT image{}; /* Timed -- Hallucination */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
     TIME_EFFECT cut{}; /* Timed -- Cut */
-    TIME_EFFECT stun{}; /* Timed -- Stun */
-
+    
     TIME_EFFECT protevil{}; /* Timed -- Protection */
     TIME_EFFECT invuln{}; /* Timed -- Invulnerable */
     TIME_EFFECT ult_res{}; /* Timed -- Ultimate Resistance */

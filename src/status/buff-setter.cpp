@@ -25,6 +25,7 @@
  */
 void reset_tim_flags(player_type *player_ptr)
 {
+    auto effects = player_ptr->effects();
     player_ptr->fast = 0; /* Timed -- Fast */
     player_ptr->lightspeed = 0;
     player_ptr->slow = 0; /* Timed -- Slow */
@@ -35,7 +36,7 @@ void reset_tim_flags(player_type *player_ptr)
     player_ptr->image = 0; /* Timed -- Hallucination */
     player_ptr->poisoned = 0; /* Timed -- Poisoned */
     player_ptr->cut = 0; /* Timed -- Cut */
-    player_ptr->stun = 0; /* Timed -- Stun */
+    effects->stun()->reset();
 
     player_ptr->protevil = 0; /* Timed -- Protection */
     player_ptr->invuln = 0; /* Timed -- Invulnerable */
