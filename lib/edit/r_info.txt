@@ -439,7 +439,7 @@ F:ONLY_GOLD | DROP_60 | DROP_SKELETON | DROP_CORPSE
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | WILD_TOWN | WILD_ONLY
 D:$The typical ponce around town, with purse jingling, and looking for more 
 D:$amulets of adornment to buy.
-D:町をふらつく典型的なクズで、財布をじゃらじゃらさせて、魅力のアミュレット
+D:町をふらつく典型的なクズで、財布をじゃらじゃらさせて、装飾のアミュレット
 D:を買おうと町を探し回っている。
 
 #J0#
