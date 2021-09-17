@@ -27,6 +27,29 @@ StunRank PlayerStun::get_rank(short value) const
     return StunRank::NONE;
 }
 
+/*!
+ * @brief 朦朧ランクに応じて各種失率を上げる.
+ * @return 朦朧ならば15%、ひどく朦朧ならば25%.
+ * @details
+ * 意識不明瞭ならばそもそも動けないのでこのメソッドを通らない.
+ * しかし今後の拡張を考慮して100%としておく.
+ */
+int PlayerStun::decrease_chance() const
+{
+    switch (this->get_rank()) {
+    case StunRank::NONE:
+        return 0;
+    case StunRank::NORMAL:
+        return 15;
+    case StunRank::HARD:
+        return 25;
+    case StunRank::UNCONSCIOUS:
+        return 100;
+    default:
+        throw("Invalid stun rank is specified!");
+    }
+}
+
 void PlayerStun::set(short value)
 {
 }

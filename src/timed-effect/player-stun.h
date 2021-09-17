@@ -15,6 +15,7 @@ public:
     short current() const;
     StunRank get_rank() const;
     StunRank get_rank(short value) const;
+    int decrease_chance() const;
     void set(short value);
 
 private:
