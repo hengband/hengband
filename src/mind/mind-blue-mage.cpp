@@ -70,13 +70,11 @@ bool do_cmd_cast_learned(player_type *player_ptr)
     if (chance < minfail)
         chance = minfail;
 
-    if (player_ptr->stun > 50)
-        chance += 25;
-    else if (player_ptr->stun)
-        chance += 15;
-
-    if (chance > 95)
+    auto player_stun = player_ptr->effects()->stun();
+    chance += player_stun->decrease_chance();
+    if (chance > 95) {
         chance = 95;
+    }
 
     chance = mod_spell_chance_2(player_ptr, chance);
     const auto spell_type = i2enum<RF_ABILITY>(n);

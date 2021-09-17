@@ -274,13 +274,11 @@ static void calculate_blue_magic_success_probability(player_type *player_ptr, le
     if (lm_ptr->chance < minfail)
         lm_ptr->chance = minfail;
 
-    if (player_ptr->stun > 50)
-        lm_ptr->chance += 25;
-    else if (player_ptr->stun)
-        lm_ptr->chance += 15;
-
-    if (lm_ptr->chance > 95)
+    auto player_stun = player_ptr->effects()->stun();
+    lm_ptr->chance += player_stun->decrease_chance();
+    if (lm_ptr->chance > 95) {
         lm_ptr->chance = 95;
+    }
 
     lm_ptr->chance = mod_spell_chance_2(player_ptr, lm_ptr->chance);
 }

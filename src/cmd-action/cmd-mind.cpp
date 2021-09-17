@@ -175,10 +175,8 @@ static void decide_mind_chance(player_type *player_ptr, cm_type *cm_ptr)
     if (cm_ptr->chance < cm_ptr->minfail)
         cm_ptr->chance = cm_ptr->minfail;
 
-    if (player_ptr->stun > 50)
-        cm_ptr->chance += 25;
-    else if (player_ptr->stun)
-        cm_ptr->chance += 15;
+    auto player_stun = player_ptr->effects()->stun();
+    cm_ptr->chance += player_stun->decrease_chance();
 
     if (cm_ptr->use_mind != mind_kind_type::KI)
         return;

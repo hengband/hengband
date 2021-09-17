@@ -383,7 +383,6 @@ bool set_slow(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool set_stun(player_type *player_ptr, TIME_EFFECT v)
 {
-    int old_aux, new_aux;
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
     if (player_ptr->is_dead)
@@ -391,39 +390,12 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
     if (PlayerRace(player_ptr).equals(player_race_type::GOLEM) || PlayerClass(player_ptr).can_resist_stun())
         v = 0;
 
-    if (player_ptr->stun > 100) {
-        old_aux = 3;
-    } else if (player_ptr->stun > 50) {
-        old_aux = 2;
-    } else if (player_ptr->stun > 0) {
-        old_aux = 1;
-    } else {
-        old_aux = 0;
-    }
-
-    if (v > 100) {
-        new_aux = 3;
-    } else if (v > 50) {
-        new_aux = 2;
-    } else if (v > 0) {
-        new_aux = 1;
-    } else {
-        new_aux = 0;
-    }
-
+    auto player_stun = player_ptr->effects()->stun();
+    auto old_aux = player_stun->get_rank();
+    auto new_aux = player_stun->get_rank(v);
     if (new_aux > old_aux) {
-        switch (new_aux) {
-        case 1:
-            msg_print(_("意識がもうろうとしてきた。", "You have been stunned."));
-            break;
-        case 2:
-            msg_print(_("意識がひどくもうろうとしてきた。", "You have been heavily stunned."));
-            break;
-        case 3:
-            msg_print(_("頭がクラクラして意識が遠のいてきた。", "You have been knocked out."));
-            break;
-        }
-
+        auto stun_mes = player_stun->get_stun_mes(new_aux);
+        msg_print(stun_mes.data());
         if (randint1(1000) < v || one_in_(16)) {
             msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
 
@@ -461,7 +433,7 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
 
         notice = true;
     } else if (new_aux < old_aux) {
-        if (new_aux == 0) {
+        if (new_aux == StunRank::NONE) {
             msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
             if (disturb_state)
                 disturb(player_ptr, false, false);

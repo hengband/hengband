@@ -300,12 +300,8 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
         this->chance = minfail;
     }
 
-    if (this->player_ptr->stun > 50) {
-        this->chance += 25;
-    } else if (this->player_ptr->stun) {
-        this->chance += 15;
-    }
-
+    auto player_stun = this->player_ptr->effects()->stun();
+    this->chance += player_stun->decrease_chance();
     add_ki_chance();
     if (this->chance > 95) {
         this->chance = 95;
