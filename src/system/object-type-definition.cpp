@@ -355,7 +355,7 @@ bool object_type::is_ego() const
  */
 bool object_type::is_smith() const
 {
-    return Smith::object_effect(this).has_value();
+    return Smith::object_effect(this).has_value() || Smith::object_activation(this).has_value();
 }
 
 /*!

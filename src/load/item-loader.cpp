@@ -43,16 +43,16 @@ void rd_item(object_type *o_ptr)
     o_ptr->tval = k_ptr->tval;
     o_ptr->sval = k_ptr->sval;
 
-    if (flags & SAVE_ITEM_PVAL)
+    if (any_bits(flags, SAVE_ITEM_PVAL))
         rd_s16b(&o_ptr->pval);
     else
         o_ptr->pval = 0;
 
-    if (flags & SAVE_ITEM_DISCOUNT)
+    if (any_bits(flags, SAVE_ITEM_DISCOUNT))
         rd_byte(&o_ptr->discount);
     else
         o_ptr->discount = 0;
-    if (flags & SAVE_ITEM_NUMBER) {
+    if (any_bits(flags, SAVE_ITEM_NUMBER)) {
         rd_byte(&tmp8u);
         o_ptr->number = tmp8u;
     } else
@@ -62,7 +62,7 @@ void rd_item(object_type *o_ptr)
     rd_s16b(&tmp16s);
     o_ptr->weight = tmp16s;
 
-    if (flags & SAVE_ITEM_NAME1) {
+    if (any_bits(flags, SAVE_ITEM_NAME1)) {
         if (h_older_than(3, 0, 0, 2)) {
             rd_byte(&tmp8u);
             o_ptr->name1 = tmp8u;
@@ -73,56 +73,56 @@ void rd_item(object_type *o_ptr)
     } else
         o_ptr->name1 = 0;
 
-    if (flags & SAVE_ITEM_NAME2) {
+    if (any_bits(flags, SAVE_ITEM_NAME2)) {
         rd_byte(&tmp8u);
         o_ptr->name2 = tmp8u;
     } else
         o_ptr->name2 = 0;
 
-    if (flags & SAVE_ITEM_TIMEOUT)
+    if (any_bits(flags, SAVE_ITEM_TIMEOUT))
         rd_s16b(&o_ptr->timeout);
     else
         o_ptr->timeout = 0;
 
-    if (flags & SAVE_ITEM_TO_H)
+    if (any_bits(flags, SAVE_ITEM_TO_H))
         rd_s16b(&o_ptr->to_h);
     else
         o_ptr->to_h = 0;
 
-    if (flags & SAVE_ITEM_TO_D) {
+    if (any_bits(flags, SAVE_ITEM_TO_D)) {
         rd_s16b(&tmp16s);
         o_ptr->to_d = tmp16s;
     } else
         o_ptr->to_d = 0;
 
-    if (flags & SAVE_ITEM_TO_A)
+    if (any_bits(flags, SAVE_ITEM_TO_A))
         rd_s16b(&o_ptr->to_a);
     else
         o_ptr->to_a = 0;
 
-    if (flags & SAVE_ITEM_AC)
+    if (any_bits(flags, SAVE_ITEM_AC))
         rd_s16b(&o_ptr->ac);
     else
         o_ptr->ac = 0;
 
-    if (flags & SAVE_ITEM_DD) {
+    if (any_bits(flags, SAVE_ITEM_DD)) {
         rd_byte(&tmp8u);
         o_ptr->dd = tmp8u;
     } else
         o_ptr->dd = 0;
 
-    if (flags & SAVE_ITEM_DS) {
+    if (any_bits(flags, SAVE_ITEM_DS)) {
         rd_byte(&tmp8u);
         o_ptr->ds = tmp8u;
     } else
         o_ptr->ds = 0;
 
-    if (flags & SAVE_ITEM_IDENT)
+    if (any_bits(flags, SAVE_ITEM_IDENT))
         rd_byte(&o_ptr->ident);
     else
         o_ptr->ident = 0;
 
-    if (flags & SAVE_ITEM_MARKED)
+    if (any_bits(flags, SAVE_ITEM_MARKED))
         rd_byte(&o_ptr->marked);
     else
         o_ptr->marked = 0;
@@ -138,7 +138,7 @@ void rd_item(object_type *o_ptr)
         };
         auto start = 0;
         for (auto f : old_savefile_art_flags) {
-            if (flags & f) {
+            if (any_bits(flags, f)) {
                 uint32_t tmp32u;
                 rd_u32b(&tmp32u);
                 migrate_bitflag_to_flaggroup(o_ptr->art_flags, tmp32u, start);
@@ -146,14 +146,14 @@ void rd_item(object_type *o_ptr)
             start += 32;
         }
     } else {
-        if (flags & SAVE_ITEM_ART_FLAGS) {
+        if (any_bits(flags, SAVE_ITEM_ART_FLAGS)) {
             rd_FlagGroup(o_ptr->art_flags, rd_byte);
         } else {
             o_ptr->art_flags.clear();
         }
     }
 
-    if (flags & SAVE_ITEM_CURSE_FLAGS) {
+    if (any_bits(flags, SAVE_ITEM_CURSE_FLAGS)) {
         if (loading_savefile_version_is_older_than(5)) {
             uint32_t tmp32u;
             rd_u32b(&tmp32u);
@@ -166,18 +166,18 @@ void rd_item(object_type *o_ptr)
     }
 
     /* Monster holding object */
-    if (flags & SAVE_ITEM_HELD_M_IDX)
+    if (any_bits(flags, SAVE_ITEM_HELD_M_IDX))
         rd_s16b(&o_ptr->held_m_idx);
     else
         o_ptr->held_m_idx = 0;
 
     /* Special powers */
-    if (flags & SAVE_ITEM_XTRA1)
+    if (any_bits(flags, SAVE_ITEM_XTRA1))
         rd_byte(&o_ptr->xtra1);
     else
         o_ptr->xtra1 = 0;
 
-    if (flags & SAVE_ITEM_XTRA2) {
+    if (any_bits(flags, SAVE_ITEM_XTRA2)) {
         if (h_older_than(3, 0, 0, 2)) {
             rd_byte(&tmp8u);
             o_ptr->xtra2 = tmp8u;
@@ -188,39 +188,51 @@ void rd_item(object_type *o_ptr)
     } else
         o_ptr->xtra2 = 0;
 
-    if (flags & SAVE_ITEM_XTRA3)
+    if (any_bits(flags, SAVE_ITEM_XTRA3))
         rd_byte(&o_ptr->xtra3);
     else
         o_ptr->xtra3 = 0;
 
-    if (flags & SAVE_ITEM_XTRA4)
+    if (any_bits(flags, SAVE_ITEM_XTRA4))
         rd_s16b(&o_ptr->xtra4);
     else
         o_ptr->xtra4 = 0;
 
-    if (flags & SAVE_ITEM_XTRA5)
+    if (any_bits(flags, SAVE_ITEM_XTRA5))
         rd_s16b(&o_ptr->xtra5);
     else
         o_ptr->xtra5 = 0;
 
-    if (flags & SAVE_ITEM_FEELING)
+    if (any_bits(flags, SAVE_ITEM_FEELING))
         rd_byte(&o_ptr->feeling);
     else
         o_ptr->feeling = 0;
 
-    if (flags & SAVE_ITEM_STACK_IDX)
+    if (any_bits(flags, SAVE_ITEM_STACK_IDX))
         rd_s16b(&o_ptr->stack_idx);
     else
         o_ptr->stack_idx = 0;
 
-    if (flags & SAVE_ITEM_INSCRIPTION) {
+    if (any_bits(flags, SAVE_ITEM_SMITH) && !loading_savefile_version_is_older_than(7)) {
+        int16_t tmp16s;
+        rd_s16b(&tmp16s);
+        if (tmp16s > 0) {
+            o_ptr->smith_effect = static_cast<SmithEffect>(tmp16s);
+        }
+        rd_s16b(&tmp16s);
+        if (tmp16s > 0) {
+            o_ptr->smith_act_idx = static_cast<random_art_activation_type>(tmp16s);
+        }
+    }
+
+    if (any_bits(flags, SAVE_ITEM_INSCRIPTION)) {
         char buf[128];
         rd_string(buf, sizeof(buf));
         o_ptr->inscription = quark_add(buf);
     } else
         o_ptr->inscription = 0;
 
-    if (flags & SAVE_ITEM_ART_NAME) {
+    if (any_bits(flags, SAVE_ITEM_ART_NAME)) {
         char buf[128];
         rd_string(buf, sizeof(buf));
         o_ptr->art_name = quark_add(buf);

@@ -47,15 +47,6 @@ public:
     virtual TrFlags tr_flags() const;
 
     /*!
-     * @brief 鍛冶効果により与えられる発動IDを取得する
-     * 基底クラスは std::nullopt を返す。派生クラスで必要に応じて鍛冶効果により与えられる発動IDを返すようオーバーライドする。
-     *
-     * @return std::optional<random_art_activation_type> 発動IDを保持する std::optional オブジェクト
-     * 発動効果が付与されない場合は std::nullopt
-     */
-    virtual std::optional<random_art_activation_type> activation_index() const;
-
-    /*!
      * @brief 鍛冶を行えるアイテムかどうかを調べる
      *
      * @param o_ptr 鍛冶を行うアイテム構造体へのポインタ
@@ -92,13 +83,14 @@ private:
 
 /*!
  * @brief 発動効果を付与する鍛冶効果の情報クラス
- * 発動効果を付与する（かつ、特性フラグを与える場合もある）鍛冶の情報を扱う
+ * 発動効果を付与する鍛冶の情報を扱う
  */
-class ActivationSmithInfo : public BasicSmithInfo {
+class ActivationSmithInfo : public ISmithInfo {
 public:
-    ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags, random_art_activation_type act_idx);
-    virtual TrFlags tr_flags() const override;
-    virtual std::optional<random_art_activation_type> activation_index() const override;
+    ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, random_art_activation_type act_idx);
+    virtual bool add_essence(player_type *player_ptr, object_type *o_ptr, int number) const override;
+    virtual void erase_essence(object_type *) const override;
+    virtual bool can_give_smith_effect(const object_type *o_ptr) const override;
 
 private:
     random_art_activation_type act_idx; //!< 発動能力ID

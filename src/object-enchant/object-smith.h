@@ -38,7 +38,7 @@ public:
     static int get_essence_consumption(SmithEffect effect, const object_type *o_ptr = nullptr);
     static std::unique_ptr<ItemTester> get_item_tester(SmithEffect effect);
     static TrFlags get_effect_tr_flags(SmithEffect effect);
-    static std::optional<random_art_activation_type> get_effect_activation(SmithEffect effect);
+    static std::optional<random_art_activation_type> object_activation(const object_type *o_ptr);
     static std::optional<SmithEffect> object_effect(const object_type *o_ptr);
 
     int get_essence_num_of_posessions(SmithEssence essence) const;

@@ -20,11 +20,6 @@ TrFlags ISmithInfo::tr_flags() const
     return {};
 }
 
-std::optional<random_art_activation_type> ISmithInfo::activation_index() const
-{
-    return std::nullopt;
-}
-
 BasicSmithInfo::BasicSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags)
     : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
     , add_flags(add_flags)
@@ -33,14 +28,14 @@ BasicSmithInfo::BasicSmithInfo(SmithEffect effect, concptr name, SmithCategory c
 
 bool BasicSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
 {
-    o_ptr->xtra3 = static_cast<decltype(o_ptr->xtra3)>(effect);
+    o_ptr->smith_effect = effect;
 
     return true;
 }
 
 void BasicSmithInfo::erase_essence(object_type *o_ptr) const
 {
-    o_ptr->xtra3 = 0;
+    o_ptr->smith_effect = std::nullopt;
     auto flgs = object_flags(o_ptr);
     if (flgs.has_none_of(TR_PVAL_FLAG_MASK))
         o_ptr->pval = 0;
@@ -58,7 +53,7 @@ bool BasicSmithInfo::can_give_smith_effect(const object_type *o_ptr) const
      * 残る具体的な絞り込みは BasicSmithInfo::can_give_smith_effect_impl およびその派生クラスで
      * オーバーライドした関数にて行う
      */
-    if (o_ptr->is_artifact() || o_ptr->is_smith()) {
+    if (o_ptr->is_artifact() || o_ptr->smith_effect.has_value()) {
         return false;
     }
 
@@ -86,20 +81,32 @@ bool BasicSmithInfo::can_give_smith_effect_impl(const object_type *o_ptr) const
     return o_ptr->is_weapon_armour_ammo() && o_ptr->is_wearable();
 }
 
-ActivationSmithInfo::ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags, random_art_activation_type act_idx)
-    : BasicSmithInfo(effect, name, category, std::move(need_essences), consumption, std::move(add_flags))
+ActivationSmithInfo::ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, random_art_activation_type act_idx)
+    : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
     , act_idx(act_idx)
 {
 }
 
-TrFlags ActivationSmithInfo::tr_flags() const
+bool ActivationSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
 {
-    return BasicSmithInfo::tr_flags().set(TR_ACTIVATE);
+    o_ptr->smith_act_idx = this->act_idx;
+
+    return true;
 }
 
-std::optional<random_art_activation_type> ActivationSmithInfo::activation_index() const
+void ActivationSmithInfo::erase_essence(object_type *o_ptr) const
 {
-    return this->act_idx;
+    o_ptr->smith_act_idx = std::nullopt;
+}
+
+bool ActivationSmithInfo::can_give_smith_effect(const object_type *o_ptr) const
+{
+    if (o_ptr->is_artifact() || o_ptr->smith_act_idx.has_value())
+    {
+        return false;
+    }
+
+    return o_ptr->is_weapon_armour_ammo() && o_ptr->is_wearable();
 }
 
 EnchantWeaponSmithInfo::EnchantWeaponSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
