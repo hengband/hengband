@@ -67,6 +67,11 @@ int PlayerStun::decrease_chance() const
     }
 }
 
+bool PlayerStun::is_stunned() const
+{
+    return this->get_rank() > StunRank::NONE;
+}
+
 void PlayerStun::set(short value)
 {
     this->stun = value;
