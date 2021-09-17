@@ -1,4 +1,5 @@
 ﻿#include "timed-effect/player-stun.h"
+#include "locale/language-switcher.h"
 
 short PlayerStun::current() const
 {
@@ -25,6 +26,22 @@ StunRank PlayerStun::get_rank(short value) const
     }
 
     return StunRank::NONE;
+}
+
+std::string_view PlayerStun::get_stun_mes(StunRank stun_rank) const
+{
+    switch (stun_rank) {
+    case StunRank::NONE:
+        return "";
+    case StunRank::NORMAL:
+        return _("意識がもうろうとしてきた。", "You have been stunned.");
+    case StunRank::HARD:
+        return _("意識がひどくもうろうとしてきた。", "You have been heavily stunned.");
+    case StunRank::UNCONSCIOUS:
+        return _("頭がクラクラして意識が遠のいてきた。", "You have been knocked out.");
+    default:
+        throw("Invalid StunRank was specified!");
+    }
 }
 
 /*!
