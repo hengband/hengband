@@ -48,8 +48,9 @@ PERCENTAGE racial_chance(player_type *player_ptr, rpi_type *rpi_ptr)
     if (difficulty == 0)
         return 100;
 
-    if (player_ptr->stun) {
-        difficulty += (PERCENTAGE)player_ptr->stun;
+    auto player_stun = player_ptr->effects()->stun();
+    if (player_stun->is_stunned()) {
+        difficulty += player_stun->current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         PERCENTAGE lev_adj = (PERCENTAGE)((player_ptr->lev - rpi_ptr->min_level) / 3);
         if (lev_adj > 10)
@@ -88,8 +89,9 @@ static void adjust_racial_power_difficulty(player_type *player_ptr, rpi_type *rp
     if (*difficulty == 0)
         return;
 
-    if (player_ptr->stun) {
-        *difficulty += player_ptr->stun;
+    auto player_stun = player_ptr->effects()->stun();
+    if (player_stun->is_stunned()) {
+        *difficulty += player_stun->current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         int lev_adj = ((player_ptr->lev - rpi_ptr->min_level) / 3);
         if (lev_adj > 10)

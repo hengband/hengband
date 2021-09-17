@@ -101,7 +101,7 @@ static bool detonation(player_type *player_ptr)
 {
     msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
     take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
-    (void)set_stun(player_ptr, player_ptr->stun + 75);
+    (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + 75);
     (void)set_cut(player_ptr, player_ptr->cut + 5000);
     return true;
 }

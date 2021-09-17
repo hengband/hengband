@@ -276,10 +276,12 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
                 else if (one_in_(5))
                     (void)set_cut(player_ptr, player_ptr->cut + 200);
                 else if (one_in_(4)) {
-                    if (!player_ptr->free_act)
+                    auto effects = player_ptr->effects(); // @todo paralyzed と共通化の予定あり.
+                    if (!player_ptr->free_act) {
                         (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 2 + randint0(6));
-                    else
-                        (void)set_stun(player_ptr, player_ptr->stun + 10 + randint0(100));
+                    } else {
+                        (void)set_stun(player_ptr, effects->stun()->current() + 10 + randint0(100));
+                    }
                 } else if (one_in_(3))
                     apply_disenchant(player_ptr, 0);
                 else if (one_in_(2)) {

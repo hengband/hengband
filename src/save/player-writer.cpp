@@ -136,6 +136,7 @@ void wr_player(player_type *player_ptr)
     wr_s16b(player_ptr->sc);
     wr_s16b(player_ptr->concent);
 
+    auto effects = player_ptr->effects();
     wr_s16b(0); /* old "rest" */
     wr_s16b(player_ptr->blind);
     wr_s16b(player_ptr->paralyzed);
@@ -149,7 +150,7 @@ void wr_player(player_type *player_ptr)
     wr_s16b(player_ptr->slow);
     wr_s16b(player_ptr->afraid);
     wr_s16b(player_ptr->cut);
-    wr_s16b(player_ptr->stun);
+    wr_s16b(effects->stun()->current());
     wr_s16b(player_ptr->poisoned);
     wr_s16b(player_ptr->image);
     wr_s16b(player_ptr->protevil);

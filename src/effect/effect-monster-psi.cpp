@@ -103,7 +103,7 @@ static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, eff
         set_confused(player_ptr, player_ptr->confused + 3 + randint1(em_ptr->dam));
         break;
     case 2:
-        set_stun(player_ptr, player_ptr->stun + randint1(em_ptr->dam));
+        set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(em_ptr->dam));
         break;
     case 3: {
         if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR))

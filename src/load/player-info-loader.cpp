@@ -348,7 +348,8 @@ static void rd_status(player_type *player_ptr)
     rd_s16b(&player_ptr->slow);
     rd_s16b(&player_ptr->afraid);
     rd_s16b(&player_ptr->cut);
-    rd_s16b(&player_ptr->stun);
+    int16_t tmp16s = player_ptr->effects()->stun()->current();
+    rd_s16b(&tmp16s);
     rd_s16b(&player_ptr->poisoned);
     rd_s16b(&player_ptr->image);
     rd_s16b(&player_ptr->protevil);

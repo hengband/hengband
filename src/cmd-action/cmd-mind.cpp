@@ -217,7 +217,7 @@ static void check_mind_mindcrafter(player_type *player_ptr, cm_type *cm_ptr)
     }
 
     if (cm_ptr->b < 90) {
-        set_stun(player_ptr, player_ptr->stun + randint1(8));
+        set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(8));
         return;
     }
 

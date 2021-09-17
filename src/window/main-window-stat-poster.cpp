@@ -106,10 +106,12 @@ void print_cut(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの朦朧状態を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @todo TERM値のenumと文字列はPlayerStunの中へ入れ、ここは可能な限り軽くする.
  */
 void print_stun(player_type *player_ptr)
 {
-    int s = player_ptr->stun;
+    int s = player_ptr->effects()->stun()->current();
     if (s > 100) {
         c_put_str(TERM_RED, _("意識不明瞭  ", "Knocked out "), ROW_STUN, COL_STUN);
         return;

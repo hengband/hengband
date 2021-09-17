@@ -31,6 +31,7 @@
 
 static void set_bad_status_info(player_type *player_ptr, self_info_type *self_ptr)
 {
+    auto effects = player_ptr->effects();
     if (player_ptr->blind)
         self_ptr->info[self_ptr->line++] = _("あなたは目が見えない。", "You cannot see.");
 
@@ -43,7 +44,8 @@ static void set_bad_status_info(player_type *player_ptr, self_info_type *self_pt
     if (player_ptr->cut)
         self_ptr->info[self_ptr->line++] = _("あなたは出血している。", "You are bleeding.");
 
-    if (player_ptr->stun)
+    auto is_stunned = effects->stun()->is_stunned();
+    if (is_stunned)
         self_ptr->info[self_ptr->line++] = _("あなたはもうろうとしている。", "You are stunned.");
 
     if (player_ptr->poisoned)

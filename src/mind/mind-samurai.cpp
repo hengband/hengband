@@ -339,7 +339,8 @@ bool choose_kata(player_type *player_ptr)
     if (cmd_limit_confused(player_ptr))
         return false;
 
-    if (player_ptr->stun) {
+    auto effects = player_ptr->effects();
+    if (effects->stun()->is_stunned()) {
         msg_print(_("意識がはっきりとしない。", "You are not clear-headed"));
         return false;
     }

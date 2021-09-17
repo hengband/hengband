@@ -63,7 +63,7 @@ bool cmd_limit_image(player_type *player_ptr)
 
 bool cmd_limit_stun(player_type *player_ptr)
 {
-    if (player_ptr->stun) {
+    if (player_ptr->effects()->stun()->is_stunned()) {
         msg_print(_("頭が朦朧としていて集中できない！", "You are too stunned!"));
         return true;
     }

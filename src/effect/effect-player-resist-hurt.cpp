@@ -142,7 +142,7 @@ void effect_player_plasma(player_type *player_ptr, effect_player_type *ep_ptr)
 
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
         int plus_stun = (randint1((ep_ptr->dam > 40) ? 35 : (ep_ptr->dam * 3 / 4 + 5)));
-        (void)set_stun(player_ptr, player_ptr->stun + plus_stun);
+        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + plus_stun);
     }
 
     if (!(has_resist_fire(player_ptr) || is_oppose_fire(player_ptr) || has_immune_fire(player_ptr)))
@@ -203,7 +203,7 @@ void effect_player_water(player_type *player_ptr, effect_player_type *ep_ptr)
 
     if (!check_multishadow(player_ptr)) {
         if (!has_resist_sound(player_ptr) && !has_res_water) {
-            set_stun(player_ptr, player_ptr->stun + randint1(40));
+            set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(40));
         }
         if (!has_resist_conf(player_ptr) && !has_res_water) {
             set_confused(player_ptr, player_ptr->confused + randint1(5) + 5);
@@ -277,7 +277,7 @@ void effect_player_sound(player_type *player_ptr, effect_player_type *ep_ptr)
 
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
         int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-        (void)set_stun(player_ptr, player_ptr->stun + plus_stun);
+        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + plus_stun);
     }
 
     if (!has_resist_sound(player_ptr) || one_in_(13))
@@ -333,7 +333,7 @@ void effect_player_force(player_type *player_ptr, effect_player_type *ep_ptr)
     if (player_ptr->blind)
         msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_stun(player_ptr, player_ptr->stun + randint1(20));
+        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(20));
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
@@ -344,7 +344,7 @@ void effect_player_rocket(player_type *player_ptr, effect_player_type *ep_ptr)
     if (player_ptr->blind)
         msg_print(_("爆発があった！", "There is an explosion!"));
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_stun(player_ptr, player_ptr->stun + randint1(20));
+        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(20));
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(player_ptr, CALC_RAND) / 100;
@@ -525,7 +525,7 @@ void effect_player_gravity(player_type *player_ptr, effect_player_type *ep_ptr)
             (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
         if (!(has_resist_sound(player_ptr) || player_ptr->levitation)) {
             int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-            (void)set_stun(player_ptr, player_ptr->stun + plus_stun);
+            (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + plus_stun);
         }
     }
 
@@ -598,7 +598,7 @@ void effect_player_icee(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     if (!has_resist_sound(player_ptr)) {
-        (void)set_stun(player_ptr, player_ptr->stun + randint1(15));
+        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(15));
     }
 
     if ((!(has_resist_cold(player_ptr) || is_oppose_cold(player_ptr))) || one_in_(12)) {
