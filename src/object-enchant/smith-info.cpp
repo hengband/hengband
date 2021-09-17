@@ -83,7 +83,7 @@ bool BasicSmithInfo::can_give_smith_effect_impl(const object_type *o_ptr) const
         return o_ptr->is_melee_ammo();
     }
 
-    return o_ptr->is_weapon_armour_ammo();
+    return o_ptr->is_weapon_armour_ammo() && o_ptr->is_wearable();
 }
 
 ActivationSmithInfo::ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags, random_art_activation_type act_idx)
