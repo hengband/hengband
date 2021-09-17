@@ -86,7 +86,7 @@ static bool check_monster_continuous_attack(player_type *player_ptr, monap_type 
     }
 
     auto is_neighbor = distance(player_ptr->y, player_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) <= 1;
-    return player_ptr->playing && !player_ptr->is_dead && is_neighbor && player_ptr->leaving;
+    return player_ptr->playing && !player_ptr->is_dead && is_neighbor && !player_ptr->leaving;
 }
 
 /*!
