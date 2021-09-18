@@ -47,6 +47,7 @@ typedef struct monster_blow {
  * fields have a special prefix to aid in searching for them.
  */
 struct monster_race {
+    MONRACE_IDX idx{};
     std::string name; //!< 名前データのオフセット(日本語) /  Name offset(Japanese)
 #ifdef JP
     std::string E_name; //!< 名前データのオフセット(英語) /  Name offset(English)

@@ -34,6 +34,7 @@ typedef struct feature_state {
  * @brief 地形情報の構造体 / Information about terrain "features"
  */
 typedef struct feature_type {
+    FEAT_IDX idx{};
     std::string name; /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
     std::string text; /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
     std::string tag; /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */

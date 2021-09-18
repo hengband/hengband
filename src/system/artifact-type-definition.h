@@ -19,7 +19,9 @@
  * "max_num" is always "1" (if that artifact "exists")
  */
 typedef struct artifact_type {
-	std::string name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
+    ARTIFACT_IDX idx{};
+
+    std::string name; /*!< アーティファクト名(headerオフセット参照) / Name (offset) */
     std::string text; /*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
 	tval_type tval{};		/*!< ベースアイテム大項目ID / Artifact type */
 	OBJECT_SUBTYPE_VALUE sval{};	/*!< ベースアイテム小項目ID / Artifact sub type */

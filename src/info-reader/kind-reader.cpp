@@ -54,6 +54,7 @@ errr parse_k_info(std::string_view buf, angband_header *head)
 
         error_idx = i;
         k_ptr = &k_info[i];
+        k_ptr->idx = i;
 #ifdef JP
         k_ptr->name = tokens[2];
 #endif

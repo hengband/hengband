@@ -233,6 +233,8 @@ struct ego_generate_type {
  * Information about "ego-items".
  */
 struct ego_item_type {
+    EGO_IDX idx{};
+
     std::string name; //!< エゴの名前
     std::string text; //!< フレーバーテキスト
 

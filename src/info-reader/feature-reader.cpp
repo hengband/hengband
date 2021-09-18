@@ -79,6 +79,7 @@ errr parse_f_info(std::string_view buf, angband_header *head)
 
         error_idx = i;
         f_ptr = &f_info[i];
+        f_ptr->idx = i;
         f_ptr->tag = tokens[2];
 
         f_ptr->mimic = (FEAT_IDX)i;
