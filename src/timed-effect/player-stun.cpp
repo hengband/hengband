@@ -1,5 +1,5 @@
 ﻿#include "timed-effect/player-stun.h"
-#include "locale/language-switcher.h"
+#include "system/angband.h"
 
 short PlayerStun::current() const
 {
