@@ -26,6 +26,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -214,7 +216,7 @@ static void effect_monster_domination_corrupted_addition(player_type *player_ptr
 {
     switch (randint1(4)) {
     case 1:
-        set_stun(player_ptr, player_ptr->stun + em_ptr->dam / 2);
+        set_stun(player_ptr, player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
         break;
     case 2:
         set_confused(player_ptr, player_ptr->confused + em_ptr->dam / 2);

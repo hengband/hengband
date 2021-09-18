@@ -17,6 +17,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 void process_blind_attack(player_type *player_ptr, monap_type *monap_ptr)
@@ -126,7 +128,7 @@ void process_stun_attack(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (set_stun(player_ptr, player_ptr->stun + 10 + randint1(r_ptr->level / 4)))
+    if (set_stun(player_ptr, player_ptr->effects()->stun()->current() + 10 + randint1(r_ptr->level / 4)))
         monap_ptr->obvious = true;
 }
 

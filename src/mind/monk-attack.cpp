@@ -29,6 +29,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -99,7 +101,9 @@ static int select_blow(player_type *player_ptr, player_attack_type *pa_ptr, int 
                 min_level = pa_ptr->ma_ptr->min_level;
         } while ((min_level > player_ptr->lev) || (randint1(player_ptr->lev) < pa_ptr->ma_ptr->chance));
 
-        if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || player_ptr->stun || player_ptr->confused) {
+        auto effects = player_ptr->effects();
+        auto is_stunned = effects->stun()->is_stunned();
+        if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || is_stunned || player_ptr->confused) {
             pa_ptr->ma_ptr = old_ptr;
             continue;
         }

@@ -25,6 +25,8 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
@@ -276,10 +278,12 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
                 else if (one_in_(5))
                     (void)set_cut(player_ptr, player_ptr->cut + 200);
                 else if (one_in_(4)) {
-                    if (!player_ptr->free_act)
+                    auto effects = player_ptr->effects(); // @todo paralyzed と共通化の予定あり.
+                    if (!player_ptr->free_act) {
                         (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 2 + randint0(6));
-                    else
-                        (void)set_stun(player_ptr, player_ptr->stun + 10 + randint0(100));
+                    } else {
+                        (void)set_stun(player_ptr, effects->stun()->current() + 10 + randint0(100));
+                    }
                 } else if (one_in_(3))
                     apply_disenchant(player_ptr, 0);
                 else if (one_in_(2)) {

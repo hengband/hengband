@@ -40,6 +40,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/object-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #ifdef JP
@@ -160,8 +162,10 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
     bool do_past = false;
     if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto effects = player_ptr->effects();
+        auto is_stunned = effects->stun()->is_stunned();
         if (!is_hostile(m_ptr)
-            && !(player_ptr->confused || player_ptr->image || !m_ptr->ml || player_ptr->stun
+            && !(player_ptr->confused || player_ptr->image || !m_ptr->ml || is_stunned
                 || (player_ptr->muta.has(MUTA::BERS_RAGE) && is_shero(player_ptr)))
             && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
@@ -271,10 +275,13 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
                 lite_spot(player_ptr, y, x);
             }
         } else {
+            auto effects = player_ptr->effects();
+            auto is_stunned = effects->stun()->is_stunned();
             if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) {
                 msg_print(_("それ以上先には進めない。", "You cannot go any more."));
-                if (!(player_ptr->confused || player_ptr->stun || player_ptr->image))
+                if (!(player_ptr->confused || is_stunned || player_ptr->image)) {
                     energy.reset_player_turn();
+                }
             } else {
                 if (easy_open && is_closed_door(player_ptr, feat) && easy_open_door(player_ptr, y, x))
                     return;
@@ -284,7 +291,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
 #else
                 msg_format("There is %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
-                if (!(player_ptr->confused || player_ptr->stun || player_ptr->image))
+                if (!(player_ptr->confused || is_stunned || player_ptr->image))
                     energy.reset_player_turn();
             }
         }
@@ -295,8 +302,11 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
     }
 
     if (can_move && !pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-        if (!(player_ptr->confused || player_ptr->stun || player_ptr->image))
+        auto effects = player_ptr->effects();
+        auto is_stunned = effects->stun()->is_stunned();
+        if (!(player_ptr->confused || is_stunned || player_ptr->image)) {
             energy.reset_player_turn();
+        }
 
         disturb(player_ptr, false, true);
         can_move = false;

@@ -15,6 +15,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "window/main-window-row-column.h"
 #include "view/status-bars-table.h"
 #include "world/world.h"
@@ -106,26 +108,18 @@ void print_cut(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの朦朧状態を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_stun(player_type *player_ptr)
 {
-    int s = player_ptr->stun;
-    if (s > 100) {
-        c_put_str(TERM_RED, _("意識不明瞭  ", "Knocked out "), ROW_STUN, COL_STUN);
+    auto player_stun = player_ptr->effects()->stun();
+    if (!player_stun->is_stunned()) {
+        put_str("            ", ROW_STUN, COL_STUN);
         return;
     }
 
-    if (s > 50) {
-        c_put_str(TERM_ORANGE, _("ひどく朦朧  ", "Heavy stun  "), ROW_STUN, COL_STUN);
-        return;
-    }
-
-    if (s) {
-        c_put_str(TERM_ORANGE, _("朦朧        ", "Stun        "), ROW_STUN, COL_STUN);
-        return;
-    }
-
-    put_str("            ", ROW_STUN, COL_STUN);
+    auto [color, stat] = player_stun->get_expr();
+    c_put_str(color, stat.data(), ROW_STUN, COL_STUN);
 }
 
 /*!

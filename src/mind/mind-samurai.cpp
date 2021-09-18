@@ -33,6 +33,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -339,7 +341,8 @@ bool choose_kata(player_type *player_ptr)
     if (cmd_limit_confused(player_ptr))
         return false;
 
-    if (player_ptr->stun) {
+    auto effects = player_ptr->effects();
+    if (effects->stun()->is_stunned()) {
         msg_print(_("意識がはっきりとしない。", "You are not clear-headed"));
         return false;
     }

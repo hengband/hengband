@@ -55,6 +55,8 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -68,13 +70,18 @@ bool kawarimi(player_type *player_ptr, bool success)
 {
     object_type forge;
     object_type *q_ptr = &forge;
+    if (player_ptr->is_dead) {
+        return false;
+    }
 
-    if (player_ptr->is_dead)
+    auto effects = player_ptr->effects();
+    if (player_ptr->confused || player_ptr->blind || player_ptr->paralyzed || player_ptr->image) {
         return false;
-    if (player_ptr->confused || player_ptr->blind || player_ptr->paralyzed || player_ptr->image)
+    }
+
+    if (effects->stun()->current() > randint0(200)) {
         return false;
-    if (randint0(200) < player_ptr->stun)
-        return false;
+    }
 
     if (!success && one_in_(3)) {
         msg_print(_("変わり身失敗！逃げられなかった。", "Kawarimi failed! You couldn't run away."));

@@ -14,6 +14,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -193,13 +195,11 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
     if (chance < minfail)
         chance = minfail;
 
-    if (player_ptr->stun > 50)
-        chance += 25;
-    else if (player_ptr->stun)
-        chance += 15;
-
-    if (chance > 95)
+    auto player_stun = player_ptr->effects()->stun();
+    chance += player_stun->get_chance_penalty();
+    if (chance > 95) {
         chance = 95;
+    }
 
     if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || (player_ptr->pclass == CLASS_SORCERER)
         || (player_ptr->pclass == CLASS_RED_MAGE)) {

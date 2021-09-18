@@ -77,6 +77,8 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -278,14 +280,11 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *player_ptr, bool onl
                 }
                 chance = mod_spell_chance_1(player_ptr, chance);
                 chance = MAX(chance, adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]]);
-                /* Stunning makes spells harder */
-                if (player_ptr->stun > 50)
-                    chance += 25;
-                else if (player_ptr->stun)
-                    chance += 15;
-
-                if (chance > 95)
+                auto player_stun = player_ptr->effects()->stun();
+                chance += player_stun->get_chance_penalty();
+                if (chance > 95) {
                     chance = 95;
+                }
 
                 chance = mod_spell_chance_2(player_ptr, chance);
 
@@ -532,14 +531,11 @@ bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful
     }
     chance = mod_spell_chance_1(player_ptr, chance);
     chance = MAX(chance, adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]]);
-    /* Stunning makes spells harder */
-    if (player_ptr->stun > 50)
-        chance += 25;
-    else if (player_ptr->stun)
-        chance += 15;
-
-    if (chance > 95)
+    auto player_stun = player_ptr->effects()->stun();
+    chance += player_stun->get_chance_penalty();
+    if (chance > 95) {
         chance = 95;
+    }
 
     chance = mod_spell_chance_2(player_ptr, chance);
 

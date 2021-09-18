@@ -36,6 +36,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -137,6 +139,8 @@ bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, M
             msg_print(_("あなたはひどい怪我を負った！", "You are severely crushed!"));
             damage = 200;
         } else {
+            auto effects = player_ptr->effects();
+            auto stun_value = effects->stun()->current();
             switch (randint1(3)) {
             case 1: {
                 msg_print(_("降り注ぐ岩をうまく避けた！", "You nimbly dodge the blast!"));
@@ -146,13 +150,13 @@ bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, M
             case 2: {
                 msg_print(_("岩石があなたに直撃した!", "You are bashed by rubble!"));
                 damage = damroll(10, 4);
-                (void)set_stun(player_ptr, player_ptr->stun + randint1(50));
+                (void)set_stun(player_ptr, stun_value + randint1(50));
                 break;
             }
             case 3: {
                 msg_print(_("あなたは床と壁との間に挟まれてしまった！", "You are crushed between the floor and ceiling!"));
                 damage = damroll(10, 4);
-                (void)set_stun(player_ptr, player_ptr->stun + randint1(50));
+                (void)set_stun(player_ptr, stun_value + randint1(50));
                 break;
             }
             }

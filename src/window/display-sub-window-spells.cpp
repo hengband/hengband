@@ -14,6 +14,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -112,13 +114,11 @@ static void display_spell_list(player_type *player_ptr)
             if (chance < minfail)
                 chance = minfail;
 
-            if (player_ptr->stun > 50)
-                chance += 25;
-            else if (player_ptr->stun)
-                chance += 15;
-
-            if (chance > 95)
+            auto player_stun = player_ptr->effects()->stun();
+            chance += player_stun->get_chance_penalty();
+            if (chance > 95) {
                 chance = 95;
+            }
 
             mindcraft_info(player_ptr, comment, use_mind, i);
             sprintf(psi_desc, "  %c) %-30s%2d %4d %3d%%%s", I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment);

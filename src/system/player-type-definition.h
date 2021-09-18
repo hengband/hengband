@@ -19,8 +19,10 @@ enum class RF_ABILITY;
 
 struct floor_type;
 struct object_type;
-;
-typedef struct player_type {
+class TimedEffects;
+struct player_type {
+public:
+    player_type();
     int player_uid{};
     int player_euid{};
     int player_egid{};
@@ -96,8 +98,7 @@ typedef struct player_type {
     TIME_EFFECT image{}; /* Timed -- Hallucination */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
     TIME_EFFECT cut{}; /* Timed -- Cut */
-    TIME_EFFECT stun{}; /* Timed -- Stun */
-
+    
     TIME_EFFECT protevil{}; /* Timed -- Protection */
     TIME_EFFECT invuln{}; /* Timed -- Invulnerable */
     TIME_EFFECT ult_res{}; /* Timed -- Ultimate Resistance */
@@ -423,6 +424,11 @@ typedef struct player_type {
     POSITION x{}; /*!< ダンジョンの現在X座標 / Player location in dungeon */
     GAME_TEXT name[32]{}; /*!< 現在のプレイヤー名 / Current player's character name */
     char base_name[32]{}; /*!< Stripped version of "player_name" */
-} player_type;
+
+    std::shared_ptr<TimedEffects> effects() const;
+
+private:
+    std::shared_ptr<TimedEffects> timed_effects;
+};
 
 extern player_type *p_ptr;

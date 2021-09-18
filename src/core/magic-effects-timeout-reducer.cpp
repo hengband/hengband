@@ -17,6 +17,8 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに魔法効果の残りターンを減らしていく処理
@@ -29,6 +31,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
         (void)set_mimic(player_ptr, player_ptr->tim_mimic - 1, player_ptr->mimic_form, true);
     }
 
+    auto effects = player_ptr->effects();
     if (player_ptr->image) {
         (void)set_image(player_ptr, player_ptr->image - dec_count);
     }
@@ -210,9 +213,10 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
         (void)set_poisoned(player_ptr, player_ptr->poisoned - adjust);
     }
 
-    if (player_ptr->stun) {
+    auto player_stun = effects->stun();
+    if (player_stun->is_stunned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)set_stun(player_ptr, player_ptr->stun - adjust);
+        (void)set_stun(player_ptr, player_stun->current() - adjust);
     }
 
     if (player_ptr->cut) {

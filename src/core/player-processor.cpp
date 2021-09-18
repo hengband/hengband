@@ -51,6 +51,8 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
@@ -148,8 +150,10 @@ void process_player(player_type *player_ptr)
                 set_action(player_ptr, ACTION_NONE);
             }
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
+            auto effects = player_ptr->effects();
+            auto is_stunned = effects->stun()->is_stunned();
             if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp >= player_ptr->msp) && !player_ptr->blind && !player_ptr->confused
-                && !player_ptr->poisoned && !player_ptr->afraid && !player_ptr->stun && !player_ptr->cut && !player_ptr->slow
+                && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !player_ptr->cut && !player_ptr->slow
                 && !player_ptr->paralyzed && !player_ptr->image && !player_ptr->word_recall && !player_ptr->alter_reality) {
                 set_action(player_ptr, ACTION_NONE);
             }
@@ -267,11 +271,13 @@ void process_player(player_type *player_ptr)
 
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
+        auto effects = player_ptr->effects();
+        auto is_unconscious = effects->stun()->get_rank() == PlayerStunRank::UNCONSCIOUS;
         if (player_ptr->phase_out) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(player_ptr);
-        } else if ((player_ptr->paralyzed || player_ptr->stun >= 100) && !cheat_immortal) {
+        } else if ((player_ptr->paralyzed || is_unconscious) && !cheat_immortal) {
             energy.set_player_turn_energy(100);
         } else if (player_ptr->action == ACTION_REST) {
             if (player_ptr->resting > 0) {

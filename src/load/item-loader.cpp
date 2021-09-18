@@ -214,11 +214,11 @@ void rd_item(object_type *o_ptr)
         o_ptr->stack_idx = 0;
 
     if (any_bits(flags, SAVE_ITEM_SMITH) && !loading_savefile_version_is_older_than(7)) {
-        int16_t tmp16s;
         rd_s16b(&tmp16s);
         if (tmp16s > 0) {
             o_ptr->smith_effect = static_cast<SmithEffect>(tmp16s);
         }
+
         rd_s16b(&tmp16s);
         if (tmp16s > 0) {
             o_ptr->smith_act_idx = static_cast<random_art_activation_type>(tmp16s);

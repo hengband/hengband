@@ -50,6 +50,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -238,7 +240,7 @@ static void calc_player_stun(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     if (stun_plus > 0) {
-        (void)set_stun(player_ptr, player_ptr->stun + stun_plus);
+        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + stun_plus);
     }
 }
 

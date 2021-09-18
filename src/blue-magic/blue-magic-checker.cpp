@@ -20,6 +20,8 @@
 #include "status/experience.h"
 #include "system/angband.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -34,7 +36,10 @@ void learn_spell(player_type *player_ptr, int monspell)
         return;
     if (player_ptr->magic_num2[monspell])
         return;
-    if (player_ptr->confused || player_ptr->blind || player_ptr->image || player_ptr->stun || player_ptr->paralyzed)
+
+    auto effects = player_ptr->effects();
+    auto is_stunned = effects->stun()->is_stunned();
+    if (player_ptr->confused || player_ptr->blind || player_ptr->image || is_stunned || player_ptr->paralyzed)
         return;
     if (randint1(player_ptr->lev + 70) > monster_powers[monspell].level + 40) {
         player_ptr->magic_num2[monspell] = 1;

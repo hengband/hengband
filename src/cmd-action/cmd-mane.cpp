@@ -64,6 +64,8 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -212,15 +214,11 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
                     if (chance < minfail)
                         chance = minfail;
 
-                    /* Stunning makes spells harder */
-                    if (player_ptr->stun > 50)
-                        chance += 25;
-                    else if (player_ptr->stun)
-                        chance += 15;
-
-                    /* Always a 5 percent chance of working */
-                    if (chance > 95)
+                    auto player_stun = player_ptr->effects()->stun();
+                    chance += player_stun->get_chance_penalty();
+                    if (chance > 95) {
                         chance = 95;
+                    }
 
                     /* Get info */
                     mane_info(player_ptr, comment, player_ptr->mane_spell[i], (baigaesi ? player_ptr->mane_dam[i] * 2 : player_ptr->mane_dam[i]));
@@ -1116,15 +1114,11 @@ bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
     if (chance < minfail)
         chance = minfail;
 
-    /* Stunning makes spells harder */
-    if (player_ptr->stun > 50)
-        chance += 25;
-    else if (player_ptr->stun)
-        chance += 15;
-
-    /* Always a 5 percent chance of working */
-    if (chance > 95)
+    auto player_stun = player_ptr->effects()->stun();
+    chance += player_stun->get_chance_penalty();
+    if (chance > 95) {
         chance = 95;
+    }
 
     /* Failed spell */
     if (randint0(100) < chance) {
