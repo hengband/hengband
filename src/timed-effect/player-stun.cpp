@@ -96,6 +96,22 @@ bool PlayerStun::is_stunned() const
     return this->get_rank() > StunRank::NONE;
 }
 
+std::tuple<term_color_type, std::string_view> PlayerStun::get_expr() const
+{
+    switch (this->get_rank()) {
+    case StunRank::NONE: // dummy.
+        return std::make_tuple(TERM_WHITE, "            ");
+    case StunRank::NORMAL:
+        return std::make_tuple(TERM_ORANGE, _("朦朧        ", "Stun        "));
+    case StunRank::HARD:
+        return std::make_tuple(TERM_ORANGE, _("ひどく朦朧  ", "Heavy stun  "));
+    case StunRank::UNCONSCIOUS:
+        return std::make_tuple(TERM_RED, _("意識不明瞭  ", "Knocked out "));
+    default:
+        throw("Invalid stun rank is specified!");
+    }
+}
+
 void PlayerStun::set(short value)
 {
     this->stun = value;

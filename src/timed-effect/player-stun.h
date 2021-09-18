@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "term/term-color-types.h"
 #include <string>
+#include <tuple>
 
 enum class StunRank {
     NONE = 0,
@@ -21,6 +23,7 @@ public:
     int decrease_chance() const;
     short decrease_damage() const;
     bool is_stunned() const;
+    std::tuple<term_color_type, std::string_view> get_expr() const;
     void reset();
     void set(short value);
 
