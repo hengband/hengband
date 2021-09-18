@@ -26557,3 +26557,21 @@ D:$and Hell followed with him. And power was given unto them over
 D:$the fourth part of the earth, to kill with sword, and with
 D:$hunger, and with death, and with the beasts of the earth.
 D:蒼ざめた馬に乗った「死」そのものだ。あなたを死に至らしめるだろう。
+
+N:1344:『鈴木土下座ェ門』
+E:SUZUKI Dogezaemon
+G:e:g
+I:120:16d100:30:80:10
+W:38:4:0:8000:0:0
+B:GAZE:EXP_20:2d4
+B:GAZE:PARALYZE:2d4
+B:GAZE:LOSE_INT:2d6
+B:GAZE:DR_MANA:2d12
+F:UNIQUE | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | CAN_FLY | BASH_DOOR
+F:EVIL | DROP_CORPSE | IM_POIS | RES_TELE | NO_CONF | NO_SLEEP
+F:DROP_90 | DROP_GREAT
+S:1_IN_2 | BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET
+S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
+D:$A disembodied eye, surrounded by twelve smaller eyes on stalks.
+D:触手の先に付いた１２個の小さな目玉に囲まれている、
+D:体を持たない目玉に手足が付いている。
