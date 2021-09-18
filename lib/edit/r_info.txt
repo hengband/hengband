@@ -12160,8 +12160,8 @@ W:42:3:0:4000:20000:1180
 B:BUTT:COLD:3d6
 B:BUTT:FIRE:3d6
 B:BUTT:ELEC:3d6
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
-F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_60 | DROP_GOOD
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR
+F:EVIL | UNDEAD | SMART | DROP_60 | DROP_90 | DROP_1D2 | DROP_GOOD | CAN_FLY
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
 F:NO_CONF | NO_SLEEP
 S:1_IN_4 |
@@ -21033,7 +21033,7 @@ N:1047:黄衣の修行僧
 E:Topaz monk
 G:p:y
 I:115:59d11:30:46:10
-W:35:2:0:800:2200:1175
+W:35:2:0:800:2200:1174
 B:KICK:SUPERHURT:8d1
 B:HIT:SUPERHURT:8d1
 B:KICK:SUPERHURT:8d4
@@ -23103,7 +23103,7 @@ G:g:s
 I:120:10d10:10:50:10
 W:34:50:0:250:0:0
 B:CRUSH:HURT:8d8
-F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | PREVENT_SUDDEN_MAGIC
 F:DROP_60 | DROP_1D2 | ONLY_GOLD
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | BR_ELEC | BR_PLAS
@@ -23452,8 +23452,8 @@ W:47:3:0:14000:35000:1181
 B:BUTT:COLD:4d6
 B:BUTT:FIRE:4d6
 B:BUTT:ELEC:4d6
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
-F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_60 | DROP_90 | DROP_GOOD
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR
+F:EVIL | UNDEAD | SMART | DROP_60 | DROP_90 | DROP_2D2 | DROP_GOOD | CAN_FLY
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
 F:NO_CONF | NO_SLEEP
 S:1_IN_3
@@ -23473,8 +23473,8 @@ W:52:3:0:19000:0:0
 B:BUTT:COLD:5d6
 B:BUTT:FIRE:5d6
 B:BUTT:ELEC:5d6
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
-F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_2D2 | DROP_GOOD
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR
+F:EVIL | UNDEAD | SMART | DROP_60 | DROP_90 | DROP_3D2 | DROP_GOOD | CAN_FLY
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
 F:NO_CONF | NO_SLEEP
 S:1_IN_2
@@ -24444,7 +24444,7 @@ N:1233:シャウラス
 E:Chaurus
 G:c:D
 I:115:15d13:40:50:15
-W:18:1:0:100:450:1235
+W:18:2:0:100:450:1235
 B:BITE:HURT:1d13
 B:STING:HURT:1d13
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
@@ -24455,11 +24455,11 @@ D:それは人ほどの大きさを誇り、甲殻に覆われている。
 N:1234:シャウラス・リーパー
 E:Chaurus reaper
 G:c:s
-I:120:30d25:40:80:15
-W:33:1:0:500:0:0
+I:115:30d25:40:80:15
+W:33:2:0:500:0:0
 B:BITE:HURT:3d13
 B:STING:HURT:3d13
-F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | FRIENDS
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
 F:IM_POIS | RES_DARK
 D:$It is much larger than a human
 D:$ and has an extremely hard shell made of chitin.
@@ -25909,7 +25909,7 @@ D:$ on stolen motorcycles under the autumn full moon.
 D:十五夜になると盗難バイクで往来の邪魔をする迷惑系暴走族だ。
 
 N:1308:気狂いピエロ『ドネルド・マクドネルド』
-E:Doneld McDoneld, the Mad Pierrot
+E:Roneld McDoneld, the Mad Pierrot
 G:h:v
 I:120:50d30:20:80:20
 W:36:3:0:3000:0:0
@@ -26251,7 +26251,7 @@ N:1328:ピカチャウ (ルルイエのすがた)
 E:Pikachau (R'lyehian Form)
 G:r:G
 I:130:80d30:30:90:0
-W:80:3:0:5500:0:0
+W:80:3:0:5500:90:0
 B:CLAW:ACID:1d20
 B:CLAW:ELEC:1d20
 B:CRUSH:ELEC:3d33
@@ -26441,7 +26441,7 @@ D:$This strange creature, transformed into an image of a strange creature
 D:$ that is transformed into an abandoned box, waits for a stupid adventurer
 D:$ to get close to its poisonous claws.
 D:放置された箱に化けている奇妙な生物の像に化けている
-D:奇妙な生物に化けている奇妙な生物で、
+D:奇妙な生物の像に化けている奇妙な生物で、
 D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
 
 N:1339:ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像)
@@ -26460,10 +26460,10 @@ D:$This strange creature, transformed into an image of a strange creature
 D:$ that is transformed into an abandoned box, waits for a stupid adventurer
 D:$ to get close to its poisonous claws.
 D:放置された箱に化けている奇妙な生物の像に化けている
-D:奇妙な生物に化けている奇妙な生物に化けている奇妙な生物で、
+D:奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物で、
 D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
 
-N:1340:ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像)の像)の像)の像)の像)の像)の像)の像)の像)
+N:1340:ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像)の像)の像)の像)の像)の像)の像)の像)
 E:Statue of Chest mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic
 G:`:W
 I:110:60d14:30:40:0
@@ -26479,9 +26479,9 @@ D:$This strange creature, transformed into an image of a strange creature
 D:$ that is transformed into an abandoned box, waits for a stupid adventurer
 D:$ to get close to its poisonous claws.
 D:放置された箱に化けている奇妙な生物の像に化けている
-D:奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
-D:化けている奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
-D:化けている奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
+D:奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に
+D:化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に
+D:化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に
 D:化けている奇妙な生物で、
 D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
 
@@ -26557,3 +26557,21 @@ D:$and Hell followed with him. And power was given unto them over
 D:$the fourth part of the earth, to kill with sword, and with
 D:$hunger, and with death, and with the beasts of the earth.
 D:蒼ざめた馬に乗った「死」そのものだ。あなたを死に至らしめるだろう。
+
+N:1344:『鈴木土下座ェ門』
+E:SUZUKI Dogezaemon
+G:e:g
+I:120:16d100:30:80:10
+W:38:4:0:8000:0:0
+B:GAZE:EXP_20:2d4
+B:GAZE:PARALYZE:2d4
+B:GAZE:LOSE_INT:2d6
+B:GAZE:DR_MANA:2d12
+F:UNIQUE | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | CAN_FLY | BASH_DOOR
+F:EVIL | DROP_CORPSE | IM_POIS | RES_TELE | NO_CONF | NO_SLEEP
+F:DROP_90 | DROP_GREAT
+S:1_IN_2 | BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET
+S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
+D:$A disembodied eye, surrounded by twelve smaller eyes on stalks.
+D:触手の先に付いた１２個の小さな目玉に囲まれている、
+D:体を持たない目玉に手足が付いている。
