@@ -100,6 +100,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/quarks.h"
@@ -1969,7 +1971,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
     }
 
     auto player_stun = player_ptr->effects()->stun();
-    damage -= player_stun->decrease_damage();
+    damage -= player_stun->get_damage_penalty();
     if ((player_ptr->pclass == CLASS_PRIEST) && (flgs.has_not(TR_BLESSED)) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
         damage -= 2;
     } else if (player_ptr->pclass == CLASS_BERSERKER) {
@@ -2114,7 +2116,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
     }
 
     auto player_stun = player_ptr->effects()->stun();
-    hit -= player_stun->decrease_damage();
+    hit -= player_stun->get_damage_penalty();
     player_hand calc_hand = PLAYER_HAND_OTHER;
     if (slot == INVEN_MAIN_HAND)
         calc_hand = PLAYER_HAND_MAIN;
@@ -2335,7 +2337,7 @@ static int16_t calc_to_hit_bow(player_type *player_ptr, bool is_real_value)
     }
 
     auto player_stun = player_ptr->effects()->stun();
-    pow -= player_stun->decrease_damage();
+    pow -= player_stun->get_damage_penalty();
     if (is_blessed(player_ptr)) {
         pow += 10;
     }
@@ -2410,7 +2412,7 @@ static int16_t calc_to_damage_misc(player_type *player_ptr)
     }
 
     auto player_stun = player_ptr->effects()->stun();
-    to_dam -= player_stun->decrease_damage();
+    to_dam -= player_stun->get_damage_penalty();
     to_dam += ((int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128);
     return to_dam;
 }
@@ -2447,7 +2449,7 @@ static int16_t calc_to_hit_misc(player_type *player_ptr)
     }
 
     auto player_stun = player_ptr->effects()->stun();
-    to_hit -= player_stun->decrease_damage();
+    to_hit -= player_stun->get_damage_penalty();
     to_hit += ((int)(adj_dex_th[player_ptr->stat_index[A_DEX]]) - 128);
     to_hit += ((int)(adj_str_th[player_ptr->stat_index[A_STR]]) - 128);
 

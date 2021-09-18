@@ -18,6 +18,8 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!

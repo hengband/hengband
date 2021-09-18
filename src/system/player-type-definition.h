@@ -10,7 +10,6 @@
 #include "player/player-sex.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
-#include "timed-effect/timed-effects.h"
 #include "util/flag-group.h"
 
 #define MAX_SKILLS 10
@@ -23,6 +22,7 @@ struct object_type;
 class TimedEffects;
 struct player_type {
 public:
+    player_type();
     int player_uid{};
     int player_euid{};
     int player_egid{};
@@ -428,7 +428,7 @@ public:
     std::shared_ptr<TimedEffects> effects() const;
 
 private:
-    std::shared_ptr<TimedEffects> timed_effects = std::shared_ptr<TimedEffects>(new TimedEffects());
+    std::shared_ptr<TimedEffects> timed_effects;
 };
 
 extern player_type *p_ptr;

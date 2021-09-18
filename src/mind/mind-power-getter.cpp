@@ -16,6 +16,8 @@
 #include "player/player-status-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
@@ -301,7 +303,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
     }
 
     auto player_stun = this->player_ptr->effects()->stun();
-    this->chance += player_stun->decrease_chance();
+    this->chance += player_stun->get_chance_penalty();
     add_ki_chance();
     if (this->chance > 95) {
         this->chance = 95;

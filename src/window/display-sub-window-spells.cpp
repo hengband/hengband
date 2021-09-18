@@ -14,6 +14,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -113,7 +115,7 @@ static void display_spell_list(player_type *player_ptr)
                 chance = minfail;
 
             auto player_stun = player_ptr->effects()->stun();
-            chance += player_stun->decrease_chance();
+            chance += player_stun->get_chance_penalty();
             if (chance > 95) {
                 chance = 95;
             }

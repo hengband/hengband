@@ -64,6 +64,8 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -213,7 +215,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
                         chance = minfail;
 
                     auto player_stun = player_ptr->effects()->stun();
-                    chance += player_stun->decrease_chance();
+                    chance += player_stun->get_chance_penalty();
                     if (chance > 95) {
                         chance = 95;
                     }
@@ -1113,7 +1115,7 @@ bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
         chance = minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->decrease_chance();
+    chance += player_stun->get_chance_penalty();
     if (chance > 95) {
         chance = 95;
     }

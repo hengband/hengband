@@ -22,6 +22,8 @@
 #include "spell/spell-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "util/int-char-converter.h"
@@ -275,7 +277,7 @@ static void calculate_blue_magic_success_probability(player_type *player_ptr, le
         lm_ptr->chance = minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    lm_ptr->chance += player_stun->decrease_chance();
+    lm_ptr->chance += player_stun->get_chance_penalty();
     if (lm_ptr->chance > 95) {
         lm_ptr->chance = 95;
     }

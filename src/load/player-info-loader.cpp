@@ -18,6 +18,8 @@
 #include "spell-realm/spells-song.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "world/world.h"
 
 /*!

@@ -27,6 +27,8 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
 
 static void set_bad_status_info(player_type *player_ptr, self_info_type *self_ptr)

@@ -6,38 +6,38 @@ short PlayerStun::current() const
     return this->stun;
 }
 
-StunRank PlayerStun::get_rank() const
+PlayerStunRank PlayerStun::get_rank() const
 {
     return this->get_rank(this->stun);
 }
 
-StunRank PlayerStun::get_rank(short value) const
+PlayerStunRank PlayerStun::get_rank(short value)
 {
     if (value > 100) {
-        return StunRank::UNCONSCIOUS;
+        return PlayerStunRank::UNCONSCIOUS;
     }
 
     if (value > 50) {
-        return StunRank::HARD;
+        return PlayerStunRank::HARD;
     }
 
     if (value > 0) {
-        return StunRank::NORMAL;
+        return PlayerStunRank::NORMAL;
     }
 
-    return StunRank::NONE;
+    return PlayerStunRank::NONE;
 }
 
-std::string_view PlayerStun::get_stun_mes(StunRank stun_rank) const
+std::string_view PlayerStun::get_stun_mes(PlayerStunRank stun_rank)
 {
     switch (stun_rank) {
-    case StunRank::NONE:
+    case PlayerStunRank::NONE:
         return "";
-    case StunRank::NORMAL:
+    case PlayerStunRank::NORMAL:
         return _("意識がもうろうとしてきた。", "You have been stunned.");
-    case StunRank::HARD:
+    case PlayerStunRank::HARD:
         return _("意識がひどくもうろうとしてきた。", "You have been heavily stunned.");
-    case StunRank::UNCONSCIOUS:
+    case PlayerStunRank::UNCONSCIOUS:
         return _("頭がクラクラして意識が遠のいてきた。", "You have been knocked out.");
     default:
         throw("Invalid StunRank was specified!");
@@ -51,16 +51,16 @@ std::string_view PlayerStun::get_stun_mes(StunRank stun_rank) const
  * 意識不明瞭ならばそもそも動けないのでこのメソッドを通らない.
  * しかし今後の拡張を考慮して100%としておく.
  */
-int PlayerStun::decrease_chance() const
+int PlayerStun::get_chance_penalty() const
 {
     switch (this->get_rank()) {
-    case StunRank::NONE:
+    case PlayerStunRank::NONE:
         return 0;
-    case StunRank::NORMAL:
+    case PlayerStunRank::NORMAL:
         return 15;
-    case StunRank::HARD:
+    case PlayerStunRank::HARD:
         return 25;
-    case StunRank::UNCONSCIOUS:
+    case PlayerStunRank::UNCONSCIOUS:
         return 100;
     default:
         throw("Invalid stun rank is specified!");
@@ -75,16 +75,16 @@ int PlayerStun::decrease_chance() const
  * 意識不明瞭ならばそもそも動けないのでこのメソッドを通らない.
  * しかし今後の拡張を考慮して100としておく.
  */
-short PlayerStun::decrease_damage() const
+short PlayerStun::get_damage_penalty() const
 {
     switch (this->get_rank()) {
-    case StunRank::NONE:
+    case PlayerStunRank::NONE:
         return 0;
-    case StunRank::NORMAL:
+    case PlayerStunRank::NORMAL:
         return 5;
-    case StunRank::HARD:
+    case PlayerStunRank::HARD:
         return 20;
-    case StunRank::UNCONSCIOUS:
+    case PlayerStunRank::UNCONSCIOUS:
         return 100;
     default:
         throw("Invalid stun rank is specified!");
@@ -93,19 +93,19 @@ short PlayerStun::decrease_damage() const
 
 bool PlayerStun::is_stunned() const
 {
-    return this->get_rank() > StunRank::NONE;
+    return this->get_rank() > PlayerStunRank::NONE;
 }
 
 std::tuple<term_color_type, std::string_view> PlayerStun::get_expr() const
 {
     switch (this->get_rank()) {
-    case StunRank::NONE: // dummy.
+    case PlayerStunRank::NONE: // dummy.
         return std::make_tuple(TERM_WHITE, "            ");
-    case StunRank::NORMAL:
+    case PlayerStunRank::NORMAL:
         return std::make_tuple(TERM_ORANGE, _("朦朧        ", "Stun        "));
-    case StunRank::HARD:
+    case PlayerStunRank::HARD:
         return std::make_tuple(TERM_ORANGE, _("ひどく朦朧  ", "Heavy stun  "));
-    case StunRank::UNCONSCIOUS:
+    case PlayerStunRank::UNCONSCIOUS:
         return std::make_tuple(TERM_RED, _("意識不明瞭  ", "Knocked out "));
     default:
         throw("Invalid stun rank is specified!");

@@ -15,6 +15,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "window/main-window-row-column.h"
 #include "view/status-bars-table.h"
 #include "world/world.h"

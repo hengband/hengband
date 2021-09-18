@@ -17,6 +17,8 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -392,9 +394,9 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
 
     auto player_stun = player_ptr->effects()->stun();
     auto old_aux = player_stun->get_rank();
-    auto new_aux = player_stun->get_rank(v);
+    auto new_aux = PlayerStun::get_rank(v);
     if (new_aux > old_aux) {
-        auto stun_mes = player_stun->get_stun_mes(new_aux);
+        auto stun_mes = PlayerStun::get_stun_mes(new_aux);
         msg_print(stun_mes.data());
         if (randint1(1000) < v || one_in_(16)) {
             msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
@@ -433,7 +435,7 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
 
         notice = true;
     } else if (new_aux < old_aux) {
-        if (new_aux == StunRank::NONE) {
+        if (new_aux == PlayerStunRank::NONE) {
             msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
             if (disturb_state)
                 disturb(player_ptr, false, false);

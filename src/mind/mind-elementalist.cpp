@@ -65,6 +65,8 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
@@ -634,7 +636,7 @@ static PERCENTAGE decide_element_chance(player_type *player_ptr, mind_type spell
         chance = minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->decrease_chance();
+    chance += player_stun->get_chance_penalty();
     if (heavy_armor(player_ptr))
         chance += 5;
 

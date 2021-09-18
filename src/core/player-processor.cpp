@@ -51,6 +51,8 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
@@ -270,7 +272,7 @@ void process_player(player_type *player_ptr)
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
         auto effects = player_ptr->effects();
-        auto is_unconscious = effects->stun()->get_rank() == StunRank::UNCONSCIOUS;
+        auto is_unconscious = effects->stun()->get_rank() == PlayerStunRank::UNCONSCIOUS;
         if (player_ptr->phase_out) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;

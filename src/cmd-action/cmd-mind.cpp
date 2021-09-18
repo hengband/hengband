@@ -47,6 +47,8 @@
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -176,7 +178,7 @@ static void decide_mind_chance(player_type *player_ptr, cm_type *cm_ptr)
         cm_ptr->chance = cm_ptr->minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    cm_ptr->chance += player_stun->decrease_chance();
+    cm_ptr->chance += player_stun->get_chance_penalty();
 
     if (cm_ptr->use_mind != mind_kind_type::KI)
         return;

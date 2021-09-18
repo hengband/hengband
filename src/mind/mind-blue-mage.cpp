@@ -20,6 +20,8 @@
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -71,7 +73,7 @@ bool do_cmd_cast_learned(player_type *player_ptr)
         chance = minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->decrease_chance();
+    chance += player_stun->get_chance_penalty();
     if (chance > 95) {
         chance = 95;
     }
