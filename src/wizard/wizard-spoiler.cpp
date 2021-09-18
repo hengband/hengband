@@ -40,53 +40,43 @@
 #include "wizard/monster-info-spoiler.h"
 #include "wizard/spoiler-util.h"
 #include <array>
+#include <set>
 #include <string>
 
-/*!
- * @brief int配列でstrncmp()と似た比較処理を行う /
- * Compare two int-type array like strncmp() and return TRUE if equals
- * @param a 比較するint配列1
- * @param b 比較するint配列2
- * @param length
- * @return 両者の値が等しければTRUEを返す
+/**
+ * @brief 進化ツリーの一番根元となるモンスターのIDのリストを取得する
+ *
+ * @return 進化ツリーの一番根元となるモンスターのIDのリスト(std::setで、evol_root_sortによりソートされている)
  */
-static bool int_n_cmp(int *a, int *b, int length)
+static auto get_mon_evol_roots(void)
 {
-    if (!length)
-        return true;
-
-    do {
-        if (*a != *(b++))
-            return false;
-        if (!(*(a++)))
-            break;
-    } while (--length);
-
-    return true;
-}
-
-/*!
- * @brief ある木が指定された木の部分木かどうかを返す /
- * Returns TRUE if an evolution tree is "partial tree"
- * @param tree 元となる木構造リスト
- * @param partial_tree 部分木かどうか判定したい木構造リスト
- * @return 部分木ならばTRUEを返す
- */
-static bool is_partial_tree(int *tree, int *partial_tree)
-{
-    int pt_head = *(partial_tree++);
-    int pt_len = 0;
-    while (partial_tree[pt_len])
-        pt_len++;
-
-    while (*tree) {
-        if (*(tree++) == pt_head) {
-            if (int_n_cmp(tree, partial_tree, pt_len))
-                return true;
+    std::set<MONRACE_IDX> evol_parents;
+    std::set<MONRACE_IDX> evol_children;
+    for (auto r_idx = 1; r_idx < max_r_idx; ++r_idx) {
+        const auto &r_ref = r_info[r_idx];
+        if (r_ref.next_r_idx > 0) {
+            evol_parents.emplace(r_idx);
+            evol_children.emplace(r_ref.next_r_idx);
         }
     }
 
-    return false;
+    auto evol_root_sort = [](MONRACE_IDX i1, MONRACE_IDX i2) {
+        auto &r1 = r_info[i1];
+        auto &r2 = r_info[i2];
+        if (r1.level != r2.level) {
+            return r1.level < r2.level;
+        }
+        if (r1.mexp != r2.mexp) {
+            return r1.mexp < r2.mexp;
+        }
+        return i1 <= i2;
+    };
+
+    std::set<MONRACE_IDX, decltype(evol_root_sort)> evol_roots(evol_root_sort);
+    std::set_difference(evol_parents.begin(), evol_parents.end(), evol_children.begin(), evol_children.end(),
+        std::inserter(evol_roots, evol_roots.end()));
+
+    return evol_roots;
 }
 
 /*!
@@ -97,10 +87,6 @@ static bool is_partial_tree(int *tree, int *partial_tree)
 static spoiler_output_status spoil_mon_evol(concptr fname)
 {
     char buf[1024];
-    monster_race *r_ptr;
-    player_type dummy;
-    int **evol_tree, i, j, n, r_idx;
-    int *evol_tree_zero; /* For C_KILL() */
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
@@ -113,53 +99,13 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
     spoil_out(buf);
 
     spoil_out("------------------------------------------\n\n");
-    C_MAKE(evol_tree, max_r_idx, int *);
-    C_MAKE(*evol_tree, max_r_idx * (max_evolution_depth + 1), int);
-    for (i = 1; i < max_r_idx; i++)
-        evol_tree[i] = *evol_tree + i * (max_evolution_depth + 1);
 
-    evol_tree_zero = *evol_tree;
-    for (i = 1; i < max_r_idx; i++) {
-        r_ptr = &r_info[i];
-        if (!r_ptr->next_exp)
-            continue;
-
-        n = 0;
-        evol_tree[i][n++] = i;
-        do {
-            evol_tree[i][n++] = r_ptr->next_r_idx;
-            r_ptr = &r_info[r_ptr->next_r_idx];
-        } while (r_ptr->next_exp && (n < max_evolution_depth));
-    }
-
-    for (i = 1; i < max_r_idx; i++) {
-        if (!evol_tree[i][0])
-            continue;
-
-        for (j = 1; j < max_r_idx; j++) {
-            if (i == j)
-                continue;
-
-            if (!evol_tree[j][0])
-                continue;
-
-            if (is_partial_tree(evol_tree[j], evol_tree[i])) {
-                evol_tree[i][0] = 0;
-                break;
-            }
-        }
-    }
-
-    ang_sort(&dummy, evol_tree, nullptr, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
-    for (i = 0; i < max_r_idx; i++) {
-        r_idx = evol_tree[i][0];
-        if (!r_idx)
-            continue;
-
-        r_ptr = &r_info[r_idx];
+    for (auto r_idx : get_mon_evol_roots()) {
+        auto r_ptr = &r_info[r_idx];
         fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), r_idx, r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
-        for (n = 1; r_ptr->next_exp; n++) {
-            fprintf(spoiler_file, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
+
+        for (auto n = 1; r_ptr->next_r_idx > 0; n++) {
+            fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
             fprintf(spoiler_file, "[%d]: ", r_ptr->next_r_idx);
             r_ptr = &r_info[r_ptr->next_r_idx];
 
@@ -169,8 +115,6 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
         fputc('\n', spoiler_file);
     }
 
-    C_KILL(evol_tree_zero, max_r_idx * (max_evolution_depth + 1), int);
-    C_KILL(evol_tree, max_r_idx, int *);
     return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
                                                                 : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }

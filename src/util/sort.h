@@ -26,6 +26,3 @@ bool ang_sort_comp_pet_dismiss(player_type *player_ptr, vptr u, vptr v, int a, i
 
 bool ang_sort_comp_cave_temp(player_type *player_ptr, vptr u, vptr v, int a, int b);
 void ang_sort_swap_cave_temp(player_type *player_ptr, vptr u, vptr v, int a, int b);
-
-bool ang_sort_comp_evol_tree(player_type *player_ptr, vptr u, vptr v, int a, int b);
-void ang_sort_swap_evol_tree(player_type *player_ptr, vptr u, vptr v, int a, int b);
