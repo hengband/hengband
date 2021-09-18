@@ -314,7 +314,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
     constexpr auto effect_num_per_page = 22;
     const int page_max = (smith_effect_list.size() - 1) / effect_num_per_page + 1;
 
-    COMMAND_CODE i;
+    COMMAND_CODE i = -1;
     COMMAND_CODE effect_idx;
 
     if (!repeat_pull(&effect_idx) || effect_idx < 0 || effect_idx >= smith_effect_list_max) {
@@ -332,10 +332,12 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
 
             display_smith_effect_list(smith, smith_effect_list, menu_line, page * effect_num_per_page, effect_num_per_page);
 
+            const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
+
             if (!get_com(out_val, &choice, false))
                 break;
 
-            if (use_menu && choice != ' ') {
+            if (use_menu) {
                 switch (choice) {
                 case '0': {
                     screen_load();
@@ -345,7 +347,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
                 case '8':
                 case 'k':
                 case 'K': {
-                    menu_line += (smith_effect_list_max - 1);
+                    menu_line += (page_effect_num - 1);
                     break;
                 }
 
@@ -359,13 +361,16 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
                 case '4':
                 case 'h':
                 case 'H': {
+                    page += (page_max - 1);
                     menu_line = 1;
                     break;
                 }
                 case '6':
                 case 'l':
-                case 'L': {
-                    menu_line = smith_effect_list_max;
+                case 'L':
+                case ' ': {
+                    page++;
+                    menu_line = 1;
                     break;
                 }
 
@@ -379,13 +384,15 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
                 }
                 }
 
-                if (menu_line > smith_effect_list_max)
-                    menu_line -= smith_effect_list_max;
+                if (menu_line > page_effect_num)
+                    menu_line -= page_effect_num;
             }
 
             /* Request redraw */
-            if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
-                page++;
+            if ((choice == ' ') || (use_menu && ask)) {
+                if (!use_menu) {
+                    page++;
+                }
                 if (page >= page_max) {
                     page = 0;
                 }
