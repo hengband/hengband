@@ -26579,7 +26579,7 @@ D:体を持たない目玉に手足が付いている。
 N:1345:巨大戦艦『グレート・シング』
 E:GREAT THING, the Huge Battle Ship
 G:l:b
-I:130:11000:14:120:20
+I:130:110d100:14:120:20
 W:70:3:0:42000:0:0
 B:CRUSH:SHATTER:15d10
 B:CRUSH:SHATTER:15d10
@@ -26600,3 +26600,26 @@ D:敵母星に駐留しており、全艦隊を指揮する旗艦である。
 D:文字通り敵の中枢として機能し、その圧倒的な火力、
 D:耐久力からベルサーを代表する存在となっている。
 D:(ダライアスバースト タイトー)
+
+N:1346:地獄の論客『カイム』
+E:Caim, the disputant of hell
+G:B:D
+I:120:24d100:40:120:20
+W:48:4:0:18000:0:0
+B:INSULT:CONFUSE:2d4
+B:CLAW:HURT:3d8
+B:BITE:HURT:4d7
+B:SLASH:LOSE_INT:4d12
+F:UNIQUE | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | 
+F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD | 
+F:SMART | CAN_SPEAK | AURA_FIRE | OPEN_DOOR | MOVE_BODY | TAKE_ITEM | 
+F:EVIL | DEMON | NO_CONF | NO_SLEEP | CAN_FLY | 
+F:IM_FIRE | RES_NETH | RES_TELE
+S:1_IN_4 | 
+S:SHRIEK | BR_CONF | BA_FIRE | MIND_BLAST | BRAIN_SMASH | BO_NETH |
+S:CONF | SLOW | HASTE | PSY_SPEAR | S_KIN | S_DEMON
+D:$The giant bird with two arms branched from its wings
+D:$ carries a magical sabre.
+D:$ This chairman of hell cleverly confuses people by speech. 
+D:翼から生えた二本の腕を持つ、巨大な鳥が、魔法のサーベルを携えている。
+D:この地獄の大議長は、弁舌巧みに人心を惑わす。
