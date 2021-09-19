@@ -857,24 +857,23 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
     if (exam_base) {
         int len;
         int max_len = 0;
-        for (KIND_OBJECT_IDX k = 1; k < max_k_idx; k++) {
-            object_kind *k_ptr = &k_info[k];
-            if (k_ptr->name.empty())
+        for (const auto &k_ref : k_info) {
+            if (k_ref.idx == 0 || k_ref.name.empty())
                 continue;
 
-            o_ptr->prep(k);
+            o_ptr->prep(k_ref.idx);
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
 #endif
             if (cheat_xtra)
-                msg_format("Matching object No.%d %s", k, o_name);
+                msg_format("Matching object No.%d %s", k_ref.idx, o_name);
 
             len = strlen(o_name);
 
             if (_(!strrncmp(str, o_name, len), !strncmp(str, o_name, len))) {
                 if (len > max_len) {
-                    k_ids.push_back(k);
+                    k_ids.push_back(k_ref.idx);
                     max_len = len;
                 }
             }

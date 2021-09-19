@@ -25,7 +25,7 @@
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
  */
-static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
+static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, KIND_OBJECT_IDX k)
 {
     object_type forge;
     object_type *q_ptr = &forge;
@@ -103,7 +103,7 @@ spoiler_output_status spoil_obj_desc(concptr fname)
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
     int n = 0;
     int group_start = 0;
-    OBJECT_IDX who[200];
+    KIND_OBJECT_IDX who[200];
     for (int i = 0; true; i++) {
         if (group_item[i].name) {
             if (n) {
@@ -149,12 +149,11 @@ spoiler_output_status spoil_obj_desc(concptr fname)
             group_start = i;
         }
 
-        for (int k = 1; k < max_k_idx; k++) {
-            object_kind *k_ptr = &k_info[k];
-            if ((k_ptr->tval != group_item[i].tval) || k_ptr->gen_flags.has(TRG::INSTA_ART))
+        for (const auto &k_ref : k_info) {
+            if ((k_ref.idx == 0) || (k_ref.tval != group_item[i].tval) || k_ref.gen_flags.has(TRG::INSTA_ART))
                 continue;
 
-            who[n++] = (uint16_t)k;
+            who[n++] = k_ref.idx;
         }
     }
 

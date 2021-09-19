@@ -144,22 +144,21 @@ void do_cmd_visuals(player_type *player_ptr)
                 continue;
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
-            for (KIND_OBJECT_IDX k_idx = 0; k_idx < max_k_idx; k_idx++) {
+            for (const auto &k_ref : k_info) {
                 GAME_TEXT o_name[MAX_NLEN];
-                object_kind *k_ptr = &k_info[k_idx];
-                if (k_ptr->name.empty())
+                if (k_ref.name.empty())
                     continue;
 
-                if (!k_ptr->flavor) {
-                    strip_name(o_name, k_idx);
+                if (!k_ref.flavor) {
+                    strip_name(o_name, k_ref.idx);
                 } else {
                     object_type dummy;
-                    dummy.prep(k_idx);
+                    dummy.prep(k_ref.idx);
                     describe_flavor(player_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", o_name);
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)k_idx, (byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
+                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)k_ref.idx, (byte)(k_ref.x_attr), (byte)(k_ref.x_char));
             }
 
             close_auto_dump(&auto_dump_stream, mark);

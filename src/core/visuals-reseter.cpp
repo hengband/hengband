@@ -21,10 +21,9 @@ void reset_visuals(player_type *player_ptr)
         }
     }
 
-    for (int i = 0; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        k_ptr->x_attr = k_ptr->d_attr;
-        k_ptr->x_char = k_ptr->d_char;
+    for (auto &k_ref : k_info) {
+        k_ref.x_attr = k_ref.d_attr;
+        k_ref.x_char = k_ref.d_char;
     }
 
     for (int i = 0; i < max_r_idx; i++) {

@@ -194,13 +194,12 @@ static errr interpret_u_token(char *buf)
     int j = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
-    for (int i = 1; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->tval == j) {
+    for (auto &k_ref : k_info) {
+        if (k_ref.idx > 0 && k_ref.tval == j) {
             if (n1)
-                k_ptr->d_attr = n1;
+                k_ref.d_attr = n1;
             if (n2)
-                k_ptr->d_char = n2;
+                k_ref.d_char = n2;
         }
     }
 

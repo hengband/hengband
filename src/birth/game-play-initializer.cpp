@@ -28,10 +28,9 @@
  */
 static void k_info_reset(void)
 {
-    for (int i = 0; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        k_ptr->tried = false;
-        k_ptr->aware = false;
+    for (auto &k_ref : k_info) {
+        k_ref.tried = false;
+        k_ref.aware = false;
     }
 }
 

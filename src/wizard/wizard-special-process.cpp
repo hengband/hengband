@@ -143,18 +143,20 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
     num = 0;
     KIND_OBJECT_IDX choice[80];
     char buf[160];
-    for (KIND_OBJECT_IDX i = 1; (num < 80) && (i < max_k_idx); i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->tval != tval)
+    for (const auto& k_ref : k_info) {
+        if (num >= 80) {
+            break;
+        }
+        if (k_ref.idx == 0 || k_ref.tval != tval)
             continue;
 
         row = 2 + (num % 20);
         col = 20 * (num / 20);
         ch = listsym[num];
         strcpy(buf, "                    ");
-        strip_name(buf, i);
+        strip_name(buf, k_ref.idx);
         prt(format("[%c] %s", ch, buf), row, col);
-        choice[num++] = i;
+        choice[num++] = k_ref.idx;
     }
 
     max_num = num;
@@ -485,11 +487,10 @@ void wiz_learn_items_all(player_type *player_ptr)
 {
     object_type forge;
     object_type *q_ptr;
-    for (KIND_OBJECT_IDX i = 1; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->level <= command_arg) {
+    for (const auto &k_ref : k_info) {
+        if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;
-            q_ptr->prep(i);
+            q_ptr->prep(k_ref.idx);
             object_aware(player_ptr, q_ptr);
         }
     }

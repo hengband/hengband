@@ -32,6 +32,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+#include <numeric>
+
 /*! 
  * @brief Check the status of "artifacts"
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -132,33 +134,30 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
 {
     KIND_OBJECT_IDX object_cnt = 0;
     byte group_tval = object_group_tval[grp_cur];
-    for (KIND_OBJECT_IDX i = 0; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->name.empty())
+    for (const auto &k_ref : k_info) {
+        if (k_ref.name.empty())
             continue;
 
         if (!(mode & 0x02)) {
             if (!w_ptr->wizard) {
-                if (!k_ptr->flavor)
+                if (!k_ref.flavor)
                     continue;
-                if (!k_ptr->aware)
+                if (!k_ref.aware)
                     continue;
             }
 
-            int k = 0;
-            for (int j = 0; j < 4; j++)
-                k += k_ptr->chance[j];
+            auto k = std::reduce(std::begin(k_ref.chance), std::end(k_ref.chance));
             if (!k)
                 continue;
         }
 
         if (TV_LIFE_BOOK == group_tval) {
-            if (TV_LIFE_BOOK <= k_ptr->tval && k_ptr->tval <= TV_HEX_BOOK) {
-                object_idx[object_cnt++] = i;
+            if (TV_LIFE_BOOK <= k_ref.tval && k_ref.tval <= TV_HEX_BOOK) {
+                object_idx[object_cnt++] = k_ref.idx;
             } else
                 continue;
-        } else if (k_ptr->tval == group_tval) {
-            object_idx[object_cnt++] = i;
+        } else if (k_ref.tval == group_tval) {
+            object_idx[object_cnt++] = k_ref.idx;
         } else
             continue;
 
