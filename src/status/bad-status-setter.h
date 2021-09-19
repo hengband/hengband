@@ -3,6 +3,15 @@
 #include "system/angband.h"
 
 struct player_type;
+class BadStatusSetter {
+public:
+    BadStatusSetter(player_type *player_ptr);
+    virtual ~BadStatusSetter() = default;
+
+private:
+    player_type *player_ptr;
+};
+
 bool set_blind(player_type *player_ptr, TIME_EFFECT v);
 bool set_confused(player_type *player_ptr, TIME_EFFECT v);
 bool set_poisoned(player_type *player_ptr, TIME_EFFECT v);

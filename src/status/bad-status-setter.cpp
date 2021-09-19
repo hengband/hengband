@@ -21,6 +21,11 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
+BadStatusSetter::BadStatusSetter(player_type* player_ptr)
+    : player_ptr(player_ptr)
+{
+}
+
 /*!
  * @brief 盲目の継続時間をセットする / Set "blind", notice observable changes
  * @param v 継続時間
