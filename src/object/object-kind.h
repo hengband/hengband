@@ -12,6 +12,8 @@
 #include <vector>
 
 typedef struct object_kind {
+    KIND_OBJECT_IDX idx{};
+
     std::string name; /*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
     std::string text; /*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
     std::string flavor_name; /*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
