@@ -133,7 +133,7 @@ bool EnchantWeaponSmithInfo::add_essence(player_type *player_ptr, object_type *o
 
 bool EnchantWeaponSmithInfo::can_give_smith_effect(const object_type *o_ptr) const
 {
-    return o_ptr->allow_enchant_melee_weapon();
+    return o_ptr->allow_enchant_weapon();
 }
 
 EnchantArmourSmithInfo::EnchantArmourSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption)
