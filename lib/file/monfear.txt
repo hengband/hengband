@@ -431,6 +431,9 @@ says, 'Dean! Brother! Help me! Help me!'
 N:1333:Professor Ootsuki
 says, 'Show me... the scientific evidence for losing...'
 
+N:1345:GREAT THING, the Huge Battle Ship
+is shimmering.
+
 N:*:Default lines
 says, 'I am too young to die.'
 says, 'Ok, ok! I get: no more pals.'
