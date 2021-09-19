@@ -12,12 +12,12 @@
 
 /*!
  * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param 換算レベル
  */
-PLAYER_LEVEL get_pseudo_monstetr_level(player_type *caster_ptr)
+PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr)
 {
-    PLAYER_LEVEL monster_level = caster_ptr->lev + 40;
+    PLAYER_LEVEL monster_level = player_ptr->lev + 40;
     return (monster_level * monster_level - 1550) / 130;
 }
 
@@ -28,13 +28,13 @@ PLAYER_LEVEL get_pseudo_monstetr_level(player_type *caster_ptr)
  * @param msg 表示する文字列
  * @param tmp 返すメッセージを格納する配列
  */
-static void set_bluemage_damage(player_type *learner_type, RF_ABILITY ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
+static void set_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
 {
-    int base_damage = monspell_bluemage_damage(learner_type, ms_type, plev, BASE_DAM);
-    int dice_num = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_NUM);
-    int dice_side = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_SIDE);
-    int dice_mult = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_MULT);
-    int dice_div = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_DIV);
+    int base_damage = monspell_bluemage_damage(player_ptr, ms_type, plev, BASE_DAM);
+    int dice_num = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_NUM);
+    int dice_side = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_SIDE);
+    int dice_mult = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_MULT);
+    int dice_div = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_DIV);
     char dmg_str[80];
     dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
     sprintf(tmp, " %s %s", msg, dmg_str);
@@ -42,13 +42,13 @@ static void set_bluemage_damage(player_type *learner_type, RF_ABILITY ms_type, P
 
 /*!
  * @brief 受け取ったモンスター魔法のIDに応じて青魔法の効果情報をまとめたフォーマットを返す
- * @param learner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param p 情報を返す文字列参照ポインタ
  * @param power モンスター魔法のID
  */
-void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
+void learnt_info(player_type *player_ptr, char *p, RF_ABILITY power)
 {
-    PLAYER_LEVEL plev = get_pseudo_monstetr_level(learner_ptr);
+    PLAYER_LEVEL plev = get_pseudo_monstetr_level(player_ptr);
 
     strcpy(p, "");
 
@@ -92,7 +92,7 @@ void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
     case RF_ABILITY::BA_MANA:
     case RF_ABILITY::BA_DARK:
     case RF_ABILITY::BA_LITE:
-        set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
+        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
     case RF_ABILITY::DISPEL:
         break;
@@ -129,10 +129,10 @@ void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
     case RF_ABILITY::BA_POIS:
     case RF_ABILITY::BA_NETH:
     case RF_ABILITY::BA_WATE:
-        set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
+        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
     case RF_ABILITY::DRAIN_MANA:
-        set_bluemage_damage(learner_ptr, power, plev, KWD_HEAL, p);
+        set_bluemage_damage(player_ptr, power, plev, KWD_HEAL, p);
         break;
     case RF_ABILITY::MIND_BLAST:
     case RF_ABILITY::BRAIN_SMASH:
@@ -150,13 +150,13 @@ void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
     case RF_ABILITY::BO_PLAS:
     case RF_ABILITY::BO_ICEE:
     case RF_ABILITY::MISSILE:
-        set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
+        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
     case RF_ABILITY::HASTE:
         sprintf(p, " %sd%d+%d", KWD_DURATION, 20 + plev, plev);
         break;
     case RF_ABILITY::HEAL:
-        set_bluemage_damage(learner_ptr, power, plev, KWD_HEAL, p);
+        set_bluemage_damage(player_ptr, power, plev, KWD_HEAL, p);
         break;
     case RF_ABILITY::INVULNER:
         sprintf(p, " %sd7+7", KWD_DURATION);
@@ -168,7 +168,7 @@ void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
         sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
         break;
     case RF_ABILITY::PSY_SPEAR:
-        set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
+        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
         break;
     case RF_ABILITY::RAISE_DEAD:

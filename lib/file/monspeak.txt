@@ -887,6 +887,20 @@ says, 'I can explain even the pattern walk as plasma!!'
 says, 'There is not the scientific evidence that you can defeat the Serpent of Chaos!!'
 says, 'My power of plasma exceeds the limitation of human!!  I will never lose!!'
 
+N:1345:GREAT THING, the Huge Battle Ship
+'s power is transmitted as the vibration of the body sonic.
+wears beautiful background music.
+is charging the burst beam.
+IS APPROACHING FAST.
+
+N:1346:Caim, the disputant of hell
+says, 'Are you also interested in shooting a psycho spear?'
+says, 'I expect you rather than Luther to show me a strong spirit.'
+says, 'God is more intolerance and kills more than the devil. Am I wrong?'
+says, 'Let's talk meaningfully.'
+says, 'If you want, I can introduce you to Lord Lucifer.'
+says, 'Do you feel like ending your life in such a dimly-lit dungeon?'
+
 N:*:Default lines
 cackles evilly.
 cackles diabolically.

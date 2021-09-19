@@ -55,11 +55,11 @@
 
 /*!
  * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 効果が何もないならFALSE、何かあるならTRUE
  */
-static process_result is_affective(player_type *caster_ptr, effect_monster_type *em_ptr)
+static process_result is_affective(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->g_ptr->m_idx)
         return PROCESS_FALSE;
@@ -69,7 +69,7 @@ static process_result is_affective(player_type *caster_ptr, effect_monster_type 
         return PROCESS_FALSE;
     if (em_ptr->m_ptr->hp < 0)
         return PROCESS_FALSE;
-    if (em_ptr->who || em_ptr->g_ptr->m_idx != caster_ptr->riding)
+    if (em_ptr->who || em_ptr->g_ptr->m_idx != player_ptr->riding)
         return PROCESS_TRUE;
 
     switch (em_ptr->effect_type) {
@@ -94,28 +94,28 @@ static process_result is_affective(player_type *caster_ptr, effect_monster_type 
 
 /*!
  * @brief 魔法の効果やモンスター種別(MAKE/FEMALE/なし)に応じて表示するメッセージを変更する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void make_description_of_affecred_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void make_description_of_affecred_monster(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     em_ptr->dam = (em_ptr->dam + em_ptr->r) / (em_ptr->r + 1);
-    monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, 0);
-    monster_desc(caster_ptr, em_ptr->m_poss, em_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    monster_desc(player_ptr, em_ptr->m_name, em_ptr->m_ptr, 0);
+    monster_desc(player_ptr, em_ptr->m_poss, em_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 }
 
 /*!
  * @brief モンスターへの効果属性による耐性及び効果を処理する( / Proccess affecting to monster by effect.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 完全な耐性が発動したらCONTINUE、そうでないなら効果処理の結果
  * @details
  * 完全な耐性を持っていたら、一部属性を除いて影響は及ぼさない
  * 射撃属性 (デバッグ用)であれば貫通する
  */
-static process_result exe_affect_monster_by_effect(player_type *caster_ptr, effect_monster_type *em_ptr)
+static process_result exe_affect_monster_by_effect(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    process_result result = is_affective(caster_ptr, em_ptr);
+    process_result result = is_affective(player_ptr, em_ptr);
     if (result != PROCESS_TRUE) {
         if (result == PROCESS_CONTINUE) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -126,14 +126,14 @@ static process_result exe_affect_monster_by_effect(player_type *caster_ptr, effe
 
     if (none_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) || em_ptr->effect_type == GF_OLD_CLONE || em_ptr->effect_type == GF_STAR_HEAL
         || em_ptr->effect_type == GF_OLD_HEAL || em_ptr->effect_type == GF_OLD_SPEED || em_ptr->effect_type == GF_CAPTURE || em_ptr->effect_type == GF_PHOTO)
-        return switch_effects_monster(caster_ptr, em_ptr);
+        return switch_effects_monster(player_ptr, em_ptr);
 
     if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) && (em_ptr->effect_type == GF_ARROW))
-        return switch_effects_monster(caster_ptr, em_ptr);
+        return switch_effects_monster(player_ptr, em_ptr);
 
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
     em_ptr->dam = 0;
-    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
         em_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
 
     if (em_ptr->effect_type == GF_LITE_WEAK || em_ptr->effect_type == GF_KILL_WALL)
@@ -144,82 +144,82 @@ static process_result exe_affect_monster_by_effect(player_type *caster_ptr, effe
 
 /*!
  * @brief ペットの死亡を処理する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void effect_damage_killed_pet(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_killed_pet(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     bool sad = is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml);
     if (em_ptr->known && em_ptr->note) {
-        monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
+        monster_desc(player_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
         if (em_ptr->see_s_msg)
             msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
         else
-            caster_ptr->current_floor_ptr->monster_noise = true;
+            player_ptr->current_floor_ptr->monster_noise = true;
     }
 
     if (em_ptr->who > 0)
-        monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
+        monster_gain_exp(player_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
 
-    monster_death(caster_ptr, em_ptr->g_ptr->m_idx, false);
-    delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+    monster_death(player_ptr, em_ptr->g_ptr->m_idx, false);
+    delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
     if (sad)
         msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
 }
 
 /*!
  * @brief モンスターの睡眠を処理する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void effect_damage_makes_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_makes_sleep(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->note && em_ptr->seen_msg)
         msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
     else if (em_ptr->see_s_msg)
-        message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+        message_pain(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
     else
-        caster_ptr->current_floor_ptr->monster_noise = true;
+        player_ptr->current_floor_ptr->monster_noise = true;
 
     if (em_ptr->do_sleep)
-        (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
+        (void)set_monster_csleep(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
 }
 
 /*!
  * @brief モンスターからモンスターへのダメージを処理する / Hurt the monster by damages another monster did.
- * @param caster_ptr プレイヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ダメージを処理しなかった(モンスターIDがプレイヤー自身)場合はFALSE、処理した(モンスターだった)場合TRUE
  * @details
  * モンスターIDがプレイヤー(0)の場合は処理しない。
  */
-static bool deal_effect_damage_from_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool deal_effect_damage_from_monster(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->who <= 0)
         return false;
 
-    if (caster_ptr->health_who == em_ptr->g_ptr->m_idx)
-        caster_ptr->redraw |= (PR_HEALTH);
-    if (caster_ptr->riding == em_ptr->g_ptr->m_idx)
-        caster_ptr->redraw |= (PR_UHEALTH);
+    if (player_ptr->health_who == em_ptr->g_ptr->m_idx)
+        player_ptr->redraw |= (PR_HEALTH);
+    if (player_ptr->riding == em_ptr->g_ptr->m_idx)
+        player_ptr->redraw |= (PR_UHEALTH);
 
-    (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
+    (void)set_monster_csleep(player_ptr, em_ptr->g_ptr->m_idx, 0);
     em_ptr->m_ptr->hp -= em_ptr->dam;
     if (em_ptr->m_ptr->hp < 0)
-        effect_damage_killed_pet(caster_ptr, em_ptr);
+        effect_damage_killed_pet(player_ptr, em_ptr);
     else
-        effect_damage_makes_sleep(caster_ptr, em_ptr);
+        effect_damage_makes_sleep(player_ptr, em_ptr);
 
     return true;
 }
 
 /*!
  * @brief 不潔な病人の治療処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 大賞モンスターが不潔な病人だった場合はTRUE、それ以外はFALSE
  */
-static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool heal_leaper(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->heal_leper)
         return false;
@@ -229,39 +229,39 @@ static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
 
     if (record_named_pet && is_pet(em_ptr->m_ptr) && em_ptr->m_ptr->nickname) {
         char m2_name[MAX_NLEN];
-        monster_desc(caster_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+        monster_desc(player_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
     }
 
-    delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+    delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
     return true;
 }
 
 /*!
  * @brief プレイヤー起因の効果によるダメージを処理 / Deal damages from player and fear by them.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return モンスターが死んだらTRUE、生きていたらFALSE
  * @details
  * em_ptr->do_fearによる恐怖メッセージもここで表示。
  */
-static bool deal_effect_damage_from_player(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool deal_effect_damage_from_player(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     bool fear = false;
-    MonsterDamageProcessor mdp(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear);
+    MonsterDamageProcessor mdp(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear);
     if (mdp.mon_take_hit(em_ptr->note_dies))
         return true;
 
     if (em_ptr->do_sleep)
-        anger_monster(caster_ptr, em_ptr->m_ptr);
+        anger_monster(player_ptr, em_ptr->m_ptr);
 
     if (em_ptr->note && em_ptr->seen)
         msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
     else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
-        message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+        message_pain(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
 
     if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep)
-        anger_monster(caster_ptr, em_ptr->m_ptr);
+        anger_monster(player_ptr, em_ptr->m_ptr);
 
     if ((fear || em_ptr->do_fear) && em_ptr->seen) {
         sound(SOUND_FLEE);
@@ -273,7 +273,7 @@ static bool deal_effect_damage_from_player(player_type *caster_ptr, effect_monst
 
 /*!
  * @brief モンスターに効果のダメージを与える / Deal effect damage to monster.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @details
  * 以下のいずれかの処理を行う。
@@ -282,63 +282,63 @@ static bool deal_effect_damage_from_player(player_type *caster_ptr, effect_monst
  * 3.プレイヤーによる効果ダメージの処理
  * 4.睡眠する処理
  */
-static void deal_effect_damage_to_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void deal_effect_damage_to_monster(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->effect_type == GF_DRAIN_MANA)
         return;
 
     // モンスターによる効果
-    if (deal_effect_damage_from_monster(caster_ptr, em_ptr))
+    if (deal_effect_damage_from_monster(player_ptr, em_ptr))
         return;
 
     //プレイヤーによる効果
-    if (heal_leaper(caster_ptr, em_ptr))
+    if (heal_leaper(player_ptr, em_ptr))
         return;
-    if (deal_effect_damage_from_player(caster_ptr, em_ptr))
+    if (deal_effect_damage_from_player(player_ptr, em_ptr))
         return;
 
     if (em_ptr->do_sleep)
-        (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
+        (void)set_monster_csleep(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
 }
 
 /*!
  * @brief プレイヤーが眠っている敵に効果を及ぼした場合の徳の変化
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void effect_makes_change_virtues(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_makes_change_virtues(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->who > 0) || !em_ptr->slept)
         return;
 
     if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
-        chg_virtue(caster_ptr, V_COMPASSION, -1);
+        chg_virtue(player_ptr, V_COMPASSION, -1);
     if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
-        chg_virtue(caster_ptr, V_HONOUR, -1);
+        chg_virtue(player_ptr, V_HONOUR, -1);
 }
 
 /*!
  * @brief 魔法効果に対する強制処理(変身の強制解除、死なない処理)
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void affected_monster_prevents_bad_status(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void affected_monster_prevents_bad_status(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding)))
+    if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)))
         em_ptr->do_polymorph = false;
 
-    if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out && (em_ptr->who > 0)
+    if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0)
         && (em_ptr->dam > em_ptr->m_ptr->hp))
         em_ptr->dam = em_ptr->m_ptr->hp;
 }
 
 /*!
  * @brief モンスターの朦朧値を蓄積させる
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @param stun_damage 朦朧値
  */
-static void effect_damage_piles_stun(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_piles_stun(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->do_stun == 0) || (em_ptr->r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) || (em_ptr->r_ptr->flags3 & RF3_NO_STUN))
         return;
@@ -355,17 +355,17 @@ static void effect_damage_piles_stun(player_type *caster_ptr, effect_monster_typ
         turns = em_ptr->do_stun;
     }
 
-    (void)set_monster_stunned(caster_ptr, em_ptr->g_ptr->m_idx, turns);
+    (void)set_monster_stunned(player_ptr, em_ptr->g_ptr->m_idx, turns);
     em_ptr->get_angry = true;
 }
 
 /*!
  * @brief モンスターの混乱値を蓄積させる
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @param stun_damage 混乱値
  */
-static void effect_damage_piles_confusion(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_piles_confusion(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
         return;
@@ -382,24 +382,24 @@ static void effect_damage_piles_confusion(player_type *caster_ptr, effect_monste
         turns = em_ptr->do_conf;
     }
 
-    (void)set_monster_confused(caster_ptr, em_ptr->g_ptr->m_idx, turns);
+    (void)set_monster_confused(player_ptr, em_ptr->g_ptr->m_idx, turns);
     em_ptr->get_angry = true;
 }
 
 /*!
  * @brief モンスターの恐怖値を蓄積させる
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @param stun_damage 恐怖値
  * @details
  * 打撃ダメージによる恐怖もあるため、メッセージは後で表示。
  */
-static void effect_damage_piles_fear(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_piles_fear(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->do_fear == 0 || any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR))
         return;
 
-    (void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, monster_fear_remaining(em_ptr->m_ptr) + em_ptr->do_fear);
+    (void)set_monster_monfear(player_ptr, em_ptr->g_ptr->m_idx, monster_fear_remaining(em_ptr->m_ptr) + em_ptr->do_fear);
     em_ptr->get_angry = true;
 }
 
@@ -430,15 +430,15 @@ static void effect_damage_makes_weak(effect_monster_type *em_ptr)
 
 /*!
  * @brief モンスターを変身させる
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void effect_damage_makes_polymorph(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_makes_polymorph(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->do_polymorph || (randint1(90) <= em_ptr->r_ptr->level))
         return;
 
-    if (polymorph_monster(caster_ptr, em_ptr->y, em_ptr->x)) {
+    if (polymorph_monster(player_ptr, em_ptr->y, em_ptr->x)) {
         if (em_ptr->seen)
             em_ptr->obvious = true;
 
@@ -446,16 +446,16 @@ static void effect_damage_makes_polymorph(player_type *caster_ptr, effect_monste
         em_ptr->dam = 0;
     }
 
-    em_ptr->m_ptr = &caster_ptr->current_floor_ptr->m_list[em_ptr->g_ptr->m_idx];
+    em_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[em_ptr->g_ptr->m_idx];
     em_ptr->r_ptr = &r_info[em_ptr->m_ptr->r_idx];
 }
 
 /*!
  * @brief モンスターをテレポートさせる
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void effect_damage_makes_teleport(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_makes_teleport(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->do_dist == 0)
         return;
@@ -466,19 +466,19 @@ static void effect_damage_makes_teleport(player_type *caster_ptr, effect_monster
     em_ptr->note = _("が消え去った！", " disappears!");
 
     if (!em_ptr->who)
-        chg_virtue(caster_ptr, V_VALOUR, -1);
+        chg_virtue(player_ptr, V_VALOUR, -1);
 
-    teleport_flags tflag = static_cast<teleport_flags>((!em_ptr->who ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
-    teleport_away(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_dist, tflag);
+    teleport_flags tflag = i2enum<teleport_flags>((!em_ptr->who ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
+    teleport_away(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_dist, tflag);
 
     em_ptr->y = em_ptr->m_ptr->fy;
     em_ptr->x = em_ptr->m_ptr->fx;
-    em_ptr->g_ptr = &caster_ptr->current_floor_ptr->grid_array[em_ptr->y][em_ptr->x];
+    em_ptr->g_ptr = &player_ptr->current_floor_ptr->grid_array[em_ptr->y][em_ptr->x];
 }
 
 /*!
  * @brief モンスターへのダメージに応じたメッセージを表示させ、異常状態を与える
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @details
  * 以下の判定と処理を行う。
@@ -486,28 +486,28 @@ static void effect_damage_makes_teleport(player_type *caster_ptr, effect_monster
  * 2.ダメージ量が現HPを上回る場合
  * 3.通常時(デバフをかける)
  */
-static void effect_damage_gives_bad_status(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_damage_gives_bad_status(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     int tmp_damage = em_ptr->dam;
-    em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
+    em_ptr->dam = mon_damage_mod(player_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
     if ((tmp_damage > 0) && (em_ptr->dam == 0) && em_ptr->seen)
         em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
 
     if (em_ptr->dam > em_ptr->m_ptr->hp)
         em_ptr->note = em_ptr->note_dies;
     else {
-        effect_damage_piles_stun(caster_ptr, em_ptr);
-        effect_damage_piles_confusion(caster_ptr, em_ptr);
-        effect_damage_piles_fear(caster_ptr, em_ptr);
+        effect_damage_piles_stun(player_ptr, em_ptr);
+        effect_damage_piles_confusion(player_ptr, em_ptr);
+        effect_damage_piles_fear(player_ptr, em_ptr);
         effect_damage_makes_weak(em_ptr);
-        effect_damage_makes_polymorph(caster_ptr, em_ptr);
-        effect_damage_makes_teleport(caster_ptr, em_ptr);
+        effect_damage_makes_polymorph(player_ptr, em_ptr);
+        effect_damage_makes_teleport(player_ptr, em_ptr);
     }
 }
 
 /*!
  * @brief 効果によるモンスターへのダメージと付随効果を処理する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @details
  * 以下の処理を行う。
@@ -517,37 +517,37 @@ static void effect_damage_gives_bad_status(player_type *caster_ptr, effect_monst
  * 4.ダメージ処理及び恐怖メッセージ
  * 5.悪魔領域血の呪いによる事後処理
  */
-static void exe_affect_monster_by_damage(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void exe_affect_monster_by_damage(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    effect_makes_change_virtues(caster_ptr, em_ptr);
-    affected_monster_prevents_bad_status(caster_ptr, em_ptr);
-    effect_damage_gives_bad_status(caster_ptr, em_ptr);
-    deal_effect_damage_to_monster(caster_ptr, em_ptr);
+    effect_makes_change_virtues(player_ptr, em_ptr);
+    affected_monster_prevents_bad_status(player_ptr, em_ptr);
+    effect_damage_gives_bad_status(player_ptr, em_ptr);
+    deal_effect_damage_to_monster(player_ptr, em_ptr);
     if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
-        blood_curse_to_enemy(caster_ptr, em_ptr->who);
+        blood_curse_to_enemy(player_ptr, em_ptr->who);
 }
 
 /*!
  * @brief モンスター闘技場にいる場合の画面更新処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void update_phase_out_stat(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void update_phase_out_stat(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    if (!caster_ptr->phase_out)
+    if (!player_ptr->phase_out)
         return;
 
-    caster_ptr->health_who = em_ptr->g_ptr->m_idx;
-    caster_ptr->redraw |= (PR_HEALTH);
-    handle_stuff(caster_ptr);
+    player_ptr->health_who = em_ptr->g_ptr->m_idx;
+    player_ptr->redraw |= (PR_HEALTH);
+    handle_stuff(player_ptr);
 }
 
 /*!
  * @brief 魔法効果がペットに及んだ時の処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void postprocess_by_effected_pet(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void postprocess_by_effected_pet(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->dam <= 0) || is_pet(em_ptr->m_ptr) || is_friendly(em_ptr->m_ptr))
         return;
@@ -559,18 +559,18 @@ static void postprocess_by_effected_pet(player_type *caster_ptr, effect_monster_
         return;
     }
 
-    if ((em_ptr->who > 0) && is_pet(em_ptr->m_caster_ptr) && !player_bold(caster_ptr, em_ptr->m_ptr->target_y, em_ptr->m_ptr->target_x))
+    if ((em_ptr->who > 0) && is_pet(em_ptr->m_caster_ptr) && !player_bold(player_ptr, em_ptr->m_ptr->target_y, em_ptr->m_ptr->target_x))
         set_target(em_ptr->m_ptr, em_ptr->m_caster_ptr->fy, em_ptr->m_caster_ptr->fx);
 }
 
 /*!
  * @brief 魔法効果が騎乗モンスターに及んだ時の処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void postprocess_by_riding_pet_effected(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void postprocess_by_riding_pet_effected(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    if (!caster_ptr->riding || (caster_ptr->riding != em_ptr->g_ptr->m_idx) || (em_ptr->dam <= 0))
+    if (!player_ptr->riding || (player_ptr->riding != em_ptr->g_ptr->m_idx) || (em_ptr->dam <= 0))
         return;
 
     if (em_ptr->m_ptr->hp > (em_ptr->m_ptr->maxhp / 3))
@@ -581,11 +581,11 @@ static void postprocess_by_riding_pet_effected(player_type *caster_ptr, effect_m
 
 /*!
  * @brief 写真を撮った時の処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @details 写真のフラッシュは弱閃光属性
  */
-static void postprocess_by_taking_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void postprocess_by_taking_photo(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->photo == 0)
         return;
@@ -596,19 +596,19 @@ static void postprocess_by_taking_photo(player_type *caster_ptr, effect_monster_
     q_ptr->prep(lookup_kind(TV_STATUE, SV_PHOTO));
     q_ptr->pval = em_ptr->photo;
     q_ptr->ident |= (IDENT_FULL_KNOWN);
-    (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
+    (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
 }
 
 /*!
  * @brief モンスター効果の後処理 (ペット関係、記念撮影、グローバル変数更新)
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  */
-static void exe_affect_monster_postprocess(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void exe_affect_monster_postprocess(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    postprocess_by_effected_pet(caster_ptr, em_ptr);
-    postprocess_by_riding_pet_effected(caster_ptr, em_ptr);
-    postprocess_by_taking_photo(caster_ptr, em_ptr);
+    postprocess_by_effected_pet(player_ptr, em_ptr);
+    postprocess_by_riding_pet_effected(player_ptr, em_ptr);
+    postprocess_by_taking_photo(player_ptr, em_ptr);
     project_m_n++;
     project_m_x = em_ptr->x;
     project_m_y = em_ptr->y;
@@ -616,7 +616,7 @@ static void exe_affect_monster_postprocess(player_type *caster_ptr, effect_monst
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標y座標 / Target y location (or location to travel "towards")
@@ -633,33 +633,33 @@ static void exe_affect_monster_postprocess(player_type *caster_ptr, effect_monst
  * 3.ペット及び撮影による事後効果
  */
 bool affect_monster(
-    player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
+    player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
     effect_monster_type tmp_effect;
-    effect_monster_type *em_ptr = initialize_effect_monster(caster_ptr, &tmp_effect, who, r, y, x, dam, effect_type, flag, see_s_msg);
+    effect_monster_type *em_ptr = initialize_effect_monster(player_ptr, &tmp_effect, who, r, y, x, dam, effect_type, flag, see_s_msg);
 
-    make_description_of_affecred_monster(caster_ptr, em_ptr);
+    make_description_of_affecred_monster(player_ptr, em_ptr);
 
-    if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding))
-        disturb(caster_ptr, true, true);
+    if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding))
+        disturb(player_ptr, true, true);
 
-    process_result result = exe_affect_monster_by_effect(caster_ptr, em_ptr);
+    process_result result = exe_affect_monster_by_effect(player_ptr, em_ptr);
     if (result != PROCESS_CONTINUE)
         return (bool)result;
 
     if (em_ptr->skipped)
         return false;
 
-    exe_affect_monster_by_damage(caster_ptr, em_ptr);
+    exe_affect_monster_by_damage(player_ptr, em_ptr);
 
-    update_phase_out_stat(caster_ptr, em_ptr);
+    update_phase_out_stat(player_ptr, em_ptr);
     if (em_ptr->m_ptr->r_idx)
-        update_monster(caster_ptr, em_ptr->g_ptr->m_idx, false);
+        update_monster(player_ptr, em_ptr->g_ptr->m_idx, false);
 
-    lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
-    if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))
-        caster_ptr->window_flags |= (PW_MONSTER);
+    lite_spot(player_ptr, em_ptr->y, em_ptr->x);
+    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))
+        player_ptr->window_flags |= (PW_MONSTER);
 
-    exe_affect_monster_postprocess(caster_ptr, em_ptr);
+    exe_affect_monster_postprocess(player_ptr, em_ptr);
     return em_ptr->obvious;
 }

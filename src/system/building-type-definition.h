@@ -2,8 +2,8 @@
 
 /* 人畜無害なenumヘッダを先に読み込む */
 #include "object/tval-types.h"
-#include "player/player-class-types.h"
-#include "player/player-race-types.h"
+#include "player-info/class-types.h"
+#include "player-info/race-types.h"
 #include "realm/realm-types.h"
 #include "system/angband.h"
 

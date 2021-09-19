@@ -29,10 +29,10 @@ extern const POSITION ddx_cdd[8];
 extern const POSITION ddy_cdd[8];
 
 struct player_type;
-DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x);
+DIRECTION coords_to_dir(player_type *player_ptr, POSITION y, POSITION x);
 POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x);
+bool player_can_see_bold(player_type *player_ptr, POSITION y, POSITION x);
 
 struct monster_type;
-bool is_seen(player_type *creature_ptr, monster_type *m_ptr);
+bool is_seen(player_type *player_ptr, monster_type *m_ptr);

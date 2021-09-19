@@ -1,14 +1,13 @@
 ﻿/*!
- * @file artifact-info.cpp 
+ * @file artifact-info.cpp
  * @brief アーティファクトの発動効果取得関数定義
  */
 
 #include "artifact/artifact-info.h"
 #include "artifact/random-art-effects.h"
-#include "cmd-item/cmd-smith.h"
-#include "mind/mind-weaponsmith.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/object-smith.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
 #include "system/artifact-type-definition.h"
@@ -24,28 +23,17 @@
  */
 int activation_index(const object_type *o_ptr)
 {
-    if (o_ptr->is_smith()) {
-        switch (o_ptr->xtra3 - 1) {
-        case ESSENCE_TMP_RES_ACID:
-            return ACT_RESIST_ACID;
-        case ESSENCE_TMP_RES_ELEC:
-            return ACT_RESIST_ELEC;
-        case ESSENCE_TMP_RES_FIRE:
-            return ACT_RESIST_FIRE;
-        case ESSENCE_TMP_RES_COLD:
-            return ACT_RESIST_COLD;
-        case TR_EARTHQUAKE:
-            return ACT_QUAKE;
-        }
+    if (auto act_idx = Smith::object_activation(o_ptr); act_idx.has_value()) {
+        return act_idx.value();
     }
 
-    if (o_ptr->is_fixed_artifact() && has_flag(a_info[o_ptr->name1].flags, TR_ACTIVATE))
+    if (o_ptr->is_fixed_artifact() && a_info[o_ptr->name1].flags.has(TR_ACTIVATE))
         return a_info[o_ptr->name1].act_idx;
 
-    if (o_ptr->is_ego() && has_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
+    if (o_ptr->is_ego() && e_info[o_ptr->name2].flags.has(TR_ACTIVATE))
         return e_info[o_ptr->name2].act_idx;
 
-    if (!o_ptr->is_random_artifact() && has_flag(k_info[o_ptr->k_idx].flags, TR_ACTIVATE))
+    if (!o_ptr->is_random_artifact() && k_info[o_ptr->k_idx].flags.has(TR_ACTIVATE))
         return k_info[o_ptr->k_idx].act_idx;
 
     return o_ptr->xtra2;

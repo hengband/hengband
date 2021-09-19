@@ -1,7 +1,7 @@
 ﻿#include "birth/birth-select-race.h"
 #include "birth/birth-util.h"
 #include "io/input-key-acceptor.h"
-#include "player/player-race.h"
+#include "player-info/race-info.h"
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -56,7 +56,7 @@ static void display_race_stat(int cs, int *os, char *cur, char *sym)
         sprintf(buf, "%2d", rp_ptr->r_mhp);
         c_put_str(TERM_L_BLUE, buf, 6, 43);
 
-        put_str(_("隠密","Stealth"), 6, 47);
+        put_str(_("隠密", "Stealth"), 6, 47);
         sprintf(buf, "%+2d", rp_ptr->r_stl);
         c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
 
@@ -92,11 +92,11 @@ static void interpret_race_select_key_move(char c, int *cs)
     }
 }
 
-static bool select_race(player_type *creature_ptr, char *sym, int *k)
+static bool select_race(player_type *player_ptr, char *sym, int *k)
 {
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    auto cs = enum2i(creature_ptr->prace);
+    auto cs = enum2i(player_ptr->prace);
     int os = MAX_RACES;
     while (true) {
         display_race_stat(cs, &os, cur, sym);
@@ -144,7 +144,7 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
         } else
             *k = -1;
 
-        birth_help_option(creature_ptr, c, BK_RACE);
+        birth_help_option(player_ptr, c, BK_RACE);
     }
 
     return true;
@@ -153,7 +153,7 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
 /*!
  * @brief プレイヤーの種族選択を行う / Player race
  */
-bool get_player_race(player_type *creature_ptr)
+bool get_player_race(player_type *player_ptr)
 {
     clear_from(10);
     put_str(
@@ -163,10 +163,10 @@ bool get_player_race(player_type *creature_ptr)
     char sym[MAX_RACES];
     enumerate_race_list(sym);
     int k = -1;
-    if (!select_race(creature_ptr, sym, &k))
+    if (!select_race(player_ptr, sym, &k))
         return false;
 
-    creature_ptr->prace = static_cast<player_race_type>(k);
+    player_ptr->prace = i2enum<player_race_type>(k);
     rp_ptr = &race_info[k];
     c_put_str(TERM_L_BLUE, rp_ptr->title, 4, 15);
     return true;

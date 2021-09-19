@@ -20,29 +20,29 @@ void rd_version_info(void)
     rd_byte(&fake_major);
 
     strip_bytes(3);
-    load_xor_byte = current_world_ptr->sf_extra;
+    load_xor_byte = w_ptr->sf_extra;
     v_check = 0L;
     x_check = 0L;
 
     /* Old savefile will be version 0.0.0.3 */
-    rd_byte(&current_world_ptr->h_ver_extra);
-    rd_byte(&current_world_ptr->h_ver_patch);
-    rd_byte(&current_world_ptr->h_ver_minor);
-    rd_byte(&current_world_ptr->h_ver_major);
+    rd_byte(&w_ptr->h_ver_extra);
+    rd_byte(&w_ptr->h_ver_patch);
+    rd_byte(&w_ptr->h_ver_minor);
+    rd_byte(&w_ptr->h_ver_major);
 
-    rd_u32b(&current_world_ptr->sf_system);
-    rd_u32b(&current_world_ptr->sf_when);
-    rd_u16b(&current_world_ptr->sf_lives);
-    rd_u16b(&current_world_ptr->sf_saves);
+    rd_u32b(&w_ptr->sf_system);
+    rd_u32b(&w_ptr->sf_when);
+    rd_u16b(&w_ptr->sf_lives);
+    rd_u16b(&w_ptr->sf_saves);
 
     rd_u32b(&loading_savefile_version);
 
     /* h_ver_majorがfake_ver_majorと同じだったころへの対策 */
-    if (fake_major - current_world_ptr->h_ver_major < FAKE_VER_PLUS)
-        current_world_ptr->h_ver_major -= FAKE_VER_PLUS;
+    if (fake_major - w_ptr->h_ver_major < FAKE_VER_PLUS)
+        w_ptr->h_ver_major -= FAKE_VER_PLUS;
 
     load_note(format(_("バージョン %d.%d.%d のセーブデータ(SAVE%lu形式)をロード中...", "Loading a Verison %d.%d.%d savefile (SAVE%lu format)..."),
-        current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch,
+        w_ptr->h_ver_major, w_ptr->h_ver_minor, w_ptr->h_ver_patch,
         loading_savefile_version));
 }
 
@@ -90,14 +90,9 @@ void rd_system_info(void)
 {
     rd_byte(&kanji_code);
     rd_randomizer();
-    if (arg_fiddle)
-        load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
-
+    load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
     rd_options();
-    if (arg_fiddle)
-        load_note(_("オプションをロードしました", "Loaded Option Flags"));
-
+    load_note(_("オプションをロードしました", "Loaded Option Flags"));
     rd_messages();
-    if (arg_fiddle)
-        load_note(_("メッセージをロードしました", "Loaded Messages"));
+    load_note(_("メッセージをロードしました", "Loaded Messages"));
 }

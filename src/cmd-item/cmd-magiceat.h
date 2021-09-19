@@ -5,4 +5,4 @@
 #define EATER_ROD_CHARGE 0x10L
 
 struct player_type;
-bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerful);
+bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful);

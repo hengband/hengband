@@ -4,7 +4,15 @@
 #define DETECT_RAD_MAP 30
 #define DETECT_RAD_ALL 255
 
-enum spell_type { SPELL_NAME = 0, SPELL_DESC = 1, SPELL_INFO = 2, SPELL_CAST = 3, SPELL_FAIL = 4, SPELL_STOP = 5, SPELL_CONT = 6 };
+enum spell_type {
+    SPELL_NAME = 0,
+    SPELL_DESCRIPTION = 1,
+    SPELL_INFO = 2,
+    SPELL_CAST = 3,
+    SPELL_FAIL = 4,
+    SPELL_STOP = 5,
+    SPELL_CONTNUATION = 6
+};
 
 enum spell_operation {
     SPOP_NONE = 0x0000U,

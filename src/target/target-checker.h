@@ -7,5 +7,5 @@ extern POSITION target_col;
 extern POSITION target_row;
 
 struct player_type;
-void verify_panel(player_type *creature_ptr);
-bool target_okay(player_type *creature_ptr);
+void verify_panel(player_type *player_ptr);
+bool target_okay(player_type *player_ptr);

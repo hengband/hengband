@@ -48,7 +48,7 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 
 /*!
  * @brief ランダムアーティファクト内容をスポイラー出力するサブルーチン /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param i 出力したい記録ランダムアーティファクトID
  */
@@ -67,7 +67,7 @@ static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_pt
  * Create a list file for random artifacts
  * @param fname 出力ファイル名
  */
-void spoil_random_artifact(player_type *creature_ptr, concptr fname)
+void spoil_random_artifact(player_type *player_ptr, concptr fname)
 {
     store_type *store_ptr;
     object_type *q_ptr;
@@ -83,25 +83,25 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
     spoiler_underline(buf);
     for (int j = 0; group_artifact[j].tval; j++) {
         for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            q_ptr = &creature_ptr->inventory_list[i];
-            spoil_random_artifact_aux(creature_ptr, q_ptr, j);
+            q_ptr = &player_ptr->inventory_list[i];
+            spoil_random_artifact_aux(player_ptr, q_ptr, j);
         }
 
         for (int i = 0; i < INVEN_PACK; i++) {
-            q_ptr = &creature_ptr->inventory_list[i];
-            spoil_random_artifact_aux(creature_ptr, q_ptr, j);
+            q_ptr = &player_ptr->inventory_list[i];
+            spoil_random_artifact_aux(player_ptr, q_ptr, j);
         }
 
         store_ptr = &town_info[1].store[STORE_HOME];
         for (int i = 0; i < store_ptr->stock_num; i++) {
             q_ptr = &store_ptr->stock[i];
-            spoil_random_artifact_aux(creature_ptr, q_ptr, j);
+            spoil_random_artifact_aux(player_ptr, q_ptr, j);
         }
 
         store_ptr = &town_info[1].store[STORE_MUSEUM];
         for (int i = 0; i < store_ptr->stock_num; i++) {
             q_ptr = &store_ptr->stock[i];
-            spoil_random_artifact_aux(creature_ptr, q_ptr, j);
+            spoil_random_artifact_aux(player_ptr, q_ptr, j);
         }
     }
 

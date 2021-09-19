@@ -17,20 +17,20 @@
 
 /*!
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_reload_autopick(player_type *creature_ptr)
+void do_cmd_reload_autopick(player_type *player_ptr)
 {
     if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? ")))
         return;
 
-    autopick_load_pref(creature_ptr, true);
+    autopick_load_pref(player_ptr, true);
 }
 
 /*
  * Check the status of "autopick"
  */
-void do_cmd_knowledge_autopick(player_type *creature_ptr)
+void do_cmd_knowledge_autopick(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -69,6 +69,6 @@ void do_cmd_knowledge_autopick(player_type *creature_ptr)
 
     angband_fclose(fff);
 
-    (void)show_file(creature_ptr, true, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
     fd_kill(file_name);
 }

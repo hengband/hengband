@@ -1,14 +1,14 @@
 ﻿#include "birth/birth-stat.h"
 #include "birth/auto-roller.h"
 #include "core/player-redraw-types.h"
-#include "sv-definition/sv-weapon-types.h"
-#include "player/player-class.h"
-#include "player/player-personality.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player/player-personality-types.h"
-#include "player/player-race.h"
+#include "player/player-personality.h"
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
-#include "player/player-race-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "system/player-type-definition.h"
 
 /*! オートロール能力値の乱数分布 / emulate 5 + 1d3 + 1d4 + 1d5 by randint0(60) */
@@ -54,12 +54,12 @@ int adjust_stat(int value, int amount)
 
 /*!
  * @brief プレイヤーの能力値を一通りロールする。 / Roll for a characters stats
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
  * For efficiency, we include a chunk of "calc_bonuses()".\n
  */
-void get_stats(player_type* creature_ptr)
+void get_stats(player_type *player_ptr)
 {
     while (true) {
         int sum = 0;
@@ -74,7 +74,7 @@ void get_stats(player_type* creature_ptr)
                 val = rand3_4_5[tmp % 60];
 
                 sum += val;
-                creature_ptr->stat_cur[stat] = creature_ptr->stat_max[stat] = val;
+                player_ptr->stat_cur[stat] = player_ptr->stat_max[stat] = val;
 
                 tmp /= 60;
             }
@@ -88,14 +88,14 @@ void get_stats(player_type* creature_ptr)
 /*!
  * @brief 経験値修正の合計値を計算
  */
-uint16_t get_expfact(player_type *creature_ptr)
+uint16_t get_expfact(player_type *player_ptr)
 {
     uint16_t expfact = rp_ptr->r_exp;
 
-    if (creature_ptr->prace != player_race_type::ANDROID)
+    if (player_ptr->prace != player_race_type::ANDROID)
         expfact += cp_ptr->c_exp;
-    if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA))
-        && ((creature_ptr->prace == player_race_type::KLACKON) || (creature_ptr->prace == player_race_type::SPRITE)))
+    if (((player_ptr->pclass == CLASS_MONK) || (player_ptr->pclass == CLASS_FORCETRAINER) || (player_ptr->pclass == CLASS_NINJA))
+        && ((player_ptr->prace == player_race_type::KLACKON) || (player_ptr->prace == player_race_type::SPRITE)))
         expfact -= 15;
 
     return expfact;
@@ -104,53 +104,53 @@ uint16_t get_expfact(player_type *creature_ptr)
 /*!
  * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
  */
-void get_extra(player_type* creature_ptr, bool roll_hitdie)
+void get_extra(player_type *player_ptr, bool roll_hitdie)
 {
-    creature_ptr->expfact = get_expfact(creature_ptr);
+    player_ptr->expfact = get_expfact(player_ptr);
 
     /* Reset record of race/realm changes */
-    creature_ptr->start_race = creature_ptr->prace;
-    creature_ptr->old_race1 = 0L;
-    creature_ptr->old_race2 = 0L;
-    creature_ptr->old_realm = 0;
+    player_ptr->start_race = player_ptr->prace;
+    player_ptr->old_race1 = 0L;
+    player_ptr->old_race2 = 0L;
+    player_ptr->old_realm = 0;
 
     for (int i = 0; i < 64; i++) {
-        if (creature_ptr->pclass == CLASS_SORCERER)
-            creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
-        else if (creature_ptr->pclass == CLASS_RED_MAGE)
-            creature_ptr->spell_exp[i] = SPELL_EXP_SKILLED;
+        if (player_ptr->pclass == CLASS_SORCERER)
+            player_ptr->spell_exp[i] = SPELL_EXP_MASTER;
+        else if (player_ptr->pclass == CLASS_RED_MAGE)
+            player_ptr->spell_exp[i] = SPELL_EXP_SKILLED;
         else
-            creature_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
+            player_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
     }
 
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 64; j++)
-            creature_ptr->weapon_exp[i][j] = s_info[creature_ptr->pclass].w_start[i][j];
+            player_ptr->weapon_exp[i][j] = s_info[player_ptr->pclass].w_start[i][j];
 
-    if ((creature_ptr->pseikaku == PERSONALITY_SEXY) && (creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER)) {
-        creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
+    if ((player_ptr->pseikaku == PERSONALITY_SEXY) && (player_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER)) {
+        player_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
     }
 
     for (int i = 0; i < MAX_SKILLS; i++)
-        creature_ptr->skill_exp[i] = s_info[creature_ptr->pclass].s_start[i];
+        player_ptr->skill_exp[i] = s_info[player_ptr->pclass].s_start[i];
 
-    if (creature_ptr->pclass == CLASS_SORCERER)
-        creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+    if (player_ptr->pclass == CLASS_SORCERER)
+        player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
     else
-        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
     if (roll_hitdie)
-        roll_hitdice(creature_ptr, SPOP_NO_UPDATE);
+        roll_hitdice(player_ptr, SPOP_NO_UPDATE);
 
-    creature_ptr->mhp = creature_ptr->player_hp[0];
+    player_ptr->mhp = player_ptr->player_hp[0];
 }
 
 /*!
  * @brief プレイヤーの限界ステータスを決める。
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details 新生の薬やステータスシャッフルでもこの関数が呼ばれる
  */
-void get_max_stats(player_type* creature_ptr)
+void get_max_stats(player_type *player_ptr)
 {
     int dice[6];
     while (true) {
@@ -166,13 +166,13 @@ void get_max_stats(player_type* creature_ptr)
 
     for (int i = 0; i < A_MAX; i++) {
         BASE_STATUS max_max = 18 + 60 + dice[i] * 10;
-        creature_ptr->stat_max_max[i] = max_max;
-        if (creature_ptr->stat_max[i] > max_max)
-            creature_ptr->stat_max[i] = max_max;
-        if (creature_ptr->stat_cur[i] > max_max)
-            creature_ptr->stat_cur[i] = max_max;
+        player_ptr->stat_max_max[i] = max_max;
+        if (player_ptr->stat_max[i] > max_max)
+            player_ptr->stat_max[i] = max_max;
+        if (player_ptr->stat_cur[i] > max_max)
+            player_ptr->stat_cur[i] = max_max;
     }
 
-    creature_ptr->knowledge &= ~(KNOW_STAT);
-    creature_ptr->redraw |= (PR_STATS);
+    player_ptr->knowledge &= ~(KNOW_STAT);
+    player_ptr->redraw |= (PR_STATS);
 }

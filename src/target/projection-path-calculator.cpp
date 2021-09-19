@@ -202,7 +202,7 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
 /*!
  * @brief 始点から終点への直線経路を返す /
  * Determine the path taken by a projection.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param gp 経路座標リストを返す参照ポインタ
  * @param range 距離
  * @param y1 始点Y座標
@@ -260,10 +260,10 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
 
 /*!
  * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 射程
  */
-int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }
+int get_max_range(player_type *player_ptr) { return player_ptr->phase_out ? 36 : 18; }
 
 /*
  * Convert a "grid" (G) into a "location" (Y)

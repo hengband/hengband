@@ -12,24 +12,24 @@
  */
 bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
-    if (current_world_ptr->h_ver_major < major)
+    if (w_ptr->h_ver_major < major)
         return true;
-    if (current_world_ptr->h_ver_major > major)
+    if (w_ptr->h_ver_major > major)
         return false;
 
-    if (current_world_ptr->h_ver_minor < minor)
+    if (w_ptr->h_ver_minor < minor)
         return true;
-    if (current_world_ptr->h_ver_minor > minor)
+    if (w_ptr->h_ver_minor > minor)
         return false;
 
-    if (current_world_ptr->h_ver_patch < patch)
+    if (w_ptr->h_ver_patch < patch)
         return true;
-    if (current_world_ptr->h_ver_patch > patch)
+    if (w_ptr->h_ver_patch > patch)
         return false;
 
-    if (current_world_ptr->h_ver_extra < extra)
+    if (w_ptr->h_ver_extra < extra)
         return true;
-    if (current_world_ptr->h_ver_extra > extra)
+    if (w_ptr->h_ver_extra > extra)
         return false;
 
     return false;
@@ -46,19 +46,19 @@ bool h_older_than(byte major, byte minor, byte patch, byte extra)
  */
 bool h_older_than(byte major, byte minor, byte patch)
 {
-    if (current_world_ptr->h_ver_major < major)
+    if (w_ptr->h_ver_major < major)
         return true;
-    if (current_world_ptr->h_ver_major > major)
+    if (w_ptr->h_ver_major > major)
         return false;
 
-    if (current_world_ptr->h_ver_minor < minor)
+    if (w_ptr->h_ver_minor < minor)
         return true;
-    if (current_world_ptr->h_ver_minor > minor)
+    if (w_ptr->h_ver_minor > minor)
         return false;
 
-    if (current_world_ptr->h_ver_patch < patch)
+    if (w_ptr->h_ver_patch < patch)
         return true;
-    if (current_world_ptr->h_ver_patch > patch)
+    if (w_ptr->h_ver_patch > patch)
         return false;
 
     return false;

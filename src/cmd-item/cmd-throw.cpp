@@ -16,8 +16,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-ThrowCommand::ThrowCommand(player_type *creature_ptr)
-    : creature_ptr(creature_ptr)
+ThrowCommand::ThrowCommand(player_type *player_ptr)
+    : player_ptr(player_ptr)
 {
 }
 
@@ -25,7 +25,7 @@ ThrowCommand::ThrowCommand(player_type *creature_ptr)
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
  * @param mult 威力の倍率
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param boomerang ブーメラン処理ならばTRUE
  * @param shuriken 忍者の手裏剣処理ならばTRUE ← 間違い、-1が渡されてくることがある。要調査.
  * @return ターンを消費した場合TRUEを返す
@@ -40,16 +40,16 @@ ThrowCommand::ThrowCommand(player_type *creature_ptr)
  */
 bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
-    if (this->creature_ptr->wild_mode) {
+    if (this->player_ptr->wild_mode) {
         return false;
     }
 
-    if (this->creature_ptr->special_defense & KATA_MUSOU) {
-        set_action(this->creature_ptr, ACTION_NONE);
+    if (this->player_ptr->special_defense & KATA_MUSOU) {
+        set_action(this->player_ptr, ACTION_NONE);
     }
 
     object_type tmp_object;
-    ObjectThrowEntity ote(this->creature_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
+    ObjectThrowEntity ote(this->player_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
     if (!ote.check_can_throw()) {
         return false;
     }
@@ -62,7 +62,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     ote.reflect_inventory_by_throw();
     if (ote.item >= INVEN_MAIN_HAND) {
         ote.equiped_item = true;
-        this->creature_ptr->redraw |= PR_EQUIPPY;
+        this->player_ptr->redraw |= PR_EQUIPPY;
     }
 
     ote.set_class_specific_throw_params();
@@ -74,7 +74,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
         torch_lost_fuel(ote.q_ptr);
     }
 
-    ote.corruption_possibility = ote.hit_body ? breakage_chance(this->creature_ptr, ote.q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0;
+    ote.corruption_possibility = ote.hit_body ? breakage_chance(this->player_ptr, ote.q_ptr, this->player_ptr->pclass == CLASS_ARCHER, 0) : 0;
     ote.display_figurine_throw();
     ote.display_potion_throw();
     ote.check_boomerang_throw();

@@ -34,9 +34,9 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "player/player-personality-types.h"
-#include "player/player-race-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -128,7 +128,7 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 
 /*!
  * @brief モンスター死亡時のメッセージ表示
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
  * @details
  * 見えない位置で死んだら何も表示しない
@@ -158,13 +158,13 @@ static void print_monster_dead_by_monster(player_type *player_ptr, mam_pp_type *
         return;
     }
 
-        sound(SOUND_KILL);
+    sound(SOUND_KILL);
     msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
 }
 
 /*!
  * @brief ダメージを受けたモンスターのHPが0未満になった際の処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
  * @return 生きていたらTRUE、それ以外 (ユニークは＠以外の攻撃では死なない)はFALSE
  */
@@ -190,7 +190,7 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 
 /*!
  * @brief 死亡等で恐慌状態をキャンセルする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
  */
 static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
@@ -204,7 +204,7 @@ static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr
 
 /*!
  * @biref HP残量などに応じてモンスターを恐慌状態にする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
  */
 static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
@@ -225,7 +225,7 @@ static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 
 /*!
  * @brief モンスター同士の乱闘による落馬処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
  */
 static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp_ptr)

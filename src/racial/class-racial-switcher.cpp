@@ -6,10 +6,10 @@
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 
-void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
+void switch_class_racial(player_type *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
-    switch (creature_ptr->pclass) {
+    switch (player_ptr->pclass) {
     case CLASS_WARRIOR:
         rpi = rpi_type(_("剣の舞い", "Sword Dancing"));
         rpi.text = _("ランダムな方向に数回攻撃する。", "Attacks some times to random directions.");
@@ -20,7 +20,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_HIGH_MAGE:
-        if (creature_ptr->realm1 == REALM_HEX) {
+        if (player_ptr->realm1 == REALM_HEX) {
             rpi = rpi_type(_("詠唱をやめる", "Stop spell casting"));
             rpi.text = _("呪術の詠唱を全てやめる。", "Stops all casting hex spells.");
             rpi.min_level = 1;
@@ -43,7 +43,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_PRIEST:
-        if (is_good_realm(creature_ptr->realm1)) {
+        if (is_good_realm(player_ptr->realm1)) {
             rpi = rpi_type(_("武器祝福", "Bless Weapon"));
             rpi.text = _("武器を祝福する。抵抗されることがある。", "Blesses a weapon. Some weapons can resist it.");
             rpi.min_level = 35;
@@ -84,7 +84,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_PALADIN:
-        if (is_good_realm(creature_ptr->realm1)) {
+        if (is_good_realm(player_ptr->realm1)) {
             rpi = rpi_type(_("ホーリー・ランス", "Holy Lance"));
             rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
             rpi.text = _("聖なる炎のビームを放つ。", "Fires a beam of holy fire.");
@@ -192,7 +192,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
         rpi.text = _("1体のモンスターをペットにする。抵抗されると無効。", "Attempts to charm a monster.");
         rpi.min_level = 1;
-        rpi.cost = (creature_ptr->lev + 3) / 4;
+        rpi.cost = (player_ptr->lev + 3) / 4;
         rpi.stat = A_CHR;
         rpi.fail = 10;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
@@ -201,7 +201,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
         rpi.text = _("周辺のモンスターをペットにする。抵抗されると無効。", "Attempts to charm a monsters in your sight.");
         rpi.min_level = 30;
-        rpi.cost = (creature_ptr->lev + 20) / 2;
+        rpi.cost = (player_ptr->lev + 20) / 2;
         rpi.stat = A_CHR;
         rpi.fail = 10;
         rc_ptr->add_power(rpi, -4);
@@ -342,7 +342,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.fail = 10;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        switch_element_racial(creature_ptr, rc_ptr);
+        switch_element_racial(player_ptr, rc_ptr);
         break;
     default:
         break;

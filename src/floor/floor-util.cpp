@@ -48,7 +48,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
+void update_smell(floor_type *floor_ptr, player_type *player_ptr)
 {
     /* Create a table that controls the spread of scent */
     const int scent_adjust[5][5] = {
@@ -73,15 +73,15 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
     for (POSITION i = 0; i < 5; i++) {
         for (POSITION j = 0; j < 5; j++) {
             grid_type *g_ptr;
-            POSITION y = i + subject_ptr->y - 2;
-            POSITION x = j + subject_ptr->x - 2;
+            POSITION y = i + player_ptr->y - 2;
+            POSITION x = j + player_ptr->x - 2;
             if (!in_bounds(floor_ptr, y, x))
                 continue;
 
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!g_ptr->cave_has_flag(FF::MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
+            if (!g_ptr->cave_has_flag(FF::MOVE) && !is_closed_door(player_ptr, g_ptr->feat))
                 continue;
-            if (!player_has_los_bold(subject_ptr, y, x))
+            if (!player_has_los_bold(player_ptr, y, x))
                 continue;
             if (scent_adjust[i][j] == -1)
                 continue;
@@ -123,7 +123,7 @@ void wipe_o_list(floor_type *floor_ptr)
         if (!o_ptr->is_valid())
             continue;
 
-        if (!current_world_ptr->character_dungeon || preserve_mode) {
+        if (!w_ptr->character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
                 a_info[o_ptr->name1].cur_num = 0;
             }
@@ -177,22 +177,22 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
 
 /*!
  * @brief 現在のマップ名を返す /
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return マップ名の文字列参照ポインタ
  */
-concptr map_name(player_type *creature_ptr)
+concptr map_name(player_type *player_ptr)
 {
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest) && (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
         return _("クエスト", "Quest");
-    else if (creature_ptr->wild_mode)
+    else if (player_ptr->wild_mode)
         return _("地上", "Surface");
     else if (floor_ptr->inside_arena)
         return _("アリーナ", "Arena");
-    else if (creature_ptr->phase_out)
+    else if (player_ptr->phase_out)
         return _("闘技場", "Monster Arena");
-    else if (!floor_ptr->dun_level && creature_ptr->town_num)
-        return town_info[creature_ptr->town_num].name;
+    else if (!floor_ptr->dun_level && player_ptr->town_num)
+        return town_info[player_ptr->town_num].name;
     else
-        return d_info[creature_ptr->dungeon_idx].name.c_str();
+        return d_info[player_ptr->dungeon_idx].name.c_str();
 }

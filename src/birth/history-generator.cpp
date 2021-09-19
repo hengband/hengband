@@ -1,12 +1,12 @@
 ﻿#include "birth/history-generator.h"
 #include "birth/history.h"
-#include "player/player-race-types.h"
+#include "player-info/race-types.h"
 #include "system/player-type-definition.h"
 #include "util/buffer-shaper.h"
 
-static int get_history_chart(player_type *creature_ptr)
+static int get_history_chart(player_type *player_ptr)
 {
-    switch (creature_ptr->prace) {
+    switch (player_ptr->prace) {
     case player_race_type::AMBERITE:
         return 67;
     case player_race_type::HUMAN:
@@ -87,14 +87,14 @@ static int get_history_chart(player_type *creature_ptr)
 
 /*!
  * @brief 生い立ちを画面に表示しつつ、種族から社会的地位を決定する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 生い立ち情報のバッファ
  * @details 画面表示と社会的地位の決定が密結合していて分離できない
  */
-static void decide_social_class(player_type *creature_ptr, char *buf)
+static void decide_social_class(player_type *player_ptr, char *buf)
 {
     int social_class = randint1(4);
-    int chart = get_history_chart(creature_ptr);
+    int chart = get_history_chart(player_ptr);
     while (chart != 0) {
         int i = 0;
         int roll = randint1(100);
@@ -112,20 +112,20 @@ static void decide_social_class(player_type *creature_ptr, char *buf)
     else if (social_class < 1)
         social_class = 1;
 
-    creature_ptr->sc = (int16_t)social_class;
+    player_ptr->sc = (int16_t)social_class;
 }
 
 /*!
  * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
  */
-void get_history(player_type *creature_ptr)
+void get_history(player_type *player_ptr)
 {
     for (int i = 0; i < 4; i++)
-        creature_ptr->history[i][0] = '\0';
+        player_ptr->history[i][0] = '\0';
 
     char buf[240];
     buf[0] = '\0';
-    decide_social_class(creature_ptr, buf);
+    decide_social_class(player_ptr, buf);
 
     /* loop */
     char *s;
@@ -145,7 +145,7 @@ void get_history(player_type *creature_ptr)
             if (t[0] == 0)
                 break;
             else {
-                strcpy(creature_ptr->history[i], t);
+                strcpy(player_ptr->history[i], t);
                 t += strlen(t) + 1;
             }
         }

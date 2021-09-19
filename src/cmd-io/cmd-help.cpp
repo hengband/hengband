@@ -6,12 +6,12 @@
 /*!
  * @brief ヘルプを表示するコマンドのメインルーチン
  * Peruse the On-Line-Help
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  */
-void do_cmd_help(player_type *creature_ptr)
+void do_cmd_help(player_type *player_ptr)
 {
 	screen_save();
-	(void)show_file(creature_ptr, true, _("jhelp.hlp", "help.hlp"), nullptr, 0, 0);
+	(void)show_file(player_ptr, true, _("jhelp.hlp", "help.hlp"), nullptr, 0, 0);
 	screen_load();
 }

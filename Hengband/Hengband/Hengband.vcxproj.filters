@@ -80,8 +80,8 @@
     <ClCompile Include="..\..\src\player\race-info-table.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\mimic-info-table.cpp">
-      <Filter>player</Filter>
+    <ClCompile Include="..\..\src\player-info\mimic-info-table.cpp">
+      <Filter>player-info</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main\sound-definitions-table.cpp">
       <Filter>main</Filter>
@@ -389,8 +389,8 @@
     <ClCompile Include="..\..\src\room\rooms-pit-nest.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-class.cpp">
-      <Filter>player</Filter>
+    <ClCompile Include="..\..\src\player-info\class-info.cpp">
+      <Filter>player-info</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-damage.cpp">
       <Filter>player</Filter>
@@ -399,9 +399,6 @@
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-personality.cpp">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player\player-race.cpp">
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-sex.cpp">
@@ -693,9 +690,6 @@
       <Filter>cmd-item</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-item\cmd-read.cpp">
-      <Filter>cmd-item</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-smith.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.cpp">
@@ -2319,6 +2313,30 @@
     <ClCompile Include="..\..\src\object-use\throw-execution.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-smith.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\race-info.cpp">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-base\player-race.cpp">
+      <Filter>player-base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-base\player-class.cpp">
+      <Filter>player-base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\smith-info.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-stun.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2399,8 +2417,8 @@
     <ClInclude Include="..\..\src\player\race-info-table.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\mimic-info-table.h">
-      <Filter>player</Filter>
+    <ClInclude Include="..\..\src\player-info\mimic-info-table.h">
+      <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\sound-definitions-table.h">
       <Filter>main</Filter>
@@ -2735,8 +2753,8 @@
     <ClInclude Include="..\..\src\room\rooms-vault.h">
       <Filter>room</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-class.h">
-      <Filter>player</Filter>
+    <ClInclude Include="..\..\src\player-info\class-info.h">
+      <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-damage.h">
       <Filter>player</Filter>
@@ -2745,9 +2763,6 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-personality.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-race.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-sex.h">
@@ -3069,9 +3084,6 @@
       <Filter>cmd-item</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-read.h">
-      <Filter>cmd-item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd-item\cmd-smith.h">
       <Filter>cmd-item</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-usestaff.h">
@@ -3749,17 +3761,14 @@
     <ClInclude Include="..\..\src\player\player-personality-types.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-class-types.h">
-      <Filter>player</Filter>
+    <ClInclude Include="..\..\src\player-info\class-types.h">
+      <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spell-types.h">
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\monster-race-definition.h">
       <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-race-types.h">
-      <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-types.h">
       <Filter>realm</Filter>
@@ -4983,6 +4992,42 @@
     <ClInclude Include="..\..\src\util\enum-converter.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\load\savedata-old-flag-types.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\tr-flags.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-smith.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-tables.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\race-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\race-types.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-base\player-race.h">
+      <Filter>player-base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-base\player-class.h">
+      <Filter>player-base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-info.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\timed-effects.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-stun.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5198,6 +5243,12 @@
     </Filter>
     <Filter Include="avatar">
       <UniqueIdentifier>{953acb44-db6d-4bd8-bb0b-5692524bad93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-base">
+      <UniqueIdentifier>{0bd4660d-028e-44be-a5fe-c7cc7d3d00c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="timed-effect">
+      <UniqueIdentifier>{b9e618e1-f780-4f5f-9413-d0270ac53660}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

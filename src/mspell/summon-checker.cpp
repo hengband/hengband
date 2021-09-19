@@ -9,7 +9,7 @@
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
-#include "player/player-race.h"
+#include "player-info/race-info.h"
 #include "spell/summon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
@@ -17,7 +17,7 @@
 
 /*!
  * @brief 指定されたモンスター種族がsummon_specific_typeで指定された召喚条件に合うかどうかを返す
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 召喚条件が一致するならtrue
  * @details
  */

@@ -16,7 +16,7 @@
 /*!
  * @brief ベースアイテムの各情報を文字列化する /
  * Describe the kind
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 名称を返すバッファ参照ポインタ
  * @param dam ダメージダイス記述を返すバッファ参照ポインタ
  * @param wgt 重量記述を返すバッファ参照ポインタ

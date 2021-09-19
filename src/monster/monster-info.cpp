@@ -43,7 +43,7 @@ void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MFLAG2::FRIENDLY); }
 /*!
  * @brief モンスターが地形を踏破できるかどうかを返す
  * Check if monster can cross terrain
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param feat 地形ID
  * @param r_ptr モンスター種族構造体の参照ポインタ
  * @param mode オプション
@@ -119,7 +119,7 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
 /*!
  * @brief 指定された座標の地形をモンスターが踏破できるかどうかを返す
  * Strictly check if monster can enter the grid
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 地形のY座標
  * @param x 地形のX座標
  * @param r_ptr モンスター種族構造体の参照ポインタ
@@ -192,7 +192,7 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
 /*!
  * @brief モンスターがプレイヤーに対して敵意を抱くかどうかを返す
  * Check if this monster race has "hostile" alignment
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター情報構造体の参照ポインタ
  * @param pa_good プレイヤーの善傾向値
  * @param pa_evil プレイヤーの悪傾向値
@@ -293,7 +293,7 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
 
 /*!
  * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param m_name モンスター名を入力する配列
  */

@@ -50,14 +50,14 @@ char debug_savefile[1024];
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する
  * Hack -- Dump a character description file
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param name 出力ファイル名
  * @return エラーコード
  * @details
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player)
+errr file_character(player_type *player_ptr, concptr name, display_player_pf display_player)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
@@ -66,7 +66,7 @@ errr file_character(player_type *creature_ptr, concptr name, display_player_pf d
         char out_val[sizeof(buf) + 128];
         (void)fd_close(fd);
         (void)sprintf(out_val, _("現存するファイル %s に上書きしますか? ", "Replace existing file %s? "), buf);
-        if (get_check_strict(creature_ptr, out_val, CHECK_NO_HISTORY))
+        if (get_check_strict(player_ptr, out_val, CHECK_NO_HISTORY))
             fd = -1;
     }
 
@@ -80,7 +80,7 @@ errr file_character(player_type *creature_ptr, concptr name, display_player_pf d
         return -1;
     }
 
-    make_character_dump(creature_ptr, fff, display_player);
+    make_character_dump(player_ptr, fff, display_player);
     angband_fclose(fff);
     msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
     msg_print(nullptr);
@@ -194,20 +194,20 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
 
 /*!
  * @brief ファイル位置をシーク /
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fd ファイルディスクリプタ
  * @param where ファイルバイト位置
  * @param flag FALSEならば現ファイルを超えた位置へシーク時エラー、TRUEなら足りない間を0で埋め尽くす
  * @return エラーコード
  * @details
  */
-static errr counts_seek(player_type *creature_ptr, int fd, uint32_t where, bool flag)
+static errr counts_seek(player_type *player_ptr, int fd, uint32_t where, bool flag)
 {
     char temp1[128], temp2[128];
 #ifdef SAVEFILE_USE_UID
-    (void)sprintf(temp1, "%d.%s.%d%d%d", creature_ptr->player_uid, savefile_base, creature_ptr->pclass, creature_ptr->pseikaku, creature_ptr->age);
+    (void)sprintf(temp1, "%d.%s.%d%d%d", player_ptr->player_uid, savefile_base, player_ptr->pclass, player_ptr->pseikaku, player_ptr->age);
 #else
-    (void)sprintf(temp1, "%s.%d%d%d", savefile_base, creature_ptr->pclass, creature_ptr->pseikaku, creature_ptr->age);
+    (void)sprintf(temp1, "%s.%d%d%d", savefile_base, player_ptr->pclass, player_ptr->pseikaku, player_ptr->age);
 #endif
     for (int i = 0; temp1[i]; i++)
         temp1[i] ^= (i + 1) * 63;
@@ -238,19 +238,19 @@ static errr counts_seek(player_type *creature_ptr, int fd, uint32_t where, bool 
 
 /*!
  * @brief ファイル位置を読み込む
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param where ファイルバイト位置
  * @return エラーコード
  * @details
  */
-uint32_t counts_read(player_type *creature_ptr, int where)
+uint32_t counts_read(player_type *player_ptr, int where)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
     int fd = fd_open(buf, O_RDONLY);
 
     uint32_t count = 0;
-    if (counts_seek(creature_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t)))
+    if (counts_seek(player_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t)))
         count = 0;
 
     (void)fd_close(fd);
@@ -260,35 +260,35 @@ uint32_t counts_read(player_type *creature_ptr, int where)
 
 /*!
  * @brief ファイル位置に書き込む /
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param where ファイルバイト位置
  * @param count 書き込む値
  * @return エラーコード
  * @details
  */
-errr counts_write(player_type *creature_ptr, int where, uint32_t count)
+errr counts_write(player_type *player_ptr, int where, uint32_t count)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 
-    safe_setuid_grab(creature_ptr);
+    safe_setuid_grab(player_ptr);
     int fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
-        safe_setuid_grab(creature_ptr);
+        safe_setuid_grab(player_ptr);
         fd = fd_make(buf, 0644);
         safe_setuid_drop();
     }
 
-    safe_setuid_grab(creature_ptr);
+    safe_setuid_grab(player_ptr);
     errr err = fd_lock(fd, F_WRLCK);
     safe_setuid_drop();
     if (err)
         return 1;
 
-    counts_seek(creature_ptr, fd, where, true);
+    counts_seek(player_ptr, fd, where, true);
     fd_write(fd, (char *)(&count), sizeof(uint32_t));
-    safe_setuid_grab(creature_ptr);
+    safe_setuid_grab(player_ptr);
     err = fd_lock(fd, F_UNLCK);
     safe_setuid_drop();
 

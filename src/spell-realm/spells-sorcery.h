@@ -1,4 +1,4 @@
 ﻿#pragma once
 
 struct player_type;
-bool alchemy(player_type *caster_ptr);
+bool alchemy(player_type *player_ptr);

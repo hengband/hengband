@@ -10,20 +10,20 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-static bool effect_monster_away_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_away_resist(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flagsr & RFR_RES_TELE) == 0) return false;
 
 	if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flagsr & RFR_RES_ALL))
 	{
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+		if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
 		em_ptr->note = _("には効果がなかった。", " is unaffected.");
 		return true;
 	}
 
 	if (em_ptr->r_ptr->level > randint1(100))
 	{
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+		if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
 		em_ptr->note = _("には耐性がある！", " resists!");
 		return true;
 	}
@@ -32,7 +32,7 @@ static bool effect_monster_away_resist(player_type *caster_ptr, effect_monster_t
 }
 
 
-process_result effect_monster_away_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_away_undead(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
@@ -41,11 +41,11 @@ process_result effect_monster_away_undead(player_type *caster_ptr, effect_monste
 		return PROCESS_CONTINUE;
 	}
 
-	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
+	bool resists_tele = effect_monster_away_resist(player_ptr, em_ptr);
 	if (!resists_tele)
 	{
 		if (em_ptr->seen) em_ptr->obvious = true;
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
 			em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 		em_ptr->do_dist = em_ptr->dam;
@@ -56,7 +56,7 @@ process_result effect_monster_away_undead(player_type *caster_ptr, effect_monste
 }
 
 
-process_result effect_monster_away_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_away_evil(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
@@ -65,11 +65,11 @@ process_result effect_monster_away_evil(player_type *caster_ptr, effect_monster_
 		return PROCESS_CONTINUE;
 	}
 
-	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
+	bool resists_tele = effect_monster_away_resist(player_ptr, em_ptr);
 	if (!resists_tele)
 	{
 		if (em_ptr->seen) em_ptr->obvious = true;
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
 			em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
 
 		em_ptr->do_dist = em_ptr->dam;
@@ -80,9 +80,9 @@ process_result effect_monster_away_evil(player_type *caster_ptr, effect_monster_
 }
 
 
-process_result effect_monster_away_all(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_away_all(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
+	bool resists_tele = effect_monster_away_resist(player_ptr, em_ptr);
 	if (!resists_tele)
 	{
 		if (em_ptr->seen) em_ptr->obvious = true;
@@ -95,7 +95,7 @@ process_result effect_monster_away_all(player_type *caster_ptr, effect_monster_t
 }
 
 
-process_result effect_monster_turn_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_turn_undead(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
@@ -106,7 +106,7 @@ process_result effect_monster_turn_undead(player_type *caster_ptr, effect_monste
 
 	if (em_ptr->seen) em_ptr->obvious = true;
 
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+	if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 	em_ptr->do_fear = damroll(3, (em_ptr->dam / 2)) + 1;
 	if (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)
@@ -121,7 +121,7 @@ process_result effect_monster_turn_undead(player_type *caster_ptr, effect_monste
 }
 
 
-process_result effect_monster_turn_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_turn_evil(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
@@ -132,7 +132,7 @@ process_result effect_monster_turn_evil(player_type *caster_ptr, effect_monster_
 
 	if (em_ptr->seen) em_ptr->obvious = true;
 
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
+	if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
 
 	em_ptr->do_fear = damroll(3, (em_ptr->dam / 2)) + 1;
 	if (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)
@@ -166,7 +166,7 @@ process_result effect_monster_turn_all(effect_monster_type *em_ptr)
 }
 
 
-process_result effect_monster_disp_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_disp_undead(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
@@ -177,7 +177,7 @@ process_result effect_monster_disp_undead(player_type *caster_ptr, effect_monste
 
 	if (em_ptr->seen) em_ptr->obvious = true;
 
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+	if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 	em_ptr->note = _("は身震いした。", " shudders.");
@@ -186,7 +186,7 @@ process_result effect_monster_disp_undead(player_type *caster_ptr, effect_monste
 }
 
 
-process_result effect_monster_disp_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_disp_evil(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
@@ -197,7 +197,7 @@ process_result effect_monster_disp_evil(player_type *caster_ptr, effect_monster_
 
 	if (em_ptr->seen) em_ptr->obvious = true;
 
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
+	if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
@@ -205,7 +205,7 @@ process_result effect_monster_disp_evil(player_type *caster_ptr, effect_monster_
 }
 
 
-process_result effect_monster_disp_good(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_disp_good(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_GOOD)) == 0)
 	{
@@ -216,7 +216,7 @@ process_result effect_monster_disp_good(player_type *caster_ptr, effect_monster_
 
 	if (em_ptr->seen) em_ptr->obvious = true;
 
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
+	if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
@@ -241,7 +241,7 @@ process_result effect_monster_disp_living(effect_monster_type *em_ptr)
 }
 
 
-process_result effect_monster_disp_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_disp_demon(player_type *player_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_DEMON)) == 0)
 	{
@@ -252,7 +252,7 @@ process_result effect_monster_disp_demon(player_type *caster_ptr, effect_monster
 
 	if (em_ptr->seen) em_ptr->obvious = true;
 
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
+	if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");

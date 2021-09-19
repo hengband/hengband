@@ -20,25 +20,25 @@
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーの腹を減らす
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void starve_player(player_type *creature_ptr)
+void starve_player(player_type *player_ptr)
 {
-    if (creature_ptr->phase_out)
+    if (player_ptr->phase_out)
         return;
 
-    if (creature_ptr->food >= PY_FOOD_MAX) {
-        (void)set_food(creature_ptr, creature_ptr->food - 100);
-    } else if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 5))) {
-        int digestion = SPEED_TO_ENERGY(creature_ptr->pspeed);
-        if (creature_ptr->regenerate)
+    if (player_ptr->food >= PY_FOOD_MAX) {
+        (void)set_food(player_ptr, player_ptr->food - 100);
+    } else if (!(w_ptr->game_turn % (TURNS_PER_TICK * 5))) {
+        int digestion = SPEED_TO_ENERGY(player_ptr->pspeed);
+        if (player_ptr->regenerate)
             digestion += 20;
-        if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
+        if (player_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
             digestion += 20;
-        if (creature_ptr->cursed.has(TRC::FAST_DIGEST))
+        if (player_ptr->cursed.has(TRC::FAST_DIGEST))
             digestion += 30;
 
-        if (creature_ptr->slow_digest)
+        if (player_ptr->slow_digest)
             digestion -= 5;
 
         if (digestion < 1)
@@ -46,22 +46,22 @@ void starve_player(player_type *creature_ptr)
         if (digestion > 100)
             digestion = 100;
 
-        (void)set_food(creature_ptr, creature_ptr->food - digestion);
+        (void)set_food(player_ptr, player_ptr->food - digestion);
     }
 
-    if ((creature_ptr->food >= PY_FOOD_FAINT))
+    if ((player_ptr->food >= PY_FOOD_FAINT))
         return;
 
-    if (!creature_ptr->paralyzed && (randint0(100) < 10)) {
+    if (!player_ptr->paralyzed && (randint0(100) < 10)) {
         msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
-        disturb(creature_ptr, true, true);
-        (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 1 + randint0(5));
+        disturb(player_ptr, true, true);
+        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 1 + randint0(5));
     }
 
-    if (creature_ptr->food < PY_FOOD_STARVE) {
-        HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
-        if (!is_invuln(creature_ptr))
-            take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"));
+    if (player_ptr->food < PY_FOOD_STARVE) {
+        HIT_POINT dam = (PY_FOOD_STARVE - player_ptr->food) / 10;
+        if (!is_invuln(player_ptr))
+            take_hit(player_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"));
     }
 }
 
@@ -91,21 +91,21 @@ void starve_player(player_type *creature_ptr)
  * game turns, or 500/(100/5) = 25 player turns (if nothing else is
  * affecting the player speed).\n
  */
-bool set_food(player_type *creature_ptr, TIME_EFFECT v)
+bool set_food(player_type *player_ptr, TIME_EFFECT v)
 {
     int old_aux, new_aux;
 
     bool notice = false;
     v = (v > 20000) ? 20000 : (v < 0) ? 0 : v;
-    if (creature_ptr->food < PY_FOOD_FAINT) {
+    if (player_ptr->food < PY_FOOD_FAINT) {
         old_aux = 0;
-    } else if (creature_ptr->food < PY_FOOD_WEAK) {
+    } else if (player_ptr->food < PY_FOOD_WEAK) {
         old_aux = 1;
-    } else if (creature_ptr->food < PY_FOOD_ALERT) {
+    } else if (player_ptr->food < PY_FOOD_ALERT) {
         old_aux = 2;
-    } else if (creature_ptr->food < PY_FOOD_FULL) {
+    } else if (player_ptr->food < PY_FOOD_FULL) {
         old_aux = 3;
-    } else if (creature_ptr->food < PY_FOOD_MAX) {
+    } else if (player_ptr->food < PY_FOOD_MAX) {
         old_aux = 4;
     } else {
         old_aux = 5;
@@ -126,13 +126,13 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
     }
 
     if (old_aux < 1 && new_aux > 0)
-        chg_virtue(creature_ptr, V_PATIENCE, 2);
+        chg_virtue(player_ptr, V_PATIENCE, 2);
     else if (old_aux < 3 && (old_aux != new_aux))
-        chg_virtue(creature_ptr, V_PATIENCE, 1);
+        chg_virtue(player_ptr, V_PATIENCE, 1);
     if (old_aux == 2)
-        chg_virtue(creature_ptr, V_TEMPERANCE, 1);
+        chg_virtue(player_ptr, V_TEMPERANCE, 1);
     if (old_aux == 0)
-        chg_virtue(creature_ptr, V_TEMPERANCE, -1);
+        chg_virtue(player_ptr, V_TEMPERANCE, -1);
 
     if (new_aux > old_aux) {
         switch (new_aux) {
@@ -151,9 +151,9 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 
         case 5:
             msg_print(_("食べ過ぎだ！", "You have gorged yourself!"));
-            chg_virtue(creature_ptr, V_HARMONY, -1);
-            chg_virtue(creature_ptr, V_PATIENCE, -1);
-            chg_virtue(creature_ptr, V_TEMPERANCE, -2);
+            chg_virtue(player_ptr, V_HARMONY, -1);
+            chg_virtue(player_ptr, V_PATIENCE, -1);
+            chg_virtue(player_ptr, V_TEMPERANCE, -2);
             break;
         }
 
@@ -180,22 +180,22 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
             break;
         }
 
-        if (creature_ptr->wild_mode && (new_aux < 2)) {
-            change_wild_mode(creature_ptr, false);
+        if (player_ptr->wild_mode && (new_aux < 2)) {
+            change_wild_mode(player_ptr, false);
         }
 
         notice = true;
     }
 
-    creature_ptr->food = v;
+    player_ptr->food = v;
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, false, false);
-    creature_ptr->update |= (PU_BONUS);
-    creature_ptr->redraw |= (PR_HUNGER);
-    handle_stuff(creature_ptr);
+        disturb(player_ptr, false, false);
+    player_ptr->update |= (PU_BONUS);
+    player_ptr->redraw |= (PR_HUNGER);
+    handle_stuff(player_ptr);
 
     return true;
 }

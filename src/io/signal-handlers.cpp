@@ -63,7 +63,7 @@ static void handle_signal_suspend(int sig)
 static void handle_signal_simple(int sig)
 {
     (void)signal(sig, SIG_IGN);
-    if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
+    if (!w_ptr->character_generated || w_ptr->character_saved)
         quit(nullptr);
 
     signal_count++;
@@ -120,7 +120,7 @@ static void handle_signal_abort(int sig)
     term_get_size(&wid, &hgt);
 
     (void)signal(sig, SIG_IGN);
-    if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
+    if (!w_ptr->character_generated || w_ptr->character_saved)
         quit(nullptr);
 
     forget_lite(p_ptr->current_floor_ptr);

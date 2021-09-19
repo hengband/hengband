@@ -10,9 +10,9 @@
 #include "monster-floor/place-monster-types.h"
 #include "object/object-kind-hook.h"
 #include "player-attack/player-attack.h"
+#include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player/player-damage.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
 #include "player/player-status-flags.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-beam.h"
@@ -42,20 +42,20 @@
 
 /*!
  * @brief 自然領域魔法の各処理を行う
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
-concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_nature_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
     bool info = (mode == SPELL_INFO) ? true : false;
     bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
     case 0:
@@ -71,7 +71,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_radius(rad);
 
             if (cast) {
-                detect_monsters_normal(caster_ptr, rad);
+                detect_monsters_normal(player_ptr, rad);
             }
         }
         break;
@@ -93,10 +93,10 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (cast) {
                 project_length = range;
 
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(caster_ptr, GF_ELEC, dir, damroll(dice, sides));
+                fire_beam(player_ptr, GF_ELEC, dir, damroll(dice, sides));
             }
         }
         break;
@@ -114,9 +114,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_radius(rad);
 
             if (cast) {
-                detect_traps(caster_ptr, rad, true);
-                detect_doors(caster_ptr, rad);
-                detect_stairs(caster_ptr, rad);
+                detect_traps(player_ptr, rad, true);
+                detect_doors(player_ptr, rad);
+                detect_stairs(player_ptr, rad);
             }
         }
         break;
@@ -136,7 +136,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
                 /* Drop the object from heaven */
-                (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
+                (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
             }
         }
         break;
@@ -156,11 +156,11 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                lite_area(caster_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, damroll(dice, sides), rad);
 
-                if (player_race_life(caster_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(caster_ptr, TR_VUL_LITE) && !has_resist_lite(caster_ptr)) {
+                if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(player_ptr, TR_VUL_LITE) && !has_resist_lite(player_ptr)) {
                     msg_print(_("日の光があなたの肉体を焦がした！", "The daylight scorches your flesh!"));
-                    take_hit(caster_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"));
+                    take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"));
                 }
             }
         }
@@ -179,10 +179,10 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                charm_animal(caster_ptr, dir, plev);
+                charm_animal(player_ptr, dir, plev);
             }
         }
         break;
@@ -202,9 +202,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_cold(caster_ptr, randint1(base) + base, false);
-                set_oppose_fire(caster_ptr, randint1(base) + base, false);
-                set_oppose_elec(caster_ptr, randint1(base) + base, false);
+                set_oppose_cold(player_ptr, randint1(base) + base, false);
+                set_oppose_fire(player_ptr, randint1(base) + base, false);
+                set_oppose_elec(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -223,9 +223,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_heal(dice, sides, 0);
 
             if (cast) {
-                hp_player(caster_ptr, damroll(dice, sides));
-                set_cut(caster_ptr, 0);
-                set_poisoned(caster_ptr, 0);
+                hp_player(player_ptr, damroll(dice, sides));
+                set_cut(player_ptr, 0);
+                set_poisoned(player_ptr, 0);
             }
         }
         break;
@@ -245,10 +245,10 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, base);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                wall_to_mud(caster_ptr, dir, 20 + randint1(30));
+                wall_to_mud(player_ptr, dir, 20 + randint1(30));
             }
         }
         break;
@@ -267,9 +267,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_COLD, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_COLD, dir, damroll(dice, sides));
             }
         }
         break;
@@ -289,11 +289,11 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_radius(MAX(rad1, rad2));
 
             if (cast) {
-                map_area(caster_ptr, rad1);
-                detect_traps(caster_ptr, rad2, true);
-                detect_doors(caster_ptr, rad2);
-                detect_stairs(caster_ptr, rad2);
-                detect_monsters_normal(caster_ptr, rad2);
+                map_area(player_ptr, rad1);
+                detect_traps(player_ptr, rad2, true);
+                detect_doors(player_ptr, rad2);
+                detect_stairs(player_ptr, rad2);
+                detect_monsters_normal(player_ptr, rad2);
             }
         }
         break;
@@ -312,9 +312,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_FIRE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_FIRE, dir, damroll(dice, sides));
             }
         }
         break;
@@ -333,10 +333,10 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
                 msg_print(_("太陽光線が現れた。", "A line of sunlight appears."));
-                lite_line(caster_ptr, dir, damroll(6, 8));
+                lite_line(player_ptr, dir, damroll(6, 8));
             }
         }
         break;
@@ -351,7 +351,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (info)
                 return info_power(power);
             if (cast)
-                slow_monsters(caster_ptr, plev);
+                slow_monsters(player_ptr, plev);
         }
         break;
 
@@ -363,7 +363,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!(summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET)))) {
+                if (!(summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET)))) {
                     msg_print(_("動物は現れなかった。", "No animals arrive."));
                 }
                 break;
@@ -381,7 +381,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (info)
                 return info_heal(0, 0, heal);
             if (cast)
-                (void)cure_critical_wounds(caster_ptr, heal);
+                (void)cure_critical_wounds(player_ptr, heal);
         }
         break;
 
@@ -393,7 +393,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                stair_creation(caster_ptr);
+                stair_creation(player_ptr);
             }
         }
         break;
@@ -412,7 +412,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, sides);
 
             if (cast) {
-                set_shield(caster_ptr, randint1(sides) + base, false);
+                set_shield(player_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -432,11 +432,11 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_acid(caster_ptr, randint1(base) + base, false);
-                set_oppose_elec(caster_ptr, randint1(base) + base, false);
-                set_oppose_fire(caster_ptr, randint1(base) + base, false);
-                set_oppose_cold(caster_ptr, randint1(base) + base, false);
-                set_oppose_pois(caster_ptr, randint1(base) + base, false);
+                set_oppose_acid(player_ptr, randint1(base) + base, false);
+                set_oppose_elec(player_ptr, randint1(base) + base, false);
+                set_oppose_fire(player_ptr, randint1(base) + base, false);
+                set_oppose_cold(player_ptr, randint1(base) + base, false);
+                set_oppose_pois(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -449,7 +449,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                tree_creation(caster_ptr, caster_ptr->y, caster_ptr->x);
+                tree_creation(player_ptr, player_ptr->y, player_ptr->x);
             }
         }
         break;
@@ -465,7 +465,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (info)
                 return info_power(power);
             if (cast)
-                charm_animals(caster_ptr, power);
+                charm_animals(player_ptr, power);
         }
         break;
 
@@ -477,7 +477,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, false))
+                if (!identify_fully(player_ptr, false))
                     return nullptr;
             }
         }
@@ -491,7 +491,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                wall_stone(caster_ptr);
+                wall_stone(player_ptr);
             }
         }
         break;
@@ -504,7 +504,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!rustproof(caster_ptr))
+                if (!rustproof(player_ptr))
                     return nullptr;
             }
         }
@@ -524,7 +524,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_radius(rad);
 
             if (cast) {
-                earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, rad, 0);
+                earthquake(player_ptr, player_ptr->y, player_ptr->x, rad, 0);
             }
         }
         break;
@@ -535,7 +535,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         if (desc)
             return _("全方向に向かって攻撃する。", "Attacks all adjacent monsters.");
         if (cast)
-            massacre(caster_ptr);
+            massacre(player_ptr);
         break;
 
     case 26:
@@ -552,10 +552,10 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_COLD, dir, dam, rad);
+                fire_ball(player_ptr, GF_COLD, dir, dam, rad);
             }
         }
         break;
@@ -574,9 +574,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball(caster_ptr, GF_ELEC, dir, dam, rad);
+                fire_ball(player_ptr, GF_ELEC, dir, dam, rad);
                 break;
             }
         }
@@ -596,9 +596,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball(caster_ptr, GF_WATER, dir, dam, rad);
+                fire_ball(player_ptr, GF_WATER, dir, dam, rad);
             }
         }
         break;
@@ -618,14 +618,14 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam / 2);
 
             if (cast) {
-                fire_ball(caster_ptr, GF_LITE, 0, dam, rad);
-                chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
-                chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
-                wiz_lite(caster_ptr, false);
+                fire_ball(player_ptr, GF_LITE, 0, dam, rad);
+                chg_virtue(player_ptr, V_KNOWLEDGE, 1);
+                chg_virtue(player_ptr, V_ENLIGHTEN, 1);
+                wiz_lite(player_ptr, false);
 
-                if (player_race_life(caster_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(caster_ptr, TR_VUL_LITE) && !has_resist_lite(caster_ptr)) {
+                if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(player_ptr, TR_VUL_LITE) && !has_resist_lite(player_ptr)) {
                     msg_print(_("日光があなたの肉体を焦がした！", "The sunlight scorches your flesh!"));
-                    take_hit(caster_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"));
+                    take_hit(player_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"));
                 }
             }
         }
@@ -639,7 +639,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                brand_weapon(caster_ptr, randint0(2));
+                brand_weapon(player_ptr, randint0(2));
             }
         }
         break;
@@ -661,9 +661,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return format("%s%d+%d", KWD_DAM, d_dam, b_dam / 2);
 
             if (cast) {
-                dispel_monsters(caster_ptr, d_dam);
-                earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, q_rad, 0);
-                project(caster_ptr, 0, b_rad, caster_ptr->y, caster_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
+                dispel_monsters(player_ptr, d_dam);
+                earthquake(player_ptr, player_ptr->y, player_ptr->x, q_rad, 0);
+                project(player_ptr, 0, b_rad, player_ptr->y, player_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;

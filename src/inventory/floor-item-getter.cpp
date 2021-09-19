@@ -36,21 +36,21 @@
 
 /*!
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_floor_item_tag_aux(player_type *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if (!fis_ptr->floor || (*fis_ptr->cp >= 0))
         return false;
 
     if (*prev_tag && command_cmd) {
         fis_ptr->floor_num
-            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
-        if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
+            = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+        if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
             command_cmd = 0;
             return true;
@@ -60,7 +60,7 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
         return false;
     }
 
-    if (!item_tester.okay(&owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)]) && ((fis_ptr->mode & USE_FULL) == 0))
+    if (!item_tester.okay(&player_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)]) && ((fis_ptr->mode & USE_FULL) == 0))
         return false;
 
     command_cmd = 0;
@@ -69,18 +69,18 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
 
 /*!
  * @brief インベントリのアイテムにタグ付けを試みる
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool get_floor_item_tag_inventory(player_type *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     bool flag = false;
     item_use_flag use_flag = (*fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
 
-    flag |= !get_tag(owner_ptr, &fis_ptr->k, *prev_tag, use_flag, item_tester);
-    flag |= !get_item_okay(owner_ptr, fis_ptr->k, item_tester);
+    flag |= !get_tag(player_ptr, &fis_ptr->k, *prev_tag, use_flag, item_tester);
+    flag |= !get_item_okay(player_ptr, fis_ptr->k, item_tester);
 
     if (fis_ptr->k < INVEN_MAIN_HAND)
         flag |= !fis_ptr->inven;
@@ -99,21 +99,21 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
 
 /*!
  * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_floor_item_tag_inventory(player_type *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK))
         && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_MAIN_HAND) || (*fis_ptr->cp >= INVEN_TOTAL)))
         return false;
 
     if ((*prev_tag != '\0') && command_cmd)
-        return get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag, item_tester);
+        return get_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
 
-    if (get_item_okay(owner_ptr, *fis_ptr->cp, item_tester)) {
+    if (get_item_okay(player_ptr, *fis_ptr->cp, item_tester)) {
         command_cmd = 0;
         return true;
     }
@@ -123,12 +123,12 @@ static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis
 
 /*!
  * @brief 床上アイテムにタグ付けがされているかの調査処理 (のはず)
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_floor_item_tag(player_type *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if (!repeat_pull(fis_ptr->cp))
         return false;
@@ -138,18 +138,18 @@ static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char
         return true;
     }
 
-    if (check_floor_item_tag_aux(owner_ptr, fis_ptr, prev_tag, item_tester))
+    if (check_floor_item_tag_aux(player_ptr, fis_ptr, prev_tag, item_tester))
         return true;
 
-    return check_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag, item_tester);
+    return check_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
 }
 
 /*!
  * @brief インベントリ内のアイテムが妥当かを判定する
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
-static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
+static void test_inventory_floor(player_type *player_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
 {
     if (!fis_ptr->inven) {
         fis_ptr->i2 = -1;
@@ -160,16 +160,16 @@ static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr, cons
         return;
 
     for (int i = 0; i < INVEN_PACK; i++)
-        if (item_tester.okay(&owner_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
+        if (item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_inven++;
 }
 
 /*!
  * @brief 装備品がが妥当かを判定する
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
-static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
+static void test_equipment_floor(player_type *player_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
 {
     if (!fis_ptr->equip) {
         fis_ptr->e2 = -1;
@@ -180,8 +180,8 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr, cons
         return;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
-        if (owner_ptr->select_ring_slot ? is_ring_slot(i)
-                                        : item_tester.okay(&owner_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
+        if (player_ptr->select_ring_slot ? is_ring_slot(i)
+                                        : item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_equip++;
 }
 
@@ -194,51 +194,51 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr, cons
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester& item_tester)
+bool get_item_floor(player_type *player_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     fis_type tmp_fis;
     fis_type *fis_ptr = initialize_fis_type(&tmp_fis, cp, mode);
     static char prev_tag = '\0';
-    if (check_floor_item_tag(owner_ptr, fis_ptr, &prev_tag, item_tester))
+    if (check_floor_item_tag(player_ptr, fis_ptr, &prev_tag, item_tester))
         return true;
 
     msg_print(nullptr);
-    handle_stuff(owner_ptr);
-    test_inventory_floor(owner_ptr, fis_ptr, item_tester);
+    handle_stuff(player_ptr);
+    test_inventory_floor(player_ptr, fis_ptr, item_tester);
     fis_ptr->done = false;
     fis_ptr->item = false;
     fis_ptr->i1 = 0;
     fis_ptr->i2 = INVEN_PACK - 1;
-    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i1, item_tester)))
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(player_ptr, fis_ptr->i1, item_tester)))
         fis_ptr->i1++;
 
-    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i2, item_tester)))
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(player_ptr, fis_ptr->i2, item_tester)))
         fis_ptr->i2--;
 
     fis_ptr->e1 = INVEN_MAIN_HAND;
     fis_ptr->e2 = INVEN_TOTAL - 1;
-    test_equipment_floor(owner_ptr, fis_ptr, item_tester);
-    if (has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
+    test_equipment_floor(player_ptr, fis_ptr, item_tester);
+    if (has_two_handed_weapons(player_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
         fis_ptr->max_equip++;
 
-    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e1, item_tester)))
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(player_ptr, fis_ptr->e1, item_tester)))
         fis_ptr->e1++;
 
-    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e2, item_tester)))
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(player_ptr, fis_ptr->e2, item_tester)))
         fis_ptr->e2--;
 
-    if (fis_ptr->equip && has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (can_attack_with_main_hand(owner_ptr)) {
+    if (fis_ptr->equip && has_two_handed_weapons(player_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
+        if (can_attack_with_main_hand(player_ptr)) {
             if (fis_ptr->e2 < INVEN_SUB_HAND)
                 fis_ptr->e2 = INVEN_SUB_HAND;
-        } else if (can_attack_with_sub_hand(owner_ptr))
+        } else if (can_attack_with_sub_hand(player_ptr))
             fis_ptr->e1 = INVEN_MAIN_HAND;
     }
 
     fis_ptr->floor_num = 0;
     if (fis_ptr->floor)
         fis_ptr->floor_num
-            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+            = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
 
     if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2))
         fis_ptr->allow_inven = true;
@@ -291,30 +291,30 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         }
 
         if ((command_wrk == (USE_EQUIP) && ni && !ne) || (command_wrk == (USE_INVEN) && !ni && ne)) {
-            toggle_inventory_equipment(owner_ptr);
+            toggle_inventory_equipment(player_ptr);
             fis_ptr->toggle = !fis_ptr->toggle;
         }
 
-        owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
-        handle_stuff(owner_ptr);
+        player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+        handle_stuff(player_ptr);
         COMMAND_CODE get_item_label = 0;
         if (command_wrk == USE_INVEN) {
             fis_ptr->n1 = I2A(fis_ptr->i1);
             fis_ptr->n2 = I2A(fis_ptr->i2);
             if (command_see)
-                get_item_label = show_inventory(owner_ptr, fis_ptr->menu_line, fis_ptr->mode, item_tester);
+                get_item_label = show_inventory(player_ptr, fis_ptr->menu_line, fis_ptr->mode, item_tester);
         } else if (command_wrk == USE_EQUIP) {
             fis_ptr->n1 = I2A(fis_ptr->e1 - INVEN_MAIN_HAND);
             fis_ptr->n2 = I2A(fis_ptr->e2 - INVEN_MAIN_HAND);
             if (command_see)
-                get_item_label = show_equipment(owner_ptr, fis_ptr->menu_line, mode, item_tester);
+                get_item_label = show_equipment(player_ptr, fis_ptr->menu_line, mode, item_tester);
         } else if (command_wrk == USE_FLOOR) {
             int j = fis_ptr->floor_top;
             fis_ptr->k = MIN(fis_ptr->floor_top + 23, fis_ptr->floor_num) - 1;
             fis_ptr->n1 = I2A(j - fis_ptr->floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
             fis_ptr->n2 = I2A(fis_ptr->k - fis_ptr->floor_top);
             if (command_see)
-                get_item_label = show_floor_items(owner_ptr, fis_ptr->menu_line, owner_ptr->y, owner_ptr->x, &fis_ptr->min_width, item_tester);
+                get_item_label = show_floor_items(player_ptr, fis_ptr->menu_line, player_ptr->y, player_ptr->x, &fis_ptr->min_width, item_tester);
         }
 
         if (command_wrk == USE_INVEN) {
@@ -549,12 +549,12 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 if (command_wrk == USE_FLOOR)
                     *cp = -get_item_label;
                 else {
-                    if (!get_item_okay(owner_ptr, get_item_label, item_tester)) {
+                    if (!get_item_okay(player_ptr, get_item_label, item_tester)) {
                         bell();
                         break;
                     }
 
-                    if (!get_item_allow(owner_ptr, get_item_label)) {
+                    if (!get_item_allow(player_ptr, get_item_label)) {
                         fis_ptr->done = true;
                         break;
                     }
@@ -603,7 +603,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '\n':
         case '\r':
         case '+': {
-            grid_type *g_ptr = &owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
+            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
             if (command_wrk != (USE_FLOOR))
                 break;
 
@@ -612,13 +612,13 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
             const auto next_o_idx = fis_ptr->floor_list[1];
             while (g_ptr->o_idx_list.front() != next_o_idx)
-                g_ptr->o_idx_list.rotate(owner_ptr->current_floor_ptr);
+                g_ptr->o_idx_list.rotate(player_ptr->current_floor_ptr);
 
-            owner_ptr->window_flags |= PW_FLOOR_ITEM_LIST;
-            window_stuff(owner_ptr);
+            player_ptr->window_flags |= PW_FLOOR_ITEM_LIST;
+            window_stuff(player_ptr);
 
             fis_ptr->floor_num
-                = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+                = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
             if (command_see) {
                 screen_load();
                 screen_save();
@@ -666,7 +666,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             if (fis_ptr->floor_num == 1) {
                 if ((command_wrk == (USE_FLOOR)) || (!carry_query_flag)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[0];
-                    if (!get_item_allow(owner_ptr, fis_ptr->k)) {
+                    if (!get_item_allow(player_ptr, fis_ptr->k)) {
                         fis_ptr->done = true;
                         break;
                     }
@@ -697,7 +697,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '8':
         case '9': {
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester)) {
+                if (!get_tag(player_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester)) {
                     bell();
                     break;
                 }
@@ -707,12 +707,12 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     break;
                 }
 
-                if (!get_item_okay(owner_ptr, fis_ptr->k, item_tester)) {
+                if (!get_item_okay(player_ptr, fis_ptr->k, item_tester)) {
                     bell();
                     break;
                 }
             } else {
-                if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                 } else {
                     bell();
@@ -720,7 +720,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 }
             }
 
-            if (!get_item_allow(owner_ptr, fis_ptr->k)) {
+            if (!get_item_allow(player_ptr, fis_ptr->k)) {
                 fis_ptr->done = true;
                 break;
             }
@@ -744,7 +744,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             bool tag_not_found = false;
 
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester))
+                if (!get_tag(player_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester))
                     tag_not_found = true;
                 else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip)
                     tag_not_found = true;
@@ -752,7 +752,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 if (!tag_not_found)
                     fis_ptr->cur_tag = fis_ptr->which;
             } else {
-                if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                     fis_ptr->cur_tag = fis_ptr->which;
                 } else
@@ -768,14 +768,14 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     else if (which == ')')
                         fis_ptr->k = fis_ptr->i2;
                     else
-                        fis_ptr->k = label_to_inventory(owner_ptr, which);
+                        fis_ptr->k = label_to_inventory(player_ptr, which);
                 } else if (command_wrk == (USE_EQUIP)) {
                     if (which == '(')
                         fis_ptr->k = fis_ptr->e1;
                     else if (which == ')')
                         fis_ptr->k = fis_ptr->e2;
                     else
-                        fis_ptr->k = label_to_equipment(owner_ptr, which);
+                        fis_ptr->k = label_to_equipment(player_ptr, which);
                 } else if (command_wrk == USE_FLOOR) {
                     if (which == '(')
                         fis_ptr->k = 0;
@@ -792,18 +792,18 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 }
             }
 
-            if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, fis_ptr->k, item_tester)) {
+            if ((command_wrk != USE_FLOOR) && !get_item_okay(player_ptr, fis_ptr->k, item_tester)) {
                 bell();
                 break;
             }
 
             auto ver = tag_not_found && isupper(fis_ptr->which);
-            if (ver && !verify(owner_ptr, _("本当に", "Try"), fis_ptr->k)) {
+            if (ver && !verify(player_ptr, _("本当に", "Try"), fis_ptr->k)) {
                 fis_ptr->done = true;
                 break;
             }
 
-            if (!get_item_allow(owner_ptr, fis_ptr->k)) {
+            if (!get_item_allow(player_ptr, fis_ptr->k)) {
                 fis_ptr->done = true;
                 break;
             }
@@ -822,10 +822,10 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     }
 
     if (fis_ptr->toggle)
-        toggle_inventory_equipment(owner_ptr);
+        toggle_inventory_equipment(player_ptr);
 
-    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
-    handle_stuff(owner_ptr);
+    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    handle_stuff(player_ptr);
     prt("", 0, 0);
     if (fis_ptr->oops && str)
         msg_print(str);

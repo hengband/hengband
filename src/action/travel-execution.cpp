@@ -26,21 +26,21 @@ travel_type travel;
 /*!
  * @brief トラベル機能の判定処理 /
  * Test for traveling
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param prev_dir 前回移動を行った元の方角ID
  * @return 次の方向
  */
-static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
+static DIRECTION travel_test(player_type *player_ptr, DIRECTION prev_dir)
 {
-    if (creature_ptr->blind || no_lite(creature_ptr)) {
+    if (player_ptr->blind || no_lite(player_ptr)) {
         msg_print(_("目が見えない！", "You cannot see!"));
         return 0;
     }
 
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    if ((disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT)) {
-        creature_ptr->dtrap = false;
-        if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE)) {
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_IN_DETECT)) {
+        player_ptr->dtrap = false;
+        if (!(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_UNSAFE)) {
             if (alert_trap_detect)
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
 
@@ -53,8 +53,8 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
     const grid_type *g_ptr;
     for (int i = -max; i <= max; i++) {
         DIRECTION dir = cycle[chome[prev_dir] + i];
-        POSITION row = creature_ptr->y + ddy[dir];
-        POSITION col = creature_ptr->x + ddx[dir];
+        POSITION row = player_ptr->y + ddy[dir];
+        POSITION col = player_ptr->x + ddx[dir];
         g_ptr = &floor_ptr->grid_array[row][col];
         if (g_ptr->m_idx) {
             monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
@@ -63,10 +63,10 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
         }
     }
 
-    int cost = travel.cost[creature_ptr->y][creature_ptr->x];
+    int cost = travel.cost[player_ptr->y][player_ptr->x];
     DIRECTION new_dir = 0;
     for (int i = 0; i < 8; ++i) {
-        int dir_cost = travel.cost[creature_ptr->y + ddy_ddd[i]][creature_ptr->x + ddx_ddd[i]];
+        int dir_cost = travel.cost[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
         if (dir_cost < cost) {
             new_dir = ddd[i];
             cost = dir_cost;
@@ -76,11 +76,11 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
     if (!new_dir)
         return 0;
 
-    g_ptr = &floor_ptr->grid_array[creature_ptr->y + ddy[new_dir]][creature_ptr->x + ddx[new_dir]];
-    if (!easy_open && is_closed_door(creature_ptr, g_ptr->feat))
+    g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy[new_dir]][player_ptr->x + ddx[new_dir]];
+    if (!easy_open && is_closed_door(player_ptr, g_ptr->feat))
         return 0;
 
-    if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat))
+    if (!g_ptr->mimic && !trap_can_be_ignored(player_ptr, g_ptr->feat))
         return 0;
 
     return new_dir;
@@ -89,24 +89,24 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 /*!
  * @brief トラベル機能の実装 /
  * Travel command
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  */
-void travel_step(player_type *creature_ptr)
+void travel_step(player_type *player_ptr)
 {
-    travel.dir = travel_test(creature_ptr, travel.dir);
+    travel.dir = travel_test(player_ptr, travel.dir);
     if (!travel.dir) {
         if (travel.run == 255) {
             msg_print(_("道筋が見つかりません！", "No route is found!"));
             travel.y = travel.x = 0;
         }
 
-        disturb(creature_ptr, false, true);
+        disturb(player_ptr, false, true);
         return;
     }
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    exe_movement(creature_ptr, travel.dir, always_pickup, false);
-    if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x)) {
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
+    exe_movement(player_ptr, travel.dir, always_pickup, false);
+    if ((player_ptr->y == travel.y) && (player_ptr->x == travel.x)) {
         travel.run = 0;
         travel.y = travel.x = 0;
     } else if (travel.run > 0)
@@ -117,7 +117,7 @@ void travel_step(player_type *creature_ptr)
 
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  */
 void forget_travel_flow(floor_type *floor_ptr)
 {

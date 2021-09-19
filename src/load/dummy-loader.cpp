@@ -37,10 +37,10 @@ void rd_dummy2(void)
 
 /*!
  * @brief 変愚蛮怒 v1.5.0より大きなバージョンにおいて、ダミーでモンスターを読み込む
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details もはや何に使われていたのか不明
  */
-void rd_dummy_monsters(player_type *creature_ptr)
+void rd_dummy_monsters(player_type *player_ptr)
 {
     if (h_older_than(1, 5, 0, 2))
         return;
@@ -49,7 +49,7 @@ void rd_dummy_monsters(player_type *creature_ptr)
     rd_s16b(&tmp16s);
     for (int i = 0; i < tmp16s; i++) {
         monster_type dummy_mon;
-        rd_monster(creature_ptr, &dummy_mon);
+        rd_monster(player_ptr, &dummy_mon);
     }
 }
 

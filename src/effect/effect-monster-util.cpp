@@ -19,7 +19,7 @@
 /*!
  * @brief affect_monster() に亘ってきた引数をeffect_monster_type構造体に代入する
  * @param em_ptr モンスター効果構造体への参照ポインタ
- * @param who 魔法を発動したモンスター (0ならばプレーヤー)
+ * @param who 魔法を発動したモンスター (0ならばプレイヤー)
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標y座標 / Target y location (or location to travel "towards")
  * @param x 目標x座標 / Target x location (or location to travel "towards")
@@ -43,9 +43,9 @@ static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX w
 
 /*!
  * @brief effect_monster_type構造体を初期化する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
- * @param who 魔法を発動したモンスター (0ならばプレーヤー)
+ * @param who 魔法を発動したモンスター (0ならばプレイヤー)
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標y座標 / Target y location (or location to travel "towards")
  * @param x 目標x座標 / Target x location (or location to travel "towards")
@@ -54,20 +54,20 @@ static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX w
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
  */
-effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
+effect_monster_type *initialize_effect_monster(player_type *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
 	substitute_effect_monster(em_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
 
-	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	em_ptr->g_ptr = &floor_ptr->grid_array[em_ptr->y][em_ptr->x];
 	em_ptr->m_ptr = &floor_ptr->m_list[em_ptr->g_ptr->m_idx];
 	em_ptr->m_caster_ptr = (em_ptr->who > 0) ? &floor_ptr->m_list[em_ptr->who] : nullptr;
 	em_ptr->r_ptr = &r_info[em_ptr->m_ptr->r_idx];
 	em_ptr->seen = em_ptr->m_ptr->ml;
-        em_ptr->seen_msg = is_seen(caster_ptr, em_ptr->m_ptr);
+        em_ptr->seen_msg = is_seen(player_ptr, em_ptr->m_ptr);
 	em_ptr->slept = (bool)monster_csleep_remaining(em_ptr->m_ptr);
 	em_ptr->obvious = false;
-	em_ptr->known = ((em_ptr->m_ptr->cdis <= MAX_SIGHT) || caster_ptr->phase_out);
+	em_ptr->known = ((em_ptr->m_ptr->cdis <= MAX_SIGHT) || player_ptr->phase_out);
 	em_ptr->skipped = false;
 	em_ptr->get_angry = false;
 	em_ptr->do_polymorph = false;
@@ -81,6 +81,6 @@ effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_m
 	em_ptr->photo = 0;
 	em_ptr->note = nullptr;
 	em_ptr->note_dies = extract_note_dies(real_r_idx(em_ptr->m_ptr));
-	em_ptr->caster_lev = (em_ptr->who > 0) ? r_info[em_ptr->m_caster_ptr->r_idx].level : (caster_ptr->lev * 2);
+	em_ptr->caster_lev = (em_ptr->who > 0) ? r_info[em_ptr->m_caster_ptr->r_idx].level : (player_ptr->lev * 2);
 	return em_ptr;
 }

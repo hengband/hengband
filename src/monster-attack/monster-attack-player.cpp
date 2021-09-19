@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief モンスターからプレーヤーへの直接攻撃処理
+ * @brief モンスターからプレイヤーへの直接攻撃処理
  * @date 2020/05/23
  * @author Hourier
  */
@@ -16,8 +16,6 @@
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "effect/effect-characteristics.h"
-#include "effect/effect-processor.h"
 #include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
@@ -44,11 +42,7 @@
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"
-#include "realm/realm-hex-numbers.h"
-#include "spell-kind/spells-teleport.h"
-#include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
@@ -56,71 +50,66 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
+static bool check_no_blow(player_type *player_ptr, monap_type *monap_ptr)
 {
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (r_ptr->flags1 & (RF1_NEVER_BLOW))
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (any_bits(r_ptr->flags1, RF1_NEVER_BLOW)) {
         return false;
+    }
 
-    if (d_info[target_ptr->dungeon_idx].flags.has(DF::NO_MELEE))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
         return false;
+    }
 
-    if (!is_hostile(monap_ptr->m_ptr))
-        return false;
-
-    return true;
+    return is_hostile(monap_ptr->m_ptr);
 }
 
 /*!
- * @brief プレーヤー死亡等でモンスターからプレーヤーへの直接攻撃処理を途中で打ち切るかどうかを判定する
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @brief プレイヤー死亡等でモンスターからプレイヤーへの直接攻撃処理を途中で打ち切るかどうかを判定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @return 攻撃続行ならばTRUE、打ち切りになったらFALSE
  */
-static bool check_monster_continuous_attack(player_type *target_ptr, monap_type *monap_ptr)
+static bool check_monster_continuous_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!monster_is_valid(monap_ptr->m_ptr))
+    if (!monster_is_valid(monap_ptr->m_ptr) || (monap_ptr->method == RBM_NONE)) {
         return false;
+    }
 
-    if (monap_ptr->method == RBM_NONE)
-        return false;
-
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (is_pet(monap_ptr->m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (monap_ptr->method == RBM_EXPLODE)) {
         monap_ptr->method = RBM_HIT;
         monap_ptr->d_dice /= 10;
     }
 
-    if (!target_ptr->playing || target_ptr->is_dead || (distance(target_ptr->y, target_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) > 1)
-        || target_ptr->leaving)
-        return false;
-
-    return true;
+    auto is_neighbor = distance(player_ptr->y, player_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) <= 1;
+    return player_ptr->playing && !player_ptr->is_dead && is_neighbor && !player_ptr->leaving;
 }
 
 /*!
  * @brief 対邪悪結界が効いている状態で邪悪なモンスターから直接攻撃を受けた時の処理
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @return briefに書いた条件＋確率が満たされたらTRUE、それ以外はFALSE
  */
-static bool effect_protecion_from_evil(player_type *target_ptr, monap_type *monap_ptr)
+static bool effect_protecion_from_evil(player_type *player_ptr, monap_type *monap_ptr)
 {
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if ((target_ptr->protevil <= 0) || ((r_ptr->flags3 & RF3_EVIL) == 0) || (target_ptr->lev < monap_ptr->rlev) || ((randint0(100) + target_ptr->lev) <= 50))
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((player_ptr->protevil <= 0) || none_bits(r_ptr->flags3, RF3_EVIL) || (player_ptr->lev < monap_ptr->rlev) || ((randint0(100) + player_ptr->lev) <= 50)) {
         return false;
+    }
 
-    if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+    if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
         r_ptr->r_flags3 |= RF3_EVIL;
+    }
 
 #ifdef JP
-    if (monap_ptr->abbreviate)
-        msg_format("撃退した。");
-    else
-        msg_format("%^sは撃退された。", monap_ptr->m_name);
-
+    monap_ptr->abbreviate ? msg_format("撃退した。") : msg_format("%^sは撃退された。", monap_ptr->m_name);
     monap_ptr->abbreviate = 1; /* 2回目以降は省略 */
 #else
     msg_format("%^s is repelled.", monap_ptr->m_name);
@@ -131,8 +120,9 @@ static bool effect_protecion_from_evil(player_type *target_ptr, monap_type *mona
 
 static void describe_silly_attacks(monap_type *monap_ptr)
 {
-    if (monap_ptr->act == nullptr)
+    if (monap_ptr->act == nullptr) {
         return;
+    }
 
     if (monap_ptr->do_silly_attack) {
 #ifdef JP
@@ -142,12 +132,14 @@ static void describe_silly_attacks(monap_type *monap_ptr)
     }
 
 #ifdef JP
-    if (monap_ptr->abbreviate == 0)
+    if (monap_ptr->abbreviate == 0) {
         msg_format("%^sに%s", monap_ptr->m_name, monap_ptr->act);
-    else if (monap_ptr->abbreviate == 1)
+    } else if (monap_ptr->abbreviate == 1) {
         msg_format("%s", monap_ptr->act);
-    else /* if (monap_ptr->abbreviate == -1) */
-        msg_format("%^s%s", monap_ptr->m_name, monap_ptr->act);
+    } else {
+       /* if (monap_ptr->abbreviate == -1) */
+       msg_format("%^s%s", monap_ptr->m_name, monap_ptr->act);
+    }
 
     monap_ptr->abbreviate = 1; /*2回目以降は省略 */
 #else
@@ -157,26 +149,29 @@ static void describe_silly_attacks(monap_type *monap_ptr)
 
 /*!
  * @brief 切り傷と朦朧が同時に発生した時、片方を無効にする
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
 static void select_cut_stun(monap_type *monap_ptr)
 {
-    if ((monap_ptr->do_cut == 0) || (monap_ptr->do_stun == 0))
+    if ((monap_ptr->do_cut == 0) || (monap_ptr->do_stun == 0)) {
         return;
+    }
 
-    if (randint0(100) < 50)
+    if (randint0(100) < 50) {
         monap_ptr->do_cut = 0;
-    else
+    } else {
         monap_ptr->do_stun = 0;
+    }
 }
 
-static void calc_player_cut(player_type *target_ptr, monap_type *monap_ptr)
+static void calc_player_cut(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (monap_ptr->do_cut == 0)
+    if (monap_ptr->do_cut == 0) {
         return;
+    }
 
-    int cut_plus = 0;
-    int criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
+    auto cut_plus = 0;
+    auto criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
     switch (criticality) {
     case 0:
         cut_plus = 0;
@@ -204,17 +199,19 @@ static void calc_player_cut(player_type *target_ptr, monap_type *monap_ptr)
         break;
     }
 
-    if (cut_plus > 0)
-        (void)set_cut(target_ptr, target_ptr->cut + cut_plus);
+    if (cut_plus > 0) {
+        (void)set_cut(player_ptr, player_ptr->cut + cut_plus);
+    }
 }
 
-static void calc_player_stun(player_type *target_ptr, monap_type *monap_ptr)
+static void calc_player_stun(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (monap_ptr->do_stun == 0)
+    if (monap_ptr->do_stun == 0) {
         return;
+    }
 
-    int stun_plus = 0;
-    int criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
+    auto stun_plus = 0;
+    auto criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
     switch (criticality) {
     case 0:
         stun_plus = 0;
@@ -242,34 +239,39 @@ static void calc_player_stun(player_type *target_ptr, monap_type *monap_ptr)
         break;
     }
 
-    if (stun_plus > 0)
-        (void)set_stun(target_ptr, target_ptr->stun + stun_plus);
+    if (stun_plus > 0) {
+        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + stun_plus);
+    }
 }
 
-static void monster_explode(player_type *target_ptr, monap_type *monap_ptr)
+static void monster_explode(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!monap_ptr->explode)
+    if (!monap_ptr->explode) {
         return;
+    }
 
     sound(SOUND_EXPLODE);
-    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear);
     if (mdp.mon_take_hit(nullptr)) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }
 }
 
-static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_ptr)
+static void describe_attack_evasion(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!monap_ptr->m_ptr->ml)
+    if (!monap_ptr->m_ptr->ml) {
         return;
+    }
 
-    disturb(target_ptr, true, true);
+    disturb(player_ptr, true, true);
 #ifdef JP
-    if (monap_ptr->abbreviate)
-        msg_format("%sかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
-    else
-        msg_format("%s%^sの攻撃をかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", monap_ptr->m_name);
+    auto is_suiken = any_bits(player_ptr->special_attack, ATTACK_SUIKEN);
+    if (monap_ptr->abbreviate) {
+        msg_format("%sかわした。", is_suiken ? "奇妙な動きで" : "");
+    } else {
+        msg_format("%s%^sの攻撃をかわした。", is_suiken ? "奇妙な動きで" : "", monap_ptr->m_name);
+    }
 
     monap_ptr->abbreviate = 1; /* 2回目以降は省略 */
 #else
@@ -277,44 +279,45 @@ static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_p
 #endif
 }
 
-static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
+static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
 {
-    const auto o_ptr_mh = &target_ptr->inventory_list[INVEN_MAIN_HAND];
-    const auto o_ptr_sh = &target_ptr->inventory_list[INVEN_SUB_HAND];
-    if (!o_ptr_mh->is_armour() && !o_ptr_sh->is_armour())
+    const auto o_ptr_mh = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
+    if (!o_ptr_mh->is_armour() && !o_ptr_sh->is_armour()) {
         return;
-
-    int cur = target_ptr->skill_exp[SKILL_SHIELD];
-    int max = s_info[target_ptr->pclass].s_max[SKILL_SHIELD];
-    if (cur >= max)
-        return;
-
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    DEPTH targetlevel = r_ptr->level;
-    int inc = 0;
-    if ((cur / 100) < targetlevel) {
-        if ((cur / 100 + 15) < targetlevel)
-            inc += 1 + (targetlevel - (cur / 100 + 15));
-        else
-            inc += 1;
     }
 
-    target_ptr->skill_exp[SKILL_SHIELD] = MIN(max, cur + inc);
-    target_ptr->update |= (PU_BONUS);
+    auto cur = player_ptr->skill_exp[SKILL_SHIELD];
+    auto max = s_info[player_ptr->pclass].s_max[SKILL_SHIELD];
+    if (cur >= max) {
+        return;
+    }
+
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto target_level = r_ptr->level;
+    auto increment = 0;
+    if ((cur / 100) < target_level) {
+        auto addition = (cur / 100 + 15) < target_level ? (target_level - (cur / 100 + 15)) : 0;
+        increment += 1 + addition;
+    }
+
+    player_ptr->skill_exp[SKILL_SHIELD] = MIN(max, cur + increment);
+    player_ptr->update |= (PU_BONUS);
 }
 
 /*!
  * @brief モンスターから直接攻撃を1回受けた時の処理
  * @return 対邪悪結界により攻撃が当たらなかったらFALSE、それ以外はTRUE
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @details 最大4 回/モンスター/ターン、このルーチンを通る
  */
-static bool process_monster_attack_hit(player_type *target_ptr, monap_type *monap_ptr)
+static bool process_monster_attack_hit(player_type *player_ptr, monap_type *monap_ptr)
 {
-    disturb(target_ptr, true, true);
-    if (effect_protecion_from_evil(target_ptr, monap_ptr))
+    disturb(player_ptr, true, true);
+    if (effect_protecion_from_evil(player_ptr, monap_ptr)) {
         return false;
+    }
 
     monap_ptr->do_cut = 0;
     monap_ptr->do_stun = 0;
@@ -322,24 +325,25 @@ static bool process_monster_attack_hit(player_type *target_ptr, monap_type *mona
     describe_silly_attacks(monap_ptr);
     monap_ptr->obvious = true;
     monap_ptr->damage = damroll(monap_ptr->d_dice, monap_ptr->d_side);
-    if (monap_ptr->explode)
+    if (monap_ptr->explode) {
         monap_ptr->damage = 0;
+    }
 
-    switch_monster_blow_to_player(target_ptr, monap_ptr);
+    switch_monster_blow_to_player(player_ptr, monap_ptr);
     select_cut_stun(monap_ptr);
-    calc_player_cut(target_ptr, monap_ptr);
-    calc_player_stun(target_ptr, monap_ptr);
-    monster_explode(target_ptr, monap_ptr);
-    process_aura_counterattack(target_ptr, monap_ptr);
+    calc_player_cut(player_ptr, monap_ptr);
+    calc_player_stun(player_ptr, monap_ptr);
+    monster_explode(player_ptr, monap_ptr);
+    process_aura_counterattack(player_ptr, monap_ptr);
     return true;
 }
 
 /*!
  * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-static void process_monster_attack_evasion(player_type *target_ptr, monap_type *monap_ptr)
+static void process_monster_attack_evasion(player_type *player_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->method) {
     case RBM_HIT:
@@ -354,8 +358,8 @@ static void process_monster_attack_evasion(player_type *target_ptr, monap_type *
     case RBM_CRUSH:
     case RBM_ENGULF:
     case RBM_CHARGE:
-        describe_attack_evasion(target_ptr, monap_ptr);
-        gain_armor_exp(target_ptr, monap_ptr);
+        describe_attack_evasion(player_ptr, monap_ptr);
+        gain_armor_exp(player_ptr, monap_ptr);
         monap_ptr->damage = 0;
         return;
     default:
@@ -365,36 +369,37 @@ static void process_monster_attack_evasion(player_type *target_ptr, monap_type *
 
 /*!
  * @brief モンスターの打撃情報を蓄積させる
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @param ap_cnt モンスターの打撃 N回目
+ * @details どの敵が何をしてきたか正しく認識できていなければ情報を蓄積しない.
+ * 非自明な類の打撃については、そのダメージが 0 ならば基本的に知識が増えない.
+ * 但し、既に一定以上の知識があれば常に知識が増える(何をされたのか察知できる).
  */
-static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr, const int ap_cnt)
+static void increase_blow_type_seen(player_type *player_ptr, monap_type *monap_ptr, const int ap_cnt)
 {
-    // どの敵が何をしてきたか正しく認識できていなければならない。
-    if (!is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) || monap_ptr->do_silly_attack)
+    if (!is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr) || monap_ptr->do_silly_attack) {
         return;
+    }
 
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-
-    // 非自明な類の打撃については、そのダメージが 0 ならば基本的に知識が増えない。
-    // ただし、既に一定以上の知識があれば常に知識が増える(何をされたのか察知できる)。
-    if (!monap_ptr->obvious && (monap_ptr->damage == 0) && (r_ptr->r_blows[ap_cnt] <= 10))
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (!monap_ptr->obvious && (monap_ptr->damage == 0) && (r_ptr->r_blows[ap_cnt] <= 10)) {
         return;
+    }
 
-    if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR)
+    if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
         r_ptr->r_blows[ap_cnt]++;
+    }
 }
 
 /*!
  * @brief モンスターからプレイヤーへの打撃処理本体
  * @return 打撃に反応してプレイヤーがその場から離脱したかどうか
  */
-static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
+static bool process_monster_blows(player_type *player_ptr, monap_type *monap_ptr)
 {
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-
-    for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    for (auto ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         monap_ptr->obvious = false;
         monap_ptr->damage = 0;
         monap_ptr->act = nullptr;
@@ -403,8 +408,9 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
         monap_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
         monap_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
 
-        if (!check_monster_continuous_attack(target_ptr, monap_ptr))
+        if (!check_monster_continuous_attack(player_ptr, monap_ptr)) {
             break;
+        }
 
         // effect が RBE_NONE (無効値)になることはあり得ないはずだが、万一そう
         // なっていたら単に攻撃を打ち切る。
@@ -414,40 +420,41 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
             break;
         }
 
-        if (monap_ptr->method == RBM_SHOOT)
+        if (monap_ptr->method == RBM_SHOOT) {
             continue;
+        }
 
         // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
-        monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
+        monap_ptr->ac = player_ptr->ac + player_ptr->to_a;
         bool hit;
         if (monap_ptr->effect == RBE_FLAVOR) {
             hit = true;
         } else {
             const int power = mbe_info[monap_ptr->effect].power;
-            hit = check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr));
+            hit = check_hit_from_monster_to_player(player_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr));
         }
 
         if (hit) {
             // 命中した。命中処理と思い出処理を行う。
             // 打撃そのものは対邪悪結界で撃退した可能性がある。
-            const bool protect = !process_monster_attack_hit(target_ptr, monap_ptr);
-            increase_blow_type_seen(target_ptr, monap_ptr, ap_cnt);
+            const bool protect = !process_monster_attack_hit(player_ptr, monap_ptr);
+            increase_blow_type_seen(player_ptr, monap_ptr, ap_cnt);
 
             // 撃退成功時はそのまま次の打撃へ移行。
             if (protect)
                 continue;
 
             // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
-            check_fall_off_horse(target_ptr, monap_ptr);
-            if (target_ptr->special_defense & NINJA_KAWARIMI) {
+            check_fall_off_horse(player_ptr, monap_ptr);
+            if (player_ptr->special_defense & NINJA_KAWARIMI) {
                 // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
-                if (kawarimi(target_ptr, false))
+                if (kawarimi(player_ptr, false))
                     return true;
             }
         } else {
             // 命中しなかった。回避時の処理、思い出処理を行う。
-            process_monster_attack_evasion(target_ptr, monap_ptr);
-            increase_blow_type_seen(target_ptr, monap_ptr, ap_cnt);
+            process_monster_attack_evasion(player_ptr, monap_ptr);
+            increase_blow_type_seen(player_ptr, monap_ptr, ap_cnt);
         }
     }
 
@@ -455,58 +462,26 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
     return false;
 }
 
-/*!
- * @brief 呪術「目には目を」の効果処理
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
- */
-static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
+static void postprocess_monster_blows(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (((target_ptr->tim_eyeeye == 0) && !hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) || (monap_ptr->get_damage == 0) || target_ptr->is_dead)
-        return;
-
-#ifdef JP
-    msg_format("攻撃が%s自身を傷つけた！", monap_ptr->m_name);
-#else
-    GAME_TEXT m_name_self[MAX_MONSTER_NAME];
-    monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-    msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
-#endif
-    project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
-    if (target_ptr->tim_eyeeye)
-        set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, true);
-}
-
-static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
-{
-    if (!monap_ptr->blinked || !monap_ptr->alive || target_ptr->is_dead)
-        return;
-
-    if (teleport_barrier(target_ptr, monap_ptr->m_idx)) {
-        msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
-    } else {
-        msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-        teleport_away(target_ptr, monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
-    }
-}
-
-static void postprocess_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
-{
-    revenge_store(target_ptr, monap_ptr->get_damage);
-    eyes_on_eyes(target_ptr, monap_ptr);
-    musou_counterattack(target_ptr, monap_ptr);
-    thief_teleport(target_ptr, monap_ptr);
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
+    SpellHex spell_hex(player_ptr, monap_ptr);
+    spell_hex.store_vengeful_damage(monap_ptr->get_damage);
+    spell_hex.eyes_on_eyes();
+    musou_counterattack(player_ptr, monap_ptr);
+    spell_hex.thief_teleport();
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (player_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !player_ptr->current_floor_ptr->inside_arena) {
         r_ptr->r_deaths++;
+    }
 
-    if (monap_ptr->m_ptr->ml && monap_ptr->fear && monap_ptr->alive && !target_ptr->is_dead) {
+    if (monap_ptr->m_ptr->ml && monap_ptr->fear && monap_ptr->alive && !player_ptr->is_dead) {
         sound(SOUND_FLEE);
         msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
     }
 
-    if (target_ptr->special_defense & KATA_IAI)
-        set_action(target_ptr, ACTION_NONE);
+    if (player_ptr->special_defense & KATA_IAI) {
+        set_action(player_ptr, ACTION_NONE);
+    }
 }
 
 /*!
@@ -514,32 +489,36 @@ static void postprocess_monster_blows(player_type *target_ptr, monap_type *monap
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
  */
-bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
+bool make_attack_normal(player_type *player_ptr, MONSTER_IDX m_idx)
 {
     monap_type tmp_monap;
-    monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
-    if (!check_no_blow(target_ptr, monap_ptr))
+    monap_type *monap_ptr = initialize_monap_type(player_ptr, &tmp_monap, m_idx);
+    if (!check_no_blow(player_ptr, monap_ptr)) {
         return false;
-
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    monster_desc(target_ptr, monap_ptr->m_name, monap_ptr->m_ptr, 0);
-    monster_desc(target_ptr, monap_ptr->ddesc, monap_ptr->m_ptr, MD_WRONGDOER_NAME);
-    if (target_ptr->special_defense & KATA_IAI) {
-        msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), monap_ptr->m_name);
-        if (do_cmd_attack(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_IAI))
-            return true;
     }
 
-    if ((target_ptr->special_defense & NINJA_KAWARIMI) && (randint0(55) < (target_ptr->lev * 3 / 5 + 20))) {
-        if (kawarimi(target_ptr, true))
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    monster_desc(player_ptr, monap_ptr->m_name, monap_ptr->m_ptr, 0);
+    monster_desc(player_ptr, monap_ptr->ddesc, monap_ptr->m_ptr, MD_WRONGDOER_NAME);
+    if (any_bits(player_ptr->special_defense, KATA_IAI)) {
+        msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), monap_ptr->m_name);
+        if (do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_IAI)) {
             return true;
+        }
+    }
+
+    auto is_kawarimi = any_bits(player_ptr->special_defense, NINJA_KAWARIMI);
+    auto can_activate_kawarimi = randint0(55) < (player_ptr->lev * 3 / 5 + 20);
+    if (is_kawarimi && can_activate_kawarimi && kawarimi(player_ptr, true)) {
+        return true;
     }
 
     monap_ptr->blinked = false;
-    if (process_monster_blows(target_ptr, monap_ptr))
+    if (process_monster_blows(player_ptr, monap_ptr)) {
         return true;
+    }
 
-    postprocess_monster_blows(target_ptr, monap_ptr);
+    postprocess_monster_blows(player_ptr, monap_ptr);
     return true;
 }

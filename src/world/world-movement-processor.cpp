@@ -22,20 +22,20 @@
 
 /*!
  * @brief プレイヤーの現在ダンジョンIDと階層に応じて、ダンジョン内ランクエの自動放棄を行う
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void check_random_quest_auto_failure(player_type *creature_ptr)
+void check_random_quest_auto_failure(player_type *player_ptr)
 {
-    if (creature_ptr->dungeon_idx != DUNGEON_ANGBAND) {
+    if (player_ptr->dungeon_idx != DUNGEON_ANGBAND) {
         return;
     }
     for (auto i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
         auto q_ptr = &quest[i];
-        if ((q_ptr->type == QUEST_TYPE_RANDOM) && (q_ptr->status == QUEST_STATUS_TAKEN) && (q_ptr->level < creature_ptr->current_floor_ptr->dun_level)) {
+        if ((q_ptr->type == QUEST_TYPE_RANDOM) && (q_ptr->status == QUEST_STATUS_TAKEN) && (q_ptr->level < player_ptr->current_floor_ptr->dun_level)) {
             q_ptr->status = QUEST_STATUS_FAILED;
-            q_ptr->complev = (byte)creature_ptr->lev;
+            q_ptr->complev = (byte)player_ptr->lev;
             update_playtime();
-            q_ptr->comptime = current_world_ptr->play_time;
+            q_ptr->comptime = w_ptr->play_time;
             r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
         }
     }
@@ -44,111 +44,111 @@ void check_random_quest_auto_failure(player_type *creature_ptr)
 /*!
  * @brief 10ゲームターンが進行するごとに帰還の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Autosave BEFORE resetting the recall counter (rr9)
  * The player is yanked up/down as soon as he loads the autosaved game.
  */
-void execute_recall(player_type *creature_ptr)
+void execute_recall(player_type *player_ptr)
 {
-    if (creature_ptr->word_recall == 0)
+    if (player_ptr->word_recall == 0)
         return;
 
-    if (autosave_l && (creature_ptr->word_recall == 1) && !creature_ptr->phase_out)
-        do_cmd_save_game(creature_ptr, true);
+    if (autosave_l && (player_ptr->word_recall == 1) && !player_ptr->phase_out)
+        do_cmd_save_game(player_ptr, true);
 
-    creature_ptr->word_recall--;
-    creature_ptr->redraw |= (PR_STATUS);
-    if (creature_ptr->word_recall != 0)
+    player_ptr->word_recall--;
+    player_ptr->redraw |= (PR_STATUS);
+    if (player_ptr->word_recall != 0)
         return;
 
-    disturb(creature_ptr, false, true);
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level || creature_ptr->current_floor_ptr->inside_quest || creature_ptr->enter_dungeon) {
+    disturb(player_ptr, false, true);
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->dun_level || player_ptr->current_floor_ptr->inside_quest || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
-        if (creature_ptr->dungeon_idx)
-            creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
+        if (player_ptr->dungeon_idx)
+            player_ptr->recall_dungeon = player_ptr->dungeon_idx;
         if (record_stair)
-            exe_write_diary(creature_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
+            exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
 
         floor_ptr->dun_level = 0;
-        creature_ptr->dungeon_idx = 0;
-        leave_quest_check(creature_ptr);
-        leave_tower_check(creature_ptr);
-        creature_ptr->current_floor_ptr->inside_quest = 0;
-        creature_ptr->leaving = true;
+        player_ptr->dungeon_idx = 0;
+        leave_quest_check(player_ptr);
+        leave_tower_check(player_ptr);
+        player_ptr->current_floor_ptr->inside_quest = 0;
+        player_ptr->leaving = true;
         sound(SOUND_TPLEVEL);
         return;
     }
 
     msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
-    creature_ptr->dungeon_idx = creature_ptr->recall_dungeon;
+    player_ptr->dungeon_idx = player_ptr->recall_dungeon;
     if (record_stair)
-        exe_write_diary(creature_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
+        exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
 
-    floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
+    floor_ptr->dun_level = max_dlv[player_ptr->dungeon_idx];
     if (floor_ptr->dun_level < 1)
         floor_ptr->dun_level = 1;
-    if (ironman_nightmare && !randint0(666) && (creature_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
+    if (ironman_nightmare && !randint0(666) && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
         if (floor_ptr->dun_level < 50) {
             floor_ptr->dun_level *= 2;
         } else if (floor_ptr->dun_level < 99) {
             floor_ptr->dun_level = (floor_ptr->dun_level + 99) / 2;
         } else if (floor_ptr->dun_level > 100) {
-            floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].maxdepth - 1;
+            floor_ptr->dun_level = d_info[player_ptr->dungeon_idx].maxdepth - 1;
         }
     }
 
-    if (creature_ptr->wild_mode) {
-        creature_ptr->wilderness_y = creature_ptr->y;
-        creature_ptr->wilderness_x = creature_ptr->x;
+    if (player_ptr->wild_mode) {
+        player_ptr->wilderness_y = player_ptr->y;
+        player_ptr->wilderness_x = player_ptr->x;
     } else {
-        creature_ptr->oldpx = creature_ptr->x;
-        creature_ptr->oldpy = creature_ptr->y;
+        player_ptr->oldpx = player_ptr->x;
+        player_ptr->oldpy = player_ptr->y;
     }
 
-    creature_ptr->wild_mode = false;
+    player_ptr->wild_mode = false;
 
     /*
      * Clear all saved floors
      * and create a first saved floor
      */
-    prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-    creature_ptr->leaving = true;
+    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    player_ptr->leaving = true;
 
-    check_random_quest_auto_failure(creature_ptr);
+    check_random_quest_auto_failure(player_ptr);
     sound(SOUND_TPLEVEL);
 }
 
 /*!
  * @brief 10ゲームターンが進行するごとにフロア・リセット/現実変容の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void execute_floor_reset(player_type *creature_ptr)
+void execute_floor_reset(player_type *player_ptr)
 {
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    if (creature_ptr->alter_reality == 0)
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (player_ptr->alter_reality == 0)
         return;
 
-    if (autosave_l && (creature_ptr->alter_reality == 1) && !creature_ptr->phase_out)
-        do_cmd_save_game(creature_ptr, true);
+    if (autosave_l && (player_ptr->alter_reality == 1) && !player_ptr->phase_out)
+        do_cmd_save_game(player_ptr, true);
 
-    creature_ptr->alter_reality--;
-    creature_ptr->redraw |= (PR_STATUS);
-    if (creature_ptr->alter_reality != 0)
+    player_ptr->alter_reality--;
+    player_ptr->redraw |= (PR_STATUS);
+    if (player_ptr->alter_reality != 0)
         return;
 
-    disturb(creature_ptr, false, true);
-    if (!quest_number(creature_ptr, floor_ptr->dun_level) && floor_ptr->dun_level) {
+    disturb(player_ptr, false, true);
+    if (!quest_number(player_ptr, floor_ptr->dun_level) && floor_ptr->dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
 
         /*
          * Clear all saved floors
          * and create a first saved floor
          */
-        prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-        creature_ptr->leaving = true;
+        prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+        player_ptr->leaving = true;
     } else {
         msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));
     }

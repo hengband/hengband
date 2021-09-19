@@ -1,7 +1,5 @@
 ﻿#include "game-option/runtime-arguments.h"
 
-bool arg_fiddle; /* Command arg -- Request fiddle mode */
-bool arg_wizard; /* Command arg -- Request wizard mode */
 bool arg_sound; /* Command arg -- Request special sounds */
 bool arg_music; /* Command arg -- Request special musics */
 byte arg_graphics; /* Command arg -- Request graphics mode */

@@ -14,23 +14,25 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief 射撃処理のメインルーチン
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param snipe_type ？？？
  * @todo Doxygenの加筆求む
  */
-void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
+void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
 {
     OBJECT_IDX item;
     object_type *j_ptr, *ammo_ptr;
-    if (creature_ptr->wild_mode)
+    if (player_ptr->wild_mode)
         return;
 
-    creature_ptr->is_fired = false;
-    j_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+    player_ptr->is_fired = false;
+    j_ptr = &player_ptr->inventory_list[INVEN_BOW];
     if (!j_ptr->tval) {
         msg_print(_("射撃用の武器を持っていない。", "You have nothing to fire with."));
         flush();
@@ -49,27 +51,28 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
         return;
     }
 
-    if (creature_ptr->special_defense & KATA_MUSOU)
-        set_action(creature_ptr, ACTION_NONE);
+    if (player_ptr->special_defense & KATA_MUSOU)
+        set_action(player_ptr, ACTION_NONE);
 
     concptr q = _("どれを撃ちますか? ", "Fire which item? ");
     concptr s = _("発射されるアイテムがありません。", "You have nothing to fire.");
-    ammo_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TvalItemTester(creature_ptr->tval_ammo));
+    ammo_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TvalItemTester(player_ptr->tval_ammo));
     if (!ammo_ptr) {
         flush();
         return;
     }
 
-    exe_fire(creature_ptr, item, j_ptr, snipe_type);
-    if (!creature_ptr->is_fired || creature_ptr->pclass != CLASS_SNIPER)
+    exe_fire(player_ptr, item, j_ptr, snipe_type);
+    if (!player_ptr->is_fired || player_ptr->pclass != CLASS_SNIPER)
         return;
 
     if (snipe_type == SP_AWAY)
-        teleport_player(creature_ptr, 10 + (creature_ptr->concent * 2), TELEPORT_SPONTANEOUS);
+        teleport_player(player_ptr, 10 + (player_ptr->concent * 2), TELEPORT_SPONTANEOUS);
 
+    auto effects = player_ptr->effects();
     if (snipe_type == SP_FINAL) {
         msg_print(_("射撃の反動が体を襲った。", "The weapon's recoil stuns you. "));
-        (void)set_slow(creature_ptr, creature_ptr->slow + randint0(7) + 7, false);
-        (void)set_stun(creature_ptr, creature_ptr->stun + randint1(25));
+        (void)set_slow(player_ptr, player_ptr->slow + randint0(7) + 7, false);
+        (void)set_stun(player_ptr, effects->stun()->current() + randint1(25));
     }
 }

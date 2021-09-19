@@ -51,4 +51,4 @@ struct player_type;
 #else
 concptr get_ordinal_number_suffix(int num);
 #endif
-errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note);
+errr exe_write_diary(player_type *player_ptr, int type, int num, concptr note);

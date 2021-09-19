@@ -57,97 +57,97 @@
 
 /*!
  * @brief 突然変異のレイシャル効果実装
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param power 発動させる突然変異レイシャルのID
  * @return レイシャルを実行した場合TRUE、キャンセルした場合FALSEを返す
  */
-bool exe_mutation_power(player_type *creature_ptr, MUTA power)
+bool exe_mutation_power(player_type *player_ptr, MUTA power)
 {
     DIRECTION dir = 0;
-    PLAYER_LEVEL lvl = creature_ptr->lev;
+    PLAYER_LEVEL lvl = player_ptr->lev;
     switch (power) {
     case MUTA::SPIT_ACID:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        stop_mouth(creature_ptr);
+        stop_mouth(player_ptr);
         msg_print(_("酸を吐きかけた...", "You spit acid..."));
-        fire_ball(creature_ptr, GF_ACID, dir, lvl, 1 + (lvl / 30));
+        fire_ball(player_ptr, GF_ACID, dir, lvl, 1 + (lvl / 30));
         return true;
     case MUTA::BR_FIRE:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        stop_mouth(creature_ptr);
+        stop_mouth(player_ptr);
         msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
-        fire_breath(creature_ptr, GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
+        fire_breath(player_ptr, GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
         return true;
     case MUTA::HYPN_GAZE:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
         msg_print(_("あなたの目は幻惑的になった...", "Your eyes look mesmerizing..."));
-        (void)charm_monster(creature_ptr, dir, lvl);
+        (void)charm_monster(player_ptr, dir, lvl);
         return true;
     case MUTA::TELEKINES:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
         msg_print(_("集中している...", "You concentrate..."));
-        fetch_item(creature_ptr, dir, lvl * 10, true);
+        fetch_item(player_ptr, dir, lvl * 10, true);
         return true;
     case MUTA::VTELEPORT:
         msg_print(_("集中している...", "You concentrate..."));
-        teleport_player(creature_ptr, 10 + 4 * lvl, TELEPORT_SPONTANEOUS);
+        teleport_player(player_ptr, 10 + 4 * lvl, TELEPORT_SPONTANEOUS);
         return true;
     case MUTA::MIND_BLST:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
         msg_print(_("集中している...", "You concentrate..."));
-        fire_bolt(creature_ptr, GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
+        fire_bolt(player_ptr, GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
         return true;
     case MUTA::RADIATION:
         msg_print(_("体から放射能が発生した！", "Radiation flows from your body!"));
-        fire_ball(creature_ptr, GF_NUKE, 0, (lvl * 2), 3 + (lvl / 20));
+        fire_ball(player_ptr, GF_NUKE, 0, (lvl * 2), 3 + (lvl / 20));
         return true;
     case MUTA::VAMPIRISM:
-        vampirism(creature_ptr);
+        vampirism(player_ptr);
         return true;
     case MUTA::SMELL_MET:
-        stop_mouth(creature_ptr);
-        (void)detect_treasure(creature_ptr, DETECT_RAD_DEFAULT);
+        stop_mouth(player_ptr);
+        (void)detect_treasure(player_ptr, DETECT_RAD_DEFAULT);
         return true;
     case MUTA::SMELL_MON:
-        stop_mouth(creature_ptr);
-        (void)detect_monsters_normal(creature_ptr, DETECT_RAD_DEFAULT);
+        stop_mouth(player_ptr);
+        (void)detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
         return true;
     case MUTA::BLINK:
-        teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
+        teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         return true;
     case MUTA::EAT_ROCK:
-        return eat_rock(creature_ptr);
+        return eat_rock(player_ptr);
     case MUTA::SWAP_POS:
         project_length = -1;
-        if (!get_aim_dir(creature_ptr, &dir)) {
+        if (!get_aim_dir(player_ptr, &dir)) {
             project_length = 0;
             return false;
         }
 
-        (void)teleport_swap(creature_ptr, dir);
+        (void)teleport_swap(player_ptr, dir);
         project_length = 0;
         return true;
     case MUTA::SHRIEK:
-        stop_mouth(creature_ptr);
-        (void)fire_ball(creature_ptr, GF_SOUND, 0, 2 * lvl, 8);
-        (void)aggravate_monsters(creature_ptr, 0);
+        stop_mouth(player_ptr);
+        (void)fire_ball(player_ptr, GF_SOUND, 0, 2 * lvl, 8);
+        (void)aggravate_monsters(player_ptr, 0);
         return true;
     case MUTA::ILLUMINE:
-        (void)lite_area(creature_ptr, damroll(2, (lvl / 2)), (lvl / 10) + 1);
+        (void)lite_area(player_ptr, damroll(2, (lvl / 2)), (lvl / 10) + 1);
         return true;
     case MUTA::DET_CURSE:
         for (int i = 0; i < INVEN_TOTAL; i++) {
-            object_type *o_ptr = &creature_ptr->inventory_list[i];
+            object_type *o_ptr = &player_ptr->inventory_list[i];
             if ((o_ptr->k_idx == 0) || !o_ptr->is_cursed())
                 continue;
 
@@ -156,87 +156,87 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
 
         return true;
     case MUTA::BERSERK:
-        (void)berserk(creature_ptr, randint1(25) + 25);
+        (void)berserk(player_ptr, randint1(25) + 25);
         return true;
     case MUTA::POLYMORPH:
         if (!get_check(_("変身します。よろしいですか？", "You will polymorph your self. Are you sure? ")))
             return false;
 
-        do_poly_self(creature_ptr);
+        do_poly_self(player_ptr);
         return true;
     case MUTA::MIDAS_TCH:
-        return alchemy(creature_ptr);
+        return alchemy(player_ptr);
     case MUTA::GROW_MOLD:
         for (DIRECTION i = 0; i < 8; i++)
-            summon_specific(creature_ptr, -1, creature_ptr->y, creature_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
+            summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
 
         return true;
     case MUTA::RESIST: {
         int num = lvl / 10;
         TIME_EFFECT dur = randint1(20) + 20;
         if (randint0(5) < num) {
-            (void)set_oppose_acid(creature_ptr, dur, false);
+            (void)set_oppose_acid(player_ptr, dur, false);
             num--;
         }
 
         if (randint0(4) < num) {
-            (void)set_oppose_elec(creature_ptr, dur, false);
+            (void)set_oppose_elec(player_ptr, dur, false);
             num--;
         }
 
         if (randint0(3) < num) {
-            (void)set_oppose_fire(creature_ptr, dur, false);
+            (void)set_oppose_fire(player_ptr, dur, false);
             num--;
         }
 
         if (randint0(2) < num) {
-            (void)set_oppose_cold(creature_ptr, dur, false);
+            (void)set_oppose_cold(player_ptr, dur, false);
             num--;
         }
 
         if (num != 0) {
-            (void)set_oppose_pois(creature_ptr, dur, false);
+            (void)set_oppose_pois(player_ptr, dur, false);
             num--;
         }
 
         return true;
     }
     case MUTA::EARTHQUAKE:
-        (void)earthquake(creature_ptr, creature_ptr->y, creature_ptr->x, 10, 0);
+        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
         return true;
     case MUTA::EAT_MAGIC:
-        return eat_magic(creature_ptr, creature_ptr->lev * 2);
+        return eat_magic(player_ptr, player_ptr->lev * 2);
     case MUTA::WEIGH_MAG:
-        report_magics(creature_ptr);
+        report_magics(player_ptr);
         return true;
     case MUTA::STERILITY:
         msg_print(_("突然頭が痛くなった！", "You suddenly have a headache!"));
-        take_hit(creature_ptr, DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"));
-        creature_ptr->current_floor_ptr->num_repro += MAX_REPRO;
+        take_hit(player_ptr, DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"));
+        player_ptr->current_floor_ptr->num_repro += MAX_REPRO;
         return true;
     case MUTA::HIT_AND_AWAY:
-        return hit_and_away(creature_ptr);
+        return hit_and_away(player_ptr);
     case MUTA::DAZZLE:
-        stun_monsters(creature_ptr, lvl * 4);
-        confuse_monsters(creature_ptr, lvl * 4);
-        turn_monsters(creature_ptr, lvl * 4);
+        stun_monsters(player_ptr, lvl * 4);
+        confuse_monsters(player_ptr, lvl * 4);
+        turn_monsters(player_ptr, lvl * 4);
         return true;
     case MUTA::LASER_EYE:
-        if (!get_aim_dir(creature_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(creature_ptr, GF_LITE, dir, 2 * lvl);
+        fire_beam(player_ptr, GF_LITE, dir, 2 * lvl);
         return true;
     case MUTA::RECALL:
-        return recall_player(creature_ptr, randint0(21) + 15);
+        return recall_player(player_ptr, randint0(21) + 15);
     case MUTA::BANISH: {
-        if (!get_direction(creature_ptr, &dir, false, false))
+        if (!get_direction(player_ptr, &dir, false, false))
             return false;
 
-        POSITION y = creature_ptr->y + ddy[dir];
-        POSITION x = creature_ptr->x + ddx[dir];
+        POSITION y = player_ptr->y + ddy[dir];
+        POSITION x = player_ptr->x + ddx[dir];
         grid_type *g_ptr;
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
         if (!g_ptr->m_idx) {
             msg_print(_("邪悪な存在を感じとれません！", "You sense no evil there!"));
@@ -244,18 +244,18 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
         }
 
         monster_type *m_ptr;
-        m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+        m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
         monster_race *r_ptr;
         r_ptr = &r_info[m_ptr->r_idx];
-        if ((r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags1 & RF1_QUESTOR) && !(r_ptr->flags1 & RF1_UNIQUE) && !creature_ptr->current_floor_ptr->inside_arena
-            && !creature_ptr->current_floor_ptr->inside_quest && (r_ptr->level < randint1(creature_ptr->lev + 50)) && m_ptr->mflag2.has_not(MFLAG2::NOGENO)) {
+        if ((r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags1 & RF1_QUESTOR) && !(r_ptr->flags1 & RF1_UNIQUE) && !player_ptr->current_floor_ptr->inside_arena
+            && !player_ptr->current_floor_ptr->inside_quest && (r_ptr->level < randint1(player_ptr->lev + 50)) && m_ptr->mflag2.has_not(MFLAG2::NOGENO)) {
             if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
                 GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+                monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
             }
 
-            delete_monster_idx(creature_ptr, g_ptr->m_idx);
+            delete_monster_idx(player_ptr, g_ptr->m_idx);
             msg_print(_("その邪悪なモンスターは硫黄臭い煙とともに消え去った！", "The evil creature vanishes in a puff of sulfurous smoke!"));
             return true;
         }
@@ -267,26 +267,26 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
         return true;
     }
     case MUTA::COLD_TOUCH: {
-        if (!get_direction(creature_ptr, &dir, false, false))
+        if (!get_direction(player_ptr, &dir, false, false))
             return false;
 
-        POSITION y = creature_ptr->y + ddy[dir];
-        POSITION x = creature_ptr->x + ddx[dir];
+        POSITION y = player_ptr->y + ddy[dir];
+        POSITION x = player_ptr->x + ddx[dir];
         grid_type *g_ptr;
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         if (!g_ptr->m_idx) {
             msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));
             return true;
         }
 
-        fire_bolt(creature_ptr, GF_COLD, dir, 2 * lvl);
+        fire_bolt(player_ptr, GF_COLD, dir, 2 * lvl);
         return true;
     }
     case MUTA::LAUNCHER: {
-        return ThrowCommand(creature_ptr).do_cmd_throw(2 + lvl / 40, false, -1);
+        return ThrowCommand(player_ptr).do_cmd_throw(2 + lvl / 40, false, -1);
     }
     default:
-        PlayerEnergy(creature_ptr).reset_player_turn();
+        PlayerEnergy(player_ptr).reset_player_turn();
         msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);
         return true;
     }

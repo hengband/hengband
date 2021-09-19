@@ -7,12 +7,12 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-static void decide_breath_kind(player_type *creature_ptr, int *breath_type, concptr *breath_type_description)
+static void decide_breath_kind(player_type *player_ptr, int *breath_type, concptr *breath_type_description)
 {
-    if (randint1(100) >= creature_ptr->lev)
+    if (randint1(100) >= player_ptr->lev)
         return;
 
-    switch (creature_ptr->pclass) {
+    switch (player_ptr->pclass) {
     case CLASS_WARRIOR:
     case CLASS_BERSERKER:
     case CLASS_RANGER:
@@ -111,26 +111,26 @@ static void decide_breath_kind(player_type *creature_ptr, int *breath_type, conc
 
         break;
     case CLASS_ELEMENTALIST:
-        *breath_type = get_element_type(creature_ptr->element, 0);
-        *breath_type_description = get_element_name(creature_ptr->element, 0);
+        *breath_type = get_element_type(player_ptr->element, 0);
+        *breath_type_description = get_element_name(player_ptr->element, 0);
         break;
     default:
         break;
     }
 }
 
-bool draconian_breath(player_type *creature_ptr)
+bool draconian_breath(player_type *player_ptr)
 {
     int breath_type = (one_in_(3) ? GF_COLD : GF_FIRE);
     concptr breath_type_description = ((breath_type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
     DIRECTION dir;
-    if (!get_aim_dir(creature_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    decide_breath_kind(creature_ptr, &breath_type, &breath_type_description);
-    stop_mouth(creature_ptr);
+    decide_breath_kind(player_ptr, &breath_type, &breath_type_description);
+    stop_mouth(player_ptr);
     msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), breath_type_description);
 
-    fire_breath(creature_ptr, breath_type, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
+    fire_breath(player_ptr, breath_type, dir, player_ptr->lev * 2, (player_ptr->lev / 15) + 1);
     return true;
 }

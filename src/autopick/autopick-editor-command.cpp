@@ -21,14 +21,14 @@
 #include "core/show-file.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
-#include "player/player-class.h"
-#include "player/player-race.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 
 /*!
  * @brief
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param tb 自動拾いの構文
  * @param com_id エディタ内で打ったコマンド
  * @return

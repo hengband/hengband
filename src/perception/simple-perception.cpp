@@ -29,12 +29,12 @@
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param heavy 重度の擬似鑑定を行うならばTRUE
  */
-static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
+static void sense_inventory_aux(player_type *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
-    object_type *o_ptr = &creature_ptr->inventory_list[slot];
+    object_type *o_ptr = &player_ptr->inventory_list[slot];
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE))
         return;
@@ -45,7 +45,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     if (!feel)
         return;
 
-    if ((creature_ptr->muta.has(MUTA::BAD_LUCK)) && !randint0(13)) {
+    if ((player_ptr->muta.has(MUTA::BAD_LUCK)) && !randint0(13)) {
         switch (feel) {
         case FEEL_TERRIBLE: {
             feel = FEEL_SPECIAL;
@@ -88,14 +88,14 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     }
 
     if (disturb_minor)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 
-    describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {
 #ifdef JP
-        msg_format("%s%s(%c)は%sという感じがする...", describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
+        msg_format("%s%s(%c)は%sという感じがする...", describe_use(player_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
-        msg_format("You feel the %s (%c) you are %s %s %s...", o_name, index_to_label(slot), describe_use(creature_ptr, slot),
+        msg_format("You feel the %s (%c) you are %s %s %s...", o_name, index_to_label(slot), describe_use(player_ptr, slot),
             ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
@@ -110,9 +110,9 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     o_ptr->ident |= (IDENT_SENSE);
     o_ptr->feeling = feel;
 
-    autopick_alter_item(creature_ptr, slot, destroy_feeling);
-    creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    autopick_alter_item(player_ptr, slot, destroy_feeling);
+    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
 }
 
 /*!
@@ -127,15 +127,15 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
  *   Class 4 = Ranger  --> slow but heavy  (changed!)\n
  *   Class 5 = Paladin --> slow but heavy\n
  */
-void sense_inventory1(player_type *creature_ptr)
+void sense_inventory1(player_type *player_ptr)
 {
-    PLAYER_LEVEL plev = creature_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     bool heavy = false;
     object_type *o_ptr;
-    if (creature_ptr->confused)
+    if (player_ptr->confused)
         return;
 
-    switch (creature_ptr->pclass) {
+    switch (player_ptr->pclass) {
     case CLASS_WARRIOR:
     case CLASS_ARCHER:
     case CLASS_SAMURAI:
@@ -245,13 +245,13 @@ void sense_inventory1(player_type *creature_ptr)
         break;
     }
 
-    if (compare_virtue(creature_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE))
+    if (compare_virtue(player_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE))
         heavy = true;
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         bool okay = false;
 
-        o_ptr = &creature_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
 
         if (!o_ptr->k_idx)
             continue;
@@ -288,26 +288,26 @@ void sense_inventory1(player_type *creature_ptr)
         if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
             continue;
 
-        if (has_good_luck(creature_ptr) && !randint0(13)) {
+        if (has_good_luck(player_ptr) && !randint0(13)) {
             heavy = true;
         }
 
-        sense_inventory_aux(creature_ptr, i, heavy);
+        sense_inventory_aux(player_ptr, i, heavy);
     }
 }
 
 /*!
  * @brief 1プレイヤーターン毎に武器、防具以外の擬似鑑定が行われるかを判定する。
  */
-void sense_inventory2(player_type *creature_ptr)
+void sense_inventory2(player_type *player_ptr)
 {
-    PLAYER_LEVEL plev = creature_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     object_type *o_ptr;
 
-    if (creature_ptr->confused)
+    if (player_ptr->confused)
         return;
 
-    switch (creature_ptr->pclass) {
+    switch (player_ptr->pclass) {
     case CLASS_WARRIOR:
     case CLASS_ARCHER:
     case CLASS_SAMURAI:
@@ -371,7 +371,7 @@ void sense_inventory2(player_type *creature_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         bool okay = false;
-        o_ptr = &creature_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -393,7 +393,7 @@ void sense_inventory2(player_type *creature_ptr)
         if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
             continue;
 
-        sense_inventory_aux(creature_ptr, i, true);
+        sense_inventory_aux(player_ptr, i, true);
     }
 }
 

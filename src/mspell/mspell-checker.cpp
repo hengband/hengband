@@ -40,9 +40,9 @@
 #include "mspell/mspell-selector.h"
 #include "mspell/mspell-util.h"
 #include "object-enchant/object-curse.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
-#include "player/player-race-types.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/range-calc.h"
@@ -61,14 +61,14 @@
 /*!
  * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 判定を行いたいマスのY座標
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
  */
-bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
+bool summon_possible(player_type *player_ptr, POSITION y1, POSITION x1)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = y1 - 2; y <= y1 + 2; y++) {
         for (POSITION x = x1 - 2; x <= x1 + 2; x++) {
             if (!in_bounds(floor_ptr, y, x))
@@ -80,7 +80,7 @@ bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
             if (pattern_tile(floor_ptr, y, x))
                 continue;
 
-            if (is_cave_empty_bold(target_ptr, y, x) && projectable(target_ptr, y1, x1, y, x) && projectable(target_ptr, y, x, y1, x1))
+            if (is_cave_empty_bold(player_ptr, y, x) && projectable(player_ptr, y1, x1, y, x) && projectable(player_ptr, y, x, y1, x1))
                 return true;
         }
     }
@@ -91,30 +91,30 @@ bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
 /*!
  * @brief モンスターにとって死者復活を行うべき状態かどうかを返す /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
-bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
+bool raise_possible(player_type *player_ptr, monster_type *m_ptr)
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION xx = x - 5; xx <= x + 5; xx++) {
         grid_type *g_ptr;
         for (POSITION yy = y - 5; yy <= y + 5; yy++) {
             if (distance(y, x, yy, xx) > 5)
                 continue;
-            if (!los(target_ptr, y, x, yy, xx))
+            if (!los(player_ptr, y, x, yy, xx))
                 continue;
-            if (!projectable(target_ptr, y, x, yy, xx))
+            if (!projectable(player_ptr, y, x, yy, xx))
                 continue;
 
             g_ptr = &floor_ptr->grid_array[yy][xx];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
                 object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
                 if (o_ptr->tval == TV_CORPSE) {
-                    if (!monster_has_hostile_align(target_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval]))
+                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval]))
                         return true;
                 }
             }
@@ -127,7 +127,7 @@ bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
 /*!
  * @brief モンスターにとってボルト型魔法が有効な状態かを返す /
  * Determine if a bolt spell will hit the player.
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 ボルト魔法発射地点のY座標
  * @param x1 ボルト魔法発射地点のX座標
  * @param y2 ボルト魔法目標地点のY座標
@@ -144,11 +144,11 @@ bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
  * no equally friendly monster is\n
  * between the attacker and target.\n
  */
-bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
+bool clean_shot(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
-    int grid_n = projection_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, 0);
+    int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, 0);
     if (!grid_n)
         return false;
 
@@ -168,7 +168,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
             }
         }
 
-        if (player_bold(target_ptr, y, x) && is_friend)
+        if (player_bold(player_ptr, y, x) && is_friend)
             return false;
     }
 
@@ -178,7 +178,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 /*!
  * @brief モンスターのボルト型魔法処理 /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -187,7 +187,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
+ProjectResult bolt(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -202,12 +202,12 @@ ProjectResult bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
     if (typ != GF_ARROW)
         flg |= PROJECT_REFLECTABLE;
 
-    return project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
 }
 
 /*!
  * @brief モンスターのビーム型魔法処理 /
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -216,7 +216,7 @@ ProjectResult bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
+ProjectResult beam(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -228,13 +228,13 @@ ProjectResult beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
         break;
     }
 
-    return project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
 }
 
 /*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  * @param m_idx モンスターのID
@@ -245,10 +245,9 @@ ProjectResult beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult breath(
-    player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int target_type)
+ProjectResult breath(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int target_type)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     BIT_FLAGS flg = 0x00;
     switch (target_type) {
@@ -282,7 +281,7 @@ ProjectResult breath(
         break;
     }
 
-    return project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
 }
 
 /*!

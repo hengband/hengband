@@ -9,6 +9,7 @@
 #include "artifact/fixed-art-types.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
+#include "object-enchant/object-smith.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -50,7 +51,7 @@ void object_type::copy_from(object_type *j_ptr)
 /*!
  * @brief オブジェクト構造体にベースアイテムを作成する
  * Prepare an object based on an object kind.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param k_idx 新たに作成したいベースアイテム情報のID
  */
 void object_type::prep(KIND_OBJECT_IDX ko_idx)
@@ -354,7 +355,7 @@ bool object_type::is_ego() const
  */
 bool object_type::is_smith() const
 {
-    return this->is_weapon_armour_ammo() && (this->xtra3 > 0);
+    return Smith::object_effect(this).has_value() || Smith::object_activation(this).has_value();
 }
 
 /*!
@@ -522,5 +523,5 @@ bool object_type::is_activatable() const
         return false;
 
     auto flags = object_flags(this);
-    return has_flag(flags, TR_ACTIVATE);
+    return flags.has(TR_ACTIVATE);
 }

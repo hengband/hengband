@@ -51,7 +51,7 @@ errr play_music(int type, int val)
 
 /*!
  * @brief シチュエーションに合ったBGM選曲
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details 設定がない場合はミュートする。
  */
 void select_floor_music(player_type *player_ptr)
@@ -65,7 +65,7 @@ void select_floor_music(player_type *player_ptr)
 
 /*!
  * @brief モンスターBGM選曲
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param monster_list モンスターリスト
  */
 void select_monster_music(player_type *player_ptr, const std::vector<MONSTER_IDX> &monster_list)

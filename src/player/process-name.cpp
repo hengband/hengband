@@ -14,83 +14,83 @@
 /*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf セーブファイル名に合わせた修正を行うならばTRUE
  * @details
  * Extract a clean "base name".
  * Build the savefile name if needed.
  */
-void process_player_name(player_type *creature_ptr, bool is_new_savefile)
+void process_player_name(player_type *player_ptr, bool is_new_savefile)
 {
     char old_player_base[32] = "";
-    if (current_world_ptr->character_generated)
-        strcpy(old_player_base, creature_ptr->base_name);
+    if (w_ptr->character_generated)
+        strcpy(old_player_base, player_ptr->base_name);
 
-    for (int i = 0; creature_ptr->name[i]; i++) {
+    for (int i = 0; player_ptr->name[i]; i++) {
 #ifdef JP
-        if (iskanji(creature_ptr->name[i])) {
+        if (iskanji(player_ptr->name[i])) {
             i++;
             continue;
         }
 
-        if (iscntrl((unsigned char)creature_ptr->name[i]))
+        if (iscntrl((unsigned char)player_ptr->name[i]))
 #else
-        if (iscntrl(creature_ptr->name[i]))
+        if (iscntrl(player_ptr->name[i]))
 #endif
         {
-            quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), creature_ptr->name);
+            quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), player_ptr->name);
         }
     }
 
     int k = 0;
-    for (int i = 0; creature_ptr->name[i]; i++) {
+    for (int i = 0; player_ptr->name[i]; i++) {
 #ifdef JP
-        unsigned char c = creature_ptr->name[i];
+        unsigned char c = player_ptr->name[i];
 #else
-        char c = creature_ptr->name[i];
+        char c = player_ptr->name[i];
 #endif
 
 #ifdef JP
         if (iskanji(c)) {
-            if (k + 2 >= (int)sizeof(creature_ptr->base_name) || !creature_ptr->name[i + 1])
+            if (k + 2 >= (int)sizeof(player_ptr->base_name) || !player_ptr->name[i + 1])
                 break;
 
-            creature_ptr->base_name[k++] = c;
+            player_ptr->base_name[k++] = c;
             i++;
-            creature_ptr->base_name[k++] = creature_ptr->name[i];
+            player_ptr->base_name[k++] = player_ptr->name[i];
         }
 #ifdef SJIS
         else if (iskana(c))
-            creature_ptr->base_name[k++] = c;
+            player_ptr->base_name[k++] = c;
 #endif
         else
 #endif
-            if (!strncmp(PATH_SEP, creature_ptr->name + i, strlen(PATH_SEP))) {
-            creature_ptr->base_name[k++] = '_';
+            if (!strncmp(PATH_SEP, player_ptr->name + i, strlen(PATH_SEP))) {
+            player_ptr->base_name[k++] = '_';
             i += strlen(PATH_SEP);
         }
 #if defined(WINDOWS)
         else if (angband_strchr("\"*,/:;<>?\\|", c))
-            creature_ptr->base_name[k++] = '_';
+            player_ptr->base_name[k++] = '_';
 #endif
         else if (isprint(c))
-            creature_ptr->base_name[k++] = c;
+            player_ptr->base_name[k++] = c;
     }
 
-    creature_ptr->base_name[k] = '\0';
-    if (!creature_ptr->base_name[0])
-        strcpy(creature_ptr->base_name, "PLAYER");
+    player_ptr->base_name[k] = '\0';
+    if (!player_ptr->base_name[0])
+        strcpy(player_ptr->base_name, "PLAYER");
 
     auto is_modified = false;
     if (is_new_savefile && (!savefile[0] || !keep_savefile)) {
         char temp[128];
 
 #ifdef SAVEFILE_USE_UID
-        /* Rename the savefile, using the creature_ptr->player_uid and creature_ptr->base_name */
-        (void)sprintf(temp, "%d.%s", creature_ptr->player_uid, creature_ptr->base_name);
+        /* Rename the savefile, using the player_ptr->player_uid and player_ptr->base_name */
+        (void)sprintf(temp, "%d.%s", player_ptr->player_uid, player_ptr->base_name);
 #else
-        /* Rename the savefile, using the creature_ptr->base_name */
-        (void)sprintf(temp, "%s", creature_ptr->base_name);
+        /* Rename the savefile, using the player_ptr->base_name */
+        (void)sprintf(temp, "%s", player_ptr->base_name);
 #endif
         path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
         is_modified = true;
@@ -113,15 +113,15 @@ void process_player_name(player_type *creature_ptr, bool is_new_savefile)
 #endif
     }
 
-    if (current_world_ptr->character_generated && !streq(old_player_base, creature_ptr->base_name)) {
-        autopick_load_pref(creature_ptr, false);
+    if (w_ptr->character_generated && !streq(old_player_base, player_ptr->base_name)) {
+        autopick_load_pref(player_ptr, false);
     }
 }
 
 /*!
  * @brief プレイヤーの名前を変更するコマンドのメインルーチン
  * Gets a name for the character, reacting to name changes.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * <pre>
  * Assumes that "display_player()" has just been called
@@ -130,17 +130,17 @@ void process_player_name(player_type *creature_ptr, bool is_new_savefile)
  * What a horrible name for a global function.
  * </pre>
  */
-void get_name(player_type *creature_ptr)
+void get_name(player_type *player_ptr)
 {
     char tmp[64];
-    strcpy(tmp, creature_ptr->name);
+    strcpy(tmp, player_ptr->name);
 
     if (get_string(_("キャラクターの名前を入力して下さい: ", "Enter a name for your character: "), tmp, 15)) {
-        strcpy(creature_ptr->name, tmp);
+        strcpy(player_ptr->name, tmp);
     }
 
-    if (strlen(creature_ptr->name) == 0) {
-        strcpy(creature_ptr->name, "PLAYER");
+    if (strlen(player_ptr->name) == 0) {
+        strcpy(player_ptr->name, "PLAYER");
     }
 
     strcpy(tmp, ap_ptr->title);
@@ -150,7 +150,7 @@ void get_name(player_type *creature_ptr)
 #else
     strcat(tmp, " ");
 #endif
-    strcat(tmp, creature_ptr->name);
+    strcat(tmp, player_ptr->name);
 
     term_erase(34, 1, 255);
     c_put_str(TERM_L_BLUE, tmp, 1, 34);

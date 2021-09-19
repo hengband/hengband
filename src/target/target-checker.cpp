@@ -32,7 +32,7 @@ POSITION target_row;
 
 /*!
  * @brief マップ描画のフォーカスを当てるべき座標を更新する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Given an row (y) and col (x), this routine detects when a move
  * off the screen has occurred and figures new borders. -RAK-
@@ -40,14 +40,14 @@ POSITION target_row;
  * The map is reprinted if necessary, and "TRUE" is returned.
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-void verify_panel(player_type *creature_ptr)
+void verify_panel(player_type *player_ptr)
 {
-    POSITION y = creature_ptr->y;
-    POSITION x = creature_ptr->x;
+    POSITION y = player_ptr->y;
+    POSITION x = player_ptr->x;
     TERM_LEN wid, hgt;
     get_screen_size(&wid, &hgt);
-    int max_prow_min = creature_ptr->current_floor_ptr->height - hgt;
-    int max_pcol_min = creature_ptr->current_floor_ptr->width - wid;
+    int max_prow_min = player_ptr->current_floor_ptr->height - hgt;
+    int max_pcol_min = player_ptr->current_floor_ptr->width - wid;
     if (max_prow_min < 0)
         max_prow_min = 0;
     if (max_pcol_min < 0)
@@ -55,7 +55,7 @@ void verify_panel(player_type *creature_ptr)
 
     int prow_min;
     int pcol_min;
-    if (center_player && (center_running || !creature_ptr->running)) {
+    if (center_player && (center_running || !player_ptr->running)) {
         prow_min = y - hgt / 2;
         if (prow_min < 0)
             prow_min = 0;
@@ -105,19 +105,19 @@ void verify_panel(player_type *creature_ptr)
     panel_row_min = prow_min;
     panel_col_min = pcol_min;
     if (disturb_panel && !center_player)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 
     panel_bounds_center();
-    creature_ptr->update |= PU_MONSTERS;
-    creature_ptr->redraw |= PR_MAP;
-    creature_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    player_ptr->update |= PU_MONSTERS;
+    player_ptr->redraw |= PR_MAP;
+    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 }
 
 /*
  * Update (if necessary) and verify (if possible) the target.
  * We return TRUE if the target is "okay" and FALSE otherwise.
  */
-bool target_okay(player_type *creature_ptr)
+bool target_okay(player_type *player_ptr)
 {
     if (target_who < 0)
         return true;
@@ -125,10 +125,10 @@ bool target_okay(player_type *creature_ptr)
     if (target_who <= 0)
         return false;
 
-    if (!target_able(creature_ptr, target_who))
+    if (!target_able(player_ptr, target_who))
         return false;
 
-    monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[target_who];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[target_who];
     target_row = m_ptr->fy;
     target_col = m_ptr->fx;
     return true;

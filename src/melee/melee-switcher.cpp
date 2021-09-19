@@ -14,7 +14,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
+void describe_melee_method(player_type *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RBM_HIT: {
@@ -93,7 +93,7 @@ void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
     }
     case RBM_EXPLODE: {
         if (mam_ptr->see_either)
-            disturb(subject_ptr, true, true);
+            disturb(player_ptr, true, true);
 
         mam_ptr->act = _("爆発した。", "explodes.");
         mam_ptr->explode = true;
@@ -148,7 +148,7 @@ void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
-void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
+void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->effect) {
     case 0:
@@ -177,7 +177,7 @@ void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
         break;
     case RBE_EAT_ITEM:
     case RBE_EAT_GOLD:
-        if ((subject_ptr->riding != mam_ptr->m_idx) && one_in_(2))
+        if ((player_ptr->riding != mam_ptr->m_idx) && one_in_(2))
             mam_ptr->blinked = true;
 
         break;
@@ -216,7 +216,7 @@ void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
     case RBE_SHATTER:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
         if (mam_ptr->damage > 23)
-            earthquake(subject_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
+            earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
 
         break;
     case RBE_EXP_10:
@@ -251,7 +251,7 @@ void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
-void describe_monster_missed_monster(player_type *subject_ptr, mam_type *mam_ptr)
+void describe_monster_missed_monster(player_type *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RBM_HIT:
@@ -266,7 +266,7 @@ void describe_monster_missed_monster(player_type *subject_ptr, mam_type *mam_ptr
     case RBM_CRUSH:
     case RBM_ENGULF:
     case RBM_CHARGE: {
-        (void)set_monster_csleep(subject_ptr, mam_ptr->t_idx, 0);
+        (void)set_monster_csleep(player_ptr, mam_ptr->t_idx, 0);
         if (mam_ptr->see_m) {
 #ifdef JP
             msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);

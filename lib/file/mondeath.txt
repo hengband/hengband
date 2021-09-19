@@ -36,7 +36,7 @@ N:880:Wong, Master of Time
 shouts, 'This CAN'T be happening!'
 
 N:921:Internet Exploder
-was deleted.
+is deleted.
 
 N:931:Caldarm the third
 says, 'I desire peace ... for all people... '
@@ -45,7 +45,7 @@ N:936:Kenshirou of hokuto
 shouts, 'JuliaAAAAAAA!!!'
 
 N:1004:Pip, the Braver from Another World
-was killed by a cruel venturer. Go to 14.
+is killed by a cruel venturer. Go to 14.
 
 N:1018:Raou
 points at himself and shouts, 'I finished my life with no regrets!'
@@ -60,16 +60,19 @@ N:1291:Diavolo
 says, 'Don't get close to me Ahhhhhhh!!!!!!'
 
 N:1292:Cioccolata
-shouted, "Yadder Baaaaaaaaaaaa!!!" and was thrown into a garbage truck.
+shouts, "Yadder Baaaaaaaaaaaa!!!" and was thrown into a garbage truck.
 
 N:1299:The Colonel Lostringil
-shouted, "Ringil! My Ringil!!"
+shouts, 'Ringil! My Ringil!!'
 
 N:1303:Spawn of Yog-Sothoth
 says, 'Please help me, Father, Father Yog-Sothoth!'
 
 N:1333:Professor Ootsuki
-Why... my plasma power loses... even though I remodeled my whole body...
+says, 'Why... my plasma power loses... even though I remodeled my whole body...'
+
+N:1345:GREAT THING, the Huge Battle Ship
+is destroyed.  FINAL ZONE IS OVER.
 
 N:*:Default
 shouts, 'AAAARRRGGGHHH!!!'

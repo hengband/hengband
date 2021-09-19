@@ -8,13 +8,13 @@
 
 /*!
  * @brief プレイヤーの各ステータス計算用のクラス
- * @param owner_ptr プレイヤーの参照ポインタ
+ * @param player_ptr プレイヤーの参照ポインタ
  * @details
- * * コンストラクタでowner_ptrをセット。メンバ変数を0クリア。
+ * * コンストラクタでplayer_ptrをセット。メンバ変数を0クリア。
  */
-PlayerStatusBase::PlayerStatusBase(player_type *owner_ptr)
+PlayerStatusBase::PlayerStatusBase(player_type *player_ptr)
 {
-    this->owner_ptr = owner_ptr;
+    this->player_ptr = player_ptr;
     this->set_locals(); /* 初期化。基底クラスの0クリアが呼ばれる。*/
 }
 
@@ -188,14 +188,14 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
     object_type *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &owner_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
         auto flgs = object_flags(o_ptr);
 
-        if (has_flag(flgs, check_flag))
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
+        if (flgs.has(check_flag))
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
     }
     return result;
 }
@@ -210,15 +210,15 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
     object_type *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &owner_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
         auto flgs = object_flags(o_ptr);
 
-        if (has_flag(flgs, check_flag)) {
+        if (flgs.has(check_flag)) {
             if (o_ptr->pval < 0) {
-                set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
+                set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
             }
         }
     }
@@ -234,12 +234,12 @@ int16_t PlayerStatusBase::equipments_value()
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     int16_t result = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &owner_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         auto flgs = object_flags(o_ptr);
 
         if (!o_ptr->k_idx)
             continue;
-        if (has_flag(flgs, this->tr_flag))
+        if (flgs.has(this->tr_flag))
             result += o_ptr->pval;
     }
     return result;

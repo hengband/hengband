@@ -32,7 +32,7 @@
 
 /*!
  * @brief 恐怖の仮面への特殊処理
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  * @return 追加能力/耐性がもらえるならtrue、もらえないならfalse
  * @details
@@ -51,8 +51,8 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
     case CLASS_BERSERKER:
         return true;
     default:
-        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-        add_flag(o_ptr->art_flags, TR_TY_CURSE);
+        o_ptr->art_flags.set(TR_AGGRAVATE);
+        o_ptr->art_flags.set(TR_TY_CURSE);
         o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
         return false;
@@ -61,7 +61,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
 
 /*!
  * @brief 戦乙女ミリムの危ない水着への特殊処理 (セクシーギャルのみpval追加)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  */
 static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
@@ -70,19 +70,19 @@ static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
         return;
 
     o_ptr->pval = 3;
-    add_flag(o_ptr->art_flags, TR_STR);
-    add_flag(o_ptr->art_flags, TR_INT);
-    add_flag(o_ptr->art_flags, TR_WIS);
-    add_flag(o_ptr->art_flags, TR_DEX);
-    add_flag(o_ptr->art_flags, TR_CON);
-    add_flag(o_ptr->art_flags, TR_CHR);
+    o_ptr->art_flags.set(TR_STR);
+    o_ptr->art_flags.set(TR_INT);
+    o_ptr->art_flags.set(TR_WIS);
+    o_ptr->art_flags.set(TR_DEX);
+    o_ptr->art_flags.set(TR_CON);
+    o_ptr->art_flags.set(TR_CHR);
 }
 
 /*!
  * @brief 特定の固定アーティファクトの条件付き追加能力/耐性を付加する
  * @attention プレイヤーの各種ステータスに依存した処理がある。
  * @todo 折を見て関数名を変更すること。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @param a_ptr 生成する固定アーティファクト構造体ポインタ
  * @details
@@ -93,24 +93,24 @@ static void invest_special_artifact_abilities(player_type *player_ptr, object_ty
     switch (o_ptr->name1) {
     case ART_MURAMASA:
         if (player_ptr->pclass != CLASS_SAMURAI) {
-            add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+            o_ptr->art_flags.set(TR_NO_MAGIC);
             o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
         if (player_ptr->pclass == CLASS_BARD)
-            add_flag(o_ptr->art_flags, TR_DEC_MANA);
+            o_ptr->art_flags.set(TR_DEC_MANA);
         return;
     case ART_XIAOLONG:
         if (player_ptr->pclass == CLASS_MONK)
-            add_flag(o_ptr->art_flags, TR_BLOWS);
+            o_ptr->art_flags.set(TR_BLOWS);
         return;
     case ART_BLOOD:
         get_bloody_moon_flags(o_ptr);
         return;
     case ART_HEAVENLY_MAIDEN:
         if (player_ptr->psex != SEX_FEMALE)
-            add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+            o_ptr->art_flags.set(TR_AGGRAVATE);
         return;
     case ART_MILIM:
         milim_swimsuit(player_ptr, o_ptr);
@@ -199,7 +199,7 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_
 
 /*!
  * @brief オブジェクトに指定した固定アーティファクトをオブジェクトに割り当てる。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
@@ -225,7 +225,7 @@ artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief フロアの指定された位置に固定アーティファクトを生成する。 / Create the artifact of the specified number
  * @details 固定アーティファクト構造体から基本ステータスをコピーした後、所定の座標でdrop_item()で落とす。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param a_idx 生成する固定アーティファクト構造体のID
  * @param y アイテムを落とす地点のy座標
  * @param x アイテムを落とす地点のx座標
@@ -257,7 +257,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 /*!
  * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  * @details
@@ -314,7 +314,7 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  * @details

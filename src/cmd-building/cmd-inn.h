@@ -1,4 +1,4 @@
 ﻿#pragma once
 
 struct player_type;
-bool inn_comm(player_type *customer_ptr, int cmd);
+bool inn_comm(player_type *player_ptr, int cmd);

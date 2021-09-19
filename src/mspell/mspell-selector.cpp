@@ -194,13 +194,13 @@ static bool spell_world(RF_ABILITY spell)
 /*!
  * @brief ID値が特別効果のモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell special.
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(player_type *target_ptr, RF_ABILITY spell)
+static bool spell_special(player_type *player_ptr, RF_ABILITY spell)
 {
-    if (target_ptr->phase_out)
+    if (player_ptr->phase_out)
         return false;
 
     return spell == RF_ABILITY::SPECIAL;
@@ -242,7 +242,7 @@ static bool spell_dispel(RF_ABILITY spell)
 /*!
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの構造体配列ID
  * @param spells 候補魔法IDをまとめた配列
  * @param num spellsの長さ
@@ -260,7 +260,7 @@ static bool spell_dispel(RF_ABILITY spell)
  * This function may well be an efficiency bottleneck.\n
  * @todo 長過ぎる。切り分けが必要
  */
-RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
+RF_ABILITY choose_attack_spell(player_type *player_ptr, msa_type *msa_ptr)
 {
     std::vector<RF_ABILITY> escape;
     std::vector<RF_ABILITY> attack;
@@ -276,7 +276,7 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
     std::vector<RF_ABILITY> heal;
     std::vector<RF_ABILITY> dispel;
 
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_STUPID)
         return (msa_ptr->mspells[randint0(msa_ptr->mspells.size())]);
@@ -306,7 +306,7 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
         if (spell_world(msa_ptr->mspells[i]))
             world.push_back(msa_ptr->mspells[i]);
 
-        if (spell_special(target_ptr, msa_ptr->mspells[i]))
+        if (spell_special(player_ptr, msa_ptr->mspells[i]))
             special.push_back(msa_ptr->mspells[i]);
 
         if (spell_psy_spe(msa_ptr->mspells[i]))
@@ -322,7 +322,7 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
             dispel.push_back(msa_ptr->mspells[i]);
     }
 
-    if (!world.empty() && (randint0(100) < 15) && !current_world_ptr->timewalk_m_idx)
+    if (!world.empty() && (randint0(100) < 15) && !w_ptr->timewalk_m_idx)
         return (world[randint0(world.size())]);
 
     if (!special.empty()) {
@@ -375,8 +375,8 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
             return (special[randint0(special.size())]);
     }
 
-    if ((distance(target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(RF_ABILITY::TRAPS)) && (randint0(100) < 75)
-        && !current_world_ptr->timewalk_m_idx) {
+    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(RF_ABILITY::TRAPS)) && (randint0(100) < 75)
+        && !w_ptr->timewalk_m_idx) {
         if (!tactic.empty())
             return (tactic[randint0(tactic.size())]);
     }
@@ -385,7 +385,7 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
         return (summon[randint0(summon.size())]);
 
     if (!dispel.empty() && one_in_(2)) {
-        if (dispel_check(target_ptr, msa_ptr->m_idx)) {
+        if (dispel_check(player_ptr, msa_ptr->m_idx)) {
             return (dispel[randint0(dispel.size())]);
         }
     }
@@ -393,7 +393,7 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
     if (!raise.empty() && (randint0(100) < 40))
         return (raise[randint0(raise.size())]);
 
-    if (is_invuln(target_ptr)) {
+    if (is_invuln(player_ptr)) {
         if (!psy_spe.empty() && (randint0(100) < 50)) {
             return (psy_spe[randint0(psy_spe.size())]);
         } else if (!attack.empty() && (randint0(100) < 40)) {
@@ -403,7 +403,7 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
         return (attack[randint0(attack.size())]);
     }
 
-    if (!tactic.empty() && (randint0(100) < 50) && !current_world_ptr->timewalk_m_idx)
+    if (!tactic.empty() && (randint0(100) < 50) && !w_ptr->timewalk_m_idx)
         return (tactic[randint0(tactic.size())]);
 
     if (!invul.empty() && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50))

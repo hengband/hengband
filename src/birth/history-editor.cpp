@@ -12,27 +12,27 @@
 
 /*!
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void edit_history(player_type *creature_ptr)
+void edit_history(player_type *player_ptr)
 {
     char old_history[4][60];
     for (int i = 0; i < 4; i++) {
-        sprintf(old_history[i], "%s", creature_ptr->history[i]);
+        sprintf(old_history[i], "%s", player_ptr->history[i]);
     }
 
     for (int i = 0; i < 4; i++) {
         /* loop */
         int j;
-        for (j = 0; creature_ptr->history[i][j]; j++)
+        for (j = 0; player_ptr->history[i][j]; j++)
             ;
 
         for (; j < 59; j++)
-            creature_ptr->history[i][j] = ' ';
-        creature_ptr->history[i][59] = '\0';
+            player_ptr->history[i][j] = ' ';
+        player_ptr->history[i][59] = '\0';
     }
 
-    display_player(creature_ptr, 1);
+    display_player(player_ptr, 1);
     c_put_str(TERM_L_GREEN, _("(キャラクターの生い立ち - 編集モード)", "(Character Background - Edit Mode)"), 11, 20);
     put_str(_("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]"), 17, 10);
     TERM_LEN y = 0;
@@ -41,15 +41,15 @@ void edit_history(player_type *creature_ptr)
         char c;
 
         for (int i = 0; i < 4; i++) {
-            put_str(creature_ptr->history[i], i + 12, 10);
+            put_str(player_ptr->history[i], i + 12, 10);
         }
 #ifdef JP
-        if (iskanji2(creature_ptr->history[y], x)) {
-            char kanji[3] = { creature_ptr->history[y][x], creature_ptr->history[y][x + 1], '\0' };
+        if (iskanji2(player_ptr->history[y], x)) {
+            char kanji[3] = { player_ptr->history[y][x], player_ptr->history[y][x + 1], '\0' };
             c_put_str(TERM_L_BLUE, format("%s", kanji), y + 12, x + 10);
         } else
 #endif
-            c_put_str(TERM_L_BLUE, format("%c", creature_ptr->history[y][x]), y + 12, x + 10);
+            c_put_str(TERM_L_BLUE, format("%c", player_ptr->history[y][x]), y + 12, x + 10);
 
         term_gotoxy(x + 10, y + 12);
         int skey = inkey_special(true);
@@ -63,7 +63,7 @@ void edit_history(player_type *creature_ptr)
             if (y < 0)
                 y = 3;
 #ifdef JP
-            if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1)))
+            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
                 x--;
 #endif
         } else if (skey == SKEY_DOWN || c == KTRL('n')) {
@@ -71,12 +71,12 @@ void edit_history(player_type *creature_ptr)
             if (y > 3)
                 y = 0;
 #ifdef JP
-            if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1)))
+            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
                 x--;
 #endif
         } else if (skey == SKEY_RIGHT || c == KTRL('f')) {
 #ifdef JP
-            if (iskanji2(creature_ptr->history[y], x))
+            if (iskanji2(player_ptr->history[y], x))
                 x++;
 #endif
             x++;
@@ -96,7 +96,7 @@ void edit_history(player_type *creature_ptr)
             }
 
 #ifdef JP
-            if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1)))
+            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
                 x--;
 #endif
         } else if (c == '\r' || c == '\n') {
@@ -108,15 +108,15 @@ void edit_history(player_type *creature_ptr)
             clear_from(11);
             put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
             for (int i = 0; i < 4; i++) {
-                sprintf(creature_ptr->history[i], "%s", old_history[i]);
-                put_str(creature_ptr->history[i], i + 12, 10);
+                sprintf(player_ptr->history[i], "%s", old_history[i]);
+                put_str(player_ptr->history[i], i + 12, 10);
             }
 
             break;
         } else if (c == KTRL('A')) {
-            if (read_histpref(creature_ptr)) {
+            if (read_histpref(player_ptr)) {
 #ifdef JP
-                if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1)))
+                if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
                     x--;
 #endif
             }
@@ -130,11 +130,11 @@ void edit_history(player_type *creature_ptr)
                     x = 0;
             }
 
-            creature_ptr->history[y][x] = ' ';
+            player_ptr->history[y][x] = ' ';
 #ifdef JP
-            if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1))) {
+            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
                 x--;
-                creature_ptr->history[y][x] = ' ';
+                player_ptr->history[y][x] = ' ';
             }
 #endif
         }
@@ -145,8 +145,8 @@ void edit_history(player_type *creature_ptr)
 #endif
         {
 #ifdef JP
-            if (iskanji2(creature_ptr->history[y], x)) {
-                creature_ptr->history[y][x + 1] = ' ';
+            if (iskanji2(player_ptr->history[y], x)) {
+                player_ptr->history[y][x + 1] = ' ';
             }
 
             if (iskanji(c)) {
@@ -157,16 +157,16 @@ void edit_history(player_type *creature_ptr)
                         y = 0;
                 }
 
-                if (iskanji2(creature_ptr->history[y], x + 1)) {
-                    creature_ptr->history[y][x + 2] = ' ';
+                if (iskanji2(player_ptr->history[y], x + 1)) {
+                    player_ptr->history[y][x + 2] = ' ';
                 }
 
-                creature_ptr->history[y][x++] = c;
+                player_ptr->history[y][x++] = c;
 
                 c = inkey();
             }
 #endif
-            creature_ptr->history[y][x++] = c;
+            player_ptr->history[y][x++] = c;
             if (x > 58) {
                 x = 0;
                 y++;

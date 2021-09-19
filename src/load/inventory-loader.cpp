@@ -8,7 +8,7 @@
 
 /*!
  * @brief プレイヤーの所持品情報を読み込む / Read the player inventory
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Note that the inventory changed in Angband 2.7.4.  Two extra
  * pack slots were added and the equipment was rearranged.  Note
@@ -64,15 +64,15 @@ static errr rd_inventory(player_type *player_ptr)
     return 0;
 }
 
-errr load_inventory(player_type *creature_ptr)
+errr load_inventory(player_type *player_ptr)
 {
     byte tmp8u;
     for (int i = 0; i < 64; i++) {
         rd_byte(&tmp8u);
-        creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
+        player_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
     }
 
-    if (!rd_inventory(creature_ptr))
+    if (!rd_inventory(player_ptr))
         return 0;
 
     load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));

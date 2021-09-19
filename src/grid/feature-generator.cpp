@@ -22,12 +22,12 @@
  * @brief フロアに洞窟や湖を配置する / Generate various caverns and lakes
  * @details There were moved from cave_gen().
  */
-void gen_caverns_and_lakes(player_type *owner_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
+void gen_caverns_and_lakes(player_type *player_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST * 2) && small_levels && dungeon_ptr->flags.has(DF::DESTROY)) {
         dd_ptr->destroyed = true;
-        build_lake(owner_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
+        build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
 
     if (one_in_(LAKE_LEVEL) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
@@ -81,19 +81,19 @@ void gen_caverns_and_lakes(player_type *owner_ptr, dungeon_type *dungeon_ptr, du
             dd_ptr->laketype = LAKE_T_AIR_VAULT;
 
         if (dd_ptr->laketype) {
-            msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("湖を生成します。", "Lake on the level."));
-            build_lake(owner_ptr, dd_ptr->laketype);
+            msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("湖を生成します。", "Lake on the level."));
+            build_lake(player_ptr, dd_ptr->laketype);
         }
     }
 
     if ((floor_ptr->dun_level > DUN_CAVERN) && !dd_ptr->empty_level && dungeon_ptr->flags.has(DF::CAVERN) && !dd_ptr->laketype && !dd_ptr->destroyed
         && (randint1(1000) < floor_ptr->dun_level)) {
         dd_ptr->cavern = true;
-        msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
-        build_cavern(owner_ptr);
+        msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
+        build_cavern(player_ptr);
     }
 
-    if (quest_number(owner_ptr, floor_ptr->dun_level))
+    if (quest_number(player_ptr, floor_ptr->dun_level))
         dd_ptr->destroyed = false;
 }
 
@@ -153,7 +153,7 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 設置を行いたいマスのY座標
  * @param x 設置を行いたいマスのX座標
  */

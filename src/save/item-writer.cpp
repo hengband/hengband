@@ -3,6 +3,7 @@
 #include "object/object-kind.h"
 #include "save/save-util.h"
 #include "system/object-type-definition.h"
+#include "util/enum-converter.h"
 #include "util/quarks.h"
 
 static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
@@ -49,20 +50,8 @@ static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->marked)
         *flags |= SAVE_ITEM_MARKED;
 
-    if (o_ptr->art_flags[0])
-        *flags |= SAVE_ITEM_ART_FLAGS0;
-
-    if (o_ptr->art_flags[1])
-        *flags |= SAVE_ITEM_ART_FLAGS1;
-
-    if (o_ptr->art_flags[2])
-        *flags |= SAVE_ITEM_ART_FLAGS2;
-
-    if (o_ptr->art_flags[3])
-        *flags |= SAVE_ITEM_ART_FLAGS3;
-
-    if (o_ptr->art_flags[4])
-        *flags |= SAVE_ITEM_ART_FLAGS4;
+    if (o_ptr->art_flags.any())
+        *flags |= SAVE_ITEM_ART_FLAGS;
 
     if (o_ptr->curse_flags.any())
         *flags |= SAVE_ITEM_CURSE_FLAGS;
@@ -96,6 +85,10 @@ static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
 
     if (o_ptr->stack_idx)
         *flags |= SAVE_ITEM_STACK_IDX;
+
+    if (o_ptr->is_smith()) {
+        *flags |= SAVE_ITEM_SMITH;
+    }
 
     wr_u32b(*flags);
 }
@@ -136,20 +129,8 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
     if (flags & SAVE_ITEM_MARKED)
         wr_byte(o_ptr->marked);
 
-    if (flags & SAVE_ITEM_ART_FLAGS0)
-        wr_u32b(o_ptr->art_flags[0]);
-
-    if (flags & SAVE_ITEM_ART_FLAGS1)
-        wr_u32b(o_ptr->art_flags[1]);
-
-    if (flags & SAVE_ITEM_ART_FLAGS2)
-        wr_u32b(o_ptr->art_flags[2]);
-
-    if (flags & SAVE_ITEM_ART_FLAGS3)
-        wr_u32b(o_ptr->art_flags[3]);
-
-    if (flags & SAVE_ITEM_ART_FLAGS4)
-        wr_u32b(o_ptr->art_flags[4]);
+    if (flags & SAVE_ITEM_ART_FLAGS)
+        wr_FlagGroup(o_ptr->art_flags, wr_byte);
 
     if (flags & SAVE_ITEM_CURSE_FLAGS)
         wr_FlagGroup(o_ptr->curse_flags, wr_byte);
@@ -177,6 +158,19 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
 
     if (flags & SAVE_ITEM_STACK_IDX)
         wr_s16b(o_ptr->stack_idx);
+
+    if (flags & SAVE_ITEM_SMITH) {
+        if (o_ptr->smith_effect.has_value()){
+            wr_s16b(enum2i(o_ptr->smith_effect.value()));
+        } else {
+            wr_s16b(0);
+        }
+        if (o_ptr->smith_act_idx.has_value()) {
+            wr_s16b(enum2i(o_ptr->smith_act_idx.value()));
+        } else {
+            wr_s16b(0);
+        }
+    }
 }
 
 /*!

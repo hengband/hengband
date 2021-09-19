@@ -29,7 +29,7 @@
  * The cost for rods depends on the level of the rod. The prices\n
  * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void building_recharge(player_type *player_ptr)
 {
@@ -171,7 +171,7 @@ void building_recharge(player_type *player_ptr)
  * The cost for rods depends on the level of the rod. The prices\n
  * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void building_recharge_all(player_type *player_ptr)
 {

@@ -68,24 +68,24 @@ static errr get_obj_num_prep(void)
 
 /*!
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
  */
-static void object_mention(player_type *owner_ptr, object_type *o_ptr)
+static void object_mention(player_type *player_ptr, object_type *o_ptr)
 {
-    object_aware(owner_ptr, o_ptr);
+    object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(owner_ptr, o_name, o_ptr, 0);
-    msg_format_wizard(owner_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
+    msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
 /*!
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
  * @return 生成に成功したらTRUEを返す。
@@ -94,12 +94,12 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
  * This routine uses "floor_ptr->object_level" for the "generation level".\n
  * We assume that the given object has been "wiped".\n
  */
-bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
+bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode)
 {
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     PERCENTAGE prob = ((mode & AM_GOOD) ? 10 : 1000);
     DEPTH base = ((mode & AM_GOOD) ? (floor_ptr->object_level + 10) : floor_ptr->object_level);
-    if (!one_in_(prob) || !make_artifact_special(owner_ptr, j_ptr)) {
+    if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
         KIND_OBJECT_IDX k_idx;
         if ((mode & AM_GOOD) && !get_obj_num_hook) {
             get_obj_num_hook = kind_is_good;
@@ -108,7 +108,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         if (get_obj_num_hook)
             get_obj_num_prep();
 
-        k_idx = get_obj_num(owner_ptr, base, mode);
+        k_idx = get_obj_num(player_ptr, base, mode);
         if (get_obj_num_hook) {
             get_obj_num_hook = nullptr;
             get_obj_num_prep();
@@ -120,7 +120,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         j_ptr->prep(k_idx);
     }
 
-    apply_magic_to_object(owner_ptr, j_ptr, floor_ptr->object_level, mode);
+    apply_magic_to_object(player_ptr, j_ptr, floor_ptr->object_level, mode);
     switch (j_ptr->tval) {
     case TV_SPIKE:
     case TV_SHOT:
@@ -136,7 +136,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
     }
 
     if (cheat_peek)
-        object_mention(owner_ptr, j_ptr);
+        object_mention(player_ptr, j_ptr);
 
     return true;
 }
@@ -173,7 +173,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
 /*!
  * @brief フロア中のアイテムを全て削除する / Deletes all objects at given location
  * Delete a dungeon object
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 削除したフロアマスのY座標
  * @param x 削除したフロアマスのX座標
  */
@@ -199,13 +199,13 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
 /*!
  * @brief 床上のアイテムの数を増やす /
  * Increase the "number" of an item on the floor
- * @param owner_ptr プレイヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 増やしたいアイテムの所持スロット
  * @param num 増やしたいアイテムの数
  */
-void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void floor_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    const floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    const floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
     object_type *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;
@@ -217,32 +217,32 @@ void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
     num -= o_ptr->number;
     o_ptr->number += num;
 
-    set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 }
 
 /*!
  * @brief 床上の数の無くなったアイテムスロットを消去する /
  * Optimize an item on the floor (destroy "empty" items)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 消去したいアイテムの所持スロット
  */
-void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
+void floor_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
+    object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
     if (!o_ptr->k_idx)
         return;
     if (o_ptr->number)
         return;
 
-    delete_object_idx(owner_ptr, item);
+    delete_object_idx(player_ptr, item);
 
-    set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 }
 
 /*!
  * @brief オブジェクトを削除する /
  * Delete a dungeon object
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  * @details
  * Handle "stacks" of objects correctly.
@@ -297,7 +297,7 @@ ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx
 /*!
  * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
  * Let an object fall to the ground at or near a location.
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ
  * @param chance ドロップの消滅率(%)
  * @param y 配置したいフロアのY座標
@@ -317,7 +317,7 @@ ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx
  * the object can combine, stack, or be placed.  Artifacts will try very\n
  * hard to be placed, including "teleporting" to a useful grid if needed.\n
  */
-OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
+OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
 {
     int i, k, d, s;
     POSITION dy, dx;
@@ -331,14 +331,14 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 #else
     bool plural = (j_ptr->number != 1);
 #endif
-    describe_flavor(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!j_ptr->is_artifact() && (randint0(100) < chance)) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (current_world_ptr->wizard)
+        if (w_ptr->wizard)
             msg_print(_("(破損)", "(breakage)"));
 
         return 0;
@@ -349,7 +349,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 
     POSITION by = y;
     POSITION bx = x;
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (dy = -3; dy <= 3; dy++) {
         for (dx = -3; dx <= 3; dx++) {
             bool comb = false;
@@ -361,7 +361,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
             tx = x + dx;
             if (!in_bounds(floor_ptr, ty, tx))
                 continue;
-            if (!projectable(owner_ptr, y, x, ty, tx))
+            if (!projectable(player_ptr, y, x, ty, tx))
                 continue;
 
             g_ptr = &floor_ptr->grid_array[ty][tx];
@@ -407,7 +407,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (current_world_ptr->wizard)
+        if (w_ptr->wizard)
             msg_print(_("(床スペースがない)", "(no floor space)"));
 
         return 0;
@@ -445,7 +445,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
             msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-            if (current_world_ptr->wizard)
+            if (w_ptr->wizard)
                 msg_print(_("(床スペースがない)", "(no floor space)"));
 
             if (preserve_mode) {
@@ -495,7 +495,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (current_world_ptr->wizard)
+        if (w_ptr->wizard)
             msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
         if (j_ptr->is_fixed_artifact()) {
@@ -515,14 +515,14 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         done = true;
     }
 
-    note_spot(owner_ptr, by, bx);
-    lite_spot(owner_ptr, by, bx);
+    note_spot(player_ptr, by, bx);
+    lite_spot(player_ptr, by, bx);
     sound(SOUND_DROP);
 
-    if (player_bold(owner_ptr, by, bx))
-        set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
+    if (player_bold(player_ptr, by, bx))
+        set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 
-    if (chance && player_bold(owner_ptr, by, bx)) {
+    if (chance && player_bold(player_ptr, by, bx)) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
     }
 
@@ -564,11 +564,11 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param item メッセージの対象にしたいアイテム所持スロット
  */
-void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
+void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
+    object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
     if (o_ptr->number <= 0) {
         msg_format("床上には、もう%sはない。", o_name);
@@ -583,7 +583,7 @@ void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester& item_tester)
+object_type *choose_object(player_type *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester& item_tester)
 {
     OBJECT_IDX item;
 
@@ -592,7 +592,7 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
 
     FixItemTesterSetter setter(item_tester);
 
-    if (!get_item(owner_ptr, &item, q, s, option, item_tester))
+    if (!get_item(player_ptr, &item, q, s, option, item_tester))
         return nullptr;
 
     if (idx)
@@ -601,5 +601,5 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
     if (item == INVEN_FORCE)
         return nullptr;
 
-    return ref_item(owner_ptr, item);
+    return ref_item(player_ptr, item);
 }

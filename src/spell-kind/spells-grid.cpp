@@ -20,31 +20,31 @@
  * Leave a "rune of protection" which prevents monster movement
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool create_rune_protection_one(player_type *caster_ptr)
+bool create_rune_protection_one(player_type *player_ptr)
 {
-    if (!cave_clean_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x)) {
+    if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_OBJECT;
-    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_rune_protection;
-    note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
-    lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
+    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info |= CAVE_OBJECT;
+    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].mimic = feat_rune_protection;
+    note_spot(player_ptr, player_ptr->y, player_ptr->x);
+    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
     return true;
 }
 
 /*!
  * @brief 爆発のルーン設置処理 /
  * Leave an "explosive rune" which prevents monster movement
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 設置場所
  * @param x 設置場所
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool create_rune_explosion(player_type *caster_ptr, POSITION y, POSITION x)
+bool create_rune_explosion(player_type *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!cave_clean_bold(floor_ptr, y, x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
@@ -52,8 +52,8 @@ bool create_rune_explosion(player_type *caster_ptr, POSITION y, POSITION x)
 
     floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
     floor_ptr->grid_array[y][x].mimic = feat_rune_explosion;
-    note_spot(caster_ptr, y, x);
-    lite_spot(caster_ptr, y, x);
+    note_spot(player_ptr, y, x);
+    lite_spot(player_ptr, y, x);
     return true;
 }
 
@@ -61,34 +61,34 @@ bool create_rune_explosion(player_type *caster_ptr, POSITION y, POSITION x)
  * @brief プレイヤーの手による能動的な階段生成処理 /
  * Create stairs at or move previously created stairs into the player location.
  */
-void stair_creation(player_type *caster_ptr)
+void stair_creation(player_type *player_ptr)
 {
     bool up = true;
     if (ironman_downward)
         up = false;
 
     bool down = true;
-    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-    if (quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth))
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (quest_number(player_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth))
         down = false;
 
     if (!floor_ptr->dun_level || (!up && !down) || (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || floor_ptr->inside_arena
-        || caster_ptr->phase_out) {
+        || player_ptr->phase_out) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
     }
 
-    if (!cave_valid_bold(floor_ptr, caster_ptr->y, caster_ptr->x)) {
+    if (!cave_valid_bold(floor_ptr, player_ptr->y, player_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return;
     }
 
-    delete_all_items_from_floor(caster_ptr, caster_ptr->y, caster_ptr->x);
+    delete_all_items_from_floor(player_ptr, player_ptr->y, player_ptr->x);
     saved_floor_type *sf_ptr;
-    sf_ptr = get_sf_ptr(caster_ptr->floor_id);
+    sf_ptr = get_sf_ptr(player_ptr->floor_id);
     if (!sf_ptr) {
-        caster_ptr->floor_id = get_new_floor_id(caster_ptr);
-        sf_ptr = get_sf_ptr(caster_ptr->floor_id);
+        player_ptr->floor_id = get_new_floor_id(player_ptr);
+        sf_ptr = get_sf_ptr(player_ptr->floor_id);
     }
 
     if (up && down) {
@@ -120,11 +120,11 @@ void stair_creation(player_type *caster_ptr)
 
                 /* Remove old stairs */
                 g_ptr->special = 0;
-                cave_set_feat(caster_ptr, y, x, feat_ground_type[randint0(100)]);
+                cave_set_feat(player_ptr, y, x, feat_ground_type[randint0(100)]);
             }
         }
     } else {
-        dest_floor_id = get_new_floor_id(caster_ptr);
+        dest_floor_id = get_new_floor_id(player_ptr);
         if (up)
             sf_ptr->upper_floor_id = dest_floor_id;
         else
@@ -134,14 +134,14 @@ void stair_creation(player_type *caster_ptr)
     saved_floor_type *dest_sf_ptr;
     dest_sf_ptr = get_sf_ptr(dest_floor_id);
     if (up) {
-        cave_set_feat(caster_ptr, caster_ptr->y, caster_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ? feat_state(caster_ptr->current_floor_ptr, feat_up_stair, FF::SHAFT)
+        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FF::SHAFT)
                                                                                               : feat_up_stair);
     } else {
-        cave_set_feat(caster_ptr, caster_ptr->y, caster_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ? feat_state(caster_ptr->current_floor_ptr, feat_down_stair, FF::SHAFT)
+        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FF::SHAFT)
                                                                                               : feat_down_stair);
     }
 
-    floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].special = dest_floor_id;
+    floor_ptr->grid_array[player_ptr->y][player_ptr->x].special = dest_floor_id;
 }

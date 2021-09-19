@@ -3,7 +3,7 @@
 #include "mutation/mutation-util.h"
 #include "system/player-type-definition.h"
 
-void switch_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
+void switch_lose_mutation(player_type *player_ptr, glm_type *glm_ptr)
 {
     switch ((glm_ptr->choose_mut != 0) ? glm_ptr->choose_mut : randint1(193)) {
     case 1:
@@ -484,7 +484,7 @@ void switch_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
         glm_ptr->muta_desc = _("動作の正確さがなくなった。", "You move with less assurance.");
         break;
     case 193:
-        if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
+        if (player_ptr->pseikaku == PERSONALITY_LUCKY)
             break;
 
         glm_ptr->muta_which = MUTA::GOOD_LUCK;

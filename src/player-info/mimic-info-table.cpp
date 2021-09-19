@@ -10,7 +10,7 @@
 /*!
  * @brief 変身種族情報
  */
-const player_race mimic_info[MAX_MIMIC_FORMS] =
+const player_race_info mimic_info[MAX_MIMIC_FORMS] =
 {
 	{
         N("[標準形態]", "Default"), "N",

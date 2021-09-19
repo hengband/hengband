@@ -38,13 +38,14 @@ typedef struct debug_spell_command {
 
 extern debug_spell_command debug_spell_commands_list[SPELL_MAX];
 
-bool wiz_debug_spell(player_type *creature_ptr);
-void wiz_dimension_door(player_type *caster_ptr);
-void wiz_summon_horde(player_type *caster_ptr);
-void wiz_teleport_back(player_type *caster_ptr);
-void wiz_learn_blue_magic_all(player_type *caster_ptr);
-void wiz_summon_random_enemy(player_type *caster_ptr, int num);
-void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx);
-void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx);
-void wiz_kill_enemy(player_type *caster_ptr, HIT_POINT dam = 1000000, EFFECT_ID effect_idx = GF_ARROW);
-void wiz_kill_me(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx);
+bool wiz_debug_spell(player_type *player_ptr);
+void wiz_dimension_door(player_type *player_ptr);
+void wiz_summon_horde(player_type *player_ptr);
+void wiz_teleport_back(player_type *player_ptr);
+void wiz_learn_blue_magic_all(player_type *player_ptr);
+void wiz_fillup_all_smith_essences(player_type *player_ptr);
+void wiz_summon_random_enemy(player_type *player_ptr, int num);
+void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx);
+void wiz_summon_pet(player_type *player_ptr, MONRACE_IDX r_idx);
+void wiz_kill_enemy(player_type *player_ptr, HIT_POINT dam = 1000000, EFFECT_ID effect_idx = GF_ARROW);
+void wiz_kill_me(player_type *player_ptr, HIT_POINT dam, EFFECT_ID effect_idx);

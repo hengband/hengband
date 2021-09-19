@@ -28,7 +28,7 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 
 /*!
  * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param x 地形を変えたいマスのX座標
  * @param y 地形を変えたいマスのY座標
  */
@@ -50,7 +50,7 @@ static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
  * @brief
  * 指定範囲に通路が通っていることを確認した上で床で埋める
  * This function tunnels around a room if it will cut off part of a grid system.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param x1 範囲の左端
  * @param y1 範囲の上端
  * @param x2 範囲の右端
@@ -154,7 +154,7 @@ static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION
 
 /*!
  * @brief 部屋生成が可能なスペースを確保する / Find a good spot for the next room.  -LM-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 部屋の生成が可能な中心Y座標を返す参照ポインタ
  * @param x 部屋の生成が可能な中心X座標を返す参照ポインタ
  * @param height 確保したい領域の高さ

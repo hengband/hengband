@@ -23,14 +23,14 @@ int wild_regen = 20;
  * @brief プレイヤーのHP自然回復処理 / Regenerate hit points -RAK-
  * @param percent 回復比率
  */
-void regenhp(player_type *creature_ptr, int percent)
+void regenhp(player_type *player_ptr, int percent)
 {
-    if (creature_ptr->special_defense & KATA_KOUKIJIN)
+    if (player_ptr->special_defense & KATA_KOUKIJIN)
         return;
-    if (creature_ptr->action == ACTION_HAYAGAKE)
+    if (player_ptr->action == ACTION_HAYAGAKE)
         return;
 
-    HIT_POINT old_chp = creature_ptr->chp;
+    HIT_POINT old_chp = player_ptr->chp;
 
     /*
      * Extract the new hitpoints
@@ -38,17 +38,17 @@ void regenhp(player_type *creature_ptr, int percent)
      * 'percent' is the Regen factor in unit (1/2^16)
      */
     HIT_POINT new_chp = 0;
-    uint32_t new_chp_frac = (creature_ptr->mhp * percent + PY_REGEN_HPBASE);
+    uint32_t new_chp_frac = (player_ptr->mhp * percent + PY_REGEN_HPBASE);
     s64b_lshift(&new_chp, &new_chp_frac, 16);
-    s64b_add(&(creature_ptr->chp), &(creature_ptr->chp_frac), new_chp, new_chp_frac);
-    if (0 < s64b_cmp(creature_ptr->chp, creature_ptr->chp_frac, creature_ptr->mhp, 0)) {
-        creature_ptr->chp = creature_ptr->mhp;
-        creature_ptr->chp_frac = 0;
+    s64b_add(&(player_ptr->chp), &(player_ptr->chp_frac), new_chp, new_chp_frac);
+    if (0 < s64b_cmp(player_ptr->chp, player_ptr->chp_frac, player_ptr->mhp, 0)) {
+        player_ptr->chp = player_ptr->mhp;
+        player_ptr->chp_frac = 0;
     }
 
-    if (old_chp != creature_ptr->chp) {
-        creature_ptr->redraw |= (PR_HP);
-        creature_ptr->window_flags |= (PW_PLAYER);
+    if (old_chp != player_ptr->chp) {
+        player_ptr->redraw |= (PR_HP);
+        player_ptr->window_flags |= (PW_PLAYER);
         wild_regen = 20;
     }
 }
@@ -58,54 +58,54 @@ void regenhp(player_type *creature_ptr, int percent)
  * @param upkeep_factor ペット維持によるMPコスト量
  * @param regen_amount 回復量
  */
-void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount)
+void regenmana(player_type *player_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 {
-    MANA_POINT old_csp = creature_ptr->csp;
+    MANA_POINT old_csp = player_ptr->csp;
     int32_t regen_rate = regen_amount * 100 - upkeep_factor * PY_REGEN_NORMAL;
 
     /*
      * Excess mana will decay 32 times faster than normal
      * regeneration rate.
      */
-    if (creature_ptr->csp > creature_ptr->msp) {
+    if (player_ptr->csp > player_ptr->msp) {
         int32_t decay = 0;
-        uint32_t decay_frac = (creature_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
+        uint32_t decay_frac = (player_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
         s64b_lshift(&decay, &decay_frac, 16);
-        s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), decay, decay_frac);
-        if (creature_ptr->csp < creature_ptr->msp) {
-            creature_ptr->csp = creature_ptr->msp;
-            creature_ptr->csp_frac = 0;
+        s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), decay, decay_frac);
+        if (player_ptr->csp < player_ptr->msp) {
+            player_ptr->csp = player_ptr->msp;
+            player_ptr->csp_frac = 0;
         }
     }
 
     /* Regenerating mana (unless the player has excess mana) */
     else if (regen_rate > 0) {
         MANA_POINT new_mana = 0;
-        uint32_t new_mana_frac = (creature_ptr->msp * regen_rate / 100 + PY_REGEN_MNBASE);
+        uint32_t new_mana_frac = (player_ptr->msp * regen_rate / 100 + PY_REGEN_MNBASE);
         s64b_lshift(&new_mana, &new_mana_frac, 16);
-        s64b_add(&(creature_ptr->csp), &(creature_ptr->csp_frac), new_mana, new_mana_frac);
-        if (creature_ptr->csp >= creature_ptr->msp) {
-            creature_ptr->csp = creature_ptr->msp;
-            creature_ptr->csp_frac = 0;
+        s64b_add(&(player_ptr->csp), &(player_ptr->csp_frac), new_mana, new_mana_frac);
+        if (player_ptr->csp >= player_ptr->msp) {
+            player_ptr->csp = player_ptr->msp;
+            player_ptr->csp_frac = 0;
         }
     }
 
     /* Reduce mana (even when the player has excess mana) */
     if (regen_rate < 0) {
         int32_t reduce_mana = 0;
-        uint32_t reduce_mana_frac = (creature_ptr->msp * (-1) * regen_rate / 100 + PY_REGEN_MNBASE);
+        uint32_t reduce_mana_frac = (player_ptr->msp * (-1) * regen_rate / 100 + PY_REGEN_MNBASE);
         s64b_lshift(&reduce_mana, &reduce_mana_frac, 16);
-        s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), reduce_mana, reduce_mana_frac);
-        if (creature_ptr->csp < 0) {
-            creature_ptr->csp = 0;
-            creature_ptr->csp_frac = 0;
+        s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), reduce_mana, reduce_mana_frac);
+        if (player_ptr->csp < 0) {
+            player_ptr->csp = 0;
+            player_ptr->csp_frac = 0;
         }
     }
 
-    if (old_csp != creature_ptr->csp) {
-        creature_ptr->redraw |= (PR_MANA);
-        creature_ptr->window_flags |= (PW_PLAYER);
-        creature_ptr->window_flags |= (PW_SPELL);
+    if (old_csp != player_ptr->csp) {
+        player_ptr->redraw |= (PR_MANA);
+        player_ptr->window_flags |= (PW_PLAYER);
+        player_ptr->window_flags |= (PW_SPELL);
         wild_regen = 20;
     }
 }
@@ -114,50 +114,50 @@ void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
  * @brief プレイヤーのMP自然回復処理 / Regenerate magic regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
  * @param regen_amount 回復量
  */
-void regenmagic(player_type *creature_ptr, int regen_amount)
+void regenmagic(player_type *player_ptr, int regen_amount)
 {
     MANA_POINT new_mana;
     int dev = 30;
-    int mult = (dev + adj_mag_mana[creature_ptr->stat_index[A_INT]]); /* x1 to x2 speed bonus for recharging */
+    int mult = (dev + adj_mag_mana[player_ptr->stat_index[A_INT]]); /* x1 to x2 speed bonus for recharging */
 
     for (int i = 0; i < EATER_EXT * 2; i++) {
-        if (!creature_ptr->magic_num2[i])
+        if (!player_ptr->magic_num2[i])
             continue;
-        if (creature_ptr->magic_num1[i] == ((long)creature_ptr->magic_num2[i] << 16))
+        if (player_ptr->magic_num1[i] == ((long)player_ptr->magic_num2[i] << 16))
             continue;
 
         /* Increase remaining charge number like float value */
-        new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 13)) / (dev * 8);
-        creature_ptr->magic_num1[i] += new_mana;
+        new_mana = (regen_amount * mult * ((long)player_ptr->magic_num2[i] + 13)) / (dev * 8);
+        player_ptr->magic_num1[i] += new_mana;
 
         /* Check maximum charge */
-        if (creature_ptr->magic_num1[i] > (creature_ptr->magic_num2[i] << 16)) {
-            creature_ptr->magic_num1[i] = ((long)creature_ptr->magic_num2[i] << 16);
+        if (player_ptr->magic_num1[i] > (player_ptr->magic_num2[i] << 16)) {
+            player_ptr->magic_num1[i] = ((long)player_ptr->magic_num2[i] << 16);
         }
 
         wild_regen = 20;
     }
 
     for (int i = EATER_EXT * 2; i < EATER_EXT * 3; i++) {
-        if (!creature_ptr->magic_num1[i])
+        if (!player_ptr->magic_num1[i])
             continue;
-        if (!creature_ptr->magic_num2[i])
+        if (!player_ptr->magic_num2[i])
             continue;
 
         /* Decrease remaining period for charging */
-        new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) / (dev * 16 * PY_REGEN_NORMAL);
-        creature_ptr->magic_num1[i] -= new_mana;
+        new_mana = (regen_amount * mult * ((long)player_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) / (dev * 16 * PY_REGEN_NORMAL);
+        player_ptr->magic_num1[i] -= new_mana;
 
         /* Check minimum remaining period for charging */
-        if (creature_ptr->magic_num1[i] < 0)
-            creature_ptr->magic_num1[i] = 0;
+        if (player_ptr->magic_num1[i] < 0)
+            player_ptr->magic_num1[i] = 0;
         wild_regen = 20;
     }
 }
 
 /*!
  * @brief 100ゲームターン毎のモンスターのHP自然回復処理 / Regenerate the monsters (once per 100 game turns)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @note Should probably be done during monster turns.
  */
 void regenerate_monsters(player_type *player_ptr)
@@ -192,15 +192,15 @@ void regenerate_monsters(player_type *player_ptr)
 
 /*!
  * @brief 30ゲームターン毎のボール中モンスターのHP自然回復処理 / Regenerate the captured monsters (once per 30 game turns)
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @note Should probably be done during monster turns.
  */
-void regenerate_captured_monsters(player_type *creature_ptr)
+void regenerate_captured_monsters(player_type *player_ptr)
 {
     bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         monster_race *r_ptr;
-        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (o_ptr->tval != TV_CAPTURE)
@@ -226,10 +226,10 @@ void regenerate_captured_monsters(player_type *creature_ptr)
     }
 
     if (heal) {
-        creature_ptr->update |= (PU_COMBINE);
+        player_ptr->update |= (PU_COMBINE);
         // FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる。現在はボール中モンスターのHP回復でボールの表示は変わらないためコメントアウトする。
-        //creature_ptr->window_flags |= (PW_INVEN);
-        //creature_ptr->window_flags |= (PW_EQUIP);
+        //player_ptr->window_flags |= (PW_INVEN);
+        //player_ptr->window_flags |= (PW_EQUIP);
         wild_regen = 20;
     }
 }

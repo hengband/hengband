@@ -18,7 +18,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
@@ -49,36 +49,36 @@ static void center_string(char *buf, concptr str)
 
 /*!
  * @brief 墓に基本情報を表示
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  */
-static void show_basic_params(player_type *dead_ptr, char *buf)
+static void show_basic_params(player_type *player_ptr, char *buf)
 {
     char tomb_message[160];
-    (void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)dead_ptr->lev);
+    (void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)player_ptr->lev);
     center_string(buf, tomb_message);
     put_str(buf, 11, 11);
 
-    (void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)dead_ptr->exp);
+    (void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp);
     center_string(buf, tomb_message);
     put_str(buf, 12, 11);
 
-    (void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)dead_ptr->au);
+    (void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)player_ptr->au);
     center_string(buf, tomb_message);
     put_str(buf, 13, 11);
 }
 
 #ifdef JP
 /*!
- * @brief プレーヤーを殺したモンスターを表示する (日本語版専用)
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーを殺したモンスターを表示する (日本語版専用)
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @param tomb_message 墓碑に刻む言葉
  * @return 追加の行数
  */
-static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_message, size_t tomb_message_size)
+static int show_killing_monster(player_type *player_ptr, char *buf, char *tomb_message, size_t tomb_message_size)
 {
-    shape_buffer(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
+    shape_buffer(player_ptr->died_from, GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
     char *t;
     t = tomb_message + strlen(tomb_message) + 1;
     if (!*t)
@@ -116,28 +116,28 @@ static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_mes
 
 /*!
  * @brief どこで死んだかを表示する (日本語版専用)
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @param tomb_message 表示する文字列
  * @param extra_line 追加の行数
  */
-static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message, int extra_line)
+static void show_dead_place(player_type *player_ptr, char *buf, char *tomb_message, int extra_line)
 {
-    if (streq(dead_ptr->died_from, "ripe") || streq(dead_ptr->died_from, "Seppuku"))
+    if (streq(player_ptr->died_from, "ripe") || streq(player_ptr->died_from, "Seppuku"))
         return;
 
-    if (dead_ptr->current_floor_ptr->dun_level == 0) {
-        concptr field_name = dead_ptr->town_num ? "街" : "荒野";
-        if (streq(dead_ptr->died_from, "途中終了")) {
+    if (player_ptr->current_floor_ptr->dun_level == 0) {
+        concptr field_name = player_ptr->town_num ? "街" : "荒野";
+        if (streq(player_ptr->died_from, "途中終了")) {
             sprintf(tomb_message, "%sで死んだ", field_name);
         } else {
             sprintf(tomb_message, "に%sで殺された", field_name);
         }
     } else {
-        if (streq(dead_ptr->died_from, "途中終了")) {
-            sprintf(tomb_message, "地下 %d 階で死んだ", (int)dead_ptr->current_floor_ptr->dun_level);
+        if (streq(player_ptr->died_from, "途中終了")) {
+            sprintf(tomb_message, "地下 %d 階で死んだ", (int)player_ptr->current_floor_ptr->dun_level);
         } else {
-            sprintf(tomb_message, "に地下 %d 階で殺された", (int)dead_ptr->current_floor_ptr->dun_level);
+            sprintf(tomb_message, "に地下 %d 階で殺された", (int)player_ptr->current_floor_ptr->dun_level);
         }
     }
 
@@ -147,44 +147,44 @@ static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message
 
 /*!
  * @brief 墓に刻む言葉を細かく表示 (日本語版専用)
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf 墓テンプレ
  */
-static void show_tomb_detail(player_type *dead_ptr, char *buf)
+static void show_tomb_detail(player_type *player_ptr, char *buf)
 {
     char tomb_message[160];
     int extra_line = 0;
-    if (streq(dead_ptr->died_from, "途中終了")) {
+    if (streq(player_ptr->died_from, "途中終了")) {
         strcpy(tomb_message, "<自殺>");
-    } else if (streq(dead_ptr->died_from, "ripe")) {
+    } else if (streq(player_ptr->died_from, "ripe")) {
         strcpy(tomb_message, "引退後に天寿を全う");
-    } else if (streq(dead_ptr->died_from, "Seppuku")) {
+    } else if (streq(player_ptr->died_from, "Seppuku")) {
         strcpy(tomb_message, "勝利の後、切腹");
     } else {
-        extra_line = show_killing_monster(dead_ptr, buf, tomb_message, sizeof(tomb_message));
+        extra_line = show_killing_monster(player_ptr, buf, tomb_message, sizeof(tomb_message));
     }
 
     center_string(buf, tomb_message);
     put_str(buf, 14, 11);
 
-    show_dead_place(dead_ptr, buf, tomb_message, extra_line);
+    show_dead_place(player_ptr, buf, tomb_message, extra_line);
 }
 #else
 
 /*!
  * @brief Detailed display of words engraved on the tomb (English version only)
- * @param dead_ptr reference pointer to the player
+ * @param player_ptr reference pointer to the player
  * @param buf template of the tomb
  * @return nothing
  */
-static void show_tomb_detail(player_type *dead_ptr, char *buf)
+static void show_tomb_detail(player_type *player_ptr, char *buf)
 {
     char tomb_message[160];
-    (void)sprintf(tomb_message, "Killed on Level %d", dead_ptr->current_floor_ptr->dun_level);
+    (void)sprintf(tomb_message, "Killed on Level %d", player_ptr->current_floor_ptr->dun_level);
     center_string(buf, tomb_message);
     put_str(buf, 14, 11);
 
-    shape_buffer(format("by %s.", dead_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
+    shape_buffer(format("by %s.", player_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
     center_string(buf, tomb_message);
     char *t;
     put_str(buf, 15, 11);
@@ -208,17 +208,17 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
 /*!
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_tomb(player_type *dead_ptr)
+void print_tomb(player_type *player_ptr)
 {
     term_clear();
     char buf[1024];
     read_dead_file(buf, sizeof(buf));
-    concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificent")
-                                                                                    : player_title[dead_ptr->pclass][(dead_ptr->lev - 1) / 5];
+    concptr p = (w_ptr->total_winner || (player_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificent")
+                                                                                    : player_title[player_ptr->pclass][(player_ptr->lev - 1) / 5];
 
-    center_string(buf, dead_ptr->name);
+    center_string(buf, player_ptr->name);
     put_str(buf, 6, 11);
 
 #ifdef JP
@@ -233,39 +233,39 @@ void print_tomb(player_type *dead_ptr)
     center_string(buf, cp_ptr->title);
     put_str(buf, 10, 11);
 
-    show_basic_params(dead_ptr, buf);
-    show_tomb_detail(dead_ptr, buf);
+    show_basic_params(player_ptr, buf);
+    show_tomb_detail(player_ptr, buf);
 
     char current_time[80];
     time_t ct = time((time_t *)0);
     (void)sprintf(current_time, "%-.24s", ctime(&ct));
     center_string(buf, current_time);
     put_str(buf, 17, 11);
-    msg_format(_("さようなら、%s!", "Goodbye, %s!"), dead_ptr->name);
+    msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_ptr->name);
 }
 
 /*!
  * @brief 死亡/引退/切腹時にインベントリ内のアイテムを*鑑定*する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void inventory_aware(player_type *creature_ptr)
+static void inventory_aware(player_type *player_ptr)
 {
     object_type *o_ptr;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
-        object_aware(creature_ptr, o_ptr);
+        object_aware(player_ptr, o_ptr);
         object_known(o_ptr);
     }
 }
 
 /*!
  * @brief 死亡/引退/切腹時に我が家のアイテムを*鑑定*する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void home_aware(player_type *creature_ptr)
+static void home_aware(player_type *player_ptr)
 {
     object_type *o_ptr;
     store_type *store_ptr;
@@ -276,30 +276,30 @@ static void home_aware(player_type *creature_ptr)
             if (!o_ptr->k_idx)
                 continue;
 
-            object_aware(creature_ptr, o_ptr);
+            object_aware(player_ptr, o_ptr);
             object_known(o_ptr);
         }
     }
 }
 
 /*!
- * @brief プレーヤーの持ち物を表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤーの持ち物を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return Escキーでゲームを終了する時TRUE
  */
-static bool show_dead_player_items(player_type *creature_ptr)
+static bool show_dead_player_items(player_type *player_ptr)
 {
-    if (creature_ptr->equip_cnt) {
+    if (player_ptr->equip_cnt) {
         term_clear();
-        (void)show_equipment(creature_ptr, 0, USE_FULL, AllMatchItemTester());
+        (void)show_equipment(player_ptr, 0, USE_FULL, AllMatchItemTester());
         prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
         if (inkey() == ESCAPE)
             return true;
     }
 
-    if (creature_ptr->inven_cnt) {
+    if (player_ptr->inven_cnt) {
         term_clear();
-        (void)show_inventory(creature_ptr, 0, USE_FULL, AllMatchItemTester());
+        (void)show_inventory(player_ptr, 0, USE_FULL, AllMatchItemTester());
         prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
         if (inkey() == ESCAPE)
@@ -311,9 +311,9 @@ static bool show_dead_player_items(player_type *creature_ptr)
 
 /*!
  * @brief 我が家にあったアイテムを表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void show_dead_home_items(player_type *creature_ptr)
+static void show_dead_home_items(player_type *player_ptr)
 {
     for (int l = 1; l < max_towns; l++) {
         store_type *store_ptr;
@@ -330,7 +330,7 @@ static void show_dead_home_items(player_type *creature_ptr)
                 o_ptr = &store_ptr->stock[i];
                 sprintf(tmp_val, "%c) ", I2A(j));
                 prt(tmp_val, j + 2, 4);
-                describe_flavor(creature_ptr, o_name, o_ptr, 0);
+                describe_flavor(player_ptr, o_name, o_ptr, 0);
                 c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
             }
 
@@ -343,10 +343,10 @@ static void show_dead_home_items(player_type *creature_ptr)
 
 /*!
  * @brief キャラクタ情報をファイルに書き出す
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param file_character ステータスダンプへのコールバック
  */
-static void export_player_info(player_type *creature_ptr, display_player_pf display_player)
+static void export_player_info(player_type *player_ptr, display_player_pf display_player)
 {
     prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
     prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
@@ -360,7 +360,7 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
             break;
 
         screen_save();
-        (void)file_character(creature_ptr, out_val, display_player);
+        (void)file_character(player_ptr, out_val, display_player);
         screen_load();
     }
 }
@@ -368,7 +368,7 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
 /*!
  * @brief 自動的にプレイヤーステータスをファイルダンプ出力する
  */
-static void file_character_auto(player_type *creature_ptr, display_player_pf display_player)
+static void file_character_auto(player_type *player_ptr, display_player_pf display_player)
 {
     time_t now_t = time(nullptr);
     struct tm *now_tm = localtime(&now_t);
@@ -380,35 +380,35 @@ static void file_character_auto(player_type *creature_ptr, display_player_pf dis
     strnfmt(filename, sizeof(filename), "%s_Autodump_%s.txt", p_ptr->name, datetime);
 
     screen_save();
-    (void)file_character(creature_ptr, filename, display_player);
+    (void)file_character(player_ptr, filename, display_player);
     screen_load();
 }
 
 /*!
  * @brief 死亡、引退時の簡易ステータス表示
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player ステータス表示へのコールバック
  */
-void show_death_info(player_type *creature_ptr, display_player_pf display_player)
+void show_death_info(player_type *player_ptr, display_player_pf display_player)
 {
-    inventory_aware(creature_ptr);
-    home_aware(creature_ptr);
+    inventory_aware(player_ptr);
+    home_aware(player_ptr);
 
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
+    player_ptr->update |= (PU_BONUS);
+    handle_stuff(player_ptr);
     flush();
     msg_erase();
 
     if (auto_dump)
-        file_character_auto(creature_ptr, display_player);
+        file_character_auto(player_ptr, display_player);
 
-    export_player_info(creature_ptr, display_player);
-    (*display_player)(creature_ptr, 0);
+    export_player_info(player_ptr, display_player);
+    (*display_player)(player_ptr, 0);
     prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
     if (inkey() == ESCAPE)
         return;
-    if (show_dead_player_items(creature_ptr))
+    if (show_dead_player_items(player_ptr))
         return;
 
-    show_dead_home_items(creature_ptr);
+    show_dead_home_items(player_ptr);
 }

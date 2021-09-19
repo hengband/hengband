@@ -23,18 +23,18 @@
 
 /*!
  * @brief モンスターが逃げ込める地点を走査する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param y_offsets
  * @param x_offsets
  * @param d モンスターがいる地点からの距離
  * @return 逃げ込める地点の候補地
  */
-static coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d)
+static coordinate_candidate sweep_safe_coordinate(player_type *player_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d)
 {
     coordinate_candidate candidate = init_coordinate_candidate();
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
         POSITION y = m_ptr->fy + dy;
         POSITION x = m_ptr->fx + dx;
@@ -45,8 +45,8 @@ static coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONST
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
 
-        BIT_FLAGS16 riding_mode = (m_idx == target_ptr->riding) ? CEM_RIDING : 0;
-        if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, riding_mode))
+        BIT_FLAGS16 riding_mode = (m_idx == player_ptr->riding) ? CEM_RIDING : 0;
+        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, riding_mode))
             continue;
 
         if (m_ptr->mflag2.has_not(MFLAG2::NOFLOW)) {
@@ -57,10 +57,10 @@ static coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONST
                 continue;
         }
 
-        if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x))
+        if (projectable(player_ptr, player_ptr->y, player_ptr->x, y, x))
             continue;
 
-        POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);
+        POSITION dis = distance(y, x, player_ptr->y, player_ptr->x);
         if (dis <= candidate.gdis)
             continue;
 
@@ -75,7 +75,7 @@ static coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONST
 /*!
  * @brief モンスターが逃げ込める安全な地点を返す /
  * Choose a "safe" location near a monster for it to run toward.
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ
@@ -91,9 +91,9 @@ static coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONST
  *\n
  * Return TRUE if a safe location is available.\n
  */
-bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+bool find_safety(player_type *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     for (POSITION d = 1; d < 10; d++) {
         const POSITION *y_offsets;
         y_offsets = dist_offsets_y[d];
@@ -101,7 +101,7 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
         const POSITION *x_offsets;
         x_offsets = dist_offsets_x[d];
 
-        coordinate_candidate candidate = sweep_safe_coordinate(target_ptr, m_idx, y_offsets, x_offsets, d);
+        coordinate_candidate candidate = sweep_safe_coordinate(player_ptr, m_idx, y_offsets, x_offsets, d);
 
         if (candidate.gdis <= 0)
             continue;
@@ -117,27 +117,27 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
 
 /*!
  * @brief モンスターが隠れられる地点を走査する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param y_offsets
  * @param x_offsets
  * @param candidate 隠れられる地点の候補地
  */
 static void sweep_hiding_candidate(
-    player_type *target_ptr, monster_type *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
+    player_type *player_ptr, monster_type *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
         POSITION y = m_ptr->fy + dy;
         POSITION x = m_ptr->fx + dx;
-        if (!in_bounds(target_ptr->current_floor_ptr, y, x))
+        if (!in_bounds(player_ptr->current_floor_ptr, y, x))
             continue;
-        if (!monster_can_enter(target_ptr, y, x, r_ptr, 0))
+        if (!monster_can_enter(player_ptr, y, x, r_ptr, 0))
             continue;
-        if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) || !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, y, x, false))
+        if (projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !clean_shot(player_ptr, m_ptr->fy, m_ptr->fx, y, x, false))
             continue;
 
-        POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);
+        POSITION dis = distance(y, x, player_ptr->y, player_ptr->x);
         if (dis < candidate->gdis && dis >= 2) {
             candidate->gy = y;
             candidate->gx = x;
@@ -149,7 +149,7 @@ static void sweep_hiding_candidate(
 /*!
  * @brief モンスターが隠れ潜める地点を返す /
  * Choose a good hiding place near a monster for it to run toward.
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ
@@ -160,9 +160,9 @@ static void sweep_hiding_candidate(
  *\n
  * Return TRUE if a good location is available.\n
  */
-bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+bool find_hiding(player_type *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     coordinate_candidate candidate = init_coordinate_candidate();
     candidate.gdis = 999;
 
@@ -173,7 +173,7 @@ bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
         const POSITION *x_offsets;
         x_offsets = dist_offsets_x[d];
 
-        sweep_hiding_candidate(target_ptr, m_ptr, y_offsets, x_offsets, &candidate);
+        sweep_hiding_candidate(player_ptr, m_ptr, y_offsets, x_offsets, &candidate);
         if (candidate.gdis >= 999)
             continue;
 

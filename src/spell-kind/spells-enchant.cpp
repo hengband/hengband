@@ -22,21 +22,21 @@
 
 /*!
  * @brief アーティファクト生成の巻物処理 /
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 生成が実際に試みられたらTRUEを返す
  */
-bool artifact_scroll(player_type *caster_ptr)
+bool artifact_scroll(player_type *player_ptr)
 {
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_nameless_weapon_armour));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_nameless_weapon_armour));
     if (!o_ptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
     msg_format("%s は眩い光を発した！", o_name);
 #else
@@ -74,13 +74,13 @@ bool artifact_scroll(player_type *caster_ptr)
 #endif
 
             if (item >= 0) {
-                inven_item_increase(caster_ptr, item, 1 - (o_ptr->number));
+                inven_item_increase(player_ptr, item, 1 - (o_ptr->number));
             } else {
-                floor_item_increase(caster_ptr, 0 - item, 1 - (o_ptr->number));
+                floor_item_increase(player_ptr, 0 - item, 1 - (o_ptr->number));
             }
         }
 
-        okay = become_random_artifact(caster_ptr, o_ptr, true);
+        okay = become_random_artifact(player_ptr, o_ptr, true);
     }
 
     if (!okay) {
@@ -89,26 +89,26 @@ bool artifact_scroll(player_type *caster_ptr)
 
         msg_print(_("強化に失敗した。", "The enchantment failed."));
         if (one_in_(3))
-            chg_virtue(caster_ptr, V_ENCHANT, -1);
+            chg_virtue(player_ptr, V_ENCHANT, -1);
 
-        calc_android_exp(caster_ptr);
+        calc_android_exp(player_ptr);
         return true;
     }
 
     if (record_rand_art) {
-        describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
-        exe_write_diary(caster_ptr, DIARY_ART_SCROLL, 0, o_name);
+        describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
+        exe_write_diary(player_ptr, DIARY_ART_SCROLL, 0, o_name);
     }
 
-    chg_virtue(caster_ptr, V_ENCHANT, 1);
-    calc_android_exp(caster_ptr);
+    chg_virtue(player_ptr, V_ENCHANT, 1);
+    calc_android_exp(player_ptr);
     return true;
 }
 
 /*!
  * @brief アイテム凡庸化のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に凡庸化をを行ったならばTRUEを返す
  * @details
@@ -118,7 +118,7 @@ bool artifact_scroll(player_type *caster_ptr)
  * Returns TRUE if something was mundanified, else FALSE.
  * </pre>
  */
-bool mundane_spell(player_type *owner_ptr, bool only_equip)
+bool mundane_spell(player_type *player_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester = std::make_unique<AllMatchItemTester>();
     if (only_equip)
@@ -129,7 +129,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     concptr q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
     concptr s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
 
-    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
 
@@ -146,6 +146,6 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     o_ptr->marked = marked;
     o_ptr->inscription = inscription;
 
-    calc_android_exp(owner_ptr);
+    calc_android_exp(player_ptr);
     return true;
 }

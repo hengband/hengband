@@ -394,7 +394,6 @@ throws off some dorky packets.
 N:1004:Pip, the Braver from Another World
 says, 'Magic ducks, Cover me. I don't shit hits the fan!'
 
-
 N:1005:Antharom, Magic Master in the Castle of Darkness
 cries, 'Oh! My gun dogs was dead! Damn it!'
 shouts, 'You! have been and killed my darling gun dogs!'
@@ -421,16 +420,23 @@ N:1292:Cioccolata
 cries, 'What a terrible bastard!'
 
 N:1299:The Colonel Lostringil
-shouted, "Ringil is not here! Retreat!!"
+shouts, "Ringil is not here! Retreat!!"
 
 N:1303:Spawn of Yog-Sothoth
-screamed in the middle of the sound, in the middle of consciousness.
+screams in the middle of the sound, in the middle of consciousness.
 
 N:1323:Bastral, the berserker
 says, 'Dean! Brother! Help me! Help me!'
 
 N:1333:Professor Ootsuki
 says, 'Show me... the scientific evidence for losing...'
+
+N:1345:GREAT THING, the Huge Battle Ship
+is shimmering.
+
+N:1346:Caim, the disputant of hell
+says, 'Xaphan! Put that fucking bastard in the flames of the hell caldron!' 
+says, 'It's time for discussion! You barbarian!'
 
 N:*:Default lines
 says, 'I am too young to die.'

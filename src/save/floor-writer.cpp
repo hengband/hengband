@@ -168,7 +168,7 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 /*!
  * @brief 現在フロアの書き込み /
  * Write the current dungeon (new method)
- * @player_ptr プレーヤーへの参照ポインタ
+ * @player_ptr プレイヤーへの参照ポインタ
  * @return 保存に成功したらTRUE
  */
 bool wr_dungeon(player_type *player_ptr)
@@ -223,7 +223,7 @@ bool wr_dungeon(player_type *player_ptr)
 
 /*!
  * @brief ゲームプレイ中のフロア一時保存出力処理サブルーチン / Actually write a temporary saved floor file
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ
  */
 static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
@@ -247,7 +247,7 @@ static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 }
 /*!
  * @brief ゲームプレイ中のフロア一時保存出力処理メインルーチン / Attempt to save the temporarily saved-floor data
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ
  * @param mode 保存オプション
  */

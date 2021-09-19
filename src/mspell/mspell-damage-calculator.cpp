@@ -53,7 +53,7 @@ static HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side
 
 /*!
  * @brief モンスターの使う呪文の威力を返す /
- * @param target_ptr プレーヤーへの参照ポインタ (破滅の手用)
+ * @param player_ptr プレイヤーへの参照ポインタ (破滅の手用)
  * @param SPELL_NUM 呪文番号
  * @param hp 呪文を唱えるモンスターの体力
  * @param rlev 呪文を唱えるモンスターのレベル
@@ -65,7 +65,7 @@ static HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
 static HIT_POINT monspell_damage_base(
-    player_type *target_ptr, RF_ABILITY ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
+    player_type *player_ptr, RF_ABILITY ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
     HIT_POINT dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
@@ -328,7 +328,7 @@ static HIT_POINT monspell_damage_base(
         return -1;
 
     case RF_ABILITY::HAND_DOOM:
-        mult = target_ptr->chp;
+        mult = player_ptr->chp;
         div = 100;
         dam = 40 * (mult / div);
         dice_num = 1;
@@ -443,15 +443,15 @@ void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
 
 /*!
  * @brief モンスターの使う呪文の威力を返す /
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param ms_type 呪文番号
  * @param m_idx 呪文を唱えるモンスターID
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_damage(player_type *target_ptr, RF_ABILITY ms_type, MONSTER_IDX m_idx, int TYPE)
+HIT_POINT monspell_damage(player_type *player_ptr, RF_ABILITY ms_type, MONSTER_IDX m_idx, int TYPE)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
@@ -459,18 +459,18 @@ HIT_POINT monspell_damage(player_type *target_ptr, RF_ABILITY ms_type, MONSTER_I
     int shoot_dd, shoot_ds;
 
     monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
-    return monspell_damage_base(target_ptr, ms_type, hp, rlev, monster_is_powerful(floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
+    return monspell_damage_base(player_ptr, ms_type, hp, rlev, monster_is_powerful(floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
 /*!
  * @brief モンスターの使う所属としての呪文の威力を返す /
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param ms_type 呪文番号
  * @param r_idx 呪文を唱えるモンスターの種族ID
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_race_damage(player_type *target_ptr, RF_ABILITY ms_type, MONRACE_IDX r_idx, int TYPE)
+HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONRACE_IDX r_idx, int TYPE)
 {
     monster_race *r_ptr = &r_info[r_idx];
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -479,27 +479,27 @@ HIT_POINT monspell_race_damage(player_type *target_ptr, RF_ABILITY ms_type, MONR
     int shoot_dd, shoot_ds;
 
     monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
-    return monspell_damage_base(target_ptr, ms_type, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
+    return monspell_damage_base(player_ptr, ms_type, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
 }
 
 /*!
  * @brief 青魔導師の使う呪文の威力を返す /
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param SPELL_NUM 呪文番号
  * @param plev 使用するレベル。2倍して扱う。
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_bluemage_damage(player_type *target_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, int TYPE)
+HIT_POINT monspell_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, int TYPE)
 {
-    int hp = target_ptr->chp;
+    int hp = player_ptr->chp;
     int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
     object_type *o_ptr = nullptr;
 
-    if (has_melee_weapon(target_ptr, INVEN_MAIN_HAND))
-        o_ptr = &target_ptr->inventory_list[INVEN_MAIN_HAND];
-    else if (has_melee_weapon(target_ptr, INVEN_SUB_HAND))
-        o_ptr = &target_ptr->inventory_list[INVEN_SUB_HAND];
+    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND))
+        o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
+        o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
 
     if (o_ptr) {
         shoot_dd = o_ptr->dd;
@@ -507,5 +507,5 @@ HIT_POINT monspell_bluemage_damage(player_type *target_ptr, RF_ABILITY ms_type, 
         shoot_base = o_ptr->to_d;
     }
 
-    return monspell_damage_base(target_ptr, ms_type, hp, plev * 2, false, shoot_dd, shoot_ds, shoot_base, TYPE);
+    return monspell_damage_base(player_ptr, ms_type, hp, plev * 2, false, shoot_dd, shoot_ds, shoot_base, TYPE);
 }

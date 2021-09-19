@@ -15,18 +15,18 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-kind.h"
-#include "player/player-realm.h"
+#include "player-base/player-class.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief 魔力食い処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param power 基本効力
  * @return ターンを消費した場合TRUEを返す
  */
-bool eat_magic(player_type *caster_ptr, int power)
+bool eat_magic(player_type *player_ptr, int power)
 {
     byte fail_type = 1;
     GAME_TEXT o_name[MAX_NLEN];
@@ -36,7 +36,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
     if (!o_ptr)
         return false;
 
@@ -54,7 +54,7 @@ bool eat_magic(player_type *caster_ptr, int power)
             if (o_ptr->timeout > (o_ptr->number - 1) * k_ptr->pval) {
                 msg_print(_("充填中のロッドから魔力を吸収することはできません。", "You can't absorb energy from a discharged rod."));
             } else {
-                caster_ptr->csp += lev;
+                player_ptr->csp += lev;
                 o_ptr->timeout += k_ptr->pval;
             }
         }
@@ -67,7 +67,7 @@ bool eat_magic(player_type *caster_ptr, int power)
             is_eating_successful = false;
         } else {
             if (o_ptr->pval > 0) {
-                caster_ptr->csp += lev / 2;
+                player_ptr->csp += lev / 2;
                 o_ptr->pval--;
 
                 if ((o_ptr->tval == TV_STAFF) && (item >= 0) && (o_ptr->number > 1)) {
@@ -79,7 +79,7 @@ bool eat_magic(player_type *caster_ptr, int power)
                     q_ptr->number = 1;
                     o_ptr->pval++;
                     o_ptr->number--;
-                    item = store_item_to_inventory(caster_ptr, q_ptr);
+                    item = store_item_to_inventory(player_ptr, q_ptr);
 
                     msg_print(_("杖をまとめなおした。", "You unstack your staff."));
                 }
@@ -93,24 +93,24 @@ bool eat_magic(player_type *caster_ptr, int power)
     }
 
     if (is_eating_successful) {
-        return redraw_player(caster_ptr);
+        return redraw_player(player_ptr);
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+        describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if (o_ptr->tval == TV_ROD)
             o_ptr->timeout = k_ptr->pval * o_ptr->number;
         else if ((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF))
             o_ptr->pval = 0;
 
-        return redraw_player(caster_ptr);
+        return redraw_player(player_ptr);
     }
 
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Mages recharge objects more safely. */
-    if (is_wizard_class(caster_ptr)) {
+    if (PlayerClass(player_ptr).is_wizard()) {
         /* 10% chance to blow up one rod, otherwise draining. */
         if (o_ptr->tval == TV_ROD) {
             if (one_in_(10))
@@ -178,7 +178,7 @@ bool eat_magic(player_type *caster_ptr, int power)
             msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
         }
 
-        vary_item(caster_ptr, item, -1);
+        vary_item(player_ptr, item, -1);
     }
 
     if (fail_type == 3) {
@@ -187,8 +187,8 @@ bool eat_magic(player_type *caster_ptr, int power)
         else
             msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-        vary_item(caster_ptr, item, -999);
+        vary_item(player_ptr, item, -999);
     }
 
-    return redraw_player(caster_ptr);
+    return redraw_player(player_ptr);
 }

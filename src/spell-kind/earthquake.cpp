@@ -36,22 +36,24 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief 地震処理
  * Induce an "earthquake" of the given radius at the given location.
- * @param caster_ptrプレーヤーへの参照ポインタ
+ * @param player_ptrプレイヤーへの参照ポインタ
  * @param cy 中心Y座標
  * @param cx 中心X座標
  * @param r 効果半径
  * @param m_idx 地震を起こしたモンスターID(0ならばプレイヤー)
  * @return 効力があった場合TRUEを返す
  */
-bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
+bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {
         return false;
     }
@@ -90,18 +92,18 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 continue;
 
             map[16 + yy - cy][16 + xx - cx] = true;
-            if (player_bold(caster_ptr, yy, xx))
+            if (player_bold(player_ptr, yy, xx))
                 hurt = true;
         }
     }
 
     int sn = 0;
     POSITION sy = 0, sx = 0;
-    if (hurt && !has_pass_wall(caster_ptr) && !has_kill_wall(caster_ptr)) {
+    if (hurt && !has_pass_wall(player_ptr) && !has_kill_wall(player_ptr)) {
         for (DIRECTION i = 0; i < 8; i++) {
-            POSITION y = caster_ptr->y + ddy_ddd[i];
-            POSITION x = caster_ptr->x + ddx_ddd[i];
-            if (!is_cave_empty_bold(caster_ptr, y, x))
+            POSITION y = player_ptr->y + ddy_ddd[i];
+            POSITION x = player_ptr->x + ddx_ddd[i];
+            if (!is_cave_empty_bold(player_ptr, y, x))
                 continue;
 
             if (map[16 + y - cy][16 + x - cx])
@@ -137,6 +139,8 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             msg_print(_("あなたはひどい怪我を負った！", "You are severely crushed!"));
             damage = 200;
         } else {
+            auto effects = player_ptr->effects();
+            auto stun_value = effects->stun()->current();
             switch (randint1(3)) {
             case 1: {
                 msg_print(_("降り注ぐ岩をうまく避けた！", "You nimbly dodge the blast!"));
@@ -146,34 +150,34 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             case 2: {
                 msg_print(_("岩石があなたに直撃した!", "You are bashed by rubble!"));
                 damage = damroll(10, 4);
-                (void)set_stun(caster_ptr, caster_ptr->stun + randint1(50));
+                (void)set_stun(player_ptr, stun_value + randint1(50));
                 break;
             }
             case 3: {
                 msg_print(_("あなたは床と壁との間に挟まれてしまった！", "You are crushed between the floor and ceiling!"));
                 damage = damroll(10, 4);
-                (void)set_stun(caster_ptr, caster_ptr->stun + randint1(50));
+                (void)set_stun(player_ptr, stun_value + randint1(50));
                 break;
             }
             }
 
-            (void)move_player_effect(caster_ptr, sy, sx, MPE_DONT_PICKUP);
+            (void)move_player_effect(player_ptr, sy, sx, MPE_DONT_PICKUP);
         }
 
-        map[16 + caster_ptr->y - cy][16 + caster_ptr->x - cx] = false;
+        map[16 + player_ptr->y - cy][16 + player_ptr->x - cx] = false;
         if (damage) {
             concptr killer;
 
             if (m_idx) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-                monster_desc(caster_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
+                monster_desc(player_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
                 killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name);
             } else {
                 killer = _("地震", "an earthquake");
             }
 
-            take_hit(caster_ptr, DAMAGE_ATTACK, damage, killer);
+            take_hit(player_ptr, DAMAGE_ATTACK, damage, killer);
         }
     }
 
@@ -186,7 +190,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
             grid_type *gg_ptr;
             gg_ptr = &floor_ptr->grid_array[yy][xx];
-            if (gg_ptr->m_idx == caster_ptr->riding)
+            if (gg_ptr->m_idx == player_ptr->riding)
                 continue;
 
             if (!gg_ptr->m_idx)
@@ -208,7 +212,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 for (DIRECTION i = 0; i < 8; i++) {
                     POSITION y = yy + ddy_ddd[i];
                     POSITION x = xx + ddx_ddd[i];
-                    if (!is_cave_empty_bold(caster_ptr, y, x))
+                    if (!is_cave_empty_bold(player_ptr, y, x))
                         continue;
 
                     auto *g_ptr = &floor_ptr->grid_array[y][x];
@@ -227,7 +231,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                     if (floor_ptr->grid_array[y][x].m_idx)
                         continue;
 
-                    if (player_bold(caster_ptr, y, x))
+                    if (player_bold(player_ptr, y, x))
                         continue;
 
                     sn++;
@@ -240,27 +244,27 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 }
             }
 
-            monster_desc(caster_ptr, m_name, m_ptr, 0);
-            if (!ignore_unview || is_seen(caster_ptr, m_ptr))
+            monster_desc(player_ptr, m_name, m_ptr, 0);
+            if (!ignore_unview || is_seen(player_ptr, m_ptr))
                 msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
 
             damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
-            (void)set_monster_csleep(caster_ptr, gg_ptr->m_idx, 0);
+            (void)set_monster_csleep(player_ptr, gg_ptr->m_idx, 0);
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {
-                if (!ignore_unview || is_seen(caster_ptr, m_ptr))
+                if (!ignore_unview || is_seen(player_ptr, m_ptr))
                     msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
 
                 if (gg_ptr->m_idx) {
                     if (record_named_pet && is_pet(&floor_ptr->m_list[gg_ptr->m_idx]) && floor_ptr->m_list[gg_ptr->m_idx].nickname) {
                         char m2_name[MAX_NLEN];
 
-                        monster_desc(caster_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
-                        exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
+                        monster_desc(player_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
+                        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
                     }
                 }
 
-                delete_monster(caster_ptr, yy, xx);
+                delete_monster(player_ptr, yy, xx);
                 sn = 0;
             }
 
@@ -272,9 +276,9 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             floor_ptr->grid_array[sy][sx].m_idx = m_idx_aux;
             m_ptr->fy = sy;
             m_ptr->fx = sx;
-            update_monster(caster_ptr, m_idx_aux, true);
-            lite_spot(caster_ptr, yy, xx);
-            lite_spot(caster_ptr, sy, sx);
+            update_monster(player_ptr, m_idx_aux, true);
+            lite_spot(player_ptr, yy, xx);
+            lite_spot(player_ptr, sy, sx);
         }
     }
 
@@ -289,24 +293,24 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             if (!cave_valid_bold(floor_ptr, yy, xx))
                 continue;
 
-            delete_all_items_from_floor(caster_ptr, yy, xx);
+            delete_all_items_from_floor(player_ptr, yy, xx);
             int t = cave_has_flag_bold(floor_ptr, yy, xx, FF::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
-                cave_set_feat(caster_ptr, yy, xx, feat_granite);
+                cave_set_feat(player_ptr, yy, xx, feat_granite);
                 continue;
             }
 
             if (t < 70) {
-                cave_set_feat(caster_ptr, yy, xx, feat_quartz_vein);
+                cave_set_feat(player_ptr, yy, xx, feat_quartz_vein);
                 continue;
             }
 
             if (t < 100) {
-                cave_set_feat(caster_ptr, yy, xx, feat_magma_vein);
+                cave_set_feat(player_ptr, yy, xx, feat_magma_vein);
                 continue;
             }
 
-            cave_set_feat(caster_ptr, yy, xx, feat_ground_type[randint0(100)]);
+            cave_set_feat(player_ptr, yy, xx, feat_ground_type[randint0(100)]);
         }
     }
 
@@ -326,7 +330,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 continue;
             }
 
-            if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+            if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
                 continue;
 
             grid_type *cc_ptr;
@@ -344,12 +348,12 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
         }
     }
 
-    caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-    caster_ptr->redraw |= (PR_HEALTH | PR_UHEALTH | PR_MAP);
-    caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-    if (caster_ptr->special_defense & NINJA_S_STEALTH) {
-        if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
-            set_superstealth(caster_ptr, false);
+    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+    player_ptr->redraw |= (PR_HEALTH | PR_UHEALTH | PR_MAP);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    if (player_ptr->special_defense & NINJA_S_STEALTH) {
+        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW)
+            set_superstealth(player_ptr, false);
     }
 
     return true;

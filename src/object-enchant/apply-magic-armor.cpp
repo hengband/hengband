@@ -15,14 +15,14 @@
 
 /*
  * @brief コンストラクタ
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
  */
-ArmorEnchanter::ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+ArmorEnchanter::ArmorEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
-    , owner_ptr(owner_ptr)
+    , player_ptr(player_ptr)
 {
 }
 
@@ -38,7 +38,7 @@ void ArmorEnchanter::apply_magic()
     switch (this->o_ptr->tval) {
     case TV_DRAG_ARMOR:
         if (one_in_(50) || (this->power > 2)) {
-            become_random_artifact(this->owner_ptr, this->o_ptr, false);
+            become_random_artifact(this->player_ptr, this->o_ptr, false);
         }
 
         break;
@@ -85,7 +85,7 @@ void ArmorEnchanter::apply_magic()
 void ArmorEnchanter::give_ego_index()
 {
     if (one_in_(20) || (this->power > 2)) {
-        become_random_artifact(this->owner_ptr, this->o_ptr, false);
+        become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;
     }
 

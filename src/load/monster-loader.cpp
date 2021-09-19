@@ -10,7 +10,7 @@
 
 /*!
  * @brief モンスターを読み込む(現版) / Read a monster (New method)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
 void rd_monster(player_type *player_ptr, monster_type *m_ptr)
@@ -118,18 +118,15 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
         if (loading_savefile_version_is_older_than(2)) {
             uint32_t tmp32u;
             rd_u32b(&tmp32u);
-            std::bitset<32> rd_bits(tmp32u);
-            for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits.size()); i++) {
-                auto f = static_cast<SM>(i);
-                m_ptr->smart[f] = rd_bits[i];
-            }
+            migrate_bitflag_to_flaggroup(m_ptr->smart, tmp32u);
 
             // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
             // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
+            std::bitset<32> rd_bits(tmp32u);
             m_ptr->mflag2[MFLAG2::CLONED] = rd_bits[22];
             m_ptr->mflag2[MFLAG2::PET] = rd_bits[23];
             m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits[28];
-            m_ptr->smart.reset(static_cast<SM>(22)).reset(static_cast<SM>(23)).reset(static_cast<SM>(28));
+            m_ptr->smart.reset(i2enum<SM>(22)).reset(i2enum<SM>(23)).reset(i2enum<SM>(28));
         } else {
             rd_FlagGroup(m_ptr->smart, rd_byte);
         }
@@ -148,11 +145,7 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
         if (loading_savefile_version_is_older_than(2)) {
             rd_byte(&tmp8u);
             constexpr auto base = enum2i(MFLAG2::KAGE);
-            std::bitset<7> rd_bits(tmp8u);
-            for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits.size()); ++i) {
-                auto f = static_cast<MFLAG2>(base + i);
-                m_ptr->mflag2[f] = rd_bits[i];
-            }
+            migrate_bitflag_to_flaggroup(m_ptr->mflag2, tmp8u, base, 7);
         } else {
             rd_FlagGroup(m_ptr->mflag2, rd_byte);
         }

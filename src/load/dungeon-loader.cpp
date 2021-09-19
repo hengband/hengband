@@ -17,7 +17,7 @@
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the dungeon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
  * @details
  * The monsters/objects must be loaded in the same order
@@ -126,13 +126,13 @@ static errr rd_dungeon(player_type *player_ptr)
         break;
     }
 
-    current_world_ptr->character_dungeon = true;
+    w_ptr->character_dungeon = true;
     return err;
 }
 
-errr restore_dungeon(player_type *creature_ptr)
+errr restore_dungeon(player_type *player_ptr)
 {
-    if (creature_ptr->is_dead) {
+    if (player_ptr->is_dead) {
         for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
             r_info[quest[i].r_idx].flags1 &= ~RF1_QUESTOR;
 
@@ -140,7 +140,7 @@ errr restore_dungeon(player_type *creature_ptr)
     }
 
     load_note(_("ダンジョン復元中...", "Restoring Dungeon..."));
-    if (rd_dungeon(creature_ptr)) {
+    if (rd_dungeon(player_ptr)) {
         load_note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
         return 34;
     }

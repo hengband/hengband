@@ -4,9 +4,9 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "player/player-personality.h"
-#include "player/player-race.h"
 #include "player/player-sex.h"
 #include "player/player-status-table.h"
 #include "system/game-option-types.h"
@@ -101,7 +101,7 @@ static int32_t get_autoroller_prob(int *minval)
 
 /*!
  * @brief オートローラの初期設定値を決定する
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param cval 設定能力値配列
  * @details
  * 純戦士系及び腕器耐が魔法の能力の職業は腕器耐17。
@@ -109,10 +109,10 @@ static int32_t get_autoroller_prob(int *minval)
  * 純メイジ系は耐と魔法の能力が17で腕器16。
  * デュアルかどうかは最大攻撃回数で決定。(4回以上)
  */
-static void decide_initial_stat(player_type *creature_ptr, int *cval)
+static void decide_initial_stat(player_type *player_ptr, int *cval)
 {
-    auto &class_ptr = class_info[creature_ptr->pclass];
-    auto &magic_ptr = m_info[creature_ptr->pclass];
+    auto &class_ptr = class_info[player_ptr->pclass];
+    auto &magic_ptr = m_info[player_ptr->pclass];
     auto is_magic_user = magic_ptr.spell_stat == A_INT || magic_ptr.spell_stat == A_WIS || magic_ptr.spell_stat == A_CHR;
     auto is_attacker = class_ptr.num > 3;
 
@@ -193,9 +193,9 @@ static void display_autoroller_chance(int *cval)
 
 /*!
  * @brief オートローラで得たい能力値の基準を決める。
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool get_stat_limits(player_type *creature_ptr)
+bool get_stat_limits(player_type *player_ptr)
 {
     clear_from(10);
     put_str(_("能力値を抽選します。最低限得たい能力値を設定して下さい。", "Set minimum stats for picking up your charactor."), 10, 10);
@@ -203,7 +203,7 @@ bool get_stat_limits(player_type *creature_ptr)
     put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
 
     int cval[A_MAX]{};
-    decide_initial_stat(creature_ptr, cval);
+    decide_initial_stat(player_ptr, cval);
 
     char buf[320];
     char cur[160];
@@ -305,12 +305,11 @@ bool get_stat_limits(player_type *creature_ptr)
 
             break;
         case '?':
-            show_help(creature_ptr, _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller"));
+            show_help(player_ptr, _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller"));
             break;
         case '=':
             screen_save();
-            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH,
-                _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:
@@ -343,7 +342,7 @@ void initialize_chara_limit(chara_limit_type *chara_limit_ptr)
 /*!
  * @brief オートローラで得たい年齢、身長、体重、社会的地位の基準を決める。
  */
-bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_ptr)
+bool get_chara_limits(player_type *player_ptr, chara_limit_type *chara_limit_ptr)
 {
 #define MAXITEMS 8
 
@@ -356,7 +355,7 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
         _("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum are extremely rare."), 23, 2);
 
     int max_percent, min_percent;
-    if (creature_ptr->psex == SEX_MALE) {
+    if (player_ptr->psex == SEX_MALE) {
         max_percent = (int)(rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1) * 100 / (int)(rp_ptr->m_b_ht);
         min_percent = (int)(rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1) * 100 / (int)(rp_ptr->m_b_ht);
     } else {
@@ -379,25 +378,25 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
             break;
 
         case 2: /* Minimum height */
-            if (creature_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE)
                 m = rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1;
             else
                 m = rp_ptr->f_b_ht - rp_ptr->f_m_ht * 4 + 1;
             break;
         case 3: /* Maximum height */
-            if (creature_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE)
                 m = rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1;
             else
                 m = rp_ptr->f_b_ht + rp_ptr->f_m_ht * 4 - 1;
             break;
         case 4: /* Minimum weight */
-            if (creature_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE)
                 m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) + 1;
             else
                 m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) + 1;
             break;
         case 5: /* Maximum weight */
-            if (creature_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE)
                 m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) - 1;
             else
                 m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) - 1;
@@ -553,14 +552,14 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
             break;
         case '?':
 #ifdef JP
-            show_help(creature_ptr, "jbirth.txt#AutoRoller");
+            show_help(player_ptr, "jbirth.txt#AutoRoller");
 #else
-            show_help(creature_ptr, "birth.txt#AutoRoller");
+            show_help(player_ptr, "birth.txt#AutoRoller");
 #endif
             break;
         case '=':
             screen_save();
-            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:

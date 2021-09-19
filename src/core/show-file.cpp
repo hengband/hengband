@@ -111,7 +111,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 /*!
  * @brief ファイル内容をコンソールに出力する
  * Recursive file perusal.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param show_version TRUEならばコンソール上にゲームのバージョンを表示する
  * @param name ファイル名の文字列
  * @param what 内容キャプションの文字列
@@ -125,7 +125,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-bool show_file(player_type *creature_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
+bool show_file(player_type *player_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {
     int wid, hgt;
     term_get_size(&wid, &hgt);
@@ -330,7 +330,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
         switch (skey) {
         case '?':
             if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0)
-                show_file(creature_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), nullptr, 0, mode);
+                show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), nullptr, 0, mode);
             break;
         case '=':
             prt(_("強調: ", "Show: "), hgt - 1, 0);
@@ -388,7 +388,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
             strcpy(tmp, _("jhelp.hlp", "help.hlp"));
 
             if (askfor(tmp, 80)) {
-                if (!show_file(creature_ptr, true, tmp, nullptr, 0, mode))
+                if (!show_file(player_ptr, true, tmp, nullptr, 0, mode))
                     skey = 'q';
             }
 
@@ -444,7 +444,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
             if ((key > -1) && hook[key][0]) {
                 /* Recurse on that file */
-                if (!show_file(creature_ptr, true, hook[key], nullptr, 0, mode))
+                if (!show_file(player_ptr, true, hook[key], nullptr, 0, mode))
                     skey = 'q';
             }
         }
@@ -472,7 +472,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
                 break;
             }
 
-            sprintf(xtmp, "%s: %s", creature_ptr->name, what ? what : caption);
+            sprintf(xtmp, "%s: %s", player_ptr->name, what ? what : caption);
             angband_fputs(ffp, xtmp, 80);
             angband_fputs(ffp, "\n", 80);
 

@@ -42,24 +42,24 @@
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
  * Hack -- redraw the screen
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Allow absolute file names?
  */
-void do_cmd_pref(player_type *creature_ptr)
+void do_cmd_pref(player_type *player_ptr)
 {
     char buf[80];
     strcpy(buf, "");
     if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80))
         return;
 
-    (void)interpret_pref_file(creature_ptr, buf);
+    (void)interpret_pref_file(player_ptr, buf);
 }
 
 /*
  * Interact with "colors"
  */
-void do_cmd_colors(player_type *creature_ptr)
+void do_cmd_colors(player_type *player_ptr)
 {
     int i;
     char tmp[160];
@@ -80,18 +80,18 @@ void do_cmd_colors(player_type *creature_ptr)
         if (i == '1') {
             prt(_("コマンド: ユーザー設定ファイルをロードします", "Command: Load a user pref file"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
-            sprintf(tmp, "%s.prf", creature_ptr->base_name);
+            sprintf(tmp, "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70))
                 continue;
 
-            (void)process_pref_file(creature_ptr, tmp, true);
+            (void)process_pref_file(player_ptr, tmp, true);
             term_xtra(TERM_XTRA_REACT, 0);
             term_redraw();
         } else if (i == '2') {
             static concptr mark = "Colors";
             prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
-            sprintf(tmp, "%s.prf", creature_ptr->base_name);
+            sprintf(tmp, "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70))
                 continue;
 
@@ -203,18 +203,18 @@ void do_cmd_version(void)
  * Note that "feeling" is set to zero unless some time has passed.
  * Note that this is done when the level is GENERATED, not entered.
  */
-void do_cmd_feeling(player_type *creature_ptr)
+void do_cmd_feeling(player_type *player_ptr)
 {
-    if (creature_ptr->wild_mode)
+    if (player_ptr->wild_mode)
         return;
 
-    if (creature_ptr->current_floor_ptr->inside_quest && !random_quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level)) {
+    if (player_ptr->current_floor_ptr->inside_quest && !random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level)) {
         msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
         return;
     }
 
-    if (creature_ptr->town_num && !creature_ptr->current_floor_ptr->dun_level) {
-        if (!strcmp(town_info[creature_ptr->town_num].name, _("荒野", "wilderness"))) {
+    if (player_ptr->town_num && !player_ptr->current_floor_ptr->dun_level) {
+        if (!strcmp(town_info[player_ptr->town_num].name, _("荒野", "wilderness"))) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
         }
@@ -223,27 +223,27 @@ void do_cmd_feeling(player_type *creature_ptr)
         return;
     }
 
-    if (!is_in_dungeon(creature_ptr)) {
+    if (!is_in_dungeon(player_ptr)) {
         msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
         return;
     }
 
-    if (has_good_luck(creature_ptr))
-        msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
-    else if (is_echizen(creature_ptr))
-        msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
+    if (has_good_luck(player_ptr))
+        msg_print(do_cmd_feeling_text_lucky[player_ptr->feeling]);
+    else if (is_echizen(player_ptr))
+        msg_print(do_cmd_feeling_text_combat[player_ptr->feeling]);
     else
-        msg_print(do_cmd_feeling_text[creature_ptr->feeling]);
+        msg_print(do_cmd_feeling_text[player_ptr->feeling]);
 }
 
 /*
  * Display the time and date
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_time(player_type *creature_ptr)
+void do_cmd_time(player_type *player_ptr)
 {
     int day, hour, min;
-    extract_day_hour_min(creature_ptr, &day, &hour, &min);
+    extract_day_hour_min(player_ptr, &day, &hour, &min);
 
     char desc[1024];
     strcpy(desc, _("変な時刻だ。", "It is a strange time."));
@@ -258,7 +258,7 @@ void do_cmd_time(player_type *creature_ptr)
         (hour < 12) ? "AM" : "PM");
 
     char buf[1024];
-    if (!randint0(10) || creature_ptr->image) {
+    if (!randint0(10) || player_ptr->image) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));

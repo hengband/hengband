@@ -13,82 +13,82 @@
 
 static bool invest_misc_ranger(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SUST_CON))
+    if (o_ptr->art_flags.has(TR_SUST_CON))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SUST_CON);
+    o_ptr->art_flags.set(TR_SUST_CON);
     return one_in_(2);
 }
 
 static bool invest_misc_strength(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SUST_STR))
+    if (o_ptr->art_flags.has(TR_SUST_STR))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SUST_STR);
+    o_ptr->art_flags.set(TR_SUST_STR);
     return one_in_(2);
 }
 
 static bool invest_misc_wisdom(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SUST_WIS))
+    if (o_ptr->art_flags.has(TR_SUST_WIS))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SUST_WIS);
+    o_ptr->art_flags.set(TR_SUST_WIS);
     return one_in_(2);
 }
 
 static bool invest_misc_intelligence(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SUST_INT))
+    if (o_ptr->art_flags.has(TR_SUST_INT))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SUST_INT);
+    o_ptr->art_flags.set(TR_SUST_INT);
     return one_in_(2);
 }
 
 static bool invest_misc_dexterity(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SUST_DEX))
+    if (o_ptr->art_flags.has(TR_SUST_DEX))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SUST_DEX);
+    o_ptr->art_flags.set(TR_SUST_DEX);
     return one_in_(2);
 }
 
 static bool invest_misc_constitution(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SUST_CON))
+    if (o_ptr->art_flags.has(TR_SUST_CON))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SUST_CON);
+    o_ptr->art_flags.set(TR_SUST_CON);
     return one_in_(2);
 }
 
 static bool invest_misc_charisma(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SUST_CHR))
+    if (o_ptr->art_flags.has(TR_SUST_CHR))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SUST_CHR);
+    o_ptr->art_flags.set(TR_SUST_CHR);
     return one_in_(2);
 }
 
 static bool invest_misc_chaos(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_TELEPORT))
+    if (o_ptr->art_flags.has(TR_TELEPORT))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_TELEPORT);
+    o_ptr->art_flags.set(TR_TELEPORT);
     return one_in_(2);
 }
 
 static bool invest_misc_res_curse(object_type* o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_RES_CURSE))
+    if (o_ptr->art_flags.has(TR_RES_CURSE))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_RES_CURSE);
+    o_ptr->art_flags.set(TR_RES_CURSE);
     return one_in_(2);
 }
 
@@ -117,8 +117,8 @@ static bool switch_misc_bias(object_type *o_ptr)
     case BIAS_CHAOS:
         return invest_misc_chaos(o_ptr);
     case BIAS_FIRE:
-        if (!(has_flag(o_ptr->art_flags, TR_LITE_1)))
-            add_flag(o_ptr->art_flags, TR_LITE_1);
+        if (o_ptr->art_flags.has_not(TR_LITE_1))
+            o_ptr->art_flags.set(TR_LITE_1);
 
         return false;
     default:
@@ -128,7 +128,7 @@ static bool switch_misc_bias(object_type *o_ptr)
 
 static void invest_misc_hit_dice(object_type *o_ptr)
 {
-    add_flag(o_ptr->art_flags, TR_SHOW_MODS);
+    o_ptr->art_flags.set(TR_SHOW_MODS);
     HIT_PROB bonus_h = 4 + (HIT_PROB)randint1(11);
     HIT_POINT bonus_d = 4 + (HIT_POINT)randint1(11);
     if ((o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM) && (o_ptr->tval != TV_HAFTED) && (o_ptr->tval != TV_DIGGING) && (o_ptr->tval != TV_GLOVES)
@@ -145,19 +145,19 @@ static void invest_misc_string_esp(object_type *o_ptr)
 {
     switch (randint1(3)) {
     case 1:
-        add_flag(o_ptr->art_flags, TR_ESP_EVIL);
+        o_ptr->art_flags.set(TR_ESP_EVIL);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_LAW;
 
         return;
     case 2:
-        add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
+        o_ptr->art_flags.set(TR_ESP_NONLIVING);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_MAGE;
 
         return;
     case 3:
-        add_flag(o_ptr->art_flags, TR_TELEPATHY);
+        o_ptr->art_flags.set(TR_TELEPATHY);
         if (!o_ptr->artifact_bias && one_in_(9))
             o_ptr->artifact_bias = BIAS_MAGE;
 
@@ -169,13 +169,13 @@ static void switch_investment_weak_esps(object_type *o_ptr, const int *idx, cons
 {
     switch (idx[n]) {
     case 1:
-        add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
+        o_ptr->art_flags.set(TR_ESP_ANIMAL);
         if (!o_ptr->artifact_bias && one_in_(4))
             o_ptr->artifact_bias = BIAS_RANGER;
 
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
+        o_ptr->art_flags.set(TR_ESP_UNDEAD);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_PRIESTLY;
         else if (!o_ptr->artifact_bias && one_in_(6))
@@ -183,34 +183,34 @@ static void switch_investment_weak_esps(object_type *o_ptr, const int *idx, cons
 
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_ESP_DEMON);
+        o_ptr->art_flags.set(TR_ESP_DEMON);
         break;
     case 4:
-        add_flag(o_ptr->art_flags, TR_ESP_ORC);
+        o_ptr->art_flags.set(TR_ESP_ORC);
         break;
     case 5:
-        add_flag(o_ptr->art_flags, TR_ESP_TROLL);
+        o_ptr->art_flags.set(TR_ESP_TROLL);
         break;
     case 6:
-        add_flag(o_ptr->art_flags, TR_ESP_GIANT);
+        o_ptr->art_flags.set(TR_ESP_GIANT);
         break;
     case 7:
-        add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
+        o_ptr->art_flags.set(TR_ESP_DRAGON);
         break;
     case 8:
-        add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
+        o_ptr->art_flags.set(TR_ESP_HUMAN);
         if (!o_ptr->artifact_bias && one_in_(6))
             o_ptr->artifact_bias = BIAS_ROGUE;
 
         break;
     case 9:
-        add_flag(o_ptr->art_flags, TR_ESP_GOOD);
+        o_ptr->art_flags.set(TR_ESP_GOOD);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_LAW;
 
         break;
     case 10:
-        add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
+        o_ptr->art_flags.set(TR_ESP_UNIQUE);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_LAW;
 
@@ -253,37 +253,37 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
 
     switch (randint1(34)) {
     case 1:
-        add_flag(o_ptr->art_flags, TR_SUST_STR);
+        o_ptr->art_flags.set(TR_SUST_STR);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_STR;
 
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_SUST_INT);
+        o_ptr->art_flags.set(TR_SUST_INT);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_INT;
 
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_SUST_WIS);
+        o_ptr->art_flags.set(TR_SUST_WIS);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_WIS;
 
         break;
     case 4:
-        add_flag(o_ptr->art_flags, TR_SUST_DEX);
+        o_ptr->art_flags.set(TR_SUST_DEX);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_DEX;
 
         break;
     case 5:
-        add_flag(o_ptr->art_flags, TR_SUST_CON);
+        o_ptr->art_flags.set(TR_SUST_CON);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_CON;
 
         break;
     case 6:
-        add_flag(o_ptr->art_flags, TR_SUST_CHR);
+        o_ptr->art_flags.set(TR_SUST_CHR);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_CHR;
 
@@ -291,10 +291,10 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
     case 7:
     case 8:
     case 14:
-        add_flag(o_ptr->art_flags, TR_FREE_ACT);
+        o_ptr->art_flags.set(TR_FREE_ACT);
         break;
     case 9:
-        add_flag(o_ptr->art_flags, TR_HOLD_EXP);
+        o_ptr->art_flags.set(TR_HOLD_EXP);
         if (!o_ptr->artifact_bias && one_in_(5))
             o_ptr->artifact_bias = BIAS_PRIESTLY;
         else if (!o_ptr->artifact_bias && one_in_(6))
@@ -303,27 +303,27 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
         break;
     case 10:
     case 11:
-        add_flag(o_ptr->art_flags, TR_LITE_1);
+        o_ptr->art_flags.set(TR_LITE_1);
         break;
     case 12:
     case 13:
-        add_flag(o_ptr->art_flags, TR_LEVITATION);
+        o_ptr->art_flags.set(TR_LEVITATION);
         break;
     case 15:
     case 16:
     case 17:
-        add_flag(o_ptr->art_flags, TR_SEE_INVIS);
+        o_ptr->art_flags.set(TR_SEE_INVIS);
         break;
     case 19:
     case 20:
-        add_flag(o_ptr->art_flags, TR_SLOW_DIGEST);
+        o_ptr->art_flags.set(TR_SLOW_DIGEST);
         break;
     case 21:
     case 22:
-        add_flag(o_ptr->art_flags, TR_REGEN);
+        o_ptr->art_flags.set(TR_REGEN);
         break;
     case 23:
-        add_flag(o_ptr->art_flags, TR_TELEPORT);
+        o_ptr->art_flags.set(TR_TELEPORT);
         break;
     case 24:
     case 25:
@@ -340,13 +340,13 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
         invest_misc_hit_dice(o_ptr);
         break;
     case 30:
-        add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+        o_ptr->art_flags.set(TR_NO_MAGIC);
         break;
     case 31:
-        add_flag(o_ptr->art_flags, TR_NO_TELE);
+        o_ptr->art_flags.set(TR_NO_TELE);
         break;
     case 32:
-        add_flag(o_ptr->art_flags, TR_WARNING);
+        o_ptr->art_flags.set(TR_WARNING);
         break;
     case 18:
         invest_misc_string_esp(o_ptr);

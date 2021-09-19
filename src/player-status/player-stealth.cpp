@@ -1,11 +1,11 @@
 ﻿#include "player-status/player-stealth.h"
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
-#include "player/mimic-info-table.h"
-#include "player/player-class.h"
+#include "player-info/mimic-info-table.h"
+#include "player-info/race-types.h"
 #include "player/player-personality.h"
-#include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -24,12 +24,12 @@
  */
 int16_t PlayerStealth::race_value()
 {
-    const player_race *tmp_rp_ptr;
+    const player_race_info *tmp_rp_ptr;
 
-    if (this->owner_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];
+    if (this->player_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[this->player_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[enum2i(this->owner_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(this->player_ptr->prace)];
 
     return tmp_rp_ptr->r_stl;
 }
@@ -42,7 +42,7 @@ int16_t PlayerStealth::race_value()
  */
 int16_t PlayerStealth::personality_value()
 {
-    const player_personality *a_ptr = &personality_info[this->owner_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[this->player_ptr->pseikaku];
     return a_ptr->a_stl;
 }
 
@@ -54,8 +54,8 @@ int16_t PlayerStealth::personality_value()
  */
 int16_t PlayerStealth::class_base_value()
 {
-    const player_class *c_ptr = &class_info[this->owner_ptr->pclass];
-    return c_ptr->c_stl + (c_ptr->x_stl * this->owner_ptr->lev / 10);
+    const player_class_info *c_ptr = &class_info[this->player_ptr->pclass];
+    return c_ptr->c_stl + (c_ptr->x_stl * this->player_ptr->lev / 10);
 }
 
 /*!
@@ -69,12 +69,12 @@ int16_t PlayerStealth::class_value()
 {
     ACTION_SKILL_POWER result = 0;
 
-    if (this->owner_ptr->pclass == CLASS_NINJA) {
-        if (heavy_armor(this->owner_ptr)) {
-            result -= (this->owner_ptr->lev) / 10;
-        } else if ((!this->owner_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->owner_ptr))
-            && (!this->owner_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->owner_ptr))) {
-            result += (this->owner_ptr->lev) / 10;
+    if (this->player_ptr->pclass == CLASS_NINJA) {
+        if (heavy_armor(this->player_ptr)) {
+            result -= (this->player_ptr->lev) / 10;
+        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr))
+            && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+            result += (this->player_ptr->lev) / 10;
         }
     }
 
@@ -91,7 +91,7 @@ int16_t PlayerStealth::class_value()
 int16_t PlayerStealth::mutation_value()
 {
     int16_t result = 0;
-    const auto &muta = this->owner_ptr->muta;
+    const auto &muta = this->player_ptr->muta;
     if (muta.has(MUTA::XTRA_NOIS)) {
         result -= 3;
     }
@@ -112,22 +112,27 @@ int16_t PlayerStealth::mutation_value()
 int16_t PlayerStealth::time_effect_value()
 {
     int16_t result = 0;
-    if (this->owner_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling_any(this->owner_ptr))
-            result -= (1 + casting_hex_num(this->owner_ptr));
+    if (this->player_ptr->realm1 == REALM_HEX) {
+        SpellHex spell_hex(this->player_ptr);
+        if (spell_hex.is_spelling_any()) {
+            result -= spell_hex.get_casting_num() + 1;
+        }
     }
-    if (is_shero(this->owner_ptr)) {
+
+    if (is_shero(this->player_ptr)) {
         result -= 7;
     }
-    if (is_time_limit_stealth(this->owner_ptr))
+
+    if (is_time_limit_stealth(this->player_ptr)) {
         result += 999;
+    }
 
     return result;
 }
 
 bool PlayerStealth::is_aggravated_s_fairy()
 {
-    return player_aggravate_state(this->owner_ptr) == AGGRAVATE_S_FAIRY;
+    return player_aggravate_state(this->player_ptr) == AGGRAVATE_S_FAIRY;
 }
 
 /*!

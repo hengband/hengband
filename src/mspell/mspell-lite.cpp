@@ -29,7 +29,7 @@
 
 /*!
  * @brief モンスターがプレイヤーにダメージを与えるための最適な座標を算出する /
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 技能を使用するモンスター構造体の参照ポインタ
  * @param yp 最適な目標地点のY座標を返す参照ポインタ
  * @param xp 最適な目標地点のX座標を返す参照ポインタ
@@ -37,17 +37,17 @@
  * @param path_check 射線を判定するための関数ポインタ
  * @return 有効な座標があった場合TRUEを返す
  */
-bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, FF f_flag, path_check_pf path_check)
+bool adjacent_grid_check(player_type *player_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, FF f_flag, path_check_pf path_check)
 {
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
 
     int next;
-    if (m_ptr->fy < target_ptr->y && m_ptr->fx < target_ptr->x)
+    if (m_ptr->fy < player_ptr->y && m_ptr->fx < player_ptr->x)
         next = 0;
-    else if (m_ptr->fy < target_ptr->y)
+    else if (m_ptr->fy < player_ptr->y)
         next = 1;
-    else if (m_ptr->fx < target_ptr->x)
+    else if (m_ptr->fx < player_ptr->x)
         next = 2;
     else
         next = 3;
@@ -56,11 +56,11 @@ bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION 
         int next_x = *xp + tonari_x[next][i];
         int next_y = *yp + tonari_y[next][i];
         grid_type *g_ptr;
-        g_ptr = &target_ptr->current_floor_ptr->grid_array[next_y][next_x];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[next_y][next_x];
         if (!g_ptr->cave_has_flag(f_flag))
             continue;
 
-        if (path_check(target_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x)) {
+        if (path_check(player_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x)) {
             *yp = next_y;
             *xp = next_x;
             return true;
@@ -70,18 +70,18 @@ bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION 
     return false;
 }
 
-void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
+void decide_lite_range(player_type *player_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->ability_flags.has_not(RF_ABILITY::BR_LITE))
         return;
 
     msa_ptr->y_br_lite = msa_ptr->y;
     msa_ptr->x_br_lite = msa_ptr->x;
-    if (los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
-        feature_type *f_ptr = &f_info[target_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
+    if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
+        feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
         if (f_ptr->flags.has_not(FF::LOS) && f_ptr->flags.has(FF::PROJECT) && one_in_(2))
             msa_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
-    } else if (!adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FF::LOS, los))
+    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FF::LOS, los))
         msa_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
 
     if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE))
@@ -106,35 +106,35 @@ static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
 }
 
-static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr)
+static void check_lite_area_by_mspell(player_type *player_ptr, msa_type *msa_ptr)
 {
-    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
-        && in_disintegration_range(target_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
-        && (one_in_(10) || (projectable(target_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
+    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
+        && in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
+        && (one_in_(10) || (projectable(player_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         msa_ptr->success = true;
         return;
     }
 
-    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
-        && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
+        && los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
         msa_ptr->success = true;
         return;
     }
 
-    if (msa_ptr->ability_flags.has_not(RF_ABILITY::BA_LITE) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr)))
+    if (msa_ptr->ability_flags.has_not(RF_ABILITY::BA_LITE) || (msa_ptr->m_ptr->cdis > get_max_range(player_ptr)))
         return;
 
     POSITION by = msa_ptr->y, bx = msa_ptr->x;
-    get_project_point(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
-    if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(target_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+    get_project_point(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
+    if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(player_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
     }
 }
 
-static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
+static void decide_lite_breath(player_type *player_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->success)
         return;
@@ -146,7 +146,7 @@ static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
         msa_ptr->success = true;
     }
 
-    if ((msa_ptr->y_br_lite == 0) || (msa_ptr->x_br_lite == 0) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr) / 2) || !one_in_(5))
+    if ((msa_ptr->y_br_lite == 0) || (msa_ptr->x_br_lite == 0) || (msa_ptr->m_ptr->cdis > get_max_range(player_ptr) / 2) || !one_in_(5))
         return;
 
     if (msa_ptr->success) {
@@ -160,38 +160,38 @@ static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
     msa_ptr->success = true;
 }
 
-bool decide_lite_projection(player_type *target_ptr, msa_type *msa_ptr)
+bool decide_lite_projection(player_type *player_ptr, msa_type *msa_ptr)
 {
-    if (projectable(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
-        feature_projection(target_ptr->current_floor_ptr, msa_ptr);
+    if (projectable(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
+        feature_projection(player_ptr->current_floor_ptr, msa_ptr);
         return true;
     }
 
     msa_ptr->success = false;
-    check_lite_area_by_mspell(target_ptr, msa_ptr);
+    check_lite_area_by_mspell(player_ptr, msa_ptr);
     if (!msa_ptr->success)
-        msa_ptr->success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF::PROJECT, projectable);
+        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF::PROJECT, projectable);
 
-    decide_lite_breath(target_ptr, msa_ptr);
+    decide_lite_breath(player_ptr, msa_ptr);
     return msa_ptr->success;
 }
 
-void decide_lite_area(player_type *target_ptr, msa_type *msa_ptr)
+void decide_lite_area(player_type *player_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->ability_flags.has_not(RF_ABILITY::DARKNESS))
         return;
 
-    bool can_use_lite_area = (target_ptr->pclass == CLASS_NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
+    bool can_use_lite_area = (player_ptr->pclass == CLASS_NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
         && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
 
     if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
         return;
 
-    if (d_info[target_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         msa_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
         return;
     }
 
-    if ((target_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
+    if ((player_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
         msa_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
 }

@@ -79,22 +79,22 @@ static bool check_death(player_type *player_ptr)
  * @brief 勝利者用の引退演出処理 /
  * Change the player into a King! -RAK-
  */
-static void kingly(player_type *winner_ptr)
+static void kingly(player_type *player_ptr)
 {
-    bool seppuku = streq(winner_ptr->died_from, "Seppuku");
-    winner_ptr->current_floor_ptr->dun_level = 0;
+    bool seppuku = streq(player_ptr->died_from, "Seppuku");
+    player_ptr->current_floor_ptr->dun_level = 0;
     if (!seppuku) {
         /* 引退したときの識別文字 */
-        (void)strcpy(winner_ptr->died_from, _("ripe", "Ripe Old Age"));
+        (void)strcpy(player_ptr->died_from, _("ripe", "Ripe Old Age"));
     }
 
-    winner_ptr->exp = winner_ptr->max_exp;
-    winner_ptr->lev = winner_ptr->max_plv;
+    player_ptr->exp = player_ptr->max_exp;
+    player_ptr->lev = player_ptr->max_plv;
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
     auto cy = hgt / 2;
     auto cx = wid / 2;
-    winner_ptr->au += 10000000L;
+    player_ptr->au += 10000000L;
     term_clear();
 
     put_str("#", cy - 11, cx - 1);
@@ -121,9 +121,9 @@ static void kingly(player_type *winner_ptr)
 #endif
 
     if (!seppuku) {
-        exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
-        exe_write_diary(winner_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-        exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+        exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
     }
 
     flush();
@@ -133,7 +133,7 @@ static void kingly(player_type *winner_ptr)
 /*!
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * <pre>
  * This function is called only from "main.c" and "signals.c".
@@ -147,7 +147,7 @@ void close_game(player_type *player_ptr)
     flush();
     signals_ignore_tstp();
 
-    current_world_ptr->character_icky_depth = 1;
+    w_ptr->character_icky_depth = 1;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     safe_setuid_grab(player_ptr);
@@ -157,12 +157,12 @@ void close_game(player_type *player_ptr)
     if (!check_death(player_ptr))
         return;
 
-    if (current_world_ptr->total_winner)
+    if (w_ptr->total_winner)
         kingly(player_ptr);
 
     if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
         update_playtime();
-        current_world_ptr->sf_play_time += current_world_ptr->play_time;
+        w_ptr->sf_play_time += w_ptr->play_time;
 
         if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
             msg_print(_("セーブ失敗！", "death save failed!"));

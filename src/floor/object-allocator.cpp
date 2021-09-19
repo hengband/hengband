@@ -48,7 +48,7 @@ static int next_to_walls(floor_type *floor_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う / Helper function for alloc_stairs(). Is this a good location for stairs?
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 基準のy座標
  * @param x 基準のx座標
  * @param walls 最低減隣接させたい外壁の数
@@ -66,17 +66,17 @@ static bool alloc_stairs_aux(player_type *player_ptr, POSITION y, POSITION x, in
 
 /*!
  * @brief 外壁に隣接させて階段を生成する / Places some staircases near walls
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param feat 配置したい地形ID
  * @param num 配置したい階段の数
  * @param walls 最低減隣接させたい外壁の数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
+bool alloc_stairs(player_type *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
     feature_type *f_ptr = &f_info[feat];
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (f_ptr->flags.has(FF::LESS)) {
         if (ironman_downward || !floor_ptr->dun_level)
             return true;
@@ -84,7 +84,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
         if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth)
             shaft_num = (randint1(num + 1)) / 2;
     } else if (f_ptr->flags.has(FF::MORE)) {
-        QUEST_IDX q_idx = quest_number(owner_ptr, floor_ptr->dun_level);
+        QUEST_IDX q_idx = quest_number(player_ptr, floor_ptr->dun_level);
         if (floor_ptr->dun_level > 1 && q_idx) {
             monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
             if (!(r_ptr->flags1 & RF1_UNIQUE) || 0 < r_ptr->max_num)
@@ -94,7 +94,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
         if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth)
             return true;
 
-        if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth - 1) && !quest_number(owner_ptr, floor_ptr->dun_level + 1))
+        if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth - 1) && !quest_number(player_ptr, floor_ptr->dun_level + 1))
             shaft_num = (randint1(num) + 1) / 2;
     } else
         return false;
@@ -106,7 +106,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
             const POSITION max_x = floor_ptr->width - 1;
             for (POSITION y = 1; y < floor_ptr->height - 1; y++)
                 for (POSITION x = 1; x < max_x; x++)
-                    if (alloc_stairs_aux(owner_ptr, y, x, walls))
+                    if (alloc_stairs_aux(player_ptr, y, x, walls))
                         candidates++;
 
             if (!candidates) {
@@ -122,7 +122,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
             POSITION x = max_x;
             for (y = 1; y < floor_ptr->height - 1; y++) {
                 for (x = 1; x < floor_ptr->width - 1; x++) {
-                    if (alloc_stairs_aux(owner_ptr, y, x, walls)) {
+                    if (alloc_stairs_aux(player_ptr, y, x, walls)) {
                         pick--;
                         if (pick == 0)
                             break;
@@ -135,7 +135,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
 
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? feat_state(owner_ptr->current_floor_ptr, feat, FF::SHAFT) : feat;
+            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, FF::SHAFT) : feat;
             g_ptr->info &= ~(CAVE_FLOOR);
             break;
         }
@@ -161,13 +161,13 @@ static void place_rubble(floor_type *floor_ptr, POSITION y, POSITION x)
  * @param num 配置したい数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
+void alloc_object(player_type *player_ptr, dap_type set, EFFECT_ID typ, int num)
 {
     POSITION y = 0;
     POSITION x = 0;
     int dummy = 0;
     grid_type *g_ptr;
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     num = num * floor_ptr->height * floor_ptr->width / (MAX_HGT * MAX_WID) + 1;
     for (int k = 0; k < num; k++) {
         while (dummy < SAFE_MAX_ATTEMPTS) {
@@ -178,7 +178,7 @@ void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
             if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->m_idx)
                 continue;
 
-            if (player_bold(owner_ptr, y, x))
+            if (player_bold(player_ptr, y, x))
                 continue;
 
             auto is_room = floor_ptr->grid_array[y][x].is_room();
@@ -189,7 +189,7 @@ void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
         }
 
         if (dummy >= SAFE_MAX_ATTEMPTS) {
-            msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("アイテムの配置に失敗しました。", "Failed to place object."));
+            msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アイテムの配置に失敗しました。", "Failed to place object."));
             return;
         }
 
@@ -199,14 +199,14 @@ void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
             floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(owner_ptr, y, x);
+            place_trap(player_ptr, y, x);
             floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:
-            place_gold(owner_ptr, y, x);
+            place_gold(player_ptr, y, x);
             break;
         case ALLOC_TYP_OBJECT:
-            place_object(owner_ptr, y, x, 0L);
+            place_object(player_ptr, y, x, 0L);
             break;
         }
     }

@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief モンスターから直接攻撃を受けた時に、プレーヤーのオーラダメージで反撃する処理
+ * @brief モンスターから直接攻撃を受けた時に、プレイヤーのオーラダメージで反撃する処理
  * @date 2020/05/31
  * @author Hourier
  */
@@ -30,102 +30,102 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_fire_by_monster_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!has_sh_fire(target_ptr) || !monap_ptr->alive || target_ptr->is_dead)
+    if (!has_sh_fire(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) != 0) {
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 
         return;
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
     if (mdp.mon_take_hit(_("は灰の山になった。", " turns into a pile of ash."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }
 }
 
-static void aura_elec_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_elec_by_monster_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!has_sh_elec(target_ptr) || !monap_ptr->alive || target_ptr->is_dead)
+    if (!has_sh_elec(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) != 0) {
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 
         return;
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
     if (mdp.mon_take_hit(_("は燃え殻の山になった。", " turns into a pile of cinders."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }
 }
 
-static void aura_cold_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_cold_by_monster_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!has_sh_cold(target_ptr) || !monap_ptr->alive || target_ptr->is_dead)
+    if (!has_sh_cold(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) != 0) {
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 
         return;
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
     if (mdp.mon_take_hit(_("は凍りついた。", " was frozen."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }
 }
 
-static void aura_shards_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_shards_by_monster_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->dustrobe || !monap_ptr->alive || target_ptr->is_dead)
+    if (!player_ptr->dustrobe || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK) != 0) {
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
     } else {
         HIT_POINT dam = damroll(2, 6);
-        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
+        dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets sliced!"), monap_ptr->m_name);
-        MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
+        MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
         if (mdp.mon_take_hit(_("はズタズタになった。", " is torn to pieces."))) {
             monap_ptr->blinked = false;
             monap_ptr->alive = false;
         }
     }
 
-    if (target_ptr->current_floor_ptr->grid_array[target_ptr->y][target_ptr->x].is_mirror())
-        teleport_player(target_ptr, 10, TELEPORT_SPONTANEOUS);
+    if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].is_mirror())
+        teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
 }
 
-static void aura_holy_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_holy_by_monster_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->tim_sh_holy || !monap_ptr->alive || target_ptr->is_dead)
+    if (!player_ptr->tim_sh_holy || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
@@ -133,75 +133,75 @@ static void aura_holy_by_monster_attack(player_type *target_ptr, monap_type *mon
         return;
 
     if ((r_ptr->flagsr & RFR_RES_ALL) != 0) {
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= RFR_RES_ALL;
 
         return;
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }
 
-    if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+    if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
         r_ptr->r_flags3 |= RF3_EVIL;
 }
 
-static void aura_force_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_force_by_monster_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->tim_sh_touki || !monap_ptr->alive || target_ptr->is_dead)
+    if (!player_ptr->tim_sh_touki || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_RES_ALL) != 0) {
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= RFR_RES_ALL;
 
         return;
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }
 }
 
-static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_shadow_by_monster_attack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (!hex_spelling(target_ptr, HEX_SHADOW_CLOAK) || !monap_ptr->alive || target_ptr->is_dead)
+    if (!SpellHex(player_ptr).is_spelling_specific(HEX_SHADOW_CLOAK) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
     HIT_POINT dam = 1;
-    object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_MAIN_HAND];
+    object_type *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (((r_ptr->flagsr & RFR_RES_ALL) != 0) || ((r_ptr->flagsr & RFR_RES_DARK) != 0)) {
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (RFR_RES_ALL | RFR_RES_DARK);
 
         return;
     }
 
     if (o_armed_ptr->k_idx) {
-        int basedam = ((o_armed_ptr->dd + target_ptr->to_dd[0]) * (o_armed_ptr->ds + target_ptr->to_ds[0] + 1));
-        dam = basedam / 2 + o_armed_ptr->to_d + target_ptr->to_d[0];
+        int basedam = ((o_armed_ptr->dd + player_ptr->to_dd[0]) * (o_armed_ptr->ds + player_ptr->to_ds[0] + 1));
+        dam = basedam / 2 + o_armed_ptr->to_d + player_ptr->to_d[0];
     }
 
-    o_armed_ptr = &target_ptr->inventory_list[INVEN_BODY];
+    o_armed_ptr = &player_ptr->inventory_list[INVEN_BODY];
     if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed())
         dam *= 2;
 
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
@@ -213,22 +213,22 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
 
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < 4; j++) {
-        o_armed_ptr = &target_ptr->inventory_list[typ[j][0]];
+        o_armed_ptr = &player_ptr->inventory_list[typ[j][0]];
         if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed() && o_armed_ptr->is_armour())
-            project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg);
+            project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), typ[j][1], flg);
     }
 }
 
-void process_aura_counterattack(player_type *target_ptr, monap_type *monap_ptr)
+void process_aura_counterattack(player_type *player_ptr, monap_type *monap_ptr)
 {
     if (!monap_ptr->touched)
         return;
 
-    aura_fire_by_monster_attack(target_ptr, monap_ptr);
-    aura_elec_by_monster_attack(target_ptr, monap_ptr);
-    aura_cold_by_monster_attack(target_ptr, monap_ptr);
-    aura_shards_by_monster_attack(target_ptr, monap_ptr);
-    aura_holy_by_monster_attack(target_ptr, monap_ptr);
-    aura_force_by_monster_attack(target_ptr, monap_ptr);
-    aura_shadow_by_monster_attack(target_ptr, monap_ptr);
+    aura_fire_by_monster_attack(player_ptr, monap_ptr);
+    aura_elec_by_monster_attack(player_ptr, monap_ptr);
+    aura_cold_by_monster_attack(player_ptr, monap_ptr);
+    aura_shards_by_monster_attack(player_ptr, monap_ptr);
+    aura_holy_by_monster_attack(player_ptr, monap_ptr);
+    aura_force_by_monster_attack(player_ptr, monap_ptr);
+    aura_shadow_by_monster_attack(player_ptr, monap_ptr);
 }

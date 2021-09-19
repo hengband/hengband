@@ -21,7 +21,7 @@
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
-#include "player/player-race-types.h"
+#include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "system/monster-race-definition.h"
@@ -32,7 +32,7 @@
 
 /*!
  * @brief クラス依存のアイテム破壊を調べる
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr アイテムへの参照ポインタ
  * @return 特別なクラス、かつそのクラス特有のアイテムであればFALSE、それ以外はTRUE
  */

@@ -30,7 +30,7 @@
 
 /*!
  * @brief 優勝時のメッセージを表示し、賞金を与える
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return まだ優勝していないか、挑戦者モンスターとの戦いではFALSE
  */
 static bool process_ostensible_arena_victory(player_type *player_ptr)
@@ -54,7 +54,7 @@ static bool process_ostensible_arena_victory(player_type *player_ptr)
 
 /*!
  * @brief はぐれメタルとの対戦
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return まだパワー・ワイアーム以下を倒していないならFALSE、倒していたらTRUE
  */
 static bool battle_metal_babble(player_type *player_ptr)
@@ -137,7 +137,7 @@ static void see_arena_poster(player_type *player_ptr)
 
 /*!
  * @brief 闘技場に入るコマンドの処理 / on_defeat_arena_monster commands
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
  */
 void arena_comm(player_type *player_ptr, int cmd)
@@ -161,7 +161,7 @@ void arena_comm(player_type *player_ptr, int cmd)
 
 /*!
  * @brief モンスター闘技場に参加するモンスターを更新する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void update_gambling_monsters(player_type *player_ptr)
 {
@@ -171,7 +171,7 @@ void update_gambling_monsters(player_type *player_ptr)
     int power[4];
     bool tekitou;
 
-    for (i = 0; i < current_world_ptr->max_d_idx; i++) {
+    for (i = 0; i < w_ptr->max_d_idx; i++) {
         if (max_dl < max_dlv[i])
             max_dl = max_dlv[i];
     }
@@ -269,7 +269,7 @@ void update_gambling_monsters(player_type *player_ptr)
 
 /*!
  * @brief モンスター闘技場のメインルーチン
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 賭けを開始したか否か
  */
 bool monster_arena_comm(player_type *player_ptr)
@@ -279,9 +279,9 @@ bool monster_arena_comm(player_type *player_ptr)
     char out_val[MAX_MONSTER_NAME], tmp_str[80];
     concptr p;
 
-    if ((current_world_ptr->game_turn - current_world_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
+    if ((w_ptr->game_turn - w_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
         update_gambling_monsters(player_ptr);
-        current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
+        w_ptr->arena_start_turn = w_ptr->game_turn;
     }
 
     screen_save();

@@ -15,27 +15,27 @@
 
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void rd_extra(player_type *creature_ptr)
+void rd_extra(player_type *player_ptr)
 {
     if (h_older_than(0, 0, 7))
-        creature_ptr->riding = 0;
+        player_ptr->riding = 0;
     else
-        rd_s16b(&creature_ptr->riding);
+        rd_s16b(&player_ptr->riding);
 
     if (h_older_than(1, 5, 0, 0))
-        creature_ptr->floor_id = 0;
+        player_ptr->floor_id = 0;
     else
-        rd_s16b(&creature_ptr->floor_id);
+        rd_s16b(&player_ptr->floor_id);
 
-    rd_dummy_monsters(creature_ptr);
+    rd_dummy_monsters(player_ptr);
     if (h_older_than(0, 1, 2))
-        current_world_ptr->play_time = 0;
+        w_ptr->play_time = 0;
     else
-        rd_u32b(&current_world_ptr->play_time);
+        rd_u32b(&w_ptr->play_time);
 
-    rd_visited_towns(creature_ptr);
+    rd_visited_towns(player_ptr);
     if (!h_older_than(1, 0, 5))
-        rd_u32b(&creature_ptr->count);
+        rd_u32b(&player_ptr->count);
 }

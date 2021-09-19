@@ -51,4 +51,4 @@
 #define ENTRY_EXP_TO_ADV_ANDR 44
 
 struct player_type;
-void display_player_various(player_type *creature_ptr);
+void display_player_various(player_type *player_ptr);

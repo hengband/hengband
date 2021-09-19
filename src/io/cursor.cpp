@@ -31,7 +31,7 @@ void move_cursor_relative(int row, int col)
 
 /*
  * @brief 矢などの軌跡を*で表示する / print project path
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  */
@@ -71,7 +71,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
             }
 
             if (!use_graphics) {
-                if (current_world_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx)
                     a = TERM_DARK;
                 else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;
@@ -93,7 +93,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する（サブルーチン）
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dy 変更先のフロアY座標
  * @param dx 変更先のフロアX座標
  * Handle a request to change the current panel

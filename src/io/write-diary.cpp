@@ -71,13 +71,13 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 
 /*!
  * @brief フロア情報を日記に追加する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return クエストID
  */
-static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level, char *note_level_buf)
+static QUEST_IDX write_floor(player_type *player_ptr, concptr *note_level, char *note_level_buf)
 {
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	QUEST_IDX q_idx = quest_number(creature_ptr, floor_ptr->dun_level);
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	QUEST_IDX q_idx = quest_number(player_ptr, floor_ptr->dun_level);
 	if (!write_level) return q_idx;
 
 	if (floor_ptr->inside_arena)
@@ -89,9 +89,9 @@ static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level, cha
 	else
 	{
 #ifdef JP
-		sprintf(note_level_buf, "%d階(%s):", (int)floor_ptr->dun_level, d_info[creature_ptr->dungeon_idx].name.c_str());
+		sprintf(note_level_buf, "%d階(%s):", (int)floor_ptr->dun_level, d_info[player_ptr->dungeon_idx].name.c_str());
 #else
-		sprintf(note_level_buf, "%s L%d:", d_info[creature_ptr->dungeon_idx].name.c_str(), (int)floor_ptr->dun_level);
+		sprintf(note_level_buf, "%s L%d:", d_info[player_ptr->dungeon_idx].name.c_str(), (int)floor_ptr->dun_level);
 #endif
 		*note_level = note_level_buf;
 	}
@@ -170,12 +170,12 @@ static void write_diary_pet(FILE *fff, int num, concptr note)
  * @param note 日記内容のIDに応じた文字列参照ポインタ
  * @return エラーコード
  */
-errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
+errr exe_write_diary(player_type *player_ptr, int type, int num, concptr note)
 {
 	static bool disable_diary = false;
 
 	int day, hour, min;
-	extract_day_hour_min(creature_ptr, &day, &hour, &min);
+	extract_day_hour_min(player_ptr, &day, &hour, &min);
 
 	if (disable_diary) return -1;
 
@@ -185,11 +185,11 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		type == DIARY_RAND_QUEST_F ||
 		type == DIARY_TO_QUEST)
 	{
-		QUEST_IDX old_quest = creature_ptr->current_floor_ptr->inside_quest;
-		creature_ptr->current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
+		QUEST_IDX old_quest = player_ptr->current_floor_ptr->inside_quest;
+		player_ptr->current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
 		init_flags = INIT_NAME_ONLY;
-		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-		creature_ptr->current_floor_ptr->inside_quest = old_quest;
+		parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+		player_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 
 	FILE *fff = nullptr;
@@ -197,7 +197,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 
 	concptr note_level = "";
     char note_level_buf[40];
-	QUEST_IDX q_idx = write_floor(creature_ptr, &note_level, note_level_buf);
+	QUEST_IDX q_idx = write_floor(player_ptr, &note_level, note_level_buf);
 
 	bool do_level = true;
 	switch (type)
@@ -275,8 +275,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	{
 		fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
 			" %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
-			_(d_info[creature_ptr->dungeon_idx].name.c_str(), num),
-			_(num, d_info[creature_ptr->dungeon_idx].name.c_str()));
+			_(d_info[player_ptr->dungeon_idx].name.c_str(), num),
+			_(num, d_info[player_ptr->dungeon_idx].name.c_str()));
 		break;
 	}
 	case DIARY_TRUMP:
@@ -292,9 +292,9 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		concptr to = q_idx && (is_fixed_quest_idx(q_idx)
 			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT)))
 			? _("地上", "the surface")
-			: !(creature_ptr->current_floor_ptr->dun_level + num)
+			: !(player_ptr->current_floor_ptr->dun_level + num)
 			? _("地上", "the surface")
-			: format(_("%d階", "level %d"), creature_ptr->current_floor_ptr->dun_level + num);
+			: format(_("%d階", "level %d"), player_ptr->current_floor_ptr->dun_level + num);
 		fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
 		break;
 	}
@@ -302,8 +302,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	{
 		if (!num)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"),
-				hour, min, note_level, _(d_info[creature_ptr->dungeon_idx].name.c_str(), (int)max_dlv[creature_ptr->dungeon_idx]),
-				_((int)max_dlv[creature_ptr->dungeon_idx], d_info[creature_ptr->dungeon_idx].name.c_str()));
+				hour, min, note_level, _(d_info[player_ptr->dungeon_idx].name.c_str(), (int)max_dlv[player_ptr->dungeon_idx]),
+				_((int)max_dlv[player_ptr->dungeon_idx], d_info[player_ptr->dungeon_idx].name.c_str()));
 		else
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
 
@@ -362,18 +362,18 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 	case DIARY_WIZ_TELE:
 	{
-        concptr to = !is_in_dungeon(creature_ptr)
+        concptr to = !is_in_dungeon(player_ptr)
 			? _("地上", "the surface")
-			: format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_info[creature_ptr->dungeon_idx].name.c_str());
+			: format(_("%d階(%s)", "level %d of %s"), player_ptr->current_floor_ptr->dun_level, d_info[player_ptr->dungeon_idx].name.c_str());
 		fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
 			" %2d:%02d %20s wizard-teleported to %s.\n"), hour, min, note_level, to);
 		break;
 	}
 	case DIARY_PAT_TELE:
 	{
-		concptr to = !is_in_dungeon(creature_ptr)
+		concptr to = !is_in_dungeon(player_ptr)
 			? _("地上", "the surface")
-			: format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_info[creature_ptr->dungeon_idx].name.c_str());
+			: format(_("%d階(%s)", "level %d of %s"), player_ptr->current_floor_ptr->dun_level, d_info[player_ptr->dungeon_idx].name.c_str());
 		fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
 			" %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
 		break;

@@ -27,20 +27,20 @@
 
 /*!
  * @brief 仙術領域魔法の各処理を行う
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
-concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_sorcery_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
     bool info = (mode == SPELL_INFO) ? true : false;
     bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
     case 0:
@@ -56,7 +56,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_radius(rad);
 
             if (cast) {
-                detect_monsters_normal(caster_ptr, rad);
+                detect_monsters_normal(player_ptr, rad);
             }
         }
         break;
@@ -74,7 +74,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_range(range);
 
             if (cast) {
-                teleport_player(caster_ptr, range, TELEPORT_SPONTANEOUS);
+                teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
             }
         }
         break;
@@ -92,9 +92,9 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_radius(rad);
 
             if (cast) {
-                detect_traps(caster_ptr, rad, true);
-                detect_doors(caster_ptr, rad);
-                detect_stairs(caster_ptr, rad);
+                detect_traps(player_ptr, rad, true);
+                detect_doors(player_ptr, rad);
+                detect_stairs(player_ptr, rad);
             }
         }
         break;
@@ -114,7 +114,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                lite_area(caster_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, damroll(dice, sides), rad);
             }
         }
         break;
@@ -132,10 +132,10 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                confuse_monster(caster_ptr, dir, power);
+                confuse_monster(player_ptr, dir, power);
             }
         }
         break;
@@ -153,7 +153,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_range(range);
 
             if (cast) {
-                teleport_player(caster_ptr, range, TELEPORT_SPONTANEOUS);
+                teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
             }
         }
         break;
@@ -171,10 +171,10 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                sleep_monster(caster_ptr, dir, plev);
+                sleep_monster(player_ptr, dir, plev);
             }
         }
         break;
@@ -192,7 +192,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (!recharge(caster_ptr, power))
+                if (!recharge(player_ptr, power))
                     return nullptr;
             }
         }
@@ -211,7 +211,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_radius(rad);
 
             if (cast) {
-                map_area(caster_ptr, rad);
+                map_area(player_ptr, rad);
             }
         }
         break;
@@ -224,7 +224,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                if (!ident_spell(caster_ptr, false))
+                if (!ident_spell(player_ptr, false))
                     return nullptr;
             }
         }
@@ -243,10 +243,10 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                slow_monster(caster_ptr, dir, plev);
+                slow_monster(player_ptr, dir, plev);
             }
         }
         break;
@@ -264,7 +264,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                sleep_monsters(caster_ptr, plev);
+                sleep_monsters(player_ptr, plev);
             }
         }
         break;
@@ -282,10 +282,10 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
+                fire_beam(player_ptr, GF_AWAY_ALL, dir, power);
             }
         }
         break;
@@ -304,7 +304,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, sides);
 
             if (cast) {
-                set_fast(caster_ptr, randint1(sides) + base, false);
+                set_fast(player_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -323,7 +323,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_radius(rad);
 
             if (cast) {
-                detect_all(caster_ptr, rad);
+                detect_all(player_ptr, rad);
             }
         }
         break;
@@ -336,7 +336,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, false))
+                if (!identify_fully(player_ptr, false))
                     return nullptr;
             }
         }
@@ -355,9 +355,9 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_radius(rad);
 
             if (cast) {
-                detect_objects_normal(caster_ptr, rad);
-                detect_treasure(caster_ptr, rad);
-                detect_objects_gold(caster_ptr, rad);
+                detect_objects_normal(player_ptr, rad);
+                detect_treasure(player_ptr, rad);
+                detect_objects_gold(player_ptr, rad);
             }
         }
         break;
@@ -375,10 +375,10 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                charm_monster(caster_ptr, dir, plev);
+                charm_monster(player_ptr, dir, plev);
             }
         }
         break;
@@ -397,7 +397,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, sides);
 
             if (cast) {
-                set_tim_esp(caster_ptr, randint1(sides) + base, false);
+                set_tim_esp(player_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -410,7 +410,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                if (!tele_town(caster_ptr))
+                if (!tele_town(player_ptr))
                     return nullptr;
             }
         }
@@ -425,7 +425,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                self_knowledge(caster_ptr);
+                self_knowledge(player_ptr);
             }
         }
         break;
@@ -440,7 +440,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (cast) {
                 if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
                     return nullptr;
-                teleport_level(caster_ptr, 0);
+                teleport_level(player_ptr, 0);
             }
         }
         break;
@@ -460,7 +460,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_delay(base, sides);
 
             if (cast) {
-                if (!recall_player(caster_ptr, randint0(21) + 15))
+                if (!recall_player(player_ptr, randint0(21) + 15))
                     return nullptr;
             }
         }
@@ -480,7 +480,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
-                if (!dimension_door(caster_ptr))
+                if (!dimension_door(player_ptr))
                     return nullptr;
             }
         }
@@ -494,7 +494,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                probing(caster_ptr);
+                probing(player_ptr);
             }
         }
         break;
@@ -515,7 +515,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(dice, sides, base);
 
             if (cast) {
-                create_rune_explosion(caster_ptr, caster_ptr->y, caster_ptr->x);
+                create_rune_explosion(player_ptr, player_ptr->y, player_ptr->x);
             }
         }
         break;
@@ -533,10 +533,10 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_weight(weight);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fetch_item(caster_ptr, dir, weight, false);
+                fetch_item(player_ptr, dir, weight, false);
             }
         }
         break;
@@ -556,13 +556,13 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, sides);
 
             if (cast) {
-                chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
-                chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
+                chg_virtue(player_ptr, V_KNOWLEDGE, 1);
+                chg_virtue(player_ptr, V_ENLIGHTEN, 1);
 
-                wiz_lite(caster_ptr, false);
+                wiz_lite(player_ptr, false);
 
-                if (!caster_ptr->telepathy) {
-                    set_tim_esp(caster_ptr, randint1(sides) + base, false);
+                if (!player_ptr->telepathy) {
+                    set_tim_esp(player_ptr, randint1(sides) + base, false);
                 }
             }
         }
@@ -581,7 +581,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                charm_monsters(caster_ptr, power);
+                charm_monsters(player_ptr, power);
             }
         }
         break;
@@ -594,7 +594,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                if (!alchemy(caster_ptr))
+                if (!alchemy(player_ptr))
                     return nullptr;
             }
         }
@@ -613,7 +613,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                banish_monsters(caster_ptr, power);
+                banish_monsters(player_ptr, power);
             }
         }
         break;
@@ -633,7 +633,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                set_invuln(caster_ptr, randint1(base) + base, false);
+                set_invuln(player_ptr, randint1(base) + base, false);
             }
         }
         break;

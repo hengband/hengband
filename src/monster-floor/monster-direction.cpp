@@ -24,23 +24,23 @@
 
 /*!
  * @brief ペットが敵に接近するための方向を決定する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 移動を試みているモンスターへの参照ポインタ
  * @param t_ptr 移動先モンスターへの参照ポインタ
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
  * @return ペットがモンスターに近づくならばTRUE
  */
-static bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, monster_type *t_ptr)
+static bool decide_pet_approch_direction(player_type *player_ptr, monster_type *m_ptr, monster_type *t_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (!is_pet(m_ptr))
         return false;
 
-    if (target_ptr->pet_follow_distance < 0) {
-        if (t_ptr->cdis <= (0 - target_ptr->pet_follow_distance)) {
+    if (player_ptr->pet_follow_distance < 0) {
+        if (t_ptr->cdis <= (0 - player_ptr->pet_follow_distance)) {
             return true;
         }
-    } else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > target_ptr->pet_follow_distance)) {
+    } else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > player_ptr->pet_follow_distance)) {
         return true;
     }
 
@@ -49,16 +49,16 @@ static bool decide_pet_approch_direction(player_type *target_ptr, monster_type *
 
 /*!
  * @brief モンスターが敵に接近するための方向を決定する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param start モンスターIDの開始
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
  * @param y モンスターの移動方向Y
  * @param x モンスターの移動方向X
  */
-static void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
+static void decide_enemy_approch_direction(player_type *player_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
@@ -73,17 +73,17 @@ static void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX 
             continue;
         if (!monster_is_valid(t_ptr))
             continue;
-        if (decide_pet_approch_direction(target_ptr, m_ptr, t_ptr))
+        if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr))
             continue;
-        if (!are_enemies(target_ptr, m_ptr, t_ptr))
+        if (!are_enemies(player_ptr, m_ptr, t_ptr))
             continue;
 
-        if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr)))
-            || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))) {
+        if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr)))
+            || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != player_ptr->riding))) {
             if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
                 continue;
         } else {
-            if (!projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
                 continue;
         }
 
@@ -96,27 +96,27 @@ static void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX 
 /*!
  * @brief モンスターが敵に接近するための方向を計算するメインルーチン
  * Calculate the direction to the next enemy
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param mm 移動するべき方角IDを返す参照ポインタ
  * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
  */
-bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
+bool get_enemy_dir(player_type *player_ptr, MONSTER_IDX m_idx, int *mm)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 
     POSITION x = 0, y = 0;
-    if (target_ptr->riding_t_m_idx && player_bold(target_ptr, m_ptr->fy, m_ptr->fx)) {
-        y = floor_ptr->m_list[target_ptr->riding_t_m_idx].fy;
-        x = floor_ptr->m_list[target_ptr->riding_t_m_idx].fx;
-    } else if (is_pet(m_ptr) && target_ptr->pet_t_m_idx) {
-        y = floor_ptr->m_list[target_ptr->pet_t_m_idx].fy;
-        x = floor_ptr->m_list[target_ptr->pet_t_m_idx].fx;
+    if (player_ptr->riding_t_m_idx && player_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
+        y = floor_ptr->m_list[player_ptr->riding_t_m_idx].fy;
+        x = floor_ptr->m_list[player_ptr->riding_t_m_idx].fx;
+    } else if (is_pet(m_ptr) && player_ptr->pet_t_m_idx) {
+        y = floor_ptr->m_list[player_ptr->pet_t_m_idx].fy;
+        x = floor_ptr->m_list[player_ptr->pet_t_m_idx].fx;
     } else {
         int start;
         int plus = 1;
-        if (target_ptr->phase_out) {
+        if (player_ptr->phase_out) {
             start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
             if (randint0(2))
                 plus = -1;
@@ -124,7 +124,7 @@ bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
             start = floor_ptr->m_max + 1;
         }
 
-        decide_enemy_approch_direction(target_ptr, m_idx, start, plus, &y, &x);
+        decide_enemy_approch_direction(player_ptr, m_idx, start, plus, &y, &x);
 
         if ((x == 0) && (y == 0))
             return false;
@@ -139,17 +139,17 @@ bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 
 /*!
  * @brief 不規則歩行フラグを持つモンスターの移動方向をその確率に基づいて決定する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_ptr モンスターへの参照ポインタ
  * @return 不規則な方向へ歩くことになったらTRUE
  * @todo "5"とはもしかして「その場に留まる」という意味か？
  */
-static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_ptr)
+static bool random_walk(player_type *player_ptr, DIRECTION *mm, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) && (randint0(100) < 75)) {
-        if (is_original_ap_and_seen(target_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -157,7 +157,7 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
     }
 
     if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 50)) {
-        if (is_original_ap_and_seen(target_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flags1 |= RF1_RAND_50;
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -165,7 +165,7 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
     }
 
     if ((r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 25)) {
-        if (is_original_ap_and_seen(target_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flags1 |= RF1_RAND_25;
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -177,23 +177,23 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
 
 /*!
  * @brief ペットや友好的なモンスターがフロアから逃げる処理を行う
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
  * @return モンスターがペットであればTRUE
  */
 static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 {
-    monster_type *m_ptr = &msd->target_ptr->current_floor_ptr->m_list[msd->m_idx];
+    monster_type *m_ptr = &msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
     if (!is_pet(m_ptr)) {
         return false;
     }
     
-    bool avoid = ((msd->target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - msd->target_ptr->pet_follow_distance)));
-    bool lonely = (!avoid && (m_ptr->cdis > msd->target_ptr->pet_follow_distance));
+    bool avoid = ((msd->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - msd->player_ptr->pet_follow_distance)));
+    bool lonely = (!avoid && (m_ptr->cdis > msd->player_ptr->pet_follow_distance));
     bool distant = (m_ptr->cdis > PET_SEEK_DIST);
     msd->mm[0] = msd->mm[1] = msd->mm[2] = msd->mm[3] = 5;
-    if (get_enemy_dir(msd->target_ptr, msd->m_idx, msd->mm)) {
+    if (get_enemy_dir(msd->player_ptr, msd->m_idx, msd->mm)) {
         return true;
     }
 
@@ -201,27 +201,27 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
         return true;
     }
     
-    POSITION dis = msd->target_ptr->pet_follow_distance;
-    if (msd->target_ptr->pet_follow_distance > PET_SEEK_DIST) {
-        msd->target_ptr->pet_follow_distance = PET_SEEK_DIST;
+    POSITION dis = msd->player_ptr->pet_follow_distance;
+    if (msd->player_ptr->pet_follow_distance > PET_SEEK_DIST) {
+        msd->player_ptr->pet_follow_distance = PET_SEEK_DIST;
     }
 
     (void)msd->get_movable_grid();
-    msd->target_ptr->pet_follow_distance = (int16_t)dis;
+    msd->player_ptr->pet_follow_distance = (int16_t)dis;
     return true;
 }
 
 /*!
  * @brief モンスターの移動パターンを決定する
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
- * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
+ * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 移動先が存在すればTRUE
  */
-bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
+bool decide_monster_movement_direction(player_type *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     if (monster_confused_remaining(m_ptr) || !aware) {
@@ -229,7 +229,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
         return true;
     }
 
-    if (random_walk(target_ptr, mm, m_ptr)) {
+    if (random_walk(player_ptr, mm, m_ptr)) {
         return true;
     }
     
@@ -238,14 +238,14 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
         return true;
     }
 
-    MonsterSweepGrid msd(target_ptr, m_idx, mm);
+    MonsterSweepGrid msd(player_ptr, m_idx, mm);
     if (decide_pet_movement_direction(&msd)) {
         return true;
     }
     
     if (!is_hostile(m_ptr)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
-        get_enemy_dir(target_ptr, m_idx, mm);
+        get_enemy_dir(player_ptr, m_idx, mm);
         return true;
     }
 

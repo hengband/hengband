@@ -50,10 +50,10 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	}
 
 	/* Allocate the "dun" array */
-	C_MAKE(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+	C_MAKE(dun, w_ptr->max_d_idx, DUNGEON_IDX);
 
 	screen_save();
-	for (i = 1; i < current_world_ptr->max_d_idx; i++)
+	for (i = 1; i < w_ptr->max_d_idx; i++)
 	{
 		char buf[80];
 		bool seiha = false;
@@ -84,7 +84,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		if ((i == ESCAPE) || !num)
 		{
 			/* Free the "dun" array */
-			C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+			C_KILL(dun, w_ptr->max_d_idx, DUNGEON_IDX);
 
 			screen_load();
 			return 0;
@@ -99,7 +99,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	screen_load();
 
 	/* Free the "dun" array */
-	C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+	C_KILL(dun, w_ptr->max_d_idx, DUNGEON_IDX);
 
 	return select_dungeon;
 }
@@ -108,7 +108,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
  * @brief プレイヤーが現在ダンジョンに潜っているかどうかを返す。
  * @memo 現在はdun_levelが0でないかそうでないかに限るが可読性を高めるため。
  */
-bool is_in_dungeon(player_type *creature_ptr)
+bool is_in_dungeon(player_type *player_ptr)
 {
-    return creature_ptr->current_floor_ptr->dun_level > 0;
+    return player_ptr->current_floor_ptr->dun_level > 0;
 }

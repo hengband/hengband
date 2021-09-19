@@ -7,7 +7,7 @@
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
@@ -33,20 +33,20 @@
 
 /*!
  * @brief 破邪領域魔法の各処理を行う
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
-concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
     bool info = (mode == SPELL_INFO) ? true : false;
     bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
     case 0:
@@ -60,9 +60,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_damage(dice, sides, 0);
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
             }
         }
         break;
@@ -77,7 +77,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_radius(rad);
             if (cast) {
-                detect_monsters_evil(caster_ptr, rad);
+                detect_monsters_evil(player_ptr, rad);
             }
         }
         break;
@@ -89,7 +89,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             return _("恐怖を取り除く。", "Removes fear.");
         {
             if (cast)
-                set_afraid(caster_ptr, 0);
+                set_afraid(player_ptr, 0);
         }
         break;
 
@@ -104,9 +104,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_power(power);
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fear_monster(caster_ptr, dir, power);
+                fear_monster(player_ptr, dir, power);
             }
         }
         break;
@@ -121,7 +121,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_power(power);
             if (cast)
-                sleep_monsters_touch(caster_ptr);
+                sleep_monsters_touch(player_ptr);
         }
         break;
 
@@ -136,7 +136,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_range(range);
             if (cast)
-                teleport_player(caster_ptr, range, TELEPORT_SPONTANEOUS);
+                teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
         }
         break;
 
@@ -152,9 +152,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_multi_damage_dice(dice, sides);
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_blast(caster_ptr, GF_LITE, dir, dice, sides, 10, 3);
+                fire_blast(player_ptr, GF_LITE, dir, dice, sides, 10, 3);
             }
         }
         break;
@@ -166,9 +166,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             return _("傷、毒、朦朧から全快する。", "Heals all cuts, poisons and being stunned.");
         {
             if (cast) {
-                set_cut(caster_ptr, 0);
-                set_poisoned(caster_ptr, 0);
-                set_stun(caster_ptr, 0);
+                set_cut(player_ptr, 0);
+                set_poisoned(player_ptr, 0);
+                set_stun(player_ptr, 0);
             }
         }
         break;
@@ -184,9 +184,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_power(power);
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball(caster_ptr, GF_AWAY_EVIL, dir, power, 0);
+                fire_ball(player_ptr, GF_AWAY_EVIL, dir, power, 0);
             }
         }
         break;
@@ -203,7 +203,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             DICE_SID sides = 6;
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
-            if (caster_ptr->pclass == CLASS_PRIEST || caster_ptr->pclass == CLASS_HIGH_MAGE || caster_ptr->pclass == CLASS_SORCERER)
+            if (player_ptr->pclass == CLASS_PRIEST || player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_SORCERER)
                 base = plev + plev / 2;
             else
                 base = plev + plev / 4;
@@ -212,10 +212,10 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(dice, sides, base);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, GF_HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
             }
         }
         break;
@@ -232,9 +232,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return info_damage(1, sides, 0);
             if (cast) {
-                dispel_undead(caster_ptr, randint1(sides));
-                dispel_demons(caster_ptr, randint1(sides));
-                turn_evil(caster_ptr, power);
+                dispel_undead(player_ptr, randint1(sides));
+                dispel_demons(player_ptr, randint1(sides));
+                turn_evil(player_ptr, power);
             }
         }
         break;
@@ -246,7 +246,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
         {
             if (cast)
-                (void)remove_curse(caster_ptr);
+                (void)remove_curse(player_ptr);
         }
         break;
 
@@ -263,7 +263,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_invis(caster_ptr, randint1(base) + base, false);
+                set_tim_invis(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -282,7 +282,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, sides);
 
             if (cast) {
-                set_protevil(caster_ptr, randint1(sides) + base, false);
+                set_protevil(player_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -300,9 +300,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_bolt(caster_ptr, GF_ELEC, dir, dam);
+                fire_bolt(player_ptr, GF_ELEC, dir, dam);
             }
         }
         break;
@@ -321,12 +321,12 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
             if (cast) {
-                dispel_evil(caster_ptr, randint1(dam_sides));
-                hp_player(caster_ptr, heal);
-                set_afraid(caster_ptr, 0);
-                set_poisoned(caster_ptr, 0);
-                set_stun(caster_ptr, 0);
-                set_cut(caster_ptr, 0);
+                dispel_evil(player_ptr, randint1(dam_sides));
+                hp_player(player_ptr, heal);
+                set_afraid(player_ptr, 0);
+                set_poisoned(player_ptr, 0);
+                set_stun(player_ptr, 0);
+                set_cut(player_ptr, 0);
             }
         }
         break;
@@ -339,10 +339,10 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                destroy_door(caster_ptr, dir);
+                destroy_door(player_ptr, dir);
             }
         }
         break;
@@ -360,9 +360,9 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                stasis_evil(caster_ptr, dir);
+                stasis_evil(player_ptr, dir);
             }
         }
         break;
@@ -381,7 +381,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_sh_holy(caster_ptr, randint1(base) + base, false);
+                set_tim_sh_holy(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -399,8 +399,8 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(1, sides, 0);
 
             if (cast) {
-                dispel_undead(caster_ptr, randint1(sides));
-                dispel_demons(caster_ptr, randint1(sides));
+                dispel_undead(player_ptr, randint1(sides));
+                dispel_demons(player_ptr, randint1(sides));
             }
         }
         break;
@@ -418,7 +418,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(1, sides, 0);
 
             if (cast) {
-                dispel_evil(caster_ptr, randint1(sides));
+                dispel_evil(player_ptr, randint1(sides));
             }
         }
         break;
@@ -431,7 +431,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                brand_weapon(caster_ptr, 13);
+                brand_weapon(player_ptr, 13);
             }
         }
         break;
@@ -450,10 +450,10 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_LITE, dir, dam, rad);
+                fire_ball(player_ptr, GF_LITE, dir, dam, rad);
             }
         }
         break;
@@ -476,7 +476,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 if (!(pet && (plev < 50)))
                     flg |= PM_ALLOW_GROUP;
 
-                if (summon_specific(caster_ptr, (pet ? -1 : 0), caster_ptr->y, caster_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg)) {
+                if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg)) {
                     if (pet) {
                         msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
                     } else {
@@ -500,7 +500,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                (void)heroism(caster_ptr, base);
+                (void)heroism(player_ptr, base);
             }
         }
         break;
@@ -513,7 +513,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast)
-                (void)remove_all_curse(caster_ptr);
+                (void)remove_all_curse(player_ptr);
         }
         break;
 
@@ -530,7 +530,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_power(power);
 
             if (cast) {
-                if (banish_evil(caster_ptr, power)) {
+                if (banish_evil(player_ptr, power)) {
                     msg_print(_("神聖な力が邪悪を打ち払った！", "The holy power banishes evil!"));
                 }
             }
@@ -548,7 +548,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             DICE_SID sides = 4;
 
             if (cast) {
-                destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), false);
+                destroy_area(player_ptr, player_ptr->y, player_ptr->x, base + randint1(sides), false);
             }
         }
         break;
@@ -567,7 +567,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_eyeeye(caster_ptr, randint1(base) + base, false);
+                set_tim_eyeeye(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -586,7 +586,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_multi_damage(dam);
 
             if (cast) {
-                if (!cast_wrath_of_the_god(caster_ptr, dam, rad))
+                if (!cast_wrath_of_the_god(player_ptr, dam, rad))
                     return nullptr;
             }
         }
@@ -609,14 +609,14 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
             if (cast) {
-                project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL);
-                dispel_monsters(caster_ptr, d_dam);
-                slow_monsters(caster_ptr, plev);
-                stun_monsters(caster_ptr, power);
-                confuse_monsters(caster_ptr, power);
-                turn_monsters(caster_ptr, power);
-                stasis_monsters(caster_ptr, power);
-                hp_player(caster_ptr, heal);
+                project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL);
+                dispel_monsters(player_ptr, d_dam);
+                slow_monsters(player_ptr, plev);
+                stun_monsters(player_ptr, power);
+                confuse_monsters(player_ptr, power);
+                turn_monsters(player_ptr, power);
+                stasis_monsters(player_ptr, power);
+                hp_player(player_ptr, heal);
             }
         }
         break;
@@ -637,27 +637,27 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 int sp_base = plev;
 
                 int i;
-                crusade(caster_ptr);
+                crusade(player_ptr);
                 for (i = 0; i < 12; i++) {
                     int attempt = 10;
                     POSITION my = 0, mx = 0;
 
                     while (attempt--) {
-                        scatter(caster_ptr, &my, &mx, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
+                        scatter(player_ptr, &my, &mx, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
 
                         /* Require empty grids */
-                        if (is_cave_empty_bold2(caster_ptr, my, mx))
+                        if (is_cave_empty_bold2(player_ptr, my, mx))
                             break;
                     }
                     if (attempt < 0)
                         continue;
-                    summon_specific(caster_ptr, -1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
+                    summon_specific(player_ptr, -1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
                 }
-                set_hero(caster_ptr, randint1(base) + base, false);
-                set_blessed(caster_ptr, randint1(base) + base, false);
-                set_fast(caster_ptr, randint1(sp_sides) + sp_base, false);
-                set_protevil(caster_ptr, randint1(base) + base, false);
-                set_afraid(caster_ptr, 0);
+                set_hero(player_ptr, randint1(base) + base, false);
+                set_blessed(player_ptr, randint1(base) + base, false);
+                set_fast(player_ptr, randint1(sp_sides) + sp_base, false);
+                set_protevil(player_ptr, randint1(base) + base, false);
+                set_afraid(player_ptr, 0);
             }
         }
         break;

@@ -15,6 +15,8 @@ private:
     static constexpr auto FLAG_TYPE_MAX = static_cast<size_t>(MAX);
 
 public:
+    using flag_type = FlagType;
+
     /**
      * @brief フラグ集合に含まれるフラグの種類数を返す
      *
@@ -192,6 +194,10 @@ public:
      */
     [[nodiscard]] bool has(FlagType f) const
     {
+        if (f == MAX) {
+            // どのフラグにも該当しないFlagTypeの型としてMAXを指定する事があるため、MAXが指定された時はfalseを返すようにする
+            return false;
+        }
         return bs_.test(static_cast<size_t>(f));
     }
 

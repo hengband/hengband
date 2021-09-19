@@ -17,14 +17,14 @@
 /*!
  * @brief 発動によるブレスの属性をアイテムの耐性から選択し、実行を処理する。/ Dragon breath activation
  * @details 対象となる耐性は dragonbreath_info テーブルを参照のこと。
- * @param user_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
-bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
+bool activate_dragon_breath(player_type *player_ptr, object_type *o_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(user_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
     auto resistance_flags = object_flags(o_ptr);
@@ -33,7 +33,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     int n = 0;
     concptr name[20];
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (has_flag(resistance_flags, dragonbreath_info[i].flag)) {
+        if (resistance_flags.has(dragonbreath_info[i].flag)) {
             type[n] = dragonbreath_info[i].type;
             name[n] = dragonbreath_info[i].name;
             n++;
@@ -43,40 +43,41 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     if (n == 0)
         return false;
 
-    if (music_singing_any(user_ptr))
-        stop_singing(user_ptr);
+    if (music_singing_any(player_ptr))
+        stop_singing(player_ptr);
 
-    if (hex_spelling_any(user_ptr))
-        stop_hex_spell_all(user_ptr);
+    if (SpellHex(player_ptr).is_spelling_any()) {
+        (void)SpellHex(player_ptr).stop_all_spells();
+    }
 
     int t = randint0(n);
     msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), name[t]);
-    fire_breath(user_ptr, type[t], dir, 250, 4);
+    fire_breath(player_ptr, type[t], dir, 250, 4);
     return true;
 }
 
-bool activate_breath_fire(player_type *user_ptr, object_type *o_ptr)
+bool activate_breath_fire(player_type *player_ptr, object_type *o_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(user_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    fire_breath(user_ptr, GF_FIRE, dir, 200, 2);
+    fire_breath(player_ptr, GF_FIRE, dir, 200, 2);
     if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-        (void)set_oppose_fire(user_ptr, randint1(20) + 20, false);
+        (void)set_oppose_fire(player_ptr, randint1(20) + 20, false);
 
     return true;
 }
 
-bool activate_breath_cold(player_type *user_ptr, object_type *o_ptr)
+bool activate_breath_cold(player_type *player_ptr, object_type *o_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(user_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    fire_breath(user_ptr, GF_COLD, dir, 200, 2);
+    fire_breath(player_ptr, GF_COLD, dir, 200, 2);
     if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-        (void)set_oppose_cold(user_ptr, randint1(20) + 20, false);
+        (void)set_oppose_cold(player_ptr, randint1(20) + 20, false);
 
     return true;
 }

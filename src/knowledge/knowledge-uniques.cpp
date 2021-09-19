@@ -126,10 +126,10 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
 
 /*!
  * @brief 既知の生きているユニークまたは撃破済ユニークの一覧を表示させる
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
  */
-void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
+void do_cmd_knowledge_uniques(player_type *player_ptr, bool is_alive)
 {
     unique_list_type tmp_list;
     unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);
@@ -158,12 +158,12 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
         unique_list_ptr->who[unique_list_ptr->n++] = i;
     }
 
-    ang_sort(creature_ptr, unique_list_ptr->who, &unique_list_ptr->why, unique_list_ptr->n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, unique_list_ptr->who, &unique_list_ptr->why, unique_list_ptr->n, ang_sort_comp_hook, ang_sort_swap_hook);
     display_uniques(unique_list_ptr, fff);
     C_KILL(unique_list_ptr->who, max_r_idx, int16_t);
     angband_fclose(fff);
     concptr title_desc
         = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
-    (void)show_file(creature_ptr, true, file_name, title_desc, 0, 0);
+    (void)show_file(player_ptr, true, file_name, title_desc, 0, 0);
     fd_kill(file_name);
 }

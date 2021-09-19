@@ -9,9 +9,9 @@
 
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void reset_visuals(player_type *owner_ptr)
+void reset_visuals(player_type *player_ptr)
 {
     for (int i = 0; i < max_f_idx; i++) {
         feature_type *f_ptr = &f_info[i];
@@ -36,7 +36,7 @@ void reset_visuals(player_type *owner_ptr)
     concptr pref_file = use_graphics ? "graf.prf" : "font.prf";
     concptr base_name = use_graphics ? "graf-%s.prf" : "font-%s.prf";
     char buf[1024];
-    process_pref_file(owner_ptr, pref_file);
-    sprintf(buf, base_name, owner_ptr->base_name);
-    process_pref_file(owner_ptr, buf);
+    process_pref_file(player_ptr, pref_file);
+    sprintf(buf, base_name, player_ptr->base_name);
+    process_pref_file(player_ptr, buf);
 }

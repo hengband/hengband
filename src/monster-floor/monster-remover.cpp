@@ -92,7 +92,7 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
 
 /*!
  * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * This is an efficient method of simulating multiple calls to the
  * "delete_monster()" function, with no visual effects.
@@ -149,7 +149,7 @@ void wipe_monsters_list(player_type *player_ptr)
 
 /*!
  * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param x 削除位置x座標
  * @param y 削除位置y座標
  */

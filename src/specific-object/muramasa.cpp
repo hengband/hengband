@@ -7,7 +7,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-bool activate_muramasa(player_type *user_ptr, object_type *o_ptr)
+bool activate_muramasa(player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_MURAMASA)
         return false;
@@ -16,10 +16,10 @@ bool activate_muramasa(player_type *user_ptr, object_type *o_ptr)
         return true;
 
     msg_print(_("村正が震えた．．．", "The Muramasa pulsates..."));
-    do_inc_stat(user_ptr, A_STR);
+    do_inc_stat(player_ptr, A_STR);
     if (one_in_(2)) {
         msg_print(_("村正は壊れた！", "The Muramasa is destroyed!"));
-        curse_weapon_object(user_ptr, true, o_ptr);
+        curse_weapon_object(player_ptr, true, o_ptr);
     }
 
     return true;

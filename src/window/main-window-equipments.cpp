@@ -23,7 +23,7 @@
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS mode, const ItemTester& item_tester)
+COMMAND_CODE show_equipment(player_type *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     COMMAND_CODE i;
     int j, k, l;
@@ -40,16 +40,16 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     term_get_size(&wid, &hgt);
     int len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &owner_ptr->inventory_list[i];
-        if (!(owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL))
-            && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(owner_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(owner_ptr)))
-                    && has_two_handed_weapons(owner_ptr))
+        o_ptr = &player_ptr->inventory_list[i];
+        if (!(player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL))
+            && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
+                    && has_two_handed_weapons(player_ptr))
                 || (mode & IGNORE_BOTHHAND_SLOT)))
             continue;
 
-        describe_flavor(owner_ptr, o_name, o_ptr, 0);
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(owner_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(owner_ptr)))
-            && has_two_handed_weapons(owner_ptr)) {
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
+            && has_two_handed_weapons(player_ptr)) {
             (void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
             out_color[k] = TERM_WHITE;
         } else {
@@ -78,10 +78,10 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     }
 
     col = (len > wid - _(6, 4)) ? 0 : (wid - len - 1);
-    prepare_label_string(owner_ptr, equip_label, USE_EQUIP, item_tester);
+    prepare_label_string(player_ptr, equip_label, USE_EQUIP, item_tester);
     for (j = 0; j < k; j++) {
         i = out_index[j];
-        o_ptr = &owner_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         prt("", j + 1, col ? col - 2 : col);
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
@@ -107,7 +107,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
         }
 
         if (show_labels) {
-            (void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(owner_ptr, i));
+            (void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(player_ptr, i));
             put_str(tmp_val, j + 1, cur_col);
             c_put_str(out_color[j], out_desc[j], j + 1, _(cur_col + 9, cur_col + 16));
         } else

@@ -28,7 +28,7 @@
  * @details
  * Note that this function is one of the more "dangerous" ones...
  */
-static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
+static MONRACE_IDX poly_r_idx(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags1 & RF1_QUESTOR))
@@ -38,7 +38,7 @@ static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
     MONRACE_IDX r;
     for (int i = 0; i < 1000; i++) {
-        r = get_mon_num(caster_ptr, 0, (caster_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, 0);
+        r = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, 0);
         if (!r)
             break;
 
@@ -58,28 +58,28 @@ static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
 /*!
  * @brief 指定座標にいるモンスターを変身させる /
  * Helper function -- return a "nearby" race for polymorphing
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 指定のY座標
  * @param x 指定のX座標
  * @return 実際に変身したらTRUEを返す
  */
-bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
+bool polymorph_monster(player_type *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     MONRACE_IDX new_r_idx;
     MONRACE_IDX old_r_idx = m_ptr->r_idx;
     bool targeted = (target_who == g_ptr->m_idx) ? true : false;
-    bool health_tracked = (caster_ptr->health_who == g_ptr->m_idx) ? true : false;
+    bool health_tracked = (player_ptr->health_who == g_ptr->m_idx) ? true : false;
 
-    if (floor_ptr->inside_arena || caster_ptr->phase_out)
+    if (floor_ptr->inside_arena || player_ptr->phase_out)
         return false;
-    if ((caster_ptr->riding == g_ptr->m_idx) || m_ptr->mflag2.has(MFLAG2::KAGE))
+    if ((player_ptr->riding == g_ptr->m_idx) || m_ptr->mflag2.has(MFLAG2::KAGE))
         return false;
 
     monster_type back_m = *m_ptr;
-    new_r_idx = poly_r_idx(caster_ptr, old_r_idx);
+    new_r_idx = poly_r_idx(player_ptr, old_r_idx);
     if (new_r_idx == old_r_idx)
         return false;
 
@@ -94,15 +94,15 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
         mode |= PM_NO_PET;
 
     m_ptr->hold_o_idx_list.clear();
-    delete_monster_idx(caster_ptr, g_ptr->m_idx);
+    delete_monster_idx(player_ptr, g_ptr->m_idx);
     bool polymorphed = false;
-    if (place_monster_aux(caster_ptr, 0, y, x, new_r_idx, mode)) {
+    if (place_monster_aux(player_ptr, 0, y, x, new_r_idx, mode)) {
         floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
         floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
         floor_ptr->m_list[hack_m_idx_ii].hold_o_idx_list = back_m.hold_o_idx_list;
         polymorphed = true;
     } else {
-        if (place_monster_aux(caster_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN))) {
+        if (place_monster_aux(player_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN))) {
             floor_ptr->m_list[hack_m_idx_ii] = back_m;
             mproc_init(floor_ptr);
         } else
@@ -117,13 +117,13 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
     } else {
         for (auto it = back_m.hold_o_idx_list.begin(); it != back_m.hold_o_idx_list.end();) {
             OBJECT_IDX this_o_idx = *it++;
-            delete_object_idx(caster_ptr, this_o_idx);
+            delete_object_idx(player_ptr, this_o_idx);
         }
     }
 
     if (targeted)
         target_who = hack_m_idx_ii;
     if (health_tracked)
-        health_track(caster_ptr, hack_m_idx_ii);
+        health_track(player_ptr, hack_m_idx_ii);
     return polymorphed;
 }

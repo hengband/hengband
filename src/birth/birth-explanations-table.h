@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "player/player-class-types.h"
+#include "player-info/race-types.h"
+#include "player-info/class-types.h"
 #include "player/player-personality.h"
-#include "player/player-race-types.h"
 #include "realm/realm-names-table.h"
 #include "system/angband.h"
 

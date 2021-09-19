@@ -2,6 +2,7 @@
 
 #include "combat/combat-options-type.h"
 #include "combat/martial-arts-table.h"
+#include "object-enchant/tr-flags.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 

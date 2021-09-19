@@ -23,7 +23,7 @@
 static bool is_blessed_item(const object_type *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
-    return has_flag(flgs, TR_BLESSED);
+    return flgs.has(TR_BLESSED);
 }
 
 static bool check_store_general(const object_type *o_ptr)
@@ -380,7 +380,7 @@ static int switch_mass_production(object_type *o_ptr, const PRICE cost)
     }
 }
 
-static DISCOUNT_RATE decide_discount_rate(const PRICE cost)
+static byte decide_discount_rate(const PRICE cost)
 {
     if (cost < 5)
         return 0;
@@ -413,7 +413,7 @@ void mass_produce(player_type *, object_type *o_ptr)
 {
     const PRICE cost = object_value(o_ptr);
     int size = switch_mass_production(o_ptr, cost);
-    DISCOUNT_RATE discount = decide_discount_rate(cost);
+    auto discount = decide_discount_rate(cost);
     if (o_ptr->art_name)
         discount = 0;
 

@@ -30,42 +30,42 @@
  * accomplished by strong players using heavy weapons.
  * </pre>
  */
-void do_cmd_tunnel(player_type *creature_ptr)
+void do_cmd_tunnel(player_type *player_ptr)
 {
     bool more = false;
-    if (creature_ptr->special_defense & KATA_MUSOU)
-        set_action(creature_ptr, ACTION_NONE);
+    if (player_ptr->special_defense & KATA_MUSOU)
+        set_action(player_ptr, ACTION_NONE);
 
     if (command_arg) {
         command_rep = command_arg - 1;
-        creature_ptr->redraw |= PR_STATE;
+        player_ptr->redraw |= PR_STATE;
         command_arg = 0;
     }
 
     DIRECTION dir;
-    if (!get_rep_dir(creature_ptr, &dir, false)) {
+    if (!get_rep_dir(player_ptr, &dir, false)) {
         if (!more)
-            disturb(creature_ptr, false, false);
+            disturb(player_ptr, false, false);
 
         return;
     }
 
-    POSITION y = creature_ptr->y + ddy[dir];
-    POSITION x = creature_ptr->x + ddx[dir];
+    POSITION y = player_ptr->y + ddy[dir];
+    POSITION x = player_ptr->x + ddx[dir];
     grid_type *g_ptr;
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
     if (f_info[feat].flags.has(FF::DOOR))
         msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
     else if (f_info[feat].flags.has_not(FF::TUNNEL))
         msg_print(_("そこは掘れない。", "You can't tunnel through that."));
     else if (g_ptr->m_idx) {
-        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
+        PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-        do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
+        do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
     } else
-        more = exe_tunnel(creature_ptr, y, x);
+        more = exe_tunnel(player_ptr, y, x);
 
     if (!more)
-        disturb(creature_ptr, false, false);
+        disturb(player_ptr, false, false);
 }

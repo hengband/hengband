@@ -2,9 +2,9 @@
 #include "cmd-action/cmd-spell.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "player-base/player-class.h"
+#include "player-info/race-info.h"
 #include "player/player-damage.h"
-#include "player/player-race.h"
-#include "player/player-realm.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -30,20 +30,20 @@
 
 /*!
  * @brief 悪魔領域魔法の各処理を行う
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
-concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
     bool info = (mode == SPELL_INFO) ? true : false;
     bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
     case 0:
@@ -60,10 +60,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
             }
         }
         break;
@@ -81,7 +81,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_radius(rad);
 
             if (cast) {
-                detect_monsters_nonliving(caster_ptr, rad);
+                detect_monsters_nonliving(player_ptr, rad);
             }
         }
         break;
@@ -99,7 +99,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_blessed(caster_ptr, randint1(base) + base, false);
+                set_blessed(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -119,7 +119,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_fire(caster_ptr, randint1(base) + base, false);
+                set_oppose_fire(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -137,11 +137,11 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fear_monster(caster_ptr, dir, power);
-                stun_monster(caster_ptr, dir, power);
+                fear_monster(player_ptr, dir, power);
+                stun_monster(player_ptr, dir, power);
             }
         }
         break;
@@ -160,10 +160,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_NETHER, dir, damroll(dice, sides));
             }
         }
         break;
@@ -176,7 +176,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
+                if (!summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
                     msg_print(_("古代の死霊は現れなかった。", "No Manes arrive."));
                 }
             }
@@ -195,7 +195,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
 
-            if (is_wizard_class(caster_ptr))
+            if (PlayerClass(player_ptr).is_wizard())
                 base = plev + plev / 2;
             else
                 base = plev + plev / 4;
@@ -204,10 +204,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, base);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_HELL_FIRE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, GF_HELL_FIRE, dir, damroll(dice, sides) + base, rad);
             }
         }
         break;
@@ -225,10 +225,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                control_one_demon(caster_ptr, dir, plev);
+                control_one_demon(player_ptr, dir, plev);
             }
         }
         break;
@@ -246,7 +246,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_radius(rad);
 
             if (cast) {
-                map_area(caster_ptr, rad);
+                map_area(player_ptr, rad);
             }
         }
         break;
@@ -264,7 +264,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_res_nether(caster_ptr, randint1(base) + base, false);
+                set_tim_res_nether(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -283,10 +283,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_PLASMA, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_PLASMA, dir, damroll(dice, sides));
             }
         }
         break;
@@ -305,10 +305,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_FIRE, dir, dam, rad);
+                fire_ball(player_ptr, GF_FIRE, dir, dam, rad);
             }
         }
         break;
@@ -321,7 +321,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                brand_weapon(caster_ptr, 1);
+                brand_weapon(player_ptr, 1);
             }
         }
         break;
@@ -340,10 +340,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
+                fire_ball(player_ptr, GF_NETHER, dir, dam, rad);
             }
         }
         break;
@@ -356,7 +356,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                cast_summon_demon(caster_ptr, plev * 2 / 3 + randint1(plev / 2));
+                cast_summon_demon(player_ptr, plev * 2 / 3 + randint1(plev / 2));
             }
         }
         break;
@@ -375,7 +375,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, sides);
 
             if (cast) {
-                set_tim_esp(caster_ptr, randint1(sides) + base, false);
+                set_tim_esp(player_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -397,10 +397,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (cast) {
                 TIME_EFFECT dur = randint1(base) + base;
 
-                set_oppose_fire(caster_ptr, dur, false);
-                set_oppose_cold(caster_ptr, dur, false);
-                set_tim_sh_fire(caster_ptr, dur, false);
-                set_afraid(caster_ptr, 0);
+                set_oppose_fire(player_ptr, dur, false);
+                set_oppose_cold(player_ptr, dur, false);
+                set_tim_sh_fire(player_ptr, dur, false);
+                set_afraid(player_ptr, 0);
                 break;
             }
         }
@@ -420,8 +420,8 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam / 2);
 
             if (cast) {
-                fire_ball(caster_ptr, GF_FIRE, 0, dam, rad);
-                fire_ball_hide(caster_ptr, GF_LAVA_FLOW, 0, 2 + randint1(2), rad);
+                fire_ball(player_ptr, GF_FIRE, 0, dam, rad);
+                fire_ball_hide(player_ptr, GF_LAVA_FLOW, 0, 2 + randint1(2), rad);
             }
         }
         break;
@@ -440,10 +440,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_PLASMA, dir, dam, rad);
+                fire_ball(player_ptr, GF_PLASMA, dir, dam, rad);
             }
         }
         break;
@@ -462,7 +462,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_mimic(caster_ptr, base + randint1(base), MIMIC_DEMON, false);
+                set_mimic(player_ptr, base + randint1(base), MIMIC_DEMON, false);
             }
         }
         break;
@@ -482,8 +482,8 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
 
             if (cast) {
-                dispel_monsters(caster_ptr, randint1(sides1));
-                dispel_good(caster_ptr, randint1(sides2));
+                dispel_monsters(player_ptr, randint1(sides1));
+                dispel_good(player_ptr, randint1(sides2));
             }
         }
         break;
@@ -502,9 +502,9 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball(caster_ptr, GF_NEXUS, dir, dam, rad);
+                fire_ball(player_ptr, GF_NEXUS, dir, dam, rad);
             }
         }
         break;
@@ -517,12 +517,12 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
                 else
                     msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
-                fire_ball_hide(caster_ptr, GF_HAND_DOOM, dir, plev * 2, 0);
+                fire_ball_hide(player_ptr, GF_HAND_DOOM, dir, plev * 2, 0);
             }
         }
         break;
@@ -538,7 +538,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (info)
                 return info_duration(base, base);
             if (cast)
-                heroism(caster_ptr, base);
+                heroism(player_ptr, base);
         }
         break;
 
@@ -555,7 +555,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_res_time(caster_ptr, randint1(base) + base, false);
+                set_tim_res_time(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -576,9 +576,9 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
 
             if (cast) {
-                fire_ball(caster_ptr, GF_CHAOS, 0, dam, rad);
-                fire_ball(caster_ptr, GF_CONFUSION, 0, dam, rad);
-                fire_ball(caster_ptr, GF_CHARM, 0, power, rad);
+                fire_ball(player_ptr, GF_CHAOS, 0, dam, rad);
+                fire_ball(player_ptr, GF_CONFUSION, 0, dam, rad);
+                fire_ball(player_ptr, GF_CHARM, 0, power, rad);
             }
         }
         break;
@@ -591,7 +591,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                discharge_minion(caster_ptr);
+                discharge_minion(player_ptr);
             }
         }
         break;
@@ -605,7 +605,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!cast_summon_greater_demon(caster_ptr))
+                if (!cast_summon_greater_demon(player_ptr))
                     return nullptr;
             }
         }
@@ -625,10 +625,10 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
+                fire_ball(player_ptr, GF_NETHER, dir, dam, rad);
             }
         }
         break;
@@ -648,11 +648,11 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball_hide(caster_ptr, GF_BLOOD_CURSE, dir, dam, rad);
-                take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));
+                fire_ball_hide(player_ptr, GF_BLOOD_CURSE, dir, dam, rad);
+                take_hit(player_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));
             }
         }
         break;
@@ -672,7 +672,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_mimic(caster_ptr, base + randint1(base), MIMIC_DEMON_LORD, false);
+                set_mimic(player_ptr, base + randint1(base), MIMIC_DEMON_LORD, false);
             }
         }
         break;

@@ -3,7 +3,7 @@
 
 /*!
  * @brief フロア切り替え時の処理フラグを追加する / Prepare mode flags of changing floor
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param mode 追加したい所持フラグ
  */
-void prepare_change_floor_mode(player_type *creature_ptr, BIT_FLAGS mode) { creature_ptr->change_floor_mode |= mode; }
+void prepare_change_floor_mode(player_type *player_ptr, BIT_FLAGS mode) { player_ptr->change_floor_mode |= mode; }

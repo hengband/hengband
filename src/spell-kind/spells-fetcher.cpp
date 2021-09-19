@@ -29,33 +29,33 @@
 /*!
  * @brief アイテム引き寄せ処理 /
  * Fetch an item (teleport it right underneath the caster)
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 魔法の発動方向
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE
  */
-void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
+void fetch_item(player_type *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
     grid_type *g_ptr;
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
-    if (!caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx_list.empty()) {
+    if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.empty()) {
         msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
         return;
     }
 
     POSITION ty, tx;
-    if (dir == 5 && target_okay(caster_ptr)) {
+    if (dir == 5 && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
 
-        if (distance(caster_ptr->y, caster_ptr->x, ty, tx) > get_max_range(caster_ptr)) {
+        if (distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr)) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
         }
 
-        g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
         if (g_ptr->o_idx_list.empty()) {
             msg_print(_("そこには何もありません。", "There is no object there."));
             return;
@@ -67,32 +67,32 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
         }
 
         if (require_los) {
-            if (!player_has_los_bold(caster_ptr, ty, tx)) {
+            if (!player_has_los_bold(player_ptr, ty, tx)) {
                 msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
                 return;
-            } else if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, ty, tx)) {
+            } else if (!projectable(player_ptr, player_ptr->y, player_ptr->x, ty, tx)) {
                 msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
                 return;
             }
         }
     } else {
-        ty = caster_ptr->y;
-        tx = caster_ptr->x;
+        ty = player_ptr->y;
+        tx = player_ptr->x;
         bool is_first_loop = true;
-        g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
         while (is_first_loop || g_ptr->o_idx_list.empty()) {
             is_first_loop = false;
             ty += ddy[dir];
             tx += ddx[dir];
-            g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
+            g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
 
-            if ((distance(caster_ptr->y, caster_ptr->x, ty, tx) > get_max_range(caster_ptr))
-                || !cave_has_flag_bold(caster_ptr->current_floor_ptr, ty, tx, FF::PROJECT))
+            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr))
+                || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, FF::PROJECT))
                 return;
         }
     }
 
-    o_ptr = &caster_ptr->current_floor_ptr->o_list[g_ptr->o_idx_list.front()];
+    o_ptr = &player_ptr->current_floor_ptr->o_list[g_ptr->o_idx_list.front()];
     if (o_ptr->weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
@@ -100,19 +100,19 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
 
     OBJECT_IDX i = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
-    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx_list.add(caster_ptr->current_floor_ptr, i); /* 'move' it */
+    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.add(player_ptr->current_floor_ptr, i); /* 'move' it */
 
-    o_ptr->iy = caster_ptr->y;
-    o_ptr->ix = caster_ptr->x;
+    o_ptr->iy = player_ptr->y;
+    o_ptr->ix = player_ptr->x;
 
-    describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
 
-    note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
-    caster_ptr->redraw |= PR_MAP;
+    note_spot(player_ptr, player_ptr->y, player_ptr->x);
+    player_ptr->redraw |= PR_MAP;
 }
 
-bool fetch_monster(player_type *caster_ptr)
+bool fetch_monster(player_type *player_ptr)
 {
     monster_type *m_ptr;
     MONSTER_IDX m_idx;
@@ -122,52 +122,52 @@ bool fetch_monster(player_type *caster_ptr)
     uint16_t path_g[512];
     POSITION ty, tx;
 
-    if (!target_set(caster_ptr, TARGET_KILL))
+    if (!target_set(player_ptr, TARGET_KILL))
         return false;
 
-    m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+    m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
     if (!m_idx)
         return false;
-    if (m_idx == caster_ptr->riding)
+    if (m_idx == player_ptr->riding)
         return false;
-    if (!player_has_los_bold(caster_ptr, target_row, target_col))
+    if (!player_has_los_bold(player_ptr, target_row, target_col))
         return false;
-    if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
+    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
         return false;
 
-    m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
-    monster_desc(caster_ptr, m_name, m_ptr, 0);
+    m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    monster_desc(player_ptr, m_name, m_ptr, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-    path_n = projection_path(caster_ptr, path_g, get_max_range(caster_ptr), target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
+    path_n = projection_path(player_ptr, path_g, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
     ty = target_row, tx = target_col;
     for (i = 1; i < path_n; i++) {
         POSITION ny = get_grid_y(path_g[i]);
         POSITION nx = get_grid_x(path_g[i]);
-        grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[ny][nx];
+        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
-        if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(caster_ptr, ny, nx) && !g_ptr->is_object()
-            && !pattern_tile(caster_ptr->current_floor_ptr, ny, nx)) {
+        if (in_bounds(player_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object()
+            && !pattern_tile(player_ptr->current_floor_ptr, ny, nx)) {
             ty = ny;
             tx = nx;
         }
     }
 
-    caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx = 0;
-    caster_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
+    player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx = 0;
+    player_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
     m_ptr->fy = ty;
     m_ptr->fx = tx;
-    (void)set_monster_csleep(caster_ptr, m_idx, 0);
-    update_monster(caster_ptr, m_idx, true);
-    lite_spot(caster_ptr, target_row, target_col);
-    lite_spot(caster_ptr, ty, tx);
+    (void)set_monster_csleep(player_ptr, m_idx, 0);
+    update_monster(player_ptr, m_idx, true);
+    lite_spot(player_ptr, target_row, target_col);
+    lite_spot(player_ptr, ty, tx);
     if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-        caster_ptr->update |= (PU_MON_LITE);
+        player_ptr->update |= (PU_MON_LITE);
 
     if (m_ptr->ml) {
-        if (!caster_ptr->image)
-            monster_race_track(caster_ptr, m_ptr->ap_r_idx);
+        if (!player_ptr->image)
+            monster_race_track(player_ptr, m_ptr->ap_r_idx);
 
-        health_track(caster_ptr, m_idx);
+        health_track(player_ptr, m_idx);
     }
 
     return true;

@@ -154,7 +154,7 @@ static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_p
             auto f = xtra.tr_flags[randint0(n)];
             auto except = (f == TR_VORPAL && o_ptr->tval != TV_SWORD);
             if (!except)
-                add_flag(o_ptr->art_flags, f);
+                o_ptr->art_flags.set(f);
         }
 
         for (auto f : xtra.trg_flags)
@@ -187,9 +187,9 @@ static int randint1_signed(const int n)
  */
 static bool ego_has_flag(object_type *o_ptr, ego_item_type *e_ptr, tr_type flag)
 {
-    if (has_flag(o_ptr->art_flags, flag))
+    if (o_ptr->art_flags.has(flag))
         return true;
-    if (has_flag(e_ptr->flags, flag))
+    if (e_ptr->flags.has(flag))
         return true;
     return false;
 }

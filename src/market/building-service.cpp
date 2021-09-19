@@ -11,7 +11,7 @@
  * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
  * @details 各種ギルドや寺院など、特定の職業ならば優遇措置を得られる施設、
  * あるいは食堂など特定の種族では利用できない施設の判定処理を行う。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  */
@@ -39,7 +39,7 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
  （スペルマスターの特別判定つき）
  * @details 各種ギルドや寺院など、特定の職業ならば優遇措置を得られる施設、
  * あるいは食堂など特定の種族では利用できない施設の判定処理を行う。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  * @todo is_owner()との実質的な多重実装なので、リファクタリングを行うべきである。
@@ -73,7 +73,7 @@ bool is_member(player_type *player_ptr, building_type *bldg)
 
 /*!
  * @brief 施設のサービス一覧を表示する / Display a building.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  */
 void display_buikding_service(player_type *player_ptr, building_type *bldg)

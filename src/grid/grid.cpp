@@ -41,7 +41,7 @@
 #include "monster/monster-update.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
@@ -67,10 +67,10 @@
 
 /*!
  * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
- * @param creature_ptr 配置したいクリーチャーの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 配置に成功したらTRUEを返す
  */
-bool new_player_spot(player_type *creature_ptr)
+bool new_player_spot(player_type *player_ptr)
 {
     POSITION y = 0, x = 0;
     int max_attempts = 10000;
@@ -80,15 +80,15 @@ bool new_player_spot(player_type *creature_ptr)
 
     while (max_attempts--) {
         /* Pick a legal spot */
-        y = (POSITION)rand_range(1, creature_ptr->current_floor_ptr->height - 2);
-        x = (POSITION)rand_range(1, creature_ptr->current_floor_ptr->width - 2);
+        y = (POSITION)rand_range(1, player_ptr->current_floor_ptr->height - 2);
+        x = (POSITION)rand_range(1, player_ptr->current_floor_ptr->width - 2);
 
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
         /* Must be a "naked" floor grid */
         if (g_ptr->m_idx)
             continue;
-        if (is_in_dungeon(creature_ptr)) {
+        if (is_in_dungeon(player_ptr)) {
             f_ptr = &f_info[g_ptr->feat];
 
             if (max_attempts > 5000) /* Rule 1 */
@@ -107,9 +107,9 @@ bool new_player_spot(player_type *creature_ptr)
             if (f_ptr->flags.has_not(FF::TELEPORTABLE))
                 continue;
         }
-        if (!player_can_enter(creature_ptr, g_ptr->feat, 0))
+        if (!player_can_enter(player_ptr, g_ptr->feat, 0))
             continue;
-        if (!in_bounds(creature_ptr->current_floor_ptr, y, x))
+        if (!in_bounds(player_ptr->current_floor_ptr, y, x))
             continue;
 
         /* Refuse to start on anti-teleport grids */
@@ -123,15 +123,15 @@ bool new_player_spot(player_type *creature_ptr)
         return false;
 
     /* Save the new player grid */
-    creature_ptr->y = y;
-    creature_ptr->x = x;
+    player_ptr->y = y;
+    player_ptr->x = x;
 
     return true;
 }
 
 /*!
  * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param g_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
@@ -149,22 +149,19 @@ bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
  * @param x x座標
  * @return 指定された座標に照明がかかっているならTRUEを返す。。
  */
-bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
+bool check_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
 {
     /* Hack -- move towards player */
-    POSITION yy = (y < creature_ptr->y) ? (y + 1) : (y > creature_ptr->y) ? (y - 1) : y;
-    POSITION xx = (x < creature_ptr->x) ? (x + 1) : (x > creature_ptr->x) ? (x - 1) : x;
+    POSITION yy = (y < player_ptr->y) ? (y + 1) : (y > player_ptr->y) ? (y - 1) : y;
+    POSITION xx = (x < player_ptr->x) ? (x + 1) : (x > player_ptr->x) ? (x - 1) : x;
 
     /* Check for "local" illumination */
 
     /* Check for "complex" illumination */
-    auto *floor_ptr = creature_ptr->current_floor_ptr;
-    if ((feat_supports_los(floor_ptr->grid_array[yy][xx].get_feat_mimic())
-            && (floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
-        || (feat_supports_los(floor_ptr->grid_array[y][xx].get_feat_mimic())
-            && (floor_ptr->grid_array[y][xx].info & CAVE_GLOW))
-        || (feat_supports_los(floor_ptr->grid_array[yy][x].get_feat_mimic())
-            && (floor_ptr->grid_array[yy][x].info & CAVE_GLOW))) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if ((feat_supports_los(floor_ptr->grid_array[yy][xx].get_feat_mimic()) && (floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
+        || (feat_supports_los(floor_ptr->grid_array[y][xx].get_feat_mimic()) && (floor_ptr->grid_array[y][xx].info & CAVE_GLOW))
+        || (feat_supports_los(floor_ptr->grid_array[yy][x].get_feat_mimic()) && (floor_ptr->grid_array[yy][x].info & CAVE_GLOW))) {
         return true;
     } else
         return false;
@@ -186,52 +183,52 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 指定された座標の照明状態を更新する / Update "local" illumination
- * @param creature_ptr 視界元のクリーチャー
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 視界先y座標
  * @param x 視界先x座標
  */
-void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
+void update_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
 {
     int i;
     POSITION yy, xx;
 
-    if (!in_bounds(creature_ptr->current_floor_ptr, y, x))
+    if (!in_bounds(player_ptr->current_floor_ptr, y, x))
         return;
 
-    if ((y != creature_ptr->y) && (x != creature_ptr->x)) {
-        yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
-        xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
-        update_local_illumination_aux(creature_ptr, yy, xx);
-        update_local_illumination_aux(creature_ptr, y, xx);
-        update_local_illumination_aux(creature_ptr, yy, x);
-    } else if (x != creature_ptr->x) /* y == creature_ptr->y */
+    if ((y != player_ptr->y) && (x != player_ptr->x)) {
+        yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
+        xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
+        update_local_illumination_aux(player_ptr, yy, xx);
+        update_local_illumination_aux(player_ptr, y, xx);
+        update_local_illumination_aux(player_ptr, yy, x);
+    } else if (x != player_ptr->x) /* y == player_ptr->y */
     {
-        xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
+        xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
         for (i = -1; i <= 1; i++) {
             yy = y + i;
-            update_local_illumination_aux(creature_ptr, yy, xx);
+            update_local_illumination_aux(player_ptr, yy, xx);
         }
         yy = y - 1;
-        update_local_illumination_aux(creature_ptr, yy, x);
+        update_local_illumination_aux(player_ptr, yy, x);
         yy = y + 1;
-        update_local_illumination_aux(creature_ptr, yy, x);
-    } else if (y != creature_ptr->y) /* x == creature_ptr->x */
+        update_local_illumination_aux(player_ptr, yy, x);
+    } else if (y != player_ptr->y) /* x == player_ptr->x */
     {
-        yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
+        yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
         for (i = -1; i <= 1; i++) {
             xx = x + i;
-            update_local_illumination_aux(creature_ptr, yy, xx);
+            update_local_illumination_aux(player_ptr, yy, xx);
         }
         xx = x - 1;
-        update_local_illumination_aux(creature_ptr, y, xx);
+        update_local_illumination_aux(player_ptr, y, xx);
         xx = x + 1;
-        update_local_illumination_aux(creature_ptr, y, xx);
+        update_local_illumination_aux(player_ptr, y, xx);
     } else /* Player's grid */
     {
         for (i = 0; i < 8; i++) {
             yy = y + ddy_cdd[i];
             xx = x + ddx_cdd[i];
-            update_local_illumination_aux(creature_ptr, yy, xx);
+            update_local_illumination_aux(player_ptr, yy, xx);
         }
     }
 }
@@ -241,25 +238,25 @@ void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x
  * @return 視覚に収められていないならTRUEを返す
  * @details player_can_see_bold()関数の返り値の否定を返している。
  */
-bool no_lite(player_type *creature_ptr)
+bool no_lite(player_type *player_ptr)
 {
-    return (!player_can_see_bold(creature_ptr, creature_ptr->y, creature_ptr->x));
+    return (!player_can_see_bold(player_ptr, player_ptr->y, player_ptr->x));
 }
 
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
+void print_rel(player_type *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
 {
     /* Only do "legal" locations */
     if (panel_contains(y, x)) {
         /* Hack -- fake monochrome */
         if (!use_graphics) {
-            if (current_world_ptr->timewalk_m_idx)
+            if (w_ptr->timewalk_m_idx)
                 a = TERM_DARK;
-            else if (is_invuln(subject_ptr) || subject_ptr->timewalk)
+            else if (is_invuln(player_ptr) || player_ptr->timewalk)
                 a = TERM_WHITE;
-            else if (subject_ptr->wraith_form)
+            else if (player_ptr->wraith_form)
                 a = TERM_L_DARK;
         }
 
@@ -399,7 +396,7 @@ void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
 
         /* Hack -- fake monochrome */
         if (!use_graphics) {
-            if (current_world_ptr->timewalk_m_idx)
+            if (w_ptr->timewalk_m_idx)
                 a = TERM_DARK;
             else if (is_invuln(player_ptr) || player_ptr->timewalk)
                 a = TERM_WHITE;
@@ -642,14 +639,14 @@ static POSITION flow_y = 0;
  * We do not need a priority queue because the cost from grid
  * to grid is always "one" and we process them in order.
  */
-void update_flow(player_type *subject_ptr)
+void update_flow(player_type *player_ptr)
 {
     POSITION x, y;
     DIRECTION d;
-    floor_type *f_ptr = subject_ptr->current_floor_ptr;
+    floor_type *f_ptr = player_ptr->current_floor_ptr;
 
     /* The last way-point is on the map */
-    if (subject_ptr->running && in_bounds(f_ptr, flow_y, flow_x)) {
+    if (player_ptr->running && in_bounds(f_ptr, flow_y, flow_x)) {
         /* The way point is in sight - do not update.  (Speedup) */
         if (f_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW)
             return;
@@ -664,13 +661,13 @@ void update_flow(player_type *subject_ptr)
     }
 
     /* Save player position */
-    flow_y = subject_ptr->y;
-    flow_x = subject_ptr->x;
+    flow_y = player_ptr->y;
+    flow_x = player_ptr->x;
 
     for (int i = 0; i < FLOW_MAX; i++) {
         // 幅優先探索用のキュー。
         std::queue<Pos2D> que;
-        que.emplace(subject_ptr->y, subject_ptr->x);
+        que.emplace(player_ptr->y, player_ptr->x);
 
         /* Now process the queue */
         while (!que.empty()) {
@@ -680,20 +677,20 @@ void update_flow(player_type *subject_ptr)
 
             /* Add the "children" */
             for (d = 0; d < 8; d++) {
-                byte m = subject_ptr->current_floor_ptr->grid_array[ty][tx].costs[i] + 1;
-                byte n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dists[i] + 1;
+                byte m = player_ptr->current_floor_ptr->grid_array[ty][tx].costs[i] + 1;
+                byte n = player_ptr->current_floor_ptr->grid_array[ty][tx].dists[i] + 1;
 
                 /* Child location */
                 y = ty + ddy_ddd[d];
                 x = tx + ddx_ddd[d];
 
                 /* Ignore player's grid */
-                if (player_bold(subject_ptr, y, x))
+                if (player_bold(player_ptr, y, x))
                     continue;
 
-                grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
+                grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-                if (is_closed_door(subject_ptr, g_ptr->feat))
+                if (is_closed_door(player_ptr, g_ptr->feat))
                     m += 3;
 
                 /* Ignore "pre-stamped" entries */
@@ -711,7 +708,7 @@ void update_flow(player_type *subject_ptr)
                     break;
                 }
 
-                if (!can_move && !is_closed_door(subject_ptr, g_ptr->feat))
+                if (!can_move && !is_closed_door(player_ptr, g_ptr->feat))
                     continue;
 
                 /* Save the flow cost */
@@ -791,7 +788,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
             found = true;
         }
 
-        if (found && current_world_ptr->character_dungeon && player_can_see_bold(player_ptr, y, x)) {
+        if (found && w_ptr->character_dungeon && player_can_see_bold(player_ptr, y, x)) {
             msg_print(_("何かを発見した！", "You have found something!"));
         }
     }
@@ -799,7 +796,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
     if (feature_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
         feature_type *old_f_ptr = &f_info[oldfeat];
 
-        if (old_f_ptr->flags.has(FF::GLASS) && current_world_ptr->character_dungeon) {
+        if (old_f_ptr->flags.has(FF::GLASS) && w_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(floor_ptr->dun_level, 100) / 4, GF_SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
@@ -807,32 +804,32 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
 }
 
 /* Remove a mirror */
-void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
+void remove_mirror(player_type *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Remove the mirror */
     g_ptr->info &= ~(CAVE_OBJECT);
     g_ptr->mimic = 0;
 
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         g_ptr->info &= ~(CAVE_GLOW);
         if (!view_torch_grids)
             g_ptr->info &= ~(CAVE_MARK);
         if (g_ptr->m_idx)
-            update_monster(caster_ptr, g_ptr->m_idx, false);
+            update_monster(player_ptr, g_ptr->m_idx, false);
 
-        update_local_illumination(caster_ptr, y, x);
+        update_local_illumination(player_ptr, y, x);
     }
 
-    note_spot(caster_ptr, y, x);
+    note_spot(player_ptr, y, x);
 
-    lite_spot(caster_ptr, y, x);
+    lite_spot(player_ptr, y, x);
 }
 
 /*!
  * @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param y 移動先Y座標
  * @param x 移動先X座標
@@ -870,7 +867,7 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
 
 /*!
  * @brief 指定されたマスにプレイヤーがテレポート可能かどうかを判定する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 移動先Y座標
  * @param x 移動先X座標
  * @param mode オプション
@@ -900,7 +897,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
         if (!player_can_enter(player_ptr, g_ptr->feat, 0))
             return false;
 
-        if (f_ptr->flags.has_all_of({FF::WATER, FF::DEEP})) {
+        if (f_ptr->flags.has_all_of({ FF::WATER, FF::DEEP })) {
             if (!player_ptr->levitation && !player_ptr->can_swim)
                 return false;
         }
@@ -936,24 +933,24 @@ bool is_open(player_type *player_ptr, FEAT_IDX feat)
  * @param mode 移動に関するオプションフラグ
  * @return 移動可能ならばTRUEを返す
  */
-bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
+bool player_can_enter(player_type *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
 {
     feature_type *f_ptr = &f_info[feature];
 
-    if (creature_ptr->riding)
+    if (player_ptr->riding)
         return monster_can_cross_terrain(
-            creature_ptr, feature, &r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx], mode | CEM_RIDING);
+            player_ptr, feature, &r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
 
     if (f_ptr->flags.has(FF::PATTERN)) {
         if (!(mode & CEM_P_CAN_ENTER_PATTERN))
             return false;
     }
 
-    if (f_ptr->flags.has(FF::CAN_FLY) && creature_ptr->levitation)
+    if (f_ptr->flags.has(FF::CAN_FLY) && player_ptr->levitation)
         return true;
-    if (f_ptr->flags.has(FF::CAN_SWIM) && creature_ptr->can_swim)
+    if (f_ptr->flags.has(FF::CAN_SWIM) && player_ptr->can_swim)
         return true;
-    if (f_ptr->flags.has(FF::CAN_PASS) && has_pass_wall(creature_ptr))
+    if (f_ptr->flags.has(FF::CAN_PASS) && has_pass_wall(player_ptr))
         return true;
 
     if (f_ptr->flags.has_not(FF::MOVE))
@@ -1046,7 +1043,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 
 /*!
  * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
  * @return 照明が消されている地形ならばTRUE
  */
@@ -1077,7 +1074,7 @@ void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX featu
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under)
+int count_dt(player_type *player_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under)
 {
     int count = 0;
     for (DIRECTION d = 0; d < 9; d++) {
@@ -1086,14 +1083,14 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
         if ((d == 8) && !under)
             continue;
 
-        POSITION yy = creature_ptr->y + ddy_ddd[d];
-        POSITION xx = creature_ptr->x + ddx_ddd[d];
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
+        POSITION yy = player_ptr->y + ddy_ddd[d];
+        POSITION xx = player_ptr->x + ddx_ddd[d];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[yy][xx];
         if (!g_ptr->is_mark())
             continue;
 
         feat = g_ptr->get_feat_mimic();
-        if (!((*test)(creature_ptr, feat)))
+        if (!((*test)(player_ptr, feat)))
             continue;
 
         ++count;

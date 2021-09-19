@@ -100,22 +100,22 @@ void one_sustain(object_type *o_ptr)
 {
     switch (randint0(A_MAX)) {
     case 0:
-        add_flag(o_ptr->art_flags, TR_SUST_STR);
+        o_ptr->art_flags.set(TR_SUST_STR);
         break;
     case 1:
-        add_flag(o_ptr->art_flags, TR_SUST_INT);
+        o_ptr->art_flags.set(TR_SUST_INT);
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_SUST_WIS);
+        o_ptr->art_flags.set(TR_SUST_WIS);
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_SUST_DEX);
+        o_ptr->art_flags.set(TR_SUST_DEX);
         break;
     case 4:
-        add_flag(o_ptr->art_flags, TR_SUST_CON);
+        o_ptr->art_flags.set(TR_SUST_CON);
         break;
     case 5:
-        add_flag(o_ptr->art_flags, TR_SUST_CHR);
+        o_ptr->art_flags.set(TR_SUST_CHR);
         break;
     }
 }
@@ -131,13 +131,13 @@ bool add_esp_strong(object_type *o_ptr)
 
     switch (randint1(3)) {
     case 1:
-        add_flag(o_ptr->art_flags, TR_ESP_EVIL);
+        o_ptr->art_flags.set(TR_ESP_EVIL);
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_TELEPATHY);
+        o_ptr->art_flags.set(TR_TELEPATHY);
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
+        o_ptr->art_flags.set(TR_ESP_NONLIVING);
         nonliv = true;
         break;
     }
@@ -153,7 +153,7 @@ bool add_esp_strong(object_type *o_ptr)
 void add_esp_weak(object_type *o_ptr, bool extra)
 {
     int i;
-    uint32_t weak_esp_list[] = {
+    tr_type weak_esp_list[] = {
         TR_ESP_ANIMAL,
         TR_ESP_UNDEAD,
         TR_ESP_DEMON,
@@ -172,7 +172,7 @@ void add_esp_weak(object_type *o_ptr, bool extra)
     for (i = 0; i < add_count; ++i) {
         int choice = rand_range(i, MAX_ESP_WEAK - 1);
 
-        add_flag(o_ptr->art_flags, weak_esp_list[choice]);
+        o_ptr->art_flags.set(weak_esp_list[choice]);
         weak_esp_list[choice] = weak_esp_list[i];
     }
 }
@@ -217,16 +217,16 @@ void one_ele_resistance(object_type *o_ptr)
 {
     switch (randint0(4)) {
     case 0:
-        add_flag(o_ptr->art_flags, TR_RES_ACID);
+        o_ptr->art_flags.set(TR_RES_ACID);
         break;
     case 1:
-        add_flag(o_ptr->art_flags, TR_RES_ELEC);
+        o_ptr->art_flags.set(TR_RES_ELEC);
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_RES_COLD);
+        o_ptr->art_flags.set(TR_RES_COLD);
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_RES_FIRE);
+        o_ptr->art_flags.set(TR_RES_FIRE);
         break;
     }
 }
@@ -239,7 +239,7 @@ void one_ele_resistance(object_type *o_ptr)
 void one_dragon_ele_resistance(object_type *o_ptr)
 {
     if (one_in_(7)) {
-        add_flag(o_ptr->art_flags, TR_RES_POIS);
+        o_ptr->art_flags.set(TR_RES_POIS);
     } else {
         one_ele_resistance(o_ptr);
     }
@@ -254,49 +254,49 @@ void one_high_resistance(object_type *o_ptr)
 {
     switch (randint0(15)) {
     case 0:
-        add_flag(o_ptr->art_flags, TR_RES_POIS);
+        o_ptr->art_flags.set(TR_RES_POIS);
         break;
     case 1:
-        add_flag(o_ptr->art_flags, TR_RES_LITE);
+        o_ptr->art_flags.set(TR_RES_LITE);
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_RES_DARK);
+        o_ptr->art_flags.set(TR_RES_DARK);
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_RES_SHARDS);
+        o_ptr->art_flags.set(TR_RES_SHARDS);
         break;
     case 4:
-        add_flag(o_ptr->art_flags, TR_RES_BLIND);
+        o_ptr->art_flags.set(TR_RES_BLIND);
         break;
     case 5:
-        add_flag(o_ptr->art_flags, TR_RES_CONF);
+        o_ptr->art_flags.set(TR_RES_CONF);
         break;
     case 6:
-        add_flag(o_ptr->art_flags, TR_RES_SOUND);
+        o_ptr->art_flags.set(TR_RES_SOUND);
         break;
     case 7:
-        add_flag(o_ptr->art_flags, TR_RES_NETHER);
+        o_ptr->art_flags.set(TR_RES_NETHER);
         break;
     case 8:
-        add_flag(o_ptr->art_flags, TR_RES_NEXUS);
+        o_ptr->art_flags.set(TR_RES_NEXUS);
         break;
     case 9:
-        add_flag(o_ptr->art_flags, TR_RES_CHAOS);
+        o_ptr->art_flags.set(TR_RES_CHAOS);
         break;
     case 10:
-        add_flag(o_ptr->art_flags, TR_RES_DISEN);
+        o_ptr->art_flags.set(TR_RES_DISEN);
         break;
     case 11:
-        add_flag(o_ptr->art_flags, TR_RES_FEAR);
+        o_ptr->art_flags.set(TR_RES_FEAR);
         break;
     case 12:
-        add_flag(o_ptr->art_flags, TR_RES_TIME);
+        o_ptr->art_flags.set(TR_RES_TIME);
         break;
     case 13:
-        add_flag(o_ptr->art_flags, TR_RES_WATER);
+        o_ptr->art_flags.set(TR_RES_WATER);
         break;
     case 14:
-        add_flag(o_ptr->art_flags, TR_RES_CURSE);
+        o_ptr->art_flags.set(TR_RES_CURSE);
         break;
     }
 }
@@ -340,28 +340,28 @@ void one_ability(object_type *o_ptr)
 {
     switch (randint0(10)) {
     case 0:
-        add_flag(o_ptr->art_flags, TR_LEVITATION);
+        o_ptr->art_flags.set(TR_LEVITATION);
         break;
     case 1:
-        add_flag(o_ptr->art_flags, TR_LITE_1);
+        o_ptr->art_flags.set(TR_LITE_1);
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_SEE_INVIS);
+        o_ptr->art_flags.set(TR_SEE_INVIS);
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_WARNING);
+        o_ptr->art_flags.set(TR_WARNING);
         break;
     case 4:
-        add_flag(o_ptr->art_flags, TR_SLOW_DIGEST);
+        o_ptr->art_flags.set(TR_SLOW_DIGEST);
         break;
     case 5:
-        add_flag(o_ptr->art_flags, TR_REGEN);
+        o_ptr->art_flags.set(TR_REGEN);
         break;
     case 6:
-        add_flag(o_ptr->art_flags, TR_FREE_ACT);
+        o_ptr->art_flags.set(TR_FREE_ACT);
         break;
     case 7:
-        add_flag(o_ptr->art_flags, TR_HOLD_EXP);
+        o_ptr->art_flags.set(TR_HOLD_EXP);
         break;
     case 8:
     case 9:
@@ -380,34 +380,34 @@ void one_low_esp(object_type *o_ptr)
 {
     switch (randint1(10)) {
     case 1:
-        add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
+        o_ptr->art_flags.set(TR_ESP_ANIMAL);
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
+        o_ptr->art_flags.set(TR_ESP_UNDEAD);
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_ESP_DEMON);
+        o_ptr->art_flags.set(TR_ESP_DEMON);
         break;
     case 4:
-        add_flag(o_ptr->art_flags, TR_ESP_ORC);
+        o_ptr->art_flags.set(TR_ESP_ORC);
         break;
     case 5:
-        add_flag(o_ptr->art_flags, TR_ESP_TROLL);
+        o_ptr->art_flags.set(TR_ESP_TROLL);
         break;
     case 6:
-        add_flag(o_ptr->art_flags, TR_ESP_GIANT);
+        o_ptr->art_flags.set(TR_ESP_GIANT);
         break;
     case 7:
-        add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
+        o_ptr->art_flags.set(TR_ESP_DRAGON);
         break;
     case 8:
-        add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
+        o_ptr->art_flags.set(TR_ESP_HUMAN);
         break;
     case 9:
-        add_flag(o_ptr->art_flags, TR_ESP_GOOD);
+        o_ptr->art_flags.set(TR_ESP_GOOD);
         break;
     case 10:
-        add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
+        o_ptr->art_flags.set(TR_ESP_UNIQUE);
         break;
     }
 }
@@ -526,7 +526,7 @@ void one_activation(object_type *o_ptr)
     }
 
     o_ptr->xtra2 = (byte)type;
-    add_flag(o_ptr->art_flags, TR_ACTIVATE);
+    o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->timeout = 0;
 }
 
@@ -541,43 +541,43 @@ void one_lordly_high_resistance(object_type *o_ptr)
 {
     switch (randint0(13)) {
     case 0:
-        add_flag(o_ptr->art_flags, TR_RES_LITE);
+        o_ptr->art_flags.set(TR_RES_LITE);
         break;
     case 1:
-        add_flag(o_ptr->art_flags, TR_RES_DARK);
+        o_ptr->art_flags.set(TR_RES_DARK);
         break;
     case 2:
-        add_flag(o_ptr->art_flags, TR_RES_SHARDS);
+        o_ptr->art_flags.set(TR_RES_SHARDS);
         break;
     case 3:
-        add_flag(o_ptr->art_flags, TR_RES_BLIND);
+        o_ptr->art_flags.set(TR_RES_BLIND);
         break;
     case 4:
-        add_flag(o_ptr->art_flags, TR_RES_CONF);
+        o_ptr->art_flags.set(TR_RES_CONF);
         break;
     case 5:
-        add_flag(o_ptr->art_flags, TR_RES_SOUND);
+        o_ptr->art_flags.set(TR_RES_SOUND);
         break;
     case 6:
-        add_flag(o_ptr->art_flags, TR_RES_NETHER);
+        o_ptr->art_flags.set(TR_RES_NETHER);
         break;
     case 7:
-        add_flag(o_ptr->art_flags, TR_RES_NEXUS);
+        o_ptr->art_flags.set(TR_RES_NEXUS);
         break;
     case 8:
-        add_flag(o_ptr->art_flags, TR_RES_CHAOS);
+        o_ptr->art_flags.set(TR_RES_CHAOS);
         break;
     case 9:
-        add_flag(o_ptr->art_flags, TR_RES_FEAR);
+        o_ptr->art_flags.set(TR_RES_FEAR);
         break;
     case 10:
-        add_flag(o_ptr->art_flags, TR_RES_TIME);
+        o_ptr->art_flags.set(TR_RES_TIME);
         break;
     case 11:
-        add_flag(o_ptr->art_flags, TR_RES_WATER);
+        o_ptr->art_flags.set(TR_RES_WATER);
         break;
     case 12:
-        add_flag(o_ptr->art_flags, TR_RES_CURSE);
+        o_ptr->art_flags.set(TR_RES_CURSE);
         break;
     }
 }

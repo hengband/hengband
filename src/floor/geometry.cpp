@@ -97,13 +97,13 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  * @param x 方角を確認したX座標
  * @return 方向ID
  */
-DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
+DIRECTION coords_to_dir(player_type *player_ptr, POSITION y, POSITION x)
 {
     DIRECTION d[3][3] = { { 7, 4, 1 }, { 8, 5, 2 }, { 9, 6, 3 } };
     POSITION dy, dx;
 
-    dy = y - creature_ptr->y;
-    dx = x - creature_ptr->x;
+    dy = y - player_ptr->y;
+    dx = x - player_ptr->x;
     if (ABS(dx) > 1 || ABS(dy) > 1)
         return 0;
 
@@ -145,26 +145,26 @@ DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
  * "glowing" grid.  This prevents the player from being able to "see" the\n
  * walls of illuminated rooms from a corridor outside the room.\n
  */
-bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
+bool player_can_see_bold(player_type *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
 
     /* Blind players see nothing */
-    if (creature_ptr->blind)
+    if (player_ptr->blind)
         return false;
 
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Note that "torch-lite" yields "illumination" */
     if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
         return true;
 
     /* Require line of sight to the grid */
-    if (!player_has_los_bold(creature_ptr, y, x))
+    if (!player_has_los_bold(player_ptr, y, x))
         return false;
 
     /* Noctovision of Ninja */
-    if (creature_ptr->see_nocto)
+    if (player_ptr->see_nocto)
         return true;
 
     /* Require "perma-lite" of the grid */
@@ -177,7 +177,7 @@ bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
         return true;
 
     /* Check for "local" illumination */
-    return check_local_illumination(creature_ptr, y, x);
+    return check_local_illumination(player_ptr, y, x);
 }
 
 /*
@@ -233,16 +233,16 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 
 /*!
  * @brief Is the monster seen by the player?
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 個々のモンスターへの参照ポインタ
- * @return 個々のモンスターがプレーヤーが見えたらTRUE
+ * @return 個々のモンスターがプレイヤーが見えたらTRUE
  * @todo is_seen() の関数マクロをバラそうとしたがインクルード関係のコンパイルエラーで失敗
  */
-bool is_seen(player_type *creature_ptr, monster_type *m_ptr)
+bool is_seen(player_type *player_ptr, monster_type *m_ptr)
 {
     bool is_inside_view = !ignore_unview;
-    is_inside_view |= creature_ptr->phase_out;
+    is_inside_view |= player_ptr->phase_out;
     is_inside_view
-        |= player_can_see_bold(creature_ptr, m_ptr->fy, m_ptr->fx) && projectable(creature_ptr, creature_ptr->y, creature_ptr->x, m_ptr->fy, m_ptr->fx);
+        |= player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     return m_ptr->ml && is_inside_view;
 }

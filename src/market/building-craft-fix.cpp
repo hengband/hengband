@@ -41,7 +41,7 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
     auto from_flgs = object_flags(from_ptr);
 
     int n = 0;
-    int cand[TR_FLAG_MAX];
+    tr_type cand[TR_FLAG_MAX];
     for (int i = 0; i < TR_FLAG_MAX; i++) {
         switch (i) {
         case TR_IGNORE_ACID:
@@ -53,15 +53,16 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
         case TR_THROW:
         case TR_SHOW_MODS:
         case TR_HIDE_TYPE:
-        case TR_ES_ATTACK:
-        case TR_ES_AC:
+        case TR_XXX_93:
+        case TR_XXX_94:
         case TR_FULL_NAME:
         case TR_FIXED_FLAVOR:
             break;
         default:
-            if (has_flag(from_flgs, i) && !has_flag(to_flgs, i)) {
-                if (!(is_pval_flag(i) && (from_ptr->pval < 1)))
-                    cand[n++] = i;
+            auto tr_flag = i2enum<tr_type>(i);
+            if (from_flgs.has(tr_flag) && to_flgs.has_not(tr_flag)) {
+                if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_ptr->pval < 1)))
+                    cand[n++] = tr_flag;
             }
         }
     }
@@ -69,9 +70,9 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
     if (n <= 0)
         return;
 
-    int tr_idx = cand[randint0(n)];
-    add_flag(to_ptr->art_flags, tr_idx);
-    if (is_pval_flag(tr_idx))
+    auto tr_idx = cand[randint0(n)];
+    to_ptr->art_flags.set(tr_idx);
+    if (TR_PVAL_FLAG_MASK.has(tr_idx))
         to_ptr->pval = MAX(to_ptr->pval, 1);
     int bmax = MIN(3, MAX(1, 40 / (to_ptr->dd * to_ptr->ds)));
     if (tr_idx == TR_BLOWS)
@@ -82,7 +83,7 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bcost 基本修復費用
  * @return 実際にかかった費用
  */
@@ -200,11 +201,11 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     o_ptr->dd = k_ptr->dd;
     o_ptr->ds = k_ptr->ds;
 
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        o_ptr->art_flags[i] |= k_ptr->flags[i];
+    o_ptr->art_flags.set(k_ptr->flags);
+
     if (k_ptr->pval)
         o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
-    if (has_flag(k_ptr->flags, TR_ACTIVATE))
+    if (k_ptr->flags.has(TR_ACTIVATE))
         o_ptr->xtra2 = (byte)k_ptr->act_idx;
 
     if (dd_bonus > 0) {
@@ -223,7 +224,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         }
     }
 
-    if (has_flag(k_ptr->flags, TR_BLOWS)) {
+    if (k_ptr->flags.has(TR_BLOWS)) {
         int bmax = MIN(3, MAX(1, 40 / (o_ptr->dd * o_ptr->ds)));
         o_ptr->pval = MIN(o_ptr->pval, bmax);
     }
@@ -235,8 +236,8 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     if ((o_ptr->name1 == ART_NARSIL) || (o_ptr->is_random_artifact() && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {
         if (o_ptr->is_ego()) {
-            add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
-            add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
+            o_ptr->art_flags.set(TR_IGNORE_FIRE);
+            o_ptr->art_flags.set(TR_IGNORE_ACID);
         }
 
         give_one_ability_of_object(o_ptr, mo_ptr);
@@ -272,7 +273,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 /*!
  * @brief アイテム修復処理の過渡ルーチン / Repair broken weapon
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param bcost 基本鑑定費用
  * @return 実際にかかった費用
  */

@@ -244,7 +244,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
 
 /*!
  * @brief ダメージを受けたモンスターの様子を記述する / Dump a message describing a monster's reaction to damage
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスター情報ID
  * @param dam 与えたダメージ
  * @details

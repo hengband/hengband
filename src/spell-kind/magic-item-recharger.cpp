@@ -21,7 +21,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-kind.h"
-#include "player/player-realm.h"
+#include "player-base/player-class.h"
 #include "system/player-type-definition.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
@@ -30,7 +30,7 @@
  * @brief 魔力充填処理 /
  * Recharge a wand/staff/rod from the pack or on the floor.
  * This function has been rewritten in Oangband and ZAngband.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param power 充填パワー
  * @return ターン消費を要する処理まで進んだらTRUEを返す
  *
@@ -47,14 +47,14 @@
  *
  * Beware of "sliding index errors".
  */
-bool recharge(player_type *caster_ptr, int power)
+bool recharge(player_type *player_ptr, int power)
 {
     concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
     if (!o_ptr)
         return false;
 
@@ -110,24 +110,24 @@ bool recharge(player_type *caster_ptr, int power)
     }
 
     if (is_recharge_successful) {
-        return update_player(caster_ptr);
+        return update_player(player_ptr);
     }
 
     byte fail_type = 1;
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->is_fixed_artifact()) {
-        describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+        describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout < 10000))
             o_ptr->timeout = (o_ptr->timeout + 100) * 2;
         else if ((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF))
             o_ptr->pval = 0;
-        return update_player(caster_ptr);
+        return update_player(player_ptr);
     }
 
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-    if (is_wizard_class(caster_ptr) || caster_ptr->pclass == CLASS_MAGIC_EATER || caster_ptr->pclass == CLASS_BLUE_MAGE) {
+    if (PlayerClass(player_ptr).is_wizard()) {
         /* 10% chance to blow up one rod, otherwise draining. */
         if (o_ptr->tval == TV_ROD) {
             if (one_in_(10))
@@ -193,7 +193,7 @@ bool recharge(player_type *caster_ptr, int power)
         if (o_ptr->tval == TV_WAND)
             o_ptr->pval = 0;
 
-        vary_item(caster_ptr, item, -1);
+        vary_item(player_ptr, item, -1);
     }
 
     if (fail_type == 3) {
@@ -202,8 +202,8 @@ bool recharge(player_type *caster_ptr, int power)
         else
             msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-        vary_item(caster_ptr, item, -999);
+        vary_item(player_ptr, item, -999);
     }
 
-    return update_player(caster_ptr);
+    return update_player(player_ptr);
 }

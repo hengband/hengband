@@ -14,31 +14,31 @@
 /*!
  * @brief セーブするコマンドのメインルーチン
  * Save the game
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_autosave オートセーブ中の処理ならばTRUE
  * @details
  */
-void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
+void do_cmd_save_game(player_type *player_ptr, int is_autosave)
 {
     if (is_autosave)
         msg_print(_("自動セーブ中", "Autosaving the game..."));
     else
-        disturb(creature_ptr, true, true);
+        disturb(player_ptr, true, true);
 
     msg_print(nullptr);
-    handle_stuff(creature_ptr);
+    handle_stuff(player_ptr);
     prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
     term_fresh();
-    (void)strcpy(creature_ptr->died_from, _("(セーブ)", "(saved)"));
+    (void)strcpy(player_ptr->died_from, _("(セーブ)", "(saved)"));
     signals_ignore_tstp();
-    if (save_player(creature_ptr, SAVE_TYPE_CONTINUE_GAME))
+    if (save_player(player_ptr, SAVE_TYPE_CONTINUE_GAME))
         prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
     else
         prt(_("ゲームをセーブしています... 失敗！", "Saving game... failed!"), 0, 0);
 
     signals_handle_tstp();
     term_fresh();
-    (void)strcpy(creature_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
+    (void)strcpy(player_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
 }
 
 /*!
@@ -46,9 +46,9 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
  * Save the game and exit
  * @details
  */
-void do_cmd_save_and_exit(player_type *creature_ptr)
+void do_cmd_save_and_exit(player_type *player_ptr)
 {
-    creature_ptr->playing = false;
-    creature_ptr->leaving = true;
-    exe_write_diary(creature_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
+    player_ptr->playing = false;
+    player_ptr->leaving = true;
+    exe_write_diary(player_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
 }

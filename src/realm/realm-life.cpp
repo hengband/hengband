@@ -25,20 +25,20 @@
 
 /*!
  * @brief 生命領域魔法の各処理を行う
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
-concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_life_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESC;
+    bool desc = mode == SPELL_DESCRIPTION;
     bool info = mode == SPELL_INFO;
     bool cast = mode == SPELL_CAST;
 
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
     case 0:
@@ -52,7 +52,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (info)
                 return info_heal(dice, sides, 0);
             if (cast)
-                (void)cure_light_wounds(caster_ptr, dice, sides);
+                (void)cure_light_wounds(player_ptr, dice, sides);
         }
         break;
 
@@ -68,7 +68,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_duration(base, base);
 
             if (cast) {
-                set_blessed(caster_ptr, randint1(base) + base, false);
+                set_blessed(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -86,9 +86,9 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
         break;
@@ -107,7 +107,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                lite_area(caster_ptr, damroll(dice, sides), rad);
+                lite_area(player_ptr, damroll(dice, sides), rad);
             }
         }
         break;
@@ -124,9 +124,9 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_radius(rad);
 
             if (cast) {
-                detect_traps(caster_ptr, rad, true);
-                detect_doors(caster_ptr, rad);
-                detect_stairs(caster_ptr, rad);
+                detect_traps(player_ptr, rad, true);
+                detect_doors(player_ptr, rad);
+                detect_stairs(player_ptr, rad);
             }
         }
         break;
@@ -143,7 +143,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (info)
                 return info_heal(dice, sides, 0);
             if (cast)
-                (void)cure_serious_wounds(caster_ptr, dice, sides);
+                (void)cure_serious_wounds(player_ptr, dice, sides);
         }
         break;
 
@@ -154,7 +154,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             return _("体内の毒を取り除く。", "Cures yourself of any poisons.");
         {
             if (cast) {
-                set_poisoned(caster_ptr, 0);
+                set_poisoned(player_ptr, 0);
             }
         }
         break;
@@ -166,7 +166,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             return _("満腹にする。", "Satisfies hunger.");
         {
             if (cast) {
-                set_food(caster_ptr, PY_FOOD_MAX - 1);
+                set_food(player_ptr, PY_FOOD_MAX - 1);
             }
         }
         break;
@@ -178,7 +178,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
         {
             if (cast)
-                (void)remove_curse(caster_ptr);
+                (void)remove_curse(player_ptr);
         }
         break;
 
@@ -195,9 +195,9 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
         break;
@@ -214,7 +214,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (info)
                 return info_heal(dice, sides, 0);
             if (cast)
-                (void)cure_critical_wounds(caster_ptr, damroll(dice, sides));
+                (void)cure_critical_wounds(player_ptr, damroll(dice, sides));
         }
         break;
 
@@ -232,8 +232,8 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_cold(caster_ptr, randint1(base) + base, false);
-                set_oppose_fire(caster_ptr, randint1(base) + base, false);
+                set_oppose_cold(player_ptr, randint1(base) + base, false);
+                set_oppose_fire(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -251,7 +251,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_radius(rad);
 
             if (cast) {
-                map_area(caster_ptr, rad);
+                map_area(player_ptr, rad);
             }
         }
         break;
@@ -264,7 +264,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                turn_undead(caster_ptr);
+                turn_undead(player_ptr);
             }
         }
         break;
@@ -280,7 +280,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (info)
                 return info_heal(0, 0, heal);
             if (cast)
-                (void)cure_critical_wounds(caster_ptr, heal);
+                (void)cure_critical_wounds(player_ptr, heal);
         }
         break;
 
@@ -293,7 +293,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                create_rune_protection_one(caster_ptr);
+                create_rune_protection_one(player_ptr);
             }
         }
         break;
@@ -305,7 +305,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curses from equipped items.");
         {
             if (cast)
-                (void)remove_all_curse(caster_ptr);
+                (void)remove_all_curse(player_ptr);
         }
         break;
 
@@ -317,7 +317,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                if (!ident_spell(caster_ptr, false))
+                if (!ident_spell(player_ptr, false))
                     return nullptr;
             }
         }
@@ -337,7 +337,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                dispel_undead(caster_ptr, damroll(dice, sides));
+                dispel_undead(player_ptr, damroll(dice, sides));
             }
         }
         break;
@@ -355,7 +355,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_power(power);
 
             if (cast) {
-                charm_monsters(caster_ptr, power);
+                charm_monsters(player_ptr, power);
             }
         }
         break;
@@ -374,9 +374,9 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
         break;
@@ -396,7 +396,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_delay(base, sides);
 
             if (cast) {
-                if (!recall_player(caster_ptr, randint0(21) + 15))
+                if (!recall_player(player_ptr, randint0(21) + 15))
                     return nullptr;
             }
         }
@@ -416,7 +416,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_delay(base, sides);
 
             if (cast) {
-                reserve_alter_reality(caster_ptr, randint0(sides) + base);
+                reserve_alter_reality(player_ptr, randint0(sides) + base);
             }
         }
         break;
@@ -435,8 +435,8 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_radius(rad);
 
             if (cast) {
-                create_rune_protection_one(caster_ptr);
-                create_rune_protection_area(caster_ptr, caster_ptr->y, caster_ptr->x);
+                create_rune_protection_one(player_ptr);
+                create_rune_protection_area(player_ptr, player_ptr->y, player_ptr->x);
             }
         }
         break;
@@ -449,7 +449,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                caster_ptr->current_floor_ptr->num_repro += MAX_REPRO;
+                player_ptr->current_floor_ptr->num_repro += MAX_REPRO;
             }
         }
         break;
@@ -468,7 +468,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_radius(rad);
 
             if (cast) {
-                detect_all(caster_ptr, rad);
+                detect_all(player_ptr, rad);
             }
         }
         break;
@@ -487,7 +487,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_power(power);
 
             if (cast) {
-                mass_genocide_undead(caster_ptr, power, true);
+                mass_genocide_undead(player_ptr, power, true);
             }
         }
         break;
@@ -501,7 +501,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                wiz_lite(caster_ptr, false);
+                wiz_lite(player_ptr, false);
             }
         }
         break;
@@ -514,8 +514,8 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                (void)restore_all_status(caster_ptr);
-                restore_level(caster_ptr);
+                (void)restore_all_status(player_ptr);
+                restore_level(player_ptr);
             }
         }
         break;
@@ -531,7 +531,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (info)
                 return info_heal(0, 0, heal);
             if (cast)
-                (void)cure_critical_wounds(caster_ptr, heal);
+                (void)cure_critical_wounds(player_ptr, heal);
         }
         break;
 
@@ -543,7 +543,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, false))
+                if (!identify_fully(player_ptr, false))
                     return nullptr;
             }
         }
@@ -563,13 +563,13 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (cast) {
                 TIME_EFFECT v = randint1(base) + base;
-                set_fast(caster_ptr, v, false);
-                set_oppose_acid(caster_ptr, v, false);
-                set_oppose_elec(caster_ptr, v, false);
-                set_oppose_fire(caster_ptr, v, false);
-                set_oppose_cold(caster_ptr, v, false);
-                set_oppose_pois(caster_ptr, v, false);
-                set_ultimate_res(caster_ptr, v, false);
+                set_fast(player_ptr, v, false);
+                set_oppose_acid(player_ptr, v, false);
+                set_oppose_elec(player_ptr, v, false);
+                set_oppose_fire(player_ptr, v, false);
+                set_oppose_cold(player_ptr, v, false);
+                set_oppose_pois(player_ptr, v, false);
+                set_ultimate_res(player_ptr, v, false);
             }
         }
         break;

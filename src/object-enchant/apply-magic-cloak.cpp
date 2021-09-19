@@ -13,14 +13,14 @@
 
 /*
  * @brief コンストラクタ
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
  */
-CloakEnchanter::CloakEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+CloakEnchanter::CloakEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
-    , owner_ptr(owner_ptr)
+    , player_ptr(player_ptr)
 {
 }
 
@@ -35,7 +35,7 @@ void CloakEnchanter::apply_magic()
 
     if (this->power > 1) {
         if (one_in_(20) || (this->power > 2)) {
-            become_random_artifact(this->owner_ptr, this->o_ptr, false);
+            become_random_artifact(this->player_ptr, this->o_ptr, false);
             return;
         }
 

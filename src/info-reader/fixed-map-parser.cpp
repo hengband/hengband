@@ -13,8 +13,8 @@
 #include "game-option/runtime-arguments.h"
 #include "io/files-util.h"
 #include "main/init-error-messages-table.h"
-#include "player/player-class.h"
-#include "player/player-race.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "realm/realm-names-table.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
@@ -29,7 +29,7 @@ static concptr variant = "ZANGBAND";
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)生成時の分岐処理
  * Helper function for "parse_fixed_map()"
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sp
  * @param fp
  * @return エラーコード
@@ -201,7 +201,7 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
         sprintf(tmp, "%d", quest[atoi(b + 6)].status);
         v = tmp;
     } else if (prefix(b + 1, "RANDOM")) {
-        sprintf(tmp, "%d", (int)(current_world_ptr->seed_town % atoi(b + 7)));
+        sprintf(tmp, "%d", (int)(w_ptr->seed_town % atoi(b + 7)));
         v = tmp;
     } else if (streq(b + 1, "VARIANT")) {
         v = variant;
@@ -224,7 +224,7 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
 
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をq_info、t_info、w_infoから読み込んでパースする
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param name ファイル名
  * @param ymin 詳細不明
  * @param xmin 詳細不明

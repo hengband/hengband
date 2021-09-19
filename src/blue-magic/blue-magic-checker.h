@@ -11,5 +11,5 @@
 enum blue_magic_type : int;
 
 struct player_type;
-void learn_spell(player_type *learner_ptr, int monspell);
+void learn_spell(player_type *player_ptr, int monspell);
 void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, blue_magic_type mode);

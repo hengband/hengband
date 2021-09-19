@@ -27,14 +27,14 @@ bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
     if (vanilla_town)
         return false;
 
-    if (player_ptr->today_mon > 0 && (streq(r_info[o_ptr->pval].name.c_str(), r_info[current_world_ptr->today_mon].name.c_str())))
+    if (player_ptr->today_mon > 0 && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str())))
         return true;
 
     if (o_ptr->pval == MON_TSUCHINOKO)
         return true;
 
     for (i = 0; i < MAX_BOUNTY; i++)
-        if (o_ptr->pval == current_world_ptr->bounty_r_idx[i])
+        if (o_ptr->pval == w_ptr->bounty_r_idx[i])
             break;
     if (i < MAX_BOUNTY)
         return true;

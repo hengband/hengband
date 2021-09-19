@@ -12,49 +12,49 @@
 
 /*!
  * @brief クリムゾンを発射する / Fire Crimson, evoluting gun.
- @ @param shooter_ptr 射撃を行うクリーチャー参照
+ @ @param player_ptr プレイヤーへの参照ポインタ
  * @return キャンセルした場合 false.
  * @details
  * Need to analyze size of the window.
  * Need more color coding.
  */
-static bool fire_crimson(player_type *shooter_ptr)
+static bool fire_crimson(player_type *player_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(shooter_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    POSITION tx = shooter_ptr->x + 99 * ddx[dir];
-    POSITION ty = shooter_ptr->y + 99 * ddy[dir];
-    if ((dir == 5) && target_okay(shooter_ptr)) {
+    POSITION tx = player_ptr->x + 99 * ddx[dir];
+    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    if ((dir == 5) && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
     }
 
     int num = 1;
-    if (shooter_ptr->pclass == CLASS_ARCHER) {
-        if (shooter_ptr->lev >= 10)
+    if (player_ptr->pclass == CLASS_ARCHER) {
+        if (player_ptr->lev >= 10)
             num++;
 
-        if (shooter_ptr->lev >= 30)
+        if (player_ptr->lev >= 30)
             num++;
 
-        if (shooter_ptr->lev >= 45)
+        if (player_ptr->lev >= 45)
             num++;
     }
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     for (int i = 0; i < num; i++)
-        (void)project(shooter_ptr, 0, shooter_ptr->lev / 20 + 1, ty, tx, shooter_ptr->lev * shooter_ptr->lev * 6 / 50, GF_ROCKET, flg);
+        (void)project(player_ptr, 0, player_ptr->lev / 20 + 1, ty, tx, player_ptr->lev * player_ptr->lev * 6 / 50, GF_ROCKET, flg);
 
     return true;
 }
 
-bool activate_crimson(player_type *user_ptr, object_type *o_ptr)
+bool activate_crimson(player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_CRIMSON)
         return false;
 
     msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
-    return fire_crimson(user_ptr);
+    return fire_crimson(player_ptr);
 }

@@ -233,7 +233,7 @@ parse_error_type parse_line_building(char *buf)
         int n;
         n = tokenize(s + 2, MAX_CLASS, zz, 0);
         for (int i = 0; i < MAX_CLASS; i++) {
-            building[index].member_class[i] = static_cast<player_class_type>((i < n) ? atoi(zz[i]) : 1);
+            building[index].member_class[i] = i2enum<player_class_type>((i < n) ? atoi(zz[i]) : 1);
         }
 
         break;
@@ -242,7 +242,7 @@ parse_error_type parse_line_building(char *buf)
         int n;
         n = tokenize(s + 2, MAX_RACES, zz, 0);
         for (int i = 0; i < MAX_RACES; i++) {
-            building[index].member_race[i] = static_cast<player_race_type>((i < n) ? atoi(zz[i]) : 1);
+            building[index].member_race[i] = i2enum<player_race_type>((i < n) ? atoi(zz[i]) : 1);
         }
 
         break;

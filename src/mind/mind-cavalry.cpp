@@ -23,27 +23,27 @@
 
 /*!
  * 荒馬慣らし
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 結果はどうあれ騎乗したらTRUE
  */
-bool rodeo(player_type *creature_ptr)
+bool rodeo(player_type *player_ptr)
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_type *m_ptr;
     monster_race *r_ptr;
     int rlev;
 
-    if (creature_ptr->riding) {
+    if (player_ptr->riding) {
         msg_print(_("今は乗馬中だ。", "You ARE riding."));
         return false;
     }
 
-    if (!do_cmd_riding(creature_ptr, true))
+    if (!do_cmd_riding(player_ptr, true))
         return true;
 
-    m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+    m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     r_ptr = &r_info[m_ptr->r_idx];
-    monster_desc(creature_ptr, m_name, m_ptr, 0);
+    monster_desc(player_ptr, m_name, m_ptr, 0);
     msg_format(_("%sに乗った。", "You ride on %s."), m_name);
 
     if (is_pet(m_ptr))
@@ -55,17 +55,17 @@ bool rodeo(player_type *creature_ptr)
         rlev = rlev * 3 / 2;
     if (rlev > 60)
         rlev = 60 + (rlev - 60) / 2;
-    if ((randint1(creature_ptr->skill_exp[SKILL_RIDING] / 120 + creature_ptr->lev * 2 / 3) > rlev) && one_in_(2)
-        && !creature_ptr->current_floor_ptr->inside_arena && !creature_ptr->phase_out && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR))
-        && (rlev < creature_ptr->lev * 3 / 2 + randint0(creature_ptr->lev / 5))) {
+    if ((randint1(player_ptr->skill_exp[SKILL_RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2)
+        && !player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR))
+        && (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {
         msg_format(_("%sを手なずけた。", "You tame %s."), m_name);
-        set_pet(creature_ptr, m_ptr);
+        set_pet(player_ptr, m_ptr);
     } else {
         msg_format(_("%sに振り落とされた！", "You have been thrown off by %s."), m_name);
-        process_fall_off_horse(creature_ptr, 1, true);
+        process_fall_off_horse(player_ptr, 1, true);
 
         /* 落馬処理に失敗してもとにかく乗馬解除 */
-        creature_ptr->riding = 0;
+        player_ptr->riding = 0;
     }
 
     return true;

@@ -1,4 +1,4 @@
 ﻿#pragma once
 
 struct player_type;
-bool eat_magic(player_type *caster_ptr, int power);
+bool eat_magic(player_type *player_ptr, int power);

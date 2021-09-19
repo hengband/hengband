@@ -17,7 +17,7 @@
 
 /*!
  * @brief クエスト情報を処理しつつ取得する。/ Process and get quest information
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param questnum クエストのID
  * @param do_init クエストの開始処理か(true)、結果処理か(FALSE)
  */
@@ -35,7 +35,7 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 
     init_flags = INIT_SHOW_TEXT;
     if (do_init)
-        init_flags = static_cast<init_flags_type>(init_flags | INIT_ASSIGN);
+        init_flags = i2enum<init_flags_type>(init_flags | INIT_ASSIGN);
 
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->inside_quest = old_quest;
@@ -43,7 +43,7 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 
 /*!
  * @brief クエスト情報を処理しつつ表示する。/ Process and display quest information
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param questnum クエストのID
  * @param do_init クエストの開始処理か(true)、結果処理か(FALSE)
  */
@@ -63,7 +63,7 @@ void print_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 
 /*!
  * @brief クエスト処理のメインルーチン / Request a quest from the Lord.
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void castle_quest(player_type *player_ptr)
 {

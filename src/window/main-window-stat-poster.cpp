@@ -15,6 +15,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "window/main-window-row-column.h"
 #include "view/status-bars-table.h"
 #include "world/world.h"
@@ -36,20 +38,20 @@
  * @brief プレイヤー能力値を描画する / Print character stat in given row, column
  * @param stat 描画するステータスのID
  */
-void print_stat(player_type *creature_ptr, int stat)
+void print_stat(player_type *player_ptr, int stat)
 {
     GAME_TEXT tmp[32];
-    if (creature_ptr->stat_cur[stat] < creature_ptr->stat_max[stat]) {
+    if (player_ptr->stat_cur[stat] < player_ptr->stat_max[stat]) {
         put_str(stat_names_reduced[stat], ROW_STAT + stat, 0);
-        cnv_stat(creature_ptr->stat_use[stat], tmp);
+        cnv_stat(player_ptr->stat_use[stat], tmp);
         c_put_str(TERM_YELLOW, tmp, ROW_STAT + stat, COL_STAT + 6);
     } else {
         put_str(stat_names[stat], ROW_STAT + stat, 0);
-        cnv_stat(creature_ptr->stat_use[stat], tmp);
+        cnv_stat(player_ptr->stat_use[stat], tmp);
         c_put_str(TERM_L_GREEN, tmp, ROW_STAT + stat, COL_STAT + 6);
     }
 
-    if (creature_ptr->stat_max[stat] != creature_ptr->stat_max_max[stat])
+    if (player_ptr->stat_max[stat] != player_ptr->stat_max_max[stat])
         return;
 
 #ifdef JP
@@ -63,9 +65,9 @@ void print_stat(player_type *creature_ptr, int stat)
 /*!
  * @brief プレイヤーの負傷状態を表示する
  */
-void print_cut(player_type *creature_ptr)
+void print_cut(player_type *player_ptr)
 {
-    int c = creature_ptr->cut;
+    int c = player_ptr->cut;
     if (c > 1000) {
         c_put_str(TERM_L_RED, _("致命傷      ", "Mortal wound"), ROW_CUT, COL_CUT);
         return;
@@ -106,35 +108,27 @@ void print_cut(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの朦朧状態を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_stun(player_type *creature_ptr)
+void print_stun(player_type *player_ptr)
 {
-    int s = creature_ptr->stun;
-    if (s > 100) {
-        c_put_str(TERM_RED, _("意識不明瞭  ", "Knocked out "), ROW_STUN, COL_STUN);
+    auto player_stun = player_ptr->effects()->stun();
+    if (!player_stun->is_stunned()) {
+        put_str("            ", ROW_STUN, COL_STUN);
         return;
     }
 
-    if (s > 50) {
-        c_put_str(TERM_ORANGE, _("ひどく朦朧  ", "Heavy stun  "), ROW_STUN, COL_STUN);
-        return;
-    }
-
-    if (s) {
-        c_put_str(TERM_ORANGE, _("朦朧        ", "Stun        "), ROW_STUN, COL_STUN);
-        return;
-    }
-
-    put_str("            ", ROW_STUN, COL_STUN);
+    auto [color, stat] = player_stun->get_expr();
+    c_put_str(color, stat.data(), ROW_STUN, COL_STUN);
 }
 
 /*!
  * @brief プレイヤーの空腹状態を表示する / Prints status of hunger
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_hunger(player_type *player_ptr)
 {
-    if (current_world_ptr->wizard && player_ptr->current_floor_ptr->inside_arena)
+    if (w_ptr->wizard && player_ptr->current_floor_ptr->inside_arena)
         return;
 
     if (player_ptr->food < PY_FOOD_FAINT) {
@@ -167,7 +161,7 @@ void print_hunger(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Display is always exactly 10 characters wide (see below)
  * This function was a major bottleneck when resting, so a lot of
@@ -270,7 +264,7 @@ void print_state(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの行動速度を表示する / Prints the speed_value of a character.			-CJS-
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_speed(player_type *player_ptr)
 {
@@ -327,7 +321,7 @@ void print_speed(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの呪文学習可能状態を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_study(player_type *player_ptr)
 {
@@ -345,7 +339,7 @@ void print_study(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーのものまね可能状態を表示する
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_imitation(player_type *player_ptr)
 {
@@ -367,9 +361,99 @@ void print_imitation(player_type *player_ptr)
 }
 
 /*!
+ * @brief 画面下部に表示すべき呪術の呪文をリストアップする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @bar_flags 表示可否を決めるためのフラグ群
+ */
+static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
+{
+    if (player_ptr->realm1 != REALM_HEX) {
+        return;
+    }
+
+    SpellHex spell_hex(player_ptr);
+    if (spell_hex.is_spelling_specific(HEX_BLESS)) {
+        ADD_BAR_FLAG(BAR_BLESSED);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_DEMON_AURA)) {
+        ADD_BAR_FLAG(BAR_SHFIRE);
+        ADD_BAR_FLAG(BAR_REGENERATION);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
+        ADD_BAR_FLAG(BAR_MIGHT);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_DETECT_EVIL)) {
+        ADD_BAR_FLAG(BAR_ESP_EVIL);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_ICE_ARMOR)) {
+        ADD_BAR_FLAG(BAR_SHCOLD);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_RUNESWORD)) {
+        ADD_BAR_FLAG(BAR_RUNESWORD);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_BUILDING)) {
+        ADD_BAR_FLAG(BAR_BUILD);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_ANTI_TELE)) {
+        ADD_BAR_FLAG(BAR_ANTITELE);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_SHOCK_CLOAK)) {
+        ADD_BAR_FLAG(BAR_SHELEC);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_SHADOW_CLOAK)) {
+        ADD_BAR_FLAG(BAR_SHSHADOW);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_CONFUSION)) {
+        ADD_BAR_FLAG(BAR_ATTKCONF);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_EYE_FOR_EYE)) {
+        ADD_BAR_FLAG(BAR_EYEEYE);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_ANTI_MULTI)) {
+        ADD_BAR_FLAG(BAR_ANTIMULTI);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_VAMP_BLADE)) {
+        ADD_BAR_FLAG(BAR_VAMPILIC);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_ANTI_MAGIC)) {
+        ADD_BAR_FLAG(BAR_ANTIMAGIC);
+    }
+
+    if (spell_hex.is_spelling_specific(HEX_CURE_LIGHT) || spell_hex.is_spelling_specific(HEX_CURE_SERIOUS)
+        || spell_hex.is_spelling_specific(HEX_CURE_CRITICAL)) {
+        ADD_BAR_FLAG(BAR_CURE);
+    }
+
+    if (spell_hex.get_revenge_turn() > 0) {
+        auto revenge_type = spell_hex.get_revenge_type();
+        if (revenge_type == SpellHexRevengeType::PATIENCE) {
+            ADD_BAR_FLAG(BAR_PATIENCE);
+        }
+
+        if (revenge_type == SpellHexRevengeType::REVENGE) {
+            ADD_BAR_FLAG(BAR_REVENGE);
+        }
+    }
+}
+
+/*!
  * @brief 下部に状態表示を行う / Show status bar
  */
-void print_status(player_type *creature_ptr)
+void print_status(player_type *player_ptr)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -381,206 +465,163 @@ void print_status(player_type *creature_ptr)
     BIT_FLAGS bar_flags[3];
     bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;
 
-    if (creature_ptr->tsuyoshi)
+    if (player_ptr->tsuyoshi)
         ADD_BAR_FLAG(BAR_TSUYOSHI);
 
-    if (creature_ptr->image)
+    if (player_ptr->image)
         ADD_BAR_FLAG(BAR_HALLUCINATION);
 
-    if (creature_ptr->blind)
+    if (player_ptr->blind)
         ADD_BAR_FLAG(BAR_BLINDNESS);
 
-    if (creature_ptr->paralyzed)
+    if (player_ptr->paralyzed)
         ADD_BAR_FLAG(BAR_PARALYZE);
 
-    if (creature_ptr->confused)
+    if (player_ptr->confused)
         ADD_BAR_FLAG(BAR_CONFUSE);
 
-    if (creature_ptr->poisoned)
+    if (player_ptr->poisoned)
         ADD_BAR_FLAG(BAR_POISONED);
 
-    if (creature_ptr->tim_invis)
+    if (player_ptr->tim_invis)
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
 
-    if (creature_ptr->concent >= CONCENT_RADAR_THRESHOLD)
+    if (player_ptr->concent >= CONCENT_RADAR_THRESHOLD)
     {
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
         ADD_BAR_FLAG(BAR_NIGHTSIGHT);
     }
 
-    if (is_time_limit_esp(creature_ptr))
+    if (is_time_limit_esp(player_ptr))
         ADD_BAR_FLAG(BAR_TELEPATHY);
 
-    if (creature_ptr->tim_regen)
+    if (player_ptr->tim_regen)
         ADD_BAR_FLAG(BAR_REGENERATION);
 
-    if (creature_ptr->tim_infra)
+    if (player_ptr->tim_infra)
         ADD_BAR_FLAG(BAR_INFRAVISION);
 
-    if (creature_ptr->protevil)
+    if (player_ptr->protevil)
         ADD_BAR_FLAG(BAR_PROTEVIL);
 
-    if (is_invuln(creature_ptr))
+    if (is_invuln(player_ptr))
         ADD_BAR_FLAG(BAR_INVULN);
 
-    if (creature_ptr->wraith_form)
+    if (player_ptr->wraith_form)
         ADD_BAR_FLAG(BAR_WRAITH);
 
-    if (creature_ptr->tim_pass_wall)
+    if (player_ptr->tim_pass_wall)
         ADD_BAR_FLAG(BAR_PASSWALL);
 
-    if (creature_ptr->tim_reflect)
+    if (player_ptr->tim_reflect)
         ADD_BAR_FLAG(BAR_REFLECTION);
 
-    if (is_hero(creature_ptr))
+    if (is_hero(player_ptr))
         ADD_BAR_FLAG(BAR_HEROISM);
 
-    if (is_shero(creature_ptr))
+    if (is_shero(player_ptr))
         ADD_BAR_FLAG(BAR_BERSERK);
 
-    if (is_blessed(creature_ptr))
+    if (is_blessed(player_ptr))
         ADD_BAR_FLAG(BAR_BLESSED);
 
-    if (creature_ptr->magicdef)
+    if (player_ptr->magicdef)
         ADD_BAR_FLAG(BAR_MAGICDEFENSE);
 
-    if (creature_ptr->tsubureru)
+    if (player_ptr->tsubureru)
         ADD_BAR_FLAG(BAR_EXPAND);
 
-    if (creature_ptr->shield)
+    if (player_ptr->shield)
         ADD_BAR_FLAG(BAR_STONESKIN);
 
-    if (creature_ptr->special_defense & NINJA_KAWARIMI)
+    if (player_ptr->special_defense & NINJA_KAWARIMI)
         ADD_BAR_FLAG(BAR_KAWARIMI);
 
-    if (creature_ptr->special_defense & DEFENSE_ACID)
+    if (player_ptr->special_defense & DEFENSE_ACID)
         ADD_BAR_FLAG(BAR_IMMACID);
-    if (is_oppose_acid(creature_ptr))
+    if (is_oppose_acid(player_ptr))
         ADD_BAR_FLAG(BAR_RESACID);
 
-    if (creature_ptr->special_defense & DEFENSE_ELEC)
+    if (player_ptr->special_defense & DEFENSE_ELEC)
         ADD_BAR_FLAG(BAR_IMMELEC);
-    if (is_oppose_elec(creature_ptr))
+    if (is_oppose_elec(player_ptr))
         ADD_BAR_FLAG(BAR_RESELEC);
 
-    if (creature_ptr->special_defense & DEFENSE_FIRE)
+    if (player_ptr->special_defense & DEFENSE_FIRE)
         ADD_BAR_FLAG(BAR_IMMFIRE);
-    if (is_oppose_fire(creature_ptr))
+    if (is_oppose_fire(player_ptr))
         ADD_BAR_FLAG(BAR_RESFIRE);
 
-    if (creature_ptr->special_defense & DEFENSE_COLD)
+    if (player_ptr->special_defense & DEFENSE_COLD)
         ADD_BAR_FLAG(BAR_IMMCOLD);
-    if (is_oppose_cold(creature_ptr))
+    if (is_oppose_cold(player_ptr))
         ADD_BAR_FLAG(BAR_RESCOLD);
 
-    if (is_oppose_pois(creature_ptr))
+    if (is_oppose_pois(player_ptr))
         ADD_BAR_FLAG(BAR_RESPOIS);
 
-    if (creature_ptr->word_recall)
+    if (player_ptr->word_recall)
         ADD_BAR_FLAG(BAR_RECALL);
 
-    if (creature_ptr->alter_reality)
+    if (player_ptr->alter_reality)
         ADD_BAR_FLAG(BAR_ALTER);
 
-    if (creature_ptr->afraid)
+    if (player_ptr->afraid)
         ADD_BAR_FLAG(BAR_AFRAID);
 
-    if (creature_ptr->tim_res_time)
+    if (player_ptr->tim_res_time)
         ADD_BAR_FLAG(BAR_RESTIME);
 
-    if (creature_ptr->multishadow)
+    if (player_ptr->multishadow)
         ADD_BAR_FLAG(BAR_MULTISHADOW);
 
-    if (creature_ptr->special_attack & ATTACK_CONFUSE)
+    if (player_ptr->special_attack & ATTACK_CONFUSE)
         ADD_BAR_FLAG(BAR_ATTKCONF);
 
-    if (creature_ptr->resist_magic)
+    if (player_ptr->resist_magic)
         ADD_BAR_FLAG(BAR_REGMAGIC);
 
-    if (creature_ptr->ult_res)
+    if (player_ptr->ult_res)
         ADD_BAR_FLAG(BAR_ULTIMATE);
 
-    if (creature_ptr->tim_levitation)
+    if (player_ptr->tim_levitation)
         ADD_BAR_FLAG(BAR_LEVITATE);
 
-    if (creature_ptr->tim_res_nether)
+    if (player_ptr->tim_res_nether)
         ADD_BAR_FLAG(BAR_RESNETH);
 
-    if (creature_ptr->dustrobe)
+    if (player_ptr->dustrobe)
         ADD_BAR_FLAG(BAR_DUSTROBE);
 
-    if (creature_ptr->special_attack & ATTACK_FIRE)
+    if (player_ptr->special_attack & ATTACK_FIRE)
         ADD_BAR_FLAG(BAR_ATTKFIRE);
-    if (creature_ptr->special_attack & ATTACK_COLD)
+    if (player_ptr->special_attack & ATTACK_COLD)
         ADD_BAR_FLAG(BAR_ATTKCOLD);
-    if (creature_ptr->special_attack & ATTACK_ELEC)
+    if (player_ptr->special_attack & ATTACK_ELEC)
         ADD_BAR_FLAG(BAR_ATTKELEC);
-    if (creature_ptr->special_attack & ATTACK_ACID)
+    if (player_ptr->special_attack & ATTACK_ACID)
         ADD_BAR_FLAG(BAR_ATTKACID);
-    if (creature_ptr->special_attack & ATTACK_POIS)
+    if (player_ptr->special_attack & ATTACK_POIS)
         ADD_BAR_FLAG(BAR_ATTKPOIS);
-    if (creature_ptr->special_defense & NINJA_S_STEALTH)
+    if (player_ptr->special_defense & NINJA_S_STEALTH)
         ADD_BAR_FLAG(BAR_SUPERSTEALTH);
 
-    if (creature_ptr->tim_sh_fire)
+    if (player_ptr->tim_sh_fire)
         ADD_BAR_FLAG(BAR_SHFIRE);
 
-    if (is_time_limit_stealth(creature_ptr))
+    if (is_time_limit_stealth(player_ptr))
         ADD_BAR_FLAG(BAR_STEALTH);
 
-    if (creature_ptr->tim_sh_touki)
+    if (player_ptr->tim_sh_touki)
         ADD_BAR_FLAG(BAR_TOUKI);
 
-    if (creature_ptr->tim_sh_holy)
+    if (player_ptr->tim_sh_holy)
         ADD_BAR_FLAG(BAR_SHHOLY);
 
-    if (creature_ptr->tim_eyeeye)
+    if (player_ptr->tim_eyeeye)
         ADD_BAR_FLAG(BAR_EYEEYE);
 
-    if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_BLESS))
-            ADD_BAR_FLAG(BAR_BLESSED);
-        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
-            ADD_BAR_FLAG(BAR_SHFIRE);
-            ADD_BAR_FLAG(BAR_REGENERATION);
-        }
-        if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT))
-            ADD_BAR_FLAG(BAR_MIGHT);
-        if (hex_spelling(creature_ptr, HEX_DETECT_EVIL))
-            ADD_BAR_FLAG(BAR_ESP_EVIL);
-        if (hex_spelling(creature_ptr, HEX_ICE_ARMOR))
-            ADD_BAR_FLAG(BAR_SHCOLD);
-        if (hex_spelling(creature_ptr, HEX_RUNESWORD))
-            ADD_BAR_FLAG(BAR_RUNESWORD);
-        if (hex_spelling(creature_ptr, HEX_BUILDING))
-            ADD_BAR_FLAG(BAR_BUILD);
-        if (hex_spelling(creature_ptr, HEX_ANTI_TELE))
-            ADD_BAR_FLAG(BAR_ANTITELE);
-        if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
-            ADD_BAR_FLAG(BAR_SHELEC);
-        if (hex_spelling(creature_ptr, HEX_SHADOW_CLOAK))
-            ADD_BAR_FLAG(BAR_SHSHADOW);
-        if (hex_spelling(creature_ptr, HEX_CONFUSION))
-            ADD_BAR_FLAG(BAR_ATTKCONF);
-        if (hex_spelling(creature_ptr, HEX_EYE_FOR_EYE))
-            ADD_BAR_FLAG(BAR_EYEEYE);
-        if (hex_spelling(creature_ptr, HEX_ANTI_MULTI))
-            ADD_BAR_FLAG(BAR_ANTIMULTI);
-        if (hex_spelling(creature_ptr, HEX_VAMP_BLADE))
-            ADD_BAR_FLAG(BAR_VAMPILIC);
-        if (hex_spelling(creature_ptr, HEX_ANTI_MAGIC))
-            ADD_BAR_FLAG(BAR_ANTIMAGIC);
-        if (hex_spelling(creature_ptr, HEX_CURE_LIGHT) || hex_spelling(creature_ptr, HEX_CURE_SERIOUS) || hex_spelling(creature_ptr, HEX_CURE_CRITICAL))
-            ADD_BAR_FLAG(BAR_CURE);
-
-        if (hex_revenge_turn(creature_ptr)) {
-            if (hex_revenge_type(creature_ptr) == 1)
-                ADD_BAR_FLAG(BAR_PATIENCE);
-            if (hex_revenge_type(creature_ptr) == 2)
-                ADD_BAR_FLAG(BAR_REVENGE);
-        }
-    }
-
+    add_hex_status_flags(player_ptr, bar_flags);
     TERM_LEN col = 0, num = 0;
     for (int i = 0; stat_bars[i].sstr; i++) {
         if (IS_BAR_FLAG(i)) {
@@ -628,7 +669,7 @@ void print_status(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_frame_extra(player_type *player_ptr)
 {

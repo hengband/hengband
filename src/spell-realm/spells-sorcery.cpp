@@ -17,10 +17,10 @@
 /*!
  * @brief アイテムの価値に応じた錬金術処理 /
  * Turns an object into gold, gain some of its value in a shop
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return 処理が実際に行われたらTRUEを返す
  */
-bool alchemy(player_type *caster_ptr)
+bool alchemy(player_type *player_ptr)
 {
     bool force = false;
     if (command_arg > 0)
@@ -30,7 +30,7 @@ bool alchemy(player_type *caster_ptr)
     concptr s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR));
     if (!o_ptr)
         return false;
 
@@ -44,7 +44,7 @@ bool alchemy(player_type *caster_ptr)
     ITEM_NUMBER old_number = o_ptr->number;
     o_ptr->number = amt;
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
     o_ptr->number = old_number;
 
     if (!force) {
@@ -56,7 +56,7 @@ bool alchemy(player_type *caster_ptr)
         }
     }
 
-    if (!can_player_destroy_object(caster_ptr, o_ptr)) {
+    if (!can_player_destroy_object(player_ptr, o_ptr)) {
         msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), o_name);
         return false;
     }
@@ -64,7 +64,7 @@ bool alchemy(player_type *caster_ptr)
     PRICE price = object_value_real(o_ptr);
     if (price <= 0) {
         msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), o_name);
-        vary_item(caster_ptr, item, -amt);
+        vary_item(player_ptr, item, -amt);
         return true;
     }
 
@@ -77,9 +77,9 @@ bool alchemy(player_type *caster_ptr)
         price = 30000;
     msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %ld coins worth of gold."), o_name, price);
 
-    caster_ptr->au += price;
-    caster_ptr->redraw |= PR_GOLD;
-    caster_ptr->window_flags |= PW_PLAYER;
-    vary_item(caster_ptr, item, -amt);
+    player_ptr->au += price;
+    player_ptr->redraw |= PR_GOLD;
+    player_ptr->window_flags |= PW_PLAYER;
+    vary_item(player_ptr, item, -amt);
     return true;
 }

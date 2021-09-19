@@ -6,4 +6,4 @@
 #include "util/flag-group.h"
 
 struct player_type;
-void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, EnumClassFlagGroup<RF_ABILITY> &ability_flags);
+void remove_bad_spells(MONSTER_IDX m_idx, player_type *player_ptr, EnumClassFlagGroup<RF_ABILITY> &ability_flags);

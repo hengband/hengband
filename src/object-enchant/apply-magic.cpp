@@ -42,32 +42,32 @@
 /*!
  * @brief 生成されたベースアイテムに魔法的な強化を与えるメインルーチン
  * Complete the "creation" of an object by applying "magic" to the item
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param lev 生成基準階
  * @param mode 生成オプション
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */
-void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
-    if (owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)
-        lev += randint0(owner_ptr->lev / 2 + 10);
+    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN)
+        lev += randint0(player_ptr->lev / 2 + 10);
     if (lev > MAX_DEPTH - 1)
         lev = MAX_DEPTH - 1;
 
     int f1 = lev + 10;
-    if (f1 > d_info[owner_ptr->dungeon_idx].obj_good)
-        f1 = d_info[owner_ptr->dungeon_idx].obj_good;
+    if (f1 > d_info[player_ptr->dungeon_idx].obj_good)
+        f1 = d_info[player_ptr->dungeon_idx].obj_good;
 
     int f2 = f1 * 2 / 3;
-    if ((owner_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[owner_ptr->dungeon_idx].obj_great))
-        f2 = d_info[owner_ptr->dungeon_idx].obj_great;
+    if ((player_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[player_ptr->dungeon_idx].obj_great))
+        f2 = d_info[player_ptr->dungeon_idx].obj_great;
 
-    if (has_good_luck(owner_ptr)) {
+    if (has_good_luck(player_ptr)) {
         f1 += 5;
         f2 += 2;
-    } else if (owner_ptr->muta.has(MUTA::BAD_LUCK)) {
+    } else if (player_ptr->muta.has(MUTA::BAD_LUCK)) {
         f1 -= 5;
         f2 -= 2;
     }
@@ -103,19 +103,19 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         rolls = 0;
 
     for (int i = 0; i < rolls; i++) {
-        if (make_artifact(owner_ptr, o_ptr))
+        if (make_artifact(player_ptr, o_ptr))
             break;
-        if (has_good_luck(owner_ptr) && one_in_(77)) {
-            if (make_artifact(owner_ptr, o_ptr))
+        if (has_good_luck(player_ptr) && one_in_(77)) {
+            if (make_artifact(player_ptr, o_ptr))
                 break;
         }
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = apply_artifact(owner_ptr, o_ptr);
+        artifact_type *a_ptr = apply_artifact(player_ptr, o_ptr);
         a_ptr->cur_num = 1;
-        if (current_world_ptr->character_dungeon)
-            a_ptr->floor_id = owner_ptr->floor_id;
+        if (w_ptr->character_dungeon)
+            a_ptr->floor_id = player_ptr->floor_id;
         return;
     }
 
@@ -127,64 +127,64 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
     case TV_ARROW:
     case TV_BOLT:
         if (power != 0) {
-            apply_magic_weapon(owner_ptr, o_ptr, lev, power);
+            apply_magic_weapon(player_ptr, o_ptr, lev, power);
         }
 
         break;
     case TV_POLEARM:
         if ((power != 0) && (o_ptr->sval != SV_DEATH_SCYTHE)) {
-            apply_magic_weapon(owner_ptr, o_ptr, lev, power);
+            apply_magic_weapon(player_ptr, o_ptr, lev, power);
         }
 
         break;
     case TV_SWORD:
         if ((power != 0) && (o_ptr->sval != SV_POISON_NEEDLE)) {
-            apply_magic_weapon(owner_ptr, o_ptr, lev, power);
+            apply_magic_weapon(player_ptr, o_ptr, lev, power);
         }
 
         break;
     case TV_SHIELD:
-        ShieldEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        ShieldEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_CLOAK:
-        CloakEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        CloakEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_HELM:
-        HelmEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        HelmEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_CROWN:
-        CrownEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        CrownEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_BOOTS:
-        BootsEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        BootsEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_DRAG_ARMOR:
     case TV_HARD_ARMOR:
     case TV_SOFT_ARMOR:
-        ArmorEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        ArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_GLOVES:
-        GlovesEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        GlovesEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_RING:
-        RingEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        RingEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_AMULET:
-        AmuletEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        AmuletEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     default:
-        apply_magic_others(owner_ptr, o_ptr, power);
+        apply_magic_others(player_ptr, o_ptr, power);
         break;
     }
 
-    if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (owner_ptr->pseikaku == PERSONALITY_SEXY)) {
+    if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->pseikaku == PERSONALITY_SEXY)) {
         o_ptr->pval = 3;
-        add_flag(o_ptr->art_flags, TR_STR);
-        add_flag(o_ptr->art_flags, TR_INT);
-        add_flag(o_ptr->art_flags, TR_WIS);
-        add_flag(o_ptr->art_flags, TR_DEX);
-        add_flag(o_ptr->art_flags, TR_CON);
-        add_flag(o_ptr->art_flags, TR_CHR);
+        o_ptr->art_flags.set(TR_STR);
+        o_ptr->art_flags.set(TR_INT);
+        o_ptr->art_flags.set(TR_WIS);
+        o_ptr->art_flags.set(TR_DEX);
+        o_ptr->art_flags.set(TR_CON);
+        o_ptr->art_flags.set(TR_CHR);
     }
 
     if (o_ptr->is_ego()) {

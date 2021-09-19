@@ -31,7 +31,7 @@ TRC get_curse(int power, object_type *o_ptr)
     TRC new_curse;
 
     while (true) {
-        new_curse = static_cast<TRC>(rand_range(enum2i(TRC::TY_CURSE), enum2i(TRC::MAX) - 1));
+        new_curse = i2enum<TRC>(rand_range(enum2i(TRC::TY_CURSE), enum2i(TRC::MAX) - 1));
         if (power == 2) {
             if (TRC_HEAVY_MASK.has_not(new_curse))
                 continue;
@@ -55,24 +55,24 @@ TRC get_curse(int power, object_type *o_ptr)
 
 /*!
  * @brief 装備への呪い付加判定と付加処理
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param chance 呪いの基本確率
  * @param heavy_chance さらに重い呪いとなる確率
  */
-void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
+void curse_equipment(player_type *player_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
 {
     if (randint1(100) > chance)
         return;
 
-    object_type *o_ptr = &owner_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
+    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
     if (!o_ptr->k_idx)
         return;
     auto oflgs = object_flags(o_ptr);
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Extra, biased saving throw for blessed items */
-    if (has_flag(oflgs, TR_BLESSED)) {
+    if (oflgs.has(TR_BLESSED)) {
 #ifdef JP
         msg_format("祝福された%sは呪いを跳ね返した！", o_name);
 #else
@@ -110,5 +110,5 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
         o_ptr->feeling = FEEL_NONE;
     }
 
-    owner_ptr->update |= PU_BONUS;
+    player_ptr->update |= PU_BONUS;
 }

@@ -2,10 +2,11 @@
 
 #include "system/angband.h"
 
+#include "object-enchant/tr-flags.h"
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
-#include "util/flag-group.h"
 #include "system/system-variables.h"
+#include "util/flag-group.h"
 
 #include <string>
 #include <vector>
@@ -60,5 +61,5 @@ typedef struct object_kind {
 extern std::vector<object_kind> k_info;
 extern KIND_OBJECT_IDX max_k_idx;
 
-struct object_type;;
+struct object_type;
 SYMBOL_CODE object_char(object_type *o_ptr);

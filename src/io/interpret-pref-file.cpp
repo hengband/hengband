@@ -277,14 +277,14 @@ static errr interpret_v_token(char *buf)
 
 /*!
  * @brief X/Yトークンの解釈
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf バッファ
  * @return エラーコード
  * @details
  * Process "X:<str>" -- turn option off
  * Process "Y:<str>" -- turn option on
  */
-static errr interpret_xy_token(player_type *creature_ptr, char *buf)
+static errr interpret_xy_token(player_type *player_ptr, char *buf)
 {
 	for (int i = 0; option_info[i].o_desc; i++)
 	{
@@ -296,8 +296,8 @@ static errr interpret_xy_token(player_type *creature_ptr, char *buf)
 		int os = option_info[i].o_set;
 		int ob = option_info[i].o_bit;
 
-		if ((creature_ptr->playing || current_world_ptr->character_xtra) &&
-			(OPT_PAGE_BIRTH == option_info[i].o_page) && !current_world_ptr->wizard)
+		if ((player_ptr->playing || w_ptr->character_xtra) &&
+			(OPT_PAGE_BIRTH == option_info[i].o_page) && !w_ptr->wizard)
 		{
 			msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
 			msg_print(nullptr);
@@ -452,7 +452,7 @@ static errr interpret_t_token(char *buf)
 /*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param buf データテキストの参照ポインタ
  * @return エラーコード
  * @details
@@ -472,7 +472,7 @@ static errr interpret_t_token(char *buf)
  * used for the "nothing" attr/char.
  * </pre>
  */
-errr interpret_pref_file(player_type *creature_ptr, char *buf)
+errr interpret_pref_file(player_type *player_ptr, char *buf)
 {
 	if (buf[1] != ':') return 1;
 
@@ -510,7 +510,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		return interpret_v_token(buf);
 	case 'X':
 	case 'Y':
-		return interpret_xy_token(creature_ptr, buf);
+		return interpret_xy_token(player_ptr, buf);
 	case 'Z':
 		return interpret_z_token(buf);
 	case 'T':

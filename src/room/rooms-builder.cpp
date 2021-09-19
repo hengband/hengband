@@ -52,7 +52,7 @@
 
 /*!
  * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param y0 配置したい中心のY座標
  * @param x0 配置したい中心のX座標
  * @details

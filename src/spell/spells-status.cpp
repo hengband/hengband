@@ -28,9 +28,9 @@
 #include "monster/monster-describer.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "player-info/class-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
@@ -54,437 +54,437 @@
 
 /*!
  * @brief モンスター回復処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam)
+bool heal_monster(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_HEAL, dir, dam, flg));
+    return (project_hook(player_ptr, GF_OLD_HEAL, dir, dam, flg));
 }
 
 /*!
  * @brief モンスター加速処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool speed_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool speed_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_SPEED, dir, power, flg));
+    return (project_hook(player_ptr, GF_OLD_SPEED, dir, power, flg));
 }
 
 /*!
  * @brief モンスター減速処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool slow_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool slow_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_SLOW, dir, power, flg));
+    return (project_hook(player_ptr, GF_OLD_SLOW, dir, power, flg));
 }
 
 /*!
  * @brief モンスター催眠処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool sleep_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool sleep_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_SLEEP, dir, power, flg));
+    return (project_hook(player_ptr, GF_OLD_SLEEP, dir, power, flg));
 }
 
 /*!
  * @brief モンスター拘束(STASIS)処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_monster(player_type *caster_ptr, DIRECTION dir)
+bool stasis_monster(player_type *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(caster_ptr, GF_STASIS, dir, caster_ptr->lev * 2, 0));
+    return (fire_ball_hide(player_ptr, GF_STASIS, dir, player_ptr->lev * 2, 0));
 }
 
 /*!
  * @brief 邪悪なモンスター拘束(STASIS)処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_evil(player_type *caster_ptr, DIRECTION dir)
+bool stasis_evil(player_type *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(caster_ptr, GF_STASIS_EVIL, dir, caster_ptr->lev * 2, 0));
+    return (fire_ball_hide(player_ptr, GF_STASIS_EVIL, dir, player_ptr->lev * 2, 0));
 }
 
 /*!
  * @brief モンスター混乱処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool confuse_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_CONF, dir, plev, flg));
+    return (project_hook(player_ptr, GF_OLD_CONF, dir, plev, flg));
 }
 
 /*!
  * @brief モンスター朦朧処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool stun_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_STUN, dir, plev, flg));
+    return (project_hook(player_ptr, GF_STUN, dir, plev, flg));
 }
 
 /*!
  * @brief チェンジモンスター処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool poly_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool poly_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    bool tester = (project_hook(caster_ptr, GF_OLD_POLY, dir, power, flg));
+    bool tester = (project_hook(player_ptr, GF_OLD_POLY, dir, power, flg));
     if (tester)
-        chg_virtue(caster_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, V_CHANCE, 1);
     return (tester);
 }
 
 /*!
  * @brief クローンモンスター処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool clone_monster(player_type *caster_ptr, DIRECTION dir)
+bool clone_monster(player_type *player_ptr, DIRECTION dir)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_CLONE, dir, 0, flg));
+    return (project_hook(player_ptr, GF_OLD_CLONE, dir, 0, flg));
 }
 
 /*!
  * @brief モンスター恐慌処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fear_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool fear_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_TURN_ALL, dir, plev, flg));
+    return (project_hook(player_ptr, GF_TURN_ALL, dir, plev, flg));
 }
 
-bool time_walk(player_type *creature_ptr)
+bool time_walk(player_type *player_ptr)
 {
-    if (creature_ptr->timewalk) {
+    if (player_ptr->timewalk) {
         msg_print(_("既に時は止まっている。", "Time is already stopped."));
         return false;
     }
 
-    creature_ptr->timewalk = true;
+    player_ptr->timewalk = true;
     msg_print(_("「時よ！」", "You yell 'Time!'"));
     //	msg_print(_("「『ザ・ワールド』！時は止まった！」", "You yell 'The World! Time has stopped!'"));
     msg_print(nullptr);
 
-    creature_ptr->energy_need -= 1000 + (100 + creature_ptr->csp - 50) * TURNS_PER_TICK / 10;
-    creature_ptr->redraw |= (PR_MAP);
-    creature_ptr->update |= (PU_MONSTERS);
-    creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-    handle_stuff(creature_ptr);
+    player_ptr->energy_need -= 1000 + (100 + player_ptr->csp - 50) * TURNS_PER_TICK / 10;
+    player_ptr->redraw |= (PR_MAP);
+    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    handle_stuff(player_ptr);
     return true;
 }
 
 /*!
  * @brief プレイヤーのヒットダイスを振る / Role Hitpoints
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param options スペル共通オプション
  */
-void roll_hitdice(player_type *creature_ptr, spell_operation options)
+void roll_hitdice(player_type *player_ptr, spell_operation options)
 {
-    HIT_POINT min_value = creature_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (creature_ptr->hitdie + 1)) * 3 / 8;
-    HIT_POINT max_value = creature_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (creature_ptr->hitdie + 1)) * 5 / 8;
+    HIT_POINT min_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 3 / 8;
+    HIT_POINT max_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 5 / 8;
 
     /* Rerate */
     while (true) {
         /* Pre-calculate level 1 hitdice */
-        creature_ptr->player_hp[0] = (HIT_POINT)creature_ptr->hitdie;
+        player_ptr->player_hp[0] = (HIT_POINT)player_ptr->hitdie;
 
         for (int i = 1; i < 4; i++) {
-            creature_ptr->player_hp[0] += randint1(creature_ptr->hitdie);
+            player_ptr->player_hp[0] += randint1(player_ptr->hitdie);
         }
 
         /* Roll the hitpoint values */
         for (int i = 1; i < PY_MAX_LEVEL; i++) {
-            creature_ptr->player_hp[i] = creature_ptr->player_hp[i - 1] + randint1(creature_ptr->hitdie);
+            player_ptr->player_hp[i] = player_ptr->player_hp[i - 1] + randint1(player_ptr->hitdie);
         }
 
         /* Require "valid" hitpoints at highest level */
-        if ((creature_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) && (creature_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value))
+        if ((player_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) && (player_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value))
             break;
     }
 
-    creature_ptr->knowledge &= ~(KNOW_HPRATE);
+    player_ptr->knowledge &= ~(KNOW_HPRATE);
 
     PERCENTAGE percent
-        = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
+        = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
 
     /* Update and redraw hitpoints */
-    creature_ptr->update |= (PU_HP);
-    creature_ptr->redraw |= (PR_HP);
-    creature_ptr->window_flags |= (PW_PLAYER);
+    player_ptr->update |= (PU_HP);
+    player_ptr->redraw |= (PR_HP);
+    player_ptr->window_flags |= (PW_PLAYER);
 
     if (!(options & SPOP_NO_UPDATE))
-        handle_stuff(creature_ptr);
+        handle_stuff(player_ptr);
 
     if (!(options & SPOP_DISPLAY_MES))
         return;
 
     if (options & SPOP_DEBUG) {
         msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
-        creature_ptr->knowledge |= KNOW_HPRATE;
+        player_ptr->knowledge |= KNOW_HPRATE;
         return;
     }
 
     msg_print(_("体力ランクが変わった。", "Life rate has changed."));
 }
 
-bool life_stream(player_type *creature_ptr, bool message, bool virtue_change)
+bool life_stream(player_type *player_ptr, bool message, bool virtue_change)
 {
     if (virtue_change) {
-        chg_virtue(creature_ptr, V_VITALITY, 1);
-        chg_virtue(creature_ptr, V_UNLIFE, -5);
+        chg_virtue(player_ptr, V_VITALITY, 1);
+        chg_virtue(player_ptr, V_UNLIFE, -5);
     }
 
     if (message) {
         msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
     }
 
-    restore_level(creature_ptr);
-    (void)set_poisoned(creature_ptr, 0);
-    (void)set_blind(creature_ptr, 0);
-    (void)set_confused(creature_ptr, 0);
-    (void)set_image(creature_ptr, 0);
-    (void)set_stun(creature_ptr, 0);
-    (void)set_cut(creature_ptr, 0);
-    (void)set_paralyzed(creature_ptr, 0);
-    (void)restore_all_status(creature_ptr);
-    (void)set_shero(creature_ptr, 0, true);
-    handle_stuff(creature_ptr);
-    hp_player(creature_ptr, 5000);
+    restore_level(player_ptr);
+    (void)set_poisoned(player_ptr, 0);
+    (void)set_blind(player_ptr, 0);
+    (void)set_confused(player_ptr, 0);
+    (void)set_image(player_ptr, 0);
+    (void)set_stun(player_ptr, 0);
+    (void)set_cut(player_ptr, 0);
+    (void)set_paralyzed(player_ptr, 0);
+    (void)restore_all_status(player_ptr);
+    (void)set_shero(player_ptr, 0, true);
+    handle_stuff(player_ptr);
+    hp_player(player_ptr, 5000);
 
     return true;
 }
 
-bool heroism(player_type *creature_ptr, int base)
+bool heroism(player_type *player_ptr, int base)
 {
     bool ident = false;
-    if (set_afraid(creature_ptr, 0))
+    if (set_afraid(player_ptr, 0))
         ident = true;
-    if (set_hero(creature_ptr, creature_ptr->hero + randint1(base) + base, false))
+    if (set_hero(player_ptr, player_ptr->hero + randint1(base) + base, false))
         ident = true;
-    if (hp_player(creature_ptr, 10))
+    if (hp_player(player_ptr, 10))
         ident = true;
     return ident;
 }
 
-bool berserk(player_type *creature_ptr, int base)
+bool berserk(player_type *player_ptr, int base)
 {
     bool ident = false;
-    if (set_afraid(creature_ptr, 0))
+    if (set_afraid(player_ptr, 0))
         ident = true;
-    if (set_shero(creature_ptr, creature_ptr->shero + randint1(base) + base, false))
+    if (set_shero(player_ptr, player_ptr->shero + randint1(base) + base, false))
         ident = true;
-    if (hp_player(creature_ptr, 30))
+    if (hp_player(player_ptr, 30))
         ident = true;
     return ident;
 }
 
-bool cure_light_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides)
+bool cure_light_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides)
 {
     bool ident = false;
-    if (hp_player(creature_ptr, damroll(dice, sides)))
+    if (hp_player(player_ptr, damroll(dice, sides)))
         ident = true;
-    if (set_blind(creature_ptr, 0))
+    if (set_blind(player_ptr, 0))
         ident = true;
-    if (set_cut(creature_ptr, creature_ptr->cut - 10))
+    if (set_cut(player_ptr, player_ptr->cut - 10))
         ident = true;
-    if (set_shero(creature_ptr, 0, true))
+    if (set_shero(player_ptr, 0, true))
         ident = true;
     return ident;
 }
 
-bool cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides)
+bool cure_serious_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides)
 {
     bool ident = false;
-    if (hp_player(creature_ptr, damroll(dice, sides)))
+    if (hp_player(player_ptr, damroll(dice, sides)))
         ident = true;
-    if (set_blind(creature_ptr, 0))
+    if (set_blind(player_ptr, 0))
         ident = true;
-    if (set_confused(creature_ptr, 0))
+    if (set_confused(player_ptr, 0))
         ident = true;
-    if (set_cut(creature_ptr, (creature_ptr->cut / 2) - 50))
+    if (set_cut(player_ptr, (player_ptr->cut / 2) - 50))
         ident = true;
-    if (set_shero(creature_ptr, 0, true))
+    if (set_shero(player_ptr, 0, true))
         ident = true;
     return ident;
 }
 
-bool cure_critical_wounds(player_type *creature_ptr, HIT_POINT pow)
+bool cure_critical_wounds(player_type *player_ptr, HIT_POINT pow)
 {
     bool ident = false;
-    if (hp_player(creature_ptr, pow))
+    if (hp_player(player_ptr, pow))
         ident = true;
-    if (set_blind(creature_ptr, 0))
+    if (set_blind(player_ptr, 0))
         ident = true;
-    if (set_confused(creature_ptr, 0))
+    if (set_confused(player_ptr, 0))
         ident = true;
-    if (set_poisoned(creature_ptr, 0))
+    if (set_poisoned(player_ptr, 0))
         ident = true;
-    if (set_stun(creature_ptr, 0))
+    if (set_stun(player_ptr, 0))
         ident = true;
-    if (set_cut(creature_ptr, 0))
+    if (set_cut(player_ptr, 0))
         ident = true;
-    if (set_shero(creature_ptr, 0, true))
+    if (set_shero(player_ptr, 0, true))
         ident = true;
     return ident;
 }
 
-bool true_healing(player_type *creature_ptr, HIT_POINT pow)
+bool true_healing(player_type *player_ptr, HIT_POINT pow)
 {
     bool ident = false;
-    if (hp_player(creature_ptr, pow))
+    if (hp_player(player_ptr, pow))
         ident = true;
-    if (set_blind(creature_ptr, 0))
+    if (set_blind(player_ptr, 0))
         ident = true;
-    if (set_confused(creature_ptr, 0))
+    if (set_confused(player_ptr, 0))
         ident = true;
-    if (set_poisoned(creature_ptr, 0))
+    if (set_poisoned(player_ptr, 0))
         ident = true;
-    if (set_stun(creature_ptr, 0))
+    if (set_stun(player_ptr, 0))
         ident = true;
-    if (set_cut(creature_ptr, 0))
+    if (set_cut(player_ptr, 0))
         ident = true;
-    if (set_image(creature_ptr, 0))
+    if (set_image(player_ptr, 0))
         ident = true;
     return ident;
 }
 
-bool restore_mana(player_type *creature_ptr, bool magic_eater)
+bool restore_mana(player_type *player_ptr, bool magic_eater)
 {
-    if (creature_ptr->pclass == CLASS_MAGIC_EATER && magic_eater) {
+    if (player_ptr->pclass == CLASS_MAGIC_EATER && magic_eater) {
         int i;
         for (i = 0; i < EATER_EXT * 2; i++) {
-            creature_ptr->magic_num1[i] += (creature_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : creature_ptr->magic_num2[i] * EATER_CHARGE / 3;
-            if (creature_ptr->magic_num1[i] > creature_ptr->magic_num2[i] * EATER_CHARGE)
-                creature_ptr->magic_num1[i] = creature_ptr->magic_num2[i] * EATER_CHARGE;
+            player_ptr->magic_num1[i] += (player_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : player_ptr->magic_num2[i] * EATER_CHARGE / 3;
+            if (player_ptr->magic_num1[i] > player_ptr->magic_num2[i] * EATER_CHARGE)
+                player_ptr->magic_num1[i] = player_ptr->magic_num2[i] * EATER_CHARGE;
         }
 
         for (; i < EATER_EXT * 3; i++) {
             KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i - EATER_EXT * 2);
-            creature_ptr->magic_num1[i]
-                -= ((creature_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE * 3 : creature_ptr->magic_num2[i] * EATER_ROD_CHARGE / 3) * k_info[k_idx].pval;
-            if (creature_ptr->magic_num1[i] < 0)
-                creature_ptr->magic_num1[i] = 0;
+            player_ptr->magic_num1[i]
+                -= ((player_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE * 3 : player_ptr->magic_num2[i] * EATER_ROD_CHARGE / 3) * k_info[k_idx].pval;
+            if (player_ptr->magic_num1[i] < 0)
+                player_ptr->magic_num1[i] = 0;
         }
 
         msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-        creature_ptr->window_flags |= (PW_PLAYER);
+        player_ptr->window_flags |= (PW_PLAYER);
         return true;
     }
 
-    if (creature_ptr->csp >= creature_ptr->msp)
+    if (player_ptr->csp >= player_ptr->msp)
         return false;
 
-    creature_ptr->csp = creature_ptr->msp;
-    creature_ptr->csp_frac = 0;
+    player_ptr->csp = player_ptr->msp;
+    player_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-    creature_ptr->redraw |= (PR_MANA);
-    creature_ptr->window_flags |= (PW_PLAYER);
-    creature_ptr->window_flags |= (PW_SPELL);
+    player_ptr->redraw |= (PR_MANA);
+    player_ptr->window_flags |= (PW_PLAYER);
+    player_ptr->window_flags |= (PW_SPELL);
     return true;
 }
 
-bool restore_all_status(player_type *creature_ptr)
+bool restore_all_status(player_type *player_ptr)
 {
     bool ident = false;
-    if (do_res_stat(creature_ptr, A_STR))
+    if (do_res_stat(player_ptr, A_STR))
         ident = true;
-    if (do_res_stat(creature_ptr, A_INT))
+    if (do_res_stat(player_ptr, A_INT))
         ident = true;
-    if (do_res_stat(creature_ptr, A_WIS))
+    if (do_res_stat(player_ptr, A_WIS))
         ident = true;
-    if (do_res_stat(creature_ptr, A_DEX))
+    if (do_res_stat(player_ptr, A_DEX))
         ident = true;
-    if (do_res_stat(creature_ptr, A_CON))
+    if (do_res_stat(player_ptr, A_CON))
         ident = true;
-    if (do_res_stat(creature_ptr, A_CHR))
+    if (do_res_stat(player_ptr, A_CHR))
         ident = true;
     return ident;
 }
 
-bool fishing(player_type *creature_ptr)
+bool fishing(player_type *player_ptr)
 {
     DIRECTION dir;
-    if (!get_direction(creature_ptr, &dir, false, false))
+    if (!get_direction(player_ptr, &dir, false, false))
         return false;
-    POSITION y = creature_ptr->y + ddy[dir];
-    POSITION x = creature_ptr->x + ddx[dir];
-    creature_ptr->fishing_dir = dir;
-    if (!cave_has_flag_bold(creature_ptr->current_floor_ptr, y, x, FF::WATER)) {
+    POSITION y = player_ptr->y + ddy[dir];
+    POSITION x = player_ptr->x + ddx[dir];
+    player_ptr->fishing_dir = dir;
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return false;
     }
 
-    if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+    if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
         GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+        monster_desc(player_ptr, m_name, &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%^s is standing in your way."), m_name);
-        PlayerEnergy(creature_ptr).reset_player_turn();
+        PlayerEnergy(player_ptr).reset_player_turn();
         return false;
     }
 
-    set_action(creature_ptr, ACTION_FISH);
-    creature_ptr->redraw |= (PR_STATE);
+    set_action(player_ptr, ACTION_FISH);
+    player_ptr->redraw |= (PR_STATE);
     return true;
 }
 
 /*!
  * @brief 装備を脱ぎ捨てて小宇宙を燃やす
- * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @param o_ptr_ptr 脱ぐ装備品への参照ポインタのポインタ
  * @return 脱いだらTRUE、脱がなかったらFALSE
  * @details
  * 脱いで落とした装備にtimeoutを設定するために装備品のアドレスを返す。
  */
-bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
+bool cosmic_cast_off(player_type *player_ptr, object_type **o_ptr_ptr)
 {
     object_type *o_ptr = (*o_ptr_ptr);
 
     /* Cast off activated item */
     INVENTORY_IDX slot;
     for (slot = INVEN_MAIN_HAND; slot <= INVEN_FEET; slot++) {
-        if (o_ptr == &creature_ptr->inventory_list[slot])
+        if (o_ptr == &player_ptr->inventory_list[slot])
             break;
     }
 
@@ -493,30 +493,30 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
 
     object_type forge;
     (&forge)->copy_from(o_ptr);
-    inven_item_increase(creature_ptr, slot, (0 - o_ptr->number));
-    inven_item_optimize(creature_ptr, slot);
+    inven_item_increase(player_ptr, slot, (0 - o_ptr->number));
+    inven_item_optimize(player_ptr, slot);
 
-    OBJECT_IDX old_o_idx = drop_near(creature_ptr, &forge, 0, creature_ptr->y, creature_ptr->x);
-    *o_ptr_ptr = &creature_ptr->current_floor_ptr->o_list[old_o_idx];
+    OBJECT_IDX old_o_idx = drop_near(player_ptr, &forge, 0, player_ptr->y, player_ptr->x);
+    *o_ptr_ptr = &player_ptr->current_floor_ptr->o_list[old_o_idx];
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(creature_ptr, o_name, &forge, OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, &forge, OD_NAME_ONLY);
     msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
     sound(SOUND_TAKE_OFF);
 
     /* Get effects */
     msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
     int t = 20 + randint1(20);
-    (void)set_blind(creature_ptr, creature_ptr->blind + t);
-    (void)set_afraid(creature_ptr, 0);
-    (void)set_tim_esp(creature_ptr, creature_ptr->tim_esp + t, false);
-    (void)set_tim_regen(creature_ptr, creature_ptr->tim_regen + t, false);
-    (void)set_hero(creature_ptr, creature_ptr->hero + t, false);
-    (void)set_blessed(creature_ptr, creature_ptr->blessed + t, false);
-    (void)set_fast(creature_ptr, creature_ptr->fast + t, false);
-    (void)set_shero(creature_ptr, creature_ptr->shero + t, false);
-    if (creature_ptr->pclass == CLASS_FORCETRAINER) {
-        set_current_ki(creature_ptr, true, creature_ptr->lev * 5 + 190);
+    (void)set_blind(player_ptr, player_ptr->blind + t);
+    (void)set_afraid(player_ptr, 0);
+    (void)set_tim_esp(player_ptr, player_ptr->tim_esp + t, false);
+    (void)set_tim_regen(player_ptr, player_ptr->tim_regen + t, false);
+    (void)set_hero(player_ptr, player_ptr->hero + t, false);
+    (void)set_blessed(player_ptr, player_ptr->blessed + t, false);
+    (void)set_fast(player_ptr, player_ptr->fast + t, false);
+    (void)set_shero(player_ptr, player_ptr->shero + t, false);
+    if (player_ptr->pclass == CLASS_FORCETRAINER) {
+        set_current_ki(player_ptr, true, player_ptr->lev * 5 + 190);
         msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));
     }
 
@@ -527,40 +527,40 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
  * @brief プレイヤーの因果混乱処理 / Apply Nexus
  * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
  */
-void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
+void apply_nexus(monster_type *m_ptr, player_type *player_ptr)
 {
     switch (randint1(7)) {
     case 1:
     case 2:
     case 3: {
-        teleport_player(target_ptr, 200, TELEPORT_PASSIVE);
+        teleport_player(player_ptr, 200, TELEPORT_PASSIVE);
         break;
     }
 
     case 4:
     case 5: {
-        teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
         break;
     }
 
     case 6: {
-        if (randint0(100) < target_ptr->skill_sav) {
+        if (randint0(100) < player_ptr->skill_sav) {
             msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
             break;
         }
 
-        teleport_level(target_ptr, 0);
+        teleport_level(player_ptr, 0);
         break;
     }
 
     case 7: {
-        if (randint0(100) < target_ptr->skill_sav) {
+        if (randint0(100) < player_ptr->skill_sav) {
             msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
             break;
         }
 
         msg_print(_("体がねじれ始めた...", "Your body starts to scramble..."));
-        status_shuffle(target_ptr);
+        status_shuffle(player_ptr);
         break;
     }
     }
@@ -568,9 +568,9 @@ void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 
 /*!
  * @brief プレイヤーのステータスシャッフル処理
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
-void status_shuffle(player_type *creature_ptr)
+void status_shuffle(player_type *player_ptr)
 {
     /* Pick a pair of stats */
     int i = randint0(A_MAX);
@@ -580,22 +580,22 @@ void status_shuffle(player_type *creature_ptr)
     for (j = i; j == i; j = randint0(A_MAX)) /* loop */
         ;
 
-    BASE_STATUS max1 = creature_ptr->stat_max[i];
-    BASE_STATUS cur1 = creature_ptr->stat_cur[i];
-    BASE_STATUS max2 = creature_ptr->stat_max[j];
-    BASE_STATUS cur2 = creature_ptr->stat_cur[j];
+    BASE_STATUS max1 = player_ptr->stat_max[i];
+    BASE_STATUS cur1 = player_ptr->stat_cur[i];
+    BASE_STATUS max2 = player_ptr->stat_max[j];
+    BASE_STATUS cur2 = player_ptr->stat_cur[j];
 
-    creature_ptr->stat_max[i] = max2;
-    creature_ptr->stat_cur[i] = cur2;
-    creature_ptr->stat_max[j] = max1;
-    creature_ptr->stat_cur[j] = cur1;
+    player_ptr->stat_max[i] = max2;
+    player_ptr->stat_cur[i] = cur2;
+    player_ptr->stat_max[j] = max1;
+    player_ptr->stat_cur[j] = cur1;
 
     for (int k = 0; k < A_MAX; k++) {
-        if (creature_ptr->stat_max[k] > creature_ptr->stat_max_max[k])
-            creature_ptr->stat_max[k] = creature_ptr->stat_max_max[k];
-        if (creature_ptr->stat_cur[k] > creature_ptr->stat_max_max[k])
-            creature_ptr->stat_cur[k] = creature_ptr->stat_max_max[k];
+        if (player_ptr->stat_max[k] > player_ptr->stat_max_max[k])
+            player_ptr->stat_max[k] = player_ptr->stat_max_max[k];
+        if (player_ptr->stat_cur[k] > player_ptr->stat_max_max[k])
+            player_ptr->stat_cur[k] = player_ptr->stat_max_max[k];
     }
 
-    creature_ptr->update |= PU_BONUS;
+    player_ptr->update |= PU_BONUS;
 }

@@ -15,17 +15,17 @@ void birth_quit(void)
 
 /*!
  * @brief 指定されたヘルプファイルを表示する / Show specific help file
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param helpfile ファイル名
  */
-void show_help(player_type* creature_ptr, concptr helpfile)
+void show_help(player_type* player_ptr, concptr helpfile)
 {
     screen_save();
-    (void)show_file(creature_ptr, true, helpfile, nullptr, 0, 0);
+    (void)show_file(player_ptr, true, helpfile, nullptr, 0, 0);
     screen_load();
 }
 
-void birth_help_option(player_type *creature_ptr, char c, birth_kind bk)
+void birth_help_option(player_type *player_ptr, char c, birth_kind bk)
 {
     concptr help_file;
     switch (bk) {
@@ -50,10 +50,10 @@ void birth_help_option(player_type *creature_ptr, char c, birth_kind bk)
     }
 
     if (c == '?') {
-        show_help(creature_ptr, help_file);
+        show_help(player_ptr, help_file);
     } else if (c == '=') {
         screen_save();
-        do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+        do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
         screen_load();
     } else if (c != '2' && c != '4' && c != '6' && c != '8')
         bell();

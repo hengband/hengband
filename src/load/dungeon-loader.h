@@ -3,4 +3,4 @@
 #include "system/angband.h"
 
 struct player_type;
-errr restore_dungeon(player_type *creature_ptr);
+errr restore_dungeon(player_type *player_ptr);

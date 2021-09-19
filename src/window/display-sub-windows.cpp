@@ -63,7 +63,7 @@ FixItemTesterSetter::~FixItemTesterSetter()
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_inventory(player_type *player_ptr)
 {
@@ -110,7 +110,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     if (r_ptr->flags1 & RF1_UNIQUE) {
         bool is_bounty = false;
         for (int i = 0; i < MAX_BOUNTY; i++) {
-            if (current_world_ptr->bounty_r_idx[i] == r_idx) {
+            if (w_ptr->bounty_r_idx[i] == r_idx) {
                 is_bounty = true;
                 break;
             }
@@ -195,7 +195,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
 
 /*!
  * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_monster_list(player_type *player_ptr)
 {
@@ -230,9 +230,9 @@ void fix_monster_list(player_type *player_ptr)
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
  */
-static void display_equipment(player_type *owner_ptr, const ItemTester& item_tester)
+static void display_equipment(player_type *player_ptr, const ItemTester& item_tester)
 {
-    if (!owner_ptr || !owner_ptr->inventory_list)
+    if (!player_ptr || !player_ptr->inventory_list)
         return;
 
     TERM_LEN wid, hgt;
@@ -246,8 +246,8 @@ static void display_equipment(player_type *owner_ptr, const ItemTester& item_tes
         if (cur_row >= hgt)
             break;
 
-        auto o_ptr = &owner_ptr->inventory_list[i];
-        auto do_disp = owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
+        auto o_ptr = &player_ptr->inventory_list[i];
+        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
         strcpy(tmp_val, "   ");
 
         if (do_disp) {
@@ -259,12 +259,12 @@ static void display_equipment(player_type *owner_ptr, const ItemTester& item_tes
         term_erase(cur_col, cur_row, 255);
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
 
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(owner_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(owner_ptr)))
-            && has_two_handed_weapons(owner_ptr)) {
+        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
+            && has_two_handed_weapons(player_ptr)) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
         } else {
-            describe_flavor(owner_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, o_ptr, 0);
             attr = tval_to_attr[o_ptr->tval % 128];
         }
 
@@ -291,7 +291,7 @@ static void display_equipment(player_type *owner_ptr, const ItemTester& item_tes
 
         if (show_labels) {
             term_putstr(wid - 20, cur_row, -1, TERM_WHITE, " <-- ");
-            prt(mention_use(owner_ptr, i), cur_row, wid - 15);
+            prt(mention_use(player_ptr, i), cur_row, wid - 15);
         }
     }
 
@@ -302,7 +302,7 @@ static void display_equipment(player_type *owner_ptr, const ItemTester& item_tes
 /*!
  * @brief 現在の装備品をサブウィンドウに表示する /
  * Hack -- display equipment in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_equip(player_type *player_ptr)
 {
@@ -322,7 +322,7 @@ void fix_equip(player_type *player_ptr)
 
 /*!
  * @brief 現在のプレイヤーステータスをサブウィンドウに表示する /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * Hack -- display character in sub-windows
  */
 void fix_player(player_type *player_ptr)
@@ -377,7 +377,7 @@ void fix_message(void)
  * @brief 簡易マップをサブウィンドウに表示する /
  * Hack -- display overhead view in sub-windows
  * Adjust for width and split messages
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Note that the "player" symbol does NOT appear on the map.
  */
@@ -428,7 +428,7 @@ static void display_dungeon(player_type *player_ptr)
             map_info(player_ptr, y, x, &a, &c, &ta, &tc);
 
             if (!use_graphics) {
-                if (current_world_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx)
                     a = TERM_DARK;
                 else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;
@@ -443,7 +443,7 @@ static void display_dungeon(player_type *player_ptr)
 
 /*!
  * @brief 自分の周辺のダンジョンの地形をサブウィンドウに表示する / display dungeon view around player in a sub window
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_dungeon(player_type *player_ptr)
 {
@@ -465,7 +465,7 @@ void fix_dungeon(player_type *player_ptr)
 /*!
  * @brief モンスターの思い出をサブウィンドウに表示する /
  * Hack -- display dungeon view in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_monster(player_type *player_ptr)
 {
@@ -489,7 +489,7 @@ void fix_monster(player_type *player_ptr)
 /*!
  * @brief ベースアイテム情報をサブウィンドウに表示する /
  * Hack -- display object recall in sub-windows
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_object(player_type *player_ptr)
 {
@@ -636,7 +636,7 @@ void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
  * @brief サブウィンドウに所持品、装備品リストの表示を行う /
  * Flip "inven" and "equip" in any sub-windows
  */
-void toggle_inventory_equipment(player_type *owner_ptr)
+void toggle_inventory_equipment(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         if (!angband_term[j])
@@ -645,14 +645,14 @@ void toggle_inventory_equipment(player_type *owner_ptr)
         if (window_flag[j] & (PW_INVEN)) {
             window_flag[j] &= ~(PW_INVEN);
             window_flag[j] |= (PW_EQUIP);
-            owner_ptr->window_flags |= (PW_EQUIP);
+            player_ptr->window_flags |= (PW_EQUIP);
             continue;
         }
 
         if (window_flag[j] & PW_EQUIP) {
             window_flag[j] &= ~(PW_EQUIP);
             window_flag[j] |= PW_INVEN;
-            owner_ptr->window_flags |= PW_INVEN;
+            player_ptr->window_flags |= PW_INVEN;
         }
     }
 }

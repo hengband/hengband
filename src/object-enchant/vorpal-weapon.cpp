@@ -68,17 +68,17 @@ static void print_chainsword_noise(object_type *o_ptr)
 
 /*!
  * @brief ヴォーパル武器利用時の処理メインルーチン
- * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param vorpal_cut メッタ斬りにできるかどうか
  * @param vorpal_chance ヴォーパル倍率上昇の機会値
  */
-void process_vorpal_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
+void process_vorpal_attack(player_type *player_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
 {
     if (!vorpal_cut)
         return;
 
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int vorpal_magnification = 2;
     print_chainsword_noise(o_ptr);
     if (o_ptr->name1 == ART_VORPAL_BLADE)

@@ -17,8 +17,8 @@
  *
  * This function assumes that (y,x) is legal (i.e. on the map).
  *
- * Grid (y1,x1) is on the "diagonal" between (subject_ptr->y,subject_ptr->x) and (y,x)
- * Grid (y2,x2) is "adjacent", also between (subject_ptr->y,subject_ptr->x) and (y,x).
+ * Grid (y1,x1) is on the "diagonal" between (player_ptr->y,player_ptr->x) and (y,x)
+ * Grid (y2,x2) is "adjacent", also between (player_ptr->y,player_ptr->x) and (y,x).
  *
  * Note that we are using the "CAVE_XTRA" field for marking grids as
  * "easily viewable".  This bit is cleared at the end of "update_view()".
@@ -27,9 +27,9 @@
  *
  * This function now returns "TRUE" if vision is "blocked" by grid (y,x).
  */
-static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+static bool update_view_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    floor_type *floor_ptr = subject_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g1_c_ptr;
     grid_type *g2_c_ptr;
     g1_c_ptr = &floor_ptr->grid_array[y1][x1];
@@ -70,7 +70,7 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
         return wall;
     }
 
-    if (los(subject_ptr, subject_ptr->y, subject_ptr->x, y, x)) {
+    if (los(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
         cave_view_hack(floor_ptr, y, x);
         return wall;
     }
@@ -96,7 +96,7 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
  *  4c1: Each side aborts as soon as possible
  *  4c2: Each side tells the next strip how far it has to check
  */
-void update_view(player_type *subject_ptr)
+void update_view(player_type *player_ptr)
 {
     // 前回プレイヤーから見えていた座標たちを格納する配列。
     std::vector<Pos2D> points;
@@ -108,7 +108,7 @@ void update_view(player_type *subject_ptr)
 
     int full, over;
 
-    floor_type *floor_ptr = subject_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     POSITION y_max = floor_ptr->height - 1;
     POSITION x_max = floor_ptr->width - 1;
 
@@ -132,8 +132,8 @@ void update_view(player_type *subject_ptr)
     }
 
     floor_ptr->view_n = 0;
-    y = subject_ptr->y;
-    x = subject_ptr->x;
+    y = player_ptr->y;
+    x = player_ptr->x;
     g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->info |= CAVE_XTRA;
     cave_view_hack(floor_ptr, y, x);
@@ -224,7 +224,7 @@ void update_view(player_type *subject_ptr)
             m = MIN(z, y_max - ypn);
             if ((xpn <= x_max) && (n < se)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ypn + d, xpn, ypn + d - 1, xpn - 1, ypn + d - 1, xpn)) {
+                    if (update_view_aux(player_ptr, ypn + d, xpn, ypn + d - 1, xpn - 1, ypn + d - 1, xpn)) {
                         if (n + d >= se)
                             break;
                     } else
@@ -236,7 +236,7 @@ void update_view(player_type *subject_ptr)
 
             if ((xmn >= 0) && (n < sw)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ypn + d, xmn, ypn + d - 1, xmn + 1, ypn + d - 1, xmn)) {
+                    if (update_view_aux(player_ptr, ypn + d, xmn, ypn + d - 1, xmn + 1, ypn + d - 1, xmn)) {
                         if (n + d >= sw)
                             break;
                     } else
@@ -251,7 +251,7 @@ void update_view(player_type *subject_ptr)
             m = MIN(z, ymn);
             if ((xpn <= x_max) && (n < ne)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ymn - d, xpn, ymn - d + 1, xpn - 1, ymn - d + 1, xpn)) {
+                    if (update_view_aux(player_ptr, ymn - d, xpn, ymn - d + 1, xpn - 1, ymn - d + 1, xpn)) {
                         if (n + d >= ne)
                             break;
                     } else
@@ -263,7 +263,7 @@ void update_view(player_type *subject_ptr)
 
             if ((xmn >= 0) && (n < nw)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ymn - d, xmn, ymn - d + 1, xmn + 1, ymn - d + 1, xmn)) {
+                    if (update_view_aux(player_ptr, ymn - d, xmn, ymn - d + 1, xmn + 1, ymn - d + 1, xmn)) {
                         if (n + d >= nw)
                             break;
                     } else
@@ -278,7 +278,7 @@ void update_view(player_type *subject_ptr)
             m = MIN(z, x_max - xpn);
             if ((ypn <= x_max) && (n < es)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ypn, xpn + d, ypn - 1, xpn + d - 1, ypn, xpn + d - 1)) {
+                    if (update_view_aux(player_ptr, ypn, xpn + d, ypn - 1, xpn + d - 1, ypn, xpn + d - 1)) {
                         if (n + d >= es)
                             break;
                     } else
@@ -290,7 +290,7 @@ void update_view(player_type *subject_ptr)
 
             if ((ymn >= 0) && (n < en)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ymn, xpn + d, ymn + 1, xpn + d - 1, ymn, xpn + d - 1)) {
+                    if (update_view_aux(player_ptr, ymn, xpn + d, ymn + 1, xpn + d - 1, ymn, xpn + d - 1)) {
                         if (n + d >= en)
                             break;
                     } else
@@ -305,7 +305,7 @@ void update_view(player_type *subject_ptr)
             m = MIN(z, xmn);
             if ((ypn <= y_max) && (n < ws)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ypn, xmn - d, ypn - 1, xmn - d + 1, ypn, xmn - d + 1)) {
+                    if (update_view_aux(player_ptr, ypn, xmn - d, ypn - 1, xmn - d + 1, ypn, xmn - d + 1)) {
                         if (n + d >= ws)
                             break;
                     } else
@@ -317,7 +317,7 @@ void update_view(player_type *subject_ptr)
 
             if ((ymn >= 0) && (n < wn)) {
                 for (k = n, d = 1; d <= m; d++) {
-                    if (update_view_aux(subject_ptr, ymn, xmn - d, ymn + 1, xmn - d + 1, ymn, xmn - d + 1)) {
+                    if (update_view_aux(player_ptr, ymn, xmn - d, ymn + 1, xmn - d + 1, ymn, xmn - d + 1)) {
                         if (n + d >= wn)
                             break;
                     } else
@@ -349,5 +349,5 @@ void update_view(player_type *subject_ptr)
         cave_redraw_later(floor_ptr, py, px);
     }
 
-    subject_ptr->update |= PU_DELAY_VIS;
+    player_ptr->update |= PU_DELAY_VIS;
 }

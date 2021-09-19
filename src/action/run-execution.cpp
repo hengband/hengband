@@ -49,17 +49,17 @@ static bool find_breakleft;
 /*!
  * @brief ダッシュ移動処理中、移動先のマスが既知の壁かどうかを判定する /
  * Hack -- Check for a "known wall" (see below)
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 想定する移動方向ID
  * @param y 移動元のY座標
  * @param x 移動元のX座標
  * @return 移動先が既知の壁ならばTRUE
  */
-static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSITION x)
+static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
     y += ddy[dir];
     x += ddx[dir];
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds2(floor_ptr, y, x))
         return false;
 
@@ -70,7 +70,7 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
 
     int16_t feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr = &f_info[feat];
-    if (!player_can_enter(creature_ptr, feat, 0))
+    if (!player_can_enter(player_ptr, feat, 0))
         return f_ptr->flags.has_not(FF::DOOR);
 
     if (f_ptr->flags.has(FF::AVOID_RUN) && !ignore_avoid_run)
@@ -85,7 +85,7 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
 /*!
  * @brief ダッシュ処理の導入 /
  * Initialize the running algorithm for a new direction.
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 導入の移動先
  * @details
  * Diagonal Corridor -- allow diaginal entry into corridors.\n
@@ -99,7 +99,7 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
  *       \#x\#                  \@x\#\n
  *       \@\@p.                  p\n
  */
-static void run_init(player_type *creature_ptr, DIRECTION dir)
+static void run_init(player_type *player_ptr, DIRECTION dir)
 {
     find_current = dir;
     find_prevdir = dir;
@@ -109,24 +109,24 @@ static void run_init(player_type *creature_ptr, DIRECTION dir)
     bool deepright = false;
     bool shortright = false;
     bool shortleft = false;
-    creature_ptr->run_py = creature_ptr->y;
-    creature_ptr->run_px = creature_ptr->x;
-    int row = creature_ptr->y + ddy[dir];
-    int col = creature_ptr->x + ddx[dir];
-    ignore_avoid_run = cave_has_flag_bold(creature_ptr->current_floor_ptr, row, col, FF::AVOID_RUN);
+    player_ptr->run_py = player_ptr->y;
+    player_ptr->run_px = player_ptr->x;
+    int row = player_ptr->y + ddy[dir];
+    int col = player_ptr->x + ddx[dir];
+    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, FF::AVOID_RUN);
     int i = chome[dir];
-    if (see_wall(creature_ptr, cycle[i + 1], creature_ptr->y, creature_ptr->x)) {
+    if (see_wall(player_ptr, cycle[i + 1], player_ptr->y, player_ptr->x)) {
         find_breakleft = true;
         shortleft = true;
-    } else if (see_wall(creature_ptr, cycle[i + 1], row, col)) {
+    } else if (see_wall(player_ptr, cycle[i + 1], row, col)) {
         find_breakleft = true;
         deepleft = true;
     }
 
-    if (see_wall(creature_ptr, cycle[i - 1], creature_ptr->y, creature_ptr->x)) {
+    if (see_wall(player_ptr, cycle[i - 1], player_ptr->y, player_ptr->x)) {
         find_breakright = true;
         shortright = true;
-    } else if (see_wall(creature_ptr, cycle[i - 1], row, col)) {
+    } else if (see_wall(player_ptr, cycle[i - 1], row, col)) {
         find_breakright = true;
         deepright = true;
     }
@@ -145,7 +145,7 @@ static void run_init(player_type *creature_ptr, DIRECTION dir)
         return;
     }
 
-    if (!see_wall(creature_ptr, cycle[i], row, col))
+    if (!see_wall(player_ptr, cycle[i], row, col))
         return;
 
     if (shortleft && !shortright) {
@@ -158,25 +158,25 @@ static void run_init(player_type *creature_ptr, DIRECTION dir)
 /*!
  * @brief ダッシュ移動処理中、移動先のマスか未知の地形かどうかを判定する /
  * Hack -- Check for an "unknown corner" (see below)
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 想定する移動方向ID
  * @param y 移動元のY座標
  * @param x 移動元のX座標
  * @return 移動先が未知の地形ならばTRUE
  */
-static bool see_nothing(player_type *creature_ptr, DIRECTION dir, POSITION y, POSITION x)
+static bool see_nothing(player_type *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
     y += ddy[dir];
     x += ddx[dir];
 
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds2(floor_ptr, y, x))
         return true;
 
     if (floor_ptr->grid_array[y][x].is_mark())
         return false;
 
-    if (player_can_see_bold(creature_ptr, y, x))
+    if (player_can_see_bold(player_ptr, y, x))
         return false;
 
     return true;
@@ -185,19 +185,19 @@ static bool see_nothing(player_type *creature_ptr, DIRECTION dir, POSITION y, PO
 /*!
  * @brief ダッシュ移動が継続できるかどうかの判定 /
  * Update the current "run" path
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @return 立ち止まるべき条件が満たされたらTRUE
  * ダッシュ移動が継続できるならばTRUEを返す。
  * Return TRUE if the running should be stopped
  */
-static bool run_test(player_type *creature_ptr)
+static bool run_test(player_type *player_ptr)
 {
     DIRECTION prev_dir = find_prevdir;
     int max = (prev_dir & 0x01) + 1;
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    if ((disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT)) {
-        creature_ptr->dtrap = false;
-        if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE)) {
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_IN_DETECT)) {
+        player_ptr->dtrap = false;
+        if (!(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_UNSAFE)) {
             if (alert_trap_detect) {
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
             }
@@ -213,8 +213,8 @@ static bool run_test(player_type *creature_ptr)
     int option = 0, option2 = 0;
     for (int i = -max; i <= max; i++) {
         DIRECTION new_dir = cycle[chome[prev_dir] + i];
-        int row = creature_ptr->y + ddy[new_dir];
-        int col = creature_ptr->x + ddx[new_dir];
+        int row = player_ptr->y + ddy[new_dir];
+        int col = player_ptr->x + ddx[new_dir];
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[row][col];
         FEAT_IDX feat = g_ptr->get_feat_mimic();
@@ -241,10 +241,10 @@ static bool run_test(player_type *creature_ptr)
                     notice = false;
                 } else if (find_ignore_stairs && f_ptr->flags.has(FF::STAIRS)) {
                     notice = false;
-                } else if (f_ptr->flags.has(FF::LAVA) && (has_immune_fire(creature_ptr) || is_invuln(creature_ptr))) {
+                } else if (f_ptr->flags.has(FF::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
                     notice = false;
                 } else if (f_ptr->flags.has_all_of({FF::WATER, FF::DEEP})
-                    && (creature_ptr->levitation || creature_ptr->can_swim || (calc_inventory_weight(creature_ptr) <= calc_weight_limit(creature_ptr)))) {
+                    && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
                     notice = false;
                 }
             }
@@ -255,7 +255,7 @@ static bool run_test(player_type *creature_ptr)
             inv = false;
         }
 
-        if (!inv && see_wall(creature_ptr, 0, row, col)) {
+        if (!inv && see_wall(player_ptr, 0, row, col)) {
             if (find_openarea) {
                 if (i < 0) {
                     find_breakright = true;
@@ -294,7 +294,7 @@ static bool run_test(player_type *creature_ptr)
 
     if (find_openarea) {
         for (int i = -max; i < 0; i++) {
-            if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x)) {
+            if (!see_wall(player_ptr, cycle[chome[prev_dir] + i], player_ptr->y, player_ptr->x)) {
                 if (find_breakright)
                     return true;
             } else {
@@ -304,7 +304,7 @@ static bool run_test(player_type *creature_ptr)
         }
 
         for (int i = max; i > 0; i--) {
-            if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x)) {
+            if (!see_wall(player_ptr, cycle[chome[prev_dir] + i], player_ptr->y, player_ptr->x)) {
                 if (find_breakleft)
                     return true;
             } else {
@@ -313,7 +313,7 @@ static bool run_test(player_type *creature_ptr)
             }
         }
 
-        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
     }
 
     if (!option)
@@ -322,20 +322,20 @@ static bool run_test(player_type *creature_ptr)
     if (!option2) {
         find_current = option;
         find_prevdir = option;
-        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
     } else if (!find_cut) {
         find_current = option;
         find_prevdir = option2;
-        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
     }
 
-    int row = creature_ptr->y + ddy[option];
-    int col = creature_ptr->x + ddx[option];
-    if (!see_wall(creature_ptr, option, row, col) || !see_wall(creature_ptr, check_dir, row, col)) {
-        if (see_nothing(creature_ptr, option, row, col) && see_nothing(creature_ptr, option2, row, col)) {
+    int row = player_ptr->y + ddy[option];
+    int col = player_ptr->x + ddx[option];
+    if (!see_wall(player_ptr, option, row, col) || !see_wall(player_ptr, check_dir, row, col)) {
+        if (see_nothing(player_ptr, option, row, col) && see_nothing(player_ptr, option2, row, col)) {
             find_current = option;
             find_prevdir = option2;
-            return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+            return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
         }
 
         return true;
@@ -344,47 +344,47 @@ static bool run_test(player_type *creature_ptr)
     if (find_cut) {
         find_current = option2;
         find_prevdir = option2;
-        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
     }
 
     find_current = option;
     find_prevdir = option2;
-    return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+    return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
 }
 
 /*!
  * @brief 継続的なダッシュ処理 /
  * Take one step along the current "run" path
- * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
  */
-void run_step(player_type *creature_ptr, DIRECTION dir)
+void run_step(player_type *player_ptr, DIRECTION dir)
 {
     if (dir) {
         ignore_avoid_run = true;
-        if (see_wall(creature_ptr, dir, creature_ptr->y, creature_ptr->x)) {
+        if (see_wall(player_ptr, dir, player_ptr->y, player_ptr->x)) {
             sound(SOUND_HITWALL);
             msg_print(_("その方向には走れません。", "You cannot run in that direction."));
-            disturb(creature_ptr, false, false);
+            disturb(player_ptr, false, false);
             return;
         }
 
-        run_init(creature_ptr, dir);
+        run_init(player_ptr, dir);
     } else {
-        if (run_test(creature_ptr)) {
-            disturb(creature_ptr, false, false);
+        if (run_test(player_ptr)) {
+            disturb(player_ptr, false, false);
             return;
         }
     }
 
-    if (--creature_ptr->running <= 0)
+    if (--player_ptr->running <= 0)
         return;
 
-    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    exe_movement(creature_ptr, find_current, false, false);
-    if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px)) {
-        creature_ptr->run_py = 0;
-        creature_ptr->run_px = 0;
-        disturb(creature_ptr, false, false);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
+    exe_movement(player_ptr, find_current, false, false);
+    if (player_bold(player_ptr, player_ptr->run_py, player_ptr->run_px)) {
+        player_ptr->run_py = 0;
+        player_ptr->run_px = 0;
+        disturb(player_ptr, false, false);
     }
 }

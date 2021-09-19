@@ -17,30 +17,30 @@
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 
-void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void vary_item(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
     if (item >= 0) {
-        inven_item_increase(owner_ptr, item, num);
-        inven_item_describe(owner_ptr, item);
-        inven_item_optimize(owner_ptr, item);
+        inven_item_increase(player_ptr, item, num);
+        inven_item_describe(player_ptr, item);
+        inven_item_optimize(player_ptr, item);
         return;
     }
 
-    floor_item_increase(owner_ptr, 0 - item, num);
-    floor_item_describe(owner_ptr, 0 - item);
-    floor_item_optimize(owner_ptr, 0 - item);
+    floor_item_increase(player_ptr, 0 - item, num);
+    floor_item_describe(player_ptr, 0 - item);
+    floor_item_optimize(player_ptr, 0 - item);
 }
 
 /*!
  * @brief アイテムを増減させ残り所持数メッセージを表示する /
  * Increase the "number" of an item in the inventory
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
  * @param num 増やしたい量
  */
-void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void inven_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    object_type *o_ptr = &owner_ptr->inventory_list[item];
+    object_type *o_ptr = &player_ptr->inventory_list[item];
     num += o_ptr->number;
     if (num > 255)
         num = 255;
@@ -52,74 +52,74 @@ void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
         return;
 
     o_ptr->number += num;
-    owner_ptr->update |= (PU_BONUS);
-    owner_ptr->update |= (PU_MANA);
-    owner_ptr->update |= (PU_COMBINE);
-    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    player_ptr->update |= (PU_BONUS);
+    player_ptr->update |= (PU_MANA);
+    player_ptr->update |= (PU_COMBINE);
+    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
 
-    if (o_ptr->number || !owner_ptr->ele_attack)
+    if (o_ptr->number || !player_ptr->ele_attack)
         return;
     if (!(item == INVEN_MAIN_HAND) && !(item == INVEN_SUB_HAND))
         return;
-    if (has_melee_weapon(owner_ptr, INVEN_MAIN_HAND + INVEN_SUB_HAND - item))
+    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + INVEN_SUB_HAND - item))
         return;
 
-    set_ele_attack(owner_ptr, 0, 0);
+    set_ele_attack(player_ptr, 0, 0);
 }
 
 /*!
  * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する /
  * Erase an inventory slot if it has no more items
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 消去したいプレイヤーのアイテム所持スロット
  */
-void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
+void inven_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &owner_ptr->inventory_list[item];
+    object_type *o_ptr = &player_ptr->inventory_list[item];
     if (!o_ptr->k_idx)
         return;
     if (o_ptr->number)
         return;
 
     if (item >= INVEN_MAIN_HAND) {
-        owner_ptr->equip_cnt--;
-        (&owner_ptr->inventory_list[item])->wipe();
-        owner_ptr->update |= PU_BONUS;
-        owner_ptr->update |= PU_TORCH;
-        owner_ptr->update |= PU_MANA;
+        player_ptr->equip_cnt--;
+        (&player_ptr->inventory_list[item])->wipe();
+        player_ptr->update |= PU_BONUS;
+        player_ptr->update |= PU_TORCH;
+        player_ptr->update |= PU_MANA;
 
-        owner_ptr->window_flags |= PW_EQUIP;
-        owner_ptr->window_flags |= PW_SPELL;
+        player_ptr->window_flags |= PW_EQUIP;
+        player_ptr->window_flags |= PW_SPELL;
         return;
     }
 
-    owner_ptr->inven_cnt--;
+    player_ptr->inven_cnt--;
     int i;
     for (i = item; i < INVEN_PACK; i++) {
-        owner_ptr->inventory_list[i] = owner_ptr->inventory_list[i + 1];
+        player_ptr->inventory_list[i] = player_ptr->inventory_list[i + 1];
     }
 
-    (&owner_ptr->inventory_list[i])->wipe();
-    owner_ptr->window_flags |= PW_INVEN;
-    owner_ptr->window_flags |= PW_SPELL;
+    (&player_ptr->inventory_list[i])->wipe();
+    player_ptr->window_flags |= PW_INVEN;
+    player_ptr->window_flags |= PW_SPELL;
 }
 
 /*!
  * @brief 所持スロットから床下にオブジェクトを落とすメインルーチン /
  * Drop (some of) a non-cursed inventory/equipment item
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 所持テーブルのID
  * @param amt 落としたい個数
  * @details
  * The object will be dropped "near" the current location
  */
-void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
+void drop_from_inventory(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
     object_type forge;
     object_type *q_ptr;
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
-    o_ptr = &owner_ptr->inventory_list[item];
+    o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0)
         return;
 
@@ -127,8 +127,8 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
         amt = o_ptr->number;
 
     if (item >= INVEN_MAIN_HAND) {
-        item = inven_takeoff(owner_ptr, item, amt);
-        o_ptr = &owner_ptr->inventory_list[item];
+        item = inven_takeoff(player_ptr, item, amt);
+        o_ptr = &player_ptr->inventory_list[item];
     }
 
     q_ptr = &forge;
@@ -136,10 +136,10 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
     distribute_charges(o_ptr, q_ptr, amt);
 
     q_ptr->number = amt;
-    describe_flavor(owner_ptr, o_name, q_ptr, 0);
+    describe_flavor(player_ptr, o_name, q_ptr, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
-    (void)drop_near(owner_ptr, q_ptr, 0, owner_ptr->y, owner_ptr->x);
-    vary_item(owner_ptr, item, -amt);
+    (void)drop_near(player_ptr, q_ptr, 0, player_ptr->y, player_ptr->x);
+    vary_item(player_ptr, item, -amt);
 }
 
 /*!
@@ -148,7 +148,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
  * @details
  * Note special handling of the "overflow" slot
  */
-void combine_pack(player_type *owner_ptr)
+void combine_pack(player_type *player_ptr)
 {
     bool flag = false;
     bool is_first_combination = true;
@@ -159,12 +159,12 @@ void combine_pack(player_type *owner_ptr)
 
         for (int i = INVEN_PACK; i > 0; i--) {
             object_type *o_ptr;
-            o_ptr = &owner_ptr->inventory_list[i];
+            o_ptr = &player_ptr->inventory_list[i];
             if (!o_ptr->k_idx)
                 continue;
             for (int j = 0; j < i; j++) {
                 object_type *j_ptr;
-                j_ptr = &owner_ptr->inventory_list[j];
+                j_ptr = &player_ptr->inventory_list[j];
                 if (!j_ptr->k_idx)
                     continue;
 
@@ -181,13 +181,13 @@ void combine_pack(player_type *owner_ptr)
                 if (o_ptr->number + j_ptr->number <= max_num) {
                     flag = true;
                     object_absorb(j_ptr, o_ptr);
-                    owner_ptr->inven_cnt--;
+                    player_ptr->inven_cnt--;
                     int k;
                     for (k = i; k < INVEN_PACK; k++) {
-                        owner_ptr->inventory_list[k] = owner_ptr->inventory_list[k + 1];
+                        player_ptr->inventory_list[k] = player_ptr->inventory_list[k + 1];
                     }
 
-                    (&owner_ptr->inventory_list[k])->wipe();
+                    (&player_ptr->inventory_list[k])->wipe();
                 } else {
                     int old_num = o_ptr->number;
                     int remain = j_ptr->number + o_ptr->number - max_num;
@@ -203,7 +203,7 @@ void combine_pack(player_type *owner_ptr)
                     }
                 }
 
-                owner_ptr->window_flags |= (PW_INVEN);
+                player_ptr->window_flags |= (PW_INVEN);
                 combined = true;
                 break;
             }
@@ -217,11 +217,11 @@ void combine_pack(player_type *owner_ptr)
 /*!
  * @brief プレイヤーの所持スロットに存在するオブジェクトを並び替える /
  * Reorder items in the pack
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * Note special handling of the "overflow" slot
  */
-void reorder_pack(player_type *owner_ptr)
+void reorder_pack(player_type *player_ptr)
 {
     int i, j, k;
     int32_t o_value;
@@ -231,16 +231,16 @@ void reorder_pack(player_type *owner_ptr)
     bool flag = false;
 
     for (i = 0; i < INVEN_PACK; i++) {
-        if ((i == INVEN_PACK) && (owner_ptr->inven_cnt == INVEN_PACK))
+        if ((i == INVEN_PACK) && (player_ptr->inven_cnt == INVEN_PACK))
             break;
 
-        o_ptr = &owner_ptr->inventory_list[i];
+        o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
         o_value = object_value(o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
+            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j]))
                 break;
         }
 
@@ -249,13 +249,13 @@ void reorder_pack(player_type *owner_ptr)
 
         flag = true;
         q_ptr = &forge;
-        q_ptr->copy_from(&owner_ptr->inventory_list[i]);
+        q_ptr->copy_from(&player_ptr->inventory_list[i]);
         for (k = i; k > j; k--) {
-            (&owner_ptr->inventory_list[k])->copy_from(&owner_ptr->inventory_list[k - 1]);
+            (&player_ptr->inventory_list[k])->copy_from(&player_ptr->inventory_list[k - 1]);
         }
 
-        (&owner_ptr->inventory_list[j])->copy_from(q_ptr);
-        owner_ptr->window_flags |= (PW_INVEN);
+        (&player_ptr->inventory_list[j])->copy_from(q_ptr);
+        player_ptr->window_flags |= (PW_INVEN);
     }
 
     if (flag)
@@ -282,14 +282,14 @@ void reorder_pack(player_type *owner_ptr)
  * Note that this code must remove any location/stack information\n
  * from the object once it is placed into the inventory.\n
  */
-int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
+int16_t store_item_to_inventory(player_type *player_ptr, object_type *o_ptr)
 {
     INVENTORY_IDX i, j, k;
     INVENTORY_IDX n = -1;
 
     object_type *j_ptr;
     for (j = 0; j < INVEN_PACK; j++) {
-        j_ptr = &owner_ptr->inventory_list[j];
+        j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx)
             continue;
 
@@ -297,17 +297,17 @@ int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
         if (object_similar(j_ptr, o_ptr)) {
             object_absorb(j_ptr, o_ptr);
 
-            owner_ptr->update |= (PU_BONUS);
-            owner_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
+            player_ptr->update |= (PU_BONUS);
+            player_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
             return (j);
         }
     }
 
-    if (owner_ptr->inven_cnt > INVEN_PACK)
+    if (player_ptr->inven_cnt > INVEN_PACK)
         return -1;
 
     for (j = 0; j <= INVEN_PACK; j++) {
-        j_ptr = &owner_ptr->inventory_list[j];
+        j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx)
             break;
     }
@@ -316,27 +316,27 @@ int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
     if (i < INVEN_PACK) {
         int32_t o_value = object_value(o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
+            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j]))
                 break;
         }
 
         i = j;
         for (k = n; k >= i; k--) {
-            (&owner_ptr->inventory_list[k + 1])->copy_from(&owner_ptr->inventory_list[k]);
+            (&player_ptr->inventory_list[k + 1])->copy_from(&player_ptr->inventory_list[k]);
         }
 
-        (&owner_ptr->inventory_list[i])->wipe();
+        (&player_ptr->inventory_list[i])->wipe();
     }
 
-    (&owner_ptr->inventory_list[i])->copy_from(o_ptr);
-    j_ptr = &owner_ptr->inventory_list[i];
+    (&player_ptr->inventory_list[i])->copy_from(o_ptr);
+    j_ptr = &player_ptr->inventory_list[i];
     j_ptr->held_m_idx = 0;
     j_ptr->iy = j_ptr->ix = 0;
     j_ptr->marked = OM_TOUCHED;
 
-    owner_ptr->inven_cnt++;
-    owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    owner_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
+    player_ptr->inven_cnt++;
+    player_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
 
     return i;
 }
@@ -344,7 +344,7 @@ int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 /*!
  * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
@@ -368,7 +368,7 @@ bool check_store_item_to_inventory(player_type *player_ptr, const object_type *o
 /*!
  * @brief 装備スロットからオブジェクトを外すメインルーチン /
  * Take off (some of) a non-cursed equipment item
- * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item オブジェクトを外したい所持テーブルのID
  * @param amt 外したい個数
  * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
@@ -378,7 +378,7 @@ bool check_store_item_to_inventory(player_type *player_ptr, const object_type *o
  * to fall to the ground.\n
  * Return the inventory slot into which the item is placed.\n
  */
-INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
+INVENTORY_IDX inven_takeoff(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
     INVENTORY_IDX slot;
     object_type forge;
@@ -386,7 +386,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     object_type *o_ptr;
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
-    o_ptr = &owner_ptr->inventory_list[item];
+    o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0)
         return -1;
 
@@ -395,7 +395,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
-    describe_flavor(owner_ptr, o_name, q_ptr, 0);
+    describe_flavor(player_ptr, o_name, q_ptr, 0);
     if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {
@@ -406,10 +406,10 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
         act = _("を装備からはずした", "You were wearing");
     }
 
-    inven_item_increase(owner_ptr, item, -amt);
-    inven_item_optimize(owner_ptr, item);
+    inven_item_increase(player_ptr, item, -amt);
+    inven_item_optimize(player_ptr, item);
 
-    slot = store_item_to_inventory(owner_ptr, q_ptr);
+    slot = store_item_to_inventory(player_ptr, q_ptr);
 #ifdef JP
     msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
 #else

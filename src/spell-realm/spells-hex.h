@@ -1,21 +1,59 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "realm/realm-hex-numbers.h"
+#include <tuple>
 
+enum class SpellHexRevengeType : byte {
+    NONE = 0,
+    PATIENCE = 1,
+    REVENGE = 2,
+};
+
+struct monap_type;
 struct player_type;
-bool stop_hex_spell_all(player_type *caster_ptr);
-bool stop_hex_spell(player_type *caster_ptr);
-void check_hex(player_type *caster_ptr);
-bool hex_spell_fully(player_type *caster_ptr);
-void revenge_spell(player_type *caster_ptr);
-void revenge_store(player_type *caster_ptr, HIT_POINT dam);
-bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
-bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx);
-bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
-bool hex_spelling(player_type *caster_type, int hex);
-bool hex_spelling_any(player_type *caster_type);
-#define casting_hex_flags(P_PTR) ((P_PTR)->magic_num1[0])
-#define casting_hex_num(P_PTR) ((P_PTR)->magic_num2[0])
-#define hex_revenge_power(P_PTR) ((P_PTR)->magic_num1[2])
-#define hex_revenge_turn(P_PTR) ((P_PTR)->magic_num2[2])
+class SpellHex {
+public:
+    SpellHex() = delete;
+    SpellHex(player_type *player_ptr);
+    SpellHex(player_type *player_ptr, monap_type *monap_ptr);
+    virtual ~SpellHex() = default;
+
+    bool stop_spells_with_selection();
+    void decrease_mana();
+    void stop_all_spells();
+    bool is_casting_full_capacity() const;
+    void continue_revenge();
+    void store_vengeful_damage(HIT_POINT dam);
+    bool check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const;
+    bool is_spelling_specific(int hex) const;
+    bool is_spelling_any() const;
+    void eyes_on_eyes();
+    void thief_teleport();
+    void set_casting_flag(spell_hex_type type);
+    void reset_casting_flag(spell_hex_type type);
+    int32_t get_casting_num() const;
+    int32_t get_revenge_power() const;
+    void set_revenge_power(int32_t power, bool substitution);
+    byte get_revenge_turn() const;
+    void set_revenge_turn(byte power, bool substitution);
+    SpellHexRevengeType get_revenge_type() const;
+    void set_revenge_type(SpellHexRevengeType type);
+
+private:
+    player_type *player_ptr;
+    std::vector<int> casting_spells;
+    monap_type *monap_ptr = nullptr;
+    
+    std::tuple<bool, bool, char> select_spell_stopping(char *out_val);
+    void display_casting_spells_list();
+    bool process_mana_cost(const bool need_restart);
+    bool check_restart();
+    int calc_need_mana();
+    void gain_exp();
+    bool gain_exp_skilled(const int spell);
+    bool gain_exp_expert(const int spell);
+    void gain_exp_master(const int spell);
+};
+
 #define hex_revenge_type(P_PTR) ((P_PTR)->magic_num2[1])

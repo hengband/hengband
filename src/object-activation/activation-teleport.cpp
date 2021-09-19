@@ -11,17 +11,17 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool activate_teleport_away(player_type *user_ptr)
+bool activate_teleport_away(player_type *player_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(user_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    (void)fire_beam(user_ptr, GF_AWAY_ALL, dir, user_ptr->lev);
+    (void)fire_beam(player_ptr, GF_AWAY_ALL, dir, player_ptr->lev);
     return true;
 }
 
-bool activate_escape(player_type *user_ptr)
+bool activate_escape(player_type *player_ptr)
 {
     switch (randint1(13)) {
     case 1:
@@ -29,55 +29,55 @@ bool activate_escape(player_type *user_ptr)
     case 3:
     case 4:
     case 5:
-        teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
+        teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         return true;
     case 6:
     case 7:
     case 8:
     case 9:
     case 10:
-        teleport_player(user_ptr, 222, TELEPORT_SPONTANEOUS);
+        teleport_player(player_ptr, 222, TELEPORT_SPONTANEOUS);
         return true;
     case 11:
     case 12:
-        (void)stair_creation(user_ptr);
+        (void)stair_creation(player_ptr);
         return true;
     default:
         if (!get_check(_("この階を去りますか？", "Leave this level? ")))
             return true;
 
         if (autosave_l)
-            do_cmd_save_game(user_ptr, true);
+            do_cmd_save_game(player_ptr, true);
 
-        user_ptr->leaving = true;
+        player_ptr->leaving = true;
         return true;
     }
 }
 
-bool activate_teleport_level(player_type *user_ptr)
+bool activate_teleport_level(player_type *player_ptr)
 {
     if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
         return false;
 
-    teleport_level(user_ptr, 0);
+    teleport_level(player_ptr, 0);
     return true;
 }
 
-bool activate_dimension_door(player_type *user_ptr)
+bool activate_dimension_door(player_type *player_ptr)
 {
     msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
-    return dimension_door(user_ptr);
+    return dimension_door(player_ptr);
 }
 
-bool activate_teleport(player_type *user_ptr)
+bool activate_teleport(player_type *player_ptr)
 {
     msg_print(_("周りの空間が歪んでいる...", "It twists space around you..."));
-    teleport_player(user_ptr, 100, TELEPORT_SPONTANEOUS);
+    teleport_player(player_ptr, 100, TELEPORT_SPONTANEOUS);
     return true;
 }
 
-bool activate_phase_door(player_type *user_ptr)
+bool activate_phase_door(player_type *player_ptr)
 {
-    teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
+    teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
     return true;
 }

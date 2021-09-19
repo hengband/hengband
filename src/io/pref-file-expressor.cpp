@@ -1,16 +1,16 @@
 ﻿#include "io/pref-file-expressor.h"
 #include "game-option/runtime-arguments.h"
-#include "player/player-class.h"
-#include "player/player-race.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "realm/realm-names-table.h"
-#include "system/system-variables.h"
 #include "system/player-type-definition.h"
+#include "system/system-variables.h"
 #include "util/string-processor.h"
 
 /*!
  * @brief process_pref_fileのサブルーチンとして条件分岐処理の解釈と結果を返す
  * Helper function for "process_pref_file()"
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param sp テキスト文字列の参照ポインタ
  * @param fp 再帰中のポインタ参照
  * @return
@@ -24,7 +24,7 @@
  *   result
  * </pre>
  */
-concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
+concptr process_pref_file_expr(player_type *player_ptr, char **sp, char *fp)
 {
     char *s;
     s = (*sp);
@@ -48,65 +48,65 @@ concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
         s++;
 
         /* First */
-        t = process_pref_file_expr(creature_ptr, &s, &f);
+        t = process_pref_file_expr(player_ptr, &s, &f);
 
         if (!*t) {
         } else if (streq(t, "IOR")) {
             v = "0";
             while (*s && (f != b2)) {
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
                 if (*t && !streq(t, "0"))
                     v = "1";
             }
         } else if (streq(t, "AND")) {
             v = "1";
             while (*s && (f != b2)) {
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
                 if (*t && streq(t, "0"))
                     v = "0";
             }
         } else if (streq(t, "NOT")) {
             v = "1";
             while (*s && (f != b2)) {
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
                 if (*t && streq(t, "1"))
                     v = "0";
             }
         } else if (streq(t, "EQU")) {
             v = "0";
             if (*s && (f != b2)) {
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
             }
             while (*s && (f != b2)) {
-                p = process_pref_file_expr(creature_ptr, &s, &f);
+                p = process_pref_file_expr(player_ptr, &s, &f);
                 if (streq(t, p))
                     v = "1";
             }
         } else if (streq(t, "LEQ")) {
             v = "1";
             if (*s && (f != b2)) {
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
             }
             while (*s && (f != b2)) {
                 p = t;
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
                 if (*t && atoi(p) > atoi(t))
                     v = "0";
             }
         } else if (streq(t, "GEQ")) {
             v = "1";
             if (*s && (f != b2)) {
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
             }
             while (*s && (f != b2)) {
                 p = t;
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
                 if (*t && atoi(p) < atoi(t))
                     v = "0";
             }
         } else {
             while (*s && (f != b2)) {
-                t = process_pref_file_expr(creature_ptr, &s, &f);
+                t = process_pref_file_expr(player_ptr, &s, &f);
             }
         }
 
@@ -169,7 +169,7 @@ concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
     } else if (streq(b + 1, "PLAYER")) {
         static char tmp_player_name[32];
         char *pn, *tpn;
-        for (pn = creature_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++) {
+        for (pn = player_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++) {
 #ifdef JP
             if (iskanji(*pn)) {
                 *(tpn++) = *(pn++);
@@ -184,26 +184,26 @@ concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
         v = tmp_player_name;
     } else if (streq(b + 1, "REALM1")) {
 #ifdef JP
-        v = E_realm_names[creature_ptr->realm1];
+        v = E_realm_names[player_ptr->realm1];
 #else
-        v = realm_names[creature_ptr->realm1];
+        v = realm_names[player_ptr->realm1];
 #endif
     } else if (streq(b + 1, "REALM2")) {
 #ifdef JP
-        v = E_realm_names[creature_ptr->realm2];
+        v = E_realm_names[player_ptr->realm2];
 #else
-        v = realm_names[creature_ptr->realm2];
+        v = realm_names[player_ptr->realm2];
 #endif
     } else if (streq(b + 1, "LEVEL")) {
-        sprintf(tmp, "%02d", creature_ptr->lev);
+        sprintf(tmp, "%02d", player_ptr->lev);
         v = tmp;
     } else if (streq(b + 1, "AUTOREGISTER")) {
-        if (creature_ptr->autopick_autoregister)
+        if (player_ptr->autopick_autoregister)
             v = "1";
         else
             v = "0";
     } else if (streq(b + 1, "MONEY")) {
-        sprintf(tmp, "%09ld", (long int)creature_ptr->au);
+        sprintf(tmp, "%09ld", (long int)player_ptr->au);
         v = tmp;
     }
 

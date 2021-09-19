@@ -14,5 +14,5 @@ typedef struct msr_type {
 } msr_type;
 
 struct player_type;
-msr_type *initialize_msr_type(player_type *target_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<RF_ABILITY> &ability_flags);
+msr_type *initialize_msr_type(player_type *player_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<RF_ABILITY> &ability_flags);
 bool int_outof(monster_race *r_ptr, PERCENTAGE prob);

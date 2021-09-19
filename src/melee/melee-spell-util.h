@@ -34,4 +34,4 @@ typedef struct melee_spell_type {
 } melee_spell_type;
 
 struct player_type;
-melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx);
+melee_spell_type *initialize_melee_spell_type(player_type *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx);

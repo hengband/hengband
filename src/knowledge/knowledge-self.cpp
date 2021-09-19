@@ -13,7 +13,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "player-info/alignment.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
 #include "store/store-util.h"
@@ -30,35 +30,35 @@
 /*
  * List virtues & status
  */
-void do_cmd_knowledge_virtues(player_type *creature_ptr)
+void do_cmd_knowledge_virtues(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    std::string alg = PlayerAlignment(creature_ptr).get_alignment_description();
+    std::string alg = PlayerAlignment(player_ptr).get_alignment_description();
     fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.c_str());
-    dump_virtues(creature_ptr, fff);
+    dump_virtues(player_ptr, fff);
     angband_fclose(fff);
-    (void)show_file(creature_ptr, true, file_name, _("八つの徳", "Virtues"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("八つの徳", "Virtues"), 0, 0);
     fd_kill(file_name);
 }
 
 /*!
  * @brief 自分に関する情報を画面に表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_yourself(player_type *creature_ptr, FILE *fff)
+static void dump_yourself(player_type *player_ptr, FILE *fff)
 {
     if (!fff)
         return;
 
     char temp[80 * 10];
-    shape_buffer(race_explanations[enum2i(creature_ptr->prace)], 78, temp, sizeof(temp));
+    shape_buffer(race_explanations[enum2i(player_ptr->prace)], 78, temp, sizeof(temp));
     fprintf(fff, "\n\n");
-    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(creature_ptr->prace)].title);
+    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(player_ptr->prace)].title);
     concptr t = temp;
 
     for (int i = 0; i < 10; i++) {
@@ -68,9 +68,9 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    shape_buffer(class_explanations[creature_ptr->pclass], 78, temp, sizeof(temp));
+    shape_buffer(class_explanations[player_ptr->pclass], 78, temp, sizeof(temp));
     fprintf(fff, "\n");
-    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[creature_ptr->pclass].title);
+    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[player_ptr->pclass].title);
 
     t = temp;
     for (int i = 0; i < 10; i++) {
@@ -80,9 +80,9 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    shape_buffer(personality_explanations[creature_ptr->pseikaku], 78, temp, sizeof(temp));
+    shape_buffer(personality_explanations[player_ptr->pseikaku], 78, temp, sizeof(temp));
     fprintf(fff, "\n");
-    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[creature_ptr->pseikaku].title);
+    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->pseikaku].title);
 
     t = temp;
     for (int i = 0; i < A_MAX; i++) {
@@ -93,9 +93,9 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
     }
 
     fprintf(fff, "\n");
-    if (creature_ptr->realm1) {
-        shape_buffer(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
-        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
+    if (player_ptr->realm1) {
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1], 78, temp, sizeof(temp));
+        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm1]);
 
         t = temp;
         for (int i = 0; i < A_MAX; i++) {
@@ -108,9 +108,9 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
     }
 
     fprintf(fff, "\n");
-    if (creature_ptr->realm2) {
-        shape_buffer(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 78, temp, sizeof(temp));
-        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm2]);
+    if (player_ptr->realm2) {
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1], 78, temp, sizeof(temp));
+        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm2]);
 
         t = temp;
         for (int i = 0; i < A_MAX; i++) {
@@ -129,7 +129,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
  */
 static void dump_winner_classes(FILE *fff)
 {
-    int n = current_world_ptr->sf_winner.count();
+    int n = w_ptr->sf_winner.count();
     concptr ss = n > 1 ? _("", "s") : "";
     fprintf(fff, _("*勝利*済みの職業%s : %d\n", "Class of *Winner%s* : %d\n"), ss, n);
     if (n == 0)
@@ -139,13 +139,13 @@ static void dump_winner_classes(FILE *fff)
     std::string s = "";
     std::string l = "";
     for (int c = 0; c < MAX_CLASS; c++) {
-        if (current_world_ptr->sf_winner.has_not(static_cast<player_class_type>(c)))
+        if (w_ptr->sf_winner.has_not(i2enum<player_class_type>(c)))
             continue;
 
         auto &cl = class_info[c];
         auto t = std::string(cl.title);
 
-        if (current_world_ptr->sf_retired.has_not(static_cast<player_class_type>(c)))
+        if (w_ptr->sf_retired.has_not(i2enum<player_class_type>(c)))
             t = "(" + t + ")";
 
         if (l.size() + t.size() + 2 > max_len) {
@@ -165,7 +165,7 @@ static void dump_winner_classes(FILE *fff)
  * List virtues & status
  *
  */
-void do_cmd_knowledge_stat(player_type *creature_ptr)
+void do_cmd_knowledge_stat(player_type *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -173,43 +173,43 @@ void do_cmd_knowledge_stat(player_type *creature_ptr)
         return;
 
     update_playtime();
-    uint32_t play_time = current_world_ptr->play_time;
-    uint32_t all_time = current_world_ptr->sf_play_time + play_time;
+    uint32_t play_time = w_ptr->play_time;
+    uint32_t all_time = w_ptr->sf_play_time + play_time;
     fprintf(fff, _("現在のプレイ時間 : %d:%02d:%02d\n", "Current Play Time is %d:%02d:%02d\n"), play_time / (60 * 60), (play_time / 60) % 60, play_time % 60);
     fprintf(fff, _("合計のプレイ時間 : %d:%02d:%02d\n", "  Total play Time is %d:%02d:%02d\n"), all_time / (60 * 60), (all_time / 60) % 60, all_time % 60);
     fputs("\n", fff);
 
     int percent
-        = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
+        = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
 
-    if (creature_ptr->knowledge & KNOW_HPRATE)
+    if (player_ptr->knowledge & KNOW_HPRATE)
         fprintf(fff, _("現在の体力ランク : %d/100\n\n", "Your current Life Rating is %d/100.\n\n"), percent);
     else
         fprintf(fff, _("現在の体力ランク : ???\n\n", "Your current Life Rating is ???.\n\n"));
 
     fprintf(fff, _("能力の最大値\n\n", "Limits of maximum stats\n\n"));
     for (int v_nr = 0; v_nr < A_MAX; v_nr++) {
-        if ((creature_ptr->knowledge & KNOW_STAT) || creature_ptr->stat_max[v_nr] == creature_ptr->stat_max_max[v_nr])
-            fprintf(fff, "%s 18/%d\n", stat_names[v_nr], creature_ptr->stat_max_max[v_nr] - 18);
+        if ((player_ptr->knowledge & KNOW_STAT) || player_ptr->stat_max[v_nr] == player_ptr->stat_max_max[v_nr])
+            fprintf(fff, "%s 18/%d\n", stat_names[v_nr], player_ptr->stat_max_max[v_nr] - 18);
         else
             fprintf(fff, "%s ???\n", stat_names[v_nr]);
     }
 
-    dump_yourself(creature_ptr, fff);
+    dump_yourself(player_ptr, fff);
     dump_winner_classes(fff);
     angband_fclose(fff);
 
-    (void)show_file(creature_ptr, true, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
     fd_kill(file_name);
 }
 
 /*
  * List my home
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void do_cmd_knowledge_home(player_type *player_ptr)
 {
-    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
 
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

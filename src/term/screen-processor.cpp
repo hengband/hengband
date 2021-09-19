@@ -34,7 +34,7 @@ void screen_save()
 
     term_save();
 
-    current_world_ptr->character_icky_depth++;
+    w_ptr->character_icky_depth++;
     screen_depth++;
 }
 
@@ -50,13 +50,13 @@ void screen_load(SCREEN_LOAD_OPT opt)
     switch (opt) {
     case SCREEN_LOAD_OPT::ONE:
         term_load(false);
-        current_world_ptr->character_icky_depth--;
+        w_ptr->character_icky_depth--;
         screen_depth--;
         break;
 
     case SCREEN_LOAD_OPT::ALL:
         term_load(true);
-        current_world_ptr->character_icky_depth -= static_cast<byte>(screen_depth);
+        w_ptr->character_icky_depth -= static_cast<byte>(screen_depth);
         screen_depth = 0;
         break;
 

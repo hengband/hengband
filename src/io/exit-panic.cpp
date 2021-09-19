@@ -18,25 +18,25 @@
 
 /*!
  * @brief Handle abrupt death of the visual system
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return なし
  * @details
  * This routine is called only in very rare situations, and only
  * by certain visual systems, when they experience fatal errors.
  */
-void exit_game_panic(player_type *creature_ptr)
+void exit_game_panic(player_type *player_ptr)
 {
-	if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
+	if (!w_ptr->character_generated || w_ptr->character_saved)
 		quit(_("緊急事態", "panic"));
 	msg_flag = false;
 
 	prt("", 0, 0);
-	disturb(creature_ptr, true, true);
-	if (creature_ptr->chp < 0) creature_ptr->is_dead = false;
+	disturb(player_ptr, true, true);
+	if (player_ptr->chp < 0) player_ptr->is_dead = false;
 
-	creature_ptr->panic_save = 1;
+	player_ptr->panic_save = 1;
 	signals_ignore_tstp();
-	(void)strcpy(creature_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
-	if (!save_player(creature_ptr, SAVE_TYPE_CLOSE_GAME)) quit(_("緊急セーブ失敗！", "panic save failed!"));
+	(void)strcpy(player_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
+	if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) quit(_("緊急セーブ失敗！", "panic save failed!"));
 	quit(_("緊急セーブ成功！", "panic save succeeded!"));
 }

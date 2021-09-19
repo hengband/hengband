@@ -21,7 +21,7 @@
 /*!
  * @brief モンスターの思い出を見るコマンドのメインルーチン
  * Identify a character, allow recall of monsters
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  * <pre>
  * Several "special" responses recall "multiple" monsters:
@@ -34,7 +34,7 @@
  * Note that the player ghosts are ignored.
  * </pre>
  */
-void do_cmd_query_symbol(player_type *creature_ptr)
+void do_cmd_query_symbol(player_type *player_ptr)
 {
     MONRACE_IDX i;
     int n;
@@ -149,7 +149,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     query = inkey();
     prt(buf, 0, 0);
     why = 2;
-    ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     if (query == 'k') {
         why = 4;
         query = 'y';
@@ -161,18 +161,18 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     }
 
     if (why == 4) {
-        ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     }
 
     i = n - 1;
     while (true) {
         r_idx = who[i];
-        monster_race_track(creature_ptr, r_idx);
-        handle_stuff(creature_ptr);
+        monster_race_track(player_ptr, r_idx);
+        handle_stuff(player_ptr);
         while (true) {
             if (recall) {
                 screen_save();
-                screen_roff(creature_ptr, who[i], MONSTER_LORE_NORMAL);
+                screen_roff(player_ptr, who[i], MONSTER_LORE_NORMAL);
             }
 
             roff_top(r_idx);

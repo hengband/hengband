@@ -50,14 +50,14 @@
 
 /*
  * @brief コンストラクタ
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx ダメージを与えたモンスターのID
  * @param dam 与えたダメージ量
  * @param fear ダメージによってモンスターが恐慌状態に陥ったならばtrue
  * @param note モンスターが倒された際の特別なメッセージ述語
  */
-MonsterDamageProcessor::MonsterDamageProcessor(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear)
-    : target_ptr(target_ptr)
+MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear)
+    : player_ptr(player_ptr)
     , m_idx(m_idx)
     , dam(dam)
     , fear(fear)
@@ -70,7 +70,7 @@ MonsterDamageProcessor::MonsterDamageProcessor(player_type *target_ptr, MONSTER_
  */
 bool MonsterDamageProcessor::mon_take_hit(concptr note)
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     monster_type exp_mon;
     (void)COPY(&exp_mon, m_ptr, monster_type);
 
@@ -87,7 +87,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
     }
 
-    if (current_world_ptr->wizard) {
+    if (w_ptr->wizard) {
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
     }
 
@@ -101,15 +101,15 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
 
 bool MonsterDamageProcessor::genocide_chaos_patron()
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     if (!monster_is_valid(m_ptr)) {
         this->m_idx = 0;
     }
 
     this->set_redraw();
-    (void)set_monster_csleep(this->target_ptr, this->m_idx, 0);
-    if (this->target_ptr->special_defense & NINJA_S_STEALTH) {
-        set_superstealth(this->target_ptr, false);
+    (void)set_monster_csleep(this->player_ptr, this->m_idx, 0);
+    if (this->player_ptr->special_defense & NINJA_S_STEALTH) {
+        set_superstealth(this->player_ptr, false);
     }
 
     return this->m_idx == 0;
@@ -117,7 +117,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
 
 bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type *exp_mon)
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->hp >= 0) {
         return false;
@@ -130,21 +130,21 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
 
     this->increase_kill_numbers();
     GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
+    monster_desc(this->player_ptr, m_name, m_ptr, MD_TRUE_NAME);
     this->death_amberites(m_name);
     this->dying_scream(m_name);
-    AvatarChanger ac(target_ptr, m_ptr);
+    AvatarChanger ac(player_ptr, m_ptr);
     ac.change_virtue();
     if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
         char note_buf[160];
         sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
-        exe_write_diary(this->target_ptr, DIARY_UNIQUE, 0, note_buf);
+        exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, note_buf);
     }
 
     sound(SOUND_KILL);
     this->show_kill_message(note, m_name);
     this->show_bounty_message(m_name);
-    monster_death(this->target_ptr, this->m_idx, true);
+    monster_death(this->player_ptr, this->m_idx, true);
     this->summon_special_unique();
     this->get_exp_from_mon(exp_mon, exp_mon->max_maxhp * 2);
     *this->fear = false;
@@ -157,7 +157,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
  */
 void MonsterDamageProcessor::death_special_flag_monster()
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto r_idx = m_ptr->r_idx;
     auto *r_ptr = &r_info[r_idx];
     if (any_bits(r_info[r_idx].flags7, RF7_TANUKI)) {
@@ -279,9 +279,9 @@ void MonsterDamageProcessor::death_combined_uniques(const monster_race_type r_id
 
 void MonsterDamageProcessor::increase_kill_numbers()
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (((m_ptr->ml == 0) || this->target_ptr->image) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (((m_ptr->ml == 0) || this->player_ptr->image) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
         return;
     }
 
@@ -297,12 +297,12 @@ void MonsterDamageProcessor::increase_kill_numbers()
         r_ptr->r_tkills++;
     }
 
-    monster_race_track(this->target_ptr, m_ptr->ap_r_idx);
+    monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
 }
 
 void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (none_bits(r_ptr->flags3, RF3_AMBERITE) || one_in_(2)) {
         return;
@@ -312,15 +312,15 @@ void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
     auto stop_ty = false;
     auto count = 0;
     msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
-    curse_equipment(this->target_ptr, 100, 50);
+    curse_equipment(this->player_ptr, 100, 50);
     do {
-        stop_ty = activate_ty_curse(this->target_ptr, stop_ty, &count);
+        stop_ty = activate_ty_curse(this->player_ptr, stop_ty, &count);
     } while (--curses);
 }
 
 void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (none_bits(r_ptr->flags2, RF2_CAN_SPEAK)) {
         return;
@@ -333,14 +333,14 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
 
 #ifdef WORLD_SCORE
     if (m_ptr->r_idx == MON_SERPENT) {
-        screen_dump = make_screen_dump(this->target_ptr);
+        screen_dump = make_screen_dump(this->player_ptr);
     }
 #endif
 }
 
 void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
 {
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (note != nullptr) {
@@ -349,14 +349,14 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
     }
 
     if (!m_ptr->ml) {
-        auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have killed %s.")
+        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have killed %s.")
                                                 : _("%sを殺した。", "You have killed %s.");
         msg_format(mes, m_name);
         return;
     }
 
     if (monster_living(m_ptr->r_idx)) {
-        auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slain %s.")
+        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slain %s.")
                                                 : _("%sを殺した。", "You have slain %s.");
         msg_format(mes, m_name);
         return;
@@ -374,14 +374,14 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
         return;
     }
 
-    auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
+    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
                                             : _("%sを殺した。", "You have destroyed %s.");
     msg_format(mes, m_name);
 }
 
 void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
 {
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (none_bits(r_ptr->flags1, RF1_UNIQUE) || m_ptr->mflag2.has(MFLAG2::CLONED) || vanilla_town) {
@@ -389,7 +389,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
     }
 
     for (auto i = 0; i < MAX_BOUNTY; i++) {
-        if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
+        if ((w_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
             msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
             break;
         }
@@ -411,7 +411,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
 void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp_dam)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_is_valid(m_ptr) || is_pet(m_ptr) || this->target_ptr->phase_out) {
+    if (!monster_is_valid(m_ptr) || is_pet(m_ptr) || this->player_ptr->phase_out) {
         return;
     }
 
@@ -423,14 +423,14 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp
     auto new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * exp_dam;
     auto new_exp_frac = 0U;
     auto div_h = 0;
-    auto div_l = (uint)((this->target_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed));
+    auto div_l = (uint)((this->player_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed));
 
     /* Use (average maxhp * 2) as a denominator */
     auto compensation = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
-    if (!this->target_ptr->current_floor_ptr->dun_level && (none_bits(r_ptr->flags8, RF8_WILD_ONLY) || none_bits(r_ptr->flags1, RF1_UNIQUE))) {
+    if (!this->player_ptr->current_floor_ptr->dun_level && (none_bits(r_ptr->flags8, RF8_WILD_ONLY) || none_bits(r_ptr->flags1, RF1_UNIQUE))) {
         s64b_mul(&div_h, &div_l, 0, 5);
     }
 
@@ -465,17 +465,17 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp
     }
 
     s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
-    gain_exp_64(this->target_ptr, new_exp, new_exp_frac);
+    gain_exp_64(this->player_ptr, new_exp, new_exp_frac);
 }
 
 void MonsterDamageProcessor::set_redraw()
 {
-    if (this->target_ptr->health_who == this->m_idx) {
-        this->target_ptr->redraw |= PR_HEALTH;
+    if (this->player_ptr->health_who == this->m_idx) {
+        this->player_ptr->redraw |= PR_HEALTH;
     }
 
-    if (this->target_ptr->riding == this->m_idx) {
-        this->target_ptr->redraw |= PR_UHEALTH;
+    if (this->player_ptr->riding == this->m_idx) {
+        this->player_ptr->redraw |= PR_UHEALTH;
     }
 }
 
@@ -485,11 +485,11 @@ void MonsterDamageProcessor::set_redraw()
  */
 void MonsterDamageProcessor::summon_special_unique()
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     bool is_special_summon = m_ptr->r_idx == MON_IKETA;
     is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
-    if (!is_special_summon || this->target_ptr->current_floor_ptr->inside_arena || this->target_ptr->phase_out) {
-        delete_monster_idx(this->target_ptr, this->m_idx);
+    if (!is_special_summon || this->player_ptr->current_floor_ptr->inside_arena || this->player_ptr->phase_out) {
+        delete_monster_idx(this->player_ptr, this->m_idx);
         return;
     }
 
@@ -517,18 +517,18 @@ void MonsterDamageProcessor::summon_special_unique()
         break;
     }
 
-    delete_monster_idx(this->target_ptr, this->m_idx);
-    if (summon_named_creature(this->target_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode)) {
+    delete_monster_idx(this->player_ptr, this->m_idx);
+    if (summon_named_creature(this->player_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode)) {
         msg_print(mes);
     }
 }
 
 void MonsterDamageProcessor::add_monster_fear()
 {
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     if (monster_fear_remaining(m_ptr) && (this->dam > 0)) {
         auto fear_remining = monster_fear_remaining(m_ptr) - randint1(this->dam);
-        if (set_monster_monfear(this->target_ptr, this->m_idx, fear_remining)) {
+        if (set_monster_monfear(this->player_ptr, this->m_idx, fear_remining)) {
             *this->fear = false;
         }
     }
@@ -546,5 +546,5 @@ void MonsterDamageProcessor::add_monster_fear()
     *this->fear = true;
     auto fear_condition = (this->dam >= m_ptr->hp) && (percentage > 7);
     auto fear_value = randint1(10) + (fear_condition ? 20 : (11 - percentage) * 5);
-    (void)set_monster_monfear(this->target_ptr, this->m_idx, fear_value);
+    (void)set_monster_monfear(this->player_ptr, this->m_idx, fear_value);
 }

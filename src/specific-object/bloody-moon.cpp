@@ -23,13 +23,13 @@ void get_bloody_moon_flags(object_type *o_ptr)
     for (int i = 0; i < dummy; i++) {
         int flag = randint0(26);
         if (flag >= 20)
-            add_flag(o_ptr->art_flags, TR_KILL_UNDEAD + flag - 20);
+            o_ptr->art_flags.set(i2enum<tr_type>(TR_KILL_UNDEAD + flag - 20));
         else if (flag == 19)
-            add_flag(o_ptr->art_flags, TR_KILL_ANIMAL);
+            o_ptr->art_flags.set(TR_KILL_ANIMAL);
         else if (flag == 18)
-            add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
+            o_ptr->art_flags.set(TR_SLAY_HUMAN);
         else
-            add_flag(o_ptr->art_flags, TR_CHAOTIC + flag);
+            o_ptr->art_flags.set(i2enum<tr_type>(TR_CHAOTIC + flag));
     }
 
     dummy = randint1(2);
@@ -39,28 +39,28 @@ void get_bloody_moon_flags(object_type *o_ptr)
     for (int i = 0; i < 2; i++) {
         int tmp = randint0(11);
         if (tmp < A_MAX)
-            add_flag(o_ptr->art_flags, TR_STR + tmp);
+            o_ptr->art_flags.set(i2enum<tr_type>(TR_STR + tmp));
         else
-            add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
+            o_ptr->art_flags.set(i2enum<tr_type>(TR_STEALTH + tmp - 6));
     }
 }
 
 /*!
  * @brief Let's dance a RONDO!!
- * @param user_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ブラッディ・ムーンへの参照ポインタ
  * @return オブジェクト情報に異常がない限りTRUE
  */
-bool activate_bloody_moon(player_type *user_ptr, object_type *o_ptr)
+bool activate_bloody_moon(player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_BLOOD)
         return false;
 
     msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
     get_bloody_moon_flags(o_ptr);
-    if (user_ptr->prace == player_race_type::ANDROID)
-        calc_android_exp(user_ptr);
+    if (player_ptr->prace == player_race_type::ANDROID)
+        calc_android_exp(player_ptr);
 
-    user_ptr->update |= PU_BONUS | PU_HP;
+    player_ptr->update |= PU_BONUS | PU_HP;
     return true;
 }

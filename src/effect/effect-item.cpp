@@ -30,7 +30,7 @@
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
@@ -39,12 +39,12 @@
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+bool affect_item(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
-    grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     bool is_item_affected = false;
-    bool known = player_has_los_bold(caster_ptr, y, x);
+    bool known = player_has_los_bold(player_ptr, y, x);
     who = who ? who : 0;
     dam = (dam + r) / (r + 1);
     std::set<OBJECT_IDX> processed_list;
@@ -56,7 +56,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 
         processed_list.insert(this_o_idx);
 
-        object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
+        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         bool ignore = false;
         bool do_kill = false;
         concptr note_kill = nullptr;
@@ -72,7 +72,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (BreakerAcid().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
-                if (has_flag(flags, TR_IGNORE_ACID))
+                if (flags.has(TR_IGNORE_ACID))
                     ignore = true;
             }
 
@@ -82,7 +82,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (BreakerElec().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-                if (has_flag(flags, TR_IGNORE_ELEC))
+                if (flags.has(TR_IGNORE_ELEC))
                     ignore = true;
             }
 
@@ -92,7 +92,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (BreakerFire().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (has_flag(flags, TR_IGNORE_FIRE))
+                if (flags.has(TR_IGNORE_FIRE))
                     ignore = true;
             }
 
@@ -102,7 +102,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (BreakerCold().hates(o_ptr)) {
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
                 do_kill = true;
-                if (has_flag(flags, TR_IGNORE_COLD))
+                if (flags.has(TR_IGNORE_COLD))
                     ignore = true;
             }
 
@@ -112,7 +112,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (BreakerFire().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (has_flag(flags, TR_IGNORE_FIRE))
+                if (flags.has(TR_IGNORE_FIRE))
                     ignore = true;
             }
 
@@ -120,7 +120,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
                 ignore = false;
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-                if (has_flag(flags, TR_IGNORE_ELEC))
+                if (flags.has(TR_IGNORE_ELEC))
                     ignore = true;
             }
 
@@ -130,7 +130,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (BreakerFire().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (has_flag(flags, TR_IGNORE_FIRE))
+                if (flags.has(TR_IGNORE_FIRE))
                     ignore = true;
             }
 
@@ -138,7 +138,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
                 ignore = false;
                 do_kill = true;
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-                if (has_flag(flags, TR_IGNORE_COLD))
+                if (flags.has(TR_IGNORE_COLD))
                     ignore = true;
             }
 
@@ -170,7 +170,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         case GF_CHAOS: {
             do_kill = true;
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-            if (has_flag(flags, TR_RES_CHAOS))
+            if (flags.has(TR_RES_CHAOS))
                 ignore = true;
             else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS))
                 ignore = true;
@@ -191,8 +191,8 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             break;
         }
         case GF_IDENTIFY: {
-            identify_item(caster_ptr, o_ptr);
-            autopick_alter_item(caster_ptr, (-this_o_idx), false);
+            identify_item(player_ptr, o_ptr);
+            autopick_alter_item(player_ptr, (-this_o_idx), false);
             break;
         }
         case GF_KILL_TRAP:
@@ -216,7 +216,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
                 break;
 
             BIT_FLAGS mode = 0L;
-            if (!who || is_pet(&caster_ptr->current_floor_ptr->m_list[who]))
+            if (!who || is_pet(&player_ptr->current_floor_ptr->m_list[who]))
                 mode |= PM_FORCE_PET;
 
             for (int i = 0; i < o_ptr->number; i++) {
@@ -226,7 +226,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
                     }
 
                     continue;
-                } else if (summon_named_creature(caster_ptr, who, y, x, o_ptr->pval, mode)) {
+                } else if (summon_named_creature(player_ptr, who, y, x, o_ptr->pval, mode)) {
                     note_kill = _("生き返った。", " revived.");
                 } else if (!note_kill) {
                     note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
@@ -245,7 +245,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         GAME_TEXT o_name[MAX_NLEN];
         if (known && (o_ptr->marked & OM_FOUND)) {
             is_item_affected = true;
-            describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 
         if ((is_artifact || ignore)) {
@@ -260,16 +260,16 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 
         KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
         bool is_potion = o_ptr->is_potion();
-        delete_object_idx(caster_ptr, this_o_idx);
+        delete_object_idx(player_ptr, this_o_idx);
         if (is_potion) {
-            (void)potion_smash_effect(caster_ptr, who, y, x, k_idx);
+            (void)potion_smash_effect(player_ptr, who, y, x, k_idx);
 
             // 薬の破壊効果によりリストの次のアイテムが破壊された可能性があるのでリストの最初から処理をやり直す
             // 処理済みのアイテムは processed_list に登録されており、スキップされる
             it = g_ptr->o_idx_list.begin();
         }
 
-        lite_spot(caster_ptr, y, x);
+        lite_spot(player_ptr, y, x);
     }
 
     return is_item_affected;

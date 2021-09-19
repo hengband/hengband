@@ -4,10 +4,10 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "hpmp/hp-mp-processor.h"
+#include "player-base/player-class.h"
+#include "player-info/race-info.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
-#include "player/player-race.h"
-#include "player/player-realm.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-genocide.h"
@@ -30,20 +30,20 @@
 
 /*!
  * @brief 暗黒領域魔法の各処理を行う
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
-concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
     bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
     bool info = (mode == SPELL_INFO) ? true : false;
     bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
     case 0:
@@ -59,7 +59,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_radius(rad);
 
             if (cast) {
-                detect_monsters_nonliving(caster_ptr, rad);
+                detect_monsters_nonliving(player_ptr, rad);
             }
         }
         break;
@@ -80,7 +80,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
                 /*
@@ -91,20 +91,20 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                  * travel to the monster.
                  */
 
-                fire_ball(caster_ptr, GF_HELL_FIRE, dir, damroll(dice, sides), rad);
+                fire_ball(player_ptr, GF_HELL_FIRE, dir, damroll(dice, sides), rad);
 
                 if (one_in_(5)) {
                     /* Special effect first */
                     int effect = randint1(1000);
 
                     if (effect == 666)
-                        fire_ball_hide(caster_ptr, GF_DEATH_RAY, dir, plev * 200, 0);
+                        fire_ball_hide(player_ptr, GF_DEATH_RAY, dir, plev * 200, 0);
                     else if (effect < 500)
-                        fire_ball_hide(caster_ptr, GF_TURN_ALL, dir, plev, 0);
+                        fire_ball_hide(player_ptr, GF_TURN_ALL, dir, plev, 0);
                     else if (effect < 800)
-                        fire_ball_hide(caster_ptr, GF_OLD_CONF, dir, plev, 0);
+                        fire_ball_hide(player_ptr, GF_OLD_CONF, dir, plev, 0);
                     else
-                        fire_ball_hide(caster_ptr, GF_STUN, dir, plev, 0);
+                        fire_ball_hide(player_ptr, GF_STUN, dir, plev, 0);
                 }
             }
         }
@@ -123,7 +123,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_radius(rad);
 
             if (cast) {
-                detect_monsters_evil(caster_ptr, rad);
+                detect_monsters_evil(player_ptr, rad);
             }
         }
         break;
@@ -142,10 +142,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_POIS, dir, dam, rad);
+                fire_ball(player_ptr, GF_POIS, dir, dam, rad);
             }
         }
         break;
@@ -163,10 +163,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                sleep_monster(caster_ptr, dir, plev);
+                sleep_monster(player_ptr, dir, plev);
             }
         }
         break;
@@ -185,7 +185,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_pois(caster_ptr, randint1(base) + base, false);
+                set_oppose_pois(player_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -203,11 +203,11 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fear_monster(caster_ptr, dir, plev);
-                stun_monster(caster_ptr, dir, plev);
+                fear_monster(player_ptr, dir, plev);
+                stun_monster(player_ptr, dir, plev);
             }
         }
         break;
@@ -225,10 +225,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                control_one_undead(caster_ptr, dir, plev);
+                control_one_undead(player_ptr, dir, plev);
             }
         }
         break;
@@ -245,7 +245,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
 
-            if (is_wizard_class(caster_ptr))
+            if (PlayerClass(player_ptr).is_wizard())
                 base = plev + plev / 2;
             else
                 base = plev + plev / 4;
@@ -254,10 +254,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(dice, sides, base);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, GF_HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
             }
         }
         break;
@@ -276,10 +276,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_NETHER, dir, damroll(dice, sides));
             }
         }
         break;
@@ -298,7 +298,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(0, 0, dam / 2);
 
             if (cast) {
-                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM);
+                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;
@@ -316,10 +316,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball_hide(caster_ptr, GF_GENOCIDE, dir, power, 0);
+                fire_ball_hide(player_ptr, GF_GENOCIDE, dir, power, 0);
             }
         }
         break;
@@ -332,7 +332,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                brand_weapon(caster_ptr, 3);
+                brand_weapon(player_ptr, 3);
             }
         }
         break;
@@ -355,14 +355,14 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             if (cast) {
                 HIT_POINT dam = base + damroll(dice, sides);
 
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                if (hypodynamic_bolt(caster_ptr, dir, dam)) {
-                    chg_virtue(caster_ptr, V_SACRIFICE, -1);
-                    chg_virtue(caster_ptr, V_VITALITY, -1);
+                if (hypodynamic_bolt(player_ptr, dir, dam)) {
+                    chg_virtue(player_ptr, V_SACRIFICE, -1);
+                    chg_virtue(player_ptr, V_VITALITY, -1);
 
-                    hp_player(caster_ptr, dam);
+                    hp_player(player_ptr, dam);
 
                     /*
                      * Gain nutritional sustenance:
@@ -375,11 +375,11 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                      * ARE Gorged, it won't cure
                      * us
                      */
-                    dam = caster_ptr->food + MIN(5000, 100 * dam);
+                    dam = player_ptr->food + MIN(5000, 100 * dam);
 
                     /* Not gorged already */
-                    if (caster_ptr->food < PY_FOOD_MAX)
-                        set_food(caster_ptr, dam >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dam);
+                    if (player_ptr->food < PY_FOOD_MAX)
+                        set_food(player_ptr, dam >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dam);
                 }
             }
         }
@@ -393,7 +393,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
+                animate_dead(player_ptr, 0, player_ptr->y, player_ptr->x);
             }
         }
         break;
@@ -412,7 +412,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                symbol_genocide(caster_ptr, power, true);
+                symbol_genocide(player_ptr, power, true);
             }
         }
         break;
@@ -430,7 +430,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, base);
 
             if (cast) {
-                (void)berserk(caster_ptr, base + randint1(base));
+                (void)berserk(player_ptr, base + randint1(base));
             }
         }
         break;
@@ -446,10 +446,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return KWD_RANDOM;
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                cast_invoke_spirits(caster_ptr, dir);
+                cast_invoke_spirits(player_ptr, dir);
             }
         }
         break;
@@ -468,10 +468,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(dice, sides, 0);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_DARK, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_DARK, dir, damroll(dice, sides));
             }
         }
         break;
@@ -491,8 +491,8 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(b_base, b_base);
 
             if (cast) {
-                (void)berserk(caster_ptr, b_base + randint1(b_base));
-                set_fast(caster_ptr, randint1(sp_sides) + sp_base, false);
+                (void)berserk(player_ptr, b_base + randint1(b_base));
+                set_fast(player_ptr, randint1(sp_sides) + sp_base, false);
             }
         }
         break;
@@ -505,7 +505,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                brand_weapon(caster_ptr, 4);
+                brand_weapon(player_ptr, 4);
             }
         }
         break;
@@ -525,15 +525,15 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             if (cast) {
                 int i;
 
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                chg_virtue(caster_ptr, V_SACRIFICE, -1);
-                chg_virtue(caster_ptr, V_VITALITY, -1);
+                chg_virtue(player_ptr, V_SACRIFICE, -1);
+                chg_virtue(player_ptr, V_VITALITY, -1);
 
                 for (i = 0; i < 3; i++) {
-                    if (hypodynamic_bolt(caster_ptr, dir, dam))
-                        hp_player(caster_ptr, dam);
+                    if (hypodynamic_bolt(player_ptr, dir, dam))
+                        hp_player(player_ptr, dam);
                 }
             }
         }
@@ -552,7 +552,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(1, sides, 0);
 
             if (cast) {
-                dispel_living(caster_ptr, randint1(sides));
+                dispel_living(player_ptr, randint1(sides));
             }
         }
         break;
@@ -571,10 +571,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_DARK, dir, dam, rad);
+                fire_ball(player_ptr, GF_DARK, dir, dam, rad);
             }
         }
         break;
@@ -587,10 +587,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                death_ray(caster_ptr, dir, plev);
+                death_ray(player_ptr, dir, plev);
             }
         }
         break;
@@ -601,7 +601,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (desc)
             return _("1体のアンデッドを召喚する。", "Summons an undead monster.");
         if (cast)
-            cast_summon_undead(caster_ptr, (plev * 3) / 2);
+            cast_summon_undead(player_ptr, (plev * 3) / 2);
         break;
 
     case 26:
@@ -613,10 +613,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (randint1(50) > plev) {
-                    if (!ident_spell(caster_ptr, false))
+                    if (!ident_spell(player_ptr, false))
                         return nullptr;
                 } else {
-                    if (!identify_fully(caster_ptr, false))
+                    if (!identify_fully(player_ptr, false))
                         return nullptr;
                 }
             }
@@ -637,7 +637,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, base);
 
             if (cast) {
-                set_mimic(caster_ptr, base + randint1(base), MIMIC_VAMPIRE, false);
+                set_mimic(player_ptr, base + randint1(base), MIMIC_VAMPIRE, false);
             }
         }
         break;
@@ -650,7 +650,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                restore_level(caster_ptr);
+                restore_level(player_ptr);
             }
         }
         break;
@@ -669,7 +669,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                mass_genocide(caster_ptr, power, true);
+                mass_genocide(player_ptr, power, true);
             }
         }
         break;
@@ -689,11 +689,11 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                if (!get_aim_dir(caster_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(caster_ptr, GF_HELL_FIRE, dir, dam, rad);
-                take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"));
+                fire_ball(player_ptr, GF_HELL_FIRE, dir, dam, rad);
+                take_hit(player_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"));
             }
         }
         break;
@@ -712,7 +712,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, base);
 
             if (cast) {
-                set_wraith_form(caster_ptr, randint1(base) + base, false);
+                set_wraith_form(player_ptr, randint1(base) + base, false);
             }
         }
         break;

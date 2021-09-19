@@ -25,7 +25,7 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-kind.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-skill.h"
 #include "room/rooms-vault.h"
 #include "system/angband-version.h"
@@ -44,10 +44,13 @@
 /*!
  * @brief 基本情報読み込みのメインルーチン /
  * Initialize misc. values
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
  */
-errr init_misc(player_type *player_ptr) { return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0); }
+errr init_misc(player_type *player_ptr)
+{
+    return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
+}
 
 /*!
  * @brief ヘッダ構造体の更新
@@ -172,7 +175,7 @@ errr init_r_info()
  */
 errr init_d_info()
 {
-    init_header(&d_head, current_world_ptr->max_d_idx);
+    init_header(&d_head, w_ptr->max_d_idx);
     return init_info("d_info", d_head, d_info, parse_d_info, nullptr);
 }
 
