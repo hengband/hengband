@@ -57,4 +57,5 @@ enum sv_ring_type {
     SV_RING_DEC_MANA = 53,
     SV_RING_WARNING = 54,
     SV_RING_MUSCLE = 55,
+    SV_RING_LAW = 56,
 };
