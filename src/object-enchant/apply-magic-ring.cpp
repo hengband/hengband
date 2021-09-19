@@ -85,8 +85,6 @@ void RingEnchanter::enchant()
         }
 
         break;
-    case SV_RING_SHOTS:
-        break;
     case SV_RING_STR:
     case SV_RING_CON:
     case SV_RING_DEX:
@@ -200,6 +198,7 @@ void RingEnchanter::enchant()
 
         break;
     case SV_RING_MUSCLE:
+    case SV_RING_LAW:
         this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(3, this->level);
         if (one_in_(4)) {
             this->o_ptr->pval++;
