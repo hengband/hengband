@@ -102,7 +102,7 @@ errr parse_d_info(std::string_view buf, angband_header *head)
 
         error_idx = i;
         d_ptr = &d_info[i];
-        d_ptr->idx = i;
+        d_ptr->idx = static_cast<DUNGEON_IDX>(i);
 #ifdef JP
         d_ptr->name = tokens[2];
 #endif

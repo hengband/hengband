@@ -5,7 +5,7 @@
 /**
  * @brief アイテムに付与できる鍛冶効果の列挙体
  */
-enum class SmithEffect {
+enum class SmithEffect : int16_t {
     NONE = 0,
     STR = 1, //!< 腕力
     INT = 2, //!< 知能

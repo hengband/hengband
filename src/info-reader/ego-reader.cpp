@@ -77,7 +77,7 @@ errr parse_e_info(std::string_view buf, angband_header *head)
 
         error_idx = i;
         e_ptr = &e_info[i];
-        e_ptr->idx = i;
+        e_ptr->idx = static_cast<EGO_IDX>(i);
 #ifdef JP
         e_ptr->name = tokens[2];
 #endif

@@ -7,7 +7,7 @@
 #include <optional>
 #include <vector>
 
-enum class SmithEffect;
+enum class SmithEffect : int16_t;
 enum class SmithCategory;
 enum class SmithEssence;
 enum random_art_activation_type : uint8_t;

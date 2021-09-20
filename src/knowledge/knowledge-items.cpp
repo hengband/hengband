@@ -145,7 +145,7 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
                     continue;
             }
 
-            auto k = std::reduce(std::begin(k_ref.chance), std::end(k_ref.chance));
+            auto k = std::reduce(std::begin(k_ref.chance), std::end(k_ref.chance), 0);
             if (!k)
                 continue;
         }
