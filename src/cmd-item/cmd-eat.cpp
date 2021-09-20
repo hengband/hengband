@@ -139,36 +139,26 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
         break;
     case SV_FOOD_RESTORING:
         return restore_all_status(player_ptr);
-#ifdef JP
-    /* それぞれの食べ物の感想をオリジナルより細かく表現 */
     case SV_FOOD_BISCUIT:
-        msg_print("甘くてサクサクしてとてもおいしい。");
+        msg_print(_("甘くてサクサクしてとてもおいしい。", "That is sweetly and shortly delicious."));
         return true;
     case SV_FOOD_JERKY:
-        msg_print("歯ごたえがあっておいしい。");
+        msg_print(_("歯ごたえがあっておいしい。", "That is chewy and delicious."));
         return true;
     case SV_FOOD_SLIME_MOLD:
-        msg_print("これはなんとも形容しがたい味だ。");
+        msg_print(_("これはなんとも形容しがたい味だ。", "That is an indescribable taste."));
         return true;
     case SV_FOOD_RATION:
-        msg_print("これはおいしい。");
+        msg_print(_("これはおいしい。", "That tastes good."));
         return true;
-#else
-    case SV_FOOD_RATION:
-    case SV_FOOD_BISCUIT:
-    case SV_FOOD_JERKY:
-    case SV_FOOD_SLIME_MOLD:
-        msg_print("That tastes good.");
-        return true;
-#endif
     case SV_FOOD_WAYBREAD:
-        msg_print(_("これはひじょうに美味だ。", "That tastes good."));
+        msg_print(_("これはひじょうに美味だ。", "That tastes very good."));
         (void)bss.poison(0);
         (void)hp_player(player_ptr, damroll(4, 8));
         return true;
     case SV_FOOD_PINT_OF_ALE:
     case SV_FOOD_PINT_OF_WINE:
-        msg_print(_("のどごし爽やかだ。", "That tastes good."));
+        msg_print(_("のどごし爽やかだ。", "That is refreshing through the throat."));
         return true;
     }
 
