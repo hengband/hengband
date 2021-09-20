@@ -90,71 +90,72 @@ bool BadStatusSetter::blindness(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_confused(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::confusion(TIME_EFFECT v)
 {
-    bool notice = false;
+    auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
-        if (!player_ptr->confused) {
+        if (!this->player_ptr->confused) {
             msg_print(_("あなたは混乱した！", "You are confused!"));
 
-            if (player_ptr->action == ACTION_LEARN) {
+            if (this->player_ptr->action == ACTION_LEARN) {
                 msg_print(_("学習が続けられない！", "You cannot continue learning!"));
-                player_ptr->new_mane = false;
+                this->player_ptr->new_mane = false;
 
-                player_ptr->redraw |= (PR_STATE);
-                player_ptr->action = ACTION_NONE;
+                this->player_ptr->redraw |= (PR_STATE);
+                this->player_ptr->action = ACTION_NONE;
             }
-            if (player_ptr->action == ACTION_KAMAE) {
+            if (this->player_ptr->action == ACTION_KAMAE) {
                 msg_print(_("構えがとけた。", "You lose your stance."));
-                player_ptr->special_defense &= ~(KAMAE_MASK);
-                player_ptr->update |= (PU_BONUS);
-                player_ptr->redraw |= (PR_STATE);
-                player_ptr->action = ACTION_NONE;
-            } else if (player_ptr->action == ACTION_KATA) {
+                this->player_ptr->special_defense &= ~(KAMAE_MASK);
+                this->player_ptr->update |= (PU_BONUS);
+                this->player_ptr->redraw |= (PR_STATE);
+                this->player_ptr->action = ACTION_NONE;
+            } else if (this->player_ptr->action == ACTION_KATA) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
-                player_ptr->special_defense &= ~(KATA_MASK);
-                player_ptr->update |= (PU_BONUS);
-                player_ptr->update |= (PU_MONSTERS);
-                player_ptr->redraw |= (PR_STATE);
-                player_ptr->redraw |= (PR_STATUS);
-                player_ptr->action = ACTION_NONE;
+                this->player_ptr->special_defense &= ~(KATA_MASK);
+                this->player_ptr->update |= (PU_BONUS);
+                this->player_ptr->update |= (PU_MONSTERS);
+                this->player_ptr->redraw |= (PR_STATE);
+                this->player_ptr->redraw |= (PR_STATUS);
+                this->player_ptr->action = ACTION_NONE;
             }
 
             /* Sniper */
-            if (player_ptr->concent)
-                reset_concentration(player_ptr, true);
+            if (this->player_ptr->concent)
+                reset_concentration(this->player_ptr, true);
 
-            SpellHex spell_hex(player_ptr);
+            SpellHex spell_hex(this->player_ptr);
             if (spell_hex.is_spelling_any()) {
                 (void)spell_hex.stop_all_spells();
             }
 
             notice = true;
-            player_ptr->counter = false;
-            chg_virtue(player_ptr, V_HARMONY, -1);
+            this->player_ptr->counter = false;
+            chg_virtue(this->player_ptr, V_HARMONY, -1);
         }
     } else {
-        if (player_ptr->confused) {
+        if (this->player_ptr->confused) {
             msg_print(_("やっと混乱がおさまった。", "You feel less confused now."));
-            player_ptr->special_attack &= ~(ATTACK_SUIKEN);
+            this->player_ptr->special_attack &= ~(ATTACK_SUIKEN);
             notice = true;
         }
     }
 
-    player_ptr->confused = v;
-    player_ptr->redraw |= (PR_STATUS);
+    this->player_ptr->confused = v;
+    this->player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
         return false;
 
     if (disturb_state)
-        disturb(player_ptr, false, false);
-    handle_stuff(player_ptr);
+        disturb(this->player_ptr, false, false);
+    handle_stuff(this->player_ptr);
     return true;
 }
 

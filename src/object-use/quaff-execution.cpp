@@ -66,7 +66,7 @@ static bool booze(player_type *player_ptr)
     else if (!has_resist_conf(player_ptr))
         player_ptr->special_attack |= ATTACK_SUIKEN;
 
-    if (!has_resist_conf(player_ptr) && set_confused(player_ptr, randint0(20) + 15)) {
+    if (!has_resist_conf(player_ptr) && BadStatusSetter(player_ptr).confusion(randint0(20) + 15)) {
         ident = true;
     }
 

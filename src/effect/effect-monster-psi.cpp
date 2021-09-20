@@ -100,9 +100,10 @@ static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, eff
     if (!one_in_(4) || check_multishadow(player_ptr))
         return;
 
+    BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
     case 1:
-        set_confused(player_ptr, player_ptr->confused + 3 + randint1(em_ptr->dam));
+        (void)bss.confusion(player_ptr->confused + 3 + randint1(em_ptr->dam));
         break;
     case 2:
         set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(em_ptr->dam));

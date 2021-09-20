@@ -121,7 +121,7 @@ static void back_to_health(player_type *player_ptr)
 {
     BadStatusSetter bss(player_ptr);
     (void)bss.blindness(0);
-    set_confused(player_ptr, 0);
+    (void)bss.confusion(0);
     player_ptr->effects()->stun()->reset();
     player_ptr->chp = player_ptr->mhp;
     player_ptr->csp = player_ptr->msp;

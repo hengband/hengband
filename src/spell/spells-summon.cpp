@@ -459,8 +459,7 @@ void cast_invoke_spirits(player_type *player_ptr, DIRECTION dir)
         set_afraid(player_ptr, player_ptr->afraid + randint1(4) + 4);
     } else if (die < 26) {
         msg_print(_("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...", "Your head is invaded by a horde of gibbering spectral voices..."));
-
-        set_confused(player_ptr, player_ptr->confused + randint1(4) + 4);
+        (void)BadStatusSetter(player_ptr).confusion(player_ptr->confused + randint1(4) + 4);
     } else if (die < 31) {
         poly_monster(player_ptr, dir, plev);
     } else if (die < 36) {

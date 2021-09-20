@@ -133,18 +133,22 @@ static void calc_blow_blind(player_type *player_ptr, monap_type *monap_ptr)
  */
 static void calc_blow_confusion(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (monap_ptr->explode)
+    if (monap_ptr->explode) {
         return;
+    }
 
-    if (has_resist_conf(player_ptr))
+    if (has_resist_conf(player_ptr)) {
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
+    }
 
     monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return;
+    }
 
-    if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr) && set_confused(player_ptr, player_ptr->confused + 3 + randint1(monap_ptr->rlev)))
+    if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr) && BadStatusSetter(player_ptr).confusion(player_ptr->confused + 3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
+    }
 
     update_smart_learn(player_ptr, monap_ptr->m_idx, DRS_CONF);
 }

@@ -149,8 +149,9 @@ void process_world_aux_mutation(player_type *player_ptr)
             msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
         }
 
+        BadStatusSetter bss(player_ptr);
         if (!has_resist_conf(player_ptr)) {
-            (void)set_confused(player_ptr, player_ptr->confused + randint0(20) + 15);
+            (void)bss.confusion(player_ptr->confused + randint0(20) + 15);
         }
 
         if (!has_resist_chaos(player_ptr)) {

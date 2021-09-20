@@ -80,7 +80,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
         break;
     case SV_FOOD_CONFUSION:
         if (!has_resist_conf(player_ptr))
-            if (set_confused(player_ptr, player_ptr->confused + randint0(10) + 10))
+            if (bss.confusion(player_ptr->confused + randint0(10) + 10))
                 return true;
         break;
     case SV_FOOD_HALLUCINATION:
@@ -128,9 +128,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
             return true;
         break;
     case SV_FOOD_CURE_CONFUSION:
-        if (set_confused(player_ptr, 0))
-            return true;
-        break;
+        return bss.confusion(0);
     case SV_FOOD_CURE_SERIOUS:
         return cure_serious_wounds(player_ptr, 4, 8);
     case SV_FOOD_RESTORE_STR:

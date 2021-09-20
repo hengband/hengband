@@ -352,7 +352,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, player_type *player_ptr, MO
             _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
-            (void)set_confused(player_ptr, player_ptr->confused + randint0(4) + 4);
+            (void)BadStatusSetter(player_ptr).confusion(player_ptr->confused + randint0(4) + 4);
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_CONF);
