@@ -32,7 +32,6 @@ DEPTH *max_dlv;
 DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 {
     DUNGEON_IDX select_dungeon;
-    DUNGEON_IDX i;
     int num = 0;
     DUNGEON_IDX *dun;
 
@@ -51,24 +50,24 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
     C_MAKE(dun, w_ptr->max_d_idx, DUNGEON_IDX);
 
     screen_save();
-    for (i = 1; i < w_ptr->max_d_idx; i++) {
+    for (const auto &d_ref : d_info) {
         char buf[80];
         bool seiha = false;
 
-        if (!d_info[i].maxdepth)
+        if (d_ref.idx == 0 || !d_ref.maxdepth)
             continue;
-        if (!max_dlv[i])
+        if (!max_dlv[d_ref.idx])
             continue;
-        if (d_info[i].final_guardian) {
-            if (!r_info[d_info[i].final_guardian].max_num)
+        if (d_ref.final_guardian) {
+            if (!r_info[d_ref.final_guardian].max_num)
                 seiha = true;
-        } else if (max_dlv[i] == d_info[i].maxdepth)
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth)
             seiha = true;
 
         sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
-            'a' + num, seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
+            'a' + num, seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
         prt(buf, y + num, x);
-        dun[num++] = i;
+        dun[num++] = d_ref.idx;
     }
 
     if (!num) {
@@ -77,7 +76,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 
     prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
     while (true) {
-        i = inkey();
+        auto i = inkey();
         if ((i == ESCAPE) || !num) {
             /* Free the "dun" array */
             C_KILL(dun, w_ptr->max_d_idx, DUNGEON_IDX);

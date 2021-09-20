@@ -349,20 +349,20 @@ void do_cmd_knowledge_dungeon(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    for (int i = 1; i < w_ptr->max_d_idx; i++) {
+    for (const auto &d_ref : d_info) {
         bool seiha = false;
 
-        if (!d_info[i].maxdepth)
+        if (d_ref.idx == 0 || !d_ref.maxdepth)
             continue;
-        if (!max_dlv[i])
+        if (!max_dlv[d_ref.idx])
             continue;
-        if (d_info[i].final_guardian) {
-            if (!r_info[d_info[i].final_guardian].max_num)
+        if (d_ref.final_guardian) {
+            if (!r_info[d_ref.final_guardian].max_num)
                 seiha = true;
-        } else if (max_dlv[i] == d_info[i].maxdepth)
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth)
             seiha = true;
 
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
+        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
     }
 
     angband_fclose(fff);

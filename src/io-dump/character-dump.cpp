@@ -161,20 +161,20 @@ static void dump_aux_last_message(player_type *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    for (int y = 1; y < w_ptr->max_d_idx; y++) {
+    for (const auto &d_ref : d_info) {
         bool seiha = false;
 
-        if (!d_info[y].maxdepth)
+        if (d_ref.idx == 0 || !d_ref.maxdepth)
             continue;
-        if (!max_dlv[y])
+        if (!max_dlv[d_ref.idx])
             continue;
-        if (d_info[y].final_guardian) {
-            if (!r_info[d_info[y].final_guardian].max_num)
+        if (d_ref.final_guardian) {
+            if (!r_info[d_ref.final_guardian].max_num)
                 seiha = true;
-        } else if (max_dlv[y] == d_info[y].maxdepth)
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth)
             seiha = true;
 
-        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_info[y].name.c_str(), (int)max_dlv[y]);
+        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
     }
 }
 
