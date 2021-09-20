@@ -291,7 +291,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *player_ptr, M
             _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
-            (void)set_blind(player_ptr, 12 + randint0(4));
+            (void)BadStatusSetter(player_ptr).blindness(12 + randint0(4));
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_BLIND);

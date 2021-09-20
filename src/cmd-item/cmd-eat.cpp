@@ -61,6 +61,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     if (o_ptr->tval != TV_FOOD)
         return false;
 
+    BadStatusSetter bss(player_ptr);
     switch (o_ptr->sval) {
     case SV_FOOD_POISON:
         if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)))
@@ -69,7 +70,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
         break;
     case SV_FOOD_BLINDNESS:
         if (!has_resist_blind(player_ptr))
-            if (set_blind(player_ptr, player_ptr->blind + randint0(200) + 200))
+            if (bss.blindness(player_ptr->blind + randint0(200) + 200))
                 return true;
         break;
     case SV_FOOD_PARANOIA:
@@ -121,9 +122,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
             return true;
         break;
     case SV_FOOD_CURE_BLINDNESS:
-        if (set_blind(player_ptr, 0))
-            return true;
-        break;
+        return bss.blindness(0);
     case SV_FOOD_CURE_PARANOIA:
         if (set_afraid(player_ptr, 0))
             return true;

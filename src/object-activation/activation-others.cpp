@@ -353,10 +353,11 @@ bool activate_protection_rune(player_type *player_ptr)
 
 bool activate_protection_elbereth(player_type *player_ptr)
 {
+    BadStatusSetter bss(player_ptr);
     msg_print(_("エルベレスよ、我を護り給え！", "A Elbereth gilthoniel!"));
     create_rune_protection_one(player_ptr);
     set_afraid(player_ptr, 0);
-    set_blind(player_ptr, 0);
+    (void)bss.blindness(0);
     set_image(player_ptr, 0);
     set_blessed(player_ptr, randint0(25) + 25, true);
     set_bits(player_ptr->redraw, PR_STATS);

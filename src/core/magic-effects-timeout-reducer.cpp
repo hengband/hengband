@@ -31,13 +31,14 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
         (void)set_mimic(player_ptr, player_ptr->tim_mimic - 1, player_ptr->mimic_form, true);
     }
 
+    BadStatusSetter bss(player_ptr);
     auto effects = player_ptr->effects();
     if (player_ptr->image) {
         (void)set_image(player_ptr, player_ptr->image - dec_count);
     }
 
     if (player_ptr->blind) {
-        (void)set_blind(player_ptr, player_ptr->blind - dec_count);
+        (void)bss.blindness(player_ptr->blind - dec_count);
     }
 
     if (player_ptr->tim_invis) {

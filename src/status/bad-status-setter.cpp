@@ -36,30 +36,29 @@ BadStatusSetter::BadStatusSetter(player_type* player_ptr)
  * Note that blindness is currently the only thing which can affect\n
  * "player_can_see_bold()".\n
  */
-bool set_blind(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::blindness(TIME_EFFECT v)
 {
-    bool notice = false;
+    auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
-        if (!player_ptr->blind) {
-            if (player_ptr->prace == player_race_type::ANDROID) {
+        if (!this->player_ptr->blind) {
+            if (this->player_ptr->prace == player_race_type::ANDROID) {
                 msg_print(_("センサーをやられた！", "The sensor broke!"));
             } else {
                 msg_print(_("目が見えなくなってしまった！", "You are blind!"));
             }
 
             notice = true;
-            chg_virtue(player_ptr, V_ENLIGHTEN, -1);
+            chg_virtue(this->player_ptr, V_ENLIGHTEN, -1);
         }
-    }
-
-    else {
-        if (player_ptr->blind) {
-            if (player_ptr->prace == player_race_type::ANDROID) {
+    } else {
+        if (this->player_ptr->blind) {
+            if (this->player_ptr->prace == player_race_type::ANDROID) {
                 msg_print(_("センサーが復旧した。", "The sensor has been restored."));
             } else {
                 msg_print(_("やっと目が見えるようになった。", "You can see again."));
@@ -69,17 +68,20 @@ bool set_blind(player_type *player_ptr, TIME_EFFECT v)
         }
     }
 
-    player_ptr->blind = v;
-    player_ptr->redraw |= (PR_STATUS);
-    if (!notice)
+    this->player_ptr->blind = v;
+    this->player_ptr->redraw |= PR_STATUS;
+    if (!notice) {
         return false;
-    if (disturb_state)
-        disturb(player_ptr, false, false);
+    }
 
-    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-    player_ptr->redraw |= (PR_MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-    handle_stuff(player_ptr);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
+
+    this->player_ptr->update |= PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE;
+    this->player_ptr->redraw |= PR_MAP;
+    this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    handle_stuff(this->player_ptr);
     return true;
 }
 

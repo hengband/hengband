@@ -35,7 +35,7 @@ void process_blind_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (!set_blind(player_ptr, player_ptr->blind + 10 + randint1(monap_ptr->rlev))) {
+    if (!BadStatusSetter(player_ptr).blindness(player_ptr->blind + 10 + randint1(monap_ptr->rlev))) {
         return;
     }
 

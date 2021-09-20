@@ -507,12 +507,13 @@ void hit_trap(player_type *player_ptr, bool break_trap)
         break;
     }
 
-    case TRAP_BLIND: {
-        hit_trap_set_abnormal_status_p(player_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), (has_resist_blind(player_ptr) != 0),
-            set_blind, player_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
-        break;
-    }
+    case TRAP_BLIND:
+        msg_print(_("黒いガスに包み込まれた！", "A black gas surrounds you!"));
+        if (has_resist_blind(player_ptr) == 0) {
+            (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
+        }
 
+        break;
     case TRAP_CONFUSE: {
         hit_trap_set_abnormal_status_p(player_ptr, _("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
             (has_resist_conf(player_ptr) != 0), set_confused, player_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
