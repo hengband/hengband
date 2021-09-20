@@ -164,35 +164,38 @@ bool BadStatusSetter::confusion(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_poisoned(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::poison(TIME_EFFECT v)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead)
         return false;
 
     if (v) {
-        if (!player_ptr->poisoned) {
+        if (!this->player_ptr->poisoned) {
             msg_print(_("毒に侵されてしまった！", "You are poisoned!"));
             notice = true;
         }
     } else {
-        if (player_ptr->poisoned) {
+        if (this->player_ptr->poisoned) {
             msg_print(_("やっと毒の痛みがなくなった。", "You are no longer poisoned."));
             notice = true;
         }
     }
 
-    player_ptr->poisoned = v;
-    player_ptr->redraw |= (PR_STATUS);
+    this->player_ptr->poisoned = v;
+    this->player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
-        disturb(player_ptr, false, false);
-    handle_stuff(player_ptr);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
+
+    handle_stuff(this->player_ptr);
     return true;
 }
 

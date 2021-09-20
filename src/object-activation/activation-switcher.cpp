@@ -196,7 +196,7 @@ bool switch_activation(player_type *player_ptr, object_type **o_ptr_ptr, const a
     case ACT_CURE_POISON:
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
         (void)set_afraid(player_ptr, 0);
-        (void)set_poisoned(player_ptr, 0);
+        (void)BadStatusSetter(player_ptr).poison(0);
         return true;
     case ACT_REST_EXP:
         msg_print(_("深紅に輝いている...", "It glows a deep red..."));

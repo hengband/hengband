@@ -26,7 +26,8 @@ bool cleansing_nova(player_type *player_ptr, bool magic, bool powerful)
     if (set_protevil(player_ptr, (magic ? 0 : player_ptr->protevil) + randint1(25) + k, false))
         ident = true;
 
-    if (set_poisoned(player_ptr, 0))
+    BadStatusSetter bss(player_ptr);
+    if (bss.poison(0))
         ident = true;
 
     if (set_afraid(player_ptr, 0))

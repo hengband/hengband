@@ -175,7 +175,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
                 ident = true;
             break;
 
-        case SV_POTION_SALT_WATER:
+        case SV_POTION_SALT_WATER: {
             msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
 
             switch (player_race_food(player_ptr)) {
@@ -188,14 +188,15 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
                 break;
             }
 
-            (void)set_poisoned(player_ptr, 0);
+            BadStatusSetter bss(player_ptr);
+            (void)bss.poison(0);
             (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 4);
             ident = true;
             break;
-
+        }
         case SV_POTION_POISON:
             if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) {
-                if (set_poisoned(player_ptr, player_ptr->poisoned + randint0(15) + 10)) {
+                if (BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint0(15) + 10)) {
                     ident = true;
                 }
             }
@@ -307,12 +308,12 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_SLOW_POISON:
-            if (set_poisoned(player_ptr, player_ptr->poisoned / 2))
+            if (BadStatusSetter(player_ptr).poison(player_ptr->poisoned / 2))
                 ident = true;
             break;
 
         case SV_POTION_CURE_POISON:
-            if (set_poisoned(player_ptr, 0))
+            if (BadStatusSetter(player_ptr).poison(0))
                 ident = true;
             break;
 

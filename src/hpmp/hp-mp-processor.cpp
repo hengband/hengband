@@ -200,7 +200,7 @@ void process_player_hp_mp(player_type *player_ptr)
         if (deal_damege_by_feat(player_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"), calc_acid_damage_rate,
                 [](player_type *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr))
-                        (void)set_poisoned(player_ptr, player_ptr->poisoned + damage);
+                        (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + damage);
                 })) {
             cave_no_regen = true;
             sound(SOUND_TERRAIN_DAMAGE);

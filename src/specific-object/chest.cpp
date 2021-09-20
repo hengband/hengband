@@ -183,7 +183,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
     if (trap & (CHEST_POISON)) {
         msg_print(_("突如吹き出した緑色のガスに包み込まれた！", "A puff of green gas surrounds you!"));
         if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) {
-            (void)set_poisoned(player_ptr, player_ptr->poisoned + 10 + randint1(20));
+            (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + 10 + randint1(20));
         }
     }
 

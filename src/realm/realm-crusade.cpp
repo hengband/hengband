@@ -160,17 +160,21 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
         break;
 
     case 7:
-        if (name)
+        if (name) {
             return _("身体浄化", "Purify");
-        if (desc)
-            return _("傷、毒、朦朧から全快する。", "Heals all cuts, poisons and being stunned.");
-        {
-            if (cast) {
-                set_cut(player_ptr, 0);
-                set_poisoned(player_ptr, 0);
-                set_stun(player_ptr, 0);
-            }
         }
+
+        if (desc) {
+            return _("傷、毒、朦朧から全快する。", "Heals all cuts, poisons and being stunned.");
+        }
+
+        if (cast) {
+            BadStatusSetter bss(player_ptr);
+            set_cut(player_ptr, 0);
+            (void)bss.poison(0);
+            set_stun(player_ptr, 0);
+        }
+
         break;
 
     case 8:
@@ -307,30 +311,34 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
         }
         break;
 
-    case 15:
-        if (name)
+    case 15: {
+        if (name) {
             return _("聖なる御言葉", "Holy Word");
-        if (desc)
+        }
+
+        if (desc) {
             return _("視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。",
                 "Damages all evil monsters in sight, heals HP somewhat and completely cures fear, poisons, cuts and being stunned.");
-
-        {
-            int dam_sides = plev * 6;
-            int heal = 100;
-
-            if (info)
-                return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
-            if (cast) {
-                dispel_evil(player_ptr, randint1(dam_sides));
-                hp_player(player_ptr, heal);
-                set_afraid(player_ptr, 0);
-                set_poisoned(player_ptr, 0);
-                set_stun(player_ptr, 0);
-                set_cut(player_ptr, 0);
-            }
         }
-        break;
 
+        auto dam_sides = plev * 6;
+        auto heal = 100;
+        if (info) {
+            return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
+        }
+
+        if (cast) {
+            BadStatusSetter bss(player_ptr);
+            dispel_evil(player_ptr, randint1(dam_sides));
+            hp_player(player_ptr, heal);
+            set_afraid(player_ptr, 0);
+            (void)bss.poison(0);
+            set_stun(player_ptr, 0);
+            set_cut(player_ptr, 0);
+        }
+
+        break;
+    }    
     case 16:
         if (name)
             return _("開かれた道", "Unbarring Ways");

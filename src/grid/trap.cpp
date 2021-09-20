@@ -329,7 +329,7 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
                 msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
             } else {
                 dam = dam * 2;
-                (void)set_poisoned(player_ptr, player_ptr->poisoned + randint1(dam));
+                (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint1(dam));
             }
         }
     }
@@ -375,21 +375,6 @@ static void hit_trap_slow(player_type *player_ptr)
 {
     if (hit_trap_dart(player_ptr)) {
         set_slow(player_ptr, player_ptr->slow + randint0(20) + 20, false);
-    }
-}
-
-/*!
- * @brief ダーツ系トラップ（通常ダメージ＋状態異常）の判定とプレイヤーの被害処理
- * @param trap_message メッセージの補完文字列
- * @param resist 状態異常に抵抗する判定が出たならTRUE
- * @param set_status 状態異常を指定する関数ポインタ
- * @param turn_aux 状態異常の追加ターン量
- */
-static void hit_trap_set_abnormal_status_p(player_type *player_ptr, concptr trap_message, bool resist, bool (*set_status)(player_type *, IDX), IDX turn_aux)
-{
-    msg_print(trap_message);
-    if (!resist) {
-        set_status(player_ptr, turn_aux);
     }
 }
 
@@ -524,8 +509,11 @@ void hit_trap(player_type *player_ptr, bool break_trap)
     }
 
     case TRAP_POISON: {
-        hit_trap_set_abnormal_status_p(player_ptr, _("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
-            has_resist_pois(player_ptr) || is_oppose_pois(player_ptr), set_poisoned, player_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+        msg_print(_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"));
+        if (has_resist_pois(player_ptr) == 0) {
+            (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+        }
+
         break;
     }
 

@@ -65,7 +65,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     switch (o_ptr->sval) {
     case SV_FOOD_POISON:
         if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)))
-            if (set_poisoned(player_ptr, player_ptr->poisoned + randint0(10) + 10))
+            if (bss.poison(player_ptr->poisoned + randint0(10) + 10))
                 return true;
         break;
     case SV_FOOD_BLINDNESS:
@@ -118,9 +118,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
         (void)do_dec_stat(player_ptr, A_STR);
         return true;
     case SV_FOOD_CURE_POISON:
-        if (set_poisoned(player_ptr, 0))
-            return true;
-        break;
+        return bss.poison(0);
     case SV_FOOD_CURE_BLINDNESS:
         return bss.blindness(0);
     case SV_FOOD_CURE_PARANOIA:
@@ -165,7 +163,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
 #endif
     case SV_FOOD_WAYBREAD:
         msg_print(_("これはひじょうに美味だ。", "That tastes good."));
-        (void)set_poisoned(player_ptr, 0);
+        (void)bss.poison(0);
         (void)hp_player(player_ptr, damroll(4, 8));
         return true;
     case SV_FOOD_PINT_OF_ALE:

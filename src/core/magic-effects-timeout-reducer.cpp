@@ -211,7 +211,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
 
     if (player_ptr->poisoned) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)set_poisoned(player_ptr, player_ptr->poisoned - adjust);
+        (void)bss.poison(player_ptr->poisoned - adjust);
     }
 
     auto player_stun = effects->stun();

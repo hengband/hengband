@@ -11,12 +11,12 @@ public:
     
     bool blindness(TIME_EFFECT v);
     bool confusion(TIME_EFFECT v);
+    bool poison(TIME_EFFECT v);
 
 private:
     player_type *player_ptr;
 };
 
-bool set_poisoned(player_type *player_ptr, TIME_EFFECT v);
 bool set_afraid(player_type *player_ptr, TIME_EFFECT v);
 bool set_paralyzed(player_type *player_ptr, TIME_EFFECT v);
 bool set_image(player_type *player_ptr, TIME_EFFECT v);
