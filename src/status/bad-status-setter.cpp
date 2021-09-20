@@ -362,37 +362,42 @@ bool BadStatusSetter::hallucination(TIME_EFFECT v)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_slow(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool BadStatusSetter::slowness(TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
-        if (player_ptr->slow && !do_dec) {
-            if (player_ptr->slow > v)
+        if (this->player_ptr->slow && !do_dec) {
+            if (this->player_ptr->slow > v) {
                 return false;
-        } else if (!player_ptr->slow) {
+            }
+        } else if (!this->player_ptr->slow) {
             msg_print(_("体の動きが遅くなってしまった！", "You feel yourself moving slower!"));
             notice = true;
         }
     } else {
-        if (player_ptr->slow) {
+        if (this->player_ptr->slow) {
             msg_print(_("動きの遅さがなくなったようだ。", "You feel yourself speed up."));
             notice = true;
         }
     }
 
-    player_ptr->slow = v;
-    if (!notice)
+    this->player_ptr->slow = v;
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
-        disturb(player_ptr, false, false);
-    player_ptr->update |= (PU_BONUS);
-    handle_stuff(player_ptr);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
+
+    this->player_ptr->update |= PU_BONUS;
+    handle_stuff(this->player_ptr);
     return true;
 }
 

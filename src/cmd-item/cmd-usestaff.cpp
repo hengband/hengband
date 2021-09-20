@@ -86,7 +86,7 @@ int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_c
 
         break;
     case SV_STAFF_SLOWNESS: {
-        if (set_slow(player_ptr, player_ptr->slow + randint1(30) + 15, false))
+        if (bss.slowness(player_ptr->slow + randint1(30) + 15, false))
             ident = true;
         break;
     }

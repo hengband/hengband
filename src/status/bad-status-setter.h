@@ -15,11 +15,11 @@ public:
     bool afraidness(TIME_EFFECT v);
     bool paralysis(TIME_EFFECT v);
     bool hallucination(TIME_EFFECT v);
+    bool slowness(TIME_EFFECT v, bool do_dec);
 
 private:
     player_type *player_ptr;
 };
 
-bool set_slow(player_type *player_ptr, TIME_EFFECT v, bool do_dec);
 bool set_stun(player_type *player_ptr, TIME_EFFECT v);
 bool set_cut(player_type *player_ptr, TIME_EFFECT v);

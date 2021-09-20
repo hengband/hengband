@@ -370,10 +370,13 @@ void effect_player_rocket(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_inertial(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
-    if (!check_multishadow(player_ptr))
-        (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+    }
+
+    if (!check_multishadow(player_ptr)) {
+        (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(4) + 4, false);
+    }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
@@ -529,8 +532,11 @@ void effect_player_gravity(player_type *player_ptr, effect_player_type *ep_ptr)
 
     if (!check_multishadow(player_ptr)) {
         teleport_player(player_ptr, 5, TELEPORT_PASSIVE);
-        if (!player_ptr->levitation)
-            (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+        BadStatusSetter bss(player_ptr);
+        if (!player_ptr->levitation) {
+            (void)bss.slowness(player_ptr->slow + randint0(4) + 4, false);
+        }
+
         if (!(has_resist_sound(player_ptr) || player_ptr->levitation)) {
             int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
             (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + plus_stun);
@@ -634,18 +640,14 @@ void effect_player_hand_doom(player_type *player_ptr, effect_player_type *ep_ptr
 
 void effect_player_void(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
-        msg_print(_("何かに身体が引っ張りこまれる！", "Something absorbs you!"));
-    else
-        msg_print(_("周辺の空間が歪んだ。", "Sight warps around you."));
-
-    if (!check_multishadow(player_ptr)) {
-        if (!player_ptr->levitation && !player_ptr->anti_tele)
-            (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+    auto effect_mes = player_ptr->blind ? _("何かに身体が引っ張りこまれる！", "Something absorbs you!")
+                                        : _("周辺の空間が歪んだ。", "Sight warps around you.");
+    msg_print(effect_mes);
+    if (!check_multishadow(player_ptr) && !player_ptr->levitation && !player_ptr->anti_tele) {
+        (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(4) + 4, false);
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_void_damage_rate(player_ptr, CALC_RAND) / 100;
-
     if (!player_ptr->levitation || one_in_(13)) {
         inventory_damage(player_ptr, BreakerCold(), 2);
     }
@@ -663,7 +665,7 @@ void effect_player_abyss(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     if (!player_ptr->levitation) {
-        (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+        (void)bss.slowness(player_ptr->slow + randint0(4) + 4, false);
     }
 
     if (player_ptr->blind) {
@@ -671,7 +673,6 @@ void effect_player_abyss(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes you from abyss!"));
-
     if (!has_resist_chaos(player_ptr)) {
         (void)bss.hallucination(player_ptr->hallucinated + randint1(10));
     }

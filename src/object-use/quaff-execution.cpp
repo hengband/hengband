@@ -172,7 +172,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_SLOWNESS:
-            if (set_slow(player_ptr, randint1(25) + 15, false))
+            if (BadStatusSetter(player_ptr).slowness(randint1(25) + 15, false))
                 ident = true;
             break;
 

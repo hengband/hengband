@@ -221,17 +221,15 @@ void process_world_aux_mutation(player_type *player_ptr)
         disturb(player_ptr, false, true);
         if (one_in_(2)) {
             msg_print(_("精力的でなくなった気がする。", "You feel less energetic."));
-
             if (player_ptr->fast > 0) {
                 set_fast(player_ptr, 0, true);
             } else {
-                set_slow(player_ptr, randint1(30) + 10, false);
+                (void)bss.slowness(randint1(30) + 10, false);
             }
         } else {
             msg_print(_("精力的になった気がする。", "You feel more energetic."));
-
             if (player_ptr->slow > 0) {
-                set_slow(player_ptr, 0, true);
+                (void)bss.slowness(0, true);
             } else {
                 set_fast(player_ptr, randint1(30) + 10, false);
             }
