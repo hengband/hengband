@@ -204,48 +204,50 @@ bool BadStatusSetter::poison(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_afraid(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::afraidness(TIME_EFFECT v)
 {
-    bool notice = false;
+    auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
-        if (!player_ptr->afraid) {
+        if (!this->player_ptr->afraid) {
             msg_print(_("何もかも恐くなってきた！", "You are terrified!"));
-
-            if (player_ptr->special_defense & KATA_MASK) {
+            if (this->player_ptr->special_defense & KATA_MASK) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
-                player_ptr->special_defense &= ~(KATA_MASK);
-                player_ptr->update |= (PU_BONUS);
-                player_ptr->update |= (PU_MONSTERS);
-                player_ptr->redraw |= (PR_STATE);
-                player_ptr->redraw |= (PR_STATUS);
-                player_ptr->action = ACTION_NONE;
+                this->player_ptr->special_defense &= ~(KATA_MASK);
+                this->player_ptr->update |= (PU_BONUS);
+                this->player_ptr->update |= (PU_MONSTERS);
+                this->player_ptr->redraw |= (PR_STATE);
+                this->player_ptr->redraw |= (PR_STATUS);
+                this->player_ptr->action = ACTION_NONE;
             }
 
             notice = true;
-            player_ptr->counter = false;
-            chg_virtue(player_ptr, V_VALOUR, -1);
+            this->player_ptr->counter = false;
+            chg_virtue(this->player_ptr, V_VALOUR, -1);
         }
     } else {
-        if (player_ptr->afraid) {
+        if (this->player_ptr->afraid) {
             msg_print(_("やっと恐怖を振り払った。", "You feel bolder now."));
             notice = true;
         }
     }
 
-    player_ptr->afraid = v;
-    player_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
+    this->player_ptr->afraid = v;
+    this->player_ptr->redraw |= PR_STATUS;
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
-        disturb(player_ptr, false, false);
-    handle_stuff(player_ptr);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
+
+    handle_stuff(this->player_ptr);
     return true;
 }
 

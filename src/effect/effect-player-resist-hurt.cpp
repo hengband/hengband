@@ -681,6 +681,6 @@ void effect_player_abyss(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     if (!has_resist_fear(player_ptr)) {
-        (void)set_afraid(player_ptr, player_ptr->afraid + randint1(10));
+        (void)bss.afraidness(player_ptr->afraid + randint1(10));
     }
 }

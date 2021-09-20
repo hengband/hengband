@@ -30,7 +30,7 @@ bool cleansing_nova(player_type *player_ptr, bool magic, bool powerful)
     if (bss.poison(0))
         ident = true;
 
-    if (set_afraid(player_ptr, 0))
+    if (bss.afraidness(0))
         ident = true;
 
     if (hp_player(player_ptr, 50))

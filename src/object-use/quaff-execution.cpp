@@ -318,7 +318,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_BOLDNESS:
-            if (set_afraid(player_ptr, 0))
+            if (BadStatusSetter(player_ptr).afraidness(0))
                 ident = true;
             break;
 

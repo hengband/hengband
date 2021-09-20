@@ -240,7 +240,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *player_ptr, M
             _("しかし恐怖に侵されなかった。", "You refuse to be frightened."), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
-            (void)set_afraid(player_ptr, player_ptr->afraid + randint0(4) + 4);
+            (void)BadStatusSetter(player_ptr).afraidness(player_ptr->afraid + randint0(4) + 4);
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_FEAR);

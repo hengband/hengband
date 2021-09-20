@@ -299,25 +299,37 @@ bool life_stream(player_type *player_ptr, bool message, bool virtue_change)
 
 bool heroism(player_type *player_ptr, int base)
 {
-    bool ident = false;
-    if (set_afraid(player_ptr, 0))
+    auto ident = false;
+    if (BadStatusSetter(player_ptr).afraidness(0)) {
         ident = true;
-    if (set_hero(player_ptr, player_ptr->hero + randint1(base) + base, false))
+    }
+
+    if (set_hero(player_ptr, player_ptr->hero + randint1(base) + base, false)) {
         ident = true;
-    if (hp_player(player_ptr, 10))
+    }
+
+    if (hp_player(player_ptr, 10)) {
         ident = true;
+    }
+
     return ident;
 }
 
 bool berserk(player_type *player_ptr, int base)
 {
-    bool ident = false;
-    if (set_afraid(player_ptr, 0))
+    auto ident = false;
+    if (BadStatusSetter(player_ptr).afraidness(0)) {
         ident = true;
-    if (set_shero(player_ptr, player_ptr->shero + randint1(base) + base, false))
+    }
+
+    if (set_shero(player_ptr, player_ptr->shero + randint1(base) + base, false)) {
         ident = true;
-    if (hp_player(player_ptr, 30))
+    }
+
+    if (hp_player(player_ptr, 30)) {
         ident = true;
+    }
+
     return ident;
 }
 
@@ -560,7 +572,7 @@ bool cosmic_cast_off(player_type *player_ptr, object_type **o_ptr_ptr)
     int t = 20 + randint1(20);
     BadStatusSetter bss(player_ptr);
     (void)bss.blindness(player_ptr->blind + t);
-    (void)set_afraid(player_ptr, 0);
+    (void)bss.afraidness(0);
     (void)set_tim_esp(player_ptr, player_ptr->tim_esp + t, false);
     (void)set_tim_regen(player_ptr, player_ptr->tim_regen + t, false);
     (void)set_hero(player_ptr, player_ptr->hero + t, false);

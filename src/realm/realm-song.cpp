@@ -257,24 +257,24 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
         break;
 
     case 7:
-        if (name)
+        if (name) {
             return _("戦いの歌", "Heroic Ballad");
-        if (desc)
-            return _("ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
+        }
 
-        /* Stop singing before start another */
-        if (cast || fail)
+        if (desc) {
+            return _("ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
+        }
+
+        if (cast || fail) {
             stop_singing(player_ptr);
+        }
 
         if (cast) {
             msg_print(_("激しい戦いの歌を歌った．．．", "You start singing a song of intense fighting..."));
 
             (void)hp_player(player_ptr, 10);
-            (void)set_afraid(player_ptr, 0);
-
-            /* Recalculate hitpoints */
-            player_ptr->update |= (PU_HP);
-
+            (void)BadStatusSetter(player_ptr).afraidness(0);
+            player_ptr->update |= PU_HP;
             start_singing(player_ptr, spell, MUSIC_HERO);
         }
 
@@ -287,7 +287,6 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
         }
 
         break;
-
     case 8:
         if (name)
             return _("霊的知覚", "Clairaudience");
@@ -839,32 +838,31 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
         }
         break;
 
-    case 27:
-        if (name)
+    case 27: {
+        if (name) {
             return _("英雄の詩", "The Hero's Poem");
-        if (desc)
-            return _("加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。", "Hastes you. Gives heroism. Damages all monsters in sight.");
+        }
 
-        /* Stop singing before start another */
-        if (cast || fail)
+        if (desc) {
+            return _("加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。", "Hastes you. Gives heroism. Damages all monsters in sight.");
+        }
+
+        if (cast || fail) {
             stop_singing(player_ptr);
+        }
 
         if (cast) {
             msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
             (void)hp_player(player_ptr, 10);
-            (void)set_afraid(player_ptr, 0);
-
-            /* Recalculate hitpoints */
-            player_ptr->update |= (PU_HP);
-
+            (void)BadStatusSetter(player_ptr).afraidness(0);
+            player_ptr->update |= PU_HP;
             start_singing(player_ptr, spell, MUSIC_SHERO);
         }
 
         if (stop) {
             if (!player_ptr->hero) {
                 msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
-                /* Recalculate hitpoints */
-                player_ptr->update |= (PU_HP);
+                player_ptr->update |= PU_HP;
             }
 
             if (!player_ptr->fast) {
@@ -872,19 +870,18 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
             }
         }
 
-        {
-            DICE_NUMBER dice = 1;
-            DICE_SID sides = plev * 3;
-
-            if (info)
-                return info_damage(dice, sides, 0);
-
-            if (cont) {
-                dispel_monsters(player_ptr, damroll(dice, sides));
-            }
+        DICE_NUMBER dice = 1;
+        DICE_SID sides = plev * 3;
+        if (info) {
+            return info_damage(dice, sides, 0);
         }
-        break;
 
+        if (cont) {
+            dispel_monsters(player_ptr, damroll(dice, sides));
+        }
+
+        break;
+    }
     case 28:
         if (name)
             return _("ヤヴァンナの助け", "Relief of Yavanna");

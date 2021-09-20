@@ -65,7 +65,7 @@ void process_terrify_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (set_afraid(player_ptr, player_ptr->afraid + 3 + randint1(monap_ptr->rlev))) {
+    if (BadStatusSetter(player_ptr).afraidness(player_ptr->afraid + 3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }

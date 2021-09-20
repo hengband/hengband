@@ -134,7 +134,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->afraid) {
-        (void)set_afraid(player_ptr, player_ptr->afraid - dec_count);
+        (void)bss.afraidness(player_ptr->afraid - dec_count);
     }
 
     if (player_ptr->fast) {

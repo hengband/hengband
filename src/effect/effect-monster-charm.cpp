@@ -218,16 +218,18 @@ static void effect_monster_domination_corrupted_addition(player_type *player_ptr
     switch (randint1(4)) {
     case 1:
         set_stun(player_ptr, player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
-        break;
+        return;
     case 2:
         (void)bss.confusion(player_ptr->confused + em_ptr->dam / 2);
-        break;
+        return;
     default:
         if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
         } else {
-            set_afraid(player_ptr, player_ptr->afraid + em_ptr->dam);
+            (void)bss.afraidness(player_ptr->afraid + em_ptr->dam);
         }
+
+        return;
     }
 }
 

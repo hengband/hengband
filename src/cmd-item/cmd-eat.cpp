@@ -68,7 +68,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     case SV_FOOD_BLINDNESS:
         return !has_resist_blind(player_ptr) && bss.blindness(player_ptr->blind + randint0(200) + 200);
     case SV_FOOD_PARANOIA:
-        return !has_resist_fear(player_ptr) && set_afraid(player_ptr, player_ptr->afraid + randint0(10) + 10);
+        return !has_resist_fear(player_ptr) && bss.afraidness(player_ptr->afraid + randint0(10) + 10);
     case SV_FOOD_CONFUSION:
         return !has_resist_conf(player_ptr) && bss.confusion(player_ptr->confused + randint0(10) + 10);
     case SV_FOOD_HALLUCINATION:
@@ -104,7 +104,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     case SV_FOOD_CURE_BLINDNESS:
         return bss.blindness(0);
     case SV_FOOD_CURE_PARANOIA:
-        return set_afraid(player_ptr, 0);
+        return bss.afraidness(0);
     case SV_FOOD_CURE_CONFUSION:
         return bss.confusion(0);
     case SV_FOOD_CURE_SERIOUS:

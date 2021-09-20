@@ -304,7 +304,7 @@ bool switch_race_racial_execution(player_type *player_ptr, const int32_t command
         return true;
     case player_race_type::HALF_ORC:
         msg_print(_("勇気を出した。", "You play tough."));
-        (void)set_afraid(player_ptr, 0);
+        (void)BadStatusSetter(player_ptr).afraidness(0);
         return true;
     case player_race_type::HALF_TROLL:
         msg_print(_("うがぁぁ！", "RAAAGH!"));
