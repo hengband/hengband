@@ -342,6 +342,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
     o_ptr->ix = old_o.ix;
     o_ptr->marked = old_o.marked;
     o_ptr->number = old_o.number;
+    o_ptr->discount = old_o.discount;
 
     if (o_ptr->tval == TV_DRAG_ARMOR)
         o_ptr->timeout = old_o.timeout;
