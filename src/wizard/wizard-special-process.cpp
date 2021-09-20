@@ -193,11 +193,11 @@ void wiz_create_item(player_type *player_ptr)
         return;
 
     if (k_info[k_idx].gen_flags.has(TRG::INSTA_ART)) {
-        for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
-            if ((a_info[i].tval != k_info[k_idx].tval) || (a_info[i].sval != k_info[k_idx].sval))
+        for (const auto &a_ref : a_info) {
+            if ((a_ref.idx == 0) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval))
                 continue;
 
-            (void)create_named_art(player_ptr, i, player_ptr->y, player_ptr->x);
+            (void)create_named_art(player_ptr, a_ref.idx, player_ptr->y, player_ptr->x);
             msg_print("Allocated(INSTA_ART).");
             return;
         }

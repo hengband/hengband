@@ -78,9 +78,8 @@ void player_wipe_without_name(player_type *player_ptr)
     for (int i = 0; i < INVEN_TOTAL; i++)
         (&player_ptr->inventory_list[i])->wipe();
 
-    for (int i = 0; i < max_a_idx; i++) {
-        artifact_type *a_ptr = &a_info[i];
-        a_ptr->cur_num = 0;
+    for (auto &a_ref : a_info) {
+        a_ref.cur_num = 0;
     }
 
     k_info_reset();

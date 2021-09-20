@@ -274,37 +274,35 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
     if (o_ptr->number != 1)
         return false;
 
-    for (ARTIFACT_IDX i = 0; i < max_a_idx; i++) {
-        auto a_ptr = &a_info[i];
-
-        if (a_ptr->name.empty())
+    for (const auto &a_ref : a_info) {
+        if (a_ref.name.empty())
             continue;
 
-        if (a_ptr->cur_num)
+        if (a_ref.cur_num)
             continue;
 
-        if (a_ptr->gen_flags.has(TRG::QUESTITEM))
+        if (a_ref.gen_flags.has(TRG::QUESTITEM))
             continue;
 
-        if (a_ptr->gen_flags.has(TRG::INSTA_ART))
+        if (a_ref.gen_flags.has(TRG::INSTA_ART))
             continue;
 
-        if (a_ptr->tval != o_ptr->tval)
+        if (a_ref.tval != o_ptr->tval)
             continue;
 
-        if (a_ptr->sval != o_ptr->sval)
+        if (a_ref.sval != o_ptr->sval)
             continue;
 
-        if (a_ptr->level > floor_ptr->dun_level) {
-            int d = (a_ptr->level - floor_ptr->dun_level) * 2;
+        if (a_ref.level > floor_ptr->dun_level) {
+            int d = (a_ref.level - floor_ptr->dun_level) * 2;
             if (!one_in_(d))
                 continue;
         }
 
-        if (!one_in_(a_ptr->rarity))
+        if (!one_in_(a_ref.rarity))
             continue;
 
-        o_ptr->name1 = i;
+        o_ptr->name1 = a_ref.idx;
         return true;
     }
 
@@ -337,38 +335,36 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
         return false;
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
-    for (ARTIFACT_IDX i = 0; i < max_a_idx; i++) {
-        auto a_ptr = &a_info[i];
-
+    for (const auto &a_ref : a_info) {
         /*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
-        if (a_ptr->name.empty())
+        if (a_ref.name.empty())
             continue;
 
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
-        if (a_ptr->cur_num)
+        if (a_ref.cur_num)
             continue;
-        if (a_ptr->gen_flags.has(TRG::QUESTITEM))
+        if (a_ref.gen_flags.has(TRG::QUESTITEM))
             continue;
-        if (!(a_ptr->gen_flags.has(TRG::INSTA_ART)))
+        if (!(a_ref.gen_flags.has(TRG::INSTA_ART)))
             continue;
 
         /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /
          *  XXX XXX Enforce minimum "depth" (loosely) */
-        if (a_ptr->level > floor_ptr->object_level) {
+        if (a_ref.level > floor_ptr->object_level) {
             /* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-            int d = (a_ptr->level - floor_ptr->object_level) * 2;
+            int d = (a_ref.level - floor_ptr->object_level) * 2;
             if (!one_in_(d))
                 continue;
         }
 
         /*! @note 1/(レア度)の確率を満たさないと除外される / Artifact "rarity roll" */
-        if (!one_in_(a_ptr->rarity))
+        if (!one_in_(a_ref.rarity))
             continue;
 
         /*! @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。ベースアイテムの生成階層が足りない場合1/(不足階層*5)
          * を満たさないと除外される。 / Find the base object. XXX XXX Enforce minimum "object" level (loosely). Acquire the "out-of-depth factor". Roll for
          * out-of-depth creation. */
-        k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+        k_idx = lookup_kind(a_ref.tval, a_ref.sval);
         if (k_info[k_idx].level > floor_ptr->object_level) {
             int d = (k_info[k_idx].level - floor_ptr->object_level) * 5;
             if (!one_in_(d))
@@ -379,7 +375,7 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
         o_ptr->prep(k_idx);
 
-        o_ptr->name1 = i;
+        o_ptr->name1 = a_ref.idx;
         return true;
     }
 

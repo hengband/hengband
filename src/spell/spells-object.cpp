@@ -124,14 +124,16 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
         fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
 
         if (insta_art || fixed_art) {
-            for (a_idx = 1; a_idx < max_a_idx; a_idx++) {
-                if (insta_art && !a_info[a_idx].gen_flags.has(TRG::INSTA_ART))
+            for (const auto &a_ref : a_info) {
+                if (a_ref.idx == 0)
                     continue;
-                if (a_info[a_idx].tval != k_info[k_idx].tval)
+                if (insta_art && !a_ref.gen_flags.has(TRG::INSTA_ART))
                     continue;
-                if (a_info[a_idx].sval != k_info[k_idx].sval)
+                if (a_ref.tval != k_info[k_idx].tval)
                     continue;
-                if (a_info[a_idx].cur_num > 0)
+                if (a_ref.sval != k_info[k_idx].sval)
+                    continue;
+                if (a_ref.cur_num > 0)
                     continue;
                 break;
             }

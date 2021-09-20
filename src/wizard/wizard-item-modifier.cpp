@@ -913,24 +913,23 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
 
         int len;
         int mlen = 0;
-        for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
-            artifact_type *a_ptr = &a_info[i];
-            if (a_ptr->name.empty())
+        for (const auto &a_ref : a_info) {
+            if (a_ref.idx == 0 || a_ref.name.empty())
                 continue;
 
-            KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+            KIND_OBJECT_IDX k_idx = lookup_kind(a_ref.tval, a_ref.sval);
             if (!k_idx)
                 continue;
 
             o_ptr->prep(k_idx);
-            o_ptr->name1 = i;
+            o_ptr->name1 = a_ref.idx;
 
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
 #endif
             a_str = a_desc;
-            strcpy(a_desc, a_ptr->name.c_str());
+            strcpy(a_desc, a_ref.name.c_str());
 
             if (*a_str == '$')
                 a_str++;
@@ -964,14 +963,14 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
 #endif
 
             if (cheat_xtra)
-                msg_format("Matching artifact No.%d %s(%s)", i, a_desc, _(&o_name[2], o_name));
+                msg_format("Matching artifact No.%d %s(%s)", a_ref.idx, a_desc, _(&o_name[2], o_name));
 
-            std::vector<const char *> l = { a_str, a_ptr->name.c_str(), _(&o_name[2], o_name) };
+            std::vector<const char *> l = { a_str, a_ref.name.c_str(), _(&o_name[2], o_name) };
             for (size_t c = 0; c < l.size(); c++) {
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));
                     if (len > mlen) {
-                        a_ids.push_back(i);
+                        a_ids.push_back(a_ref.idx);
                         mlen = len;
                     }
                 }
@@ -1008,11 +1007,10 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
         artifact_type *a_ptr;
         ARTIFACT_IDX a_idx = 0;
         if (k_ptr->gen_flags.has(TRG::INSTA_ART)) {
-            for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
-                a_ptr = &a_info[i];
-                if (a_ptr->tval != k_ptr->tval || a_ptr->sval != k_ptr->sval)
+            for (const auto &a_ref : a_info) {
+                if (a_ref.idx == 0 || a_ref.tval != k_ptr->tval || a_ref.sval != k_ptr->sval)
                     continue;
-                a_idx = i;
+                a_idx = a_ref.idx;
                 break;
             }
         }

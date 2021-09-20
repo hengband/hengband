@@ -51,15 +51,14 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
     bool *okay;
     C_MAKE(okay, max_a_idx, bool);
 
-    for (ARTIFACT_IDX k = 0; k < max_a_idx; k++) {
-        artifact_type *a_ptr = &a_info[k];
-        okay[k] = false;
-        if (a_ptr->name.empty())
+    for (const auto &a_ref : a_info) {
+        okay[a_ref.idx] = false;
+        if (a_ref.name.empty())
             continue;
-        if (!a_ptr->cur_num)
+        if (!a_ref.cur_num)
             continue;
 
-        okay[k] = true;
+        okay[a_ref.idx] = true;
     }
 
     for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -91,9 +90,9 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
     }
 
     int n = 0;
-    for (ARTIFACT_IDX k = 0; k < max_a_idx; k++) {
-        if (okay[k])
-            who[n++] = k;
+    for (const auto &a_ref : a_info) {
+        if (okay[a_ref.idx])
+            who[n++] = a_ref.idx;
     }
 
     uint16_t why = 3;
