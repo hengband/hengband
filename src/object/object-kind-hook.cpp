@@ -190,18 +190,17 @@ KIND_OBJECT_IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval)
 {
     int num = 0;
     KIND_OBJECT_IDX bk = 0;
-    for (KIND_OBJECT_IDX k = 1; k < max_k_idx; k++) {
-        object_kind *k_ptr = &k_info[k];
-        if (k_ptr->tval != tval)
+    for (const auto& k_ref : k_info) {
+        if (k_ref.tval != tval)
             continue;
 
-        if (k_ptr->sval == sval)
-            return k;
+        if (k_ref.sval == sval)
+            return k_ref.idx;
 
         if ((sval != SV_ANY) || !one_in_(++num))
             continue;
 
-        bk = k;
+        bk = k_ref.idx;
     }
 
     if (sval == SV_ANY)

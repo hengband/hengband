@@ -105,10 +105,9 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
         "---", "---", "---", "-----", "-----", "-------------------");
 
     int n = 0;
-    for (auto i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!r_ptr->name.empty())
-            who[n++] = (int16_t)i;
+    for (const auto &r_ref : r_info) {
+        if (r_ref.idx > 0 && !r_ref.name.empty())
+            who[n++] = r_ref.idx;
     }
 
     ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
@@ -203,10 +202,9 @@ spoiler_output_status spoil_mon_info(concptr fname)
     MONRACE_IDX *who;
     C_MAKE(who, max_r_idx, MONRACE_IDX);
     int n = 0;
-    for (int i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!r_ptr->name.empty())
-            who[n++] = (int16_t)i;
+    for (const auto &r_ref : r_info) {
+        if (r_ref.idx > 0 && !r_ref.name.empty())
+            who[n++] = r_ref.idx;
     }
 
     uint16_t why = 2;

@@ -724,12 +724,12 @@ parse_error_type parse_line_wilderness(player_type *player_ptr, char *buf, int x
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
 
-    for (int i = 1; i < w_ptr->max_d_idx; i++) {
-        if (!d_info[i].maxdepth)
+    for (const auto &d_ref : d_info) {
+        if (d_ref.idx == 0 || !d_ref.maxdepth)
             continue;
-        wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte)i;
-        if (!wilderness[d_info[i].dy][d_info[i].dx].town) {
-            wilderness[d_info[i].dy][d_info[i].dx].level = d_info[i].mindepth;
+        wilderness[d_ref.dy][d_ref.dx].entrance = static_cast<byte>(d_ref.idx);
+        if (!wilderness[d_ref.dy][d_ref.dx].town) {
+            wilderness[d_ref.dy][d_ref.dx].level = d_ref.mindepth;
         }
     }
 

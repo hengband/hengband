@@ -106,23 +106,19 @@ errr init_other(player_type *player_ptr)
  */
 errr init_object_alloc(void)
 {
-    int16_t aux[MAX_DEPTH];
-    (void)C_WIPE(aux, MAX_DEPTH, int16_t);
+    int16_t aux[MAX_DEPTH] = {};
 
-    int16_t num[MAX_DEPTH];
-    (void)C_WIPE(num, MAX_DEPTH, int16_t);
+    int16_t num[MAX_DEPTH] = {};
 
     if (alloc_kind_table)
         C_KILL(alloc_kind_table, alloc_kind_size, alloc_entry);
 
     alloc_kind_size = 0;
-    for (int i = 1; i < max_k_idx; i++) {
-        object_kind *k_ptr;
-        k_ptr = &k_info[i];
+    for (const auto &k_ref : k_info) {
         for (int j = 0; j < 4; j++) {
-            if (k_ptr->chance[j]) {
+            if (k_ref.chance[j]) {
                 alloc_kind_size++;
-                num[k_ptr->locale[j]]++;
+                num[k_ref.locale[j]]++;
             }
         }
     }
@@ -136,18 +132,16 @@ errr init_object_alloc(void)
     C_MAKE(alloc_kind_table, alloc_kind_size, alloc_entry);
     alloc_entry *table;
     table = alloc_kind_table;
-    for (int i = 1; i < max_k_idx; i++) {
-        object_kind *k_ptr;
-        k_ptr = &k_info[i];
+    for (const auto &k_ref : k_info) {
         for (int j = 0; j < 4; j++) {
-            if (k_ptr->chance[j] == 0)
+            if (k_ref.chance[j] == 0)
                 continue;
 
-            int x = k_ptr->locale[j];
-            int p = (100 / k_ptr->chance[j]);
+            int x = k_ref.locale[j];
+            int p = (100 / k_ref.chance[j]);
             int y = (x > 0) ? num[x - 1] : 0;
             int z = y + aux[x];
-            table[z].index = (KIND_OBJECT_IDX)i;
+            table[z].index = k_ref.idx;
             table[z].level = (DEPTH)x;
             table[z].prob1 = (PROB)p;
             table[z].prob2 = (PROB)p;
@@ -168,9 +162,11 @@ errr init_alloc(void)
     monster_race *r_ptr;
     tag_type *elements;
     C_MAKE(elements, max_r_idx, tag_type);
-    for (int i = 1; i < max_r_idx; i++) {
-        elements[i].tag = r_info[i].level;
-        elements[i].index = i;
+    for (const auto &r_ref : r_info) {
+        if (r_ref.idx > 0) {
+            elements[r_ref.idx].tag = r_ref.level;
+            elements[r_ref.idx].index = r_ref.idx;
+        }
     }
 
     tag_sort(elements, max_r_idx);

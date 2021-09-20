@@ -147,18 +147,16 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (o_ptr->sval == SV_BROKEN_DAGGER) {
         int n = 1;
         k_idx = 0;
-        for (KIND_OBJECT_IDX j = 1; j < max_k_idx; j++) {
-            object_kind *k_aux_ptr = &k_info[j];
-
-            if (k_aux_ptr->tval != TV_SWORD)
+        for (const auto &k_ref : k_info) {
+            if (k_ref.tval != TV_SWORD)
                 continue;
-            if ((k_aux_ptr->sval == SV_BROKEN_DAGGER) || (k_aux_ptr->sval == SV_BROKEN_SWORD) || (k_aux_ptr->sval == SV_POISON_NEEDLE))
+            if ((k_ref.sval == SV_BROKEN_DAGGER) || (k_ref.sval == SV_BROKEN_SWORD) || (k_ref.sval == SV_POISON_NEEDLE))
                 continue;
-            if (k_aux_ptr->weight > 99)
+            if (k_ref.weight > 99)
                 continue;
 
             if (one_in_(n)) {
-                k_idx = j;
+                k_idx = k_ref.idx;
                 n++;
             }
         }

@@ -162,14 +162,13 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
             spoiler_blanklines(1);
         }
 
-        for (ARTIFACT_IDX j = 1; j < max_a_idx; ++j) {
-            artifact_type *a_ptr = &a_info[j];
-            if (a_ptr->tval != group_artifact[i].tval)
+        for (const auto &a_ref : a_info) {
+            if (a_ref.idx == 0 || a_ref.tval != group_artifact[i].tval)
                 continue;
 
             q_ptr = &forge;
             q_ptr->wipe();
-            if (!make_fake_artifact(q_ptr, j))
+            if (!make_fake_artifact(q_ptr, a_ref.idx))
                 continue;
 
             object_analyze(&dummy, q_ptr, &artifact);

@@ -280,17 +280,16 @@ void WorldTurnProcessor::shuffle_shopkeeper()
         }
     } while (true);
 
-    for (auto i = 1; i < max_f_idx; i++) {
-        auto *f_ptr = &f_info[i];
-        if (f_ptr->name.empty() || f_ptr->flags.has_not(FF::STORE))
+    for (const auto &f_ref : f_info) {
+        if (f_ref.name.empty() || f_ref.flags.has_not(FF::STORE))
             continue;
 
-        if (f_ptr->subtype != n) {
+        if (f_ref.subtype != n) {
             continue;
         }
 
         if (cheat_xtra) {
-            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ptr->name.c_str());
+            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.c_str());
         }
 
         store_shuffle(this->player_ptr, n);

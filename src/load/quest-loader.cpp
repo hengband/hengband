@@ -22,13 +22,12 @@
 void rd_unique_info(void)
 {
     const int MAX_TRIES = 100;
-    for (int i = 0; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        r_ptr->max_num = MAX_TRIES;
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            r_ptr->max_num = 1;
-        else if (r_ptr->flags7 & RF7_NAZGUL)
-            r_ptr->max_num = MAX_NAZGUL_NUM;
+    for (auto &r_ref : r_info) {
+        r_ref.max_num = MAX_TRIES;
+        if (r_ref.flags1 & RF1_UNIQUE)
+            r_ref.max_num = 1;
+        else if (r_ref.flags7 & RF7_NAZGUL)
+            r_ref.max_num = MAX_NAZGUL_NUM;
     }
 }
 

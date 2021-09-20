@@ -34,17 +34,15 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
     for (int i = 0; i < 5; i++) {
         for (int num = 0; num < 64; num++) {
             char tmp[30];
-            for (KIND_OBJECT_IDX j = 0; j < max_k_idx; j++) {
-                object_kind *k_ptr = &k_info[j];
-
-                if ((k_ptr->tval != TV_SWORD - i) || (k_ptr->sval != num))
+            for (const auto &k_ref : k_info) {
+                if ((k_ref.tval != TV_SWORD - i) || (k_ref.sval != num))
                     continue;
-                if ((k_ptr->tval == TV_BOW) && (k_ptr->sval == SV_CRIMSON || k_ptr->sval == SV_HARP))
+                if ((k_ref.tval == TV_BOW) && (k_ref.sval == SV_CRIMSON || k_ref.sval == SV_HARP))
                     continue;
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[4 - i][num];
                 SUB_EXP weapon_max = s_info[player_ptr->pclass].w_max[4 - i][num];
-                strip_name(tmp, j);
+                strip_name(tmp, k_ref.idx);
                 fprintf(fff, "%-25s ", tmp);
                 if (show_actual_value)
                     fprintf(fff, "%4d/%4d ", MIN(weapon_exp, weapon_max), weapon_max);

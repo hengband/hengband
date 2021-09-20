@@ -29,14 +29,13 @@
 static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 {
     FEAT_IDX feat_cnt = 0;
-    for (FEAT_IDX i = 0; i < max_f_idx; i++) {
-        feature_type *f_ptr = &f_info[i];
-        if (f_ptr->name.empty())
+    for (const auto &f_ref : f_info) {
+        if (f_ref.name.empty())
             continue;
-        if (f_ptr->mimic != i)
+        if (f_ref.mimic != f_ref.idx)
             continue;
 
-        feat_idx[feat_cnt++] = i;
+        feat_idx[feat_cnt++] = f_ref.idx;
         if (mode & 0x01)
             break;
     }
@@ -349,20 +348,20 @@ void do_cmd_knowledge_dungeon(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    for (int i = 1; i < w_ptr->max_d_idx; i++) {
+    for (const auto &d_ref : d_info) {
         bool seiha = false;
 
-        if (!d_info[i].maxdepth)
+        if (d_ref.idx == 0 || !d_ref.maxdepth)
             continue;
-        if (!max_dlv[i])
+        if (!max_dlv[d_ref.idx])
             continue;
-        if (d_info[i].final_guardian) {
-            if (!r_info[d_info[i].final_guardian].max_num)
+        if (d_ref.final_guardian) {
+            if (!r_info[d_ref.final_guardian].max_num)
                 seiha = true;
-        } else if (max_dlv[i] == d_info[i].maxdepth)
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth)
             seiha = true;
 
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
+        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
     }
 
     angband_fclose(fff);

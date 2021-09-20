@@ -58,24 +58,23 @@ static IDX collect_monsters(player_type *player_ptr, IDX grp_cur, IDX mon_idx[],
     bool grp_amberite = (monster_group_char[grp_cur] == (char *)-4L);
 
     IDX mon_cnt = 0;
-    for (IDX i = 0; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (r_ptr->name.empty())
+    for (const auto &r_ref : r_info) {
+        if (r_ref.name.empty())
             continue;
-        if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !r_ptr->r_sights)
+        if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !r_ref.r_sights)
             continue;
 
         if (grp_unique) {
-            if (none_bits(r_ptr->flags1, RF1_UNIQUE))
+            if (none_bits(r_ref.flags1, RF1_UNIQUE))
                 continue;
         } else if (grp_riding) {
-            if (none_bits(r_ptr->flags7, RF7_RIDING))
+            if (none_bits(r_ref.flags7, RF7_RIDING))
                 continue;
         } else if (grp_wanted) {
             bool wanted = false;
             for (int j = 0; j < MAX_BOUNTY; j++) {
-                if (w_ptr->bounty_r_idx[j] == i || w_ptr->bounty_r_idx[j] - 10000 == i
-                    || (player_ptr->today_mon && player_ptr->today_mon == i)) {
+                if (w_ptr->bounty_r_idx[j] == r_ref.idx || w_ptr->bounty_r_idx[j] - 10000 == r_ref.idx
+                    || (player_ptr->today_mon && player_ptr->today_mon == r_ref.idx)) {
                     wanted = true;
                     break;
                 }
@@ -84,14 +83,14 @@ static IDX collect_monsters(player_type *player_ptr, IDX grp_cur, IDX mon_idx[],
             if (!wanted)
                 continue;
         } else if (grp_amberite) {
-            if (none_bits(r_ptr->flags3, RF3_AMBERITE))
+            if (none_bits(r_ref.flags3, RF3_AMBERITE))
                 continue;
         } else {
-            if (!angband_strchr(group_char, r_ptr->d_char))
+            if (!angband_strchr(group_char, r_ref.d_char))
                 continue;
         }
 
-        mon_idx[mon_cnt++] = i;
+        mon_idx[mon_cnt++] = r_ref.idx;
         if (mode == MONSTER_LORE_NORMAL)
             break;
         if (mode == MONSTER_LORE_DEBUG)
@@ -157,23 +156,17 @@ void do_cmd_knowledge_kill_count(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    MONRACE_IDX *who;
-    C_MAKE(who, max_r_idx, MONRACE_IDX);
     int32_t total = 0;
-    for (int kk = 1; kk < max_r_idx; kk++) {
-        monster_race *r_ptr = &r_info[kk];
-
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-            bool dead = (r_ptr->max_num == 0);
+    for (const auto &r_ref : r_info) {
+        if (any_bits(r_ref.flags1, RF1_UNIQUE)) {
+            bool dead = (r_ref.max_num == 0);
 
             if (dead) {
                 total++;
             }
         } else {
-            MONSTER_NUMBER this_monster = r_ptr->r_pkills;
-
-            if (this_monster > 0) {
-                total += this_monster;
+            if (r_ref.r_pkills > 0) {
+                total += r_ref.r_pkills;
             }
         }
     }
@@ -187,19 +180,18 @@ void do_cmd_knowledge_kill_count(player_type *player_ptr)
         fprintf(fff, "You have defeated %ld %s.\n\n", (long int)total, (total == 1) ? "enemy" : "enemies");
 #endif
 
+    std::vector<MONRACE_IDX> who;
     total = 0;
-    int n = 0;
-    for (MONRACE_IDX i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!r_ptr->name.empty())
-            who[n++] = i;
+    for (const auto &r_ref : r_info) {
+        if (r_ref.idx > 0 && !r_ref.name.empty())
+            who.push_back(r_ref.idx);
     }
 
     uint16_t why = 2;
     char buf[80];
-    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
-    for (int k = 0; k < n; k++) {
-        monster_race *r_ptr = &r_info[who[k]];
+    ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
+    for (auto r_idx : who) {
+        monster_race *r_ptr = &r_info[r_idx];
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
@@ -247,7 +239,6 @@ void do_cmd_knowledge_kill_count(player_type *player_ptr)
     fprintf(fff, "   Total: %lu creature%s killed.\n", (ulong)total, (total == 1 ? "" : "s"));
 #endif
 
-    C_KILL(who, max_r_idx, int16_t);
     angband_fclose(fff);
     (void)show_file(player_ptr, true, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
     fd_kill(file_name);
