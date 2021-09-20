@@ -582,43 +582,40 @@ concptr do_hissatsu_spell(player_type *player_ptr, SPELL_IDX spell, spell_type m
         break;
 
     case 19:
-        if (name)
+        if (name) {
             return _("赤流渦", "Bloody Maelstrom");
-        if (desc)
+        }
+
+        if (desc) {
             return _("自分自身も傷を作りつつ、その傷が深いほど大きい威力で全方向の敵を攻撃できる。生きていないモンスターには効果がない。",
                 "Attacks all adjacent monsters with power corresponding to your cuts. Then increases your cuts. Has no effect on unliving monsters.");
+        }
 
         if (cast) {
             POSITION y = 0, x = 0;
-
-            grid_type *g_ptr;
-            monster_type *m_ptr;
-
-            if (player_ptr->cut < 300)
-                set_cut(player_ptr, player_ptr->cut + 300);
-            else
-                set_cut(player_ptr, player_ptr->cut * 2);
-
+            short new_cut = player_ptr->cut < 300 ? player_ptr->cut + 300 : player_ptr->cut * 2;
+            (void)BadStatusSetter(player_ptr).cut(new_cut);
             for (dir = 0; dir < 8; dir++) {
                 y = player_ptr->y + ddy_ddd[dir];
                 x = player_ptr->x + ddx_ddd[dir];
-                g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-                m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-
-                /* Hack -- attack monsters */
-                if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT))) {
-                    if (!monster_living(m_ptr->r_idx)) {
-                        GAME_TEXT m_name[MAX_NLEN];
-
-                        monster_desc(player_ptr, m_name, m_ptr, 0);
-                        msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);
-                    } else
-                        do_cmd_attack(player_ptr, y, x, HISSATSU_SEKIRYUKA);
+                auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+                if ((g_ptr->m_idx == 0) || (!m_ptr->ml && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT))) {
+                    continue;
                 }
+
+                if (monster_living(m_ptr->r_idx)) {
+                    do_cmd_attack(player_ptr, y, x, HISSATSU_SEKIRYUKA);
+                    continue;
+                }
+                    
+                GAME_TEXT m_name[MAX_NLEN];
+                monster_desc(player_ptr, m_name, m_ptr, 0);
+                msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);
             }
         }
-        break;
 
+        break;
     case 20:
         if (name)
             return _("激震撃", "Earthquake Blow");

@@ -46,11 +46,13 @@ void effect_player_curse_3(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_curse_4(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && !(ep_ptr->m_ptr->r_idx == MON_KENSHIROU) && !check_multishadow(player_ptr)) {
+    if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && (ep_ptr->m_ptr->r_idx != MON_KENSHIROU) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
-    } else {
-        ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
-        if (!check_multishadow(player_ptr))
-            (void)set_cut(player_ptr, player_ptr->cut + damroll(10, 10));
+        return;
+    }
+
+    ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
+    if (!check_multishadow(player_ptr)) {
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut + damroll(10, 10));
     }
 }

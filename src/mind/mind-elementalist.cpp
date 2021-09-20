@@ -497,7 +497,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         return psychometry(player_ptr);
     case ElementSpells::CURE:
         (void)hp_player(player_ptr, damroll(2, 8));
-        (void)set_cut(player_ptr, player_ptr->cut - 10);
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut - 10);
         break;
     case ElementSpells::BOLT_2ND:
         if (!get_aim_dir(player_ptr, &dir))

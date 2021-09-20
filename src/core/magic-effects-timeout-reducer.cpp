@@ -221,9 +221,11 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->cut) {
-        int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        if (player_ptr->cut > 1000)
+        short adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
+        if (player_ptr->cut > 1000) {
             adjust = 0;
-        (void)set_cut(player_ptr, player_ptr->cut - adjust);
+        }
+
+        (void)bss.cut(player_ptr->cut - adjust);
     }
 }

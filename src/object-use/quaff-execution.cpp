@@ -106,7 +106,7 @@ static bool detonation(player_type *player_ptr)
     take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
     BadStatusSetter bss(player_ptr);
     (void)bss.stun(player_ptr->effects()->stun()->current() + 75);
-    (void)set_cut(player_ptr, player_ptr->cut + 5000);
+    (void)bss.cut(player_ptr->cut + 5000);
     return true;
 }
 

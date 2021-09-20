@@ -200,7 +200,7 @@ static void calc_player_cut(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     if (cut_plus > 0) {
-        (void)set_cut(player_ptr, player_ptr->cut + cut_plus);
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut + cut_plus);
     }
 }
 

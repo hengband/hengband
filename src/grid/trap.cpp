@@ -313,27 +313,29 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
     }
 
     msg_format(_("%sに落ちてしまった！", "You have fallen into %s!"), trap_name);
-
-    /* Base damage */
     dam = damroll(2, 6);
-
-    /* Extra spike damage */
-    if ((trap_feat_type == TRAP_SPIKED_PIT || trap_feat_type == TRAP_POISON_PIT) && one_in_(2)) {
-        msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
-
-        dam = dam * 2;
-        (void)set_cut(player_ptr, player_ptr->cut + randint1(dam));
-
-        if (trap_feat_type == TRAP_POISON_PIT) {
-            if (has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) {
-                msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
-            } else {
-                dam = dam * 2;
-                (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint1(dam));
-            }
-        }
+    if (((trap_feat_type != TRAP_SPIKED_PIT) && (trap_feat_type != TRAP_POISON_PIT)) || one_in_(2)) {
+        take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
+        return;
     }
 
+    msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
+    dam = dam * 2;
+    BadStatusSetter bss(player_ptr);
+    (void)bss.cut(player_ptr->cut + randint1(dam));
+    if (trap_feat_type != TRAP_POISON_PIT) {
+        take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
+        return;
+    }
+
+    if (has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) {
+        msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
+        return;
+    }
+
+    dam = dam * 2;
+    (void)bss.poison(player_ptr->poisoned + randint1(dam));
     take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
 }
 

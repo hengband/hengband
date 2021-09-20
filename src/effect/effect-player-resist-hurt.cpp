@@ -267,7 +267,7 @@ void effect_player_shards(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_shards_damage_rate(player_ptr, CALC_RAND) / 100;
 
     if (!has_resist_shard(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_cut(player_ptr, player_ptr->cut + ep_ptr->dam);
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut + ep_ptr->dam);
     }
 
     if (!has_resist_shard(player_ptr) || one_in_(13))
@@ -350,16 +350,18 @@ void effect_player_force(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_rocket(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("爆発があった！", "There is an explosion!"));
+    }
+
+    BadStatusSetter bss(player_ptr);
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + randint1(20));
+        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(20));
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(player_ptr, CALC_RAND) / 100;
-
     if (!has_resist_shard(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_cut(player_ptr, player_ptr->cut + (ep_ptr->dam / 2));
+        (void)bss.cut(player_ptr->cut + (ep_ptr->dam / 2));
     }
 
     if (!has_resist_shard(player_ptr) || one_in_(12)) {
@@ -613,7 +615,7 @@ void effect_player_icee(player_type *player_ptr, effect_player_type *ep_ptr)
 
     BadStatusSetter bss(player_ptr);
     if (!has_resist_shard(player_ptr)) {
-        (void)set_cut(player_ptr, player_ptr->cut + damroll(5, 8));
+        (void)bss.cut(player_ptr->cut + damroll(5, 8));
     }
 
     if (!has_resist_sound(player_ptr)) {
@@ -621,8 +623,9 @@ void effect_player_icee(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     if ((!(has_resist_cold(player_ptr) || is_oppose_cold(player_ptr))) || one_in_(12)) {
-        if (!has_immune_cold(player_ptr))
+        if (!has_immune_cold(player_ptr)) {
             inventory_damage(player_ptr, BreakerCold(), 3);
+        }
     }
 }
 

@@ -21,7 +21,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-BadStatusSetter::BadStatusSetter(player_type* player_ptr)
+BadStatusSetter::BadStatusSetter(player_type *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -39,7 +39,8 @@ BadStatusSetter::BadStatusSetter(player_type* player_ptr)
 bool BadStatusSetter::blindness(TIME_EFFECT v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if (this->player_ptr->is_dead) {
         return false;
@@ -93,7 +94,8 @@ bool BadStatusSetter::blindness(TIME_EFFECT v)
 bool BadStatusSetter::confusion(TIME_EFFECT v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if (this->player_ptr->is_dead) {
         return false;
@@ -167,7 +169,8 @@ bool BadStatusSetter::confusion(TIME_EFFECT v)
 bool BadStatusSetter::poison(TIME_EFFECT v)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if (this->player_ptr->is_dead)
         return false;
@@ -207,7 +210,8 @@ bool BadStatusSetter::poison(TIME_EFFECT v)
 bool BadStatusSetter::afraidness(TIME_EFFECT v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if (this->player_ptr->is_dead) {
         return false;
@@ -259,7 +263,8 @@ bool BadStatusSetter::afraidness(TIME_EFFECT v)
 bool BadStatusSetter::paralysis(TIME_EFFECT v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if (this->player_ptr->is_dead) {
         return false;
@@ -311,7 +316,8 @@ bool BadStatusSetter::paralysis(TIME_EFFECT v)
 bool BadStatusSetter::hallucination(TIME_EFFECT v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if (this->player_ptr->is_dead) {
         return false;
@@ -365,7 +371,8 @@ bool BadStatusSetter::hallucination(TIME_EFFECT v)
 bool BadStatusSetter::slowness(TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if (this->player_ptr->is_dead) {
         return false;
@@ -411,7 +418,8 @@ bool BadStatusSetter::slowness(TIME_EFFECT v, bool do_dec)
 bool BadStatusSetter::stun(TIME_EFFECT v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
     if (this->player_ptr->is_dead) {
         return false;
     }
@@ -495,32 +503,36 @@ bool BadStatusSetter::stun(TIME_EFFECT v)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool set_cut(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::cut(TIME_EFFECT v)
 {
     int old_aux, new_aux;
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if (player_ptr->is_dead)
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+
+    if (this->player_ptr->is_dead) {
         return false;
+    }
 
-    if ((player_ptr->prace == player_race_type::GOLEM || player_ptr->prace == player_race_type::SKELETON || player_ptr->prace == player_race_type::SPECTRE
-            || (player_ptr->prace == player_race_type::ZOMBIE && player_ptr->lev > 11))
-        && !player_ptr->mimic_form)
+    if ((this->player_ptr->prace == player_race_type::GOLEM || this->player_ptr->prace == player_race_type::SKELETON || this->player_ptr->prace == player_race_type::SPECTRE
+            || (this->player_ptr->prace == player_race_type::ZOMBIE && this->player_ptr->lev > 11))
+        && !this->player_ptr->mimic_form) {
         v = 0;
+    }
 
-    if (player_ptr->cut > 1000) {
+    if (this->player_ptr->cut > 1000) {
         old_aux = 7;
-    } else if (player_ptr->cut > 200) {
+    } else if (this->player_ptr->cut > 200) {
         old_aux = 6;
-    } else if (player_ptr->cut > 100) {
+    } else if (this->player_ptr->cut > 100) {
         old_aux = 5;
-    } else if (player_ptr->cut > 50) {
+    } else if (this->player_ptr->cut > 50) {
         old_aux = 4;
-    } else if (player_ptr->cut > 25) {
+    } else if (this->player_ptr->cut > 25) {
         old_aux = 3;
-    } else if (player_ptr->cut > 10) {
+    } else if (this->player_ptr->cut > 10) {
         old_aux = 2;
-    } else if (player_ptr->cut > 0) {
+    } else if (this->player_ptr->cut > 0) {
         old_aux = 1;
     } else {
         old_aux = 0;
@@ -571,30 +583,36 @@ bool set_cut(player_type *player_ptr, TIME_EFFECT v)
 
         notice = true;
         if (randint1(1000) < v || one_in_(16)) {
-            if (!has_sustain_chr(player_ptr)) {
+            if (!has_sustain_chr(this->player_ptr)) {
                 msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
-                do_dec_stat(player_ptr, A_CHR);
+                do_dec_stat(this->player_ptr, A_CHR);
             }
         }
     } else if (new_aux < old_aux) {
         if (new_aux == 0) {
-            msg_format(_("やっと%s。", "You are no longer %s."),
-                player_ptr->prace == player_race_type::ANDROID ? _("怪我が直った", "leaking fluid") : _("出血が止まった", "bleeding"));
-            if (disturb_state)
-                disturb(player_ptr, false, false);
+            auto blood_stop_mes = this->player_ptr->prace == player_race_type::ANDROID
+                ? _("怪我が直った", "leaking fluid")
+                : _("出血が止まった", "bleeding");
+            msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
+            if (disturb_state) {
+                disturb(this->player_ptr, false, false);
+            }
         }
 
         notice = true;
     }
 
-    player_ptr->cut = v;
-    if (!notice)
+    this->player_ptr->cut = v;
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
-        disturb(player_ptr, false, false);
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->redraw |= (PR_CUT);
-    handle_stuff(player_ptr);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
+
+    this->player_ptr->update |= PU_BONUS;
+    this->player_ptr->redraw |= PR_CUT;
+    handle_stuff(this->player_ptr);
     return true;
 }
