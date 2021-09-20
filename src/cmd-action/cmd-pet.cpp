@@ -72,13 +72,9 @@ void do_cmd_pet_dismiss(player_type *player_ptr)
 {
     monster_type *m_ptr;
     bool all_pets = false;
-    MONSTER_IDX pet_ctr;
-    int i;
     int Dismissed = 0;
 
-    MONSTER_IDX *who;
     uint16_t dummy_why;
-    int max_pet = 0;
     bool cu, cv;
 
     cu = Term->scr->cu;
@@ -87,23 +83,23 @@ void do_cmd_pet_dismiss(player_type *player_ptr)
     Term->scr->cv = 1;
 
     /* Allocate the "who" array */
-    C_MAKE(who, w_ptr->max_m_idx, MONSTER_IDX);
+    std::vector<MONSTER_IDX> who;
 
     /* Process the monsters (backwards) */
-    for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
+    for (MONSTER_IDX pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
         if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr]))
-            who[max_pet++] = pet_ctr;
+            who.push_back(pet_ctr);
     }
 
-    ang_sort(player_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
+    ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
 
     /* Process the monsters (backwards) */
-    for (i = 0; i < max_pet; i++) {
+    for (auto i = 0U; i < who.size(); i++) {
         bool delete_this;
         GAME_TEXT friend_name[MAX_NLEN];
         bool kakunin;
 
-        pet_ctr = who[i];
+        auto pet_ctr = who[i];
         m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
 
         delete_this = false;
@@ -115,7 +111,7 @@ void do_cmd_pet_dismiss(player_type *player_ptr)
             health_track(player_ptr, pet_ctr);
             handle_stuff(player_ptr);
 
-            msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
+            msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, who.size() - i);
 
             if (m_ptr->ml)
                 move_cursor_relative(m_ptr->fy, m_ptr->fx);
@@ -177,8 +173,6 @@ void do_cmd_pet_dismiss(player_type *player_ptr)
     Term->scr->cu = cu;
     Term->scr->cv = cv;
     term_fresh();
-
-    C_KILL(who, w_ptr->max_m_idx, MONSTER_IDX);
 
 #ifdef JP
     msg_format("%d 体のペットを放しました。", Dismissed);

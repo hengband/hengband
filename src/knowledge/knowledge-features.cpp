@@ -102,8 +102,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
 
-    FEAT_IDX *feat_idx;
-    C_MAKE(feat_idx, max_f_idx, FEAT_IDX);
+    std::vector<FEAT_IDX> feat_idx(f_info.size());
 
     concptr feature_group_text[] = { "terrains", nullptr };
     int len;
@@ -121,7 +120,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             if (len > max)
                 max = len;
 
-            if (collect_features(feat_idx, 0x01)) {
+            if (collect_features(feat_idx.data(), 0x01)) {
                 grp_idx[grp_cnt++] = i;
             }
         }
@@ -198,7 +197,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_group_list(0, 6, max, browser_rows, grp_idx, feature_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                feat_cnt = collect_features(feat_idx, 0x00);
+                feat_cnt = collect_features(feat_idx.data(), 0x00);
             }
 
             while (feat_cur < feat_top)
@@ -208,10 +207,10 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
 
         if (!visual_list) {
-            display_feature_list(max + 3, 6, browser_rows, feat_idx, feat_cur, feat_top, visual_only, F_LIT_STANDARD);
+            display_feature_list(max + 3, 6, browser_rows, feat_idx.data(), feat_cur, feat_top, visual_only, F_LIT_STANDARD);
         } else {
             feat_top = feat_cur;
-            display_feature_list(max + 3, 6, 1, feat_idx, feat_cur, feat_top, visual_only, *lighting_level);
+            display_feature_list(max + 3, 6, 1, feat_idx.data(), feat_cur, feat_top, visual_only, *lighting_level);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
@@ -334,8 +333,6 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
         }
     }
-
-    C_KILL(feat_idx, max_f_idx, FEAT_IDX);
 }
 
 /*

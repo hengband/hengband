@@ -57,17 +57,12 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
      *     515 will be "0xff" "0xff" "0x03"
      */
 
-    /* Fake max number */
-    uint16_t max_num_temp = 255;
-
-    grid_template_type *templates;
-    C_MAKE(templates, max_num_temp, grid_template_type);
-    uint16_t num_temp = 0;
+    std::vector<grid_template_type> templates;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-            int i;
-            for (i = 0; i < num_temp; i++) {
+            uint i;
+            for (i = 0; i < templates.size(); i++) {
                 if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic
                     && templates[i].special == g_ptr->special) {
                     templates[i].occurrence++;
@@ -75,37 +70,23 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
                 }
             }
 
-            if (i < num_temp)
+            if (i < templates.size())
                 continue;
 
-            if (num_temp >= max_num_temp) {
-                grid_template_type *old_template = templates;
-                C_MAKE(templates, max_num_temp + 255, grid_template_type);
-                (void)C_COPY(templates, old_template, max_num_temp, grid_template_type);
-                C_KILL(old_template, max_num_temp, grid_template_type);
-                max_num_temp += 255;
-            }
-
-            templates[num_temp].info = g_ptr->info;
-            templates[num_temp].feat = g_ptr->feat;
-            templates[num_temp].mimic = g_ptr->mimic;
-            templates[num_temp].special = g_ptr->special;
-            templates[num_temp].occurrence = 1;
-            num_temp++;
+            templates.push_back({g_ptr->info, g_ptr->feat, g_ptr->mimic, g_ptr->special, 1});
         }
     }
 
     int dummy_why;
-    ang_sort(player_ptr, templates, &dummy_why, num_temp, ang_sort_comp_cave_temp, ang_sort_swap_cave_temp);
+    ang_sort(player_ptr, templates.data(), &dummy_why, templates.size(), ang_sort_comp_cave_temp, ang_sort_swap_cave_temp);
 
     /*** Dump templates ***/
-    wr_u16b(num_temp);
-    for (int i = 0; i < num_temp; i++) {
-        grid_template_type *ct_ptr = &templates[i];
-        wr_u16b((uint16_t)ct_ptr->info);
-        wr_s16b(ct_ptr->feat);
-        wr_s16b(ct_ptr->mimic);
-        wr_s16b(ct_ptr->special);
+    wr_u16b(static_cast<uint16_t>(templates.size()));
+    for (const auto &ct_ref : templates) {
+        wr_u16b(static_cast<uint16_t>(ct_ref.info));
+        wr_s16b(ct_ref.feat);
+        wr_s16b(ct_ref.mimic);
+        wr_s16b(ct_ref.special);
     }
 
     byte count = 0;
@@ -113,8 +94,8 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-            int i;
-            for (i = 0; i < num_temp; i++) {
+            uint i;
+            for (i = 0; i < templates.size(); i++) {
                 if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic
                     && templates[i].special == g_ptr->special)
                     break;
@@ -147,8 +128,6 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
         wr_byte((byte)prev_u16b);
     }
-
-    C_KILL(templates, max_num_temp, grid_template_type);
 
     /*** Dump objects ***/
     wr_u16b(floor_ptr->o_max);

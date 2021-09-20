@@ -191,9 +191,7 @@ void get_table_sindarin(char *out_string)
  */
 static void shuffle_flavors(tval_type tval)
 {
-    KIND_OBJECT_IDX *k_idx_list;
-    KIND_OBJECT_IDX k_idx_list_num = 0;
-    C_MAKE(k_idx_list, max_k_idx, KIND_OBJECT_IDX);
+    std::vector<KIND_OBJECT_IDX> k_idx_list;
     for (const auto &k_ref : k_info) {
         if (k_ref.tval != tval)
             continue;
@@ -204,19 +202,14 @@ static void shuffle_flavors(tval_type tval)
         if (k_ref.flags.has(TR_FIXED_FLAVOR))
             continue;
 
-        k_idx_list[k_idx_list_num] = k_ref.idx;
-        k_idx_list_num++;
+        k_idx_list.push_back(k_ref.idx);
     }
 
-    for (KIND_OBJECT_IDX i = 0; i < k_idx_list_num; i++) {
-        object_kind *k1_ptr = &k_info[k_idx_list[i]];
-        object_kind *k2_ptr = &k_info[k_idx_list[randint0(k_idx_list_num)]];
-        int16_t tmp = k1_ptr->flavor;
-        k1_ptr->flavor = k2_ptr->flavor;
-        k2_ptr->flavor = tmp;
+    for (auto k_idx : k_idx_list) {
+        object_kind *k1_ptr = &k_info[k_idx];
+        object_kind *k2_ptr = &k_info[k_idx_list[randint0(k_idx_list.size())]];
+        std::swap(k1_ptr->flavor, k2_ptr->flavor);
     }
-
-    C_KILL(k_idx_list, max_k_idx, int16_t);
 }
 
 /*!

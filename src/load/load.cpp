@@ -240,12 +240,10 @@ static errr exe_reading_savefile(player_type *player_ptr)
         rd_u16b(&player_ptr->pet_extra_flags);
 
     if (!h_older_than(1, 0, 9)) {
-        char *buf;
-        C_MAKE(buf, SCREEN_BUF_MAX_SIZE, char);
-        rd_string(buf, SCREEN_BUF_MAX_SIZE);
+        std::vector<char> buf(SCREEN_BUF_MAX_SIZE);
+        rd_string(buf.data(), SCREEN_BUF_MAX_SIZE);
         if (buf[0])
-            screen_dump = string_make(buf);
-        C_KILL(buf, SCREEN_BUF_MAX_SIZE, char);
+            screen_dump = string_make(buf.data());
     }
 
     errr restore_dungeon_result = restore_dungeon(player_ptr);

@@ -188,22 +188,17 @@ static bool activate_whistle(player_type *player_ptr, ae_type *ae_ptr)
         (void)SpellHex(player_ptr).stop_all_spells();
     }
 
-    MONSTER_IDX pet_ctr;
-    MONSTER_IDX *who;
-    int max_pet = 0;
-    C_MAKE(who, w_ptr->max_m_idx, MONSTER_IDX);
-    for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+    std::vector<MONSTER_IDX> who;
+    for (MONSTER_IDX pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
         if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr]) && (player_ptr->riding != pet_ctr))
-            who[max_pet++] = pet_ctr;
+            who.push_back(pet_ctr);
 
     uint16_t dummy_why;
-    ang_sort(player_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
-    for (MONSTER_IDX i = 0; i < max_pet; i++) {
-        pet_ctr = who[i];
+    ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet, ang_sort_swap_hook);
+    for (auto pet_ctr : who) {
         teleport_monster_to(player_ptr, pet_ctr, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
     }
 
-    C_KILL(who, w_ptr->max_m_idx, MONSTER_IDX);
     ae_ptr->o_ptr->timeout = 100 + randint1(100);
     return true;
 }

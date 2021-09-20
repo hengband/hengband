@@ -47,6 +47,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+#include <numeric>
+
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -110,21 +112,17 @@ static void dump_aux_pet(player_type *player_ptr, FILE *fff)
 static void dump_aux_quest(player_type *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
-    QUEST_IDX *quest_num;
-    C_MAKE(quest_num, max_q_idx, QUEST_IDX);
+    std::vector<QUEST_IDX> quest_num(max_q_idx);
 
-    for (QUEST_IDX i = 1; i < max_q_idx; i++)
-        quest_num[i] = i;
+    std::iota(quest_num.begin(), quest_num.end(), static_cast<QUEST_IDX>(0));
     int dummy;
-    ang_sort(player_ptr, quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
+    ang_sort(player_ptr, quest_num.data(), &dummy, quest_num.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
     fputc('\n', fff);
-    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_num);
+    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_num.data());
     fputc('\n', fff);
-    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_num);
+    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_num.data());
     fputc('\n', fff);
-
-    C_KILL(quest_num, max_q_idx, QUEST_IDX);
 }
 
 /*!
@@ -288,12 +286,10 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
     fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
 
     /* Allocate the "who" array */
-    MONRACE_IDX *who;
     uint16_t why = 2;
-    C_MAKE(who, max_r_idx, MONRACE_IDX);
+    std::vector<MONRACE_IDX> who;
 
     /* Count monster kills */
-    long uniq_total = 0;
     long norm_total = 0;
     for (const auto &r_ref : r_info) {
         /* Ignore unused index */
@@ -306,7 +302,7 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
                 norm_total++;
 
                 /* Add a unique monster to the list */
-                who[uniq_total++] = r_ref.idx;
+                who.push_back(r_ref.idx);
             }
 
             continue;
@@ -320,10 +316,10 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
     /* No monsters is defeated */
     if (norm_total < 1) {
         fprintf(fff, _("まだ敵を倒していません。\n", "You have defeated no enemies yet.\n"));
-        C_KILL(who, max_r_idx, int16_t);
         return;
     }
 
+    const long uniq_total = who.size();
     /* Defeated more than one normal monsters */
     if (uniq_total == 0) {
 #ifdef JP
@@ -331,7 +327,6 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
 #else
         fprintf(fff, "You have defeated %ld %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
 #endif
-        C_KILL(who, max_r_idx, int16_t);
         return;
     }
 
@@ -344,12 +339,12 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
 #endif
 
     /* Sort the array by dungeon depth of monsters */
-    ang_sort(player_ptr, who, &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, who.data(), &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
     fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), MIN(uniq_total, 10));
 
     char buf[80];
-    for (MONRACE_IDX k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--) {
-        monster_race *r_ptr = &r_info[who[k]];
+    for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
+        monster_race *r_ptr = &r_info[*it];
         if (r_ptr->defeat_level && r_ptr->defeat_time)
             sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
@@ -358,8 +353,6 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
 
         fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), r_ptr->name.c_str(), (int)r_ptr->level, buf);
     }
-
-    C_KILL(who, max_r_idx, int16_t);
 }
 
 /*!
