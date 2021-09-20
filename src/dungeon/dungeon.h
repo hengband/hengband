@@ -38,8 +38,9 @@ typedef struct feat_prob {
 
 /* A structure for the != dungeon types */
 typedef struct dungeon_type {
+    DUNGEON_IDX idx{};
 
-	std::string name; /* Name */
+    std::string name; /* Name */
     std::string text; /* Description */
 
 	POSITION dy{};

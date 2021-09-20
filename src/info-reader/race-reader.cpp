@@ -85,6 +85,7 @@ errr parse_r_info(std::string_view buf, angband_header *head)
 
         error_idx = i;
         r_ptr = &r_info[i];
+        r_ptr->idx = i;
 #ifdef JP
         r_ptr->name = tokens[2];
 #endif

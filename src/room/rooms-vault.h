@@ -5,6 +5,8 @@
 #include <vector>
 
 typedef struct vault_type {
+    int16_t idx;
+
     std::string name; /* Name (offset) */
     std::string text; /* Text (offset) */
 
