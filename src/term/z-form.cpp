@@ -13,6 +13,7 @@
 #include "term/z-form.h"
 #include "term/z-util.h"
 #include "term/z-virt.h"
+#include <vector>
 
 /*
  * Here is some information about the routines in this file.
