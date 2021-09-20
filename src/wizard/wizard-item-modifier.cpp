@@ -883,23 +883,22 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
             KIND_OBJECT_IDX k_idx = k_ids.back();
             o_ptr->prep(k_idx);
 
-            for (EGO_IDX k = 1; k < max_e_idx; k++) {
-                ego_item_type *e_ptr = &e_info[k];
-                if (e_ptr->name.empty())
+            for (const auto &e_ref : e_info) {
+                if (e_ref.idx == 0 || e_ref.name.empty())
                     continue;
 
-                strcpy(o_name, e_ptr->name.c_str());
+                strcpy(o_name, e_ref.name.c_str());
 #ifndef JP
                 str_tolower(o_name);
 #endif
                 if (cheat_xtra)
-                    msg_format("Mathcing ego No.%d %s...", k, o_name);
+                    msg_format("mathcing ego no.%d %s...", e_ref.idx, o_name);
 
                 if (_(!strncmp(str, o_name, strlen(o_name)), !strrncmp(str, o_name, strlen(o_name)))) {
-                    if (is_slot_able_to_be_ego(player_ptr, o_ptr) != e_ptr->slot)
+                    if (is_slot_able_to_be_ego(player_ptr, o_ptr) != e_ref.slot)
                         continue;
 
-                    e_ids.push_back(k);
+                    e_ids.push_back(e_ref.idx);
                 }
             }
         }
