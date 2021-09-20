@@ -33,8 +33,8 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
 
     BadStatusSetter bss(player_ptr);
     auto effects = player_ptr->effects();
-    if (player_ptr->image) {
-        (void)set_image(player_ptr, player_ptr->image - dec_count);
+    if (player_ptr->hallucinated) {
+        (void)hallucination(player_ptr, player_ptr->hallucinated - dec_count);
     }
 
     if (player_ptr->blind) {

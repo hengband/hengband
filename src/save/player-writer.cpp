@@ -154,7 +154,7 @@ void wr_player(player_type *player_ptr)
     wr_s16b(player_ptr->cut);
     wr_s16b(effects->stun()->current());
     wr_s16b(player_ptr->poisoned);
-    wr_s16b(player_ptr->image);
+    wr_s16b(player_ptr->hallucinated);
     wr_s16b(player_ptr->protevil);
     wr_s16b(player_ptr->invuln);
     wr_s16b(player_ptr->ult_res);

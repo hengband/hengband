@@ -120,7 +120,7 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
     describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
     TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
 
-    if (player_ptr->image) {
+    if (player_ptr->hallucinated) {
         attr = TERM_WHITE;
         strcpy(buf, _("何か奇妙な物", "something strange"));
     }

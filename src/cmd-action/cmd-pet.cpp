@@ -398,12 +398,12 @@ void do_cmd_pet(player_type *player_ptr)
 #ifdef JP
     sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
         (player_ptr->pet_t_m_idx
-                ? (player_ptr->image ? "何か奇妙な物" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+                ? (player_ptr->hallucinated ? "何か奇妙な物" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                 : "指定なし"));
 #else
     sprintf(target_buf, "specify a target of pet (now:%s)",
         (player_ptr->pet_t_m_idx
-                ? (player_ptr->image ? "something strange" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+                ? (player_ptr->hallucinated ? "something strange" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                 : "nothing"));
 #endif
     power_desc[num] = target_buf;

@@ -164,7 +164,7 @@ bool fetch_monster(player_type *player_ptr)
         player_ptr->update |= (PU_MON_LITE);
 
     if (m_ptr->ml) {
-        if (!player_ptr->image)
+        if (!player_ptr->hallucinated)
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
 
         health_track(player_ptr, m_idx);

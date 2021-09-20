@@ -689,7 +689,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                         msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
                         if (m_ptr->ml) {
-                            if (!player_ptr->image)
+                            if (!player_ptr->hallucinated)
                                 monster_race_track(player_ptr, m_ptr->ap_r_idx);
                             health_track(player_ptr, c_mon_ptr->m_idx);
                         }

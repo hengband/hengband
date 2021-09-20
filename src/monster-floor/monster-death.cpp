@@ -295,7 +295,7 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = floor_ptr->base_level;
     coin_type = 0;
-    bool visible = (md_ptr->m_ptr->ml && !player_ptr->image) || ((md_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0);
+    bool visible = (md_ptr->m_ptr->ml && !player_ptr->hallucinated) || ((md_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0);
     if (visible && (dump_item || dump_gold))
         lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
 }

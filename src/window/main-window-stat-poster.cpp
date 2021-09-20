@@ -468,7 +468,7 @@ void print_status(player_type *player_ptr)
     if (player_ptr->tsuyoshi)
         ADD_BAR_FLAG(BAR_TSUYOSHI);
 
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         ADD_BAR_FLAG(BAR_HALLUCINATION);
 
     if (player_ptr->blind)

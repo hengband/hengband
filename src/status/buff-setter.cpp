@@ -35,7 +35,7 @@ void reset_tim_flags(player_type *player_ptr)
     player_ptr->paralyzed = 0; /* Timed -- Paralysis */
     player_ptr->confused = 0; /* Timed -- Confusion */
     player_ptr->afraid = 0; /* Timed -- Fear */
-    player_ptr->image = 0; /* Timed -- Hallucination */
+    player_ptr->hallucinated = 0; /* Timed -- Hallucination */
     player_ptr->poisoned = 0; /* Timed -- Poisoned */
     player_ptr->cut = 0; /* Timed -- Cut */
     effects->stun()->reset();

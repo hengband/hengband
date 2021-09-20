@@ -308,7 +308,7 @@ bool BadStatusSetter::paralysis(TIME_EFFECT v)
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details Note that we must redraw the map when hallucination changes.
  */
-bool set_image(player_type *player_ptr, TIME_EFFECT v)
+bool hallucination(player_type *player_ptr, TIME_EFFECT v)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -320,7 +320,7 @@ bool set_image(player_type *player_ptr, TIME_EFFECT v)
 
     if (v) {
         set_tsuyoshi(player_ptr, 0, true);
-        if (!player_ptr->image) {
+        if (!player_ptr->hallucinated) {
             msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
 
             /* Sniper */
@@ -331,13 +331,13 @@ bool set_image(player_type *player_ptr, TIME_EFFECT v)
             notice = true;
         }
     } else {
-        if (player_ptr->image) {
+        if (player_ptr->hallucinated) {
             msg_print(_("やっとはっきりと物が見えるようになった。", "You can see clearly again."));
             notice = true;
         }
     }
 
-    player_ptr->image = v;
+    player_ptr->hallucinated = v;
     player_ptr->redraw |= (PR_STATUS);
 
     if (!notice)

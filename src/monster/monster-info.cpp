@@ -229,7 +229,7 @@ bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int
     return false;
 }
 
-bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr) { return m_ptr->ml && !player_ptr->image && (m_ptr->ap_r_idx == m_ptr->r_idx); }
+bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr) { return m_ptr->ml && !player_ptr->hallucinated && (m_ptr->ap_r_idx == m_ptr->r_idx); }
 
 /*  Determine monster race appearance index is same as race index */
 bool is_original_ap(monster_type *m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }

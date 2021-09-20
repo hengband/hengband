@@ -240,7 +240,7 @@ void effect_player_chaos(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     if (!has_resist_chaos(player_ptr)) {
-        (void)set_image(player_ptr, player_ptr->image + randint1(10));
+        (void)hallucination(player_ptr, player_ptr->hallucinated + randint1(10));
         if (one_in_(3)) {
             msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
             (void)gain_mutation(player_ptr, 0);
@@ -673,7 +673,7 @@ void effect_player_abyss(player_type *player_ptr, effect_player_type *ep_ptr)
     msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes you from abyss!"));
 
     if (!has_resist_chaos(player_ptr)) {
-        (void)set_image(player_ptr, player_ptr->image + randint1(10));
+        (void)hallucination(player_ptr, player_ptr->hallucinated + randint1(10));
     }
 
     if (!has_resist_conf(player_ptr)) {

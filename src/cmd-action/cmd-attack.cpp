@@ -186,7 +186,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     monster_desc(player_ptr, m_name, m_ptr, 0);
 
     if (m_ptr->ml) {
-        if (!player_ptr->image)
+        if (!player_ptr->hallucinated)
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
 
         health_track(player_ptr, g_ptr->m_idx);
@@ -194,7 +194,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
 
     auto effects = player_ptr->effects();
     auto is_stunned = effects->stun()->is_stunned();
-    if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || player_ptr->confused || player_ptr->image || !m_ptr->ml)) {
+    if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || player_ptr->confused || player_ptr->hallucinated || !m_ptr->ml)) {
         if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ZANTETSU) || (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_ZANTETSU)) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
@@ -207,7 +207,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     }
 
     bool stormbringer = false;
-    if (!is_hostile(m_ptr) && !(is_stunned || player_ptr->confused || player_ptr->image || is_shero(player_ptr) || !m_ptr->ml)) {
+    if (!is_hostile(m_ptr) && !(is_stunned || player_ptr->confused || player_ptr->hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_STORMBRINGER)
             stormbringer = true;
         if (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)

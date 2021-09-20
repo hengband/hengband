@@ -75,7 +75,7 @@ bool kawarimi(player_type *player_ptr, bool success)
     }
 
     auto effects = player_ptr->effects();
-    if (player_ptr->confused || player_ptr->blind || player_ptr->paralyzed || player_ptr->image) {
+    if (player_ptr->confused || player_ptr->blind || player_ptr->paralyzed || player_ptr->hallucinated) {
         return false;
     }
 

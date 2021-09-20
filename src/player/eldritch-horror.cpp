@@ -119,12 +119,12 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
         if (saving_throw(player_ptr->skill_sav - power))
             return;
 
-        if (player_ptr->image) {
+        if (player_ptr->hallucinated) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
 
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                player_ptr->image = player_ptr->image + randint1(r_ptr->level);
+                player_ptr->hallucinated = player_ptr->hallucinated + randint1(r_ptr->level);
             }
 
             return;
@@ -170,12 +170,12 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
             return;
         }
 
-        if (player_ptr->image) {
+        if (player_ptr->hallucinated) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
 
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                player_ptr->image = player_ptr->image + randint1(r_ptr->level);
+                player_ptr->hallucinated = player_ptr->hallucinated + randint1(r_ptr->level);
             }
 
             return;
@@ -266,7 +266,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
         }
 
         if (!has_resist_chaos(player_ptr) && one_in_(3)) {
-            (void)set_image(player_ptr, player_ptr->image + randint0(250) + 150);
+            (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(250) + 150);
         }
 
         /*!< @todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
@@ -284,7 +284,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
             (void)bss.paralysis(player_ptr->paralyzed + randint0(4) + 4);
         }
         if (!has_resist_chaos(player_ptr)) {
-            (void)set_image(player_ptr, player_ptr->image + randint0(250) + 150);
+            (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(250) + 150);
         }
 
         do {

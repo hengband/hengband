@@ -435,7 +435,7 @@ void do_cmd_rest(player_type *player_ptr)
     auto is_stunned = effects->stun()->is_stunned();
     if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp == player_ptr->msp) && !player_ptr->blind && !player_ptr->confused
         && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !player_ptr->cut && !player_ptr->slow && !player_ptr->paralyzed
-        && !player_ptr->image && !player_ptr->word_recall && !player_ptr->alter_reality)
+        && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality)
         chg_virtue(player_ptr, V_DILIGENCE, -1);
 
     player_ptr->resting = command_arg;
