@@ -159,9 +159,7 @@ errr init_object_alloc(void)
  */
 errr init_alloc(void)
 {
-    monster_race *r_ptr;
-    tag_type *elements;
-    C_MAKE(elements, max_r_idx, tag_type);
+    std::vector<tag_type> elements(r_info.size());
     for (const auto &r_ref : r_info) {
         if (r_ref.idx > 0) {
             elements[r_ref.idx].tag = r_ref.level;
@@ -169,11 +167,11 @@ errr init_alloc(void)
         }
     }
 
-    tag_sort(elements, max_r_idx);
+    tag_sort(elements.data(), elements.size());
     alloc_race_size = max_r_idx;
     C_MAKE(alloc_race_table, alloc_race_size, alloc_entry);
     for (int i = 1; i < max_r_idx; i++) {
-        r_ptr = &r_info[elements[i].index];
+        auto r_ptr = &r_info[elements[i].index];
         if (r_ptr->rarity == 0)
             continue;
 
@@ -185,7 +183,6 @@ errr init_alloc(void)
         alloc_race_table[i].prob2 = (PROB)p;
     }
 
-    C_KILL(elements, max_r_idx, tag_type);
     (void)init_object_alloc();
     return 0;
 }

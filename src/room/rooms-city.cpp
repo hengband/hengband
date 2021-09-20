@@ -15,23 +15,18 @@
 
 #include <algorithm>
 
-static ugbldg_type *ugbldg;
-
 /*
  * Precalculate buildings' location of underground arcade
  */
-static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
+static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbldg_type>& ugbldg)
 {
     POSITION i, y, x, center_y, center_x;
     int tmp, attempt = 10000;
     POSITION max_bldg_hgt = 3 * town_hgt / MAX_TOWN_HGT;
     POSITION max_bldg_wid = 5 * town_wid / MAX_TOWN_WID;
     ugbldg_type *cur_ugbldg;
-    bool **ugarcade_used, abort;
-    C_MAKE(ugarcade_used, town_hgt, bool *);
-    C_MAKE(*ugarcade_used, town_hgt * town_wid, bool);
-    for (y = 1; y < town_hgt; y++)
-        ugarcade_used[y] = *ugarcade_used + y * town_wid;
+    std::vector<std::vector<bool>> ugarcade_used(town_hgt, std::vector<bool>(town_wid));
+    bool abort;
 
     for (i = 0; i < n; i++) {
         cur_ugbldg = &ugbldg[i];
@@ -69,8 +64,6 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
         }
     }
 
-    C_KILL(*ugarcade_used, town_hgt * town_wid, bool);
-    C_KILL(ugarcade_used, town_hgt, bool *);
     return i == n;
 }
 
@@ -106,11 +99,11 @@ static void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITI
  * @note
  * Note: ltcy and ltcx indicate "left top corner".
  */
-static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, int stores[], int n)
+static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, int stores[], int n, const std::vector<ugbldg_type>& ugbldg)
 {
     int i;
     POSITION y, x;
-    ugbldg_type *cur_ugbldg;
+    const ugbldg_type *cur_ugbldg;
 
     for (i = 0; i < n; i++) {
         cur_ugbldg = &ugbldg[i];
@@ -192,22 +185,19 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
     if (!n)
         return false;
 
-    C_MAKE(ugbldg, n, ugbldg_type);
-    if (!precalc_ugarcade(town_hgt, town_wid, n)) {
-        C_KILL(ugbldg, n, ugbldg_type);
+    std::vector<ugbldg_type> ugbldg(n);
+    if (!precalc_ugarcade(town_hgt, town_wid, n, ugbldg)) {
         return false;
     }
 
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, town_hgt + 4, town_wid + 4)) {
-        C_KILL(ugbldg, n, ugbldg_type);
         return false;
     }
 
     y1 = yval - (town_hgt / 2);
     x1 = xval - (town_wid / 2);
     generate_room_floor(player_ptr, y1 + town_hgt / 3, x1 + town_wid / 3, y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, false);
-    build_stores(player_ptr, y1, x1, stores, n);
+    build_stores(player_ptr, y1, x1, stores, n, ugbldg);
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
-    C_KILL(ugbldg, n, ugbldg_type);
     return true;
 }

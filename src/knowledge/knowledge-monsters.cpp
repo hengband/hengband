@@ -289,8 +289,7 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    IDX *mon_idx;
-    C_MAKE(mon_idx, max_r_idx, MONRACE_IDX);
+    std::vector<MONRACE_IDX> mon_idx(r_info.size());
 
     int max = 0;
     IDX grp_cnt = 0;
@@ -309,7 +308,7 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
             if (len > max)
                 max = len;
 
-            if ((monster_group_char[i] == ((char *)-1L)) || collect_monsters(player_ptr, i, mon_idx, mode)) {
+            if ((monster_group_char[i] == ((char *)-1L)) || collect_monsters(player_ptr, i, mon_idx.data(), mode)) {
                 grp_idx[grp_cnt++] = i;
             }
         }
@@ -369,7 +368,7 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
             display_group_list(0, 6, max, browser_rows, grp_idx, monster_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                mon_cnt = collect_monsters(player_ptr, grp_idx[grp_cur], mon_idx, mode);
+                mon_cnt = collect_monsters(player_ptr, grp_idx[grp_cur], mon_idx.data(), mode);
             }
 
             while (mon_cur < mon_top)
@@ -379,10 +378,10 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
         }
 
         if (!visual_list) {
-            display_monster_list(max + 3, 6, browser_rows, mon_idx, mon_cur, mon_top, visual_only);
+            display_monster_list(max + 3, 6, browser_rows, mon_idx.data(), mon_cur, mon_top, visual_only);
         } else {
             mon_top = mon_cur;
-            display_monster_list(max + 3, 6, 1, mon_idx, mon_cur, mon_top, visual_only);
+            display_monster_list(max + 3, 6, 1, mon_idx.data(), mon_cur, mon_top, visual_only);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
@@ -456,8 +455,6 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
         }
         }
     }
-
-    C_KILL(mon_idx, max_r_idx, MONRACE_IDX);
 }
 
 /*

@@ -32,8 +32,6 @@ DEPTH *max_dlv;
 DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 {
     DUNGEON_IDX select_dungeon;
-    int num = 0;
-    DUNGEON_IDX *dun;
 
     /* Hack -- No need to choose dungeon in some case */
     if (lite_town || vanilla_town || ironman_downward) {
@@ -46,8 +44,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         }
     }
 
-    /* Allocate the "dun" array */
-    C_MAKE(dun, w_ptr->max_d_idx, DUNGEON_IDX);
+    std::vector<DUNGEON_IDX> dun;
 
     screen_save();
     for (const auto &d_ref : d_info) {
@@ -65,35 +62,29 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
             seiha = true;
 
         sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
-            'a' + num, seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
-        prt(buf, y + num, x);
-        dun[num++] = d_ref.idx;
+            static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
+        prt(buf, y + dun.size(), x);
+        dun.push_back(d_ref.idx);
     }
 
-    if (!num) {
+    if (dun.empty()) {
         prt(_("      選べるダンジョンがない。", "      No dungeon is available."), y, x);
     }
 
     prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
     while (true) {
         auto i = inkey();
-        if ((i == ESCAPE) || !num) {
-            /* Free the "dun" array */
-            C_KILL(dun, w_ptr->max_d_idx, DUNGEON_IDX);
-
+        if ((i == ESCAPE) || dun.empty()) {
             screen_load();
             return 0;
         }
-        if (i >= 'a' && i < ('a' + num)) {
+        if (i >= 'a' && i < static_cast<char>('a' + dun.size())) {
             select_dungeon = dun[i - 'a'];
             break;
         } else
             bell();
     }
     screen_load();
-
-    /* Free the "dun" array */
-    C_KILL(dun, w_ptr->max_d_idx, DUNGEON_IDX);
 
     return select_dungeon;
 }

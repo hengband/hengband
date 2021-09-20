@@ -596,11 +596,7 @@ void wiz_dump_options(void)
         return;
     }
 
-    int **exist;
-    C_MAKE(exist, NUM_O_SET, int *);
-    C_MAKE(*exist, NUM_O_BIT * NUM_O_SET, int);
-    for (int i = 1; i < NUM_O_SET; i++)
-        exist[i] = *exist + i * NUM_O_BIT;
+    std::vector<std::vector<int>> exist(NUM_O_SET, std::vector<int>(NUM_O_BIT));
 
     for (int i = 0; option_info[i].o_desc; i++) {
         const option_type *ot_ptr = &option_info[i];
@@ -626,8 +622,6 @@ void wiz_dump_options(void)
         fputc('\n', fff);
     }
 
-    C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
-    C_KILL(exist, NUM_O_SET, int *);
     angband_fclose(fff);
     msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
 }

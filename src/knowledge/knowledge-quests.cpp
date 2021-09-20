@@ -25,6 +25,8 @@
 #include "util/sort.h"
 #include "world/world.h"
 
+#include <numeric>
+
 /*!
  * @brief Check on the status of an active quest
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -292,20 +294,17 @@ void do_cmd_knowledge_quests(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    IDX *quest_num;
-    C_MAKE(quest_num, max_q_idx, QUEST_IDX);
-
-    for (IDX i = 1; i < max_q_idx; i++)
-        quest_num[i] = i;
+    std::vector<QUEST_IDX> quest_num(max_q_idx);
+    std::iota(quest_num.begin(), quest_num.end(), static_cast<QUEST_IDX>(0));
 
     int dummy;
-    ang_sort(player_ptr, quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
+    ang_sort(player_ptr, quest_num.data(), &dummy, quest_num.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
     do_cmd_knowledge_quests_current(player_ptr, fff);
     fputc('\n', fff);
-    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_num);
+    do_cmd_knowledge_quests_completed(player_ptr, fff, quest_num.data());
     fputc('\n', fff);
-    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_num);
+    do_cmd_knowledge_quests_failed(player_ptr, fff, quest_num.data());
     if (w_ptr->wizard) {
         fputc('\n', fff);
         do_cmd_knowledge_quests_wiz_random(fff);
@@ -314,5 +313,4 @@ void do_cmd_knowledge_quests(player_type *player_ptr)
     angband_fclose(fff);
     (void)show_file(player_ptr, true, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
     fd_kill(file_name);
-    C_KILL(quest_num, max_q_idx, QUEST_IDX);
 }

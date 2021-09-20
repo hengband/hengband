@@ -46,10 +46,8 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    ARTIFACT_IDX *who;
-    C_MAKE(who, max_a_idx, ARTIFACT_IDX);
-    bool *okay;
-    C_MAKE(okay, max_a_idx, bool);
+    //! @note 一般的に std::vector<bool> は使用を避けるべきとされているが、ここの用途では問題ない
+    std::vector<bool> okay(a_info.size());
 
     for (const auto &a_ref : a_info) {
         okay[a_ref.idx] = false;
@@ -89,16 +87,16 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
         okay[o_ptr->name1] = false;
     }
 
-    int n = 0;
+    std::vector<ARTIFACT_IDX> whats;
     for (const auto &a_ref : a_info) {
         if (okay[a_ref.idx])
-            who[n++] = a_ref.idx;
+            whats.push_back(a_ref.idx);
     }
 
     uint16_t why = 3;
-    ang_sort(player_ptr, who, &why, n, ang_sort_art_comp, ang_sort_art_swap);
-    for (ARTIFACT_IDX k = 0; k < n; k++) {
-        artifact_type *a_ptr = &a_info[who[k]];
+    ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
+    for (auto a_idx : whats) {
+        artifact_type *a_ptr = &a_info[a_idx];
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
         ARTIFACT_IDX z = lookup_kind(a_ptr->tval, a_ptr->sval);
@@ -107,7 +105,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
             object_type *q_ptr;
             q_ptr = &forge;
             q_ptr->prep(z);
-            q_ptr->name1 = who[k];
+            q_ptr->name1 = a_idx;
             q_ptr->ident |= IDENT_STORE;
             describe_flavor(player_ptr, base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
@@ -115,8 +113,6 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
         fprintf(fff, _("     %s\n", "     The %s\n"), base_name);
     }
 
-    C_KILL(who, max_a_idx, ARTIFACT_IDX);
-    C_KILL(okay, max_a_idx, bool);
     angband_fclose(fff);
     (void)show_file(player_ptr, true, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
     fd_kill(file_name);
@@ -245,7 +241,6 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
     KIND_OBJECT_IDX object_old, object_top;
     KIND_OBJECT_IDX grp_idx[100];
     int object_cnt;
-    OBJECT_IDX *object_idx;
 
     bool visual_list = false;
     TERM_COLOR attr_top = 0;
@@ -256,7 +251,7 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
     term_get_size(&wid, &hgt);
 
     int browser_rows = hgt - 8;
-    C_MAKE(object_idx, max_k_idx, KIND_OBJECT_IDX);
+    std::vector<KIND_OBJECT_IDX> object_idx(k_info.size());
 
     int len;
     int max = 0;
@@ -268,7 +263,7 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
             if (len > max)
                 max = len;
 
-            if (collect_objects(i, object_idx, mode)) {
+            if (collect_objects(i, object_idx.data(), mode)) {
                 grp_idx[grp_cnt++] = i;
             }
         }
@@ -348,7 +343,7 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
             display_group_list(0, 6, max, browser_rows, grp_idx, object_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                object_cnt = collect_objects(grp_idx[grp_cur], object_idx, mode);
+                object_cnt = collect_objects(grp_idx[grp_cur], object_idx.data(), mode);
             }
 
             while (object_cur < object_top)
@@ -358,10 +353,10 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
         }
 
         if (!visual_list) {
-            display_object_list(max + 3, 6, browser_rows, object_idx, object_cur, object_top, visual_only);
+            display_object_list(max + 3, 6, browser_rows, object_idx.data(), object_cur, object_top, visual_only);
         } else {
             object_top = object_cur;
-            display_object_list(max + 3, 6, 1, object_idx, object_cur, object_top, visual_only);
+            display_object_list(max + 3, 6, 1, object_idx.data(), object_cur, object_top, visual_only);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
@@ -438,6 +433,4 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
         }
         }
     }
-
-    C_KILL(object_idx, max_k_idx, KIND_OBJECT_IDX);
 }
