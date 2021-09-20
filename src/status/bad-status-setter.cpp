@@ -408,16 +408,19 @@ bool BadStatusSetter::slowness(TIME_EFFECT v, bool do_dec)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool set_stun(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::stun(TIME_EFFECT v)
 {
-    bool notice = false;
+    auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead) {
         return false;
-    if (PlayerRace(player_ptr).equals(player_race_type::GOLEM) || PlayerClass(player_ptr).can_resist_stun())
-        v = 0;
+    }
 
-    auto player_stun = player_ptr->effects()->stun();
+    if (PlayerRace(this->player_ptr).equals(player_race_type::GOLEM) || PlayerClass(this->player_ptr).can_resist_stun()) {
+        v = 0;
+    }
+
+    auto player_stun = this->player_ptr->effects()->stun();
     auto old_aux = player_stun->get_rank();
     auto new_aux = PlayerStun::get_rank(v);
     if (new_aux > old_aux) {
@@ -425,35 +428,35 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
         msg_print(stun_mes.data());
         if (randint1(1000) < v || one_in_(16)) {
             msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
-
             if (one_in_(3)) {
-                if (!has_sustain_int(player_ptr))
-                    (void)do_dec_stat(player_ptr, A_INT);
-                if (!has_sustain_wis(player_ptr))
-                    (void)do_dec_stat(player_ptr, A_WIS);
+                if (!has_sustain_int(this->player_ptr))
+                    (void)do_dec_stat(this->player_ptr, A_INT);
+                if (!has_sustain_wis(this->player_ptr))
+                    (void)do_dec_stat(this->player_ptr, A_WIS);
             } else if (one_in_(2)) {
-                if (!has_sustain_int(player_ptr))
-                    (void)do_dec_stat(player_ptr, A_INT);
+                if (!has_sustain_int(this->player_ptr))
+                    (void)do_dec_stat(this->player_ptr, A_INT);
             } else {
-                if (!has_sustain_wis(player_ptr))
-                    (void)do_dec_stat(player_ptr, A_WIS);
+                if (!has_sustain_wis(this->player_ptr))
+                    (void)do_dec_stat(this->player_ptr, A_WIS);
             }
         }
 
-        if (player_ptr->special_defense & KATA_MASK) {
+        if (this->player_ptr->special_defense & KATA_MASK) {
             msg_print(_("型が崩れた。", "You lose your stance."));
-            player_ptr->special_defense &= ~(KATA_MASK);
-            player_ptr->update |= (PU_BONUS);
-            player_ptr->update |= (PU_MONSTERS);
-            player_ptr->redraw |= (PR_STATE);
-            player_ptr->redraw |= (PR_STATUS);
-            player_ptr->action = ACTION_NONE;
+            this->player_ptr->special_defense &= ~(KATA_MASK);
+            this->player_ptr->update |= (PU_BONUS);
+            this->player_ptr->update |= (PU_MONSTERS);
+            this->player_ptr->redraw |= (PR_STATE);
+            this->player_ptr->redraw |= (PR_STATUS);
+            this->player_ptr->action = ACTION_NONE;
         }
 
-        if (player_ptr->concent)
-            reset_concentration(player_ptr, true);
+        if (this->player_ptr->concent) {
+            reset_concentration(this->player_ptr, true);
+        }
 
-        SpellHex spell_hex(player_ptr);
+        SpellHex spell_hex(this->player_ptr);
         if (spell_hex.is_spelling_any()) {
             (void)spell_hex.stop_all_spells();
         }
@@ -462,8 +465,9 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
     } else if (new_aux < old_aux) {
         if (new_aux == PlayerStunRank::NONE) {
             msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
-            if (disturb_state)
-                disturb(player_ptr, false, false);
+            if (disturb_state) {
+                disturb(this->player_ptr, false, false);
+            }
         }
 
         notice = true;
@@ -475,12 +479,12 @@ bool set_stun(player_type *player_ptr, TIME_EFFECT v)
     }
 
     if (disturb_state) {
-        disturb(player_ptr, false, false);
+        disturb(this->player_ptr, false, false);
     }
 
-    player_ptr->update |= PU_BONUS;
-    player_ptr->redraw |= PR_STUN;
-    handle_stuff(player_ptr);
+    this->player_ptr->update |= PU_BONUS;
+    this->player_ptr->redraw |= PR_STUN;
+    handle_stuff(this->player_ptr);
     return true;
 }
 

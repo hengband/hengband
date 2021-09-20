@@ -802,7 +802,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
     case RF_ABILITY::HEAL:
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(player_ptr, plev * 6);
-        (void)set_stun(player_ptr, 0);
+        (void)BadStatusSetter(player_ptr).stun(0);
         (void)set_cut(player_ptr, 0);
         break;
     case RF_ABILITY::INVULNER:

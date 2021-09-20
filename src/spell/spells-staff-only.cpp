@@ -36,7 +36,7 @@ bool cleansing_nova(player_type *player_ptr, bool magic, bool powerful)
     if (hp_player(player_ptr, 50))
         ident = true;
 
-    if (set_stun(player_ptr, 0))
+    if (bss.stun(0))
         ident = true;
 
     if (set_cut(player_ptr, 0))

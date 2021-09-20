@@ -175,7 +175,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             BadStatusSetter bss(player_ptr);
             set_cut(player_ptr, 0);
             (void)bss.poison(0);
-            set_stun(player_ptr, 0);
+            (void)bss.stun(0);
         }
 
         break;
@@ -336,7 +336,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             hp_player(player_ptr, heal);
             (void)bss.afraidness(0);
             (void)bss.poison(0);
-            set_stun(player_ptr, 0);
+            (void)bss.stun(0);
             set_cut(player_ptr, 0);
         }
 

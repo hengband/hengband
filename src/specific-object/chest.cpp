@@ -283,7 +283,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
                     if (!player_ptr->free_act) {
                         (void)bss.paralysis(player_ptr->paralyzed + 2 + randint0(6));
                     } else {
-                        (void)set_stun(player_ptr, effects->stun()->current() + 10 + randint0(100));
+                        (void)bss.stun(effects->stun()->current() + 10 + randint0(100));
                     }
                 } else if (one_in_(3))
                     apply_disenchant(player_ptr, 0);

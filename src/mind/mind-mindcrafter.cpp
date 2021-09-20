@@ -226,7 +226,7 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
     case ADRENALINE_CHANNELING: {
         BadStatusSetter bss(player_ptr);
         (void)bss.afraidness(0);
-        set_stun(player_ptr, 0);
+        (void)bss.stun(0);
         if (!is_fast(player_ptr) || !is_hero(player_ptr)) {
             hp_player(player_ptr, plev);
         }

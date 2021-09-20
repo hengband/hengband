@@ -217,7 +217,7 @@ static void effect_monster_domination_corrupted_addition(player_type *player_ptr
     BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
     case 1:
-        set_stun(player_ptr, player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
+        (void)bss.stun(player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
         return;
     case 2:
         (void)bss.confusion(player_ptr->confused + em_ptr->dam / 2);

@@ -882,37 +882,39 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
 
         break;
     }
-    case 28:
-        if (name)
+    case 28: {
+        if (name) {
             return _("ヤヴァンナの助け", "Relief of Yavanna");
-        if (desc)
-            return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also completely heals cuts and being stunned.");
+        }
 
-        /* Stop singing before start another */
-        if (cast || fail)
+        if (desc) {
+            return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also completely heals cuts and being stunned.");
+        }
+
+        if (cast || fail) {
             stop_singing(player_ptr);
+        }
 
         if (cast) {
             msg_print(_("歌を通して体に活気が戻ってきた．．．", "Life flows through you as you sing the song..."));
             start_singing(player_ptr, spell, MUSIC_H_LIFE);
         }
 
-        {
-            DICE_NUMBER dice = 15;
-            DICE_SID sides = 10;
+        auto dice = 15;
+        auto sides = 10;
+        if (info) {
+            return info_heal(dice, sides, 0);
+        }
 
-            if (info)
-                return info_heal(dice, sides, 0);
-
-            if (cont) {
-                hp_player(player_ptr, damroll(dice, sides));
-                set_stun(player_ptr, 0);
-                set_cut(player_ptr, 0);
-            }
+        if (cont) {
+            hp_player(player_ptr, damroll(dice, sides));
+            BadStatusSetter bss(player_ptr);
+            (void)bss.stun(0);
+            set_cut(player_ptr, 0);
         }
 
         break;
-
+    }
     case 29:
         if (name)
             return _("再生の歌", "Goddess's rebirth");
