@@ -13,11 +13,10 @@
  */
 void reset_visuals(player_type *player_ptr)
 {
-    for (int i = 0; i < max_f_idx; i++) {
-        feature_type *f_ptr = &f_info[i];
+    for (auto &f_ref : f_info) {
         for (int j = 0; j < F_LIT_MAX; j++) {
-            f_ptr->x_attr[j] = f_ptr->d_attr[j];
-            f_ptr->x_char[j] = f_ptr->d_char[j];
+            f_ref.x_attr[j] = f_ref.d_attr[j];
+            f_ref.x_char[j] = f_ref.d_char[j];
         }
     }
 

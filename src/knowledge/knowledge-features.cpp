@@ -29,14 +29,13 @@
 static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 {
     FEAT_IDX feat_cnt = 0;
-    for (FEAT_IDX i = 0; i < max_f_idx; i++) {
-        feature_type *f_ptr = &f_info[i];
-        if (f_ptr->name.empty())
+    for (const auto &f_ref : f_info) {
+        if (f_ref.name.empty())
             continue;
-        if (f_ptr->mimic != i)
+        if (f_ref.mimic != f_ref.idx)
             continue;
 
-        feat_idx[feat_cnt++] = i;
+        feat_idx[feat_cnt++] = f_ref.idx;
         if (mode & 0x01)
             break;
     }

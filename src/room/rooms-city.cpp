@@ -13,6 +13,8 @@
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
+#include <algorithm>
+
 static ugbldg_type *ugbldg;
 
 /*
@@ -108,7 +110,6 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
 {
     int i;
     POSITION y, x;
-    FEAT_IDX j;
     ugbldg_type *cur_ugbldg;
 
     for (i = 0; i < n; i++) {
@@ -147,15 +148,12 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
             break;
         }
 
-        for (j = 0; j < max_f_idx; j++) {
-            if (f_info[j].flags.has(FF::STORE)) {
-                if (f_info[j].subtype == stores[i])
-                    break;
-            }
-        }
-
-        if (j < max_f_idx) {
-            cave_set_feat(player_ptr, ltcy + y, ltcx + x, j);
+        if (auto it = std::find_if(f_info.begin(), f_info.end(),
+                [subtype = stores[i]](const feature_type &f_ref) {
+                    return f_ref.flags.has(FF::STORE) && (f_ref.subtype == subtype);
+                });
+            it != f_info.end()) {
+            cave_set_feat(player_ptr, ltcy + y, ltcx + x, (*it).idx);
             store_init(NO_TOWN, stores[i]);
         }
     }

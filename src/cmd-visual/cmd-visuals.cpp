@@ -177,17 +177,16 @@ void do_cmd_visuals(player_type *player_ptr)
                 continue;
 
             auto_dump_printf(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
-            for (i = 0; i < max_f_idx; i++) {
-                feature_type *f_ptr = &f_info[i];
-                if (f_ptr->name.empty())
+            for (const auto &f_ref : f_info) {
+                if (f_ref.name.empty())
                     continue;
-                if (f_ptr->mimic != i)
+                if (f_ref.mimic != f_ref.idx)
                     continue;
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", (f_ptr->name.c_str()));
-                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", i, (byte)(f_ptr->x_attr[F_LIT_STANDARD]),
-                    (byte)(f_ptr->x_char[F_LIT_STANDARD]), (byte)(f_ptr->x_attr[F_LIT_LITE]), (byte)(f_ptr->x_char[F_LIT_LITE]),
-                    (byte)(f_ptr->x_attr[F_LIT_DARK]), (byte)(f_ptr->x_char[F_LIT_DARK]));
+                auto_dump_printf(auto_dump_stream, "# %s\n", (f_ref.name.c_str()));
+                auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", f_ref.idx, (byte)(f_ref.x_attr[F_LIT_STANDARD]),
+                    (byte)(f_ref.x_char[F_LIT_STANDARD]), (byte)(f_ref.x_attr[F_LIT_LITE]), (byte)(f_ref.x_char[F_LIT_LITE]),
+                    (byte)(f_ref.x_attr[F_LIT_DARK]), (byte)(f_ref.x_char[F_LIT_DARK]));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
