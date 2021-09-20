@@ -372,17 +372,14 @@ bool perilous_secrets(player_type *player_ptr)
 
     BadStatusSetter bss(player_ptr);
     if (player_ptr->msp > 0) {
-        if (20 <= player_ptr->csp)
+        if (20 <= player_ptr->csp) {
             player_ptr->csp -= 20;
-        else {
-            int oops = 20 - player_ptr->csp;
-
+        } else {
+            auto oops = 20 - player_ptr->csp;
             player_ptr->csp = 0;
             player_ptr->csp_frac = 0;
-
             msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
-
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(5 * oops + 1));
+            (void)bss.paralysis(player_ptr->paralyzed + randint1(5 * oops + 1));
             (void)bss.confusion(player_ptr->confused + randint1(5 * oops + 1));
         }
 

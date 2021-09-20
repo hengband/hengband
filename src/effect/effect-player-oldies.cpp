@@ -50,6 +50,6 @@ void effect_player_old_sleep(player_type *player_ptr, effect_player_type *ep_ptr
         sanity_blast(player_ptr, nullptr, false);
     }
 
-    set_paralyzed(player_ptr, player_ptr->paralyzed + ep_ptr->dam);
+    (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + ep_ptr->dam);
     ep_ptr->dam = 0;
 }

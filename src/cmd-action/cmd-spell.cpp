@@ -1350,16 +1350,10 @@ bool do_cmd_cast(player_type *player_ptr)
     /* Over-exert the player */
     if (over_exerted) {
         int oops = need_mana;
-
-        /* No mana left */
         player_ptr->csp = 0;
         player_ptr->csp_frac = 0;
-
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-
-        /* Hack -- Bypass free action */
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(5 * oops + 1));
-
+        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint1(5 * oops + 1));
         switch (realm) {
         case REALM_LIFE:
             chg_virtue(player_ptr, V_VITALITY, -10);

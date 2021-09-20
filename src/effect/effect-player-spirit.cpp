@@ -127,7 +127,7 @@ void effect_player_brain_smash(player_type *player_ptr, effect_player_type *ep_p
     }
 
     if (!player_ptr->free_act) {
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(4) + 4);
+        (void)bss.paralysis(player_ptr->paralyzed + randint0(4) + 4);
     }
 
     (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);

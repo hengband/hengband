@@ -191,7 +191,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
     if (trap & (CHEST_PARALYZE)) {
         msg_print(_("突如吹き出した黄色いガスに包み込まれた！", "A puff of yellow gas surrounds you!"));
         if (!player_ptr->free_act) {
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 10 + randint1(20));
+            (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + 10 + randint1(20));
         }
     }
 
@@ -279,8 +279,9 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
                     (void)set_cut(player_ptr, player_ptr->cut + 200);
                 else if (one_in_(4)) {
                     auto effects = player_ptr->effects(); // @todo paralyzed と共通化の予定あり.
+                    BadStatusSetter bss(player_ptr);
                     if (!player_ptr->free_act) {
-                        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 2 + randint0(6));
+                        (void)bss.paralysis(player_ptr->paralyzed + 2 + randint0(6));
                     } else {
                         (void)set_stun(player_ptr, effects->stun()->current() + 10 + randint0(100));
                     }

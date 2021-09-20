@@ -177,7 +177,6 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
 
         case SV_POTION_SALT_WATER: {
             msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
-
             switch (player_race_food(player_ptr)) {
             case PlayerRaceFood::RATION:
             case PlayerRaceFood::WATER:
@@ -190,7 +189,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
 
             BadStatusSetter bss(player_ptr);
             (void)bss.poison(0);
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 4);
+            (void)bss.paralysis(player_ptr->paralyzed + 4);
             ident = true;
             break;
         }
@@ -215,21 +214,21 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_SLEEP:
-            if (!player_ptr->free_act) {
-                msg_print(_("あなたは眠ってしまった。", "You fall asleep."));
-
-                if (ironman_nightmare) {
-                    msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
-
-                    /* Have some nightmares */
-                    sanity_blast(player_ptr, nullptr, false);
-                }
-                if (set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(4) + 4)) {
-                    ident = true;
-                }
+            if (player_ptr->free_act) {
+                break;
             }
-            break;
 
+            msg_print(_("あなたは眠ってしまった。", "You fall asleep."));
+            if (ironman_nightmare) {
+                msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
+                sanity_blast(player_ptr, nullptr, false);
+            }
+
+            if (BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(4) + 4)) {
+                ident = true;
+            }
+
+            break;
         case SV_POTION_LOSE_MEMORIES:
             if (!player_ptr->hold_exp && (player_ptr->exp > 0)) {
                 msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));

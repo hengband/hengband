@@ -288,7 +288,7 @@ bool life_stream(player_type *player_ptr, bool message, bool virtue_change)
     (void)set_image(player_ptr, 0);
     (void)set_stun(player_ptr, 0);
     (void)set_cut(player_ptr, 0);
-    (void)set_paralyzed(player_ptr, 0);
+    (void)bss.paralysis(0);
     (void)restore_all_status(player_ptr);
     (void)set_shero(player_ptr, 0, true);
     handle_stuff(player_ptr);

@@ -126,7 +126,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->paralyzed) {
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed - dec_count);
+        (void)bss.paralysis(player_ptr->paralyzed - dec_count);
     }
 
     if (player_ptr->confused) {

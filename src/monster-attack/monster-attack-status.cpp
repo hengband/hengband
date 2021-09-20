@@ -89,7 +89,7 @@ void process_paralyze_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (!player_ptr->paralyzed && set_paralyzed(player_ptr, 3 + randint1(monap_ptr->rlev))) {
+    if (!player_ptr->paralyzed && BadStatusSetter(player_ptr).paralysis(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }

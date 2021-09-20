@@ -519,17 +519,17 @@ void hit_trap(player_type *player_ptr, bool break_trap)
 
     case TRAP_SLEEP: {
         msg_print(_("奇妙な白い霧に包まれた！", "A strange white mist surrounds you!"));
-        if (!player_ptr->free_act) {
-            msg_print(_("あなたは眠りに就いた。", "You fall asleep."));
-
-            if (ironman_nightmare) {
-                msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
-
-                /* Have some nightmares */
-                sanity_blast(player_ptr, nullptr, false);
-            }
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(10) + 5);
+        if (player_ptr->free_act) {
+            break;
         }
+
+        msg_print(_("あなたは眠りに就いた。", "You fall asleep."));
+        if (ironman_nightmare) {
+            msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
+            sanity_blast(player_ptr, nullptr, false);
+        }
+
+        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(10) + 5);
         break;
     }
 

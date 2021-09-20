@@ -74,7 +74,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     case SV_FOOD_HALLUCINATION:
         return !has_resist_chaos(player_ptr) && set_image(player_ptr, player_ptr->image + randint0(250) + 250);
     case SV_FOOD_PARALYSIS:
-        return !player_ptr->free_act && set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(10) + 10);
+        return !player_ptr->free_act && bss.paralysis(player_ptr->paralyzed + randint0(10) + 10);
     case SV_FOOD_WEAKNESS:
         take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_STR);

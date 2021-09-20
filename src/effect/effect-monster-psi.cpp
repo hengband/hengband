@@ -119,7 +119,7 @@ static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, eff
         return;
     default:
         if (!player_ptr->free_act) {
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(em_ptr->dam));
+            (void)bss.paralysis(player_ptr->paralyzed + randint1(em_ptr->dam));
         }
 
         return;

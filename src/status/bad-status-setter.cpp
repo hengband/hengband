@@ -256,45 +256,49 @@ bool BadStatusSetter::afraidness(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_paralyzed(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::paralysis(TIME_EFFECT v)
 {
-    bool notice = false;
+    auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
-        if (!player_ptr->paralyzed) {
+        if (!this->player_ptr->paralyzed) {
             msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
-            if (player_ptr->concent)
-                reset_concentration(player_ptr, true);
+            if (this->player_ptr->concent) {
+                reset_concentration(this->player_ptr, true);
+            }
 
-            SpellHex spell_hex(player_ptr);
+            SpellHex spell_hex(this->player_ptr);
             if (spell_hex.is_spelling_any()) {
                 (void)spell_hex.stop_all_spells();
             }
 
-            player_ptr->counter = false;
+            this->player_ptr->counter = false;
             notice = true;
         }
     } else {
-        if (player_ptr->paralyzed) {
+        if (this->player_ptr->paralyzed) {
             msg_print(_("やっと動けるようになった。", "You can move again."));
             notice = true;
         }
     }
 
-    player_ptr->paralyzed = v;
-    player_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
+    this->player_ptr->paralyzed = v;
+    this->player_ptr->redraw |= PR_STATUS;
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
-        disturb(player_ptr, false, false);
-    player_ptr->redraw |= (PR_STATE);
-    handle_stuff(player_ptr);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
+
+    this->player_ptr->redraw |= PR_STATE;
+    handle_stuff(this->player_ptr);
     return true;
 }
 
