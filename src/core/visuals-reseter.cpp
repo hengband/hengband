@@ -26,10 +26,9 @@ void reset_visuals(player_type *player_ptr)
         k_ref.x_char = k_ref.d_char;
     }
 
-    for (int i = 0; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        r_ptr->x_attr = r_ptr->d_attr;
-        r_ptr->x_char = r_ptr->d_char;
+    for (auto &r_ref : r_info) {
+        r_ref.x_attr = r_ref.d_attr;
+        r_ref.x_char = r_ref.d_char;
     }
 
     concptr pref_file = use_graphics ? "graf.prf" : "font.prf";

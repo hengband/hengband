@@ -118,13 +118,12 @@ void do_cmd_visuals(player_type *player_ptr)
                 continue;
 
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
-            for (i = 0; i < max_r_idx; i++) {
-                monster_race *r_ptr = &r_info[i];
-                if (r_ptr->name.empty())
+            for (const auto& r_ref : r_info) {
+                if (r_ref.name.empty())
                     continue;
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", r_ptr->name.c_str());
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", i, (byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
+                auto_dump_printf(auto_dump_stream, "# %s\n", r_ref.name.c_str());
+                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", i, (byte)(r_ref.x_attr), (byte)(r_ref.x_char));
             }
 
             close_auto_dump(&auto_dump_stream, mark);

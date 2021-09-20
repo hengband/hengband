@@ -83,17 +83,19 @@ void player_wipe_without_name(player_type *player_ptr)
     }
 
     k_info_reset();
-    for (int i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        r_ptr->cur_num = 0;
-        r_ptr->max_num = 100;
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            r_ptr->max_num = 1;
-        else if (r_ptr->flags7 & RF7_NAZGUL)
-            r_ptr->max_num = MAX_NAZGUL_NUM;
+    for (auto &r_ref : r_info) {
+        if (r_ref.idx == 0) {
+            continue;
+        }
+        r_ref.cur_num = 0;
+        r_ref.max_num = 100;
+        if (r_ref.flags1 & RF1_UNIQUE)
+            r_ref.max_num = 1;
+        else if (r_ref.flags7 & RF7_NAZGUL)
+            r_ref.max_num = MAX_NAZGUL_NUM;
 
-        r_ptr->r_pkills = 0;
-        r_ptr->r_akills = 0;
+        r_ref.r_pkills = 0;
+        r_ref.r_akills = 0;
     }
 
     player_ptr->food = PY_FOOD_FULL - 1;

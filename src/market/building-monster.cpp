@@ -89,20 +89,18 @@ bool research_mon(player_type *player_ptr)
 
     /* Collect matching monsters */
     int n = 0;
-    for (i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-
+    for (const auto &r_ref : r_info) {
         /* Empty monster */
-        if (r_ptr->name.empty())
+        if (r_ref.idx == 0 || r_ref.name.empty())
             continue;
 
         /* XTRA HACK WHATSEARCH */
         /* Require non-unique monsters if needed */
-        if (norm && (r_ptr->flags1 & (RF1_UNIQUE)))
+        if (norm && (r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
         /* Require unique monsters if needed */
-        if (uniq && !(r_ptr->flags1 & (RF1_UNIQUE)))
+        if (uniq && !(r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
         /* 名前検索 */
@@ -120,9 +118,9 @@ bool research_mon(player_type *player_ptr)
 
             char temp2[MAX_MONSTER_NAME];
 #ifdef JP
-            strcpy(temp2, r_ptr->E_name.c_str());
+            strcpy(temp2, r_ref.E_name.c_str());
 #else
-            strcpy(temp2, r_ptr->name.c_str());
+            strcpy(temp2, r_ref.name.c_str());
 #endif
             for (int xx = 0; temp2[xx] && xx < 80; xx++) {
                 if (isupper(temp2[xx]))
@@ -130,12 +128,12 @@ bool research_mon(player_type *player_ptr)
             }
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_ptr->name.c_str(), temp))
+            if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.c_str(), temp))
 #else
             if (angband_strstr(temp2, temp))
 #endif
                 who[n++] = i;
-        } else if (all || (r_ptr->d_char == sym)) {
+        } else if (all || (r_ref.d_char == sym)) {
             who[n++] = i;
         }
     }

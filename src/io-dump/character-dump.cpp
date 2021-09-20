@@ -295,26 +295,25 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
     /* Count monster kills */
     long uniq_total = 0;
     long norm_total = 0;
-    for (MONRACE_IDX k = 1; k < max_r_idx; k++) {
+    for (const auto &r_ref : r_info) {
         /* Ignore unused index */
-        monster_race *r_ptr = &r_info[k];
-        if (r_ptr->name.empty())
+        if (r_ref.idx == 0 || r_ref.name.empty())
             continue;
 
-        if (r_ptr->flags1 & RF1_UNIQUE) {
-            bool dead = (r_ptr->max_num == 0);
+        if (r_ref.flags1 & RF1_UNIQUE) {
+            bool dead = (r_ref.max_num == 0);
             if (dead) {
                 norm_total++;
 
                 /* Add a unique monster to the list */
-                who[uniq_total++] = k;
+                who[uniq_total++] = r_ref.idx;
             }
 
             continue;
         }
 
-        if (r_ptr->r_pkills > 0) {
-            norm_total += r_ptr->r_pkills;
+        if (r_ref.r_pkills > 0) {
+            norm_total += r_ref.r_pkills;
         }
     }
 

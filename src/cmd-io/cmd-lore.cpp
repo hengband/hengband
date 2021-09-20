@@ -90,18 +90,18 @@ void do_cmd_query_symbol(player_type *player_ptr)
 
     prt(buf, 0, 0);
     C_MAKE(who, max_r_idx, MONRACE_IDX);
-    for (n = 0, i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!cheat_know && !r_ptr->r_sights)
+    n = 0;
+    for (const auto &r_ref : r_info) {
+        if (!cheat_know && !r_ref.r_sights)
             continue;
 
-        if (norm && (r_ptr->flags1 & (RF1_UNIQUE)))
+        if (norm && (r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
-        if (uniq && !(r_ptr->flags1 & (RF1_UNIQUE)))
+        if (uniq && !(r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
-        if (ride && !(r_ptr->flags7 & (RF7_RIDING)))
+        if (ride && !(r_ref.flags7 & (RF7_RIDING)))
             continue;
 
         if (temp[0]) {
@@ -120,23 +120,23 @@ void do_cmd_query_symbol(player_type *player_ptr)
             }
 
 #ifdef JP
-            strcpy(temp2, r_ptr->E_name.c_str());
+            strcpy(temp2, r_ref.E_name.c_str());
 #else
-            strcpy(temp2, r_ptr->name.c_str());
+            strcpy(temp2, r_ref.name.c_str());
 #endif
             for (xx = 0; temp2[xx] && xx < MAX_MONSTER_NAME; xx++)
                 if (isupper(temp2[xx]))
                     temp2[xx] = (char)tolower(temp2[xx]);
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_ptr->name.c_str(), temp))
+            if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.c_str(), temp))
 #else
             if (angband_strstr(temp2, temp))
 #endif
                 who[n++] = i;
         }
 
-        else if (all || (r_ptr->d_char == sym))
+        else if (all || (r_ref.d_char == sym))
             who[n++] = i;
     }
 

@@ -132,8 +132,8 @@ void wipe_monsters_list(player_type *player_ptr)
      * counters of monsters in party_mon[] are required to prevent multiple
      * generation of unique monster who is the minion of player.
      */
-    for (int i = 1; i < max_r_idx; i++)
-        r_info[i].cur_num = 0;
+    for (auto &r_ref : r_info)
+        r_ref.cur_num = 0;
 
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;

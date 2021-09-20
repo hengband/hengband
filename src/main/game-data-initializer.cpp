@@ -162,9 +162,11 @@ errr init_alloc(void)
     monster_race *r_ptr;
     tag_type *elements;
     C_MAKE(elements, max_r_idx, tag_type);
-    for (int i = 1; i < max_r_idx; i++) {
-        elements[i].tag = r_info[i].level;
-        elements[i].index = i;
+    for (const auto &r_ref : r_info) {
+        if (r_ref.idx > 0) {
+            elements[r_ref.idx].tag = r_ref.level;
+            elements[r_ref.idx].index = r_ref.idx;
+        }
     }
 
     tag_sort(elements, max_r_idx);
