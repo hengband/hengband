@@ -14,12 +14,12 @@ public:
     bool poison(TIME_EFFECT v);
     bool afraidness(TIME_EFFECT v);
     bool paralysis(TIME_EFFECT v);
+    bool hallucination(TIME_EFFECT v);
 
 private:
     player_type *player_ptr;
 };
 
-bool hallucination(player_type *player_ptr, TIME_EFFECT v);
 bool set_slow(player_type *player_ptr, TIME_EFFECT v, bool do_dec);
 bool set_stun(player_type *player_ptr, TIME_EFFECT v);
 bool set_cut(player_type *player_ptr, TIME_EFFECT v);

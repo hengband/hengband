@@ -285,7 +285,7 @@ bool life_stream(player_type *player_ptr, bool message, bool virtue_change)
     (void)bss.poison(0);
     (void)bss.blindness(0);
     (void)bss.confusion(0);
-    (void)hallucination(player_ptr, 0);
+    (void)bss.hallucination(0);
     (void)set_stun(player_ptr, 0);
     (void)set_cut(player_ptr, 0);
     (void)bss.paralysis(0);
@@ -446,7 +446,7 @@ bool true_healing(player_type *player_ptr, HIT_POINT pow)
         ident = true;
     }
 
-    if (hallucination(player_ptr, 0)) {
+    if (bss.hallucination(0)) {
         ident = true;
     }
 

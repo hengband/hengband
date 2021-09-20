@@ -308,48 +308,51 @@ bool BadStatusSetter::paralysis(TIME_EFFECT v)
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details Note that we must redraw the map when hallucination changes.
  */
-bool hallucination(player_type *player_ptr, TIME_EFFECT v)
+bool BadStatusSetter::hallucination(TIME_EFFECT v)
 {
-    bool notice = false;
+    auto notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-    if (player_ptr->is_dead)
+    if (this->player_ptr->is_dead) {
         return false;
-    if (is_chargeman(player_ptr))
+    }
+
+    if (is_chargeman(this->player_ptr)) {
         v = 0;
+    }
 
     if (v) {
-        set_tsuyoshi(player_ptr, 0, true);
-        if (!player_ptr->hallucinated) {
+        set_tsuyoshi(this->player_ptr, 0, true);
+        if (!this->player_ptr->hallucinated) {
             msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
+            if (this->player_ptr->concent) {
+                reset_concentration(this->player_ptr, true);
+            }
 
-            /* Sniper */
-            if (player_ptr->concent)
-                reset_concentration(player_ptr, true);
-
-            player_ptr->counter = false;
+            this->player_ptr->counter = false;
             notice = true;
         }
     } else {
-        if (player_ptr->hallucinated) {
+        if (this->player_ptr->hallucinated) {
             msg_print(_("やっとはっきりと物が見えるようになった。", "You can see clearly again."));
             notice = true;
         }
     }
 
-    player_ptr->hallucinated = v;
-    player_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
+    this->player_ptr->hallucinated = v;
+    this->player_ptr->redraw |= PR_STATUS;
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
-        disturb(player_ptr, false, true);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, true);
+    }
 
-    player_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
-    player_ptr->update |= (PU_MONSTERS);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-    handle_stuff(player_ptr);
+    this->player_ptr->redraw |= PR_MAP | PR_HEALTH | PR_UHEALTH;
+    this->player_ptr->update |= PU_MONSTERS;
+    this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    handle_stuff(this->player_ptr);
     return true;
 }
 

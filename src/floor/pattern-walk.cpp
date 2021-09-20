@@ -114,7 +114,7 @@ bool pattern_effect(player_type *player_ptr)
     int pattern_type = f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
     switch (pattern_type) {
     case PATTERN_TILE_END:
-        (void)hallucination(player_ptr, 0);
+        (void)BadStatusSetter(player_ptr).hallucination(0);
         (void)restore_all_status(player_ptr);
         (void)restore_level(player_ptr);
         (void)cure_critical_wounds(player_ptr, 1000);

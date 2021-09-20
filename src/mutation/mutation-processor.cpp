@@ -169,7 +169,7 @@ void process_world_aux_mutation(player_type *player_ptr)
             } else {
                 if (one_in_(3)) {
                     msg_print(_("き～れいなちょおちょらとんれいる～", "Thishcischs GooDSChtuff!"));
-                    (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(150) + 150);
+                    (void)bss.hallucination(player_ptr->hallucinated + randint0(150) + 150);
                 }
             }
         }
@@ -179,7 +179,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         if (!has_resist_chaos(player_ptr)) {
             disturb(player_ptr, false, true);
             player_ptr->redraw |= PR_EXTRA;
-            (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(50) + 20);
+            (void)bss.hallucination(player_ptr->hallucinated + randint0(50) + 20);
         }
     }
 

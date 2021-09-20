@@ -66,7 +66,8 @@ static bool booze(player_type *player_ptr)
     else if (!has_resist_conf(player_ptr))
         player_ptr->special_attack |= ATTACK_SUIKEN;
 
-    if (!has_resist_conf(player_ptr) && BadStatusSetter(player_ptr).confusion(randint0(20) + 15)) {
+    BadStatusSetter bss(player_ptr);
+    if (!has_resist_conf(player_ptr) && bss.confusion(randint0(20) + 15)) {
         ident = true;
     }
 
@@ -74,7 +75,7 @@ static bool booze(player_type *player_ptr)
         return ident;
     }
 
-    if (one_in_(2) && hallucination(player_ptr, player_ptr->hallucinated + randint0(150) + 150)) {
+    if (one_in_(2) && bss.hallucination(player_ptr->hallucinated + randint0(150) + 150)) {
         ident = true;
     }
 
@@ -539,7 +540,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_NEO_TSUYOSHI:
-            (void)hallucination(player_ptr, 0);
+            (void)BadStatusSetter(player_ptr).hallucination(0);
             (void)set_tsuyoshi(player_ptr, player_ptr->tsuyoshi + randint1(100) + 100, false);
             ident = true;
             break;
@@ -550,7 +551,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
             player_ptr->tsuyoshi = 1;
             (void)set_tsuyoshi(player_ptr, 0, true);
             if (!has_resist_chaos(player_ptr)) {
-                (void)hallucination(player_ptr, 50 + randint1(50));
+                (void)BadStatusSetter(player_ptr).hallucination(50 + randint1(50));
             }
             ident = true;
             break;

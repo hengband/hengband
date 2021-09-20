@@ -266,7 +266,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
         }
 
         if (!has_resist_chaos(player_ptr) && one_in_(3)) {
-            (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(250) + 150);
+            (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
         }
 
         /*!< @todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
@@ -284,7 +284,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
             (void)bss.paralysis(player_ptr->paralyzed + randint0(4) + 4);
         }
         if (!has_resist_chaos(player_ptr)) {
-            (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(250) + 150);
+            (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
         }
 
         do {

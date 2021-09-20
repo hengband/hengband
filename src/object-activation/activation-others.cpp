@@ -358,7 +358,7 @@ bool activate_protection_elbereth(player_type *player_ptr)
     create_rune_protection_one(player_ptr);
     (void)bss.afraidness(0);
     (void)bss.blindness(0);
-    (void)hallucination(player_ptr, 0);
+    (void)bss.hallucination(0);
     set_blessed(player_ptr, randint0(25) + 25, true);
     set_bits(player_ptr->redraw, PR_STATS);
     return true;

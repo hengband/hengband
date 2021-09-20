@@ -82,7 +82,7 @@ void effect_player_mind_blast(player_type *player_ptr, effect_player_type *ep_pt
     }
 
     if (!has_resist_chaos(player_ptr) && one_in_(3)) {
-        (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(250) + 150);
+        (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
     }
 
     player_ptr->csp -= 50;
@@ -138,6 +138,6 @@ void effect_player_brain_smash(player_type *player_ptr, effect_player_type *ep_p
         (void)do_dec_stat(player_ptr, A_WIS);
 
     if (!has_resist_chaos(player_ptr)) {
-        (void)hallucination(player_ptr, player_ptr->hallucinated + randint0(250) + 150);
+        (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
     }
 }
