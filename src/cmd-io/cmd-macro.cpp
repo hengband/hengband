@@ -150,6 +150,7 @@ void do_cmd_macros(player_type *player_ptr)
 {
     char tmp[1024];
     char buf[1024];
+    static char macro_buf[1024];
     FILE *auto_dump_stream;
     BIT_FLAGS mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
     screen_save();
@@ -210,10 +211,10 @@ void do_cmd_macros(player_type *player_ptr)
             if (k < 0) {
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
             } else {
-                // マクロの作成時に参照するためmacro__bufにコピーする
-                strcpy(macro__buf, macro__act[k]);
+                // マクロの作成時に参照するためmacro_bufにコピーする
+                strcpy(macro_buf, macro__act[k].c_str());
                 // too long macro must die
-                strncpy(tmp, macro__buf, 80);
+                strncpy(tmp, macro_buf, 80);
                 tmp[80] = '\0';
                 ascii_to_text(buf, tmp);
                 prt(buf, 22, 0);
@@ -229,11 +230,11 @@ void do_cmd_macros(player_type *player_ptr)
                 22, 0);
             prt(_("マクロ行動: ", "Action: "), 20, 0);
             // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
-            macro__buf[80] = '\0';
-            ascii_to_text(tmp, macro__buf);
+            macro_buf[80] = '\0';
+            ascii_to_text(tmp, macro_buf);
             if (askfor(tmp, 80)) {
-                text_to_ascii(macro__buf, tmp);
-                macro_add(buf, macro__buf);
+                text_to_ascii(macro_buf, tmp);
+                macro_add(buf, macro_buf);
                 msg_print(_("マクロを追加しました。", "Added a macro."));
             }
         } else if (key == '5') {
@@ -260,10 +261,10 @@ void do_cmd_macros(player_type *player_ptr)
             if (!act) {
                 msg_print(_("キー配置は定義されていません。", "Found no keymap."));
             } else {
-                // マクロの作成時に参照するためmacro__bufにコピーする
-                strcpy(macro__buf, act);
+                // マクロの作成時に参照するためmacro_bufにコピーする
+                strcpy(macro_buf, act);
                 // too long macro must die
-                strncpy(tmp, macro__buf, 80);
+                strncpy(tmp, macro_buf, 80);
                 tmp[80] = '\0';
                 ascii_to_text(buf, tmp);
                 prt(buf, 22, 0);
@@ -279,12 +280,12 @@ void do_cmd_macros(player_type *player_ptr)
                 22, 0);
             prt(_("行動: ", "Action: "), 20, 0);
             // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
-            macro__buf[80] = '\0';
-            ascii_to_text(tmp, macro__buf);
+            macro_buf[80] = '\0';
+            ascii_to_text(tmp, macro_buf);
             if (askfor(tmp, 80)) {
-                text_to_ascii(macro__buf, tmp);
+                text_to_ascii(macro_buf, tmp);
                 string_free(keymap_act[mode][(byte)(buf[0])]);
-                keymap_act[mode][(byte)(buf[0])] = string_make(macro__buf);
+                keymap_act[mode][(byte)(buf[0])] = string_make(macro_buf);
                 msg_print(_("キー配置を追加しました。", "Added a keymap."));
             }
         } else if (key == '9') {
@@ -305,7 +306,7 @@ void do_cmd_macros(player_type *player_ptr)
             if (!askfor(buf, 80))
                 continue;
 
-            text_to_ascii(macro__buf, buf);
+            text_to_ascii(macro_buf, buf);
         } else {
             bell();
         }
