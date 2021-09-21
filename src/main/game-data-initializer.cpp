@@ -108,10 +108,7 @@ errr init_object_alloc(void)
 
     int16_t num[MAX_DEPTH] = {};
 
-    if (alloc_kind_table)
-        C_KILL(alloc_kind_table, alloc_kind_size, alloc_entry);
-
-    alloc_kind_size = 0;
+    auto alloc_kind_size = 0;
     for (const auto &k_ref : k_info) {
         for (int j = 0; j < 4; j++) {
             if (k_ref.chance[j]) {
@@ -127,9 +124,7 @@ errr init_object_alloc(void)
     if (!num[0])
         quit(_("町のアイテムがない！", "No town objects!"));
 
-    C_MAKE(alloc_kind_table, alloc_kind_size, alloc_entry);
-    alloc_entry *table;
-    table = alloc_kind_table;
+    alloc_kind_table.assign(alloc_kind_size, {});
     for (const auto &k_ref : k_info) {
         for (int j = 0; j < 4; j++) {
             if (k_ref.chance[j] == 0)
@@ -139,10 +134,10 @@ errr init_object_alloc(void)
             int p = (100 / k_ref.chance[j]);
             int y = (x > 0) ? num[x - 1] : 0;
             int z = y + aux[x];
-            table[z].index = k_ref.idx;
-            table[z].level = (DEPTH)x;
-            table[z].prob1 = (PROB)p;
-            table[z].prob2 = (PROB)p;
+            alloc_kind_table[z].index = k_ref.idx;
+            alloc_kind_table[z].level = (DEPTH)x;
+            alloc_kind_table[z].prob1 = (PROB)p;
+            alloc_kind_table[z].prob2 = (PROB)p;
             aux[x]++;
         }
     }
@@ -166,8 +161,7 @@ errr init_alloc(void)
     }
 
     tag_sort(elements.data(), elements.size());
-    alloc_race_size = max_r_idx;
-    C_MAKE(alloc_race_table, alloc_race_size, alloc_entry);
+    alloc_race_table.assign(r_info.size(), {});
     for (int i = 1; i < max_r_idx; i++) {
         auto r_ptr = &r_info[elements[i].index];
         if (r_ptr->rarity == 0)

@@ -267,17 +267,16 @@ static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, T
     for (int i = 0; i < K_MAX_DEPTH; i++) {
         int total_frac = 0;
         object_kind *k_ptr;
-        alloc_entry *table = alloc_kind_table;
-        for (int j = 0; j < alloc_kind_size; j++) {
+        for (const auto &entry : alloc_kind_table) {
             PERCENTAGE prob = 0;
 
-            if (table[j].level <= i) {
-                prob = table[j].prob1 * GREAT_OBJ * K_MAX_DEPTH;
-            } else if (table[j].level - 1 > 0) {
-                prob = table[j].prob1 * i * K_MAX_DEPTH / (table[j].level - 1);
+            if (entry.level <= i) {
+                prob = entry.prob1 * GREAT_OBJ * K_MAX_DEPTH;
+            } else if (entry.level - 1 > 0) {
+                prob = entry.prob1 * i * K_MAX_DEPTH / (entry.level - 1);
             }
 
-            k_ptr = &k_info[table[j].index];
+            k_ptr = &k_info[entry.index];
 
             total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
             total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
