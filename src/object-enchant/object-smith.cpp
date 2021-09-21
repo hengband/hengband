@@ -256,17 +256,19 @@ std::vector<SmithEffect> Smith::get_effect_list(SmithCategory category)
  * @brief 指定した鍛冶効果のエッセンスを付与できる回数を取得する
  *
  * @param effect 鍛冶効果
- * @param item_number 同時に付与するスタックしたアイテム数。スタックしている場合アイテム数倍の数だけエッセンスが必要となる。
+ * @param o_ptr 鍛冶効果を付与するアイテムへのポインタ。nullptrの場合はデフォルトの消費量での回数が返される。
  * @return エッセンスを付与できる回数を返す
  */
-int Smith::get_addable_count(SmithEffect effect, int item_number) const
+int Smith::get_addable_count(SmithEffect effect, const object_type *o_ptr) const
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
         return 0;
     }
 
-    return addable_count(this->player_ptr, info.value()->need_essences, info.value()->consumption * item_number);
+    auto consumption = Smith::get_essence_consumption(effect, o_ptr);
+
+    return addable_count(this->player_ptr, info.value()->need_essences, consumption);
 }
 
 /*!

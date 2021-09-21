@@ -45,7 +45,7 @@ public:
     DrainEssenceResult drain_essence(object_type *o_ptr);
     bool add_essence(SmithEffect effect, object_type *o_ptr, int consumption);
     void erase_essence(object_type *o_ptr) const;
-    int get_addable_count(SmithEffect smith_effect, int item_number) const;
+    int get_addable_count(SmithEffect smith_effect, const object_type *o_ptr = nullptr) const;
 
     static constexpr int ESSENCE_AMOUNT_MAX = 20000;
 
