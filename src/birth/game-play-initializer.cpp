@@ -50,14 +50,12 @@ void player_wipe_without_name(player_type *player_ptr)
     if (player_ptr->last_message)
         string_free(player_ptr->last_message);
 
-    if (player_ptr->inventory_list != nullptr)
-        C_KILL(player_ptr->inventory_list, INVEN_TOTAL, object_type);
-
     (void)WIPE(player_ptr, player_type);
 
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     player_ptr->current_floor_ptr = &floor_info;
-    C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
+    //! @todo std::make_shared の配列対応版は C++20 から
+    player_ptr->inventory_list = std::shared_ptr<object_type[]>{ new object_type[INVEN_TOTAL] };
     for (int i = 0; i < 4; i++)
         strcpy(player_ptr->history[i], "");
 
