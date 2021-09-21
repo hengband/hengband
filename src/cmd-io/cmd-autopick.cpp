@@ -199,7 +199,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	strcpy(buf, pickpref_filename(player_ptr, tb->filename_mode));
 
 	if (quit == APE_QUIT_AND_SAVE)
-		write_text_lines(buf, tb->lines_list);
+		write_text_lines(buf, tb->lines_list.data());
 
 	free_text_lines(tb->lines_list);
 	string_free(tb->search_str);

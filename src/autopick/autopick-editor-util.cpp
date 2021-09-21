@@ -165,7 +165,6 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
             continue;
 
         if (IS_FLG(flg)) {
-            autopick_free_entry(entry);
             continue;
         }
 

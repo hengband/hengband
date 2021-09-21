@@ -37,15 +37,16 @@ void do_cmd_knowledge_autopick(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    if (!max_autopick) {
+    if (autopick_list.empty()) {
         fprintf(fff, _("自動破壊/拾いには何も登録されていません。", "No preference for auto picker/destroyer."));
     } else {
-        fprintf(fff, _("   自動拾い/破壊には現在 %d行登録されています。\n\n", "   There are %d registered lines for auto picker/destroyer.\n\n"), max_autopick);
+        fprintf(fff, _("   自動拾い/破壊には現在 %d行登録されています。\n\n", "   There are %d registered lines for auto picker/destroyer.\n\n"),
+            static_cast<int>(autopick_list.size()));
     }
 
-    for (int k = 0; k < max_autopick; k++) {
+    for (auto &item : autopick_list) {
         concptr tmp;
-        byte act = autopick_list[k].action;
+        byte act = item.action;
         if (act & DONT_AUTOPICK) {
             tmp = _("放置", "Leave");
         } else if (act & DO_AUTODESTROY) {
@@ -61,7 +62,7 @@ void do_cmd_knowledge_autopick(player_type *player_ptr)
         else
             fprintf(fff, "%11s", format("(%s)", tmp));
 
-        tmp = autopick_line_from_entry(&autopick_list[k]);
+        tmp = autopick_line_from_entry(&item);
         fprintf(fff, " %s", tmp);
         string_free(tmp);
         fprintf(fff, "\n");
