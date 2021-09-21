@@ -132,6 +132,7 @@
 #include <cstdlib>
 #include <locale>
 #include <string>
+#include <vector>
 
 #include <commdlg.h>
 #include <direct.h>
@@ -2235,11 +2236,10 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         for (int i = 0; i < dy; i++) {
 #ifdef JP
-            char *s;
             const auto &scr = data[0].t.scr->c;
 
-            C_MAKE(s, (dx + 1), char);
-            strncpy(s, &scr[oy + i][ox], dx);
+            std::vector<char> s(dx + 1);
+            strncpy(s.data(), &scr[oy + i][ox], dx);
 
             if (ox > 0) {
                 if (iskanji(scr[oy + i][ox - 1]))
