@@ -270,8 +270,6 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
                 t += strlen(t) + 1;
             }
         }
-
-        autopick_free_entry(entry);
     }
 
     if (str1)

@@ -57,9 +57,8 @@ concptr pickpref_filename(player_type *player_ptr, int filename_mode)
 /*!
  * @brief Read whole lines of a file to memory
  */
-static concptr *read_text_lines(concptr filename)
+static std::vector<concptr> read_text_lines(concptr filename)
 {
-    concptr *lines_list = nullptr;
     FILE *fff;
 
     int lines = 0;
@@ -68,9 +67,9 @@ static concptr *read_text_lines(concptr filename)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     fff = angband_fopen(buf, "r");
     if (!fff)
-        return nullptr;
+        return {};
 
-    C_MAKE(lines_list, MAX_LINES, concptr);
+    std::vector<concptr> lines_list(MAX_LINES);
     while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
         lines_list[lines++] = string_make(buf);
         if (is_greater_autopick_max_line(lines))
@@ -133,28 +132,27 @@ static void prepare_default_pickpref(player_type *player_ptr)
  * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-concptr *read_pickpref_text_lines(player_type *player_ptr, int *filename_mode_p)
+std::vector<concptr> read_pickpref_text_lines(player_type *player_ptr, int *filename_mode_p)
 {
     /* Try a filename with player name */
     *filename_mode_p = PT_WITH_PNAME;
     char buf[1024];
     strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
-    concptr *lines_list;
-    lines_list = read_text_lines(buf);
+    std::vector<concptr> lines_list = read_text_lines(buf);
 
-    if (!lines_list) {
+    if (lines_list.empty()) {
         *filename_mode_p = PT_DEFAULT;
         strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
         lines_list = read_text_lines(buf);
     }
 
-    if (!lines_list) {
+    if (lines_list.empty()) {
         prepare_default_pickpref(player_ptr);
         lines_list = read_text_lines(buf);
     }
 
-    if (!lines_list) {
-        C_MAKE(lines_list, MAX_LINES, concptr);
+    if (lines_list.empty()) {
+        lines_list.resize(MAX_LINES);
         lines_list[0] = string_make("");
     }
 
