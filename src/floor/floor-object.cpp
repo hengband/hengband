@@ -54,12 +54,11 @@
  */
 static errr get_obj_num_prep(void)
 {
-    alloc_entry *table = alloc_kind_table;
-    for (OBJECT_IDX i = 0; i < alloc_kind_size; i++) {
-        if (!get_obj_num_hook || (*get_obj_num_hook)(table[i].index)) {
-            table[i].prob2 = table[i].prob1;
+    for (auto &entry : alloc_kind_table) {
+        if (!get_obj_num_hook || (*get_obj_num_hook)(entry.index)) {
+            entry.prob2 = entry.prob1;
         } else {
-            table[i].prob2 = 0;
+            entry.prob2 = 0;
         }
     }
 

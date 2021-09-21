@@ -307,7 +307,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
     int prob2_total = 0; // 重みの総和
 
     // モンスター生成テーブルの各要素について重みを修正する。
-    for (int i = 0; i < alloc_race_size; i++) {
+    for (auto i = 0U; i < alloc_race_table.size(); i++) {
         alloc_entry *const entry = &alloc_race_table[i];
         const monster_race *const r_ptr = &r_info[entry->index];
 
