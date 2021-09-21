@@ -1,23 +1,31 @@
 ﻿#include "util/quarks.h"
 
-/*
- * The number of quarks
+#include <string>
+#include <vector>
+
+namespace {
+/*!
+ * @brief 銘情報の最大数 / Maximum number of "quarks"
+ * @note
+ * Default: assume at most 512 different inscriptions are used<br>
+ * Was 512... 256 quarks added for random artifacts<br>
  */
-STR_OFFSET quark__num;
+constexpr auto QUARK_MAX = 768;
 
 /*
  * The pointers to the quarks [QUARK_MAX]
  */
-concptr *quark__str;
+std::vector<std::string> quark__str;
+}
 
 /*
  * Initialize the quark array
  */
 void quark_init(void)
 {
-    C_MAKE(quark__str, QUARK_MAX, concptr);
-    quark__str[1] = string_make("");
-    quark__num = 2;
+    //! @note [0]は使用しない、[1]は空文字列固定
+    quark__str.assign(2, {});
+    quark__str[1] = "";
 }
 
 /*
@@ -25,18 +33,16 @@ void quark_init(void)
  */
 uint16_t quark_add(concptr str)
 {
-    uint16_t i;
-    for (i = 1; i < quark__num; i++) {
+    for (uint16_t i = 1; i < quark__str.size(); i++) {
         if (streq(quark__str[i], str))
             return (i);
     }
 
-    if (quark__num == QUARK_MAX)
+    if (quark__str.size() >= QUARK_MAX)
         return 1;
 
-    quark__num = i + 1;
-    quark__str[i] = string_make(str);
-    return (i);
+    quark__str.emplace_back(str);
+    return quark__str.size() - 1;
 }
 
 /*
@@ -47,11 +53,11 @@ concptr quark_str(STR_OFFSET i)
     concptr q;
 
     /* Return nullptr for an invalid index */
-    if ((i < 1) || (i >= quark__num))
+    if ((i < 1) || (i >= quark__str.size()))
         return nullptr;
 
     /* Access the quark */
-    q = quark__str[i];
+    q = quark__str[i].data();
 
     /* Return the quark */
     return (q);
