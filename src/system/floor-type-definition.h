@@ -5,12 +5,14 @@
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
 
+#include <vector>
+
 struct grid_type;;
 struct object_type;;
 struct monster_type;
 typedef struct floor_type {
     DUNGEON_IDX dungeon_idx;
-    grid_type *grid_array[MAX_HGT];
+    std::vector<std::vector<grid_type>> grid_array;
     DEPTH dun_level; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
     DEPTH base_level; /*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
     DEPTH object_level; /*!< アイテムの生成レベル、 base_level を起点に一時変更する時に参照 / Current object creation level */
@@ -21,15 +23,15 @@ typedef struct floor_type {
 
     GAME_TURN generated_turn; /* Turn when level began */
 
-    object_type *o_list; /*!< The array of dungeon items [max_o_idx] */
+    std::vector<object_type> o_list; /*!< The array of dungeon items [max_o_idx] */
     OBJECT_IDX o_max; /* Number of allocated objects */
     OBJECT_IDX o_cnt; /* Number of live objects */
 
-    monster_type *m_list; /*!< The array of dungeon monsters [max_m_idx] */
+    std::vector<monster_type> m_list; /*!< The array of dungeon monsters [max_m_idx] */
     MONSTER_IDX m_max; /* Number of allocated monsters */
     MONSTER_IDX m_cnt; /* Number of live monsters */
 
-    int16_t *mproc_list[MAX_MTIMED]; /*!< The array to process dungeon monsters[max_m_idx] */
+    std::vector<int16_t> mproc_list[MAX_MTIMED]; /*!< The array to process dungeon monsters[max_m_idx] */
     int16_t mproc_max[MAX_MTIMED]; /*!< Number of monsters to be processed */
 
     POSITION_IDX lite_n; //!< Array of grids lit by player lite

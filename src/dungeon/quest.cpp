@@ -36,7 +36,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-quest_type *quest; /*!< Quest info */
+std::vector<quest_type> quest; /*!< Quest info */
 QUEST_IDX max_q_idx; /*!< Maximum number of quests */
 char quest_text[10][80]; /*!< Quest text */
 int quest_text_line; /*!< Current line of the quest text */

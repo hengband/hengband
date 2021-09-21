@@ -39,9 +39,9 @@ static const int MACRO_MAX = 256;
  */
 errr init_quests(void)
 {
-    C_MAKE(quest, max_q_idx, quest_type);
-    for (int i = 0; i < max_q_idx; i++)
-        quest[i].status = QUEST_STATUS_UNTAKEN;
+    quest.assign(max_q_idx, {});
+    for (auto &q_ref : quest)
+        q_ref.status = QUEST_STATUS_UNTAKEN;
 
     return 0;
 }
@@ -55,14 +55,13 @@ errr init_other(player_type *player_ptr)
 {
     player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    C_MAKE(floor_ptr->o_list, w_ptr->max_o_idx, object_type);
-    C_MAKE(floor_ptr->m_list, w_ptr->max_m_idx, monster_type);
-    for (int i = 0; i < MAX_MTIMED; i++)
-        C_MAKE(floor_ptr->mproc_list[i], w_ptr->max_m_idx, int16_t);
+    floor_ptr->o_list.assign(w_ptr->max_o_idx, {});
+    floor_ptr->m_list.assign(w_ptr->max_m_idx, {});
+    for (auto &list : floor_ptr->mproc_list)
+        list.assign(w_ptr->max_m_idx, {});
 
-    C_MAKE(max_dlv, w_ptr->max_d_idx, DEPTH);
-    for (int i = 0; i < MAX_HGT; i++)
-        C_MAKE(floor_ptr->grid_array[i], MAX_WID, grid_type);
+    max_dlv.assign(w_ptr->max_d_idx, {});
+    floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
 
     C_MAKE(macro__pat, MACRO_MAX, concptr);
     C_MAKE(macro__act, MACRO_MAX, concptr);
