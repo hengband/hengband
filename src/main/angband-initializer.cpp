@@ -37,10 +37,6 @@
 #include "util/string-processor.h"
 #endif
 
-char *file_read__buf;
-char *file_read__swp;
-char *file_read__tmp;
-
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する
  * Find the default paths to all of our important sub-directories.
@@ -214,9 +210,6 @@ static void put_title(void)
  */
 void init_angband(player_type *player_ptr, bool no_term)
 {
-    C_MAKE(file_read__buf, FILE_READ_BUFF_SIZE, char);
-    C_MAKE(file_read__swp, FILE_READ_BUFF_SIZE, char);
-    C_MAKE(file_read__tmp, FILE_READ_BUFF_SIZE, char);
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
     int fd = fd_open(buf, O_RDONLY);
