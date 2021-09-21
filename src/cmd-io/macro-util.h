@@ -2,13 +2,15 @@
 
 #include "system/angband.h"
 
-extern bool *macro__cmd;
-extern char *macro__buf;
+#include <string>
+#include <vector>
+
+extern std::vector<char> macro__buf;
 
 extern bool get_com_no_macros;
 
-extern concptr *macro__pat;
-extern concptr *macro__act;
+extern std::vector<std::string> macro__pat;
+extern std::vector<std::string> macro__act;
 extern int16_t macro__num;
 
 int macro_find_exact(concptr pat);

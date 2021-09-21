@@ -13,6 +13,7 @@
 
 #include "system/h-basic.h"
 
+#include <string_view>
 
 /*
  * Extremely basic stuff, like global temp and constant variables.
@@ -36,10 +37,9 @@ extern void (*core_aux)(concptr);
 /**** Available Functions ****/
 
 /* Test equality, prefix, suffix */
-extern bool streq(concptr s, concptr t);
-extern bool prefix(concptr s, concptr t);
-extern bool suffix(concptr s, concptr t);
-
+extern bool streq(std::string_view s, std::string_view t);
+extern bool prefix(std::string_view s, std::string_view t);
+extern bool suffix(std::string_view s, std::string_view t);
 
 /* Print an error message */
 extern void plog(concptr str);
@@ -85,4 +85,3 @@ extern void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 
 extern int count_bits(BIT_FLAGS x);
 extern int mysqrt(int n);
-
