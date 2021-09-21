@@ -205,7 +205,7 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
  */
 void floor_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    const floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
     object_type *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;

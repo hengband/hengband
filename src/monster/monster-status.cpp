@@ -101,7 +101,7 @@ HIT_POINT mon_damage_mod(player_type *player_ptr, monster_type *m_ptr, HIT_POINT
  */
 int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
-    int16_t *cur_mproc_list = floor_ptr->mproc_list[mproc_type];
+    const auto &cur_mproc_list = floor_ptr->mproc_list[mproc_type];
     for (int i = floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--) {
         if (cur_mproc_list[i] == m_idx) {
             return i;
@@ -344,7 +344,7 @@ static void process_monsters_mtimed_aux(player_type *player_ptr, MONSTER_IDX m_i
 void process_monsters_mtimed(player_type *player_ptr, int mtimed_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *cur_mproc_list = floor_ptr->mproc_list[mtimed_idx];
+    const auto &cur_mproc_list = floor_ptr->mproc_list[mtimed_idx];
 
     /* Hack -- calculate the "player noise" */
     if (mtimed_idx == MTIMED_CSLEEP) {

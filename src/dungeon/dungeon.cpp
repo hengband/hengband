@@ -20,7 +20,7 @@ std::vector<dungeon_type> d_info;
 /*
  * Maximum number of dungeon in d_info.txt
  */
-DEPTH *max_dlv;
+std::vector<DEPTH> max_dlv;
 
 /*!
  * @brief これまでに入ったダンジョンの一覧を表示し、選択させる。

@@ -518,12 +518,12 @@ void fix_object(player_type *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static monster_type *monster_on_floor_items(const floor_type *floor_ptr, const grid_type *g_ptr)
+static const monster_type *monster_on_floor_items(floor_type *floor_ptr, const grid_type *g_ptr)
 {
     if (g_ptr->m_idx == 0)
         return nullptr;
 
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (!monster_is_valid(m_ptr) || !m_ptr->ml)
         return nullptr;
 
@@ -550,7 +550,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
     term_clear();
     term_gotoxy(0, 0);
 
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto *g_ptr = &floor_ptr->grid_array[y][x];
     char line[1024];
 
