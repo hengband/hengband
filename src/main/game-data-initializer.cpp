@@ -63,10 +63,9 @@ errr init_other(player_type *player_ptr)
     max_dlv.assign(w_ptr->max_d_idx, {});
     floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
 
-    C_MAKE(macro__pat, MACRO_MAX, concptr);
-    C_MAKE(macro__act, MACRO_MAX, concptr);
-    C_MAKE(macro__cmd, MACRO_MAX, bool);
-    C_MAKE(macro__buf, FILE_READ_BUFF_SIZE, char);
+    macro__pat.assign(MACRO_MAX, {});
+    macro__act.assign(MACRO_MAX, {});
+    macro__buf.assign(FILE_READ_BUFF_SIZE, {});
     quark_init();
 
     for (int i = 0; option_info[i].o_desc; i++) {

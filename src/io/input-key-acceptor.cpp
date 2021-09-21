@@ -157,7 +157,7 @@ static char inkey_aux(void)
         return (ch);
     }
 
-    concptr pat = macro__pat[k];
+    concptr pat = macro__pat[k].c_str();
     n = strlen(pat);
     while (p > n) {
         if (term_key_push(buf[--p]))
@@ -168,7 +168,7 @@ static char inkey_aux(void)
     if (term_key_push(30))
         return 0;
 
-    concptr act = macro__act[k];
+    concptr act = macro__act[k].c_str();
 
     n = strlen(act);
     while (n > 0) {
