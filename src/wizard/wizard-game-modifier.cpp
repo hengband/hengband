@@ -22,9 +22,10 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"
-#include <string>
-#include <vector>
 #include <sstream>
+#include <string>
+#include <tuple>
+#include <vector>
 
 void wiz_enter_quest(player_type *player_ptr);
 void wiz_complete_quest(player_type *player_ptr);
@@ -33,12 +34,12 @@ void wiz_restore_monster_max_num();
 /*!
  * @brief ゲーム設定コマンド一覧表
  */
-std::vector<std::vector<std::string>> wizard_game_modifier_menu_table = {
-    { "t", _("プレイ時間変更", "Modify played time") },
-    { "q", _("現在のクエストを完了", "Complete current quest") },
-    { "Q", _("クエストに突入", "Enter quest") },
-    { "u", _("ユニーク/ナズグルの生存数を復元", "Restore living info of unique/nazgul") },
-    { "g", _("モンスター闘技場出場者更新", "Update gambling monster") },
+constexpr std::array wizard_game_modifier_menu_table = {
+    std::make_tuple('t', _("プレイ時間変更", "Modify played time")),
+    std::make_tuple('q', _("現在のクエストを完了", "Complete current quest")),
+    std::make_tuple('Q', _("クエストに突入", "Enter quest")),
+    std::make_tuple('u', _("ユニーク/ナズグルの生存数を復元", "Restore living info of unique/nazgul")),
+    std::make_tuple('g', _("モンスター闘技場出場者更新", "Update gambling monster")),
 };
 
 /*!
@@ -46,15 +47,14 @@ std::vector<std::vector<std::string>> wizard_game_modifier_menu_table = {
  */
 void display_wizard_game_modifier_menu()
 {
-    for (int y = 1; y < 6; y++)
+    for (auto y = 1U; y <= wizard_game_modifier_menu_table.size(); y++)
         term_erase(14, y, 64);
 
     int r = 1;
     int c = 15;
-    int sz = wizard_game_modifier_menu_table.size();
-    for (int i = 0; i < sz; i++) {
+    for (const auto &[symbol, desc] : wizard_game_modifier_menu_table) {
         std::stringstream ss;
-        ss << wizard_game_modifier_menu_table[i][0] << ") " << wizard_game_modifier_menu_table[i][1];
+        ss << symbol << ") " << desc;
         put_str(ss.str().c_str(), r++, c);
     }
 }

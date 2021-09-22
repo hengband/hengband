@@ -14,22 +14,23 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"
-#include <string>
-#include <vector>
 #include <sstream>
+#include <string>
+#include <tuple>
+#include <vector>
 
 /*!
  * @brief プレイヤー設定コマンド一覧表
  */
-std::vector<std::vector<std::string>> wizard_player_modifier_menu_table = {
-    { "r", _("種族変更", "Change race") },
-    { "c", _("職業変更", "Change class") },
-    { "R", _("領域変更", "Change realms") },
-    { "e", _("能力変更", "Change status") },
-    { "k", _("自己分析", "Self knowledge") },
-    { "l", _("ライフレート変更", "Set new life rate") },
-    { "m", _("突然変異", "Get mutation") },
-    { "a", _("属性表示", "Print your alignment") },
+constexpr std::array wizard_player_modifier_menu_table = {
+    std::make_tuple('r', _("種族変更", "Change race")),
+    std::make_tuple('c', _("職業変更", "Change class")),
+    std::make_tuple('R', _("領域変更", "Change realms")),
+    std::make_tuple('e', _("能力変更", "Change status")),
+    std::make_tuple('k', _("自己分析", "Self knowledge")),
+    std::make_tuple('l', _("ライフレート変更", "Set new life rate")),
+    std::make_tuple('m', _("突然変異", "Get mutation")),
+    std::make_tuple('a', _("属性表示", "Print your alignment")),
 };
 
 /*!
@@ -37,15 +38,14 @@ std::vector<std::vector<std::string>> wizard_player_modifier_menu_table = {
  */
 void display_wizard_player_modifier_menu()
 {
-    for (int y = 1; y < 9; y++)
+    for (auto y = 1U; y <= wizard_player_modifier_menu_table.size(); y++)
         term_erase(14, y, 64);
 
     int r = 1;
     int c = 15;
-    int sz = wizard_player_modifier_menu_table.size();
-    for (int i = 0; i < sz; i++) {
+    for (const auto &[symbol, desc] : wizard_player_modifier_menu_table) {
         std::stringstream ss;
-        ss << wizard_player_modifier_menu_table[i][0] << ") " << wizard_player_modifier_menu_table[i][1];
+        ss << symbol << ") " << desc;
         put_str(ss.str().c_str(), r++, c);
     }
 }

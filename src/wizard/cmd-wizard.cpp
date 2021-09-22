@@ -36,6 +36,7 @@
 #include "wizard/wizard-spoiler.h"
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 /*!
@@ -43,44 +44,44 @@
  * @details
  * 空き: A,B,E,I,J,k,K,L,M,q,Q,R,T,U,V,W,y,Y
  */
-std::vector<std::vector<std::string>> debug_menu_table = {
-    { "a", _("全状態回復", "Restore all status") },
-    { "b", _("現在のターゲットを引き寄せる", "Teleport target back") },
-    { "c", _("オブジェクト生成", "Create object") },
-    { "C", _("固定アーティファクト生成", "Create fixed artifact") },
-    { "d", _("全感知", "Detection all") },
-    { "D", _("次元の扉", "Dimension door") },
-    { "e", _("能力値変更", "Modify player status") },
-    { "E", _("青魔法を全取得/エッセンスを全取得", "Learn all blue magics / Obtain all essences") },
-    { "f", _("*鑑定*", "*Idenfity*") },
-    { "F", _("地形ID変更", "Modify feature type under player") },
-    { "G", _("ゲーム設定コマンドメニュー", "Modify game configurations") },
-    { "H", _("モンスターの群れ生成", "Summon monsters") },
-    { "i", _("鑑定", "Idenfity") },
-    { "I", _("アイテム設定コマンドメニュー", "Modify item configurations") },
-    { "j", _("指定ダンジョン階にワープ", "Jump to floor depth of target dungeon") },
-    { "k", _("指定ダメージ・半径0の指定属性のボールを自分に放つ", "Fire a zero ball to self") },
-    { "m", _("魔法の地図", "Magic mapping") },
-    { "n", _("指定モンスター生成", "Summon target monster") },
-    { "N", _("指定モンスターをペットとして生成", "Summon target monster as pet") },
-    { "o", _("オブジェクトの能力変更", "Modift object abilities") },
-    { "O", _("オプション設定をダンプ", "Dump current options") },
-    { "p", _("ショート・テレポート", "Phase door") },
-    { "P", _("プレイヤー設定変更メニュー", "Modify player configurations") },
-    { "r", _("カオスパトロンの報酬", "Get reward of chaos patron") },
-    { "s", _("フロア相当のモンスター召喚", "Summon monster which be in target depth") },
-    { "t", _("テレポート", "Teleport self") },
-    { "u", _("啓蒙(忍者以外)", "Wiz-lite all floor except Ninja") },
-    { "w", _("啓蒙(忍者配慮)", "Wiz-lite all floor") },
-    { "x", _("経験値を得る(指定可)", "Get experience") },
-    { "X", _("所持品を初期状態に戻す", "Return inventory to initial") },
-    { "y", _("ダメージ100万・半径0の射撃のボールを放つ", "Cast missile ball had power a million") },
-    { "Y", _("指定ダメージ・半径0の指定属性のボールを放つ", "Cast zero ball had power a thousand") },
-    { "z", _("近隣のモンスター消去", "Terminate near monsters") },
-    { "Z", _("フロアの全モンスター消去", "Terminate all monsters in floor") },
-    { "@", _("特殊スペルの発動", "Activate specified spells") },
-    { "\"", _("スポイラーのダンプ", "Dump spoiler") },
-    { "?", _("ヘルプ表示", "Help") },
+constexpr std::array debug_menu_table = {
+    std::make_tuple('a', _("全状態回復", "Restore all status")),
+    std::make_tuple('b', _("現在のターゲットを引き寄せる", "Teleport target back")),
+    std::make_tuple('c', _("オブジェクト生成", "Create object")),
+    std::make_tuple('C', _("固定アーティファクト生成", "Create fixed artifact")),
+    std::make_tuple('d', _("全感知", "Detection all")),
+    std::make_tuple('D', _("次元の扉", "Dimension door")),
+    std::make_tuple('e', _("能力値変更", "Modify player status")),
+    std::make_tuple('E', _("青魔法を全取得/エッセンスを全取得", "Learn all blue magics / Obtain all essences")),
+    std::make_tuple('f', _("*鑑定*", "*Idenfity*")),
+    std::make_tuple('F', _("地形ID変更", "Modify feature type under player")),
+    std::make_tuple('G', _("ゲーム設定コマンドメニュー", "Modify game configurations")),
+    std::make_tuple('H', _("モンスターの群れ生成", "Summon monsters")),
+    std::make_tuple('i', _("鑑定", "Idenfity")),
+    std::make_tuple('I', _("アイテム設定コマンドメニュー", "Modify item configurations")),
+    std::make_tuple('j', _("指定ダンジョン階にワープ", "Jump to floor depth of target dungeon")),
+    std::make_tuple('k', _("指定ダメージ・半径0の指定属性のボールを自分に放つ", "Fire a zero ball to self")),
+    std::make_tuple('m', _("魔法の地図", "Magic mapping")),
+    std::make_tuple('n', _("指定モンスター生成", "Summon target monster")),
+    std::make_tuple('N', _("指定モンスターをペットとして生成", "Summon target monster as pet")),
+    std::make_tuple('o', _("オブジェクトの能力変更", "Modift object abilities")),
+    std::make_tuple('O', _("オプション設定をダンプ", "Dump current options")),
+    std::make_tuple('p', _("ショート・テレポート", "Phase door")),
+    std::make_tuple('P', _("プレイヤー設定変更メニュー", "Modify player configurations")),
+    std::make_tuple('r', _("カオスパトロンの報酬", "Get reward of chaos patron")),
+    std::make_tuple('s', _("フロア相当のモンスター召喚", "Summon monster which be in target depth")),
+    std::make_tuple('t', _("テレポート", "Teleport self")),
+    std::make_tuple('u', _("啓蒙(忍者以外)", "Wiz-lite all floor except Ninja")),
+    std::make_tuple('w', _("啓蒙(忍者配慮)", "Wiz-lite all floor")),
+    std::make_tuple('x', _("経験値を得る(指定可)", "Get experience")),
+    std::make_tuple('X', _("所持品を初期状態に戻す", "Return inventory to initial")),
+    std::make_tuple('y', _("ダメージ100万・半径0の射撃のボールを放つ", "Cast missile ball had power a million")),
+    std::make_tuple('Y', _("指定ダメージ・半径0の指定属性のボールを放つ", "Cast zero ball had power a thousand")),
+    std::make_tuple('z', _("近隣のモンスター消去", "Terminate near monsters")),
+    std::make_tuple('Z', _("フロアの全モンスター消去", "Terminate all monsters in floor")),
+    std::make_tuple('@', _("特殊スペルの発動", "Activate specified spells")),
+    std::make_tuple('"', _("スポイラーのダンプ", "Dump spoiler")),
+    std::make_tuple('?', _("ヘルプ表示", "Help")),
 };
 
 /*!
@@ -103,7 +104,8 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
             break;
 
         std::stringstream ss;
-        ss << debug_menu_table[pos][0] << ") " << debug_menu_table[pos][1];
+        const auto &[symbol, desc] = debug_menu_table[pos];
+        ss << symbol << ") " << desc;
         put_str(ss.str().c_str(), r++, c);
     }
     if (max_page > 1)
