@@ -17,6 +17,7 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -493,7 +494,6 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
  */
 bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
 {
-    int old_aux, new_aux;
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
@@ -506,67 +506,12 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
         v = 0;
     }
 
-    if (this->player_ptr->cut > 1000) {
-        old_aux = 7;
-    } else if (this->player_ptr->cut > 200) {
-        old_aux = 6;
-    } else if (this->player_ptr->cut > 100) {
-        old_aux = 5;
-    } else if (this->player_ptr->cut > 50) {
-        old_aux = 4;
-    } else if (this->player_ptr->cut > 25) {
-        old_aux = 3;
-    } else if (this->player_ptr->cut > 10) {
-        old_aux = 2;
-    } else if (this->player_ptr->cut > 0) {
-        old_aux = 1;
-    } else {
-        old_aux = 0;
-    }
-
-    if (v > 1000) {
-        new_aux = 7;
-    } else if (v > 200) {
-        new_aux = 6;
-    } else if (v > 100) {
-        new_aux = 5;
-    } else if (v > 50) {
-        new_aux = 4;
-    } else if (v > 25) {
-        new_aux = 3;
-    } else if (v > 10) {
-        new_aux = 2;
-    } else if (v > 0) {
-        new_aux = 1;
-    } else {
-        new_aux = 0;
-    }
-
+    auto player_cut = this->player_ptr->effects()->cut();
+    auto old_aux = player_cut->get_rank();
+    auto new_aux = player_cut->get_rank(v);
     if (new_aux > old_aux) {
-        switch (new_aux) {
-        case 1:
-            msg_print(_("かすり傷を負ってしまった。", "You have been given a graze."));
-            break;
-        case 2:
-            msg_print(_("軽い傷を負ってしまった。", "You have been given a light cut."));
-            break;
-        case 3:
-            msg_print(_("ひどい傷を負ってしまった。", "You have been given a bad cut."));
-            break;
-        case 4:
-            msg_print(_("大変な傷を負ってしまった。", "You have been given a nasty cut."));
-            break;
-        case 5:
-            msg_print(_("重大な傷を負ってしまった。", "You have been given a severe cut."));
-            break;
-        case 6:
-            msg_print(_("ひどい深手を負ってしまった。", "You have been given a deep gash."));
-            break;
-        case 7:
-            msg_print(_("致命的な傷を負ってしまった。", "You have been given a mortal wound."));
-            break;
-        }
-
+        auto cut_mes = player_cut->get_cut_mes(new_aux);
+        msg_print(cut_mes.data());
         notice = true;
         if (randint1(1000) < v || one_in_(16)) {
             if (!has_sustain_chr(this->player_ptr)) {
@@ -575,7 +520,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
             }
         }
     } else if (new_aux < old_aux) {
-        if (new_aux == 0) {
+        if (new_aux == PlayerCutRank::NONE) {
             auto blood_stop_mes = this->player_ptr->prace == player_race_type::ANDROID
                 ? _("怪我が直った", "leaking fluid")
                 : _("出血が止まった", "bleeding");
