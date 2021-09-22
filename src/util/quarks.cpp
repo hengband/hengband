@@ -34,15 +34,17 @@ void quark_init(void)
 uint16_t quark_add(concptr str)
 {
     for (uint16_t i = 1; i < quark__str.size(); i++) {
-        if (streq(quark__str[i], str))
-            return (i);
+        if (streq(quark__str[i], str)) {
+            return i;
+        }
     }
 
-    if (quark__str.size() >= QUARK_MAX)
+    if (quark__str.size() >= QUARK_MAX) {
         return 1;
+    }
 
     quark__str.emplace_back(str);
-    return quark__str.size() - 1;
+    return static_cast<uint16_t>(quark__str.size() - 1);
 }
 
 /*
