@@ -121,10 +121,9 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 
         if (player_ptr->hallucinated) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
-
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                player_ptr->hallucinated = player_ptr->hallucinated + randint1(r_ptr->level);
+                BadStatusSetter(player_ptr).hallucination(player_ptr->hallucinated + randint1(r_ptr->level));
             }
 
             return;
@@ -172,10 +171,9 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 
         if (player_ptr->hallucinated) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
-
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                player_ptr->hallucinated = player_ptr->hallucinated + randint1(r_ptr->level);
+                BadStatusSetter(player_ptr).hallucination(player_ptr->hallucinated + randint1(r_ptr->level));
             }
 
             return;
