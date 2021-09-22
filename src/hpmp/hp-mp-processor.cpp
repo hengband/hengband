@@ -116,7 +116,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
     
     auto player_cut = player_ptr->effects()->cut();
-    if (player_ptr->cut && !is_invuln(player_ptr)) {
+    if (player_cut->is_cut() && !is_invuln(player_ptr)) {
         auto dam = player_cut->get_damage();
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a mortal wound")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
@@ -318,7 +318,7 @@ void process_player_hp_mp(player_type *player_ptr)
 
     if (player_ptr->poisoned)
         regen_amount = 0;
-    if (player_ptr->cut)
+    if (player_cut->is_cut())
         regen_amount = 0;
     if (cave_no_regen)
         regen_amount = 0;

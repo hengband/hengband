@@ -41,6 +41,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -322,7 +324,7 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
     msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
     dam = dam * 2;
     BadStatusSetter bss(player_ptr);
-    (void)bss.cut(player_ptr->cut + randint1(dam));
+    (void)bss.cut(player_ptr->effects()->cut()->current() + randint1(dam));
     if (trap_feat_type != TRAP_POISON_PIT) {
         take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
         return;

@@ -18,6 +18,7 @@
 #include "spell-realm/spells-song.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -346,11 +347,13 @@ static void rd_energy(player_type *player_ptr)
  */
 static void rd_status(player_type *player_ptr)
 {
+    int16_t tmp16s;
     rd_s16b(&player_ptr->fast);
     rd_s16b(&player_ptr->slow);
     rd_s16b(&player_ptr->afraid);
-    rd_s16b(&player_ptr->cut);
-    int16_t tmp16s = player_ptr->effects()->stun()->current();
+    tmp16s = player_ptr->effects()->cut()->current();
+    rd_s16b(&tmp16s);
+    tmp16s = player_ptr->effects()->stun()->current();
     rd_s16b(&tmp16s);
     rd_s16b(&player_ptr->poisoned);
     rd_s16b(&player_ptr->hallucinated);

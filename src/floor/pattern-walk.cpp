@@ -23,6 +23,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -107,7 +108,8 @@ bool pattern_effect(player_type *player_ptr)
     if (!pattern_tile(floor_ptr, player_ptr->y, player_ptr->x))
         return false;
 
-    if ((PlayerRace(player_ptr).equals(player_race_type::AMBERITE)) && (player_ptr->cut > 0) && one_in_(10)) {
+    auto is_cut = player_ptr->effects()->cut()->is_cut();
+    if ((PlayerRace(player_ptr).equals(player_race_type::AMBERITE)) && is_cut && one_in_(10)) {
         wreck_the_pattern(player_ptr);
     }
 

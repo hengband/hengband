@@ -451,7 +451,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     }
 
     auto notice = this->process_cut_effect(v);
-    this->player_ptr->cut = v;
+    this->player_ptr->effects()->cut()->set(v);
     if (!notice) {
         return false;
     }

@@ -25,6 +25,7 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -277,13 +278,13 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
             }
             
             BadStatusSetter bss(player_ptr);
+            auto effects = player_ptr->effects();
             if (one_in_(5)) {
-                (void)bss.cut(player_ptr->cut + 200);
+                (void)bss.cut(effects->cut()->current() + 200);
                 continue;
             }
             
             if (one_in_(4)) {
-                auto effects = player_ptr->effects(); // @todo paralyzed と共通化の予定あり.
                 if (!player_ptr->free_act) {
                     (void)bss.paralysis(player_ptr->paralyzed + 2 + randint0(6));
                 } else {
