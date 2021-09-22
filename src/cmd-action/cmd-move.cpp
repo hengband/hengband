@@ -24,6 +24,8 @@
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
@@ -85,6 +87,8 @@ void do_cmd_go_up(player_type *player_ptr)
             msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
         else
             msg_print(_("上の階に登った。", "You enter the up staircase."));
+
+        sound(SOUND_STAIRWAY);
 
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
@@ -161,6 +165,8 @@ void do_cmd_go_up(player_type *player_ptr)
             msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
     }
 
+    sound(SOUND_STAIRWAY);
+
     player_ptr->leaving = true;
 }
 
@@ -198,6 +204,8 @@ void do_cmd_go_down(player_type *player_ptr)
             msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
         else
             msg_print(_("下の階に降りた。", "You enter the down staircase."));
+
+        sound(SOUND_STAIRWAY);
 
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
@@ -276,6 +284,8 @@ void do_cmd_go_down(player_type *player_ptr)
             else
                 msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));
         }
+
+        sound(SOUND_STAIRWAY);
     }
 
     player_ptr->leaving = true;

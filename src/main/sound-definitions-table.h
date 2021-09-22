@@ -93,6 +93,7 @@ enum sound_type {
     SOUND_TAKE_OFF,
     SOUND_TERRAIN_DAMAGE,
     SOUND_DAMAGE_OVER_TIME,
+    SOUND_STAIRWAY,
     SOUND_MAX, /*!< 効果音定義の最大数 / Maximum numbers of sound effect */
 };
 
