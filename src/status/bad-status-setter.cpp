@@ -500,9 +500,8 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    if ((this->player_ptr->prace == player_race_type::GOLEM || this->player_ptr->prace == player_race_type::SKELETON || this->player_ptr->prace == player_race_type::SPECTRE
-            || (this->player_ptr->prace == player_race_type::ZOMBIE && this->player_ptr->lev > 11))
-        && !this->player_ptr->mimic_form) {
+    PlayerRace player_race(this->player_ptr);
+    if (player_race.can_resist_cut() && !this->player_ptr->mimic_form) {
         v = 0;
     }
 
@@ -521,7 +520,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
         }
     } else if (new_aux < old_aux) {
         if (new_aux == PlayerCutRank::NONE) {
-            auto blood_stop_mes = this->player_ptr->prace == player_race_type::ANDROID
+            auto blood_stop_mes = player_race.equals(player_race_type::ANDROID)
                 ? _("怪我が直った", "leaking fluid")
                 : _("出血が止まった", "bleeding");
             msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
