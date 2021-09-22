@@ -499,6 +499,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_info<ActivationSmithInfo>(SmithEffect::ACT_LIGHT, _("イルミネーション", "light area"), SmithCategory::ACTIVATION, { SmithEssence::LITE }, 30, ACT_LIGHT),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_MAP_LIGHT, _("魔法の地図と光", "light & map area"), SmithCategory::ACTIVATION, { SmithEssence::SEARCH, SmithEssence::LITE }, 30, ACT_MAP_LIGHT),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_DETECT_ALL, _("全感知", "detection"), SmithCategory::ACTIVATION, { SmithEssence::SEARCH, SmithEssence::TELEPATHY }, 30, ACT_DETECT_ALL),
+    make_info<ActivationSmithInfo>(SmithEffect::ACT_DETECT_UNIQUE, _("階にいるユニークモンスターを表示", "list of the uniques on the level"), SmithCategory::ACTIVATION, { SmithEssence::UNIQUE }, 100, ACT_DETECT_UNIQUE),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_REST_EXP, _("経験値復活", "restore experience"), SmithCategory::ACTIVATION, { SmithEssence::HOLD_EXP }, 30, ACT_REST_EXP),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_REST_ALL, _("全ステータスと経験値復活", "restore stats and experience"), SmithCategory::ACTIVATION, { SmithEssence::SUST_STATUS, SmithEssence::HOLD_EXP }, 40, ACT_REST_ALL),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_PROT_EVIL, _("対邪悪結界", "protect evil"), SmithCategory::ACTIVATION, { SmithEssence::SLAY_EVIL }, 100, ACT_PROT_EVIL),
