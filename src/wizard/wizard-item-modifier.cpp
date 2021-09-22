@@ -46,6 +46,7 @@
 #include <algorithm>
 #include <limits>
 #include <sstream>
+#include <tuple>
 #include <vector>
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
@@ -54,18 +55,18 @@ namespace {
 /*!
  * @brief アイテム設定コマンド一覧表
  */
-std::vector<std::vector<std::string>> wizard_sub_menu_table = {
-    { "a", _("アーティファクト出現フラグリセット", "Restore aware flag of fixed artifact") },
-    { "A", _("アーティファクトを出現済みにする", "Make a fixed artifact awared") },
-    { "e", _("高級品獲得ドロップ", "Drop excellent object") },
-    { "f", _("*鑑定*", "*Idenfity*") },
-    { "i", _("鑑定", "Idenfity") },
-    { "I", _("インベントリ全*鑑定*", "Idenfity all objects fully in inventory") },
-    { "l", _("指定アイテム番号まで一括鑑定", "Make objects awared to target object id") },
-    { "g", _("上質なアイテムドロップ", "Drop good object") },
-    { "s", _("特別品獲得ドロップ", "Drop special object") },
-    { "w", _("願い", "Wishing") },
-    { "U", _("発動を変更する", "Modify item activation") },
+constexpr std::array wizard_sub_menu_table = {
+    std::make_tuple('a', _("アーティファクト出現フラグリセット", "Restore aware flag of fixed artifact")),
+    std::make_tuple('A', _("アーティファクトを出現済みにする", "Make a fixed artifact awared")),
+    std::make_tuple('e', _("高級品獲得ドロップ", "Drop excellent object")),
+    std::make_tuple('f', _("*鑑定*", "*Idenfity*")),
+    std::make_tuple('i', _("鑑定", "Idenfity")),
+    std::make_tuple('I', _("インベントリ全*鑑定*", "Idenfity all objects fully in inventory")),
+    std::make_tuple('l', _("指定アイテム番号まで一括鑑定", "Make objects awared to target object id")),
+    std::make_tuple('g', _("上質なアイテムドロップ", "Drop good object")),
+    std::make_tuple('s', _("特別品獲得ドロップ", "Drop special object")),
+    std::make_tuple('w', _("願い", "Wishing")),
+    std::make_tuple('U', _("発動を変更する", "Modify item activation")),
 };
 
 /*!
@@ -73,15 +74,14 @@ std::vector<std::vector<std::string>> wizard_sub_menu_table = {
  */
 void display_wizard_sub_menu()
 {
-    for (size_t y = 1; y <= wizard_sub_menu_table.size(); y++)
+    for (auto y = 1U; y <= wizard_sub_menu_table.size(); y++)
         term_erase(14, y, 64);
 
     int r = 1;
     int c = 15;
-    int sz = wizard_sub_menu_table.size();
-    for (int i = 0; i < sz; i++) {
+    for (const auto &[symbol, desc] : wizard_sub_menu_table) {
         std::stringstream ss;
-        ss << wizard_sub_menu_table[i][0] << ") " << wizard_sub_menu_table[i][1];
+        ss << symbol << ") " << desc;
         put_str(ss.str().c_str(), r++, c);
     }
 }
