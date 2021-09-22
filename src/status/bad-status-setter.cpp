@@ -509,15 +509,8 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     auto old_aux = player_cut->get_rank();
     auto new_aux = player_cut->get_rank(v);
     if (new_aux > old_aux) {
-        auto cut_mes = player_cut->get_cut_mes(new_aux);
-        msg_print(cut_mes.data());
+        this->decrease_charisma(new_aux, v);
         notice = true;
-        if (randint1(1000) < v || one_in_(16)) {
-            if (!has_sustain_chr(this->player_ptr)) {
-                msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
-                do_dec_stat(this->player_ptr, A_CHR);
-            }
-        }
     } else if (new_aux < old_aux) {
         if (new_aux == PlayerCutRank::NONE) {
             auto blood_stop_mes = player_race.equals(player_race_type::ANDROID)
@@ -545,4 +538,21 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     this->player_ptr->redraw |= PR_CUT;
     handle_stuff(this->player_ptr);
     return true;
+}
+
+void BadStatusSetter::decrease_charisma(const PlayerCutRank new_aux, const short v)
+{
+    auto player_cut = this->player_ptr->effects()->cut();
+    auto cut_mes = player_cut->get_cut_mes(new_aux);
+    msg_print(cut_mes.data());
+    if (v <= randint1(1000) && !one_in_(16)) {
+        return;
+    }
+
+    if (has_sustain_chr(this->player_ptr)) {
+        return;
+    }
+
+    msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
+    do_dec_stat(this->player_ptr, A_CHR);
 }
