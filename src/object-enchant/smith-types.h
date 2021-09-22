@@ -152,6 +152,7 @@ enum class SmithEffect : int16_t {
     ACT_DRAIN, //!< 吸血の矢発動
     ACT_CONFUSE, //!< パニック・モンスター発動
     ACT_DETECT_ALL, //!< 全感知発動
+    ACT_DETECT_UNIQUE, //!< ユニークモンスター感知発動
     ACT_MAP_LIGHT, //!< 魔法の地図と光発動
     ACT_SATIATE, //!< 空腹充足発動
     ACT_CURE_700, //!< 体力回復発動
