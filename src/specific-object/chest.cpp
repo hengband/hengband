@@ -183,7 +183,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
     if (trap & (CHEST_POISON)) {
         msg_print(_("突如吹き出した緑色のガスに包み込まれた！", "A puff of green gas surrounds you!"));
         if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) {
-            (void)set_poisoned(player_ptr, player_ptr->poisoned + 10 + randint1(20));
+            (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + 10 + randint1(20));
         }
     }
 
@@ -191,7 +191,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
     if (trap & (CHEST_PARALYZE)) {
         msg_print(_("突如吹き出した黄色いガスに包み込まれた！", "A puff of yellow gas surrounds you!"));
         if (!player_ptr->free_act) {
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 10 + randint1(20));
+            (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + 10 + randint1(20));
         }
     }
 
@@ -265,37 +265,50 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 
     /* Dispel player. */
     if ((trap & (CHEST_RUNES_OF_EVIL)) && o_ptr->k_idx) {
-        /* Determine how many nasty tricks can be played. */
-        int nasty_tricks_count = 4 + randint0(3);
-
         msg_print(_("恐ろしい声が響いた:  「暗闇が汝をつつまん！」", "Hideous voices bid:  'Let the darkness have thee!'"));
-        /* This is gonna hurt... */
-        for (; nasty_tricks_count > 0; nasty_tricks_count--) {
-            /* ...but a high saving throw does help a little. */
-            if (randint1(100 + o_ptr->pval * 2) > player_ptr->skill_sav) {
-                if (one_in_(6))
-                    take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"));
-                else if (one_in_(5))
-                    (void)set_cut(player_ptr, player_ptr->cut + 200);
-                else if (one_in_(4)) {
-                    auto effects = player_ptr->effects(); // @todo paralyzed と共通化の予定あり.
-                    if (!player_ptr->free_act) {
-                        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 2 + randint0(6));
-                    } else {
-                        (void)set_stun(player_ptr, effects->stun()->current() + 10 + randint0(100));
-                    }
-                } else if (one_in_(3))
-                    apply_disenchant(player_ptr, 0);
-                else if (one_in_(2)) {
-                    (void)do_dec_stat(player_ptr, A_STR);
-                    (void)do_dec_stat(player_ptr, A_DEX);
-                    (void)do_dec_stat(player_ptr, A_CON);
-                    (void)do_dec_stat(player_ptr, A_INT);
-                    (void)do_dec_stat(player_ptr, A_WIS);
-                    (void)do_dec_stat(player_ptr, A_CHR);
-                } else
-                    (void)fire_meteor(player_ptr, -1, GF_NETHER, y, x, 150, 1);
+        for (auto count = 4 + randint0(3); count > 0; count--) {
+            if (randint1(100 + o_ptr->pval * 2) <= player_ptr->skill_sav) {
+                continue;
             }
+
+            if (one_in_(6)) {
+                take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"));
+                continue;
+            }
+            
+            BadStatusSetter bss(player_ptr);
+            if (one_in_(5)) {
+                (void)bss.cut(player_ptr->cut + 200);
+                continue;
+            }
+            
+            if (one_in_(4)) {
+                auto effects = player_ptr->effects(); // @todo paralyzed と共通化の予定あり.
+                if (!player_ptr->free_act) {
+                    (void)bss.paralysis(player_ptr->paralyzed + 2 + randint0(6));
+                } else {
+                    (void)bss.stun(effects->stun()->current() + 10 + randint0(100));
+                }
+
+                continue;
+            }
+            
+            if (one_in_(3)) {
+                apply_disenchant(player_ptr, 0);
+                continue;
+            }
+            
+            if (one_in_(2)) {
+                (void)do_dec_stat(player_ptr, A_STR);
+                (void)do_dec_stat(player_ptr, A_DEX);
+                (void)do_dec_stat(player_ptr, A_CON);
+                (void)do_dec_stat(player_ptr, A_INT);
+                (void)do_dec_stat(player_ptr, A_WIS);
+                (void)do_dec_stat(player_ptr, A_CHR);
+                continue;
+            }
+
+            (void)fire_meteor(player_ptr, -1, GF_NETHER, y, x, 150, 1);
         }
     }
 

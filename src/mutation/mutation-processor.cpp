@@ -114,22 +114,24 @@ static bool get_hack_dir(player_type *player_ptr, DIRECTION *dp)
  */
 void process_world_aux_mutation(player_type *player_ptr)
 {
-    if (player_ptr->muta.none() || player_ptr->phase_out || player_ptr->wild_mode)
+    if (player_ptr->muta.none() || player_ptr->phase_out || player_ptr->wild_mode) {
         return;
+    }
 
+    BadStatusSetter bss(player_ptr);
     if (player_ptr->muta.has(MUTA::BERS_RAGE) && one_in_(3000)) {
         disturb(player_ptr, false, true);
         msg_print(_("ウガァァア！", "RAAAAGHH!"));
         msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
         (void)set_shero(player_ptr, 10 + randint1(player_ptr->lev), false);
-        (void)set_afraid(player_ptr, 0);
+        (void)bss.afraidness(0);
     }
 
     if (player_ptr->muta.has(MUTA::COWARDICE) && (randint1(3000) == 13)) {
         if (!has_resist_fear(player_ptr)) {
             disturb(player_ptr, false, true);
             msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-            set_afraid(player_ptr, player_ptr->afraid + 13 + randint1(26));
+            (void)bss.afraidness(player_ptr->afraid + 13 + randint1(26));
         }
     }
 
@@ -150,7 +152,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         }
 
         if (!has_resist_conf(player_ptr)) {
-            (void)set_confused(player_ptr, player_ptr->confused + randint0(20) + 15);
+            (void)bss.confusion(player_ptr->confused + randint0(20) + 15);
         }
 
         if (!has_resist_chaos(player_ptr)) {
@@ -167,7 +169,7 @@ void process_world_aux_mutation(player_type *player_ptr)
             } else {
                 if (one_in_(3)) {
                     msg_print(_("き～れいなちょおちょらとんれいる～", "Thishcischs GooDSChtuff!"));
-                    (void)set_image(player_ptr, player_ptr->image + randint0(150) + 150);
+                    (void)bss.hallucination(player_ptr->hallucinated + randint0(150) + 150);
                 }
             }
         }
@@ -177,7 +179,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         if (!has_resist_chaos(player_ptr)) {
             disturb(player_ptr, false, true);
             player_ptr->redraw |= PR_EXTRA;
-            (void)set_image(player_ptr, player_ptr->image + randint0(50) + 20);
+            (void)bss.hallucination(player_ptr->hallucinated + randint0(50) + 20);
         }
     }
 
@@ -219,17 +221,15 @@ void process_world_aux_mutation(player_type *player_ptr)
         disturb(player_ptr, false, true);
         if (one_in_(2)) {
             msg_print(_("精力的でなくなった気がする。", "You feel less energetic."));
-
             if (player_ptr->fast > 0) {
                 set_fast(player_ptr, 0, true);
             } else {
-                set_slow(player_ptr, randint1(30) + 10, false);
+                (void)bss.slowness(randint1(30) + 10, false);
             }
         } else {
             msg_print(_("精力的になった気がする。", "You feel more energetic."));
-
             if (player_ptr->slow > 0) {
-                set_slow(player_ptr, 0, true);
+                (void)bss.slowness(0, true);
             } else {
                 set_fast(player_ptr, randint1(30) + 10, false);
             }

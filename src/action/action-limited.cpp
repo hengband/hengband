@@ -55,7 +55,7 @@ bool cmd_limit_confused(player_type *player_ptr)
 
 bool cmd_limit_image(player_type *player_ptr)
 {
-    if (player_ptr->image) {
+    if (player_ptr->hallucinated) {
         msg_print(_("幻覚が見えて集中できない！", "Your hallucinations prevent you from concentrating!"));
         return true;
     }

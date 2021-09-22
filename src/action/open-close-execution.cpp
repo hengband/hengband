@@ -56,7 +56,7 @@ bool exe_open(player_type *player_ptr, POSITION y, POSITION x)
     if (player_ptr->blind || no_lite(player_ptr))
         i = i / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         i = i / 10;
 
     int j = f_ptr->power;
@@ -145,7 +145,7 @@ bool easy_open_door(player_type *player_ptr, POSITION y, POSITION x)
         if (player_ptr->blind || no_lite(player_ptr))
             i = i / 10;
 
-        if (player_ptr->confused || player_ptr->image)
+        if (player_ptr->confused || player_ptr->hallucinated)
             i = i / 10;
 
         j = f_ptr->power;
@@ -195,7 +195,7 @@ bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_ID
     if (player_ptr->blind || no_lite(player_ptr))
         i = i / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         i = i / 10;
 
     int j = i - o_ptr->pval;
@@ -254,7 +254,7 @@ bool exe_disarm(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     if (player_ptr->blind || no_lite(player_ptr))
         i = i / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         i = i / 10;
 
     int j = i - power;
@@ -326,7 +326,7 @@ bool exe_bash(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
         more = true;
     } else {
         msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 2 + randint0(2));
+        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + 2 + randint0(2));
     }
 
     return more;

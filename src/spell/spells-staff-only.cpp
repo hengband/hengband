@@ -19,27 +19,35 @@
 bool cleansing_nova(player_type *player_ptr, bool magic, bool powerful)
 {
     bool ident = false;
-    if (dispel_evil(player_ptr, powerful ? 225 : 150))
+    if (dispel_evil(player_ptr, powerful ? 225 : 150)) {
         ident = true;
+    }
 
     int k = 3 * player_ptr->lev;
-    if (set_protevil(player_ptr, (magic ? 0 : player_ptr->protevil) + randint1(25) + k, false))
+    if (set_protevil(player_ptr, (magic ? 0 : player_ptr->protevil) + randint1(25) + k, false)) {
         ident = true;
+    }
 
-    if (set_poisoned(player_ptr, 0))
+    BadStatusSetter bss(player_ptr);
+    if (bss.poison(0)) {
         ident = true;
+    }
 
-    if (set_afraid(player_ptr, 0))
+    if (bss.afraidness(0)) {
         ident = true;
+    }
 
-    if (hp_player(player_ptr, 50))
+    if (hp_player(player_ptr, 50)) {
         ident = true;
+    }
 
-    if (set_stun(player_ptr, 0))
+    if (bss.stun(0)) {
         ident = true;
+    }
 
-    if (set_cut(player_ptr, 0))
+    if (bss.cut(0)) {
         ident = true;
+    }
 
     return ident;
 }

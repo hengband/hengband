@@ -356,7 +356,7 @@ void health_redraw(player_type *player_ptr, bool riding)
         return;
     }
 
-    if (player_ptr->image) {
+    if (player_ptr->hallucinated) {
         term_putstr(col, row, 12, TERM_WHITE, "[----------]");
         return;
     }

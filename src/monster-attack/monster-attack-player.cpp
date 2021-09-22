@@ -200,7 +200,7 @@ static void calc_player_cut(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     if (cut_plus > 0) {
-        (void)set_cut(player_ptr, player_ptr->cut + cut_plus);
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut + cut_plus);
     }
 }
 
@@ -240,7 +240,7 @@ static void calc_player_stun(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     if (stun_plus > 0) {
-        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + stun_plus);
+        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + stun_plus);
     }
 }
 

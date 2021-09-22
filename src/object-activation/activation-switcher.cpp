@@ -193,11 +193,13 @@ bool switch_activation(player_type *player_ptr, object_type **o_ptr_ptr, const a
         msg_print(_("深紫色の光を発している...", "It radiates deep purple..."));
         (void)cure_serious_wounds(player_ptr, 4, 8);
         return true;
-    case ACT_CURE_POISON:
+    case ACT_CURE_POISON: {
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-        (void)set_afraid(player_ptr, 0);
-        (void)set_poisoned(player_ptr, 0);
+        BadStatusSetter bss(player_ptr);
+        (void)bss.afraidness(0);
+        (void)bss.poison(0);
         return true;
+    }
     case ACT_REST_EXP:
         msg_print(_("深紅に輝いている...", "It glows a deep red..."));
         restore_level(player_ptr);

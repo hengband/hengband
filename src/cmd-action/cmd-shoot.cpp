@@ -72,7 +72,8 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
     auto effects = player_ptr->effects();
     if (snipe_type == SP_FINAL) {
         msg_print(_("射撃の反動が体を襲った。", "The weapon's recoil stuns you. "));
-        (void)set_slow(player_ptr, player_ptr->slow + randint0(7) + 7, false);
-        (void)set_stun(player_ptr, effects->stun()->current() + randint1(25));
+        BadStatusSetter bss(player_ptr);
+        (void)bss.slowness(player_ptr->slow + randint0(7) + 7, false);
+        (void)bss.stun(effects->stun()->current() + randint1(25));
     }
 }

@@ -95,7 +95,7 @@ public:
     TIME_EFFECT paralyzed{}; /* Timed -- Paralysis */
     TIME_EFFECT confused{}; /* Timed -- Confusion */
     TIME_EFFECT afraid{}; /* Timed -- Fear */
-    TIME_EFFECT image{}; /* Timed -- Hallucination */
+    TIME_EFFECT hallucinated{}; /* Timed -- Hallucination */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
     TIME_EFFECT cut{}; /* Timed -- Cut */
     

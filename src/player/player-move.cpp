@@ -101,7 +101,7 @@ void search(player_type *player_ptr)
     if (player_ptr->blind || no_lite(player_ptr))
         chance = chance / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         chance = chance / 10;
 
     for (DIRECTION i = 0; i < 9; ++i)

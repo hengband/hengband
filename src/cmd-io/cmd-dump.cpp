@@ -258,7 +258,7 @@ void do_cmd_time(player_type *player_ptr)
         (hour < 12) ? "AM" : "PM");
 
     char buf[1024];
-    if (!randint0(10) || player_ptr->image) {
+    if (!randint0(10) || player_ptr->hallucinated) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));

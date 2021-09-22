@@ -29,10 +29,11 @@ void effect_player_old_speed(player_type *player_ptr, effect_player_type *ep_ptr
 
 void effect_player_old_slow(player_type *player_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
+    }
 
-    (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+    (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(4) + 4, false);
 }
 
 void effect_player_old_sleep(player_type *player_ptr, effect_player_type *ep_ptr)
@@ -50,6 +51,6 @@ void effect_player_old_sleep(player_type *player_ptr, effect_player_type *ep_ptr
         sanity_blast(player_ptr, nullptr, false);
     }
 
-    set_paralyzed(player_ptr, player_ptr->paralyzed + ep_ptr->dam);
+    (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + ep_ptr->dam);
     ep_ptr->dam = 0;
 }

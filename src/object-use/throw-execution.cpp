@@ -462,7 +462,7 @@ void ObjectThrowEntity::display_attack_racial_power()
         return;
     }
 
-    if (!this->player_ptr->image) {
+    if (!this->player_ptr->hallucinated) {
         monster_race_track(this->player_ptr, this->m_ptr->ap_r_idx);
     }
 

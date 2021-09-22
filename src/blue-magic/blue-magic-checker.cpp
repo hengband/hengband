@@ -39,7 +39,7 @@ void learn_spell(player_type *player_ptr, int monspell)
 
     auto effects = player_ptr->effects();
     auto is_stunned = effects->stun()->is_stunned();
-    if (player_ptr->confused || player_ptr->blind || player_ptr->image || is_stunned || player_ptr->paralyzed)
+    if (player_ptr->confused || player_ptr->blind || player_ptr->hallucinated || is_stunned || player_ptr->paralyzed)
         return;
     if (randint1(player_ptr->lev + 70) > monster_powers[monspell].level + 40) {
         player_ptr->magic_num2[monspell] = 1;

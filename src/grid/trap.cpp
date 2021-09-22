@@ -313,27 +313,29 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
     }
 
     msg_format(_("%sに落ちてしまった！", "You have fallen into %s!"), trap_name);
-
-    /* Base damage */
     dam = damroll(2, 6);
-
-    /* Extra spike damage */
-    if ((trap_feat_type == TRAP_SPIKED_PIT || trap_feat_type == TRAP_POISON_PIT) && one_in_(2)) {
-        msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
-
-        dam = dam * 2;
-        (void)set_cut(player_ptr, player_ptr->cut + randint1(dam));
-
-        if (trap_feat_type == TRAP_POISON_PIT) {
-            if (has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) {
-                msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
-            } else {
-                dam = dam * 2;
-                (void)set_poisoned(player_ptr, player_ptr->poisoned + randint1(dam));
-            }
-        }
+    if (((trap_feat_type != TRAP_SPIKED_PIT) && (trap_feat_type != TRAP_POISON_PIT)) || one_in_(2)) {
+        take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
+        return;
     }
 
+    msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
+    dam = dam * 2;
+    BadStatusSetter bss(player_ptr);
+    (void)bss.cut(player_ptr->cut + randint1(dam));
+    if (trap_feat_type != TRAP_POISON_PIT) {
+        take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
+        return;
+    }
+
+    if (has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) {
+        msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
+        return;
+    }
+
+    dam = dam * 2;
+    (void)bss.poison(player_ptr->poisoned + randint1(dam));
     take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
 }
 
@@ -374,22 +376,7 @@ static void hit_trap_lose_stat(player_type *player_ptr, int stat)
 static void hit_trap_slow(player_type *player_ptr)
 {
     if (hit_trap_dart(player_ptr)) {
-        set_slow(player_ptr, player_ptr->slow + randint0(20) + 20, false);
-    }
-}
-
-/*!
- * @brief ダーツ系トラップ（通常ダメージ＋状態異常）の判定とプレイヤーの被害処理
- * @param trap_message メッセージの補完文字列
- * @param resist 状態異常に抵抗する判定が出たならTRUE
- * @param set_status 状態異常を指定する関数ポインタ
- * @param turn_aux 状態異常の追加ターン量
- */
-static void hit_trap_set_abnormal_status_p(player_type *player_ptr, concptr trap_message, bool resist, bool (*set_status)(player_type *, IDX), IDX turn_aux)
-{
-    msg_print(trap_message);
-    if (!resist) {
-        set_status(player_ptr, turn_aux);
+        (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(20) + 20, false);
     }
 }
 
@@ -507,37 +494,44 @@ void hit_trap(player_type *player_ptr, bool break_trap)
         break;
     }
 
-    case TRAP_BLIND: {
-        hit_trap_set_abnormal_status_p(player_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), (has_resist_blind(player_ptr) != 0),
-            set_blind, player_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
-        break;
-    }
+    case TRAP_BLIND:
+        msg_print(_("黒いガスに包み込まれた！", "A black gas surrounds you!"));
+        if (has_resist_blind(player_ptr) == 0) {
+            (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
+        }
 
+        break;
     case TRAP_CONFUSE: {
-        hit_trap_set_abnormal_status_p(player_ptr, _("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
-            (has_resist_conf(player_ptr) != 0), set_confused, player_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
+        msg_print(_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"));
+        if (has_resist_conf(player_ptr) == 0) {
+            (void)BadStatusSetter(player_ptr).confusion(player_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
+        }
+
         break;
     }
 
     case TRAP_POISON: {
-        hit_trap_set_abnormal_status_p(player_ptr, _("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
-            has_resist_pois(player_ptr) || is_oppose_pois(player_ptr), set_poisoned, player_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+        msg_print(_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"));
+        if (has_resist_pois(player_ptr) == 0) {
+            (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+        }
+
         break;
     }
 
     case TRAP_SLEEP: {
         msg_print(_("奇妙な白い霧に包まれた！", "A strange white mist surrounds you!"));
-        if (!player_ptr->free_act) {
-            msg_print(_("あなたは眠りに就いた。", "You fall asleep."));
-
-            if (ironman_nightmare) {
-                msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
-
-                /* Have some nightmares */
-                sanity_blast(player_ptr, nullptr, false);
-            }
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(10) + 5);
+        if (player_ptr->free_act) {
+            break;
         }
+
+        msg_print(_("あなたは眠りに就いた。", "You fall asleep."));
+        if (ironman_nightmare) {
+            msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
+            sanity_blast(player_ptr, nullptr, false);
+        }
+
+        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(10) + 5);
         break;
     }
 

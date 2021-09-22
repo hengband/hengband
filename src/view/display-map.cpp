@@ -242,7 +242,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
     (*ap) = a;
     (*cp) = c;
 
-    if (player_ptr->image && one_in_(256))
+    if (player_ptr->hallucinated && one_in_(256))
         image_random(ap, cp);
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
@@ -271,7 +271,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
         (*cp) = object_char(o_ptr);
         (*ap) = object_attr(o_ptr);
         feat_priority = 20;
-        if (player_ptr->image)
+        if (player_ptr->hallucinated)
             image_object(ap, cp);
 
         break;
@@ -290,7 +290,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
 
     monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
     feat_priority = 30;
-    if (player_ptr->image) {
+    if (player_ptr->hallucinated) {
         if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) {
             /* Do nothing */
         } else {

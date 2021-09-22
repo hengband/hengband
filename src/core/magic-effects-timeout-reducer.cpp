@@ -31,13 +31,14 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
         (void)set_mimic(player_ptr, player_ptr->tim_mimic - 1, player_ptr->mimic_form, true);
     }
 
+    BadStatusSetter bss(player_ptr);
     auto effects = player_ptr->effects();
-    if (player_ptr->image) {
-        (void)set_image(player_ptr, player_ptr->image - dec_count);
+    if (player_ptr->hallucinated) {
+        (void)bss.hallucination(player_ptr->hallucinated - dec_count);
     }
 
     if (player_ptr->blind) {
-        (void)set_blind(player_ptr, player_ptr->blind - dec_count);
+        (void)bss.blindness(player_ptr->blind - dec_count);
     }
 
     if (player_ptr->tim_invis) {
@@ -125,15 +126,15 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->paralyzed) {
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed - dec_count);
+        (void)bss.paralysis(player_ptr->paralyzed - dec_count);
     }
 
     if (player_ptr->confused) {
-        (void)set_confused(player_ptr, player_ptr->confused - dec_count);
+        (void)bss.confusion(player_ptr->confused - dec_count);
     }
 
     if (player_ptr->afraid) {
-        (void)set_afraid(player_ptr, player_ptr->afraid - dec_count);
+        (void)bss.afraidness(player_ptr->afraid - dec_count);
     }
 
     if (player_ptr->fast) {
@@ -141,7 +142,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->slow) {
-        (void)set_slow(player_ptr, player_ptr->slow - dec_count, true);
+        (void)bss.slowness(player_ptr->slow - dec_count, true);
     }
 
     if (player_ptr->protevil) {
@@ -210,19 +211,21 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
 
     if (player_ptr->poisoned) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)set_poisoned(player_ptr, player_ptr->poisoned - adjust);
+        (void)bss.poison(player_ptr->poisoned - adjust);
     }
 
     auto player_stun = effects->stun();
     if (player_stun->is_stunned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)set_stun(player_ptr, player_stun->current() - adjust);
+        (void)bss.stun(player_stun->current() - adjust);
     }
 
     if (player_ptr->cut) {
-        int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        if (player_ptr->cut > 1000)
+        short adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
+        if (player_ptr->cut > 1000) {
             adjust = 0;
-        (void)set_cut(player_ptr, player_ptr->cut - adjust);
+        }
+
+        (void)bss.cut(player_ptr->cut - adjust);
     }
 }

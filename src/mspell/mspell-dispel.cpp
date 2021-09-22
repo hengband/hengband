@@ -38,7 +38,7 @@ static void dispel_player(player_type *player_ptr)
 {
     (void)set_fast(player_ptr, 0, true);
     set_lightspeed(player_ptr, 0, true);
-    (void)set_slow(player_ptr, 0, true);
+    (void)BadStatusSetter(player_ptr).slowness(0, true);
     (void)set_shield(player_ptr, 0, true);
     (void)set_blessed(player_ptr, 0, true);
     (void)set_tsuyoshi(player_ptr, 0, true);

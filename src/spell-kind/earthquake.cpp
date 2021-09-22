@@ -141,6 +141,7 @@ bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, M
         } else {
             auto effects = player_ptr->effects();
             auto stun_value = effects->stun()->current();
+            BadStatusSetter bss(player_ptr);
             switch (randint1(3)) {
             case 1: {
                 msg_print(_("降り注ぐ岩をうまく避けた！", "You nimbly dodge the blast!"));
@@ -150,13 +151,13 @@ bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, M
             case 2: {
                 msg_print(_("岩石があなたに直撃した!", "You are bashed by rubble!"));
                 damage = damroll(10, 4);
-                (void)set_stun(player_ptr, stun_value + randint1(50));
+                (void)bss.stun(stun_value + randint1(50));
                 break;
             }
             case 3: {
                 msg_print(_("あなたは床と壁との間に挟まれてしまった！", "You are crushed between the floor and ceiling!"));
                 damage = damroll(10, 4);
-                (void)set_stun(player_ptr, stun_value + randint1(50));
+                (void)bss.stun(stun_value + randint1(50));
                 break;
             }
             }

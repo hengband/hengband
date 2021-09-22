@@ -281,13 +281,14 @@ bool life_stream(player_type *player_ptr, bool message, bool virtue_change)
     }
 
     restore_level(player_ptr);
-    (void)set_poisoned(player_ptr, 0);
-    (void)set_blind(player_ptr, 0);
-    (void)set_confused(player_ptr, 0);
-    (void)set_image(player_ptr, 0);
-    (void)set_stun(player_ptr, 0);
-    (void)set_cut(player_ptr, 0);
-    (void)set_paralyzed(player_ptr, 0);
+    BadStatusSetter bss(player_ptr);
+    (void)bss.poison(0);
+    (void)bss.blindness(0);
+    (void)bss.confusion(0);
+    (void)bss.hallucination(0);
+    (void)bss.stun(0);
+    (void)bss.cut(0);
+    (void)bss.paralysis(0);
     (void)restore_all_status(player_ptr);
     (void)set_shero(player_ptr, 0, true);
     handle_stuff(player_ptr);
@@ -298,95 +299,157 @@ bool life_stream(player_type *player_ptr, bool message, bool virtue_change)
 
 bool heroism(player_type *player_ptr, int base)
 {
-    bool ident = false;
-    if (set_afraid(player_ptr, 0))
+    auto ident = false;
+    if (BadStatusSetter(player_ptr).afraidness(0)) {
         ident = true;
-    if (set_hero(player_ptr, player_ptr->hero + randint1(base) + base, false))
+    }
+
+    if (set_hero(player_ptr, player_ptr->hero + randint1(base) + base, false)) {
         ident = true;
-    if (hp_player(player_ptr, 10))
+    }
+
+    if (hp_player(player_ptr, 10)) {
         ident = true;
+    }
+
     return ident;
 }
 
 bool berserk(player_type *player_ptr, int base)
 {
-    bool ident = false;
-    if (set_afraid(player_ptr, 0))
+    auto ident = false;
+    if (BadStatusSetter(player_ptr).afraidness(0)) {
         ident = true;
-    if (set_shero(player_ptr, player_ptr->shero + randint1(base) + base, false))
+    }
+
+    if (set_shero(player_ptr, player_ptr->shero + randint1(base) + base, false)) {
         ident = true;
-    if (hp_player(player_ptr, 30))
+    }
+
+    if (hp_player(player_ptr, 30)) {
         ident = true;
+    }
+
     return ident;
 }
 
 bool cure_light_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides)
 {
-    bool ident = false;
-    if (hp_player(player_ptr, damroll(dice, sides)))
+    auto ident = false;
+    if (hp_player(player_ptr, damroll(dice, sides))) {
         ident = true;
-    if (set_blind(player_ptr, 0))
+    }
+
+    BadStatusSetter bss(player_ptr);
+    if (bss.blindness(0)) {
         ident = true;
-    if (set_cut(player_ptr, player_ptr->cut - 10))
+    }
+
+    if (bss.cut(player_ptr->cut - 10)) {
         ident = true;
-    if (set_shero(player_ptr, 0, true))
+    }
+
+    if (set_shero(player_ptr, 0, true)) {
         ident = true;
+    }
+
     return ident;
 }
 
 bool cure_serious_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides)
 {
-    bool ident = false;
-    if (hp_player(player_ptr, damroll(dice, sides)))
+    auto ident = false;
+    if (hp_player(player_ptr, damroll(dice, sides))) {
         ident = true;
-    if (set_blind(player_ptr, 0))
+    }
+
+    BadStatusSetter bss(player_ptr);
+    if (bss.blindness(0)) {
         ident = true;
-    if (set_confused(player_ptr, 0))
+    }
+
+    if (bss.confusion(0)) {
         ident = true;
-    if (set_cut(player_ptr, (player_ptr->cut / 2) - 50))
+    }
+
+    if (bss.cut((player_ptr->cut / 2) - 50)) {
         ident = true;
-    if (set_shero(player_ptr, 0, true))
+    }
+
+    if (set_shero(player_ptr, 0, true)) {
         ident = true;
+    }
+
     return ident;
 }
 
 bool cure_critical_wounds(player_type *player_ptr, HIT_POINT pow)
 {
-    bool ident = false;
-    if (hp_player(player_ptr, pow))
+    auto ident = false;
+    if (hp_player(player_ptr, pow)) {
         ident = true;
-    if (set_blind(player_ptr, 0))
+    }
+
+    BadStatusSetter bss(player_ptr);
+    if (bss.blindness(0)) {
         ident = true;
-    if (set_confused(player_ptr, 0))
+    }
+
+    if (bss.confusion(0)) {
         ident = true;
-    if (set_poisoned(player_ptr, 0))
+    }
+
+    if (bss.poison(0)) {
         ident = true;
-    if (set_stun(player_ptr, 0))
+    }
+
+    if (bss.stun(0)) {
         ident = true;
-    if (set_cut(player_ptr, 0))
+    }
+
+    if (bss.cut(0)) {
         ident = true;
-    if (set_shero(player_ptr, 0, true))
+    }
+
+    if (set_shero(player_ptr, 0, true)) {
         ident = true;
+    }
+
     return ident;
 }
 
 bool true_healing(player_type *player_ptr, HIT_POINT pow)
 {
-    bool ident = false;
-    if (hp_player(player_ptr, pow))
+    auto ident = false;
+    if (hp_player(player_ptr, pow)) {
         ident = true;
-    if (set_blind(player_ptr, 0))
+    }
+
+    BadStatusSetter bss(player_ptr);
+    if (bss.blindness(0)) {
         ident = true;
-    if (set_confused(player_ptr, 0))
+    }
+
+    if (bss.confusion(0)) {
         ident = true;
-    if (set_poisoned(player_ptr, 0))
+    }
+
+    if (bss.poison(0)) {
         ident = true;
-    if (set_stun(player_ptr, 0))
+    }
+
+    if (bss.stun(0)) {
         ident = true;
-    if (set_cut(player_ptr, 0))
+    }
+
+    if (bss.cut(0)) {
         ident = true;
-    if (set_image(player_ptr, 0))
+    }
+
+    if (bss.hallucination(0)) {
         ident = true;
+    }
+
     return ident;
 }
 
@@ -507,8 +570,9 @@ bool cosmic_cast_off(player_type *player_ptr, object_type **o_ptr_ptr)
     /* Get effects */
     msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
     int t = 20 + randint1(20);
-    (void)set_blind(player_ptr, player_ptr->blind + t);
-    (void)set_afraid(player_ptr, 0);
+    BadStatusSetter bss(player_ptr);
+    (void)bss.blindness(player_ptr->blind + t);
+    (void)bss.afraidness(0);
     (void)set_tim_esp(player_ptr, player_ptr->tim_esp + t, false);
     (void)set_tim_regen(player_ptr, player_ptr->tim_regen + t, false);
     (void)set_hero(player_ptr, player_ptr->hero + t, false);

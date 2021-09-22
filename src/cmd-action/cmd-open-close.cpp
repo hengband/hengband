@@ -49,7 +49,7 @@ static bool exe_open_chest(player_type *player_ptr, POSITION y, POSITION x, OBJE
         if (player_ptr->blind || no_lite(player_ptr))
             i = i / 10;
 
-        if (player_ptr->confused || player_ptr->image)
+        if (player_ptr->confused || player_ptr->hallucinated)
             i = i / 10;
 
         int j = i - o_ptr->pval;

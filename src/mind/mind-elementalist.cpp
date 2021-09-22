@@ -497,7 +497,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         return psychometry(player_ptr);
     case ElementSpells::CURE:
         (void)hp_player(player_ptr, damroll(2, 8));
-        (void)set_cut(player_ptr, player_ptr->cut - 10);
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut - 10);
         break;
     case ElementSpells::BOLT_2ND:
         if (!get_aim_dir(player_ptr, &dir))
@@ -918,7 +918,7 @@ void do_cmd_element(player_type *player_ptr)
         player_ptr->csp = 0;
         player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(5 * oops + 1));
+        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint1(5 * oops + 1));
         chg_virtue(player_ptr, V_KNOWLEDGE, -10);
         if (randint0(100) < 50) {
             bool perm = (randint0(100) < 25);

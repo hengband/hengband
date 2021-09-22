@@ -160,7 +160,7 @@ static void describe_target(player_type *player_ptr, eg_type *eg_ptr)
 
 static process_result describe_hallucinated_target(player_type *player_ptr, eg_type *eg_ptr)
 {
-    if (!player_ptr->image)
+    if (!player_ptr->hallucinated)
         return PROCESS_CONTINUE;
 
     concptr name = _("何か奇妙な物", "something strange");

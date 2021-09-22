@@ -257,24 +257,24 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
         break;
 
     case 7:
-        if (name)
+        if (name) {
             return _("戦いの歌", "Heroic Ballad");
-        if (desc)
-            return _("ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
+        }
 
-        /* Stop singing before start another */
-        if (cast || fail)
+        if (desc) {
+            return _("ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
+        }
+
+        if (cast || fail) {
             stop_singing(player_ptr);
+        }
 
         if (cast) {
             msg_print(_("激しい戦いの歌を歌った．．．", "You start singing a song of intense fighting..."));
 
             (void)hp_player(player_ptr, 10);
-            (void)set_afraid(player_ptr, 0);
-
-            /* Recalculate hitpoints */
-            player_ptr->update |= (PU_HP);
-
+            (void)BadStatusSetter(player_ptr).afraidness(0);
+            player_ptr->update |= PU_HP;
             start_singing(player_ptr, spell, MUSIC_HERO);
         }
 
@@ -287,7 +287,6 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
         }
 
         break;
-
     case 8:
         if (name)
             return _("霊的知覚", "Clairaudience");
@@ -839,32 +838,31 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
         }
         break;
 
-    case 27:
-        if (name)
+    case 27: {
+        if (name) {
             return _("英雄の詩", "The Hero's Poem");
-        if (desc)
-            return _("加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。", "Hastes you. Gives heroism. Damages all monsters in sight.");
+        }
 
-        /* Stop singing before start another */
-        if (cast || fail)
+        if (desc) {
+            return _("加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。", "Hastes you. Gives heroism. Damages all monsters in sight.");
+        }
+
+        if (cast || fail) {
             stop_singing(player_ptr);
+        }
 
         if (cast) {
             msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
             (void)hp_player(player_ptr, 10);
-            (void)set_afraid(player_ptr, 0);
-
-            /* Recalculate hitpoints */
-            player_ptr->update |= (PU_HP);
-
+            (void)BadStatusSetter(player_ptr).afraidness(0);
+            player_ptr->update |= PU_HP;
             start_singing(player_ptr, spell, MUSIC_SHERO);
         }
 
         if (stop) {
             if (!player_ptr->hero) {
                 msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
-                /* Recalculate hitpoints */
-                player_ptr->update |= (PU_HP);
+                player_ptr->update |= PU_HP;
             }
 
             if (!player_ptr->fast) {
@@ -872,50 +870,51 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
             }
         }
 
-        {
-            DICE_NUMBER dice = 1;
-            DICE_SID sides = plev * 3;
-
-            if (info)
-                return info_damage(dice, sides, 0);
-
-            if (cont) {
-                dispel_monsters(player_ptr, damroll(dice, sides));
-            }
+        DICE_NUMBER dice = 1;
+        DICE_SID sides = plev * 3;
+        if (info) {
+            return info_damage(dice, sides, 0);
         }
+
+        if (cont) {
+            dispel_monsters(player_ptr, damroll(dice, sides));
+        }
+
         break;
-
-    case 28:
-        if (name)
+    }
+    case 28: {
+        if (name) {
             return _("ヤヴァンナの助け", "Relief of Yavanna");
-        if (desc)
-            return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also completely heals cuts and being stunned.");
+        }
 
-        /* Stop singing before start another */
-        if (cast || fail)
+        if (desc) {
+            return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also completely heals cuts and being stunned.");
+        }
+
+        if (cast || fail) {
             stop_singing(player_ptr);
+        }
 
         if (cast) {
             msg_print(_("歌を通して体に活気が戻ってきた．．．", "Life flows through you as you sing the song..."));
             start_singing(player_ptr, spell, MUSIC_H_LIFE);
         }
 
-        {
-            DICE_NUMBER dice = 15;
-            DICE_SID sides = 10;
+        auto dice = 15;
+        auto sides = 10;
+        if (info) {
+            return info_heal(dice, sides, 0);
+        }
 
-            if (info)
-                return info_heal(dice, sides, 0);
-
-            if (cont) {
-                hp_player(player_ptr, damroll(dice, sides));
-                set_stun(player_ptr, 0);
-                set_cut(player_ptr, 0);
-            }
+        if (cont) {
+            hp_player(player_ptr, damroll(dice, sides));
+            BadStatusSetter bss(player_ptr);
+            (void)bss.stun(0);
+            (void)bss.cut(0);
         }
 
         break;
-
+    }
     case 29:
         if (name)
             return _("再生の歌", "Goddess's rebirth");

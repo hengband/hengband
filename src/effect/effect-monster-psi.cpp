@@ -97,29 +97,32 @@ static bool reflects_psi_with_currupted_mind(player_type *player_ptr, effect_mon
  */
 static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    if (!one_in_(4) || check_multishadow(player_ptr))
+    if (!one_in_(4) || check_multishadow(player_ptr)) {
         return;
+    }
 
+    BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
     case 1:
-        set_confused(player_ptr, player_ptr->confused + 3 + randint1(em_ptr->dam));
-        break;
+        (void)bss.confusion(player_ptr->confused + 3 + randint1(em_ptr->dam));
+        return;
     case 2:
-        set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(em_ptr->dam));
-        break;
-    case 3: {
-        if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR))
+        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(em_ptr->dam));
+        return;
+    case 3:
+        if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        else
-            set_afraid(player_ptr, player_ptr->afraid + 3 + randint1(em_ptr->dam));
+        } else {
+            (void)bss.afraidness(player_ptr->afraid + 3 + randint1(em_ptr->dam));
+        }
 
-        break;
-    }
+        return;
     default:
-        if (!player_ptr->free_act)
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(em_ptr->dam));
+        if (!player_ptr->free_act) {
+            (void)bss.paralysis(player_ptr->paralyzed + randint1(em_ptr->dam));
+        }
 
-        break;
+        return;
     }
 }
 

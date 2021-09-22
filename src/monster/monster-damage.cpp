@@ -281,7 +281,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (((m_ptr->ml == 0) || this->player_ptr->image) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (((m_ptr->ml == 0) || this->player_ptr->hallucinated) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
         return;
     }
 

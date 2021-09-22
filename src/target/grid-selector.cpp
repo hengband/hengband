@@ -37,7 +37,7 @@ static bool tgt_pt_accept(player_type *player_ptr, POSITION y, POSITION x)
     if ((y == player_ptr->y) && (x == player_ptr->x))
         return true;
 
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         return false;
 
     grid_type *g_ptr;

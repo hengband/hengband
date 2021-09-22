@@ -53,7 +53,7 @@ static void set_bad_status_info(player_type *player_ptr, self_info_type *self_pt
     if (player_ptr->poisoned)
         self_ptr->info[self_ptr->line++] = _("あなたは毒に侵されている。", "You are poisoned.");
 
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         self_ptr->info[self_ptr->line++] = _("あなたは幻覚を見ている。", "You are hallucinating.");
 }
 
@@ -289,8 +289,8 @@ void report_magics(player_type *player_ptr)
         info[i++] = _("あなたは毒に侵されている", "You are poisoned");
     }
 
-    if (player_ptr->image) {
-        info2[i] = report_magics_aux(player_ptr->image);
+    if (player_ptr->hallucinated) {
+        info2[i] = report_magics_aux(player_ptr->hallucinated);
         info[i++] = _("あなたは幻覚を見ている", "You are hallucinating");
     }
 

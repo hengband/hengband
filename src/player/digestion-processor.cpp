@@ -55,7 +55,7 @@ void starve_player(player_type *player_ptr)
     if (!player_ptr->paralyzed && (randint0(100) < 10)) {
         msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
         disturb(player_ptr, true, true);
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 1 + randint0(5));
+        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + 1 + randint0(5));
     }
 
     if (player_ptr->food < PY_FOOD_STARVE) {

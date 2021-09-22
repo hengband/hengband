@@ -247,7 +247,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                 if (!who && (project_m_n == 1) && !jump && (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
                     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
                     if (m_ptr->ml) {
-                        if (!player_ptr->image)
+                        if (!player_ptr->hallucinated)
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
                         health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
                     }
@@ -270,7 +270,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
                     if (m_ptr->ml) {
-                        if (!player_ptr->image)
+                        if (!player_ptr->hallucinated)
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
                         health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
                     }
@@ -374,7 +374,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
                     if (m_ptr->ml) {
-                        if (!player_ptr->image)
+                        if (!player_ptr->hallucinated)
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
                         health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
                     }
@@ -728,7 +728,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                 monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 
                 if (m_ptr->ml) {
-                    if (!player_ptr->image)
+                    if (!player_ptr->hallucinated)
                         monster_race_track(player_ptr, m_ptr->ap_r_idx);
                     health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].m_idx);
                 }

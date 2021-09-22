@@ -71,20 +71,22 @@ int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_c
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
     POSITION detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
 
-    /* Analyze the staff */
+    BadStatusSetter bss(player_ptr);
     switch (sval) {
-    case SV_STAFF_DARKNESS: {
+    case SV_STAFF_DARKNESS:
         if (!has_resist_blind(player_ptr) && !has_resist_dark(player_ptr)) {
-            if (set_blind(player_ptr, player_ptr->blind + 3 + randint1(5)))
+            if (bss.blindness(player_ptr->blind + 3 + randint1(5))) {
                 ident = true;
+            }
         }
-        if (unlite_area(player_ptr, 10, (powerful ? 6 : 3)))
-            ident = true;
-        break;
-    }
 
+        if (unlite_area(player_ptr, 10, (powerful ? 6 : 3))) {
+            ident = true;
+        }
+
+        break;
     case SV_STAFF_SLOWNESS: {
-        if (set_slow(player_ptr, player_ptr->slow + randint1(30) + 15, false))
+        if (bss.slowness(player_ptr->slow + randint1(30) + 15, false))
             ident = true;
         break;
     }

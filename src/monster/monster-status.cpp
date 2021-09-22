@@ -484,7 +484,7 @@ void monster_gain_exp(player_type *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
     m_ptr->exp = 0;
     if (is_pet(m_ptr) || m_ptr->ml) {
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
-            if (player_ptr->image) {
+            if (player_ptr->hallucinated) {
                 monster_race *hallu_race;
                 do {
                     hallu_race = &r_info[randint1(max_r_idx - 1)];
@@ -495,7 +495,7 @@ void monster_gain_exp(player_type *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
             }
         }
 
-        if (!player_ptr->image) {
+        if (!player_ptr->hallucinated) {
             r_info[old_r_idx].r_can_evolve = true;
         }
 

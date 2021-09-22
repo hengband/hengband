@@ -61,37 +61,20 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     if (o_ptr->tval != TV_FOOD)
         return false;
 
+    BadStatusSetter bss(player_ptr);
     switch (o_ptr->sval) {
     case SV_FOOD_POISON:
-        if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)))
-            if (set_poisoned(player_ptr, player_ptr->poisoned + randint0(10) + 10))
-                return true;
-        break;
+        return (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) && bss.poison(player_ptr->poisoned + randint0(10) + 10);
     case SV_FOOD_BLINDNESS:
-        if (!has_resist_blind(player_ptr))
-            if (set_blind(player_ptr, player_ptr->blind + randint0(200) + 200))
-                return true;
-        break;
+        return !has_resist_blind(player_ptr) && bss.blindness(player_ptr->blind + randint0(200) + 200);
     case SV_FOOD_PARANOIA:
-        if (!has_resist_fear(player_ptr))
-            if (set_afraid(player_ptr, player_ptr->afraid + randint0(10) + 10))
-                return true;
-        break;
+        return !has_resist_fear(player_ptr) && bss.afraidness(player_ptr->afraid + randint0(10) + 10);
     case SV_FOOD_CONFUSION:
-        if (!has_resist_conf(player_ptr))
-            if (set_confused(player_ptr, player_ptr->confused + randint0(10) + 10))
-                return true;
-        break;
+        return !has_resist_conf(player_ptr) && bss.confusion(player_ptr->confused + randint0(10) + 10);
     case SV_FOOD_HALLUCINATION:
-        if (!has_resist_chaos(player_ptr))
-            if (set_image(player_ptr, player_ptr->image + randint0(250) + 250))
-                return true;
-        break;
+        return !has_resist_chaos(player_ptr) && bss.hallucination(player_ptr->hallucinated + randint0(250) + 250);
     case SV_FOOD_PARALYSIS:
-        if (!player_ptr->free_act)
-            if (set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(10) + 10))
-                return true;
-        break;
+        return !player_ptr->free_act && bss.paralysis(player_ptr->paralyzed + randint0(10) + 10);
     case SV_FOOD_WEAKNESS:
         take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_STR);
@@ -117,67 +100,45 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
         (void)do_dec_stat(player_ptr, A_STR);
         return true;
     case SV_FOOD_CURE_POISON:
-        if (set_poisoned(player_ptr, 0))
-            return true;
-        break;
+        return bss.poison(0);
     case SV_FOOD_CURE_BLINDNESS:
-        if (set_blind(player_ptr, 0))
-            return true;
-        break;
+        return bss.blindness(0);
     case SV_FOOD_CURE_PARANOIA:
-        if (set_afraid(player_ptr, 0))
-            return true;
-        break;
+        return bss.afraidness(0);
     case SV_FOOD_CURE_CONFUSION:
-        if (set_confused(player_ptr, 0))
-            return true;
-        break;
+        return bss.confusion(0);
     case SV_FOOD_CURE_SERIOUS:
         return cure_serious_wounds(player_ptr, 4, 8);
     case SV_FOOD_RESTORE_STR:
-        if (do_res_stat(player_ptr, A_STR))
-            return true;
-        break;
+        return do_res_stat(player_ptr, A_STR);
     case SV_FOOD_RESTORE_CON:
-        if (do_res_stat(player_ptr, A_CON))
-            return true;
-        break;
+        return do_res_stat(player_ptr, A_CON);
     case SV_FOOD_RESTORING:
         return restore_all_status(player_ptr);
-#ifdef JP
-    /* それぞれの食べ物の感想をオリジナルより細かく表現 */
     case SV_FOOD_BISCUIT:
-        msg_print("甘くてサクサクしてとてもおいしい。");
+        msg_print(_("甘くてサクサクしてとてもおいしい。", "That is sweetly and shortly delicious."));
         return true;
     case SV_FOOD_JERKY:
-        msg_print("歯ごたえがあっておいしい。");
+        msg_print(_("歯ごたえがあっておいしい。", "That is chewy and delicious."));
         return true;
     case SV_FOOD_SLIME_MOLD:
-        msg_print("これはなんとも形容しがたい味だ。");
+        msg_print(_("これはなんとも形容しがたい味だ。", "That is an indescribable taste."));
         return true;
     case SV_FOOD_RATION:
-        msg_print("これはおいしい。");
+        msg_print(_("これはおいしい。", "That tastes good."));
         return true;
-#else
-    case SV_FOOD_RATION:
-    case SV_FOOD_BISCUIT:
-    case SV_FOOD_JERKY:
-    case SV_FOOD_SLIME_MOLD:
-        msg_print("That tastes good.");
-        return true;
-#endif
     case SV_FOOD_WAYBREAD:
-        msg_print(_("これはひじょうに美味だ。", "That tastes good."));
-        (void)set_poisoned(player_ptr, 0);
+        msg_print(_("これはひじょうに美味だ。", "That tastes very good."));
+        (void)bss.poison(0);
         (void)hp_player(player_ptr, damroll(4, 8));
         return true;
     case SV_FOOD_PINT_OF_ALE:
     case SV_FOOD_PINT_OF_WINE:
-        msg_print(_("のどごし爽やかだ。", "That tastes good."));
+        msg_print(_("のどごし爽やかだ。", "That is refreshing through the throat."));
         return true;
+    default:
+        return false;
     }
-
-    return false;
 }
 
 /*!

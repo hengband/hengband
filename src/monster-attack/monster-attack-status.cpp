@@ -35,7 +35,7 @@ void process_blind_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (!set_blind(player_ptr, player_ptr->blind + 10 + randint1(monap_ptr->rlev))) {
+    if (!BadStatusSetter(player_ptr).blindness(player_ptr->blind + 10 + randint1(monap_ptr->rlev))) {
         return;
     }
 
@@ -65,7 +65,7 @@ void process_terrify_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (set_afraid(player_ptr, player_ptr->afraid + 3 + randint1(monap_ptr->rlev))) {
+    if (BadStatusSetter(player_ptr).afraidness(player_ptr->afraid + 3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }
@@ -89,7 +89,7 @@ void process_paralyze_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (!player_ptr->paralyzed && set_paralyzed(player_ptr, 3 + randint1(monap_ptr->rlev))) {
+    if (!player_ptr->paralyzed && BadStatusSetter(player_ptr).paralysis(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }
@@ -128,8 +128,10 @@ void process_stun_attack(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (set_stun(player_ptr, player_ptr->effects()->stun()->current() + 10 + randint1(r_ptr->level / 4)))
+    auto current_stun = player_ptr->effects()->stun()->current();
+    if (BadStatusSetter(player_ptr).stun(current_stun + 10 + randint1(r_ptr->level / 4))) {
         monap_ptr->obvious = true;
+    }
 }
 
 /*!

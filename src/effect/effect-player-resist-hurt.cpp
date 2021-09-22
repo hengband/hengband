@@ -59,8 +59,9 @@ void effect_player_poison(player_type *player_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 
-    if (!(double_resist || has_resist_pois(player_ptr)) && !check_multishadow(player_ptr))
-        set_poisoned(player_ptr, player_ptr->poisoned + randint0(ep_ptr->dam) + 10);
+    if (!(double_resist || has_resist_pois(player_ptr)) && !check_multishadow(player_ptr)) {
+        (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint0(ep_ptr->dam) + 10);
+    }
 }
 
 void effect_player_nuke(player_type *player_ptr, effect_player_type *ep_ptr)
@@ -75,7 +76,7 @@ void effect_player_nuke(player_type *player_ptr, effect_player_type *ep_ptr)
     if ((double_resist || has_resist_pois(player_ptr)) || check_multishadow(player_ptr))
         return;
 
-    set_poisoned(player_ptr, player_ptr->poisoned + randint0(ep_ptr->dam) + 10);
+    (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint0(ep_ptr->dam) + 10);
     if (one_in_(5)) /* 6 */
     {
         msg_print(_("奇形的な変身を遂げた！", "You undergo a freakish metamorphosis!"));
@@ -144,7 +145,7 @@ void effect_player_plasma(player_type *player_ptr, effect_player_type *ep_ptr)
 
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
         int plus_stun = (randint1((ep_ptr->dam > 40) ? 35 : (ep_ptr->dam * 3 / 4 + 5)));
-        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + plus_stun);
+        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + plus_stun);
     }
 
     if (!(has_resist_fire(player_ptr) || is_oppose_fire(player_ptr) || has_immune_fire(player_ptr)))
@@ -192,8 +193,10 @@ void effect_player_nether(player_type *player_ptr, effect_player_type *ep_ptr)
  */
 void effect_player_water(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
+    }
+
     if (check_multishadow(player_ptr)) {
         ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
         return;
@@ -202,13 +205,14 @@ void effect_player_water(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_water_damage_rate(player_ptr, CALC_RAND) / 100;
 
     BIT_FLAGS has_res_water = has_resist_water(player_ptr);
-
+    BadStatusSetter bss(player_ptr);
     if (!check_multishadow(player_ptr)) {
         if (!has_resist_sound(player_ptr) && !has_res_water) {
-            set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(40));
+            (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(40));
         }
+
         if (!has_resist_conf(player_ptr) && !has_res_water) {
-            set_confused(player_ptr, player_ptr->confused + randint1(5) + 5);
+            (void)bss.confusion(player_ptr->confused + randint1(5) + 5);
         }
 
         if (one_in_(5) && !has_res_water) {
@@ -221,21 +225,23 @@ void effect_player_water(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_chaos(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
+    }
 
     ep_ptr->dam = ep_ptr->dam * calc_chaos_damage_rate(player_ptr, CALC_RAND) / 100;
-
     if (check_multishadow(player_ptr)) {
         ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
         return;
     }
 
+    BadStatusSetter bss(player_ptr);
     if (!has_resist_conf(player_ptr)) {
-        (void)set_confused(player_ptr, player_ptr->confused + randint0(20) + 10);
+        (void)bss.confusion(player_ptr->confused + randint0(20) + 10);
     }
+
     if (!has_resist_chaos(player_ptr)) {
-        (void)set_image(player_ptr, player_ptr->image + randint1(10));
+        (void)bss.hallucination(player_ptr->hallucinated + randint1(10));
         if (one_in_(3)) {
             msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
             (void)gain_mutation(player_ptr, 0);
@@ -261,7 +267,7 @@ void effect_player_shards(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_shards_damage_rate(player_ptr, CALC_RAND) / 100;
 
     if (!has_resist_shard(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_cut(player_ptr, player_ptr->cut + ep_ptr->dam);
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut + ep_ptr->dam);
     }
 
     if (!has_resist_shard(player_ptr) || one_in_(13))
@@ -279,7 +285,7 @@ void effect_player_sound(player_type *player_ptr, effect_player_type *ep_ptr)
 
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
         int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + plus_stun);
+        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + plus_stun);
     }
 
     if (!has_resist_sound(player_ptr) || one_in_(13))
@@ -290,13 +296,14 @@ void effect_player_sound(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_confusion(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
+    }
 
     ep_ptr->dam = ep_ptr->dam * calc_conf_damage_rate(player_ptr, CALC_RAND) / 100;
-
+    BadStatusSetter bss(player_ptr);
     if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_confused(player_ptr, player_ptr->confused + randint1(20) + 10);
+        (void)bss.confusion(player_ptr->confused + randint1(20) + 10);
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
@@ -335,7 +342,7 @@ void effect_player_force(player_type *player_ptr, effect_player_type *ep_ptr)
     if (player_ptr->blind)
         msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(20));
+        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + randint1(20));
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
@@ -343,16 +350,18 @@ void effect_player_force(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_rocket(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("爆発があった！", "There is an explosion!"));
+    }
+
+    BadStatusSetter bss(player_ptr);
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(20));
+        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(20));
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(player_ptr, CALC_RAND) / 100;
-
     if (!has_resist_shard(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_cut(player_ptr, player_ptr->cut + (ep_ptr->dam / 2));
+        (void)bss.cut(player_ptr->cut + (ep_ptr->dam / 2));
     }
 
     if (!has_resist_shard(player_ptr) || one_in_(12)) {
@@ -364,10 +373,13 @@ void effect_player_rocket(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_inertial(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
-    if (!check_multishadow(player_ptr))
-        (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+    }
+
+    if (!check_multishadow(player_ptr)) {
+        (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(4) + 4, false);
+    }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
@@ -377,7 +389,7 @@ void effect_player_lite(player_type *player_ptr, effect_player_type *ep_ptr)
     if (player_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
     if (!player_ptr->blind && !has_resist_lite(player_ptr) && !has_resist_blind(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_blind(player_ptr, player_ptr->blind + randint1(5) + 2);
+        (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + randint1(5) + 2);
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_lite_damage_rate(player_ptr, CALC_RAND) / 100;
@@ -408,7 +420,7 @@ void effect_player_dark(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_dark_damage_rate(player_ptr, CALC_RAND) / 100;
 
     if (!player_ptr->blind && !has_resist_dark(player_ptr) && !has_resist_blind(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)set_blind(player_ptr, player_ptr->blind + randint1(5) + 2);
+        (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + randint1(5) + 2);
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
@@ -517,22 +529,26 @@ void effect_player_time(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_gravity(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
+    }
+
     msg_print(_("周辺の重力がゆがんだ。", "Gravity warps around you."));
 
     if (!check_multishadow(player_ptr)) {
         teleport_player(player_ptr, 5, TELEPORT_PASSIVE);
-        if (!player_ptr->levitation)
-            (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+        BadStatusSetter bss(player_ptr);
+        if (!player_ptr->levitation) {
+            (void)bss.slowness(player_ptr->slow + randint0(4) + 4, false);
+        }
+
         if (!(has_resist_sound(player_ptr) || player_ptr->levitation)) {
-            int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-            (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + plus_stun);
+            auto plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
+            (void)bss.stun(player_ptr->effects()->stun()->current() + plus_stun);
         }
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_gravity_damage_rate(player_ptr, CALC_RAND) / 100;
-
     if (!player_ptr->levitation || one_in_(13)) {
         inventory_damage(player_ptr, BreakerCold(), 2);
     }
@@ -588,24 +604,28 @@ void effect_player_meteor(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_icee(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
+    }
 
     ep_ptr->get_damage = cold_dam(player_ptr, ep_ptr->dam, ep_ptr->killer, false);
-    if (check_multishadow(player_ptr))
+    if (check_multishadow(player_ptr)) {
         return;
+    }
 
+    BadStatusSetter bss(player_ptr);
     if (!has_resist_shard(player_ptr)) {
-        (void)set_cut(player_ptr, player_ptr->cut + damroll(5, 8));
+        (void)bss.cut(player_ptr->cut + damroll(5, 8));
     }
 
     if (!has_resist_sound(player_ptr)) {
-        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + randint1(15));
+        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(15));
     }
 
     if ((!(has_resist_cold(player_ptr) || is_oppose_cold(player_ptr))) || one_in_(12)) {
-        if (!has_immune_cold(player_ptr))
+        if (!has_immune_cold(player_ptr)) {
             inventory_damage(player_ptr, BreakerCold(), 3);
+        }
     }
 }
 
@@ -628,18 +648,14 @@ void effect_player_hand_doom(player_type *player_ptr, effect_player_type *ep_ptr
 
 void effect_player_void(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
-        msg_print(_("何かに身体が引っ張りこまれる！", "Something absorbs you!"));
-    else
-        msg_print(_("周辺の空間が歪んだ。", "Sight warps around you."));
-
-    if (!check_multishadow(player_ptr)) {
-        if (!player_ptr->levitation && !player_ptr->anti_tele)
-            (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+    auto effect_mes = player_ptr->blind ? _("何かに身体が引っ張りこまれる！", "Something absorbs you!")
+                                        : _("周辺の空間が歪んだ。", "Sight warps around you.");
+    msg_print(effect_mes);
+    if (!check_multishadow(player_ptr) && !player_ptr->levitation && !player_ptr->anti_tele) {
+        (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(4) + 4, false);
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_void_damage_rate(player_ptr, CALC_RAND) / 100;
-
     if (!player_ptr->levitation || one_in_(13)) {
         inventory_damage(player_ptr, BreakerCold(), 2);
     }
@@ -647,28 +663,33 @@ void effect_player_void(player_type *player_ptr, effect_player_type *ep_ptr)
 
 void effect_player_abyss(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if (player_ptr->blind)
-        msg_print(_("身体が沈み込む気がする！", "You feel you are sinking into something!"));
-    else
-        msg_print(_("深淵があなたを誘い込んでいる！", "You are falling in abyss!"));
-
+    auto effect_mes = player_ptr->blind ? _("身体が沈み込む気がする！", "You feel you are sinking into something!")
+                                        : _("深淵があなたを誘い込んでいる！", "You are falling in abyss!");
+    msg_print(effect_mes);
     ep_ptr->dam = ep_ptr->dam * calc_abyss_damage_rate(player_ptr, CALC_RAND) / 100;
+    BadStatusSetter bss(player_ptr);
+    if (check_multishadow(player_ptr)) {
+        return;
+    }
 
-    if (!check_multishadow(player_ptr)) {
-        if (!player_ptr->levitation)
-            (void)set_slow(player_ptr, player_ptr->slow + randint0(4) + 4, false);
+    if (!player_ptr->levitation) {
+        (void)bss.slowness(player_ptr->slow + randint0(4) + 4, false);
+    }
 
-        if (!player_ptr->blind) {
-            msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes you from abyss!"));
+    if (player_ptr->blind) {
+        return;
+    }
 
-            if (!has_resist_chaos(player_ptr))
-                (void)set_image(player_ptr, player_ptr->image + randint1(10));
+    msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes you from abyss!"));
+    if (!has_resist_chaos(player_ptr)) {
+        (void)bss.hallucination(player_ptr->hallucinated + randint1(10));
+    }
 
-            if (!has_resist_conf(player_ptr))
-                (void)set_confused(player_ptr, player_ptr->confused + randint1(10));
+    if (!has_resist_conf(player_ptr)) {
+        (void)bss.confusion(player_ptr->confused + randint1(10));
+    }
 
-            if (!has_resist_fear(player_ptr))
-                (void)set_afraid(player_ptr, player_ptr->afraid + randint1(10));
-        }
+    if (!has_resist_fear(player_ptr)) {
+        (void)bss.afraidness(player_ptr->afraid + randint1(10));
     }
 }

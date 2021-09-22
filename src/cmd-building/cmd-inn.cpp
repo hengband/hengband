@@ -119,10 +119,10 @@ static bool has_a_nightmare(player_type *player_ptr)
  */
 static void back_to_health(player_type *player_ptr)
 {
-    auto effects = player_ptr->effects();
-    set_blind(player_ptr, 0);
-    set_confused(player_ptr, 0);
-    effects->stun()->reset();
+    BadStatusSetter bss(player_ptr);
+    (void)bss.blindness(0);
+    (void)bss.confusion(0);
+    player_ptr->effects()->stun()->reset();
     player_ptr->chp = player_ptr->mhp;
     player_ptr->csp = player_ptr->msp;
 }

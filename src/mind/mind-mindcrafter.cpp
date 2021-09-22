@@ -223,16 +223,19 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
             (void)mindblast_monsters(player_ptr, randint1(plev * ((plev - 5) / 10 + 1)));
 
         break;
-    case ADRENALINE_CHANNELING:
-        set_afraid(player_ptr, 0);
-        set_stun(player_ptr, 0);
-        if (!is_fast(player_ptr) || !is_hero(player_ptr))
+    case ADRENALINE_CHANNELING: {
+        BadStatusSetter bss(player_ptr);
+        (void)bss.afraidness(0);
+        (void)bss.stun(0);
+        if (!is_fast(player_ptr) || !is_hero(player_ptr)) {
             hp_player(player_ptr, plev);
+        }
 
         t = 10 + randint1((plev * 3) / 2);
         set_hero(player_ptr, t, false);
         (void)set_fast(player_ptr, t, false);
         break;
+    }
     case TELEKINESIS:
         if (!get_aim_dir(player_ptr, &dir))
             return false;

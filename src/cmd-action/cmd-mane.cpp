@@ -799,12 +799,14 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         fire_ball_hide(player_ptr, GF_HAND_DOOM, dir, 200, 0);
         break;
     }
-    case RF_ABILITY::HEAL:
+    case RF_ABILITY::HEAL: {
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(player_ptr, plev * 6);
-        (void)set_stun(player_ptr, 0);
-        (void)set_cut(player_ptr, 0);
+        BadStatusSetter bss(player_ptr);
+        (void)bss.stun(0);
+        (void)bss.cut(0);
         break;
+    }
     case RF_ABILITY::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
         (void)set_invuln(player_ptr, randint1(7) + 7, false);

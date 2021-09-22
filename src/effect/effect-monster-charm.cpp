@@ -214,19 +214,22 @@ process_result effect_monster_charm_living(player_type *player_ptr, effect_monst
 
 static void effect_monster_domination_corrupted_addition(player_type *player_ptr, effect_monster_type *em_ptr)
 {
+    BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
     case 1:
-        set_stun(player_ptr, player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
-        break;
+        (void)bss.stun(player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
+        return;
     case 2:
-        set_confused(player_ptr, player_ptr->confused + em_ptr->dam / 2);
-        break;
-    default: {
-        if (em_ptr->r_ptr->flags3 & RF3_NO_FEAR)
+        (void)bss.confusion(player_ptr->confused + em_ptr->dam / 2);
+        return;
+    default:
+        if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        else
-            set_afraid(player_ptr, player_ptr->afraid + em_ptr->dam);
-    }
+        } else {
+            (void)bss.afraidness(player_ptr->afraid + em_ptr->dam);
+        }
+
+        return;
     }
 }
 

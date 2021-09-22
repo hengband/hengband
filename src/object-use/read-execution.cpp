@@ -107,7 +107,7 @@ void exe_read(player_type *player_ptr, INVENTORY_IDX item, bool known)
         switch (o_ptr->sval) {
         case SV_SCROLL_DARKNESS: {
             if (!has_resist_blind(player_ptr) && !has_resist_dark(player_ptr))
-                (void)set_blind(player_ptr, player_ptr->blind + 3 + randint1(5));
+                (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + 3 + randint1(5));
 
             if (unlite_area(player_ptr, 10, 3))
                 ident = true;

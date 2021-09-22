@@ -119,12 +119,11 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
         if (saving_throw(player_ptr->skill_sav - power))
             return;
 
-        if (player_ptr->image) {
+        if (player_ptr->hallucinated) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
-
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                player_ptr->image = player_ptr->image + randint1(r_ptr->level);
+                BadStatusSetter(player_ptr).hallucination(player_ptr->hallucinated + randint1(r_ptr->level));
             }
 
             return;
@@ -170,12 +169,11 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
             return;
         }
 
-        if (player_ptr->image) {
+        if (player_ptr->hallucinated) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
-
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                player_ptr->image = player_ptr->image + randint1(r_ptr->level);
+                BadStatusSetter(player_ptr).hallucination(player_ptr->hallucinated + randint1(r_ptr->level));
             }
 
             return;
@@ -260,12 +258,13 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
     case 10:
     case 11:
     case 12: {
+        BadStatusSetter bss(player_ptr);
         if (!has_resist_conf(player_ptr)) {
-            (void)set_confused(player_ptr, player_ptr->confused + randint0(4) + 4);
+            (void)bss.confusion(player_ptr->confused + randint0(4) + 4);
         }
 
         if (!has_resist_chaos(player_ptr) && one_in_(3)) {
-            (void)set_image(player_ptr, player_ptr->image + randint0(250) + 150);
+            (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
         }
 
         /*!< @todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
@@ -275,14 +274,15 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
     case 13:
     case 14:
     case 15: {
+        BadStatusSetter bss(player_ptr);
         if (!has_resist_conf(player_ptr)) {
-            (void)set_confused(player_ptr, player_ptr->confused + randint0(4) + 4);
+            (void)bss.confusion(player_ptr->confused + randint0(4) + 4);
         }
         if (!player_ptr->free_act) {
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint0(4) + 4);
+            (void)bss.paralysis(player_ptr->paralyzed + randint0(4) + 4);
         }
         if (!has_resist_chaos(player_ptr)) {
-            (void)set_image(player_ptr, player_ptr->image + randint0(250) + 150);
+            (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
         }
 
         do {
