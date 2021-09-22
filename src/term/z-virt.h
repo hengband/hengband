@@ -71,25 +71,8 @@ inline T *wipe_impl(T *p)
 }
 
 //
-// データコピーマクロ COPY/C_COPY の実装
+// データコピーマクロ COPY の実装
 //
-
-// トリビアルコピーが可能な型は memcpy でコピーする
-template <typename T, std::enable_if_t<std::is_trivially_copyable_v<T>, std::nullptr_t> = nullptr>
-inline T *c_copy_impl(T *p1, T *p2, size_t n)
-{
-    return static_cast<T *>(memcpy(p1, p2, sizeof(T) * n));
-}
-
-// トリビアルコピーが不可能な型は要素を1つずつコピー代入する
-template <typename T, std::enable_if_t<!std::is_trivially_copyable_v<T>, std::nullptr_t> = nullptr>
-inline T *c_copy_impl(T *p1, T *p2, size_t n)
-{
-    for (size_t i = 0; i < n; i++) {
-        *(p1 + i) = *(p2 + i);
-    }
-    return p1;
-}
 
 // 単要素の場合はトリビアルコピーの可/不可に関わらずコピー代入する
 template <typename T>
@@ -101,20 +84,11 @@ inline T *copy_impl(T *p1, T *p2)
 
 /**** Available macros ****/
 
-/* Size of 'N' things of type 'T' */
-#define C_SIZE(N, T) ((ulong)((N) * (sizeof(T))))
-
-/* Size of one thing of type 'T' */
-#define SIZE(T) ((ulong)(sizeof(T)))
-
 /* Wipe an array of type T[N], at location P, and return P */
 #define C_WIPE(P, N, T) (c_wipe_impl<T>(P, N))
 
 /* Wipe a thing of type T, at location P, and return P */
 #define WIPE(P, T) (wipe_impl<T>(P))
-
-/* Load an array of type T[N], at location P1, from another, at location P2 */
-#define C_COPY(P1, P2, N, T) (c_copy_impl<T>(P1, P2, N))
 
 /* Load a thing of type T, at location P1, from another, at location P2 */
 #define COPY(P1, P2, T) (copy_impl<T>(P1, P2))
