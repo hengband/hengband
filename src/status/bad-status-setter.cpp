@@ -494,7 +494,6 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
  */
 bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
 {
-    auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
@@ -504,17 +503,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
         v = 0;
     }
 
-    auto player_cut = this->player_ptr->effects()->cut();
-    auto old_aux = player_cut->get_rank();
-    auto new_aux = player_cut->get_rank(v);
-    if (new_aux > old_aux) {
-        this->decrease_charisma(new_aux, v);
-        notice = true;
-    } else if (new_aux < old_aux) {
-        this->stop_blooding(new_aux);
-        notice = true;
-    }
-
+    auto notice = this->process_cut_effect(v);
     this->player_ptr->cut = v;
     if (!notice) {
         return false;
@@ -528,6 +517,24 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     this->player_ptr->redraw |= PR_CUT;
     handle_stuff(this->player_ptr);
     return true;
+}
+
+bool BadStatusSetter::process_cut_effect(const short v)
+{
+    auto player_cut = this->player_ptr->effects()->cut();
+    auto old_aux = player_cut->get_rank();
+    auto new_aux = player_cut->get_rank(v);
+    if (new_aux > old_aux) {
+        this->decrease_charisma(new_aux, v);
+        return true;
+    }
+    
+    if (new_aux < old_aux) {
+        this->stop_blooding(new_aux);
+        return true;
+    }
+
+    return false;
 }
 
 void BadStatusSetter::decrease_charisma(const PlayerCutRank new_aux, const short v)
