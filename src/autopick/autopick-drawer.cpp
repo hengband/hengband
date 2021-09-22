@@ -25,7 +25,6 @@ static void process_dirty_expression(player_type *player_ptr, text_body_type *tb
     byte state = 0;
     for (int y = 0; tb->lines_list[y]; y++) {
         concptr s = tb->lines_list[y];
-        char *ss, *s_keep;
         tb->states[y] = state;
 
         if (*s++ != '?')
@@ -36,9 +35,10 @@ static void process_dirty_expression(player_type *player_ptr, text_body_type *tb
         if (streq(s, "$AUTOREGISTER"))
             state |= LSTAT_AUTOREGISTER;
 
-        int s_len = strlen(s);
-        ss = (char *)string_make(s);
-        s_keep = ss;
+        auto s_keep = string_make(s);
+        //! @note string_make の戻り値は const char* だが process_pref_file_expr で書き換える
+        // 可能性があるのでconstを外す必要がある。バッファ領域内のみの操作なので安全なはず。
+        auto ss = const_cast<char *>(s_keep);
 
         char f;
         concptr v = process_pref_file_expr(player_ptr, &ss, &f);
@@ -47,7 +47,7 @@ static void process_dirty_expression(player_type *player_ptr, text_body_type *tb
         else
             state &= ~LSTAT_BYPASS;
 
-        C_KILL(s_keep, s_len + 1, char);
+        string_free(s_keep);
         tb->states[y] = state | LSTAT_EXPRESSION;
     }
 
