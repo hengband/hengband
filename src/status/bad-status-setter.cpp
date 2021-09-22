@@ -407,7 +407,6 @@ bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
  */
 bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
 {
-    auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
@@ -417,18 +416,8 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         v = 0;
     }
 
-    auto player_stun = this->player_ptr->effects()->stun();
-    auto old_aux = player_stun->get_rank();
-    auto new_aux = PlayerStun::get_rank(v);
-    if (new_aux > old_aux) {
-        this->process_stun_status(new_aux, v);
-        notice = true;
-    } else if (new_aux < old_aux) {
-        this->clear_head(new_aux);
-        notice = true;
-    }
-
-    player_stun->set(v);
+    auto notice = this->process_stun_effect(v);
+    this->player_ptr->effects()->stun()->set(v);
     if (!notice) {
         return false;
     }
@@ -475,6 +464,23 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     this->player_ptr->redraw |= PR_CUT;
     handle_stuff(this->player_ptr);
     return true;
+}
+
+bool BadStatusSetter::process_stun_effect(const short v)
+{
+    auto old_aux = this->player_ptr->effects()->stun()->get_rank();
+    auto new_aux = PlayerStun::get_rank(v);
+    if (new_aux > old_aux) {
+        this->process_stun_status(new_aux, v);
+        return true;
+    }
+    
+    if (new_aux < old_aux) {
+        this->clear_head(new_aux);
+        return true;
+    }
+
+    return false;
 }
 
 void BadStatusSetter::process_stun_status(const PlayerStunRank new_aux, const short v)

@@ -27,6 +27,7 @@ public:
 private:
     player_type *player_ptr;
 
+    bool process_stun_effect(const short v);
     void process_stun_status(const PlayerStunRank new_aux, const short v);
     void clear_head(const PlayerStunRank new_aux);
     void decrease_int_wis(const short v);
