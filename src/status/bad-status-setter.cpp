@@ -413,7 +413,8 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::GOLEM) || PlayerClass(this->player_ptr).can_resist_stun()) {
+    PlayerClass player_class(this->player_ptr);
+    if (PlayerRace(this->player_ptr).equals(player_race_type::GOLEM) || player_class.can_resist_stun()) {
         v = 0;
     }
 
@@ -424,14 +425,8 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         auto stun_mes = PlayerStun::get_stun_mes(new_aux);
         msg_print(stun_mes.data());
         this->decrease_int_wis(v);
-        if (this->player_ptr->special_defense & KATA_MASK) {
+        if (player_class.lose_balance()) {
             msg_print(_("型が崩れた。", "You lose your stance."));
-            this->player_ptr->special_defense &= ~(KATA_MASK);
-            this->player_ptr->update |= PU_BONUS;
-            this->player_ptr->update |= PU_MONSTERS;
-            this->player_ptr->redraw |= PR_STATE;
-            this->player_ptr->redraw |= PR_STATUS;
-            this->player_ptr->action = ACTION_NONE;
         }
 
         if (this->player_ptr->concent) {
