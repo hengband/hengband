@@ -7,6 +7,7 @@
  * @todo TIME_EFFECT型の引数はplayer_typeの時限ステータスをTimedEffectsクラスへ入れる時にshortへ差し替えること.
  */
 enum class PlayerCutRank;
+enum class PlayerStunRank;
 struct player_type;
 class BadStatusSetter {
 public:
@@ -26,6 +27,7 @@ public:
 private:
     player_type *player_ptr;
 
+    void process_stun_status(const PlayerStunRank new_aux, const short v);
     void decrease_int_wis(const short v);
     bool process_cut_effect(const short v);
     void decrease_charisma(const PlayerCutRank new_aux, const short v);

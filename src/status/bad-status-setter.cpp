@@ -413,8 +413,7 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    PlayerClass player_class(this->player_ptr);
-    if (PlayerRace(this->player_ptr).equals(player_race_type::GOLEM) || player_class.can_resist_stun()) {
+    if (PlayerRace(this->player_ptr).equals(player_race_type::GOLEM) || PlayerClass(this->player_ptr).can_resist_stun()) {
         v = 0;
     }
 
@@ -422,22 +421,7 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
     auto old_aux = player_stun->get_rank();
     auto new_aux = PlayerStun::get_rank(v);
     if (new_aux > old_aux) {
-        auto stun_mes = PlayerStun::get_stun_mes(new_aux);
-        msg_print(stun_mes.data());
-        this->decrease_int_wis(v);
-        if (player_class.lose_balance()) {
-            msg_print(_("型が崩れた。", "You lose your stance."));
-        }
-
-        if (this->player_ptr->concent) {
-            reset_concentration(this->player_ptr, true);
-        }
-
-        SpellHex spell_hex(this->player_ptr);
-        if (spell_hex.is_spelling_any()) {
-            (void)spell_hex.stop_all_spells();
-        }
-
+        this->process_stun_status(new_aux, v);
         notice = true;
     } else if (new_aux < old_aux) {
         if (new_aux == PlayerStunRank::NONE) {
@@ -497,6 +481,25 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     this->player_ptr->redraw |= PR_CUT;
     handle_stuff(this->player_ptr);
     return true;
+}
+
+void BadStatusSetter::process_stun_status(const PlayerStunRank new_aux, const short v)
+{
+    auto stun_mes = PlayerStun::get_stun_mes(new_aux);
+    msg_print(stun_mes.data());
+    this->decrease_int_wis(v);
+    if (PlayerClass(this->player_ptr).lose_balance()) {
+        msg_print(_("型が崩れた。", "You lose your stance."));
+    }
+
+    if (this->player_ptr->concent) {
+        reset_concentration(this->player_ptr, true);
+    }
+
+    SpellHex spell_hex(this->player_ptr);
+    if (spell_hex.is_spelling_any()) {
+        (void)spell_hex.stop_all_spells();
+    }
 }
 
 /*!
