@@ -20,6 +20,7 @@
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 BadStatusSetter::BadStatusSetter(player_type *player_ptr)
     : player_ptr(player_ptr)
@@ -36,17 +37,15 @@ BadStatusSetter::BadStatusSetter(player_type *player_ptr)
  * Note that blindness is currently the only thing which can affect\n
  * "player_can_see_bold()".\n
  */
-bool BadStatusSetter::blindness(TIME_EFFECT v)
+bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
 
-    if (v) {
+    if (v > 0) {
         if (!this->player_ptr->blind) {
             if (this->player_ptr->prace == player_race_type::ANDROID) {
                 msg_print(_("センサーをやられた！", "The sensor broke!"));
@@ -91,17 +90,15 @@ bool BadStatusSetter::blindness(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::confusion(TIME_EFFECT v)
+bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
 
-    if (v) {
+    if (v > 0) {
         if (!this->player_ptr->confused) {
             msg_print(_("あなたは混乱した！", "You are confused!"));
 
@@ -109,22 +106,22 @@ bool BadStatusSetter::confusion(TIME_EFFECT v)
                 msg_print(_("学習が続けられない！", "You cannot continue learning!"));
                 this->player_ptr->new_mane = false;
 
-                this->player_ptr->redraw |= (PR_STATE);
+                this->player_ptr->redraw |= PR_STATE;
                 this->player_ptr->action = ACTION_NONE;
             }
             if (this->player_ptr->action == ACTION_KAMAE) {
                 msg_print(_("構えがとけた。", "You lose your stance."));
                 this->player_ptr->special_defense &= ~(KAMAE_MASK);
-                this->player_ptr->update |= (PU_BONUS);
-                this->player_ptr->redraw |= (PR_STATE);
+                this->player_ptr->update |= PU_BONUS;
+                this->player_ptr->redraw |= PR_STATE;
                 this->player_ptr->action = ACTION_NONE;
             } else if (this->player_ptr->action == ACTION_KATA) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
                 this->player_ptr->special_defense &= ~(KATA_MASK);
-                this->player_ptr->update |= (PU_BONUS);
-                this->player_ptr->update |= (PU_MONSTERS);
-                this->player_ptr->redraw |= (PR_STATE);
-                this->player_ptr->redraw |= (PR_STATUS);
+                this->player_ptr->update |= PU_BONUS;
+                this->player_ptr->update |= PU_MONSTERS;
+                this->player_ptr->redraw |= PR_STATE;
+                this->player_ptr->redraw |= PR_STATUS;
                 this->player_ptr->action = ACTION_NONE;
             }
 
@@ -150,13 +147,15 @@ bool BadStatusSetter::confusion(TIME_EFFECT v)
     }
 
     this->player_ptr->confused = v;
-    this->player_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
+    this->player_ptr->redraw |= PR_STATUS;
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(this->player_ptr, false, false);
+    }
+
     handle_stuff(this->player_ptr);
     return true;
 }
@@ -166,16 +165,15 @@ bool BadStatusSetter::confusion(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::poison(TIME_EFFECT v)
+bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
 {
-    bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
-    if (this->player_ptr->is_dead)
+    auto notice = false;
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
+    if (this->player_ptr->is_dead) {
         return false;
+    }
 
-    if (v) {
+    if (v > 0) {
         if (!this->player_ptr->poisoned) {
             msg_print(_("毒に侵されてしまった！", "You are poisoned!"));
             notice = true;
@@ -188,8 +186,7 @@ bool BadStatusSetter::poison(TIME_EFFECT v)
     }
 
     this->player_ptr->poisoned = v;
-    this->player_ptr->redraw |= (PR_STATUS);
-
+    this->player_ptr->redraw |= PR_STATUS;
     if (!notice) {
         return false;
     }
@@ -207,26 +204,24 @@ bool BadStatusSetter::poison(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::afraidness(TIME_EFFECT v)
+bool BadStatusSetter::afraidness(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
 
-    if (v) {
+    if (v > 0) {
         if (!this->player_ptr->afraid) {
             msg_print(_("何もかも恐くなってきた！", "You are terrified!"));
             if (this->player_ptr->special_defense & KATA_MASK) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
                 this->player_ptr->special_defense &= ~(KATA_MASK);
-                this->player_ptr->update |= (PU_BONUS);
-                this->player_ptr->update |= (PU_MONSTERS);
-                this->player_ptr->redraw |= (PR_STATE);
-                this->player_ptr->redraw |= (PR_STATUS);
+                this->player_ptr->update |= PU_BONUS;
+                this->player_ptr->update |= PU_MONSTERS;
+                this->player_ptr->redraw |= PR_STATE;
+                this->player_ptr->redraw |= PR_STATUS;
                 this->player_ptr->action = ACTION_NONE;
             }
 
@@ -260,17 +255,15 @@ bool BadStatusSetter::afraidness(TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::paralysis(TIME_EFFECT v)
+bool BadStatusSetter::paralysis(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
 
-    if (v) {
+    if (v > 0) {
         if (!this->player_ptr->paralyzed) {
             msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
             if (this->player_ptr->concent) {
@@ -313,12 +306,10 @@ bool BadStatusSetter::paralysis(TIME_EFFECT v)
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details Note that we must redraw the map when hallucination changes.
  */
-bool BadStatusSetter::hallucination(TIME_EFFECT v)
+bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
@@ -327,7 +318,7 @@ bool BadStatusSetter::hallucination(TIME_EFFECT v)
         v = 0;
     }
 
-    if (v) {
+    if (v > 0) {
         set_tsuyoshi(this->player_ptr, 0, true);
         if (!this->player_ptr->hallucinated) {
             msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
@@ -368,17 +359,15 @@ bool BadStatusSetter::hallucination(TIME_EFFECT v)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::slowness(TIME_EFFECT v, bool do_dec)
+bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
 {
-    bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
+    auto notice = false;
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
 
-    if (v) {
+    if (v > 0) {
         if (this->player_ptr->slow && !do_dec) {
             if (this->player_ptr->slow > v) {
                 return false;
@@ -415,11 +404,10 @@ bool BadStatusSetter::slowness(TIME_EFFECT v, bool do_dec)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool BadStatusSetter::stun(TIME_EFFECT v)
+bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
@@ -453,10 +441,10 @@ bool BadStatusSetter::stun(TIME_EFFECT v)
         if (this->player_ptr->special_defense & KATA_MASK) {
             msg_print(_("型が崩れた。", "You lose your stance."));
             this->player_ptr->special_defense &= ~(KATA_MASK);
-            this->player_ptr->update |= (PU_BONUS);
-            this->player_ptr->update |= (PU_MONSTERS);
-            this->player_ptr->redraw |= (PR_STATE);
-            this->player_ptr->redraw |= (PR_STATUS);
+            this->player_ptr->update |= PU_BONUS;
+            this->player_ptr->update |= PU_MONSTERS;
+            this->player_ptr->redraw |= PR_STATE;
+            this->player_ptr->redraw |= PR_STATUS;
             this->player_ptr->action = ACTION_NONE;
         }
 
@@ -503,13 +491,11 @@ bool BadStatusSetter::stun(TIME_EFFECT v)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool BadStatusSetter::cut(TIME_EFFECT v)
+bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
 {
     int old_aux, new_aux;
-    bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-
+    auto notice = false;
+    auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
