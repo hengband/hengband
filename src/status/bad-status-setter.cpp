@@ -423,22 +423,7 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
     if (new_aux > old_aux) {
         auto stun_mes = PlayerStun::get_stun_mes(new_aux);
         msg_print(stun_mes.data());
-        if (randint1(1000) < v || one_in_(16)) {
-            msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
-            if (one_in_(3)) {
-                if (!has_sustain_int(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_INT);
-                if (!has_sustain_wis(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_WIS);
-            } else if (one_in_(2)) {
-                if (!has_sustain_int(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_INT);
-            } else {
-                if (!has_sustain_wis(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_WIS);
-            }
-        }
-
+        this->decrease_int_wis(v);
         if (this->player_ptr->special_defense & KATA_MASK) {
             msg_print(_("型が崩れた。", "You lose your stance."));
             this->player_ptr->special_defense &= ~(KATA_MASK);
@@ -519,6 +504,45 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     return true;
 }
 
+/*!
+ * @todo 後で知能と賢さが両方減る確率を減らす.
+ */
+void BadStatusSetter::decrease_int_wis(const short v)
+{
+    if ((v <= randint1(1000)) && !one_in_(16)) {
+        return;
+    }
+
+    msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
+    auto rand = randint0(3);
+    switch (rand) {
+    case 0:
+        if (has_sustain_int(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_INT);
+        }
+
+        if (has_sustain_wis(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_WIS);
+        }
+
+        return;
+    case 1:
+        if (has_sustain_int(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_INT);
+        }
+        
+        return;
+    case 2:
+        if (has_sustain_wis(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_WIS);
+        }
+
+        return;
+    default:
+        return;
+    }
+}
+
 bool BadStatusSetter::process_cut_effect(const short v)
 {
     auto player_cut = this->player_ptr->effects()->cut();
@@ -528,7 +552,7 @@ bool BadStatusSetter::process_cut_effect(const short v)
         this->decrease_charisma(new_aux, v);
         return true;
     }
-    
+
     if (new_aux < old_aux) {
         this->stop_blooding(new_aux);
         return true;
