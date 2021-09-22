@@ -22,6 +22,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"
+#include <array>
 #include <sstream>
 #include <string>
 #include <tuple>
