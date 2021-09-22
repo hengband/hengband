@@ -97,6 +97,30 @@ std::tuple<term_color_type, std::string_view> PlayerCut::get_expr() const
     }
 }
 
+int PlayerCut::get_damage() const
+{
+    switch (this->get_rank()) {
+    case PlayerCutRank::NONE:
+        return 0;
+    case PlayerCutRank::GRAZING:
+        return 1;
+    case PlayerCutRank::LIGHT:
+        return 3;
+    case PlayerCutRank::BAD:
+        return 7;
+    case PlayerCutRank::NASTY:
+        return 16;
+    case PlayerCutRank::SEVERE:
+        return 32;
+    case PlayerCutRank::DEEP:
+        return 80;
+    case PlayerCutRank::MORTAL:
+        return 200;
+    default:
+        throw("Invalid StunRank was specified!");
+    }
+}
+
 void PlayerCut::set(short value)
 {
     this->cut = value;

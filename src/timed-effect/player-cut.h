@@ -27,8 +27,9 @@ public:
     PlayerCutRank get_rank() const;
     bool is_cut() const;
     std::tuple<term_color_type, std::string_view> get_expr() const;
-    void reset();
+    int get_damage() const;
     void set(short value);
+    void reset();
 
 private:
     short cut = 0;
