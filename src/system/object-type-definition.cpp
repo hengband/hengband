@@ -45,7 +45,7 @@ void object_type::wipe()
  */
 void object_type::copy_from(object_type *j_ptr)
 {
-    (void)COPY(this, j_ptr, object_type);
+    *this = *j_ptr;
 }
 
 /*!

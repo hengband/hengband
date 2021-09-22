@@ -68,7 +68,7 @@ static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTE
         }
     }
 
-    (void)COPY(&floor_ptr->m_list[i2], &floor_ptr->m_list[i1], monster_type);
+    floor_ptr->m_list[i2] = floor_ptr->m_list[i1];
     (void)WIPE(&floor_ptr->m_list[i1], monster_type);
 
     for (int i = 0; i < MAX_MTIMED; i++) {

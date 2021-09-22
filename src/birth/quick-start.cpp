@@ -159,6 +159,6 @@ void load_prev_data(player_type *player_ptr, bool swap)
     }
 
     if (swap) {
-        (void)COPY(&previous_char, &temp, birther);
+        previous_char = temp;
     }
 }
