@@ -28,6 +28,7 @@ private:
     player_type *player_ptr;
 
     void process_stun_status(const PlayerStunRank new_aux, const short v);
+    void clear_head(const PlayerStunRank new_aux);
     void decrease_int_wis(const short v);
     bool process_cut_effect(const short v);
     void decrease_charisma(const PlayerCutRank new_aux, const short v);

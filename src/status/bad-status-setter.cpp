@@ -424,13 +424,7 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         this->process_stun_status(new_aux, v);
         notice = true;
     } else if (new_aux < old_aux) {
-        if (new_aux == PlayerStunRank::NONE) {
-            msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
-            if (disturb_state) {
-                disturb(this->player_ptr, false, false);
-            }
-        }
-
+        this->clear_head(new_aux);
         notice = true;
     }
 
@@ -499,6 +493,18 @@ void BadStatusSetter::process_stun_status(const PlayerStunRank new_aux, const sh
     SpellHex spell_hex(this->player_ptr);
     if (spell_hex.is_spelling_any()) {
         (void)spell_hex.stop_all_spells();
+    }
+}
+
+void BadStatusSetter::clear_head(const PlayerStunRank new_aux)
+{
+    if (new_aux >= PlayerStunRank::NORMAL) {
+        return;
+    }
+
+    msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
     }
 }
 
