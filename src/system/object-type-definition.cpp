@@ -35,7 +35,7 @@
  */
 void object_type::wipe()
 {
-    (void)WIPE(this, object_type);
+    *this = {};
 }
 
 /*!

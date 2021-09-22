@@ -48,7 +48,7 @@ void player_wipe_without_name(player_type *player_ptr)
     if (player_ptr->last_message)
         string_free(player_ptr->last_message);
 
-    (void)WIPE(player_ptr, player_type);
+    *player_ptr = {};
 
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     player_ptr->current_floor_ptr = &floor_info;
