@@ -468,24 +468,24 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::process_stun_effect(const short v)
 {
-    auto old_aux = this->player_ptr->effects()->stun()->get_rank();
-    auto new_aux = PlayerStun::get_rank(v);
-    if (new_aux > old_aux) {
-        this->process_stun_status(new_aux, v);
+    auto old_rank = this->player_ptr->effects()->stun()->get_rank();
+    auto new_rank = PlayerStun::get_rank(v);
+    if (new_rank > old_rank) {
+        this->process_stun_status(new_rank, v);
         return true;
     }
     
-    if (new_aux < old_aux) {
-        this->clear_head(new_aux);
+    if (new_rank < old_rank) {
+        this->clear_head(new_rank);
         return true;
     }
 
     return false;
 }
 
-void BadStatusSetter::process_stun_status(const PlayerStunRank new_aux, const short v)
+void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const short v)
 {
-    auto stun_mes = PlayerStun::get_stun_mes(new_aux);
+    auto stun_mes = PlayerStun::get_stun_mes(new_rank);
     msg_print(stun_mes.data());
     this->decrease_int_wis(v);
     if (PlayerClass(this->player_ptr).lose_balance()) {
@@ -502,9 +502,9 @@ void BadStatusSetter::process_stun_status(const PlayerStunRank new_aux, const sh
     }
 }
 
-void BadStatusSetter::clear_head(const PlayerStunRank new_aux)
+void BadStatusSetter::clear_head(const PlayerStunRank new_rank)
 {
-    if (new_aux >= PlayerStunRank::NORMAL) {
+    if (new_rank >= PlayerStunRank::NORMAL) {
         return;
     }
 
@@ -556,25 +556,25 @@ void BadStatusSetter::decrease_int_wis(const short v)
 bool BadStatusSetter::process_cut_effect(const short v)
 {
     auto player_cut = this->player_ptr->effects()->cut();
-    auto old_aux = player_cut->get_rank();
-    auto new_aux = player_cut->get_rank(v);
-    if (new_aux > old_aux) {
-        this->decrease_charisma(new_aux, v);
+    auto old_rank = player_cut->get_rank();
+    auto new_rank = player_cut->get_rank(v);
+    if (new_rank > old_rank) {
+        this->decrease_charisma(new_rank, v);
         return true;
     }
 
-    if (new_aux < old_aux) {
-        this->stop_blooding(new_aux);
+    if (new_rank < old_rank) {
+        this->stop_blooding(new_rank);
         return true;
     }
 
     return false;
 }
 
-void BadStatusSetter::decrease_charisma(const PlayerCutRank new_aux, const short v)
+void BadStatusSetter::decrease_charisma(const PlayerCutRank new_rank, const short v)
 {
     auto player_cut = this->player_ptr->effects()->cut();
-    auto cut_mes = player_cut->get_cut_mes(new_aux);
+    auto cut_mes = player_cut->get_cut_mes(new_rank);
     msg_print(cut_mes.data());
     if (v <= randint1(1000) && !one_in_(16)) {
         return;
@@ -588,9 +588,9 @@ void BadStatusSetter::decrease_charisma(const PlayerCutRank new_aux, const short
     do_dec_stat(this->player_ptr, A_CHR);
 }
 
-void BadStatusSetter::stop_blooding(const PlayerCutRank new_aux)
+void BadStatusSetter::stop_blooding(const PlayerCutRank new_rank)
 {
-    if (new_aux >= PlayerCutRank::GRAZING) {
+    if (new_rank >= PlayerCutRank::GRAZING) {
         return;
     }
 
