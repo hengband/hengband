@@ -500,8 +500,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    PlayerRace player_race(this->player_ptr);
-    if (player_race.can_resist_cut() && !this->player_ptr->mimic_form) {
+    if (PlayerRace(this->player_ptr).can_resist_cut() && !this->player_ptr->mimic_form) {
         v = 0;
     }
 
@@ -512,16 +511,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
         this->decrease_charisma(new_aux, v);
         notice = true;
     } else if (new_aux < old_aux) {
-        if (new_aux == PlayerCutRank::NONE) {
-            auto blood_stop_mes = player_race.equals(player_race_type::ANDROID)
-                ? _("怪我が直った", "leaking fluid")
-                : _("出血が止まった", "bleeding");
-            msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
-            if (disturb_state) {
-                disturb(this->player_ptr, false, false);
-            }
-        }
-
+        this->stop_blooding(new_aux);
         notice = true;
     }
 
@@ -555,4 +545,19 @@ void BadStatusSetter::decrease_charisma(const PlayerCutRank new_aux, const short
 
     msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
     do_dec_stat(this->player_ptr, A_CHR);
+}
+
+void BadStatusSetter::stop_blooding(const PlayerCutRank new_aux)
+{
+    if (new_aux >= PlayerCutRank::GRAZING) {
+        return;
+    }
+
+    auto blood_stop_mes = PlayerRace(this->player_ptr).equals(player_race_type::ANDROID)
+        ? _("怪我が直った", "leaking fluid")
+        : _("出血が止まった", "bleeding");
+    msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
 }

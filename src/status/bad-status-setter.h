@@ -27,4 +27,5 @@ private:
     player_type *player_ptr;
 
     void decrease_charisma(const PlayerCutRank new_aux, const short v);
+    void stop_blooding(const PlayerCutRank new_aux);
 };
