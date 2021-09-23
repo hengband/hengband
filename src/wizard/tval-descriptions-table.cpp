@@ -18,7 +18,7 @@ const std::vector<tval_desc> tvals = {
     { TV_GLOVES, _("籠手", "Gloves") },
     { TV_BOOTS, _("靴", "Boots") },
     { TV_CLOAK, _("クローク", "Cloak") },
-    { TV_DRAG_ARMOR, _("ドラゴンスケイルメイル", "Dragon Scale Mail") },
+    { TV_DRAG_ARMOR, _("ドラゴン・スケイルメイル", "Dragon Scale Mail") },
     { TV_HARD_ARMOR, _("重鎧", "Hard Armor") },
     { TV_SOFT_ARMOR, _("軽鎧", "Soft Armor") },
     { TV_RING, _("指輪", "Ring") },

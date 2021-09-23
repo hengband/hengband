@@ -117,17 +117,16 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
 {
     term_clear();
     int num;
-    TERM_LEN col, row;
     char ch;
-    for (num = 0; (num < 80) && tvals[num].tval; num++) {
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
+    for (num = 0; (num < 80) && (tvals[num].tval > TV_NONE); num++) {
+        auto row = 2 + (num % 20);
+        auto col = _(32, 24) * (num / 20);
         ch = listsym[num];
         prt(format("[%c] %s", ch, tvals[num].desc), row, col);
     }
 
     int max_num = num;
-    if (!get_com("Get what type of object? ", &ch, false))
+    if (!get_com(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false))
         return 0;
 
     for (num = 0; num < max_num; num++)
@@ -147,11 +146,13 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
         if (num >= 80) {
             break;
         }
-        if (k_ref.idx == 0 || k_ref.tval != tval)
-            continue;
 
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
+        if (k_ref.idx == 0 || k_ref.tval != tval) {
+            continue;
+        }
+
+        auto row = 2 + (num % 20);
+        auto col = 20 * (num / 20);
         ch = listsym[num];
         strcpy(buf, "                    ");
         strip_name(buf, k_ref.idx);
@@ -160,7 +161,7 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
     }
 
     max_num = num;
-    if (!get_com(format("What Kind of %s? ", tval_desc), &ch, false))
+    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_desc), &ch, false))
         return 0;
 
     for (num = 0; num < max_num; num++)
