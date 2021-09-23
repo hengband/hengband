@@ -256,12 +256,9 @@ void wiz_identify_full_inventory(player_type *player_ptr)
  */
 static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
-    uint32_t rarity[K_MAX_DEPTH];
-    (void)C_WIPE(rarity, K_MAX_DEPTH, uint32_t);
-    uint32_t total[K_MAX_DEPTH];
-    (void)C_WIPE(total, K_MAX_DEPTH, uint32_t);
-    int32_t display[22];
-    (void)C_WIPE(display, 22, int32_t);
+    uint32_t rarity[K_MAX_DEPTH] = {};
+    uint32_t total[K_MAX_DEPTH] = {};
+    int32_t display[22] = {};
 
     int home = 0;
     for (int i = 0; i < K_MAX_DEPTH; i++) {

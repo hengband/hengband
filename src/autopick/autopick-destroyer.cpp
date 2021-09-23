@@ -124,7 +124,7 @@ void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int autopick
         return;
     }
 
-    (void)COPY(&autopick_last_destroyed_object, o_ptr, object_type);
+    autopick_last_destroyed_object = *o_ptr;
     o_ptr->marked |= OM_AUTODESTROY;
     player_ptr->update |= PU_AUTODESTROY;
 }

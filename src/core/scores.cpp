@@ -185,9 +185,8 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, display_pla
  */
 errr top_twenty(player_type *current_player_ptr)
 {
-    high_score the_score;
+    high_score the_score = {};
     char buf[32];
-    (void)WIPE(&the_score, high_score);
 
     /* Save the version */
     sprintf(the_score.what, "%u.%u.%u", FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);

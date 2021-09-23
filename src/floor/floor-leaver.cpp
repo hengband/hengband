@@ -53,7 +53,7 @@ static void check_riding_preservation(player_type *player_ptr)
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
-        (void)COPY(&party_mon[0], m_ptr, monster_type);
+        party_mon[0] = *m_ptr;
         delete_monster_idx(player_ptr, player_ptr->riding);
     }
 }
@@ -89,7 +89,7 @@ static void sweep_preserving_pet(player_type *player_ptr)
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr))
             continue;
 
-        (void)COPY(&party_mon[party_monster_num], &player_ptr->current_floor_ptr->m_list[i], monster_type);
+        party_mon[party_monster_num] = player_ptr->current_floor_ptr->m_list[i];
         party_monster_num++;
         delete_monster_idx(player_ptr, i);
     }

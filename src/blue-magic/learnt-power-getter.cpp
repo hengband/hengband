@@ -29,6 +29,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
+#include <algorithm>
 #include <vector>
 
 typedef struct learnt_magic_type {

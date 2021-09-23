@@ -82,7 +82,7 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
         }
     }
 
-    (void)WIPE(m_ptr, monster_type);
+    *m_ptr = {};
     floor_ptr->m_cnt--;
     lite_spot(player_ptr, y, x);
     if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
@@ -124,7 +124,7 @@ void wipe_monsters_list(player_type *player_ptr)
             continue;
 
         floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
-        (void)WIPE(m_ptr, monster_type);
+        *m_ptr = {};
     }
 
     /*
