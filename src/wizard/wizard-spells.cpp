@@ -19,6 +19,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/monster-race.h"
 #include "mutation/mutation-processor.h"
 #include "object-enchant/object-smith.h"
 #include "spell-kind/spells-launcher.h"
@@ -181,6 +182,20 @@ void wiz_summon_random_enemy(player_type *player_ptr, int num)
  */
 void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    if (r_idx <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Monster ID (1-%d): ", max_r_idx - 1);
+        char tmp_val[10] = "";
+        if (!get_string(tmp, tmp_val, 4))
+            return;
+
+        r_idx = (MONRACE_IDX)atoi(tmp_val);
+    }
+
+    if (r_idx <= 0 || r_idx >= max_r_idx) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_r_idx - 1);
+        return;
+    }
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
 }
 
@@ -193,6 +208,21 @@ void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx)
  */
 void wiz_summon_pet(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    if (r_idx <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Monster ID (1-%d): ", max_r_idx - 1);
+        char tmp_val[10] = "";
+        if (!get_string(tmp, tmp_val, 4))
+            return;
+
+        r_idx = (MONRACE_IDX)atoi(tmp_val);
+    }
+
+    if (r_idx <= 0 || r_idx >= max_r_idx) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_r_idx - 1);
+        return;
+    }
+
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
 }
 
