@@ -43,7 +43,7 @@ static errr interpret_r_token(char *buf)
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
-    if (i >= max_r_idx)
+    if (i >= static_cast<int>(r_info.size()))
         return 1;
 
     r_ptr = &r_info[i];
@@ -70,7 +70,7 @@ static errr interpret_k_token(char *buf)
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
-    if (i >= max_k_idx)
+    if (i >= static_cast<int>(k_info.size()))
         return 1;
 
     k_ptr = &k_info[i];
@@ -155,7 +155,7 @@ static errr interpret_f_token(char *buf)
         return 1;
 
     int i = (int)strtol(zz[0], nullptr, 0);
-    if (i >= max_f_idx)
+    if (i >= static_cast<int>(f_info.size()))
         return 1;
 
     return decide_feature_type(i, num, zz);

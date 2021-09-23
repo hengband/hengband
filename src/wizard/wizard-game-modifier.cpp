@@ -145,14 +145,14 @@ void wiz_restore_monster_max_num()
     MONRACE_IDX r_idx = command_arg;
     if (r_idx <= 0) {
         std::stringstream ss;
-        ss << "Monster race (1-" << max_r_idx << "): ";
+        ss << "Monster race (1-" << r_info.size() << "): ";
 
         char tmp_val[160] = "\0";
         if (!get_string(ss.str().c_str(), tmp_val, 5))
             return;
 
         r_idx = (MONRACE_IDX)atoi(tmp_val);
-        if (r_idx <= 0 || r_idx >= max_r_idx)
+        if (r_idx <= 0 || r_idx >= static_cast<MONRACE_IDX>(r_info.size()))
             return;
     }
 

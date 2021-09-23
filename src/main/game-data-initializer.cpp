@@ -60,7 +60,7 @@ errr init_other(player_type *player_ptr)
     for (auto &list : floor_ptr->mproc_list)
         list.assign(w_ptr->max_m_idx, {});
 
-    max_dlv.assign(w_ptr->max_d_idx, {});
+    max_dlv.assign(d_info.size(), {});
     floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
 
     macro__pat.assign(MACRO_MAX, {});
@@ -162,7 +162,7 @@ errr init_alloc(void)
 
     tag_sort(elements.data(), elements.size());
     alloc_race_table.assign(r_info.size(), {});
-    for (int i = 1; i < max_r_idx; i++) {
+    for (auto i = 1U; i < r_info.size(); i++) {
         auto r_ptr = &r_info[elements[i].index];
         if (r_ptr->rarity == 0)
             continue;

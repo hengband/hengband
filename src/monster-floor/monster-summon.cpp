@@ -182,7 +182,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
  */
 bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-    if ((r_idx <= 0) || (r_idx >= max_r_idx)) {
+    if ((r_idx <= 0) || (r_idx >= static_cast<MONRACE_IDX>(r_info.size()))) {
         return false;
     }
     

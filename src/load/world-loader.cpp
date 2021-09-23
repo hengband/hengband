@@ -13,7 +13,7 @@
 
 static void rd_hengband_dungeons(void)
 {
-    byte max = (byte)w_ptr->max_d_idx;
+    byte max = d_info.size();
     rd_byte(&max);
     int16_t tmp16s;
     for (int i = 0; i < max; i++) {

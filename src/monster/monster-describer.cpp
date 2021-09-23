@@ -40,7 +40,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
             monster_race *hallu_race;
 
             do {
-                hallu_race = &r_info[randint1(max_r_idx - 1)];
+                hallu_race = &r_info[randint1(r_info.size() - 1)];
             } while (hallu_race->name.empty() || (hallu_race->flags1 & RF1_UNIQUE));
 
             strcpy(silly_name, (hallu_race->name.c_str()));

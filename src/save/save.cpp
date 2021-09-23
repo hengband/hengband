@@ -36,6 +36,7 @@
 #include "store/store-util.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
@@ -103,12 +104,12 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     for (int i = tmp32u - 1; i >= 0; i--)
         wr_string(message_str(i));
 
-    uint16_t tmp16u = max_r_idx;
+    uint16_t tmp16u = static_cast<uint16_t>(r_info.size());
     wr_u16b(tmp16u);
     for (MONRACE_IDX r_idx = 0; r_idx < tmp16u; r_idx++)
         wr_lore(r_idx);
 
-    tmp16u = max_k_idx;
+    tmp16u = static_cast<uint16_t>(k_info.size());
     wr_u16b(tmp16u);
     for (KIND_OBJECT_IDX k_idx = 0; k_idx < tmp16u; k_idx++)
         wr_perception(k_idx);
@@ -154,7 +155,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
         for (int j = 0; j < w_ptr->max_wild_y; j++)
             wr_u32b(wilderness[j][i].seed);
 
-    tmp16u = max_a_idx;
+    tmp16u = static_cast<uint16_t>(a_info.size());
     wr_u16b(tmp16u);
     for (int i = 0; i < tmp16u; i++) {
         artifact_type *a_ptr = &a_info[i];
