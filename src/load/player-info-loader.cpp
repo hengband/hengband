@@ -9,10 +9,12 @@
 #include "load/load-v1-7-0.h"
 #include "load/load-zangband.h"
 #include "load/player-attack-loader.h"
+#include "load/player-class-specific-data-loader.h"
 #include "load/world-loader.h"
 #include "market/arena.h"
-#include "mutation/mutation-calculator.h"
 #include "monster-race/race-ability-flags.h"
+#include "mutation/mutation-calculator.h"
+#include "player-base/player-class.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
@@ -143,6 +145,10 @@ void rd_skills(player_type *player_ptr)
         set_zangband_spells(player_ptr);
     else
         set_spells(player_ptr);
+
+    PlayerClass(player_ptr).init_specific_data();
+    std::visit(PlayerClassSpecificDataLoader(player_ptr->magic_num1, player_ptr->magic_num2),
+        player_ptr->class_specific_data);
 
     if (music_singing_any(player_ptr))
         player_ptr->action = ACTION_SING;

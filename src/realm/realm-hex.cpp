@@ -880,6 +880,8 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
         break;
     }
+    case HEX_MAX:
+        break;
     }
 
     if (cast && should_continue) {

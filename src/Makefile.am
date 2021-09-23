@@ -356,6 +356,7 @@ hengband_SOURCES = \
 	load/lore-loader.cpp load/lore-loader.h \
 	load/option-loader.cpp load/option-loader.h \
 	load/player-attack-loader.cpp load/player-attack-loader.h \
+	load/player-class-specific-data-loader.cpp load/player-class-specific-data-loader.h \
 	load/player-info-loader.cpp load/player-info-loader.h \
 	load/savedata-flag-types.h \
 	load/savedata-old-flag-types.h \
@@ -665,6 +666,7 @@ hengband_SOURCES = \
 	player-info/class-types.h \
 	player-info/class-info.cpp player-info/class-info.h \
 	player-info/equipment-info.cpp player-info/equipment-info.h \
+	player-info/force-trainer-data-type.h \
 	player-info/mimic-info-table.cpp player-info/mimic-info-table.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
 	player-info/race-ability-info.cpp player-info/race-ability-info.h \
@@ -673,6 +675,8 @@ hengband_SOURCES = \
 	player-info/resistance-info.cpp player-info/resistance-info.h \
 	player-info/self-info.cpp player-info/self-info.h \
 	player-info/self-info-util.cpp player-info/self-info-util.h \
+        player-info/smith-data-type.h \
+        player-info/spell-hex-data-type.h \
 	player-info/weapon-effect-info.cpp player-info/weapon-effect-info.h \
 	\
 	player-status/player-hand-types.h \
@@ -734,6 +738,7 @@ hengband_SOURCES = \
 	save/info-writer.cpp save/info-writer.h \
 	save/item-writer.cpp save/item-writer.h \
 	save/monster-writer.cpp save/monster-writer.h \
+	save/player-class-specific-data-writer.cpp save/player-class-specific-data-writer.h \
 	save/player-writer.cpp save/player-writer.h \
 	save/save.cpp save/save.h \
 	save/save-util.cpp save/save-util.h \

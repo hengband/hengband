@@ -4,6 +4,7 @@
 #include "birth/game-play-initializer.h"
 #include "core/player-update-types.h"
 #include "io/input-key-acceptor.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-personality.h"
@@ -153,6 +154,8 @@ void load_prev_data(player_type *player_ptr, bool swap)
     for (int i = 0; i < 8; i++) {
         player_ptr->vir_types[i] = previous_char.vir_types[i];
     }
+
+    PlayerClass(player_ptr).init_specific_data();
 
     for (int i = 0; i < 4; i++) {
         strcpy(player_ptr->history[i], previous_char.history[i]);

@@ -269,11 +269,13 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
+    <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp" />
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-info.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
     <ClCompile Include="..\..\src\player-base\player-class.cpp" />
     <ClCompile Include="..\..\src\player-base\player-race.cpp" />
+    <ClCompile Include="..\..\src\save\player-class-specific-data-writer.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
@@ -914,6 +916,7 @@
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
+    <ClInclude Include="..\..\src\load\player-class-specific-data-loader.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
     <ClInclude Include="..\..\src\object-enchant\object-smith.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-info.h" />
@@ -988,10 +991,15 @@
     <ClInclude Include="..\..\src\player-base\player-class.h" />
     <ClInclude Include="..\..\src\player-base\player-race.h" />
     <ClInclude Include="..\..\src\player-info\alignment.h" />
+    <ClInclude Include="..\..\src\player-info\class-specific-data.h" />
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />
+    <ClInclude Include="..\..\src\player-info\force-trainer-data-type.h" />
+    <ClInclude Include="..\..\src\player-info\smith-data-type.h" />
+    <ClInclude Include="..\..\src\player-info\spell-hex-data-type.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h" />
     <ClInclude Include="..\..\src\player-status\player-hand-types.h" />
     <ClInclude Include="..\..\src\main-win\main-win-utils.h" />
+    <ClInclude Include="..\..\src\save\player-class-specific-data-writer.h" />
     <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />

@@ -37,4 +37,5 @@ enum spell_hex_type {
     HEX_SHADOW_MOVE = 29,
     HEX_ANTI_MAGIC = 30,
     HEX_REVENGE = 31,
+    HEX_MAX,
 };

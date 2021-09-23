@@ -181,7 +181,7 @@ enum class SmithCategory {
 /**
  * @brief 鍛冶エッセンスの列挙体
  */
-enum class SmithEssence {
+enum class SmithEssence : int16_t {
     NONE = 0,
     STR = 1, //!< 腕力
     INT = 2, //!< 知能
