@@ -137,6 +137,49 @@ static std::tuple<bool, KIND_OBJECT_IDX> wiz_select_tval()
     return std::make_tuple(true, selection);
 }
 
+static KIND_OBJECT_IDX wiz_select_sval(const tval_type tval, concptr tval_description)
+{
+    auto num = 0;
+    KIND_OBJECT_IDX choice[80]{};
+    char buf[160]{};
+    char ch;
+    for (const auto &k_ref : k_info) {
+        if (num >= 80) {
+            break;
+        }
+
+        if (k_ref.idx == 0 || k_ref.tval != tval) {
+            continue;
+        }
+
+        auto row = 2 + (num % 20);
+        auto col = _(30, 32) * (num / 20);
+        ch = listsym[num];
+        strcpy(buf, "                    ");
+        strip_name(buf, k_ref.idx);
+        prt(format("[%c] %s", ch, buf), row, col);
+        choice[num++] = k_ref.idx;
+    }
+
+    auto max_num = num;
+    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
+        return 0;
+    }
+
+    KIND_OBJECT_IDX selection;
+    for (selection = 0; selection < max_num; selection++) {
+        if (listsym[selection] == ch) {
+            break;
+        }
+    }
+
+    if ((selection < 0) || (selection >= max_num)) {
+        return 0;
+    }
+
+    return choice[selection];
+}
+
 /*!
  * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
  * Specify tval and sval (type and subtype of object) originally
@@ -155,46 +198,9 @@ static KIND_OBJECT_IDX wiz_create_itemtype()
     }
 
     tval_type tval = i2enum<tval_type>(tvals[selection].tval);
-    concptr tval_desc = tvals[selection].desc;
+    concptr tval_description = tvals[selection].desc;
     term_clear();
-    auto num = 0;
-    KIND_OBJECT_IDX choice[80]{};
-    char buf[160]{};
-    char ch;
-    for (const auto& k_ref : k_info) {
-        if (num >= 80) {
-            break;
-        }
-
-        if (k_ref.idx == 0 || k_ref.tval != tval) {
-            continue;
-        }
-
-        auto row = 2 + (num % 20);
-        auto col = 20 * (num / 20);
-        ch = listsym[num];
-        strcpy(buf, "                    ");
-        strip_name(buf, k_ref.idx);
-        prt(format("[%c] %s", ch, buf), row, col);
-        choice[num++] = k_ref.idx;
-    }
-
-    auto max_num = num;
-    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_desc), &ch, false)) {
-        return 0;
-    }
-
-    for (num = 0; num < max_num; num++) {
-        if (listsym[num] == ch) {
-            break;
-        }
-    }
-
-    if ((num < 0) || (num >= max_num)) {
-        return 0;
-    }
-
-    return choice[num];
+    return wiz_select_sval(tval, tval_description);
 }
 
 /*!
