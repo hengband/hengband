@@ -9,6 +9,7 @@
 #include "core/player-update-types.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
+#include "player-info/force-trainer-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "realm/realm-types.h"
@@ -64,6 +65,9 @@ void PlayerClass::init_specific_data()
     switch (this->player_ptr->pclass) {
     case CLASS_SMITH:
         this->player_ptr->class_specific_data = std::make_shared<smith_data_type>();
+        break;
+    case CLASS_FORCETRAINER:
+        this->player_ptr->class_specific_data = std::make_shared<force_trainer_data_type>();
         break;
     case CLASS_HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {

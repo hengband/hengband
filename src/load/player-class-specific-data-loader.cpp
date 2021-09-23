@@ -1,6 +1,7 @@
 #include "load/player-class-specific-data-loader.h"
 #include "load/load-util.h"
 #include "player-info/smith-data-type.h"
+#include "player-info/force-trainer-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "util/enum-converter.h"
 
@@ -22,6 +23,15 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<smith_data_type> 
             }
             smith_data->essences[i2enum<SmithEssence>(essence)] = amount;
         }
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<force_trainer_data_type> &force_trainer_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        force_trainer_data->ki = this->magic_num1[0];
+    } else {
+        rd_s32b(&force_trainer_data->ki);
     }
 }
 

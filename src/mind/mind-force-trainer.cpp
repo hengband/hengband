@@ -19,7 +19,9 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
+#include "player-info/force-trainer-data-type.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
@@ -45,7 +47,9 @@
  */
 int32_t get_current_ki(player_type *player_ptr)
 {
-    return player_ptr->magic_num1[0];
+    auto data = PlayerClass(player_ptr).get_specific_data<force_trainer_data_type>();
+
+    return data ? data->ki : 0;
 }
 
 /*!
@@ -56,12 +60,17 @@ int32_t get_current_ki(player_type *player_ptr)
  */
 void set_current_ki(player_type *player_ptr, bool is_reset, int32_t ki)
 {
-    if (is_reset) {
-        player_ptr->magic_num1[0] = ki;
+    auto data = PlayerClass(player_ptr).get_specific_data<force_trainer_data_type>();
+    if (!data) {
         return;
     }
 
-    player_ptr->magic_num1[0] += ki;
+    if (is_reset) {
+        data->ki = ki;
+        return;
+    }
+
+    data->ki += ki;
 }
 
 bool clear_mind(player_type *player_ptr)
@@ -281,7 +290,8 @@ bool cast_force_spell(player_type *player_ptr, mind_force_trainer_type spell)
         if (randint1(get_current_ki(player_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
             fire_ball(player_ptr, GF_MANA, 0, get_current_ki(player_ptr) / 2, 10);
-            take_hit(player_ptr, DAMAGE_LOSELIFE, player_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"));
+            auto data = PlayerClass(player_ptr).get_specific_data<force_trainer_data_type>();
+            take_hit(player_ptr, DAMAGE_LOSELIFE, data->ki / 2, _("気の暴走", "Explosion of the Force"));
         } else
             return true;
 

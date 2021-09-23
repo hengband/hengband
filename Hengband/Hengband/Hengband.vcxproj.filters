@@ -5043,6 +5043,9 @@
     <ClInclude Include="..\..\src\player-info\class-specific-data.h">
       <Filter>player-info</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\force-trainer-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\player-info\smith-data-type.h">
       <Filter>player-info</Filter>
     </ClInclude>
