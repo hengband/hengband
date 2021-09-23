@@ -4,7 +4,7 @@
 /*!
  * ベースアイテムの大項目IDの種別名定義 / A list of tvals and their textual names
  */
-tval_desc tvals[MAX_TVAL_DESCRIPTIONS] = {
+const std::vector<tval_desc> tvals = {
     { TV_SWORD, _("刀剣", "Sword") },
     { TV_POLEARM, _("長柄/斧", "Polearm") },
     { TV_HAFTED, _("鈍器", "Hafted Weapon") },
@@ -63,6 +63,9 @@ tval_desc tvals[MAX_TVAL_DESCRIPTIONS] = {
  * 選択処理用キーコード /
  * Global array for converting numbers to a logical list symbol
  */
-const char listsym[MAX_DEBUG_COMMAND_SYMBOLS] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-    'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '\0' };
+const std::vector<char> listsym = {
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '\0'
+};
