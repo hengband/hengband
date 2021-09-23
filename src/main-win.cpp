@@ -1313,7 +1313,7 @@ static void init_windows(void)
 
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
-        td = {};
+        *td = {};
         td->name = win_term_name[i];
         td->rows = 24;
         td->cols = 80;
