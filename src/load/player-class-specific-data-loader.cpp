@@ -1,4 +1,4 @@
-#include "load/player-class-specific-data-loader.h"
+﻿#include "load/player-class-specific-data-loader.h"
 #include "load/load-util.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/force-trainer-data-type.h"
@@ -10,7 +10,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<smith_data_type> 
     if (loading_savefile_version_is_older_than(9)) {
         for (auto i = 0; i < MAX_SPELLS; ++i) {
             if (this->magic_num1[i] > 0) {
-                smith_data->essences[i2enum<SmithEssence>(i)] = this->magic_num1[i];
+                smith_data->essences[i2enum<SmithEssence>(i)] = static_cast<int16_t>(this->magic_num1[i]);
             }
         }
     } else {

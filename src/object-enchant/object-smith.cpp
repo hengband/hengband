@@ -409,7 +409,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
             continue;
         }
 
-        this->smith_data->essences[essence] = std::min(Smith::ESSENCE_AMOUNT_MAX, this->smith_data->essences[essence] + drain_value);
+        this->smith_data->essences[essence] = std::min<int16_t>(Smith::ESSENCE_AMOUNT_MAX, this->smith_data->essences[essence] + drain_value);
         result.emplace_back(essence, drain_value);
     }
 
@@ -433,7 +433,7 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
 
     const auto total_consumption = this->get_essence_consumption(effect, o_ptr) * number;
     for (auto &&essence : info.value()->need_essences) {
-        this->smith_data->essences[essence] -= total_consumption;
+        this->smith_data->essences[essence] -= static_cast<int16_t>(total_consumption);
     }
 
     return info.value()->add_essence(this->player_ptr, o_ptr, number);
