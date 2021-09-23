@@ -21,6 +21,8 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #ifdef JP
@@ -30,18 +32,18 @@
 
 void do_poly_wounds(player_type *player_ptr)
 {
-    auto wounds = player_ptr->cut;
     int16_t hit_p = (player_ptr->mhp - player_ptr->chp);
     int16_t change = damroll(player_ptr->lev, 5);
     auto nasty_effect = one_in_(5);
-    if ((wounds == 0) && (hit_p == 0) && !nasty_effect)
+    auto player_cut = player_ptr->effects()->cut();
+    if (!player_cut->is_cut() && (hit_p == 0) && !nasty_effect)
         return;
 
     msg_print(_("傷がより軽いものに変化した。", "Your wounds are polymorphed into less serious ones."));
     hp_player(player_ptr, change);
     BadStatusSetter bss(player_ptr);
     if (!nasty_effect) {
-        (void)bss.cut(player_ptr->cut - (change / 2));
+        (void)bss.cut(player_cut->current() - (change / 2));
         return;
     }
 

@@ -17,6 +17,7 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 
@@ -220,12 +221,13 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
         (void)bss.stun(player_stun->current() - adjust);
     }
 
-    if (player_ptr->cut) {
+    auto player_cut = effects->cut();
+    if (player_cut->is_cut()) {
         short adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        if (player_ptr->cut > 1000) {
+        if (player_cut->get_rank() == PlayerCutRank::MORTAL) {
             adjust = 0;
         }
 
-        (void)bss.cut(player_ptr->cut - adjust);
+        (void)bss.cut(player_cut->current() - adjust);
     }
 }

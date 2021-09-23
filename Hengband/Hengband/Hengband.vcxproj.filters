@@ -2337,6 +2337,9 @@
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-cut.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5026,6 +5029,9 @@
       <Filter>timed-effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\timed-effect\player-stun.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-cut.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
   </ItemGroup>

@@ -38,6 +38,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -112,26 +114,11 @@ void process_player_hp_mp(player_type *player_ptr)
             sound(SOUND_DAMAGE_OVER_TIME);
         }
     }
-
-    if (player_ptr->cut && !is_invuln(player_ptr)) {
-        HIT_POINT dam;
-        if (player_ptr->cut > 1000) {
-            dam = 200;
-        } else if (player_ptr->cut > 200) {
-            dam = 80;
-        } else if (player_ptr->cut > 100) {
-            dam = 32;
-        } else if (player_ptr->cut > 50) {
-            dam = 16;
-        } else if (player_ptr->cut > 25) {
-            dam = 7;
-        } else if (player_ptr->cut > 10) {
-            dam = 3;
-        } else {
-            dam = 1;
-        }
-
-        if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound")) > 0) {
+    
+    auto player_cut = player_ptr->effects()->cut();
+    if (player_cut->is_cut() && !is_invuln(player_ptr)) {
+        auto dam = player_cut->get_damage();
+        if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a mortal wound")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
         }
     }
@@ -331,7 +318,7 @@ void process_player_hp_mp(player_type *player_ptr)
 
     if (player_ptr->poisoned)
         regen_amount = 0;
-    if (player_ptr->cut)
+    if (player_cut->is_cut())
         regen_amount = 0;
     if (cave_no_regen)
         regen_amount = 0;

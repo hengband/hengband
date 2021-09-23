@@ -52,6 +52,8 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -593,7 +595,8 @@ concptr do_hissatsu_spell(player_type *player_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             POSITION y = 0, x = 0;
-            short new_cut = player_ptr->cut < 300 ? player_ptr->cut + 300 : player_ptr->cut * 2;
+            auto current_cut = player_ptr->effects()->cut()->current();
+            short new_cut = current_cut < 300 ? current_cut + 300 : current_cut * 2;
             (void)BadStatusSetter(player_ptr).cut(new_cut);
             for (dir = 0; dir < 8; dir++) {
                 y = player_ptr->y + ddy_ddd[dir];

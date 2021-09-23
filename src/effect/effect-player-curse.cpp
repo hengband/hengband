@@ -8,6 +8,8 @@
 #include "status/bad-status-setter.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -53,6 +55,6 @@ void effect_player_curse_4(player_type *player_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
     if (!check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut + damroll(10, 10));
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->effects()->cut()->current() + damroll(10, 10));
     }
 }

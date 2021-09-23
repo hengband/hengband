@@ -15,6 +15,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "window/main-window-row-column.h"
@@ -67,43 +68,14 @@ void print_stat(player_type *player_ptr, int stat)
  */
 void print_cut(player_type *player_ptr)
 {
-    int c = player_ptr->cut;
-    if (c > 1000) {
-        c_put_str(TERM_L_RED, _("致命傷      ", "Mortal wound"), ROW_CUT, COL_CUT);
+    auto player_cut = player_ptr->effects()->cut();
+    if (!player_cut->is_cut()) {
+        put_str("            ", ROW_CUT, COL_CUT);
         return;
     }
 
-    if (c > 200) {
-        c_put_str(TERM_RED, _("ひどい深手  ", "Deep gash   "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 100) {
-        c_put_str(TERM_RED, _("重傷        ", "Severe cut  "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 50) {
-        c_put_str(TERM_ORANGE, _("大変な傷    ", "Nasty cut   "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 25) {
-        c_put_str(TERM_ORANGE, _("ひどい傷    ", "Bad cut     "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 10) {
-        c_put_str(TERM_YELLOW, _("軽傷        ", "Light cut   "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c) {
-        c_put_str(TERM_YELLOW, _("かすり傷    ", "Graze       "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    put_str("            ", ROW_CUT, COL_CUT);
+    auto [color, stat] = player_cut->get_expr();
+    c_put_str(color, stat.data(), ROW_CUT, COL_CUT);
 }
 
 /*!

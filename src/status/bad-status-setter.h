@@ -6,6 +6,8 @@
  * @details 仮引数がtmpなのは、全て範囲外の値を範囲内に収める処理が含まれるため
  * @todo TIME_EFFECT型の引数はplayer_typeの時限ステータスをTimedEffectsクラスへ入れる時にshortへ差し替えること.
  */
+enum class PlayerCutRank;
+enum class PlayerStunRank;
 struct player_type;
 class BadStatusSetter {
 public:
@@ -24,4 +26,12 @@ public:
 
 private:
     player_type *player_ptr;
+
+    bool process_stun_effect(const short v);
+    void process_stun_status(const PlayerStunRank new_rank, const short v);
+    void clear_head(const PlayerStunRank new_rank);
+    void decrease_int_wis(const short v);
+    bool process_cut_effect(const short v);
+    void decrease_charisma(const PlayerCutRank new_rank, const short v);
+    void stop_blooding(const PlayerCutRank new_rank);
 };

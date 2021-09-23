@@ -33,6 +33,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -240,8 +241,9 @@ static void hissatsu_lightning_eagle(player_type *player_ptr, samurai_slaying_ty
  */
 static void hissatsu_bloody_maelstroem(player_type *player_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
-    if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_ptr->cut && monster_living(samurai_slaying_ptr->m_ptr->r_idx)) {
-        MULTIPLY tmp = MIN(100, MAX(10, player_ptr->cut / 10));
+    auto player_cut = player_ptr->effects()->cut();
+    if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_cut->is_cut() && monster_living(samurai_slaying_ptr->m_ptr->r_idx)) {
+        MULTIPLY tmp = MIN(100, MAX(10, player_cut->current() / 10));
         if (samurai_slaying_ptr->mult < tmp)
             samurai_slaying_ptr->mult = tmp;
     }

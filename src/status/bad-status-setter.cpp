@@ -17,6 +17,7 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -406,7 +407,6 @@ bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
  */
 bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
 {
-    auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
@@ -416,60 +416,8 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         v = 0;
     }
 
-    auto player_stun = this->player_ptr->effects()->stun();
-    auto old_aux = player_stun->get_rank();
-    auto new_aux = PlayerStun::get_rank(v);
-    if (new_aux > old_aux) {
-        auto stun_mes = PlayerStun::get_stun_mes(new_aux);
-        msg_print(stun_mes.data());
-        if (randint1(1000) < v || one_in_(16)) {
-            msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
-            if (one_in_(3)) {
-                if (!has_sustain_int(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_INT);
-                if (!has_sustain_wis(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_WIS);
-            } else if (one_in_(2)) {
-                if (!has_sustain_int(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_INT);
-            } else {
-                if (!has_sustain_wis(this->player_ptr))
-                    (void)do_dec_stat(this->player_ptr, A_WIS);
-            }
-        }
-
-        if (this->player_ptr->special_defense & KATA_MASK) {
-            msg_print(_("型が崩れた。", "You lose your stance."));
-            this->player_ptr->special_defense &= ~(KATA_MASK);
-            this->player_ptr->update |= PU_BONUS;
-            this->player_ptr->update |= PU_MONSTERS;
-            this->player_ptr->redraw |= PR_STATE;
-            this->player_ptr->redraw |= PR_STATUS;
-            this->player_ptr->action = ACTION_NONE;
-        }
-
-        if (this->player_ptr->concent) {
-            reset_concentration(this->player_ptr, true);
-        }
-
-        SpellHex spell_hex(this->player_ptr);
-        if (spell_hex.is_spelling_any()) {
-            (void)spell_hex.stop_all_spells();
-        }
-
-        notice = true;
-    } else if (new_aux < old_aux) {
-        if (new_aux == PlayerStunRank::NONE) {
-            msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
-            if (disturb_state) {
-                disturb(this->player_ptr, false, false);
-            }
-        }
-
-        notice = true;
-    }
-
-    player_stun->set(v);
+    auto notice = this->process_stun_effect(v);
+    this->player_ptr->effects()->stun()->set(v);
     if (!notice) {
         return false;
     }
@@ -493,102 +441,17 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
  */
 bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
 {
-    int old_aux, new_aux;
-    auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
 
-    if ((this->player_ptr->prace == player_race_type::GOLEM || this->player_ptr->prace == player_race_type::SKELETON || this->player_ptr->prace == player_race_type::SPECTRE
-            || (this->player_ptr->prace == player_race_type::ZOMBIE && this->player_ptr->lev > 11))
-        && !this->player_ptr->mimic_form) {
+    if (PlayerRace(this->player_ptr).can_resist_cut() && !this->player_ptr->mimic_form) {
         v = 0;
     }
 
-    if (this->player_ptr->cut > 1000) {
-        old_aux = 7;
-    } else if (this->player_ptr->cut > 200) {
-        old_aux = 6;
-    } else if (this->player_ptr->cut > 100) {
-        old_aux = 5;
-    } else if (this->player_ptr->cut > 50) {
-        old_aux = 4;
-    } else if (this->player_ptr->cut > 25) {
-        old_aux = 3;
-    } else if (this->player_ptr->cut > 10) {
-        old_aux = 2;
-    } else if (this->player_ptr->cut > 0) {
-        old_aux = 1;
-    } else {
-        old_aux = 0;
-    }
-
-    if (v > 1000) {
-        new_aux = 7;
-    } else if (v > 200) {
-        new_aux = 6;
-    } else if (v > 100) {
-        new_aux = 5;
-    } else if (v > 50) {
-        new_aux = 4;
-    } else if (v > 25) {
-        new_aux = 3;
-    } else if (v > 10) {
-        new_aux = 2;
-    } else if (v > 0) {
-        new_aux = 1;
-    } else {
-        new_aux = 0;
-    }
-
-    if (new_aux > old_aux) {
-        switch (new_aux) {
-        case 1:
-            msg_print(_("かすり傷を負ってしまった。", "You have been given a graze."));
-            break;
-        case 2:
-            msg_print(_("軽い傷を負ってしまった。", "You have been given a light cut."));
-            break;
-        case 3:
-            msg_print(_("ひどい傷を負ってしまった。", "You have been given a bad cut."));
-            break;
-        case 4:
-            msg_print(_("大変な傷を負ってしまった。", "You have been given a nasty cut."));
-            break;
-        case 5:
-            msg_print(_("重大な傷を負ってしまった。", "You have been given a severe cut."));
-            break;
-        case 6:
-            msg_print(_("ひどい深手を負ってしまった。", "You have been given a deep gash."));
-            break;
-        case 7:
-            msg_print(_("致命的な傷を負ってしまった。", "You have been given a mortal wound."));
-            break;
-        }
-
-        notice = true;
-        if (randint1(1000) < v || one_in_(16)) {
-            if (!has_sustain_chr(this->player_ptr)) {
-                msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
-                do_dec_stat(this->player_ptr, A_CHR);
-            }
-        }
-    } else if (new_aux < old_aux) {
-        if (new_aux == 0) {
-            auto blood_stop_mes = this->player_ptr->prace == player_race_type::ANDROID
-                ? _("怪我が直った", "leaking fluid")
-                : _("出血が止まった", "bleeding");
-            msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
-            if (disturb_state) {
-                disturb(this->player_ptr, false, false);
-            }
-        }
-
-        notice = true;
-    }
-
-    this->player_ptr->cut = v;
+    auto notice = this->process_cut_effect(v);
+    this->player_ptr->effects()->cut()->set(v);
     if (!notice) {
         return false;
     }
@@ -601,4 +464,141 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     this->player_ptr->redraw |= PR_CUT;
     handle_stuff(this->player_ptr);
     return true;
+}
+
+bool BadStatusSetter::process_stun_effect(const short v)
+{
+    auto old_rank = this->player_ptr->effects()->stun()->get_rank();
+    auto new_rank = PlayerStun::get_rank(v);
+    if (new_rank > old_rank) {
+        this->process_stun_status(new_rank, v);
+        return true;
+    }
+    
+    if (new_rank < old_rank) {
+        this->clear_head(new_rank);
+        return true;
+    }
+
+    return false;
+}
+
+void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const short v)
+{
+    auto stun_mes = PlayerStun::get_stun_mes(new_rank);
+    msg_print(stun_mes.data());
+    this->decrease_int_wis(v);
+    if (PlayerClass(this->player_ptr).lose_balance()) {
+        msg_print(_("型が崩れた。", "You lose your stance."));
+    }
+
+    if (this->player_ptr->concent) {
+        reset_concentration(this->player_ptr, true);
+    }
+
+    SpellHex spell_hex(this->player_ptr);
+    if (spell_hex.is_spelling_any()) {
+        (void)spell_hex.stop_all_spells();
+    }
+}
+
+void BadStatusSetter::clear_head(const PlayerStunRank new_rank)
+{
+    if (new_rank >= PlayerStunRank::NORMAL) {
+        return;
+    }
+
+    msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
+}
+
+/*!
+ * @todo 後で知能と賢さが両方減る確率を減らす.
+ */
+void BadStatusSetter::decrease_int_wis(const short v)
+{
+    if ((v <= randint1(1000)) && !one_in_(16)) {
+        return;
+    }
+
+    msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
+    auto rand = randint0(3);
+    switch (rand) {
+    case 0:
+        if (has_sustain_int(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_INT);
+        }
+
+        if (has_sustain_wis(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_WIS);
+        }
+
+        return;
+    case 1:
+        if (has_sustain_int(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_INT);
+        }
+        
+        return;
+    case 2:
+        if (has_sustain_wis(this->player_ptr) == 0) {
+            (void)do_dec_stat(this->player_ptr, A_WIS);
+        }
+
+        return;
+    default:
+        return;
+    }
+}
+
+bool BadStatusSetter::process_cut_effect(const short v)
+{
+    auto player_cut = this->player_ptr->effects()->cut();
+    auto old_rank = player_cut->get_rank();
+    auto new_rank = player_cut->get_rank(v);
+    if (new_rank > old_rank) {
+        this->decrease_charisma(new_rank, v);
+        return true;
+    }
+
+    if (new_rank < old_rank) {
+        this->stop_blooding(new_rank);
+        return true;
+    }
+
+    return false;
+}
+
+void BadStatusSetter::decrease_charisma(const PlayerCutRank new_rank, const short v)
+{
+    auto player_cut = this->player_ptr->effects()->cut();
+    auto cut_mes = player_cut->get_cut_mes(new_rank);
+    msg_print(cut_mes.data());
+    if (v <= randint1(1000) && !one_in_(16)) {
+        return;
+    }
+
+    if (has_sustain_chr(this->player_ptr)) {
+        return;
+    }
+
+    msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
+    do_dec_stat(this->player_ptr, A_CHR);
+}
+
+void BadStatusSetter::stop_blooding(const PlayerCutRank new_rank)
+{
+    if (new_rank >= PlayerCutRank::GRAZING) {
+        return;
+    }
+
+    auto blood_stop_mes = PlayerRace(this->player_ptr).equals(player_race_type::ANDROID)
+        ? _("怪我が直った", "leaking fluid")
+        : _("出血が止まった", "bleeding");
+    msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
+    if (disturb_state) {
+        disturb(this->player_ptr, false, false);
+    }
 }

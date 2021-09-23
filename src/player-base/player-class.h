@@ -10,6 +10,8 @@ public:
     bool can_resist_stun() const;
     bool is_wizard() const;
 
+    bool lose_balance();
+
 private:
     player_type *player_ptr;
 };

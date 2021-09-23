@@ -12,6 +12,7 @@
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -41,8 +42,9 @@ static bool buy_food(player_type *player_ptr)
  */
 static bool is_healthy_stay(player_type *player_ptr)
 {
-    if (!player_ptr->poisoned && !player_ptr->cut)
+    if (!player_ptr->poisoned && !player_ptr->effects()->cut()->is_cut()) {
         return true;
+    }
 
     msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
     msg_print(nullptr);

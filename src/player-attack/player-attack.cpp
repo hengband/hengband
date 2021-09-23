@@ -54,6 +54,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -392,7 +394,8 @@ static void apply_damage_bonus(player_type *player_ptr, player_attack_type *pa_p
     if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !monster_living(pa_ptr->m_ptr->r_idx))
         pa_ptr->attack_damage = 0;
 
-    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !player_ptr->cut)
+    auto is_cut = player_ptr->effects()->cut()->is_cut();
+    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !is_cut)
         pa_ptr->attack_damage /= 2;
 }
 

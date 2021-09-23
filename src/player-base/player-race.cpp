@@ -20,6 +20,15 @@ bool PlayerRace::is_mimic_nonliving() const
     return any_bits(mimic_info[this->player_ptr->mimic_form].choice, nonliving_flag);
 }
 
+bool PlayerRace::can_resist_cut() const
+{
+    auto can_resist_cut = this->player_ptr->prace == player_race_type::GOLEM;
+    can_resist_cut |= this->player_ptr->prace == player_race_type::SKELETON;
+    can_resist_cut |= this->player_ptr->prace == player_race_type::SPECTRE;
+    can_resist_cut |= (this->player_ptr->prace == player_race_type::ZOMBIE) && (this->player_ptr->lev > 11);
+    return can_resist_cut;
+}
+
 bool PlayerRace::equals(player_race_type prace) const
 {
     return (this->player_ptr->mimic_form == MIMIC_NONE) && (this->player_ptr->prace == prace);

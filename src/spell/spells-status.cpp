@@ -49,6 +49,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -345,7 +347,7 @@ bool cure_light_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides
         ident = true;
     }
 
-    if (bss.cut(player_ptr->cut - 10)) {
+    if (bss.cut(player_ptr->effects()->cut()->current() - 10)) {
         ident = true;
     }
 
@@ -372,7 +374,7 @@ bool cure_serious_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sid
         ident = true;
     }
 
-    if (bss.cut((player_ptr->cut / 2) - 50)) {
+    if (bss.cut((player_ptr->effects()->cut()->current() / 2) - 50)) {
         ident = true;
     }
 

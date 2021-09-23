@@ -30,6 +30,7 @@
 #include "status/shape-changer.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -267,7 +268,7 @@ void effect_player_shards(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_shards_damage_rate(player_ptr, CALC_RAND) / 100;
 
     if (!has_resist_shard(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).cut(player_ptr->cut + ep_ptr->dam);
+        (void)BadStatusSetter(player_ptr).cut(player_ptr->effects()->cut()->current() + ep_ptr->dam);
     }
 
     if (!has_resist_shard(player_ptr) || one_in_(13))
@@ -361,7 +362,7 @@ void effect_player_rocket(player_type *player_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(player_ptr, CALC_RAND) / 100;
     if (!has_resist_shard(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)bss.cut(player_ptr->cut + (ep_ptr->dam / 2));
+        (void)bss.cut(player_ptr->effects()->cut()->current() + (ep_ptr->dam / 2));
     }
 
     if (!has_resist_shard(player_ptr) || one_in_(12)) {
@@ -615,7 +616,7 @@ void effect_player_icee(player_type *player_ptr, effect_player_type *ep_ptr)
 
     BadStatusSetter bss(player_ptr);
     if (!has_resist_shard(player_ptr)) {
-        (void)bss.cut(player_ptr->cut + damroll(5, 8));
+        (void)bss.cut(player_ptr->effects()->cut()->current() + damroll(5, 8));
     }
 
     if (!has_resist_sound(player_ptr)) {
