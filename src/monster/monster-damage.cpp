@@ -71,8 +71,7 @@ MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_
 bool MonsterDamageProcessor::mon_take_hit(concptr note)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    monster_type exp_mon;
-    (void)COPY(&exp_mon, m_ptr, monster_type);
+    auto exp_mon = *m_ptr;
 
     auto exp_dam = (m_ptr->hp > this->dam) ? this->dam : m_ptr->hp;
 

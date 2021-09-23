@@ -16,11 +16,6 @@
 std::vector<object_kind> k_info;
 
 /*
- * Maximum number of items in k_info.txt
- */
-KIND_OBJECT_IDX max_k_idx;
-
-/*
  * Return the "char" for a given item.
  * Use "flavor" if available.
  * Default to user definitions.

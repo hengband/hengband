@@ -30,7 +30,7 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
 
     for (i = 0; i < n; i++) {
         cur_ugbldg = &ugbldg[i];
-        (void)WIPE(cur_ugbldg, ugbldg_type);
+        *cur_ugbldg = {};
         do {
             center_y = rand_range(2, town_hgt - 3);
             center_x = rand_range(2, town_wid - 3);

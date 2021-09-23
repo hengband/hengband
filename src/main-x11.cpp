@@ -554,7 +554,7 @@ static errr Infowin_prepare(Window xid)
 static errr Infowin_init_data(Window dad, int x, int y, int w, int h, int b, Pixell fg, Pixell bg)
 {
     Window xid;
-    (void)WIPE(Infowin, infowin);
+    *Infowin = {};
     if (dad == None)
         dad = Metadpy->root;
 
@@ -720,7 +720,7 @@ static errr Infoclr_init_data(Pixell fg, Pixell bg, int op, int stip)
     gc = XCreateGC(Metadpy->dpy, Metadpy->root, gc_mask, &gcv);
 #endif
 
-    (void)WIPE(iclr, infoclr);
+    *iclr = {};
 
 #ifndef USE_XFT
     iclr->gc = gc;
@@ -856,7 +856,7 @@ static void Infofnt_init_data(concptr name)
     if (!info)
         quit_fmt("Failed to find font:\"%s\"", name);
 
-    (void)WIPE(Infofnt, infofnt);
+    *Infofnt = {};
     if (Infofnt_prepare(info)) {
 #ifdef USE_XFT
         XftFontClose(Metadpy->dpy, info);

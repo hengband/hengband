@@ -263,7 +263,6 @@ struct ego_item_type {
     IDX act_idx{}; //!< 発動番号 / Activative ability index
 };
 
-extern EGO_IDX max_e_idx;
 extern std::vector<ego_item_type> e_info;
 
 struct object_type;;

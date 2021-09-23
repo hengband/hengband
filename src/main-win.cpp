@@ -1297,7 +1297,7 @@ static void init_windows(void)
 {
     term_data *td;
     td = &data[0];
-    WIPE(td, term_data);
+    *td = {};
     td->name = win_term_name[0];
 
     td->rows = 24;
@@ -1313,7 +1313,7 @@ static void init_windows(void)
 
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
-        WIPE(td, term_data);
+        *td = {};
         td->name = win_term_name[i];
         td->rows = 24;
         td->cols = 80;

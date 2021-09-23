@@ -53,7 +53,6 @@ typedef struct feature_type {
     SYMBOL_CODE x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 } feature_type;
 
-extern FEAT_IDX max_f_idx;
 extern std::vector<feature_type> f_info;
 
 /*** Terrain feature variables ***/

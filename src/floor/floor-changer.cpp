@@ -44,6 +44,8 @@
 #include "window/main-window-util.h"
 #include "world/world.h"
 
+#include <algorithm>
+
 /*!
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
  */
@@ -150,7 +152,7 @@ static void place_pet(player_type *player_ptr)
         }
     }
 
-    (void)C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
+    std::fill(std::begin(party_mon), std::end(party_mon), monster_type{});
 }
 
 /*!

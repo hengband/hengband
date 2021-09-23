@@ -174,7 +174,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
 {
     if (a_idx <= 0) {
         char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx - 1);
+        sprintf(tmp, "Artifact ID (1-%d): ", static_cast<int>(a_info.size()) - 1);
         char tmp_val[10] = "";
         if (!get_string(tmp, tmp_val, 3))
             return;
@@ -182,8 +182,8 @@ void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
         a_idx = (ARTIFACT_IDX)atoi(tmp_val);
     }
 
-    if (a_idx <= 0 || a_idx >= max_a_idx) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx - 1);
+    if (a_idx <= 0 || a_idx >= static_cast<ARTIFACT_IDX>(a_info.size())) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), a_info.size() - 1);
         return;
     }
 
@@ -256,12 +256,9 @@ void wiz_identify_full_inventory(player_type *player_ptr)
  */
 static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
-    uint32_t rarity[K_MAX_DEPTH];
-    (void)C_WIPE(rarity, K_MAX_DEPTH, uint32_t);
-    uint32_t total[K_MAX_DEPTH];
-    (void)C_WIPE(total, K_MAX_DEPTH, uint32_t);
-    int32_t display[22];
-    (void)C_WIPE(display, 22, int32_t);
+    uint32_t rarity[K_MAX_DEPTH] = {};
+    uint32_t total[K_MAX_DEPTH] = {};
+    int32_t display[22] = {};
 
     int home = 0;
     for (int i = 0; i < K_MAX_DEPTH; i++) {

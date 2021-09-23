@@ -45,4 +45,3 @@ typedef struct artifact_type {
 } artifact_type;
 
 extern std::vector<artifact_type> a_info;
-extern ARTIFACT_IDX max_a_idx;

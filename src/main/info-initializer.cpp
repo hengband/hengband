@@ -60,7 +60,7 @@ errr init_misc(player_type *player_ptr)
  * @param len データの長さ
  * @return エラーコード
  */
-static void init_header(angband_header *head, IDX num)
+static void init_header(angband_header *head, IDX num = 0)
 {
     head->checksum = 0;
     head->info_num = (IDX)num;
@@ -107,6 +107,9 @@ static errr init_info(concptr filename, angband_header &head, std::vector<InfoTy
         quit(format(_("'%s.txt'ファイルにエラー", "Error in '%s.txt' file."), filename));
     }
 
+    info.shrink_to_fit();
+    head.info_num = static_cast<uint16_t>(info.size());
+
     if (retouch)
         (*retouch)(&head);
 
@@ -120,7 +123,7 @@ static errr init_info(concptr filename, angband_header &head, std::vector<InfoTy
  */
 errr init_f_info()
 {
-    init_header(&f_head, max_f_idx);
+    init_header(&f_head);
     return init_info("f_info", f_head, f_info, parse_f_info, retouch_f_info);
 }
 
@@ -131,7 +134,7 @@ errr init_f_info()
  */
 errr init_k_info()
 {
-    init_header(&k_head, max_k_idx);
+    init_header(&k_head);
     return init_info("k_info", k_head, k_info, parse_k_info, nullptr);
 }
 
@@ -142,7 +145,7 @@ errr init_k_info()
  */
 errr init_a_info()
 {
-    init_header(&a_head, max_a_idx);
+    init_header(&a_head);
     return init_info("a_info", a_head, a_info, parse_a_info, nullptr);
 }
 
@@ -153,7 +156,7 @@ errr init_a_info()
  */
 errr init_e_info()
 {
-    init_header(&e_head, max_e_idx);
+    init_header(&e_head);
     return init_info("e_info", e_head, e_info, parse_e_info, nullptr);
 }
 
@@ -164,7 +167,7 @@ errr init_e_info()
  */
 errr init_r_info()
 {
-    init_header(&r_head, max_r_idx);
+    init_header(&r_head);
     return init_info("r_info", r_head, r_info, parse_r_info, nullptr);
 }
 
@@ -175,7 +178,7 @@ errr init_r_info()
  */
 errr init_d_info()
 {
-    init_header(&d_head, w_ptr->max_d_idx);
+    init_header(&d_head);
     return init_info("d_info", d_head, d_info, parse_d_info, nullptr);
 }
 
@@ -189,7 +192,7 @@ errr init_d_info()
  */
 errr init_v_info()
 {
-    init_header(&v_head, max_v_idx);
+    init_header(&v_head);
     return init_info("v_info", v_head, v_info, parse_v_info, nullptr);
 }
 

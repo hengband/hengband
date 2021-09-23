@@ -23,11 +23,6 @@
  */
 std::vector<ego_item_type> e_info;
 
-/*
- * Maximum number of ego-items in e_info.txt
- */
-EGO_IDX max_e_idx;
-
 /*!
  * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
  * Choose random ego type

@@ -66,7 +66,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         ARTIFACT_IDX a_idx;
         artifact_type *a_ptr;
         while (true) {
-            a_idx = rumor_num(zz[1], max_a_idx);
+            a_idx = rumor_num(zz[1], static_cast<IDX>(a_info.size()));
 
             a_ptr = &a_info[a_idx];
             if (!a_ptr->name.empty())
@@ -83,7 +83,7 @@ void display_rumor(player_type *player_ptr, bool ex)
     } else if (strcmp(zz[0], "MONSTER") == 0) {
         monster_race *r_ptr;
         while (true) {
-            MONRACE_IDX r_idx = rumor_num(zz[1], max_r_idx);
+            MONRACE_IDX r_idx = rumor_num(zz[1], static_cast<IDX>(r_info.size()));
             r_ptr = &r_info[r_idx];
             if (!r_ptr->name.empty())
                 break;
@@ -98,7 +98,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         DUNGEON_IDX d_idx;
         dungeon_type *d_ptr;
         while (true) {
-            d_idx = rumor_num(zz[1], w_ptr->max_d_idx);
+            d_idx = rumor_num(zz[1], static_cast<IDX>(d_info.size()));
             d_ptr = &d_info[d_idx];
             if (!d_ptr->name.empty())
                 break;

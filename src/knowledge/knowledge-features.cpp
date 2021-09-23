@@ -94,10 +94,8 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
  */
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
-    TERM_COLOR attr_old[F_LIT_MAX];
-    (void)C_WIPE(attr_old, F_LIT_MAX, TERM_COLOR);
-    SYMBOL_CODE char_old[F_LIT_MAX];
-    (void)C_WIPE(char_old, F_LIT_MAX, SYMBOL_CODE);
+    TERM_COLOR attr_old[F_LIT_MAX] = {};
+    SYMBOL_CODE char_old[F_LIT_MAX] = {};
 
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
