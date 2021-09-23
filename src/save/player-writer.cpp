@@ -3,6 +3,7 @@
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
 #include "save/info-writer.h"
+#include "save/player-class-specific-data-writer.h"
 #include "save/save-util.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -11,6 +12,8 @@
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
+
+#include <variant>
 
 /*!
  * @brief セーブデータに領域情報を書き込む / Write player realms
@@ -87,6 +90,8 @@ void wr_player(player_type *player_ptr)
 
     for (int i = 0; i < MAX_SPELLS; i++)
         wr_byte(player_ptr->magic_num2[i]);
+
+    std::visit(PlayerClassSpecificDataWriter(), player_ptr->class_specific_data);
 
     wr_byte((byte)player_ptr->start_race);
     wr_s32b(player_ptr->old_race1);

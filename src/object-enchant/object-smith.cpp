@@ -8,6 +8,8 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
+#include "player-info/smith-data-type.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -26,7 +28,7 @@ namespace {
  * @param consumption 1種あたりに使用する消費量
  * @return 所持しているエッセンスで付与可能な回数を返す
  */
-int addable_count(const player_type *player_ptr, std::vector<SmithEssence> essence_list, int consumption)
+int addable_count(smith_data_type *smith_data, std::vector<SmithEssence> essence_list, int consumption)
 {
     if (consumption <= 0) {
         return 0;
@@ -34,7 +36,7 @@ int addable_count(const player_type *player_ptr, std::vector<SmithEssence> essen
 
     std::vector<int> addable_count;
     for (auto essence : essence_list) {
-        int own_amount = player_ptr->magic_num1[enum2i(essence)];
+        int own_amount = smith_data->essences[essence];
         addable_count.push_back(own_amount / consumption);
     }
     return *std::min_element(addable_count.begin(), addable_count.end());
@@ -47,6 +49,7 @@ int addable_count(const player_type *player_ptr, std::vector<SmithEssence> essen
  */
 Smith::Smith(player_type *player_ptr)
     : player_ptr(player_ptr)
+    , smith_data(PlayerClass(player_ptr).get_specific_data<smith_data_type>())
 {
 }
 
@@ -268,7 +271,7 @@ int Smith::get_addable_count(SmithEffect effect, const object_type *o_ptr) const
 
     auto consumption = Smith::get_essence_consumption(effect, o_ptr);
 
-    return addable_count(this->player_ptr, info.value()->need_essences, consumption);
+    return addable_count(this->smith_data.get(), info.value()->need_essences, consumption);
 }
 
 /*!
@@ -289,7 +292,7 @@ const std::vector<SmithEssence> &Smith::get_essence_list()
  */
 int Smith::get_essence_num_of_posessions(SmithEssence essence) const
 {
-    return this->player_ptr->magic_num1[enum2i(essence)];
+    return this->smith_data->essences[essence];
 }
 
 /*!
@@ -406,8 +409,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
             continue;
         }
 
-        auto i = enum2i(essence);
-        this->player_ptr->magic_num1[i] = std::min(Smith::ESSENCE_AMOUNT_MAX, this->player_ptr->magic_num1[i] + drain_value);
+        this->smith_data->essences[essence] = std::min(Smith::ESSENCE_AMOUNT_MAX, this->smith_data->essences[essence] + drain_value);
         result.emplace_back(essence, drain_value);
     }
 
@@ -431,7 +433,7 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
 
     const auto total_consumption = this->get_essence_consumption(effect, o_ptr) * number;
     for (auto &&essence : info.value()->need_essences) {
-        this->player_ptr->magic_num1[enum2i(essence)] -= total_consumption;
+        this->smith_data->essences[essence] -= total_consumption;
     }
 
     return info.value()->add_essence(this->player_ptr, o_ptr, number);

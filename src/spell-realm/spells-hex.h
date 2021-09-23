@@ -12,6 +12,7 @@ enum class SpellHexRevengeType : byte {
 
 struct monap_type;
 struct player_type;
+struct spell_hex_data_type;
 class SpellHex {
 public:
     SpellHex() = delete;
@@ -44,7 +45,8 @@ private:
     player_type *player_ptr;
     std::vector<int> casting_spells;
     monap_type *monap_ptr = nullptr;
-    
+    std::shared_ptr<spell_hex_data_type> spell_hex_data;
+
     std::tuple<bool, bool, char> select_spell_stopping(char *out_val);
     void display_casting_spells_list();
     bool process_mana_cost(const bool need_restart);

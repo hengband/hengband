@@ -9,10 +9,13 @@
 #include "core/player-update-types.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
+#include "player-info/smith-data-type.h"
+#include "player-info/spell-hex-data-type.h"
+#include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerClass::PlayerClass(player_type* player_ptr)
+PlayerClass::PlayerClass(player_type *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -50,4 +53,27 @@ bool PlayerClass::lose_balance()
     this->player_ptr->redraw |= PR_STATUS;
     this->player_ptr->action = ACTION_NONE;
     return true;
+}
+
+/**
+ * @brief プレイヤーの職業にで使用する職業固有データ領域を初期化する
+ * @details 事前条件: player_type の職業や領域が決定済みであること
+ */
+void PlayerClass::init_specific_data()
+{
+    switch (this->player_ptr->pclass) {
+    case CLASS_SMITH:
+        this->player_ptr->class_specific_data = std::make_shared<smith_data_type>();
+        break;
+    case CLASS_HIGH_MAGE:
+        if (this->player_ptr->realm1 == REALM_HEX) {
+            this->player_ptr->class_specific_data = std::make_shared<spell_hex_data_type>();
+        } else {
+            this->player_ptr->class_specific_data = no_class_specific_data();
+        }
+        break;
+    default:
+        this->player_ptr->class_specific_data = no_class_specific_data();
+        break;
+    }
 }

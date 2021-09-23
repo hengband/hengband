@@ -7,6 +7,8 @@
 #include "effect/effect-processor.h"
 #include "monster-attack/monster-attack-util.h"
 #include "monster-race/monster-race.h"
+#include "player-base/player-class.h"
+#include "player-info/spell-hex-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
@@ -40,13 +42,13 @@ constexpr int MAX_KEEP = 4;
 
 SpellHex::SpellHex(player_type *player_ptr)
     : player_ptr(player_ptr)
+    , spell_hex_data(PlayerClass(player_ptr).get_specific_data<spell_hex_data_type>())
 {
-    constexpr int max_realm_spells = 32;
-    for (auto spell = 0; spell < max_realm_spells; spell++) {
-        if (this->is_spelling_specific(spell)) {
-            this->casting_spells.push_back(spell);
-        }
+    if (!this->spell_hex_data) {
+        return;
     }
+
+    HexSpellFlagGroup::get_flags(this->spell_hex_data->casting_spells, std::back_inserter(this->casting_spells));
 
     if (this->casting_spells.size() > MAX_KEEP) {
         throw("Invalid numbers of hex magics keep!");
@@ -68,7 +70,7 @@ void SpellHex::stop_all_spells()
         exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_STOP);
     }
 
-    this->player_ptr->magic_num1[0] = 0;
+    this->spell_hex_data->casting_spells.clear();
     if (this->player_ptr->action == ACTION_SPELL) {
         set_action(this->player_ptr, ACTION_NONE);
     }
@@ -170,7 +172,7 @@ void SpellHex::display_casting_spells_list()
  */
 void SpellHex::decrease_mana()
 {
-    if (this->player_ptr->realm1 != REALM_HEX) {
+    if (!this->spell_hex_data) {
         return;
     }
 
@@ -230,13 +232,21 @@ bool SpellHex::process_mana_cost(const bool need_restart)
 
 bool SpellHex::check_restart()
 {
+    return false;
+
+    //! @todo 現状呪術で magic_num1[1] が 0 以外になる事が無いように思える。
+    // spell_hex_data->casting_spells にかかわるのでそのまま残しておくことができないので
+    // プリプロで無効にしておき、常にfalse を返すようにしておく
+    // どういう意図だったのか作成者に確認の必要あり？
+#if 0
     if (this->player_ptr->magic_num1[1] == 0) {
         return false;
     }
 
-    this->player_ptr->magic_num1[0] = this->player_ptr->magic_num1[1];
+    this->spell_hex_data->casting_spells = this->player_ptr->magic_num1[1];
     this->player_ptr->magic_num1[1] = 0;
     return true;
+#endif
 }
 
 int SpellHex::calc_need_mana()
@@ -341,7 +351,7 @@ bool SpellHex::is_casting_full_capacity() const
  */
 void SpellHex::continue_revenge()
 {
-    if ((this->player_ptr->realm1 != REALM_HEX) || (this->get_revenge_turn() == 0)) {
+    if (!this->spell_hex_data || (this->get_revenge_turn() == 0)) {
         return;
     }
 
@@ -363,7 +373,7 @@ void SpellHex::continue_revenge()
  */
 void SpellHex::store_vengeful_damage(HIT_POINT dam)
 {
-    if ((this->player_ptr->realm1 != REALM_HEX) || (this->get_revenge_turn() == 0)) {
+    if (!this->spell_hex_data || (this->get_revenge_turn() == 0)) {
         return;
     }
 
@@ -385,13 +395,12 @@ bool SpellHex::check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const
 
 bool SpellHex::is_spelling_specific(int hex) const
 {
-    auto check = static_cast<uint32_t>(this->player_ptr->magic_num1[0]);
-    return (this->player_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
+    return this->spell_hex_data && this->spell_hex_data->casting_spells.has(i2enum<spell_hex_type>(hex));
 }
 
 bool SpellHex::is_spelling_any() const
 {
-    return (this->player_ptr->realm1 == REALM_HEX) && (this->get_casting_num() > 0);
+    return this->spell_hex_data && (this->get_casting_num() > 0);
 }
 
 /*!
@@ -445,40 +454,36 @@ void SpellHex::thief_teleport()
 
 void SpellHex::set_casting_flag(spell_hex_type type)
 {
-    auto value = static_cast<uint>(this->player_ptr->magic_num1[0]);
-    set_bits(value, 1U << type);
-    this->player_ptr->magic_num1[0] = value;
+    this->spell_hex_data->casting_spells.set(type);
 }
 
 void SpellHex::reset_casting_flag(spell_hex_type type)
 {
-    auto value = static_cast<uint>(this->player_ptr->magic_num1[0]);
-    reset_bits(value, 1U << type);
-    this->player_ptr->magic_num1[0] = value;
+    this->spell_hex_data->casting_spells.reset(type);
 }
 
 int32_t SpellHex::get_casting_num() const
 {
-    return std::bitset<32>(this->player_ptr->magic_num1[0]).count();
+    return this->spell_hex_data->casting_spells.count();
 }
 
 int32_t SpellHex::get_revenge_power() const
 {
-    return this->player_ptr->magic_num1[2];
+    return this->spell_hex_data->revenge_power;
 }
 
 void SpellHex::set_revenge_power(int32_t power, bool substitution)
 {
     if (substitution) {
-        this->player_ptr->magic_num1[2] = power;
+        this->spell_hex_data->revenge_power = power;
     } else {
-        this->player_ptr->magic_num1[2] += power;
+        this->spell_hex_data->revenge_power += power;
     }
 }
 
 byte SpellHex::get_revenge_turn() const
 {
-    return this->player_ptr->magic_num2[2];
+    return this->spell_hex_data->revenge_turn;
 }
 
 /*!
@@ -489,18 +494,18 @@ byte SpellHex::get_revenge_turn() const
 void SpellHex::set_revenge_turn(byte turn, bool substitution)
 {
     if (substitution) {
-        this->player_ptr->magic_num2[2] = turn;
+        this->spell_hex_data->revenge_turn = turn;
     } else {
-        this->player_ptr->magic_num2[2] -= turn;
+        this->spell_hex_data->revenge_turn -= turn;
     }
 }
 
 SpellHexRevengeType SpellHex::get_revenge_type() const
 {
-    return i2enum<SpellHexRevengeType>(this->player_ptr->magic_num2[1]);
+    return this->spell_hex_data->revenge_type;
 }
 
 void SpellHex::set_revenge_type(SpellHexRevengeType type)
 {
-    this->player_ptr->magic_num2[1] = enum2i(type);
+    this->spell_hex_data->revenge_type = type;
 }

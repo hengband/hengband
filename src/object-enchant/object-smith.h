@@ -13,6 +13,7 @@ struct player_type;
 class ISmithInfo;
 struct essence_drain_type;
 class ItemTester;
+struct smith_data_type;
 
 enum class SmithEffect : int16_t;
 enum class SmithCategory;
@@ -58,4 +59,5 @@ private:
     static const std::vector<std::shared_ptr<ISmithInfo>> smith_info_table;
 
     player_type *player_ptr;
+    std::shared_ptr<smith_data_type> smith_data;
 };

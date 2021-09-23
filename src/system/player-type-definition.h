@@ -4,6 +4,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
+#include "player-info/class-specific-data.h"
 #include "player-info/class-types.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -97,7 +98,7 @@ public:
     TIME_EFFECT afraid{}; /* Timed -- Fear */
     TIME_EFFECT hallucinated{}; /* Timed -- Hallucination */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
-    
+
     TIME_EFFECT protevil{}; /* Timed -- Protection */
     TIME_EFFECT invuln{}; /* Timed -- Invulnerable */
     TIME_EFFECT ult_res{}; /* Timed -- Ultimate Resistance */
@@ -187,6 +188,8 @@ public:
     SUB_EXP spell_exp[64]{}; /* Proficiency of spells */
     SUB_EXP weapon_exp[5][64]{}; /* Proficiency of weapons */
     SUB_EXP skill_exp[MAX_SKILLS]{}; /* Proficiency of misc. skill */
+
+    ClassSpecificData class_specific_data;
 
     // @todo uint32_tで定義したいが可能か？
     int32_t magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
