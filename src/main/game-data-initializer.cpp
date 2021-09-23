@@ -30,20 +30,18 @@
  * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
  * @note Default: assume at most 256 macros are used
  */
-static const int MACRO_MAX = 256;
+constexpr int MACRO_MAX = 256;
 
 /*!
  * @brief クエスト情報初期化のメインルーチン /
  * Initialize quest array
  * @return エラーコード
  */
-errr init_quests(void)
+void init_quests(void)
 {
     quest.assign(max_q_idx, {});
     for (auto &q_ref : quest)
         q_ref.status = QUEST_STATUS_UNTAKEN;
-
-    return 0;
 }
 
 /*!
@@ -51,7 +49,7 @@ errr init_quests(void)
  * Initialize some other arrays
  * @return エラーコード
  */
-errr init_other(player_type *player_ptr)
+void init_other(player_type *player_ptr)
 {
     player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -94,7 +92,6 @@ errr init_other(player_type *player_ptr)
     window_flag[1] = 1UL << A_MAX;
     window_flag[2] = 1UL << 0;
     (void)format("%s (%s).", "Mr.Hoge", MAINTAINER);
-    return 0;
 }
 
 /*!
@@ -102,7 +99,7 @@ errr init_other(player_type *player_ptr)
  * Initialize some other arrays
  * @return エラーコード
  */
-errr init_object_alloc(void)
+static void init_object_alloc(void)
 {
     int16_t aux[MAX_DEPTH] = {};
 
@@ -141,8 +138,6 @@ errr init_object_alloc(void)
             aux[x]++;
         }
     }
-
-    return 0;
 }
 
 /*!
@@ -150,7 +145,7 @@ errr init_object_alloc(void)
  * Initialize some other arrays
  * @return エラーコード
  */
-errr init_alloc(void)
+void init_alloc(void)
 {
     std::vector<tag_type> elements(r_info.size());
     for (const auto &r_ref : r_info) {
@@ -175,6 +170,5 @@ errr init_alloc(void)
         alloc_race_table[i].prob2 = (PROB)p;
     }
 
-    (void)init_object_alloc();
-    return 0;
+    init_object_alloc();
 }
