@@ -113,7 +113,7 @@ void wiz_cure_all(player_type *player_ptr)
  * This function returns the k_idx of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-KIND_OBJECT_IDX wiz_create_itemtype(void)
+static KIND_OBJECT_IDX wiz_create_itemtype()
 {
     term_clear();
     int num;
