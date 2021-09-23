@@ -351,10 +351,10 @@ static void rd_status(player_type *player_ptr)
     rd_s16b(&player_ptr->fast);
     rd_s16b(&player_ptr->slow);
     rd_s16b(&player_ptr->afraid);
-    tmp16s = player_ptr->effects()->cut()->current();
     rd_s16b(&tmp16s);
-    tmp16s = player_ptr->effects()->stun()->current();
+    player_ptr->effects()->cut()->set(tmp16s);
     rd_s16b(&tmp16s);
+    player_ptr->effects()->stun()->set(tmp16s);
     rd_s16b(&player_ptr->poisoned);
     rd_s16b(&player_ptr->hallucinated);
     rd_s16b(&player_ptr->protevil);
