@@ -19,6 +19,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/monster-race.h"
 #include "mutation/mutation-processor.h"
 #include "object-enchant/object-smith.h"
 #include "spell-kind/spells-launcher.h"
@@ -29,6 +30,7 @@
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -181,6 +183,13 @@ void wiz_summon_random_enemy(player_type *player_ptr, int num)
  */
 void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    if (r_idx <= 0) {
+        int val;
+        if(!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
+            return;
+        }
+        r_idx = static_cast<MONRACE_IDX>(val);
+    }
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
 }
 
@@ -193,6 +202,13 @@ void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx)
  */
 void wiz_summon_pet(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    if (r_idx <= 0) {
+        int val;
+        if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
+            return;
+        }
+        r_idx = static_cast<MONRACE_IDX>(val);
+    }
     (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
 }
 
