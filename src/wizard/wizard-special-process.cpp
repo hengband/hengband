@@ -219,19 +219,13 @@ void wiz_create_item(player_type *player_ptr)
 void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
 {
     if (a_idx <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx - 1);
-        char tmp_val[10] = "";
-        if (!get_string(tmp, tmp_val, 3))
+        int val;
+        if (!get_value("ArtifactID", 1, a_info.size() - 1, &val)) {
             return;
-
-        a_idx = (ARTIFACT_IDX)atoi(tmp_val);
+        }
+        a_idx = static_cast<ARTIFACT_IDX>(val);
     }
 
-    if (a_idx <= 0 || a_idx >= max_a_idx) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx - 1);
-        return;
-    }
 
     (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
