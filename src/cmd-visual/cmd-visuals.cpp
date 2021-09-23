@@ -230,7 +230,7 @@ void do_cmd_visuals(player_type *player_ptr)
                 case 'n': {
                     IDX prev_r = r;
                     do {
-                        if (!cmd_visuals_aux(i, &r, max_r_idx)) {
+                        if (!cmd_visuals_aux(i, &r, static_cast<IDX>(r_info.size()))) {
                             r = prev_r;
                             break;
                         }
@@ -300,7 +300,7 @@ void do_cmd_visuals(player_type *player_ptr)
                 case 'n': {
                     IDX prev_k = k;
                     do {
-                        if (!cmd_visuals_aux(i, &k, max_k_idx)) {
+                        if (!cmd_visuals_aux(i, &k, static_cast<IDX>(k_info.size()))) {
                             k = prev_k;
                             break;
                         }
@@ -373,7 +373,7 @@ void do_cmd_visuals(player_type *player_ptr)
                 case 'n': {
                     IDX prev_f = f;
                     do {
-                        if (!cmd_visuals_aux(i, &f, max_f_idx)) {
+                        if (!cmd_visuals_aux(i, &f, static_cast<IDX>(f_info.size()))) {
                             f = prev_f;
                             break;
                         }

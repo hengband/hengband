@@ -487,7 +487,7 @@ void monster_gain_exp(player_type *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
             if (player_ptr->hallucinated) {
                 monster_race *hallu_race;
                 do {
-                    hallu_race = &r_info[randint1(max_r_idx - 1)];
+                    hallu_race = &r_info[randint1(r_info.size() - 1)];
                 } while (hallu_race->name.empty() || any_bits(hallu_race->flags1, RF1_UNIQUE));
                 msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, hallu_race->name.c_str());
             } else {

@@ -41,7 +41,7 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
 static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
     if (use_graphics) {
-        object_kind *k_ptr = &k_info[randint1(max_k_idx - 1)];
+        object_kind *k_ptr = &k_info[randint1(k_info.size() - 1)];
         *cp = k_ptr->x_char;
         *ap = k_ptr->x_attr;
         return;
@@ -60,7 +60,7 @@ static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
     if (use_graphics) {
-        monster_race *r_ptr = &r_info[randint1(max_r_idx - 1)];
+        monster_race *r_ptr = &r_info[randint1(r_info.size() - 1)];
         *cp = r_ptr->x_char;
         *ap = r_ptr->x_attr;
         return;
@@ -357,7 +357,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
 
     if (r_ptr->flags1 & RF1_SHAPECHANGER) {
         if (use_graphics) {
-            monster_race *tmp_r_ptr = &r_info[randint1(max_r_idx - 1)];
+            monster_race *tmp_r_ptr = &r_info[randint1(r_info.size() - 1)];
             *cp = tmp_r_ptr->x_char;
             *ap = tmp_r_ptr->x_attr;
         } else {

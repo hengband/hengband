@@ -305,8 +305,8 @@ errr load_item(void)
     object_kind *k_ptr;
     object_kind dummy;
     byte tmp8u;
-    for (int i = 0; i < loading_max_k_idx; i++) {
-        if (i < max_k_idx)
+    for (auto i = 0U; i < loading_max_k_idx; i++) {
+        if (i < k_info.size())
             k_ptr = &k_info[i];
         else
             k_ptr = &dummy;
@@ -332,8 +332,8 @@ errr load_artifact(void)
     artifact_type *a_ptr;
     artifact_type dummy;
     byte tmp8u;
-    for (int i = 0; i < loading_max_a_idx; i++) {
-        if (i < max_a_idx)
+    for (auto i = 0U; i < loading_max_a_idx; i++) {
+        if (i < a_info.size())
             a_ptr = &a_info[i];
         else
             a_ptr = &dummy;

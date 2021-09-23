@@ -42,11 +42,6 @@
 std::vector<vault_type> v_info;
 
 /*
- * Maximum number of vaults in v_info.txt
- */
-int16_t max_v_idx;
-
-/*
  * This function creates a random vault that looks like a collection of bubbles.
  * It works by getting a set of coordinates that represent the center of each
  * bubble.  The entire room is made by seeing which bubble center is closest. If
@@ -618,7 +613,7 @@ bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Pick a lesser vault */
     for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++) {
         /* Access a random vault record */
-        v_ptr = &v_info[randint0(max_v_idx)];
+        v_ptr = &v_info[randint0(v_info.size())];
 
         /* Accept the first lesser vault */
         if (v_ptr->typ == 7)
@@ -686,7 +681,7 @@ bool build_type8(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Pick a greater vault */
     for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++) {
         /* Access a random vault record */
-        v_ptr = &v_info[randint0(max_v_idx)];
+        v_ptr = &v_info[randint0(v_info.size())];
 
         /* Accept the first greater vault */
         if (v_ptr->typ == 8)
@@ -1156,7 +1151,7 @@ bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Pick a lesser vault */
     for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++) {
         /* Access a random vault record */
-        v_ptr = &v_info[randint0(max_v_idx)];
+        v_ptr = &v_info[randint0(v_info.size())];
 
         /* Accept the special fix room. */
         if (v_ptr->typ == 17)

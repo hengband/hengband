@@ -115,11 +115,6 @@ FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
-/*
- * Maximum number of terrain features in f_info.txt
- */
-FEAT_IDX max_f_idx;
-
 /*!
  * @brief 地形が罠持ちであるかの判定を行う。 / Return TRUE if the given feature is a trap
  * @param feat 地形情報のID

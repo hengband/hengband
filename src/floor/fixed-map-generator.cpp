@@ -364,20 +364,6 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
         max_towns = static_cast<int16_t>(atoi(zz[1]));
     } else if (zz[0][0] == 'Q') {
         max_q_idx = (QUEST_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'R') {
-        max_r_idx = (MONRACE_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'K') {
-        max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'V') {
-        max_v_idx = static_cast<int16_t>(atoi(zz[1]));
-    } else if (zz[0][0] == 'F') {
-        max_f_idx = (FEAT_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'A') {
-        max_a_idx = (ARTIFACT_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'E') {
-        max_e_idx = (EGO_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'D') {
-        w_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'O') {
         w_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'M') {

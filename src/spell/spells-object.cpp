@@ -138,7 +138,7 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
                 break;
             }
 
-            if (a_idx >= max_a_idx)
+            if (a_idx >= static_cast<ARTIFACT_IDX>(a_info.size()))
                 continue;
         }
 

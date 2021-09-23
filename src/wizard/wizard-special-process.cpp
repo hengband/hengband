@@ -220,7 +220,7 @@ void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
 {
     if (a_idx <= 0) {
         char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx - 1);
+        sprintf(tmp, "Artifact ID (1-%d): ", static_cast<int>(a_info.size()) - 1);
         char tmp_val[10] = "";
         if (!get_string(tmp, tmp_val, 3))
             return;
@@ -228,8 +228,8 @@ void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
         a_idx = (ARTIFACT_IDX)atoi(tmp_val);
     }
 
-    if (a_idx <= 0 || a_idx >= max_a_idx) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx - 1);
+    if (a_idx <= 0 || a_idx >= static_cast<ARTIFACT_IDX>(a_info.size())) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), a_info.size() - 1);
         return;
     }
 
@@ -342,8 +342,8 @@ void wiz_create_feature(player_type *player_ptr)
     FEAT_IDX tmp_feat = (FEAT_IDX)atoi(tmp_val);
     if (tmp_feat < 0)
         tmp_feat = 0;
-    else if (tmp_feat >= max_f_idx)
-        tmp_feat = max_f_idx - 1;
+    else if (tmp_feat >= static_cast<FEAT_IDX>(f_info.size()))
+        tmp_feat = static_cast<FEAT_IDX>(f_info.size()) - 1;
 
     static int prev_mimic = 0;
     sprintf(tmp_val, "%d", prev_mimic);
@@ -354,8 +354,8 @@ void wiz_create_feature(player_type *player_ptr)
     FEAT_IDX tmp_mimic = (FEAT_IDX)atoi(tmp_val);
     if (tmp_mimic < 0)
         tmp_mimic = 0;
-    else if (tmp_mimic >= max_f_idx)
-        tmp_mimic = max_f_idx - 1;
+    else if (tmp_mimic >= static_cast<FEAT_IDX>(f_info.size()))
+        tmp_mimic = static_cast<FEAT_IDX>(f_info.size()) - 1;
 
     cave_set_feat(player_ptr, y, x, tmp_feat);
     g_ptr->mimic = (int16_t)tmp_mimic;
@@ -385,7 +385,7 @@ void wiz_create_feature(player_type *player_ptr)
 static bool select_debugging_floor(player_type *player_ptr, int dungeon_type)
 {
     auto max_depth = d_info[dungeon_type].maxdepth;
-    if ((max_depth == 0) || (dungeon_type > w_ptr->max_d_idx)) {
+    if ((max_depth == 0) || (dungeon_type > static_cast<int>(d_info.size()))) {
         dungeon_type = DUNGEON_ANGBAND;
     }
 
