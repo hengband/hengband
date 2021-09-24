@@ -25,8 +25,6 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
@@ -277,9 +275,8 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
             }
             
             BadStatusSetter bss(player_ptr);
-            auto effects = player_ptr->effects();
             if (one_in_(5)) {
-                (void)bss.cut(effects->cut()->current() + 200);
+                (void)bss.mod_cut(200);
                 continue;
             }
             

@@ -49,8 +49,6 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -105,9 +103,8 @@ static bool detonation(player_type *player_ptr)
     msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
     take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
     BadStatusSetter bss(player_ptr);
-    auto effects = player_ptr->effects();
     (void)bss.mod_stun(75);
-    (void)bss.cut(effects->cut()->current() + 5000);
+    (void)bss.mod_cut(5000);
     return true;
 }
 

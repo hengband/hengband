@@ -347,7 +347,7 @@ bool cure_light_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides
         ident = true;
     }
 
-    if (bss.cut(player_ptr->effects()->cut()->current() - 10)) {
+    if (bss.mod_cut(-10)) {
         ident = true;
     }
 

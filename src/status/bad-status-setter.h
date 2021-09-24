@@ -31,6 +31,7 @@ public:
     bool stun(const TIME_EFFECT tmp_v);
     bool mod_stun(const TIME_EFFECT tmp_v);
     bool cut(const TIME_EFFECT tmp_v);
+    bool mod_cut(const TIME_EFFECT tmp_v);
 
 private:
     player_type *player_ptr;

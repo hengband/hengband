@@ -228,6 +228,6 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
             adjust = 0;
         }
 
-        (void)bss.cut(player_cut->current() - adjust);
+        (void)bss.mod_cut(-adjust);
     }
 }

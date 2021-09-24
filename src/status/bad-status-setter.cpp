@@ -506,6 +506,11 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_cut(const TIME_EFFECT tmp_v)
+{
+    return this->cut(this->player_ptr->effects()->cut()->current() + tmp_v);
+}
+
 bool BadStatusSetter::process_stun_effect(const short v)
 {
     auto old_rank = this->player_ptr->effects()->stun()->get_rank();

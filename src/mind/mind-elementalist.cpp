@@ -65,7 +65,6 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -498,7 +497,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         return psychometry(player_ptr);
     case ElementSpells::CURE:
         (void)hp_player(player_ptr, damroll(2, 8));
-        (void)BadStatusSetter(player_ptr).cut(player_ptr->effects()->cut()->current() - 10);
+        (void)BadStatusSetter(player_ptr).mod_cut(10);
         break;
     case ElementSpells::BOLT_2ND:
         if (!get_aim_dir(player_ptr, &dir))
