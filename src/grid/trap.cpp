@@ -60,7 +60,7 @@ static int16_t normal_traps[MAX_NORMAL_TRAPS];
  * Note that disarming a trap on a chest also removes the lock.
  * </pre>
  */
-const int chest_traps[64] = {
+const std::vector<int> chest_traps = {
     0, /* 0 == empty */
     (CHEST_POISON),
     (CHEST_LOSE_STR),

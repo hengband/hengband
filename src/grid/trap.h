@@ -49,7 +49,7 @@ enum trap_type {
 };
 const int MAX_NORMAL_TRAPS = TRAP_ALARM + 1;
 
-extern const int chest_traps[64];
+extern const std::vector<int> chest_traps;
 
 struct player_type;
 void init_normal_traps(void);
