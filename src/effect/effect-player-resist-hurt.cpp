@@ -213,7 +213,7 @@ void effect_player_water(player_type *player_ptr, effect_player_type *ep_ptr)
         }
 
         if (!has_resist_conf(player_ptr) && !has_res_water) {
-            (void)bss.confusion(player_ptr->confused + randint1(5) + 5);
+            (void)bss.mod_confusion(randint1(5) + 5);
         }
 
         if (one_in_(5) && !has_res_water) {
@@ -238,7 +238,7 @@ void effect_player_chaos(player_type *player_ptr, effect_player_type *ep_ptr)
 
     BadStatusSetter bss(player_ptr);
     if (!has_resist_conf(player_ptr)) {
-        (void)bss.confusion(player_ptr->confused + randint0(20) + 10);
+        (void)bss.mod_confusion(randint0(20) + 10);
     }
 
     if (!has_resist_chaos(player_ptr)) {
@@ -304,7 +304,7 @@ void effect_player_confusion(player_type *player_ptr, effect_player_type *ep_ptr
     ep_ptr->dam = ep_ptr->dam * calc_conf_damage_rate(player_ptr, CALC_RAND) / 100;
     BadStatusSetter bss(player_ptr);
     if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)bss.confusion(player_ptr->confused + randint1(20) + 10);
+        (void)bss.mod_confusion(randint1(20) + 10);
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
@@ -687,7 +687,7 @@ void effect_player_abyss(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     if (!has_resist_conf(player_ptr)) {
-        (void)bss.confusion(player_ptr->confused + randint1(10));
+        (void)bss.mod_confusion(randint1(10));
     }
 
     if (!has_resist_fear(player_ptr)) {

@@ -220,7 +220,7 @@ static void effect_monster_domination_corrupted_addition(player_type *player_ptr
         (void)bss.stun(player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
         return;
     case 2:
-        (void)bss.confusion(player_ptr->confused + em_ptr->dam / 2);
+        (void)bss.mod_confusion(em_ptr->dam / 2);
         return;
     default:
         if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {

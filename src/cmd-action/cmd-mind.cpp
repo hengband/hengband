@@ -213,7 +213,7 @@ static void check_mind_mindcrafter(player_type *player_ptr, cm_type *cm_ptr)
 
     if (cm_ptr->b < 45) {
         msg_print(_("あなたの頭は混乱した！", "Your brain is addled!"));
-        (void)bss.confusion(player_ptr->confused + randint1(8));
+        (void)bss.mod_confusion(randint1(8));
         return;
     }
 

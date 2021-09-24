@@ -152,7 +152,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         }
 
         if (!has_resist_conf(player_ptr)) {
-            (void)bss.confusion(player_ptr->confused + randint0(20) + 15);
+            (void)bss.mod_confusion(randint0(20) + 15);
         }
 
         if (!has_resist_chaos(player_ptr)) {

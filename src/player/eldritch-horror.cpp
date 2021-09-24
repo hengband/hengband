@@ -260,7 +260,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
     case 12: {
         BadStatusSetter bss(player_ptr);
         if (!has_resist_conf(player_ptr)) {
-            (void)bss.confusion(player_ptr->confused + randint0(4) + 4);
+            (void)bss.mod_confusion(randint0(4) + 4);
         }
 
         if (!has_resist_chaos(player_ptr) && one_in_(3)) {
@@ -276,7 +276,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
     case 15: {
         BadStatusSetter bss(player_ptr);
         if (!has_resist_conf(player_ptr)) {
-            (void)bss.confusion(player_ptr->confused + randint0(4) + 4);
+            (void)bss.mod_confusion(randint0(4) + 4);
         }
         if (!player_ptr->free_act) {
             (void)bss.paralysis(player_ptr->paralyzed + randint0(4) + 4);

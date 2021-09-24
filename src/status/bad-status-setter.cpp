@@ -166,6 +166,11 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
+{
+    return this->confusion(this->player_ptr->confused + tmp_v);
+}
+
 /*!
  * @brief 毒の継続時間をセットする / Set "poisoned", notice observable changes
  * @param v 継続時間

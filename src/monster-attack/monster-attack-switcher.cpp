@@ -146,7 +146,7 @@ static void calc_blow_confusion(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr) && BadStatusSetter(player_ptr).confusion(player_ptr->confused + 3 + randint1(monap_ptr->rlev))) {
+    if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr) && BadStatusSetter(player_ptr).mod_confusion(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 

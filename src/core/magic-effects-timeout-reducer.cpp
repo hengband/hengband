@@ -131,7 +131,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->confused) {
-        (void)bss.confusion(player_ptr->confused - dec_count);
+        (void)bss.mod_confusion(-dec_count);
     }
 
     if (player_ptr->afraid) {

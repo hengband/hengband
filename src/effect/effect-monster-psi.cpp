@@ -104,7 +104,7 @@ static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, eff
     BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
     case 1:
-        (void)bss.confusion(player_ptr->confused + 3 + randint1(em_ptr->dam));
+        (void)bss.mod_confusion(3 + randint1(em_ptr->dam));
         return;
     case 2:
         (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(em_ptr->dam));

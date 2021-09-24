@@ -506,7 +506,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
     case TRAP_CONFUSE: {
         msg_print(_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"));
         if (has_resist_conf(player_ptr) == 0) {
-            (void)BadStatusSetter(player_ptr).confusion(player_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
+            (void)BadStatusSetter(player_ptr).mod_confusion((TIME_EFFECT)randint0(20) + 10);
         }
 
         break;
