@@ -54,36 +54,33 @@ void learn_spell(player_type *player_ptr, RF_ABILITY monspell)
 }
 
 /*!
- * @brief モンスター特殊能力のフラグ配列から特定条件の魔法だけを抜き出す処理
+ * @brief モンスター特殊能力のフラグ配列から特定のタイプの能力だけを抜き出す処理
  * Extract monster spells mask for the given mode
- * @param f4 モンスター特殊能力の4番目のフラグ配列
- * @param f5 モンスター特殊能力の5番目のフラグ配列
- * @param f6 モンスター特殊能力の6番目のフラグ配列
- * @param mode 抜き出したい条件
- * @todo f4, f5, f6を構造体にまとめ直す
+ * @param ability_flags モンスター特殊能力のフラグ集合
+ * @param type 抜き出したいタイプ
  */
-void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, blue_magic_type mode)
+void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, BlueMagicType type)
 {
     ability_flags.clear();
 
-    switch (mode) {
-    case MONSPELL_TYPE_BOLT:
+    switch (type) {
+    case BlueMagicType::BOLT:
         ability_flags.set(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK).reset(RF_ABILITY::ROCKET);
         break;
 
-    case MONSPELL_TYPE_BALL:
+    case BlueMagicType::BALL:
         ability_flags.set(RF_ABILITY_BALL_MASK).reset(RF_ABILITY_BREATH_MASK);
         break;
 
-    case MONSPELL_TYPE_BREATH:
+    case BlueMagicType::BREATH:
         ability_flags.set(RF_ABILITY_BREATH_MASK);
         break;
 
-    case MONSPELL_TYPE_SUMMON:
+    case BlueMagicType::SUMMON:
         ability_flags.set(RF_ABILITY_SUMMON_MASK);
         break;
 
-    case MONSPELL_TYPE_OTHER:
+    case BlueMagicType::OTHER:
         ability_flags.set(RF_ABILITY_ATTACK_MASK);
         ability_flags.reset(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_INDIRECT_MASK);
         break;
