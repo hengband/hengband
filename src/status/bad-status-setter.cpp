@@ -428,6 +428,11 @@ bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
     return true;
 }
 
+bool BadStatusSetter::mod_slowness(const TIME_EFFECT tmp_v, bool do_dec)
+{
+    return this->slowness(this->player_ptr->slow + tmp_v, do_dec);
+}
+
 /*!
  * @brief 朦朧の継続時間をセットする / Set "stun", notice observable changes
  * @param v 継続時間

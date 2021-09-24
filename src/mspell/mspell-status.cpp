@@ -485,7 +485,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *player_ptr, MO
             _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
-            (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(4) + 4, false);
+            (void)BadStatusSetter(player_ptr).mod_slowness(randint0(4) + 4, false);
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_FREE);

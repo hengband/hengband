@@ -143,7 +143,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->slow) {
-        (void)bss.slowness(player_ptr->slow - dec_count, true);
+        (void)bss.mod_slowness(-dec_count, true);
     }
 
     if (player_ptr->protevil) {

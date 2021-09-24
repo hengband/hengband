@@ -378,7 +378,7 @@ static void hit_trap_lose_stat(player_type *player_ptr, int stat)
 static void hit_trap_slow(player_type *player_ptr)
 {
     if (hit_trap_dart(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(20) + 20, false);
+        (void)BadStatusSetter(player_ptr).mod_slowness(randint0(20) + 20, false);
     }
 }
 
