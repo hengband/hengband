@@ -106,7 +106,7 @@ void wiz_cure_all(player_type *player_ptr)
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 }
 
-static std::tuple<bool, KIND_OBJECT_IDX> wiz_select_tval()
+static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
 {
     KIND_OBJECT_IDX list;
     char ch;
@@ -118,9 +118,8 @@ static std::tuple<bool, KIND_OBJECT_IDX> wiz_select_tval()
     }
 
     auto max_num = list;
-    KIND_OBJECT_IDX dummy = 0;
     if (!get_com(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false)) {
-        return std::make_tuple(false, dummy);
+        return std::nullopt;
     }
 
     KIND_OBJECT_IDX selection;
@@ -131,10 +130,10 @@ static std::tuple<bool, KIND_OBJECT_IDX> wiz_select_tval()
     }
 
     if ((selection < 0) || (selection >= max_num)) {
-        return std::make_tuple(false, dummy);
+        return std::nullopt;
     }
 
-    return std::make_tuple(true, selection);
+    return selection;
 }
 
 static KIND_OBJECT_IDX wiz_select_sval(const tval_type tval, concptr tval_description)
@@ -192,13 +191,13 @@ static KIND_OBJECT_IDX wiz_select_sval(const tval_type tval, concptr tval_descri
 static KIND_OBJECT_IDX wiz_create_itemtype()
 {
     term_clear();
-    auto [result, selection] = wiz_select_tval();
-    if (!result) {
+    auto selection = wiz_select_tval();
+    if (!selection.has_value()) {
         return 0;
     }
 
-    tval_type tval = i2enum<tval_type>(tvals[selection].tval);
-    concptr tval_description = tvals[selection].desc;
+    tval_type tval = i2enum<tval_type>(tvals[selection.value()].tval);
+    concptr tval_description = tvals[selection.value()].desc;
     term_clear();
     return wiz_select_sval(tval, tval_description);
 }
