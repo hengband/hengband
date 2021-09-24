@@ -72,7 +72,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     case SV_FOOD_CONFUSION:
         return !has_resist_conf(player_ptr) && bss.mod_confusion(randint0(10) + 10);
     case SV_FOOD_HALLUCINATION:
-        return !has_resist_chaos(player_ptr) && bss.hallucination(player_ptr->hallucinated + randint0(250) + 250);
+        return !has_resist_chaos(player_ptr) && bss.mod_hallucination(randint0(250) + 250);
     case SV_FOOD_PARALYSIS:
         return !player_ptr->free_act && bss.mod_paralysis(randint0(10) + 10);
     case SV_FOOD_WEAKNESS:

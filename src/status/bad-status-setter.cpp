@@ -379,6 +379,11 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_hallucination(const TIME_EFFECT tmp_v)
+{
+    return this->hallucination(this->player_ptr->hallucinated + tmp_v);
+}
+
 /*!
  * @brief 減速の継続時間をセットする / Set "slow", notice observable changes
  * @param v 継続時間

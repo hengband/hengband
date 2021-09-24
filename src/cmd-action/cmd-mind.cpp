@@ -207,7 +207,7 @@ static void check_mind_mindcrafter(player_type *player_ptr, cm_type *cm_ptr)
     BadStatusSetter bss(player_ptr);
     if (cm_ptr->b < 15) {
         msg_print(_("奇妙な光景が目の前で踊っている...", "Weird visions seem to dance before your eyes..."));
-        (void)bss.hallucination(player_ptr->hallucinated + 5 + randint1(10));
+        (void)bss.mod_hallucination(5 + randint1(10));
         return;
     }
 
@@ -244,7 +244,7 @@ static void check_mind_mirror_master(player_type *player_ptr, cm_type *cm_ptr)
 
     if (cm_ptr->b < 96) {
         msg_print(_("まわりのものがキラキラ輝いている！", "Your brain is addled!"));
-        (void)BadStatusSetter(player_ptr).hallucination(player_ptr->hallucinated + 5 + randint1(10));
+        (void)BadStatusSetter(player_ptr).mod_hallucination(5 + randint1(10));
         return;
     }
 

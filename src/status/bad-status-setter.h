@@ -25,6 +25,7 @@ public:
     bool paralysis(const TIME_EFFECT tmp_v);
     bool mod_paralysis(const TIME_EFFECT tmp_v);
     bool hallucination(const TIME_EFFECT tmp_v);
+    bool mod_hallucination(const TIME_EFFECT tmp_v);
     bool slowness(const TIME_EFFECT tmp_v, bool do_dec);
     bool stun(const TIME_EFFECT tmp_v);
     bool cut(const TIME_EFFECT tmp_v);

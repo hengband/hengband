@@ -76,7 +76,7 @@ static bool booze(player_type *player_ptr)
         return ident;
     }
 
-    if (one_in_(2) && bss.hallucination(player_ptr->hallucinated + randint0(150) + 150)) {
+    if (one_in_(2) && bss.mod_hallucination(randint0(150) + 150)) {
         ident = true;
     }
 
