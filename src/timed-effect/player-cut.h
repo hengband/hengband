@@ -22,6 +22,7 @@ public:
 
     static PlayerCutRank get_rank(short value);
     static std::string_view get_cut_mes(PlayerCutRank stun_rank);
+    static short get_accumulation(int total, int damage);
 
     short current() const;
     PlayerCutRank get_rank() const;
@@ -33,4 +34,6 @@ public:
 
 private:
     short cut = 0;
+
+    static int get_accumulation_rank(int total, int damage);
 };

@@ -50,6 +50,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/player-stun.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -168,35 +170,7 @@ static void calc_player_cut(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    TIME_EFFECT cut_plus = 0;
-    auto criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
-    switch (criticality) {
-    case 0:
-        cut_plus = 0;
-        break;
-    case 1:
-        cut_plus = randint1(5);
-        break;
-    case 2:
-        cut_plus = randint1(5) + 5;
-        break;
-    case 3:
-        cut_plus = randint1(20) + 20;
-        break;
-    case 4:
-        cut_plus = randint1(50) + 50;
-        break;
-    case 5:
-        cut_plus = randint1(100) + 100;
-        break;
-    case 6:
-        cut_plus = 300;
-        break;
-    default:
-        cut_plus = 500;
-        break;
-    }
-
+    auto cut_plus = PlayerCut::get_accumulation(monap_ptr->d_dice * monap_ptr->d_side, monap_ptr->damage);
     if (cut_plus > 0) {
         (void)BadStatusSetter(player_ptr).mod_cut(cut_plus);
     }
@@ -208,35 +182,8 @@ static void calc_player_stun(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    TIME_EFFECT stun_plus = 0;
-    auto criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
-    switch (criticality) {
-    case 0:
-        stun_plus = 0;
-        break;
-    case 1:
-        stun_plus = randint1(5);
-        break;
-    case 2:
-        stun_plus = randint1(5) + 10;
-        break;
-    case 3:
-        stun_plus = randint1(10) + 20;
-        break;
-    case 4:
-        stun_plus = randint1(15) + 30;
-        break;
-    case 5:
-        stun_plus = randint1(20) + 40;
-        break;
-    case 6:
-        stun_plus = 80;
-        break;
-    default:
-        stun_plus = 150;
-        break;
-    }
-
+    auto accumulation_rank = PlayerStun::get_accumulation_rank(monap_ptr->d_dice * monap_ptr->d_side, monap_ptr->damage);
+    auto stun_plus = PlayerStun::get_accumulation(accumulation_rank);
     if (stun_plus > 0) {
         (void)BadStatusSetter(player_ptr).mod_stun(stun_plus);
     }

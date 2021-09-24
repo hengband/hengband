@@ -58,6 +58,35 @@ std::string_view PlayerCut::get_cut_mes(PlayerCutRank stun_rank)
     }
 }
 
+/*!
+ * @brief モンスター打撃による切り傷値を返す.
+ * @param total 痛恨の一撃でない場合の最大ダメージ (ダイスXdY に対し、X*Y)
+ * @param dam プレイヤーに与えた実際のダメージ
+ * @return 切り傷値
+ */
+short PlayerCut::get_accumulation(int total, int damage)
+{
+    auto rank = get_accumulation_rank(total, damage);
+    switch (rank) {
+    case 0:
+        return 0;
+    case 1:
+        return randint1(5);
+    case 2:
+        return randint1(5) + 5;
+    case 3:
+        return randint1(20) + 20;
+    case 4:
+        return randint1(50) + 50;
+    case 5:
+        return randint1(100) + 100;
+    case 6:
+        return 300;
+    default: // 7 or more.
+        return 500;
+    }
+}
+
 short PlayerCut::current() const
 {
     return this->cut;
@@ -129,4 +158,55 @@ void PlayerCut::set(short value)
 void PlayerCut::reset()
 {
     this->set(0);
+}
+
+/*!
+ * @brief モンスター打撃の切り傷蓄積ランクを返す.
+ * @param total 痛恨の一撃でない場合の最大ダメージ (ダイスXdY に対し、X*Y)
+ * @param dam プレイヤーに与えた実際のダメージ
+ * @return 切り傷蓄積ランク
+ * @details v3.0.0 Alpha40時点では朦朧と異なりv2.2.1までの仕様と同一
+ */
+int PlayerCut::get_accumulation_rank(int total, int damage)
+{
+    if (damage < total * 19 / 20) {
+        return 0;
+    }
+
+    if ((damage < 20) && (damage <= randint0(100))) {
+        return 0;
+    }
+
+    auto max = 0;
+    if ((damage >= total) && (damage >= 40)) {
+        max++;
+    }
+
+    if (damage >= 20) {
+        while (randint0(100) < 2) {
+            max++;
+        }
+    }
+
+    if (damage > 45) {
+        return (6 + max);
+    }
+
+    if (damage > 33) {
+        return (5 + max);
+    }
+
+    if (damage > 25) {
+        return (4 + max);
+    }
+
+    if (damage > 18) {
+        return (3 + max);
+    }
+
+    if (damage > 11) {
+        return (2 + max);
+    }
+
+    return (1 + max);
 }
