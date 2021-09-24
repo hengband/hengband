@@ -193,7 +193,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
 
             BadStatusSetter bss(player_ptr);
             (void)bss.poison(0);
-            (void)bss.paralysis(player_ptr->paralyzed + 4);
+            (void)bss.mod_paralysis(4);
             ident = true;
             break;
         }
@@ -228,7 +228,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
                 sanity_blast(player_ptr, nullptr, false);
             }
 
-            if (BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(4) + 4)) {
+            if (BadStatusSetter(player_ptr).mod_paralysis(randint0(4) + 4)) {
                 ident = true;
             }
 

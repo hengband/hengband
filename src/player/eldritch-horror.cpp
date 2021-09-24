@@ -279,7 +279,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
             (void)bss.mod_confusion(randint0(4) + 4);
         }
         if (!player_ptr->free_act) {
-            (void)bss.paralysis(player_ptr->paralyzed + randint0(4) + 4);
+            (void)bss.mod_paralysis(randint0(4) + 4);
         }
         if (!has_resist_chaos(player_ptr)) {
             (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);

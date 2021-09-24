@@ -321,6 +321,11 @@ bool BadStatusSetter::paralysis(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_paralysis(const TIME_EFFECT tmp_v)
+{
+    return this->paralysis(this->player_ptr->paralyzed + tmp_v);
+}
+
 /*!
  * @brief 幻覚の継続時間をセットする / Set "image", notice observable changes
  * @param v 継続時間

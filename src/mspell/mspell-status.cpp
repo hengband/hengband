@@ -403,7 +403,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *player_ptr, MO
             _("しかし効力を跳ね返した！", "You resist the effects!"), (bool)resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
-            (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(4) + 4);
+            (void)BadStatusSetter(player_ptr).mod_paralysis(randint0(4) + 4);
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_FREE);

@@ -379,7 +379,7 @@ bool perilous_secrets(player_type *player_ptr)
             player_ptr->csp = 0;
             player_ptr->csp_frac = 0;
             msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
-            (void)bss.paralysis(player_ptr->paralyzed + randint1(5 * oops + 1));
+            (void)bss.mod_paralysis(randint1(5 * oops + 1));
             (void)bss.mod_confusion(randint1(5 * oops + 1));
         }
 

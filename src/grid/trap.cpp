@@ -533,7 +533,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
             sanity_blast(player_ptr, nullptr, false);
         }
 
-        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(10) + 5);
+        (void)BadStatusSetter(player_ptr).mod_paralysis(randint0(10) + 5);
         break;
     }
 
