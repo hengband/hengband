@@ -27,8 +27,8 @@ public:
     short get_damage_penalty() const;
     bool is_stunned() const;
     std::tuple<term_color_type, std::string_view> get_expr() const;
-    void reset();
     void set(short value);
+    void reset();
 
 private:
     short stun = 0;

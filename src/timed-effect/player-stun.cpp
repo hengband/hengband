@@ -1,16 +1,6 @@
 ﻿#include "timed-effect/player-stun.h"
 #include "system/angband.h"
 
-short PlayerStun::current() const
-{
-    return this->stun;
-}
-
-PlayerStunRank PlayerStun::get_rank() const
-{
-    return this->get_rank(this->stun);
-}
-
 PlayerStunRank PlayerStun::get_rank(short value)
 {
     if (value > 100) {
@@ -114,6 +104,16 @@ int PlayerStun::get_accumulation_rank(int total, int damage)
     }
 
     return (1 + max);
+}
+
+short PlayerStun::current() const
+{
+    return this->stun;
+}
+
+PlayerStunRank PlayerStun::get_rank() const
+{
+    return this->get_rank(this->stun);
 }
 
 /*!

@@ -1,35 +1,6 @@
 ﻿#include "timed-effect/player-cut.h"
 #include "system/angband.h"
 
-/*!
- * @brief モンスター打撃による切り傷値を返す.
- * @param total 痛恨の一撃でない場合の最大ダメージ (ダイスXdY に対し、X*Y)
- * @param dam プレイヤーに与えた実際のダメージ
- * @return 切り傷値
- */
-short PlayerCut::get_accumulation(int total, int damage)
-{
-    auto rank = get_accumulation_rank(total, damage);
-    switch (rank) {
-    case 0:
-        return 0;
-    case 1:
-        return randint1(5);
-    case 2:
-        return randint1(5) + 5;
-    case 3:
-        return randint1(20) + 20;
-    case 4:
-        return randint1(50) + 50;
-    case 5:
-        return randint1(100) + 100;
-    case 6:
-        return 300;
-    default: // 7 or more.
-        return 500;
-    }
-}
-
 PlayerCutRank PlayerCut::get_rank(short value)
 {
     if (value > 1000) {
@@ -84,6 +55,35 @@ std::string_view PlayerCut::get_cut_mes(PlayerCutRank stun_rank)
         return _("致命的な傷を負ってしまった。", "You have been given a mortal wound.");
     default:
         throw("Invalid StunRank was specified!");
+    }
+}
+
+/*!
+ * @brief モンスター打撃による切り傷値を返す.
+ * @param total 痛恨の一撃でない場合の最大ダメージ (ダイスXdY に対し、X*Y)
+ * @param dam プレイヤーに与えた実際のダメージ
+ * @return 切り傷値
+ */
+short PlayerCut::get_accumulation(int total, int damage)
+{
+    auto rank = get_accumulation_rank(total, damage);
+    switch (rank) {
+    case 0:
+        return 0;
+    case 1:
+        return randint1(5);
+    case 2:
+        return randint1(5) + 5;
+    case 3:
+        return randint1(20) + 20;
+    case 4:
+        return randint1(50) + 50;
+    case 5:
+        return randint1(100) + 100;
+    case 6:
+        return 300;
+    default: // 7 or more.
+        return 500;
     }
 }
 
