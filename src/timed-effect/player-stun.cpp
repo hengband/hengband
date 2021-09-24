@@ -44,6 +44,78 @@ std::string_view PlayerStun::get_stun_mes(PlayerStunRank stun_rank)
     }
 }
 
+short PlayerStun::get_accumulation(int rank)
+{
+    switch (rank) {
+    case 0:
+        return 0;
+    case 1:
+        return randint1(5);
+    case 2:
+        return randint1(5) + 10;
+    case 3:
+        return randint1(10) + 20;
+    case 4:
+        return randint1(15) + 30;
+    case 5:
+        return randint1(20) + 40;
+    case 6:
+        return 80;
+    default:
+        return 150;
+    }
+}
+
+/*!
+ * @brief モンスター打撃の朦朧蓄積ランクを返す.
+ * @param total 痛恨の一撃でない場合の最大ダメージ (ダイスXdY に対し、X*Y)
+ * @param dam プレイヤーに与えた実際のダメージ
+ * @return 朦朧蓄積ランク
+ */
+int PlayerStun::get_accumulation_rank(int total, int damage)
+{
+    if (damage < total * 19 / 20) {
+        return 0;
+    }
+
+    if ((damage < 20) && (damage <= randint0(100))) {
+        return 0;
+    }
+
+    auto max = 0;
+    if ((damage >= total) && (damage >= 40)) {
+        max++;
+    }
+
+    if (damage >= 20) {
+        while (randint0(100) < 2) {
+            max++;
+        }
+    }
+
+    if (damage > 45) {
+        return (6 + max);
+    }
+
+    if (damage > 33) {
+        return (5 + max);
+    }
+
+    if (damage > 25) {
+        return (4 + max);
+    }
+
+    if (damage > 18) {
+        return (3 + max);
+    }
+
+    if (damage > 11) {
+        return (2 + max);
+    }
+
+    return (1 + max);
+}
+
 /*!
  * @brief 朦朧ランクに応じて各種失率を上げる.
  * @return 朦朧ならば15%、ひどく朦朧ならば25%.

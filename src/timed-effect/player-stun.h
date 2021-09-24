@@ -18,7 +18,9 @@ public:
 
     static PlayerStunRank get_rank(short value);
     static std::string_view get_stun_mes(PlayerStunRank stun_rank);
-    
+    static short get_accumulation(int rank);
+    static int get_accumulation_rank(int total, int damage);
+
     short current() const;
     PlayerStunRank get_rank() const;
     int get_chance_penalty() const;
