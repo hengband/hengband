@@ -155,7 +155,7 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
  */
 void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
-    int i, trap;
+    int i;
 
     object_type *o_ptr = &this->player_ptr->current_floor_ptr->o_list[o_idx];
 
@@ -166,24 +166,24 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
         return;
 
     /* Obtain the traps */
-    trap = chest_traps[o_ptr->pval];
+    auto trap = chest_traps[o_ptr->pval];
 
     /* Lose strength */
-    if (trap & (CHEST_LOSE_STR)) {
+    if (trap.has(ChestTrapType::LOSE_STR)) {
         msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
         take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"));
         (void)do_dec_stat(this->player_ptr, A_STR);
     }
 
     /* Lose constitution */
-    if (trap & (CHEST_LOSE_CON)) {
+    if (trap.has(ChestTrapType::LOSE_CON)) {
         msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
         take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"));
         (void)do_dec_stat(this->player_ptr, A_CON);
     }
 
     /* Poison */
-    if (trap & (CHEST_POISON)) {
+    if (trap.has(ChestTrapType::POISON)) {
         msg_print(_("突如吹き出した緑色のガスに包み込まれた！", "A puff of green gas surrounds you!"));
         if (!(has_resist_pois(this->player_ptr) || is_oppose_pois(this->player_ptr))) {
             (void)BadStatusSetter(this->player_ptr).mod_poison(10 + randint1(20));
@@ -191,7 +191,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Paralyze */
-    if (trap & (CHEST_PARALYZE)) {
+    if (trap.has(ChestTrapType::PARALYZE)) {
         msg_print(_("突如吹き出した黄色いガスに包み込まれた！", "A puff of yellow gas surrounds you!"));
         if (!this->player_ptr->free_act) {
             (void)BadStatusSetter(this->player_ptr).mod_paralysis(10 + randint1(20));
@@ -199,7 +199,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Summon monsters */
-    if (trap & (CHEST_SUMMON)) {
+    if (trap.has(ChestTrapType::SUMMON)) {
         int num = 2 + randint1(3);
         msg_print(_("突如吹き出した煙に包み込まれた！", "You are enveloped in a cloud of smoke!"));
         for (i = 0; i < num; i++) {
@@ -211,7 +211,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Elemental summon. */
-    if (trap & (CHEST_E_SUMMON)) {
+    if (trap.has(ChestTrapType::E_SUMMON)) {
         msg_print(_("宝を守るためにエレメンタルが現れた！", "Elemental beings appear to protect their treasures!"));
         for (i = 0; i < randint1(3) + 5; i++) {
             (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -219,7 +219,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Force clouds, then summon birds. */
-    if (trap & (CHEST_BIRD_STORM)) {
+    if (trap.has(ChestTrapType::BIRD_STORM)) {
         msg_print(_("鳥の群れがあなたを取り巻いた！", "A storm of birds swirls around you!"));
 
         for (i = 0; i < randint1(3) + 3; i++)
@@ -231,7 +231,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Various colorful summonings. */
-    if (trap & (CHEST_H_SUMMON)) {
+    if (trap.has(ChestTrapType::H_SUMMON)) {
         /* Summon demons. */
         if (one_in_(4)) {
             msg_print(_("炎と硫黄の雲の中に悪魔が姿を現した！", "Demons materialize in clouds of fire and brimstone!"));
@@ -267,7 +267,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Dispel player. */
-    if ((trap & (CHEST_RUNES_OF_EVIL)) && o_ptr->k_idx) {
+    if ((trap.has(ChestTrapType::RUNES_OF_EVIL)) && o_ptr->k_idx) {
         msg_print(_("恐ろしい声が響いた:  「暗闇が汝をつつまん！」", "Hideous voices bid:  'Let the darkness have thee!'"));
         for (auto count = 4 + randint0(3); count > 0; count--) {
             if (randint1(100 + o_ptr->pval * 2) <= this->player_ptr->skill_sav) {
@@ -315,13 +315,13 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Aggravate monsters. */
-    if (trap & (CHEST_ALARM)) {
+    if (trap.has(ChestTrapType::ALARM)) {
         msg_print(_("けたたましい音が鳴り響いた！", "An alarm sounds!"));
         aggravate_monsters(this->player_ptr, 0);
     }
 
     /* Explode */
-    if ((trap & (CHEST_EXPLODE)) && o_ptr->k_idx) {
+    if ((trap.has(ChestTrapType::EXPLODE)) && o_ptr->k_idx) {
         msg_print(_("突然、箱が爆発した！", "There is a sudden explosion!"));
         msg_print(_("箱の中の物はすべて粉々に砕け散った！", "Everything inside the chest is destroyed!"));
         o_ptr->pval = 0;
@@ -329,7 +329,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
         take_hit(this->player_ptr, DAMAGE_ATTACK, damroll(5, 8), _("爆発する箱", "an exploding chest"));
     }
     /* Scatter contents. */
-    if ((trap & (CHEST_SCATTER)) && o_ptr->k_idx) {
+    if ((trap.has(ChestTrapType::SCATTER)) && o_ptr->k_idx) {
         msg_print(_("宝箱の中身はダンジョンじゅうに散乱した！", "The contents of the chest scatter all over the dungeon!"));
         this->chest_death(true, y, x, o_idx);
         o_ptr->pval = 0;
