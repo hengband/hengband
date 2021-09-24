@@ -90,6 +90,8 @@
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
+#include <tuple>
+
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
 
@@ -104,6 +106,79 @@ void wiz_cure_all(player_type *player_ptr)
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 }
 
+static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
+{
+    KIND_OBJECT_IDX list;
+    char ch;
+    for (list = 0; (list < 80) && (tvals[list].tval > TV_NONE); list++) {
+        auto row = 2 + (list % 20);
+        auto col = _(32, 24) * (list / 20);
+        ch = listsym[list];
+        prt(format("[%c] %s", ch, tvals[list].desc), row, col);
+    }
+
+    auto max_num = list;
+    if (!get_com(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false)) {
+        return std::nullopt;
+    }
+
+    KIND_OBJECT_IDX selection;
+    for (selection = 0; selection < max_num; selection++) {
+        if (listsym[selection] == ch) {
+            break;
+        }
+    }
+
+    if ((selection < 0) || (selection >= max_num)) {
+        return std::nullopt;
+    }
+
+    return selection;
+}
+
+static KIND_OBJECT_IDX wiz_select_sval(const tval_type tval, concptr tval_description)
+{
+    auto num = 0;
+    KIND_OBJECT_IDX choice[80]{};
+    char buf[160]{};
+    char ch;
+    for (const auto &k_ref : k_info) {
+        if (num >= 80) {
+            break;
+        }
+
+        if (k_ref.idx == 0 || k_ref.tval != tval) {
+            continue;
+        }
+
+        auto row = 2 + (num % 20);
+        auto col = _(30, 32) * (num / 20);
+        ch = listsym[num];
+        strcpy(buf, "                    ");
+        strip_name(buf, k_ref.idx);
+        prt(format("[%c] %s", ch, buf), row, col);
+        choice[num++] = k_ref.idx;
+    }
+
+    auto max_num = num;
+    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
+        return 0;
+    }
+
+    KIND_OBJECT_IDX selection;
+    for (selection = 0; selection < max_num; selection++) {
+        if (listsym[selection] == ch) {
+            break;
+        }
+    }
+
+    if ((selection < 0) || (selection >= max_num)) {
+        return 0;
+    }
+
+    return choice[selection];
+}
+
 /*!
  * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
  * Specify tval and sval (type and subtype of object) originally
@@ -113,64 +188,18 @@ void wiz_cure_all(player_type *player_ptr)
  * This function returns the k_idx of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-KIND_OBJECT_IDX wiz_create_itemtype(void)
+static KIND_OBJECT_IDX wiz_create_itemtype()
 {
     term_clear();
-    int num;
-    TERM_LEN col, row;
-    char ch;
-    for (num = 0; (num < 80) && tvals[num].tval; num++) {
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
-        ch = listsym[num];
-        prt(format("[%c] %s", ch, tvals[num].desc), row, col);
+    auto selection = wiz_select_tval();
+    if (!selection.has_value()) {
+        return 0;
     }
 
-    int max_num = num;
-    if (!get_com("Get what type of object? ", &ch, false))
-        return 0;
-
-    for (num = 0; num < max_num; num++)
-        if (listsym[num] == ch)
-            break;
-
-    if ((num < 0) || (num >= max_num))
-        return 0;
-
-    tval_type tval = i2enum<tval_type>(tvals[num].tval);
-    concptr tval_desc = tvals[num].desc;
+    tval_type tval = i2enum<tval_type>(tvals[selection.value()].tval);
+    concptr tval_description = tvals[selection.value()].desc;
     term_clear();
-    num = 0;
-    KIND_OBJECT_IDX choice[80];
-    char buf[160];
-    for (const auto& k_ref : k_info) {
-        if (num >= 80) {
-            break;
-        }
-        if (k_ref.idx == 0 || k_ref.tval != tval)
-            continue;
-
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
-        ch = listsym[num];
-        strcpy(buf, "                    ");
-        strip_name(buf, k_ref.idx);
-        prt(format("[%c] %s", ch, buf), row, col);
-        choice[num++] = k_ref.idx;
-    }
-
-    max_num = num;
-    if (!get_com(format("What Kind of %s? ", tval_desc), &ch, false))
-        return 0;
-
-    for (num = 0; num < max_num; num++)
-        if (listsym[num] == ch)
-            break;
-
-    if ((num < 0) || (num >= max_num))
-        return 0;
-
-    return choice[num];
+    return wiz_select_sval(tval, tval_description);
 }
 
 /*!
