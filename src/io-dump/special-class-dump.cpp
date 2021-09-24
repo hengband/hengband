@@ -122,28 +122,28 @@ static void dump_smith(player_type *player_ptr, FILE *fff)
  * @param spell_type 魔法の種類
  * @param learnt_spell_ptr 学習済魔法のテーブル
  */
-static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_type, learnt_spell_table *learnt_spell_ptr)
+static void add_monster_spell_type(char p[][80], int col, BlueMagicType spell_type, learnt_spell_table *learnt_spell_ptr)
 {
     learnt_spell_ptr->ability_flags.clear();
     set_rf_masks(learnt_spell_ptr->ability_flags, spell_type);
     switch (spell_type) {
-    case MONSPELL_TYPE_BOLT:
+    case BlueMagicType::BOLT:
         strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
         break;
 
-    case MONSPELL_TYPE_BALL:
+    case BlueMagicType::BALL:
         strcat(p[col], _("\n     [ボール型]\n", "\n     [Ball  Type]\n"));
         break;
 
-    case MONSPELL_TYPE_BREATH:
+    case BlueMagicType::BREATH:
         strcat(p[col], _("\n     [ブレス型]\n", "\n     [  Breath  ]\n"));
         break;
 
-    case MONSPELL_TYPE_SUMMON:
+    case BlueMagicType::SUMMON:
         strcat(p[col], _("\n     [召喚魔法]\n", "\n     [Summonning]\n"));
         break;
 
-    case MONSPELL_TYPE_OTHER:
+    case BlueMagicType::OTHER:
         strcat(p[col], _("\n     [ その他 ]\n", "\n     [Other Type]\n"));
         break;
     }

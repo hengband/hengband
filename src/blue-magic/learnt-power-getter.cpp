@@ -184,7 +184,7 @@ static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
 static bool sweep_learnt_spells(learnt_magic_type *lm_ptr)
 {
     EnumClassFlagGroup<RF_ABILITY> ability_flags;
-    set_rf_masks(ability_flags, i2enum<blue_magic_type>(lm_ptr->mode));
+    set_rf_masks(ability_flags, i2enum<BlueMagicType>(lm_ptr->mode));
 
     EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(lm_ptr->blue_magics));
     lm_ptr->count = ability_flags.count();
