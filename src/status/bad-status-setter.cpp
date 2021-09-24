@@ -86,6 +86,11 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_blindness(const TIME_EFFECT tmp_v)
+{
+    return this->blindness(this->player_ptr->blind + tmp_v);
+}
+
 /*!
  * @brief 混乱の継続時間をセットする / Set "confused", notice observable changes
  * @param v 継続時間

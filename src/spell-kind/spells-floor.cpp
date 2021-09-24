@@ -444,7 +444,7 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
     if (flag) {
         msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
         if (!has_resist_blind(player_ptr) && !has_resist_lite(player_ptr)) {
-            (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + 10 + randint1(10));
+            (void)BadStatusSetter(player_ptr).mod_blindness(10 + randint1(10));
         }
     }
 

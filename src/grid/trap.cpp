@@ -499,7 +499,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
     case TRAP_BLIND:
         msg_print(_("黒いガスに包み込まれた！", "A black gas surrounds you!"));
         if (has_resist_blind(player_ptr) == 0) {
-            (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
+            (void)BadStatusSetter(player_ptr).mod_blindness(randint0(50) + 25);
         }
 
         break;

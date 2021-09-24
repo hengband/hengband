@@ -39,7 +39,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->blind) {
-        (void)bss.blindness(player_ptr->blind - dec_count);
+        (void)bss.mod_blindness(-dec_count);
     }
 
     if (player_ptr->tim_invis) {

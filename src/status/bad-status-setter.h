@@ -15,6 +15,7 @@ public:
     virtual ~BadStatusSetter() = default;
     
     bool blindness(const TIME_EFFECT tmp_v);
+    bool mod_blindness(const TIME_EFFECT tmp_v);
     bool confusion(const TIME_EFFECT tmp_v);
     bool poison(const TIME_EFFECT tmp_v);
     bool afraidness(const TIME_EFFECT tmp_v);

@@ -119,7 +119,7 @@ void effect_player_brain_smash(player_type *player_ptr, effect_player_type *ep_p
 
     BadStatusSetter bss(player_ptr);
     if (!has_resist_blind(player_ptr)) {
-        (void)bss.blindness(player_ptr->blind + 8 + randint0(8));
+        (void)bss.mod_blindness(8 + randint0(8));
     }
 
     if (!has_resist_conf(player_ptr)) {

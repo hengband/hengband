@@ -390,7 +390,7 @@ void effect_player_lite(player_type *player_ptr, effect_player_type *ep_ptr)
     if (player_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
     if (!player_ptr->blind && !has_resist_lite(player_ptr) && !has_resist_blind(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + randint1(5) + 2);
+        (void)BadStatusSetter(player_ptr).mod_blindness(randint1(5) + 2);
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_lite_damage_rate(player_ptr, CALC_RAND) / 100;
@@ -421,7 +421,7 @@ void effect_player_dark(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_dark_damage_rate(player_ptr, CALC_RAND) / 100;
 
     if (!player_ptr->blind && !has_resist_dark(player_ptr) && !has_resist_blind(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + randint1(5) + 2);
+        (void)BadStatusSetter(player_ptr).mod_blindness(randint1(5) + 2);
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
