@@ -666,6 +666,7 @@ hengband_SOURCES = \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
 	player-info/class-types.h \
 	player-info/class-info.cpp player-info/class-info.h \
+	player-info/class-specific-data.h \
 	player-info/equipment-info.cpp player-info/equipment-info.h \
 	player-info/force-trainer-data-type.h \
 	player-info/mimic-info-table.cpp player-info/mimic-info-table.h \
