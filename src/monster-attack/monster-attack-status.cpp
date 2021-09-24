@@ -17,7 +17,6 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -35,7 +34,7 @@ void process_blind_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (!BadStatusSetter(player_ptr).blindness(player_ptr->blind + 10 + randint1(monap_ptr->rlev))) {
+    if (!BadStatusSetter(player_ptr).mod_blindness(10 + randint1(monap_ptr->rlev))) {
         return;
     }
 
@@ -65,7 +64,7 @@ void process_terrify_attack(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (BadStatusSetter(player_ptr).afraidness(player_ptr->afraid + 3 + randint1(monap_ptr->rlev))) {
+    if (BadStatusSetter(player_ptr).mod_afraidness(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }
@@ -128,8 +127,7 @@ void process_stun_attack(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    auto current_stun = player_ptr->effects()->stun()->current();
-    if (BadStatusSetter(player_ptr).stun(current_stun + 10 + randint1(r_ptr->level / 4))) {
+    if (BadStatusSetter(player_ptr).mod_stun(10 + randint1(r_ptr->level / 4))) {
         monap_ptr->obvious = true;
     }
 }

@@ -456,10 +456,10 @@ void cast_invoke_spirits(player_type *player_ptr, DIRECTION dir)
         chg_virtue(player_ptr, V_UNLIFE, 1);
     } else if (die < 14) {
         msg_print(_("名状し難い邪悪な存在があなたの心を通り過ぎて行った...", "An unnamable evil brushes against your mind..."));
-        (void)bss.afraidness(player_ptr->afraid + randint1(4) + 4);
+        (void)bss.mod_afraidness(randint1(4) + 4);
     } else if (die < 26) {
         msg_print(_("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...", "Your head is invaded by a horde of gibbering spectral voices..."));
-        (void)bss.confusion(player_ptr->confused + randint1(4) + 4);
+        (void)bss.mod_confusion(randint1(4) + 4);
     } else if (die < 31) {
         poly_monster(player_ptr, dir, plev);
     } else if (die < 36) {

@@ -324,7 +324,7 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
     msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
     dam = dam * 2;
     BadStatusSetter bss(player_ptr);
-    (void)bss.cut(player_ptr->effects()->cut()->current() + randint1(dam));
+    (void)bss.mod_cut(randint1(dam));
     if (trap_feat_type != TRAP_POISON_PIT) {
         take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
         return;
@@ -337,7 +337,7 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
     }
 
     dam = dam * 2;
-    (void)bss.poison(player_ptr->poisoned + randint1(dam));
+    (void)bss.mod_poison(randint1(dam));
     take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
 }
 
@@ -378,7 +378,7 @@ static void hit_trap_lose_stat(player_type *player_ptr, int stat)
 static void hit_trap_slow(player_type *player_ptr)
 {
     if (hit_trap_dart(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).slowness(player_ptr->slow + randint0(20) + 20, false);
+        (void)BadStatusSetter(player_ptr).mod_slowness(randint0(20) + 20, false);
     }
 }
 
@@ -499,14 +499,14 @@ void hit_trap(player_type *player_ptr, bool break_trap)
     case TRAP_BLIND:
         msg_print(_("黒いガスに包み込まれた！", "A black gas surrounds you!"));
         if (has_resist_blind(player_ptr) == 0) {
-            (void)BadStatusSetter(player_ptr).blindness(player_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
+            (void)BadStatusSetter(player_ptr).mod_blindness(randint0(50) + 25);
         }
 
         break;
     case TRAP_CONFUSE: {
         msg_print(_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"));
         if (has_resist_conf(player_ptr) == 0) {
-            (void)BadStatusSetter(player_ptr).confusion(player_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
+            (void)BadStatusSetter(player_ptr).mod_confusion(randint0(20) + 10);
         }
 
         break;
@@ -515,7 +515,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
     case TRAP_POISON: {
         msg_print(_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"));
         if (has_resist_pois(player_ptr) == 0) {
-            (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+            (void)BadStatusSetter(player_ptr).mod_poison(randint0(20) + 10);
         }
 
         break;
@@ -533,7 +533,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
             sanity_blast(player_ptr, nullptr, false);
         }
 
-        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(10) + 5);
+        (void)BadStatusSetter(player_ptr).mod_paralysis(randint0(10) + 5);
         break;
     }
 

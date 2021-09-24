@@ -35,11 +35,11 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     BadStatusSetter bss(player_ptr);
     auto effects = player_ptr->effects();
     if (player_ptr->hallucinated) {
-        (void)bss.hallucination(player_ptr->hallucinated - dec_count);
+        (void)bss.mod_hallucination(-dec_count);
     }
 
     if (player_ptr->blind) {
-        (void)bss.blindness(player_ptr->blind - dec_count);
+        (void)bss.mod_blindness(-dec_count);
     }
 
     if (player_ptr->tim_invis) {
@@ -127,15 +127,15 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->paralyzed) {
-        (void)bss.paralysis(player_ptr->paralyzed - dec_count);
+        (void)bss.mod_paralysis(-dec_count);
     }
 
     if (player_ptr->confused) {
-        (void)bss.confusion(player_ptr->confused - dec_count);
+        (void)bss.mod_confusion(-dec_count);
     }
 
     if (player_ptr->afraid) {
-        (void)bss.afraidness(player_ptr->afraid - dec_count);
+        (void)bss.mod_afraidness(-dec_count);
     }
 
     if (player_ptr->fast) {
@@ -143,7 +143,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->slow) {
-        (void)bss.slowness(player_ptr->slow - dec_count, true);
+        (void)bss.mod_slowness(-dec_count, true);
     }
 
     if (player_ptr->protevil) {
@@ -212,13 +212,13 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
 
     if (player_ptr->poisoned) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)bss.poison(player_ptr->poisoned - adjust);
+        (void)bss.mod_poison(-adjust);
     }
 
     auto player_stun = effects->stun();
     if (player_stun->is_stunned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)bss.stun(player_stun->current() - adjust);
+        (void)bss.mod_stun(-adjust);
     }
 
     auto player_cut = effects->cut();
@@ -228,6 +228,6 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
             adjust = 0;
         }
 
-        (void)bss.cut(player_cut->current() - adjust);
+        (void)bss.mod_cut(-adjust);
     }
 }

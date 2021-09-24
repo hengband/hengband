@@ -317,7 +317,7 @@ static void curse_cowardice(player_type *player_ptr)
 
     disturb(player_ptr, false, true);
     msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-    (void)BadStatusSetter(player_ptr).afraidness(player_ptr->afraid + 13 + randint1(26));
+    (void)BadStatusSetter(player_ptr).mod_afraidness(13 + randint1(26));
 }
 
 /*!

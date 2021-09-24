@@ -86,6 +86,11 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_blindness(const TIME_EFFECT tmp_v)
+{
+    return this->blindness(this->player_ptr->blind + tmp_v);
+}
+
 /*!
  * @brief 混乱の継続時間をセットする / Set "confused", notice observable changes
  * @param v 継続時間
@@ -161,6 +166,11 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
+{
+    return this->confusion(this->player_ptr->confused + tmp_v);
+}
+
 /*!
  * @brief 毒の継続時間をセットする / Set "poisoned", notice observable changes
  * @param v 継続時間
@@ -198,6 +208,11 @@ bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
 
     handle_stuff(this->player_ptr);
     return true;
+}
+
+bool BadStatusSetter::mod_poison(const TIME_EFFECT tmp_v)
+{
+    return this->poison(this->player_ptr->poisoned + tmp_v);
 }
 
 /*!
@@ -251,6 +266,11 @@ bool BadStatusSetter::afraidness(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_afraidness(const TIME_EFFECT tmp_v)
+{
+    return this->afraidness(this->player_ptr->afraid + tmp_v);
+}
+
 /*!
  * @brief 麻痺の継続時間をセットする / Set "paralyzed", notice observable changes
  * @param v 継続時間
@@ -299,6 +319,11 @@ bool BadStatusSetter::paralysis(const TIME_EFFECT tmp_v)
     this->player_ptr->redraw |= PR_STATE;
     handle_stuff(this->player_ptr);
     return true;
+}
+
+bool BadStatusSetter::mod_paralysis(const TIME_EFFECT tmp_v)
+{
+    return this->paralysis(this->player_ptr->paralyzed + tmp_v);
 }
 
 /*!
@@ -354,6 +379,11 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_hallucination(const TIME_EFFECT tmp_v)
+{
+    return this->hallucination(this->player_ptr->hallucinated + tmp_v);
+}
+
 /*!
  * @brief 減速の継続時間をセットする / Set "slow", notice observable changes
  * @param v 継続時間
@@ -398,6 +428,11 @@ bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
     return true;
 }
 
+bool BadStatusSetter::mod_slowness(const TIME_EFFECT tmp_v, bool do_dec)
+{
+    return this->slowness(this->player_ptr->slow + tmp_v, do_dec);
+}
+
 /*!
  * @brief 朦朧の継続時間をセットする / Set "stun", notice observable changes
  * @param v 継続時間
@@ -432,6 +467,11 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_stun(const TIME_EFFECT tmp_v)
+{
+    return this->stun(this->player_ptr->effects()->stun()->current() + tmp_v);
+}
+
 /*!
  * @brief 出血の継続時間をセットする / Set "cut", notice observable changes
  * @param v 継続時間
@@ -464,6 +504,11 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
     this->player_ptr->redraw |= PR_CUT;
     handle_stuff(this->player_ptr);
     return true;
+}
+
+bool BadStatusSetter::mod_cut(const TIME_EFFECT tmp_v)
+{
+    return this->cut(this->player_ptr->effects()->cut()->current() + tmp_v);
 }
 
 bool BadStatusSetter::process_stun_effect(const short v)

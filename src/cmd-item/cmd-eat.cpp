@@ -64,17 +64,17 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     BadStatusSetter bss(player_ptr);
     switch (o_ptr->sval) {
     case SV_FOOD_POISON:
-        return (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) && bss.poison(player_ptr->poisoned + randint0(10) + 10);
+        return (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) && bss.mod_poison(randint0(10) + 10);
     case SV_FOOD_BLINDNESS:
-        return !has_resist_blind(player_ptr) && bss.blindness(player_ptr->blind + randint0(200) + 200);
+        return !has_resist_blind(player_ptr) && bss.mod_blindness(randint0(200) + 200);
     case SV_FOOD_PARANOIA:
-        return !has_resist_fear(player_ptr) && bss.afraidness(player_ptr->afraid + randint0(10) + 10);
+        return !has_resist_fear(player_ptr) && bss.mod_afraidness(randint0(10) + 10);
     case SV_FOOD_CONFUSION:
-        return !has_resist_conf(player_ptr) && bss.confusion(player_ptr->confused + randint0(10) + 10);
+        return !has_resist_conf(player_ptr) && bss.mod_confusion(randint0(10) + 10);
     case SV_FOOD_HALLUCINATION:
-        return !has_resist_chaos(player_ptr) && bss.hallucination(player_ptr->hallucinated + randint0(250) + 250);
+        return !has_resist_chaos(player_ptr) && bss.mod_hallucination(randint0(250) + 250);
     case SV_FOOD_PARALYSIS:
-        return !player_ptr->free_act && bss.paralysis(player_ptr->paralyzed + randint0(10) + 10);
+        return !player_ptr->free_act && bss.mod_paralysis(randint0(10) + 10);
     case SV_FOOD_WEAKNESS:
         take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"));
         (void)do_dec_stat(player_ptr, A_STR);

@@ -75,7 +75,7 @@ int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_c
     switch (sval) {
     case SV_STAFF_DARKNESS:
         if (!has_resist_blind(player_ptr) && !has_resist_dark(player_ptr)) {
-            if (bss.blindness(player_ptr->blind + 3 + randint1(5))) {
+            if (bss.mod_blindness(3 + randint1(5))) {
                 ident = true;
             }
         }
@@ -86,7 +86,7 @@ int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_c
 
         break;
     case SV_STAFF_SLOWNESS: {
-        if (bss.slowness(player_ptr->slow + randint1(30) + 15, false))
+        if (bss.mod_slowness(randint1(30) + 15, false))
             ident = true;
         break;
     }

@@ -15,14 +15,23 @@ public:
     virtual ~BadStatusSetter() = default;
     
     bool blindness(const TIME_EFFECT tmp_v);
+    bool mod_blindness(const TIME_EFFECT tmp_v);
     bool confusion(const TIME_EFFECT tmp_v);
+    bool mod_confusion(const TIME_EFFECT tmp_v);
     bool poison(const TIME_EFFECT tmp_v);
+    bool mod_poison(const TIME_EFFECT tmp_v);
     bool afraidness(const TIME_EFFECT tmp_v);
+    bool mod_afraidness(const TIME_EFFECT tmp_v);
     bool paralysis(const TIME_EFFECT tmp_v);
+    bool mod_paralysis(const TIME_EFFECT tmp_v);
     bool hallucination(const TIME_EFFECT tmp_v);
+    bool mod_hallucination(const TIME_EFFECT tmp_v);
     bool slowness(const TIME_EFFECT tmp_v, bool do_dec);
+    bool mod_slowness(const TIME_EFFECT tmp_v, bool do_dec);
     bool stun(const TIME_EFFECT tmp_v);
+    bool mod_stun(const TIME_EFFECT tmp_v);
     bool cut(const TIME_EFFECT tmp_v);
+    bool mod_cut(const TIME_EFFECT tmp_v);
 
 private:
     player_type *player_ptr;

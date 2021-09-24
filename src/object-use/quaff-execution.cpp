@@ -49,9 +49,6 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -76,7 +73,7 @@ static bool booze(player_type *player_ptr)
         return ident;
     }
 
-    if (one_in_(2) && bss.hallucination(player_ptr->hallucinated + randint0(150) + 150)) {
+    if (one_in_(2) && bss.mod_hallucination(randint0(150) + 150)) {
         ident = true;
     }
 
@@ -106,9 +103,8 @@ static bool detonation(player_type *player_ptr)
     msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
     take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
     BadStatusSetter bss(player_ptr);
-    auto effects = player_ptr->effects();
-    (void)bss.stun(effects->stun()->current() + 75);
-    (void)bss.cut(effects->cut()->current() + 5000);
+    (void)bss.mod_stun(75);
+    (void)bss.mod_cut(5000);
     return true;
 }
 
@@ -193,13 +189,13 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
 
             BadStatusSetter bss(player_ptr);
             (void)bss.poison(0);
-            (void)bss.paralysis(player_ptr->paralyzed + 4);
+            (void)bss.mod_paralysis(4);
             ident = true;
             break;
         }
         case SV_POTION_POISON:
             if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) {
-                if (BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint0(15) + 10)) {
+                if (BadStatusSetter(player_ptr).mod_poison(randint0(15) + 10)) {
                     ident = true;
                 }
             }
@@ -207,7 +203,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
 
         case SV_POTION_BLINDNESS:
             if (!has_resist_blind(player_ptr)) {
-                if (BadStatusSetter(player_ptr).blindness(player_ptr->blind + randint0(100) + 100)) {
+                if (BadStatusSetter(player_ptr).mod_blindness(randint0(100) + 100)) {
                     ident = true;
                 }
             }
@@ -228,7 +224,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
                 sanity_blast(player_ptr, nullptr, false);
             }
 
-            if (BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + randint0(4) + 4)) {
+            if (BadStatusSetter(player_ptr).mod_paralysis(randint0(4) + 4)) {
                 ident = true;
             }
 

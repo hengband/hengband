@@ -131,7 +131,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         if (!has_resist_fear(player_ptr)) {
             disturb(player_ptr, false, true);
             msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-            (void)bss.afraidness(player_ptr->afraid + 13 + randint1(26));
+            (void)bss.mod_afraidness(13 + randint1(26));
         }
     }
 
@@ -152,7 +152,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         }
 
         if (!has_resist_conf(player_ptr)) {
-            (void)bss.confusion(player_ptr->confused + randint0(20) + 15);
+            (void)bss.mod_confusion(randint0(20) + 15);
         }
 
         if (!has_resist_chaos(player_ptr)) {
@@ -169,7 +169,7 @@ void process_world_aux_mutation(player_type *player_ptr)
             } else {
                 if (one_in_(3)) {
                     msg_print(_("き～れいなちょおちょらとんれいる～", "Thishcischs GooDSChtuff!"));
-                    (void)bss.hallucination(player_ptr->hallucinated + randint0(150) + 150);
+                    (void)bss.mod_hallucination(randint0(150) + 150);
                 }
             }
         }
@@ -179,7 +179,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         if (!has_resist_chaos(player_ptr)) {
             disturb(player_ptr, false, true);
             player_ptr->redraw |= PR_EXTRA;
-            (void)bss.hallucination(player_ptr->hallucinated + randint0(50) + 20);
+            (void)bss.mod_hallucination(randint0(50) + 20);
         }
     }
 

@@ -43,7 +43,7 @@ void do_poly_wounds(player_type *player_ptr)
     hp_player(player_ptr, change);
     BadStatusSetter bss(player_ptr);
     if (!nasty_effect) {
-        (void)bss.cut(player_cut->current() - (change / 2));
+        (void)bss.mod_cut(change / 2);
         return;
     }
 

@@ -347,7 +347,7 @@ bool cure_light_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides
         ident = true;
     }
 
-    if (bss.cut(player_ptr->effects()->cut()->current() - 10)) {
+    if (bss.mod_cut(-10)) {
         ident = true;
     }
 
@@ -571,9 +571,9 @@ bool cosmic_cast_off(player_type *player_ptr, object_type **o_ptr_ptr)
 
     /* Get effects */
     msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
-    int t = 20 + randint1(20);
+    TIME_EFFECT t = 20 + randint1(20);
     BadStatusSetter bss(player_ptr);
-    (void)bss.blindness(player_ptr->blind + t);
+    (void)bss.mod_blindness(t);
     (void)bss.afraidness(0);
     (void)set_tim_esp(player_ptr, player_ptr->tim_esp + t, false);
     (void)set_tim_regen(player_ptr, player_ptr->tim_regen + t, false);

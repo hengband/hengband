@@ -42,7 +42,7 @@ static void calc_blow_poison(player_type *player_ptr, monap_type *monap_ptr)
         return;
 
     if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) && !check_multishadow(player_ptr)
-        && BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint1(monap_ptr->rlev) + 5))
+        && BadStatusSetter(player_ptr).mod_poison(randint1(monap_ptr->rlev) + 5))
         monap_ptr->obvious = true;
 
     monap_ptr->damage = monap_ptr->damage * calc_nuke_damage_rate(player_ptr) / 100;
@@ -146,7 +146,7 @@ static void calc_blow_confusion(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr) && BadStatusSetter(player_ptr).confusion(player_ptr->confused + 3 + randint1(monap_ptr->rlev))) {
+    if (!has_resist_conf(player_ptr) && !check_multishadow(player_ptr) && BadStatusSetter(player_ptr).mod_confusion(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 
@@ -282,7 +282,7 @@ static void calc_blow_inertia(player_type *player_ptr, monap_type *monap_ptr)
     if (player_ptr->is_dead || check_multishadow(player_ptr))
         return;
 
-    if (BadStatusSetter(player_ptr).slowness(player_ptr->slow + 4 + randint0(monap_ptr->rlev / 10), false))
+    if (BadStatusSetter(player_ptr).mod_slowness(4 + randint0(monap_ptr->rlev / 10), false))
         monap_ptr->obvious = true;
 }
 

@@ -25,9 +25,6 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-cut.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
@@ -184,7 +181,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
     if (trap & (CHEST_POISON)) {
         msg_print(_("突如吹き出した緑色のガスに包み込まれた！", "A puff of green gas surrounds you!"));
         if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) {
-            (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + 10 + randint1(20));
+            (void)BadStatusSetter(player_ptr).mod_poison(10 + randint1(20));
         }
     }
 
@@ -192,7 +189,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
     if (trap & (CHEST_PARALYZE)) {
         msg_print(_("突如吹き出した黄色いガスに包み込まれた！", "A puff of yellow gas surrounds you!"));
         if (!player_ptr->free_act) {
-            (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + 10 + randint1(20));
+            (void)BadStatusSetter(player_ptr).mod_paralysis(10 + randint1(20));
         }
     }
 
@@ -278,17 +275,16 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
             }
             
             BadStatusSetter bss(player_ptr);
-            auto effects = player_ptr->effects();
             if (one_in_(5)) {
-                (void)bss.cut(effects->cut()->current() + 200);
+                (void)bss.mod_cut(200);
                 continue;
             }
             
             if (one_in_(4)) {
                 if (!player_ptr->free_act) {
-                    (void)bss.paralysis(player_ptr->paralyzed + 2 + randint0(6));
+                    (void)bss.mod_paralysis(2 + randint0(6));
                 } else {
-                    (void)bss.stun(effects->stun()->current() + 10 + randint0(100));
+                    (void)bss.mod_stun(10 + randint0(100));
                 }
 
                 continue;

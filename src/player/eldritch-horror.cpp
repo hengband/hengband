@@ -123,7 +123,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                BadStatusSetter(player_ptr).hallucination(player_ptr->hallucinated + randint1(r_ptr->level));
+                BadStatusSetter(player_ptr).mod_hallucination(randint1(r_ptr->level));
             }
 
             return;
@@ -173,7 +173,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-                BadStatusSetter(player_ptr).hallucination(player_ptr->hallucinated + randint1(r_ptr->level));
+                BadStatusSetter(player_ptr).mod_hallucination(randint1(r_ptr->level));
             }
 
             return;
@@ -260,11 +260,11 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
     case 12: {
         BadStatusSetter bss(player_ptr);
         if (!has_resist_conf(player_ptr)) {
-            (void)bss.confusion(player_ptr->confused + randint0(4) + 4);
+            (void)bss.mod_confusion(randint0(4) + 4);
         }
 
         if (!has_resist_chaos(player_ptr) && one_in_(3)) {
-            (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
+            (void)bss.mod_hallucination(randint0(250) + 150);
         }
 
         /*!< @todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
@@ -276,13 +276,13 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
     case 15: {
         BadStatusSetter bss(player_ptr);
         if (!has_resist_conf(player_ptr)) {
-            (void)bss.confusion(player_ptr->confused + randint0(4) + 4);
+            (void)bss.mod_confusion(randint0(4) + 4);
         }
         if (!player_ptr->free_act) {
-            (void)bss.paralysis(player_ptr->paralyzed + randint0(4) + 4);
+            (void)bss.mod_paralysis(randint0(4) + 4);
         }
         if (!has_resist_chaos(player_ptr)) {
-            (void)bss.hallucination(player_ptr->hallucinated + randint0(250) + 150);
+            (void)bss.mod_hallucination(randint0(250) + 150);
         }
 
         do {

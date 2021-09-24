@@ -17,8 +17,6 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -104,22 +102,22 @@ static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, eff
     BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
     case 1:
-        (void)bss.confusion(player_ptr->confused + 3 + randint1(em_ptr->dam));
+        (void)bss.mod_confusion(3 + randint1(em_ptr->dam));
         return;
     case 2:
-        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(em_ptr->dam));
+        (void)bss.mod_stun(randint1(em_ptr->dam));
         return;
     case 3:
         if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
         } else {
-            (void)bss.afraidness(player_ptr->afraid + 3 + randint1(em_ptr->dam));
+            (void)bss.mod_afraidness(3 + randint1(em_ptr->dam));
         }
 
         return;
     default:
         if (!player_ptr->free_act) {
-            (void)bss.paralysis(player_ptr->paralyzed + randint1(em_ptr->dam));
+            (void)bss.mod_paralysis(randint1(em_ptr->dam));
         }
 
         return;

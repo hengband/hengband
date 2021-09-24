@@ -326,7 +326,7 @@ bool exe_bash(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
         more = true;
     } else {
         msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
-        (void)BadStatusSetter(player_ptr).paralysis(player_ptr->paralyzed + 2 + randint0(2));
+        (void)BadStatusSetter(player_ptr).mod_paralysis(2 + randint0(2));
     }
 
     return more;
