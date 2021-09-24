@@ -257,8 +257,7 @@ MonsterSpellResult monspell_to_player(player_type *player_ptr, RF_ABILITY ms_typ
 
     // 条件を満たしていればラーニングを試みる。
     if (res.valid && res.learnable) {
-        const auto monspell = enum2i(ms_type);
-        learn_spell(player_ptr, monspell);
+        learn_spell(player_ptr, ms_type);
     }
 
     return res;
@@ -287,8 +286,7 @@ MonsterSpellResult monspell_to_monster(
 
     // 条件を満たしていればラーニングを試みる。
     if (res.valid && res.learnable) {
-        const auto monspell = enum2i(ms_type);
-        learn_spell(player_ptr, monspell);
+        learn_spell(player_ptr, ms_type);
     }
 
     return res;

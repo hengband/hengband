@@ -21,6 +21,7 @@
 #include "mutation/mutation-processor.h"
 #include "object-enchant/object-smith.h"
 #include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-random.h"
@@ -142,15 +143,15 @@ void wiz_teleport_back(player_type *player_ptr)
  */
 void wiz_learn_blue_magic_all(player_type *player_ptr)
 {
-    EnumClassFlagGroup<RF_ABILITY> ability_flags;
-    for (int j = 1; j < A_MAX; j++) {
-        set_rf_masks(ability_flags, i2enum<blue_magic_type>(j));
+    auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+    if (!bluemage_data) {
+        return;
+    }
 
-        std::vector<RF_ABILITY> spells;
-        EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));
-        for (auto spell : spells) {
-            player_ptr->magic_num2[enum2i(spell)] = 1;
-        }
+    for (auto type : BLUE_MAGIC_TYPE_LIST) {
+        EnumClassFlagGroup<RF_ABILITY> ability_flags;
+        set_rf_masks(ability_flags, type);
+        bluemage_data->learnt_blue_magics.set(ability_flags);
     }
 }
 

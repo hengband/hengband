@@ -661,6 +661,7 @@ hengband_SOURCES = \
 	\
 	player-info/alignment.cpp player-info/alignment.h \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
+	player-info/bluemage-data-type.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
 	player-info/class-types.h \

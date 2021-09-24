@@ -1,6 +1,7 @@
 #include "save/player-class-specific-data-writer.h"
-#include "player-info/smith-data-type.h"
+#include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
+#include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "save/save-util.h"
 #include "util/enum-converter.h"
@@ -20,6 +21,11 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<smith_data_
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<force_trainer_data_type> &force_trainer_data) const
 {
     wr_s32b(force_trainer_data->ki);
+}
+
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<bluemage_data_type> &bluemage_data) const
+{
+    wr_FlagGroup(bluemage_data->learnt_blue_magics, wr_byte);
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

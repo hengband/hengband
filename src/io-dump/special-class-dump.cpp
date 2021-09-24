@@ -13,6 +13,8 @@
 #include "object-enchant/object-smith.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
@@ -154,6 +156,11 @@ static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_
  */
 static void dump_blue_mage(player_type *player_ptr, FILE *fff)
 {
+    const auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+    if (!bluemage_data) {
+        return;
+    }
+
     char p[60][80];
     for (int i = 0; i < 60; i++) {
         p[i][0] = '\0';
@@ -162,10 +169,11 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
     int col = 0;
     strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
 
-    for (int spell_type = 1; spell_type < 6; spell_type++) {
+    for (auto spell_type : BLUE_MAGIC_TYPE_LIST) {
         col++;
         learnt_spell_table learnt_magic;
-        add_monster_spell_type(p, col, i2enum<blue_magic_type>(spell_type), &learnt_magic);
+        add_monster_spell_type(p, col, spell_type, &learnt_magic);
+        learnt_magic.ability_flags &= bluemage_data->learnt_blue_magics;
 
         std::vector<RF_ABILITY> learnt_spells;
         EnumClassFlagGroup<RF_ABILITY>::get_flags(learnt_magic.ability_flags, std::back_inserter(learnt_spells));
@@ -176,8 +184,6 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
 
         for (auto spell : learnt_spells) {
             const int spellnum = enum2i(spell);
-            if (player_ptr->magic_num2[spellnum] == 0)
-                continue;
 
             pcol = true;
             int l1 = strlen(p[col]);

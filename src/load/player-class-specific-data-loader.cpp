@@ -1,7 +1,8 @@
 ﻿#include "load/player-class-specific-data-loader.h"
 #include "load/load-util.h"
-#include "player-info/smith-data-type.h"
+#include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
+#include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "util/enum-converter.h"
 
@@ -32,6 +33,17 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<force_trainer_dat
         force_trainer_data->ki = this->magic_num1[0];
     } else {
         rd_s32b(&force_trainer_data->ki);
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bluemage_data_type> &bluemage_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        for (int i = 0, count = std::min(enum2i(RF_ABILITY::MAX), MAX_SPELLS); i < count; ++i) {
+            bluemage_data->learnt_blue_magics.set(i2enum<RF_ABILITY>(i), this->magic_num2[i] != 0);
+        }
+    } else {
+        rd_FlagGroup(bluemage_data->learnt_blue_magics, rd_byte);
     }
 }
 

@@ -5040,6 +5040,9 @@
     <ClInclude Include="..\..\src\timed-effect\player-cut.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\bluemage-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\player-info\class-specific-data.h">
       <Filter>player-info</Filter>
     </ClInclude>
