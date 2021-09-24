@@ -27,6 +27,7 @@ StoneOfLore::StoneOfLore(player_type *player_ptr)
  */
 bool StoneOfLore::perilous_secrets()
 {
+    msg_print(_("石が隠された秘密を写し出した．．．", "The stone reveals hidden mysteries..."));
     if (!ident_spell(this->player_ptr, false)) {
         return false;
     }

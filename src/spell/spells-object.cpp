@@ -6,7 +6,6 @@
 
 #include "spell/spells-object.h"
 #include "avatar/avatar.h"
-#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -32,10 +31,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-info/class-info.h"
-#include "player/player-damage.h"
 #include "racial/racial-android.h"
-#include "spell-kind/spells-perception.h"
-#include "status/bad-status-setter.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
