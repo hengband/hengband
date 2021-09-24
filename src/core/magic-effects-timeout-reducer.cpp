@@ -218,7 +218,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     auto player_stun = effects->stun();
     if (player_stun->is_stunned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)bss.stun(player_stun->current() - adjust);
+        (void)bss.mod_stun(-adjust);
     }
 
     auto player_cut = effects->cut();

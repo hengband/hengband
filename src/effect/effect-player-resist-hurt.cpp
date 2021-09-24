@@ -31,7 +31,6 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-cut.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -145,8 +144,8 @@ void effect_player_plasma(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        int plus_stun = (randint1((ep_ptr->dam > 40) ? 35 : (ep_ptr->dam * 3 / 4 + 5)));
-        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + plus_stun);
+        TIME_EFFECT plus_stun = (randint1((ep_ptr->dam > 40) ? 35 : (ep_ptr->dam * 3 / 4 + 5)));
+        (void)BadStatusSetter(player_ptr).mod_stun(plus_stun);
     }
 
     if (!(has_resist_fire(player_ptr) || is_oppose_fire(player_ptr) || has_immune_fire(player_ptr)))
@@ -209,7 +208,7 @@ void effect_player_water(player_type *player_ptr, effect_player_type *ep_ptr)
     BadStatusSetter bss(player_ptr);
     if (!check_multishadow(player_ptr)) {
         if (!has_resist_sound(player_ptr) && !has_res_water) {
-            (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(40));
+            (void)bss.mod_stun(randint1(40));
         }
 
         if (!has_resist_conf(player_ptr) && !has_res_water) {
@@ -285,8 +284,8 @@ void effect_player_sound(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_sound_damage_rate(player_ptr, CALC_RAND) / 100;
 
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + plus_stun);
+        TIME_EFFECT plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
+        (void)BadStatusSetter(player_ptr).mod_stun(plus_stun);
     }
 
     if (!has_resist_sound(player_ptr) || one_in_(13))
@@ -343,7 +342,7 @@ void effect_player_force(player_type *player_ptr, effect_player_type *ep_ptr)
     if (player_ptr->blind)
         msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).stun(player_ptr->effects()->stun()->current() + randint1(20));
+        (void)BadStatusSetter(player_ptr).mod_stun(randint1(20));
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
@@ -357,7 +356,7 @@ void effect_player_rocket(player_type *player_ptr, effect_player_type *ep_ptr)
 
     BadStatusSetter bss(player_ptr);
     if (!has_resist_sound(player_ptr) && !check_multishadow(player_ptr)) {
-        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(20));
+        (void)bss.mod_stun(randint1(20));
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(player_ptr, CALC_RAND) / 100;
@@ -544,8 +543,8 @@ void effect_player_gravity(player_type *player_ptr, effect_player_type *ep_ptr)
         }
 
         if (!(has_resist_sound(player_ptr) || player_ptr->levitation)) {
-            auto plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-            (void)bss.stun(player_ptr->effects()->stun()->current() + plus_stun);
+            TIME_EFFECT plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
+            (void)bss.mod_stun(plus_stun);
         }
     }
 
@@ -620,7 +619,7 @@ void effect_player_icee(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 
     if (!has_resist_sound(player_ptr)) {
-        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(15));
+        (void)bss.mod_stun(randint1(15));
     }
 
     if ((!(has_resist_cold(player_ptr) || is_oppose_cold(player_ptr))) || one_in_(12)) {

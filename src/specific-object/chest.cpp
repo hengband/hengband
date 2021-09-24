@@ -26,7 +26,6 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-cut.h"
-#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -288,7 +287,7 @@ void chest_trap(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
                 if (!player_ptr->free_act) {
                     (void)bss.mod_paralysis(2 + randint0(6));
                 } else {
-                    (void)bss.stun(effects->stun()->current() + 10 + randint0(100));
+                    (void)bss.mod_stun(10 + randint0(100));
                 }
 
                 continue;

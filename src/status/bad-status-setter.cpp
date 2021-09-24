@@ -467,6 +467,11 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_stun(const TIME_EFFECT tmp_v)
+{
+    return this->stun(this->player_ptr->effects()->stun()->current() + tmp_v);
+}
+
 /*!
  * @brief 出血の継続時間をセットする / Set "cut", notice observable changes
  * @param v 継続時間

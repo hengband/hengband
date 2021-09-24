@@ -17,8 +17,6 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -107,7 +105,7 @@ static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, eff
         (void)bss.mod_confusion(3 + randint1(em_ptr->dam));
         return;
     case 2:
-        (void)bss.stun(player_ptr->effects()->stun()->current() + randint1(em_ptr->dam));
+        (void)bss.mod_stun(randint1(em_ptr->dam));
         return;
     case 3:
         if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {

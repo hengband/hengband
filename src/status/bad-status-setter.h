@@ -29,6 +29,7 @@ public:
     bool slowness(const TIME_EFFECT tmp_v, bool do_dec);
     bool mod_slowness(const TIME_EFFECT tmp_v, bool do_dec);
     bool stun(const TIME_EFFECT tmp_v);
+    bool mod_stun(const TIME_EFFECT tmp_v);
     bool cut(const TIME_EFFECT tmp_v);
 
 private:
