@@ -29,7 +29,7 @@ void calc_blow_disease(player_type *player_ptr, monap_type *monap_ptr)
     if (player_ptr->is_dead || check_multishadow(player_ptr))
         return;
 
-    if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) && BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint1(monap_ptr->rlev) + 5))
+    if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) && BadStatusSetter(player_ptr).mod_poison(randint1(monap_ptr->rlev) + 5))
         monap_ptr->obvious = true;
 
     bool disease_possibility = randint1(100) > calc_nuke_damage_rate(player_ptr);

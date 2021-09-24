@@ -61,7 +61,7 @@ void effect_player_poison(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 
     if (!(double_resist || has_resist_pois(player_ptr)) && !check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint0(ep_ptr->dam) + 10);
+        (void)BadStatusSetter(player_ptr).mod_poison(randint0(ep_ptr->dam) + 10);
     }
 }
 
@@ -77,7 +77,7 @@ void effect_player_nuke(player_type *player_ptr, effect_player_type *ep_ptr)
     if ((double_resist || has_resist_pois(player_ptr)) || check_multishadow(player_ptr))
         return;
 
-    (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint0(ep_ptr->dam) + 10);
+    (void)BadStatusSetter(player_ptr).mod_poison(randint0(ep_ptr->dam) + 10);
     if (one_in_(5)) /* 6 */
     {
         msg_print(_("奇形的な変身を遂げた！", "You undergo a freakish metamorphosis!"));

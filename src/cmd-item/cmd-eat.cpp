@@ -64,7 +64,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
     BadStatusSetter bss(player_ptr);
     switch (o_ptr->sval) {
     case SV_FOOD_POISON:
-        return (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) && bss.poison(player_ptr->poisoned + randint0(10) + 10);
+        return (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) && bss.mod_poison(randint0(10) + 10);
     case SV_FOOD_BLINDNESS:
         return !has_resist_blind(player_ptr) && bss.mod_blindness(randint0(200) + 200);
     case SV_FOOD_PARANOIA:

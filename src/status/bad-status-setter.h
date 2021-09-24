@@ -19,6 +19,7 @@ public:
     bool confusion(const TIME_EFFECT tmp_v);
     bool mod_confusion(const TIME_EFFECT tmp_v);
     bool poison(const TIME_EFFECT tmp_v);
+    bool mod_poison(const TIME_EFFECT tmp_v);
     bool afraidness(const TIME_EFFECT tmp_v);
     bool paralysis(const TIME_EFFECT tmp_v);
     bool hallucination(const TIME_EFFECT tmp_v);

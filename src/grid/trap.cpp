@@ -337,7 +337,7 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
     }
 
     dam = dam * 2;
-    (void)bss.poison(player_ptr->poisoned + randint1(dam));
+    (void)bss.mod_poison(randint1(dam));
     take_hit(player_ptr, DAMAGE_NOESCAPE, dam, trap_name);
 }
 
@@ -515,7 +515,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
     case TRAP_POISON: {
         msg_print(_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"));
         if (has_resist_pois(player_ptr) == 0) {
-            (void)BadStatusSetter(player_ptr).poison(player_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+            (void)BadStatusSetter(player_ptr).mod_poison((TIME_EFFECT)randint0(20) + 10);
         }
 
         break;

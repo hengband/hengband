@@ -210,6 +210,11 @@ bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_poison(const TIME_EFFECT tmp_v)
+{
+    return this->poison(this->player_ptr->poisoned + tmp_v);
+}
+
 /*!
  * @brief 恐怖の継続時間をセットする / Set "afraid", notice observable changes
  * @param v 継続時間

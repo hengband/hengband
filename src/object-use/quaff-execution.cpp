@@ -199,7 +199,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
         }
         case SV_POTION_POISON:
             if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) {
-                if (BadStatusSetter(player_ptr).poison(player_ptr->poisoned + randint0(15) + 10)) {
+                if (BadStatusSetter(player_ptr).mod_poison(randint0(15) + 10)) {
                     ident = true;
                 }
             }
