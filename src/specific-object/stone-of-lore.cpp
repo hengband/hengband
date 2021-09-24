@@ -10,6 +10,7 @@
 #include "spell-kind/spells-perception.h"
 #include "status/bad-status-setter.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 StoneOfLore::StoneOfLore(player_type *player_ptr)
@@ -32,30 +33,38 @@ bool StoneOfLore::perilous_secrets()
         return false;
     }
 
-    BadStatusSetter bss(this->player_ptr);
-    if (this->player_ptr->msp > 0) {
-        if (20 <= this->player_ptr->csp) {
-            this->player_ptr->csp -= 20;
-        } else {
-            auto oops = 20 - this->player_ptr->csp;
-            this->player_ptr->csp = 0;
-            this->player_ptr->csp_frac = 0;
-            msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
-            (void)bss.mod_paralysis(randint1(5 * oops + 1));
-            (void)bss.mod_confusion(randint1(5 * oops + 1));
-        }
-
-        this->player_ptr->redraw |= PR_MANA;
-    }
-
-    take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"));
+    this->consume_mp();
+    auto dam_source = _("危険な秘密", "perilous secrets");
+    take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(1, 12), dam_source);
     if (one_in_(5)) {
-        (void)bss.mod_confusion(randint1(10));
+        (void)BadStatusSetter(this->player_ptr).mod_confusion(randint1(10));
     }
 
     if (one_in_(20)) {
-        take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"));
+        take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(4, 10), dam_source);
     }
 
     return true;
+}
+
+void StoneOfLore::consume_mp()
+{
+    if (this->player_ptr->msp <= 0) {
+        return;
+    }
+
+    if (this->player_ptr->csp >= 20) {
+        this->player_ptr->csp -= 20;
+        set_bits(this->player_ptr->redraw, PR_MANA);
+        return;
+    }
+
+    auto oops = 20 - this->player_ptr->csp;
+    this->player_ptr->csp = 0;
+    this->player_ptr->csp_frac = 0;
+    msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
+    BadStatusSetter bss(this->player_ptr);
+    (void)bss.mod_paralysis(randint1(5 * oops + 1));
+    (void)bss.mod_confusion(randint1(5 * oops + 1));
+    set_bits(this->player_ptr->redraw, PR_MANA);
 }

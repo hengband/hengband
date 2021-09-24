@@ -9,4 +9,6 @@ public:
 
 private:
     player_type *player_ptr;
+
+    void consume_mp();
 };
