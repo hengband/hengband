@@ -266,6 +266,11 @@ bool BadStatusSetter::afraidness(const TIME_EFFECT tmp_v)
     return true;
 }
 
+bool BadStatusSetter::mod_afraidness(const TIME_EFFECT tmp_v)
+{
+    return this->afraidness(this->player_ptr->afraid + tmp_v);
+}
+
 /*!
  * @brief 麻痺の継続時間をセットする / Set "paralyzed", notice observable changes
  * @param v 継続時間
