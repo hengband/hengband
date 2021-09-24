@@ -7,11 +7,12 @@
 #include "player-base/player-class.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
-#include "player/attack-defense-types.h"
-#include "player/special-defense-types.h"
+#include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
+#include "player/attack-defense-types.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -68,6 +69,9 @@ void PlayerClass::init_specific_data()
         break;
     case CLASS_FORCETRAINER:
         this->player_ptr->class_specific_data = std::make_shared<force_trainer_data_type>();
+        break;
+    case CLASS_BLUE_MAGE:
+        this->player_ptr->class_specific_data = std::make_shared<bluemage_data_type>();
         break;
     case CLASS_HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {
