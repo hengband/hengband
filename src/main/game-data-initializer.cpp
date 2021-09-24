@@ -21,6 +21,7 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/tag-sorter.h"
 #include "view/display-messages.h"
@@ -30,20 +31,19 @@
  * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
  * @note Default: assume at most 256 macros are used
  */
-static const int MACRO_MAX = 256;
+constexpr int MACRO_MAX = 256;
 
 /*!
  * @brief クエスト情報初期化のメインルーチン /
  * Initialize quest array
  * @return エラーコード
  */
-errr init_quests(void)
+void init_quests(void)
 {
     quest.assign(max_q_idx, {});
-    for (auto &q_ref : quest)
+    for (auto &q_ref : quest) {
         q_ref.status = QUEST_STATUS_UNTAKEN;
-
-    return 0;
+    }
 }
 
 /*!
@@ -51,14 +51,15 @@ errr init_quests(void)
  * Initialize some other arrays
  * @return エラーコード
  */
-errr init_other(player_type *player_ptr)
+void init_other(player_type *player_ptr)
 {
     player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->o_list.assign(w_ptr->max_o_idx, {});
     floor_ptr->m_list.assign(w_ptr->max_m_idx, {});
-    for (auto &list : floor_ptr->mproc_list)
+    for (auto &list : floor_ptr->mproc_list) {
         list.assign(w_ptr->max_m_idx, {});
+    }
 
     max_dlv.assign(d_info.size(), {});
     floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
@@ -68,33 +69,37 @@ errr init_other(player_type *player_ptr)
     macro__buf.assign(FILE_READ_BUFF_SIZE, {});
     quark_init();
 
-    for (int i = 0; option_info[i].o_desc; i++) {
+    for (auto i = 0; option_info[i].o_desc; i++) {
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
-        if (!option_info[i].o_var)
+        if (option_info[i].o_var == nullptr) {
             continue;
+        }
 
         option_mask[os] |= (1UL << ob);
-        if (option_info[i].o_norm)
-            option_flag[os] |= (1UL << ob);
-        else
-            option_flag[os] &= ~(1UL << ob);
+        if (option_info[i].o_norm) {
+            set_bits(option_flag[os], 1U << ob);
+        } else {
+            reset_bits(option_flag[os], 1U << ob);
+        }
     }
 
-    for (int n = 0; n < 8; n++)
-        for (int i = 0; i < 32; i++)
-            if (window_flag_desc[i])
-                window_mask[n] |= (1UL << i);
+    for (auto n = 0; n < 8; n++) {
+        for (auto i = 0; i < 32; i++) {
+            if (window_flag_desc[i]) {
+                set_bits(window_mask[n], 1U << i);
+            }
+        }
+    }
 
     /*
      *  Set the "default" window flags
      *  Window 1 : Display messages
      *  Window 2 : Display inven/equip
      */
-    window_flag[1] = 1UL << A_MAX;
-    window_flag[2] = 1UL << 0;
+    window_flag[1] = 1U << A_MAX;
+    window_flag[2] = 1U << 0;
     (void)format("%s (%s).", "Mr.Hoge", MAINTAINER);
-    return 0;
 }
 
 /*!
@@ -102,15 +107,12 @@ errr init_other(player_type *player_ptr)
  * Initialize some other arrays
  * @return エラーコード
  */
-errr init_object_alloc(void)
+static void init_object_alloc(void)
 {
-    int16_t aux[MAX_DEPTH] = {};
-
-    int16_t num[MAX_DEPTH] = {};
-
+    int16_t num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
     for (const auto &k_ref : k_info) {
-        for (int j = 0; j < 4; j++) {
+        for (auto j = 0; j < 4; j++) {
             if (k_ref.chance[j]) {
                 alloc_kind_size++;
                 num[k_ref.locale[j]]++;
@@ -118,31 +120,33 @@ errr init_object_alloc(void)
         }
     }
 
-    for (int i = 1; i < MAX_DEPTH; i++)
+    for (auto i = 1; i < MAX_DEPTH; i++) {
         num[i] += num[i - 1];
+    }
 
-    if (!num[0])
+    if (num[0] == 0) {
         quit(_("町のアイテムがない！", "No town objects!"));
+    }
 
     alloc_kind_table.assign(alloc_kind_size, {});
+    int16_t aux[MAX_DEPTH]{};
     for (const auto &k_ref : k_info) {
-        for (int j = 0; j < 4; j++) {
-            if (k_ref.chance[j] == 0)
+        for (auto j = 0; j < 4; j++) {
+            if (k_ref.chance[j] == 0) {
                 continue;
+            }
 
-            int x = k_ref.locale[j];
-            int p = (100 / k_ref.chance[j]);
-            int y = (x > 0) ? num[x - 1] : 0;
-            int z = y + aux[x];
+            auto x = k_ref.locale[j];
+            PROB p = (100 / k_ref.chance[j]);
+            auto y = (x > 0) ? num[x - 1] : 0;
+            auto z = y + aux[x];
             alloc_kind_table[z].index = k_ref.idx;
-            alloc_kind_table[z].level = (DEPTH)x;
-            alloc_kind_table[z].prob1 = (PROB)p;
-            alloc_kind_table[z].prob2 = (PROB)p;
+            alloc_kind_table[z].level = x;
+            alloc_kind_table[z].prob1 = p;
+            alloc_kind_table[z].prob2 = p;
             aux[x]++;
         }
     }
-
-    return 0;
 }
 
 /*!
@@ -150,7 +154,7 @@ errr init_object_alloc(void)
  * Initialize some other arrays
  * @return エラーコード
  */
-errr init_alloc(void)
+void init_alloc(void)
 {
     std::vector<tag_type> elements(r_info.size());
     for (const auto &r_ref : r_info) {
@@ -163,18 +167,18 @@ errr init_alloc(void)
     tag_sort(elements.data(), elements.size());
     alloc_race_table.assign(r_info.size(), {});
     for (auto i = 1U; i < r_info.size(); i++) {
-        auto r_ptr = &r_info[elements[i].index];
-        if (r_ptr->rarity == 0)
+        auto *r_ptr = &r_info[elements[i].index];
+        if (r_ptr->rarity == 0) {
             continue;
+        }
 
-        int x = r_ptr->level;
-        int p = (100 / r_ptr->rarity);
+        auto x = r_ptr->level;
+        PROB p = (100 / r_ptr->rarity);
         alloc_race_table[i].index = (KIND_OBJECT_IDX)elements[i].index;
-        alloc_race_table[i].level = (DEPTH)x;
-        alloc_race_table[i].prob1 = (PROB)p;
-        alloc_race_table[i].prob2 = (PROB)p;
+        alloc_race_table[i].level = x;
+        alloc_race_table[i].prob1 = p;
+        alloc_race_table[i].prob2 = p;
     }
 
-    (void)init_object_alloc();
-    return 0;
+    init_object_alloc();
 }
