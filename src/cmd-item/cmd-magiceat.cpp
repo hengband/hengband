@@ -596,7 +596,7 @@ bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful
             if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
                 if (!get_aim_dir(player_ptr, &dir))
                     return false;
-            rod_effect(player_ptr, sval, dir, &use_charge, powerful, true);
+            (void)rod_effect(player_ptr, sval, dir, &use_charge, powerful);
             if (!use_charge)
                 return false;
         } else if (tval == TV_WAND) {

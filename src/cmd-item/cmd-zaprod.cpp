@@ -38,18 +38,14 @@
  * @param dir 発動目標の方向ID
  * @param use_charge チャージを消費したかどうかを返す参照ポインタ
  * @param powerful 強力発動上の処理ならばTRUE
- * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int rod_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful, bool magic)
+int rod_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful)
 {
     int ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
     POSITION detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
     POSITION rad = powerful ? 3 : 2;
-
-    /* Unused */
-    (void)magic;
 
     /* Analyze the rod */
     switch (sval) {
