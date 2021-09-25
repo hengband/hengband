@@ -49,6 +49,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -69,13 +71,7 @@ ObjectQuaffEntity::ObjectQuaffEntity(player_type *player_ptr)
 void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 {
     PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
-    if (this->player_ptr->timewalk) {
-        if (flush_failure) {
-            flush();
-        }
-
-        msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from the bottle."));
-        sound(SOUND_FAIL);
+    if (!this->check_can_quaff()) {
         return;
     }
 
@@ -566,6 +562,27 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         (void)set_food(this->player_ptr, this->player_ptr->food + q_ptr->pval);
         break;
     }
+}
+
+bool ObjectQuaffEntity::check_can_quaff()
+{
+    if (this->player_ptr->timewalk) {
+        if (flush_failure) {
+            flush();
+        }
+
+        msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from the bottle."));
+        sound(SOUND_FAIL);
+        return false;
+    }
+
+    auto penalty = this->player_ptr->effects()->stun()->get_item_chance_penalty();
+    if (penalty >= randint1(100)) {
+        msg_print(_("朦朧としていて瓶の蓋を開けられなかった！", "You were not able to quaff it by the stun!"));
+        return false;
+    }
+
+    return true;
 }
 
 /*!

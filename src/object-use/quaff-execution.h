@@ -13,6 +13,7 @@ public:
 private:
     player_type *player_ptr;
 
+    bool check_can_quaff();
     bool booze();
     bool detonation();
 };
