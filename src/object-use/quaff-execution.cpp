@@ -16,6 +16,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-investor-remover.h"
+#include "object-use/item-use-checker.h"
 #include "object/object-broken.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -49,8 +50,6 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -576,13 +575,7 @@ bool ObjectQuaffEntity::check_can_quaff()
         return false;
     }
 
-    auto penalty = this->player_ptr->effects()->stun()->get_item_chance_penalty();
-    if (penalty >= randint1(100)) {
-        msg_print(_("朦朧としていて瓶の蓋を開けられなかった！", "You were not able to quaff it by the stun!"));
-        return false;
-    }
-
-    return true;
+    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて瓶の蓋を開けられなかった！", "You were not able to quaff it by the stun!"));
 }
 
 /*!

@@ -22,6 +22,7 @@
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "object-use/item-use-checker.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -62,8 +63,6 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/timed-effects.h"
-#include "timed-effect/player-stun.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 
@@ -533,11 +532,5 @@ bool ObjectReadEntity::check_can_read()
         return false;
     }
 
-    auto penalty = this->player_ptr->effects()->stun()->get_item_chance_penalty();
-    if (penalty >= randint1(100)) {
-        msg_print(_("朦朧としていて読めなかった！", "You were not able to read it by the stun!"));
-        return false;
-    }
-
-    return true;
+    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて読めなかった！", "You were not able to read it by the stun!"));
 }

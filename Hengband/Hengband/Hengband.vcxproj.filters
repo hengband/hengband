@@ -2352,6 +2352,9 @@
     <ClCompile Include="..\..\src\object-use\use-execution.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-use\item-use-checker.cpp">
+      <Filter>object-use</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5080,6 +5083,9 @@
       <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\use-execution.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\item-use-checker.h">
       <Filter>object-use</Filter>
     </ClInclude>
   </ItemGroup>

@@ -607,6 +607,7 @@ hengband_SOURCES = \
 	object-hook/hook-quest.cpp object-hook/hook-quest.h \
 	object-hook/hook-weapon.cpp object-hook/hook-weapon.h \
 	\
+	object-use/item-use-checker.cpp object-use/item-use-checker.h \
 	object-use/quaff-execution.cpp object-use/quaff-execution.h \
 	object-use/read-execution.cpp object-use/read-execution.h \
 	object-use/throw-execution.cpp object-use/throw-execution.h \
