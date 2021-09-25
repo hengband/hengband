@@ -81,11 +81,19 @@ static void dispel_player(player_type *player_ptr)
         msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
     }
 
-    if (music_singing_any(player_ptr) || SpellHex(player_ptr).is_spelling_any()) {
-        concptr str = (music_singing_any(player_ptr)) ? _("歌", "singing") : _("呪文", "casting");
-        set_interrupting_song_effect(player_ptr, get_singing_song_effect(player_ptr));
-        set_singing_song_effect(player_ptr, MUSIC_NONE);
-        msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
+    auto song_interruption = music_singing_any(player_ptr);
+    auto spellhex_interruption = SpellHex(player_ptr).is_spelling_any();
+
+    if (song_interruption || spellhex_interruption) {
+        if (song_interruption) {
+            set_interrupting_song_effect(player_ptr, get_singing_song_effect(player_ptr));
+            set_singing_song_effect(player_ptr, MUSIC_NONE);
+            msg_print(_("歌が途切れた。", "Your singing is interrupted."));
+        }
+        if (spellhex_interruption) {
+            SpellHex(player_ptr).interrupt_spelling();
+            msg_print(_("呪文が途切れた。", "Your casting is interrupted."));
+        }
 
         player_ptr->action = ACTION_NONE;
         player_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);

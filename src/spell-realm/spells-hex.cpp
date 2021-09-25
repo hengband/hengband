@@ -176,7 +176,7 @@ void SpellHex::decrease_mana()
         return;
     }
 
-    if (!this->is_spelling_any() && !this->player_ptr->magic_num1[1]) {
+    if (this->spell_hex_data->casting_spells.none() && this->spell_hex_data->interrupting_spells.none()) {
         return;
     }
 
@@ -232,21 +232,13 @@ bool SpellHex::process_mana_cost(const bool need_restart)
 
 bool SpellHex::check_restart()
 {
-    return false;
-
-    //! @todo 現状呪術で magic_num1[1] が 0 以外になる事が無いように思える。
-    // spell_hex_data->casting_spells にかかわるのでそのまま残しておくことができないので
-    // プリプロで無効にしておき、常にfalse を返すようにしておく
-    // どういう意図だったのか作成者に確認の必要あり？
-#if 0
-    if (this->player_ptr->magic_num1[1] == 0) {
+    if (this->spell_hex_data->interrupting_spells.none()) {
         return false;
     }
 
-    this->spell_hex_data->casting_spells = this->player_ptr->magic_num1[1];
-    this->player_ptr->magic_num1[1] = 0;
+    this->spell_hex_data->casting_spells = this->spell_hex_data->interrupting_spells;
+    this->spell_hex_data->interrupting_spells.clear();
     return true;
-#endif
 }
 
 int SpellHex::calc_need_mana()
@@ -401,6 +393,12 @@ bool SpellHex::is_spelling_specific(int hex) const
 bool SpellHex::is_spelling_any() const
 {
     return this->spell_hex_data && (this->get_casting_num() > 0);
+}
+
+void SpellHex::interrupt_spelling()
+{
+    this->spell_hex_data->interrupting_spells = this->spell_hex_data->casting_spells;
+    this->spell_hex_data->casting_spells.clear();
 }
 
 /*!
