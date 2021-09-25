@@ -265,7 +265,7 @@ void do_cmd_use(player_type *player_ptr)
         if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
             return;
 
-        exe_read(player_ptr, item, true);
+        ObjectReadEntity(player_ptr, item).execute(true);
         break;
     case TV_SHOT:
     case TV_ARROW:
