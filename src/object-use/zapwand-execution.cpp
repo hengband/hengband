@@ -10,6 +10,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-use/item-use-checker.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -54,6 +55,9 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
 
     target_pet = old_target_pet;
     PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
+    if (!this->check_can_zap()) {
+        return;
+    }
 
     auto lev = k_info[o_ptr->k_idx].level;
     if (lev > 50) {
@@ -68,10 +72,6 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
     chance = chance - lev;
     if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1)) {
         chance = USE_DEVICE;
-    }
-
-    if (cmd_limit_time_walk(this->player_ptr)) {
-        return;
     }
 
     if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (this->player_ptr->pclass == CLASS_BERSERKER)) {
@@ -127,4 +127,13 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
     }
 
     floor_item_charges(this->player_ptr->current_floor_ptr, 0 - item);
+}
+
+bool ObjectZapWandEntity::check_can_zap() const
+{
+    if (cmd_limit_time_walk(this->player_ptr)) {
+        return false;
+    }
+
+    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて魔法棒を振れなかった！", "You were not able to zap it by the stun!"));
 }
