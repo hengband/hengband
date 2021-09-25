@@ -191,10 +191,6 @@ public:
 
     ClassSpecificData class_specific_data;
 
-    // @todo uint32_tで定義したいが可能か？
-    int32_t magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
-    byte magic_num2[MAX_SPELLS]{}; /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
-
     RF_ABILITY mane_spell[MAX_MANE]{};
     HIT_POINT mane_dam[MAX_MANE]{};
     int16_t mane_num{};

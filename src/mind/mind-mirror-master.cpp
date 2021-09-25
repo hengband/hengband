@@ -543,6 +543,5 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
         break;
     }
 
-    player_ptr->magic_num1[0] = 0;
     return true;
 }

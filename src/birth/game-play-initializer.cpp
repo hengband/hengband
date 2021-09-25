@@ -139,11 +139,6 @@ void player_wipe_without_name(player_type *player_ptr)
     player_ptr->visit = 1;
     player_ptr->wild_mode = false;
 
-    for (int i = 0; i < MAX_SPELLS; i++) {
-        player_ptr->magic_num1[i] = 0;
-        player_ptr->magic_num2[i] = 0;
-    }
-
     player_ptr->max_plv = player_ptr->lev = 1;
     player_ptr->arena_number = 0;
     player_ptr->current_floor_ptr->inside_arena = false;

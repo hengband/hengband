@@ -5,7 +5,6 @@
 #include "load/birth-loader.h"
 #include "load/dummy-loader.h"
 #include "load/load-util.h"
-#include "load/load-v1-3-0.h"
 #include "load/load-v1-7-0.h"
 #include "load/load-zangband.h"
 #include "load/player-attack-loader.h"
@@ -124,31 +123,13 @@ void rd_experience(player_type *player_ptr)
         rd_s16b(&player_ptr->skill_exp[i]);
 }
 
-static void set_spells(player_type *player_ptr)
-{
-    for (int i = 0; i < MAX_SPELLS; i++)
-        rd_s32b(&player_ptr->magic_num1[i]);
-
-    for (int i = 0; i < MAX_SPELLS; i++)
-        rd_byte(&player_ptr->magic_num2[i]);
-
-    if (h_older_than(1, 3, 0, 1))
-        set_spells_old(player_ptr);
-}
-
 void rd_skills(player_type *player_ptr)
 {
     if (h_older_than(0, 4, 1))
         set_zangband_skill(player_ptr);
 
-    if (h_older_than(0, 3, 14))
-        set_zangband_spells(player_ptr);
-    else
-        set_spells(player_ptr);
-
     PlayerClass(player_ptr).init_specific_data();
-    std::visit(PlayerClassSpecificDataLoader(player_ptr->magic_num1, player_ptr->magic_num2),
-        player_ptr->class_specific_data);
+    std::visit(PlayerClassSpecificDataLoader(), player_ptr->class_specific_data);
 
     if (music_singing_any(player_ptr))
         player_ptr->action = ACTION_SING;

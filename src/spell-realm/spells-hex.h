@@ -58,5 +58,3 @@ private:
     bool gain_exp_expert(const int spell);
     void gain_exp_master(const int spell);
 };
-
-#define hex_revenge_type(P_PTR) ((P_PTR)->magic_num2[1])

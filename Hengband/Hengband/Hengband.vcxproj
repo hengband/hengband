@@ -491,7 +491,6 @@
     <ClCompile Include="..\..\src\load\inventory-loader.cpp" />
     <ClCompile Include="..\..\src\load\item-loader.cpp" />
     <ClCompile Include="..\..\src\load\load-util.cpp" />
-    <ClCompile Include="..\..\src\load\load-v1-3-0.cpp" />
     <ClCompile Include="..\..\src\load\load-v1-5-0.cpp" />
     <ClCompile Include="..\..\src\load\load-v1-7-0.cpp" />
     <ClCompile Include="..\..\src\load\load-zangband.cpp" />
@@ -1225,7 +1224,6 @@
     <ClInclude Include="..\..\src\load\item-loader.h" />
     <ClInclude Include="..\..\src\load\load-util.h" />
     <ClInclude Include="..\..\src\load\load-v1-7-0.h" />
-    <ClInclude Include="..\..\src\load\load-v1-3-0.h" />
     <ClInclude Include="..\..\src\load\load-v1-5-0.h" />
     <ClInclude Include="..\..\src\load\load-zangband.h" />
     <ClInclude Include="..\..\src\load\lore-loader.h" />

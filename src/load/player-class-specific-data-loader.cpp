@@ -8,12 +8,48 @@
 #include "player-info/spell-hex-data-type.h"
 #include "util/enum-converter.h"
 
+#include <tuple>
+#include <vector>
+
+namespace {
+
+//! 職業間で配列データを共有して使っていた時の配列長。古いセーブデータのマイグレーション用。
+constexpr int OLD_SAVEFILE_MAX_SPELLS = 108;
+
+std::tuple<std::vector<int32_t>, std::vector<byte>> load_old_savfile_magic_num()
+{
+    std::vector<int32_t> magic_num1(OLD_SAVEFILE_MAX_SPELLS);
+    std::vector<byte> magic_num2(OLD_SAVEFILE_MAX_SPELLS);
+
+    if (loading_savefile_version_is_older_than(9)) {
+        for (auto &item : magic_num1) {
+            rd_s32b(&item);
+        }
+        for (auto &item : magic_num2) {
+            rd_byte(&item);
+        }
+    }
+
+    return std::make_tuple(std::move(magic_num1), std::move(magic_num2));
+}
+
+}
+
+void PlayerClassSpecificDataLoader::operator()(no_class_specific_data &) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        // マイグレーションすべきデータは無いので読み捨てる
+        load_old_savfile_magic_num();
+    }
+}
+
 void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<smith_data_type> &smith_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
-        for (auto i = 0; i < MAX_SPELLS; ++i) {
-            if (this->magic_num1[i] > 0) {
-                smith_data->essences[i2enum<SmithEssence>(i)] = static_cast<int16_t>(this->magic_num1[i]);
+        auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
+        for (auto i = 0; i < OLD_SAVEFILE_MAX_SPELLS; ++i) {
+            if (magic_num1[i] > 0) {
+                smith_data->essences[i2enum<SmithEssence>(i)] = static_cast<int16_t>(magic_num1[i]);
             }
         }
     } else {
@@ -32,7 +68,8 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<smith_data_type> 
 void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<force_trainer_data_type> &force_trainer_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
-        force_trainer_data->ki = this->magic_num1[0];
+        auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
+        force_trainer_data->ki = magic_num1[0];
     } else {
         rd_s32b(&force_trainer_data->ki);
     }
@@ -41,8 +78,9 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<force_trainer_dat
 void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bluemage_data_type> &bluemage_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
-        for (int i = 0, count = std::min(enum2i(RF_ABILITY::MAX), MAX_SPELLS); i < count; ++i) {
-            bluemage_data->learnt_blue_magics.set(i2enum<RF_ABILITY>(i), this->magic_num2[i] != 0);
+        auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
+        for (int i = 0, count = std::min(enum2i(RF_ABILITY::MAX), OLD_SAVEFILE_MAX_SPELLS); i < count; ++i) {
+            bluemage_data->learnt_blue_magics.set(i2enum<RF_ABILITY>(i), magic_num2[i] != 0);
         }
     } else {
         rd_FlagGroup(bluemage_data->learnt_blue_magics, rd_byte);
@@ -52,12 +90,13 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bluemage_data_typ
 void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<magic_eater_data_type> &magic_eater_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
-        auto load_old_item_group = [this](auto &item_group, int index) {
+        auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
+        auto load_old_item_group = [magic_num1 = std::move(magic_num1), magic_num2 = std::move(magic_num2)](auto &item_group, int index) {
             constexpr size_t old_item_group_size = 36;
             int offset = old_item_group_size * index;
             for (auto i = 0U; i < std::min(item_group.size(), old_item_group_size); ++i) {
-                item_group[i].charge = this->magic_num1[offset + i];
-                item_group[i].count = this->magic_num2[offset + i];
+                item_group[i].charge = magic_num1[offset + i];
+                item_group[i].count = magic_num2[offset + i];
             }
         };
         load_old_item_group(magic_eater_data->staves, 0);
@@ -87,10 +126,11 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<magic_eater_data_
 void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bard_data_type> &bird_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
-        bird_data->singing_song = i2enum<realm_song_type>(this->magic_num1[0]);
-        bird_data->interrputing_song = i2enum<realm_song_type>(this->magic_num1[1]);
-        bird_data->singing_duration = this->magic_num1[2];
-        bird_data->singing_song_spell_idx = this->magic_num2[0];
+        auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
+        bird_data->singing_song = i2enum<realm_song_type>(magic_num1[0]);
+        bird_data->interrputing_song = i2enum<realm_song_type>(magic_num1[1]);
+        bird_data->singing_duration = magic_num1[2];
+        bird_data->singing_song_spell_idx = magic_num2[0];
     } else {
         int32_t tmp32s;
         rd_s32b(&tmp32s);
@@ -105,10 +145,11 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bard_data_type> &
 void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<spell_hex_data_type> &spell_hex_data) const
 {
     if (loading_savefile_version_is_older_than(9)) {
-        migrate_bitflag_to_flaggroup(spell_hex_data->casting_spells, this->magic_num1[0]);
-        spell_hex_data->revenge_power = this->magic_num1[2];
-        spell_hex_data->revenge_type = i2enum<SpellHexRevengeType>(this->magic_num2[1]);
-        spell_hex_data->revenge_turn = this->magic_num2[2];
+        auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
+        migrate_bitflag_to_flaggroup(spell_hex_data->casting_spells, magic_num1[0]);
+        spell_hex_data->revenge_power = magic_num1[2];
+        spell_hex_data->revenge_type = i2enum<SpellHexRevengeType>(magic_num2[1]);
+        spell_hex_data->revenge_turn = magic_num2[2];
     } else {
         rd_FlagGroup(spell_hex_data->casting_spells, rd_byte);
         rd_s32b(&spell_hex_data->revenge_power);
