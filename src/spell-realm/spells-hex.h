@@ -29,6 +29,7 @@ public:
     bool check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const;
     bool is_spelling_specific(int hex) const;
     bool is_spelling_any() const;
+    void interrupt_spelling();
     void eyes_on_eyes();
     void thief_teleport();
     void set_casting_flag(spell_hex_type type);
