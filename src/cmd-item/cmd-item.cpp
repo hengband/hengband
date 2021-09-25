@@ -39,6 +39,7 @@
 #include "object-use/quaff-execution.h"
 #include "object-use/read-execution.h"
 #include "object-use/use-execution.h"
+#include "object-use/zaprod-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/identification.h"
@@ -256,7 +257,7 @@ void do_cmd_use(player_type *player_ptr)
         ObjectUseEntity(player_ptr, item).execute();
         break;
     case TV_ROD:
-        exe_zap_rod(player_ptr, item);
+        ObjectZapRodEntity(player_ptr).execute(item);
         break;
     case TV_POTION:
         ObjectQuaffEntity(player_ptr).execute(item);
