@@ -302,5 +302,5 @@ void do_cmd_use_staff(player_type *player_ptr)
     if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_STAFF)))
         return;
 
-    exe_use_staff(player_ptr, item);
+    ObjectUseEntity(player_ptr, item).execute();
 }

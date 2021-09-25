@@ -3,4 +3,14 @@
 #include "system/angband.h"
 
 struct player_type;
-void exe_use_staff(player_type *player_ptr, INVENTORY_IDX item);
+class ObjectUseEntity {
+public:
+    ObjectUseEntity(player_type *player_ptr, INVENTORY_IDX item);
+    virtual ~ObjectUseEntity() = default;
+
+    void execute();
+
+private:
+    player_type *player_ptr;
+    INVENTORY_IDX item;
+};

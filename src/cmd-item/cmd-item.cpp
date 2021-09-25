@@ -253,7 +253,7 @@ void do_cmd_use(player_type *player_ptr)
         exe_aim_wand(player_ptr, item);
         break;
     case TV_STAFF:
-        exe_use_staff(player_ptr, item);
+        ObjectUseEntity(player_ptr, item).execute();
         break;
     case TV_ROD:
         exe_zap_rod(player_ptr, item);

@@ -28,30 +28,36 @@
 #include "view/object-describer.h"
 
 /*!
- * @brief 杖を使うコマンドのサブルーチン /
- * Use a staff.			-RAK-
+ * @brief コンストラクタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 使うオブジェクトの所持品ID
- * @details
- * One charge of one staff disappears.
- * Hack -- staffs of identify can be "cancelled".
  */
-void exe_use_staff(player_type *player_ptr, INVENTORY_IDX item)
+ObjectUseEntity::ObjectUseEntity(player_type* player_ptr, INVENTORY_IDX item)
+    : player_ptr(player_ptr)
+    , item(item)
+{
+}
+
+/*!
+ * @brief 杖を使う
+ */
+void ObjectUseEntity::execute()
 {
     auto use_charge = true;
-    auto *o_ptr = ref_item(player_ptr, item);
-    if ((item < 0) && (o_ptr->number > 1)) {
+    auto *o_ptr = ref_item(this->player_ptr, this->item);
+    if ((this->item < 0) && (o_ptr->number > 1)) {
         msg_print(_("まずは杖を拾わなければ。", "You must first pick up the staffs."));
         return;
     }
 
-    PlayerEnergy(player_ptr).set_player_turn_energy(100);
+    PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
     auto lev = k_info[o_ptr->k_idx].level;
     if (lev > 50) {
         lev = 50 + (lev - 50) / 2;
     }
 
-    auto chance = player_ptr->skill_dev;
-    if (player_ptr->confused) {
+    auto chance = this->player_ptr->skill_dev;
+    if (this->player_ptr->confused) {
         chance = chance / 2;
     }
 
@@ -60,11 +66,11 @@ void exe_use_staff(player_type *player_ptr, INVENTORY_IDX item)
         chance = USE_DEVICE;
     }
 
-    if (cmd_limit_time_walk(player_ptr)) {
+    if (cmd_limit_time_walk(this->player_ptr)) {
         return;
     }
 
-    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (player_ptr->pclass == CLASS_BERSERKER)) {
+    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (this->player_ptr->pclass == CLASS_BERSERKER)) {
         if (flush_failure) {
             flush();
         }
@@ -81,17 +87,17 @@ void exe_use_staff(player_type *player_ptr, INVENTORY_IDX item)
 
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
         o_ptr->ident |= IDENT_EMPTY;
-        player_ptr->update |= PU_COMBINE | PU_REORDER;
-        player_ptr->window_flags |= PW_INVEN;
+        this->player_ptr->update |= PU_COMBINE | PU_REORDER;
+        this->player_ptr->window_flags |= PW_INVEN;
         return;
     }
 
     sound(SOUND_ZAP);
-    auto ident = staff_effect(player_ptr, o_ptr->sval, &use_charge, false, false, o_ptr->is_aware());
+    auto ident = staff_effect(this->player_ptr, o_ptr->sval, &use_charge, false, false, o_ptr->is_aware());
     if (!(o_ptr->is_aware())) {
-        chg_virtue(player_ptr, V_PATIENCE, -1);
-        chg_virtue(player_ptr, V_CHANCE, 1);
-        chg_virtue(player_ptr, V_KNOWLEDGE, -1);
+        chg_virtue(this->player_ptr, V_PATIENCE, -1);
+        chg_virtue(this->player_ptr, V_CHANCE, 1);
+        chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
     }
 
     /*
@@ -99,35 +105,35 @@ void exe_use_staff(player_type *player_ptr, INVENTORY_IDX item)
      * gain_exp() does not reorder the inventory before the charge
      * is deducted from the staff.
      */
-    BIT_FLAGS inventory_flags = PU_COMBINE | PU_REORDER | (player_ptr->update & PU_AUTODESTROY);
-    reset_bits(player_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
+    BIT_FLAGS inventory_flags = PU_COMBINE | PU_REORDER | (this->player_ptr->update & PU_AUTODESTROY);
+    reset_bits(this->player_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
     object_tried(o_ptr);
     if (ident && !o_ptr->is_aware()) {
-        object_aware(player_ptr, o_ptr);
-        gain_exp(player_ptr, (lev + (player_ptr->lev >> 1)) / player_ptr->lev);
+        object_aware(this->player_ptr, o_ptr);
+        gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
-    set_bits(player_ptr->update, inventory_flags);
+    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(this->player_ptr->update, inventory_flags);
     if (!use_charge) {
         return;
     }
 
     o_ptr->pval--;
-    if ((item >= 0) && (o_ptr->number > 1)) {
+    if ((this->item >= 0) && (o_ptr->number > 1)) {
         object_type forge;
         auto *q_ptr = &forge;
         q_ptr->copy_from(o_ptr);
         q_ptr->number = 1;
         o_ptr->pval++;
         o_ptr->number--;
-        item = store_item_to_inventory(player_ptr, q_ptr);
+        this->item = store_item_to_inventory(this->player_ptr, q_ptr);
         msg_print(_("杖をまとめなおした。", "You unstack your staff."));
     }
 
-    if (item >= 0) {
-        inven_item_charges(player_ptr, item);
+    if (this->item >= 0) {
+        inven_item_charges(this->player_ptr, this->item);
     } else {
-        floor_item_charges(player_ptr->current_floor_ptr, 0 - item);
+        floor_item_charges(this->player_ptr->current_floor_ptr, 0 - this->item);
     }
 }
