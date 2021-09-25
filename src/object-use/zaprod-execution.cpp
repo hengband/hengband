@@ -12,6 +12,7 @@
 #include "game-option/disturbance-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "object-use/item-use-checker.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -57,6 +58,10 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
     }
 
     PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
+    if (!this->check_can_zap()) {
+        return;
+    }
+
     auto lev = k_info[o_ptr->k_idx].level;
     auto chance = this->player_ptr->skill_dev;
     if (this->player_ptr->confused) {
@@ -76,10 +81,6 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
 
     if (chance < USE_DEVICE) {
         chance = USE_DEVICE;
-    }
-
-    if (cmd_limit_time_walk(this->player_ptr)) {
-        return;
     }
 
     bool success;
@@ -138,4 +139,13 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
     }
 
     set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+}
+
+bool ObjectZapRodEntity::check_can_zap()
+{
+    if (cmd_limit_time_walk(this->player_ptr)) {
+        return false;
+    }
+
+    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていてロッドを振れなかった！", "You were not able to zap it by the stun!"));
 }

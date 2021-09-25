@@ -12,4 +12,6 @@ public:
 
 private:
     player_type *player_ptr;
+
+    bool check_can_zap();
 };
