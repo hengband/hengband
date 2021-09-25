@@ -118,15 +118,11 @@ static bool detonation(player_type *player_ptr)
  */
 void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr;
-    object_type forge;
-    object_type *q_ptr;
-
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-
     if (player_ptr->timewalk) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
 
         msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from the bottle."));
         sound(SOUND_FAIL);
@@ -141,17 +137,16 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
         (void)SpellHex(player_ptr).stop_all_spells();
     }
 
-    o_ptr = ref_item(player_ptr, item);
-    q_ptr = &forge;
+    auto *o_ptr = ref_item(player_ptr, item);
+    object_type forge;
+    auto *q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;
     vary_item(player_ptr, item, -1);
     sound(SOUND_QUAFF);
-    bool ident = false;
-    DEPTH lev = k_info[q_ptr->k_idx].level;
+    auto ident = false;
     if (q_ptr->tval == TV_POTION) {
         switch (q_ptr->sval) {
-            /* 飲みごたえをオリジナルより細かく表現 */
         case SV_POTION_WATER:
             msg_print(_("口の中がさっぱりした。", "That was refreshing."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
@@ -575,8 +570,8 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
         (void)potion_smash_effect(player_ptr, 0, player_ptr->y, player_ptr->x, q_ptr->k_idx);
     }
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
 
+    player_ptr->update |= PU_COMBINE | PU_REORDER;
     if (!(q_ptr->is_aware())) {
         chg_virtue(player_ptr, V_PATIENCE, -1);
         chg_virtue(player_ptr, V_CHANCE, 1);
@@ -589,7 +584,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
     /* An identification was made */
     if (ident && !q_ptr->is_aware()) {
         object_aware(player_ptr, q_ptr);
-        gain_exp(player_ptr, (lev + (player_ptr->lev >> 1)) / player_ptr->lev);
+        gain_exp(player_ptr, (k_info[q_ptr->k_idx].level + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
     player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
