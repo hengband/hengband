@@ -1,4 +1,5 @@
 ﻿#include "save/player-class-specific-data-writer.h"
+#include "player-info/bard-data-type.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
@@ -41,6 +42,14 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<magic_eater
     write_item_group(magic_eater_data->staves);
     write_item_group(magic_eater_data->wands);
     write_item_group(magic_eater_data->rods);
+}
+
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<bard_data_type> &bird_data) const
+{
+    wr_s32b(enum2i(bird_data->singing_song));
+    wr_s32b(enum2i(bird_data->interrputing_song));
+    wr_s32b(bird_data->singing_duration);
+    wr_byte(bird_data->singing_song_spell_idx);
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

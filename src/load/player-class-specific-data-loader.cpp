@@ -1,5 +1,6 @@
 ﻿#include "load/player-class-specific-data-loader.h"
 #include "load/load-util.h"
+#include "player-info/bard-data-type.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
@@ -80,6 +81,24 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<magic_eater_data_
         load_item_group(magic_eater_data->staves);
         load_item_group(magic_eater_data->wands);
         load_item_group(magic_eater_data->rods);
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bard_data_type> &bird_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        bird_data->singing_song = i2enum<realm_song_type>(this->magic_num1[0]);
+        bird_data->interrputing_song = i2enum<realm_song_type>(this->magic_num1[1]);
+        bird_data->singing_duration = this->magic_num1[2];
+        bird_data->singing_song_spell_idx = this->magic_num2[0];
+    } else {
+        int32_t tmp32s;
+        rd_s32b(&tmp32s);
+        bird_data->singing_song = i2enum<realm_song_type>(tmp32s);
+        rd_s32b(&tmp32s);
+        bird_data->interrputing_song = i2enum<realm_song_type>(tmp32s);
+        rd_s32b(&bird_data->singing_duration);
+        rd_byte(&bird_data->singing_song_spell_idx);
     }
 }
 

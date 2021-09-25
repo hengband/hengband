@@ -7,6 +7,7 @@
 #include "player-base/player-class.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "player-info/bard-data-type.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
@@ -76,6 +77,9 @@ void PlayerClass::init_specific_data()
         break;
     case CLASS_MAGIC_EATER:
         this->player_ptr->class_specific_data = std::make_shared<magic_eater_data_type>();
+        break;
+    case CLASS_BARD:
+        this->player_ptr->class_specific_data = std::make_shared<bard_data_type>();
         break;
     case CLASS_HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {
