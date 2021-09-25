@@ -273,6 +273,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-info.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
+    <ClCompile Include="..\..\src\object-use\use-execution.cpp" />
     <ClCompile Include="..\..\src\player-base\player-class.cpp" />
     <ClCompile Include="..\..\src\player-base\player-race.cpp" />
     <ClCompile Include="..\..\src\player-info\magic-eater-data-type.cpp" />
@@ -988,6 +989,7 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-helm.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-shield.h" />
+    <ClInclude Include="..\..\src\object-use\use-execution.h" />
     <ClInclude Include="..\..\src\object\object-index-list.h" />
     <ClInclude Include="..\..\src\player-base\player-class.h" />
     <ClInclude Include="..\..\src\player-base\player-race.h" />

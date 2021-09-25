@@ -2349,6 +2349,9 @@
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-use\use-execution.cpp">
+      <Filter>object-use</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5075,6 +5078,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\sniper-data-type.h">
       <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\use-execution.h">
+      <Filter>object-use</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

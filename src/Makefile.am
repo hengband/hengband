@@ -610,6 +610,7 @@ hengband_SOURCES = \
 	object-use/quaff-execution.cpp object-use/quaff-execution.h \
 	object-use/read-execution.cpp object-use/read-execution.h \
 	object-use/throw-execution.cpp object-use/throw-execution.h \
+	object-use/use-execution.cpp object-use/use-execution.h \
 	\
 	perception/identification.cpp perception/identification.h \
 	perception/object-perception.cpp perception/object-perception.h \
