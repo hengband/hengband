@@ -659,6 +659,7 @@ hengband_SOURCES = \
 	player-base/player-race.cpp player-base/player-race.h \
 	\
 	player-info/alignment.cpp player-info/alignment.h \
+	player-info/bard-data-type.h \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/bluemage-data-type.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
