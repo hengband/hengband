@@ -85,12 +85,6 @@ void wr_player(player_type *player_ptr)
     for (int i = 0; i < MAX_SKILLS; i++)
         wr_s16b(player_ptr->skill_exp[i]);
 
-    for (int i = 0; i < MAX_SPELLS; i++)
-        wr_s32b(player_ptr->magic_num1[i]);
-
-    for (int i = 0; i < MAX_SPELLS; i++)
-        wr_byte(player_ptr->magic_num2[i]);
-
     std::visit(PlayerClassSpecificDataWriter(), player_ptr->class_specific_data);
 
     wr_byte((byte)player_ptr->start_race);

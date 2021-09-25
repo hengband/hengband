@@ -257,6 +257,4 @@ enum class SmithEssence : int16_t {
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御
-
-    MAX = MAX_SPELLS, //!< エッセンス所持量はplayer_type::magic_num1[MAX_SPELLS]に格納するので、この値未満を割り当てる必要あり
 };

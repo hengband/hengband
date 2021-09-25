@@ -3,15 +3,6 @@
  * @date 2014/01/14
  * @author
  * 2014 Deskull rearranged comment for Doxygen.\n
- * @details
- * magic_num1\n
- * 0: Flag bits of spelling spells\n
- * 1: Flag bits of despelled spells\n
- * 2: Revange damage\n
- * magic_num2\n
- * 0: Number of spelling spells\n
- * 1: Type of revenge\n
- * 2: Turn count for revenge\n
  */
 
 #include "realm/realm-hex.h"
