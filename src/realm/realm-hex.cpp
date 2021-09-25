@@ -46,7 +46,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
@@ -588,7 +587,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);
-                if (get_singing_song_id(player_ptr) == 0)
+                if (!spell_hex.is_spelling_any())
                     set_action(player_ptr, ACTION_NONE);
             }
         }
