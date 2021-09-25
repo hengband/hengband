@@ -259,7 +259,7 @@ void do_cmd_use(player_type *player_ptr)
         exe_zap_rod(player_ptr, item);
         break;
     case TV_POTION:
-        exe_quaff_potion(player_ptr, item);
+        ObjectQuaffEntity(player_ptr).execute(item);
         break;
     case TV_SCROLL:
         if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
