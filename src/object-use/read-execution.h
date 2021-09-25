@@ -13,4 +13,6 @@ public:
 private:
     player_type *player_ptr;
     INVENTORY_IDX item;
+
+    bool check_can_read();
 };

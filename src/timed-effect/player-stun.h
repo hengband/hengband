@@ -23,7 +23,8 @@ public:
 
     short current() const;
     PlayerStunRank get_rank() const;
-    int get_chance_penalty() const;
+    int get_magic_chance_penalty() const;
+    int get_item_chance_penalty() const;
     short get_damage_penalty() const;
     bool is_stunned() const;
     std::tuple<term_color_type, std::string_view> get_expr() const;

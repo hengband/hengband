@@ -636,7 +636,7 @@ static PERCENTAGE decide_element_chance(player_type *player_ptr, mind_type spell
         chance = minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->get_chance_penalty();
+    chance += player_stun->get_magic_chance_penalty();
     if (heavy_armor(player_ptr))
         chance += 5;
 

@@ -115,7 +115,7 @@ static void display_spell_list(player_type *player_ptr)
                 chance = minfail;
 
             auto player_stun = player_ptr->effects()->stun();
-            chance += player_stun->get_chance_penalty();
+            chance += player_stun->get_magic_chance_penalty();
             if (chance > 95) {
                 chance = 95;
             }

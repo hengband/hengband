@@ -62,6 +62,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/timed-effects.h"
+#include "timed-effect/player-stun.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 
@@ -84,12 +86,7 @@ void ObjectReadEntity::execute(bool known)
 {
     auto *o_ptr = ref_item(this->player_ptr, this->item);
     PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
-    if (cmd_limit_time_walk(this->player_ptr)) {
-        return;
-    }
-
-    if (this->player_ptr->pclass == CLASS_BERSERKER) {
-        msg_print(_("巻物なんて読めない。", "You cannot read."));
+    if (!this->check_can_read()) {
         return;
     }
 
@@ -523,4 +520,24 @@ void ObjectReadEntity::execute(bool known)
 
     sound(SOUND_SCROLL);
     vary_item(this->player_ptr, this->item, -1);
+}
+
+bool ObjectReadEntity::check_can_read()
+{
+    if (cmd_limit_time_walk(this->player_ptr)) {
+        return false;
+    }
+
+    if (this->player_ptr->pclass == CLASS_BERSERKER) {
+        msg_print(_("巻物なんて読めない。", "You cannot read."));
+        return false;
+    }
+
+    auto penalty = this->player_ptr->effects()->stun()->get_item_chance_penalty();
+    if (penalty >= randint1(100)) {
+        msg_print(_("朦朧としていて読めなかった！", "You were not able to read it by the stun!"));
+        return false;
+    }
+
+    return true;
 }

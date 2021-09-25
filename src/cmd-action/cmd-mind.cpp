@@ -178,7 +178,7 @@ static void decide_mind_chance(player_type *player_ptr, cm_type *cm_ptr)
         cm_ptr->chance = cm_ptr->minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    cm_ptr->chance += player_stun->get_chance_penalty();
+    cm_ptr->chance += player_stun->get_magic_chance_penalty();
 
     if (cm_ptr->use_mind != mind_kind_type::KI)
         return;
