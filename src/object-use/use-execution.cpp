@@ -23,6 +23,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/timed-effects.h"
+#include "timed-effect/player-stun.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -51,6 +53,10 @@ void ObjectUseEntity::execute()
     }
 
     PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
+    if (!this->check_can_use()) {
+        return;
+    }
+
     auto lev = k_info[o_ptr->k_idx].level;
     if (lev > 50) {
         lev = 50 + (lev - 50) / 2;
@@ -64,10 +70,6 @@ void ObjectUseEntity::execute()
     chance = chance - lev;
     if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1)) {
         chance = USE_DEVICE;
-    }
-
-    if (cmd_limit_time_walk(this->player_ptr)) {
-        return;
     }
 
     if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (this->player_ptr->pclass == CLASS_BERSERKER)) {
@@ -136,4 +138,19 @@ void ObjectUseEntity::execute()
     } else {
         floor_item_charges(this->player_ptr->current_floor_ptr, 0 - this->item);
     }
+}
+
+bool ObjectUseEntity::check_can_use()
+{
+    if (cmd_limit_time_walk(this->player_ptr)) {
+        return false;
+    }
+
+    auto penalty = this->player_ptr->effects()->stun()->get_item_chance_penalty();
+    if (penalty >= randint1(100)) {
+        msg_print(_("朦朧としていて杖を振れなかった！", "You were not able to use it by the stun!"));
+        return false;
+    }
+
+    return true;
 }
