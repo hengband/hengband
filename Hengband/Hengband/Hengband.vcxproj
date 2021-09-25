@@ -275,6 +275,7 @@
     <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
     <ClCompile Include="..\..\src\player-base\player-class.cpp" />
     <ClCompile Include="..\..\src\player-base\player-race.cpp" />
+    <ClCompile Include="..\..\src\player-info\magic-eater-data-type.cpp" />
     <ClCompile Include="..\..\src\save\player-class-specific-data-writer.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
@@ -995,6 +996,7 @@
     <ClInclude Include="..\..\src\player-info\class-specific-data.h" />
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />
     <ClInclude Include="..\..\src\player-info\force-trainer-data-type.h" />
+    <ClInclude Include="..\..\src\player-info\magic-eater-data-type.h" />
     <ClInclude Include="..\..\src\player-info\smith-data-type.h" />
     <ClInclude Include="..\..\src\player-info\spell-hex-data-type.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h" />

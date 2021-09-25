@@ -1,6 +1,7 @@
-#include "save/player-class-specific-data-writer.h"
+﻿#include "save/player-class-specific-data-writer.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
+#include "player-info/magic-eater-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "save/save-util.h"
@@ -26,6 +27,20 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<force_train
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<bluemage_data_type> &bluemage_data) const
 {
     wr_FlagGroup(bluemage_data->learnt_blue_magics, wr_byte);
+}
+
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<magic_eater_data_type> &magic_eater_data) const
+{
+    auto write_item_group = [](const auto &item_group) {
+        wr_u16b(static_cast<uint16_t>(item_group.size()));
+        for (const auto &item : item_group) {
+            wr_s32b(item.charge);
+            wr_byte(item.count);
+        }
+    };
+    write_item_group(magic_eater_data->staves);
+    write_item_group(magic_eater_data->wands);
+    write_item_group(magic_eater_data->rods);
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

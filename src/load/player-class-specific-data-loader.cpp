@@ -2,6 +2,7 @@
 #include "load/load-util.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
+#include "player-info/magic-eater-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "util/enum-converter.h"
@@ -44,6 +45,41 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bluemage_data_typ
         }
     } else {
         rd_FlagGroup(bluemage_data->learnt_blue_magics, rd_byte);
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<magic_eater_data_type> &magic_eater_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        auto load_old_item_group = [this](auto &item_group, int index) {
+            constexpr size_t old_item_group_size = 36;
+            int offset = old_item_group_size * index;
+            for (auto i = 0U; i < std::min(item_group.size(), old_item_group_size); ++i) {
+                item_group[i].charge = this->magic_num1[offset + i];
+                item_group[i].count = this->magic_num2[offset + i];
+            }
+        };
+        load_old_item_group(magic_eater_data->staves, 0);
+        load_old_item_group(magic_eater_data->wands, 1);
+        load_old_item_group(magic_eater_data->rods, 2);
+    } else {
+        auto load_item_group = [](auto &item_group) {
+            uint16_t item_count;
+            rd_u16b(&item_count);
+            for (auto i = 0U; i < item_count; ++i) {
+                int32_t charge;
+                byte count;
+                rd_s32b(&charge);
+                rd_byte(&count);
+                if (i < item_group.size()) {
+                    item_group[i].charge = charge;
+                    item_group[i].count = count;
+                }
+            }
+        };
+        load_item_group(magic_eater_data->staves);
+        load_item_group(magic_eater_data->wands);
+        load_item_group(magic_eater_data->rods);
     }
 }
 

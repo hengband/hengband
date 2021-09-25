@@ -28,7 +28,9 @@
 #include "monster/monster-describer.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/magic-eater-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "spell-kind/spells-launcher.h"
@@ -458,19 +460,23 @@ bool true_healing(player_type *player_ptr, HIT_POINT pow)
 bool restore_mana(player_type *player_ptr, bool magic_eater)
 {
     if (player_ptr->pclass == CLASS_MAGIC_EATER && magic_eater) {
-        int i;
-        for (i = 0; i < EATER_EXT * 2; i++) {
-            player_ptr->magic_num1[i] += (player_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : player_ptr->magic_num2[i] * EATER_CHARGE / 3;
-            if (player_ptr->magic_num1[i] > player_ptr->magic_num2[i] * EATER_CHARGE)
-                player_ptr->magic_num1[i] = player_ptr->magic_num2[i] * EATER_CHARGE;
+        // 魔力復活による、魔道具術師の取り込んだ魔法の回復量
+        // 取り込み数が10回未満: 3 回分回復
+        // 取り込み数が10回以上: 取り込み回数/3 回分回復
+        auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+        for (auto tval : { TV_STAFF, TV_WAND }) {
+            for (auto &item : magic_eater_data->get_item_group(tval)) {
+                item.charge += (item.count < 10) ? EATER_CHARGE * 3 : item.count * EATER_CHARGE / 3;
+                item.charge = std::min(item.charge, item.count * EATER_CHARGE);
+            }
         }
 
-        for (; i < EATER_EXT * 3; i++) {
-            KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i - EATER_EXT * 2);
-            player_ptr->magic_num1[i]
-                -= ((player_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE * 3 : player_ptr->magic_num2[i] * EATER_ROD_CHARGE / 3) * k_info[k_idx].pval;
-            if (player_ptr->magic_num1[i] < 0)
-                player_ptr->magic_num1[i] = 0;
+        auto sval = 0;
+        for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
+            KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, sval);
+            item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * k_info[k_idx].pval;
+            item.charge = std::max(item.charge, 0);
+            ++sval;
         }
 
         msg_print(_("頭がハッキリとした。", "You feel your head clear."));
