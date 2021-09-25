@@ -15,11 +15,13 @@
 #include "object/object-kind.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
+#include "player-info/magic-eater-data-type.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 
 #include <algorithm>
+#include <string>
 #include <vector>
 
 typedef struct {
@@ -33,48 +35,52 @@ typedef struct {
  */
 static void dump_magic_eater(player_type *player_ptr, FILE *fff)
 {
-    char s[EATER_EXT][MAX_NLEN];
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    if (!magic_eater_data) {
+        return;
+    }
+
     fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
 
-    for (int ext = 0; ext < 3; ext++) {
-        tval_type tval = TV_NONE;
-        switch (ext) {
-        case 0:
-            tval = TV_STAFF;
+    for (auto tval : { TV_STAFF, TV_WAND, TV_ROD }) {
+        switch (tval) {
+        case TV_STAFF:
             fprintf(fff, _("\n[杖]\n", "\n[Staffs]\n"));
             break;
-        case 1:
-            tval = TV_WAND;
+        case TV_WAND:
             fprintf(fff, _("\n[魔法棒]\n", "\n[Wands]\n"));
             break;
-        case 2:
-            tval = TV_ROD;
+        case TV_ROD:
             fprintf(fff, _("\n[ロッド]\n", "\n[Rods]\n"));
+            break;
+        default:
             break;
         }
 
-        int eat_num = 0;
-        for (OBJECT_SUBTYPE_VALUE i = 0; i < EATER_EXT; i++) {
-            int idx = EATER_EXT * ext + i;
-            int magic_num = player_ptr->magic_num2[idx];
-            if (!magic_num)
+        const auto &item_group = magic_eater_data->get_item_group(tval);
+        std::vector<std::string> desc_list;
+        for (auto i = 0U; i < item_group.size(); ++i) {
+            auto &item = item_group[i];
+            if (item.count == 0)
                 continue;
 
             KIND_OBJECT_IDX k_idx = lookup_kind(tval, i);
             if (!k_idx)
                 continue;
-            sprintf(s[eat_num], "%23s (%2d)", k_info[k_idx].name.c_str(), magic_num);
-            eat_num++;
+
+            char buf[128];
+            snprintf(buf, sizeof(buf), "%23s (%2d)", k_info[k_idx].name.c_str(), item.count);
+            desc_list.emplace_back(buf);
         }
 
-        if (eat_num <= 0) {
+        if (desc_list.size() <= 0) {
             fputs(_("  (なし)\n", "  (none)\n"), fff);
             continue;
         }
 
-        OBJECT_SUBTYPE_VALUE i;
-        for (i = 0; i < eat_num; i++) {
-            fputs(s[i], fff);
+        uint i;
+        for (i = 0; i < desc_list.size(); i++) {
+            fputs(desc_list[i].c_str(), fff);
             if (i % 3 < 2)
                 fputs("    ", fff);
             else

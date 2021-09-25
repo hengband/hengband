@@ -35,4 +35,5 @@ enum sv_staff_type {
     SV_STAFF_ANIMATE_DEAD = 30,
     SV_STAFF_MSTORM = 31,
     SV_STAFF_NOTHING = 32,
+    SV_STAFF_MAX,
 };

@@ -7,6 +7,8 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
+#include "player-base/player-class.h"
+#include "player-info/magic-eater-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-table.h"
 #include "player/special-defense-types.h"
@@ -111,48 +113,49 @@ void regenmana(player_type *player_ptr, MANA_POINT upkeep_factor, MANA_POINT reg
 }
 
 /*!
- * @brief プレイヤーのMP自然回復処理 / Regenerate magic regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
+ * @brief 取り込んだ魔道具の自然回復処理 / Regenerate magic regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
  * @param regen_amount 回復量
  */
 void regenmagic(player_type *player_ptr, int regen_amount)
 {
-    MANA_POINT new_mana;
-    int dev = 30;
-    int mult = (dev + adj_mag_mana[player_ptr->stat_index[A_INT]]); /* x1 to x2 speed bonus for recharging */
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    if (!magic_eater_data) {
+        return;
+    }
 
-    for (int i = 0; i < EATER_EXT * 2; i++) {
-        if (!player_ptr->magic_num2[i])
+    const int dev = 30;
+    const int mult = (dev + adj_mag_mana[player_ptr->stat_index[A_INT]]); /* x1 to x2 speed bonus for recharging */
+
+    for (auto tval : { TV_STAFF, TV_WAND }) {
+        for (auto &item : magic_eater_data->get_item_group(tval)) {
+            const int maximum_charge = item.count * EATER_CHARGE;
+            if (item.count == 0 || item.charge == maximum_charge) {
+                continue;
+            }
+
+            /* Increase remaining charge number like float value */
+            auto new_mana = (regen_amount * mult * (item.count + 13)) / (dev * 8);
+            item.charge += new_mana;
+
+            /* Check maximum charge */
+            item.charge = std::min(item.charge, maximum_charge);
+        }
+    }
+
+    for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
+        if (item.count == 0 || item.charge == 0) {
             continue;
-        if (player_ptr->magic_num1[i] == ((long)player_ptr->magic_num2[i] << 16))
-            continue;
-
-        /* Increase remaining charge number like float value */
-        new_mana = (regen_amount * mult * ((long)player_ptr->magic_num2[i] + 13)) / (dev * 8);
-        player_ptr->magic_num1[i] += new_mana;
-
-        /* Check maximum charge */
-        if (player_ptr->magic_num1[i] > (player_ptr->magic_num2[i] << 16)) {
-            player_ptr->magic_num1[i] = ((long)player_ptr->magic_num2[i] << 16);
         }
 
-        wild_regen = 20;
-    }
-
-    for (int i = EATER_EXT * 2; i < EATER_EXT * 3; i++) {
-        if (!player_ptr->magic_num1[i])
-            continue;
-        if (!player_ptr->magic_num2[i])
-            continue;
-
         /* Decrease remaining period for charging */
-        new_mana = (regen_amount * mult * ((long)player_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) / (dev * 16 * PY_REGEN_NORMAL);
-        player_ptr->magic_num1[i] -= new_mana;
+        auto new_mana = (regen_amount * mult * (item.count + 10) * EATER_ROD_CHARGE) / (dev * 16 * PY_REGEN_NORMAL);
+        item.charge -= new_mana;
 
         /* Check minimum remaining period for charging */
-        if (player_ptr->magic_num1[i] < 0)
-            player_ptr->magic_num1[i] = 0;
-        wild_regen = 20;
+        item.charge = std::max(item.charge, 0);
     }
+
+    wild_regen = 20;
 }
 
 /*!

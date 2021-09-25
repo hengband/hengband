@@ -5,6 +5,8 @@
 #include "io/write-diary.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
+#include "player-base/player-class.h"
+#include "player-info/magic-eater-data-type.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
@@ -130,21 +132,23 @@ static void back_to_health(player_type *player_ptr)
 }
 
 /*!
- * @brief 魔力喰いの残り回数回復(本当？ 要調査)
+ * @brief 魔道具術師の取り込んだ魔法をすべて完全に回復した状態にする
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void charge_magic_eating_energy(player_type *player_ptr)
 {
-    if (player_ptr->pclass != CLASS_MAGIC_EATER)
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    if (!magic_eater_data) {
         return;
-
-    int i;
-    for (i = 0; i < 72; i++) {
-        player_ptr->magic_num1[i] = player_ptr->magic_num2[i] * EATER_CHARGE;
     }
 
-    for (; i < MAX_SPELLS; i++) {
-        player_ptr->magic_num1[i] = 0;
+    for (auto tval : { TV_STAFF, TV_WAND }) {
+        for (auto &item : magic_eater_data->get_item_group(tval)) {
+            item.charge = item.count * EATER_CHARGE;
+        }
+    }
+    for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
+        item.charge = 0;
     }
 }
 
