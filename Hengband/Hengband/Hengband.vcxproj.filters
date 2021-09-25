@@ -2358,6 +2358,9 @@
     <ClCompile Include="..\..\src\object-use\zaprod-execution.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-use\zapwand-execution.cpp">
+      <Filter>object-use</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5092,6 +5095,9 @@
       <Filter>object-use</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\zaprod-execution.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\zapwand-execution.h">
       <Filter>object-use</Filter>
     </ClInclude>
   </ItemGroup>

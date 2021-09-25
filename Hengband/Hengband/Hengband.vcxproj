@@ -276,6 +276,7 @@
     <ClCompile Include="..\..\src\object-use\item-use-checker.cpp" />
     <ClCompile Include="..\..\src\object-use\use-execution.cpp" />
     <ClCompile Include="..\..\src\object-use\zaprod-execution.cpp" />
+    <ClCompile Include="..\..\src\object-use\zapwand-execution.cpp" />
     <ClCompile Include="..\..\src\player-base\player-class.cpp" />
     <ClCompile Include="..\..\src\player-base\player-race.cpp" />
     <ClCompile Include="..\..\src\player-info\magic-eater-data-type.cpp" />
@@ -994,6 +995,7 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-shield.h" />
     <ClInclude Include="..\..\src\object-use\use-execution.h" />
     <ClInclude Include="..\..\src\object-use\zaprod-execution.h" />
+    <ClInclude Include="..\..\src\object-use\zapwand-execution.h" />
     <ClInclude Include="..\..\src\object\object-index-list.h" />
     <ClInclude Include="..\..\src\player-base\player-class.h" />
     <ClInclude Include="..\..\src\player-base\player-race.h" />

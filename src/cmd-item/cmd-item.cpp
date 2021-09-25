@@ -40,6 +40,7 @@
 #include "object-use/read-execution.h"
 #include "object-use/use-execution.h"
 #include "object-use/zaprod-execution.h"
+#include "object-use/zapwand-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/identification.h"
@@ -251,7 +252,7 @@ void do_cmd_use(player_type *player_ptr)
         exe_eat_food(player_ptr, item);
         break;
     case TV_WAND:
-        exe_aim_wand(player_ptr, item);
+        ObjectZapWandEntity(player_ptr).execute(item);
         break;
     case TV_STAFF:
         ObjectUseEntity(player_ptr, item).execute();
