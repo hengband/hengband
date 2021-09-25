@@ -8,6 +8,7 @@ struct smith_data_type;
 struct force_trainer_data_type;
 struct bluemage_data_type;
 struct magic_eater_data_type;
+struct bard_data_type;
 struct spell_hex_data_type;
 
 class PlayerClassSpecificDataLoader {
@@ -26,6 +27,7 @@ public:
     void operator()(std::shared_ptr<force_trainer_data_type> &) const;
     void operator()(std::shared_ptr<bluemage_data_type> &bluemage_data) const;
     void operator()(std::shared_ptr<magic_eater_data_type> &magic_eater_data) const;
+    void operator()(std::shared_ptr<bard_data_type> &bird_data) const;
 
 private:
     int32_t (&magic_num1)[MAX_SPELLS];

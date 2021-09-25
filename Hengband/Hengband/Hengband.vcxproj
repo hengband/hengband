@@ -992,6 +992,7 @@
     <ClInclude Include="..\..\src\player-base\player-class.h" />
     <ClInclude Include="..\..\src\player-base\player-race.h" />
     <ClInclude Include="..\..\src\player-info\alignment.h" />
+    <ClInclude Include="..\..\src\player-info\bard-data-type.h" />
     <ClInclude Include="..\..\src\player-info\bluemage-data-type.h" />
     <ClInclude Include="..\..\src\player-info\class-specific-data.h" />
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />
