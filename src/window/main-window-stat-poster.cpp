@@ -2,6 +2,9 @@
 #include "io/input-key-requester.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
+#include "player-info/mane-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-status-table.h"
@@ -173,7 +176,8 @@ void print_state(player_type *player_ptr)
 
     case ACTION_LEARN: {
         strcpy(text, _("学習", "lear"));
-        if (player_ptr->new_mane)
+        auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+        if (bluemage_data->new_magic_learned)
             attr = TERM_L_RED;
         break;
     }
@@ -323,12 +327,14 @@ void print_imitation(player_type *player_ptr)
     if (player_ptr->pclass != CLASS_IMITATOR)
         return;
 
-    if (player_ptr->mane_num == 0) {
+    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+
+    if (mane_data->mane_list.size() == 0) {
         put_str("    ", row_study, col_study);
         return;
     }
 
-    TERM_COLOR attr = player_ptr->new_mane ? TERM_L_RED : TERM_WHITE;
+    TERM_COLOR attr = mane_data->new_mane ? TERM_L_RED : TERM_WHITE;
     c_put_str(attr, _("まね", "Imit"), row_study, col_study);
 }
 

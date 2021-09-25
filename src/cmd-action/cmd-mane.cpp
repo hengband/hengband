@@ -37,6 +37,8 @@
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-power-table.h"
+#include "player-base/player-class.h"
+#include "player-info/mane-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-table.h"
 #include "spell-kind/spells-launcher.h"
@@ -69,6 +71,8 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+
+#include <iterator>
 
 static int damage;
 
@@ -159,7 +163,9 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
     flag = false;
     redraw = false;
 
-    num = player_ptr->mane_num;
+    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+
+    num = mane_data->mane_list.size();
 
     /* Build a prompt (accept all spells) */
     (void)strnfmt(out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0), I2A(num - 1), p);
@@ -186,8 +192,9 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
 
                 /* Dump the spells */
                 for (i = 0; i < num; i++) {
+                    const auto &mane = mane_data->mane_list[i];
                     /* Access the spell */
-                    spell = monster_powers[enum2i(player_ptr->mane_spell[i])];
+                    spell = monster_powers[enum2i(mane.spell)];
 
                     chance = spell.manefail;
 
@@ -199,7 +206,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
                     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[spell.use_stat]] + adj_mag_stat[player_ptr->stat_index[A_DEX]] - 2) / 2;
 
                     if (spell.manedam)
-                        chance = chance * (baigaesi ? player_ptr->mane_dam[i] * 2 : player_ptr->mane_dam[i]) / spell.manedam;
+                        chance = chance * (baigaesi ? mane.damage * 2 : mane.damage) / spell.manedam;
 
                     chance += player_ptr->to_m_chance;
 
@@ -221,7 +228,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
                     }
 
                     /* Get info */
-                    mane_info(player_ptr, comment, player_ptr->mane_spell[i], (baigaesi ? player_ptr->mane_dam[i] * 2 : player_ptr->mane_dam[i]));
+                    mane_info(player_ptr, comment, mane.spell, (baigaesi ? mane.damage * 2 : mane.damage));
 
                     /* Dump the spell --(-- */
                     sprintf(psi_desc, "  %c) %-30s %3d%%%s", I2A(i), spell.name, chance, comment);
@@ -260,7 +267,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
         }
 
         /* Save the spell index */
-        spell = monster_powers[enum2i(player_ptr->mane_spell[i])];
+        spell = monster_powers[enum2i(mane_data->mane_list[i].spell)];
 
         /* Verify it */
         if (ask) {
@@ -290,7 +297,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
     /* Save the choice */
     (*sn) = i;
 
-    damage = (baigaesi ? player_ptr->mane_dam[i] * 2 : player_ptr->mane_dam[i]);
+    damage = (baigaesi ? mane_data->mane_list[i].damage * 2 : mane_data->mane_list[i].damage);
 
     /* Success */
     return true;
@@ -1074,7 +1081,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
  */
 bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
 {
-    int n = 0, j;
+    int n = 0;
     PERCENTAGE chance;
     PERCENTAGE minfail = 0;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -1084,7 +1091,9 @@ bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
     if (cmd_limit_confused(player_ptr))
         return false;
 
-    if (!player_ptr->mane_num) {
+    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+
+    if (mane_data->mane_list.empty()) {
         msg_print(_("まねられるものが何もない！", "You don't remember any action!"));
         return false;
     }
@@ -1092,7 +1101,7 @@ bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
     if (!get_mane_power(player_ptr, &n, baigaesi))
         return false;
 
-    spell = monster_powers[enum2i(player_ptr->mane_spell[n])];
+    spell = monster_powers[enum2i(mane_data->mane_list[n].spell)];
 
     /* Spell failure chance */
     chance = spell.manefail;
@@ -1130,16 +1139,12 @@ bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
         sound(SOUND_FAIL);
     } else {
         sound(SOUND_ZAP);
-        cast = use_mane(player_ptr, player_ptr->mane_spell[n]);
+        cast = use_mane(player_ptr, mane_data->mane_list[n].spell);
         if (!cast)
             return false;
     }
 
-    player_ptr->mane_num--;
-    for (j = n; j < player_ptr->mane_num; j++) {
-        player_ptr->mane_spell[j] = player_ptr->mane_spell[j + 1];
-        player_ptr->mane_dam[j] = player_ptr->mane_dam[j + 1];
-    }
+    mane_data->mane_list.erase(std::next(mane_data->mane_list.begin(), n));
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 

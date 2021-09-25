@@ -3,6 +3,7 @@
 #include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
+#include "player-info/mane-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "save/save-util.h"
@@ -50,6 +51,16 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<bard_data_t
     wr_s32b(enum2i(bird_data->interrputing_song));
     wr_s32b(bird_data->singing_duration);
     wr_byte(bird_data->singing_song_spell_idx);
+}
+
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<mane_data_type> &mane_data) const
+{
+    wr_s16b(static_cast<int16_t>(mane_data->mane_list.size()));
+
+    for (const auto &mane : mane_data->mane_list) {
+        wr_s16b(static_cast<int16_t>(mane.spell));
+        wr_s16b(static_cast<int16_t>(mane.damage));
+    }
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

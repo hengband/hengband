@@ -143,12 +143,7 @@ void player_wipe_without_name(player_type *player_ptr)
     player_ptr->arena_number = 0;
     player_ptr->current_floor_ptr->inside_arena = false;
     player_ptr->current_floor_ptr->inside_quest = 0;
-    for (int i = 0; i < MAX_MANE; i++) {
-        player_ptr->mane_spell[i] = RF_ABILITY::MAX;
-        player_ptr->mane_dam[i] = 0;
-    }
 
-    player_ptr->mane_num = 0;
     player_ptr->exit_bldg = true;
     player_ptr->today_mon = 0;
     update_gambling_monsters(player_ptr);

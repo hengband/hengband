@@ -24,6 +24,8 @@
 #include "mspell/mspell-selector.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
+#include "player-base/player-class.h"
+#include "player-info/mane-data-type.h"
 #include "player/attack-defense-types.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
@@ -263,18 +265,14 @@ static void check_mspell_imitation(player_type *player_ptr, msa_type *msa_ptr)
     if (msa_ptr->thrown_spell == RF_ABILITY::SPECIAL)
         return;
 
-    if (player_ptr->mane_num == MAX_MANE) {
-        player_ptr->mane_num--;
-        for (int i = 0; i < player_ptr->mane_num; i++) {
-            player_ptr->mane_spell[i] = player_ptr->mane_spell[i + 1];
-            player_ptr->mane_dam[i] = player_ptr->mane_dam[i + 1];
-        }
+    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+
+    if (mane_data->mane_list.size() == MAX_MANE) {
+        mane_data->mane_list.pop_front();
     }
 
-    player_ptr->mane_spell[player_ptr->mane_num] = msa_ptr->thrown_spell;
-    player_ptr->mane_dam[player_ptr->mane_num] = msa_ptr->dam;
-    player_ptr->mane_num++;
-    player_ptr->new_mane = true;
+    mane_data->mane_list.push_back({ msa_ptr->thrown_spell, msa_ptr->dam });
+    mane_data->new_mane = true;
     player_ptr->redraw |= PR_IMITATION;
 }
 

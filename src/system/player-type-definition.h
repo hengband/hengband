@@ -14,7 +14,6 @@
 #include "util/flag-group.h"
 
 #define MAX_SKILLS 10
-#define MAX_MANE 16
 
 enum class RF_ABILITY;
 
@@ -190,11 +189,6 @@ public:
     SUB_EXP skill_exp[MAX_SKILLS]{}; /* Proficiency of misc. skill */
 
     ClassSpecificData class_specific_data;
-
-    RF_ABILITY mane_spell[MAX_MANE]{};
-    HIT_POINT mane_dam[MAX_MANE]{};
-    int16_t mane_num{};
-    bool new_mane{};
 
 #define CONCENT_RADAR_THRESHOLD 2
 #define CONCENT_TELE_THRESHOLD 5

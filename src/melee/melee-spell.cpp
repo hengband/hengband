@@ -11,6 +11,8 @@
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
+#include "player-base/player-class.h"
+#include "player-info/mane-data-type.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -61,18 +63,14 @@ static void process_special_melee_spell(player_type *player_ptr, melee_spell_typ
     if (!is_special_magic)
         return;
 
-    if (player_ptr->mane_num == MAX_MANE) {
-        player_ptr->mane_num--;
-        for (int i = 0; i < player_ptr->mane_num - 1; i++) {
-            player_ptr->mane_spell[i] = player_ptr->mane_spell[i + 1];
-            player_ptr->mane_dam[i] = player_ptr->mane_dam[i + 1];
-        }
+    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+
+    if (mane_data->mane_list.size() == MAX_MANE) {
+        mane_data->mane_list.pop_front();
     }
 
-    player_ptr->mane_spell[player_ptr->mane_num] = ms_ptr->thrown_spell;
-    player_ptr->mane_dam[player_ptr->mane_num] = ms_ptr->dam;
-    player_ptr->mane_num++;
-    player_ptr->new_mane = true;
+    mane_data->mane_list.push_back({ ms_ptr->thrown_spell, ms_ptr->dam });
+    mane_data->new_mane = true;
 
     player_ptr->redraw |= PR_IMITATION;
 }
