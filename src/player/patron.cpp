@@ -146,7 +146,7 @@ void Patron::gain_level_reward(int chosen_reward) const
     int nasty_chance = 6;
     int type;
     patron_reward effect;
-    concptr reward = NULL;
+    concptr reward = nullptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     int count = 0;
