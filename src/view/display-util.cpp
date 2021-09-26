@@ -6,7 +6,7 @@ static struct
 	int col;
 	int row;
 	int len;
-	char header[20];
+	const char *header;
 } disp_player_line[]
 #ifdef JP
 = {
