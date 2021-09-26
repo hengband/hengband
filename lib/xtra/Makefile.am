@@ -3,3 +3,6 @@
 AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = graf music sound
+
+EXTRA_DIST = \
+	readme.md
