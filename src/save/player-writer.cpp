@@ -131,7 +131,6 @@ void wr_player(player_type *player_ptr)
     wr_s16b(0);
     wr_s16b(0);
     wr_s16b(player_ptr->sc);
-    wr_s16b(player_ptr->concent);
 
     auto effects = player_ptr->effects();
     wr_s16b(0); /* old "rest" */

@@ -74,7 +74,9 @@
 #include "mind/mind-sniper.h"
 #include "mind/mind-weaponsmith.h"
 #include "mind/snipe-types.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
@@ -132,8 +134,10 @@ void process_command(player_type *player_ptr)
     COMMAND_CODE old_now_message = now_message;
     repeat_check();
     now_message = 0;
-    if ((player_ptr->pclass == CLASS_SNIPER) && (player_ptr->concent))
-        player_ptr->reset_concent = true;
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    if (sniper_data && sniper_data->concent > 0) {
+        sniper_data->reset_concent = true;
+    }
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     switch (command_cmd) {

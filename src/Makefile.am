@@ -680,6 +680,7 @@ hengband_SOURCES = \
 	player-info/self-info.cpp player-info/self-info.h \
 	player-info/self-info-util.cpp player-info/self-info-util.h \
         player-info/smith-data-type.h \
+	player-info/sniper-data-type.h \
         player-info/spell-hex-data-type.h \
 	player-info/weapon-effect-info.cpp player-info/weapon-effect-info.h \
 	\

@@ -1000,6 +1000,7 @@
     <ClInclude Include="..\..\src\player-info\magic-eater-data-type.h" />
     <ClInclude Include="..\..\src\player-info\mane-data-type.h" />
     <ClInclude Include="..\..\src\player-info\smith-data-type.h" />
+    <ClInclude Include="..\..\src\player-info\sniper-data-type.h" />
     <ClInclude Include="..\..\src\player-info\spell-hex-data-type.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h" />
     <ClInclude Include="..\..\src\player-status\player-hand-types.h" />

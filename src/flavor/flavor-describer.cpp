@@ -258,8 +258,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
     tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128);
     flavor_ptr->avgdam *= tmul;
     flavor_ptr->avgdam /= (100 * 10);
-    if (player_ptr->concent)
-        flavor_ptr->avgdam = boost_concentration_damage(player_ptr, flavor_ptr->avgdam);
+    flavor_ptr->avgdam = boost_concentration_damage(player_ptr, flavor_ptr->avgdam);
 
     if (flavor_ptr->avgdam < 0)
         flavor_ptr->avgdam = 0;

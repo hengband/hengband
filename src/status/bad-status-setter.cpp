@@ -134,8 +134,7 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
             }
 
             /* Sniper */
-            if (this->player_ptr->concent)
-                reset_concentration(this->player_ptr, true);
+            reset_concentration(this->player_ptr, true);
 
             SpellHex spell_hex(this->player_ptr);
             if (spell_hex.is_spelling_any()) {
@@ -289,9 +288,7 @@ bool BadStatusSetter::paralysis(const TIME_EFFECT tmp_v)
     if (v > 0) {
         if (!this->player_ptr->paralyzed) {
             msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
-            if (this->player_ptr->concent) {
-                reset_concentration(this->player_ptr, true);
-            }
+            reset_concentration(this->player_ptr, true);
 
             SpellHex spell_hex(this->player_ptr);
             if (spell_hex.is_spelling_any()) {
@@ -350,9 +347,7 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
         set_tsuyoshi(this->player_ptr, 0, true);
         if (!this->player_ptr->hallucinated) {
             msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
-            if (this->player_ptr->concent) {
-                reset_concentration(this->player_ptr, true);
-            }
+            reset_concentration(this->player_ptr, true);
 
             this->player_ptr->counter = false;
             notice = true;
@@ -539,9 +534,7 @@ void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const s
         msg_print(_("型が崩れた。", "You lose your stance."));
     }
 
-    if (this->player_ptr->concent) {
-        reset_concentration(this->player_ptr, true);
-    }
+    reset_concentration(this->player_ptr, true);
 
     SpellHex spell_hex(this->player_ptr);
     if (spell_hex.is_spelling_any()) {

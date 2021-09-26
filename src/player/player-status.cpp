@@ -54,11 +54,13 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/alignment.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
+#include "player-info/sniper-data-type.h"
 #include "player-status/player-basic-statistics.h"
 #include "player-status/player-hand-types.h"
 #include "player-status/player-infravision.h"
@@ -2924,7 +2926,9 @@ bool is_blessed(player_type *player_ptr)
 
 bool is_tim_esp(player_type *player_ptr)
 {
-    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (player_ptr->concent >= CONCENT_TELE_THRESHOLD);
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_concent = sniper_data ? sniper_data->concent : 0;
+    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }
 
 bool is_tim_stealth(player_type *player_ptr)
@@ -2934,7 +2938,9 @@ bool is_tim_stealth(player_type *player_ptr)
 
 bool is_time_limit_esp(player_type *player_ptr)
 {
-    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (player_ptr->concent >= CONCENT_TELE_THRESHOLD);
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_concent = sniper_data ? sniper_data->concent : 0;
+    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }
 
 bool is_time_limit_stealth(player_type *player_ptr)

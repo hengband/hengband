@@ -5073,6 +5073,9 @@
     <ClInclude Include="..\..\src\specific-object\stone-of-lore.h">
       <Filter>specific-object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\sniper-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

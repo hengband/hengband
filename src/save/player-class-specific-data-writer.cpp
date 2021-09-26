@@ -5,6 +5,7 @@
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/smith-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "save/save-util.h"
 #include "util/enum-converter.h"
@@ -61,6 +62,11 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<mane_data_t
         wr_s16b(static_cast<int16_t>(mane.spell));
         wr_s16b(static_cast<int16_t>(mane.damage));
     }
+}
+
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<sniper_data_type> &sniper_data) const
+{
+    wr_s16b(sniper_data->concent);
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

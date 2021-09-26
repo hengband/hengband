@@ -6,6 +6,7 @@
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-status-table.h"
@@ -464,8 +465,8 @@ void print_status(player_type *player_ptr)
     if (player_ptr->tim_invis)
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
 
-    if (player_ptr->concent >= CONCENT_RADAR_THRESHOLD)
-    {
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
         ADD_BAR_FLAG(BAR_NIGHTSIGHT);
     }

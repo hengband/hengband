@@ -190,10 +190,6 @@ public:
 
     ClassSpecificData class_specific_data;
 
-#define CONCENT_RADAR_THRESHOLD 2
-#define CONCENT_TELE_THRESHOLD 5
-    int16_t concent{}; /* Sniper's concentration level */
-
     HIT_POINT player_hp[PY_MAX_LEVEL]{};
     char died_from[MAX_MONSTER_NAME]{}; /* What killed the player */
     concptr last_message{}; /* Last message on death or retirement */
@@ -206,8 +202,6 @@ public:
     bool now_damaged{};
     bool ambush_flag{};
     BIT_FLAGS change_floor_mode{}; /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
-
-    bool reset_concent{}; /* Concentration reset flag */
 
     MONSTER_IDX riding{}; /* Riding on a monster of this index */
 
