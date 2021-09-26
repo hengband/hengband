@@ -309,29 +309,22 @@ int16_t PlayerSpeed::riding_value()
  */
 int16_t PlayerSpeed::inventory_weight_value()
 {
-    SPEED result = 0;
-
-    int weight = calc_inventory_weight(this->player_ptr);
-    int count;
-
+    auto result = 0;
+    auto weight = calc_inventory_weight(this->player_ptr);
     if (this->player_ptr->riding) {
-        monster_type *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
-        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        count = 1500 + riding_r_ptr->level * 25;
-
-        if (this->player_ptr->skill_exp[SKILL_RIDING] < RIDING_EXP_SKILLED) {
-            weight += (this->player_ptr->wt * 3 * (RIDING_EXP_SKILLED - this->player_ptr->skill_exp[SKILL_RIDING])) / RIDING_EXP_SKILLED;
-        }
-
+        auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
+        auto *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
+        auto count = 1500 + riding_r_ptr->level * 25;
         if (weight > count) {
             result -= ((weight - count) / (count / 5));
         }
     } else {
-        count = (int)calc_weight_limit(this->player_ptr);
+        auto count = calc_weight_limit(this->player_ptr);
         if (weight > count) {
             result -= ((weight - count) / (count / 5));
         }
     }
+
     return result;
 }
 
