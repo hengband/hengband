@@ -126,9 +126,9 @@ const std::vector<Patron> patron_list = {
 };
 
 #ifdef JP
-Patron::Patron(const char *name, const char *ename, const std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr)
+Patron::Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr)
 #else
-Patron::Patron(const char *name, const std::vector<patron_reward> reward_table, player_ability_type boost_stat, player_type *player_ptr)
+Patron::Patron(const char *name, std::vector<patron_reward> reward_table, player_ability_type boost_stat, player_type *player_ptr)
 #endif
     : name(name)
 #ifdef JP

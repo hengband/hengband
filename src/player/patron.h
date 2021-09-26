@@ -57,9 +57,9 @@ public:
     std::string name = ""; //!< パトロン名
 #ifdef JP
     std::string ename = ""; //!< PatronName
-    Patron(const char *name, const char *ename, const std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr);
+    Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr);
 #else
-    Patron(const char *name, const std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr);
+    Patron(const char *name, std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr);
 #endif
     std::vector<patron_reward> reward_table = {}; //!< 報酬テーブル
     player_ability_type boost_stat = player_ability_type::A_STR; //!< 強化能力値傾向
