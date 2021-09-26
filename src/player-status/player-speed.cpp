@@ -107,14 +107,14 @@ int16_t PlayerSpeed::class_value()
             && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
             result += 3;
             if (!(PlayerRace(this->player_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->player_ptr).equals(player_race_type::SPRITE)
-                    || (this->player_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
+                    || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
                 result += (this->player_ptr->lev) / 10;
         }
     }
 
     if ((this->player_ptr->pclass == CLASS_MONK || this->player_ptr->pclass == CLASS_FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
         if (!(PlayerRace(this->player_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->player_ptr).equals(player_race_type::SPRITE)
-                || (this->player_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
+                || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
             result += (this->player_ptr->lev) / 10;
     }
 
@@ -141,7 +141,7 @@ int16_t PlayerSpeed::class_value()
 int16_t PlayerSpeed::personality_value()
 {
     int16_t result = 0;
-    if (this->player_ptr->pseikaku == PERSONALITY_MUNCHKIN && this->player_ptr->prace != player_race_type::KLACKON
+    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != player_race_type::KLACKON
         && this->player_ptr->prace != player_race_type::SPRITE) {
         result += (this->player_ptr->lev) / 10 + 5;
     }

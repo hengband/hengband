@@ -215,7 +215,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 
     case BACT_LOSE_MUTATION: {
         auto muta = player_ptr->muta;
-        if (player_ptr->pseikaku == PERSONALITY_LUCKY) {
+        if (player_ptr->ppersonality == PERSONALITY_LUCKY) {
             // ラッキーマンの白オーラは突然変異治療の対象外
             muta.reset(MUTA::GOOD_LUCK);
         }

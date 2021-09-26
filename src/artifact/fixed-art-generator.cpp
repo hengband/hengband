@@ -66,7 +66,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
  */
 static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
 {
-    if ((o_ptr->name1 != ART_MILIM) || (player_ptr->pseikaku != PERSONALITY_SEXY))
+    if ((o_ptr->name1 != ART_MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY))
         return;
 
     o_ptr->pval = 3;

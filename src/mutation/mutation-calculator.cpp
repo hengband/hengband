@@ -37,7 +37,7 @@ int calc_mutant_regenerate_mod(player_type *player_ptr)
     int regen;
     int mod = 10;
     int count = count_mutations(player_ptr);
-    if (player_ptr->pseikaku == PERSONALITY_LUCKY)
+    if (player_ptr->ppersonality == PERSONALITY_LUCKY)
         count--;
 
     if (player_ptr->prace == player_race_type::BEASTMAN) {

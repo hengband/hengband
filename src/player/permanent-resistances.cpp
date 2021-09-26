@@ -188,12 +188,12 @@ static void add_mutation_flags(player_type *player_ptr, TrFlags &flags)
  */
 static void add_personality_flags(player_type *player_ptr, TrFlags &flags)
 {
-    if (player_ptr->pseikaku == PERSONALITY_SEXY)
+    if (player_ptr->ppersonality == PERSONALITY_SEXY)
         flags.set(TR_AGGRAVATE);
-    if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN)
+    if (player_ptr->ppersonality == PERSONALITY_CHARGEMAN)
         flags.set(TR_RES_CONF);
 
-    if (player_ptr->pseikaku != PERSONALITY_MUNCHKIN)
+    if (player_ptr->ppersonality != PERSONALITY_MUNCHKIN)
         return;
 
     flags.set(TR_RES_BLIND);

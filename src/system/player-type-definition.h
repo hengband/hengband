@@ -34,12 +34,11 @@ public:
     player_sex psex{}; /* Sex index */
     player_race_type prace{}; /* Race index */
     player_class_type pclass{}; /* Class index */
-    player_personality_type pseikaku{}; /* Seikaku index */
+    player_personality_type ppersonality{}; /* Personality index */
     int16_t realm1{}; /* First magic realm */
     int16_t realm2{}; /* Second magic realm */
     int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
-    player_personality_type oops{}; /* Unused */
-
+    
     DICE_SID hitdie{}; /* Hit dice (sides) */
     uint16_t expfact{}; /* Experience factor
                          * Note: was byte, causing overflow for Amberite

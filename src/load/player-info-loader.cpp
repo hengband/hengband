@@ -74,7 +74,7 @@ void rd_base_info(player_type *player_ptr)
     player_ptr->pclass = (player_class_type)tmp8u;
 
     rd_byte(&tmp8u);
-    player_ptr->pseikaku = (player_personality_type)tmp8u;
+    player_ptr->ppersonality = (player_personality_type)tmp8u;
 
     rd_byte(&tmp8u);
     player_ptr->psex = i2enum<player_sex>(tmp8u);

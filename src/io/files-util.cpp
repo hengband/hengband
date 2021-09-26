@@ -205,9 +205,9 @@ static errr counts_seek(player_type *player_ptr, int fd, uint32_t where, bool fl
 {
     char temp1[128], temp2[128];
 #ifdef SAVEFILE_USE_UID
-    (void)sprintf(temp1, "%d.%s.%d%d%d", player_ptr->player_uid, savefile_base, player_ptr->pclass, player_ptr->pseikaku, player_ptr->age);
+    (void)sprintf(temp1, "%d.%s.%d%d%d", player_ptr->player_uid, savefile_base, player_ptr->pclass, player_ptr->ppersonality, player_ptr->age);
 #else
-    (void)sprintf(temp1, "%s.%d%d%d", savefile_base, player_ptr->pclass, player_ptr->pseikaku, player_ptr->age);
+    (void)sprintf(temp1, "%s.%d%d%d", savefile_base, player_ptr->pclass, player_ptr->ppersonality, player_ptr->age);
 #endif
     for (int i = 0; temp1[i]; i++)
         temp1[i] ^= (i + 1) * 63;

@@ -915,7 +915,7 @@ bool test_hit_fire(player_type *player_ptr, int chance, monster_type *m_ptr, int
     if (k > 95)
         return true;
 
-    if (player_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->ppersonality == PERSONALITY_LAZY)
         if (one_in_(20))
             return false;
 

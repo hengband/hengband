@@ -383,7 +383,7 @@ void change_floor(player_type *player_ptr)
     update_unique_artifact(player_ptr->current_floor_ptr, new_floor_id);
     player_ptr->floor_id = new_floor_id;
     w_ptr->character_dungeon = true;
-    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN)
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         wiz_lite(player_ptr, (bool)(player_ptr->pclass == CLASS_NINJA));
 
     player_ptr->current_floor_ptr->generated_turn = w_ptr->game_turn;

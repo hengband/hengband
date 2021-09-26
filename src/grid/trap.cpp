@@ -264,7 +264,7 @@ static int check_hit_from_monster_to_player(player_type *player_ptr, int power)
     if (k < 10)
         return (k < 5);
 
-    if (player_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->ppersonality == PERSONALITY_LAZY)
         if (one_in_(20))
             return true;
 

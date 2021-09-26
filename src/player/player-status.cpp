@@ -802,7 +802,7 @@ static void update_max_mana(player_type *player_ptr)
             msp++;
         if (msp)
             msp += (msp * rp_ptr->r_adj[mp_ptr->spell_stat] / 20);
-        if (msp && (player_ptr->pseikaku == PERSONALITY_MUNCHKIN))
+        if (msp && (player_ptr->ppersonality == PERSONALITY_MUNCHKIN))
             msp += msp / 2;
         if (msp && (player_ptr->pclass == CLASS_HIGH_MAGE))
             msp += msp / 4;
@@ -1066,7 +1066,7 @@ static ACTION_SKILL_POWER calc_disarming(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_dis + c_ptr->c_dis + a_ptr->a_dis;
     pow += ((cp_ptr->x_dis * player_ptr->lev / 10) + (ap_ptr->a_dis * player_ptr->lev / 50));
@@ -1096,7 +1096,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_dev + c_ptr->c_dev + a_ptr->a_dev;
     pow += ((c_ptr->x_dev * player_ptr->lev / 10) + (ap_ptr->a_dev * player_ptr->lev / 50));
@@ -1146,7 +1146,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
     pow += ((cp_ptr->x_sav * player_ptr->lev / 10) + (ap_ptr->a_sav * player_ptr->lev / 50));
@@ -1201,7 +1201,7 @@ static ACTION_SKILL_POWER calc_search(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_srh + c_ptr->c_srh + a_ptr->a_srh;
     pow += (c_ptr->x_srh * player_ptr->lev / 10);
@@ -1248,7 +1248,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_fos + c_ptr->c_fos + a_ptr->a_fos;
     pow += (c_ptr->x_fos * player_ptr->lev / 10);
@@ -1286,7 +1286,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     if (player_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
@@ -1310,7 +1310,7 @@ static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     if (player_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
@@ -1335,7 +1335,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(player_type *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     if (player_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
@@ -1562,13 +1562,13 @@ static int16_t calc_to_magic_chance(player_type *player_ptr)
 {
     int16_t chance = 0;
 
-    if (player_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->ppersonality == PERSONALITY_LAZY)
         chance += 10;
-    if (player_ptr->pseikaku == PERSONALITY_SHREWD)
+    if (player_ptr->ppersonality == PERSONALITY_SHREWD)
         chance -= 3;
-    if ((player_ptr->pseikaku == PERSONALITY_PATIENT) || (player_ptr->pseikaku == PERSONALITY_MIGHTY))
+    if ((player_ptr->ppersonality == PERSONALITY_PATIENT) || (player_ptr->ppersonality == PERSONALITY_MIGHTY))
         chance++;
-    if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN)
+    if (player_ptr->ppersonality == PERSONALITY_CHARGEMAN)
         chance += 5;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
@@ -2903,7 +2903,7 @@ long calc_score(player_type *player_ptr)
             point = point / 5;
     }
 
-    if ((player_ptr->pseikaku == PERSONALITY_MUNCHKIN) && point) {
+    if ((player_ptr->ppersonality == PERSONALITY_MUNCHKIN) && point) {
         point = 1;
         if (w_ptr->total_winner)
             point = 2;
@@ -2984,12 +2984,12 @@ bool is_shero(player_type *player_ptr)
 
 bool is_echizen(player_type *player_ptr)
 {
-    return (player_ptr->pseikaku == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
+    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
 }
 
 bool is_chargeman(player_type *player_ptr)
 {
-    return player_ptr->pseikaku == PERSONALITY_CHARGEMAN;
+    return player_ptr->ppersonality == PERSONALITY_CHARGEMAN;
 }
 
 WEIGHT calc_weapon_weight_limit(player_type *player_ptr)

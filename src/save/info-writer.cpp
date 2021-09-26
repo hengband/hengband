@@ -140,7 +140,7 @@ void save_quick_start(void)
     wr_byte(previous_char.psex);
     wr_byte((byte)previous_char.prace);
     wr_byte((byte)previous_char.pclass);
-    wr_byte((byte)previous_char.pseikaku);
+    wr_byte((byte)previous_char.ppersonality);
     wr_byte((byte)previous_char.realm1);
     wr_byte((byte)previous_char.realm2);
 
