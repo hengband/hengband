@@ -756,6 +756,7 @@ hengband_SOURCES = \
 	specific-object/monster-ball.cpp specific-object/monster-ball.h \
 	specific-object/muramasa.cpp specific-object/muramasa.h \
 	specific-object/ring-of-power.cpp specific-object/ring-of-power.h \
+	specific-object/stone-of-lore.cpp specific-object/stone-of-lore.h \
 	specific-object/toragoroshi.cpp specific-object/toragoroshi.h \
 	specific-object/torch.cpp specific-object/torch.h \
 	\

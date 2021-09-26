@@ -2346,6 +2346,9 @@
     <ClCompile Include="..\..\src\player-info\magic-eater-data-type.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp">
+      <Filter>specific-object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5066,6 +5069,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\mane-data-type.h">
       <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\stone-of-lore.h">
+      <Filter>specific-object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

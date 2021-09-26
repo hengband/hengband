@@ -23,6 +23,7 @@
 #include "specific-object/death-crimson.h"
 #include "specific-object/muramasa.h"
 #include "specific-object/ring-of-power.h"
+#include "specific-object/stone-of-lore.h"
 #include "specific-object/toragoroshi.h"
 #include "spell-realm/spells-sorcery.h"
 #include "spell/spells-object.h"
@@ -332,8 +333,7 @@ bool switch_activation(player_type *player_ptr, object_type **o_ptr_ptr, const a
     case ACT_RECHARGE_XTRA:
         return activate_recharge_extra(player_ptr, name);
     case ACT_LORE:
-        msg_print(_("石が隠された秘密を写し出した．．．", "The stone reveals hidden mysteries..."));
-        return perilous_secrets(player_ptr);
+        return StoneOfLore(player_ptr).perilous_secrets();
     case ACT_SHIKOFUMI:
         return activate_shikofumi(player_ptr);
     case ACT_PHASE_DOOR:
