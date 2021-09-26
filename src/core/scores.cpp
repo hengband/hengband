@@ -218,7 +218,7 @@ errr top_twenty(player_type *current_player_ptr)
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
     memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
@@ -321,7 +321,7 @@ errr predict_score(player_type *current_player_ptr)
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
     memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */

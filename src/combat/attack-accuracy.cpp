@@ -44,7 +44,7 @@ PERCENTAGE hit_chance(player_type *player_ptr, int reli, ARMOUR_CLASS ac)
     PERCENTAGE chance = 5, chance_left = 90;
     if (reli <= 0)
         return 5;
-    if (player_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->ppersonality == PERSONALITY_LAZY)
         chance_left = (chance_left * 19 + 9) / 20;
     chance += (100 - ((ac * 75) / reli)) * chance_left / 100;
     if (chance < 5)

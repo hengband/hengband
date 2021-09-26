@@ -44,7 +44,7 @@ void wr_player(player_type *player_ptr)
 
     wr_byte((byte)player_ptr->prace);
     wr_byte((byte)player_ptr->pclass);
-    wr_byte((byte)player_ptr->pseikaku);
+    wr_byte((byte)player_ptr->ppersonality);
     wr_byte((byte)player_ptr->psex);
     wr_relams(player_ptr);
     wr_byte(0);

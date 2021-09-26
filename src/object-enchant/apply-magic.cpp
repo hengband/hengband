@@ -51,7 +51,7 @@
  */
 void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
-    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN)
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         lev += randint0(player_ptr->lev / 2 + 10);
     if (lev > MAX_DEPTH - 1)
         lev = MAX_DEPTH - 1;
@@ -61,7 +61,7 @@ void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH le
         f1 = d_info[player_ptr->dungeon_idx].obj_good;
 
     int f2 = f1 * 2 / 3;
-    if ((player_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[player_ptr->dungeon_idx].obj_great))
+    if ((player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (f2 > d_info[player_ptr->dungeon_idx].obj_great))
         f2 = d_info[player_ptr->dungeon_idx].obj_great;
 
     if (has_good_luck(player_ptr)) {
@@ -177,7 +177,7 @@ void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH le
         break;
     }
 
-    if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->pseikaku == PERSONALITY_SEXY)) {
+    if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality == PERSONALITY_SEXY)) {
         o_ptr->pval = 3;
         o_ptr->art_flags.set(TR_STR);
         o_ptr->art_flags.set(TR_INT);

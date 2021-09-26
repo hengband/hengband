@@ -219,14 +219,14 @@ static bool let_player_select_class(player_type *player_ptr)
 
 static bool let_player_select_personality(player_type *player_ptr)
 {
-    player_ptr->pseikaku = PERSONALITY_ORDINARY;
+    player_ptr->ppersonality = PERSONALITY_ORDINARY;
     while (true) {
         char temp[80 * 8];
         if (!get_player_personality(player_ptr))
             return false;
 
         clear_from(10);
-        shape_buffer(personality_explanations[player_ptr->pseikaku], 74, temp, sizeof(temp));
+        shape_buffer(personality_explanations[player_ptr->ppersonality], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)

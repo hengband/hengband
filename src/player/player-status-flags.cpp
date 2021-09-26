@@ -863,7 +863,7 @@ BIT_FLAGS has_hold_exp(player_type *player_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
@@ -1184,7 +1184,7 @@ void update_curses(player_type *player_ptr)
     player_ptr->cursed.clear();
     player_ptr->cursed_special.clear();
 
-    if (player_ptr->pseikaku == PERSONALITY_SEXY)
+    if (player_ptr->ppersonality == PERSONALITY_SEXY)
         player_ptr->cursed.set(TRC::AGGRAVATE);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
@@ -1491,7 +1491,7 @@ BIT_FLAGS has_resist_conf(player_type *player_ptr)
     if (player_ptr->pclass == CLASS_MINDCRAFTER && player_ptr->lev > 29)
         result |= FLAG_CAUSE_CLASS;
 
-    if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN || player_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+    if (player_ptr->ppersonality == PERSONALITY_CHARGEMAN || player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
@@ -1683,7 +1683,7 @@ BIT_FLAGS has_resist_blind(player_type *player_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
@@ -1979,7 +1979,7 @@ BIT_FLAGS has_lite(player_type *player_ptr)
     if (player_ptr->pclass == CLASS_NINJA)
         return 0L;
 
-    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
@@ -2082,13 +2082,13 @@ bool has_not_monk_weapon(player_type *player_ptr, int i)
 
 bool has_good_luck(player_type *player_ptr)
 {
-    return (player_ptr->pseikaku == PERSONALITY_LUCKY) || (player_ptr->muta.has(MUTA::GOOD_LUCK));
+    return (player_ptr->ppersonality == PERSONALITY_LUCKY) || (player_ptr->muta.has(MUTA::GOOD_LUCK));
 }
 
 BIT_FLAGS player_aggravate_state(player_type *player_ptr)
 {
     if (player_ptr->cursed.has(TRC::AGGRAVATE)) {
-        if ((PlayerRace(player_ptr).equals(player_race_type::S_FAIRY)) && (player_ptr->pseikaku != PERSONALITY_SEXY)) {
+        if ((PlayerRace(player_ptr).equals(player_race_type::S_FAIRY)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
             return AGGRAVATE_S_FAIRY;
         }
         return AGGRAVATE_NORMAL;

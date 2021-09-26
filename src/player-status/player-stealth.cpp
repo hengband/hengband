@@ -42,7 +42,7 @@ int16_t PlayerStealth::race_value()
  */
 int16_t PlayerStealth::personality_value()
 {
-    const player_personality *a_ptr = &personality_info[this->player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[this->player_ptr->ppersonality];
     return a_ptr->a_stl;
 }
 

@@ -473,7 +473,7 @@ void switch_gain_mutation(player_type *player_ptr, glm_type *glm_ptr)
         glm_ptr->muta_desc = _("関節が突然痛み出した。", "Your joints suddenly hurt.");
         break;
     case 188:
-        if (player_ptr->pseikaku == PERSONALITY_LUCKY)
+        if (player_ptr->ppersonality == PERSONALITY_LUCKY)
             break;
 
         glm_ptr->muta_which = MUTA::BAD_LUCK;

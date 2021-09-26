@@ -149,7 +149,7 @@ static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
 
 static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type *md_ptr)
 {
-    if ((player_ptr->pseikaku != PERSONALITY_LAZY) || !md_ptr->drop_chosen_item)
+    if ((player_ptr->ppersonality != PERSONALITY_LAZY) || !md_ptr->drop_chosen_item)
         return;
 
     ARTIFACT_IDX a_idx = 0;
