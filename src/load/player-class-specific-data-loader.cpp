@@ -6,6 +6,7 @@
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/smith-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "util/enum-converter.h"
 
@@ -157,6 +158,16 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<mane_data_type> &
             rd_s16b(&damage);
             mane_data->mane_list.push_back({ i2enum<RF_ABILITY>(spell), damage });
         }
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<sniper_data_type> &sniper_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        // 古いセーブファイルのスナイパーのデータは magic_num には保存されていないので読み捨てる
+        load_old_savfile_magic_num();
+    } else {
+        rd_s16b(&sniper_data->concent);
     }
 }
 

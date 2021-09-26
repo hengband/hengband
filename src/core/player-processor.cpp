@@ -40,6 +40,7 @@
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/eldritch-horror.h"
@@ -407,7 +408,8 @@ void process_player(player_type *player_ptr)
             break;
         }
 
-        if (player_ptr->energy_use && player_ptr->reset_concent)
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        if (player_ptr->energy_use && sniper_data && sniper_data->reset_concent)
             reset_concentration(player_ptr, true);
 
         if (player_ptr->leaving)

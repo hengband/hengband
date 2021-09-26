@@ -15,6 +15,7 @@
 #include "mutation/mutation-calculator.h"
 #include "player-base/player-class.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
@@ -455,7 +456,16 @@ static void rd_player_status(player_type *player_ptr)
     rd_dungeons(player_ptr);
     strip_bytes(8);
     rd_s16b(&player_ptr->sc);
-    rd_s16b(&player_ptr->concent);
+    if (loading_savefile_version_is_older_than(9)) {
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        if (sniper_data) {
+            rd_s16b(&sniper_data->concent);
+        } else {
+            // 職業がスナイパーではないので読み捨てる
+            int16_t tmp16s;
+            rd_s16b(&tmp16s);
+        }
+    }
     rd_bad_status(player_ptr);
     rd_energy(player_ptr);
     rd_status(player_ptr);

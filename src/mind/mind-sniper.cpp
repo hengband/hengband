@@ -25,6 +25,8 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
+#include "player-base/player-class.h"
+#include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -126,15 +128,20 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
 
 /*!
  * @brief スナイパーの集中度加算
- * @return 常にTRUEを返す
+ * @return 集中度を加算した場合は true、そうでなければ false
  */
 static bool snipe_concentrate(player_type *player_ptr)
 {
-    if ((int)player_ptr->concent < (2 + (player_ptr->lev + 5) / 10))
-        player_ptr->concent++;
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    if (!sniper_data) {
+        return false;
+    }
 
-    msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), player_ptr->concent);
-    player_ptr->reset_concent = false;
+    if (sniper_data->concent < (2 + (player_ptr->lev + 5) / 10))
+        sniper_data->concent++;
+
+    msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), sniper_data->concent);
+    sniper_data->reset_concent = false;
 
     player_ptr->update |= (PU_BONUS | PU_MONSTERS);
     player_ptr->redraw |= (PR_STATUS);
@@ -143,16 +150,22 @@ static bool snipe_concentrate(player_type *player_ptr)
 
 /*!
  * @brief スナイパーの集中度リセット
+ * スナイパーではない、もしくは集中度がすでに0であればなにもしない。
  * @param msg TRUEならばメッセージを表示する
  */
 void reset_concentration(player_type *player_ptr, bool msg)
 {
-    if (msg) {
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    if (!sniper_data) {
+        return;
+    }
+
+    if (msg && (sniper_data->concent > 0)) {
         msg_print(_("集中力が途切れてしまった。", "Stop concentrating."));
     }
 
-    player_ptr->concent = 0;
-    player_ptr->reset_concent = false;
+    sniper_data->concent = 0;
+    sniper_data->reset_concent = false;
 
     player_ptr->update |= (PU_BONUS | PU_MONSTERS);
     player_ptr->redraw |= (PR_STATUS);
@@ -165,8 +178,10 @@ void reset_concentration(player_type *player_ptr, bool msg)
  */
 int boost_concentration_damage(player_type *player_ptr, int tdam)
 {
-    tdam *= (10 + player_ptr->concent);
-    tdam /= 10;
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    const auto sniper_concent = sniper_data ? sniper_data->concent : 0;
+
+    tdam = tdam * (10 + sniper_concent) / 10;
 
     return (tdam);
 }
@@ -188,6 +203,8 @@ void display_snipe_list(player_type *player_ptr)
     put_str(_("名前", "Name"), y, x + 5);
     put_str(_("Lv   MP", "Lv Mana"), y, x + 35);
 
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+
     for (i = 0; i < MAX_SNIPE_POWERS; i++) {
         /* Access the available spell */
         spell = snipe_powers[i];
@@ -196,12 +213,11 @@ void display_snipe_list(player_type *player_ptr)
 
         sprintf(psi_desc, "  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
-        if (spell.mana_cost > (int)player_ptr->concent)
+        if (spell.mana_cost > sniper_data->concent)
             term_putstr(x, y + i + 1, -1, TERM_SLATE, psi_desc);
         else
             term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
     }
-    return;
 }
 
 /*!
@@ -241,11 +257,13 @@ static int get_snipe_power(player_type *player_ptr, COMMAND_CODE *sn, bool only_
     /* Assume cancelled */
     *sn = (-1);
 
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+
     /* Repeat previous command */
     /* Get the spell, if available */
     if (repeat_pull(sn)) {
         /* Verify the spell */
-        if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= (int)player_ptr->concent)) {
+        if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= sniper_data->concent)) {
             /* Success */
             return true;
         }
@@ -255,7 +273,7 @@ static int get_snipe_power(player_type *player_ptr, COMMAND_CODE *sn, bool only_
     redraw = false;
 
     for (i = 0; i < MAX_SNIPE_POWERS; i++) {
-        if ((snipe_powers[i].min_lev <= plev) && ((only_browse) || (snipe_powers[i].mana_cost <= (int)player_ptr->concent))) {
+        if ((snipe_powers[i].min_lev <= plev) && ((only_browse) || (snipe_powers[i].mana_cost <= sniper_data->concent))) {
             num = i;
         }
     }
@@ -309,7 +327,7 @@ static int get_snipe_power(player_type *player_ptr, COMMAND_CODE *sn, bool only_
 
                     if (spell.min_lev > plev)
                         tcol = TERM_SLATE;
-                    else if (spell.mana_cost > (int)player_ptr->concent)
+                    else if (spell.mana_cost > sniper_data->concent)
                         tcol = TERM_L_BLUE;
 
                     term_putstr(x, y + i + 1, -1, tcol, psi_index);
@@ -343,7 +361,7 @@ static int get_snipe_power(player_type *player_ptr, COMMAND_CODE *sn, bool only_
         i = (islower(choice) ? A2I(choice) : -1);
 
         /* Totally Illegal */
-        if ((i < 0) || (i > num) || (!only_browse && (snipe_powers[i].mana_cost > (int)player_ptr->concent))) {
+        if ((i < 0) || (i > num) || (!only_browse && (snipe_powers[i].mana_cost > sniper_data->concent))) {
             bell();
             continue;
         }
@@ -397,10 +415,13 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, mon
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool seen = is_seen(player_ptr, m_ptr);
 
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    const auto sniper_concent = sniper_data ? sniper_data->concent : 0;
+
     switch (snipe_type) {
     case SP_LITE:
         if (r_ptr->flags3 & (RF3_HURT_LITE)) {
-            MULTIPLY n = 20 + player_ptr->concent;
+            MULTIPLY n = 20 + sniper_concent;
             if (seen)
                 r_ptr->r_flags3 |= (RF3_HURT_LITE);
             if (mult < n)
@@ -414,11 +435,10 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, mon
         } else {
             MULTIPLY n;
             if (r_ptr->flags3 & RF3_HURT_FIRE) {
-                n = 22 + (player_ptr->concent * 4);
+                n = 22 + (sniper_concent * 4);
                 r_ptr->r_flags3 |= RF3_HURT_FIRE;
-            }
-            else
-                n = 15 + (player_ptr->concent * 3);
+            } else
+                n = 15 + (sniper_concent * 3);
 
             if (mult < n)
                 mult = n;
@@ -431,11 +451,10 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, mon
         } else {
             MULTIPLY n;
             if (r_ptr->flags3 & RF3_HURT_COLD) {
-                n = 22 + (player_ptr->concent * 4);
+                n = 22 + (sniper_concent * 4);
                 r_ptr->r_flags3 |= RF3_HURT_COLD;
-            }
-            else
-                n = 15 + (player_ptr->concent * 3);
+            } else
+                n = 15 + (sniper_concent * 3);
 
             if (mult < n)
                 mult = n;
@@ -446,20 +465,20 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, mon
             if (seen)
                 r_ptr->r_flagsr |= RFR_IM_ELEC;
         } else {
-            MULTIPLY n = 18 + (player_ptr->concent * 4);
+            MULTIPLY n = 18 + (sniper_concent * 4);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_KILL_WALL:
         if (r_ptr->flags3 & RF3_HURT_ROCK) {
-            MULTIPLY n = 15 + (player_ptr->concent * 2);
+            MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen)
                 r_ptr->r_flags3 |= RF3_HURT_ROCK;
             if (mult < n)
                 mult = n;
         } else if (r_ptr->flags3 & RF3_NONLIVING) {
-            MULTIPLY n = 15 + (player_ptr->concent * 2);
+            MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen)
                 r_ptr->r_flags3 |= RF3_NONLIVING;
             if (mult < n)
@@ -468,7 +487,7 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, mon
         break;
     case SP_EVILNESS:
         if (r_ptr->flags3 & RF3_GOOD) {
-            MULTIPLY n = 15 + (player_ptr->concent * 4);
+            MULTIPLY n = 15 + (sniper_concent * 4);
             if (seen)
                 r_ptr->r_flags3 |= RF3_GOOD;
             if (mult < n)
@@ -477,11 +496,11 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, mon
         break;
     case SP_HOLYNESS:
         if (r_ptr->flags3 & RF3_EVIL) {
-            MULTIPLY n = 12 + (player_ptr->concent * 3);
+            MULTIPLY n = 12 + (sniper_concent * 3);
             if (seen)
                 r_ptr->r_flags3 |= RF3_EVIL;
             if (r_ptr->flags3 & (RF3_HURT_LITE)) {
-                n += (player_ptr->concent * 3);
+                n += (sniper_concent * 3);
                 if (seen)
                     r_ptr->r_flags3 |= (RF3_HURT_LITE);
             }

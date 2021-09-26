@@ -28,6 +28,8 @@
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "player-base/player-class.h"
+#include "player-info/sniper-data-type.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
@@ -402,7 +404,8 @@ static void decide_sight_invisible_monster(player_type *player_ptr, um_type *um_
     if (!player_has_los_bold(player_ptr, um_ptr->fy, um_ptr->fx) || player_ptr->blind)
         return;
 
-    if (player_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
         um_ptr->easy = true;
         um_ptr->flag = true;
     }
