@@ -53,20 +53,19 @@ struct player_type;
  * @brief パトロン情報の定義
  */
 class Patron {
-
 public:
     std::string name = ""; //!< パトロン名
-    Patron(const char *_name, const char *_ename, const player_ability_type _boost_stat);
 #ifdef JP
     std::string ename = ""; //!< PatronName
-    Patron(const char *name, const char *ename, const std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
+    Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
 #else
-    Patron(const char *name, const std::vector<patron_reward>, const player_ability_type boost_stat);
+    Patron(const char *name, std::vector<patron_reward>, const player_ability_type boost_stat);
 #endif
     std::vector<patron_reward> reward_table = {}; //!< 報酬テーブル
     player_ability_type boost_stat = player_ability_type::A_STR; //!< 強化能力値傾向
-    void GainLevelReward(player_type *player_ptr, int chosen_reward);
-    void AdmireFromPatron(player_type *player_ptr);
+    const void gain_level_reward(player_type *player_ptr, int chosen_reward);
+    const void admire(player_type *player_ptr);
+    virtual ~Patron() {}
 };
 
-extern std::vector<Patron> patron_list;
+extern const std::vector<Patron> patron_list;

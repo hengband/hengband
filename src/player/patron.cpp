@@ -41,7 +41,7 @@
 #define N(JAPANESE, ENGLISH) ENGLISH
 #endif
 
-std::vector<Patron> patron_list = {
+const std::vector<Patron> patron_list = {
 
     Patron(N("スローター", "Slortar"),
         { REW_WRATH, REW_CURSE_WP, REW_CURSE_AR, REW_RUIN_ABL, REW_LOSE_ABL, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_POLY_WND, REW_POLY_SLF, REW_POLY_SLF,
@@ -126,20 +126,20 @@ std::vector<Patron> patron_list = {
 };
 
 #ifdef JP
-Patron::Patron(const char *_name, const char *_ename, const std::vector<patron_reward> _reward_table, const player_ability_type _boost_stat)
+Patron::Patron(const char *_name, const char *_ename, std::vector<patron_reward> _reward_table, const player_ability_type _boost_stat)
 #else
-Patron::Patron(const char *_name, std::vector<patron_reward> _reward_table, player_ability_type _boost_stat)
+Patron::Patron(const char *_name, std::vector<patron_reward> reward_table, player_ability_type boost_stat)
 #endif
 {
     name = _name;
 #ifdef JP
     ename = _ename;
 #endif
-    boost_stat = _boost_stat;
-    reward_table = _reward_table;
+    this->boost_stat = boost_stat;
+    this->reward_table = std::move(reward_table);
 }
 
-void Patron::GainLevelReward(player_type *player_ptr, int chosen_reward)
+const void Patron::GainLevelReward(player_type *player_ptr, int chosen_reward)
 {
     char wrath_reason[32] = "";
     int nasty_chance = 6;
@@ -560,7 +560,7 @@ void Patron::GainLevelReward(player_type *player_ptr, int chosen_reward)
     }
 }
 
-void Patron::AdmireFromPatron(player_type *player_ptr)
+const void Patron::admire(player_type *player_ptr)
 {
     if ((player_ptr->pclass == CLASS_CHAOS_WARRIOR) || player_ptr->muta.has(MUTA::CHAOS_GIFT)) {
         msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), this->name.c_str());
