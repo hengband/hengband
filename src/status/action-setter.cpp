@@ -14,6 +14,8 @@
 #include "status/action-setter.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -47,7 +49,8 @@ void set_action(player_type *player_ptr, uint8_t typ)
     }
     case ACTION_LEARN: {
         msg_print(_("学習をやめた。", "You stop learning."));
-        player_ptr->new_mane = false;
+        auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+        bluemage_data->new_magic_learned = false;
         break;
     }
     case ACTION_KAMAE: {

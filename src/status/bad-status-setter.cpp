@@ -9,6 +9,7 @@
 #include "mind/mind-sniper.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
+#include "player-info/bluemage-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -110,7 +111,8 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
 
             if (this->player_ptr->action == ACTION_LEARN) {
                 msg_print(_("学習が続けられない！", "You cannot continue learning!"));
-                this->player_ptr->new_mane = false;
+                auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+                bluemage_data->new_magic_learned = false;
 
                 this->player_ptr->redraw |= PR_STATE;
                 this->player_ptr->action = ACTION_NONE;

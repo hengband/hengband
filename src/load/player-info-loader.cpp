@@ -14,6 +14,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-calculator.h"
 #include "player-base/player-class.h"
+#include "player-info/mane-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
@@ -188,12 +189,6 @@ static void rd_base_status(player_type *player_ptr)
 static void set_imitation(player_type *player_ptr)
 {
     if (h_older_than(0, 0, 1)) {
-        for (int i = 0; i < MAX_MANE; i++) {
-            player_ptr->mane_spell[i] = RF_ABILITY::MAX;
-            player_ptr->mane_dam[i] = 0;
-        }
-
-        player_ptr->mane_num = 0;
         return;
     }
 
@@ -205,25 +200,27 @@ static void set_imitation(player_type *player_ptr)
             rd_s16b(&tmp16s);
         }
 
-        for (int i = 0; i < MAX_MANE; i++) {
-            player_ptr->mane_spell[i] = RF_ABILITY::MAX;
-            player_ptr->mane_dam[i] = 0;
-        }
-
         rd_s16b(&tmp16s);
-        player_ptr->mane_num = 0;
         return;
     }
 
-    for (int i = 0; i < MAX_MANE; i++) {
-        int16_t tmp16s;
-        rd_s16b(&tmp16s);
-        player_ptr->mane_spell[i] = i2enum<RF_ABILITY>(tmp16s);
-        rd_s16b(&tmp16s);
-        player_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
-    }
+    if (loading_savefile_version_is_older_than(9)) {
+        auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+        if (!mane_data) {
+            // ものまね師でない場合に読み捨てるためのダミーデータ領域
+            mane_data = std::make_shared<mane_data_type>();
+        }
 
-    rd_s16b(&player_ptr->mane_num);
+        for (int i = 0; i < MAX_MANE; ++i) {
+            int16_t spell, damage;
+            rd_s16b(&spell);
+            rd_s16b(&damage);
+            mane_data->mane_list.push_back({ i2enum<RF_ABILITY>(spell), damage });
+        }
+        int16_t count;
+        rd_s16b(&count);
+        mane_data->mane_list.resize(count);
+    }
 }
 
 static void rd_phase_out(player_type *player_ptr)

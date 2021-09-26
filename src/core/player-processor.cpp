@@ -37,6 +37,9 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "mutation/mutation-investor-remover.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
+#include "player-info/mane-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/eldritch-horror.h"
@@ -370,20 +373,18 @@ void process_player(player_type *player_ptr)
             }
 
             if (player_ptr->pclass == CLASS_IMITATOR) {
-                if (player_ptr->mane_num > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2 : 1)) {
-                    player_ptr->mane_num--;
-                    for (int j = 0; j < player_ptr->mane_num; j++) {
-                        player_ptr->mane_spell[j] = player_ptr->mane_spell[j + 1];
-                        player_ptr->mane_dam[j] = player_ptr->mane_dam[j + 1];
-                    }
+                auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+                if (static_cast<int>(mane_data->mane_list.size()) > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2 : 1)) {
+                    mane_data->mane_list.pop_front();
                 }
 
-                player_ptr->new_mane = false;
+                mane_data->new_mane = false;
                 player_ptr->redraw |= (PR_IMITATION);
             }
 
             if (player_ptr->action == ACTION_LEARN) {
-                player_ptr->new_mane = false;
+                auto mane_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+                mane_data->new_magic_learned = false;
                 player_ptr->redraw |= (PR_STATE);
             }
 

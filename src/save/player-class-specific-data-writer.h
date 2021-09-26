@@ -9,6 +9,7 @@ struct force_trainer_data_type;
 struct bluemage_data_type;
 struct magic_eater_data_type;
 struct bard_data_type;
+struct mane_data_type;
 
 class PlayerClassSpecificDataWriter {
 public:
@@ -19,4 +20,5 @@ public:
     void operator()(const std::shared_ptr<bluemage_data_type> &bluemage_data) const;
     void operator()(const std::shared_ptr<magic_eater_data_type> &magic_eater_data) const;
     void operator()(const std::shared_ptr<bard_data_type> &bird_data) const;
+    void operator()(const std::shared_ptr<mane_data_type> &mane_data) const;
 };

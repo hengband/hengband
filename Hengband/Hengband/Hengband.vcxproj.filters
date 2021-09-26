@@ -5064,6 +5064,9 @@
     <ClInclude Include="..\..\src\player-info\bard-data-type.h">
       <Filter>player-info</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\mane-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -4,6 +4,7 @@
 #include "player-info/bluemage-data-type.h"
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
+#include "player-info/mane-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/spell-hex-data-type.h"
 #include "util/enum-converter.h"
@@ -139,6 +140,23 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bard_data_type> &
         bird_data->interrputing_song = i2enum<realm_song_type>(tmp32s);
         rd_s32b(&bird_data->singing_duration);
         rd_byte(&bird_data->singing_song_spell_idx);
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<mane_data_type> &mane_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        // 古いセーブファイルのものまね師のデータは magic_num には保存されていないので読み捨てる
+        load_old_savfile_magic_num();
+    } else {
+        int16_t count;
+        rd_s16b(&count);
+        for (; count > 0; --count) {
+            int16_t spell, damage;
+            rd_s16b(&spell);
+            rd_s16b(&damage);
+            mane_data->mane_list.push_back({ i2enum<RF_ABILITY>(spell), damage });
+        }
     }
 }
 

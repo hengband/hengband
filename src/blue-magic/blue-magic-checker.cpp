@@ -48,7 +48,7 @@ void learn_spell(player_type *player_ptr, RF_ABILITY monspell)
         msg_format(_("%sを学習した！", "You have learned %s!"), monster_power.name);
         gain_exp(player_ptr, monster_power.level * monster_power.smana);
         sound(SOUND_STUDY);
-        player_ptr->new_mane = true;
+        bluemage_data->new_magic_learned = true;
         player_ptr->redraw |= PR_STATE;
     }
 }

@@ -91,12 +91,7 @@ void wr_player(player_type *player_ptr)
     wr_s32b(player_ptr->old_race1);
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
-    for (int i = 0; i < MAX_MANE; i++) {
-        wr_s16b((int16_t)player_ptr->mane_spell[i]);
-        wr_s16b((int16_t)player_ptr->mane_dam[i]);
-    }
 
-    wr_s16b(player_ptr->mane_num);
     for (int i = 0; i < MAX_BOUNTY; i++)
         wr_s16b(w_ptr->bounty_r_idx[i]);
 
