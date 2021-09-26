@@ -11,6 +11,7 @@
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "io/input-key-acceptor.h"
@@ -94,7 +95,7 @@ void teleport_level(player_type *player_ptr, MONSTER_IDX m_idx)
     else
         go_up = false;
 
-    if ((m_idx <= 0) && w_ptr->wizard) {
+    if ((m_idx <= 0) && allow_debug_options) {
         if (get_check("Force to go up? "))
             go_up = true;
         else if (get_check("Force to go down? "))

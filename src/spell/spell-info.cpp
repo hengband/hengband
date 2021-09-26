@@ -1,4 +1,5 @@
 ﻿#include "spell/spell-info.h"
+#include "game-option/game-play-options.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
 #include "player-info/class-info.h"
@@ -19,7 +20,6 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 
 // 5%
 static const int extra_min_magic_fail_rate = 2;
@@ -226,7 +226,7 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
  */
 void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, int16_t use_realm)
 {
-    if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && w_ptr->wizard)
+    if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && allow_debug_options)
         msg_print(_("警告！ print_spell が領域なしに呼ばれた", "Warning! print_spells called with null realm"));
 
     prt("", y, x);

@@ -86,7 +86,7 @@ Y:bound_walls_perm
 Y:last_words
 X:auto_dump
 Y:send_score
-X:allow_debug_opts
+X:allow_debug_options
 
 ##### Disturbance #####
 

@@ -164,7 +164,7 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
 
     { &auto_debug_save, true, OPT_PAGE_GAMEPLAY, 4, 7, "auto_debug_save", _("デバッグ用セーブデータを自動生成する", "Create a debug save automatically") },
 
-    { &allow_debug_opts, false, OPT_PAGE_GAMEPLAY, 6, 11, "allow_debug_opts", _("デバッグ/詐欺オプションを許可する", "Allow use of debug/cheat options") },
+    { &allow_debug_options, false, OPT_PAGE_GAMEPLAY, 6, 11, "allow_debug_options", _("デバッグ/詐欺オプションを許可する", "Allow use of debug/cheat options") },
 
     /*** Disturbance ***/
 

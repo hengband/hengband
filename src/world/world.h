@@ -59,8 +59,6 @@ struct world_type {
 
     bool creating_savefile{}; /* New savefile is currently created */
 
-    bool wizard{}; /* This world under wizard mode */
-
     OBJECT_IDX max_o_idx{}; /*!< Maximum number of objects in the level */
     MONSTER_IDX max_m_idx{}; /*!< Maximum number of monsters in the level */
 };

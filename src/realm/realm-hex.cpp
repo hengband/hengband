@@ -18,6 +18,7 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
+#include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
@@ -51,7 +52,6 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 
 #ifdef JP
 #else
@@ -287,7 +287,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                     project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
 
-                if (w_ptr->wizard) {
+                if (allow_debug_options) {
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                 }
 
@@ -857,7 +857,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
                     fire_ball(player_ptr, GF_HELL_FIRE, dir, power, 1);
 
-                    if (w_ptr->wizard) {
+                    if (allow_debug_options) {
                         msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                     }
                 } else {
