@@ -66,7 +66,7 @@ public:
     player_type *player_ptr; //!< プレイヤー参照ポインタ
     void gain_level_reward(int chosen_reward) const;
     void admire() const;
-    virtual ~Patron() {}
+    virtual ~Patron() = default;
 };
 
 extern const std::vector<Patron> patron_list;
