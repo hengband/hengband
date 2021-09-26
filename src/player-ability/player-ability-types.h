@@ -13,4 +13,5 @@ enum player_ability_type {
     A_CON = 4,
     A_CHR = 5,
     A_MAX = 6,
+    A_RANDOM = 7,
 };

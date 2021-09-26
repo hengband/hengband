@@ -1,6 +1,9 @@
 ﻿#pragma once
 
+#include "player-ability/player-ability-types.h"
 #include "system/angband.h"
+#include <string>
+#include <vector>
 
 #define MAX_PATRON 16 /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
 
@@ -44,8 +47,26 @@ enum patron_reward {
     REW_SER_MONS = 36, /*!< カオスパトロンからの報酬: モンスターの下僕下賜 */
 };
 
-extern const concptr chaos_patrons[MAX_PATRON];
-
 struct player_type;
-void gain_level_reward(player_type *player_ptr, int chosen_reward);
-void admire_from_patron(player_type *player_ptr);
+
+/*!
+ * @brief パトロン情報の定義
+ */
+class Patron {
+
+public:
+    std::string name = ""; //!< パトロン名
+    Patron(const char *_name, const char *_ename, const player_ability_type _boost_stat);
+#ifdef JP
+    std::string ename = ""; //!< PatronName
+    Patron(const char *name, const char *ename, const std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
+#else
+    Patron(const char *name, const std::vector<patron_reward>, const player_ability_type boost_stat);
+#endif
+    std::vector<patron_reward> reward_table = {}; //!< 報酬テーブル
+    player_ability_type boost_stat = player_ability_type::A_STR; //!< 強化能力値傾向
+    void GainLevelReward(player_type *player_ptr, int chosen_reward);
+    void AdmireFromPatron(player_type *player_ptr);
+};
+
+extern std::vector<Patron> patron_list;
