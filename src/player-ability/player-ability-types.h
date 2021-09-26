@@ -5,8 +5,8 @@
  * @brief アビリティスコア定義 (順番はAD&D初版準拠)
  */
 
-enum player_ability_type {
-	A_STR = 0,
+enum player_ability_type : int {
+    A_STR = 0,
     A_INT = 1,
     A_WIS = 2,
     A_DEX = 3,
