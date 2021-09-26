@@ -61,7 +61,7 @@ public:
 #else
     Patron(const char *name, std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr);
 #endif
-    std::vector<patron_reward> reward_table = {}; //!< 報酬テーブル
+    std::vector<patron_reward> reward_table; //!< 報酬テーブル
     player_ability_type boost_stat = player_ability_type::A_STR; //!< 強化能力値傾向
     player_type *player_ptr; //!< プレイヤー参照ポインタ
     void gain_level_reward(int chosen_reward) const;
