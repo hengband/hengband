@@ -124,7 +124,8 @@ void do_cmd_wield(player_type *player_ptr)
                 need_switch_wielding = INVEN_SUB_HAND;
         } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
             slot = INVEN_MAIN_HAND;
-        else if (o_ptr_mh->k_idx && !o_ptr_mh->is_melee_weapon() && o_ptr_sh->k_idx && !o_ptr_sh->is_melee_weapon()) {
+        else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx &&
+                 ((o_ptr->tval == TV_CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_wieldable_in_etheir_hand)))
