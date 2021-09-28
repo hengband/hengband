@@ -6,7 +6,7 @@ AlignAfterOpenBracket: DontAlign
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Right
-AlignOperands:   false
+AlignOperands: Align
 AlignTrailingComments: false
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: false
@@ -36,7 +36,7 @@ BraceWrapping:
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
-BreakBeforeBinaryOperators: All
+BreakBeforeBinaryOperators: None
 BreakBeforeBraces: WebKit
 BreakBeforeInheritanceComma: false
 BreakBeforeTernaryOperators: true
