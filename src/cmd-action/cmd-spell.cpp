@@ -1132,14 +1132,6 @@ bool do_cmd_cast(player_type *player_ptr)
     /* Spell failure chance */
     chance = spell_chance(player_ptr, spell, use_realm);
 
-    /* Sufficient mana */
-    if (need_mana <= player_ptr->csp) {
-        /* Use some mana */
-        player_ptr->csp -= need_mana;
-    } else
-        over_exerted = true;
-    player_ptr->redraw |= (PR_MANA);
-
     /* Failed spell */
     if (randint0(100) < chance) {
         if (flush_failure)
@@ -1346,6 +1338,14 @@ bool do_cmd_cast(player_type *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
+
+    /* Sufficient mana */
+    if (need_mana <= player_ptr->csp) {
+        /* Use some mana */
+        player_ptr->csp -= need_mana;
+    } else
+        over_exerted = true;
+    player_ptr->redraw |= (PR_MANA);
 
     /* Over-exert the player */
     if (over_exerted) {
