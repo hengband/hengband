@@ -11,6 +11,7 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
@@ -41,6 +42,31 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+
+namespace {
+
+/*!
+ * @brief 指定した特性フラグが得られている要因となる flag_cause 型のうち以下の基本的な物のフラグ集合を取得する
+ * 装備品のアイテムスロット / 種族上の体得 / 職業上の体得
+ * @param tr_flag 特性フラグ
+ * @return tr_flag が得られる要因となるフラグの集合
+ */
+BIT_FLAGS common_cause_flags(player_type *player_ptr, tr_type tr_flag)
+{
+    BIT_FLAGS result = check_equipment_flags(player_ptr, tr_flag);
+
+    if (player_race_has_flag(player_ptr, tr_flag)) {
+        set_bits(result, FLAG_CAUSE_RACE);
+    }
+
+    if (PlayerClass(player_ptr).tr_flags().has(tr_flag)) {
+        set_bits(result, FLAG_CAUSE_CLASS);
+    }
+
+    return result;
+}
+
+}
 
 #define SPELL_SW 22
 #define SPELL_WALL 20
@@ -100,7 +126,7 @@ BIT_FLAGS check_equipment_flags(player_type *player_ptr, tr_type tr_flag)
 
 BIT_FLAGS player_flags_brand_pois(player_type *player_ptr)
 {
-    BIT_FLAGS result = check_equipment_flags(player_ptr, TR_BRAND_POIS);
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_POIS);
 
     if (player_ptr->special_attack & ATTACK_POIS)
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
@@ -110,7 +136,7 @@ BIT_FLAGS player_flags_brand_pois(player_type *player_ptr)
 
 BIT_FLAGS player_flags_brand_acid(player_type *player_ptr)
 {
-    BIT_FLAGS result = check_equipment_flags(player_ptr, TR_BRAND_ACID);
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_ACID);
 
     if (player_ptr->special_attack & ATTACK_ACID)
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
@@ -120,7 +146,7 @@ BIT_FLAGS player_flags_brand_acid(player_type *player_ptr)
 
 BIT_FLAGS player_flags_brand_elec(player_type *player_ptr)
 {
-    BIT_FLAGS result = check_equipment_flags(player_ptr, TR_BRAND_ELEC);
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_ELEC);
 
     if (player_ptr->special_attack & ATTACK_ELEC)
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
@@ -130,7 +156,7 @@ BIT_FLAGS player_flags_brand_elec(player_type *player_ptr)
 
 BIT_FLAGS player_flags_brand_fire(player_type *player_ptr)
 {
-    BIT_FLAGS result = check_equipment_flags(player_ptr, TR_BRAND_FIRE);
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_FIRE);
 
     if (player_ptr->special_attack & ATTACK_FIRE)
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
@@ -140,7 +166,7 @@ BIT_FLAGS player_flags_brand_fire(player_type *player_ptr)
 
 BIT_FLAGS player_flags_brand_cold(player_type *player_ptr)
 {
-    BIT_FLAGS result = check_equipment_flags(player_ptr, TR_BRAND_COLD);
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_COLD);
 
     if (player_ptr->special_attack & ATTACK_COLD)
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
@@ -479,9 +505,7 @@ bool has_pass_wall(player_type *player_ptr)
  */
 BIT_FLAGS has_xtra_might(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(player_ptr, TR_XTRA_MIGHT);
-    return result;
+    return common_cause_flags(player_ptr, TR_XTRA_MIGHT);
 }
 
 /*!
@@ -491,12 +515,11 @@ BIT_FLAGS has_xtra_might(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_evil(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_ESP_EVIL);
     if (player_ptr->realm1 == REALM_HEX) {
         if (SpellHex(player_ptr).is_spelling_specific(HEX_DETECT_EVIL))
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
-    result |= check_equipment_flags(player_ptr, TR_ESP_EVIL);
     return result;
 }
 
@@ -507,7 +530,7 @@ BIT_FLAGS has_esp_evil(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_animal(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_ANIMAL);
+    return common_cause_flags(player_ptr, TR_ESP_ANIMAL);
 }
 
 /*!
@@ -517,7 +540,7 @@ BIT_FLAGS has_esp_animal(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_undead(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_UNDEAD);
+    return common_cause_flags(player_ptr, TR_ESP_UNDEAD);
 }
 
 /*!
@@ -527,7 +550,7 @@ BIT_FLAGS has_esp_undead(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_demon(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_DEMON);
+    return common_cause_flags(player_ptr, TR_ESP_DEMON);
 }
 
 /*!
@@ -537,7 +560,7 @@ BIT_FLAGS has_esp_demon(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_orc(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_ORC);
+    return common_cause_flags(player_ptr, TR_ESP_ORC);
 }
 
 /*!
@@ -547,7 +570,7 @@ BIT_FLAGS has_esp_orc(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_troll(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_TROLL);
+    return common_cause_flags(player_ptr, TR_ESP_TROLL);
 }
 
 /*!
@@ -557,7 +580,7 @@ BIT_FLAGS has_esp_troll(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_giant(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_GIANT);
+    return common_cause_flags(player_ptr, TR_ESP_GIANT);
 }
 
 /*!
@@ -567,7 +590,7 @@ BIT_FLAGS has_esp_giant(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_dragon(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_DRAGON);
+    return common_cause_flags(player_ptr, TR_ESP_DRAGON);
 }
 
 /*!
@@ -577,7 +600,7 @@ BIT_FLAGS has_esp_dragon(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_human(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_HUMAN);
+    return common_cause_flags(player_ptr, TR_ESP_HUMAN);
 }
 
 /*!
@@ -587,7 +610,7 @@ BIT_FLAGS has_esp_human(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_good(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_GOOD);
+    return common_cause_flags(player_ptr, TR_ESP_GOOD);
 }
 
 /*!
@@ -597,7 +620,7 @@ BIT_FLAGS has_esp_good(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_nonliving(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_NONLIVING);
+    return common_cause_flags(player_ptr, TR_ESP_NONLIVING);
 }
 
 /*!
@@ -607,7 +630,7 @@ BIT_FLAGS has_esp_nonliving(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_unique(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_ESP_UNIQUE);
+    return common_cause_flags(player_ptr, TR_ESP_UNIQUE);
 }
 
 /*!
@@ -617,7 +640,7 @@ BIT_FLAGS has_esp_unique(player_type *player_ptr)
  */
 BIT_FLAGS has_esp_telepathy(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_TELEPATHY);
 
     if (is_time_limit_esp(player_ptr) || player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -630,43 +653,35 @@ BIT_FLAGS has_esp_telepathy(player_type *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_race_has_flag(player_ptr, TR_TELEPATHY))
-        result |= FLAG_CAUSE_RACE;
-
-    if (player_ptr->pclass == CLASS_MINDCRAFTER && player_ptr->lev > 39)
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_TELEPATHY);
     return result;
 }
 
 BIT_FLAGS has_bless_blade(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_BLESSED);
+    return common_cause_flags(player_ptr, TR_BLESSED);
 }
 
 BIT_FLAGS has_easy2_weapon(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_EASY2_WEAPON);
+    return common_cause_flags(player_ptr, TR_EASY2_WEAPON);
 }
 
 BIT_FLAGS has_down_saving(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_DOWN_SAVING);
+    return common_cause_flags(player_ptr, TR_DOWN_SAVING);
 }
 
 BIT_FLAGS has_no_ac(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_NO_AC);
+    return common_cause_flags(player_ptr, TR_NO_AC);
 }
 
 BIT_FLAGS has_invuln_arrow(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
     if (player_ptr->blind)
-        return result;
-    result |= check_equipment_flags(player_ptr, TR_INVULN_ARROW);
-    return result;
+        return 0;
+
+    return common_cause_flags(player_ptr, TR_INVULN_ARROW);
 }
 
 void check_no_flowed(player_type *player_ptr)
@@ -717,23 +732,17 @@ void check_no_flowed(player_type *player_ptr)
 
 BIT_FLAGS has_mighty_throw(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_MIGHTY_THROW);
+    return common_cause_flags(player_ptr, TR_MIGHTY_THROW);
 }
 
 BIT_FLAGS has_dec_mana(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_DEC_MANA);
+    return common_cause_flags(player_ptr, TR_DEC_MANA);
 }
 
 BIT_FLAGS has_reflect(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_BERSERKER && player_ptr->lev > 39)
-        result |= FLAG_CAUSE_CLASS;
-
-    if (player_ptr->pclass == CLASS_MIRROR_MASTER && player_ptr->lev > 39)
-        result |= FLAG_CAUSE_CLASS;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_REFLECT);
 
     if (player_ptr->special_defense & KAMAE_GENBU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -743,10 +752,6 @@ BIT_FLAGS has_reflect(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::EARTH, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_REFLECT);
     return result;
 }
 
@@ -777,24 +782,21 @@ BIT_FLAGS has_warning(player_type *player_ptr)
 
 BIT_FLAGS has_anti_magic(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_NO_MAGIC);
+    return common_cause_flags(player_ptr, TR_NO_MAGIC);
 }
 
 BIT_FLAGS has_anti_tele(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_NO_TELE);
+    return common_cause_flags(player_ptr, TR_NO_TELE);
 }
 
 BIT_FLAGS has_sh_fire(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_FIRE);
 
     if (player_ptr->muta.has(MUTA::FIRE_BODY)) {
         result |= FLAG_CAUSE_MUTATION;
     }
-
-    if (player_race_has_flag(player_ptr, TR_SH_FIRE))
-        result |= FLAG_CAUSE_RACE;
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -804,16 +806,12 @@ BIT_FLAGS has_sh_fire(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SH_FIRE);
     return result;
 }
 
 BIT_FLAGS has_sh_elec(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_SH_ELEC))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_ELEC);
 
     if (player_ptr->muta.has(MUTA::ELEC_TOUC))
         result |= FLAG_CAUSE_MUTATION;
@@ -826,16 +824,12 @@ BIT_FLAGS has_sh_elec(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SH_ELEC);
     return result;
 }
 
 BIT_FLAGS has_sh_cold(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_SH_COLD))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_COLD);
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -845,30 +839,26 @@ BIT_FLAGS has_sh_cold(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SH_COLD);
     return result;
 }
 
 BIT_FLAGS has_easy_spell(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_EASY_SPELL);
+    return common_cause_flags(player_ptr, TR_EASY_SPELL);
 }
 
 BIT_FLAGS has_heavy_spell(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_HEAVY_SPELL);
+    return common_cause_flags(player_ptr, TR_HEAVY_SPELL);
 }
 
 BIT_FLAGS has_hold_exp(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_HOLD_EXP);
 
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
-
-    if (player_race_has_flag(player_ptr, TR_HOLD_EXP))
-        result |= FLAG_CAUSE_RACE;
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -878,19 +868,12 @@ BIT_FLAGS has_hold_exp(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_HOLD_EXP);
     return result;
 }
 
 BIT_FLAGS has_see_inv(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_NINJA && player_ptr->lev > 29)
-        result |= FLAG_CAUSE_CLASS;
-
-    if (player_race_has_flag(player_ptr, TR_SEE_INVIS))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SEE_INVIS);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -900,42 +883,20 @@ BIT_FLAGS has_see_inv(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SEE_INVIS);
     return result;
 }
 
 BIT_FLAGS has_magic_mastery(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_MAGIC_MASTERY);
+    return common_cause_flags(player_ptr, TR_MAGIC_MASTERY);
 }
 
 BIT_FLAGS has_free_act(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_FREE_ACT);
 
     if (player_ptr->muta.has(MUTA::MOTION))
         result |= FLAG_CAUSE_MUTATION;
-
-    if (player_race_has_flag(player_ptr, TR_FREE_ACT))
-        result |= FLAG_CAUSE_RACE;
-
-    if (player_ptr->pclass == CLASS_NINJA && !heavy_armor(player_ptr)
-        && (!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(player_ptr))
-        && (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(player_ptr))) {
-        if (player_ptr->lev > 24)
-            result |= FLAG_CAUSE_CLASS;
-    }
-
-    if (player_ptr->pclass == CLASS_MONK || player_ptr->pclass == CLASS_FORCETRAINER) {
-        if (!(heavy_armor(player_ptr))) {
-            if (player_ptr->lev > 24)
-                result |= FLAG_CAUSE_CLASS;
-        }
-    }
-
-    if (player_ptr->pclass == CLASS_BERSERKER) {
-        result |= FLAG_CAUSE_CLASS;
-    }
 
     if (player_ptr->ult_res || player_ptr->magicdef) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -945,20 +906,12 @@ BIT_FLAGS has_free_act(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_FREE_ACT);
     return result;
 }
 
 BIT_FLAGS has_sustain_str(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_BERSERKER) {
-        result |= FLAG_CAUSE_CLASS;
-    }
-
-    if (player_race_has_flag(player_ptr, TR_SUST_STR))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_STR);
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -968,16 +921,12 @@ BIT_FLAGS has_sustain_str(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SUST_STR);
     return result;
 }
 
 BIT_FLAGS has_sustain_int(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_SUST_INT))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_INT);
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -987,19 +936,12 @@ BIT_FLAGS has_sustain_int(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SUST_INT);
     return result;
 }
 
 BIT_FLAGS has_sustain_wis(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_MINDCRAFTER && player_ptr->lev > 19)
-        result |= FLAG_CAUSE_CLASS;
-
-    if (player_race_has_flag(player_ptr, TR_SUST_WIS))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_WIS);
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1009,22 +951,12 @@ BIT_FLAGS has_sustain_wis(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SUST_WIS);
     return result;
 }
 
 BIT_FLAGS has_sustain_dex(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-    if (player_ptr->pclass == CLASS_BERSERKER) {
-        result |= FLAG_CAUSE_CLASS;
-    }
-
-    if (player_ptr->pclass == CLASS_NINJA && player_ptr->lev > 24)
-        result |= FLAG_CAUSE_CLASS;
-
-    if (player_race_has_flag(player_ptr, TR_SUST_DEX))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_DEX);
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1034,19 +966,12 @@ BIT_FLAGS has_sustain_dex(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SUST_DEX);
     return result;
 }
 
 BIT_FLAGS has_sustain_con(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-    if (player_ptr->pclass == CLASS_BERSERKER) {
-        result |= FLAG_CAUSE_CLASS;
-    }
-
-    if (player_race_has_flag(player_ptr, TR_SUST_CON))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_CON);
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1056,16 +981,12 @@ BIT_FLAGS has_sustain_con(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SUST_CON);
     return result;
 }
 
 BIT_FLAGS has_sustain_chr(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_SUST_CHR))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_CHR);
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1075,20 +996,16 @@ BIT_FLAGS has_sustain_chr(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SUST_CHR);
     return result;
 }
 
 BIT_FLAGS has_levitation(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_LEVITATION);
 
     if (player_ptr->muta.has(MUTA::WINGS)) {
         result |= FLAG_CAUSE_MUTATION;
     }
-
-    if (player_race_has_flag(player_ptr, TR_LEVITATION))
-        result |= FLAG_CAUSE_RACE;
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KAMAE_SUZAKU || (player_ptr->special_defense & KATA_MUSOU)) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1102,13 +1019,13 @@ BIT_FLAGS has_levitation(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_LEVITATION);
-
+    // 乗馬中は実際に浮遊するかどうかは乗馬中のモンスターに依存する
     if (player_ptr->riding) {
         monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         result = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? FLAG_CAUSE_RIDING : FLAG_CAUSE_NONE;
     }
+
     return result;
 }
 
@@ -1127,14 +1044,7 @@ bool has_can_swim(player_type *player_ptr)
 
 BIT_FLAGS has_slow_digest(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_NINJA) {
-        result |= FLAG_CAUSE_CLASS;
-    }
-
-    if (player_race_has_flag(player_ptr, TR_SLOW_DIGEST))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_SLOW_DIGEST);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1144,23 +1054,15 @@ BIT_FLAGS has_slow_digest(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_SLOW_DIGEST);
     return result;
 }
 
 BIT_FLAGS has_regenerate(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_WARRIOR && player_ptr->lev > 44) {
-        result |= FLAG_CAUSE_CLASS;
-    }
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_REGEN);
 
     if (player_ptr->muta.has(MUTA::REGEN))
         result |= FLAG_CAUSE_MUTATION;
-
-    if (player_race_has_flag(player_ptr, TR_REGEN))
-        result |= FLAG_CAUSE_RACE;
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1169,8 +1071,6 @@ BIT_FLAGS has_regenerate(player_type *player_ptr)
     if (SpellHex(player_ptr).is_spelling_specific(HEX_DEMON_AURA) || player_ptr->ult_res || player_ptr->tim_regen) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
-
-    result |= check_equipment_flags(player_ptr, TR_REGEN);
 
     if (player_ptr->muta.has(MUTA::FLESH_ROT))
         result = 0L;
@@ -1256,12 +1156,12 @@ void update_curses(player_type *player_ptr)
 
 BIT_FLAGS has_impact(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_IMPACT);
+    return common_cause_flags(player_ptr, TR_IMPACT);
 }
 
 BIT_FLAGS has_earthquake(player_type *player_ptr)
 {
-    return check_equipment_flags(player_ptr, TR_EARTHQUAKE);
+    return common_cause_flags(player_ptr, TR_EARTHQUAKE);
 }
 
 void update_extra_blows(player_type *player_ptr)
@@ -1293,10 +1193,7 @@ void update_extra_blows(player_type *player_ptr)
 
 BIT_FLAGS has_resist_acid(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_ACID))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_ACID);
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1306,40 +1203,29 @@ BIT_FLAGS has_resist_acid(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::SEA, 1))
-        result |= FLAG_CAUSE_CLASS;
-
     result |= has_immune_acid(player_ptr);
 
-    result |= check_equipment_flags(player_ptr, TR_RES_ACID);
     return result;
 }
 
 BIT_FLAGS has_vuln_acid(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_ACID);
 
     if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_race_has_flag(player_ptr, TR_VUL_ACID))
-        result |= FLAG_CAUSE_RACE;
-
     if (player_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_VUL_ACID);
     return result;
 }
 
 BIT_FLAGS has_resist_elec(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_ELEC))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_ELEC);
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1349,38 +1235,29 @@ BIT_FLAGS has_resist_elec(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::SKY, 1))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_ELEC);
     result |= has_immune_elec(player_ptr);
+
     return result;
 }
 
 BIT_FLAGS has_vuln_elec(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_ELEC);
+
     if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
-
-    if (player_race_has_flag(player_ptr, TR_VUL_ELEC))
-        result |= FLAG_CAUSE_RACE;
 
     if (player_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_VUL_ELEC);
     return result;
 }
 
 BIT_FLAGS has_resist_fire(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_FIRE))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_FIRE);
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1390,39 +1267,29 @@ BIT_FLAGS has_resist_fire(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::FIRE, 1))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_FIRE);
     result |= has_immune_fire(player_ptr);
+
     return result;
 }
 
 BIT_FLAGS has_vuln_fire(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_FIRE);
 
     if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_race_has_flag(player_ptr, TR_VUL_FIRE))
-        result |= FLAG_CAUSE_RACE;
-
     if (player_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_VUL_FIRE);
     return result;
 }
 
 BIT_FLAGS has_resist_cold(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_COLD))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_COLD);
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1432,42 +1299,29 @@ BIT_FLAGS has_resist_cold(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::ICE, 1))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_COLD);
     result |= has_immune_cold(player_ptr);
+
     return result;
 }
 
 BIT_FLAGS has_vuln_cold(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_COLD);
 
     if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_race_has_flag(player_ptr, TR_VUL_COLD))
-        result |= FLAG_CAUSE_RACE;
-
     if (player_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_VUL_COLD);
     return result;
 }
 
 BIT_FLAGS has_resist_pois(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_NINJA && player_ptr->lev > 19)
-        result |= FLAG_CAUSE_CLASS;
-
-    if (player_race_has_flag(player_ptr, TR_RES_POIS))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_POIS);
 
     if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1477,27 +1331,17 @@ BIT_FLAGS has_resist_pois(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::DEATH, 1))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_POIS);
     return result;
 }
 
 BIT_FLAGS has_resist_conf(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_MINDCRAFTER && player_ptr->lev > 29)
-        result |= FLAG_CAUSE_CLASS;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CONF);
 
     if (player_ptr->ppersonality == PERSONALITY_CHARGEMAN || player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (player_race_has_flag(player_ptr, TR_RES_CONF))
-        result |= FLAG_CAUSE_RACE;
-
     if (player_ptr->ult_res || player_ptr->magicdef) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1506,22 +1350,12 @@ BIT_FLAGS has_resist_conf(player_type *player_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::CHAOS, 1))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_CONF);
     return result;
 }
 
 BIT_FLAGS has_resist_sound(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_BARD) {
-        result |= FLAG_CAUSE_CLASS;
-    }
-    if (player_race_has_flag(player_ptr, TR_RES_SOUND))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SOUND);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1531,16 +1365,12 @@ BIT_FLAGS has_resist_sound(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_RES_SOUND);
     return result;
 }
 
 BIT_FLAGS has_resist_lite(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_LITE))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_LITE);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1550,31 +1380,23 @@ BIT_FLAGS has_resist_lite(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_RES_LITE);
     return result;
 }
 
 BIT_FLAGS has_vuln_lite(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_VUL_LITE))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_LITE);
 
     if (player_ptr->wraith_form) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_VUL_LITE);
     return result;
 }
 
 BIT_FLAGS has_resist_dark(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_DARK))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1584,22 +1406,12 @@ BIT_FLAGS has_resist_dark(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::DARKNESS, 1))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_DARK);
     return result;
 }
 
 BIT_FLAGS has_resist_chaos(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_ptr->pclass == CLASS_CHAOS_WARRIOR && player_ptr->lev > 29)
-        result |= FLAG_CAUSE_CLASS;
-
-    if (player_race_has_flag(player_ptr, TR_RES_CHAOS))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CHAOS);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1609,19 +1421,12 @@ BIT_FLAGS has_resist_chaos(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::CHAOS, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_CHAOS);
     return result;
 }
 
 BIT_FLAGS has_resist_disen(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_DISEN))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DISEN);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1631,19 +1436,12 @@ BIT_FLAGS has_resist_disen(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::DEATH, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_DISEN);
     return result;
 }
 
 BIT_FLAGS has_resist_shard(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_SHARDS))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SHARDS);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1653,19 +1451,12 @@ BIT_FLAGS has_resist_shard(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::EARTH, 1))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_SHARDS);
     return result;
 }
 
 BIT_FLAGS has_resist_nexus(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_NEXUS))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NEXUS);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1675,20 +1466,16 @@ BIT_FLAGS has_resist_nexus(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_RES_NEXUS);
     return result;
 }
 
 BIT_FLAGS has_resist_blind(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_BLIND);
 
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
-
-    if (player_race_has_flag(player_ptr, TR_RES_BLIND))
-        result |= FLAG_CAUSE_RACE;
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1698,16 +1485,12 @@ BIT_FLAGS has_resist_blind(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_RES_BLIND);
     return result;
 }
 
 BIT_FLAGS has_resist_neth(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_RES_NETHER))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NETHER);
 
     if (player_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1717,36 +1500,28 @@ BIT_FLAGS has_resist_neth(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::DARKNESS, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_RES_NETHER);
     return result;
 }
 
 BIT_FLAGS has_resist_time(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_TIME);
 
-    if (player_race_has_flag(player_ptr, TR_RES_TIME))
-        result |= FLAG_CAUSE_RACE;
+    //! @todo 究極の耐性と無双の型で耐性を得られるようにすべき？
 
     if (player_ptr->tim_res_time) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_RES_TIME);
     return result;
 }
 
 BIT_FLAGS has_resist_water(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_WATER);
 
-    if (player_race_has_flag(player_ptr, TR_RES_WATER))
-        result |= FLAG_CAUSE_RACE;
+    //! @todo 究極の耐性と無双の型で耐性を得られるようにすべき？
 
-    result |= check_equipment_flags(player_ptr, TR_RES_WATER);
     return result;
 }
 
@@ -1757,47 +1532,19 @@ BIT_FLAGS has_resist_water(player_type *player_ptr)
  */
 BIT_FLAGS has_resist_curse(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CURSE);
 
-    if (player_race_has_flag(player_ptr, TR_RES_CURSE))
-        result |= FLAG_CAUSE_RACE;
+    //! @todo 究極の耐性と無双の型で耐性を得られるようにすべき？
 
-    result |= check_equipment_flags(player_ptr, TR_RES_CURSE);
     return result;
 }
 
 BIT_FLAGS has_resist_fear(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_FEAR);
 
     if (player_ptr->muta.has(MUTA::FEARLESS))
         result |= FLAG_CAUSE_MUTATION;
-
-    switch (player_ptr->pclass) {
-    case CLASS_WARRIOR:
-    case CLASS_SAMURAI:
-        if (player_ptr->lev > 29)
-            result |= FLAG_CAUSE_CLASS;
-        break;
-    case CLASS_PALADIN:
-    case CLASS_CHAOS_WARRIOR:
-        if (player_ptr->lev > 39)
-            result |= FLAG_CAUSE_CLASS;
-        break;
-    case CLASS_MINDCRAFTER:
-        if (player_ptr->lev > 9)
-            result |= FLAG_CAUSE_CLASS;
-        break;
-    case CLASS_NINJA:
-        result |= FLAG_CAUSE_CLASS;
-        break;
-
-    default:
-        break;
-    }
-
-    if (player_race_has_flag(player_ptr, TR_RES_FEAR))
-        result |= FLAG_CAUSE_RACE;
 
     if ((player_ptr->special_defense & KATA_MUSOU)) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1807,98 +1554,65 @@ BIT_FLAGS has_resist_fear(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_RES_FEAR);
     return result;
 }
 
 BIT_FLAGS has_immune_acid(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_IM_ACID))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_ACID);
 
     if (player_ptr->ele_immune) {
         if (player_ptr->special_defense & DEFENSE_ACID)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::SEA, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_IM_ACID);
     return result;
 }
 
 BIT_FLAGS has_immune_elec(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_IM_ELEC))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_ELEC);
 
     if (player_ptr->ele_immune) {
         if (player_ptr->special_defense & DEFENSE_ELEC)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::SKY, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_IM_ELEC);
     return result;
 }
 
 BIT_FLAGS has_immune_fire(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_IM_FIRE))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_FIRE);
 
     if (player_ptr->ele_immune) {
         if (player_ptr->special_defense & DEFENSE_FIRE)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::FIRE, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_IM_FIRE);
     return result;
 }
 
 BIT_FLAGS has_immune_cold(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_IM_COLD))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_COLD);
 
     if (player_ptr->ele_immune) {
         if (player_ptr->special_defense & DEFENSE_COLD)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (has_element_resist(player_ptr, ElementRealm::ICE, 30))
-        result |= FLAG_CAUSE_CLASS;
-
-    result |= check_equipment_flags(player_ptr, TR_IM_COLD);
     return result;
 }
 
 BIT_FLAGS has_immune_dark(player_type *player_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    if (player_race_has_flag(player_ptr, TR_IM_DARK))
-        result |= FLAG_CAUSE_RACE;
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_DARK);
 
     if (player_ptr->wraith_form) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= check_equipment_flags(player_ptr, TR_IM_DARK);
     return result;
 }
 
