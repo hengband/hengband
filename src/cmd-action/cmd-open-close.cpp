@@ -70,8 +70,9 @@ static bool exe_open_chest(player_type *player_ptr, POSITION y, POSITION x, OBJE
     }
 
     if (flag) {
-        chest_trap(player_ptr, y, x, o_idx);
-        chest_death(player_ptr, false, y, x, o_idx);
+        Chest chest(player_ptr);
+        chest.chest_trap(y, x, o_idx);
+        chest.chest_death(false, y, x, o_idx);
     }
 
     return more;

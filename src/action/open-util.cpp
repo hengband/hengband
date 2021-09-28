@@ -59,7 +59,7 @@ int count_chests(player_type *player_ptr, POSITION *y, POSITION *x, bool trapped
         if (o_ptr->pval == 0)
             continue;
 
-        if (trapped && (!o_ptr->is_known() || !chest_traps[o_ptr->pval]))
+        if (trapped && (!o_ptr->is_known() || chest_traps[o_ptr->pval].none()))
             continue;
 
         ++count;

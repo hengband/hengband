@@ -206,7 +206,7 @@ bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_ID
         msg_print(_("トラップが見あたらない。", "I don't see any traps."));
     } else if (o_ptr->pval <= 0) {
         msg_print(_("箱にはトラップが仕掛けられていない。", "The chest is not trapped."));
-    } else if (!chest_traps[o_ptr->pval]) {
+    } else if (chest_traps[o_ptr->pval].none()) {
         msg_print(_("箱にはトラップが仕掛けられていない。", "The chest is not trapped."));
     } else if (randint0(100) < j) {
         msg_print(_("箱に仕掛けられていたトラップを解除した。", "You have disarmed the chest."));
@@ -221,7 +221,7 @@ bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_ID
     } else {
         msg_print(_("トラップを作動させてしまった！", "You set off a trap!"));
         sound(SOUND_FAIL);
-        chest_trap(player_ptr, y, x, o_idx);
+        Chest(player_ptr).chest_trap(y, x, o_idx);
     }
 
     return more;

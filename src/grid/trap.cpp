@@ -43,7 +43,6 @@
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -60,71 +59,71 @@ static int16_t normal_traps[MAX_NORMAL_TRAPS];
  * Note that disarming a trap on a chest also removes the lock.
  * </pre>
  */
-const int chest_traps[64] = {
-    0, /* 0 == empty */
-    (CHEST_POISON),
-    (CHEST_LOSE_STR),
-    (CHEST_LOSE_CON),
-    (CHEST_LOSE_STR),
-    (CHEST_LOSE_CON), /* 5 == best small wooden */
-    0,
-    (CHEST_ALARM),
-    (CHEST_ALARM),
-    (CHEST_LOSE_STR),
-    (CHEST_LOSE_CON),
-    (CHEST_POISON),
-    (CHEST_SCATTER),
-    (CHEST_LOSE_STR | CHEST_LOSE_CON),
-    (CHEST_LOSE_STR | CHEST_LOSE_CON),
-    (CHEST_SUMMON), /* 15 == best large wooden */
-    0,
-    (CHEST_ALARM),
-    (CHEST_SCATTER),
-    (CHEST_PARALYZE),
-    (CHEST_LOSE_STR | CHEST_LOSE_CON),
-    (CHEST_SUMMON),
-    (CHEST_PARALYZE),
-    (CHEST_LOSE_STR),
-    (CHEST_LOSE_CON),
-    (CHEST_EXPLODE), /* 25 == best small iron */
-    0,
-    (CHEST_E_SUMMON),
-    (CHEST_POISON | CHEST_LOSE_CON),
-    (CHEST_LOSE_STR | CHEST_LOSE_CON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_BIRD_STORM),
-    (CHEST_POISON | CHEST_SUMMON),
-    (CHEST_E_SUMMON | CHEST_ALARM),
-    (CHEST_EXPLODE),
-    (CHEST_EXPLODE | CHEST_SUMMON), /* 35 == best large iron */
-    0,
-    (CHEST_SUMMON | CHEST_ALARM),
-    (CHEST_EXPLODE),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_POISON | CHEST_PARALYZE),
-    (CHEST_EXPLODE),
-    (CHEST_BIRD_STORM),
-    (CHEST_EXPLODE | CHEST_E_SUMMON | CHEST_ALARM),
-    (CHEST_H_SUMMON), /* 45 == best small steel */
-    0,
-    (CHEST_EXPLODE | CHEST_SUMMON | CHEST_ALARM),
-    (CHEST_BIRD_STORM),
-    (CHEST_RUNES_OF_EVIL),
-    (CHEST_EXPLODE | CHEST_SUMMON | CHEST_ALARM),
-    (CHEST_BIRD_STORM | CHEST_ALARM),
-    (CHEST_H_SUMMON | CHEST_ALARM),
-    (CHEST_RUNES_OF_EVIL),
-    (CHEST_H_SUMMON | CHEST_SCATTER | CHEST_ALARM),
-    (CHEST_RUNES_OF_EVIL | CHEST_EXPLODE), /* 55 == best large steel */
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
-    (CHEST_EXPLODE | CHEST_SUMMON),
+const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
+    { }, /* empty */
+    { ChestTrapType::POISON },
+    { ChestTrapType::LOSE_STR },
+    { ChestTrapType::LOSE_CON },
+    { ChestTrapType::LOSE_STR },
+    { ChestTrapType::LOSE_CON }, /* 5 == best small wooden */
+    { },
+    { ChestTrapType::ALARM },
+    { ChestTrapType::ALARM },
+    { ChestTrapType::LOSE_STR },
+    { ChestTrapType::LOSE_CON },
+    { ChestTrapType::POISON },
+    { ChestTrapType::SCATTER },
+    { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
+    { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
+    { ChestTrapType::SUMMON }, /* 15 == best large wooden */
+    { },
+    { ChestTrapType::ALARM },
+    { ChestTrapType::SCATTER },
+    { ChestTrapType::PARALYZE },
+    { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
+    { ChestTrapType::SUMMON },
+    { ChestTrapType::PARALYZE },
+    { ChestTrapType::LOSE_STR },
+    { ChestTrapType::LOSE_CON },
+    { ChestTrapType::EXPLODE }, /* 25 == best small iron */
+    { },
+    { ChestTrapType::E_SUMMON },
+    { ChestTrapType::POISON, ChestTrapType::LOSE_CON },
+    { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::BIRD_STORM },
+    { ChestTrapType::POISON, ChestTrapType::SUMMON },
+    { ChestTrapType::E_SUMMON, ChestTrapType::ALARM },
+    { ChestTrapType::EXPLODE },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON }, /* 35 == best large iron */
+    { },
+    { ChestTrapType::SUMMON, ChestTrapType::ALARM },
+    { ChestTrapType::EXPLODE },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::POISON, ChestTrapType::PARALYZE },
+    { ChestTrapType::EXPLODE },
+    { ChestTrapType::BIRD_STORM },
+    { ChestTrapType::EXPLODE, ChestTrapType::E_SUMMON, ChestTrapType::ALARM },
+    { ChestTrapType::H_SUMMON }, /* 45 == best small steel */
+    { },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON, ChestTrapType::ALARM },
+    { ChestTrapType::BIRD_STORM },
+    { ChestTrapType::RUNES_OF_EVIL },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON, ChestTrapType::ALARM },
+    { ChestTrapType::BIRD_STORM, ChestTrapType::ALARM },
+    { ChestTrapType::H_SUMMON, ChestTrapType::ALARM },
+    { ChestTrapType::RUNES_OF_EVIL },
+    { ChestTrapType::H_SUMMON, ChestTrapType::SCATTER, ChestTrapType::ALARM },
+    { ChestTrapType::RUNES_OF_EVIL, ChestTrapType::EXPLODE }, /* 55 == best large steel */
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
+    { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
 };
 
 /*!
