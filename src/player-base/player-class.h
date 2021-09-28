@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "object-enchant/tr-flags.h"
 #include "system/player-type-definition.h"
 
 #include <memory>
@@ -10,6 +11,8 @@ public:
     PlayerClass() = delete;
     PlayerClass(player_type *player_ptr);
     virtual ~PlayerClass() = default;
+
+    TrFlags tr_flags() const;
 
     bool can_resist_stun() const;
     bool is_wizard() const;
