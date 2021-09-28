@@ -150,7 +150,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
  */
 void do_cmd_knowledge_skill_exp(player_type *player_ptr)
 {
-    char skill_name[SKILL_MAX][20] = { _("マーシャルアーツ", "Martial Arts    "), _("二刀流          ", "Dual Wielding   "),
+    const char *skill_name[SKILL_MAX] = { _("マーシャルアーツ", "Martial Arts    "), _("二刀流          ", "Dual Wielding   "),
         _("乗馬            ", "Riding          "), _("盾              ", "Shield          ") };
 
     FILE *fff = nullptr;
