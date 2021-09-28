@@ -6,6 +6,7 @@
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -57,7 +58,7 @@ static bool is_healthy_stay(player_type *player_ptr)
 #ifdef JP
 static bool is_player_undead(player_type *player_ptr)
 {
-    return player_race_life(player_ptr, true) == PlayerRaceLife::UNDEAD;
+    return PlayerRace(player_ptr, true).life() == PlayerRaceLife::UNDEAD;
 }
 #endif
 

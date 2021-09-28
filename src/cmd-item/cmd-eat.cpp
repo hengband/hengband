@@ -153,7 +153,7 @@ bool exe_eat_charge_of_magic_device(player_type *player_ptr, object_type *o_ptr,
     if (o_ptr->tval != TV_STAFF && o_ptr->tval != TV_WAND)
         return false;
 
-    if (player_race_food(player_ptr) == PlayerRaceFood::MANA) {
+    if (PlayerRace(player_ptr).food() == PlayerRaceFood::MANA) {
         concptr staff;
 
         if (o_ptr->tval == TV_STAFF && (item < 0) && (o_ptr->number > 1)) {
@@ -272,7 +272,7 @@ void exe_eat_food(player_type *player_ptr, INVENTORY_IDX item)
         return;
     }
 
-    auto food_type = player_race_food(player_ptr);
+    auto food_type = PlayerRace(player_ptr).food();
 
     /* Balrogs change humanoid corpses to energy */
     if (food_type == PlayerRaceFood::CORPSE && (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))) {

@@ -19,6 +19,7 @@
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-base/player-race.h"
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -130,7 +131,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
         }
 
         see_eldritch_horror(m_name, r_ptr);
-        switch (player_race_life(player_ptr)) {
+        switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLife::DEMON:
             return;
         case PlayerRaceLife::UNDEAD:
@@ -180,7 +181,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
         }
 
         feel_eldritch_horror(desc, r_ptr);
-        switch (player_race_life(player_ptr)) {
+        switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLife::DEMON:
             if (saving_throw(20 + player_ptr->lev))
                 return;

@@ -7,6 +7,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-race.h"
 #include "player-info/mimic-info-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
@@ -26,7 +27,7 @@ bool item_tester_hook_eatable(player_type *player_ptr, const object_type *o_ptr)
     if (o_ptr->tval == TV_FOOD)
         return true;
 
-    auto food_type = player_race_food(player_ptr);
+    auto food_type = PlayerRace(player_ptr).food();
     if (food_type == PlayerRaceFood::MANA) {
         if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
             return true;
@@ -49,7 +50,7 @@ bool item_tester_hook_quaff(player_type *player_ptr, const object_type *o_ptr)
     if (o_ptr->tval == TV_POTION)
         return true;
 
-    if (player_race_food(player_ptr) == PlayerRaceFood::OIL && o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
+    if (PlayerRace(player_ptr).food() == PlayerRaceFood::OIL && o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
         return true;
 
     return false;

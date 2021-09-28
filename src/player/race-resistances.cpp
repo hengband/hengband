@@ -4,6 +4,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player/special-defense-types.h"
@@ -22,30 +23,21 @@ void player_immunity(player_type *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    if (player_race_has_flag(player_ptr, TR_IM_ACID))
+    const auto p_flags = (PlayerRace(player_ptr).tr_flags() | PlayerClass(player_ptr).tr_flags());
+
+    if (p_flags.has(TR_IM_ACID))
         flags.set(TR_RES_ACID);
-    if (player_race_has_flag(player_ptr, TR_IM_COLD))
+    if (p_flags.has(TR_IM_COLD))
         flags.set(TR_RES_COLD);
-    if (player_race_has_flag(player_ptr, TR_IM_ELEC))
+    if (p_flags.has(TR_IM_ELEC))
         flags.set(TR_RES_ELEC);
-    if (player_race_has_flag(player_ptr, TR_IM_FIRE))
+    if (p_flags.has(TR_IM_FIRE))
         flags.set(TR_RES_FIRE);
+    if (p_flags.has(TR_IM_DARK))
+        flags.set(TR_RES_DARK);
 
     if (PlayerRace(player_ptr).equals(player_race_type::SPECTRE))
         flags.set(TR_RES_NETHER);
-    if (player_race_has_flag(player_ptr, TR_IM_DARK))
-        flags.set(TR_RES_DARK);
-
-    if (player_ptr->pclass == CLASS_ELEMENTALIST) {
-        if (has_element_resist(player_ptr, ElementRealm::FIRE, 30))
-            flags.set(TR_RES_FIRE);
-        if (has_element_resist(player_ptr, ElementRealm::SKY, 30))
-            flags.set(TR_RES_ELEC);
-        if (has_element_resist(player_ptr, ElementRealm::SEA, 30))
-            flags.set(TR_RES_ACID);
-        if (has_element_resist(player_ptr, ElementRealm::ICE, 30))
-            flags.set(TR_RES_COLD);
-    }
 }
 
 /*!
@@ -118,14 +110,16 @@ void player_vulnerability_flags(player_type *player_ptr, TrFlags &flags)
         flags.set(TR_RES_COLD);
     }
 
-    if (player_race_has_flag(player_ptr, TR_VUL_ACID))
+    const auto p_flags = PlayerRace(player_ptr).tr_flags();
+
+    if (p_flags.has(TR_VUL_ACID))
         flags.set(TR_RES_ACID);
-    if (player_race_has_flag(player_ptr, TR_VUL_COLD))
+    if (p_flags.has(TR_VUL_COLD))
         flags.set(TR_RES_COLD);
-    if (player_race_has_flag(player_ptr, TR_VUL_ELEC))
+    if (p_flags.has(TR_VUL_ELEC))
         flags.set(TR_RES_ELEC);
-    if (player_race_has_flag(player_ptr, TR_VUL_FIRE))
+    if (p_flags.has(TR_VUL_FIRE))
         flags.set(TR_RES_FIRE);
-    if (player_race_has_flag(player_ptr, TR_VUL_LITE))
+    if (p_flags.has(TR_VUL_LITE))
         flags.set(TR_RES_LITE);
 }

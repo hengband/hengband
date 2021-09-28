@@ -12,6 +12,7 @@
 #include "monster-race/race-flags7.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
@@ -206,7 +207,7 @@ void init_dungeon_quests(player_type *player_ptr)
  */
 void init_turn(player_type *player_ptr)
 {
-    if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD) {
+    if (PlayerRace(player_ptr).life() == PlayerRaceLife::UNDEAD) {
         w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
         w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     } else {
