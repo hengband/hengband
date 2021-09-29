@@ -42,5 +42,5 @@ void do_cmd_read_scroll(player_type *player_ptr)
     if (!o_ptr)
         return;
 
-    exe_read(player_ptr, item, o_ptr->is_aware());
+    ObjectReadEntity(player_ptr, item).execute(o_ptr->is_aware());
 }

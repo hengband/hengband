@@ -18,7 +18,6 @@
 #include "cmd-item/cmd-eat.h"
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"
-#include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "combat/shoot.h"
@@ -39,6 +38,9 @@
 #include "object-hook/hook-magic.h"
 #include "object-use/quaff-execution.h"
 #include "object-use/read-execution.h"
+#include "object-use/use-execution.h"
+#include "object-use/zaprod-execution.h"
+#include "object-use/zapwand-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/identification.h"
@@ -250,22 +252,22 @@ void do_cmd_use(player_type *player_ptr)
         exe_eat_food(player_ptr, item);
         break;
     case TV_WAND:
-        exe_aim_wand(player_ptr, item);
+        ObjectZapWandEntity(player_ptr).execute(item);
         break;
     case TV_STAFF:
-        exe_use_staff(player_ptr, item);
+        ObjectUseEntity(player_ptr, item).execute();
         break;
     case TV_ROD:
-        exe_zap_rod(player_ptr, item);
+        ObjectZapRodEntity(player_ptr).execute(item);
         break;
     case TV_POTION:
-        exe_quaff_potion(player_ptr, item);
+        ObjectQuaffEntity(player_ptr).execute(item);
         break;
     case TV_SCROLL:
         if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
             return;
 
-        exe_read(player_ptr, item, true);
+        ObjectReadEntity(player_ptr, item).execute(true);
         break;
     case TV_SHOT:
     case TV_ARROW:

@@ -273,6 +273,10 @@
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-info.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
+    <ClCompile Include="..\..\src\object-use\item-use-checker.cpp" />
+    <ClCompile Include="..\..\src\object-use\use-execution.cpp" />
+    <ClCompile Include="..\..\src\object-use\zaprod-execution.cpp" />
+    <ClCompile Include="..\..\src\object-use\zapwand-execution.cpp" />
     <ClCompile Include="..\..\src\player-base\player-class.cpp" />
     <ClCompile Include="..\..\src\player-base\player-race.cpp" />
     <ClCompile Include="..\..\src\player-info\magic-eater-data-type.cpp" />
@@ -924,6 +928,7 @@
     <ClInclude Include="..\..\src\object-enchant\smith-tables.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-types.h" />
     <ClInclude Include="..\..\src\object-enchant\tr-flags.h" />
+    <ClInclude Include="..\..\src\object-use\item-use-checker.h" />
     <ClInclude Include="..\..\src\object-use\throw-execution.h" />
     <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />
@@ -988,6 +993,9 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-helm.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-shield.h" />
+    <ClInclude Include="..\..\src\object-use\use-execution.h" />
+    <ClInclude Include="..\..\src\object-use\zaprod-execution.h" />
+    <ClInclude Include="..\..\src\object-use\zapwand-execution.h" />
     <ClInclude Include="..\..\src\object\object-index-list.h" />
     <ClInclude Include="..\..\src\player-base\player-class.h" />
     <ClInclude Include="..\..\src\player-base\player-race.h" />

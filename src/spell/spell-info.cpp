@@ -196,7 +196,7 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
         chance = minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->get_chance_penalty();
+    chance += player_stun->get_magic_chance_penalty();
     if (chance > 95) {
         chance = 95;
     }

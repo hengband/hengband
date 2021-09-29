@@ -281,7 +281,7 @@ static void calculate_blue_magic_success_probability(player_type *player_ptr, le
         lm_ptr->chance = minfail;
 
     auto player_stun = player_ptr->effects()->stun();
-    lm_ptr->chance += player_stun->get_chance_penalty();
+    lm_ptr->chance += player_stun->get_magic_chance_penalty();
     if (lm_ptr->chance > 95) {
         lm_ptr->chance = 95;
     }

@@ -40,5 +40,5 @@ void do_cmd_quaff_potion(player_type *player_ptr)
     if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_quaff, player_ptr)))
         return;
 
-    exe_quaff_potion(player_ptr, item);
+    ObjectQuaffEntity(player_ptr).execute(item);
 }

@@ -117,13 +117,13 @@ PlayerStunRank PlayerStun::get_rank() const
 }
 
 /*!
- * @brief 朦朧ランクに応じて各種失率を上げる.
- * @return 朦朧ならば15%、ひどく朦朧ならば25%.
+ * @brief 朦朧ランクに応じて魔法系の失率を上げる.
+ * @return 失率
  * @details
  * 意識不明瞭ならばそもそも動けないのでこのメソッドを通らない.
  * しかし今後の拡張を考慮して100%としておく.
  */
-int PlayerStun::get_chance_penalty() const
+int PlayerStun::get_magic_chance_penalty() const
 {
     switch (this->get_rank()) {
     case PlayerStunRank::NONE:
@@ -132,6 +132,29 @@ int PlayerStun::get_chance_penalty() const
         return 15;
     case PlayerStunRank::HARD:
         return 25;
+    case PlayerStunRank::UNCONSCIOUS:
+        return 100;
+    default:
+        throw("Invalid stun rank is specified!");
+    }
+}
+
+/*!
+ * @brief 朦朧ランクに応じてアイテム使用の失率を上げる.
+ * @return リファクタリング中の暫定的な値 (意識不明瞭ならば100%、それ以外は常に0%)
+ * @details
+ * 昏倒ならばそもそも動けないのでこのメソッドを通らない.
+ * しかし今後の拡張を考慮して100%としておく.
+ */
+int PlayerStun::get_item_chance_penalty() const
+{
+    switch (this->get_rank()) {
+    case PlayerStunRank::NONE:
+        return 0;
+    case PlayerStunRank::NORMAL:
+        return 0;
+    case PlayerStunRank::HARD:
+        return 0;
     case PlayerStunRank::UNCONSCIOUS:
         return 100;
     default:
