@@ -176,7 +176,7 @@ static void calc_player_cut(player_type *player_ptr, monap_type *monap_ptr)
     }
 }
 
-static void calc_player_stun(player_type *player_ptr, monap_type *monap_ptr)
+static void process_player_stun(player_type *player_ptr, monap_type *monap_ptr)
 {
     if (monap_ptr->do_stun == 0) {
         return;
@@ -277,7 +277,7 @@ static bool process_monster_attack_hit(player_type *player_ptr, monap_type *mona
     switch_monster_blow_to_player(player_ptr, monap_ptr);
     select_cut_stun(monap_ptr);
     calc_player_cut(player_ptr, monap_ptr);
-    calc_player_stun(player_ptr, monap_ptr);
+    process_player_stun(player_ptr, monap_ptr);
     monster_explode(player_ptr, monap_ptr);
     process_aura_counterattack(player_ptr, monap_ptr);
     return true;
