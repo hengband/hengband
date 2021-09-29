@@ -93,6 +93,7 @@
 #include "window/main-window-util.h"
 #include "wizard/wizard-special-process.h"
 #include "world/world.h"
+#include <ctime>
 
 static void restore_windows(player_type *player_ptr)
 {

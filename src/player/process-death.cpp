@@ -32,6 +32,7 @@
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <ctime>
 
 #define GRAVE_LINE_WIDTH 31
 

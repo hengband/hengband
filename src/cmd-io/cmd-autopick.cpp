@@ -18,6 +18,7 @@
 #include "util/int-char-converter.h"
 #include "term/screen-processor.h"
 #include "world/world.h"
+#include <ctime>
 
 /*
  * Check special key code and get a movement command id

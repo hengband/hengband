@@ -23,6 +23,7 @@
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <ctime>
 
 static void check_saved_tmp_files(const int fd, bool *force)
 {

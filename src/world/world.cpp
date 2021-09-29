@@ -2,6 +2,7 @@
 #include "player-info/race-types.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include <ctime>
 
 world_type world;
 world_type *w_ptr = &world;

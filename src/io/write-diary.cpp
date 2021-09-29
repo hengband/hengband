@@ -18,6 +18,7 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <ctime>
 
 bool write_level; //!< @todo *抹殺* したい…
 

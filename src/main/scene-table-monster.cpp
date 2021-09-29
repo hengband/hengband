@@ -14,6 +14,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
+#include <ctime>
 
 struct scene_monster_info {
     MONSTER_IDX m_idx;

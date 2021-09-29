@@ -38,6 +38,7 @@
 #include "view/display-messages.h"
 #include "view/display-scores.h"
 #include "world/world.h"
+#include <ctime>
 
 #ifdef JP
 #include "locale/japanese.h"

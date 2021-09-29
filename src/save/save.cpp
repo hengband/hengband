@@ -41,6 +41,7 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <ctime>
 
 /*!
  * @brief セーブデータの書き込み /

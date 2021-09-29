@@ -15,6 +15,7 @@
 #endif
 
 #include "term/z-rand.h"
+#include <ctime>
 
 /*
  * Angband 2.7.9 introduced a new (optimized) random number generator,
