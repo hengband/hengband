@@ -518,7 +518,7 @@ bool BadStatusSetter::process_stun_effect(const short v)
     }
     
     if (new_rank < old_rank) {
-        this->clear_head(new_rank);
+        this->clear_head();
         return true;
     }
 
@@ -542,9 +542,9 @@ void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const s
     }
 }
 
-void BadStatusSetter::clear_head(const PlayerStunRank new_rank)
+void BadStatusSetter::clear_head()
 {
-    if (new_rank >= PlayerStunRank::NORMAL) {
+    if (this->player_ptr->effects()->stun()->is_stunned()) {
         return;
     }
 

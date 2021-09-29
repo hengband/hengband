@@ -1,6 +1,13 @@
 ﻿#include "timed-effect/player-stun.h"
 #include "system/angband.h"
 
+enum class PlayerStunRank {
+    NONE = 0,
+    NORMAL = 1,
+    HARD = 2,
+    UNCONSCIOUS = 3,
+};
+
 PlayerStunRank PlayerStun::get_rank(short value)
 {
     if (value > 100) {
@@ -189,6 +196,15 @@ short PlayerStun::get_damage_penalty() const
 bool PlayerStun::is_stunned() const
 {
     return this->get_rank() > PlayerStunRank::NONE;
+}
+
+/*!
+ * @brief プレイヤーが朦朧で行動不能かを返す
+ * @todo 新朦朧仕様に基づき、メソッド名をis_faint() に変更予定
+ */
+bool PlayerStun::is_unconscious() const
+{
+    return this->get_rank() > PlayerStunRank::UNCONSCIOUS;
 }
 
 std::tuple<term_color_type, std::string_view> PlayerStun::get_expr() const

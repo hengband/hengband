@@ -278,7 +278,7 @@ void process_player(player_type *player_ptr)
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
         auto effects = player_ptr->effects();
-        auto is_unconscious = effects->stun()->get_rank() == PlayerStunRank::UNCONSCIOUS;
+        auto is_unconscious = effects->stun()->is_unconscious();
         if (player_ptr->phase_out) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
