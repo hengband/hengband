@@ -177,7 +177,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
 
         case SV_POTION_SALT_WATER: {
             msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
-            switch (player_race_food(player_ptr)) {
+            switch (PlayerRace(player_ptr).food()) {
             case PlayerRaceFood::RATION:
             case PlayerRaceFood::WATER:
             case PlayerRaceFood::BLOOD:
@@ -597,7 +597,7 @@ void exe_quaff_potion(player_type *player_ptr, INVENTORY_IDX item)
     if (PlayerRace(player_ptr).equals(player_race_type::SKELETON))
         return; //!< @note スケルトンは水分で飢えを満たせない
 
-    switch (player_race_food(player_ptr)) {
+    switch (PlayerRace(player_ptr).food()) {
     case PlayerRaceFood::WATER:
         msg_print(_("水分を取り込んだ。", "You are moistened."));
         set_food(player_ptr, MIN(player_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));

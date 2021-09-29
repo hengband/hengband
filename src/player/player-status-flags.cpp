@@ -55,7 +55,7 @@ BIT_FLAGS common_cause_flags(player_type *player_ptr, tr_type tr_flag)
 {
     BIT_FLAGS result = check_equipment_flags(player_ptr, tr_flag);
 
-    if (player_race_has_flag(player_ptr, tr_flag)) {
+    if (PlayerRace(player_ptr).tr_flags().has(tr_flag)) {
         set_bits(result, FLAG_CAUSE_RACE);
     }
 
@@ -1712,7 +1712,7 @@ BIT_FLAGS has_lite(player_type *player_ptr)
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (player_race_has_flag(player_ptr, TR_LITE_1))
+    if (PlayerRace(player_ptr).tr_flags().has(TR_LITE_1))
         result |= FLAG_CAUSE_RACE;
 
     if (player_ptr->ult_res) {

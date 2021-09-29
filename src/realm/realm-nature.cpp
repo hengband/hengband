@@ -10,6 +10,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "object/object-kind-hook.h"
 #include "player-attack/player-attack.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/player-damage.h"
@@ -158,7 +159,8 @@ concptr do_nature_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
             if (cast) {
                 lite_area(player_ptr, damroll(dice, sides), rad);
 
-                if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(player_ptr, TR_VUL_LITE) && !has_resist_lite(player_ptr)) {
+                PlayerRace race(player_ptr);
+                if (race.life() == PlayerRaceLife::UNDEAD && race.tr_flags().has(TR_VUL_LITE) && !has_resist_lite(player_ptr)) {
                     msg_print(_("日の光があなたの肉体を焦がした！", "The daylight scorches your flesh!"));
                     take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"));
                 }
@@ -624,7 +626,8 @@ concptr do_nature_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 chg_virtue(player_ptr, V_ENLIGHTEN, 1);
                 wiz_lite(player_ptr, false);
 
-                if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(player_ptr, TR_VUL_LITE) && !has_resist_lite(player_ptr)) {
+                PlayerRace race(player_ptr);
+                if (race.life() == PlayerRaceLife::UNDEAD && race.tr_flags().has(TR_VUL_LITE) && !has_resist_lite(player_ptr)) {
                     msg_print(_("日光があなたの肉体を焦がした！", "The sunlight scorches your flesh!"));
                     take_hit(player_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"));
                 }

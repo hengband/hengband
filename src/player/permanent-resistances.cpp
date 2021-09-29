@@ -4,8 +4,8 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
-#include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
@@ -147,7 +147,7 @@ void player_flags(player_type *player_ptr, TrFlags &flags)
     flags.clear();
 
     flags.set(PlayerClass(player_ptr).tr_flags());
-    add_player_race_flags(player_ptr, flags);
+    flags.set(PlayerRace(player_ptr).tr_flags());
 
     add_mutation_flags(player_ptr, flags);
     add_personality_flags(player_ptr, flags);

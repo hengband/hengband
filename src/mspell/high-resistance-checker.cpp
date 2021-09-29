@@ -3,7 +3,6 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"
 #include "player-base/player-race.h"
-#include "player-info/race-info.h"
 #include "player/player-status-flags.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -92,7 +91,7 @@ static void check_dark_resistance(player_type *player_ptr, msr_type *msr_ptr)
     if (msr_ptr->smart.has_not(SM::RES_DARK))
         return;
 
-    if (player_race_has_flag(player_ptr, TR_IM_DARK)) {
+    if (PlayerRace(player_ptr).tr_flags().has(TR_IM_DARK)) {
         msr_ptr->ability_flags.reset(RF_ABILITY::BR_DARK);
         msr_ptr->ability_flags.reset(RF_ABILITY::BA_DARK);
         return;

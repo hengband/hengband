@@ -21,6 +21,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "pet/pet-util.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/attack-defense-types.h"
@@ -123,7 +124,8 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(player_ptr, TR_VUL_LITE)) {
+    const PlayerRace race(player_ptr);
+    if (race.life() == PlayerRaceLife::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
         if (!is_in_dungeon(player_ptr) && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
             if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
@@ -207,7 +209,7 @@ void process_player_hp_mp(player_type *player_ptr)
         HIT_POINT damage;
         if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !has_immune_fire(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
-            if (player_race_has_flag(player_ptr, TR_VUL_FIRE))
+            if (race.tr_flags().has(TR_VUL_FIRE))
                 damage += damage / 3;
             if (has_resist_fire(player_ptr))
                 damage = damage / 3;
@@ -218,7 +220,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
         if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !has_immune_elec(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
-            if (player_race_has_flag(player_ptr, TR_VUL_ELEC))
+            if (race.tr_flags().has(TR_VUL_ELEC))
                 damage += damage / 3;
             if (has_resist_elec(player_ptr))
                 damage = damage / 3;
@@ -229,7 +231,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
         if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !has_immune_cold(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
-            if (player_race_has_flag(player_ptr, TR_VUL_COLD))
+            if (race.tr_flags().has(TR_VUL_COLD))
                 damage += damage / 3;
             if (has_resist_cold(player_ptr))
                 damage = damage / 3;

@@ -113,7 +113,3 @@ extern const player_race_info *rp_ptr;
 
 struct player_type;
 SYMBOL_CODE get_summon_symbol_from_player(player_type *player_ptr);
-bool player_race_has_flag(player_type *player_ptr, tr_type flag, bool base_race = false);
-void add_player_race_flags(player_type *player_ptr, TrFlags &flags, bool base_race = false);
-PlayerRaceLife player_race_life(player_type *player_ptr, bool base_race = false);
-PlayerRaceFood player_race_food(player_type *player_ptr, bool base_race = false);
