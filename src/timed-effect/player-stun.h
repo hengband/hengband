@@ -21,7 +21,7 @@ public:
     int get_item_chance_penalty() const;
     short get_damage_penalty() const;
     bool is_stunned() const;
-    bool is_unconscious() const;
+    bool is_knocked_out() const;
     std::tuple<term_color_type, std::string_view> get_expr() const;
     void set(short value);
     void reset();
