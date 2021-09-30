@@ -6,5 +6,8 @@
 
 #include "system/angband.h"
 
+#include <optional>
+
+enum class RF_ABILITY;
 struct player_type;
-bool get_learned_power(player_type *player_ptr, SPELL_IDX *sn);
+std::optional<RF_ABILITY> get_learned_power(player_type *player_ptr);

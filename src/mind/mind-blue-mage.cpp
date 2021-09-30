@@ -31,7 +31,6 @@
  */
 bool do_cmd_cast_learned(player_type *player_ptr)
 {
-    SPELL_IDX n = 0;
     PERCENTAGE chance;
     PERCENTAGE minfail = 0;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -42,10 +41,12 @@ bool do_cmd_cast_learned(player_type *player_ptr)
     if (cmd_limit_confused(player_ptr))
         return false;
 
-    if (!get_learned_power(player_ptr, &n))
+    auto selected_spell = get_learned_power(player_ptr);
+    if (!selected_spell.has_value()) {
         return false;
+    }
 
-    spell = monster_powers[n];
+    spell = monster_powers.at(selected_spell.value());
     need_mana = mod_need_mana(player_ptr, spell.smana, 0, REALM_NONE);
     if (need_mana > player_ptr->csp) {
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
@@ -79,18 +80,17 @@ bool do_cmd_cast_learned(player_type *player_ptr)
     }
 
     chance = mod_spell_chance_2(player_ptr, chance);
-    const auto spell_type = i2enum<RF_ABILITY>(n);
     if (randint0(100) < chance) {
         if (flush_failure)
             flush();
 
         msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
         sound(SOUND_FAIL);
-        if (RF_ABILITY_SUMMON_MASK.has(spell_type))
-            cast = cast_learned_spell(player_ptr, spell_type, false);
+        if (RF_ABILITY_SUMMON_MASK.has(selected_spell.value()))
+            cast = cast_learned_spell(player_ptr, selected_spell.value(), false);
     } else {
         sound(SOUND_ZAP);
-        cast = cast_learned_spell(player_ptr, spell_type, true);
+        cast = cast_learned_spell(player_ptr, selected_spell.value(), true);
         if (!cast)
             return false;
     }
