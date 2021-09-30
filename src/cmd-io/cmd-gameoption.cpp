@@ -523,7 +523,8 @@ void do_cmd_options(player_type *player_ptr)
                                     : _("初期オプション(参照のみ)", "Birth Options(browse only)"));
             break;
         }
-        case 'C': {
+        case 'C':
+        case 'c':
             if (!w_ptr->noscore && !allow_debug_options) {
                 bell();
                 break;
@@ -531,7 +532,6 @@ void do_cmd_options(player_type *player_ptr)
 
             do_cmd_options_cheat(player_ptr, _("詐欺師は決して勝利できない！", "Cheaters never win"));
             break;
-        }
         case 'a':
         case 'A': {
             do_cmd_options_autosave(player_ptr, _("自動セーブ", "Autosave"));
