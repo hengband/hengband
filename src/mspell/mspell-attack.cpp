@@ -41,6 +41,8 @@
 #include "monster/monster-description-types.h"
 #endif
 
+#include <iterator>
+
 static void set_no_magic_mask(msa_type *msa_ptr)
 {
     if (!msa_ptr->no_inate)

@@ -21,6 +21,7 @@
 #include "util/flag-group.h"
 
 #include <algorithm>
+#include <iterator>
 #include <string>
 #include <vector>
 

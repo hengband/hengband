@@ -35,7 +35,7 @@
 #include "monster/monster-description-types.h"
 #endif
 
-#include <bitset>
+#include <iterator>
 
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
