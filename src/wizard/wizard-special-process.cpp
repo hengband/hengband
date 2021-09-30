@@ -54,6 +54,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -566,6 +567,7 @@ void wiz_reset_class(player_type *player_ptr)
     player_ptr->pclass = i2enum<player_class_type>(tmp_int);
     cp_ptr = &class_info[player_ptr->pclass];
     mp_ptr = &m_info[player_ptr->pclass];
+    PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
@@ -587,6 +589,8 @@ void wiz_reset_realms(player_type *player_ptr)
         return;
 
     player_ptr->realm1 = static_cast<int16_t>(atoi(tmp_val));
+
+    PlayerClass(player_ptr).init_specific_data();
 
     sprintf(ppp, "2st Realm (None=0, 1-%d): ", MAX_REALM - 1);
     sprintf(tmp_val, "%d", player_ptr->realm2);
