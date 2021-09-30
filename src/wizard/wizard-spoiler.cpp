@@ -39,7 +39,10 @@
 #include "wizard/items-spoiler.h"
 #include "wizard/monster-info-spoiler.h"
 #include "wizard/spoiler-util.h"
+
+#include <algorithm>
 #include <array>
+#include <iterator>
 #include <set>
 #include <string>
 

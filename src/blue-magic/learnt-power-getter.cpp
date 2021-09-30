@@ -32,6 +32,7 @@
 #include "view/display-messages.h"
 
 #include <algorithm>
+#include <iterator>
 #include <vector>
 
 typedef struct learnt_magic_type {
