@@ -320,7 +320,7 @@ static void do_cmd_options_win(player_type *player_ptr)
 static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
 {
     char ch;
-    int i, k = 0, n = MAX_CHEAT_OPTIONS;
+    int i, k = 0, n = cheat_info.size();
     char buf[80];
     term_clear();
     while (true) {
