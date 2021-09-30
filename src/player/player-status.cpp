@@ -2909,9 +2909,6 @@ long calc_score(player_type *player_ptr)
             point = 2;
     }
 
-    if (easy_band)
-        point = (0 - point);
-
     return point;
 }
 

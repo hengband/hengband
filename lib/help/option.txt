@@ -843,14 +843,6 @@ Manually haggle in stores    [manual_haggle]
     forced to haggle for.  If this option is set, auto-haggle is
     disabled.
 
-***** <easy_band>
-Easy Mode (*)    [easy_band]
-    This option enables easy game mode for beginners. If this option is
-    set, you take only half damage from any enemy's attack compared
-    to normal mode, and monster's summoning spells become much
-    weaker. But your score will be estimated to be negative number,
-    and you cannot send score record to world score board.
-
 ***** <smart_learn>
 Monsters learn from their mistakes (*)    [smart_learn]
     Allow monsters to learn what spell attacks you are resistant to,

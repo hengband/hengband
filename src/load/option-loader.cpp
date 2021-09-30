@@ -7,6 +7,7 @@
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "system/angband.h"
+#include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
 /*!
@@ -66,12 +67,11 @@ void rd_options(void)
     for (int n = 0; n < 8; n++)
         rd_u32b(&mask[n]);
 
-    for (int n = 0; n < 8; n++) {
-        for (int i = 0; i < 32; i++) {
-            if (!(mask[n] & (1UL << i)))
+    for (auto n = 0; n < 8; n++) {
+        for (auto i = 0; i < 32; i++) {
+            if (none_bits(mask[n], 1U << i) || none_bits(option_mask[n], 1U << i)) {
                 continue;
-            if (!(option_mask[n] & (1UL << i)))
-                continue;
+            }
 
             if (flag[n] & (1UL << i)) {
                 option_flag[n] |= (1UL << i);

@@ -143,11 +143,6 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, display_pla
         return true;
     }
 
-    if (easy_band) {
-        msg_print(_("初心者モードではワールドスコアに登録できません。", "Since you are in the Easy Mode, you cannot send score to world score server."));
-        return true;
-    }
-
     auto is_registration = get_check_strict(
         current_player_ptr, _("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
     if (!is_registration) {

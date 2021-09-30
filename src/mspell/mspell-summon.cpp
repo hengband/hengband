@@ -24,11 +24,12 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /* summoning number */
-#define S_NUM_6 (easy_band ? 2 : 6)
-#define S_NUM_4 (easy_band ? 1 : 4)
+constexpr int S_NUM_6 = 6;
+constexpr int S_NUM_4 = 4;
 
 /*!
  * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
@@ -301,7 +302,7 @@ MonsterSpellResult spell_RF6_S_MONSTERS(player_type *player_ptr, POSITION y, POS
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-    for (int k = 0; k < S_NUM_6; k++) {
+    for (auto k = 0; k < S_NUM_6; k++) {
         if (mon_to_player)
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
@@ -342,7 +343,7 @@ MonsterSpellResult spell_RF6_S_ANT(player_type *player_ptr, POSITION y, POSITION
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-    for (int k = 0; k < S_NUM_6; k++) {
+    for (auto k = 0; k < S_NUM_6; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
     }
 
@@ -379,7 +380,7 @@ MonsterSpellResult spell_RF6_S_SPIDER(player_type *player_ptr, POSITION y, POSIT
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    for (int k = 0; k < S_NUM_6; k++) {
+    for (auto k = 0; k < S_NUM_6; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
     }
 
@@ -417,7 +418,7 @@ MonsterSpellResult spell_RF6_S_HOUND(player_type *player_ptr, POSITION y, POSITI
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-    for (int k = 0; k < S_NUM_4; k++) {
+    for (auto k = 0; k < S_NUM_4; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
     }
 
@@ -454,7 +455,7 @@ MonsterSpellResult spell_RF6_S_HYDRA(player_type *player_ptr, POSITION y, POSITI
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-    for (int k = 0; k < S_NUM_4; k++) {
+    for (auto k = 0; k < S_NUM_4; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
     }
 
@@ -490,7 +491,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(player_type *player_ptr, POSITION y, POSITI
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     int num = 1;
-    if ((r_ptr->flags1 & RF1_UNIQUE) && !easy_band) {
+    if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
         num += r_ptr->level / 40;
     }
 
@@ -664,7 +665,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(player_type *player_ptr, POSITION y, PO
             _("%sが魔法でアンデッドを召喚した。", "%^s magically summons undead."), TARGET_TYPE);
 
         DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-        for (int k = 0; k < S_NUM_6; k++) {
+        for (auto k = 0; k < S_NUM_6; k++) {
             if (mon_to_player)
                 count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
@@ -708,7 +709,7 @@ MonsterSpellResult spell_RF6_S_HI_DRAGON(player_type *player_ptr, POSITION y, PO
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     int count = 0;
-    for (int k = 0; k < S_NUM_4; k++) {
+    for (auto k = 0; k < S_NUM_4; k++) {
         if (mon_to_player)
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
@@ -751,7 +752,7 @@ MonsterSpellResult spell_RF6_S_AMBERITES(player_type *player_ptr, POSITION y, PO
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-    for (int k = 0; k < S_NUM_4; k++) {
+    for (auto k = 0; k < S_NUM_4; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
 
@@ -792,7 +793,7 @@ MonsterSpellResult spell_RF6_S_UNIQUE(player_type *player_ptr, POSITION y, POSIT
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     bool uniques_are_summoned = false;
     int count = 0;
-    for (int k = 0; k < S_NUM_4; k++) {
+    for (auto k = 0; k < S_NUM_4; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
 
@@ -805,7 +806,7 @@ MonsterSpellResult spell_RF6_S_UNIQUE(player_type *player_ptr, POSITION y, POSIT
     else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
         non_unique_type = SUMMON_ANGEL;
 
-    for (int k = count; k < S_NUM_4; k++) {
+    for (auto k = count; k < S_NUM_4; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
 
