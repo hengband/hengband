@@ -518,7 +518,7 @@ bool BadStatusSetter::process_stun_effect(const short v)
     }
     
     if (new_rank < old_rank) {
-        this->clear_head(new_rank);
+        this->clear_head();
         return true;
     }
 
@@ -542,9 +542,9 @@ void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const s
     }
 }
 
-void BadStatusSetter::clear_head(const PlayerStunRank new_rank)
+void BadStatusSetter::clear_head()
 {
-    if (new_rank >= PlayerStunRank::NORMAL) {
+    if (this->player_ptr->effects()->stun()->is_stunned()) {
         return;
     }
 
@@ -564,7 +564,7 @@ void BadStatusSetter::decrease_int_wis(const short v)
     }
 
     msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
-    auto rand = randint0(3);
+    auto rand = randint0(5);
     switch (rand) {
     case 0:
         if (has_sustain_int(this->player_ptr) == 0) {
@@ -577,19 +577,21 @@ void BadStatusSetter::decrease_int_wis(const short v)
 
         return;
     case 1:
+    case 2:
         if (has_sustain_int(this->player_ptr) == 0) {
             (void)do_dec_stat(this->player_ptr, A_INT);
         }
         
         return;
-    case 2:
+    case 3:
+    case 4:
         if (has_sustain_wis(this->player_ptr) == 0) {
             (void)do_dec_stat(this->player_ptr, A_WIS);
         }
 
         return;
     default:
-        return;
+        throw("Invalid random number is specified!");
     }
 }
 

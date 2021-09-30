@@ -176,13 +176,58 @@ static void calc_player_cut(player_type *player_ptr, monap_type *monap_ptr)
     }
 }
 
-static void calc_player_stun(player_type *player_ptr, monap_type *monap_ptr)
+/*!
+ * @brief 能力値の実値を求める
+ * @param raw player_typeに格納されている生値
+ * @return 実値
+ * @details AD&Dの記法に則り、19以上の値を取らなくしているので、格納方法が面倒
+ */
+static int stat_value(const int raw)
+{
+    if (raw <= 18) {
+        return raw;
+    }
+
+    return (raw - 18) / 10 + 18;
+}
+
+/*!
+ * @brief 朦朧を蓄積させる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスター打撃への参照ポインタ
+ * @details
+ * 痛恨の一撃ならば朦朧蓄積ランクを1上げる.
+ * 2%の確率で朦朧蓄積ランクを1上げる.
+ * 肉体のパラメータが合計80を超える水準に強化されていたら朦朧蓄積ランクを1下げる.
+ */
+static void process_player_stun(player_type *player_ptr, monap_type *monap_ptr)
 {
     if (monap_ptr->do_stun == 0) {
         return;
     }
 
-    auto accumulation_rank = PlayerStun::get_accumulation_rank(monap_ptr->d_dice * monap_ptr->d_side, monap_ptr->damage);
+    auto total = monap_ptr->d_dice * monap_ptr->d_side;
+    auto accumulation_rank = PlayerStun::get_accumulation_rank(total, monap_ptr->damage);
+    if (accumulation_rank == 0) {
+        return;
+    }
+
+    if ((total < monap_ptr->damage) && (accumulation_rank <= 6)) {
+        accumulation_rank++;
+    }
+
+    if (one_in_(50)) {
+        accumulation_rank++;
+    }
+
+    auto str = stat_value(player_ptr->stat_cur[A_STR]);
+    auto dex = stat_value(player_ptr->stat_cur[A_DEX]);
+    auto con = stat_value(player_ptr->stat_cur[A_CON]);
+    auto is_powerful_body = str + dex + con > 80;
+    if (is_powerful_body) {
+        accumulation_rank--;
+    }
+
     auto stun_plus = PlayerStun::get_accumulation(accumulation_rank);
     if (stun_plus > 0) {
         (void)BadStatusSetter(player_ptr).mod_stun(stun_plus);
@@ -277,7 +322,7 @@ static bool process_monster_attack_hit(player_type *player_ptr, monap_type *mona
     switch_monster_blow_to_player(player_ptr, monap_ptr);
     select_cut_stun(monap_ptr);
     calc_player_cut(player_ptr, monap_ptr);
-    calc_player_stun(player_ptr, monap_ptr);
+    process_player_stun(player_ptr, monap_ptr);
     monster_explode(player_ptr, monap_ptr);
     process_aura_counterattack(player_ptr, monap_ptr);
     return true;

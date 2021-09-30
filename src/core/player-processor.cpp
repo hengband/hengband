@@ -278,12 +278,12 @@ void process_player(player_type *player_ptr)
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
         auto effects = player_ptr->effects();
-        auto is_unconscious = effects->stun()->get_rank() == PlayerStunRank::UNCONSCIOUS;
+        auto is_knocked_out = effects->stun()->is_knocked_out();
         if (player_ptr->phase_out) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(player_ptr);
-        } else if ((player_ptr->paralyzed || is_unconscious) && !cheat_immortal) {
+        } else if ((player_ptr->paralyzed || is_knocked_out) && !cheat_immortal) {
             energy.set_player_turn_energy(100);
         } else if (player_ptr->action == ACTION_REST) {
             if (player_ptr->resting > 0) {
