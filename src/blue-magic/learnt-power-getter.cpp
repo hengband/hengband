@@ -46,8 +46,9 @@ static bool check_blue_magic_repeat(SPELL_IDX *sn)
 {
     *sn = -1;
     COMMAND_CODE code;
-    if (!repeat_pull(&code))
+    if (!repeat_pull(&code)) {
         return false;
+    }
 
     *sn = static_cast<SPELL_IDX>(code);
     return true;
@@ -99,8 +100,9 @@ static std::optional<BlueMagicType> select_blue_magic_type_by_menu()
             break;
         }
 
-        if (menu_line > 5)
+        if (menu_line > 5) {
             menu_line -= 5;
+        }
     }
 
     screen_load();
@@ -120,8 +122,9 @@ static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
 
     while (true) {
         char ch;
-        if (!get_com(candidate_desc, &ch, true))
+        if (!get_com(candidate_desc, &ch, true)) {
             return std::nullopt;
+        }
 
         switch (ch) {
         case 'A':
@@ -191,8 +194,9 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
     case 'K':
         do {
             menu_line += (blue_magics_count - 1);
-            if (menu_line > blue_magics_count)
+            if (menu_line > blue_magics_count) {
                 menu_line -= blue_magics_count;
+            }
         } while (learnt_blue_magics.has_not(blue_magics[menu_line - 1]));
         return false;
 
@@ -201,8 +205,9 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
     case 'J':
         do {
             menu_line++;
-            if (menu_line > blue_magics_count)
+            if (menu_line > blue_magics_count) {
                 menu_line -= blue_magics_count;
+            }
         } while (learnt_blue_magics.has_not(blue_magics[menu_line - 1]));
         return false;
 
@@ -210,8 +215,9 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
     case 'l':
     case 'L':
         menu_line = blue_magics_count;
-        while (learnt_blue_magics.has_not(blue_magics[menu_line - 1]))
+        while (learnt_blue_magics.has_not(blue_magics[menu_line - 1])) {
             menu_line--;
+        }
 
         return false;
 
@@ -219,8 +225,9 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
     case 'h':
     case 'H':
         menu_line = 1;
-        while (learnt_blue_magics.has_not(blue_magics[menu_line - 1]))
+        while (learnt_blue_magics.has_not(blue_magics[menu_line - 1])) {
             menu_line++;
+        }
 
         return false;
 
@@ -241,22 +248,25 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
  * @param need_mana 青魔法を使うのに必要なMP
  * @return int 失敗率(%)を返す
  */
-static int calculate_blue_magic_success_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
+static int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
 {
     auto chance = mp.fail;
-    if (player_ptr->lev > mp.level)
+    if (player_ptr->lev > mp.level) {
         chance -= 3 * (player_ptr->lev - mp.level);
-    else
+    } else {
         chance += (mp.level - player_ptr->lev);
+    }
 
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[A_INT]] - 1);
     chance = mod_spell_chance_1(player_ptr, chance);
-    if (need_mana > player_ptr->csp)
+    if (need_mana > player_ptr->csp) {
         chance += 5 * (need_mana - player_ptr->csp);
+    }
 
     PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[A_INT]];
-    if (chance < minfail)
+    if (chance < minfail) {
         chance = minfail;
+    }
 
     auto player_stun = player_ptr->effects()->stun();
     chance += player_stun->get_magic_chance_penalty();
@@ -286,10 +296,11 @@ static void close_blue_magic_name(char *buf, size_t buf_size, int index, int men
         return;
     }
 
-    if (index == menu_line - 1)
+    if (index == menu_line - 1) {
         snprintf(buf, buf_size, _("  》", "  > "));
-    else
+    } else {
         snprintf(buf, buf_size, "    ");
+    }
 }
 
 /*!
@@ -309,12 +320,13 @@ static void describe_blue_magic_name(player_type *player_ptr, int menu_line, con
     for (auto i = 0U; i < blue_magics.size(); ++i) {
         prt("", y_base + i + 1, x_base);
         const auto &spell = blue_magics[i];
-        if (bluemage_data.learnt_blue_magics.has_not(spell))
+        if (bluemage_data.learnt_blue_magics.has_not(spell)) {
             continue;
+        }
 
         const auto &mp = monster_powers[enum2i(spell)];
         auto need_mana = mod_need_mana(player_ptr, mp.smana, 0, REALM_NONE);
-        auto chance = calculate_blue_magic_success_probability(player_ptr, mp, need_mana);
+        auto chance = calculate_blue_magic_failure_probability(player_ptr, mp, need_mana);
         char comment[80];
         learnt_info(player_ptr, comment, spell);
         char psi_desc[80];
@@ -358,8 +370,9 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *pla
 
     while (!selected_spell.has_value()) {
         char choice;
-        if (!first_show_list && !get_com(out_val, &choice, true))
+        if (!first_show_list && !get_com(out_val, &choice, true)) {
             break;
+        }
 
         if (first_show_list || (choice == ' ') || (choice == '*') || (choice == '?')) {
             // 選択する青魔法一覧の表示/非表示切り替え
@@ -417,11 +430,13 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_menu(player_type *playe
         describe_blue_magic_name(player_ptr, menu_line, bluemage_data, spells);
 
         char choice;
-        if (!get_com(out_val, &choice, true) || choice == '0')
+        if (!get_com(out_val, &choice, true) || choice == '0') {
             break;
+        }
 
-        if (!switch_blue_magic_choice(choice, menu_line, bluemage_data, spells))
+        if (!switch_blue_magic_choice(choice, menu_line, bluemage_data, spells)) {
             continue;
+        }
 
         uint index = menu_line - 1;
         if (spells.size() <= index || bluemage_data.learnt_blue_magics.has_not(spells[index])) {
@@ -462,14 +477,16 @@ bool get_learned_power(player_type *player_ptr, SPELL_IDX *sn)
         return false;
     }
 
-    if (check_blue_magic_repeat(sn))
+    if (check_blue_magic_repeat(sn)) {
         return true;
+    }
 
     auto type = (use_menu)
                     ? select_blue_magic_type_by_menu()
                     : select_blue_magic_kind_by_symbol();
-    if (!type.has_value())
+    if (!type.has_value()) {
         return false;
+    }
 
     auto spells = sweep_learnt_spells(*bluemage_data, type.value());
     if (!spells.has_value() || spells->empty()) {
@@ -483,8 +500,9 @@ bool get_learned_power(player_type *player_ptr, SPELL_IDX *sn)
     player_ptr->window_flags |= PW_SPELL;
     handle_stuff(player_ptr);
 
-    if (!selected_spell.has_value())
+    if (!selected_spell.has_value()) {
         return false;
+    }
 
     *sn = enum2i(selected_spell.value());
     repeat_push(static_cast<COMMAND_CODE>(selected_spell.value()));
