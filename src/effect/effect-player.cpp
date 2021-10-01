@@ -119,18 +119,27 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
  */
 static process_result check_continue_player_effect(player_type *player_ptr, effect_player_type *ep_ptr, POSITION y, POSITION x, project_func project)
 {
-    if (!player_bold(player_ptr, y, x))
+    if (!player_bold(player_ptr, y, x)) {
         return PROCESS_FALSE;
+    }
 
-    if (((player_ptr->special_defense & NINJA_KAWARIMI) != 0) && (ep_ptr->dam > 0) && (randint0(55) < (player_ptr->lev * 3 / 5 + 20)) && (ep_ptr->who > 0)
-        && (ep_ptr->who != player_ptr->riding) && kawarimi(player_ptr, true))
+    auto is_kawarimi = any_bits(player_ptr->special_defense, NINJA_KAWARIMI);
+    is_kawarimi &= kawarimi(player_ptr, true);
+    auto is_effective = ep_ptr->dam > 0;
+    is_effective &= randint0(55) < (player_ptr->lev * 3 / 5 + 20);
+    is_effective &= ep_ptr->who > 0;
+    is_effective &= ep_ptr->who != player_ptr->riding;
+    if (is_kawarimi && is_effective) {
         return PROCESS_FALSE;
+    }
 
-    if ((ep_ptr->who == 0) || (ep_ptr->who == player_ptr->riding))
+    if ((ep_ptr->who == 0) || (ep_ptr->who == player_ptr->riding)) {
         return PROCESS_FALSE;
+    }
 
-    if (process_bolt_reflection(player_ptr, ep_ptr, project))
+    if (process_bolt_reflection(player_ptr, ep_ptr, project)) {
         return PROCESS_TRUE;
+    }
 
     return PROCESS_CONTINUE;
 }
