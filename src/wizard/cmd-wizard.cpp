@@ -140,7 +140,7 @@ bool exe_cmd_debug(player_type *player_ptr, char cmd)
         wiz_create_item(player_ptr);
         break;
     case 'C':
-        wiz_create_named_art(player_ptr, command_arg);
+        wiz_create_named_art(player_ptr);
         break;
     case 'd':
         detect_all(player_ptr, DETECT_RAD_ALL * 3);

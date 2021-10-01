@@ -23,6 +23,8 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
 #include "flavor/object-flavor.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
@@ -52,6 +54,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
@@ -79,6 +82,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
@@ -87,11 +91,16 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "wizard/spoiler-table.h"
 #include "wizard/tval-descriptions-table.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
+
+#include <optional>
+#include <sstream>
 #include <tuple>
+#include <vector>
 
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
@@ -243,19 +252,136 @@ void wiz_create_item(player_type *player_ptr)
 }
 
 /*!
- * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @brief 指定したIDの固定アーティファクトの名称を取得する
+ *
+ * @param a_idx 固定アーティファクトのID
+ * @return 固定アーティファクトの名称(Ex. ★ロング・ソード『リンギル』)を保持する std::string オブジェクト
  */
-void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
+static std::string wiz_make_named_artifact_desc(player_type *player_ptr, ARTIFACT_IDX a_idx)
 {
-    if (a_idx <= 0) {
-        int val;
-        if (!get_value("ArtifactID", 1, a_info.size() - 1, &val)) {
-            return;
+    const auto &a_ref = a_info[a_idx];
+    object_type obj;
+    obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
+    obj.name1 = a_idx;
+    object_known(&obj);
+    char buf[MAX_NLEN];
+    describe_flavor(player_ptr, buf, &obj, OD_NAME_ONLY);
+
+    return buf;
+}
+
+/**
+ * @brief 固定アーティファクトをリストから選択する
+ *
+ * @param a_idx_list 選択する候補となる固定アーティファクトのIDのリスト
+ * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は std::nullopt を返す。
+ */
+static std::optional<ARTIFACT_IDX> wiz_select_named_artifact(player_type *player_ptr, const std::vector<ARTIFACT_IDX> &a_idx_list)
+{
+    constexpr auto MAX_PER_PAGE = 20UL;
+    const auto page_max = (a_idx_list.size() - 1) / MAX_PER_PAGE + 1;
+    auto current_page = 0UL;
+
+    screen_save();
+
+    std::optional<ARTIFACT_IDX> selected_a_idx;
+
+    while (!selected_a_idx.has_value()) {
+        const auto page_base_idx = current_page * MAX_PER_PAGE;
+        for (auto i = 0U; i < MAX_PER_PAGE + 1; ++i) {
+            term_erase(14, i + 1, 255);
         }
-        a_idx = static_cast<ARTIFACT_IDX>(val);
+        const auto page_item_count = std::min(MAX_PER_PAGE, a_idx_list.size() - page_base_idx);
+        for (auto i = 0U; i < page_item_count; ++i) {
+            std::stringstream ss;
+            ss << I2A(i) << ") " << wiz_make_named_artifact_desc(player_ptr, a_idx_list[page_base_idx + i]);
+            put_str(ss.str().c_str(), i + 1, 15);
+        }
+        if (page_max > 1) {
+            put_str(format("-- more (%d/%d) --", current_page + 1, page_max), page_item_count + 1, 15);
+        }
+
+        char cmd = ESCAPE;
+        get_com("Which artifact: ", &cmd, false);
+        switch (cmd) {
+        case ESCAPE:
+            screen_load();
+            return selected_a_idx;
+        case ' ':
+            current_page++;
+            if (current_page >= page_max) {
+                current_page = 0;
+            }
+            break;
+        default:
+            const auto select_idx = A2I(cmd) + page_base_idx;
+            if (select_idx < a_idx_list.size()) {
+                selected_a_idx = a_idx_list[select_idx];
+            }
+            break;
+        }
     }
-    (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
+
+    screen_load();
+
+    return selected_a_idx;
+}
+
+/**
+ * @brief 指定したカテゴリの固定アーティファクトのIDのリストを得る
+ *
+ * @param group_artifact 固定アーティファクトのカテゴリ
+ * @return 該当のカテゴリの固定アーティファクトのIDのリスト
+ */
+static std::vector<ARTIFACT_IDX> wiz_collect_group_a_idx(const grouper &group_artifact)
+{
+    const auto &[tval_list, name] = group_artifact;
+    std::vector<ARTIFACT_IDX> a_idx_list;
+    for (auto tval : tval_list) {
+        for (const auto &a_ref : a_info) {
+            if (a_ref.tval == tval) {
+                a_idx_list.push_back(a_ref.idx);
+            }
+        }
+    }
+    return a_idx_list;
+}
+
+/*!
+ * @brief 固定アーティファクトを生成する / Create the artifact
+ */
+void wiz_create_named_art(player_type *player_ptr)
+{
+    screen_save();
+
+    for (auto i = 0U; i < group_artifact_list.size(); ++i) {
+        const auto &[tval_lit, name] = group_artifact_list[i];
+        std::stringstream ss;
+        ss << I2A(i) << ") " << name;
+        term_erase(14, i + 1, 255);
+        put_str(ss.str().c_str(), i + 1, 15);
+    }
+
+    std::optional<ARTIFACT_IDX> create_a_idx;
+
+    while (!create_a_idx.has_value()) {
+        char cmd = ESCAPE;
+        get_com("Kind of artifact: ", &cmd, false);
+        switch (cmd) {
+        case ESCAPE:
+            screen_load();
+            return;
+        default:
+            if (auto idx = A2I(cmd); idx < group_artifact_list.size()) {
+                const auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
+                create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
+            }
+        }
+    }
+
+    screen_load();
+
+    create_named_art(player_ptr, create_a_idx.value(), player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }
 
