@@ -259,7 +259,7 @@ int summon_cyber(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION 
             mode |= PM_FORCE_PET;
     }
 
-    int max_cyber = (easy_band ? 1 : (floor_ptr->dun_level / 50) + randint1(2));
+    int max_cyber = (floor_ptr->dun_level / 50) + randint1(2);
     if (max_cyber > 4)
         max_cyber = 4;
 

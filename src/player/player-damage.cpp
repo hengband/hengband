@@ -282,9 +282,6 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
     if (player_ptr->special_defense & KATA_IAI)
         damage += (damage + 4) / 5;
 
-    if (easy_band)
-        damage = (damage + 1) / 2;
-
     if (damage_type != DAMAGE_USELIFE) {
         disturb(player_ptr, true, true);
         if (auto_more) {

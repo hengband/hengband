@@ -27,7 +27,6 @@
  */
 void reduce_magic_effects_timeout(player_type *player_ptr)
 {
-    const int dec_count = (easy_band ? 2 : 1);
     if (player_ptr->tim_mimic) {
         (void)set_mimic(player_ptr, player_ptr->tim_mimic - 1, player_ptr->mimic_form, true);
     }
@@ -35,11 +34,11 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     BadStatusSetter bss(player_ptr);
     auto effects = player_ptr->effects();
     if (player_ptr->hallucinated) {
-        (void)bss.mod_hallucination(-dec_count);
+        (void)bss.mod_hallucination(-1);
     }
 
     if (player_ptr->blind) {
-        (void)bss.mod_blindness(-dec_count);
+        (void)bss.mod_blindness(-1);
     }
 
     if (player_ptr->tim_invis) {
@@ -127,15 +126,15 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->paralyzed) {
-        (void)bss.mod_paralysis(-dec_count);
+        (void)bss.mod_paralysis(-1);
     }
 
     if (player_ptr->confused) {
-        (void)bss.mod_confusion(-dec_count);
+        (void)bss.mod_confusion(-1);
     }
 
     if (player_ptr->afraid) {
-        (void)bss.mod_afraidness(-dec_count);
+        (void)bss.mod_afraidness(-1);
     }
 
     if (player_ptr->fast) {
@@ -143,7 +142,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->slow) {
-        (void)bss.mod_slowness(-dec_count, true);
+        (void)bss.mod_slowness(-1, true);
     }
 
     if (player_ptr->protevil) {

@@ -15,7 +15,7 @@
  * @brief オプションテーブル /
  * Available Options
  */
-const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
+const std::vector<option_type> option_info = {
     /*** Input Options ***/
     { &rogue_like_commands, false, OPT_PAGE_INPUT, 0, 0, "rogue_like_commands", _("ローグ風キー配置を使用する", "Rogue-like commands") },
 
@@ -206,8 +206,6 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
         _("トラップ感知範囲外に出る直前に警告する", "Alert when leaving trap detected area") },
 
     /*** Birth Options ***/
-    { &easy_band, false, OPT_PAGE_BIRTH, 6, 31, "easy_band", _("初心者用簡単モード(*)", "Easy Mode (*)") },
-
     { &smart_learn, true, OPT_PAGE_BIRTH, 1, 14, "smart_learn", _("モンスターは失敗を学習する(*)", "Monsters learn from their mistakes (*)") },
 
     { &smart_cheat, false, OPT_PAGE_BIRTH, 1, 15, "smart_cheat", _("モンスターはプレイヤーの弱みを突く(*)", "Monsters exploit players weaknesses (*)") },
@@ -295,40 +293,39 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
 
     /*** End of Table ***/
     { nullptr, 0, 0, 0, 0, nullptr, nullptr }
-}};
+};
 
 /*!
  * チートオプションの定義テーブル / Cheating options
  */
-const option_type cheat_info[MAX_CHEAT_OPTIONS]
-    = { { &cheat_peek, false, 255, 0x01, 0x00, "cheat_peek", _("アイテムの生成をのぞき見る", "Peek into object creation") },
+const std::vector<option_type> cheat_info = {
+    { &cheat_peek, false, 255, 0x01, 0x00, "cheat_peek", _("アイテムの生成をのぞき見る", "Peek into object creation") },
 
-          { &cheat_hear, false, 255, 0x02, 0x00, "cheat_hear", _("モンスターの生成をのぞき見る", "Peek into monster creation") },
+    { &cheat_hear, false, 255, 0x02, 0x00, "cheat_hear", _("モンスターの生成をのぞき見る", "Peek into monster creation") },
 
-          { &cheat_room, false, 255, 0x04, 0x00, "cheat_room", _("ダンジョンの生成をのぞき見る", "Peek into dungeon creation") },
+    { &cheat_room, false, 255, 0x04, 0x00, "cheat_room", _("ダンジョンの生成をのぞき見る", "Peek into dungeon creation") },
 
-          { &cheat_xtra, false, 255, 0x08, 0x00, "cheat_xtra", _("その他の事をのぞき見る", "Peek into something else") },
+    { &cheat_xtra, false, 255, 0x08, 0x00, "cheat_xtra", _("その他の事をのぞき見る", "Peek into something else") },
 
-          { &cheat_know, false, 255, 0x10, 0x00, "cheat_know", _("完全なモンスターの思い出を知る", "Know complete monster info") },
+    { &cheat_know, false, 255, 0x10, 0x00, "cheat_know", _("完全なモンスターの思い出を知る", "Know complete monster info") },
 
-          { &cheat_live, false, 255, 0x20, 0x00, "cheat_live", _("死を回避することを可能にする", "Allow player to avoid death") },
+    { &cheat_live, false, 255, 0x20, 0x00, "cheat_live", _("死を回避することを可能にする", "Allow player to avoid death") },
 
-          { &cheat_save, false, 255, 0x40, 0x00, "cheat_save", _("死んだ時セーブするか確認する", "Ask for saving death") },
+    { &cheat_save, false, 255, 0x40, 0x00, "cheat_save", _("死んだ時セーブするか確認する", "Ask for saving death") },
 
-          { &cheat_diary_output, false, 255, 0x80, 0x00, "cheat_diary_output", _("ウィザードログを日記に出力する", "Output wizard log to diary.") },
+    { &cheat_diary_output, false, 255, 0x80, 0x00, "cheat_diary_output", _("ウィザードログを日記に出力する", "Output wizard log to diary.") },
 
-          { &cheat_turn, false, 255, 0x81, 0x00, "cheat_turn", _("ゲームメッセージにターン表示を行う", "Put turn in game messages.") },
+    { &cheat_turn, false, 255, 0x81, 0x00, "cheat_turn", _("ゲームメッセージにターン表示を行う", "Put turn in game messages.") },
 
-          { &cheat_sight, false, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") },
+    { &cheat_sight, false, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") },
 
-          { &cheat_immortal, false, 255, 0x83, 0x00, "cheat_immortal", _("完全な不滅状態になる。", "Completely immortal.") } };
-
-
+    { &cheat_immortal, false, 255, 0x83, 0x00, "cheat_immortal", _("完全な不滅状態になる。", "Completely immortal.") }
+};
 
 /*!
  * 自動セーブオプションテーブル
  */
-const option_type autosave_info[MAX_AUTOSAVE_INFO] = {
+const std::vector<option_type> autosave_info = {
     { &autosave_l, false, 255, 0x01, 0x00, "autosave_l", _("新しい階に入る度に自動セーブする", "Autosave when entering new levels") },
 
     { &autosave_t, false, 255, 0x02, 0x00, "autosave_t", _("一定ターン毎に自動セーブする", "Timed autosave") },
