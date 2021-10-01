@@ -192,13 +192,15 @@ bool affect_player(MONSTER_IDX who, player_type *player_ptr, concptr who_name, i
     BIT_FLAGS flag, project_func project)
 {
     effect_player_type tmp_effect;
-    effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag);
+    auto *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag);
     auto check_result = check_continue_player_effect(player_ptr, ep_ptr, y, x, project);
-    if (check_result != PROCESS_CONTINUE)
+    if (check_result != PROCESS_CONTINUE) {
         return check_result == PROCESS_TRUE;
+    }
 
-    if (ep_ptr->dam > 1600)
+    if (ep_ptr->dam > 1600) {
         ep_ptr->dam = 1600;
+    }
 
     ep_ptr->dam = (ep_ptr->dam + r) / (r + 1);
     describe_effect_source(player_ptr, ep_ptr, who_name);
@@ -210,8 +212,9 @@ bool affect_player(MONSTER_IDX who, player_type *player_ptr, concptr who_name, i
         monster_desc(player_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);
         (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
-        if (player_ptr->tim_eyeeye)
+        if (player_ptr->tim_eyeeye) {
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
+        }
     }
 
     if (player_ptr->riding && ep_ptr->dam > 0) {
