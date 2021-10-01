@@ -250,7 +250,7 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
  * @param need_mana 青魔法を使うのに必要なMP
  * @return int 失敗率(%)を返す
  */
-static int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
+int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
 {
     auto chance = mp.fail;
     if (player_ptr->lev > mp.level) {

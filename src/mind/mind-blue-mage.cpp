@@ -31,13 +31,6 @@
  */
 bool do_cmd_cast_learned(player_type *player_ptr)
 {
-    PERCENTAGE chance;
-    PERCENTAGE minfail = 0;
-    PLAYER_LEVEL plev = player_ptr->lev;
-    monster_power spell;
-    bool cast;
-    MANA_POINT need_mana;
-
     if (cmd_limit_confused(player_ptr))
         return false;
 
@@ -46,8 +39,8 @@ bool do_cmd_cast_learned(player_type *player_ptr)
         return false;
     }
 
-    spell = monster_powers.at(selected_spell.value());
-    need_mana = mod_need_mana(player_ptr, spell.smana, 0, REALM_NONE);
+    const auto &spell = monster_powers.at(selected_spell.value());
+    const auto need_mana = mod_need_mana(player_ptr, spell.smana, 0, REALM_NONE);
     if (need_mana > player_ptr->csp) {
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
         if (!over_exert)
@@ -57,42 +50,22 @@ bool do_cmd_cast_learned(player_type *player_ptr)
             return false;
     }
 
-    chance = spell.fail;
-    if (plev > spell.level)
-        chance -= 3 * (plev - spell.level);
-    else
-        chance += (spell.level - plev);
+    const auto chance = calculate_blue_magic_failure_probability(player_ptr, spell, need_mana);
 
-    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[A_INT]] - 1);
-    chance = mod_spell_chance_1(player_ptr, chance);
-    if (need_mana > player_ptr->csp) {
-        chance += 5 * (need_mana - player_ptr->csp);
-    }
-
-    minfail = adj_mag_fail[player_ptr->stat_index[A_INT]];
-    if (chance < minfail)
-        chance = minfail;
-
-    auto player_stun = player_ptr->effects()->stun();
-    chance += player_stun->get_magic_chance_penalty();
-    if (chance > 95) {
-        chance = 95;
-    }
-
-    chance = mod_spell_chance_2(player_ptr, chance);
     if (randint0(100) < chance) {
         if (flush_failure)
             flush();
 
         msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
         sound(SOUND_FAIL);
-        if (RF_ABILITY_SUMMON_MASK.has(selected_spell.value()))
-            cast = cast_learned_spell(player_ptr, selected_spell.value(), false);
+        if (RF_ABILITY_SUMMON_MASK.has(selected_spell.value())) {
+            cast_learned_spell(player_ptr, selected_spell.value(), false);
+        }
     } else {
         sound(SOUND_ZAP);
-        cast = cast_learned_spell(player_ptr, selected_spell.value(), true);
-        if (!cast)
+        if (!cast_learned_spell(player_ptr, selected_spell.value(), true)) {
             return false;
+        }
     }
 
     if (need_mana <= player_ptr->csp) {
