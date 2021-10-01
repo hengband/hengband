@@ -64,10 +64,10 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  */
 static bool process_bolt_reflection(player_type *player_ptr, effect_player_type *ep_ptr, project_func project)
 {
-    auto can_bolt_hit = has_reflect(player_ptr) || (((player_ptr->special_defense & KATA_FUUJIN) != 0) && !player_ptr->blind);
-    can_bolt_hit &= (ep_ptr->flag & PROJECT_REFLECTABLE) != 0;
-    can_bolt_hit &= !one_in_(10);
-    if (!can_bolt_hit) {
+    auto can_reflect = (has_reflect(player_ptr) != 0) || (any_bits(player_ptr->special_defense, KATA_FUUJIN) && !player_ptr->blind);
+    can_reflect &= any_bits(ep_ptr->flag, PROJECT_REFLECTABLE);
+    can_reflect &= !one_in_(10);
+    if (!can_reflect) {
         return false;
     }
 
