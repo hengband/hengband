@@ -30,7 +30,9 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <string>
 
 /*!
  * @brief effect_player_type構造体を初期化する
@@ -62,35 +64,40 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  */
 static bool process_bolt_reflection(player_type *player_ptr, effect_player_type *ep_ptr, project_func project)
 {
-    bool can_bolt_hit = has_reflect(player_ptr) || (((player_ptr->special_defense & KATA_FUUJIN) != 0) && !player_ptr->blind);
+    auto can_bolt_hit = has_reflect(player_ptr) || (((player_ptr->special_defense & KATA_FUUJIN) != 0) && !player_ptr->blind);
     can_bolt_hit &= (ep_ptr->flag & PROJECT_REFLECTABLE) != 0;
     can_bolt_hit &= !one_in_(10);
-    if (!can_bolt_hit)
+    if (!can_bolt_hit) {
         return false;
+    }
 
-    POSITION t_y, t_x;
-    int max_attempts = 10;
+    auto max_attempts = 10;
     sound(SOUND_REFLECT);
 
-    if (player_ptr->blind)
-        msg_print(_("何かが跳ね返った！", "Something bounces!"));
-    else if (player_ptr->special_defense & KATA_FUUJIN)
-        msg_print(_("風の如く武器を振るって弾き返した！", "The attack bounces!"));
-    else
-        msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
+    std::string mes;
+    if (player_ptr->blind) {
+        mes = _("何かが跳ね返った！", "Something bounces!");
+    } else if (any_bits(player_ptr->special_defense, KATA_FUUJIN)) {
+        mes = _("風の如く武器を振るって弾き返した！", "The attack bounces!");
+    } else {
+        mes = _("攻撃が跳ね返った！", "The attack bounces!");
+    }
 
+    msg_print(mes.data());
+    POSITION t_y;
+    POSITION t_x;
     if (ep_ptr->who > 0) {
-        floor_type *floor_ptr = player_ptr->current_floor_ptr;
-        monster_type m_type = floor_ptr->m_list[ep_ptr->who];
+        auto *floor_ptr = player_ptr->current_floor_ptr;
+        auto *m_ptr = &floor_ptr->m_list[ep_ptr->who];
         do {
-            t_y = m_type.fy - 1 + randint1(3);
-            t_x = m_type.fx - 1 + randint1(3);
+            t_y = m_ptr->fy - 1 + randint1(3);
+            t_x = m_ptr->fx - 1 + randint1(3);
             max_attempts--;
         } while (max_attempts && in_bounds2u(floor_ptr, t_y, t_x) && !projectable(player_ptr, player_ptr->y, player_ptr->x, t_y, t_x));
 
         if (max_attempts < 1) {
-            t_y = m_type.fy;
-            t_x = m_type.fx;
+            t_y = m_ptr->fy;
+            t_x = m_ptr->fx;
         }
     } else {
         t_y = player_ptr->y - 1 + randint1(3);
