@@ -1,8 +1,9 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <vector>
 
-typedef struct activation_type {
+struct activation_type {
     concptr flag;
     byte index;
     byte level;
@@ -12,7 +13,6 @@ typedef struct activation_type {
         DICE_NUMBER dice;
     } timeout;
     concptr desc;
-} activation_type;
+};
 
-#define MAX_ACTIVATION_TYPE 138
-extern const activation_type activation_info[MAX_ACTIVATION_TYPE];
+extern const std::vector<activation_type> activation_info;

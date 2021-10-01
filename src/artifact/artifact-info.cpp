@@ -47,11 +47,12 @@ int activation_index(const object_type *o_ptr)
  */
 const activation_type *find_activation_info(const object_type *o_ptr)
 {
-    const int index = activation_index(o_ptr);
-    const activation_type *p;
-    for (p = activation_info; p->flag != nullptr; ++p)
-        if (p->index == index)
-            return p;
+    const auto index = activation_index(o_ptr);
+    for (auto &p : activation_info) {
+        if (p.index == index) {
+            return &p;
+        }
+    }
 
     return nullptr;
 }
