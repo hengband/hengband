@@ -39,19 +39,21 @@
 
 /*!
  * @brief コマンド反復チェック
- * @param sn 選択したモンスター攻撃ID
- * @return 発動可能な魔法を選択した場合TRUE、処理続行の場合FALSE
+ * @return 反復可能な青魔法があればそれを返す。なければ std::nullopt を返す。
  */
-static bool check_blue_magic_repeat(SPELL_IDX *sn)
+static std::optional<RF_ABILITY> check_blue_magic_repeat()
 {
-    *sn = -1;
     COMMAND_CODE code;
     if (!repeat_pull(&code)) {
-        return false;
+        return std::nullopt;
     }
 
-    *sn = static_cast<SPELL_IDX>(code);
-    return true;
+    if (auto spell = static_cast<RF_ABILITY>(code);
+        monster_powers.find(spell) != monster_powers.end()) {
+        return spell;
+    }
+
+    return std::nullopt;
 }
 
 /*!
@@ -248,7 +250,7 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
  * @param need_mana 青魔法を使うのに必要なMP
  * @return int 失敗率(%)を返す
  */
-static int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
+int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
 {
     auto chance = mp.fail;
     if (player_ptr->lev > mp.level) {
@@ -324,7 +326,7 @@ static void describe_blue_magic_name(player_type *player_ptr, int menu_line, con
             continue;
         }
 
-        const auto &mp = monster_powers[enum2i(spell)];
+        const auto &mp = monster_powers.at(spell);
         auto need_mana = mod_need_mana(player_ptr, mp.smana, 0, REALM_NONE);
         auto chance = calculate_blue_magic_failure_probability(player_ptr, mp, need_mana);
         char comment[80];
@@ -347,7 +349,7 @@ static void describe_blue_magic_name(player_type *player_ptr, int menu_line, con
 static bool confirm_cast_blue_magic(RF_ABILITY spell)
 {
     char tmp_val[160];
-    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[enum2i(spell)].name);
+    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers.at(spell).name);
     return get_check(tmp_val);
 }
 
@@ -470,27 +472,28 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_menu(player_type *playe
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-bool get_learned_power(player_type *player_ptr, SPELL_IDX *sn)
+std::optional<RF_ABILITY> get_learned_power(player_type *player_ptr)
 {
     auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
     if (!bluemage_data) {
-        return false;
+        return std::nullopt;
     }
 
-    if (check_blue_magic_repeat(sn)) {
-        return true;
+    if (auto repeat_spell = check_blue_magic_repeat();
+        repeat_spell.has_value()) {
+        return repeat_spell;
     }
 
     auto type = (use_menu)
                     ? select_blue_magic_type_by_menu()
                     : select_blue_magic_kind_by_symbol();
     if (!type.has_value()) {
-        return false;
+        return std::nullopt;
     }
 
     auto spells = sweep_learnt_spells(*bluemage_data, type.value());
     if (!spells.has_value() || spells->empty()) {
-        return false;
+        return std::nullopt;
     }
 
     auto selected_spell = (use_menu)
@@ -501,10 +504,9 @@ bool get_learned_power(player_type *player_ptr, SPELL_IDX *sn)
     handle_stuff(player_ptr);
 
     if (!selected_spell.has_value()) {
-        return false;
+        return std::nullopt;
     }
 
-    *sn = enum2i(selected_spell.value());
     repeat_push(static_cast<COMMAND_CODE>(selected_spell.value()));
-    return true;
+    return selected_spell;
 }

@@ -190,18 +190,16 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
         strcat(p[col], "       ");
 
         for (auto spell : learnt_spells) {
-            const int spellnum = enum2i(spell);
-
             pcol = true;
             int l1 = strlen(p[col]);
-            int l2 = strlen(monster_powers_short[spellnum]);
+            int l2 = strlen(monster_powers_short.at(spell));
             if ((l1 + l2) >= 75) {
                 strcat(p[col], "\n");
                 col++;
                 strcat(p[col], "       ");
             }
 
-            strcat(p[col], monster_powers_short[spellnum]);
+            strcat(p[col], monster_powers_short.at(spell));
             strcat(p[col], ", ");
         }
 

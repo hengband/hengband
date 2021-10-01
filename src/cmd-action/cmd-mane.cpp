@@ -194,7 +194,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
                 for (i = 0; i < num; i++) {
                     const auto &mane = mane_data->mane_list[i];
                     /* Access the spell */
-                    spell = monster_powers[enum2i(mane.spell)];
+                    spell = monster_powers.at(mane.spell);
 
                     chance = spell.manefail;
 
@@ -267,7 +267,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
         }
 
         /* Save the spell index */
-        spell = monster_powers[enum2i(mane_data->mane_list[i].spell)];
+        spell = monster_powers.at(mane_data->mane_list[i].spell);
 
         /* Verify it */
         if (ask) {
@@ -1101,7 +1101,7 @@ bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
     if (!get_mane_power(player_ptr, &n, baigaesi))
         return false;
 
-    spell = monster_powers[enum2i(mane_data->mane_list[n].spell)];
+    spell = monster_powers.at(mane_data->mane_list[n].spell);
 
     /* Spell failure chance */
     chance = spell.manefail;
