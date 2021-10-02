@@ -53,6 +53,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
+#include <mind/mind-archer.h>
 
 bool activate_sunlight(player_type *player_ptr)
 {
@@ -396,4 +397,10 @@ bool activate_detect_treasure(player_type *player_ptr)
 {
     msg_print(_("金と銀に彩られている...", "It shines with gold and silver..."));
     return detect_treasure(player_ptr, DETECT_RAD_DEFAULT);
+}
+
+bool activate_create_ammo(player_type *player_ptr)
+{
+    msg_print(_("ダイアナの祝福を感じた...", "You feel Diana's breath..."));
+    return create_ammo(player_ptr);
 }

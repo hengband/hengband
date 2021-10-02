@@ -371,6 +371,8 @@ bool switch_activation(player_type *player_ptr, object_type **o_ptr_ptr, const a
         return activate_bloody_moon(player_ptr, o_ptr);
     case ACT_CRIMSON:
         return activate_crimson(player_ptr, o_ptr);
+    case ACT_CREATE_AMMO:
+        return activate_create_ammo(player_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
         return false;

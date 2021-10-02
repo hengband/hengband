@@ -43,3 +43,4 @@ bool activate_recall(player_type *player_ptr);
 bool activate_tree_creation(player_type *player_ptr, object_type *o_ptr, concptr name);
 bool activate_animate_dead(player_type *player_ptr, object_type *o_ptr);
 bool activate_detect_treasure(player_type *player_ptr);
+bool activate_create_ammo(player_type *player_ptr);

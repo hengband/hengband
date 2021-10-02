@@ -137,7 +137,8 @@ enum random_art_activation_type : uint8_t {
     ACT_ULTIMATE_RESIST = 138,
     ACT_ELBERETH = 139,
     ACT_DETECT_TREASURE = 140,
-    /* 141 - 245 unused */
+    ACT_CREATE_AMMO = 141,
+    /* 142 - 245 unused */
     ACT_FALLING_STAR = 246,
     ACT_STRAIN_HASTE = 247,
     ACT_TELEPORT_LEVEL = 248,
