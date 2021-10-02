@@ -398,9 +398,9 @@ bool free_level_recall(player_type *player_ptr)
 
     DEPTH max_depth = d_info[select_dungeon].maxdepth;
     if (select_dungeon == DUNGEON_ANGBAND) {
-        if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED)
+        if (quest[QUEST_OBERON].status != QuestStatusType::FINISHED)
             max_depth = 98;
-        else if (quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED)
+        else if (quest[QUEST_SERPENT].status != QuestStatusType::FINISHED)
             max_depth = 99;
     }
 

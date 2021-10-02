@@ -37,7 +37,7 @@ void QuestCompletionChecker::complete()
         short i;
         for (i = max_q_idx - 1; i > 0; i--) {
             auto *const q_ptr = &quest[i];
-            if (q_ptr->status != QUEST_STATUS_TAKEN) {
+            if (q_ptr->status != QuestStatusType::TAKEN) {
                 continue;
             }
 
@@ -67,7 +67,7 @@ void QuestCompletionChecker::complete()
 
     auto create_stairs = false;
     auto reward = false;
-    if ((quest_num > 0) && (quest[quest_num].status == QUEST_STATUS_TAKEN)) {
+    if ((quest_num > 0) && (quest[quest_num].status == QuestStatusType::TAKEN)) {
         auto *const q_ptr = &quest[quest_num];
         switch (q_ptr->type) {
         case QUEST_TYPE_KILL_NUMBER:
@@ -84,7 +84,7 @@ void QuestCompletionChecker::complete()
             }
 
             if (q_ptr->flags & QUEST_FLAG_SILENT) {
-                q_ptr->status = QUEST_STATUS_FINISHED;
+                q_ptr->status = QuestStatusType::FINISHED;
             } else {
                 complete_quest(this->player_ptr, quest_num);
             }
@@ -108,12 +108,12 @@ void QuestCompletionChecker::complete()
             }
 
             if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT)) {
-                q_ptr->status = QUEST_STATUS_FINISHED;
+                q_ptr->status = QuestStatusType::FINISHED;
             }
 
             if (q_ptr->type == QUEST_TYPE_RANDOM) {
                 reward = true;
-                q_ptr->status = QUEST_STATUS_FINISHED;
+                q_ptr->status = QuestStatusType::FINISHED;
             }
 
             break;
@@ -131,9 +131,9 @@ void QuestCompletionChecker::complete()
             }
 
             if (this->count_all_hostile_monsters() == 1) {
-                q_ptr->status = QUEST_STATUS_STAGE_COMPLETED;
-                if ((quest[QUEST_TOWER1].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QUEST_STATUS_STAGE_COMPLETED)
-                    && (quest[QUEST_TOWER3].status == QUEST_STATUS_STAGE_COMPLETED)) {
+                q_ptr->status = QuestStatusType::STAGE_COMPLETED;
+                if ((quest[QUEST_TOWER1].status == QuestStatusType::STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QuestStatusType::STAGE_COMPLETED)
+                    && (quest[QUEST_TOWER3].status == QuestStatusType::STAGE_COMPLETED)) {
                     complete_quest(this->player_ptr, QUEST_TOWER1);
                 }
             }

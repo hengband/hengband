@@ -55,9 +55,9 @@ static bool confirm_leave_level(player_type *player_ptr, bool down_stair)
 {
     quest_type *q_ptr = &quest[player_ptr->current_floor_ptr->inside_quest];
     if (confirm_quest && player_ptr->current_floor_ptr->inside_quest
-        && (q_ptr->type == QUEST_TYPE_RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QUEST_STATUS_COMPLETED)
+        && (q_ptr->type == QUEST_TYPE_RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED)
             || (q_ptr->flags & QUEST_FLAG_TOWER
-                && ((q_ptr->status != QUEST_STATUS_STAGE_COMPLETED) || (down_stair && (quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED)))))) {
+                && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[QUEST_TOWER1].status != QuestStatusType::COMPLETED)))))) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
         return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
@@ -94,13 +94,13 @@ void do_cmd_go_up(player_type *player_ptr)
 
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (!quest[player_ptr->current_floor_ptr->inside_quest].status) {
+        if (quest[player_ptr->current_floor_ptr->inside_quest].status != QuestStatusType::UNTAKEN) {
             if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[player_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+            quest[player_ptr->current_floor_ptr->inside_quest].status = QuestStatusType::TAKEN;
         }
 
         if (!player_ptr->current_floor_ptr->inside_quest) {
@@ -211,13 +211,13 @@ void do_cmd_go_down(player_type *player_ptr)
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (!quest[player_ptr->current_floor_ptr->inside_quest].status) {
+        if (quest[player_ptr->current_floor_ptr->inside_quest].status != QuestStatusType::UNTAKEN) {
             if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[player_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+            quest[player_ptr->current_floor_ptr->inside_quest].status = QuestStatusType::TAKEN;
         }
 
         if (!player_ptr->current_floor_ptr->inside_quest) {

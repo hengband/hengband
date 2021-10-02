@@ -125,13 +125,13 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
 
     for (short i = 0; i < max_q_idx; i++) {
         auto *const q_ptr = &quest[i];
-        wr_s16b(q_ptr->status);
+        wr_s16b(enum2i(q_ptr->status));
         wr_s16b((int16_t)q_ptr->level);
         wr_byte((byte)q_ptr->complev);
         wr_u32b(q_ptr->comptime);
 
-        bool is_quest_running = q_ptr->status == QUEST_STATUS_TAKEN;
-        is_quest_running |= q_ptr->status == QUEST_STATUS_COMPLETED;
+        bool is_quest_running = q_ptr->status == QuestStatusType::TAKEN;
+        is_quest_running |= q_ptr->status == QuestStatusType::COMPLETED;
         is_quest_running |= !quest_type::is_fixed(i);
         if (!is_quest_running)
             continue;

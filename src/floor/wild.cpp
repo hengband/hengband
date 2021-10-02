@@ -542,8 +542,8 @@ void wilderness_gen(player_type *player_ptr)
     generate_encounter = false;
     set_floor_and_wall(0);
     for (int i = 0; i < max_q_idx; i++)
-        if (quest[i].status == QUEST_STATUS_REWARDED)
-            quest[i].status = QUEST_STATUS_FINISHED;
+        if (quest[i].status == QuestStatusType::REWARDED)
+            quest[i].status = QuestStatusType::FINISHED;
 }
 
 static int16_t conv_terrain2feat[MAX_WILDERNESS];
