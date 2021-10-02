@@ -676,6 +676,7 @@ hengband_SOURCES = \
 	player-info/magic-eater-data-type.cpp player-info/magic-eater-data-type.h \
 	player-info/mane-data-type.h \
 	player-info/mimic-info-table.cpp player-info/mimic-info-table.h \
+	player-info/monk-data-type.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
 	player-info/race-ability-info.cpp player-info/race-ability-info.h \
 	player-info/race-info.cpp player-info/race-info.h \
