@@ -9,13 +9,18 @@
 /*
  * Quest constants
  */
-#define MIN_RANDOM_QUEST 40 /*<! ランダムクエストを割り当てるクエストIDの開始値 */
-#define MAX_RANDOM_QUEST 49 /*<! ランダムクエストを割り当てるクエストIDの終了値 */
-#define QUEST_TOWER1      5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
-#define QUEST_TOWER2      6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
-#define QUEST_TOWER3      7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
-#define QUEST_OBERON      8 /*<! オベロン打倒クエストに割り振るクエストID */
-#define QUEST_SERPENT     9 /*<! サーペント打倒クエストに割り振るクエストID */
+constexpr short MIN_RANDOM_QUEST = 40; /*<! ランダムクエストを割り当てるクエストIDの開始値 */
+constexpr short MAX_RANDOM_QUEST = 49; /*<! ランダムクエストを割り当てるクエストIDの終了値 */
+constexpr short QUEST_TOWER1     = 5;  /*<! 塔クエスト(第1階層)に割り振るクエストID */
+constexpr short QUEST_TOWER2     = 6;  /*<! 塔クエスト(第2階層)に割り振るクエストID */
+constexpr short QUEST_TOWER3     = 7;  /*<! 塔クエスト(第3階層)に割り振るクエストID */
+constexpr short QUEST_OBERON     = 8;  /*<! オベロン打倒クエストに割り振るクエストID */
+constexpr short QUEST_SERPENT    = 9;  /*<! サーペント打倒クエストに割り振るクエストID */
+
+constexpr uint QUEST_FLAG_SILENT = 0x01; /*!< クエストフラグ: クエスト進行に関する情報表示を抑止する / no messages from completion */
+constexpr uint QUEST_FLAG_PRESET = 0x02; /*!< クエストフラグ: クエストがダンジョン外で発生する / quest is outside the main dungeon */
+constexpr uint QUEST_FLAG_ONCE   = 0x04; /*!< クエストフラグ: クエストがフロアを出た時点で完了する / quest is marked finished after leaving */
+constexpr uint QUEST_FLAG_TOWER  = 0x08; /*!< クエストフラグ: クエスト:塔の形式で進行する / Tower quest is special */
 
 enum class QuestStatusType : short {
 	UNTAKEN = 0,         /*!< クエストステータス状態：未発生*/
@@ -39,14 +44,6 @@ enum class QuestKindType : short {
 	RANDOM = 7,         /*!< クエスト目的: ランダムクエストとして選ばれたユニーク1体を倒す */
 	TOWER = 8,          /*!< クエスト目的: 複数のエリアの全てのモンスターを倒す */
 };
-
-/*
- * Quest flags
- */
-#define QUEST_FLAG_SILENT  0x01 /*!< クエストフラグ: クエスト進行に関する情報表示を抑止する / no messages from completion */
-#define QUEST_FLAG_PRESET  0x02 /*!< クエストフラグ: クエストがダンジョン外で発生する / quest is outside the main dungeon */
-#define QUEST_FLAG_ONCE    0x04 /*!< クエストフラグ: クエストがフロアを出た時点で完了する / quest is marked finished after leaving */
-#define QUEST_FLAG_TOWER   0x08 /*!< クエストフラグ: クエスト:塔の形式で進行する / Tower quest is special */
 
 // clang-format on
 
