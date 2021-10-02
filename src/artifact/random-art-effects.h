@@ -7,6 +7,7 @@
  * @brief ランダムアーティファクトの発動ID定義
  */
 enum random_art_activation_type : uint8_t {
+    ACT_NONE = 0,
     ACT_SUNLIGHT = 1,
     ACT_BO_MISS_1 = 2,
     ACT_BA_POIS_1 = 3,

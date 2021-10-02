@@ -1,10 +1,12 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <vector>
 
-typedef struct activation_type {
+enum random_art_activation_type : uint8_t;
+struct activation_type {
     concptr flag;
-    byte index;
+    random_art_activation_type index;
     byte level;
     int32_t value;
     struct {
@@ -12,7 +14,6 @@ typedef struct activation_type {
         DICE_NUMBER dice;
     } timeout;
     concptr desc;
-} activation_type;
+};
 
-#define MAX_ACTIVATION_TYPE 138
-extern const activation_type activation_info[MAX_ACTIVATION_TYPE];
+extern const std::vector<activation_type> activation_info;

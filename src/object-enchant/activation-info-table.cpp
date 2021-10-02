@@ -5,7 +5,7 @@
  * @brief アイテムの発動効果テーブル /
  * Define flags, levels, values of activations
  */
-const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
+const std::vector<activation_type> activation_info = {
     { "SUNLIGHT", ACT_SUNLIGHT, 10, 250, { 10, 0 }, _("太陽光線", "beam of sunlight") },
     { "BO_MISS_1", ACT_BO_MISS_1, 10, 250, { 2, 0 }, _("マジック・ミサイル(2d6)", "magic missile (2d6)") },
     { "BA_POIS_1", ACT_BA_POIS_1, 10, 300, { 4, 0 }, _("悪臭雲(12)", "stinking cloud (12)") },
@@ -152,5 +152,5 @@ const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
     { "ELBERETH", ACT_ELBERETH, 10, 30000, { 75, 0 }, _("エルベレスの結界", "Rune of Elbereth") },
     { "DETECT_TREASURE", ACT_DETECT_TREASURE, 10, 3000, {35, 0}, _("財宝感知", "detect treasure") },
 
-    { nullptr, 0, 0, 0, { 0, 0 }, "" },
+    { nullptr, ACT_NONE, 0, 0, { 0, 0 }, "" },
 };

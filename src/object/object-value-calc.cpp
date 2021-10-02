@@ -442,9 +442,9 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
 
     /* Also, give some extra for activatable powers... */
     if (o_ptr->art_name && (o_ptr->art_flags.has(TR_ACTIVATE))) {
-        const activation_type *const act_ptr = find_activation_info(o_ptr);
-        if (act_ptr) {
-            total += act_ptr->value;
+        auto act_ptr = find_activation_info(o_ptr);
+        if (act_ptr.has_value()) {
+            total += act_ptr.value()->value;
         }
     }
 
