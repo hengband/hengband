@@ -76,6 +76,7 @@
 #include "mind/snipe-types.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -613,9 +614,7 @@ void process_command(player_type *player_ptr)
     case '`': {
         if (!player_ptr->wild_mode)
             do_cmd_travel(player_ptr);
-        if (player_ptr->special_defense & KATA_MUSOU) {
-            set_action(player_ptr, ACTION_NONE);
-        }
+        PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
         break;
     }

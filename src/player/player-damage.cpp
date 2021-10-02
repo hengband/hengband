@@ -43,8 +43,10 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
+#include "player-info/samurai-data-type.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
@@ -279,7 +281,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
 
     if (player_ptr->sutemi)
         damage *= 2;
-    if (player_ptr->special_defense & KATA_IAI)
+    if (PlayerClass(player_ptr).get_kata() == SamuraiKata::IAI)
         damage += (damage + 4) / 5;
 
     if (damage_type != DAMAGE_USELIFE) {
@@ -319,7 +321,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
             }
         }
 
-        if (player_ptr->special_defense & KATA_MUSOU) {
+        if (PlayerClass(player_ptr).get_kata() == SamuraiKata::MUSOU) {
             damage /= 2;
             if ((damage == 0) && one_in_(2))
                 damage = 1;

@@ -2,6 +2,8 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "system/player-type-definition.h"
@@ -24,8 +26,9 @@ void rd_special_action(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_attack & KATA_MASK)
+    if (PlayerClass(player_ptr).get_kata() != SamuraiKata::NONE) {
         player_ptr->action = ACTION_KATA;
+    }
 }
 
 void rd_special_defense(player_type *player_ptr)

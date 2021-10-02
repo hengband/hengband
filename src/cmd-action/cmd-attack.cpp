@@ -33,7 +33,9 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -309,7 +311,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
         msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
     }
 
-    if ((player_ptr->special_defense & KATA_IAI) && ((mode != HISSATSU_IAI) || mdeath)) {
+    if ((PlayerClass(player_ptr).get_kata() == SamuraiKata::IAI) && ((mode != HISSATSU_IAI) || mdeath)) {
         set_action(player_ptr, ACTION_NONE);
     }
 

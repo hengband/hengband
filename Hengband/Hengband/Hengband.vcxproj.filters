@@ -5100,6 +5100,9 @@
     <ClInclude Include="..\..\src\object-use\zapwand-execution.h">
       <Filter>object-use</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\samurai-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

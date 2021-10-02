@@ -7,6 +7,7 @@
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player/special-defense-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -103,7 +104,7 @@ void player_vulnerability_flags(player_type *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    if (player_ptr->muta.has(MUTA::VULN_ELEM) || (player_ptr->special_defense & KATA_KOUKIJIN)) {
+    if (player_ptr->muta.has(MUTA::VULN_ELEM) || (PlayerClass(player_ptr).get_kata() == SamuraiKata::KOUKIJIN)) {
         flags.set(TR_RES_ACID);
         flags.set(TR_RES_ELEC);
         flags.set(TR_RES_FIRE);

@@ -60,6 +60,7 @@
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-basic-statistics.h"
 #include "player-status/player-hand-types.h"
@@ -1478,7 +1479,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             else if ((player_ptr->pclass == CLASS_ROGUE) && (o_ptr->weight < 50) && (player_ptr->stat_index[A_DEX] >= 30))
                 num_blow++;
 
-            if (any_bits(player_ptr->special_defense, KATA_FUUJIN))
+            if (PlayerClass(player_ptr).get_kata() == SamuraiKata::FUUJIN)
                 num_blow -= 1;
 
             if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
@@ -1735,17 +1736,18 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         }
     }
 
+    PlayerClass pc(player_ptr);
     if (any_bits(player_ptr->special_defense, KAMAE_GENBU)) {
         ac += (player_ptr->lev * player_ptr->lev) / 50;
     } else if (any_bits(player_ptr->special_defense, KAMAE_BYAKKO)) {
         ac -= 40;
     } else if (any_bits(player_ptr->special_defense, KAMAE_SEIRYU)) {
         ac -= 50;
-    } else if (any_bits(player_ptr->special_defense, KATA_KOUKIJIN)) {
+    } else if (pc.get_kata() == SamuraiKata::KOUKIJIN) {
         ac -= 50;
     }
 
-    if (player_ptr->ult_res || (any_bits(player_ptr->special_defense, KATA_MUSOU))) {
+    if (player_ptr->ult_res || (pc.get_kata() == SamuraiKata::MUSOU)) {
         ac += 100;
     } else if (player_ptr->tsubureru || player_ptr->shield || player_ptr->magicdef) {
         ac += 50;

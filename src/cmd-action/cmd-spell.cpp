@@ -32,7 +32,9 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -624,9 +626,7 @@ void do_cmd_browse(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
     if (player_ptr->pclass == CLASS_FORCETRAINER) {
         if (player_has_no_spellbooks(player_ptr)) {
@@ -783,9 +783,7 @@ void do_cmd_study(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
 #ifdef JP
     if (player_ptr->new_spells < 10) {

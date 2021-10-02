@@ -29,6 +29,7 @@
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
@@ -232,7 +233,7 @@ static bool update_weird_telepathy(player_type *player_ptr, um_type *um_ptr, MON
 static void update_telepathy_sight(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
-    if (player_ptr->special_defense & KATA_MUSOU) {
+    if (PlayerClass(player_ptr).get_kata() == SamuraiKata::MUSOU) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)

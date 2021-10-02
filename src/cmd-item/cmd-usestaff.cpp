@@ -6,10 +6,12 @@
 #include "object-use/use-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
@@ -293,9 +295,7 @@ void do_cmd_use_staff(player_type *player_ptr)
     if (cmd_limit_arena(player_ptr))
         return;
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN)) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
 
     q = _("どの杖を使いますか? ", "Use which staff? ");
     s = _("使える杖がない。", "You have no staff to use.");

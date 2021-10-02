@@ -4,6 +4,7 @@
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player-info/spell-hex-data-type.h"
@@ -67,6 +68,11 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<mane_data_t
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<sniper_data_type> &sniper_data) const
 {
     wr_s16b(sniper_data->concent);
+}
+
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<samurai_data_type> &samurai_data) const
+{
+    wr_byte(enum2i(samurai_data->kata));
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

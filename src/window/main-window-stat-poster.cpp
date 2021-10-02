@@ -6,6 +6,7 @@
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
@@ -23,8 +24,8 @@
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
-#include "window/main-window-row-column.h"
 #include "view/status-bars-table.h"
+#include "window/main-window-row-column.h"
 
 /*!
  * @brief 32ビット変数配列の指定位置のビットフラグを1にする。
@@ -210,12 +211,10 @@ void print_state(player_type *player_ptr)
         break;
     }
     case ACTION_KATA: {
-        int i;
-        for (i = 0; i < MAX_KATA; i++)
-            if (player_ptr->special_defense & (KATA_IAI << i))
-                break;
-
-        strcpy(text, samurai_stances[i].desc);
+        if (auto kata = PlayerClass(player_ptr).get_kata();
+            kata != SamuraiKata::NONE) {
+            strcpy(text, samurai_stances[enum2i(kata) - 1].desc);
+        }
         break;
     }
     case ACTION_SING: {

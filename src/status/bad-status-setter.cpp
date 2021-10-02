@@ -125,12 +125,7 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
                 this->player_ptr->action = ACTION_NONE;
             } else if (this->player_ptr->action == ACTION_KATA) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
-                this->player_ptr->special_defense &= ~(KATA_MASK);
-                this->player_ptr->update |= PU_BONUS;
-                this->player_ptr->update |= PU_MONSTERS;
-                this->player_ptr->redraw |= PR_STATE;
-                this->player_ptr->redraw |= PR_STATUS;
-                this->player_ptr->action = ACTION_NONE;
+                PlayerClass(player_ptr).lose_balance();
             }
 
             /* Sniper */
@@ -232,14 +227,8 @@ bool BadStatusSetter::afraidness(const TIME_EFFECT tmp_v)
     if (v > 0) {
         if (!this->player_ptr->afraid) {
             msg_print(_("何もかも恐くなってきた！", "You are terrified!"));
-            if (this->player_ptr->special_defense & KATA_MASK) {
+            if (PlayerClass(this->player_ptr).lose_balance()) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
-                this->player_ptr->special_defense &= ~(KATA_MASK);
-                this->player_ptr->update |= PU_BONUS;
-                this->player_ptr->update |= PU_MONSTERS;
-                this->player_ptr->redraw |= PR_STATE;
-                this->player_ptr->redraw |= PR_STATUS;
-                this->player_ptr->action = ACTION_NONE;
             }
 
             notice = true;
