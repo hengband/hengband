@@ -12,6 +12,8 @@ public:
 private:
     player_type *player_ptr;
     monster_type *m_ptr;
+    short quest_idx;
 
     int count_all_hostile_monsters();
+    void set_quest_idx();
 };
