@@ -17,22 +17,10 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-/*!
- * @brief 現在フロアに残っている敵モンスターの数を返す /
- * @return 現在の敵モンスターの数
- */
-static MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
+QuestCompletionChecker::QuestCompletionChecker(player_type *player_ptr, monster_type *m_ptr)
+    : player_ptr(player_ptr)
+    , m_ptr(m_ptr)
 {
-    MONSTER_NUMBER number_mon = 0;
-    for (POSITION x = 0; x < floor_ptr->width; ++x) {
-        for (POSITION y = 0; y < floor_ptr->height; ++y) {
-            MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
-            if (m_idx > 0 && is_hostile(&floor_ptr->m_list[m_idx]))
-                ++number_mon;
-        }
-    }
-
-    return number_mon;
 }
 
 /*!
@@ -41,7 +29,7 @@ static MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr 撃破したモンスターの構造体参照ポインタ
  */
-void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
+void QuestCompletionChecker::complete()
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
@@ -89,7 +77,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
             break;
         }
         case QUEST_TYPE_KILL_ALL: {
-            if (!is_hostile(m_ptr) || count_all_hostile_monsters(floor_ptr) != 1)
+            if (!is_hostile(m_ptr) || this->count_all_hostile_monsters() != 1)
                 break;
 
             if (q_ptr->flags & QUEST_FLAG_SILENT) {
@@ -138,7 +126,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
             if (!is_hostile(m_ptr))
                 break;
 
-            if (count_all_hostile_monsters(floor_ptr) == 1) {
+            if (this->count_all_hostile_monsters() == 1) {
                 q_ptr->status = QUEST_STATUS_STAGE_COMPLETED;
 
                 if ((quest[QUEST_TOWER1].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QUEST_STATUS_STAGE_COMPLETED)
@@ -179,4 +167,24 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
         make_object(player_ptr, o_ptr, AM_GOOD | AM_GREAT);
         (void)drop_near(player_ptr, o_ptr, -1, y, x);
     }
+}
+
+/*!
+ * @brief 現在フロアに残っている敵モンスターの数を返す /
+ * @return 現在の敵モンスターの数
+ */
+int QuestCompletionChecker::count_all_hostile_monsters()
+{
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto number_mon = 0;
+    for (auto x = 0; x < floor_ptr->width; ++x) {
+        for (auto y = 0; y < floor_ptr->height; ++y) {
+            auto m_idx = floor_ptr->grid_array[y][x].m_idx;
+            if ((m_idx > 0) && is_hostile(&floor_ptr->m_list[m_idx])) {
+                ++number_mon;
+            }
+        }
+    }
+
+    return number_mon;
 }
