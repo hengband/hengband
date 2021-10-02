@@ -17,7 +17,7 @@
 #include <optional>
 
 enum class SmithEffect : int16_t;
-enum random_art_activation_type : uint8_t;
+enum class RandomArtActType : short;
 
 struct player_type;
 typedef struct object_type {
@@ -36,13 +36,13 @@ typedef struct object_type {
     EGO_IDX name2{}; /*!< Ego-Item type, if any */
 
     XTRA8 xtra1{}; /*!< Extra info type (now unused) */
-    XTRA16 xtra2{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
+    RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     XTRA8 xtra3{}; /*!< 複数の使用用途 捕らえたモンスターの速度 / Extra info */
     XTRA16 xtra4{}; /*!< 複数の使用用途 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
     XTRA16 xtra5{}; /*!< 複数の使用用途 捕らえたモンスターの最大HP / Extra info captured monster's max HP */
 
     std::optional<SmithEffect> smith_effect; //!< 鍛冶で付与された効果
-    std::optional<random_art_activation_type> smith_act_idx; //!< 鍛冶で付与された発動効果のID
+    std::optional<RandomArtActType> smith_act_idx; //!< 鍛冶で付与された発動効果のID
 
     HIT_PROB to_h{}; /*!< Plusses to hit */
     HIT_POINT to_d{}; /*!< Plusses to damage */

@@ -232,6 +232,7 @@ struct ego_generate_type {
 /*
  * Information about "ego-items".
  */
+enum class RandomArtActType : short;
 struct ego_item_type {
     EGO_IDX idx{};
 
@@ -260,7 +261,7 @@ struct ego_item_type {
     EnumClassFlagGroup<TRG> gen_flags; //!< 生成時適用フラグ
     std::vector<ego_generate_type> xtra_flags{}; //!< 追加能力/耐性フラグ
 
-    IDX act_idx{}; //!< 発動番号 / Activative ability index
+    RandomArtActType act_idx{}; //!< 発動番号 / Activative ability index
 };
 
 extern std::vector<ego_item_type> e_info;

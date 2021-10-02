@@ -219,7 +219,7 @@ TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
  * @return アイテムに付与されている発動効果の発動ID(random_art_activation_type型)
  * 付与されている発動効果が無い場合は std::nullopt
  */
-std::optional<random_art_activation_type> Smith::object_activation(const object_type *o_ptr)
+std::optional<RandomArtActType> Smith::object_activation(const object_type *o_ptr)
 {
     return o_ptr->smith_act_idx;
 }

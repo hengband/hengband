@@ -21,7 +21,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果のIDを返す
  */
-int activation_index(const object_type *o_ptr)
+RandomArtActType activation_index(const object_type *o_ptr)
 {
     if (auto act_idx = Smith::object_activation(o_ptr); act_idx.has_value()) {
         return act_idx.value();
@@ -36,7 +36,7 @@ int activation_index(const object_type *o_ptr)
     if (!o_ptr->is_random_artifact() && k_info[o_ptr->k_idx].flags.has(TR_ACTIVATE))
         return k_info[o_ptr->k_idx].act_idx;
 
-    return o_ptr->xtra2;
+    return o_ptr->activation_id;
 }
 
 /*!

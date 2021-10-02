@@ -1,4 +1,5 @@
 ﻿#include "market/building-craft-fix.h"
+#include "artifact/random-art-effects.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/artifact-info.h"
 #include "core/asking-player.h"
@@ -204,7 +205,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (k_ptr->pval)
         o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
     if (k_ptr->flags.has(TR_ACTIVATE))
-        o_ptr->xtra2 = (byte)k_ptr->act_idx;
+        o_ptr->activation_id = k_ptr->act_idx;
 
     if (dd_bonus > 0) {
         o_ptr->dd++;
@@ -239,7 +240,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         }
 
         give_one_ability_of_object(o_ptr, mo_ptr);
-        if (!activation_index(o_ptr))
+        if (activation_index(o_ptr) == RandomArtActType::NONE)
             one_activation(o_ptr);
 
         if (o_ptr->name1 == ART_NARSIL) {

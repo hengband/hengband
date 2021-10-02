@@ -1,4 +1,5 @@
 ﻿#include "info-reader/ego-reader.h"
+#include "artifact/random-art-effects.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
@@ -132,10 +133,10 @@ errr parse_e_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
         auto n = grab_one_activation_flag(tokens[1].c_str());
-        if (n <= 0)
+        if (n <=RandomArtActType::NONE)
             return PARSE_ERROR_INVALID_FLAG;
 
-        e_ptr->act_idx = (IDX)n;
+        e_ptr->act_idx = n;
     } else if (tokens[0] == "F") {
         // F:flags
         if (tokens.size() < 2 || tokens[1].size() == 0)

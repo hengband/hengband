@@ -4,9 +4,8 @@
  * @author deskull
  * @details Ego-Item indexes (see "lib/edit/e_info.txt")
  */
-#include <vector>
-
 #include "object-enchant/object-ego.h"
+#include "artifact/random-art-effects.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
@@ -17,6 +16,7 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
+#include <vector>
 
 /*
  * The ego-item arrays
@@ -245,8 +245,8 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
     ego_invest_curse(o_ptr, gen_flags);
     ego_invest_extra_abilities(o_ptr, gen_flags);
 
-    if (e_ptr->act_idx)
-        o_ptr->xtra2 = (XTRA8)e_ptr->act_idx;
+    if (e_ptr->act_idx > RandomArtActType::NONE)
+        o_ptr->activation_id = e_ptr->act_idx;
 
     o_ptr->to_h += (HIT_PROB)e_ptr->base_to_h;
     o_ptr->to_d += (HIT_POINT)e_ptr->base_to_d;

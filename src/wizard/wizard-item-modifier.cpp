@@ -198,29 +198,22 @@ void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
  */
 void wiz_modify_item_activation(player_type *player_ptr)
 {
-    concptr q = "Which object? ";
-    concptr s = "Nothing to do with.";
+    auto q = _("どのアイテムの発動を変更しますか？ ", "Which object? ");
+    auto s = _("発動を変更するアイテムがない。", "Nothing to do with.");
     OBJECT_IDX item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
-    if (!o_ptr)
-        return;
-
-    XTRA16 act_idx;
-    char tmp[80] = "";
-    sprintf(tmp, "Artifact ID (1-%d): ", ACT_MAX);
-    char tmp_val[10] = "";
-    if (!get_string(tmp, tmp_val, 3))
-        return;
-
-    act_idx = (XTRA16)atoi(tmp_val);
-
-    if (act_idx <= 0 || act_idx > ACT_MAX) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), ACT_MAX - 1);
+    if (!o_ptr) {
         return;
     }
 
+    int val;
+    if (!get_value("Activation ID", enum2i(RandomArtActType::NONE), enum2i(RandomArtActType::MAX) - 1, &val)) {
+        return;
+    }
+
+    auto act_idx = i2enum<RandomArtActType>(val);
     o_ptr->art_flags.set(TR_ACTIVATE);
-    o_ptr->xtra2 = act_idx;
+    o_ptr->activation_id = act_idx;
 }
 
 /*!
@@ -351,7 +344,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
     prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
-    prt(format("ident = %04x  xtra1 = %-4d  xtra2 = %-4d  timeout = %-d", o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
+    prt(format("ident = %04x  xtra1 = %-4d  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->xtra1, o_ptr->activation_id, o_ptr->timeout), 8, j);
     prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
     prt("+------------FLAGS1------------+", 10, j);

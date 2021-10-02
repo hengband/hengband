@@ -1,7 +1,9 @@
 ﻿#include "info-reader/info-reader-util.h"
+#include "artifact/random-art-effects.h"
 #include "main/angband-headers.h"
 #include "object-enchant/activation-info-table.h"
 #include "view/display-messages.h"
+#include "util/enum-converter.h"
 
 /* Help give useful error messages */
 int error_idx; /*!< データ読み込み/初期化時に汎用的にエラーコードを保存するグローバル変数 */
@@ -13,22 +15,23 @@ int error_line; /*!< データ読み込み/初期化時に汎用的にエラー�
  * @param what 参照元の文字列ポインタ
  * @return 発動能力ID
  */
-byte grab_one_activation_flag(concptr what)
+RandomArtActType grab_one_activation_flag(concptr what)
 {
-    for (int i = 0;; i++) {
-        if (activation_info[i].flag == nullptr)
+    for (auto i = 0;; i++) {
+        if (activation_info[i].flag == nullptr) {
             break;
+        }
 
         if (streq(what, activation_info[i].flag)) {
             return activation_info[i].index;
         }
     }
 
-    int j = atoi(what);
+    auto j = atoi(what);
     if (j > 0) {
-        return ((byte)j);
+        return i2enum<RandomArtActType>(j);
     }
 
     msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what);
-    return 0;
+    return RandomArtActType::NONE;
 }

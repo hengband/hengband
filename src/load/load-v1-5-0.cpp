@@ -158,11 +158,11 @@ void rd_item_old(object_type *o_ptr)
     rd_s16b(&o_ptr->held_m_idx);
     rd_byte(&o_ptr->xtra1);
     rd_byte(&tmp8u);
-    o_ptr->xtra2 = tmp8u;
+    o_ptr->activation_id = i2enum<RandomArtActType>(tmp8u);
 
     if (h_older_than(1, 0, 10)) {
         if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN) {
-            switch (o_ptr->xtra2 % 6) {
+            switch (enum2i(o_ptr->activation_id) % 6) {
             case 0:
                 o_ptr->art_flags.set(TR_SUST_STR);
                 break;
@@ -182,9 +182,9 @@ void rd_item_old(object_type *o_ptr)
                 o_ptr->art_flags.set(TR_SUST_CHR);
                 break;
             }
-            o_ptr->xtra2 = 0;
+            o_ptr->activation_id = i2enum<RandomArtActType>(0);
         } else if (o_ptr->xtra1 == EGO_XTRA_POWER) {
-            switch (o_ptr->xtra2 % 11) {
+            switch (enum2i(o_ptr->activation_id) % 11) {
             case 0:
                 o_ptr->art_flags.set(TR_RES_BLIND);
                 break;
@@ -219,9 +219,9 @@ void rd_item_old(object_type *o_ptr)
                 o_ptr->art_flags.set(TR_RES_LITE);
                 break;
             }
-            o_ptr->xtra2 = 0;
+            o_ptr->activation_id = i2enum<RandomArtActType>(0);
         } else if (o_ptr->xtra1 == EGO_XTRA_ABILITY) {
-            switch (o_ptr->xtra2 % 8) {
+            switch (enum2i(o_ptr->activation_id) % 8) {
             case 0:
                 o_ptr->art_flags.set(TR_LEVITATION);
                 break;
@@ -247,7 +247,7 @@ void rd_item_old(object_type *o_ptr)
                 o_ptr->art_flags.set(TR_HOLD_EXP);
                 break;
             }
-            o_ptr->xtra2 = 0;
+            o_ptr->activation_id = i2enum<RandomArtActType>(0);
         }
         o_ptr->xtra1 = 0;
     }

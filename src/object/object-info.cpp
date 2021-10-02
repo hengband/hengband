@@ -69,59 +69,59 @@ static concptr item_activation_aux(object_type *o_ptr)
 {
     static char activation_detail[512];
     char timeout[64];
-    auto act_ptr = find_activation_info(o_ptr);
-
-    if (!act_ptr.has_value()) {
+    auto tmp_act_ptr = find_activation_info(o_ptr);
+    if (!tmp_act_ptr.has_value()) {
         return _("未定義", "something undefined");
     }
 
-    concptr desc = act_ptr.value()->desc;
-    switch (act_ptr.value()->index) {
-    case ACT_NONE:
+    auto *act_ptr = tmp_act_ptr.value();
+    concptr desc = act_ptr->desc;
+    switch (act_ptr->index) {
+    case RandomArtActType::NONE:
         break;
-    case ACT_BR_FIRE:
+    case RandomArtActType::BR_FIRE:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
             desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
         break;
-    case ACT_BR_COLD:
+    case RandomArtActType::BR_COLD:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
             desc = _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
         break;
-    case ACT_BR_DRAGON:
+    case RandomArtActType::BR_DRAGON:
         desc = item_activation_dragon_breath(o_ptr);
         break;
-    case ACT_AGGRAVATE:
+    case RandomArtActType::AGGRAVATE:
         if (o_ptr->name1 == ART_HYOUSIGI)
             desc = _("拍子木を打ちならす", "beat wooden clappers");
         break;
-    case ACT_ACID_BALL_AND_RESISTANCE:
+    case RandomArtActType::ACID_BALL_AND_RESISTANCE:
         desc = _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
         break;
-    case ACT_FIRE_BALL_AND_RESISTANCE:
+    case RandomArtActType::FIRE_BALL_AND_RESISTANCE:
         desc = _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
         break;
-    case ACT_COLD_BALL_AND_RESISTANCE:
+    case RandomArtActType::COLD_BALL_AND_RESISTANCE:
         desc = _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
         break;
-    case ACT_ELEC_BALL_AND_RESISTANCE:
+    case RandomArtActType::ELEC_BALL_AND_RESISTANCE:
         desc = _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
         break;
-    case ACT_POIS_BALL_AND_RESISTANCE:
+    case RandomArtActType::POIS_BALL_AND_RESISTANCE:
         desc = _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
         break;
-    case ACT_RESIST_ACID:
+    case RandomArtActType::RESIST_ACID:
         desc = _("一時的な酸への耐性", "temporary resist acid");
         break;
-    case ACT_RESIST_FIRE:
+    case RandomArtActType::RESIST_FIRE:
         desc = _("一時的な火への耐性", "temporary resist fire");
         break;
-    case ACT_RESIST_COLD:
+    case RandomArtActType::RESIST_COLD:
         desc = _("一時的な冷気への耐性", "temporary resist cold");
         break;
-    case ACT_RESIST_ELEC:
+    case RandomArtActType::RESIST_ELEC:
         desc = _("一時的な電撃への耐性", "temporary resist elec");
         break;
-    case ACT_RESIST_POIS:
+    case RandomArtActType::RESIST_POIS:
         desc = _("一時的な毒への耐性", "temporary resist elec");
         break;
     default:
@@ -129,24 +129,24 @@ static concptr item_activation_aux(object_type *o_ptr)
     }
 
     /* Timeout description */
-    int constant = act_ptr.value()->timeout.constant;
-    int dice = act_ptr.value()->timeout.dice;
+    int constant = act_ptr->timeout.constant;
+    int dice = act_ptr->timeout.dice;
     if (constant == 0 && dice == 0) {
         /* We can activate it every turn */
         strcpy(timeout, _("いつでも", "every turn"));
     } else if (constant < 0) {
         /* Activations that have special timeout */
-        switch (act_ptr.value()->index) {
-        case ACT_BR_FIRE:
+        switch (act_ptr->index) {
+        case RandomArtActType::BR_FIRE:
             sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250);
             break;
-        case ACT_BR_COLD:
+        case RandomArtActType::BR_COLD:
             sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250);
             break;
-        case ACT_TERROR:
+        case RandomArtActType::TERROR:
             strcpy(timeout, _("3*(レベル+10) ターン毎", "every 3 * (level+10) turns"));
             break;
-        case ACT_MURAMASA:
+        case RandomArtActType::MURAMASA:
             strcpy(timeout, _("確率50%で壊れる", "(destroyed 50%)"));
             break;
         default:
@@ -177,7 +177,7 @@ concptr activation_explanation(object_type *o_ptr)
     if (flgs.has_not(TR_ACTIVATE))
         return (_("なし", "nothing"));
 
-    if (activation_index(o_ptr)) {
+    if (activation_index(o_ptr) > RandomArtActType::NONE) {
         return item_activation_aux(o_ptr);
     }
 

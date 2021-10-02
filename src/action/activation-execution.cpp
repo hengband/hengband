@@ -162,16 +162,16 @@ static bool activate_artifact(player_type *player_ptr, object_type *o_ptr)
     }
 
     switch (act_ptr->index) {
-    case ACT_BR_FIRE:
+    case RandomArtActType::BR_FIRE:
         o_ptr->timeout = ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250;
         return true;
-    case ACT_BR_COLD:
+    case RandomArtActType::BR_COLD:
         o_ptr->timeout = ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250;
         return true;
-    case ACT_TERROR:
+    case RandomArtActType::TERROR:
         o_ptr->timeout = 3 * (player_ptr->lev + 10);
         return true;
-    case ACT_MURAMASA:
+    case RandomArtActType::MURAMASA:
         return true;
     default:
         msg_format("Special timeout is not implemented: %d.", act_ptr->index);
@@ -235,7 +235,7 @@ void exe_activate(player_type *player_ptr, INVENTORY_IDX item)
 
     msg_print(_("始動させた...", "You activate it..."));
     sound(SOUND_ZAP);
-    if (activation_index(ae_ptr->o_ptr)) {
+    if (activation_index(ae_ptr->o_ptr) > RandomArtActType::NONE) {
         (void)activate_artifact(player_ptr, ae_ptr->o_ptr);
         player_ptr->window_flags |= PW_INVEN | PW_EQUIP;
         return;

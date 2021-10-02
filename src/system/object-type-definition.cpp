@@ -7,6 +7,7 @@
 
 #include "system/object-type-definition.h"
 #include "artifact/fixed-art-types.h"
+#include "artifact/random-art-effects.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-smith.h"
@@ -73,8 +74,8 @@ void object_type::prep(KIND_OBJECT_IDX ko_idx)
     this->dd = k_ptr->dd;
     this->ds = k_ptr->ds;
 
-    if (k_ptr->act_idx > 0)
-        this->xtra2 = (XTRA8)k_ptr->act_idx;
+    if (k_ptr->act_idx > RandomArtActType::NONE)
+        this->activation_id = k_ptr->act_idx;
     if (k_info[this->k_idx].cost <= 0)
         this->ident |= (IDENT_BROKEN);
 

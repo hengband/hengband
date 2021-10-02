@@ -81,7 +81,7 @@ bool BasicSmithInfo::can_give_smith_effect_impl(const object_type *o_ptr) const
     return o_ptr->is_weapon_armour_ammo() && o_ptr->is_wearable();
 }
 
-ActivationSmithInfo::ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, random_art_activation_type act_idx)
+ActivationSmithInfo::ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, RandomArtActType act_idx)
     : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
     , act_idx(act_idx)
 {
