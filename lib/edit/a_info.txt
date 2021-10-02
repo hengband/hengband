@@ -4500,7 +4500,7 @@ E:The Longbow of Diana
 I:19:13:0
 W:35:97:30:4000
 P:0:1d2:15:0:0
-F:REFLECT | ACTIVATE | FULL_NAME
+F:REFLECT | ACTIVATE
 U:CREATE_AMMO
 D:「よくやった！ 私は無理ではないかと恐れていたのだ！
 D:「ダイアナの長弓を持って戻ってきたな！
