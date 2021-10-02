@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+#include <tuple>
+
 struct monster_type;
 struct player_type;
 struct quest_type;
@@ -18,4 +21,5 @@ private:
 
     int count_all_hostile_monsters();
     void set_quest_idx();
+    std::tuple<bool, bool> switch_completion();
 };

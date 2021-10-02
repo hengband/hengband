@@ -38,79 +38,9 @@ void QuestCompletionChecker::complete()
     auto reward = false;
     if ((this->quest_idx > 0) && (quest[this->quest_idx].status == QuestStatusType::TAKEN)) {
         this->q_ptr = &quest[this->quest_idx];
-        switch (this->q_ptr->type) {
-        case QuestKindType::KILL_NUMBER:
-            this->q_ptr->cur_num++;
-            if (this->q_ptr->cur_num >= this->q_ptr->num_mon) {
-                complete_quest(this->player_ptr, this->quest_idx);
-                this->q_ptr->cur_num = 0;
-            }
-
-            break;
-        case QuestKindType::KILL_ALL:
-            if (!is_hostile(this->m_ptr) || (this->count_all_hostile_monsters() != 1)) {
-                break;
-            }
-
-            if (this->q_ptr->flags & QUEST_FLAG_SILENT) {
-                this->q_ptr->status = QuestStatusType::FINISHED;
-            } else {
-                complete_quest(this->player_ptr, this->quest_idx);
-            }
-
-            break;
-        case QuestKindType::KILL_LEVEL:
-        case QuestKindType::RANDOM:
-            if (this->q_ptr->r_idx != this->m_ptr->r_idx) {
-                break;
-            }
-
-            this->q_ptr->cur_num++;
-            if (this->q_ptr->cur_num < this->q_ptr->max_num) {
-                break;
-            }
-
-            complete_quest(this->player_ptr, this->quest_idx);
-            if (!(this->q_ptr->flags & QUEST_FLAG_PRESET)) {
-                create_stairs = true;
-                floor_ptr->inside_quest = 0;
-            }
-
-            if ((this->quest_idx == QUEST_OBERON) || (this->quest_idx == QUEST_SERPENT)) {
-                this->q_ptr->status = QuestStatusType::FINISHED;
-            }
-
-            if (this->q_ptr->type == QuestKindType::RANDOM) {
-                reward = true;
-                this->q_ptr->status = QuestStatusType::FINISHED;
-            }
-
-            break;
-        case QuestKindType::KILL_ANY_LEVEL:
-            this->q_ptr->cur_num++;
-            if (this->q_ptr->cur_num >= this->q_ptr->max_num) {
-                complete_quest(this->player_ptr, this->quest_idx);
-                this->q_ptr->cur_num = 0;
-            }
-
-            break;
-        case QuestKindType::TOWER:
-            if (!is_hostile(this->m_ptr)) {
-                break;
-            }
-
-            if (this->count_all_hostile_monsters() == 1) {
-                this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
-                if ((quest[QUEST_TOWER1].status == QuestStatusType::STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QuestStatusType::STAGE_COMPLETED)
-                    && (quest[QUEST_TOWER3].status == QuestStatusType::STAGE_COMPLETED)) {
-                    complete_quest(this->player_ptr, QUEST_TOWER1);
-                }
-            }
-
-            break;
-        default:
-            break;
-        }
+        auto [tmp_create_stairs, tmp_reward] = this->switch_completion();
+        create_stairs = tmp_create_stairs;
+        reward = tmp_reward;
     }
 
     auto y = this->m_ptr->fy;
@@ -185,6 +115,85 @@ void QuestCompletionChecker::set_quest_idx()
     }
 
     this->quest_idx = i;
+}
+
+std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
+{
+    switch (this->q_ptr->type) {
+    case QuestKindType::KILL_NUMBER:
+        this->q_ptr->cur_num++;
+        if (this->q_ptr->cur_num >= this->q_ptr->num_mon) {
+            complete_quest(this->player_ptr, this->quest_idx);
+            this->q_ptr->cur_num = 0;
+        }
+
+        return std::make_tuple(false, false);
+    case QuestKindType::KILL_ALL:
+        if (!is_hostile(this->m_ptr) || (this->count_all_hostile_monsters() != 1)) {
+            return std::make_tuple(false, false);
+        }
+
+        if (this->q_ptr->flags & QUEST_FLAG_SILENT) {
+            this->q_ptr->status = QuestStatusType::FINISHED;
+        } else {
+            complete_quest(this->player_ptr, this->quest_idx);
+        }
+
+        return std::make_tuple(false, false);
+    case QuestKindType::KILL_LEVEL:
+    case QuestKindType::RANDOM: {
+        if (this->q_ptr->r_idx != this->m_ptr->r_idx) {
+            return std::make_tuple(false, false);
+        }
+
+        this->q_ptr->cur_num++;
+        if (this->q_ptr->cur_num < this->q_ptr->max_num) {
+            return std::make_tuple(false, false);
+        }
+
+        complete_quest(this->player_ptr, this->quest_idx);
+        auto create_stairs = false;
+        if (!(this->q_ptr->flags & QUEST_FLAG_PRESET)) {
+            create_stairs = true;
+            this->player_ptr->current_floor_ptr->inside_quest = 0;
+        }
+
+        if ((this->quest_idx == QUEST_OBERON) || (this->quest_idx == QUEST_SERPENT)) {
+            this->q_ptr->status = QuestStatusType::FINISHED;
+        }
+
+        auto reward = false;
+        if (this->q_ptr->type == QuestKindType::RANDOM) {
+            reward = true;
+            this->q_ptr->status = QuestStatusType::FINISHED;
+        }
+
+        return std::make_tuple(create_stairs, reward);
+    }
+    case QuestKindType::KILL_ANY_LEVEL:
+        this->q_ptr->cur_num++;
+        if (this->q_ptr->cur_num >= this->q_ptr->max_num) {
+            complete_quest(this->player_ptr, this->quest_idx);
+            this->q_ptr->cur_num = 0;
+        }
+
+        return std::make_tuple(false, false);
+    case QuestKindType::TOWER:
+        if (!is_hostile(this->m_ptr)) {
+            return std::make_tuple(false, false);
+        }
+
+        if (this->count_all_hostile_monsters() == 1) {
+            this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
+            if ((quest[QUEST_TOWER1].status == QuestStatusType::STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QuestStatusType::STAGE_COMPLETED) && (quest[QUEST_TOWER3].status == QuestStatusType::STAGE_COMPLETED)) {
+                complete_quest(this->player_ptr, QUEST_TOWER1);
+            }
+        }
+
+        return std::make_tuple(false, false);
+    default:
+        return std::make_tuple(false, false);
+    }
 }
 
 /*!
