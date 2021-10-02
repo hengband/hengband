@@ -104,7 +104,7 @@ void player_vulnerability_flags(player_type *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    if (player_ptr->muta.has(MUTA::VULN_ELEM) || (PlayerClass(player_ptr).get_kata() == SamuraiKata::KOUKIJIN)) {
+    if (player_ptr->muta.has(MUTA::VULN_ELEM) || PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
         flags.set(TR_RES_ACID);
         flags.set(TR_RES_ELEC);
         flags.set(TR_RES_FIRE);

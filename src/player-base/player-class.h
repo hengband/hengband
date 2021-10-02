@@ -26,6 +26,7 @@ public:
     bool lose_balance();
     void break_kata(std::initializer_list<SamuraiKata> kata_list);
     SamuraiKata get_kata() const;
+    bool kata_is(SamuraiKata kata) const;
     void set_kata(SamuraiKata kata) const;
 
     void init_specific_data();

@@ -88,7 +88,7 @@ int16_t PlayerStrength::battleform_value()
 {
     int16_t result = 0;
 
-    if (PlayerClass(player_ptr).get_kata() == SamuraiKata::KOUKIJIN) {
+    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
         result += 5;
     }
 

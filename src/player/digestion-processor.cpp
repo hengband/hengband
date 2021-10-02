@@ -35,7 +35,7 @@ void starve_player(player_type *player_ptr)
         int digestion = SPEED_TO_ENERGY(player_ptr->pspeed);
         if (player_ptr->regenerate)
             digestion += 20;
-        if ((player_ptr->special_defense & (KAMAE_MASK)) || (PlayerClass(player_ptr).get_kata() != SamuraiKata::NONE))
+        if ((player_ptr->special_defense & (KAMAE_MASK)) || !PlayerClass(player_ptr).kata_is(SamuraiKata::NONE))
             digestion += 20;
         if (player_ptr->cursed.has(TRC::FAST_DIGEST))
             digestion += 30;

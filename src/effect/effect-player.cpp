@@ -79,7 +79,7 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
     std::string mes;
     if (player_ptr->blind) {
         mes = _("何かが跳ね返った！", "Something bounces!");
-    } else if (PlayerClass(player_ptr).get_kata() == SamuraiKata::FUUJIN) {
+    } else if (PlayerClass(player_ptr).kata_is(SamuraiKata::FUUJIN)) {
         mes = _("風の如く武器を振るって弾き返した！", "The attack bounces!");
     } else {
         mes = _("攻撃が跳ね返った！", "The attack bounces!");

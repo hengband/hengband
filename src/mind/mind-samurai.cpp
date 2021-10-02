@@ -315,7 +315,7 @@ void concentration(player_type *player_ptr)
         return;
     }
 
-    if (PlayerClass(player_ptr).get_kata() != SamuraiKata::NONE) {
+    if (!PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
         msg_print(_("今は構えに集中している。", "You're already concentrating on your stance."));
         return;
     }
@@ -396,7 +396,7 @@ bool choose_kata(player_type *player_ptr)
     }
 
     set_action(player_ptr, ACTION_KATA);
-    if (PlayerClass(player_ptr).get_kata() == new_kata) {
+    if (PlayerClass(player_ptr).kata_is(new_kata)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
         player_ptr->update |= (PU_BONUS | PU_MONSTERS);
@@ -423,7 +423,7 @@ int calc_attack_quality(player_type *player_ptr, player_attack_type *pa_ptr)
     if (pa_ptr->mode == HISSATSU_IAI)
         chance += 60;
 
-    if (PlayerClass(player_ptr).get_kata() == SamuraiKata::KOUKIJIN) {
+    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
         chance += 150;
     }
 
@@ -473,7 +473,7 @@ void mineuchi(player_type *player_ptr, player_attack_type *pa_ptr)
  */
 void musou_counterattack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if ((!player_ptr->counter && (PlayerClass(player_ptr).get_kata() != SamuraiKata::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
+    if ((!player_ptr->counter && !PlayerClass(player_ptr).kata_is(SamuraiKata::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
         || (player_ptr->csp <= 7))
         return;
 

@@ -1479,7 +1479,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             else if ((player_ptr->pclass == CLASS_ROGUE) && (o_ptr->weight < 50) && (player_ptr->stat_index[A_DEX] >= 30))
                 num_blow++;
 
-            if (PlayerClass(player_ptr).get_kata() == SamuraiKata::FUUJIN)
+            if (PlayerClass(player_ptr).kata_is(SamuraiKata::FUUJIN))
                 num_blow -= 1;
 
             if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
@@ -1743,11 +1743,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         ac -= 40;
     } else if (any_bits(player_ptr->special_defense, KAMAE_SEIRYU)) {
         ac -= 50;
-    } else if (pc.get_kata() == SamuraiKata::KOUKIJIN) {
+    } else if (pc.kata_is(SamuraiKata::KOUKIJIN)) {
         ac -= 50;
     }
 
-    if (player_ptr->ult_res || (pc.get_kata() == SamuraiKata::MUSOU)) {
+    if (player_ptr->ult_res || (pc.kata_is(SamuraiKata::MUSOU))) {
         ac += 100;
     } else if (player_ptr->tsubureru || player_ptr->shield || player_ptr->magicdef) {
         ac += 50;

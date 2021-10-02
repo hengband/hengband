@@ -225,7 +225,7 @@ bool PlayerClass::lose_balance()
         return false;
     }
 
-    if (this->get_kata() == SamuraiKata::NONE) {
+    if (this->kata_is(SamuraiKata::NONE)) {
         return false;
     }
 
@@ -246,6 +246,11 @@ SamuraiKata PlayerClass::get_kata() const
     }
 
     return samurai_data->kata;
+}
+
+bool PlayerClass::kata_is(SamuraiKata kata) const
+{
+    return this->get_kata() == kata;
 }
 
 /**

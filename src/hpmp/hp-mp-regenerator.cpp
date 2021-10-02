@@ -28,7 +28,7 @@ int wild_regen = 20;
  */
 void regenhp(player_type *player_ptr, int percent)
 {
-    if (PlayerClass(player_ptr).get_kata() == SamuraiKata::KOUKIJIN)
+    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN))
         return;
     if (player_ptr->action == ACTION_HAYAGAKE)
         return;
