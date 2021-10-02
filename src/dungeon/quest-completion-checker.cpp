@@ -43,24 +43,7 @@ void QuestCompletionChecker::complete()
         reward = tmp_reward;
     }
 
-    auto y = this->m_ptr->fy;
-    auto x = this->m_ptr->fx;
-    if (create_stairs) {
-        auto *g_ptr = &floor_ptr->grid_array[y][x];
-        while (cave_has_flag_bold(floor_ptr, y, x, FF::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
-            int ny;
-            int nx;
-            scatter(this->player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
-            y = ny;
-            x = nx;
-            g_ptr = &floor_ptr->grid_array[y][x];
-        }
-
-        msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-        cave_set_feat(this->player_ptr, y, x, feat_down_stair);
-        this->player_ptr->update |= PU_FLOW;
-    }
-
+    auto pos = this->make_stairs(create_stairs);
     if (!reward) {
         return;
     }
@@ -70,7 +53,7 @@ void QuestCompletionChecker::complete()
     for (auto i = 0; i < (floor_ptr->dun_level / 15) + 1; i++) {
         o_ptr->wipe();
         make_object(this->player_ptr, o_ptr, AM_GOOD | AM_GREAT);
-        (void)drop_near(this->player_ptr, o_ptr, -1, y, x);
+        (void)drop_near(this->player_ptr, o_ptr, -1, pos.y, pos.x);
     }
 }
 
@@ -214,4 +197,29 @@ int QuestCompletionChecker::count_all_hostile_monsters()
     }
 
     return number_mon;
+}
+
+Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
+{
+    auto y = this->m_ptr->fy;
+    auto x = this->m_ptr->fx;
+    if (!create_stairs) {
+        return Pos2D(y, x);
+    }
+
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    while (cave_has_flag_bold(floor_ptr, y, x, FF::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
+        int ny;
+        int nx;
+        scatter(this->player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
+        y = ny;
+        x = nx;
+        g_ptr = &floor_ptr->grid_array[y][x];
+    }
+
+    msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
+    cave_set_feat(this->player_ptr, y, x, feat_down_stair);
+    set_bits(this->player_ptr->update, PU_FLOW);
+    return Pos2D(y, x);
 }

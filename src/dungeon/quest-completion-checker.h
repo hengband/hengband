@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "util/point-2d.h"
 #include <tuple>
 
 struct monster_type;
@@ -22,4 +23,5 @@ private:
     int count_all_hostile_monsters();
     void set_quest_idx();
     std::tuple<bool, bool> switch_completion();
+    Pos2D make_stairs(const bool create_stairs);
 };
