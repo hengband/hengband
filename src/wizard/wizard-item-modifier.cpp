@@ -198,20 +198,20 @@ void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
  */
 void wiz_modify_item_activation(player_type *player_ptr)
 {
-    concptr q = "Which object? ";
-    concptr s = "Nothing to do with.";
+    auto q = _("どのアイテムの発動を変更しますか？ ", "Which object? ");
+    auto s = _("発動を変更するアイテムがない。", "Nothing to do with.");
     OBJECT_IDX item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
-    char tmp[80] = "";
-    sprintf(tmp, "Artifact ID (1-%d): ", enum2i(RandomArtActType::MAX));
-    char tmp_val[10] = "";
-    if (!get_string(tmp, tmp_val, 3))
+    int val;
+    if (!get_value("Activation ID", enum2i(RandomArtActType::NONE), enum2i(RandomArtActType::MAX), &val)) {
         return;
+    }
 
-    auto act_idx = i2enum<RandomArtActType>(atoi(tmp_val));
+    auto act_idx = i2enum<RandomArtActType>(val);
     if ((act_idx <= RandomArtActType::NONE) || (act_idx > RandomArtActType::MAX)) {
         msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), enum2i(RandomArtActType::MAX) - 1);
         return;
