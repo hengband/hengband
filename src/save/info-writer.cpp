@@ -49,7 +49,8 @@ void wr_options(save_type type)
     for (int i = 0; i < 4; i++)
         wr_u32b(0L);
 
-    wr_byte(delay_factor);
+    wr_u32b(delay_factor);
+
     wr_byte(hitpoint_warn);
     wr_byte(mana_warn);
 

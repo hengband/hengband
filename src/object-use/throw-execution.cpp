@@ -70,7 +70,7 @@ ObjectThrowEntity::ObjectThrowEntity(player_type *player_ptr, object_type *q_ptr
     , player_ptr(player_ptr)
     , shuriken(shuriken)
     , mult(mult)
-    , msec(delay_factor_val * delay_factor_val * delay_factor_val)
+    , msec(delay_factor_val)
     , boomerang(boomerang)
 {
 }

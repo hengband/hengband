@@ -2,6 +2,7 @@
 #include "autopick/autopick.h"
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/show-file.h"
 #include "core/window-redrawer.h"
@@ -546,23 +547,9 @@ void do_cmd_options(player_type *player_ptr)
         case 'D':
         case 'd': {
             clear_from(18);
-            prt(_("コマンド: 基本ウェイト量", "Command: Base Delay Factor"), 19, 0);
-            while (true) {
-                int msec = delay_factor * delay_factor * delay_factor;
-                prt(format(_("現在のウェイト: %d (%dミリ秒)", "Current base delay factor: %d (%d msec)"), delay_factor, msec), 22, 0);
-                prt(_("ウェイト (0-9) ESCで決定: ", "Delay Factor (0-9 or ESC to accept): "), 20, 0);
-                k = inkey();
-                if (k == ESCAPE)
-                    break;
-                else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), nullptr, 0, 0);
-                    term_clear();
-                } else if (isdigit(k))
-                    delay_factor = D2I(k);
-                else
-                    bell();
-            }
-
+            prt(format(_("現在ウェイト量(msec): %d", "Current Delay Factor(msec): %d"), delay_factor), 19, 0);
+            (void)get_value(_("コマンド: ウェイト量(msec)", "Command: Delay Factor(msec)"), 0, 1000, &delay_factor);
+            clear_from(18);
             break;
         }
         case 'H':

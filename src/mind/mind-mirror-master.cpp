@@ -108,7 +108,6 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
-    int msec = delay_factor * delay_factor * delay_factor;
 
     /* 三角形の頂点 */
     POSITION point_x[3];
@@ -173,7 +172,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                         print_rel(player_ptr, PICT_C(p), PICT_A(p), y, x);
                         move_cursor_relative(y, x);
                         term_fresh();
-                        term_xtra(TERM_XTRA_DELAY, msec);
+                        term_xtra(TERM_XTRA_DELAY, delay_factor);
                     }
                 }
             }
