@@ -75,8 +75,8 @@ static concptr item_activation_aux(object_type *o_ptr)
         return _("未定義", "something undefined");
     }
 
-    concptr desc = act_ptr->desc;
-    switch (act_ptr->index) {
+    concptr desc = act_ptr.value()->desc;
+    switch (act_ptr.value()->index) {
     case ACT_BR_FIRE:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
             desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
@@ -125,14 +125,14 @@ static concptr item_activation_aux(object_type *o_ptr)
     }
 
     /* Timeout description */
-    int constant = act_ptr->timeout.constant;
-    int dice = act_ptr->timeout.dice;
+    int constant = act_ptr.value()->timeout.constant;
+    int dice = act_ptr.value()->timeout.dice;
     if (constant == 0 && dice == 0) {
         /* We can activate it every turn */
         strcpy(timeout, _("いつでも", "every turn"));
     } else if (constant < 0) {
         /* Activations that have special timeout */
-        switch (act_ptr->index) {
+        switch (act_ptr.value()->index) {
         case ACT_BR_FIRE:
             sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250);
             break;

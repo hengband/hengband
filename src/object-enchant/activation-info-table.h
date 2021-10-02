@@ -3,9 +3,10 @@
 #include "system/angband.h"
 #include <vector>
 
+enum random_art_activation_type : uint8_t;
 struct activation_type {
     concptr flag;
-    byte index;
+    random_art_activation_type index;
     byte level;
     int32_t value;
     struct {

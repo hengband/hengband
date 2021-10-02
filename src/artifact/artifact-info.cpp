@@ -45,12 +45,12 @@ int activation_index(const object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果構造体のポインタを返す
  */
-const std::optional<activation_type> find_activation_info(const object_type *o_ptr)
+std::optional<const activation_type *> find_activation_info(const object_type *o_ptr)
 {
     const auto index = activation_index(o_ptr);
-    for (auto &p : activation_info) {
+    for (const auto &p : activation_info) {
         if (p.index == index) {
-            return p;
+            return &p;
         }
     }
 
