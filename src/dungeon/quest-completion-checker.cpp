@@ -109,7 +109,7 @@ std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
             return std::make_tuple(false, false);
         }
 
-        if (this->q_ptr->flags & QUEST_FLAG_SILENT) {
+        if (any_bits(this->q_ptr->flags, QUEST_FLAG_SILENT)) {
             this->q_ptr->status = QuestStatusType::FINISHED;
         } else {
             complete_quest(this->player_ptr, this->quest_idx);
@@ -129,7 +129,7 @@ std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
 
         complete_quest(this->player_ptr, this->quest_idx);
         auto create_stairs = false;
-        if (!(this->q_ptr->flags & QUEST_FLAG_PRESET)) {
+        if (none_bits(this->q_ptr->flags, QUEST_FLAG_PRESET)) {
             create_stairs = true;
             this->player_ptr->current_floor_ptr->inside_quest = 0;
         }
@@ -161,7 +161,10 @@ std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
 
         if (this->count_all_hostile_monsters() == 1) {
             this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
-            if ((quest[QUEST_TOWER1].status == QuestStatusType::STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QuestStatusType::STAGE_COMPLETED) && (quest[QUEST_TOWER3].status == QuestStatusType::STAGE_COMPLETED)) {
+            auto is_tower_completed = quest[QUEST_TOWER1].status == QuestStatusType::STAGE_COMPLETED;
+            is_tower_completed &= quest[QUEST_TOWER2].status == QuestStatusType::STAGE_COMPLETED;
+            is_tower_completed &= quest[QUEST_TOWER3].status == QuestStatusType::STAGE_COMPLETED;
+            if (is_tower_completed) {
                 complete_quest(this->player_ptr, QUEST_TOWER1);
             }
         }
