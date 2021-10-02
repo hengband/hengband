@@ -123,8 +123,8 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     tmp8u = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST;
     wr_byte(tmp8u);
 
-    for (int i = 0; i < max_q_idx; i++) {
-        quest_type *const q_ptr = &quest[i];
+    for (short i = 0; i < max_q_idx; i++) {
+        auto *const q_ptr = &quest[i];
         wr_s16b(q_ptr->status);
         wr_s16b((int16_t)q_ptr->level);
         wr_byte((byte)q_ptr->complev);

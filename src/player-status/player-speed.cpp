@@ -311,7 +311,7 @@ int16_t PlayerSpeed::riding_value()
  */
 int16_t PlayerSpeed::inventory_weight_value()
 {
-    auto result = 0;
+    int16_t result = 0;
     auto weight = calc_inventory_weight(this->player_ptr);
     if (this->player_ptr->riding) {
         auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
