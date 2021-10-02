@@ -16,6 +16,7 @@
 #include "core/player-update-types.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -56,7 +57,7 @@ void set_action(player_type *player_ptr, uint8_t typ)
     }
     case ACTION_KAMAE: {
         msg_print(_("構えをといた。", "You stop assuming the special stance."));
-        player_ptr->special_defense &= ~(KAMAE_MASK);
+        PlayerClass(player_ptr).set_kamae(MonkKamae::NONE);
         break;
     }
     case ACTION_KATA: {

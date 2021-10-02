@@ -60,6 +60,7 @@
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-basic-statistics.h"
@@ -353,7 +354,7 @@ static void update_bonuses(player_type *player_ptr)
 
     player_ptr->lite = has_lite(player_ptr);
 
-    if (any_bits(player_ptr->special_defense, KAMAE_MASK)) {
+    if (!PlayerClass(player_ptr).kamae_is(MonkKamae::NONE)) {
         if (none_bits(empty_hands_status, EMPTY_HAND_MAIN)) {
             set_action(player_ptr, ACTION_NONE);
         }
@@ -1526,13 +1527,14 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
         if (heavy_armor(player_ptr) && (player_ptr->pclass != CLASS_BERSERKER))
             num_blow /= 2;
 
-        if (any_bits(player_ptr->special_defense, KAMAE_GENBU)) {
+        PlayerClass pc(player_ptr);
+        if (pc.kamae_is(MonkKamae::GENBU)) {
             num_blow -= 2;
             if ((player_ptr->pclass == CLASS_MONK) && (player_ptr->lev > 42))
                 num_blow--;
             if (num_blow < 0)
                 num_blow = 0;
-        } else if (any_bits(player_ptr->special_defense, KAMAE_SUZAKU)) {
+        } else if (pc.kamae_is(MonkKamae::SUZAKU)) {
             num_blow /= 2;
         }
 
@@ -1737,11 +1739,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
     }
 
     PlayerClass pc(player_ptr);
-    if (any_bits(player_ptr->special_defense, KAMAE_GENBU)) {
+    if (pc.kamae_is(MonkKamae::GENBU)) {
         ac += (player_ptr->lev * player_ptr->lev) / 50;
-    } else if (any_bits(player_ptr->special_defense, KAMAE_BYAKKO)) {
+    } else if (pc.kamae_is(MonkKamae::BYAKKO)) {
         ac -= 40;
-    } else if (any_bits(player_ptr->special_defense, KAMAE_SEIRYU)) {
+    } else if (pc.kamae_is(MonkKamae::SEIRYU)) {
         ac -= 50;
     } else if (pc.kata_is(SamuraiKata::KOUKIJIN)) {
         ac -= 50;
@@ -2084,7 +2086,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
     }
 
     // 朱雀の構えをとっているとき、格闘ダメージに -(レベル)/6 の修正を得る。
-    if (any_bits(player_ptr->special_defense, KAMAE_SUZAKU)) {
+    if (PlayerClass(player_ptr).kamae_is(MonkKamae::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             damage -= (player_ptr->lev / 6);
         }
@@ -2310,7 +2312,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
     hit -= calc_double_weapon_penalty(player_ptr, slot);
 
     // 朱雀の構えをとっているとき、格闘命中に -(レベル)/3 の修正を得る。
-    if (any_bits(player_ptr->special_defense, KAMAE_SUZAKU)) {
+    if (PlayerClass(player_ptr).kamae_is(MonkKamae::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             hit -= (player_ptr->lev / 3);
         }

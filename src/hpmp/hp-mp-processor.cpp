@@ -23,6 +23,7 @@
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player-info/samurai-data-type.h"
@@ -285,7 +286,7 @@ void process_player_hp_mp(player_type *player_ptr)
         if (player_ptr->regenerate) {
             regen_amount = regen_amount * 2;
         }
-        if ((player_ptr->special_defense & (KAMAE_MASK)) || !PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
+        if (!PlayerClass(player_ptr).kamae_is(MonkKamae::NONE) || !PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
             regen_amount /= 2;
         }
         if (player_ptr->cursed.has(TRC::SLOW_REGEN)) {

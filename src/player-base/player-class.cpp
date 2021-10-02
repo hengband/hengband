@@ -14,6 +14,7 @@
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
@@ -200,6 +201,22 @@ TrFlags PlayerClass::form_tr_flags() const
         break;
     }
 
+    switch (this->get_kamae()) {
+    case MonkKamae::GENBU:
+        flags.set(TR_REFLECT);
+        break;
+    case MonkKamae::SUZAKU:
+        flags.set(TR_LEVITATION);
+        break;
+    case MonkKamae::SEIRYU:
+        flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
+        flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
+        flags.set(TR_LEVITATION);
+        break;
+    default:
+        break;
+    }
+
     return flags;
 }
 
@@ -284,6 +301,31 @@ void PlayerClass::set_kata(SamuraiKata kata) const
     samurai_data->kata = kata;
 }
 
+MonkKamae PlayerClass::get_kamae() const
+{
+    auto monk_data = this->get_specific_data<monk_data_type>();
+    if (!monk_data) {
+        return MonkKamae::NONE;
+    }
+
+    return monk_data->kamae;
+}
+
+bool PlayerClass::kamae_is(MonkKamae kamae) const
+{
+    return this->get_kamae() == kamae;
+}
+
+void PlayerClass::set_kamae(MonkKamae kamae) const
+{
+    auto monk_data = this->get_specific_data<monk_data_type>();
+    if (!monk_data) {
+        return;
+    }
+
+    monk_data->kamae = kamae;
+}
+
 /**
  * @brief プレイヤーの職業にで使用する職業固有データ領域を初期化する
  * @details 事前条件: player_type の職業や領域が決定済みであること
@@ -314,6 +356,9 @@ void PlayerClass::init_specific_data()
         break;
     case CLASS_SAMURAI:
         this->player_ptr->class_specific_data = std::make_shared<samurai_data_type>();
+        break;
+    case CLASS_MONK:
+        this->player_ptr->class_specific_data = std::make_shared<monk_data_type>();
         break;
     case CLASS_HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {

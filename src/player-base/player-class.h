@@ -10,6 +10,7 @@
 #include <variant>
 
 enum class SamuraiKata : uint8_t;
+enum class MonkKamae : uint8_t;
 
 class PlayerClass {
 public:
@@ -28,6 +29,10 @@ public:
     SamuraiKata get_kata() const;
     bool kata_is(SamuraiKata kata) const;
     void set_kata(SamuraiKata kata) const;
+
+    MonkKamae get_kamae() const;
+    bool kamae_is(MonkKamae kamae) const;
+    void set_kamae(MonkKamae kamae) const;
 
     void init_specific_data();
     template <typename T>

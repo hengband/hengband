@@ -11,5 +11,5 @@ typedef struct blow_stance {
     concptr info;
 } blow_stance;
 
-extern const blow_stance monk_stances[MAX_KAMAE];
+extern const std::vector<blow_stance> monk_stances;
 extern const std::vector<blow_stance> samurai_stances;

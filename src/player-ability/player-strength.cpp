@@ -3,6 +3,7 @@
 #include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
@@ -88,13 +89,14 @@ int16_t PlayerStrength::battleform_value()
 {
     int16_t result = 0;
 
-    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
+    PlayerClass pc(player_ptr);
+    if (pc.kata_is(SamuraiKata::KOUKIJIN)) {
         result += 5;
     }
 
-    if (any_bits(this->player_ptr->special_defense, KAMAE_BYAKKO)) {
+    if (pc.kamae_is(MonkKamae::BYAKKO)) {
         result += 2;
-    } else if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU)) {
+    } else if (pc.kamae_is(MonkKamae::SUZAKU)) {
         result -= 2;
     }
 

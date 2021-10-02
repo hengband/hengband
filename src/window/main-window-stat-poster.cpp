@@ -6,6 +6,7 @@
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
@@ -188,26 +189,26 @@ void print_state(player_type *player_ptr)
         break;
     }
     case ACTION_KAMAE: {
-        int i;
-        for (i = 0; i < MAX_KAMAE; i++)
-            if (player_ptr->special_defense & (KAMAE_GENBU << i))
+        if (auto kamae = PlayerClass(player_ptr).get_kamae();
+            kamae != MonkKamae::NONE) {
+            switch (kamae) {
+            case MonkKamae::GENBU:
+                attr = TERM_GREEN;
                 break;
-        switch (i) {
-        case 0:
-            attr = TERM_GREEN;
-            break;
-        case 1:
-            attr = TERM_WHITE;
-            break;
-        case 2:
-            attr = TERM_L_BLUE;
-            break;
-        case 3:
-            attr = TERM_L_RED;
-            break;
+            case MonkKamae::BYAKKO:
+                attr = TERM_WHITE;
+                break;
+            case MonkKamae::SEIRYU:
+                attr = TERM_L_BLUE;
+                break;
+            case MonkKamae::SUZAKU:
+                attr = TERM_L_RED;
+                break;
+            default:
+                break;
+            }
+            strcpy(text, monk_stances[enum2i(kamae) - 1].desc);
         }
-
-        strcpy(text, monk_stances[i].desc);
         break;
     }
     case ACTION_KATA: {

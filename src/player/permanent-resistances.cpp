@@ -74,31 +74,6 @@ static void add_personality_flags(player_type *player_ptr, TrFlags &flags)
 }
 
 /*!
- * @brief 剣術家の型による耐性フラグを返す
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param flags 耐性フラグの配列
- * @todo 最終的にplayer-status系列と統合する
- */
-static void add_kata_flags(player_type *player_ptr, TrFlags &flags)
-{
-    if (player_ptr->special_defense & KAMAE_GENBU)
-        flags.set(TR_REFLECT);
-    if (player_ptr->special_defense & KAMAE_SUZAKU)
-        flags.set(TR_LEVITATION);
-    if (player_ptr->special_defense & KAMAE_SEIRYU) {
-        flags.set(TR_RES_FIRE);
-        flags.set(TR_RES_COLD);
-        flags.set(TR_RES_ACID);
-        flags.set(TR_RES_ELEC);
-        flags.set(TR_RES_POIS);
-        flags.set(TR_LEVITATION);
-        flags.set(TR_SH_FIRE);
-        flags.set(TR_SH_ELEC);
-        flags.set(TR_SH_COLD);
-    }
-}
-
-/*!
  * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
  * Prints ratings on certain abilities
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -116,7 +91,6 @@ void player_flags(player_type *player_ptr, TrFlags &flags)
 
     add_mutation_flags(player_ptr, flags);
     add_personality_flags(player_ptr, flags);
-    add_kata_flags(player_ptr, flags);
 }
 
 void riding_flags(player_type *player_ptr, TrFlags &flags, TrFlags &negative_flags)
