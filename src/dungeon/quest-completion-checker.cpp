@@ -31,80 +31,85 @@ QuestCompletionChecker::QuestCompletionChecker(player_type *player_ptr, monster_
  */
 void QuestCompletionChecker::complete()
 {
-    POSITION y = m_ptr->fy;
-    POSITION x = m_ptr->fx;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    QUEST_IDX quest_num = floor_ptr->inside_quest;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto quest_num = floor_ptr->inside_quest;
     if (!quest_num) {
-        QUEST_IDX i;
+        short i;
         for (i = max_q_idx - 1; i > 0; i--) {
-            quest_type *const q_ptr = &quest[i];
-            if (q_ptr->status != QUEST_STATUS_TAKEN)
+            auto *const q_ptr = &quest[i];
+            if (q_ptr->status != QUEST_STATUS_TAKEN) {
                 continue;
+            }
 
-            if (q_ptr->flags & QUEST_FLAG_PRESET)
+            if (q_ptr->flags & QUEST_FLAG_PRESET) {
                 continue;
+            }
 
-            if ((q_ptr->level != floor_ptr->dun_level) && (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL))
+            if ((q_ptr->level != floor_ptr->dun_level) && (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL)) {
                 continue;
+            }
 
-            if ((q_ptr->type == QUEST_TYPE_FIND_ARTIFACT) || (q_ptr->type == QUEST_TYPE_FIND_EXIT))
+            if ((q_ptr->type == QUEST_TYPE_FIND_ARTIFACT) || (q_ptr->type == QUEST_TYPE_FIND_EXIT)) {
                 continue;
+            }
 
-            if ((q_ptr->type == QUEST_TYPE_KILL_NUMBER) || (q_ptr->type == QUEST_TYPE_TOWER) || (q_ptr->type == QUEST_TYPE_KILL_ALL))
+            if ((q_ptr->type == QUEST_TYPE_KILL_NUMBER) || (q_ptr->type == QUEST_TYPE_TOWER) || (q_ptr->type == QUEST_TYPE_KILL_ALL)) {
                 break;
+            }
 
-            if (((q_ptr->type == QUEST_TYPE_KILL_LEVEL) || (q_ptr->type == QUEST_TYPE_KILL_ANY_LEVEL) || (q_ptr->type == QUEST_TYPE_RANDOM))
-                && (q_ptr->r_idx == m_ptr->r_idx))
+            if (((q_ptr->type == QUEST_TYPE_KILL_LEVEL) || (q_ptr->type == QUEST_TYPE_KILL_ANY_LEVEL) || (q_ptr->type == QUEST_TYPE_RANDOM)) && (q_ptr->r_idx == this->m_ptr->r_idx)) {
                 break;
+            }
         }
 
         quest_num = i;
     }
 
-    bool create_stairs = false;
-    bool reward = false;
-    if (quest_num && (quest[quest_num].status == QUEST_STATUS_TAKEN)) {
-        quest_type *const q_ptr = &quest[quest_num];
+    auto create_stairs = false;
+    auto reward = false;
+    if ((quest_num > 0) && (quest[quest_num].status == QUEST_STATUS_TAKEN)) {
+        auto *const q_ptr = &quest[quest_num];
         switch (q_ptr->type) {
-        case QUEST_TYPE_KILL_NUMBER: {
+        case QUEST_TYPE_KILL_NUMBER:
             q_ptr->cur_num++;
             if (q_ptr->cur_num >= q_ptr->num_mon) {
-                complete_quest(player_ptr, quest_num);
+                complete_quest(this->player_ptr, quest_num);
                 q_ptr->cur_num = 0;
             }
 
             break;
-        }
-        case QUEST_TYPE_KILL_ALL: {
-            if (!is_hostile(m_ptr) || this->count_all_hostile_monsters() != 1)
+        case QUEST_TYPE_KILL_ALL:
+            if (!is_hostile(this->m_ptr) || (this->count_all_hostile_monsters() != 1)) {
                 break;
+            }
 
             if (q_ptr->flags & QUEST_FLAG_SILENT) {
                 q_ptr->status = QUEST_STATUS_FINISHED;
             } else {
-                complete_quest(player_ptr, quest_num);
+                complete_quest(this->player_ptr, quest_num);
             }
 
             break;
-        }
         case QUEST_TYPE_KILL_LEVEL:
-        case QUEST_TYPE_RANDOM: {
-            if (q_ptr->r_idx != m_ptr->r_idx)
+        case QUEST_TYPE_RANDOM:
+            if (q_ptr->r_idx != this->m_ptr->r_idx) {
                 break;
+            }
 
             q_ptr->cur_num++;
-            if (q_ptr->cur_num < q_ptr->max_num)
+            if (q_ptr->cur_num < q_ptr->max_num) {
                 break;
+            }
 
-            complete_quest(player_ptr, quest_num);
+            complete_quest(this->player_ptr, quest_num);
             if (!(q_ptr->flags & QUEST_FLAG_PRESET)) {
                 create_stairs = true;
                 floor_ptr->inside_quest = 0;
             }
 
-            if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT))
+            if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT)) {
                 q_ptr->status = QUEST_STATUS_FINISHED;
+            }
 
             if (q_ptr->type == QUEST_TYPE_RANDOM) {
                 reward = true;
@@ -112,60 +117,61 @@ void QuestCompletionChecker::complete()
             }
 
             break;
-        }
-        case QUEST_TYPE_KILL_ANY_LEVEL: {
+        case QUEST_TYPE_KILL_ANY_LEVEL:
             q_ptr->cur_num++;
             if (q_ptr->cur_num >= q_ptr->max_num) {
-                complete_quest(player_ptr, quest_num);
+                complete_quest(this->player_ptr, quest_num);
                 q_ptr->cur_num = 0;
             }
 
             break;
-        }
-        case QUEST_TYPE_TOWER: {
-            if (!is_hostile(m_ptr))
+        case QUEST_TYPE_TOWER:
+            if (!is_hostile(this->m_ptr)) {
                 break;
+            }
 
             if (this->count_all_hostile_monsters() == 1) {
                 q_ptr->status = QUEST_STATUS_STAGE_COMPLETED;
-
                 if ((quest[QUEST_TOWER1].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QUEST_STATUS_STAGE_COMPLETED)
                     && (quest[QUEST_TOWER3].status == QUEST_STATUS_STAGE_COMPLETED)) {
-
-                    complete_quest(player_ptr, QUEST_TOWER1);
+                    complete_quest(this->player_ptr, QUEST_TOWER1);
                 }
             }
 
             break;
-        }
+        default:
+            break;
         }
     }
 
+    auto y = this->m_ptr->fy;
+    auto x = this->m_ptr->fx;
     if (create_stairs) {
-        POSITION ny, nx;
         auto *g_ptr = &floor_ptr->grid_array[y][x];
         while (cave_has_flag_bold(floor_ptr, y, x, FF::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
-            scatter(player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
+            int ny;
+            int nx;
+            scatter(this->player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
             y = ny;
             x = nx;
             g_ptr = &floor_ptr->grid_array[y][x];
         }
 
         msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-        cave_set_feat(player_ptr, y, x, feat_down_stair);
-        player_ptr->update |= PU_FLOW;
+        cave_set_feat(this->player_ptr, y, x, feat_down_stair);
+        this->player_ptr->update |= PU_FLOW;
     }
 
-    if (!reward)
+    if (!reward) {
         return;
+    }
 
     object_type forge;
-    object_type *o_ptr;
-    for (int i = 0; i < (floor_ptr->dun_level / 15) + 1; i++) {
-        o_ptr = &forge;
+    auto *o_ptr = &forge;
+    for (auto i = 0; i < (floor_ptr->dun_level / 15) + 1; i++) {
         o_ptr->wipe();
-        make_object(player_ptr, o_ptr, AM_GOOD | AM_GREAT);
-        (void)drop_near(player_ptr, o_ptr, -1, y, x);
+        make_object(this->player_ptr, o_ptr, AM_GOOD | AM_GREAT);
+        (void)drop_near(this->player_ptr, o_ptr, -1, y, x);
     }
 }
 
