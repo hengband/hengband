@@ -143,10 +143,6 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
  */
 spoiler_output_status spoil_fixed_artifact(concptr fname)
 {
-    player_type dummy;
-    object_type forge;
-    object_type *q_ptr;
-    obj_desc_list artifact;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
@@ -155,24 +151,26 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
     }
 
     print_header();
-    for (int i = 0; group_artifact[i].tval; i++) {
-        if (group_artifact[i].name) {
-            spoiler_blanklines(2);
-            spoiler_underline(group_artifact[i].name);
-            spoiler_blanklines(1);
-        }
+    for (const auto &[tval_list, name] : group_artifact_list) {
+        spoiler_blanklines(2);
+        spoiler_underline(name);
+        spoiler_blanklines(1);
 
-        for (const auto &a_ref : a_info) {
-            if (a_ref.idx == 0 || a_ref.tval != group_artifact[i].tval)
-                continue;
+        for (auto tval : tval_list) {
+            for (const auto &a_ref : a_info) {
+                if (a_ref.tval != tval)
+                    continue;
 
-            q_ptr = &forge;
-            q_ptr->wipe();
-            if (!make_fake_artifact(q_ptr, a_ref.idx))
-                continue;
+                object_type obj;
+                obj.wipe();
+                if (!make_fake_artifact(&obj, a_ref.idx))
+                    continue;
 
-            object_analyze(&dummy, q_ptr, &artifact);
-            spoiler_print_art(&artifact);
+                player_type dummy;
+                obj_desc_list artifact;
+                object_analyze(&dummy, &obj, &artifact);
+                spoiler_print_art(&artifact);
+            }
         }
     }
 
