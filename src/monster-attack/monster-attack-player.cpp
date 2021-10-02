@@ -436,10 +436,10 @@ static bool process_monster_blows(player_type *player_ptr, monap_type *monap_ptr
 
             // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
             check_fall_off_horse(player_ptr, monap_ptr);
-            if (player_ptr->special_defense & NINJA_KAWARIMI) {
-                // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
-                if (kawarimi(player_ptr, false))
-                    return true;
+
+            // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
+            if (kawarimi(player_ptr, false)) {
+                return true;
             }
         } else {
             // 命中しなかった。回避時の処理、思い出処理を行う。
@@ -498,9 +498,8 @@ bool make_attack_normal(player_type *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    auto is_kawarimi = any_bits(player_ptr->special_defense, NINJA_KAWARIMI);
     auto can_activate_kawarimi = randint0(55) < (player_ptr->lev * 3 / 5 + 20);
-    if (is_kawarimi && can_activate_kawarimi && kawarimi(player_ptr, true)) {
+    if (can_activate_kawarimi && kawarimi(player_ptr, true)) {
         return true;
     }
 

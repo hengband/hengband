@@ -68,6 +68,10 @@
  */
 bool kawarimi(player_type *player_ptr, bool success)
 {
+    if (none_bits(player_ptr->special_defense, NINJA_KAWARIMI)) {
+        return false;
+    }
+
     object_type forge;
     object_type *q_ptr = &forge;
     if (player_ptr->is_dead) {
