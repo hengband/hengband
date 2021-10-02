@@ -77,6 +77,8 @@ static concptr item_activation_aux(object_type *o_ptr)
 
     concptr desc = act_ptr.value()->desc;
     switch (act_ptr.value()->index) {
+    case ACT_NONE:
+        break;
     case ACT_BR_FIRE:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
             desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
@@ -121,6 +123,8 @@ static concptr item_activation_aux(object_type *o_ptr)
         break;
     case ACT_RESIST_POIS:
         desc = _("一時的な毒への耐性", "temporary resist elec");
+        break;
+    default:
         break;
     }
 
