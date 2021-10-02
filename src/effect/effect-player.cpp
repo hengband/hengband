@@ -123,8 +123,7 @@ static process_result check_continue_player_effect(player_type *player_ptr, effe
         return PROCESS_FALSE;
     }
 
-    auto is_kawarimi = any_bits(player_ptr->special_defense, NINJA_KAWARIMI);
-    is_kawarimi &= kawarimi(player_ptr, true);
+    auto is_kawarimi = kawarimi(player_ptr, true);
     auto is_effective = ep_ptr->dam > 0;
     is_effective &= randint0(55) < (player_ptr->lev * 3 / 5 + 20);
     is_effective &= ep_ptr->who > 0;
@@ -222,7 +221,7 @@ bool affect_player(MONSTER_IDX who, player_type *player_ptr, concptr who_name, i
     }
 
     disturb(player_ptr, true, true);
-    if ((player_ptr->special_defense & NINJA_KAWARIMI) && ep_ptr->dam && ep_ptr->who && (ep_ptr->who != player_ptr->riding)) {
+    if (ep_ptr->dam && ep_ptr->who && (ep_ptr->who != player_ptr->riding)) {
         (void)kawarimi(player_ptr, false);
     }
 
