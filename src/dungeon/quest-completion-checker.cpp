@@ -37,13 +37,13 @@ void QuestCompletionChecker::complete()
     auto create_stairs = false;
     auto reward = false;
     if ((this->quest_idx > 0) && (quest[this->quest_idx].status == QuestStatusType::TAKEN)) {
-        auto *const q_ptr = &quest[this->quest_idx];
-        switch (q_ptr->type) {
+        this->q_ptr = &quest[this->quest_idx];
+        switch (this->q_ptr->type) {
         case QuestKindType::KILL_NUMBER:
-            q_ptr->cur_num++;
-            if (q_ptr->cur_num >= q_ptr->num_mon) {
+            this->q_ptr->cur_num++;
+            if (this->q_ptr->cur_num >= this->q_ptr->num_mon) {
                 complete_quest(this->player_ptr, this->quest_idx);
-                q_ptr->cur_num = 0;
+                this->q_ptr->cur_num = 0;
             }
 
             break;
@@ -52,8 +52,8 @@ void QuestCompletionChecker::complete()
                 break;
             }
 
-            if (q_ptr->flags & QUEST_FLAG_SILENT) {
-                q_ptr->status = QuestStatusType::FINISHED;
+            if (this->q_ptr->flags & QUEST_FLAG_SILENT) {
+                this->q_ptr->status = QuestStatusType::FINISHED;
             } else {
                 complete_quest(this->player_ptr, this->quest_idx);
             }
@@ -61,36 +61,36 @@ void QuestCompletionChecker::complete()
             break;
         case QuestKindType::KILL_LEVEL:
         case QuestKindType::RANDOM:
-            if (q_ptr->r_idx != this->m_ptr->r_idx) {
+            if (this->q_ptr->r_idx != this->m_ptr->r_idx) {
                 break;
             }
 
-            q_ptr->cur_num++;
-            if (q_ptr->cur_num < q_ptr->max_num) {
+            this->q_ptr->cur_num++;
+            if (this->q_ptr->cur_num < this->q_ptr->max_num) {
                 break;
             }
 
             complete_quest(this->player_ptr, this->quest_idx);
-            if (!(q_ptr->flags & QUEST_FLAG_PRESET)) {
+            if (!(this->q_ptr->flags & QUEST_FLAG_PRESET)) {
                 create_stairs = true;
                 floor_ptr->inside_quest = 0;
             }
 
             if ((this->quest_idx == QUEST_OBERON) || (this->quest_idx == QUEST_SERPENT)) {
-                q_ptr->status = QuestStatusType::FINISHED;
+                this->q_ptr->status = QuestStatusType::FINISHED;
             }
 
-            if (q_ptr->type == QuestKindType::RANDOM) {
+            if (this->q_ptr->type == QuestKindType::RANDOM) {
                 reward = true;
-                q_ptr->status = QuestStatusType::FINISHED;
+                this->q_ptr->status = QuestStatusType::FINISHED;
             }
 
             break;
         case QuestKindType::KILL_ANY_LEVEL:
-            q_ptr->cur_num++;
-            if (q_ptr->cur_num >= q_ptr->max_num) {
+            this->q_ptr->cur_num++;
+            if (this->q_ptr->cur_num >= this->q_ptr->max_num) {
                 complete_quest(this->player_ptr, this->quest_idx);
-                q_ptr->cur_num = 0;
+                this->q_ptr->cur_num = 0;
             }
 
             break;
@@ -100,7 +100,7 @@ void QuestCompletionChecker::complete()
             }
 
             if (this->count_all_hostile_monsters() == 1) {
-                q_ptr->status = QuestStatusType::STAGE_COMPLETED;
+                this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
                 if ((quest[QUEST_TOWER1].status == QuestStatusType::STAGE_COMPLETED) && (quest[QUEST_TOWER2].status == QuestStatusType::STAGE_COMPLETED)
                     && (quest[QUEST_TOWER3].status == QuestStatusType::STAGE_COMPLETED)) {
                     complete_quest(this->player_ptr, QUEST_TOWER1);
@@ -154,32 +154,32 @@ void QuestCompletionChecker::set_quest_idx()
 
     short i;
     for (i = max_q_idx - 1; i > 0; i--) {
-        auto *const q_ptr = &quest[i];
-        if (q_ptr->status != QuestStatusType::TAKEN) {
+        auto *const quest_ptr = &quest[i];
+        if (quest_ptr->status != QuestStatusType::TAKEN) {
             continue;
         }
 
-        if (any_bits(q_ptr->flags, QUEST_FLAG_PRESET)) {
+        if (any_bits(quest_ptr->flags, QUEST_FLAG_PRESET)) {
             continue;
         }
 
-        if ((q_ptr->level != floor_ptr->dun_level) && (q_ptr->type != QuestKindType::KILL_ANY_LEVEL)) {
+        if ((quest_ptr->level != floor_ptr->dun_level) && (quest_ptr->type != QuestKindType::KILL_ANY_LEVEL)) {
             continue;
         }
 
-        if ((q_ptr->type == QuestKindType::FIND_ARTIFACT) || (q_ptr->type == QuestKindType::FIND_EXIT)) {
+        if ((quest_ptr->type == QuestKindType::FIND_ARTIFACT) || (quest_ptr->type == QuestKindType::FIND_EXIT)) {
             continue;
         }
 
-        auto kill_them_all = q_ptr->type == QuestKindType::KILL_NUMBER;
-        kill_them_all |= q_ptr->type == QuestKindType::TOWER;
-        kill_them_all |= q_ptr->type == QuestKindType::KILL_ALL;
+        auto kill_them_all = quest_ptr->type == QuestKindType::KILL_NUMBER;
+        kill_them_all |= quest_ptr->type == QuestKindType::TOWER;
+        kill_them_all |= quest_ptr->type == QuestKindType::KILL_ALL;
         if (kill_them_all) {
             break;
         }
 
-        auto is_target = (q_ptr->type == QuestKindType::RANDOM) && (q_ptr->r_idx == this->m_ptr->r_idx);
-        if ((q_ptr->type == QuestKindType::KILL_LEVEL) || (q_ptr->type == QuestKindType::KILL_ANY_LEVEL) || is_target) {
+        auto is_target = (quest_ptr->type == QuestKindType::RANDOM) && (quest_ptr->r_idx == this->m_ptr->r_idx);
+        if ((quest_ptr->type == QuestKindType::KILL_LEVEL) || (quest_ptr->type == QuestKindType::KILL_ANY_LEVEL) || is_target) {
             break;
         }
     }
