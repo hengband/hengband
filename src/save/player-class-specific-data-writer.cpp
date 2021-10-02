@@ -78,7 +78,7 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<samurai_dat
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<monk_data_type> &monk_data) const
 {
-    wr_byte(enum2i(monk_data->kamae));
+    wr_byte(enum2i(monk_data->stance));
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

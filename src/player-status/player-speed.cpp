@@ -236,7 +236,7 @@ int16_t PlayerSpeed::time_effect_value()
 int16_t PlayerSpeed::battleform_value()
 {
     int16_t result = 0;
-    if (PlayerClass(player_ptr).kamae_is(MonkKamae::SUZAKU))
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
         result += 10;
     return result;
 }

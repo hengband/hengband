@@ -286,7 +286,7 @@ void process_player_hp_mp(player_type *player_ptr)
         if (player_ptr->regenerate) {
             regen_amount = regen_amount * 2;
         }
-        if (!PlayerClass(player_ptr).kamae_is(MonkKamae::NONE) || !PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
+        if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE) || !PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
             regen_amount /= 2;
         }
         if (player_ptr->cursed.has(TRC::SLOW_REGEN)) {

@@ -72,15 +72,15 @@ static void display_sub_hand(player_type *player_ptr)
         return;
 
     PlayerClass pc(player_ptr);
-    if (pc.kamae_is(MonkKamae::NONE)) {
+    if (pc.monk_stance_is(MonkStance::NONE)) {
         display_player_one_line(ENTRY_POSTURE, _("構えなし", "none"), TERM_YELLOW);
         return;
     }
 
-    uint kamae_num = enum2i(pc.get_kamae()) - 1;
+    uint stance_num = enum2i(pc.get_monk_stance()) - 1;
 
-    if (kamae_num < monk_stances.size()) {
-        display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), monk_stances[kamae_num].desc), TERM_YELLOW);
+    if (stance_num < monk_stances.size()) {
+        display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), monk_stances[stance_num].desc), TERM_YELLOW);
     }
 }
 

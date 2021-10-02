@@ -14,11 +14,11 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-static void set_stance(player_type *player_ptr, const MonkKamae new_stance)
+static void set_stance(player_type *player_ptr, const MonkStance new_stance)
 {
-    set_action(player_ptr, ACTION_KAMAE);
+    set_action(player_ptr, ACTION_MONK_STANCE);
     PlayerClass pc(player_ptr);
-    if (pc.kamae_is(new_stance)) {
+    if (pc.monk_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
         return;
     }
@@ -26,7 +26,7 @@ static void set_stance(player_type *player_ptr, const MonkKamae new_stance)
     player_ptr->update |= PU_BONUS;
     player_ptr->redraw |= PR_STATE;
     msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[enum2i(new_stance) - 1].desc);
-    pc.set_kamae(new_stance);
+    pc.set_monk_stance(new_stance);
 }
 
 /*!
@@ -51,7 +51,7 @@ bool choose_monk_stance(player_type *player_ptr)
     prt("", 1, 0);
     prt(_("        どの構えをとりますか？", "        Choose Stance: "), 1, 14);
 
-    auto new_stance = MonkKamae::NONE;
+    auto new_stance = MonkStance::NONE;
     while (true) {
         char choice = inkey();
         if (choice == ESCAPE) {
@@ -60,7 +60,7 @@ bool choose_monk_stance(player_type *player_ptr)
         }
         
         if ((choice == 'a') || (choice == 'A')) {
-            if (player_ptr->action == ACTION_KAMAE) {
+            if (player_ptr->action == ACTION_MONK_STANCE) {
                 set_action(player_ptr, ACTION_NONE);
             } else
                 msg_print(_("もともと構えていない。", "You are not in a special stance."));
@@ -69,16 +69,16 @@ bool choose_monk_stance(player_type *player_ptr)
         }
         
         if ((choice == 'b') || (choice == 'B')) {
-            new_stance = MonkKamae::GENBU;
+            new_stance = MonkStance::GENBU;
             break;
         } else if (((choice == 'c') || (choice == 'C')) && (player_ptr->lev > 29)) {
-            new_stance = MonkKamae::BYAKKO;
+            new_stance = MonkStance::BYAKKO;
             break;
         } else if (((choice == 'd') || (choice == 'D')) && (player_ptr->lev > 34)) {
-            new_stance = MonkKamae::SEIRYU;
+            new_stance = MonkStance::SEIRYU;
             break;
         } else if (((choice == 'e') || (choice == 'E')) && (player_ptr->lev > 39)) {
-            new_stance = MonkKamae::SUZAKU;
+            new_stance = MonkStance::SUZAKU;
             break;
         }
     }

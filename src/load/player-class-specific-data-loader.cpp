@@ -193,7 +193,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<monk_data_type> &
     } else {
         byte tmp8u;
         rd_byte(&tmp8u);
-        monk_data->kamae = i2enum<MonkKamae>(tmp8u);
+        monk_data->stance = i2enum<MonkStance>(tmp8u);
     }
 }
 

@@ -86,11 +86,11 @@ int16_t PlayerConstitution::battleform_value()
         result += 5;
     }
 
-    if (pc.kamae_is(MonkKamae::BYAKKO)) {
+    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
         result -= 3;
-    } else if (pc.kamae_is(MonkKamae::GENBU)) {
+    } else if (pc.monk_stance_is(MonkStance::GENBU)) {
         result += 3;
-    } else if (pc.kamae_is(MonkKamae::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
         result -= 2;
     }
     if (this->player_ptr->tsuyoshi) {

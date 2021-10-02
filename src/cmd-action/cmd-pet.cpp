@@ -277,7 +277,7 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
             msg_format(_("%sを起こした。", "You have woken %s up."), m_name);
         }
 
-        if (player_ptr->action == ACTION_KAMAE)
+        if (player_ptr->action == ACTION_MONK_STANCE)
             set_action(player_ptr, ACTION_NONE);
 
         player_ptr->riding = g_ptr->m_idx;

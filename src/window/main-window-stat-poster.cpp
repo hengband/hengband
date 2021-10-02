@@ -188,26 +188,26 @@ void print_state(player_type *player_ptr)
         strcpy(text, _("釣り", "fish"));
         break;
     }
-    case ACTION_KAMAE: {
-        if (auto kamae = PlayerClass(player_ptr).get_kamae();
-            kamae != MonkKamae::NONE) {
-            switch (kamae) {
-            case MonkKamae::GENBU:
+    case ACTION_MONK_STANCE: {
+        if (auto stance = PlayerClass(player_ptr).get_monk_stance();
+            stance != MonkStance::NONE) {
+            switch (stance) {
+            case MonkStance::GENBU:
                 attr = TERM_GREEN;
                 break;
-            case MonkKamae::BYAKKO:
+            case MonkStance::BYAKKO:
                 attr = TERM_WHITE;
                 break;
-            case MonkKamae::SEIRYU:
+            case MonkStance::SEIRYU:
                 attr = TERM_L_BLUE;
                 break;
-            case MonkKamae::SUZAKU:
+            case MonkStance::SUZAKU:
                 attr = TERM_L_RED;
                 break;
             default:
                 break;
             }
-            strcpy(text, monk_stances[enum2i(kamae) - 1].desc);
+            strcpy(text, monk_stances[enum2i(stance) - 1].desc);
         }
         break;
     }

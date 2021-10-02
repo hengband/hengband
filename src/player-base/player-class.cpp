@@ -201,14 +201,14 @@ TrFlags PlayerClass::form_tr_flags() const
         break;
     }
 
-    switch (this->get_kamae()) {
-    case MonkKamae::GENBU:
+    switch (this->get_monk_stance()) {
+    case MonkStance::GENBU:
         flags.set(TR_REFLECT);
         break;
-    case MonkKamae::SUZAKU:
+    case MonkStance::SUZAKU:
         flags.set(TR_LEVITATION);
         break;
-    case MonkKamae::SEIRYU:
+    case MonkStance::SEIRYU:
         flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
         flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
         flags.set(TR_LEVITATION);
@@ -301,29 +301,29 @@ void PlayerClass::set_kata(SamuraiKata kata) const
     samurai_data->kata = kata;
 }
 
-MonkKamae PlayerClass::get_kamae() const
+MonkStance PlayerClass::get_monk_stance() const
 {
     auto monk_data = this->get_specific_data<monk_data_type>();
     if (!monk_data) {
-        return MonkKamae::NONE;
+        return MonkStance::NONE;
     }
 
-    return monk_data->kamae;
+    return monk_data->stance;
 }
 
-bool PlayerClass::kamae_is(MonkKamae kamae) const
+bool PlayerClass::monk_stance_is(MonkStance stance) const
 {
-    return this->get_kamae() == kamae;
+    return this->get_monk_stance() == stance;
 }
 
-void PlayerClass::set_kamae(MonkKamae kamae) const
+void PlayerClass::set_monk_stance(MonkStance stance) const
 {
     auto monk_data = this->get_specific_data<monk_data_type>();
     if (!monk_data) {
         return;
     }
 
-    monk_data->kamae = kamae;
+    monk_data->stance = stance;
 }
 
 /**

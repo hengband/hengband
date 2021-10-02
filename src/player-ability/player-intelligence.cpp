@@ -41,9 +41,9 @@ int16_t PlayerIntelligence::battleform_value()
         result += 5;
     }
 
-    if (pc.kamae_is(MonkKamae::GENBU)) {
+    if (pc.monk_stance_is(MonkStance::GENBU)) {
         result -= 1;
-    } else if (pc.kamae_is(MonkKamae::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
         result += 1;
     }
 

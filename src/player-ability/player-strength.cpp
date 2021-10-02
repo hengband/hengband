@@ -94,9 +94,9 @@ int16_t PlayerStrength::battleform_value()
         result += 5;
     }
 
-    if (pc.kamae_is(MonkKamae::BYAKKO)) {
+    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
         result += 2;
-    } else if (pc.kamae_is(MonkKamae::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
         result -= 2;
     }
 

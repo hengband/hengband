@@ -29,7 +29,7 @@
 /*!
  * @brief プレイヤーの継続行動を設定する。
  * @param typ 継続行動のID\n
- * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_KAMAE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
+ * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_MONK_STANCE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
  * から選択。
  */
 void set_action(player_type *player_ptr, uint8_t typ)
@@ -55,9 +55,9 @@ void set_action(player_type *player_ptr, uint8_t typ)
         bluemage_data->new_magic_learned = false;
         break;
     }
-    case ACTION_KAMAE: {
+    case ACTION_MONK_STANCE: {
         msg_print(_("構えをといた。", "You stop assuming the special stance."));
-        PlayerClass(player_ptr).set_kamae(MonkKamae::NONE);
+        PlayerClass(player_ptr).set_monk_stance(MonkStance::NONE);
         break;
     }
     case ACTION_KATA: {

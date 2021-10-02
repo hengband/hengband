@@ -354,7 +354,7 @@ static void update_bonuses(player_type *player_ptr)
 
     player_ptr->lite = has_lite(player_ptr);
 
-    if (!PlayerClass(player_ptr).kamae_is(MonkKamae::NONE)) {
+    if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE)) {
         if (none_bits(empty_hands_status, EMPTY_HAND_MAIN)) {
             set_action(player_ptr, ACTION_NONE);
         }
@@ -1528,13 +1528,13 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             num_blow /= 2;
 
         PlayerClass pc(player_ptr);
-        if (pc.kamae_is(MonkKamae::GENBU)) {
+        if (pc.monk_stance_is(MonkStance::GENBU)) {
             num_blow -= 2;
             if ((player_ptr->pclass == CLASS_MONK) && (player_ptr->lev > 42))
                 num_blow--;
             if (num_blow < 0)
                 num_blow = 0;
-        } else if (pc.kamae_is(MonkKamae::SUZAKU)) {
+        } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
             num_blow /= 2;
         }
 
@@ -1739,11 +1739,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
     }
 
     PlayerClass pc(player_ptr);
-    if (pc.kamae_is(MonkKamae::GENBU)) {
+    if (pc.monk_stance_is(MonkStance::GENBU)) {
         ac += (player_ptr->lev * player_ptr->lev) / 50;
-    } else if (pc.kamae_is(MonkKamae::BYAKKO)) {
+    } else if (pc.monk_stance_is(MonkStance::BYAKKO)) {
         ac -= 40;
-    } else if (pc.kamae_is(MonkKamae::SEIRYU)) {
+    } else if (pc.monk_stance_is(MonkStance::SEIRYU)) {
         ac -= 50;
     } else if (pc.kata_is(SamuraiKata::KOUKIJIN)) {
         ac -= 50;
@@ -2086,7 +2086,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
     }
 
     // 朱雀の構えをとっているとき、格闘ダメージに -(レベル)/6 の修正を得る。
-    if (PlayerClass(player_ptr).kamae_is(MonkKamae::SUZAKU)) {
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             damage -= (player_ptr->lev / 6);
         }
@@ -2312,7 +2312,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
     hit -= calc_double_weapon_penalty(player_ptr, slot);
 
     // 朱雀の構えをとっているとき、格闘命中に -(レベル)/3 の修正を得る。
-    if (PlayerClass(player_ptr).kamae_is(MonkKamae::SUZAKU)) {
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             hit -= (player_ptr->lev / 3);
         }
