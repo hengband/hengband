@@ -53,7 +53,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
-#include <mind/mind-archer.h>
+#include "mind/mind-archer.h"
 
 bool activate_sunlight(player_type *player_ptr)
 {
