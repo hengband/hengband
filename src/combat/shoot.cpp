@@ -401,8 +401,6 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
 
     uint16_t path_g[512]; /* For calcuration of path length */
 
-    int msec = delay_factor * delay_factor * delay_factor;
-
     /* STICK TO */
     bool stick_to = false;
 
@@ -580,11 +578,11 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                 byte a = object_attr(q_ptr);
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
-                if (msec > 0) {
+                if (delay_factor > 0) {
                     print_rel(player_ptr, c, a, ny, nx);
                     move_cursor_relative(ny, nx);
                     term_fresh();
-                    term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, delay_factor);
                     lite_spot(player_ptr, ny, nx);
                     term_fresh();
                 }
@@ -593,8 +591,8 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
             /* The player cannot see the missile */
             else {
                 /* Pause anyway, for consistancy **/
-                if (msec > 0) {
-                    term_xtra(TERM_XTRA_DELAY, msec);
+                if (delay_factor > 0) {
+                    term_xtra(TERM_XTRA_DELAY, delay_factor);
                 }
             }
 
@@ -812,11 +810,11 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
 
                                 update_monster(player_ptr, m_idx, true);
 
-                                if (msec > 0) {
+                                if (delay_factor > 0) {
                                     lite_spot(player_ptr, ny, nx);
                                     lite_spot(player_ptr, oy, ox);
                                     term_fresh();
-                                    term_xtra(TERM_XTRA_DELAY, msec);
+                                    term_xtra(TERM_XTRA_DELAY, delay_factor);
                                 }
 
                                 x = nx;

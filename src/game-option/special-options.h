@@ -4,7 +4,7 @@
 
 extern byte hitpoint_warn;
 extern byte mana_warn;
-extern byte delay_factor;
+extern int32_t delay_factor;
 extern int16_t autosave_freq;
 extern bool autosave_t;
 extern bool autosave_l;

@@ -97,7 +97,6 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
     POSITION x2;
     POSITION y_saver;
     POSITION x_saver;
-    int msec = delay_factor * delay_factor * delay_factor;
     bool visual = false;
     bool drawn = false;
     bool breath = false;
@@ -203,7 +202,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             gx[grids] = x;
             grids++;
 
-            if (msec > 0) {
+            if (delay_factor > 0) {
                 if (!blind && !(flag & (PROJECT_HIDE))) {
                     if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
                         uint16_t p = bolt_pict(oy, ox, y, x, typ);
@@ -212,7 +211,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                         print_rel(player_ptr, c, a, y, x);
                         move_cursor_relative(y, x);
                         term_fresh();
-                        term_xtra(TERM_XTRA_DELAY, msec);
+                        term_xtra(TERM_XTRA_DELAY, delay_factor);
                         lite_spot(player_ptr, y, x);
                         term_fresh();
                         if (flag & (PROJECT_BEAM)) {
@@ -224,7 +223,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
 
                         visual = true;
                     } else if (visual) {
-                        term_xtra(TERM_XTRA_DELAY, msec);
+                        term_xtra(TERM_XTRA_DELAY, delay_factor);
                     }
                 }
             }
@@ -298,7 +297,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             gx[grids] = x;
             grids++;
             {
-                if (msec > 0) {
+                if (delay_factor > 0) {
                     if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
                         uint16_t p;
                         TERM_COLOR a;
@@ -309,7 +308,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                         print_rel(player_ptr, c, a, y, x);
                         move_cursor_relative(y, x);
                         term_fresh();
-                        term_xtra(TERM_XTRA_DELAY, msec);
+                        term_xtra(TERM_XTRA_DELAY, delay_factor);
                         lite_spot(player_ptr, y, x);
                         term_fresh();
                         if (flag & (PROJECT_BEAM)) {
@@ -321,7 +320,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
 
                         visual = true;
                     } else if (visual) {
-                        term_xtra(TERM_XTRA_DELAY, msec);
+                        term_xtra(TERM_XTRA_DELAY, delay_factor);
                     }
                 }
             }
@@ -412,7 +411,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             grids++;
         }
 
-        if (msec > 0) {
+        if (delay_factor > 0) {
             if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
                 if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
                     uint16_t p;
@@ -424,7 +423,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                     print_rel(player_ptr, c, a, y, x);
                     move_cursor_relative(y, x);
                     term_fresh();
-                    term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, delay_factor);
                     lite_spot(player_ptr, y, x);
                     term_fresh();
                     if (flag & (PROJECT_BEAM)) {
@@ -436,7 +435,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
 
                     visual = true;
                 } else if (visual) {
-                    term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, delay_factor);
                 }
             }
         }
@@ -515,7 +514,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
     if (!grids)
         return res;
 
-    if (!blind && !(flag & (PROJECT_HIDE)) && (msec > 0)) {
+    if (!blind && !(flag & (PROJECT_HIDE)) && (delay_factor > 0)) {
         for (int t = 0; t <= gm_rad; t++) {
             for (int i = gm[t]; i < gm[t + 1]; i++) {
                 y = gy[i];
@@ -535,7 +534,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             move_cursor_relative(by, bx);
             term_fresh();
             if (visual || drawn) {
-                term_xtra(TERM_XTRA_DELAY, msec);
+                term_xtra(TERM_XTRA_DELAY, delay_factor);
             }
         }
 
