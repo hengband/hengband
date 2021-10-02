@@ -148,5 +148,5 @@ enum class RandomArtActType : short {
     MURAMASA = 253,
     BLOODY_MOON = 254,
     CRIMSON = 255,
-    MAX = 255, /* ダミー、最大値と合わせること / Dummy. Please match the value as max value */
+    MAX,
 };

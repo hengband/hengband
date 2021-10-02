@@ -207,16 +207,11 @@ void wiz_modify_item_activation(player_type *player_ptr)
     }
 
     int val;
-    if (!get_value("Activation ID", enum2i(RandomArtActType::NONE), enum2i(RandomArtActType::MAX), &val)) {
+    if (!get_value("Activation ID", enum2i(RandomArtActType::NONE), enum2i(RandomArtActType::MAX) - 1, &val)) {
         return;
     }
 
     auto act_idx = i2enum<RandomArtActType>(val);
-    if ((act_idx <= RandomArtActType::NONE) || (act_idx > RandomArtActType::MAX)) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), enum2i(RandomArtActType::MAX) - 1);
-        return;
-    }
-
     o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->activation_id = act_idx;
 }
