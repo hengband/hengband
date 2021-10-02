@@ -27,7 +27,9 @@
 #include "monster-race/monster-race-hook.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -324,9 +326,7 @@ void do_cmd_hissatsu(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_defense & KATA_MASK) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::IAI, SamuraiKata::FUUJIN, SamuraiKata::KOUKIJIN });
 
     if (!get_hissatsu_power(player_ptr, &n))
         return;
@@ -373,9 +373,7 @@ void do_cmd_gain_hissatsu(player_type *player_ptr)
 
     bool gain = false;
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN)) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
 
     if (cmd_limit_blind(player_ptr))
         return;

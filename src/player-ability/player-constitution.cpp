@@ -1,8 +1,10 @@
 ﻿#include "player-ability/player-constitution.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
@@ -78,7 +80,7 @@ int16_t PlayerConstitution::battleform_value()
 {
     int16_t result = 0;
 
-    if (any_bits(this->player_ptr->special_defense, KATA_KOUKIJIN)) {
+    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
         result += 5;
     }
 

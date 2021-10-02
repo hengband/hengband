@@ -6,6 +6,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -50,8 +51,7 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
         return;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
     concptr q = _("どれを撃ちますか? ", "Fire which item? ");
     concptr s = _("発射されるアイテムがありません。", "You have nothing to fire.");

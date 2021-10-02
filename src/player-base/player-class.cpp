@@ -2,7 +2,6 @@
  * @brief プレイヤーの職業クラスに基づく耐性・能力の判定処理等を行うクラス
  * @date 2021/09/08
  * @author Hourier
- * @details 本クラス作成時点で責務に対する余裕はかなりあるので、適宜ここへ移してくること.
  */
 #include "player-base/player-class.h"
 #include "core/player-redraw-types.h"
@@ -15,6 +14,7 @@
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player-info/spell-hex-data-type.h"
@@ -22,6 +22,7 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
+#include "status/action-setter.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -81,8 +82,7 @@ TrFlags PlayerClass::tr_flags() const
         if (heavy_armor(this->player_ptr)) {
             flags.set(TR_SPEED);
         } else {
-            if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr))
-                && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr)))
+            if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr)))
                 flags.set(TR_SPEED);
             if (plev > 24 && !this->player_ptr->is_icky_wield[0] && !this->player_ptr->is_icky_wield[1])
                 flags.set(TR_FREE_ACT);
@@ -174,6 +174,35 @@ TrFlags PlayerClass::tr_flags() const
     return flags;
 }
 
+TrFlags PlayerClass::form_tr_flags() const
+{
+    TrFlags flags;
+
+    switch (this->get_kata()) {
+    case SamuraiKata::FUUJIN:
+        if (!this->player_ptr->blind) {
+            flags.set(TR_REFLECT);
+        }
+        break;
+    case SamuraiKata::MUSOU:
+        flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
+        flags.set({ TR_REFLECT, TR_RES_FEAR, TR_RES_LITE, TR_RES_DARK, TR_RES_BLIND, TR_RES_CONF,
+            TR_RES_SOUND, TR_RES_SHARDS, TR_RES_NETHER, TR_RES_NEXUS, TR_RES_CHAOS, TR_RES_DISEN,
+            TR_RES_WATER, TR_RES_TIME, TR_RES_CURSE });
+        flags.set({ TR_HOLD_EXP, TR_FREE_ACT, TR_LEVITATION, TR_LITE_1, TR_SEE_INVIS, TR_TELEPATHY, TR_SLOW_DIGEST, TR_REGEN });
+        flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
+        flags.set({ TR_SUST_STR, TR_SUST_INT, TR_SUST_WIS, TR_SUST_DEX, TR_SUST_CON, TR_SUST_CHR });
+        break;
+    case SamuraiKata::KOUKIJIN:
+        flags.set({ TR_VUL_ACID, TR_VUL_ELEC, TR_VUL_FIRE, TR_VUL_COLD });
+        break;
+    default:
+        break;
+    }
+
+    return flags;
+}
+
 bool PlayerClass::can_resist_stun() const
 {
     return (this->player_ptr->pclass == CLASS_BERSERKER) && (this->player_ptr->lev > 34);
@@ -196,17 +225,63 @@ bool PlayerClass::lose_balance()
         return false;
     }
 
-    if (none_bits(this->player_ptr->special_defense, KATA_MASK)) {
+    if (this->kata_is(SamuraiKata::NONE)) {
         return false;
     }
 
-    reset_bits(this->player_ptr->special_defense, KATA_MASK);
+    this->set_kata(SamuraiKata::NONE);
     this->player_ptr->update |= PU_BONUS;
     this->player_ptr->update |= PU_MONSTERS;
     this->player_ptr->redraw |= PR_STATE;
     this->player_ptr->redraw |= PR_STATUS;
     this->player_ptr->action = ACTION_NONE;
     return true;
+}
+
+SamuraiKata PlayerClass::get_kata() const
+{
+    auto samurai_data = this->get_specific_data<samurai_data_type>();
+    if (!samurai_data) {
+        return SamuraiKata::NONE;
+    }
+
+    return samurai_data->kata;
+}
+
+bool PlayerClass::kata_is(SamuraiKata kata) const
+{
+    return this->get_kata() == kata;
+}
+
+/**
+ * @brief 剣術家の型を崩す
+ *
+ * @param kata_list 崩す型を指定する。取っている型が指定された型に含まれない場合は崩さない。
+ */
+void PlayerClass::break_kata(std::initializer_list<SamuraiKata> kata_list)
+{
+    auto samurai_data = this->get_specific_data<samurai_data_type>();
+    if (!samurai_data) {
+        return;
+    }
+
+    for (auto kata : kata_list) {
+        if (samurai_data->kata == kata) {
+            set_action(player_ptr, ACTION_NONE);
+            samurai_data->kata = SamuraiKata::NONE;
+            break;
+        }
+    }
+}
+
+void PlayerClass::set_kata(SamuraiKata kata) const
+{
+    auto samurai_data = this->get_specific_data<samurai_data_type>();
+    if (!samurai_data) {
+        return;
+    }
+
+    samurai_data->kata = kata;
 }
 
 /**
@@ -236,6 +311,9 @@ void PlayerClass::init_specific_data()
         break;
     case CLASS_SNIPER:
         this->player_ptr->class_specific_data = std::make_shared<sniper_data_type>();
+        break;
+    case CLASS_SAMURAI:
+        this->player_ptr->class_specific_data = std::make_shared<samurai_data_type>();
         break;
     case CLASS_HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {

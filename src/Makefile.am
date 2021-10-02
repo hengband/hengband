@@ -681,6 +681,7 @@ hengband_SOURCES = \
 	player-info/race-info.cpp player-info/race-info.h \
 	player-info/race-types.h \
 	player-info/resistance-info.cpp player-info/resistance-info.h \
+	player-info/samurai-data-type.h \
 	player-info/self-info.cpp player-info/self-info.h \
 	player-info/self-info-util.cpp player-info/self-info-util.h \
         player-info/smith-data-type.h \

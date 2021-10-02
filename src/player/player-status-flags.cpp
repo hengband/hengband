@@ -63,6 +63,10 @@ BIT_FLAGS common_cause_flags(player_type *player_ptr, tr_type tr_flag)
         set_bits(result, FLAG_CAUSE_CLASS);
     }
 
+    if (PlayerClass(player_ptr).form_tr_flags().has(tr_flag)) {
+        set_bits(result, FLAG_CAUSE_BATTLE_FORM);
+    }
+
     return result;
 }
 
@@ -645,9 +649,6 @@ BIT_FLAGS has_esp_telepathy(player_type *player_ptr)
     if (is_time_limit_esp(player_ptr) || player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->muta.has(MUTA::ESP)) {
         result |= FLAG_CAUSE_MUTATION;
@@ -744,7 +745,7 @@ BIT_FLAGS has_reflect(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_REFLECT);
 
-    if (player_ptr->special_defense & KAMAE_GENBU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_GENBU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -798,7 +799,7 @@ BIT_FLAGS has_sh_fire(player_type *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -820,7 +821,7 @@ BIT_FLAGS has_sh_elec(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || (player_ptr->special_defense & KATA_MUSOU)) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -831,7 +832,7 @@ BIT_FLAGS has_sh_cold(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_COLD);
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -860,10 +861,6 @@ BIT_FLAGS has_hold_exp(player_type *player_ptr)
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -874,10 +871,6 @@ BIT_FLAGS has_hold_exp(player_type *player_ptr)
 BIT_FLAGS has_see_inv(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SEE_INVIS);
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->ult_res || player_ptr->tim_invis) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -902,10 +895,6 @@ BIT_FLAGS has_free_act(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -915,10 +904,6 @@ BIT_FLAGS has_sustain_str(player_type *player_ptr)
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
-    }
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
     return result;
@@ -932,10 +917,6 @@ BIT_FLAGS has_sustain_int(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -945,10 +926,6 @@ BIT_FLAGS has_sustain_wis(player_type *player_ptr)
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
-    }
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
     return result;
@@ -962,10 +939,6 @@ BIT_FLAGS has_sustain_dex(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -975,10 +948,6 @@ BIT_FLAGS has_sustain_con(player_type *player_ptr)
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
-    }
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
     return result;
@@ -992,10 +961,6 @@ BIT_FLAGS has_sustain_chr(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -1007,7 +972,7 @@ BIT_FLAGS has_levitation(player_type *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KAMAE_SUZAKU || (player_ptr->special_defense & KATA_MUSOU)) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KAMAE_SUZAKU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -1046,10 +1011,6 @@ BIT_FLAGS has_slow_digest(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SLOW_DIGEST);
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1063,10 +1024,6 @@ BIT_FLAGS has_regenerate(player_type *player_ptr)
 
     if (player_ptr->muta.has(MUTA::REGEN))
         result |= FLAG_CAUSE_MUTATION;
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_DEMON_AURA) || player_ptr->ult_res || player_ptr->tim_regen) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1195,7 +1152,7 @@ BIT_FLAGS has_resist_acid(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_ACID);
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -1216,10 +1173,6 @@ BIT_FLAGS has_vuln_acid(player_type *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_ptr->special_defense & KATA_KOUKIJIN) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -1227,7 +1180,7 @@ BIT_FLAGS has_resist_elec(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_ELEC);
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -1248,10 +1201,6 @@ BIT_FLAGS has_vuln_elec(player_type *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_ptr->special_defense & KATA_KOUKIJIN) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -1259,7 +1208,7 @@ BIT_FLAGS has_resist_fire(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_FIRE);
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -1280,10 +1229,6 @@ BIT_FLAGS has_vuln_fire(player_type *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_ptr->special_defense & KATA_KOUKIJIN) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -1291,7 +1236,7 @@ BIT_FLAGS has_resist_cold(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_COLD);
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -1312,10 +1257,6 @@ BIT_FLAGS has_vuln_cold(player_type *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (player_ptr->special_defense & KATA_KOUKIJIN) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
@@ -1323,7 +1264,7 @@ BIT_FLAGS has_resist_pois(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_POIS);
 
-    if (player_ptr->special_defense & KAMAE_SEIRYU || player_ptr->special_defense & KATA_MUSOU) {
+    if (player_ptr->special_defense & KAMAE_SEIRYU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -1346,20 +1287,12 @@ BIT_FLAGS has_resist_conf(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     return result;
 }
 
 BIT_FLAGS has_resist_sound(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SOUND);
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1371,10 +1304,6 @@ BIT_FLAGS has_resist_sound(player_type *player_ptr)
 BIT_FLAGS has_resist_lite(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_LITE);
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1398,10 +1327,6 @@ BIT_FLAGS has_resist_dark(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK);
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1412,10 +1337,6 @@ BIT_FLAGS has_resist_dark(player_type *player_ptr)
 BIT_FLAGS has_resist_chaos(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CHAOS);
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1428,10 +1349,6 @@ BIT_FLAGS has_resist_disen(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DISEN);
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1443,10 +1360,6 @@ BIT_FLAGS has_resist_shard(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SHARDS);
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1457,10 +1370,6 @@ BIT_FLAGS has_resist_shard(player_type *player_ptr)
 BIT_FLAGS has_resist_nexus(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NEXUS);
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1477,10 +1386,6 @@ BIT_FLAGS has_resist_blind(player_type *player_ptr)
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res || player_ptr->magicdef) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1491,10 +1396,6 @@ BIT_FLAGS has_resist_blind(player_type *player_ptr)
 BIT_FLAGS has_resist_neth(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NETHER);
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->ult_res || player_ptr->tim_res_nether) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1507,10 +1408,6 @@ BIT_FLAGS has_resist_time(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_TIME);
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res || player_ptr->tim_res_time) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1521,10 +1418,6 @@ BIT_FLAGS has_resist_time(player_type *player_ptr)
 BIT_FLAGS has_resist_water(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_WATER);
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1543,10 +1436,6 @@ BIT_FLAGS has_resist_curse(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CURSE);
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
-
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1560,10 +1449,6 @@ BIT_FLAGS has_resist_fear(player_type *player_ptr)
 
     if (player_ptr->muta.has(MUTA::FEARLESS))
         result |= FLAG_CAUSE_MUTATION;
-
-    if ((player_ptr->special_defense & KATA_MUSOU)) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
-    }
 
     if (is_hero(player_ptr) || is_shero(player_ptr) || player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1717,10 +1602,6 @@ BIT_FLAGS has_lite(player_type *player_ptr)
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
-    }
-
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
     result |= has_sh_fire(player_ptr);

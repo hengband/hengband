@@ -18,6 +18,8 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
@@ -64,7 +66,7 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  */
 static bool process_bolt_reflection(player_type *player_ptr, effect_player_type *ep_ptr, project_func project)
 {
-    auto can_reflect = (has_reflect(player_ptr) != 0) || (any_bits(player_ptr->special_defense, KATA_FUUJIN) && !player_ptr->blind);
+    auto can_reflect = (has_reflect(player_ptr) != 0);
     can_reflect &= any_bits(ep_ptr->flag, PROJECT_REFLECTABLE);
     can_reflect &= !one_in_(10);
     if (!can_reflect) {
@@ -77,7 +79,7 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
     std::string mes;
     if (player_ptr->blind) {
         mes = _("何かが跳ね返った！", "Something bounces!");
-    } else if (any_bits(player_ptr->special_defense, KATA_FUUJIN)) {
+    } else if (PlayerClass(player_ptr).kata_is(SamuraiKata::FUUJIN)) {
         mes = _("風の如く武器を振るって弾き返した！", "The attack bounces!");
     } else {
         mes = _("攻撃が跳ね返った！", "The attack bounces!");

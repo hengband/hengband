@@ -1,10 +1,15 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #include "object-enchant/tr-flags.h"
 #include "system/player-type-definition.h"
 
+#include <initializer_list>
 #include <memory>
 #include <variant>
+
+enum class SamuraiKata : uint8_t;
 
 class PlayerClass {
 public:
@@ -13,11 +18,16 @@ public:
     virtual ~PlayerClass() = default;
 
     TrFlags tr_flags() const;
+    TrFlags form_tr_flags() const;
 
     bool can_resist_stun() const;
     bool is_wizard() const;
 
     bool lose_balance();
+    void break_kata(std::initializer_list<SamuraiKata> kata_list);
+    SamuraiKata get_kata() const;
+    bool kata_is(SamuraiKata kata) const;
+    void set_kata(SamuraiKata kata) const;
 
     void init_specific_data();
     template <typename T>

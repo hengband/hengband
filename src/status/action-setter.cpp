@@ -16,6 +16,7 @@
 #include "core/player-update-types.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -60,7 +61,7 @@ void set_action(player_type *player_ptr, uint8_t typ)
     }
     case ACTION_KATA: {
         msg_print(_("型を崩した。", "You stop assuming the special stance."));
-        player_ptr->special_defense &= ~(KATA_MASK);
+        PlayerClass(player_ptr).set_kata(SamuraiKata::NONE);
         player_ptr->update |= (PU_MONSTERS);
         player_ptr->redraw |= (PR_STATUS);
         break;

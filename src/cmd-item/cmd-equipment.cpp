@@ -30,6 +30,8 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -96,8 +98,7 @@ void do_cmd_wield(player_type *player_ptr)
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     OBJECT_IDX need_switch_wielding = 0;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
     concptr q = _("どれを装備しますか? ", "Wear/Wield which item? ");
     concptr s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
@@ -303,8 +304,7 @@ void do_cmd_takeoff(player_type *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
     concptr q = _("どれを装備からはずしますか? ", "Take off which item? ");
     concptr s = _("はずせる装備がない。", "You are not wearing anything to take off.");

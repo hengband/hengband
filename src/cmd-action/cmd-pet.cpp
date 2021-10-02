@@ -36,8 +36,10 @@
 #include "monster/smart-learn-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -203,8 +205,7 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
     x = player_ptr->x + ddx[dir];
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+   PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
     if (player_ptr->riding) {
         /* Skip non-empty grids */

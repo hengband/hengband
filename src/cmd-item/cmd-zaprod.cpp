@@ -5,7 +5,9 @@
 #include "object-use/zaprod-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-beam.h"
@@ -271,9 +273,7 @@ void do_cmd_zap_rod(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN)) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
 
     auto q = _("どのロッドを振りますか? ", "Zap which rod? ");
     auto s = _("使えるロッドがない。", "You have no rod to zap.");

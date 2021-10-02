@@ -45,8 +45,10 @@
 #include "object/item-use-flags.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -109,8 +111,7 @@ void do_cmd_drop(player_type *player_ptr)
     OBJECT_IDX item;
     int amt = 1;
     object_type *o_ptr;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
 
     concptr q = _("どのアイテムを落としますか? ", "Drop which item? ");
     concptr s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
@@ -234,8 +235,7 @@ void do_cmd_use(player_type *player_ptr)
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
 
     concptr q = _("どれを使いますか？", "Use which item? ");
     concptr s = _("使えるものがありません。", "You have nothing to use.");
@@ -290,8 +290,7 @@ void do_cmd_activate(player_type *player_ptr)
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
 
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");

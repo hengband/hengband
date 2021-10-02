@@ -81,8 +81,6 @@ static void add_personality_flags(player_type *player_ptr, TrFlags &flags)
  */
 static void add_kata_flags(player_type *player_ptr, TrFlags &flags)
 {
-    if (player_ptr->special_defense & KATA_FUUJIN)
-        flags.set(TR_REFLECT);
     if (player_ptr->special_defense & KAMAE_GENBU)
         flags.set(TR_REFLECT);
     if (player_ptr->special_defense & KAMAE_SUZAKU)
@@ -98,39 +96,6 @@ static void add_kata_flags(player_type *player_ptr, TrFlags &flags)
         flags.set(TR_SH_ELEC);
         flags.set(TR_SH_COLD);
     }
-
-    if ((player_ptr->special_defense & KATA_MUSOU) == 0)
-        return;
-
-    flags.set(TR_RES_FEAR);
-    flags.set(TR_RES_LITE);
-    flags.set(TR_RES_DARK);
-    flags.set(TR_RES_BLIND);
-    flags.set(TR_RES_CONF);
-    flags.set(TR_RES_SOUND);
-    flags.set(TR_RES_SHARDS);
-    flags.set(TR_RES_NETHER);
-    flags.set(TR_RES_NEXUS);
-    flags.set(TR_RES_CHAOS);
-    flags.set(TR_RES_DISEN);
-    flags.set(TR_REFLECT);
-    flags.set(TR_HOLD_EXP);
-    flags.set(TR_FREE_ACT);
-    flags.set(TR_SH_FIRE);
-    flags.set(TR_SH_ELEC);
-    flags.set(TR_SH_COLD);
-    flags.set(TR_LEVITATION);
-    flags.set(TR_LITE_1);
-    flags.set(TR_SEE_INVIS);
-    flags.set(TR_TELEPATHY);
-    flags.set(TR_SLOW_DIGEST);
-    flags.set(TR_REGEN);
-    flags.set(TR_SUST_STR);
-    flags.set(TR_SUST_INT);
-    flags.set(TR_SUST_WIS);
-    flags.set(TR_SUST_DEX);
-    flags.set(TR_SUST_CON);
-    flags.set(TR_SUST_CHR);
 }
 
 /*!

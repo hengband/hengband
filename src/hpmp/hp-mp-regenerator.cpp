@@ -9,6 +9,7 @@
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
 #include "player-info/magic-eater-data-type.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-table.h"
 #include "player/special-defense-types.h"
@@ -27,7 +28,7 @@ int wild_regen = 20;
  */
 void regenhp(player_type *player_ptr, int percent)
 {
-    if (player_ptr->special_defense & KATA_KOUKIJIN)
+    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN))
         return;
     if (player_ptr->action == ACTION_HAYAGAKE)
         return;

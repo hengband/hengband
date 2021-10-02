@@ -1,12 +1,14 @@
 ﻿#include "player-ability/player-strength.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
-#include "realm/realm-types.h"
+#include "player-info/samurai-data-type.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
+#include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -86,7 +88,7 @@ int16_t PlayerStrength::battleform_value()
 {
     int16_t result = 0;
 
-    if (any_bits(this->player_ptr->special_defense, KATA_KOUKIJIN)) {
+    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
         result += 5;
     }
 
