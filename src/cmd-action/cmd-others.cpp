@@ -103,7 +103,7 @@ static bool exe_alter(player_type *player_ptr)
  */
 void do_cmd_alter(player_type *player_ptr)
 {
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (command_arg) {
         command_rep = command_arg - 1;

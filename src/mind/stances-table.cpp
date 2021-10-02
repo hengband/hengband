@@ -3,7 +3,7 @@
 /*!
  * @brief 修行僧の構え能力テーブル
  */
-const blow_stance monk_stances[MAX_KAMAE] = {
+const std::vector<blow_stance> monk_stances = {
     { _("玄武", "Genbu"), 25, _("", "(Black Tortoise) ") },
     { _("白虎", "Byakko"), 30, _("", "(White Tiger) ") },
     { _("青竜", "Seiryuu"), 35, _("", "(Blue Dragon) ") },

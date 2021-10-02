@@ -74,7 +74,7 @@ void do_cmd_go_up(player_type *player_ptr)
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int up_num = 0;
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (f_ptr->flags.has_not(FF::LESS)) {
         msg_print(_("ここには上り階段が見当たらない。", "I see no up staircase here."));
@@ -180,7 +180,7 @@ void do_cmd_go_down(player_type *player_ptr)
 {
     bool fall_trap = false;
     int down_num = 0;
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -322,7 +322,7 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
         PlayerEnergy energy(player_ptr);
         energy.set_player_turn_energy(100);
         if (dir != 5) {
-            PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+            PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
         }
 
         if (player_ptr->wild_mode) {
@@ -367,7 +367,7 @@ void do_cmd_run(player_type *player_ptr)
     if (cmd_limit_confused(player_ptr))
         return;
 
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (get_rep_dir(player_ptr, &dir, false)) {
         player_ptr->running = (command_arg ? command_arg : 1000);

@@ -51,7 +51,7 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
         return;
     }
 
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     concptr q = _("どれを撃ちますか? ", "Fire which item? ");
     concptr s = _("発射されるアイテムがありません。", "You have nothing to fire.");

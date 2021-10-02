@@ -30,7 +30,7 @@ void do_cmd_read_scroll(player_type *player_ptr)
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
 
     if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
         return;

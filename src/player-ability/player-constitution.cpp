@@ -4,6 +4,7 @@
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
@@ -80,15 +81,16 @@ int16_t PlayerConstitution::battleform_value()
 {
     int16_t result = 0;
 
-    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
+    PlayerClass pc(player_ptr);
+    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
         result += 5;
     }
 
-    if (any_bits(this->player_ptr->special_defense, KAMAE_BYAKKO)) {
+    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
         result -= 3;
-    } else if (any_bits(this->player_ptr->special_defense, KAMAE_GENBU)) {
+    } else if (pc.monk_stance_is(MonkStance::GENBU)) {
         result += 3;
-    } else if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
         result -= 2;
     }
     if (this->player_ptr->tsuyoshi) {

@@ -8,8 +8,10 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
@@ -234,7 +236,7 @@ int16_t PlayerSpeed::time_effect_value()
 int16_t PlayerSpeed::battleform_value()
 {
     int16_t result = 0;
-    if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU))
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
         result += 10;
     return result;
 }

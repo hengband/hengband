@@ -311,7 +311,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
         msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
     }
 
-    if (PlayerClass(player_ptr).kata_is(SamuraiKata::IAI) && ((mode != HISSATSU_IAI) || mdeath)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::IAI) && ((mode != HISSATSU_IAI) || mdeath)) {
         set_action(player_ptr, ACTION_NONE);
     }
 

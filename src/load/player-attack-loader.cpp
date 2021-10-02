@@ -3,6 +3,7 @@
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "player-base/player-class.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -21,13 +22,13 @@ void rd_special_attack(player_type *player_ptr)
 
 void rd_special_action(player_type *player_ptr)
 {
-    if (player_ptr->special_attack & KAMAE_MASK) {
-        player_ptr->action = ACTION_KAMAE;
+    if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE)) {
+        player_ptr->action = ACTION_MONK_STANCE;
         return;
     }
 
-    if (!PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
-        player_ptr->action = ACTION_KATA;
+    if (!PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
+        player_ptr->action = ACTION_SAMURAI_STANCE;
     }
 }
 

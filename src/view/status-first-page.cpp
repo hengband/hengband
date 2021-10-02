@@ -17,7 +17,9 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
+#include "player-info/monk-data-type.h"
 #include "player-status/player-hand-types.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
@@ -80,9 +82,10 @@ static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *dam
 
     if (player_ptr->pclass == CLASS_FORCETRAINER)
         level = MAX(1, level - 3);
-    if (player_ptr->special_defense & KAMAE_BYAKKO)
+    PlayerClass pc(player_ptr);
+    if (pc.monk_stance_is(MonkStance::BYAKKO))
         *basedam = monk_ave_damage[level][1];
-    else if (player_ptr->special_defense & (KAMAE_GENBU | KAMAE_SUZAKU))
+    else if (pc.monk_stance_is(MonkStance::GENBU) || pc.monk_stance_is(MonkStance::SUZAKU))
         *basedam = monk_ave_damage[level][2];
     else
         *basedam = monk_ave_damage[level][0];

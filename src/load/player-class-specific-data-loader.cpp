@@ -5,6 +5,7 @@
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
@@ -180,10 +181,19 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<samurai_data_type
     } else {
         byte tmp8u;
         rd_byte(&tmp8u);
-        samurai_data->kata = i2enum<SamuraiKata>(tmp8u);
-        if (samurai_data->kata != SamuraiKata::NONE) {
-            
-        }
+        samurai_data->stance = i2enum<SamuraiStance>(tmp8u);
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<monk_data_type> &monk_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        // 古いセーブファイルの修行僧のデータは magic_num には保存されていないので読み捨てる
+        load_old_savfile_magic_num();
+    } else {
+        byte tmp8u;
+        rd_byte(&tmp8u);
+        monk_data->stance = i2enum<MonkStance>(tmp8u);
     }
 }
 

@@ -3,6 +3,7 @@
 #include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/mimic-info-table.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-personality.h"
@@ -35,13 +36,14 @@ int16_t PlayerIntelligence::battleform_value()
 {
     int16_t result = 0;
 
-    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
+    PlayerClass pc(player_ptr);
+    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
         result += 5;
     }
 
-    if (any_bits(this->player_ptr->special_defense, KAMAE_GENBU)) {
+    if (pc.monk_stance_is(MonkStance::GENBU)) {
         result -= 1;
-    } else if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
         result += 1;
     }
 

@@ -21,6 +21,8 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
+#include "player-info/monk-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "system/floor-type-definition.h"
@@ -70,13 +72,14 @@ static int calc_stun_resistance(player_attack_type *pa_ptr)
  */
 static int calc_max_blow_selection_times(player_type *player_ptr)
 {
-    if (player_ptr->special_defense & KAMAE_BYAKKO)
+    PlayerClass pc(player_ptr);
+    if (pc.monk_stance_is(MonkStance::BYAKKO))
         return (player_ptr->lev < 3 ? 1 : player_ptr->lev / 3);
 
-    if (player_ptr->special_defense & KAMAE_SUZAKU)
+    if (pc.monk_stance_is(MonkStance::SUZAKU))
         return 1;
 
-    if (player_ptr->special_defense & KAMAE_GENBU)
+    if (pc.monk_stance_is(MonkStance::GENBU))
         return 1;
 
     return player_ptr->lev < 7 ? 1 : player_ptr->lev / 7;
@@ -159,7 +162,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
 static WEIGHT calc_monk_attack_weight(player_type *player_ptr)
 {
     WEIGHT weight = 8;
-    if (player_ptr->special_defense & KAMAE_SUZAKU)
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
         weight = 4;
 
     if ((player_ptr->pclass == CLASS_FORCETRAINER) && (get_current_ki(player_ptr) != 0)) {

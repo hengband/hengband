@@ -14,6 +14,7 @@
 #include "player-info/force-trainer-data-type.h"
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
@@ -178,13 +179,13 @@ TrFlags PlayerClass::form_tr_flags() const
 {
     TrFlags flags;
 
-    switch (this->get_kata()) {
-    case SamuraiKata::FUUJIN:
+    switch (this->get_samurai_stance()) {
+    case SamuraiStance::FUUJIN:
         if (!this->player_ptr->blind) {
             flags.set(TR_REFLECT);
         }
         break;
-    case SamuraiKata::MUSOU:
+    case SamuraiStance::MUSOU:
         flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
         flags.set({ TR_REFLECT, TR_RES_FEAR, TR_RES_LITE, TR_RES_DARK, TR_RES_BLIND, TR_RES_CONF,
             TR_RES_SOUND, TR_RES_SHARDS, TR_RES_NETHER, TR_RES_NEXUS, TR_RES_CHAOS, TR_RES_DISEN,
@@ -193,8 +194,24 @@ TrFlags PlayerClass::form_tr_flags() const
         flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
         flags.set({ TR_SUST_STR, TR_SUST_INT, TR_SUST_WIS, TR_SUST_DEX, TR_SUST_CON, TR_SUST_CHR });
         break;
-    case SamuraiKata::KOUKIJIN:
+    case SamuraiStance::KOUKIJIN:
         flags.set({ TR_VUL_ACID, TR_VUL_ELEC, TR_VUL_FIRE, TR_VUL_COLD });
+        break;
+    default:
+        break;
+    }
+
+    switch (this->get_monk_stance()) {
+    case MonkStance::GENBU:
+        flags.set(TR_REFLECT);
+        break;
+    case MonkStance::SUZAKU:
+        flags.set(TR_LEVITATION);
+        break;
+    case MonkStance::SEIRYU:
+        flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
+        flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
+        flags.set(TR_LEVITATION);
         break;
     default:
         break;
@@ -225,11 +242,11 @@ bool PlayerClass::lose_balance()
         return false;
     }
 
-    if (this->kata_is(SamuraiKata::NONE)) {
+    if (this->samurai_stance_is(SamuraiStance::NONE)) {
         return false;
     }
 
-    this->set_kata(SamuraiKata::NONE);
+    this->set_samurai_stance(SamuraiStance::NONE);
     this->player_ptr->update |= PU_BONUS;
     this->player_ptr->update |= PU_MONSTERS;
     this->player_ptr->redraw |= PR_STATE;
@@ -238,50 +255,75 @@ bool PlayerClass::lose_balance()
     return true;
 }
 
-SamuraiKata PlayerClass::get_kata() const
+SamuraiStance PlayerClass::get_samurai_stance() const
 {
     auto samurai_data = this->get_specific_data<samurai_data_type>();
     if (!samurai_data) {
-        return SamuraiKata::NONE;
+        return SamuraiStance::NONE;
     }
 
-    return samurai_data->kata;
+    return samurai_data->stance;
 }
 
-bool PlayerClass::kata_is(SamuraiKata kata) const
+bool PlayerClass::samurai_stance_is(SamuraiStance stance) const
 {
-    return this->get_kata() == kata;
+    return this->get_samurai_stance() == stance;
 }
 
 /**
  * @brief 剣術家の型を崩す
  *
- * @param kata_list 崩す型を指定する。取っている型が指定された型に含まれない場合は崩さない。
+ * @param stance_list 崩す型を指定する。取っている型が指定された型に含まれない場合は崩さない。
  */
-void PlayerClass::break_kata(std::initializer_list<SamuraiKata> kata_list)
+void PlayerClass::break_samurai_stance(std::initializer_list<SamuraiStance> stance_list)
 {
     auto samurai_data = this->get_specific_data<samurai_data_type>();
     if (!samurai_data) {
         return;
     }
 
-    for (auto kata : kata_list) {
-        if (samurai_data->kata == kata) {
+    for (auto stance : stance_list) {
+        if (samurai_data->stance == stance) {
             set_action(player_ptr, ACTION_NONE);
-            samurai_data->kata = SamuraiKata::NONE;
+            samurai_data->stance = SamuraiStance::NONE;
             break;
         }
     }
 }
 
-void PlayerClass::set_kata(SamuraiKata kata) const
+void PlayerClass::set_samurai_stance(SamuraiStance stance) const
 {
     auto samurai_data = this->get_specific_data<samurai_data_type>();
     if (!samurai_data) {
         return;
     }
 
-    samurai_data->kata = kata;
+    samurai_data->stance = stance;
+}
+
+MonkStance PlayerClass::get_monk_stance() const
+{
+    auto monk_data = this->get_specific_data<monk_data_type>();
+    if (!monk_data) {
+        return MonkStance::NONE;
+    }
+
+    return monk_data->stance;
+}
+
+bool PlayerClass::monk_stance_is(MonkStance stance) const
+{
+    return this->get_monk_stance() == stance;
+}
+
+void PlayerClass::set_monk_stance(MonkStance stance) const
+{
+    auto monk_data = this->get_specific_data<monk_data_type>();
+    if (!monk_data) {
+        return;
+    }
+
+    monk_data->stance = stance;
 }
 
 /**
@@ -314,6 +356,9 @@ void PlayerClass::init_specific_data()
         break;
     case CLASS_SAMURAI:
         this->player_ptr->class_specific_data = std::make_shared<samurai_data_type>();
+        break;
+    case CLASS_MONK:
+        this->player_ptr->class_specific_data = std::make_shared<monk_data_type>();
         break;
     case CLASS_HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {

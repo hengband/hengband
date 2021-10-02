@@ -10,6 +10,7 @@
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/bluemage-data-type.h"
+#include "player-info/monk-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -117,13 +118,13 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
                 this->player_ptr->redraw |= PR_STATE;
                 this->player_ptr->action = ACTION_NONE;
             }
-            if (this->player_ptr->action == ACTION_KAMAE) {
+            if (this->player_ptr->action == ACTION_MONK_STANCE) {
                 msg_print(_("構えがとけた。", "You lose your stance."));
-                this->player_ptr->special_defense &= ~(KAMAE_MASK);
+                PlayerClass(player_ptr).set_monk_stance(MonkStance::NONE);
                 this->player_ptr->update |= PU_BONUS;
                 this->player_ptr->redraw |= PR_STATE;
                 this->player_ptr->action = ACTION_NONE;
-            } else if (this->player_ptr->action == ACTION_KATA) {
+            } else if (this->player_ptr->action == ACTION_SAMURAI_STANCE) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
                 PlayerClass(player_ptr).lose_balance();
             }

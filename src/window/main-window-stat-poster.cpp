@@ -6,6 +6,7 @@
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/mane-data-type.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
@@ -187,33 +188,33 @@ void print_state(player_type *player_ptr)
         strcpy(text, _("釣り", "fish"));
         break;
     }
-    case ACTION_KAMAE: {
-        int i;
-        for (i = 0; i < MAX_KAMAE; i++)
-            if (player_ptr->special_defense & (KAMAE_GENBU << i))
+    case ACTION_MONK_STANCE: {
+        if (auto stance = PlayerClass(player_ptr).get_monk_stance();
+            stance != MonkStance::NONE) {
+            switch (stance) {
+            case MonkStance::GENBU:
+                attr = TERM_GREEN;
                 break;
-        switch (i) {
-        case 0:
-            attr = TERM_GREEN;
-            break;
-        case 1:
-            attr = TERM_WHITE;
-            break;
-        case 2:
-            attr = TERM_L_BLUE;
-            break;
-        case 3:
-            attr = TERM_L_RED;
-            break;
+            case MonkStance::BYAKKO:
+                attr = TERM_WHITE;
+                break;
+            case MonkStance::SEIRYU:
+                attr = TERM_L_BLUE;
+                break;
+            case MonkStance::SUZAKU:
+                attr = TERM_L_RED;
+                break;
+            default:
+                break;
+            }
+            strcpy(text, monk_stances[enum2i(stance) - 1].desc);
         }
-
-        strcpy(text, monk_stances[i].desc);
         break;
     }
-    case ACTION_KATA: {
-        if (auto kata = PlayerClass(player_ptr).get_kata();
-            kata != SamuraiKata::NONE) {
-            strcpy(text, samurai_stances[enum2i(kata) - 1].desc);
+    case ACTION_SAMURAI_STANCE: {
+        if (auto stance = PlayerClass(player_ptr).get_samurai_stance();
+            stance != SamuraiStance::NONE) {
+            strcpy(text, samurai_stances[enum2i(stance) - 1].desc);
         }
         break;
     }
