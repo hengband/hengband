@@ -69,10 +69,11 @@ static concptr item_activation_aux(object_type *o_ptr)
 {
     static char activation_detail[512];
     char timeout[64];
-    const activation_type *const act_ptr = find_activation_info(o_ptr);
+    auto act_ptr = find_activation_info(o_ptr);
 
-    if (!act_ptr)
+    if (!act_ptr.has_value()) {
         return _("未定義", "something undefined");
+    }
 
     concptr desc = act_ptr->desc;
     switch (act_ptr->index) {

@@ -55,9 +55,10 @@ static void decide_activation_level(ae_type *ae_ptr)
     }
 
     if (ae_ptr->o_ptr->is_random_artifact()) {
-        const activation_type *const act_ptr = find_activation_info(ae_ptr->o_ptr);
-        if (act_ptr != nullptr)
+        auto act_ptr = find_activation_info(ae_ptr->o_ptr);
+        if (act_ptr.has_value()) {
             ae_ptr->lev = act_ptr->level;
+        }
 
         return;
     }
@@ -141,14 +142,15 @@ static bool check_activation_conditions(player_type *player_ptr, ae_type *ae_ptr
 static bool activate_artifact(player_type *player_ptr, object_type *o_ptr)
 {
     concptr name = k_info[o_ptr->k_idx].name.c_str();
-    const activation_type *const act_ptr = find_activation_info(o_ptr);
-    if (!act_ptr) {
+    auto act_ptr = find_activation_info(o_ptr);
+    if (!act_ptr.has_value()) {
         msg_print("Activation information is not found.");
         return false;
     }
 
-    if (!switch_activation(player_ptr, &o_ptr, act_ptr, name))
+    if (!switch_activation(player_ptr, &o_ptr, &act_ptr.value(), name)) {
         return false;
+    }
 
     if (act_ptr->timeout.constant >= 0) {
         o_ptr->timeout = (int16_t)act_ptr->timeout.constant;
