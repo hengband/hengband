@@ -3854,9 +3854,6 @@
     <ClInclude Include="..\..\src\locale\language-switcher.h">
       <Filter>locale</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\alloc-entry-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\alloc-entries.h">
       <Filter>system</Filter>
     </ClInclude>

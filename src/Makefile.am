@@ -853,7 +853,6 @@ hengband_SOURCES = \
 	sv-definition/sv-other-types.h \
 	\
 	system/alloc-entries.cpp system/alloc-entries.h \
-	system/alloc-entry-definition.h \
 	system/angband.h \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
