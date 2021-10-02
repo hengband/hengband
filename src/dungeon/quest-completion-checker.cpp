@@ -32,7 +32,6 @@ QuestCompletionChecker::QuestCompletionChecker(player_type *player_ptr, monster_
  */
 void QuestCompletionChecker::complete()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     this->set_quest_idx();
     auto create_stairs = false;
     auto reward = false;
@@ -48,13 +47,7 @@ void QuestCompletionChecker::complete()
         return;
     }
 
-    object_type forge;
-    auto *o_ptr = &forge;
-    for (auto i = 0; i < (floor_ptr->dun_level / 15) + 1; i++) {
-        o_ptr->wipe();
-        make_object(this->player_ptr, o_ptr, AM_GOOD | AM_GREAT);
-        (void)drop_near(this->player_ptr, o_ptr, -1, pos.y, pos.x);
-    }
+    this->make_reward(pos);
 }
 
 void QuestCompletionChecker::set_quest_idx()
@@ -222,4 +215,14 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
     cave_set_feat(this->player_ptr, y, x, feat_down_stair);
     set_bits(this->player_ptr->update, PU_FLOW);
     return Pos2D(y, x);
+}
+
+void QuestCompletionChecker::make_reward(const Pos2D pos)
+{
+    auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
+    for (auto i = 0; i < (dun_level / 15) + 1; i++) {
+        object_type item;
+        make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT);
+        (void)drop_near(this->player_ptr, &item, -1, pos.y, pos.x);
+    }
 }

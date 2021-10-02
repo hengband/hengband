@@ -24,4 +24,5 @@ private:
     void set_quest_idx();
     std::tuple<bool, bool> switch_completion();
     Pos2D make_stairs(const bool create_stairs);
+    void make_reward(const Pos2D pos);
 };
