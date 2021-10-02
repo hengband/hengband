@@ -33,5 +33,5 @@ RandomArtActType grab_one_activation_flag(concptr what)
     }
 
     msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what);
-    return RandomArtActType::ACT_NONE;
+    return RandomArtActType::NONE;
 }

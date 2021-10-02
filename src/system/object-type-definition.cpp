@@ -74,8 +74,8 @@ void object_type::prep(KIND_OBJECT_IDX ko_idx)
     this->dd = k_ptr->dd;
     this->ds = k_ptr->ds;
 
-    if (k_ptr->act_idx > RandomArtActType::ACT_NONE)
-        this->xtra2 = k_ptr->act_idx;
+    if (k_ptr->act_idx > RandomArtActType::NONE)
+        this->activation_id = k_ptr->act_idx;
     if (k_info[this->k_idx].cost <= 0)
         this->ident |= (IDENT_BROKEN);
 

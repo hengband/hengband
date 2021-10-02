@@ -151,7 +151,7 @@ errr parse_k_info(std::string_view buf, angband_header *)
         if (tokens.size() < 2 || tokens[1].size() == 0)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         auto n = grab_one_activation_flag(tokens[1].c_str());
-        if (n <=RandomArtActType::ACT_NONE)
+        if (n <=RandomArtActType::NONE)
             return PARSE_ERROR_INVALID_FLAG;
 
         k_ptr->act_idx = n;

@@ -16,164 +16,164 @@
 static RandomArtActType invest_activation_elec(void)
 {
     if (!one_in_(3))
-        return RandomArtActType::ACT_BO_ELEC_1;
+        return RandomArtActType::BO_ELEC_1;
 
     if (!one_in_(5))
-        return RandomArtActType::ACT_BA_ELEC_2;
+        return RandomArtActType::BA_ELEC_2;
 
-    return RandomArtActType::ACT_BA_ELEC_3;
+    return RandomArtActType::BA_ELEC_3;
 }
 
 static RandomArtActType invest_activation_fire(void)
 {
     if (!one_in_(3))
-        return RandomArtActType::ACT_BO_FIRE_1;
+        return RandomArtActType::BO_FIRE_1;
 
     if (!one_in_(5))
-        return RandomArtActType::ACT_BA_FIRE_1;
+        return RandomArtActType::BA_FIRE_1;
 
-    return RandomArtActType::ACT_BA_FIRE_2;
+    return RandomArtActType::BA_FIRE_2;
 }
 
 static RandomArtActType invest_activation_cold(void)
 {
     if (!one_in_(3))
-        return RandomArtActType::ACT_BO_COLD_1;
+        return RandomArtActType::BO_COLD_1;
 
     if (!one_in_(3))
-        return RandomArtActType::ACT_BA_COLD_1;
+        return RandomArtActType::BA_COLD_1;
 
     if (!one_in_(3))
-        return RandomArtActType::ACT_BA_COLD_2;
+        return RandomArtActType::BA_COLD_2;
 
-    return RandomArtActType::ACT_BA_COLD_3;
+    return RandomArtActType::BA_COLD_3;
 }
 
 static RandomArtActType invest_activation_chaos(void)
 {
-    return one_in_(6) ? RandomArtActType::ACT_SUMMON_DEMON : RandomArtActType::ACT_CALL_CHAOS;
+    return one_in_(6) ? RandomArtActType::SUMMON_DEMON : RandomArtActType::CALL_CHAOS;
 }
 
 static RandomArtActType invest_activation_priest(void)
 {
     if (one_in_(13))
-        return RandomArtActType::ACT_CHARM_UNDEAD;
+        return RandomArtActType::CHARM_UNDEAD;
 
     if (one_in_(12))
-        return RandomArtActType::ACT_BANISH_EVIL;
+        return RandomArtActType::BANISH_EVIL;
 
     if (one_in_(11))
-        return RandomArtActType::ACT_DISP_EVIL;
+        return RandomArtActType::DISP_EVIL;
 
     if (one_in_(10))
-        return RandomArtActType::ACT_PROT_EVIL;
+        return RandomArtActType::PROT_EVIL;
 
     if (one_in_(9))
-        return RandomArtActType::ACT_CURE_1000;
+        return RandomArtActType::CURE_1000;
 
     if (one_in_(8))
-        return RandomArtActType::ACT_CURE_700;
+        return RandomArtActType::CURE_700;
 
     if (one_in_(7))
-        return RandomArtActType::ACT_REST_ALL;
+        return RandomArtActType::REST_ALL;
 
     if (one_in_(6))
-        return RandomArtActType::ACT_REST_EXP;
+        return RandomArtActType::REST_EXP;
 
-    return RandomArtActType::ACT_CURE_MW;
+    return RandomArtActType::CURE_MW;
 }
 
 static RandomArtActType invest_activation_necromancy(void)
 {
     if (one_in_(66))
-        return RandomArtActType::ACT_WRAITH;
+        return RandomArtActType::WRAITH;
 
     if (one_in_(13))
-        return RandomArtActType::ACT_DISP_GOOD;
+        return RandomArtActType::DISP_GOOD;
 
     if (one_in_(9))
-        return RandomArtActType::ACT_MASS_GENO;
+        return RandomArtActType::MASS_GENO;
 
     if (one_in_(8))
-        return RandomArtActType::ACT_GENOCIDE;
+        return RandomArtActType::GENOCIDE;
 
     if (one_in_(13))
-        return RandomArtActType::ACT_SUMMON_UNDEAD;
+        return RandomArtActType::SUMMON_UNDEAD;
 
     if (one_in_(9))
-        return RandomArtActType::ACT_DRAIN_2;
+        return RandomArtActType::DRAIN_2;
 
     if (one_in_(6))
-        return RandomArtActType::ACT_CHARM_UNDEAD;
+        return RandomArtActType::CHARM_UNDEAD;
 
-    return RandomArtActType::ACT_DRAIN_1;
+    return RandomArtActType::DRAIN_1;
 }
 
 static RandomArtActType invest_activation_law(void)
 {
     if (one_in_(8))
-        return RandomArtActType::ACT_BANISH_EVIL;
+        return RandomArtActType::BANISH_EVIL;
 
     if (one_in_(4))
-        return RandomArtActType::ACT_DISP_EVIL;
+        return RandomArtActType::DISP_EVIL;
 
-    return RandomArtActType::ACT_PROT_EVIL;
+    return RandomArtActType::PROT_EVIL;
 }
 
 static RandomArtActType invest_activation_rogue(void)
 {
     if (one_in_(50))
-        return RandomArtActType::ACT_SPEED;
+        return RandomArtActType::SPEED;
 
     if (one_in_(4))
-        return RandomArtActType::ACT_SLEEP;
+        return RandomArtActType::SLEEP;
 
     if (one_in_(3))
-        return RandomArtActType::ACT_DETECT_ALL;
+        return RandomArtActType::DETECT_ALL;
 
     if (one_in_(8))
-        return RandomArtActType::ACT_ID_FULL;
+        return RandomArtActType::ID_FULL;
 
-    return RandomArtActType::ACT_ID_PLAIN;
+    return RandomArtActType::ID_PLAIN;
 }
 
 static RandomArtActType invest_activation_mage(void)
 {
     if (one_in_(20))
-        return RandomArtActType::ACT_SUMMON_ELEMENTAL;
+        return RandomArtActType::SUMMON_ELEMENTAL;
 
     if (one_in_(10))
-        return RandomArtActType::ACT_SUMMON_PHANTOM;
+        return RandomArtActType::SUMMON_PHANTOM;
 
     if (one_in_(5))
-        return RandomArtActType::ACT_RUNE_EXPLO;
+        return RandomArtActType::RUNE_EXPLO;
 
-    return RandomArtActType::ACT_ESP;
+    return RandomArtActType::ESP;
 }
 
 static RandomArtActType invest_activation_warrior(void)
 {
-    return one_in_(100) ? RandomArtActType::ACT_INVULN : RandomArtActType::ACT_BERSERK;
+    return one_in_(100) ? RandomArtActType::INVULN : RandomArtActType::BERSERK;
 }
 
 static RandomArtActType invest_activation_ranger(void)
 {
     if (one_in_(20))
-        return RandomArtActType::ACT_CHARM_ANIMALS;
+        return RandomArtActType::CHARM_ANIMALS;
 
     if (one_in_(7))
-        return RandomArtActType::ACT_SUMMON_ANIMAL;
+        return RandomArtActType::SUMMON_ANIMAL;
 
     if (one_in_(6))
-        return RandomArtActType::ACT_CHARM_ANIMAL;
+        return RandomArtActType::CHARM_ANIMAL;
 
     if (one_in_(4))
-        return RandomArtActType::ACT_RESIST_ALL;
+        return RandomArtActType::RESIST_ALL;
 
     if (one_in_(3))
-        return RandomArtActType::ACT_SATIATE;
+        return RandomArtActType::SATIATE;
 
-    return RandomArtActType::ACT_CURE_POISON;
+    return RandomArtActType::CURE_POISON;
 }
 
 /*!
@@ -183,7 +183,7 @@ static RandomArtActType invest_activation_ranger(void)
  */
 void give_activation_power(object_type *o_ptr)
 {
-    RandomArtActType type =RandomArtActType::ACT_NONE;
+    RandomArtActType type =RandomArtActType::NONE;
     int chance = 0;
     switch (o_ptr->artifact_bias) {
     case BIAS_ELEC:
@@ -191,7 +191,7 @@ void give_activation_power(object_type *o_ptr)
         chance = 101;
         break;
     case BIAS_POIS:
-        type = RandomArtActType::ACT_BA_POIS_1;
+        type = RandomArtActType::BA_POIS_1;
         chance = 101;
         break;
     case BIAS_FIRE:
@@ -236,12 +236,12 @@ void give_activation_power(object_type *o_ptr)
         break;
     }
 
-    if ((type == RandomArtActType::ACT_NONE) || (randint1(100) >= chance)) {
+    if ((type == RandomArtActType::NONE) || (randint1(100) >= chance)) {
         one_activation(o_ptr);
         return;
     }
 
-    o_ptr->xtra2 = type;
+    o_ptr->activation_id = type;
     o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->timeout = 0;
 }

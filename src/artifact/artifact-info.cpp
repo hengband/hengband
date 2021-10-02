@@ -36,7 +36,7 @@ RandomArtActType activation_index(const object_type *o_ptr)
     if (!o_ptr->is_random_artifact() && k_info[o_ptr->k_idx].flags.has(TR_ACTIVATE))
         return k_info[o_ptr->k_idx].act_idx;
 
-    return o_ptr->xtra2;
+    return o_ptr->activation_id;
 }
 
 /*!

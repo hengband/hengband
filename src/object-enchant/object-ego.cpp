@@ -245,8 +245,8 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
     ego_invest_curse(o_ptr, gen_flags);
     ego_invest_extra_abilities(o_ptr, gen_flags);
 
-    if (e_ptr->act_idx > RandomArtActType::ACT_NONE)
-        o_ptr->xtra2 = e_ptr->act_idx;
+    if (e_ptr->act_idx > RandomArtActType::NONE)
+        o_ptr->activation_id = e_ptr->act_idx;
 
     o_ptr->to_h += (HIT_PROB)e_ptr->base_to_h;
     o_ptr->to_d += (HIT_POINT)e_ptr->base_to_d;

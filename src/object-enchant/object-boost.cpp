@@ -421,104 +421,104 @@ void one_low_esp(object_type *o_ptr)
  */
 void one_activation(object_type *o_ptr)
 {
-    RandomArtActType type =RandomArtActType::ACT_NONE;
+    RandomArtActType type =RandomArtActType::NONE;
     PERCENTAGE chance = 0;
     while (randint1(100) >= chance) {
-        type = i2enum<RandomArtActType>(randint1(enum2i(RandomArtActType::ACT_MAX)));
+        type = i2enum<RandomArtActType>(randint1(enum2i(RandomArtActType::MAX)));
         switch (type) {
-        case RandomArtActType::ACT_SUNLIGHT:
-        case RandomArtActType::ACT_BO_MISS_1:
-        case RandomArtActType::ACT_BA_POIS_1:
-        case RandomArtActType::ACT_BO_ELEC_1:
-        case RandomArtActType::ACT_BO_ACID_1:
-        case RandomArtActType::ACT_BO_COLD_1:
-        case RandomArtActType::ACT_BO_FIRE_1:
-        case RandomArtActType::ACT_CONFUSE:
-        case RandomArtActType::ACT_SLEEP:
-        case RandomArtActType::ACT_QUAKE:
-        case RandomArtActType::ACT_CURE_LW:
-        case RandomArtActType::ACT_CURE_MW:
-        case RandomArtActType::ACT_CURE_POISON:
-        case RandomArtActType::ACT_BERSERK:
-        case RandomArtActType::ACT_LIGHT:
-        case RandomArtActType::ACT_MAP_LIGHT:
-        case RandomArtActType::ACT_DEST_DOOR:
-        case RandomArtActType::ACT_STONE_MUD:
-        case RandomArtActType::ACT_TELEPORT:
+        case RandomArtActType::SUNLIGHT:
+        case RandomArtActType::BO_MISS_1:
+        case RandomArtActType::BA_POIS_1:
+        case RandomArtActType::BO_ELEC_1:
+        case RandomArtActType::BO_ACID_1:
+        case RandomArtActType::BO_COLD_1:
+        case RandomArtActType::BO_FIRE_1:
+        case RandomArtActType::CONFUSE:
+        case RandomArtActType::SLEEP:
+        case RandomArtActType::QUAKE:
+        case RandomArtActType::CURE_LW:
+        case RandomArtActType::CURE_MW:
+        case RandomArtActType::CURE_POISON:
+        case RandomArtActType::BERSERK:
+        case RandomArtActType::LIGHT:
+        case RandomArtActType::MAP_LIGHT:
+        case RandomArtActType::DEST_DOOR:
+        case RandomArtActType::STONE_MUD:
+        case RandomArtActType::TELEPORT:
             chance = 101;
             break;
-        case RandomArtActType::ACT_BA_COLD_1:
-        case RandomArtActType::ACT_BA_FIRE_1:
-        case RandomArtActType::ACT_HYPODYNAMIA_1:
-        case RandomArtActType::ACT_TELE_AWAY:
-        case RandomArtActType::ACT_ESP:
-        case RandomArtActType::ACT_RESIST_ALL:
-        case RandomArtActType::ACT_DETECT_ALL:
-        case RandomArtActType::ACT_RECALL:
-        case RandomArtActType::ACT_SATIATE:
-        case RandomArtActType::ACT_RECHARGE:
+        case RandomArtActType::BA_COLD_1:
+        case RandomArtActType::BA_FIRE_1:
+        case RandomArtActType::HYPODYNAMIA_1:
+        case RandomArtActType::TELE_AWAY:
+        case RandomArtActType::ESP:
+        case RandomArtActType::RESIST_ALL:
+        case RandomArtActType::DETECT_ALL:
+        case RandomArtActType::RECALL:
+        case RandomArtActType::SATIATE:
+        case RandomArtActType::RECHARGE:
             chance = 85;
             break;
-        case RandomArtActType::ACT_TERROR:
-        case RandomArtActType::ACT_PROT_EVIL:
-        case RandomArtActType::ACT_ID_PLAIN:
+        case RandomArtActType::TERROR:
+        case RandomArtActType::PROT_EVIL:
+        case RandomArtActType::ID_PLAIN:
             chance = 75;
             break;
-        case RandomArtActType::ACT_HYPODYNAMIA_2:
-        case RandomArtActType::ACT_DRAIN_1:
-        case RandomArtActType::ACT_BO_MISS_2:
-        case RandomArtActType::ACT_BA_FIRE_2:
-        case RandomArtActType::ACT_REST_EXP:
+        case RandomArtActType::HYPODYNAMIA_2:
+        case RandomArtActType::DRAIN_1:
+        case RandomArtActType::BO_MISS_2:
+        case RandomArtActType::BA_FIRE_2:
+        case RandomArtActType::REST_EXP:
             chance = 66;
             break;
-        case RandomArtActType::ACT_BA_FIRE_3:
-        case RandomArtActType::ACT_BA_COLD_3:
-        case RandomArtActType::ACT_BA_ELEC_3:
-        case RandomArtActType::ACT_WHIRLWIND:
-        case RandomArtActType::ACT_DRAIN_2:
-        case RandomArtActType::ACT_CHARM_ANIMAL:
+        case RandomArtActType::BA_FIRE_3:
+        case RandomArtActType::BA_COLD_3:
+        case RandomArtActType::BA_ELEC_3:
+        case RandomArtActType::WHIRLWIND:
+        case RandomArtActType::DRAIN_2:
+        case RandomArtActType::CHARM_ANIMAL:
             chance = 50;
             break;
-        case RandomArtActType::ACT_SUMMON_ANIMAL:
-        case RandomArtActType::ACT_ANIM_DEAD:
+        case RandomArtActType::SUMMON_ANIMAL:
+        case RandomArtActType::ANIM_DEAD:
             chance = 40;
             break;
-        case RandomArtActType::ACT_DISP_EVIL:
-        case RandomArtActType::ACT_BA_MISS_3:
-        case RandomArtActType::ACT_DISP_GOOD:
-        case RandomArtActType::ACT_BANISH_EVIL:
-        case RandomArtActType::ACT_GENOCIDE:
-        case RandomArtActType::ACT_MASS_GENO:
-        case RandomArtActType::ACT_CHARM_UNDEAD:
-        case RandomArtActType::ACT_CHARM_OTHER:
-        case RandomArtActType::ACT_SUMMON_PHANTOM:
-        case RandomArtActType::ACT_REST_ALL:
-        case RandomArtActType::ACT_RUNE_EXPLO:
+        case RandomArtActType::DISP_EVIL:
+        case RandomArtActType::BA_MISS_3:
+        case RandomArtActType::DISP_GOOD:
+        case RandomArtActType::BANISH_EVIL:
+        case RandomArtActType::GENOCIDE:
+        case RandomArtActType::MASS_GENO:
+        case RandomArtActType::CHARM_UNDEAD:
+        case RandomArtActType::CHARM_OTHER:
+        case RandomArtActType::SUMMON_PHANTOM:
+        case RandomArtActType::REST_ALL:
+        case RandomArtActType::RUNE_EXPLO:
             chance = 33;
             break;
-        case RandomArtActType::ACT_CALL_CHAOS:
-        case RandomArtActType::ACT_ROCKET:
-        case RandomArtActType::ACT_CHARM_ANIMALS:
-        case RandomArtActType::ACT_CHARM_OTHERS:
-        case RandomArtActType::ACT_SUMMON_ELEMENTAL:
-        case RandomArtActType::ACT_CURE_700:
-        case RandomArtActType::ACT_SPEED:
-        case RandomArtActType::ACT_ID_FULL:
-        case RandomArtActType::ACT_RUNE_PROT:
+        case RandomArtActType::CALL_CHAOS:
+        case RandomArtActType::ROCKET:
+        case RandomArtActType::CHARM_ANIMALS:
+        case RandomArtActType::CHARM_OTHERS:
+        case RandomArtActType::SUMMON_ELEMENTAL:
+        case RandomArtActType::CURE_700:
+        case RandomArtActType::SPEED:
+        case RandomArtActType::ID_FULL:
+        case RandomArtActType::RUNE_PROT:
             chance = 25;
             break;
-        case RandomArtActType::ACT_CURE_1000:
-        case RandomArtActType::ACT_XTRA_SPEED:
-        case RandomArtActType::ACT_DETECT_XTRA:
-        case RandomArtActType::ACT_DIM_DOOR:
+        case RandomArtActType::CURE_1000:
+        case RandomArtActType::XTRA_SPEED:
+        case RandomArtActType::DETECT_XTRA:
+        case RandomArtActType::DIM_DOOR:
             chance = 10;
             break;
-        case RandomArtActType::ACT_TREE_CREATION:
-        case RandomArtActType::ACT_SUMMON_DEMON:
-        case RandomArtActType::ACT_SUMMON_UNDEAD:
-        case RandomArtActType::ACT_WRAITH:
-        case RandomArtActType::ACT_INVULN:
-        case RandomArtActType::ACT_ALCHEMY:
+        case RandomArtActType::TREE_CREATION:
+        case RandomArtActType::SUMMON_DEMON:
+        case RandomArtActType::SUMMON_UNDEAD:
+        case RandomArtActType::WRAITH:
+        case RandomArtActType::INVULN:
+        case RandomArtActType::ALCHEMY:
             chance = 5;
             break;
         default:
@@ -526,7 +526,7 @@ void one_activation(object_type *o_ptr)
         }
     }
 
-    o_ptr->xtra2 = type;
+    o_ptr->activation_id = type;
     o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->timeout = 0;
 }

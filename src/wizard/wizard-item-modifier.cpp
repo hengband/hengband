@@ -212,13 +212,13 @@ void wiz_modify_item_activation(player_type *player_ptr)
         return;
 
     auto act_idx = i2enum<RandomArtActType>(atoi(tmp_val));
-    if ((act_idx <= RandomArtActType::ACT_NONE) || (act_idx > RandomArtActType::ACT_MAX)) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), enum2i(RandomArtActType::ACT_MAX) - 1);
+    if ((act_idx <= RandomArtActType::NONE) || (act_idx > RandomArtActType::MAX)) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), enum2i(RandomArtActType::MAX) - 1);
         return;
     }
 
     o_ptr->art_flags.set(TR_ACTIVATE);
-    o_ptr->xtra2 = act_idx;
+    o_ptr->activation_id = act_idx;
 }
 
 /*!
@@ -349,7 +349,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
     prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
-    prt(format("ident = %04x  xtra1 = %-4d  xtra2 = %-4d  timeout = %-d", o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
+    prt(format("ident = %04x  xtra1 = %-4d  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->xtra1, o_ptr->activation_id, o_ptr->timeout), 8, j);
     prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
     prt("+------------FLAGS1------------+", 10, j);

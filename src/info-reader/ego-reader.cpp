@@ -133,7 +133,7 @@ errr parse_e_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
         auto n = grab_one_activation_flag(tokens[1].c_str());
-        if (n <=RandomArtActType::ACT_NONE)
+        if (n <=RandomArtActType::NONE)
             return PARSE_ERROR_INVALID_FLAG;
 
         e_ptr->act_idx = n;

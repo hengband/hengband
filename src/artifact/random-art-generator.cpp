@@ -425,7 +425,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
         curse_artifact(player_ptr, o_ptr);
 
     if (!a_cursed && one_in_(o_ptr->is_armour() ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
-        o_ptr->xtra2 = RandomArtActType::ACT_NONE;
+        o_ptr->activation_id = RandomArtActType::NONE;
         give_activation_power(o_ptr);
     }
 

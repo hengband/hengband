@@ -214,7 +214,7 @@ artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr)
     o_ptr->to_h = a_ptr->to_h;
     o_ptr->to_d = a_ptr->to_d;
     o_ptr->weight = a_ptr->weight;
-    o_ptr->xtra2 = a_ptr->act_idx;
+    o_ptr->activation_id = a_ptr->act_idx;
 
     invest_curse_to_fixed_artifact(a_ptr, o_ptr);
     fixed_artifact_random_abilities(player_ptr, a_ptr, o_ptr);
