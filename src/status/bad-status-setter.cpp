@@ -124,7 +124,7 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
                 this->player_ptr->update |= PU_BONUS;
                 this->player_ptr->redraw |= PR_STATE;
                 this->player_ptr->action = ACTION_NONE;
-            } else if (this->player_ptr->action == ACTION_KATA) {
+            } else if (this->player_ptr->action == ACTION_SAMURAI_STANCE) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
                 PlayerClass(player_ptr).lose_balance();
             }

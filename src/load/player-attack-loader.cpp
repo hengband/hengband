@@ -27,8 +27,8 @@ void rd_special_action(player_type *player_ptr)
         return;
     }
 
-    if (!PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
-        player_ptr->action = ACTION_KATA;
+    if (!PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
+        player_ptr->action = ACTION_SAMURAI_STANCE;
     }
 }
 

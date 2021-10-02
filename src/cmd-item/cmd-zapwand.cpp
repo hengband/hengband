@@ -327,7 +327,7 @@ void do_cmd_aim_wand(player_type *player_ptr)
         return;
     if (cmd_limit_arena(player_ptr))
         return;
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
 
     q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
     s = _("使える魔法棒がない。", "You have no wand to aim.");

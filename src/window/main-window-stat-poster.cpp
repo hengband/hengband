@@ -211,10 +211,10 @@ void print_state(player_type *player_ptr)
         }
         break;
     }
-    case ACTION_KATA: {
-        if (auto kata = PlayerClass(player_ptr).get_kata();
-            kata != SamuraiKata::NONE) {
-            strcpy(text, samurai_stances[enum2i(kata) - 1].desc);
+    case ACTION_SAMURAI_STANCE: {
+        if (auto stance = PlayerClass(player_ptr).get_samurai_stance();
+            stance != SamuraiStance::NONE) {
+            strcpy(text, samurai_stances[enum2i(stance) - 1].desc);
         }
         break;
     }

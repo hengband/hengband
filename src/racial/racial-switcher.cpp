@@ -230,7 +230,7 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
             return false;
         }
 
-        if (!choose_kata(player_ptr))
+        if (!choose_samurai_stance(player_ptr))
             return false;
 
         set_bits(player_ptr->update, PU_BONUS);

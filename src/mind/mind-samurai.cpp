@@ -315,7 +315,7 @@ void concentration(player_type *player_ptr)
         return;
     }
 
-    if (!PlayerClass(player_ptr).kata_is(SamuraiKata::NONE)) {
+    if (!PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
         msg_print(_("今は構えに集中している。", "You're already concentrating on your stance."));
         return;
     }
@@ -335,7 +335,7 @@ void concentration(player_type *player_ptr)
  * @brief 剣術家の型設定処理
  * @return 型を変化させたらTRUE、型の構え不能かキャンセルしたらFALSEを返す。
  */
-bool choose_kata(player_type *player_ptr)
+bool choose_samurai_stance(player_type *player_ptr)
 {
     char choice;
     char buf[80];
@@ -366,7 +366,7 @@ bool choose_kata(player_type *player_ptr)
     prt("", 1, 0);
     prt(_("        どの型で構えますか？", "        Choose Stance: "), 1, 14);
 
-    SamuraiKata new_kata = SamuraiKata::NONE;
+    SamuraiStance new_stance = SamuraiStance::NONE;
     while (true) {
         choice = inkey();
 
@@ -374,34 +374,34 @@ bool choose_kata(player_type *player_ptr)
             screen_load();
             return false;
         } else if ((choice == 'a') || (choice == 'A')) {
-            if (player_ptr->action == ACTION_KATA) {
+            if (player_ptr->action == ACTION_SAMURAI_STANCE) {
                 set_action(player_ptr, ACTION_NONE);
             } else
                 msg_print(_("もともと構えていない。", "You are not in a special stance."));
             screen_load();
             return true;
         } else if ((choice == 'b') || (choice == 'B')) {
-            new_kata = SamuraiKata::IAI;
+            new_stance = SamuraiStance::IAI;
             break;
         } else if (((choice == 'c') || (choice == 'C')) && (player_ptr->lev > 29)) {
-            new_kata = SamuraiKata::FUUJIN;
+            new_stance = SamuraiStance::FUUJIN;
             break;
         } else if (((choice == 'd') || (choice == 'D')) && (player_ptr->lev > 34)) {
-            new_kata = SamuraiKata::KOUKIJIN;
+            new_stance = SamuraiStance::KOUKIJIN;
             break;
         } else if (((choice == 'e') || (choice == 'E')) && (player_ptr->lev > 39)) {
-            new_kata = SamuraiKata::MUSOU;
+            new_stance = SamuraiStance::MUSOU;
             break;
         }
     }
 
-    set_action(player_ptr, ACTION_KATA);
-    if (PlayerClass(player_ptr).kata_is(new_kata)) {
+    set_action(player_ptr, ACTION_SAMURAI_STANCE);
+    if (PlayerClass(player_ptr).samurai_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
         player_ptr->update |= (PU_BONUS | PU_MONSTERS);
-        msg_format(_("%sの型で構えた。", "You assume the %s stance."), samurai_stances[enum2i(new_kata) - 1].desc);
-        PlayerClass(player_ptr).set_kata(new_kata);
+        msg_format(_("%sの型で構えた。", "You assume the %s stance."), samurai_stances[enum2i(new_stance) - 1].desc);
+        PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }
 
     player_ptr->redraw |= (PR_STATE | PR_STATUS);
@@ -423,7 +423,7 @@ int calc_attack_quality(player_type *player_ptr, player_attack_type *pa_ptr)
     if (pa_ptr->mode == HISSATSU_IAI)
         chance += 60;
 
-    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
         chance += 150;
     }
 
@@ -473,7 +473,7 @@ void mineuchi(player_type *player_ptr, player_attack_type *pa_ptr)
  */
 void musou_counterattack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if ((!player_ptr->counter && !PlayerClass(player_ptr).kata_is(SamuraiKata::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
+    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
         || (player_ptr->csp <= 7))
         return;
 

@@ -626,7 +626,7 @@ void do_cmd_browse(player_type *player_ptr)
         return;
     }
 
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (player_ptr->pclass == CLASS_FORCETRAINER) {
         if (player_has_no_spellbooks(player_ptr)) {
@@ -783,7 +783,7 @@ void do_cmd_study(player_type *player_ptr)
         return;
     }
 
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
 #ifdef JP
     if (player_ptr->new_spells < 10) {

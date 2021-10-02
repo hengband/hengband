@@ -29,7 +29,7 @@
 /*!
  * @brief プレイヤーの継続行動を設定する。
  * @param typ 継続行動のID\n
- * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_MONK_STANCE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
+ * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_MONK_STANCE / #ACTION_SAMURAI_STANCE / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
  * から選択。
  */
 void set_action(player_type *player_ptr, uint8_t typ)
@@ -60,9 +60,9 @@ void set_action(player_type *player_ptr, uint8_t typ)
         PlayerClass(player_ptr).set_monk_stance(MonkStance::NONE);
         break;
     }
-    case ACTION_KATA: {
+    case ACTION_SAMURAI_STANCE: {
         msg_print(_("型を崩した。", "You stop assuming the special stance."));
-        PlayerClass(player_ptr).set_kata(SamuraiKata::NONE);
+        PlayerClass(player_ptr).set_samurai_stance(SamuraiStance::NONE);
         player_ptr->update |= (PU_MONSTERS);
         player_ptr->redraw |= (PR_STATUS);
         break;

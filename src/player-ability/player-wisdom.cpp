@@ -35,7 +35,7 @@ int16_t PlayerWisdom::battleform_value()
     int16_t result = 0;
 
     PlayerClass pc(player_ptr);
-    if (pc.kata_is(SamuraiKata::KOUKIJIN)) {
+    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
         result += 5;
     }
 

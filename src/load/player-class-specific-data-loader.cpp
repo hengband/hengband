@@ -181,7 +181,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<samurai_data_type
     } else {
         byte tmp8u;
         rd_byte(&tmp8u);
-        samurai_data->kata = i2enum<SamuraiKata>(tmp8u);
+        samurai_data->stance = i2enum<SamuraiStance>(tmp8u);
     }
 }
 

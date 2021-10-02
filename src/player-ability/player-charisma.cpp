@@ -33,7 +33,7 @@ int16_t PlayerCharisma::battleform_value()
 {
     int16_t result = 0;
 
-    if (PlayerClass(player_ptr).kata_is(SamuraiKata::KOUKIJIN)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
         result += 5;
     }
 

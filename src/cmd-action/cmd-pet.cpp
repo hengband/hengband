@@ -205,7 +205,7 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
     x = player_ptr->x + ddx[dir];
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-   PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU });
+   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (player_ptr->riding) {
         /* Skip non-empty grids */

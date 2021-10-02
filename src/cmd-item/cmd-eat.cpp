@@ -337,7 +337,7 @@ void do_cmd_eat_food(player_type *player_ptr)
     OBJECT_IDX item;
     concptr q, s;
 
-    PlayerClass(player_ptr).break_kata({ SamuraiKata::MUSOU, SamuraiKata::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
 
     q = _("どれを食べますか? ", "Eat which item? ");
     s = _("食べ物がない。", "You have nothing to eat.");
