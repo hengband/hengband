@@ -195,7 +195,7 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
         sprintf(tmp, "%d", leaving_quest);
         v = tmp;
     } else if (prefix(b + 1, "QUEST_TYPE")) {
-        sprintf(tmp, "%d", quest[atoi(b + 11)].type);
+        sprintf(tmp, "%d", enum2i(quest[atoi(b + 11)].type));
         v = tmp;
     } else if (prefix(b + 1, "QUEST")) {
         sprintf(tmp, "%d", enum2i(quest[atoi(b + 6)].status));

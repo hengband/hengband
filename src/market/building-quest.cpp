@@ -91,7 +91,7 @@ void castle_quest(player_type *player_ptr)
         get_questinfo(player_ptr, q_index, false);
         put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name), 11, 0);
 
-        if (q_ptr->type != QUEST_TYPE_KILL_LEVEL || q_ptr->dungeon == 0) {
+        if (q_ptr->type != QuestKindType::KILL_LEVEL || q_ptr->dungeon == 0) {
             put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
             return;
         }
@@ -119,7 +119,7 @@ void castle_quest(player_type *player_ptr)
 
     q_ptr->status = QuestStatusType::TAKEN;
     reinit_wilderness = true;
-    if (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL) {
+    if (q_ptr->type != QuestKindType::KILL_ANY_LEVEL) {
         print_questinfo(player_ptr, q_index, true);
         return;
     }

@@ -55,7 +55,7 @@ static bool confirm_leave_level(player_type *player_ptr, bool down_stair)
 {
     quest_type *q_ptr = &quest[player_ptr->current_floor_ptr->inside_quest];
     if (confirm_quest && player_ptr->current_floor_ptr->inside_quest
-        && (q_ptr->type == QUEST_TYPE_RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED)
+        && (q_ptr->type == QuestKindType::RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED)
             || (q_ptr->flags & QUEST_FLAG_TOWER
                 && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[QUEST_TOWER1].status != QuestStatusType::COMPLETED)))))) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
@@ -95,7 +95,7 @@ void do_cmd_go_up(player_type *player_ptr)
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
         if (quest[player_ptr->current_floor_ptr->inside_quest].status != QuestStatusType::UNTAKEN) {
-            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
+            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
@@ -128,12 +128,12 @@ void do_cmd_go_up(player_type *player_ptr)
     if (autosave_l)
         do_cmd_save_game(player_ptr, true);
 
-    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_RANDOM) {
+    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = 0;
     }
 
-    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
+    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
         player_ptr->current_floor_ptr->dun_level = 0;
@@ -212,7 +212,7 @@ void do_cmd_go_down(player_type *player_ptr)
         leave_tower_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
         if (quest[player_ptr->current_floor_ptr->inside_quest].status != QuestStatusType::UNTAKEN) {
-            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
+            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }

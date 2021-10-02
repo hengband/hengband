@@ -63,7 +63,7 @@ void player_wipe_without_name(player_type *player_ptr)
         q_ptr->status = QuestStatusType::UNTAKEN;
         q_ptr->cur_num = 0;
         q_ptr->max_num = 0;
-        q_ptr->type = 0;
+        q_ptr->type = QuestKindType::NONE;
         q_ptr->level = 0;
         q_ptr->r_idx = 0;
         q_ptr->complev = 0;

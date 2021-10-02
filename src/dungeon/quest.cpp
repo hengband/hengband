@@ -133,7 +133,7 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
     quest_type *const q_ptr = &quest[quest_num];
 
     switch (q_ptr->type) {
-    case QUEST_TYPE_RANDOM:
+    case QuestKindType::RANDOM:
         if (record_rand_quest)
             exe_write_diary(player_ptr, DIARY_RAND_QUEST_C, quest_num, nullptr);
         break;
@@ -163,7 +163,7 @@ void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr
 {
     /* Check if completed a quest */
     for (QUEST_IDX i = 0; i < max_q_idx; i++) {
-        if ((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].k_idx == o_ptr->name1)) {
+        if ((quest[i].type == QuestKindType::FIND_ARTIFACT) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].k_idx == o_ptr->name1)) {
             complete_quest(player_ptr, i);
         }
     }
@@ -225,7 +225,7 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
         if (quest[i].status != QuestStatusType::TAKEN)
             continue;
 
-        if ((quest[i].type == QUEST_TYPE_KILL_LEVEL) && !(quest[i].flags & QUEST_FLAG_PRESET) && (quest[i].level == level)
+        if ((quest[i].type == QuestKindType::KILL_LEVEL) && !(quest[i].flags & QUEST_FLAG_PRESET) && (quest[i].level == level)
             && (quest[i].dungeon == player_ptr->dungeon_idx))
             return i;
     }
@@ -245,7 +245,7 @@ QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
         return 0;
 
     for (QUEST_IDX i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
-        if ((quest[i].type == QUEST_TYPE_RANDOM) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].level == level)
+        if ((quest[i].type == QuestKindType::RANDOM) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].level == level)
             && (quest[i].dungeon == DUNGEON_ANGBAND)) {
             return i;
         }
@@ -265,7 +265,7 @@ void leave_quest_check(player_type *player_ptr)
         return;
 
     quest_type *const q_ptr = &quest[leaving_quest];
-    bool is_one_time_quest = ((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QUEST_TYPE_RANDOM)) && (q_ptr->status == QuestStatusType::TAKEN);
+    bool is_one_time_quest = ((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QuestKindType::RANDOM)) && (q_ptr->status == QuestStatusType::TAKEN);
     if (!is_one_time_quest)
         return;
 
@@ -273,23 +273,23 @@ void leave_quest_check(player_type *player_ptr)
 
     /* Additional settings */
     switch (q_ptr->type) {
-    case QUEST_TYPE_TOWER:
+    case QuestKindType::TOWER:
         quest[QUEST_TOWER1].status = QuestStatusType::FAILED;
         quest[QUEST_TOWER1].complev = player_ptr->lev;
         break;
-    case QUEST_TYPE_FIND_ARTIFACT:
+    case QuestKindType::FIND_ARTIFACT:
         a_info[q_ptr->k_idx].gen_flags.reset(TRG::QUESTITEM);
         break;
-    case QUEST_TYPE_RANDOM:
+    case QuestKindType::RANDOM:
         r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
-
-        /* Floor of random quest will be blocked */
         prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
+        break;
+    default:
         break;
     }
 
     /* Record finishing a quest */
-    if (q_ptr->type == QUEST_TYPE_RANDOM) {
+    if (q_ptr->type == QuestKindType::RANDOM) {
         if (record_rand_quest)
             exe_write_diary(player_ptr, DIARY_RAND_QUEST_F, leaving_quest, nullptr);
         return;
@@ -306,11 +306,11 @@ void leave_tower_check(player_type *player_ptr)
 {
     leaving_quest = player_ptr->current_floor_ptr->inside_quest;
     bool is_leaving_from_tower = leaving_quest != 0;
-    is_leaving_from_tower &= quest[leaving_quest].type == QUEST_TYPE_TOWER;
+    is_leaving_from_tower &= quest[leaving_quest].type == QuestKindType::TOWER;
     is_leaving_from_tower &= quest[QUEST_TOWER1].status != QuestStatusType::COMPLETED;
     if (!is_leaving_from_tower)
         return;
-    if (quest[leaving_quest].type != QUEST_TYPE_TOWER)
+    if (quest[leaving_quest].type != QuestKindType::TOWER)
         return;
 
     quest[QUEST_TOWER1].status = QuestStatusType::FAILED;
@@ -324,7 +324,7 @@ void leave_tower_check(player_type *player_ptr)
  */
 void exe_enter_quest(player_type *player_ptr, QUEST_IDX quest_idx)
 {
-    if (quest[quest_idx].type != QUEST_TYPE_RANDOM)
+    if (quest[quest_idx].type != QuestKindType::RANDOM)
         player_ptr->current_floor_ptr->dun_level = 1;
     player_ptr->current_floor_ptr->inside_quest = quest_idx;
 

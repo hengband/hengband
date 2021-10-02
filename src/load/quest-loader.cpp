@@ -97,10 +97,11 @@ static void load_quest_details(player_type *player_ptr, quest_type *q_ptr, int l
     q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
     rd_s16b(&tmp16s);
     q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
-    rd_s16b(&q_ptr->type);
+    rd_s16b(&tmp16s);
+    q_ptr->type = i2enum<QuestKindType>(tmp16s);
 
     rd_s16b(&q_ptr->r_idx);
-    if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
+    if ((q_ptr->type == QuestKindType::RANDOM) && (!q_ptr->r_idx))
         determine_random_questor(player_ptr, &quest[loading_quest_index]);
 
     rd_s16b(&q_ptr->k_idx);

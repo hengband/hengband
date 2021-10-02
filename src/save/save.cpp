@@ -138,7 +138,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
 
         wr_s16b((int16_t)q_ptr->cur_num);
         wr_s16b((int16_t)q_ptr->max_num);
-        wr_s16b(q_ptr->type);
+        wr_s16b(enum2i(q_ptr->type));
         wr_s16b(q_ptr->r_idx);
         wr_s16b(q_ptr->k_idx);
         wr_byte((byte)q_ptr->flags);

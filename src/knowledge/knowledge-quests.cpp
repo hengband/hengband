@@ -56,7 +56,7 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
 
     for (QUEST_IDX i = 1; i < max_q_idx; i++) {
         bool is_print = quest[i].status == QuestStatusType::TAKEN;
-        is_print |= (quest[i].status == QuestStatusType::STAGE_COMPLETED) && (quest[i].type == QUEST_TYPE_TOWER);
+        is_print |= (quest[i].status == QuestStatusType::STAGE_COMPLETED) && (quest[i].type == QuestKindType::TOWER);
         is_print |= quest[i].status == QuestStatusType::COMPLETED;
         if (!is_print)
             continue;
@@ -74,13 +74,13 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
             continue;
 
         total++;
-        if (quest[i].type != QUEST_TYPE_RANDOM) {
+        if (quest[i].type != QuestKindType::RANDOM) {
             char note[512] = "\0";
 
             if (quest[i].status == QuestStatusType::TAKEN || quest[i].status == QuestStatusType::STAGE_COMPLETED) {
                 switch (quest[i].type) {
-                case QUEST_TYPE_KILL_LEVEL:
-                case QUEST_TYPE_KILL_ANY_LEVEL:
+                case QuestKindType::KILL_LEVEL:
+                case QuestKindType::KILL_ANY_LEVEL:
                     r_ptr = &r_info[quest[i].r_idx];
                     strcpy(name, r_ptr->name.c_str());
                     if (quest[i].max_num > 1) {
@@ -94,7 +94,7 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
                         sprintf(note, _(" - %sを倒す。", " - kill %s."), name);
                     break;
 
-                case QUEST_TYPE_FIND_ARTIFACT:
+                case QuestKindType::FIND_ARTIFACT:
                     if (quest[i].k_idx) {
                         artifact_type *a_ptr = &a_info[quest[i].k_idx];
                         object_type forge;
@@ -107,11 +107,11 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
                     }
                     sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find %s."), name);
                     break;
-                case QUEST_TYPE_FIND_EXIT:
+                case QuestKindType::FIND_EXIT:
                     sprintf(note, _(" - 出口に到達する。", " - Reach exit."));
                     break;
 
-                case QUEST_TYPE_KILL_NUMBER:
+                case QuestKindType::KILL_NUMBER:
 #ifdef JP
                     sprintf(note, " - %d 体のモンスターを倒す。(あと %d 体)", (int)quest[i].max_num, (int)(quest[i].max_num - quest[i].cur_num));
 #else
@@ -119,9 +119,11 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
 #endif
                     break;
 
-                case QUEST_TYPE_KILL_ALL:
-                case QUEST_TYPE_TOWER:
+                case QuestKindType::KILL_ALL:
+                case QuestKindType::TOWER:
                     sprintf(note, _(" - 全てのモンスターを倒す。", " - Kill all monsters."));
+                    break;
+                default:
                     break;
                 }
             }
@@ -273,7 +275,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
         if (quest[i].flags & QUEST_FLAG_SILENT)
             continue;
 
-        if ((quest[i].type == QUEST_TYPE_RANDOM) && (quest[i].status == QuestStatusType::TAKEN)) {
+        if ((quest[i].type == QuestKindType::RANDOM) && (quest[i].status == QuestStatusType::TAKEN)) {
             total++;
             sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"), quest[i].name, (int)quest[i].level, r_info[quest[i].r_idx].name.c_str());
             fputs(tmp_str, fff);

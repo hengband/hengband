@@ -23,17 +23,17 @@ enum class QuestStatusType : short {
 	STAGE_COMPLETED = 7, /*!< クエストステータス状態：ステージ毎達成*/
 };
 
-/*
- * Quest type
- */
-#define QUEST_TYPE_KILL_LEVEL                1 /*!< クエスト目的: 特定のユニークモンスターを倒す */
-#define QUEST_TYPE_KILL_ANY_LEVEL            2 /*!< クエスト目的: イベント受託時点でランダムで選ばれた特定のユニークモンスターを倒す */
-#define QUEST_TYPE_FIND_ARTIFACT             3 /*!< クエスト目的: 特定のアーティファクトを発見する */
-#define QUEST_TYPE_FIND_EXIT                 4 /*!< クエスト目的: 脱出する */
-#define QUEST_TYPE_KILL_NUMBER               5 /*!< クエスト目的: モンスターを無差別に特定数倒す */
-#define QUEST_TYPE_KILL_ALL                  6 /*!< クエスト目的: エリア中のすべてのモンスターを全て倒す */
-#define QUEST_TYPE_RANDOM                    7 /*!< クエスト目的: ランダムクエストとして選ばれたユニーク1体を倒す */
-#define QUEST_TYPE_TOWER                     8 /*!< クエスト目的: 複数のエリアの全てのモンスターを倒す */
+enum class QuestKindType : short {
+	NONE = 0,                      /*!< ダミー、クエストではない */
+	KILL_LEVEL = 1,     /*!< クエスト目的: 特定のユニークモンスターを倒す */
+	KILL_ANY_LEVEL = 2, /*!< クエスト目的: イベント受託時点でランダムで選ばれた特定のユニークモンスターを倒す */
+	FIND_ARTIFACT = 3,  /*!< クエスト目的: 特定のアーティファクトを発見する */
+	FIND_EXIT = 4,      /*!< クエスト目的: 脱出する */
+	KILL_NUMBER = 5,    /*!< クエスト目的: モンスターを無差別に特定数倒す */
+	KILL_ALL = 6,       /*!< クエスト目的: エリア中のすべてのモンスターを全て倒す */
+	RANDOM = 7,         /*!< クエスト目的: ランダムクエストとして選ばれたユニーク1体を倒す */
+	TOWER = 8,          /*!< クエスト目的: 複数のエリアの全てのモンスターを倒す */
+};
 
 /*
  * Quest flags
@@ -60,7 +60,7 @@ public:
     quest_type() = default;
     virtual ~quest_type() = default;
     QuestStatusType status; /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
-	int16_t type;              /*!< クエストの種別 / The quest type */
+	QuestKindType type;              /*!< クエストの種別 / The quest type */
 
 	GAME_TEXT name[60];          /*!< クエスト名 / Quest name */
 	DEPTH level;            /*!< 処理階層 / Dungeon level */
@@ -70,7 +70,7 @@ public:
 	MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
 
 	KIND_OBJECT_IDX k_idx;              /*!< クエスト対象のアイテムID / object index */
-	MONSTER_NUMBER num_mon; /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
+	MONSTER_NUMBER num_mon; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
 
 	BIT_FLAGS flags;             /*!< クエストに関するフラグビット / quest flags */
 	DUNGEON_IDX dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */

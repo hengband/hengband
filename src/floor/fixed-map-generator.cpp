@@ -205,7 +205,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     if (num < 9)
         return true;
 
-    q_ptr->type = static_cast<int16_t>(atoi(zz[2]));
+    q_ptr->type = i2enum<QuestKindType>(atoi(zz[2]));
     q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
     q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
@@ -254,7 +254,7 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
         q_ptr->k_idx = (KIND_OBJECT_IDX)reward_idx;
         a_info[reward_idx].gen_flags.set(TRG::QUESTITEM);
     } else {
-        q_ptr->type = QUEST_TYPE_KILL_ALL;
+        q_ptr->type = QuestKindType::KILL_ALL;
     }
 
     return true;
