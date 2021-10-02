@@ -4,13 +4,18 @@
 
 #include <vector>
 
+// clang-format off
+
 /*
  * Quest constants
  */
 #define MIN_RANDOM_QUEST 40 /*<! ランダムクエストを割り当てるクエストIDの開始値 */
 #define MAX_RANDOM_QUEST 49 /*<! ランダムクエストを割り当てるクエストIDの終了値 */
-
-// clang-format off
+#define QUEST_TOWER1      5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
+#define QUEST_TOWER2      6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
+#define QUEST_TOWER3      7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
+#define QUEST_OBERON      8 /*<! オベロン打倒クエストに割り振るクエストID */
+#define QUEST_SERPENT     9 /*<! サーペント打倒クエストに割り振るクエストID */
 
 enum class QuestStatusType : short {
 	UNTAKEN = 0,         /*!< クエストステータス状態：未発生*/
@@ -43,12 +48,6 @@ enum class QuestKindType : short {
 #define QUEST_FLAG_ONCE    0x04 /*!< クエストフラグ: クエストがフロアを出た時点で完了する / quest is marked finished after leaving */
 #define QUEST_FLAG_TOWER   0x08 /*!< クエストフラグ: クエスト:塔の形式で進行する / Tower quest is special */
 
-#define QUEST_TOWER1 5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
-#define QUEST_TOWER2 6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
-#define QUEST_TOWER3 7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
-#define QUEST_OBERON 8 /*<! オベロン打倒クエストに割り振るクエストID */
-#define QUEST_SERPENT 9 /*<! サーペント打倒クエストに割り振るクエストID */
-
 // clang-format on
 
 /*!
@@ -60,25 +59,25 @@ public:
     quest_type() = default;
     virtual ~quest_type() = default;
     QuestStatusType status; /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
-	QuestKindType type;              /*!< クエストの種別 / The quest type */
+    QuestKindType type; /*!< クエストの種別 / The quest type */
 
-	GAME_TEXT name[60];          /*!< クエスト名 / Quest name */
-	DEPTH level;            /*!< 処理階層 / Dungeon level */
-	MONRACE_IDX r_idx;      /*!< クエスト対象のモンスターID / Monster race */
+    GAME_TEXT name[60]; /*!< クエスト名 / Quest name */
+    DEPTH level; /*!< 処理階層 / Dungeon level */
+    MONRACE_IDX r_idx; /*!< クエスト対象のモンスターID / Monster race */
 
-	MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
-	MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
+    MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
+    MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
 
-	KIND_OBJECT_IDX k_idx;              /*!< クエスト対象のアイテムID / object index */
-	MONSTER_NUMBER num_mon; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
+    KIND_OBJECT_IDX k_idx; /*!< クエスト対象のアイテムID / object index */
+    MONSTER_NUMBER num_mon; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
 
-	BIT_FLAGS flags;             /*!< クエストに関するフラグビット / quest flags */
-	DUNGEON_IDX dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */
+    BIT_FLAGS flags; /*!< クエストに関するフラグビット / quest flags */
+    DUNGEON_IDX dungeon; /*!< クエスト対象のダンジョンID / quest dungeon */
 
-	PLAYER_LEVEL complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
-	REAL_TIME comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/
+    PLAYER_LEVEL complev; /*!< クリア時プレイヤーレベル / player level (complete) */
+    REAL_TIME comptime; /*!< クリア時ゲーム時間 /  quest clear time*/
 
-	static bool is_fixed(short quest_idx);
+    static bool is_fixed(short quest_idx);
 };
 
 extern std::vector<quest_type> quest;
@@ -87,7 +86,7 @@ extern char quest_text[10][80];
 extern int quest_text_line;
 extern int leaving_quest;
 
-struct object_type;;
+struct object_type;
 struct player_type;
 void determine_random_questor(player_type *player_ptr, quest_type *q_ptr);
 void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat);
