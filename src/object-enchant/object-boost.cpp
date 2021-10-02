@@ -6,6 +6,7 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief 上質以上のオブジェクトに与えるための各種ボーナスを正規乱数も加えて算出する。
@@ -420,104 +421,104 @@ void one_low_esp(object_type *o_ptr)
  */
 void one_activation(object_type *o_ptr)
 {
-    int type = 0;
+    RandomArtActType type =RandomArtActType::ACT_NONE;
     PERCENTAGE chance = 0;
     while (randint1(100) >= chance) {
-        type = randint1(ACT_MAX);
+        type = i2enum<RandomArtActType>(randint1(enum2i(RandomArtActType::ACT_MAX)));
         switch (type) {
-        case ACT_SUNLIGHT:
-        case ACT_BO_MISS_1:
-        case ACT_BA_POIS_1:
-        case ACT_BO_ELEC_1:
-        case ACT_BO_ACID_1:
-        case ACT_BO_COLD_1:
-        case ACT_BO_FIRE_1:
-        case ACT_CONFUSE:
-        case ACT_SLEEP:
-        case ACT_QUAKE:
-        case ACT_CURE_LW:
-        case ACT_CURE_MW:
-        case ACT_CURE_POISON:
-        case ACT_BERSERK:
-        case ACT_LIGHT:
-        case ACT_MAP_LIGHT:
-        case ACT_DEST_DOOR:
-        case ACT_STONE_MUD:
-        case ACT_TELEPORT:
+        case RandomArtActType::ACT_SUNLIGHT:
+        case RandomArtActType::ACT_BO_MISS_1:
+        case RandomArtActType::ACT_BA_POIS_1:
+        case RandomArtActType::ACT_BO_ELEC_1:
+        case RandomArtActType::ACT_BO_ACID_1:
+        case RandomArtActType::ACT_BO_COLD_1:
+        case RandomArtActType::ACT_BO_FIRE_1:
+        case RandomArtActType::ACT_CONFUSE:
+        case RandomArtActType::ACT_SLEEP:
+        case RandomArtActType::ACT_QUAKE:
+        case RandomArtActType::ACT_CURE_LW:
+        case RandomArtActType::ACT_CURE_MW:
+        case RandomArtActType::ACT_CURE_POISON:
+        case RandomArtActType::ACT_BERSERK:
+        case RandomArtActType::ACT_LIGHT:
+        case RandomArtActType::ACT_MAP_LIGHT:
+        case RandomArtActType::ACT_DEST_DOOR:
+        case RandomArtActType::ACT_STONE_MUD:
+        case RandomArtActType::ACT_TELEPORT:
             chance = 101;
             break;
-        case ACT_BA_COLD_1:
-        case ACT_BA_FIRE_1:
-        case ACT_HYPODYNAMIA_1:
-        case ACT_TELE_AWAY:
-        case ACT_ESP:
-        case ACT_RESIST_ALL:
-        case ACT_DETECT_ALL:
-        case ACT_RECALL:
-        case ACT_SATIATE:
-        case ACT_RECHARGE:
+        case RandomArtActType::ACT_BA_COLD_1:
+        case RandomArtActType::ACT_BA_FIRE_1:
+        case RandomArtActType::ACT_HYPODYNAMIA_1:
+        case RandomArtActType::ACT_TELE_AWAY:
+        case RandomArtActType::ACT_ESP:
+        case RandomArtActType::ACT_RESIST_ALL:
+        case RandomArtActType::ACT_DETECT_ALL:
+        case RandomArtActType::ACT_RECALL:
+        case RandomArtActType::ACT_SATIATE:
+        case RandomArtActType::ACT_RECHARGE:
             chance = 85;
             break;
-        case ACT_TERROR:
-        case ACT_PROT_EVIL:
-        case ACT_ID_PLAIN:
+        case RandomArtActType::ACT_TERROR:
+        case RandomArtActType::ACT_PROT_EVIL:
+        case RandomArtActType::ACT_ID_PLAIN:
             chance = 75;
             break;
-        case ACT_HYPODYNAMIA_2:
-        case ACT_DRAIN_1:
-        case ACT_BO_MISS_2:
-        case ACT_BA_FIRE_2:
-        case ACT_REST_EXP:
+        case RandomArtActType::ACT_HYPODYNAMIA_2:
+        case RandomArtActType::ACT_DRAIN_1:
+        case RandomArtActType::ACT_BO_MISS_2:
+        case RandomArtActType::ACT_BA_FIRE_2:
+        case RandomArtActType::ACT_REST_EXP:
             chance = 66;
             break;
-        case ACT_BA_FIRE_3:
-        case ACT_BA_COLD_3:
-        case ACT_BA_ELEC_3:
-        case ACT_WHIRLWIND:
-        case ACT_DRAIN_2:
-        case ACT_CHARM_ANIMAL:
+        case RandomArtActType::ACT_BA_FIRE_3:
+        case RandomArtActType::ACT_BA_COLD_3:
+        case RandomArtActType::ACT_BA_ELEC_3:
+        case RandomArtActType::ACT_WHIRLWIND:
+        case RandomArtActType::ACT_DRAIN_2:
+        case RandomArtActType::ACT_CHARM_ANIMAL:
             chance = 50;
             break;
-        case ACT_SUMMON_ANIMAL:
-        case ACT_ANIM_DEAD:
+        case RandomArtActType::ACT_SUMMON_ANIMAL:
+        case RandomArtActType::ACT_ANIM_DEAD:
             chance = 40;
             break;
-        case ACT_DISP_EVIL:
-        case ACT_BA_MISS_3:
-        case ACT_DISP_GOOD:
-        case ACT_BANISH_EVIL:
-        case ACT_GENOCIDE:
-        case ACT_MASS_GENO:
-        case ACT_CHARM_UNDEAD:
-        case ACT_CHARM_OTHER:
-        case ACT_SUMMON_PHANTOM:
-        case ACT_REST_ALL:
-        case ACT_RUNE_EXPLO:
+        case RandomArtActType::ACT_DISP_EVIL:
+        case RandomArtActType::ACT_BA_MISS_3:
+        case RandomArtActType::ACT_DISP_GOOD:
+        case RandomArtActType::ACT_BANISH_EVIL:
+        case RandomArtActType::ACT_GENOCIDE:
+        case RandomArtActType::ACT_MASS_GENO:
+        case RandomArtActType::ACT_CHARM_UNDEAD:
+        case RandomArtActType::ACT_CHARM_OTHER:
+        case RandomArtActType::ACT_SUMMON_PHANTOM:
+        case RandomArtActType::ACT_REST_ALL:
+        case RandomArtActType::ACT_RUNE_EXPLO:
             chance = 33;
             break;
-        case ACT_CALL_CHAOS:
-        case ACT_ROCKET:
-        case ACT_CHARM_ANIMALS:
-        case ACT_CHARM_OTHERS:
-        case ACT_SUMMON_ELEMENTAL:
-        case ACT_CURE_700:
-        case ACT_SPEED:
-        case ACT_ID_FULL:
-        case ACT_RUNE_PROT:
+        case RandomArtActType::ACT_CALL_CHAOS:
+        case RandomArtActType::ACT_ROCKET:
+        case RandomArtActType::ACT_CHARM_ANIMALS:
+        case RandomArtActType::ACT_CHARM_OTHERS:
+        case RandomArtActType::ACT_SUMMON_ELEMENTAL:
+        case RandomArtActType::ACT_CURE_700:
+        case RandomArtActType::ACT_SPEED:
+        case RandomArtActType::ACT_ID_FULL:
+        case RandomArtActType::ACT_RUNE_PROT:
             chance = 25;
             break;
-        case ACT_CURE_1000:
-        case ACT_XTRA_SPEED:
-        case ACT_DETECT_XTRA:
-        case ACT_DIM_DOOR:
+        case RandomArtActType::ACT_CURE_1000:
+        case RandomArtActType::ACT_XTRA_SPEED:
+        case RandomArtActType::ACT_DETECT_XTRA:
+        case RandomArtActType::ACT_DIM_DOOR:
             chance = 10;
             break;
-        case ACT_TREE_CREATION:
-        case ACT_SUMMON_DEMON:
-        case ACT_SUMMON_UNDEAD:
-        case ACT_WRAITH:
-        case ACT_INVULN:
-        case ACT_ALCHEMY:
+        case RandomArtActType::ACT_TREE_CREATION:
+        case RandomArtActType::ACT_SUMMON_DEMON:
+        case RandomArtActType::ACT_SUMMON_UNDEAD:
+        case RandomArtActType::ACT_WRAITH:
+        case RandomArtActType::ACT_INVULN:
+        case RandomArtActType::ACT_ALCHEMY:
             chance = 5;
             break;
         default:
@@ -525,7 +526,7 @@ void one_activation(object_type *o_ptr)
         }
     }
 
-    o_ptr->xtra2 = (byte)type;
+    o_ptr->xtra2 = type;
     o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->timeout = 0;
 }

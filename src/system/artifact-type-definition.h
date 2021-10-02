@@ -18,7 +18,8 @@
  * the save-file only writes "cur_num" to the savefile.
  * "max_num" is always "1" (if that artifact "exists")
  */
-typedef struct artifact_type {
+enum class RandomArtActType : short;
+struct artifact_type {
     ARTIFACT_IDX idx{};
 
     std::string name; /*!< アーティファクト名(headerオフセット参照) / Name (offset) */
@@ -41,7 +42,7 @@ typedef struct artifact_type {
 	byte cur_num{};		/*! 現在の生成数 / Number created (0 or 1) */
 	byte max_num{};		/*! (未使用)最大生成数 / Unused (should be "1") */
 	FLOOR_IDX floor_id{};      /*! アイテムを落としたフロアのID / Leaved on this location last time */
-	byte act_idx{};		/*! 発動能力ID / Activative ability index */
-} artifact_type;
+    RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
+};
 
 extern std::vector<artifact_type> a_info;

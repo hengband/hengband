@@ -205,17 +205,15 @@ void wiz_modify_item_activation(player_type *player_ptr)
     if (!o_ptr)
         return;
 
-    XTRA16 act_idx;
     char tmp[80] = "";
-    sprintf(tmp, "Artifact ID (1-%d): ", ACT_MAX);
+    sprintf(tmp, "Artifact ID (1-%d): ", enum2i(RandomArtActType::MAX));
     char tmp_val[10] = "";
     if (!get_string(tmp, tmp_val, 3))
         return;
 
-    act_idx = (XTRA16)atoi(tmp_val);
-
-    if (act_idx <= 0 || act_idx > ACT_MAX) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), ACT_MAX - 1);
+    auto act_idx = i2enum<RandomArtActType>(atoi(tmp_val));
+    if ((act_idx <= RandomArtActType::ACT_NONE) || (act_idx > RandomArtActType::ACT_MAX)) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), enum2i(RandomArtActType::ACT_MAX) - 1);
         return;
     }
 

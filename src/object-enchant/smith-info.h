@@ -10,7 +10,7 @@
 enum class SmithEffect : int16_t;
 enum class SmithCategory;
 enum class SmithEssence : int16_t;
-enum random_art_activation_type : uint8_t;
+enum class RandomArtActType : short;
 
 struct player_type;
 struct object_type;
@@ -87,13 +87,13 @@ private:
  */
 class ActivationSmithInfo : public ISmithInfo {
 public:
-    ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, random_art_activation_type act_idx);
+    ActivationSmithInfo(SmithEffect effect, concptr name, SmithCategory category, std::vector<SmithEssence> need_essences, int consumption, RandomArtActType act_idx);
     virtual bool add_essence(player_type *player_ptr, object_type *o_ptr, int number) const override;
     virtual void erase_essence(object_type *) const override;
     virtual bool can_give_smith_effect(const object_type *o_ptr) const override;
 
 private:
-    random_art_activation_type act_idx; //!< 発動能力ID
+    RandomArtActType act_idx; //!< 発動能力ID
 };
 
 /*!

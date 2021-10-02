@@ -12,7 +12,8 @@
 extern int error_idx; //!< エラーが発生したinfo ID
 extern int error_line; //!< エラーが発生した行
 
-byte grab_one_activation_flag(concptr what);
+enum class RandomArtActType : short;
+RandomArtActType grab_one_activation_flag(concptr what);
 
 using sview = std::string_view;
 

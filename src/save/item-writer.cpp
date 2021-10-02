@@ -1,4 +1,5 @@
 ﻿#include "save/item-writer.h"
+#include "artifact/random-art-effects.h"
 #include "load/savedata-flag-types.h"
 #include "object/object-kind.h"
 #include "save/save-util.h"
@@ -62,7 +63,7 @@ static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->xtra1)
         *flags |= SAVE_ITEM_XTRA1;
 
-    if (o_ptr->xtra2)
+    if (o_ptr->xtra2 > RandomArtActType::ACT_NONE)
         *flags |= SAVE_ITEM_XTRA2;
 
     if (o_ptr->xtra3)
@@ -142,7 +143,7 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
         wr_byte(o_ptr->xtra1);
 
     if (flags & SAVE_ITEM_XTRA2)
-        wr_s16b(o_ptr->xtra2);
+        wr_s16b(enum2i(o_ptr->xtra2));
 
     if (flags & SAVE_ITEM_XTRA3)
         wr_byte(o_ptr->xtra3);

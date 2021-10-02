@@ -15,6 +15,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/quarks.h"
 
 /*!
@@ -180,13 +181,14 @@ void rd_item(object_type *o_ptr)
     if (any_bits(flags, SAVE_ITEM_XTRA2)) {
         if (h_older_than(3, 0, 0, 2)) {
             rd_byte(&tmp8u);
-            o_ptr->xtra2 = tmp8u;
+            o_ptr->xtra2 = i2enum<RandomArtActType>(tmp8u);
         } else {
             rd_s16b(&tmp16s);
-            o_ptr->xtra2 = tmp16s;
+            o_ptr->xtra2 = i2enum<RandomArtActType>(tmp16s);
         }
-    } else
-        o_ptr->xtra2 = 0;
+    } else {
+        o_ptr->xtra2 = i2enum<RandomArtActType>(0);
+    }
 
     if (any_bits(flags, SAVE_ITEM_XTRA3))
         rd_byte(&o_ptr->xtra3);
@@ -221,7 +223,7 @@ void rd_item(object_type *o_ptr)
 
         rd_s16b(&tmp16s);
         if (tmp16s > 0) {
-            o_ptr->smith_act_idx = static_cast<random_art_activation_type>(tmp16s);
+            o_ptr->smith_act_idx = static_cast<RandomArtActType>(tmp16s);
         }
     }
 
