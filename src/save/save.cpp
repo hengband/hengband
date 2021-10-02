@@ -132,7 +132,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
 
         bool is_quest_running = q_ptr->status == QUEST_STATUS_TAKEN;
         is_quest_running |= q_ptr->status == QUEST_STATUS_COMPLETED;
-        is_quest_running |= !is_fixed_quest_idx(i);
+        is_quest_running |= !quest_type::is_fixed(i);
         if (!is_quest_running)
             continue;
 

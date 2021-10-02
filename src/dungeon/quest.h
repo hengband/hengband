@@ -43,13 +43,6 @@
 #define QUEST_FLAG_ONCE    0x04 /*!< クエストフラグ: クエストがフロアを出た時点で完了する / quest is marked finished after leaving */
 #define QUEST_FLAG_TOWER   0x08 /*!< クエストフラグ: クエスト:塔の形式で進行する / Tower quest is special */
 
-/*!
- * @brief 該当IDが固定クエストかどうかを判定する / Check is the quest index is "fixed"
- * @param Q_IDX クエストID
- * @return 固定クエストならばTRUEを返す
- */
-#define is_fixed_quest_idx(Q_IDX) (((Q_IDX) < MIN_RANDOM_QUEST) || ((Q_IDX) > MAX_RANDOM_QUEST))
-
 #define QUEST_TOWER1 5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
 #define QUEST_TOWER2 6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
 #define QUEST_TOWER3 7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
@@ -60,7 +53,10 @@
  * @struct quest_type
  * @brief クエスト情報の構造体 / Structure for the "quests".
  */
-typedef struct quest_type {
+struct quest_type {
+public:
+    quest_type() = default;
+    virtual ~quest_type() = default;
 	int16_t status;          /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
 	int16_t type;              /*!< クエストの種別 / The quest type */
 
@@ -79,7 +75,9 @@ typedef struct quest_type {
 
 	PLAYER_LEVEL complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
 	REAL_TIME comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/
-} quest_type;
+
+	static bool is_fixed(short quest_idx);
+};
 
 extern std::vector<quest_type> quest;
 extern QUEST_IDX max_q_idx;

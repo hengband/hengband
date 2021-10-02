@@ -108,7 +108,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     term_fresh();
 
     if (quest_num
-        && (is_fixed_quest_idx(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
+        && (quest_type::is_fixed(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
         do_cmd_feeling(player_ptr);
 
     if (player_ptr->phase_out) {

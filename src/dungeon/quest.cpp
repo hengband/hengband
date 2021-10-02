@@ -54,6 +54,16 @@ static concptr find_quest[] = {
 };
 
 /*!
+ * @brief 該当IDが固定クエストかどうかを判定する.
+ * @param quest_idx クエストID
+ * @return 固定クエストならばTRUEを返す
+ */
+bool quest_type::is_fixed(short quest_idx)
+{
+    return ((quest_idx) < MIN_RANDOM_QUEST) || ((quest_idx) > MAX_RANDOM_QUEST);
+}
+
+/*!
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param q_ptr クエスト構造体の参照ポインタ
  */

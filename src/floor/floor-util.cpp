@@ -183,7 +183,7 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
 concptr map_name(player_type *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest) && (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
+    if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest) && (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
         return _("クエスト", "Quest");
     else if (player_ptr->wild_mode)
         return _("地上", "Surface");

@@ -182,7 +182,8 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
     quest_type *const q_ptr = &quest[q_idx];
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (is_fixed_quest_idx(q_idx)) {
+    auto is_fixed_quest = quest_type::is_fixed(q_idx);
+    if (is_fixed_quest) {
         IDX old_quest = floor_ptr->inside_quest;
         floor_ptr->inside_quest = q_idx;
         init_flags = INIT_NAME_ONLY;
@@ -194,7 +195,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 
     strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
 
-    if (is_fixed_quest_idx(q_idx) || (q_ptr->r_idx == 0)) {
+    if (is_fixed_quest || (q_ptr->r_idx == 0)) {
         sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), q_ptr->name, (int)q_ptr->level,
             q_ptr->complev, playtime_str);
         fputs(tmp_str, fff);
