@@ -13,6 +13,8 @@
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
 
+#include <algorithm>
+
 /*!
  * @brief ベースアイテムの各情報を文字列化する /
  * Describe the kind
@@ -88,7 +90,6 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
  */
 spoiler_output_status spoil_obj_desc(concptr fname)
 {
-    player_type dummy;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
@@ -101,59 +102,39 @@ spoiler_output_status spoil_obj_desc(concptr fname)
     fprintf(spoiler_file, "Spoiler File -- Basic Items (%s)\n\n\n", title);
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
-    int n = 0;
-    int group_start = 0;
-    KIND_OBJECT_IDX who[200];
-    for (int i = 0; true; i++) {
-        if (group_item[i].name) {
-            if (n) {
-                for (int s = 0; s < n - 1; s++) {
-                    for (int t = 0; t < n - 1; t++) {
-                        int i1 = t;
-                        int i2 = t + 1;
 
-                        DEPTH e1;
-                        DEPTH e2;
-
-                        PRICE t1;
-                        PRICE t2;
-
-                        kind_info(&dummy, nullptr, nullptr, nullptr, nullptr, &e1, &t1, who[i1]);
-                        kind_info(&dummy, nullptr, nullptr, nullptr, nullptr, &e2, &t2, who[i2]);
-
-                        if ((t1 > t2) || ((t1 == t2) && (e1 > e2))) {
-                            uint16_t tmp = who[i1];
-                            who[i1] = who[i2];
-                            who[i2] = tmp;
-                        }
-                    }
+    for (const auto &[tval_list, name] : group_item_list) {
+        std::vector<KIND_OBJECT_IDX> whats;
+        for (auto tval : tval_list) {
+            for (const auto &k_ref : k_info) {
+                if ((k_ref.tval == tval) && k_ref.gen_flags.has_not(TRG::INSTA_ART)) {
+                    whats.push_back(k_ref.idx);
                 }
-
-                fprintf(spoiler_file, "\n\n%s\n\n", group_item[group_start].name);
-                for (int s = 0; s < n; s++) {
-                    DEPTH e;
-                    PRICE v;
-                    char wgt[80];
-                    char chance[80];
-                    char dam[80];
-                    kind_info(&dummy, buf, dam, wgt, chance, &e, &v, who[s]);
-                    fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, (int)e, chance, (long)(v));
-                }
-
-                n = 0;
             }
-
-            if (!group_item[i].tval)
-                break;
-
-            group_start = i;
+        }
+        if (whats.empty()) {
+            continue;
         }
 
-        for (const auto &k_ref : k_info) {
-            if ((k_ref.idx == 0) || (k_ref.tval != group_item[i].tval) || k_ref.gen_flags.has(TRG::INSTA_ART))
-                continue;
+        std::stable_sort(whats.begin(), whats.end(), [](auto k1_idx, auto k2_idx) {
+            player_type dummy;
+            DEPTH d1, d2;
+            PRICE p1, p2;
+            kind_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d1, &p1, k1_idx);
+            kind_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d2, &p2, k2_idx);
+            return (p1 != p2) ? p1 < p2 : d1 < d2;
+        });
 
-            who[n++] = k_ref.idx;
+        fprintf(spoiler_file, "\n\n%s\n\n", name);
+        for (const auto &k_idx : whats) {
+            DEPTH e;
+            PRICE v;
+            char wgt[80];
+            char chance[80];
+            char dam[80];
+            player_type dummy;
+            kind_info(&dummy, buf, dam, wgt, chance, &e, &v, k_idx);
+            fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, static_cast<int>(e), chance, static_cast<long>(v));
         }
     }
 

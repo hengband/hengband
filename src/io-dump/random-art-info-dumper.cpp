@@ -50,12 +50,12 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
  * @brief ランダムアーティファクト内容をスポイラー出力するサブルーチン /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
- * @param i 出力したい記録ランダムアーティファクトID
+ * @param tval 出力したいランダムアーティファクトの種類
  */
-static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_ptr, int i)
+static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_ptr, tval_type tval)
 {
     obj_desc_list artifact;
-    if (!o_ptr->is_known() || !o_ptr->art_name || o_ptr->tval != group_artifact[i].tval)
+    if (!o_ptr->is_known() || !o_ptr->art_name || o_ptr->tval != tval)
         return;
 
     random_artifact_analyze(player_ptr, o_ptr, &artifact);
@@ -81,27 +81,29 @@ void spoil_random_artifact(player_type *player_ptr, concptr fname)
 
     sprintf(buf, "Random artifacts list.\r");
     spoiler_underline(buf);
-    for (int j = 0; group_artifact[j].tval; j++) {
-        for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            q_ptr = &player_ptr->inventory_list[i];
-            spoil_random_artifact_aux(player_ptr, q_ptr, j);
-        }
+    for (const auto &[tval_list, name] : group_artifact_list) {
+        for (auto tval : tval_list) {
+            for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+                q_ptr = &player_ptr->inventory_list[i];
+                spoil_random_artifact_aux(player_ptr, q_ptr, tval);
+            }
 
-        for (int i = 0; i < INVEN_PACK; i++) {
-            q_ptr = &player_ptr->inventory_list[i];
-            spoil_random_artifact_aux(player_ptr, q_ptr, j);
-        }
+            for (int i = 0; i < INVEN_PACK; i++) {
+                q_ptr = &player_ptr->inventory_list[i];
+                spoil_random_artifact_aux(player_ptr, q_ptr, tval);
+            }
 
-        store_ptr = &town_info[1].store[STORE_HOME];
-        for (int i = 0; i < store_ptr->stock_num; i++) {
-            q_ptr = &store_ptr->stock[i];
-            spoil_random_artifact_aux(player_ptr, q_ptr, j);
-        }
+            store_ptr = &town_info[1].store[STORE_HOME];
+            for (int i = 0; i < store_ptr->stock_num; i++) {
+                q_ptr = &store_ptr->stock[i];
+                spoil_random_artifact_aux(player_ptr, q_ptr, tval);
+            }
 
-        store_ptr = &town_info[1].store[STORE_MUSEUM];
-        for (int i = 0; i < store_ptr->stock_num; i++) {
-            q_ptr = &store_ptr->stock[i];
-            spoil_random_artifact_aux(player_ptr, q_ptr, j);
+            store_ptr = &town_info[1].store[STORE_MUSEUM];
+            for (int i = 0; i < store_ptr->stock_num; i++) {
+                q_ptr = &store_ptr->stock[i];
+                spoil_random_artifact_aux(player_ptr, q_ptr, tval);
+            }
         }
     }
 
