@@ -404,7 +404,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
                     strcpy(buf, _("アリーナ", "in the Arena"));
                 else if (!is_in_dungeon(player_ptr))
                     strcpy(buf, _("地上", "on the surface"));
-                else if (q_idx && (is_fixed_quest_idx(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
+                else if (q_idx && (quest_type::is_fixed(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
                     strcpy(buf, _("クエスト", "in a quest"));
                 else
                     sprintf(buf, _("%d階", "level %d"), (int)player_ptr->current_floor_ptr->dun_level);

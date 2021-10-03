@@ -192,7 +192,7 @@ static bool search_death_cause(player_type *player_ptr, char *statmsg)
         return true;
     }
 
-    if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) {
+    if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) {
         /* Get the quest text */
         /* Bewere that INIT_ASSIGN resets the cur_num. */
         init_flags = INIT_NAME_ONLY;
@@ -223,7 +223,7 @@ static bool search_death_cause(player_type *player_ptr, char *statmsg)
 static bool decide_death_in_quest(player_type *player_ptr, char *statmsg)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->inside_quest || !is_fixed_quest_idx(floor_ptr->inside_quest))
+    if (!floor_ptr->inside_quest || !quest_type::is_fixed(floor_ptr->inside_quest))
         return false;
 
     for (int i = 0; i < 10; i++)

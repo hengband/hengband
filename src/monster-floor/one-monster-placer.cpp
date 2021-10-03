@@ -149,7 +149,7 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
         return true;
 
     int hoge = quest_number(player_ptr, floor_ptr->dun_level);
-    if ((quest[hoge].type != QUEST_TYPE_KILL_LEVEL) && (quest[hoge].type != QUEST_TYPE_RANDOM))
+    if ((quest[hoge].type != QuestKindType::KILL_LEVEL) && (quest[hoge].type != QuestKindType::RANDOM))
         return true;
 
     if (r_idx != quest[hoge].r_idx)

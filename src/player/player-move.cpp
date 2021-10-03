@@ -228,7 +228,7 @@ bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_F
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (f_ptr->flags.has(FF::QUEST_EXIT)) {
-        if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
+        if (quest[floor_ptr->inside_quest].type == QuestKindType::FIND_EXIT)
             complete_quest(player_ptr, floor_ptr->inside_quest);
 
         leave_quest_check(player_ptr);

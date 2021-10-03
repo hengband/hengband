@@ -42,7 +42,7 @@ void init_quests(void)
 {
     quest.assign(max_q_idx, {});
     for (auto &q_ref : quest) {
-        q_ref.status = QUEST_STATUS_UNTAKEN;
+        q_ref.status = QuestStatusType::UNTAKEN;
     }
 }
 

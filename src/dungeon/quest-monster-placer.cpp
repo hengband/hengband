@@ -25,7 +25,7 @@ bool place_quest_monsters(player_type *player_ptr)
     for (int i = 0; i < max_q_idx; i++) {
         monster_race *r_ptr;
         BIT_FLAGS mode;
-        if (quest[i].status != QUEST_STATUS_TAKEN || (quest[i].type != QUEST_TYPE_KILL_LEVEL && quest[i].type != QUEST_TYPE_RANDOM)
+        if (quest[i].status != QuestStatusType::TAKEN || (quest[i].type != QuestKindType::KILL_LEVEL && quest[i].type != QuestKindType::RANDOM)
             || quest[i].level != floor_ptr->dun_level || player_ptr->dungeon_idx != quest[i].dungeon || (quest[i].flags & QUEST_FLAG_PRESET)) {
             continue;
         }

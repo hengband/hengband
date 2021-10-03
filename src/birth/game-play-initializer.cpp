@@ -60,10 +60,10 @@ void player_wipe_without_name(player_type *player_ptr)
 
     for (int i = 0; i < max_q_idx; i++) {
         quest_type *const q_ptr = &quest[i];
-        q_ptr->status = QUEST_STATUS_UNTAKEN;
+        q_ptr->status = QuestStatusType::UNTAKEN;
         q_ptr->cur_num = 0;
         q_ptr->max_num = 0;
-        q_ptr->type = 0;
+        q_ptr->type = QuestKindType::NONE;
         q_ptr->level = 0;
         q_ptr->r_idx = 0;
         q_ptr->complev = 0;
@@ -181,7 +181,7 @@ void init_dungeon_quests(player_type *player_ptr)
     for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
         quest_type *q_ptr = &quest[i];
         monster_race *quest_r_ptr;
-        q_ptr->status = QUEST_STATUS_TAKEN;
+        q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
         quest_r_ptr = &r_info[q_ptr->r_idx];
         quest_r_ptr->flags1 |= RF1_QUESTOR;
@@ -191,11 +191,11 @@ void init_dungeon_quests(player_type *player_ptr)
     init_flags = INIT_ASSIGN;
     floor_ptr->inside_quest = QUEST_OBERON;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
+    quest[QUEST_OBERON].status = QuestStatusType::TAKEN;
 
     floor_ptr->inside_quest = QUEST_SERPENT;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
+    quest[QUEST_SERPENT].status = QuestStatusType::TAKEN;
     floor_ptr->inside_quest = 0;
 }
 

@@ -371,7 +371,7 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *pla
     std::optional<RF_ABILITY> selected_spell;
 
     while (!selected_spell.has_value()) {
-        char choice;
+        char choice = 0;
         if (!first_show_list && !get_com(out_val, &choice, true)) {
             break;
         }

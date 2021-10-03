@@ -55,9 +55,9 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
     for (QUEST_IDX i = 1; i < max_q_idx; i++) {
-        bool is_print = quest[i].status == QUEST_STATUS_TAKEN;
-        is_print |= (quest[i].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[i].type == QUEST_TYPE_TOWER);
-        is_print |= quest[i].status == QUEST_STATUS_COMPLETED;
+        bool is_print = quest[i].status == QuestStatusType::TAKEN;
+        is_print |= (quest[i].status == QuestStatusType::STAGE_COMPLETED) && (quest[i].type == QuestKindType::TOWER);
+        is_print |= quest[i].status == QuestStatusType::COMPLETED;
         if (!is_print)
             continue;
 
@@ -74,13 +74,13 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
             continue;
 
         total++;
-        if (quest[i].type != QUEST_TYPE_RANDOM) {
+        if (quest[i].type != QuestKindType::RANDOM) {
             char note[512] = "\0";
 
-            if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_STAGE_COMPLETED) {
+            if (quest[i].status == QuestStatusType::TAKEN || quest[i].status == QuestStatusType::STAGE_COMPLETED) {
                 switch (quest[i].type) {
-                case QUEST_TYPE_KILL_LEVEL:
-                case QUEST_TYPE_KILL_ANY_LEVEL:
+                case QuestKindType::KILL_LEVEL:
+                case QuestKindType::KILL_ANY_LEVEL:
                     r_ptr = &r_info[quest[i].r_idx];
                     strcpy(name, r_ptr->name.c_str());
                     if (quest[i].max_num > 1) {
@@ -94,7 +94,7 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
                         sprintf(note, _(" - %sを倒す。", " - kill %s."), name);
                     break;
 
-                case QUEST_TYPE_FIND_ARTIFACT:
+                case QuestKindType::FIND_ARTIFACT:
                     if (quest[i].k_idx) {
                         artifact_type *a_ptr = &a_info[quest[i].k_idx];
                         object_type forge;
@@ -107,11 +107,11 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
                     }
                     sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find %s."), name);
                     break;
-                case QUEST_TYPE_FIND_EXIT:
+                case QuestKindType::FIND_EXIT:
                     sprintf(note, _(" - 出口に到達する。", " - Reach exit."));
                     break;
 
-                case QUEST_TYPE_KILL_NUMBER:
+                case QuestKindType::KILL_NUMBER:
 #ifdef JP
                     sprintf(note, " - %d 体のモンスターを倒す。(あと %d 体)", (int)quest[i].max_num, (int)(quest[i].max_num - quest[i].cur_num));
 #else
@@ -119,16 +119,18 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
 #endif
                     break;
 
-                case QUEST_TYPE_KILL_ALL:
-                case QUEST_TYPE_TOWER:
+                case QuestKindType::KILL_ALL:
+                case QuestKindType::TOWER:
                     sprintf(note, _(" - 全てのモンスターを倒す。", " - Kill all monsters."));
+                    break;
+                default:
                     break;
                 }
             }
 
             sprintf(tmp_str, _("  %s (危険度:%d階相当)%s\n", "  %s (Danger level: %d)%s\n"), quest[i].name, (int)quest[i].level, note);
             fputs(tmp_str, fff);
-            if (quest[i].status == QUEST_STATUS_COMPLETED) {
+            if (quest[i].status == QuestStatusType::COMPLETED) {
                 sprintf(tmp_str, _("    クエスト達成 - まだ報酬を受けとってない。\n", "    Quest Completed - Unrewarded\n"));
                 fputs(tmp_str, fff);
                 continue;
@@ -182,7 +184,8 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
     quest_type *const q_ptr = &quest[q_idx];
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (is_fixed_quest_idx(q_idx)) {
+    auto is_fixed_quest = quest_type::is_fixed(q_idx);
+    if (is_fixed_quest) {
         IDX old_quest = floor_ptr->inside_quest;
         floor_ptr->inside_quest = q_idx;
         init_flags = INIT_NAME_ONLY;
@@ -194,7 +197,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 
     strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
 
-    if (is_fixed_quest_idx(q_idx) || (q_ptr->r_idx == 0)) {
+    if (is_fixed_quest || (q_ptr->r_idx == 0)) {
         sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), q_ptr->name, (int)q_ptr->level,
             q_ptr->complev, playtime_str);
         fputs(tmp_str, fff);
@@ -228,7 +231,7 @@ void do_cmd_knowledge_quests_completed(player_type *player_ptr, FILE *fff, QUEST
         QUEST_IDX q_idx = quest_num[i];
         quest_type *const q_ptr = &quest[q_idx];
 
-        if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
+        if (q_ptr->status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
         }
     }
@@ -251,7 +254,7 @@ void do_cmd_knowledge_quests_failed(player_type *player_ptr, FILE *fff, QUEST_ID
         QUEST_IDX q_idx = quest_num[i];
         quest_type *const q_ptr = &quest[q_idx];
 
-        if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
+        if (((q_ptr->status == QuestStatusType::FAILED_DONE) || (q_ptr->status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
         }
     }
@@ -272,7 +275,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
         if (quest[i].flags & QUEST_FLAG_SILENT)
             continue;
 
-        if ((quest[i].type == QUEST_TYPE_RANDOM) && (quest[i].status == QUEST_STATUS_TAKEN)) {
+        if ((quest[i].type == QuestKindType::RANDOM) && (quest[i].status == QuestStatusType::TAKEN)) {
             total++;
             sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"), quest[i].name, (int)quest[i].level, r_info[quest[i].r_idx].name.c_str());
             fputs(tmp_str, fff);

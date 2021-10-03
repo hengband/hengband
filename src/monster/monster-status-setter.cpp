@@ -34,7 +34,7 @@
  */
 void set_pet(player_type *player_ptr, monster_type *m_ptr)
 {
-    check_quest_completion(player_ptr, m_ptr);
+    QuestCompletionChecker(player_ptr, m_ptr).complete();
     m_ptr->mflag2.set(MFLAG2::PET);
     if (!(r_info[m_ptr->r_idx].flags3 & (RF3_EVIL | RF3_GOOD)))
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
