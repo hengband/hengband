@@ -125,12 +125,11 @@ static process_result check_continue_player_effect(player_type *player_ptr, effe
         return PROCESS_FALSE;
     }
 
-    auto is_kawarimi = kawarimi(player_ptr, true);
     auto is_effective = ep_ptr->dam > 0;
     is_effective &= randint0(55) < (player_ptr->lev * 3 / 5 + 20);
     is_effective &= ep_ptr->who > 0;
     is_effective &= ep_ptr->who != player_ptr->riding;
-    if (is_kawarimi && is_effective) {
+    if (is_effective && kawarimi(player_ptr, true)) {
         return PROCESS_FALSE;
     }
 
