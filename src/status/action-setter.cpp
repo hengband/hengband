@@ -89,7 +89,10 @@ void set_action(player_type *player_ptr, uint8_t typ)
         stop_singing(player_ptr);
 
     if (prev_typ == ACTION_SPELL) {
-        (void)SpellHex(player_ptr).stop_spells_with_selection();
+        SpellHex spell_hex(player_ptr);
+        if (spell_hex.is_spelling_any()) {
+            spell_hex.stop_all_spells();
+        }
     }
 
     switch (player_ptr->action) {
