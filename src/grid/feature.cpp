@@ -266,10 +266,8 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
         update_local_illumination(player_ptr, yy, xx);
     }
 
-    if (player_ptr->special_defense & NINJA_S_STEALTH) {
-        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
-            set_superstealth(player_ptr, false);
-        }
+    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+        set_superstealth(player_ptr, false);
     }
 }
 

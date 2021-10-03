@@ -7,6 +7,7 @@
 #include "player-info/bluemage-data-type.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/monk-data-type.h"
+#include "player-info/ninja-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
@@ -513,7 +514,8 @@ void print_status(player_type *player_ptr)
     if (player_ptr->shield)
         ADD_BAR_FLAG(BAR_STONESKIN);
 
-    if (player_ptr->special_defense & NINJA_KAWARIMI)
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (ninja_data && ninja_data->kawarimi)
         ADD_BAR_FLAG(BAR_KAWARIMI);
 
     if (player_ptr->special_defense & DEFENSE_ACID)
@@ -582,7 +584,7 @@ void print_status(player_type *player_ptr)
         ADD_BAR_FLAG(BAR_ATTKACID);
     if (player_ptr->special_attack & ATTACK_POIS)
         ADD_BAR_FLAG(BAR_ATTKPOIS);
-    if (player_ptr->special_defense & NINJA_S_STEALTH)
+    if (ninja_data && ninja_data->s_stealth)
         ADD_BAR_FLAG(BAR_SUPERSTEALTH);
 
     if (player_ptr->tim_sh_fire)

@@ -14,6 +14,7 @@ struct mane_data_type;
 struct sniper_data_type;
 struct samurai_data_type;
 struct monk_data_type;
+struct ninja_data_type;
 struct spell_hex_data_type;
 
 using ClassSpecificData = std::variant<
@@ -28,6 +29,7 @@ using ClassSpecificData = std::variant<
     std::shared_ptr<sniper_data_type>,
     std::shared_ptr<samurai_data_type>,
     std::shared_ptr<monk_data_type>,
+    std::shared_ptr<ninja_data_type>,
     std::shared_ptr<spell_hex_data_type>
 
     >;

@@ -435,8 +435,7 @@ void do_cmd_rest(player_type *player_ptr)
     if (command_arg > 9999)
         command_arg = 9999;
 
-    if (player_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(player_ptr, false);
+    set_superstealth(player_ptr, false);
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (command_arg > 100)

@@ -63,7 +63,7 @@ void day_break(player_type *player_ptr)
     player_ptr->update |= PU_MONSTERS | PU_MON_LITE;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-    if (((player_ptr->special_defense & NINJA_S_STEALTH) != 0) && ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0))
+    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0)
         set_superstealth(player_ptr, false);
 }
 
@@ -94,7 +94,7 @@ void night_falls(player_type *player_ptr)
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 
-    if (((player_ptr->special_defense & NINJA_S_STEALTH) != 0) && ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0))
+    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0)
         set_superstealth(player_ptr, false);
 }
 

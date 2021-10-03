@@ -142,7 +142,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 #endif
     }
 
-    if (!load_game && (player_ptr->special_defense & NINJA_S_STEALTH))
+    if (!load_game)
         set_superstealth(player_ptr, false);
 
     floor_ptr->monster_level = floor_ptr->base_level;

@@ -9,6 +9,8 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-status.h"
+#include "player-base/player-class.h"
+#include "player-info/ninja-data-type.h"
 #include "player/special-defense-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -307,7 +309,8 @@ void update_mon_lite(player_type *player_ptr)
 
     player_ptr->update |= PU_DELAY_VIS;
     player_ptr->monlite = (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_MNLT) != 0;
-    if (!(player_ptr->special_defense & NINJA_S_STEALTH)) {
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (!ninja_data || !ninja_data->s_stealth) {
         player_ptr->old_monlite = player_ptr->monlite;
         return;
     }

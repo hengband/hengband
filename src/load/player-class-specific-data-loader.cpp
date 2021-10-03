@@ -6,6 +6,7 @@
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/monk-data-type.h"
+#include "player-info/ninja-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
@@ -194,6 +195,20 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<monk_data_type> &
         byte tmp8u;
         rd_byte(&tmp8u);
         monk_data->stance = i2enum<MonkStance>(tmp8u);
+    }
+}
+
+void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<ninja_data_type> &ninja_data) const
+{
+    if (loading_savefile_version_is_older_than(9)) {
+        // 古いセーブファイルの忍者のデータは magic_num には保存されていないので読み捨てる
+        load_old_savfile_magic_num();
+    } else {
+        byte tmp8u;
+        rd_byte(&tmp8u);
+        ninja_data->kawarimi = tmp8u != 0;
+        rd_byte(&tmp8u);
+        ninja_data->s_stealth = tmp8u != 0;
     }
 }
 
