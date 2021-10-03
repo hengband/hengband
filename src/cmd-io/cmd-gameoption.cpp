@@ -321,9 +321,9 @@ static void do_cmd_options_win(player_type *player_ptr)
 static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
 {
     term_clear();
+    auto k = 0U;
+    const auto n = cheat_info.size();
     while (true) {
-        auto k = 0U;
-        const auto n = cheat_info.size();
         char buf[80];
         sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
         prt(buf, 0, 0);
