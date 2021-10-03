@@ -8,10 +8,13 @@
 #include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-enchant/object-ego.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -247,7 +250,33 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
     auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
     for (auto i = 0; i < (dun_level / 15) + 1; i++) {
         object_type item;
-        make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT);
-        (void)drop_near(this->player_ptr, &item, -1, pos.y, pos.x);
+        while (true) {
+            item.wipe();
+            auto &r_ref = r_info[this->m_ptr->r_idx];
+            make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, r_ref.level);
+            if (!this->check_quality(item)) {
+                continue;
+            }
+
+            (void)drop_near(this->player_ptr, &item, -1, pos.y, pos.x);
+            break;
+        }
     }
+}
+
+/*!
+ * @brief ランダムクエスト報酬の品質をチェックする
+ * @param item 生成された高級品への参照
+ * @return 十分な品質か否か
+ * @details 以下のものを弾く
+ * 1. 呪われれた装備品
+ * 2. 固定アーティファクト以外の矢弾
+ * 3. 穴掘りエゴの装備品
+ */
+bool QuestCompletionChecker::check_quality(object_type &item)
+{
+    auto is_good_reward = !item.is_cursed();
+    is_good_reward &= !item.is_ammo() || (item.is_ammo() && item.is_fixed_artifact());
+    is_good_reward &= item.name2 != EGO_DIGGING;
+    return is_good_reward;
 }
