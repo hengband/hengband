@@ -665,8 +665,8 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
-                if (spell_hex.get_casting_num() > 0) {
-                    player_ptr->action = ACTION_NONE;
+                if (!spell_hex.is_spelling_any()) {
+                    set_action(player_ptr, ACTION_NONE);
                 }
 
                 player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
