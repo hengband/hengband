@@ -447,7 +447,7 @@ static void wiz_statistics(player_type *player_ptr, object_type *o_ptr)
             object_type forge;
             object_type *q_ptr = &forge;
             q_ptr->wipe();
-            make_object(player_ptr, q_ptr, mode);
+            make_object(player_ptr, q_ptr, mode, -1);
             if (q_ptr->is_fixed_artifact())
                 a_info[q_ptr->name1].cur_num = 0;
 

@@ -81,40 +81,58 @@ static void object_mention(player_type *player_ptr, object_type *o_ptr)
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
+static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, int rq_level)
+{
+    if (any_bits(mode, AM_GREAT)) {
+        if (rq_level > 0) {
+            return rq_level + 10 + randint1(10);
+        } else {
+            return floor_ptr->object_level + 15;
+        }
+    }
+
+    if (any_bits(mode, AM_GOOD)) {
+        return floor_ptr->object_level + 10;
+    }
+
+    return floor_ptr->object_level;
+}
+
 /*!
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
- * @return 生成に成功したらTRUEを返す。
+ * @param rq_floor ランダムクエスト討伐対象のレベル
+ * @return アイテムの生成成功可否
  * @details
- * This routine plays nasty games to generate the "special artifacts".\n
- * This routine uses "floor_ptr->object_level" for the "generation level".\n
- * We assume that the given object has been "wiped".\n
+ * rq_levelは、ユニークのレベルであってランダムクエストの階層ではない
+ * ランダムクエストではない場合、-1が入る
  */
-bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode)
+bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, int rq_level)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     PERCENTAGE prob = ((mode & AM_GOOD) ? 10 : 1000);
-    DEPTH base = ((mode & AM_GOOD) ? (floor_ptr->object_level + 10) : floor_ptr->object_level);
+    auto base = get_base_floor(floor_ptr, mode, rq_level);
     if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
-        KIND_OBJECT_IDX k_idx;
-        if ((mode & AM_GOOD) && !get_obj_num_hook) {
+        if (any_bits(mode, AM_GOOD) && !get_obj_num_hook) {
             get_obj_num_hook = kind_is_good;
         }
 
-        if (get_obj_num_hook)
+        if (get_obj_num_hook) {
             get_obj_num_prep();
+        }
 
-        k_idx = get_obj_num(player_ptr, base, mode);
+        auto k_idx = get_obj_num(player_ptr, base, mode);
         if (get_obj_num_hook) {
             get_obj_num_hook = nullptr;
             get_obj_num_prep();
         }
 
-        if (!k_idx)
+        if (k_idx == 0) {
             return false;
+        }
 
         j_ptr->prep(k_idx);
     }
@@ -134,8 +152,9 @@ bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode)
         break;
     }
 
-    if (cheat_peek)
+    if (cheat_peek) {
         object_mention(player_ptr, j_ptr);
+    }
 
     return true;
 }

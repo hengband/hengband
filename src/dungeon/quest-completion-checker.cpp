@@ -8,10 +8,12 @@
 #include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -247,7 +249,8 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
     auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
     for (auto i = 0; i < (dun_level / 15) + 1; i++) {
         object_type item;
-        make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT);
+        auto &r_ref = r_info[this->m_ptr->r_idx];
+        make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, r_ref.level);
         (void)drop_near(this->player_ptr, &item, -1, pos.y, pos.x);
     }
 }
