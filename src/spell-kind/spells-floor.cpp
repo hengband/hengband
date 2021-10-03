@@ -121,9 +121,8 @@ void wiz_lite(player_type *player_ptr, bool ninja)
     player_ptr->redraw |= (PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
-    if (player_ptr->special_defense & NINJA_S_STEALTH) {
-        if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW)
-            set_superstealth(player_ptr, false);
+    if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+        set_superstealth(player_ptr, false);
     }
 }
 
@@ -455,9 +454,8 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
     player_ptr->redraw |= (PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
-    if (player_ptr->special_defense & NINJA_S_STEALTH) {
-        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW)
-            set_superstealth(player_ptr, false);
+    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+        set_superstealth(player_ptr, false);
     }
 
     return true;

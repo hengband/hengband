@@ -15,6 +15,7 @@
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/monk-data-type.h"
+#include "player-info/ninja-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
@@ -359,6 +360,9 @@ void PlayerClass::init_specific_data()
         break;
     case CLASS_MONK:
         this->player_ptr->class_specific_data = std::make_shared<monk_data_type>();
+        break;
+    case CLASS_NINJA:
+        this->player_ptr->class_specific_data = std::make_shared<ninja_data_type>();
         break;
     case CLASS_HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {

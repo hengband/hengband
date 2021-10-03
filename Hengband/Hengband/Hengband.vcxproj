@@ -1007,6 +1007,8 @@
     <ClInclude Include="..\..\src\player-info\force-trainer-data-type.h" />
     <ClInclude Include="..\..\src\player-info\magic-eater-data-type.h" />
     <ClInclude Include="..\..\src\player-info\mane-data-type.h" />
+    <ClInclude Include="..\..\src\player-info\monk-data-type.h" />
+    <ClInclude Include="..\..\src\player-info\ninja-data-type.h" />
     <ClInclude Include="..\..\src\player-info\samurai-data-type.h" />
     <ClInclude Include="..\..\src\player-info\smith-data-type.h" />
     <ClInclude Include="..\..\src\player-info\sniper-data-type.h" />

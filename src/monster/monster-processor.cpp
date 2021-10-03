@@ -52,6 +52,8 @@
 #include "mspell/mspell-judgement.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
+#include "player-base/player-class.h"
+#include "player-info/ninja-data-type.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
@@ -190,7 +192,8 @@ void process_monster(player_type *player_ptr, MONSTER_IDX m_idx)
  */
 bool process_stealth(player_type *player_ptr, MONSTER_IDX m_idx)
 {
-    if ((player_ptr->special_defense & NINJA_S_STEALTH) == 0)
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (!ninja_data || !ninja_data->s_stealth)
         return true;
 
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];

@@ -13,6 +13,7 @@ struct mane_data_type;
 struct sniper_data_type;
 struct samurai_data_type;
 struct monk_data_type;
+struct ninja_data_type;
 
 class PlayerClassSpecificDataWriter {
 public:
@@ -27,4 +28,5 @@ public:
     void operator()(const std::shared_ptr<sniper_data_type> &sniper_data) const;
     void operator()(const std::shared_ptr<samurai_data_type> &samurai_data) const;
     void operator()(const std::shared_ptr<monk_data_type> &monk_data) const;
+    void operator()(const std::shared_ptr<ninja_data_type> &ninja_data) const;
 };

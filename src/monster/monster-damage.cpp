@@ -108,9 +108,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
 
     this->set_redraw();
     (void)set_monster_csleep(this->player_ptr, this->m_idx, 0);
-    if (this->player_ptr->special_defense & NINJA_S_STEALTH) {
-        set_superstealth(this->player_ptr, false);
-    }
+    set_superstealth(this->player_ptr, false);
 
     return this->m_idx == 0;
 }

@@ -678,6 +678,7 @@ hengband_SOURCES = \
 	player-info/mimic-info-table.cpp player-info/mimic-info-table.h \
 	player-info/monk-data-type.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
+	player-info/ninja-data-type.h \
 	player-info/race-ability-info.cpp player-info/race-ability-info.h \
 	player-info/race-info.cpp player-info/race-info.h \
 	player-info/race-types.h \

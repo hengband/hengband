@@ -27,7 +27,9 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-kind-hook.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
+#include "player-info/ninja-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
@@ -68,7 +70,8 @@
  */
 bool kawarimi(player_type *player_ptr, bool success)
 {
-    if (none_bits(player_ptr->special_defense, NINJA_KAWARIMI)) {
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (!ninja_data || !ninja_data->kawarimi) {
         return false;
     }
 
@@ -89,7 +92,7 @@ bool kawarimi(player_type *player_ptr, bool success)
 
     if (!success && one_in_(3)) {
         msg_print(_("変わり身失敗！逃げられなかった。", "Kawarimi failed! You couldn't run away."));
-        player_ptr->special_defense &= ~(NINJA_KAWARIMI);
+        ninja_data->kawarimi = false;
         player_ptr->redraw |= (PR_STATUS);
         return false;
     }
@@ -110,7 +113,7 @@ bool kawarimi(player_type *player_ptr, bool success)
     else
         msg_print(_("変わり身失敗！攻撃を受けてしまった。", "Kawarimi failed! You are hit by the attack."));
 
-    player_ptr->special_defense &= ~(NINJA_KAWARIMI);
+    ninja_data->kawarimi = false;
     player_ptr->redraw |= (PR_STATUS);
     return true;
 }
@@ -227,11 +230,13 @@ void process_surprise_attack(player_type *player_ptr, player_attack_type *pa_ptr
         tmp /= 2;
     if (r_ptr->level > (player_ptr->lev * player_ptr->lev / 20 + 10))
         tmp /= 3;
+
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     if (monster_csleep_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         /* Can't backstab creatures that we can't see, right? */
         pa_ptr->backstab = true;
-    } else if ((player_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml
-        && !(r_ptr->flagsr & RFR_RES_ALL)) {
+    } else if ((ninja_data && ninja_data->s_stealth) && (randint0(tmp) > (r_ptr->level + 20)) &&
+               pa_ptr->m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
         pa_ptr->surprise_attack = true;
     } else if (monster_fear_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         pa_ptr->stab_fleeing = true;
@@ -307,11 +312,12 @@ bool set_superstealth(player_type *player_ptr, bool set)
 {
     bool notice = false;
 
-    if (player_ptr->is_dead)
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (!ninja_data || player_ptr->is_dead)
         return false;
 
     if (set) {
-        if (!(player_ptr->special_defense & NINJA_S_STEALTH)) {
+        if (!ninja_data->s_stealth) {
             if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_MNLT) {
                 msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
                 player_ptr->monlite = player_ptr->old_monlite = true;
@@ -321,13 +327,13 @@ bool set_superstealth(player_type *player_ptr, bool set)
             }
 
             notice = true;
-            player_ptr->special_defense |= NINJA_S_STEALTH;
+            ninja_data->s_stealth = true;
         }
     } else {
-        if (player_ptr->special_defense & NINJA_S_STEALTH) {
+        if (ninja_data->s_stealth) {
             msg_print(_("再び敵の目にさらされるようになった。", "You are exposed to common sight once more."));
             notice = true;
-            player_ptr->special_defense &= ~(NINJA_S_STEALTH);
+            ninja_data->s_stealth = false;
         }
     }
 
@@ -352,6 +358,7 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
     POSITION x = 0, y = 0;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     switch (spell) {
     case DARKNESS_CREATION:
         (void)unlite_area(player_ptr, 0, 3);
@@ -375,9 +382,9 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
     case KAWARIMI:
-        if (!(player_ptr->special_defense & NINJA_KAWARIMI)) {
+        if (ninja_data && !ninja_data->kawarimi) {
             msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepared to evade any attacks."));
-            player_ptr->special_defense |= NINJA_KAWARIMI;
+            ninja_data->kawarimi = true;
             player_ptr->redraw |= (PR_STATUS);
         }
 

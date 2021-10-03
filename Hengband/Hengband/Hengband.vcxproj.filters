@@ -5100,6 +5100,12 @@
     <ClInclude Include="..\..\src\player-info\samurai-data-type.h">
       <Filter>player-info</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\monk-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\ninja-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

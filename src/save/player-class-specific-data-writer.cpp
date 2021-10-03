@@ -5,6 +5,7 @@
 #include "player-info/magic-eater-data-type.h"
 #include "player-info/mane-data-type.h"
 #include "player-info/monk-data-type.h"
+#include "player-info/ninja-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player-info/smith-data-type.h"
 #include "player-info/sniper-data-type.h"
@@ -79,6 +80,12 @@ void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<samurai_dat
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<monk_data_type> &monk_data) const
 {
     wr_byte(enum2i(monk_data->stance));
+}
+
+void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<ninja_data_type> &ninja_data) const
+{
+    wr_byte(ninja_data->kawarimi ? 1 : 0);
+    wr_byte(ninja_data->s_stealth ? 1 : 0);
 }
 
 void PlayerClassSpecificDataWriter::operator()(const std::shared_ptr<spell_hex_data_type> &spell_hex_data) const

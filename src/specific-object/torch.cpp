@@ -135,8 +135,9 @@ void update_lite_radius(player_type *player_ptr)
     player_ptr->update |= PU_LITE | PU_MON_LITE | PU_MONSTERS;
     player_ptr->old_lite = player_ptr->cur_lite;
 
-    if ((player_ptr->cur_lite > 0) && (player_ptr->special_defense & NINJA_S_STEALTH))
+    if (player_ptr->cur_lite > 0) {
         set_superstealth(player_ptr, false);
+    }
 }
 
 /*
