@@ -94,7 +94,7 @@ void do_cmd_go_up(player_type *player_ptr)
 
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (quest[player_ptr->current_floor_ptr->inside_quest].status != QuestStatusType::UNTAKEN) {
+        if (quest[player_ptr->current_floor_ptr->inside_quest].status == QuestStatusType::UNTAKEN) {
             if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
@@ -211,7 +211,7 @@ void do_cmd_go_down(player_type *player_ptr)
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (quest[player_ptr->current_floor_ptr->inside_quest].status != QuestStatusType::UNTAKEN) {
+        if (quest[player_ptr->current_floor_ptr->inside_quest].status == QuestStatusType::UNTAKEN) {
             if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
