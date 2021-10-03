@@ -104,8 +104,8 @@ errr load_lore(void)
 
     monster_race *r_ptr;
     monster_race dummy;
-    for (int i = 0; i < loading_max_r_idx; i++) {
-        if (i < max_r_idx)
+    for (auto i = 0U; i < loading_max_r_idx; i++) {
+        if (i < r_info.size())
             r_ptr = &r_info[i];
         else
             r_ptr = &dummy;

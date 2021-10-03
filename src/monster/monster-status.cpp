@@ -101,7 +101,7 @@ HIT_POINT mon_damage_mod(player_type *player_ptr, monster_type *m_ptr, HIT_POINT
  */
 int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
-    int16_t *cur_mproc_list = floor_ptr->mproc_list[mproc_type];
+    const auto &cur_mproc_list = floor_ptr->mproc_list[mproc_type];
     for (int i = floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--) {
         if (cur_mproc_list[i] == m_idx) {
             return i;
@@ -344,7 +344,7 @@ static void process_monsters_mtimed_aux(player_type *player_ptr, MONSTER_IDX m_i
 void process_monsters_mtimed(player_type *player_ptr, int mtimed_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *cur_mproc_list = floor_ptr->mproc_list[mtimed_idx];
+    const auto &cur_mproc_list = floor_ptr->mproc_list[mtimed_idx];
 
     /* Hack -- calculate the "player noise" */
     if (mtimed_idx == MTIMED_CSLEEP) {
@@ -484,10 +484,10 @@ void monster_gain_exp(player_type *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
     m_ptr->exp = 0;
     if (is_pet(m_ptr) || m_ptr->ml) {
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
-            if (player_ptr->image) {
+            if (player_ptr->hallucinated) {
                 monster_race *hallu_race;
                 do {
-                    hallu_race = &r_info[randint1(max_r_idx - 1)];
+                    hallu_race = &r_info[randint1(r_info.size() - 1)];
                 } while (hallu_race->name.empty() || any_bits(hallu_race->flags1, RF1_UNIQUE));
                 msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, hallu_race->name.c_str());
             } else {
@@ -495,7 +495,7 @@ void monster_gain_exp(player_type *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
             }
         }
 
-        if (!player_ptr->image) {
+        if (!player_ptr->hallucinated) {
             r_info[old_r_idx].r_can_evolve = true;
         }
 

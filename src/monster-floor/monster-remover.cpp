@@ -82,7 +82,7 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
         }
     }
 
-    (void)WIPE(m_ptr, monster_type);
+    *m_ptr = {};
     floor_ptr->m_cnt--;
     lite_spot(player_ptr, y, x);
     if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
@@ -124,7 +124,7 @@ void wipe_monsters_list(player_type *player_ptr)
             continue;
 
         floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
-        (void)WIPE(m_ptr, monster_type);
+        *m_ptr = {};
     }
 
     /*
@@ -132,8 +132,8 @@ void wipe_monsters_list(player_type *player_ptr)
      * counters of monsters in party_mon[] are required to prevent multiple
      * generation of unique monster who is the minion of player.
      */
-    for (int i = 1; i < max_r_idx; i++)
-        r_info[i].cur_num = 0;
+    for (auto &r_ref : r_info)
+        r_ref.cur_num = 0;
 
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;

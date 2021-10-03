@@ -191,7 +191,7 @@ void player_outfit(player_type *player_ptr)
             add_outfit(player_ptr, q_ptr);
         }
     } else if (player_ptr->pclass == CLASS_TOURIST) {
-        if (player_ptr->pseikaku != PERSONALITY_SEXY) {
+        if (player_ptr->ppersonality != PERSONALITY_SEXY) {
             q_ptr->prep(lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
             q_ptr->number = rand_range(15, 20);
             add_outfit(player_ptr, q_ptr);
@@ -232,7 +232,7 @@ void player_outfit(player_type *player_ptr)
     }
 
     if (player_ptr->pclass != CLASS_SORCERER) {
-        if (player_ptr->pseikaku == PERSONALITY_SEXY) {
+        if (player_ptr->ppersonality == PERSONALITY_SEXY) {
             player_init[player_ptr->pclass][2][0] = TV_HAFTED;
             player_init[player_ptr->pclass][2][1] = SV_WHIP;
         } else if (player_ptr->prace == player_race_type::MERFOLK) {

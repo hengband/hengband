@@ -60,7 +60,7 @@ void roff_top(MONRACE_IDX r_idx)
     }
 #endif
 
-    if (w_ptr->wizard || cheat_know) {
+    if (cheat_know) {
         term_addstr(-1, TERM_WHITE, "[");
         term_addstr(-1, TERM_L_BLUE, format("%d", r_idx));
         term_addstr(-1, TERM_WHITE, "] ");

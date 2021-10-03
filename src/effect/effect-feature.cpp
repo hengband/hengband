@@ -331,9 +331,8 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (g_ptr->m_idx)
             update_monster(player_ptr, g_ptr->m_idx, false);
 
-        if (player_ptr->special_defense & NINJA_S_STEALTH) {
-            if (player_bold(player_ptr, y, x))
-                set_superstealth(player_ptr, false);
+        if (player_bold(player_ptr, y, x)) {
+            set_superstealth(player_ptr, false);
         }
 
         break;

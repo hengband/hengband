@@ -2,7 +2,7 @@
 
 byte hitpoint_warn; /* Hitpoint warning (0 to 9) */
 byte mana_warn; /* Mana color (0 to 9) */
-byte delay_factor; /* Delay factor (0 to 9) */
+int32_t delay_factor; /* Delay factor (0 to 9) */
 bool autosave_l; /* Autosave before entering new levels */
 bool autosave_t; /* Timed autosave */
 int16_t autosave_freq; /* Autosave frequency */

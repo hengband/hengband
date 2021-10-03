@@ -49,15 +49,13 @@ void wr_options(save_type type)
     for (int i = 0; i < 4; i++)
         wr_u32b(0L);
 
-    wr_byte(delay_factor);
+    wr_u32b(delay_factor);
+
     wr_byte(hitpoint_warn);
     wr_byte(mana_warn);
 
     /*** Cheating options ***/
     uint16_t c = 0;
-    if (w_ptr->wizard)
-        c |= 0x0002;
-
     if (cheat_sight)
         c |= 0x0040;
 
@@ -143,7 +141,7 @@ void save_quick_start(void)
     wr_byte(previous_char.psex);
     wr_byte((byte)previous_char.prace);
     wr_byte((byte)previous_char.pclass);
-    wr_byte((byte)previous_char.pseikaku);
+    wr_byte((byte)previous_char.ppersonality);
     wr_byte((byte)previous_char.realm1);
     wr_byte((byte)previous_char.realm2);
 

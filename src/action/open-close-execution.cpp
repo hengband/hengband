@@ -56,7 +56,7 @@ bool exe_open(player_type *player_ptr, POSITION y, POSITION x)
     if (player_ptr->blind || no_lite(player_ptr))
         i = i / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         i = i / 10;
 
     int j = f_ptr->power;
@@ -145,7 +145,7 @@ bool easy_open_door(player_type *player_ptr, POSITION y, POSITION x)
         if (player_ptr->blind || no_lite(player_ptr))
             i = i / 10;
 
-        if (player_ptr->confused || player_ptr->image)
+        if (player_ptr->confused || player_ptr->hallucinated)
             i = i / 10;
 
         j = f_ptr->power;
@@ -195,7 +195,7 @@ bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_ID
     if (player_ptr->blind || no_lite(player_ptr))
         i = i / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         i = i / 10;
 
     int j = i - o_ptr->pval;
@@ -206,7 +206,7 @@ bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_ID
         msg_print(_("トラップが見あたらない。", "I don't see any traps."));
     } else if (o_ptr->pval <= 0) {
         msg_print(_("箱にはトラップが仕掛けられていない。", "The chest is not trapped."));
-    } else if (!chest_traps[o_ptr->pval]) {
+    } else if (chest_traps[o_ptr->pval].none()) {
         msg_print(_("箱にはトラップが仕掛けられていない。", "The chest is not trapped."));
     } else if (randint0(100) < j) {
         msg_print(_("箱に仕掛けられていたトラップを解除した。", "You have disarmed the chest."));
@@ -221,7 +221,7 @@ bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_ID
     } else {
         msg_print(_("トラップを作動させてしまった！", "You set off a trap!"));
         sound(SOUND_FAIL);
-        chest_trap(player_ptr, y, x, o_idx);
+        Chest(player_ptr).chest_trap(y, x, o_idx);
     }
 
     return more;
@@ -254,7 +254,7 @@ bool exe_disarm(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     if (player_ptr->blind || no_lite(player_ptr))
         i = i / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         i = i / 10;
 
     int j = i - power;
@@ -326,7 +326,7 @@ bool exe_bash(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
         more = true;
     } else {
         msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + 2 + randint0(2));
+        (void)BadStatusSetter(player_ptr).mod_paralysis(2 + randint0(2));
     }
 
     return more;

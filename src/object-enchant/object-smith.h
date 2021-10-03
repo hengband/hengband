@@ -13,11 +13,12 @@ struct player_type;
 class ISmithInfo;
 struct essence_drain_type;
 class ItemTester;
+struct smith_data_type;
 
-enum class SmithEffect;
+enum class SmithEffect : int16_t;
 enum class SmithCategory;
-enum class SmithEssence;
-enum random_art_activation_type : uint8_t;
+enum class SmithEssence : int16_t;
+enum class RandomArtActType : short;
 
 /*!
  * @brief 鍛冶クラス
@@ -38,14 +39,14 @@ public:
     static int get_essence_consumption(SmithEffect effect, const object_type *o_ptr = nullptr);
     static std::unique_ptr<ItemTester> get_item_tester(SmithEffect effect);
     static TrFlags get_effect_tr_flags(SmithEffect effect);
-    static std::optional<random_art_activation_type> object_activation(const object_type *o_ptr);
+    static std::optional<RandomArtActType> object_activation(const object_type *o_ptr);
     static std::optional<SmithEffect> object_effect(const object_type *o_ptr);
 
     int get_essence_num_of_posessions(SmithEssence essence) const;
     DrainEssenceResult drain_essence(object_type *o_ptr);
     bool add_essence(SmithEffect effect, object_type *o_ptr, int consumption);
     void erase_essence(object_type *o_ptr) const;
-    int get_addable_count(SmithEffect smith_effect, int item_number) const;
+    int get_addable_count(SmithEffect smith_effect, const object_type *o_ptr = nullptr) const;
 
     static constexpr int ESSENCE_AMOUNT_MAX = 20000;
 
@@ -58,4 +59,5 @@ private:
     static const std::vector<std::shared_ptr<ISmithInfo>> smith_info_table;
 
     player_type *player_ptr;
+    std::shared_ptr<smith_data_type> smith_data;
 };

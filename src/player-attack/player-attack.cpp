@@ -54,6 +54,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -392,7 +394,8 @@ static void apply_damage_bonus(player_type *player_ptr, player_attack_type *pa_p
     if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !monster_living(pa_ptr->m_ptr->r_idx))
         pa_ptr->attack_damage = 0;
 
-    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !player_ptr->cut)
+    auto is_cut = player_ptr->effects()->cut()->is_cut();
+    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !is_cut)
         pa_ptr->attack_damage /= 2;
 }
 
@@ -487,7 +490,6 @@ static void apply_actual_attack(
     pa_ptr->magical_effect = select_magical_brand_effect(player_ptr, pa_ptr);
     decide_blood_sucking(player_ptr, pa_ptr);
 
-    // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでis_spelling_specific() の判定をしないとダメ.
     bool vorpal_cut = (pa_ptr->flags.has(TR_VORPAL) || SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
         && !is_zantetsu_nullified;
     calc_attack_damage(player_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);

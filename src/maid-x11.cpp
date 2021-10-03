@@ -277,13 +277,13 @@ static XImage *ReadBMP(Display *dpy, char *Name)
     total = infoheader.biWidth * infoheader.biHeight * i;
 
     /* Allocate image memory */
-    C_MAKE(Data, total, char);
+    Data = (char*)malloc(total);
 
     Res = XCreateImage(dpy, visual, depth, ZPixmap, 0 /*offset*/, Data, infoheader.biWidth, infoheader.biHeight, 8 /*bitmap_pad*/, 0 /*bytes_per_line*/);
 
     /* Failure */
     if (Res == nullptr) {
-        C_KILL(Data, total, char);
+        free(Data);
         fclose(f);
         return nullptr;
     }

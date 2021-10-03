@@ -2,18 +2,20 @@
 
 #include "system/angband.h"
 
-typedef struct store_type store_type;
+#include <vector>
+
+struct store_type;
 
 /*
  * A structure describing a town with
  * stores and buildings
  */
-typedef struct town_type {
-	GAME_TEXT name[32];
-	uint32_t seed;      /* Seed for RNG */
-	store_type *store;    /* The stores [MAX_STORES] */
-	byte numstores;
-} town_type;
+struct town_type {
+    GAME_TEXT name[32];
+    uint32_t seed; /* Seed for RNG */
+    std::vector<store_type> store; /* The stores [MAX_STORES] */
+    byte numstores;
+};
 
 extern int16_t max_towns;
-extern town_type *town_info;
+extern std::vector<town_type> town_info;

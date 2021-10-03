@@ -92,4 +92,5 @@ const concptr angband_sound_name[SOUND_MAX] = {
     "take_off",
     "terrain_damage",
     "damage_over_time",
+    "stairway",
 };

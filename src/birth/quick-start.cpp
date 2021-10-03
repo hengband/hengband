@@ -4,6 +4,7 @@
 #include "birth/game-play-initializer.h"
 #include "core/player-update-types.h"
 #include "io/input-key-acceptor.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-personality.h"
@@ -57,7 +58,7 @@ bool ask_quick_start(player_type *player_ptr)
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     cp_ptr = &class_info[player_ptr->pclass];
     mp_ptr = &m_info[player_ptr->pclass];
-    ap_ptr = &personality_info[player_ptr->pseikaku];
+    ap_ptr = &personality_info[player_ptr->ppersonality];
 
     get_extra(player_ptr, false);
     player_ptr->update |= (PU_BONUS | PU_HP);
@@ -77,7 +78,7 @@ void save_prev_data(player_type *player_ptr, birther *birther_ptr)
     birther_ptr->psex = player_ptr->psex;
     birther_ptr->prace = player_ptr->prace;
     birther_ptr->pclass = player_ptr->pclass;
-    birther_ptr->pseikaku = player_ptr->pseikaku;
+    birther_ptr->ppersonality = player_ptr->ppersonality;
 
     if (player_ptr->pclass == CLASS_ELEMENTALIST)
         birther_ptr->realm1 = player_ptr->element;
@@ -124,7 +125,7 @@ void load_prev_data(player_type *player_ptr, bool swap)
     player_ptr->psex = previous_char.psex;
     player_ptr->prace = previous_char.prace;
     player_ptr->pclass = previous_char.pclass;
-    player_ptr->pseikaku = previous_char.pseikaku;
+    player_ptr->ppersonality = previous_char.ppersonality;
 
     if (player_ptr->pclass == CLASS_ELEMENTALIST)
         player_ptr->element = previous_char.realm1;
@@ -154,11 +155,13 @@ void load_prev_data(player_type *player_ptr, bool swap)
         player_ptr->vir_types[i] = previous_char.vir_types[i];
     }
 
+    PlayerClass(player_ptr).init_specific_data();
+
     for (int i = 0; i < 4; i++) {
         strcpy(player_ptr->history[i], previous_char.history[i]);
     }
 
     if (swap) {
-        (void)COPY(&previous_char, &temp, birther);
+        previous_char = temp;
     }
 }

@@ -8,8 +8,8 @@
 #include "monster-race/race-ability-flags.h"
 #include "util/flag-group.h"
 
-enum blue_magic_type : int;
+enum class BlueMagicType;
 
 struct player_type;
-void learn_spell(player_type *player_ptr, int monspell);
-void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, blue_magic_type mode);
+void learn_spell(player_type *player_ptr, RF_ABILITY monspell);
+void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, BlueMagicType type);

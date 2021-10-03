@@ -37,6 +37,11 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "mutation/mutation-investor-remover.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
+#include "player-info/mane-data-type.h"
+#include "player-info/samurai-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/eldritch-horror.h"
@@ -51,6 +56,7 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -152,9 +158,10 @@ void process_player(player_type *player_ptr)
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
             auto effects = player_ptr->effects();
             auto is_stunned = effects->stun()->is_stunned();
+            auto is_cut = effects->cut()->is_cut();
             if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp >= player_ptr->msp) && !player_ptr->blind && !player_ptr->confused
-                && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !player_ptr->cut && !player_ptr->slow
-                && !player_ptr->paralyzed && !player_ptr->image && !player_ptr->word_recall && !player_ptr->alter_reality) {
+                && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow
+                && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality) {
                 set_action(player_ptr, ACTION_NONE);
             }
         }
@@ -241,14 +248,12 @@ void process_player(player_type *player_ptr)
         player_ptr->redraw |= PR_MANA;
     }
 
-    if (player_ptr->special_defense & KATA_MASK) {
-        if (player_ptr->special_defense & KATA_MUSOU) {
-            if (player_ptr->csp < 3) {
-                set_action(player_ptr, ACTION_NONE);
-            } else {
-                player_ptr->csp -= 2;
-                player_ptr->redraw |= (PR_MANA);
-            }
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
+        if (player_ptr->csp < 3) {
+            set_action(player_ptr, ACTION_NONE);
+        } else {
+            player_ptr->csp -= 2;
+            player_ptr->redraw |= (PR_MANA);
         }
     }
 
@@ -272,12 +277,12 @@ void process_player(player_type *player_ptr)
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
         auto effects = player_ptr->effects();
-        auto is_unconscious = effects->stun()->get_rank() == PlayerStunRank::UNCONSCIOUS;
+        auto is_knocked_out = effects->stun()->is_knocked_out();
         if (player_ptr->phase_out) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(player_ptr);
-        } else if ((player_ptr->paralyzed || is_unconscious) && !cheat_immortal) {
+        } else if ((player_ptr->paralyzed || is_knocked_out) && !cheat_immortal) {
             energy.set_player_turn_energy(100);
         } else if (player_ptr->action == ACTION_REST) {
             if (player_ptr->resting > 0) {
@@ -321,7 +326,7 @@ void process_player(player_type *player_ptr)
                 player_ptr->energy_need += (int16_t)((int32_t)player_ptr->energy_use * ENERGY_NEED() / 100L);
             }
 
-            if (player_ptr->image)
+            if (player_ptr->hallucinated)
                 player_ptr->redraw |= (PR_MAP);
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
@@ -368,20 +373,18 @@ void process_player(player_type *player_ptr)
             }
 
             if (player_ptr->pclass == CLASS_IMITATOR) {
-                if (player_ptr->mane_num > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2 : 1)) {
-                    player_ptr->mane_num--;
-                    for (int j = 0; j < player_ptr->mane_num; j++) {
-                        player_ptr->mane_spell[j] = player_ptr->mane_spell[j + 1];
-                        player_ptr->mane_dam[j] = player_ptr->mane_dam[j + 1];
-                    }
+                auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+                if (static_cast<int>(mane_data->mane_list.size()) > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2 : 1)) {
+                    mane_data->mane_list.pop_front();
                 }
 
-                player_ptr->new_mane = false;
+                mane_data->new_mane = false;
                 player_ptr->redraw |= (PR_IMITATION);
             }
 
             if (player_ptr->action == ACTION_LEARN) {
-                player_ptr->new_mane = false;
+                auto mane_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+                mane_data->new_magic_learned = false;
                 player_ptr->redraw |= (PR_STATE);
             }
 
@@ -404,7 +407,8 @@ void process_player(player_type *player_ptr)
             break;
         }
 
-        if (player_ptr->energy_use && player_ptr->reset_concent)
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        if (player_ptr->energy_use && sniper_data && sniper_data->reset_concent)
             reset_concentration(player_ptr, true);
 
         if (player_ptr->leaving)

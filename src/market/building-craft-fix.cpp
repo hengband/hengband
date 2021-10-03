@@ -1,4 +1,5 @@
 ﻿#include "market/building-craft-fix.h"
+#include "artifact/random-art-effects.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/artifact-info.h"
 #include "core/asking-player.h"
@@ -147,18 +148,16 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (o_ptr->sval == SV_BROKEN_DAGGER) {
         int n = 1;
         k_idx = 0;
-        for (KIND_OBJECT_IDX j = 1; j < max_k_idx; j++) {
-            object_kind *k_aux_ptr = &k_info[j];
-
-            if (k_aux_ptr->tval != TV_SWORD)
+        for (const auto &k_ref : k_info) {
+            if (k_ref.tval != TV_SWORD)
                 continue;
-            if ((k_aux_ptr->sval == SV_BROKEN_DAGGER) || (k_aux_ptr->sval == SV_BROKEN_SWORD) || (k_aux_ptr->sval == SV_POISON_NEEDLE))
+            if ((k_ref.sval == SV_BROKEN_DAGGER) || (k_ref.sval == SV_BROKEN_SWORD) || (k_ref.sval == SV_POISON_NEEDLE))
                 continue;
-            if (k_aux_ptr->weight > 99)
+            if (k_ref.weight > 99)
                 continue;
 
             if (one_in_(n)) {
-                k_idx = j;
+                k_idx = k_ref.idx;
                 n++;
             }
         }
@@ -206,7 +205,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (k_ptr->pval)
         o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
     if (k_ptr->flags.has(TR_ACTIVATE))
-        o_ptr->xtra2 = (byte)k_ptr->act_idx;
+        o_ptr->activation_id = k_ptr->act_idx;
 
     if (dd_bonus > 0) {
         o_ptr->dd++;
@@ -241,7 +240,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         }
 
         give_one_ability_of_object(o_ptr, mo_ptr);
-        if (!activation_index(o_ptr))
+        if (activation_index(o_ptr) == RandomArtActType::NONE)
             one_activation(o_ptr);
 
         if (o_ptr->name1 == ART_NARSIL) {

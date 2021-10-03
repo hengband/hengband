@@ -21,8 +21,12 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
@@ -38,6 +42,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -112,31 +118,17 @@ void process_player_hp_mp(player_type *player_ptr)
             sound(SOUND_DAMAGE_OVER_TIME);
         }
     }
-
-    if (player_ptr->cut && !is_invuln(player_ptr)) {
-        HIT_POINT dam;
-        if (player_ptr->cut > 1000) {
-            dam = 200;
-        } else if (player_ptr->cut > 200) {
-            dam = 80;
-        } else if (player_ptr->cut > 100) {
-            dam = 32;
-        } else if (player_ptr->cut > 50) {
-            dam = 16;
-        } else if (player_ptr->cut > 25) {
-            dam = 7;
-        } else if (player_ptr->cut > 10) {
-            dam = 3;
-        } else {
-            dam = 1;
-        }
-
-        if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound")) > 0) {
+    
+    auto player_cut = player_ptr->effects()->cut();
+    if (player_cut->is_cut() && !is_invuln(player_ptr)) {
+        auto dam = player_cut->get_damage();
+        if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a mortal wound")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
         }
     }
 
-    if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(player_ptr, TR_VUL_LITE)) {
+    const PlayerRace race(player_ptr);
+    if (race.life() == PlayerRaceLife::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
         if (!is_in_dungeon(player_ptr) && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
             if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
@@ -200,7 +192,7 @@ void process_player_hp_mp(player_type *player_ptr)
         if (deal_damege_by_feat(player_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"), calc_acid_damage_rate,
                 [](player_type *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr))
-                        (void)set_poisoned(player_ptr, player_ptr->poisoned + damage);
+                        (void)BadStatusSetter(player_ptr).mod_poison(static_cast<TIME_EFFECT>(damage));
                 })) {
             cave_no_regen = true;
             sound(SOUND_TERRAIN_DAMAGE);
@@ -220,7 +212,7 @@ void process_player_hp_mp(player_type *player_ptr)
         HIT_POINT damage;
         if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !has_immune_fire(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
-            if (player_race_has_flag(player_ptr, TR_VUL_FIRE))
+            if (race.tr_flags().has(TR_VUL_FIRE))
                 damage += damage / 3;
             if (has_resist_fire(player_ptr))
                 damage = damage / 3;
@@ -231,7 +223,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
         if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !has_immune_elec(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
-            if (player_race_has_flag(player_ptr, TR_VUL_ELEC))
+            if (race.tr_flags().has(TR_VUL_ELEC))
                 damage += damage / 3;
             if (has_resist_elec(player_ptr))
                 damage = damage / 3;
@@ -242,7 +234,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
         if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !has_immune_cold(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
-            if (player_race_has_flag(player_ptr, TR_VUL_COLD))
+            if (race.tr_flags().has(TR_VUL_COLD))
                 damage += damage / 3;
             if (has_resist_cold(player_ptr))
                 damage = damage / 3;
@@ -294,7 +286,7 @@ void process_player_hp_mp(player_type *player_ptr)
         if (player_ptr->regenerate) {
             regen_amount = regen_amount * 2;
         }
-        if (player_ptr->special_defense & (KAMAE_MASK | KATA_MASK)) {
+        if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
             regen_amount /= 2;
         }
         if (player_ptr->cursed.has(TRC::SLOW_REGEN)) {
@@ -307,7 +299,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
 
     upkeep_factor = calculate_upkeep(player_ptr);
-    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || (player_ptr->special_defense & KATA_KOUKIJIN)) {
+    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
         upkeep_factor += 100;
     }
 
@@ -331,7 +323,7 @@ void process_player_hp_mp(player_type *player_ptr)
 
     if (player_ptr->poisoned)
         regen_amount = 0;
-    if (player_ptr->cut)
+    if (player_cut->is_cut())
         regen_amount = 0;
     if (cave_no_regen)
         regen_amount = 0;

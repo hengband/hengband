@@ -8,7 +8,7 @@
  */
 void process_autopick_file_command(char *buf)
 {
-    autopick_type an_entry, *entry = &an_entry;
+    autopick_type entry;
     int i;
     for (i = 0; buf[i]; i++) {
 #ifdef JP
@@ -22,16 +22,15 @@ void process_autopick_file_command(char *buf)
     }
 
     buf[i] = 0;
-    if (!autopick_new_entry(entry, buf, false))
+    if (!autopick_new_entry(&entry, buf, false))
         return;
 
-    for (i = 0; i < max_autopick; i++) {
-        if (!strcmp(entry->name, autopick_list[i].name) && entry->flag[0] == autopick_list[i].flag[0] && entry->flag[1] == autopick_list[i].flag[1]
-            && entry->dice == autopick_list[i].dice && entry->bonus == autopick_list[i].bonus) {
-            autopick_free_entry(entry);
+    for (const auto &item : autopick_list) {
+        if ((entry.name == item.name) && entry.flag[0] == item.flag[0] && entry.flag[1] == item.flag[1]
+            && entry.dice == item.dice && entry.bonus == item.bonus) {
             return;
         }
     }
 
-    add_autopick_list(entry);
+    autopick_list.push_back(std::move(entry));
 }

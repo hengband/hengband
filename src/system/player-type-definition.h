@@ -4,6 +4,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
+#include "player-info/class-specific-data.h"
 #include "player-info/class-types.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -13,7 +14,6 @@
 #include "util/flag-group.h"
 
 #define MAX_SKILLS 10
-#define MAX_MANE 16
 
 enum class RF_ABILITY;
 
@@ -34,12 +34,11 @@ public:
     player_sex psex{}; /* Sex index */
     player_race_type prace{}; /* Race index */
     player_class_type pclass{}; /* Class index */
-    player_personality_type pseikaku{}; /* Seikaku index */
+    player_personality_type ppersonality{}; /* Personality index */
     int16_t realm1{}; /* First magic realm */
     int16_t realm2{}; /* Second magic realm */
     int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
-    player_personality_type oops{}; /* Unused */
-
+    
     DICE_SID hitdie{}; /* Hit dice (sides) */
     uint16_t expfact{}; /* Experience factor
                          * Note: was byte, causing overflow for Amberite
@@ -95,10 +94,9 @@ public:
     TIME_EFFECT paralyzed{}; /* Timed -- Paralysis */
     TIME_EFFECT confused{}; /* Timed -- Confusion */
     TIME_EFFECT afraid{}; /* Timed -- Fear */
-    TIME_EFFECT image{}; /* Timed -- Hallucination */
+    TIME_EFFECT hallucinated{}; /* Timed -- Hallucination */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
-    TIME_EFFECT cut{}; /* Timed -- Cut */
-    
+
     TIME_EFFECT protevil{}; /* Timed -- Protection */
     TIME_EFFECT invuln{}; /* Timed -- Invulnerable */
     TIME_EFFECT ult_res{}; /* Timed -- Ultimate Resistance */
@@ -189,18 +187,7 @@ public:
     SUB_EXP weapon_exp[5][64]{}; /* Proficiency of weapons */
     SUB_EXP skill_exp[MAX_SKILLS]{}; /* Proficiency of misc. skill */
 
-    // @todo uint32_tで定義したいが可能か？
-    int32_t magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
-    byte magic_num2[MAX_SPELLS]{}; /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
-
-    RF_ABILITY mane_spell[MAX_MANE]{};
-    HIT_POINT mane_dam[MAX_MANE]{};
-    int16_t mane_num{};
-    bool new_mane{};
-
-#define CONCENT_RADAR_THRESHOLD 2
-#define CONCENT_TELE_THRESHOLD 5
-    int16_t concent{}; /* Sniper's concentration level */
+    ClassSpecificData class_specific_data;
 
     HIT_POINT player_hp[PY_MAX_LEVEL]{};
     char died_from[MAX_MONSTER_NAME]{}; /* What killed the player */
@@ -214,8 +201,6 @@ public:
     bool now_damaged{};
     bool ambush_flag{};
     BIT_FLAGS change_floor_mode{}; /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
-
-    bool reset_concent{}; /* Concentration reset flag */
 
     MONSTER_IDX riding{}; /* Riding on a monster of this index */
 
@@ -242,7 +227,7 @@ public:
     byte feeling{}; /* Most recent dungeon feeling */
     int32_t feeling_turn{}; /* The turn of the last dungeon feeling */
 
-    object_type *inventory_list{}; /* The player's inventory */
+    std::shared_ptr<object_type[]> inventory_list{}; /* The player's inventory */
     int16_t inven_cnt{}; /* Number of items in inventory */
     int16_t equip_cnt{}; /* Number of items in equipment */
 

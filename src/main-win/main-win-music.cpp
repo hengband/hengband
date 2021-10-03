@@ -4,6 +4,7 @@
  */
 
 #include "main-win/main-win-music.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "main-win/main-win-define.h"
@@ -15,6 +16,7 @@
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
+#include "system/monster-race-definition.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include "world/world.h"
@@ -55,7 +57,7 @@ static concptr basic_key_at(int index, char *buf)
 
 static inline DUNGEON_IDX get_dungeon_count()
 {
-    return w_ptr->max_d_idx;
+    return static_cast<DUNGEON_IDX>(d_info.size());
 }
 
 /*!
@@ -115,7 +117,7 @@ static concptr town_key_at(int index, char *buf)
 
 static inline MONRACE_IDX get_monster_count()
 {
-    return max_r_idx;
+    return static_cast<MONRACE_IDX>(r_info.size());
 }
 
 /*!

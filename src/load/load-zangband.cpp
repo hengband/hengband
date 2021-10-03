@@ -95,15 +95,6 @@ void set_zangband_skill(player_type *player_ptr)
     player_ptr->skill_exp[SKILL_RIDING] = MIN(player_ptr->skill_exp[SKILL_RIDING], s_info[player_ptr->pclass].s_max[SKILL_RIDING]);
 }
 
-void set_zangband_spells(player_type *player_ptr)
-{
-    for (int i = 0; i < MAX_SPELLS; i++)
-        player_ptr->magic_num1[i] = 0;
-
-    for (int i = 0; i < MAX_SPELLS; i++)
-        player_ptr->magic_num2[i] = 0;
-}
-
 void set_zangband_race(player_type *player_ptr)
 {
     player_ptr->start_race = player_ptr->prace;

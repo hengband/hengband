@@ -303,7 +303,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
     }
 
     auto player_stun = this->player_ptr->effects()->stun();
-    this->chance += player_stun->get_chance_penalty();
+    this->chance += player_stun->get_magic_chance_penalty();
     add_ki_chance();
     if (this->chance > 95) {
         this->chance = 95;

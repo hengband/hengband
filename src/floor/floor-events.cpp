@@ -63,7 +63,7 @@ void day_break(player_type *player_ptr)
     player_ptr->update |= PU_MONSTERS | PU_MON_LITE;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-    if (((player_ptr->special_defense & NINJA_S_STEALTH) != 0) && ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0))
+    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0)
         set_superstealth(player_ptr, false);
 }
 
@@ -94,7 +94,7 @@ void night_falls(player_type *player_ptr)
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 
-    if (((player_ptr->special_defense & NINJA_S_STEALTH) != 0) && ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0))
+    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0)
         set_superstealth(player_ptr, false);
 }
 
@@ -241,9 +241,9 @@ void update_dungeon_feeling(player_type *player_ptr)
     if (w_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra)
         return;
 
-    int quest_num = quest_number(player_ptr, floor_ptr->dun_level);
-    if (quest_num
-        && (is_fixed_quest_idx(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
+    auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
+    if ((quest_num > 0)
+        && (quest_type::is_fixed(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
         return;
 
     byte new_feeling = get_dungeon_feeling(player_ptr);

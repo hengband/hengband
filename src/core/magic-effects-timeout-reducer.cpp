@@ -17,6 +17,7 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 
@@ -26,18 +27,18 @@
  */
 void reduce_magic_effects_timeout(player_type *player_ptr)
 {
-    const int dec_count = (easy_band ? 2 : 1);
     if (player_ptr->tim_mimic) {
         (void)set_mimic(player_ptr, player_ptr->tim_mimic - 1, player_ptr->mimic_form, true);
     }
 
+    BadStatusSetter bss(player_ptr);
     auto effects = player_ptr->effects();
-    if (player_ptr->image) {
-        (void)set_image(player_ptr, player_ptr->image - dec_count);
+    if (player_ptr->hallucinated) {
+        (void)bss.mod_hallucination(-1);
     }
 
     if (player_ptr->blind) {
-        (void)set_blind(player_ptr, player_ptr->blind - dec_count);
+        (void)bss.mod_blindness(-1);
     }
 
     if (player_ptr->tim_invis) {
@@ -125,15 +126,15 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->paralyzed) {
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed - dec_count);
+        (void)bss.mod_paralysis(-1);
     }
 
     if (player_ptr->confused) {
-        (void)set_confused(player_ptr, player_ptr->confused - dec_count);
+        (void)bss.mod_confusion(-1);
     }
 
     if (player_ptr->afraid) {
-        (void)set_afraid(player_ptr, player_ptr->afraid - dec_count);
+        (void)bss.mod_afraidness(-1);
     }
 
     if (player_ptr->fast) {
@@ -141,7 +142,7 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
     }
 
     if (player_ptr->slow) {
-        (void)set_slow(player_ptr, player_ptr->slow - dec_count, true);
+        (void)bss.mod_slowness(-1, true);
     }
 
     if (player_ptr->protevil) {
@@ -210,19 +211,22 @@ void reduce_magic_effects_timeout(player_type *player_ptr)
 
     if (player_ptr->poisoned) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)set_poisoned(player_ptr, player_ptr->poisoned - adjust);
+        (void)bss.mod_poison(-adjust);
     }
 
     auto player_stun = effects->stun();
     if (player_stun->is_stunned()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        (void)set_stun(player_ptr, player_stun->current() - adjust);
+        (void)bss.mod_stun(-adjust);
     }
 
-    if (player_ptr->cut) {
-        int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
-        if (player_ptr->cut > 1000)
+    auto player_cut = effects->cut();
+    if (player_cut->is_cut()) {
+        short adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
+        if (player_cut->get_rank() == PlayerCutRank::MORTAL) {
             adjust = 0;
-        (void)set_cut(player_ptr, player_ptr->cut - adjust);
+        }
+
+        (void)bss.mod_cut(-adjust);
     }
 }

@@ -12,7 +12,7 @@
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_v_info(std::string_view buf, angband_header *head)
+errr parse_v_info(std::string_view buf, angband_header *)
 {
     static vault_type *v_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 5);
@@ -27,12 +27,13 @@ errr parse_v_info(std::string_view buf, angband_header *head)
         auto i = std::stoi(tokens[1]);
         if (i < error_idx)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-        if (i >= head->info_num)
-            return PARSE_ERROR_OUT_OF_BOUNDS;
+        if (i >= static_cast<int>(v_info.size())) {
+            v_info.resize(i + 1);
+        }
 
         error_idx = i;
         v_ptr = &v_info[i];
-        v_ptr->idx = i;
+        v_ptr->idx = static_cast<int16_t>(i);
         v_ptr->name = std::string(tokens[2]);
     } else if (!v_ptr)
         return PARSE_ERROR_MISSING_RECORD_HEADER;

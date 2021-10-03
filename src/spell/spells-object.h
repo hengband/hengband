@@ -9,7 +9,6 @@ void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, boo
 bool curse_armor(player_type *player_ptr);
 bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr);
 void brand_bolts(player_type *player_ptr);
-bool perilous_secrets(player_type *player_ptr);
 
 /*
  * Bit flags for the "enchant()" function

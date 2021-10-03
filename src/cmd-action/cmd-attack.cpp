@@ -33,7 +33,9 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -186,7 +188,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     monster_desc(player_ptr, m_name, m_ptr, 0);
 
     if (m_ptr->ml) {
-        if (!player_ptr->image)
+        if (!player_ptr->hallucinated)
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
 
         health_track(player_ptr, g_ptr->m_idx);
@@ -194,7 +196,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
 
     auto effects = player_ptr->effects();
     auto is_stunned = effects->stun()->is_stunned();
-    if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || player_ptr->confused || player_ptr->image || !m_ptr->ml)) {
+    if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || player_ptr->confused || player_ptr->hallucinated || !m_ptr->ml)) {
         if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ZANTETSU) || (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_ZANTETSU)) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
@@ -207,7 +209,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     }
 
     bool stormbringer = false;
-    if (!is_hostile(m_ptr) && !(is_stunned || player_ptr->confused || player_ptr->image || is_shero(player_ptr) || !m_ptr->ml)) {
+    if (!is_hostile(m_ptr) && !(is_stunned || player_ptr->confused || player_ptr->hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_STORMBRINGER)
             stormbringer = true;
         if (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
@@ -309,7 +311,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
         msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
     }
 
-    if ((player_ptr->special_defense & KATA_IAI) && ((mode != HISSATSU_IAI) || mdeath)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::IAI) && ((mode != HISSATSU_IAI) || mdeath)) {
         set_action(player_ptr, ACTION_NONE);
     }
 

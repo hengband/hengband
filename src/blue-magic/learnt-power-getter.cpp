@@ -17,6 +17,8 @@
 #include "mind/mind-blue-mage.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/monster-power-table.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
 #include "player/player-status-table.h"
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
@@ -27,368 +29,429 @@
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
+#include <algorithm>
+#include <iterator>
+#include <optional>
 #include <vector>
-
-typedef struct learnt_magic_type {
-    int blue_magic_num;
-    int count;
-    TERM_LEN y;
-    TERM_LEN x;
-    PLAYER_LEVEL plev;
-    PERCENTAGE chance;
-    int ask;
-    int mode;
-    std::vector<int> blue_magics;
-    char choice;
-    char out_val[160];
-    char comment[80];
-    EnumClassFlagGroup<RF_ABILITY> ability_flags;
-    monster_power spell;
-    int menu_line;
-    bool flag;
-    bool redraw;
-    int need_mana;
-    char psi_desc[80];
-} learnt_magic_type;
-
-static learnt_magic_type *initialize_lenat_magic_type(player_type *player_ptr, learnt_magic_type *lm_ptr)
-{
-    lm_ptr->blue_magic_num = 0;
-    lm_ptr->count = 0;
-    lm_ptr->y = 1;
-    lm_ptr->x = 18;
-    lm_ptr->plev = player_ptr->lev;
-    lm_ptr->chance = 0;
-    lm_ptr->ask = true;
-    lm_ptr->mode = 0;
-    lm_ptr->blue_magics.clear();
-    lm_ptr->ability_flags.clear();
-    lm_ptr->menu_line = use_menu ? 1 : 0;
-    lm_ptr->flag = false;
-    lm_ptr->redraw = false;
-    return lm_ptr;
-}
 
 /*!
  * @brief コマンド反復チェック
- * @param sn 選択したモンスター攻撃ID
- * @return 発動可能な魔法を選択した場合TRUE、処理続行の場合FALSE
+ * @return 反復可能な青魔法があればそれを返す。なければ std::nullopt を返す。
  */
-static bool check_blue_magic_cancel(SPELL_IDX *sn)
+static std::optional<RF_ABILITY> check_blue_magic_repeat()
 {
-    *sn = -1;
     COMMAND_CODE code;
-    if (!repeat_pull(&code))
-        return false;
+    if (!repeat_pull(&code)) {
+        return std::nullopt;
+    }
 
-    *sn = (SPELL_IDX)code;
-    return true;
+    if (auto spell = static_cast<RF_ABILITY>(code);
+        monster_powers.find(spell) != monster_powers.end()) {
+        return spell;
+    }
+
+    return std::nullopt;
 }
 
-static bool select_blue_magic_kind_menu(learnt_magic_type *lm_ptr)
+/*!
+ * @brief 青魔法のタイプをコマンドメニューにより選択する
+ *
+ * @return 選択した青魔法のタイプ
+ * 選択をキャンセルした場合は std::nullopt
+ */
+static std::optional<BlueMagicType> select_blue_magic_type_by_menu()
 {
-    while (lm_ptr->mode == 0) {
-        prt(format(_(" %s ボルト", " %s bolt"), (lm_ptr->menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
-        prt(format(_(" %s ボール", " %s ball"), (lm_ptr->menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
-        prt(format(_(" %s ブレス", " %s breath"), (lm_ptr->menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
-        prt(format(_(" %s 召喚", " %s sommoning"), (lm_ptr->menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
-        prt(format(_(" %s その他", " %s others"), (lm_ptr->menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
+    auto menu_line = 1;
+    std::optional<BlueMagicType> type;
+
+    screen_save();
+
+    while (!type.has_value()) {
+        prt(format(_(" %s ボルト", " %s bolt"), (menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
+        prt(format(_(" %s ボール", " %s ball"), (menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
+        prt(format(_(" %s ブレス", " %s breath"), (menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
+        prt(format(_(" %s 召喚", " %s sommoning"), (menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
+        prt(format(_(" %s その他", " %s others"), (menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
         prt(_("どの種類の魔法を使いますか？", "use which type of magic? "), 0, 0);
 
-        lm_ptr->choice = inkey();
-        switch (lm_ptr->choice) {
+        auto choice = inkey();
+        switch (choice) {
         case ESCAPE:
         case 'z':
         case 'Z':
             screen_load();
-            return false;
+            return std::nullopt;
+            break;
         case '2':
         case 'j':
         case 'J':
-            lm_ptr->menu_line++;
+            menu_line++;
             break;
         case '8':
         case 'k':
         case 'K':
-            lm_ptr->menu_line += 4;
+            menu_line += 4;
             break;
         case '\r':
         case 'x':
         case 'X':
-            lm_ptr->mode = lm_ptr->menu_line;
+            type = i2enum<BlueMagicType>(menu_line);
             break;
         }
 
-        if (lm_ptr->menu_line > 5)
-            lm_ptr->menu_line -= 5;
-    }
-
-    return true;
-}
-
-static bool select_blue_magic_kind_command(learnt_magic_type *lm_ptr)
-{
-    sprintf(lm_ptr->comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
-    while (true) {
-        char ch;
-        if (!get_com(lm_ptr->comment, &ch, true))
-            return false;
-
-        if (ch == 'A' || ch == 'a') {
-            lm_ptr->mode = 1;
-            break;
-        }
-
-        if (ch == 'B' || ch == 'b') {
-            lm_ptr->mode = 2;
-            break;
-        }
-
-        if (ch == 'C' || ch == 'c') {
-            lm_ptr->mode = 3;
-            break;
-        }
-
-        if (ch == 'D' || ch == 'd') {
-            lm_ptr->mode = 4;
-            break;
-        }
-
-        if (ch == 'E' || ch == 'e') {
-            lm_ptr->mode = 5;
-            break;
+        if (menu_line > 5) {
+            menu_line -= 5;
         }
     }
-
-    return true;
-}
-
-static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
-{
-    if (!use_menu)
-        return select_blue_magic_kind_command(lm_ptr);
-
-    screen_save();
-    if (!select_blue_magic_kind_menu(lm_ptr))
-        return false;
 
     screen_load();
-    return true;
+
+    return type;
 }
 
-static bool sweep_learnt_spells(player_type *player_ptr, learnt_magic_type *lm_ptr)
+/*!
+ * @brief 青魔法のタイプを記号により選択する
+ *
+ * @return 選択した青魔法のタイプ
+ * 選択をキャンセルした場合は std::nullopt
+ */
+static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
 {
-    set_rf_masks(lm_ptr->ability_flags, i2enum<blue_magic_type>(lm_ptr->mode));
+    auto candidate_desc = _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
 
-    std::vector<RF_ABILITY> spells;
-    EnumClassFlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
-    std::transform(spells.begin(), spells.end(), std::back_inserter(lm_ptr->blue_magics), [](RF_ABILITY ability) { return enum2i(ability); });
-    lm_ptr->count = lm_ptr->ability_flags.count();
+    while (true) {
+        char ch;
+        if (!get_com(candidate_desc, &ch, true)) {
+            return std::nullopt;
+        }
 
-    for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
-        if (player_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]] == 0)
-            continue;
-
-        if (use_menu)
-            lm_ptr->menu_line = lm_ptr->blue_magic_num + 1;
-
-        break;
+        switch (ch) {
+        case 'A':
+        case 'a':
+            return BlueMagicType::BOLT;
+        case 'B':
+        case 'b':
+            return BlueMagicType::BALL;
+        case 'C':
+        case 'c':
+            return BlueMagicType::BREATH;
+        case 'D':
+        case 'd':
+            return BlueMagicType::SUMMON;
+        case 'E':
+        case 'e':
+            return BlueMagicType::OTHER;
+        default:
+            break;
+        }
     }
 
-    if (lm_ptr->blue_magic_num == lm_ptr->count) {
+    return std::nullopt;
+}
+
+/*!
+ * @brief 指定したタイプの青魔法のリストを(覚えていないものも含め)返す
+ *
+ * @param bluemage_data 青魔道士の固有データへの参照
+ * @param type 青魔法のタイプ
+ * @return 指定したタイプの青魔法のリストを(覚えていないものも含め)返す
+ * 但し、そのタイプの魔法を1つも覚えていない場合は std::nullopt を返す
+ */
+static std::optional<std::vector<RF_ABILITY>> sweep_learnt_spells(const bluemage_data_type &bluemage_data, BlueMagicType type)
+{
+    EnumClassFlagGroup<RF_ABILITY> ability_flags;
+    set_rf_masks(ability_flags, type);
+
+    if (bluemage_data.learnt_blue_magics.has_none_of(ability_flags)) {
         msg_print(_("その種類の魔法は覚えていない！", "You don't know any spell of this type."));
-        return false;
+        return std::nullopt;
     }
 
-    (void)strnfmt(lm_ptr->out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0),
-        I2A(lm_ptr->count - 1), _("魔法", "magic"));
-    return true;
+    std::vector<RF_ABILITY> blue_magics;
+    EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(blue_magics));
+
+    return blue_magics;
 }
 
-static bool switch_blue_magic_choice(player_type *player_ptr, learnt_magic_type *lm_ptr)
+/*!
+ * @brief 入力されたキーに従いコマンドメニューで選択中の青魔法を切り替える
+ *
+ * @param key 入力されたキー
+ * @param menu_line 選択中の青魔法の行
+ * @param bluemage_data 青魔道士の固有データへの参照
+ * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、カーソル移動時に選択をスキップする)
+ * @return 選択確定キーが入力された場合は true、そうでなければ false
+ */
+static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_data_type &bluemage_data, const std::vector<RF_ABILITY> blue_magics)
 {
-    switch (lm_ptr->choice) {
-    case '0':
-        screen_load();
-        return false;
+    const auto &learnt_blue_magics = bluemage_data.learnt_blue_magics;
+    const int blue_magics_count = blue_magics.size();
+
+    switch (key) {
     case '8':
     case 'k':
     case 'K':
         do {
-            lm_ptr->menu_line += (lm_ptr->count - 1);
-            if (lm_ptr->menu_line > lm_ptr->count)
-                lm_ptr->menu_line -= lm_ptr->count;
-        } while (!player_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
-        return true;
+            menu_line += (blue_magics_count - 1);
+            if (menu_line > blue_magics_count) {
+                menu_line -= blue_magics_count;
+            }
+        } while (learnt_blue_magics.has_not(blue_magics[menu_line - 1]));
+        return false;
+
     case '2':
     case 'j':
     case 'J':
         do {
-            lm_ptr->menu_line++;
-            if (lm_ptr->menu_line > lm_ptr->count)
-                lm_ptr->menu_line -= lm_ptr->count;
-        } while (!player_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
-        return true;
+            menu_line++;
+            if (menu_line > blue_magics_count) {
+                menu_line -= blue_magics_count;
+            }
+        } while (learnt_blue_magics.has_not(blue_magics[menu_line - 1]));
+        return false;
+
     case '6':
     case 'l':
     case 'L':
-        lm_ptr->menu_line = lm_ptr->count;
-        while (!player_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
-            lm_ptr->menu_line--;
+        menu_line = blue_magics_count;
+        while (learnt_blue_magics.has_not(blue_magics[menu_line - 1])) {
+            menu_line--;
+        }
 
-        return true;
+        return false;
+
     case '4':
     case 'h':
     case 'H':
-        lm_ptr->menu_line = 1;
-        while (!player_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
-            lm_ptr->menu_line++;
+        menu_line = 1;
+        while (learnt_blue_magics.has_not(blue_magics[menu_line - 1])) {
+            menu_line++;
+        }
 
-        return true;
+        return false;
+
     case 'x':
     case 'X':
     case '\r':
-        lm_ptr->blue_magic_num = lm_ptr->menu_line - 1;
-        lm_ptr->ask = false;
         return true;
+
     default:
-        return true;
+        return false;
     }
 }
 
-static void calculate_blue_magic_success_probability(player_type *player_ptr, learnt_magic_type *lm_ptr)
+/*!
+ * @brief 青魔法の失敗率を計算する
+ *
+ * @param mp 失敗率を計算する青魔法に対応した monster_power 構造体への参照
+ * @param need_mana 青魔法を使うのに必要なMP
+ * @return int 失敗率(%)を返す
+ */
+int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
 {
-    lm_ptr->chance = lm_ptr->spell.fail;
-    if (lm_ptr->plev > lm_ptr->spell.level)
-        lm_ptr->chance -= 3 * (lm_ptr->plev - lm_ptr->spell.level);
-    else
-        lm_ptr->chance += (lm_ptr->spell.level - lm_ptr->plev);
+    auto chance = mp.fail;
+    if (player_ptr->lev > mp.level) {
+        chance -= 3 * (player_ptr->lev - mp.level);
+    } else {
+        chance += (mp.level - player_ptr->lev);
+    }
 
-    lm_ptr->chance -= 3 * (adj_mag_stat[player_ptr->stat_index[A_INT]] - 1);
-    lm_ptr->chance = mod_spell_chance_1(player_ptr, lm_ptr->chance);
-    lm_ptr->need_mana = mod_need_mana(player_ptr, monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].smana, 0, REALM_NONE);
-    if (lm_ptr->need_mana > player_ptr->csp)
-        lm_ptr->chance += 5 * (lm_ptr->need_mana - player_ptr->csp);
+    chance -= 3 * (adj_mag_stat[player_ptr->stat_index[A_INT]] - 1);
+    chance = mod_spell_chance_1(player_ptr, chance);
+    if (need_mana > player_ptr->csp) {
+        chance += 5 * (need_mana - player_ptr->csp);
+    }
 
     PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[A_INT]];
-    if (lm_ptr->chance < minfail)
-        lm_ptr->chance = minfail;
+    if (chance < minfail) {
+        chance = minfail;
+    }
 
     auto player_stun = player_ptr->effects()->stun();
-    lm_ptr->chance += player_stun->get_chance_penalty();
-    if (lm_ptr->chance > 95) {
-        lm_ptr->chance = 95;
+    chance += player_stun->get_magic_chance_penalty();
+    if (chance > 95) {
+        chance = 95;
     }
 
-    lm_ptr->chance = mod_spell_chance_2(player_ptr, lm_ptr->chance);
+    chance = mod_spell_chance_2(player_ptr, chance);
+
+    return chance;
 }
 
-static void close_blue_magic_name(learnt_magic_type *lm_ptr)
+/*!
+ * @brief 青魔法リストに表示する青魔法の先頭のヘッダを出力する
+ * 記号で選択する場合、" 記号)" が出力される
+ * コマンドメニューで選択する場合、選択中の青魔法にはカーソルが、そうでない青魔法には空白が出力される
+ *
+ * @param buf 出力するバッファ
+ * @param buf_size バッファのサイズ
+ * @param index 選択する青魔法のリスト上の番号
+ * @param menu_line コマンドメニューで選択する場合、選択中の行。記号で選択する場合は使用されない。
+ */
+static void close_blue_magic_name(char *buf, size_t buf_size, int index, int menu_line)
 {
     if (!use_menu) {
-        sprintf(lm_ptr->psi_desc, "  %c)", I2A(lm_ptr->blue_magic_num));
+        snprintf(buf, buf_size, "  %c)", I2A(index));
         return;
     }
 
-    if (lm_ptr->blue_magic_num == (lm_ptr->menu_line - 1))
-        strcpy(lm_ptr->psi_desc, _("  》", "  > "));
-    else
-        strcpy(lm_ptr->psi_desc, "    ");
+    if (index == menu_line - 1) {
+        snprintf(buf, buf_size, _("  》", "  > "));
+    } else {
+        snprintf(buf, buf_size, "    ");
+    }
 }
 
-static void describe_blue_magic_name(player_type *player_ptr, learnt_magic_type *lm_ptr)
+/*!
+ * @brief 使用できる青魔法のリストを表示する
+ *
+ * @param menu_line 選択中の青魔法の行
+ * @param bluemage_data 青魔道士の固有データへの参照
+ * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていないものは表示をスキップする)
+ */
+static void describe_blue_magic_name(player_type *player_ptr, int menu_line, const bluemage_data_type &bluemage_data, const std::vector<RF_ABILITY> &blue_magics)
 {
-    prt("", lm_ptr->y, lm_ptr->x);
-    put_str(_("名前", "Name"), lm_ptr->y, lm_ptr->x + 5);
-    put_str(_("MP 失率 効果", "SP Fail Info"), lm_ptr->y, lm_ptr->x + 33);
-    for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
-        prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
-        if (!player_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]])
+    constexpr TERM_LEN y_base = 1;
+    constexpr TERM_LEN x_base = 18;
+    prt("", y_base, x_base);
+    put_str(_("名前", "Name"), y_base, x_base + 5);
+    put_str(_("MP 失率 効果", "SP Fail Info"), y_base, x_base + 33);
+    for (auto i = 0U; i < blue_magics.size(); ++i) {
+        prt("", y_base + i + 1, x_base);
+        const auto &spell = blue_magics[i];
+        if (bluemage_data.learnt_blue_magics.has_not(spell)) {
             continue;
+        }
 
-        lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
-        calculate_blue_magic_success_probability(player_ptr, lm_ptr);
-        learnt_info(player_ptr, lm_ptr->comment, i2enum<RF_ABILITY>(lm_ptr->blue_magics[lm_ptr->blue_magic_num]));
-        close_blue_magic_name(lm_ptr);
-        strcat(lm_ptr->psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
-        prt(lm_ptr->psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
-    }
-}
-
-static bool blue_magic_key_input(player_type *player_ptr, learnt_magic_type *lm_ptr)
-{
-    if ((lm_ptr->choice != ' ') && (lm_ptr->choice != '*') && (lm_ptr->choice != '?') && (!use_menu || (lm_ptr->ask == 0)))
-        return false;
-
-    if (lm_ptr->redraw && !use_menu) {
-        lm_ptr->redraw = false;
-        screen_load();
-        return true;
+        const auto &mp = monster_powers.at(spell);
+        auto need_mana = mod_need_mana(player_ptr, mp.smana, 0, REALM_NONE);
+        auto chance = calculate_blue_magic_failure_probability(player_ptr, mp, need_mana);
+        char comment[80];
+        learnt_info(player_ptr, comment, spell);
+        char psi_desc[80];
+        close_blue_magic_name(psi_desc, sizeof(psi_desc), i, menu_line);
+        angband_strcat(psi_desc, format(" %-26s %3d %3d%%%s", mp.name, need_mana, chance, comment), sizeof(psi_desc));
+        prt(psi_desc, y_base + i + 1, x_base);
     }
 
-    lm_ptr->redraw = true;
-    if (!use_menu)
-        screen_save();
-
-    describe_blue_magic_name(player_ptr, lm_ptr);
-    if (lm_ptr->y < 22)
-        prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
-
-    return true;
+    prt("", y_base + blue_magics.size() + 1, x_base);
 }
 
-static void convert_lower_blue_magic_selection(learnt_magic_type *lm_ptr)
+/*!
+ * @brief 青魔法を唱えるか確認する
+ *
+ * @param spell 唱える青魔法
+ * @return 唱えるなら ture、キャンセルするなら false を返す
+ */
+static bool confirm_cast_blue_magic(RF_ABILITY spell)
 {
-    if (use_menu)
-        return;
-
-    lm_ptr->ask = isupper(lm_ptr->choice);
-    if (lm_ptr->ask)
-        lm_ptr->choice = (char)tolower(lm_ptr->choice);
-
-    lm_ptr->blue_magic_num = islower(lm_ptr->choice) ? A2I(lm_ptr->choice) : -1;
-}
-
-static bool ask_cast_blue_magic(learnt_magic_type *lm_ptr)
-{
-    if (lm_ptr->ask == 0)
-        return true;
-
     char tmp_val[160];
-    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].name);
+    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers.at(spell).name);
     return get_check(tmp_val);
 }
 
-static bool select_learnt_spells(player_type *player_ptr, learnt_magic_type *lm_ptr)
+/*!
+ * @brief 唱える青魔法を記号により選択する
+ *
+ * @param bluemage_data 青魔道士の固有データへの参照
+ * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていない物は候補に出ず選択できない)
+ * @return 選択した青魔法。選択をキャンセルした場合は std::nullopt
+ */
+static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
 {
-    while (!lm_ptr->flag) {
-        if (lm_ptr->choice == ESCAPE)
-            lm_ptr->choice = ' ';
-        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, true))
+    char out_val[80];
+    (void)strnfmt(out_val, sizeof(out_val), _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
+        I2A(0), I2A(spells.size() - 1), _("魔法", "magic"));
+
+    bool first_show_list = always_show_list;
+    auto show_list = false;
+    std::optional<RF_ABILITY> selected_spell;
+
+    while (!selected_spell.has_value()) {
+        char choice = 0;
+        if (!first_show_list && !get_com(out_val, &choice, true)) {
             break;
+        }
 
-        if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(player_ptr, lm_ptr))
-            return false;
-
-        if (blue_magic_key_input(player_ptr, lm_ptr))
+        if (first_show_list || (choice == ' ') || (choice == '*') || (choice == '?')) {
+            // 選択する青魔法一覧の表示/非表示切り替え
+            first_show_list = false;
+            show_list = !show_list;
+            if (show_list) {
+                screen_save();
+                describe_blue_magic_name(player_ptr, 0, bluemage_data, spells);
+            } else {
+                screen_load();
+            }
             continue;
+        }
 
-        convert_lower_blue_magic_selection(lm_ptr);
-        if ((lm_ptr->blue_magic_num < 0) || (lm_ptr->blue_magic_num >= lm_ptr->count) || !player_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]]) {
+        auto confirm = isupper(choice) != 0;
+        uint index = A2I(tolower(choice));
+        if (spells.size() <= index || bluemage_data.learnt_blue_magics.has_not(spells[index])) {
             bell();
             continue;
         }
 
-        lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
-        if (!ask_cast_blue_magic(lm_ptr))
+        if (confirm && !confirm_cast_blue_magic(spells[index])) {
             continue;
+        }
 
-        lm_ptr->flag = true;
+        selected_spell = spells[index];
     }
 
-    return true;
+    if (show_list) {
+        screen_load();
+    }
+
+    return selected_spell;
+}
+
+/*!
+ * @brief 唱える青魔法をコマンドメニューにより選択する
+ *
+ * @param bluemage_data 青魔道士の固有データへの参照
+ * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていない物は候補に出ず選択できない)
+ * @return 選択した青魔法。選択をキャンセルした場合は std::nullopt
+ */
+static std::optional<RF_ABILITY> select_learnt_spells_by_menu(player_type *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
+{
+    char out_val[80];
+    angband_strcpy(out_val, _("(ESC=中断) どの魔法を唱えますか？", "(ESC=exit) Use which magic? "), sizeof(out_val));
+
+    auto it = std::find_if(spells.begin(), spells.end(), [&bluemage_data](const auto &spell) { return bluemage_data.learnt_blue_magics.has(spell); });
+    int menu_line = std::distance(spells.begin(), it) + 1;
+    std::optional<RF_ABILITY> selected_spell;
+
+    screen_save();
+
+    while (!selected_spell.has_value()) {
+        describe_blue_magic_name(player_ptr, menu_line, bluemage_data, spells);
+
+        char choice;
+        if (!get_com(out_val, &choice, true) || choice == '0') {
+            break;
+        }
+
+        if (!switch_blue_magic_choice(choice, menu_line, bluemage_data, spells)) {
+            continue;
+        }
+
+        uint index = menu_line - 1;
+        if (spells.size() <= index || bluemage_data.learnt_blue_magics.has_not(spells[index])) {
+            bell();
+            continue;
+        }
+
+        selected_spell = spells[index];
+    }
+
+    screen_load();
+
+    return selected_spell;
 }
 
 /*!
@@ -409,33 +472,41 @@ static bool select_learnt_spells(player_type *player_ptr, learnt_magic_type *lm_
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-bool get_learned_power(player_type *player_ptr, SPELL_IDX *sn)
+std::optional<RF_ABILITY> get_learned_power(player_type *player_ptr)
 {
-    learnt_magic_type tmp_magic;
-    learnt_magic_type *lm_ptr = initialize_lenat_magic_type(player_ptr, &tmp_magic);
-    if (check_blue_magic_cancel(sn))
-        return true;
+    auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+    if (!bluemage_data) {
+        return std::nullopt;
+    }
 
-    if (!check_blue_magic_kind(lm_ptr) || !sweep_learnt_spells(player_ptr, lm_ptr))
-        return false;
+    if (auto repeat_spell = check_blue_magic_repeat();
+        repeat_spell.has_value()) {
+        return repeat_spell;
+    }
 
-    if (use_menu)
-        screen_save();
+    auto type = (use_menu)
+                    ? select_blue_magic_type_by_menu()
+                    : select_blue_magic_kind_by_symbol();
+    if (!type.has_value()) {
+        return std::nullopt;
+    }
 
-    lm_ptr->choice = (always_show_list || use_menu) ? ESCAPE : 1;
-    if (!select_learnt_spells(player_ptr, lm_ptr))
-        return false;
+    auto spells = sweep_learnt_spells(*bluemage_data, type.value());
+    if (!spells.has_value() || spells->empty()) {
+        return std::nullopt;
+    }
 
-    if (lm_ptr->redraw)
-        screen_load();
+    auto selected_spell = (use_menu)
+                              ? select_learnt_spells_by_menu(player_ptr, *bluemage_data, spells.value())
+                              : select_learnt_spells_by_symbol(player_ptr, *bluemage_data, spells.value());
 
     player_ptr->window_flags |= PW_SPELL;
     handle_stuff(player_ptr);
 
-    if (!lm_ptr->flag)
-        return false;
+    if (!selected_spell.has_value()) {
+        return std::nullopt;
+    }
 
-    *sn = lm_ptr->blue_magics[lm_ptr->blue_magic_num];
-    repeat_push((COMMAND_CODE)lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
-    return true;
+    repeat_push(static_cast<COMMAND_CODE>(selected_spell.value()));
+    return selected_spell;
 }

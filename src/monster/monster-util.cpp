@@ -307,7 +307,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
     int prob2_total = 0; // 重みの総和
 
     // モンスター生成テーブルの各要素について重みを修正する。
-    for (int i = 0; i < alloc_race_size; i++) {
+    for (auto i = 0U; i < alloc_race_table.size(); i++) {
         alloc_entry *const entry = &alloc_race_table[i];
         const monster_race *const r_ptr = &r_info[entry->index];
 
@@ -352,7 +352,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = floor_ptr->inside_quest && !is_fixed_quest_idx(floor_ptr->inside_quest);
+            const bool in_random_quest = floor_ptr->inside_quest && !quest_type::is_fixed(floor_ptr->inside_quest);
             const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
 
             if (cond && !restrict_monster_to_dungeon(player_ptr, entry->index)) {

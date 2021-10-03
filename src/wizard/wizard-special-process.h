@@ -4,9 +4,8 @@
 
 struct player_type;
 void wiz_cure_all(player_type *player_ptr);
-KIND_OBJECT_IDX wiz_create_itemtype(void);
 void wiz_create_item(player_type *player_ptr);
-void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx);
+void wiz_create_named_art(player_type *player_ptr);
 void wiz_change_status(player_type *player_ptr);
 void wiz_create_feature(player_type *player_ptr);
 void wiz_jump_to_dungeon(player_type *player_ptr);

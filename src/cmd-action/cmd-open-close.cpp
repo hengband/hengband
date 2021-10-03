@@ -12,6 +12,8 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -49,7 +51,7 @@ static bool exe_open_chest(player_type *player_ptr, POSITION y, POSITION x, OBJE
         if (player_ptr->blind || no_lite(player_ptr))
             i = i / 10;
 
-        if (player_ptr->confused || player_ptr->image)
+        if (player_ptr->confused || player_ptr->hallucinated)
             i = i / 10;
 
         int j = i - o_ptr->pval;
@@ -70,8 +72,9 @@ static bool exe_open_chest(player_type *player_ptr, POSITION y, POSITION x, OBJE
     }
 
     if (flag) {
-        chest_trap(player_ptr, y, x, o_idx);
-        chest_death(player_ptr, false, y, x, o_idx);
+        Chest chest(player_ptr);
+        chest.chest_trap(y, x, o_idx);
+        chest.chest_death(false, y, x, o_idx);
     }
 
     return more;
@@ -92,8 +95,7 @@ void do_cmd_open(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (easy_open) {
         int num_doors = count_dt(player_ptr, &y, &x, is_closed_door, false);
@@ -150,8 +152,7 @@ void do_cmd_close(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (easy_open && (count_dt(player_ptr, &y, &x, is_open, false) == 1))
         command_dir = coords_to_dir(player_ptr, y, x);
@@ -197,8 +198,7 @@ void do_cmd_disarm(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (easy_disarm) {
         int num_traps = count_dt(player_ptr, &y, &x, is_trap, true);
@@ -266,8 +266,7 @@ void do_cmd_bash(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (command_arg) {
         command_rep = command_arg - 1;
@@ -338,8 +337,7 @@ void do_cmd_spike(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (!get_rep_dir(player_ptr, &dir, false))
         return;

@@ -12,6 +12,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief ランダムクエスト情報の読み込み
@@ -22,13 +23,12 @@
 void rd_unique_info(void)
 {
     const int MAX_TRIES = 100;
-    for (int i = 0; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        r_ptr->max_num = MAX_TRIES;
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            r_ptr->max_num = 1;
-        else if (r_ptr->flags7 & RF7_NAZGUL)
-            r_ptr->max_num = MAX_NAZGUL_NUM;
+    for (auto &r_ref : r_info) {
+        r_ref.max_num = MAX_TRIES;
+        if (r_ref.flags1 & RF1_UNIQUE)
+            r_ref.max_num = 1;
+        else if (r_ref.flags7 & RF7_NAZGUL)
+            r_ref.max_num = MAX_NAZGUL_NUM;
     }
 }
 
@@ -70,8 +70,9 @@ static bool check_quest_index(int loading_quest_index)
 
 static void load_quest_completion(quest_type *q_ptr)
 {
-    rd_s16b(&q_ptr->status);
     int16_t tmp16s;
+    rd_s16b(&tmp16s);
+    q_ptr->status = i2enum<QuestStatusType>(tmp16s);
     rd_s16b(&tmp16s);
     q_ptr->level = tmp16s;
 
@@ -96,10 +97,11 @@ static void load_quest_details(player_type *player_ptr, quest_type *q_ptr, int l
     q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
     rd_s16b(&tmp16s);
     q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
-    rd_s16b(&q_ptr->type);
+    rd_s16b(&tmp16s);
+    q_ptr->type = i2enum<QuestKindType>(tmp16s);
 
     rd_s16b(&q_ptr->r_idx);
-    if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
+    if ((q_ptr->type == QuestKindType::RANDOM) && (!q_ptr->r_idx))
         determine_random_questor(player_ptr, &quest[loading_quest_index]);
 
     rd_s16b(&q_ptr->k_idx);
@@ -120,8 +122,8 @@ void analyze_quests(player_type *player_ptr, const uint16_t max_quests_load, con
 
         quest_type *const q_ptr = &quest[i];
         load_quest_completion(q_ptr);
-        bool is_quest_running = (q_ptr->status == QUEST_STATUS_TAKEN);
-        is_quest_running |= (!h_older_than(0, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED));
+        bool is_quest_running = (q_ptr->status == QuestStatusType::TAKEN);
+        is_quest_running |= (!h_older_than(0, 3, 14) && (q_ptr->status == QuestStatusType::COMPLETED));
         is_quest_running |= (!h_older_than(1, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
         if (!is_quest_running)
             continue;
@@ -135,7 +137,7 @@ void analyze_quests(player_type *player_ptr, const uint16_t max_quests_load, con
             q_ptr->dungeon = tmp8u;
         }
 
-        if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)
+        if (q_ptr->status == QuestStatusType::TAKEN || q_ptr->status == QuestStatusType::UNTAKEN)
             if (r_info[q_ptr->r_idx].flags1 & RF1_UNIQUE)
                 r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
     }

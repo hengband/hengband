@@ -532,10 +532,11 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
  */
 void describe_autopick(char *buff, autopick_type *entry)
 {
+    //! @note autopick_describer::str は non-nullable、autopick_describer::insc は nullable という制約がある
     autopick_describer describer;
-    describer.str = entry->name;
+    describer.str = entry->name.c_str();
     describer.act = entry->action;
-    describer.insc = entry->insc;
+    describer.insc = entry->insc.empty() ? nullptr : entry->insc.c_str();
     describer.top = false;
     describer.before_n = 0;
     describer.body_str = _("アイテム", "items");

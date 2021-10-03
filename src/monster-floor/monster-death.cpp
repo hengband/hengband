@@ -9,6 +9,7 @@
 #include "effect/effect-processor.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "lore/lore-store.h"
@@ -156,8 +157,13 @@ static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_t
 
         a_idx = md_ptr->r_ptr->artifact_id[i];
         chance = md_ptr->r_ptr->artifact_percent[i];
-        if ((randint0(100) >= chance) && !w_ptr->wizard)
+        if (allow_debug_options) {
+            // continue process.
+            // @todo ここより下の処理は関数分割で何とかしたい.
+            // 処理を送るだけのif文は気持ち悪い.
+        } else if (randint0(100) >= chance) {
             continue;
+        }
 
         artifact_type *a_ptr = &a_info[a_idx];
         if (a_ptr->cur_num == 1)
@@ -283,7 +289,7 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
 
             dump_gold++;
         } else {
-            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode))
+            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode, -1))
                 continue;
 
             dump_item++;
@@ -295,7 +301,7 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = floor_ptr->base_level;
     coin_type = 0;
-    bool visible = (md_ptr->m_ptr->ml && !player_ptr->image) || ((md_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0);
+    bool visible = (md_ptr->m_ptr->ml && !player_ptr->hallucinated) || ((md_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0);
     if (visible && (dump_item || dump_gold))
         lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
 }
@@ -311,7 +317,7 @@ static void on_defeat_last_boss(player_type *player_ptr)
     player_ptr->redraw |= PR_TITLE;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
-    admire_from_patron(player_ptr);
+    patron_list[player_ptr->chaos_patron].admire();
     msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
     msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
     msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
@@ -358,7 +364,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
     }
 
-    check_quest_completion(player_ptr, md_ptr->m_ptr);
+    QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();
     on_defeat_arena_monster(player_ptr, md_ptr);
     if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, false))
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));

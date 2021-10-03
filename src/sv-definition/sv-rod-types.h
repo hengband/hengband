@@ -33,4 +33,5 @@ enum sv_rod_type {
     SV_ROD_HAVOC = 28,
     SV_ROD_STONE_TO_MUD = 29,
     SV_ROD_AGGRAVATE = 30,
+    SV_ROD_MAX,
 };

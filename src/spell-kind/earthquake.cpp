@@ -36,8 +36,6 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -54,7 +52,7 @@
 bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {
+    if ((floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {
         return false;
     }
 
@@ -139,8 +137,7 @@ bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, M
             msg_print(_("あなたはひどい怪我を負った！", "You are severely crushed!"));
             damage = 200;
         } else {
-            auto effects = player_ptr->effects();
-            auto stun_value = effects->stun()->current();
+            BadStatusSetter bss(player_ptr);
             switch (randint1(3)) {
             case 1: {
                 msg_print(_("降り注ぐ岩をうまく避けた！", "You nimbly dodge the blast!"));
@@ -150,13 +147,13 @@ bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, M
             case 2: {
                 msg_print(_("岩石があなたに直撃した!", "You are bashed by rubble!"));
                 damage = damroll(10, 4);
-                (void)set_stun(player_ptr, stun_value + randint1(50));
+                (void)bss.mod_stun(randint1(50));
                 break;
             }
             case 3: {
                 msg_print(_("あなたは床と壁との間に挟まれてしまった！", "You are crushed between the floor and ceiling!"));
                 damage = damroll(10, 4);
-                (void)set_stun(player_ptr, stun_value + randint1(50));
+                (void)bss.mod_stun(randint1(50));
                 break;
             }
             }
@@ -351,9 +348,8 @@ bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, M
     player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
     player_ptr->redraw |= (PR_HEALTH | PR_UHEALTH | PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-    if (player_ptr->special_defense & NINJA_S_STEALTH) {
-        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW)
-            set_superstealth(player_ptr, false);
+    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+        set_superstealth(player_ptr, false);
     }
 
     return true;

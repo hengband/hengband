@@ -32,9 +32,6 @@ extern int usleep(ulong usecs);
 #endif
 
 #define FILE_READ_BUFF_SIZE 65535
-extern char *file_read__buf;
-extern char *file_read__swp;
-extern char *file_read__tmp;
 
 errr path_parse(char *buf, int max, concptr file);
 errr path_build(char *buf, int max, concptr path, concptr file);

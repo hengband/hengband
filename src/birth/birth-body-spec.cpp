@@ -61,9 +61,9 @@ void get_money(player_type *player_ptr)
     if (gold < minimum_deposit)
         gold = minimum_deposit;
 
-    if (player_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->ppersonality == PERSONALITY_LAZY)
         gold /= 2;
-    else if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN)
+    else if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         gold = 10000000;
     if (player_ptr->prace == player_race_type::ANDROID)
         gold /= 5;

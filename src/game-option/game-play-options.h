@@ -13,4 +13,4 @@ extern bool last_words; /* Leave last words when your character dies */
 extern bool auto_dump; /* Dump a character record automatically */
 extern bool auto_debug_save; /* Dump a debug savedata every key input */
 extern bool send_score; /* Send score dump to the world score server */
-extern bool allow_debug_opts; /* Allow use of debug/cheat options */
+extern bool allow_debug_options; /* Allow use of debug/cheat options */

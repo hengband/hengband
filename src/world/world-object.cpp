@@ -68,8 +68,6 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
  */
 OBJECT_IDX get_obj_num(player_type *player_ptr, DEPTH level, BIT_FLAGS mode)
 {
-    alloc_entry *table = alloc_kind_table;
-
     if (level > MAX_DEPTH - 1)
         level = MAX_DEPTH - 1;
 
@@ -81,17 +79,18 @@ OBJECT_IDX get_obj_num(player_type *player_ptr, DEPTH level, BIT_FLAGS mode)
 
     // 候補の確率テーブル生成
     ProbabilityTable<int> prob_table;
-    for (int i = 0; i < alloc_kind_size; i++) {
-        if (table[i].level > level)
+    for (auto i = 0U; i < alloc_kind_table.size(); i++) {
+        const auto &entry = alloc_kind_table[i];
+        if (entry.level > level)
             break;
 
-        KIND_OBJECT_IDX k_idx = table[i].index;
+        KIND_OBJECT_IDX k_idx = entry.index;
         object_kind *k_ptr = &k_info[k_idx];
 
         if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == TV_CHEST))
             continue;
 
-        prob_table.entry_item(i, table[i].prob2);
+        prob_table.entry_item(i, entry.prob2);
     }
 
     // 候補なし
@@ -110,7 +109,7 @@ OBJECT_IDX get_obj_num(player_type *player_ptr, DEPTH level, BIT_FLAGS mode)
     std::vector<int> result;
     ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
 
-    auto it = std::max_element(result.begin(), result.end(), [table](int a, int b) { return table[a].level < table[b].level; });
+    auto it = std::max_element(result.begin(), result.end(), [](int a, int b) { return alloc_kind_table[a].level < alloc_kind_table[b].level; });
 
-    return table[*it].index;
+    return alloc_kind_table[*it].index;
 }

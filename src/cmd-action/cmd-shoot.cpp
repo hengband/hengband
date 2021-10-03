@@ -5,6 +5,9 @@
 #include "mind/snipe-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
@@ -14,15 +17,12 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief 射撃処理のメインルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param snipe_type ？？？
- * @todo Doxygenの加筆求む
+ * @param snipe_type スナイパーの射撃術の種類
  */
 void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
 {
@@ -51,8 +51,7 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
         return;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     concptr q = _("どれを撃ちますか? ", "Fire which item? ");
     concptr s = _("発射されるアイテムがありません。", "You have nothing to fire.");
@@ -66,13 +65,16 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
     if (!player_ptr->is_fired || player_ptr->pclass != CLASS_SNIPER)
         return;
 
-    if (snipe_type == SP_AWAY)
-        teleport_player(player_ptr, 10 + (player_ptr->concent * 2), TELEPORT_SPONTANEOUS);
+    if (snipe_type == SP_AWAY) {
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        teleport_player(player_ptr, 10 + (sniper_data->concent * 2), TELEPORT_SPONTANEOUS);
+    }
 
     auto effects = player_ptr->effects();
     if (snipe_type == SP_FINAL) {
         msg_print(_("射撃の反動が体を襲った。", "The weapon's recoil stuns you. "));
-        (void)set_slow(player_ptr, player_ptr->slow + randint0(7) + 7, false);
-        (void)set_stun(player_ptr, effects->stun()->current() + randint1(25));
+        BadStatusSetter bss(player_ptr);
+        (void)bss.mod_slowness(randint0(7) + 7, false);
+        (void)bss.mod_stun(randint1(25));
     }
 }

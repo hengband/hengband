@@ -2,6 +2,7 @@
 #include "autopick/autopick.h"
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/show-file.h"
 #include "core/window-redrawer.h"
@@ -319,12 +320,11 @@ static void do_cmd_options_win(player_type *player_ptr)
  */
 static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
 {
-    char ch;
-    int i, k = 0, n = MAX_CHEAT_OPTIONS;
-    char buf[80];
     term_clear();
+    auto k = 0U;
+    const auto n = cheat_info.size();
     while (true) {
-        DIRECTION dir;
+        char buf[80];
         sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
         prt(buf, 0, 0);
 
@@ -335,66 +335,62 @@ static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
         prt("      後に解除してもダメですので、勝利者を目指す方はここのオプションはい", 13, 0);
         prt("      じらないようにして下さい。", 14, 0);
 #endif
-        for (i = 0; i < n; i++) {
-            byte a = TERM_WHITE;
-            if (i == k)
+        for (auto i = 0U; i < n; i++) {
+            auto a = TERM_WHITE;
+            if (i == k) {
                 a = TERM_L_BLUE;
+            }
 
             sprintf(buf, "%-48s: %s (%s)", cheat_info[i].o_desc, (*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), cheat_info[i].o_text);
-            c_prt(a, buf, i + 2, 0);
+            c_prt(enum2i(a), buf, i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
-        ch = inkey();
-        dir = get_keymap_dir(ch);
-        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+        auto ch = inkey();
+        auto dir = get_keymap_dir(ch);
+        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8)) {
             ch = I2D(dir);
+        }
 
         switch (ch) {
-        case ESCAPE: {
+        case ESCAPE:
             return;
-        }
         case '-':
-        case '8': {
+        case '8':
             k = (n + k - 1) % n;
             break;
-        }
         case ' ':
         case '\n':
         case '\r':
-        case '2': {
+        case '2':
             k = (k + 1) % n;
             break;
-        }
         case 'y':
         case 'Y':
-        case '6': {
-            if (!w_ptr->noscore)
+        case '6':
+            if (!w_ptr->noscore) {
                 exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0,
                     _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
+            }
 
-            w_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
-            (*cheat_info[k].o_var) = true;
+            w_ptr->noscore |= cheat_info[k].o_set * 256 + cheat_info[k].o_bit;
+            *cheat_info[k].o_var = true;
             k = (k + 1) % n;
             break;
-        }
         case 'n':
         case 'N':
-        case '4': {
-            (*cheat_info[k].o_var) = false;
+        case '4':
+            *cheat_info[k].o_var = false;
             k = (k + 1) % n;
             break;
-        }
-        case '?': {
+        case '?':
             strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
             (void)show_file(player_ptr, true, buf, nullptr, 0, 0);
             term_clear();
             break;
-        }
-        default: {
+        default:
             bell();
             break;
-        }
         }
     }
 }
@@ -434,7 +430,7 @@ void do_cmd_options(player_type *player_ptr)
     screen_save();
     while (true) {
         int n = OPT_NUM;
-        if (!w_ptr->noscore && !allow_debug_opts)
+        if (!w_ptr->noscore && !allow_debug_options)
             n--;
 
         term_clear();
@@ -519,19 +515,19 @@ void do_cmd_options(player_type *player_ptr)
         case 'B':
         case 'b': {
             do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
-                (!w_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
-                                                                  : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+                allow_debug_options ? _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score")
+                                    : _("初期オプション(参照のみ)", "Birth Options(browse only)"));
             break;
         }
-        case 'C': {
-            if (!w_ptr->noscore && !allow_debug_opts) {
+        case 'C':
+        case 'c':
+            if (!w_ptr->noscore && !allow_debug_options) {
                 bell();
                 break;
             }
 
             do_cmd_options_cheat(player_ptr, _("詐欺師は決して勝利できない！", "Cheaters never win"));
             break;
-        }
         case 'a':
         case 'A': {
             do_cmd_options_autosave(player_ptr, _("自動セーブ", "Autosave"));
@@ -551,23 +547,9 @@ void do_cmd_options(player_type *player_ptr)
         case 'D':
         case 'd': {
             clear_from(18);
-            prt(_("コマンド: 基本ウェイト量", "Command: Base Delay Factor"), 19, 0);
-            while (true) {
-                int msec = delay_factor * delay_factor * delay_factor;
-                prt(format(_("現在のウェイト: %d (%dミリ秒)", "Current base delay factor: %d (%d msec)"), delay_factor, msec), 22, 0);
-                prt(_("ウェイト (0-9) ESCで決定: ", "Delay Factor (0-9 or ESC to accept): "), 20, 0);
-                k = inkey();
-                if (k == ESCAPE)
-                    break;
-                else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), nullptr, 0, 0);
-                    term_clear();
-                } else if (isdigit(k))
-                    delay_factor = D2I(k);
-                else
-                    bell();
-            }
-
+            prt(format(_("現在ウェイト量(msec): %d", "Current Delay Factor(msec): %d"), delay_factor), 19, 0);
+            (void)get_value(_("コマンド: ウェイト量(msec)", "Command: Delay Factor(msec)"), 0, 1000, &delay_factor);
+            clear_from(18);
             break;
         }
         case 'H':
@@ -641,8 +623,7 @@ void do_cmd_options_aux(player_type *player_ptr, game_option_types page, concptr
     int i, k = 0, n = 0, l;
     int opt[24];
     char buf[80];
-    bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && (!w_ptr->wizard || !allow_debug_opts);
-
+    bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && !allow_debug_options;
     for (i = 0; i < 24; i++)
         opt[i] = 0;
 

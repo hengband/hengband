@@ -28,6 +28,9 @@
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
@@ -219,7 +222,7 @@ static bool update_weird_telepathy(player_type *player_ptr, um_type *um_ptr, MON
 
     um_ptr->flag = true;
     um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-    if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image) {
+    if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
         r_ptr->r_flags2 |= RF2_WEIRD_MIND;
         update_smart_stupid_flags(r_ptr);
     }
@@ -230,10 +233,10 @@ static bool update_weird_telepathy(player_type *player_ptr, um_type *um_ptr, MON
 static void update_telepathy_sight(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
-    if (player_ptr->special_defense & KATA_MUSOU) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             update_smart_stupid_flags(r_ptr);
 
         return;
@@ -243,7 +246,7 @@ static void update_telepathy_sight(player_type *player_ptr, um_type *um_ptr, MON
         return;
 
     if (r_ptr->flags2 & RF2_EMPTY_MIND) {
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags2 |= RF2_EMPTY_MIND;
 
         return;
@@ -254,7 +257,7 @@ static void update_telepathy_sight(player_type *player_ptr, um_type *um_ptr, MON
 
     um_ptr->flag = true;
     um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-    if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+    if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
         update_smart_stupid_flags(r_ptr);
 }
 
@@ -264,84 +267,84 @@ static void update_specific_race_telepathy(player_type *player_ptr, um_type *um_
     if ((player_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_ANIMAL;
     }
 
     if ((player_ptr->esp_undead) && (r_ptr->flags3 & RF3_UNDEAD)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_UNDEAD;
     }
 
     if ((player_ptr->esp_demon) && (r_ptr->flags3 & RF3_DEMON)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_DEMON;
     }
 
     if ((player_ptr->esp_orc) && (r_ptr->flags3 & RF3_ORC)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_ORC;
     }
 
     if ((player_ptr->esp_troll) && (r_ptr->flags3 & RF3_TROLL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_TROLL;
     }
 
     if ((player_ptr->esp_giant) && (r_ptr->flags3 & RF3_GIANT)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_GIANT;
     }
 
     if ((player_ptr->esp_dragon) && (r_ptr->flags3 & RF3_DRAGON)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_DRAGON;
     }
 
     if ((player_ptr->esp_human) && (r_ptr->flags2 & RF2_HUMAN)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags2 |= RF2_HUMAN;
     }
 
     if ((player_ptr->esp_evil) && (r_ptr->flags3 & RF3_EVIL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_EVIL;
     }
 
     if ((player_ptr->esp_good) && (r_ptr->flags3 & RF3_GOOD)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_GOOD;
     }
 
     if ((player_ptr->esp_nonliving) && ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags3 |= RF3_NONLIVING;
     }
 
     if ((player_ptr->esp_unique) && (r_ptr->flags1 & RF1_UNIQUE)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->image)
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
             r_ptr->r_flags1 |= RF1_UNIQUE;
     }
 }
@@ -402,14 +405,15 @@ static void decide_sight_invisible_monster(player_type *player_ptr, um_type *um_
     if (!player_has_los_bold(player_ptr, um_ptr->fy, um_ptr->fx) || player_ptr->blind)
         return;
 
-    if (player_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
         um_ptr->easy = true;
         um_ptr->flag = true;
     }
 
     bool do_cold_blood = check_cold_blood(player_ptr, um_ptr, distance);
     bool do_invisible = check_invisible(player_ptr, um_ptr);
-    if (!um_ptr->flag || !is_original_ap(um_ptr->m_ptr) || player_ptr->image)
+    if (!um_ptr->flag || !is_original_ap(um_ptr->m_ptr) || player_ptr->hallucinated)
         return;
 
     if (do_invisible)
@@ -441,7 +445,7 @@ static void update_invisible_monster(player_type *player_ptr, um_type *um_ptr, M
     if (player_ptr->riding == m_idx)
         player_ptr->redraw |= PR_UHEALTH;
 
-    if (!player_ptr->image) {
+    if (!player_ptr->hallucinated) {
         monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
         if ((um_ptr->m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
             r_info[MON_KAGE].r_sights++;

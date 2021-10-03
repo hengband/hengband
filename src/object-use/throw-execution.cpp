@@ -70,7 +70,7 @@ ObjectThrowEntity::ObjectThrowEntity(player_type *player_ptr, object_type *q_ptr
     , player_ptr(player_ptr)
     , shuriken(shuriken)
     , mult(mult)
-    , msec(delay_factor_val * delay_factor_val * delay_factor_val)
+    , msec(delay_factor_val)
     , boomerang(boomerang)
 {
 }
@@ -462,7 +462,7 @@ void ObjectThrowEntity::display_attack_racial_power()
         return;
     }
 
-    if (!this->player_ptr->image) {
+    if (!this->player_ptr->hallucinated) {
         monster_race_track(this->player_ptr, this->m_ptr->ap_r_idx);
     }
 

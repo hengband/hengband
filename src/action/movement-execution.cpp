@@ -165,13 +165,13 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
         if (!is_hostile(m_ptr)
-            && !(player_ptr->confused || player_ptr->image || !m_ptr->ml || is_stunned
+            && !(player_ptr->confused || player_ptr->hallucinated || !m_ptr->ml || is_stunned
                 || (player_ptr->muta.has(MUTA::BERS_RAGE) && is_shero(player_ptr)))
             && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
             monster_desc(player_ptr, m_name, m_ptr, 0);
             if (m_ptr->ml) {
-                if (!player_ptr->image)
+                if (!player_ptr->hallucinated)
                     monster_race_track(player_ptr, m_ptr->ap_r_idx);
 
                 health_track(player_ptr, g_ptr->m_idx);
@@ -279,7 +279,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
             auto is_stunned = effects->stun()->is_stunned();
             if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) {
                 msg_print(_("それ以上先には進めない。", "You cannot go any more."));
-                if (!(player_ptr->confused || is_stunned || player_ptr->image)) {
+                if (!(player_ptr->confused || is_stunned || player_ptr->hallucinated)) {
                     energy.reset_player_turn();
                 }
             } else {
@@ -291,7 +291,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
 #else
                 msg_format("There is %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
-                if (!(player_ptr->confused || is_stunned || player_ptr->image))
+                if (!(player_ptr->confused || is_stunned || player_ptr->hallucinated))
                     energy.reset_player_turn();
             }
         }
@@ -304,7 +304,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
     if (can_move && !pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
-        if (!(player_ptr->confused || is_stunned || player_ptr->image)) {
+        if (!(player_ptr->confused || is_stunned || player_ptr->hallucinated)) {
             energy.reset_player_turn();
         }
 

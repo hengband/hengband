@@ -1484,9 +1484,6 @@
     <ClCompile Include="..\..\src\load\extra-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load-v1-3-0.cpp">
-      <Filter>load</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\load\load-v1-7-0.cpp">
       <Filter>load</Filter>
     </ClCompile>
@@ -2336,6 +2333,33 @@
     </ClCompile>
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp">
       <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-cut.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\player-class-specific-data-writer.cpp">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\magic-eater-data-type.cpp">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\use-execution.cpp">
+      <Filter>object-use</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\item-use-checker.cpp">
+      <Filter>object-use</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\zaprod-execution.cpp">
+      <Filter>object-use</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\zapwand-execution.cpp">
+      <Filter>object-use</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3830,9 +3854,6 @@
     <ClInclude Include="..\..\src\locale\language-switcher.h">
       <Filter>locale</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\alloc-entry-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\alloc-entries.h">
       <Filter>system</Filter>
     </ClInclude>
@@ -4074,9 +4095,6 @@
       <Filter>load</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\extra-loader.h">
-      <Filter>load</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\load\load-v1-3-0.h">
       <Filter>load</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\load-v1-7-0.h">
@@ -5027,6 +5045,66 @@
     </ClInclude>
     <ClInclude Include="..\..\src\timed-effect\player-stun.h">
       <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-cut.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\bluemage-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\class-specific-data.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\force-trainer-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\smith-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\spell-hex-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\player-class-specific-data-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\player-class-specific-data-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\magic-eater-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\bard-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\mane-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\stone-of-lore.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\sniper-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\use-execution.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\item-use-checker.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\zaprod-execution.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\zapwand-execution.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\samurai-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\monk-data-type.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\ninja-data-type.h">
+      <Filter>player-info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

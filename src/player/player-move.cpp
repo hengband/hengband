@@ -81,7 +81,7 @@ static void discover_hidden_things(player_type *player_ptr, POSITION y, POSITION
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (o_ptr->tval != TV_CHEST)
             continue;
-        if (!chest_traps[o_ptr->pval])
+        if (chest_traps[o_ptr->pval].none())
             continue;
         if (!o_ptr->is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
@@ -101,7 +101,7 @@ void search(player_type *player_ptr)
     if (player_ptr->blind || no_lite(player_ptr))
         chance = chance / 10;
 
-    if (player_ptr->confused || player_ptr->image)
+    if (player_ptr->confused || player_ptr->hallucinated)
         chance = chance / 10;
 
     for (DIRECTION i = 0; i < 9; ++i)
@@ -228,7 +228,7 @@ bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_F
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (f_ptr->flags.has(FF::QUEST_EXIT)) {
-        if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
+        if (quest[floor_ptr->inside_quest].type == QuestKindType::FIND_EXIT)
             complete_quest(player_ptr, floor_ptr->inside_quest);
 
         leave_quest_check(player_ptr);

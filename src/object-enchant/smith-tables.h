@@ -4,7 +4,7 @@
 
 #include <vector>
 
-enum class SmithEssence;
+enum class SmithEssence : int16_t;
 enum tr_type : int32_t;
 
 /*!

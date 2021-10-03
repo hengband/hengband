@@ -11,6 +11,7 @@
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "io/input-key-acceptor.h"
@@ -94,7 +95,7 @@ void teleport_level(player_type *player_ptr, MONSTER_IDX m_idx)
     else
         go_up = false;
 
-    if ((m_idx <= 0) && w_ptr->wizard) {
+    if ((m_idx <= 0) && allow_debug_options) {
         if (get_check("Force to go up? "))
             go_up = true;
         else if (get_check("Force to go down? "))
@@ -199,7 +200,7 @@ void teleport_level(player_type *player_ptr, MONSTER_IDX m_idx)
     }
 
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    check_quest_completion(player_ptr, m_ptr);
+    QuestCompletionChecker(player_ptr, m_ptr).complete();
     if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
         char m2_name[MAX_NLEN];
 
@@ -397,9 +398,9 @@ bool free_level_recall(player_type *player_ptr)
 
     DEPTH max_depth = d_info[select_dungeon].maxdepth;
     if (select_dungeon == DUNGEON_ANGBAND) {
-        if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED)
+        if (quest[QUEST_OBERON].status != QuestStatusType::FINISHED)
             max_depth = 98;
-        else if (quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED)
+        else if (quest[QUEST_SERPENT].status != QuestStatusType::FINISHED)
             max_depth = 99;
     }
 

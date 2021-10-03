@@ -54,11 +54,15 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/alignment.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
+#include "player-info/monk-data-type.h"
+#include "player-info/samurai-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player-status/player-basic-statistics.h"
 #include "player-status/player-hand-types.h"
 #include "player-status/player-infravision.h"
@@ -350,7 +354,7 @@ static void update_bonuses(player_type *player_ptr)
 
     player_ptr->lite = has_lite(player_ptr);
 
-    if (any_bits(player_ptr->special_defense, KAMAE_MASK)) {
+    if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE)) {
         if (none_bits(empty_hands_status, EMPTY_HAND_MAIN)) {
             set_action(player_ptr, ACTION_NONE);
         }
@@ -800,7 +804,7 @@ static void update_max_mana(player_type *player_ptr)
             msp++;
         if (msp)
             msp += (msp * rp_ptr->r_adj[mp_ptr->spell_stat] / 20);
-        if (msp && (player_ptr->pseikaku == PERSONALITY_MUNCHKIN))
+        if (msp && (player_ptr->ppersonality == PERSONALITY_MUNCHKIN))
             msp += msp / 2;
         if (msp && (player_ptr->pclass == CLASS_HIGH_MAGE))
             msp += msp / 4;
@@ -1064,7 +1068,7 @@ static ACTION_SKILL_POWER calc_disarming(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_dis + c_ptr->c_dis + a_ptr->a_dis;
     pow += ((cp_ptr->x_dis * player_ptr->lev / 10) + (ap_ptr->a_dis * player_ptr->lev / 50));
@@ -1094,7 +1098,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_dev + c_ptr->c_dev + a_ptr->a_dev;
     pow += ((c_ptr->x_dev * player_ptr->lev / 10) + (ap_ptr->a_dev * player_ptr->lev / 50));
@@ -1144,7 +1148,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
     pow += ((cp_ptr->x_sav * player_ptr->lev / 10) + (ap_ptr->a_sav * player_ptr->lev / 50));
@@ -1199,7 +1203,7 @@ static ACTION_SKILL_POWER calc_search(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_srh + c_ptr->c_srh + a_ptr->a_srh;
     pow += (c_ptr->x_srh * player_ptr->lev / 10);
@@ -1246,7 +1250,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *player_ptr)
     else
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     pow = tmp_rp_ptr->r_fos + c_ptr->c_fos + a_ptr->a_fos;
     pow += (c_ptr->x_fos * player_ptr->lev / 10);
@@ -1284,7 +1288,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     if (player_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
@@ -1308,7 +1312,7 @@ static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     if (player_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
@@ -1333,7 +1337,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(player_type *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
     const player_class_info *c_ptr = &class_info[player_ptr->pclass];
-    const player_personality *a_ptr = &personality_info[player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
     if (player_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
@@ -1476,7 +1480,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             else if ((player_ptr->pclass == CLASS_ROGUE) && (o_ptr->weight < 50) && (player_ptr->stat_index[A_DEX] >= 30))
                 num_blow++;
 
-            if (any_bits(player_ptr->special_defense, KATA_FUUJIN))
+            if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::FUUJIN))
                 num_blow -= 1;
 
             if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
@@ -1523,13 +1527,14 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
         if (heavy_armor(player_ptr) && (player_ptr->pclass != CLASS_BERSERKER))
             num_blow /= 2;
 
-        if (any_bits(player_ptr->special_defense, KAMAE_GENBU)) {
+        PlayerClass pc(player_ptr);
+        if (pc.monk_stance_is(MonkStance::GENBU)) {
             num_blow -= 2;
             if ((player_ptr->pclass == CLASS_MONK) && (player_ptr->lev > 42))
                 num_blow--;
             if (num_blow < 0)
                 num_blow = 0;
-        } else if (any_bits(player_ptr->special_defense, KAMAE_SUZAKU)) {
+        } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
             num_blow /= 2;
         }
 
@@ -1560,13 +1565,13 @@ static int16_t calc_to_magic_chance(player_type *player_ptr)
 {
     int16_t chance = 0;
 
-    if (player_ptr->pseikaku == PERSONALITY_LAZY)
+    if (player_ptr->ppersonality == PERSONALITY_LAZY)
         chance += 10;
-    if (player_ptr->pseikaku == PERSONALITY_SHREWD)
+    if (player_ptr->ppersonality == PERSONALITY_SHREWD)
         chance -= 3;
-    if ((player_ptr->pseikaku == PERSONALITY_PATIENT) || (player_ptr->pseikaku == PERSONALITY_MIGHTY))
+    if ((player_ptr->ppersonality == PERSONALITY_PATIENT) || (player_ptr->ppersonality == PERSONALITY_MIGHTY))
         chance++;
-    if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN)
+    if (player_ptr->ppersonality == PERSONALITY_CHARGEMAN)
         chance += 5;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
@@ -1733,17 +1738,18 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         }
     }
 
-    if (any_bits(player_ptr->special_defense, KAMAE_GENBU)) {
+    PlayerClass pc(player_ptr);
+    if (pc.monk_stance_is(MonkStance::GENBU)) {
         ac += (player_ptr->lev * player_ptr->lev) / 50;
-    } else if (any_bits(player_ptr->special_defense, KAMAE_BYAKKO)) {
+    } else if (pc.monk_stance_is(MonkStance::BYAKKO)) {
         ac -= 40;
-    } else if (any_bits(player_ptr->special_defense, KAMAE_SEIRYU)) {
+    } else if (pc.monk_stance_is(MonkStance::SEIRYU)) {
         ac -= 50;
-    } else if (any_bits(player_ptr->special_defense, KATA_KOUKIJIN)) {
+    } else if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
         ac -= 50;
     }
 
-    if (player_ptr->ult_res || (any_bits(player_ptr->special_defense, KATA_MUSOU))) {
+    if (player_ptr->ult_res || (pc.samurai_stance_is(SamuraiStance::MUSOU))) {
         ac += 100;
     } else if (player_ptr->tsubureru || player_ptr->shield || player_ptr->magicdef) {
         ac += 50;
@@ -2080,7 +2086,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
     }
 
     // 朱雀の構えをとっているとき、格闘ダメージに -(レベル)/6 の修正を得る。
-    if (any_bits(player_ptr->special_defense, KAMAE_SUZAKU)) {
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             damage -= (player_ptr->lev / 6);
         }
@@ -2306,7 +2312,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
     hit -= calc_double_weapon_penalty(player_ptr, slot);
 
     // 朱雀の構えをとっているとき、格闘命中に -(レベル)/3 の修正を得る。
-    if (any_bits(player_ptr->special_defense, KAMAE_SUZAKU)) {
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             hit -= (player_ptr->lev / 3);
         }
@@ -2766,7 +2772,7 @@ void check_experience(player_type *player_ptr)
          * 呼ばれるので順番を最後にする。
          */
         if (level_reward) {
-            gain_level_reward(player_ptr, 0);
+            patron_list[player_ptr->chaos_patron].gain_level_reward(0);
             level_reward = false;
         }
 
@@ -2874,9 +2880,9 @@ long calc_score(player_type *player_ptr)
         mult = 5;
 
     DEPTH max_dl = 0;
-    for (int i = 0; i < w_ptr->max_d_idx; i++)
-        if (max_dlv[i] > max_dl)
-            max_dl = max_dlv[i];
+    for (const auto &d_ref : d_info)
+        if (max_dl < max_dlv[d_ref.idx])
+            max_dl = max_dlv[d_ref.idx];
 
     uint32_t point_l = (player_ptr->max_max_exp + (100 * max_dl));
     uint32_t point_h = point_l / 0x10000L;
@@ -2901,14 +2907,11 @@ long calc_score(player_type *player_ptr)
             point = point / 5;
     }
 
-    if ((player_ptr->pseikaku == PERSONALITY_MUNCHKIN) && point) {
+    if ((player_ptr->ppersonality == PERSONALITY_MUNCHKIN) && point) {
         point = 1;
         if (w_ptr->total_winner)
             point = 2;
     }
-
-    if (easy_band)
-        point = (0 - point);
 
     return point;
 }
@@ -2924,7 +2927,9 @@ bool is_blessed(player_type *player_ptr)
 
 bool is_tim_esp(player_type *player_ptr)
 {
-    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (player_ptr->concent >= CONCENT_TELE_THRESHOLD);
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_concent = sniper_data ? sniper_data->concent : 0;
+    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }
 
 bool is_tim_stealth(player_type *player_ptr)
@@ -2934,7 +2939,9 @@ bool is_tim_stealth(player_type *player_ptr)
 
 bool is_time_limit_esp(player_type *player_ptr)
 {
-    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (player_ptr->concent >= CONCENT_TELE_THRESHOLD);
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_concent = sniper_data ? sniper_data->concent : 0;
+    return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }
 
 bool is_time_limit_stealth(player_type *player_ptr)
@@ -2978,12 +2985,12 @@ bool is_shero(player_type *player_ptr)
 
 bool is_echizen(player_type *player_ptr)
 {
-    return (player_ptr->pseikaku == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
+    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
 }
 
 bool is_chargeman(player_type *player_ptr)
 {
-    return player_ptr->pseikaku == PERSONALITY_CHARGEMAN;
+    return player_ptr->ppersonality == PERSONALITY_CHARGEMAN;
 }
 
 WEIGHT calc_weapon_weight_limit(player_type *player_ptr)

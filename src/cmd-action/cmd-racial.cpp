@@ -14,6 +14,8 @@
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
@@ -435,8 +437,7 @@ void do_cmd_racial_power(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(player_ptr, ACTION_NONE);
+   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
 
     auto tmp_r = rc_type(player_ptr);
     auto *rc_ptr = &tmp_r;

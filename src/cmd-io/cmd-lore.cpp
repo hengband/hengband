@@ -36,9 +36,6 @@
  */
 void do_cmd_query_symbol(player_type *player_ptr)
 {
-    MONRACE_IDX i;
-    int n;
-    MONRACE_IDX r_idx;
     char sym, query;
     char buf[256];
 
@@ -51,15 +48,15 @@ void do_cmd_query_symbol(player_type *player_ptr)
     bool recall = false;
 
     uint16_t why = 0;
-    MONRACE_IDX *who;
 
     if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
                      "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
             &sym, false))
         return;
 
-    for (i = 0; ident_info[i]; ++i) {
-        if (sym == ident_info[i][0])
+    int ident_i;
+    for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
+        if (sym == ident_info[ident_i][0])
             break;
     }
 
@@ -82,26 +79,25 @@ void do_cmd_query_symbol(player_type *player_ptr)
             return;
         }
         sprintf(buf, _("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
-    } else if (ident_info[i]) {
-        sprintf(buf, "%c - %s.", sym, ident_info[i] + 2);
+    } else if (ident_info[ident_i]) {
+        sprintf(buf, "%c - %s.", sym, ident_info[ident_i] + 2);
     } else {
         sprintf(buf, "%c - %s", sym, _("無効な文字", "Unknown Symbol"));
     }
 
     prt(buf, 0, 0);
-    C_MAKE(who, max_r_idx, MONRACE_IDX);
-    for (n = 0, i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!cheat_know && !r_ptr->r_sights)
+    std::vector<MONRACE_IDX> who;
+    for (const auto &r_ref : r_info) {
+        if (!cheat_know && !r_ref.r_sights)
             continue;
 
-        if (norm && (r_ptr->flags1 & (RF1_UNIQUE)))
+        if (norm && (r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
-        if (uniq && !(r_ptr->flags1 & (RF1_UNIQUE)))
+        if (uniq && !(r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
-        if (ride && !(r_ptr->flags7 & (RF7_RIDING)))
+        if (ride && !(r_ref.flags7 & (RF7_RIDING)))
             continue;
 
         if (temp[0]) {
@@ -120,28 +116,27 @@ void do_cmd_query_symbol(player_type *player_ptr)
             }
 
 #ifdef JP
-            strcpy(temp2, r_ptr->E_name.c_str());
+            strcpy(temp2, r_ref.E_name.c_str());
 #else
-            strcpy(temp2, r_ptr->name.c_str());
+            strcpy(temp2, r_ref.name.c_str());
 #endif
             for (xx = 0; temp2[xx] && xx < MAX_MONSTER_NAME; xx++)
                 if (isupper(temp2[xx]))
                     temp2[xx] = (char)tolower(temp2[xx]);
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_ptr->name.c_str(), temp))
+            if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.c_str(), temp))
 #else
             if (angband_strstr(temp2, temp))
 #endif
-                who[n++] = i;
+                who.push_back(r_ref.idx);
         }
 
-        else if (all || (r_ptr->d_char == sym))
-            who[n++] = i;
+        else if (all || (r_ref.d_char == sym))
+            who.push_back(r_ref.idx);
     }
 
-    if (!n) {
-        C_KILL(who, max_r_idx, MONRACE_IDX);
+    if (who.empty()) {
         return;
     }
 
@@ -149,24 +144,23 @@ void do_cmd_query_symbol(player_type *player_ptr)
     query = inkey();
     prt(buf, 0, 0);
     why = 2;
-    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     if (query == 'k') {
         why = 4;
         query = 'y';
     }
 
     if (query != 'y') {
-        C_KILL(who, max_r_idx, MONRACE_IDX);
         return;
     }
 
     if (why == 4) {
-        ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     }
 
-    i = n - 1;
+    auto i = who.size() - 1;
     while (true) {
-        r_idx = who[i];
+        auto r_idx = who[i];
         monster_race_track(player_ptr, r_idx);
         handle_stuff(player_ptr);
         while (true) {
@@ -191,20 +185,19 @@ void do_cmd_query_symbol(player_type *player_ptr)
             break;
 
         if (query == '-') {
-            if (++i == n) {
+            if (++i == who.size()) {
                 i = 0;
                 if (!expand_list)
                     break;
             }
         } else {
             if (i-- == 0) {
-                i = n - 1;
+                i = who.size() - 1;
                 if (!expand_list)
                     break;
             }
         }
     }
 
-    C_KILL(who, max_r_idx, MONRACE_IDX);
     prt(buf, 0, 0);
 }

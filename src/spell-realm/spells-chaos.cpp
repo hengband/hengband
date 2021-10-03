@@ -33,10 +33,10 @@
  */
 void call_the_void(player_type *player_ptr)
 {
-    grid_type *g_ptr;
     bool do_call = true;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < 9; i++) {
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
+        auto *g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
 
         if (!g_ptr->cave_has_flag(FF::PROJECT)) {
             if (!g_ptr->mimic || f_info[g_ptr->mimic].flags.has_not(FF::PROJECT) || !permanent_wall(&f_info[g_ptr->feat])) {
@@ -65,8 +65,8 @@ void call_the_void(player_type *player_ptr)
         return;
     }
 
-    bool is_special_fllor = player_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(player_ptr->current_floor_ptr->inside_quest);
-    is_special_fllor |= !player_ptr->current_floor_ptr->dun_level;
+    bool is_special_fllor = floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest);
+    is_special_fllor |= floor_ptr->dun_level > 0;
     if (is_special_fllor) {
         msg_print(_("地面が揺れた。", "The ground trembles."));
         return;
@@ -103,22 +103,20 @@ void call_the_void(player_type *player_ptr)
  */
 bool vanish_dungeon(player_type *player_ptr)
 {
-    bool is_special_floor = player_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(player_ptr->current_floor_ptr->inside_quest);
-    is_special_floor |= !player_ptr->current_floor_ptr->dun_level;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    bool is_special_floor = floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest);
+    is_special_floor |= floor_ptr->dun_level > 0;
     if (is_special_floor)
         return false;
 
-    grid_type *g_ptr;
-    feature_type *f_ptr;
-    monster_type *m_ptr;
     GAME_TEXT m_name[MAX_NLEN];
-    for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
-        for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    for (POSITION y = 1; y < floor_ptr->height - 1; y++) {
+        for (POSITION x = 1; x < floor_ptr->width - 1; x++) {
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
 
-            f_ptr = &f_info[g_ptr->feat];
+            auto *f_ptr = &f_info[g_ptr->feat];
             g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-            m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
             if (g_ptr->m_idx && monster_csleep_remaining(m_ptr)) {
                 (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
                 if (m_ptr->ml) {
@@ -132,46 +130,46 @@ bool vanish_dungeon(player_type *player_ptr)
         }
     }
 
-    for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[0][x];
-        f_ptr = &f_info[g_ptr->mimic];
+    for (POSITION x = 0; x < floor_ptr->width; x++) {
+        auto *g_ptr = &floor_ptr->grid_array[0][x];
+        auto *f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(player_ptr->current_floor_ptr, g_ptr->mimic, FF::HURT_DISI);
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
             if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
 
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->current_floor_ptr->height - 1][x];
+        g_ptr = &floor_ptr->grid_array[floor_ptr->height - 1][x];
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(player_ptr->current_floor_ptr, g_ptr->mimic, FF::HURT_DISI);
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
             if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
     }
 
     /* Special boundary walls -- Left and right */
-    for (POSITION y = 1; y < (player_ptr->current_floor_ptr->height - 1); y++) {
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][0];
-        f_ptr = &f_info[g_ptr->mimic];
+    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
+        auto *g_ptr = &floor_ptr->grid_array[y][0];
+        auto *f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(player_ptr->current_floor_ptr, g_ptr->mimic, FF::HURT_DISI);
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
             if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
 
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][player_ptr->current_floor_ptr->width - 1];
+        g_ptr = &floor_ptr->grid_array[y][floor_ptr->width - 1];
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(player_ptr->current_floor_ptr, g_ptr->mimic, FF::HURT_DISI);
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
             if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }

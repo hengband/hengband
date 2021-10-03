@@ -13,6 +13,8 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
@@ -28,8 +30,7 @@ void do_cmd_read_scroll(player_type *player_ptr)
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
 
     if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
         return;
@@ -42,5 +43,5 @@ void do_cmd_read_scroll(player_type *player_ptr)
     if (!o_ptr)
         return;
 
-    exe_read(player_ptr, item, o_ptr->is_aware());
+    ObjectReadEntity(player_ptr, item).execute(o_ptr->is_aware());
 }

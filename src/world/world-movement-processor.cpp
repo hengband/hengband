@@ -31,8 +31,8 @@ void check_random_quest_auto_failure(player_type *player_ptr)
     }
     for (auto i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
         auto q_ptr = &quest[i];
-        if ((q_ptr->type == QUEST_TYPE_RANDOM) && (q_ptr->status == QUEST_STATUS_TAKEN) && (q_ptr->level < player_ptr->current_floor_ptr->dun_level)) {
-            q_ptr->status = QUEST_STATUS_FAILED;
+        if ((q_ptr->type == QuestKindType::RANDOM) && (q_ptr->status == QuestStatusType::TAKEN) && (q_ptr->level < player_ptr->current_floor_ptr->dun_level)) {
+            q_ptr->status = QuestStatusType::FAILED;
             q_ptr->complev = (byte)player_ptr->lev;
             update_playtime();
             q_ptr->comptime = w_ptr->play_time;

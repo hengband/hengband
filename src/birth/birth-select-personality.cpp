@@ -116,7 +116,7 @@ static bool select_personality(player_type *player_ptr, int *k, concptr *str, ch
 {
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    int cs = player_ptr->pseikaku;
+    int cs = player_ptr->ppersonality;
     int os = MAX_PERSONALITIES;
     while (true) {
         display_personality_stat(cs, &os, str, cur, sym);
@@ -182,7 +182,7 @@ static bool select_personality(player_type *player_ptr, int *k, concptr *str, ch
 }
 
 /*!
- * @brief プレイヤーの性格選択を行う / Player Player seikaku
+ * @brief プレイヤーの性格選択を行う / Select player's personality
  */
 bool get_player_personality(player_type *player_ptr)
 {
@@ -198,8 +198,8 @@ bool get_player_personality(player_type *player_ptr)
     if (!select_personality(player_ptr, &k, &str, sym))
         return false;
 
-    player_ptr->pseikaku = (player_personality_type)k;
-    ap_ptr = &personality_info[player_ptr->pseikaku];
+    player_ptr->ppersonality = (player_personality_type)k;
+    ap_ptr = &personality_info[player_ptr->ppersonality];
     char tmp[64];
 #ifdef JP
     strcpy(tmp, ap_ptr->title);

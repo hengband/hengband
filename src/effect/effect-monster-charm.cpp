@@ -26,8 +26,6 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -214,19 +212,22 @@ process_result effect_monster_charm_living(player_type *player_ptr, effect_monst
 
 static void effect_monster_domination_corrupted_addition(player_type *player_ptr, effect_monster_type *em_ptr)
 {
+    BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
     case 1:
-        set_stun(player_ptr, player_ptr->effects()->stun()->current() + em_ptr->dam / 2);
-        break;
+        (void)bss.mod_stun(em_ptr->dam / 2);
+        return;
     case 2:
-        set_confused(player_ptr, player_ptr->confused + em_ptr->dam / 2);
-        break;
-    default: {
-        if (em_ptr->r_ptr->flags3 & RF3_NO_FEAR)
+        (void)bss.mod_confusion(em_ptr->dam / 2);
+        return;
+    default:
+        if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        else
-            set_afraid(player_ptr, player_ptr->afraid + em_ptr->dam);
-    }
+        } else {
+            (void)bss.mod_afraidness(static_cast<TIME_EFFECT>(em_ptr->dam));
+        }
+
+        return;
     }
 }
 
@@ -399,7 +400,7 @@ static void effect_monster_captured(player_type *player_ptr, effect_monster_type
 process_result effect_monster_capture(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(em_ptr->m_ptr))
+    if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QuestKindType::KILL_ALL) && !is_pet(em_ptr->m_ptr))
         || any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE | RF1_QUESTOR) || any_bits(em_ptr->r_ptr->flags7, RF7_NAZGUL | RF7_UNIQUE2)
         || em_ptr->m_ptr->parent_m_idx) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);

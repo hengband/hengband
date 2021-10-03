@@ -38,6 +38,8 @@
 #include "object-hook/hook-armor.h"
 #include "object/item-tester-hooker.h"
 #include "pet/pet-fall-off.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
@@ -50,8 +52,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
-#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -170,77 +172,67 @@ static void calc_player_cut(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    auto cut_plus = 0;
-    auto criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
-    switch (criticality) {
-    case 0:
-        cut_plus = 0;
-        break;
-    case 1:
-        cut_plus = randint1(5);
-        break;
-    case 2:
-        cut_plus = randint1(5) + 5;
-        break;
-    case 3:
-        cut_plus = randint1(20) + 20;
-        break;
-    case 4:
-        cut_plus = randint1(50) + 50;
-        break;
-    case 5:
-        cut_plus = randint1(100) + 100;
-        break;
-    case 6:
-        cut_plus = 300;
-        break;
-    default:
-        cut_plus = 500;
-        break;
-    }
-
+    auto cut_plus = PlayerCut::get_accumulation(monap_ptr->d_dice * monap_ptr->d_side, monap_ptr->damage);
     if (cut_plus > 0) {
-        (void)set_cut(player_ptr, player_ptr->cut + cut_plus);
+        (void)BadStatusSetter(player_ptr).mod_cut(cut_plus);
     }
 }
 
-static void calc_player_stun(player_type *player_ptr, monap_type *monap_ptr)
+/*!
+ * @brief 能力値の実値を求める
+ * @param raw player_typeに格納されている生値
+ * @return 実値
+ * @details AD&Dの記法に則り、19以上の値を取らなくしているので、格納方法が面倒
+ */
+static int stat_value(const int raw)
+{
+    if (raw <= 18) {
+        return raw;
+    }
+
+    return (raw - 18) / 10 + 18;
+}
+
+/*!
+ * @brief 朦朧を蓄積させる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスター打撃への参照ポインタ
+ * @details
+ * 痛恨の一撃ならば朦朧蓄積ランクを1上げる.
+ * 2%の確率で朦朧蓄積ランクを1上げる.
+ * 肉体のパラメータが合計80を超える水準に強化されていたら朦朧蓄積ランクを1下げる.
+ */
+static void process_player_stun(player_type *player_ptr, monap_type *monap_ptr)
 {
     if (monap_ptr->do_stun == 0) {
         return;
     }
 
-    auto stun_plus = 0;
-    auto criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
-    switch (criticality) {
-    case 0:
-        stun_plus = 0;
-        break;
-    case 1:
-        stun_plus = randint1(5);
-        break;
-    case 2:
-        stun_plus = randint1(5) + 10;
-        break;
-    case 3:
-        stun_plus = randint1(10) + 20;
-        break;
-    case 4:
-        stun_plus = randint1(15) + 30;
-        break;
-    case 5:
-        stun_plus = randint1(20) + 40;
-        break;
-    case 6:
-        stun_plus = 80;
-        break;
-    default:
-        stun_plus = 150;
-        break;
+    auto total = monap_ptr->d_dice * monap_ptr->d_side;
+    auto accumulation_rank = PlayerStun::get_accumulation_rank(total, monap_ptr->damage);
+    if (accumulation_rank == 0) {
+        return;
     }
 
+    if ((total < monap_ptr->damage) && (accumulation_rank <= 6)) {
+        accumulation_rank++;
+    }
+
+    if (one_in_(50)) {
+        accumulation_rank++;
+    }
+
+    auto str = stat_value(player_ptr->stat_cur[A_STR]);
+    auto dex = stat_value(player_ptr->stat_cur[A_DEX]);
+    auto con = stat_value(player_ptr->stat_cur[A_CON]);
+    auto is_powerful_body = str + dex + con > 80;
+    if (is_powerful_body) {
+        accumulation_rank--;
+    }
+
+    auto stun_plus = PlayerStun::get_accumulation(accumulation_rank);
     if (stun_plus > 0) {
-        (void)set_stun(player_ptr, player_ptr->effects()->stun()->current() + stun_plus);
+        (void)BadStatusSetter(player_ptr).mod_stun(stun_plus);
     }
 }
 
@@ -332,7 +324,7 @@ static bool process_monster_attack_hit(player_type *player_ptr, monap_type *mona
     switch_monster_blow_to_player(player_ptr, monap_ptr);
     select_cut_stun(monap_ptr);
     calc_player_cut(player_ptr, monap_ptr);
-    calc_player_stun(player_ptr, monap_ptr);
+    process_player_stun(player_ptr, monap_ptr);
     monster_explode(player_ptr, monap_ptr);
     process_aura_counterattack(player_ptr, monap_ptr);
     return true;
@@ -446,10 +438,10 @@ static bool process_monster_blows(player_type *player_ptr, monap_type *monap_ptr
 
             // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
             check_fall_off_horse(player_ptr, monap_ptr);
-            if (player_ptr->special_defense & NINJA_KAWARIMI) {
-                // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
-                if (kawarimi(player_ptr, false))
-                    return true;
+
+            // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
+            if (kawarimi(player_ptr, false)) {
+                return true;
             }
         } else {
             // 命中しなかった。回避時の処理、思い出処理を行う。
@@ -479,9 +471,7 @@ static void postprocess_monster_blows(player_type *player_ptr, monap_type *monap
         msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
     }
 
-    if (player_ptr->special_defense & KATA_IAI) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::IAI });
 }
 
 /*!
@@ -501,16 +491,15 @@ bool make_attack_normal(player_type *player_ptr, MONSTER_IDX m_idx)
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     monster_desc(player_ptr, monap_ptr->m_name, monap_ptr->m_ptr, 0);
     monster_desc(player_ptr, monap_ptr->ddesc, monap_ptr->m_ptr, MD_WRONGDOER_NAME);
-    if (any_bits(player_ptr->special_defense, KATA_IAI)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::IAI)) {
         msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), monap_ptr->m_name);
         if (do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_IAI)) {
             return true;
         }
     }
 
-    auto is_kawarimi = any_bits(player_ptr->special_defense, NINJA_KAWARIMI);
     auto can_activate_kawarimi = randint0(55) < (player_ptr->lev * 3 / 5 + 20);
-    if (is_kawarimi && can_activate_kawarimi && kawarimi(player_ptr, true)) {
+    if (can_activate_kawarimi && kawarimi(player_ptr, true)) {
         return true;
     }
 

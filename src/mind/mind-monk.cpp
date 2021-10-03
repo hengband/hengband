@@ -4,6 +4,8 @@
 #include "core/player-update-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"
+#include "player-base/player-class.h"
+#include "player-info/monk-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
@@ -12,19 +14,19 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-static void set_stance(player_type *player_ptr, const int new_stance)
+static void set_stance(player_type *player_ptr, const MonkStance new_stance)
 {
-    set_action(player_ptr, ACTION_KAMAE);
-    if (player_ptr->special_defense & (KAMAE_GENBU << new_stance)) {
+    set_action(player_ptr, ACTION_MONK_STANCE);
+    PlayerClass pc(player_ptr);
+    if (pc.monk_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
         return;
     }
 
-    player_ptr->special_defense &= ~(KAMAE_MASK);
     player_ptr->update |= PU_BONUS;
     player_ptr->redraw |= PR_STATE;
-    msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[new_stance].desc);
-    player_ptr->special_defense |= (KAMAE_GENBU << new_stance);
+    msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[enum2i(new_stance) - 1].desc);
+    pc.set_monk_stance(new_stance);
 }
 
 /*!
@@ -38,7 +40,7 @@ bool choose_monk_stance(player_type *player_ptr)
 
     screen_save();
     prt(_(" a) 構えをとく", " a) No form"), 2, 20);
-    for (int i = 0; i < MAX_KAMAE; i++) {
+    for (auto i = 0U; i < monk_stances.size(); i++) {
         if (player_ptr->lev >= monk_stances[i].min_level) {
             char buf[80];
             sprintf(buf, " %c) %-12s  %s", I2A(i + 1), monk_stances[i].desc, monk_stances[i].info);
@@ -49,7 +51,7 @@ bool choose_monk_stance(player_type *player_ptr)
     prt("", 1, 0);
     prt(_("        どの構えをとりますか？", "        Choose Stance: "), 1, 14);
 
-    int new_stance = 0;
+    auto new_stance = MonkStance::NONE;
     while (true) {
         char choice = inkey();
         if (choice == ESCAPE) {
@@ -58,7 +60,7 @@ bool choose_monk_stance(player_type *player_ptr)
         }
         
         if ((choice == 'a') || (choice == 'A')) {
-            if (player_ptr->action == ACTION_KAMAE) {
+            if (player_ptr->action == ACTION_MONK_STANCE) {
                 set_action(player_ptr, ACTION_NONE);
             } else
                 msg_print(_("もともと構えていない。", "You are not in a special stance."));
@@ -67,16 +69,16 @@ bool choose_monk_stance(player_type *player_ptr)
         }
         
         if ((choice == 'b') || (choice == 'B')) {
-            new_stance = 0;
+            new_stance = MonkStance::GENBU;
             break;
         } else if (((choice == 'c') || (choice == 'C')) && (player_ptr->lev > 29)) {
-            new_stance = 1;
+            new_stance = MonkStance::BYAKKO;
             break;
         } else if (((choice == 'd') || (choice == 'D')) && (player_ptr->lev > 34)) {
-            new_stance = 2;
+            new_stance = MonkStance::SEIRYU;
             break;
         } else if (((choice == 'e') || (choice == 'E')) && (player_ptr->lev > 39)) {
-            new_stance = 3;
+            new_stance = MonkStance::SUZAKU;
             break;
         }
     }

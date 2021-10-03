@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <bitset>
+#include <optional>
 
 /**
  * @brief フラグ集合を扱う、FlagGroupクラス
@@ -368,6 +369,22 @@ public:
     [[nodiscard]] size_t count() const noexcept
     {
         return bs_.count();
+    }
+
+    /**
+     * @brief フラグ集合のONになっているフラグのうち最初のフラグを返す
+     *
+     * @return フラグ集合のONになっているフラグのうち最初のフラグ。但し一つもONになっているフラグがなければ std::nullopt
+     */
+    [[nodiscard]] std::optional<FlagType> first() const noexcept
+    {
+        for (size_t i = 0; i < bs_.size(); i++) {
+            if (bs_.test(i)) {
+                return static_cast<FlagType>(i);
+            }
+        }
+
+        return std::nullopt;
     }
 
     /**

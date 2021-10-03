@@ -9,6 +9,8 @@
 #include "game-option/special-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/object-broken.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "specific-object/torch.h"
@@ -44,9 +46,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
         return false;
     }
 
-    if (this->player_ptr->special_defense & KATA_MUSOU) {
-        set_action(this->player_ptr, ACTION_NONE);
-    }
+    PlayerClass(this->player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     object_type tmp_object;
     ObjectThrowEntity ote(this->player_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);

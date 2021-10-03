@@ -20,7 +20,7 @@ monap_type *initialize_monap_type(player_type *player_ptr, monap_type *monap_ptr
     monap_ptr->act = nullptr;
     monap_ptr->touched = false;
     monap_ptr->explode = false;
-    monap_ptr->do_silly_attack = one_in_(2) && player_ptr->image;
+    monap_ptr->do_silly_attack = one_in_(2) && player_ptr->hallucinated;
     monap_ptr->obvious = false;
     monap_ptr->get_damage = 0;
     monap_ptr->alive = true;

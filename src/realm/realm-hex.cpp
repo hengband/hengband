@@ -3,15 +3,6 @@
  * @date 2014/01/14
  * @author
  * 2014 Deskull rearranged comment for Doxygen.\n
- * @details
- * magic_num1\n
- * 0: Flag bits of spelling spells\n
- * 1: Flag bits of despelled spells\n
- * 2: Revange damage\n
- * magic_num2\n
- * 0: Number of spelling spells\n
- * 1: Type of revenge\n
- * 2: Turn count for revenge\n
  */
 
 #include "realm/realm-hex.h"
@@ -27,6 +18,7 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
+#include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
@@ -46,7 +38,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
@@ -61,7 +52,6 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 
 #ifdef JP
 #else
@@ -297,7 +287,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                     project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
 
-                if (w_ptr->wizard) {
+                if (allow_debug_options) {
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                 }
 
@@ -588,7 +578,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);
-                if (get_singing_song_id(player_ptr) == 0)
+                if (!spell_hex.is_spelling_any())
                     set_action(player_ptr, ACTION_NONE);
             }
         }
@@ -675,8 +665,8 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
-                if (spell_hex.get_casting_num() > 0) {
-                    player_ptr->action = ACTION_NONE;
+                if (!spell_hex.is_spelling_any()) {
+                    set_action(player_ptr, ACTION_NONE);
                 }
 
                 player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
@@ -867,7 +857,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
                     fire_ball(player_ptr, GF_HELL_FIRE, dir, power, 1);
 
-                    if (w_ptr->wizard) {
+                    if (allow_debug_options) {
                         msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                     }
                 } else {
@@ -880,6 +870,8 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
         break;
     }
+    case HEX_MAX:
+        break;
     }
 
     if (cast && should_continue) {

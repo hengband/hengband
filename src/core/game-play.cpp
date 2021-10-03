@@ -258,7 +258,7 @@ static void generate_world(player_type *player_ptr, bool new_game)
     panel_col_min = floor_ptr->width;
 
     if (player_ptr->pclass != CLASS_SORCERER) {
-        if (player_ptr->pseikaku == PERSONALITY_SEXY)
+        if (player_ptr->ppersonality == PERSONALITY_SEXY)
             s_info[player_ptr->pclass].w_max[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
         if (player_ptr->prace == player_race_type::MERFOLK) {
             s_info[player_ptr->pclass].w_max[TV_POLEARM - TV_WEAPON_BEGIN][SV_TRIDENT] = WEAPON_EXP_MASTER;
@@ -318,8 +318,9 @@ static void decide_arena_death(player_type *player_ptr)
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_arena) {
-        if ((w_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
+        if (cheat_live && !get_check(_("死にますか? ", "Die? "))) {
             cheat_death(player_ptr);
+        }
 
         return;
     }

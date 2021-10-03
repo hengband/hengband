@@ -39,7 +39,10 @@
 #include "wizard/items-spoiler.h"
 #include "wizard/monster-info-spoiler.h"
 #include "wizard/spoiler-util.h"
+
+#include <algorithm>
 #include <array>
+#include <iterator>
 #include <set>
 #include <string>
 
@@ -52,10 +55,9 @@ static auto get_mon_evol_roots(void)
 {
     std::set<MONRACE_IDX> evol_parents;
     std::set<MONRACE_IDX> evol_children;
-    for (auto r_idx = 1; r_idx < max_r_idx; ++r_idx) {
-        const auto &r_ref = r_info[r_idx];
+    for (const auto &r_ref : r_info) {
         if (r_ref.next_r_idx > 0) {
-            evol_parents.emplace(r_idx);
+            evol_parents.emplace(r_ref.idx);
             evol_children.emplace(r_ref.next_r_idx);
         }
     }

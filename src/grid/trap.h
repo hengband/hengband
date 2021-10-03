@@ -1,22 +1,28 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "util/flag-group.h"
 
+// clang-format off
 /*!
  * 箱のトラップ定義 Chest trap flags
  */
-#define CHEST_LOSE_STR          0x0001 /*!< 箱のトラップ: STR減少の毒針 */
-#define CHEST_LOSE_CON          0x0002 /*!< 箱のトラップ: CON減少の毒針 */
-#define CHEST_POISON            0x0004 /*!< 箱のトラップ: 毒針 */
-#define CHEST_PARALYZE          0x0008 /*!< 箱のトラップ: 麻痺ガス */
-#define CHEST_EXPLODE           0x0010 /*!< 箱のトラップ: 爆発 */
-#define CHEST_SUMMON            0x0020 /*!< 箱のトラップ: 召喚のルーン(モンスター) */
-#define CHEST_SCATTER           0x0040 /*!< 箱のトラップ: アイテム散乱 */
-#define CHEST_E_SUMMON          0x0080 /*!< 箱のトラップ: 召喚のルーン(エレメンタル) */
-#define CHEST_BIRD_STORM        0x0100 /*!< 箱のトラップ: 召喚のルーン(鳥) */
-#define CHEST_H_SUMMON          0x0200 /*!< 箱のトラップ: 召喚のルーン(強敵)  */
-#define CHEST_RUNES_OF_EVIL     0x0400 /*!< 箱のトラップ: 邪悪なルーン */
-#define CHEST_ALARM             0x0800 /*!< 箱のトラップ: 警報装置 */
+enum class ChestTrapType : ushort {
+    LOSE_STR = 0,       /*!< 箱のトラップ: 腕力減少の毒針 */
+    LOSE_CON = 1,       /*!< 箱のトラップ: 器用さ減少の毒針 */
+    POISON = 2,         /*!< 箱のトラップ: 毒針 */
+    PARALYZE = 3,       /*!< 箱のトラップ: 麻痺ガス */
+    EXPLODE = 4,        /*!< 箱のトラップ: 爆発 */
+    SUMMON = 5,         /*!< 箱のトラップ: 召喚のルーン(モンスター) */
+    SCATTER = 6,        /*!< 箱のトラップ: アイテム散乱 */
+    E_SUMMON = 7,       /*!< 箱のトラップ: 召喚のルーン(エレメンタル) */
+    BIRD_STORM = 8,     /*!< 箱のトラップ: 召喚のルーン(鳥) */
+    H_SUMMON = 9,      /*!< 箱のトラップ: 召喚のルーン(強敵) */
+    RUNES_OF_EVIL = 10, /*!< 箱のトラップ: 邪悪なルーン */
+    ALARM = 11,         /*!< 箱のトラップ: 警報装置 */
+    MAX,
+};
+// clang-format on
 
 /* Types of normal traps */
 enum trap_type {
@@ -49,7 +55,7 @@ enum trap_type {
 };
 const int MAX_NORMAL_TRAPS = TRAP_ALARM + 1;
 
-extern const int chest_traps[64];
+extern const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps;
 
 struct player_type;
 void init_normal_traps(void);

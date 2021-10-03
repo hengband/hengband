@@ -107,8 +107,7 @@ bool genocide_aux(player_type *player_ptr, MONSTER_IDX m_idx, int power, bool pl
     handle_stuff(player_ptr);
     term_fresh();
 
-    int msec = delay_factor * delay_factor * delay_factor;
-    term_xtra(TERM_XTRA_DELAY, msec);
+    term_xtra(TERM_XTRA_DELAY, delay_factor);
 
     return !resist;
 }

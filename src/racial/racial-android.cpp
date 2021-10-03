@@ -108,7 +108,7 @@ void calc_android_exp(player_type *player_ptr)
         value = object_value_real(q_ptr);
         if (value <= 0)
             continue;
-        if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->pseikaku != PERSONALITY_SEXY))
+        if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality != PERSONALITY_SEXY))
             value /= 32;
         if (value > 5000000L)
             value = 5000000L;

@@ -23,6 +23,8 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
 #include "flavor/object-flavor.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
@@ -52,8 +54,10 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -78,6 +82,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
@@ -86,10 +91,17 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "wizard/spoiler-table.h"
 #include "wizard/tval-descriptions-table.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
+
+#include <optional>
+#include <sstream>
+#include <tuple>
+#include <vector>
+
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
 
@@ -104,6 +116,79 @@ void wiz_cure_all(player_type *player_ptr)
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 }
 
+static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
+{
+    KIND_OBJECT_IDX list;
+    char ch;
+    for (list = 0; (list < 80) && (tvals[list].tval > TV_NONE); list++) {
+        auto row = 2 + (list % 20);
+        auto col = _(32, 24) * (list / 20);
+        ch = listsym[list];
+        prt(format("[%c] %s", ch, tvals[list].desc), row, col);
+    }
+
+    auto max_num = list;
+    if (!get_com(_("アイテム種別を選んで下さい", "Get what type of object? "), &ch, false)) {
+        return std::nullopt;
+    }
+
+    KIND_OBJECT_IDX selection;
+    for (selection = 0; selection < max_num; selection++) {
+        if (listsym[selection] == ch) {
+            break;
+        }
+    }
+
+    if ((selection < 0) || (selection >= max_num)) {
+        return std::nullopt;
+    }
+
+    return selection;
+}
+
+static KIND_OBJECT_IDX wiz_select_sval(const tval_type tval, concptr tval_description)
+{
+    auto num = 0;
+    KIND_OBJECT_IDX choice[80]{};
+    char buf[160]{};
+    char ch;
+    for (const auto &k_ref : k_info) {
+        if (num >= 80) {
+            break;
+        }
+
+        if (k_ref.idx == 0 || k_ref.tval != tval) {
+            continue;
+        }
+
+        auto row = 2 + (num % 20);
+        auto col = _(30, 32) * (num / 20);
+        ch = listsym[num];
+        strcpy(buf, "                    ");
+        strip_name(buf, k_ref.idx);
+        prt(format("[%c] %s", ch, buf), row, col);
+        choice[num++] = k_ref.idx;
+    }
+
+    auto max_num = num;
+    if (!get_com(format(_("%s群の具体的なアイテムを選んで下さい", "What Kind of %s? "), tval_description), &ch, false)) {
+        return 0;
+    }
+
+    KIND_OBJECT_IDX selection;
+    for (selection = 0; selection < max_num; selection++) {
+        if (listsym[selection] == ch) {
+            break;
+        }
+    }
+
+    if ((selection < 0) || (selection >= max_num)) {
+        return 0;
+    }
+
+    return choice[selection];
+}
+
 /*!
  * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
  * Specify tval and sval (type and subtype of object) originally
@@ -113,62 +198,18 @@ void wiz_cure_all(player_type *player_ptr)
  * This function returns the k_idx of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-KIND_OBJECT_IDX wiz_create_itemtype(void)
+static KIND_OBJECT_IDX wiz_create_itemtype()
 {
     term_clear();
-    int num;
-    TERM_LEN col, row;
-    char ch;
-    for (num = 0; (num < 80) && tvals[num].tval; num++) {
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
-        ch = listsym[num];
-        prt(format("[%c] %s", ch, tvals[num].desc), row, col);
+    auto selection = wiz_select_tval();
+    if (!selection.has_value()) {
+        return 0;
     }
 
-    int max_num = num;
-    if (!get_com("Get what type of object? ", &ch, false))
-        return 0;
-
-    for (num = 0; num < max_num; num++)
-        if (listsym[num] == ch)
-            break;
-
-    if ((num < 0) || (num >= max_num))
-        return 0;
-
-    tval_type tval = i2enum<tval_type>(tvals[num].tval);
-    concptr tval_desc = tvals[num].desc;
+    tval_type tval = i2enum<tval_type>(tvals[selection.value()].tval);
+    concptr tval_description = tvals[selection.value()].desc;
     term_clear();
-    num = 0;
-    KIND_OBJECT_IDX choice[80];
-    char buf[160];
-    for (KIND_OBJECT_IDX i = 1; (num < 80) && (i < max_k_idx); i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->tval != tval)
-            continue;
-
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
-        ch = listsym[num];
-        strcpy(buf, "                    ");
-        strip_name(buf, i);
-        prt(format("[%c] %s", ch, buf), row, col);
-        choice[num++] = i;
-    }
-
-    max_num = num;
-    if (!get_com(format("What Kind of %s? ", tval_desc), &ch, false))
-        return 0;
-
-    for (num = 0; num < max_num; num++)
-        if (listsym[num] == ch)
-            break;
-
-    if ((num < 0) || (num >= max_num))
-        return 0;
-
-    return choice[num];
+    return wiz_select_sval(tval, tval_description);
 }
 
 /*!
@@ -191,11 +232,11 @@ void wiz_create_item(player_type *player_ptr)
         return;
 
     if (k_info[k_idx].gen_flags.has(TRG::INSTA_ART)) {
-        for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
-            if ((a_info[i].tval != k_info[k_idx].tval) || (a_info[i].sval != k_info[k_idx].sval))
+        for (const auto &a_ref : a_info) {
+            if ((a_ref.idx == 0) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval))
                 continue;
 
-            (void)create_named_art(player_ptr, i, player_ptr->y, player_ptr->x);
+            (void)create_named_art(player_ptr, a_ref.idx, player_ptr->y, player_ptr->x);
             msg_print("Allocated(INSTA_ART).");
             return;
         }
@@ -211,27 +252,136 @@ void wiz_create_item(player_type *player_ptr)
 }
 
 /*!
- * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @brief 指定したIDの固定アーティファクトの名称を取得する
+ *
+ * @param a_idx 固定アーティファクトのID
+ * @return 固定アーティファクトの名称(Ex. ★ロング・ソード『リンギル』)を保持する std::string オブジェクト
  */
-void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
+static std::string wiz_make_named_artifact_desc(player_type *player_ptr, ARTIFACT_IDX a_idx)
 {
-    if (a_idx <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx - 1);
-        char tmp_val[10] = "";
-        if (!get_string(tmp, tmp_val, 3))
+    const auto &a_ref = a_info[a_idx];
+    object_type obj;
+    obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
+    obj.name1 = a_idx;
+    object_known(&obj);
+    char buf[MAX_NLEN];
+    describe_flavor(player_ptr, buf, &obj, OD_NAME_ONLY);
+
+    return buf;
+}
+
+/**
+ * @brief 固定アーティファクトをリストから選択する
+ *
+ * @param a_idx_list 選択する候補となる固定アーティファクトのIDのリスト
+ * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は std::nullopt を返す。
+ */
+static std::optional<ARTIFACT_IDX> wiz_select_named_artifact(player_type *player_ptr, const std::vector<ARTIFACT_IDX> &a_idx_list)
+{
+    constexpr auto MAX_PER_PAGE = 20UL;
+    const auto page_max = (a_idx_list.size() - 1) / MAX_PER_PAGE + 1;
+    auto current_page = 0UL;
+
+    screen_save();
+
+    std::optional<ARTIFACT_IDX> selected_a_idx;
+
+    while (!selected_a_idx.has_value()) {
+        const auto page_base_idx = current_page * MAX_PER_PAGE;
+        for (auto i = 0U; i < MAX_PER_PAGE + 1; ++i) {
+            term_erase(14, i + 1, 255);
+        }
+        const auto page_item_count = std::min(MAX_PER_PAGE, a_idx_list.size() - page_base_idx);
+        for (auto i = 0U; i < page_item_count; ++i) {
+            std::stringstream ss;
+            ss << I2A(i) << ") " << wiz_make_named_artifact_desc(player_ptr, a_idx_list[page_base_idx + i]);
+            put_str(ss.str().c_str(), i + 1, 15);
+        }
+        if (page_max > 1) {
+            put_str(format("-- more (%d/%d) --", current_page + 1, page_max), page_item_count + 1, 15);
+        }
+
+        char cmd = ESCAPE;
+        get_com("Which artifact: ", &cmd, false);
+        switch (cmd) {
+        case ESCAPE:
+            screen_load();
+            return selected_a_idx;
+        case ' ':
+            current_page++;
+            if (current_page >= page_max) {
+                current_page = 0;
+            }
+            break;
+        default:
+            const auto select_idx = A2I(cmd) + page_base_idx;
+            if (select_idx < a_idx_list.size()) {
+                selected_a_idx = a_idx_list[select_idx];
+            }
+            break;
+        }
+    }
+
+    screen_load();
+
+    return selected_a_idx;
+}
+
+/**
+ * @brief 指定したカテゴリの固定アーティファクトのIDのリストを得る
+ *
+ * @param group_artifact 固定アーティファクトのカテゴリ
+ * @return 該当のカテゴリの固定アーティファクトのIDのリスト
+ */
+static std::vector<ARTIFACT_IDX> wiz_collect_group_a_idx(const grouper &group_artifact)
+{
+    const auto &[tval_list, name] = group_artifact;
+    std::vector<ARTIFACT_IDX> a_idx_list;
+    for (auto tval : tval_list) {
+        for (const auto &a_ref : a_info) {
+            if (a_ref.tval == tval) {
+                a_idx_list.push_back(a_ref.idx);
+            }
+        }
+    }
+    return a_idx_list;
+}
+
+/*!
+ * @brief 固定アーティファクトを生成する / Create the artifact
+ */
+void wiz_create_named_art(player_type *player_ptr)
+{
+    screen_save();
+
+    for (auto i = 0U; i < group_artifact_list.size(); ++i) {
+        const auto &[tval_lit, name] = group_artifact_list[i];
+        std::stringstream ss;
+        ss << I2A(i) << ") " << name;
+        term_erase(14, i + 1, 255);
+        put_str(ss.str().c_str(), i + 1, 15);
+    }
+
+    std::optional<ARTIFACT_IDX> create_a_idx;
+
+    while (!create_a_idx.has_value()) {
+        char cmd = ESCAPE;
+        get_com("Kind of artifact: ", &cmd, false);
+        switch (cmd) {
+        case ESCAPE:
+            screen_load();
             return;
-
-        a_idx = (ARTIFACT_IDX)atoi(tmp_val);
+        default:
+            if (auto idx = A2I(cmd); idx < group_artifact_list.size()) {
+                const auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
+                create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
+            }
+        }
     }
 
-    if (a_idx <= 0 || a_idx >= max_a_idx) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx - 1);
-        return;
-    }
+    screen_load();
 
-    (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
+    create_named_art(player_ptr, create_a_idx.value(), player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }
 
@@ -340,8 +490,8 @@ void wiz_create_feature(player_type *player_ptr)
     FEAT_IDX tmp_feat = (FEAT_IDX)atoi(tmp_val);
     if (tmp_feat < 0)
         tmp_feat = 0;
-    else if (tmp_feat >= max_f_idx)
-        tmp_feat = max_f_idx - 1;
+    else if (tmp_feat >= static_cast<FEAT_IDX>(f_info.size()))
+        tmp_feat = static_cast<FEAT_IDX>(f_info.size()) - 1;
 
     static int prev_mimic = 0;
     sprintf(tmp_val, "%d", prev_mimic);
@@ -352,8 +502,8 @@ void wiz_create_feature(player_type *player_ptr)
     FEAT_IDX tmp_mimic = (FEAT_IDX)atoi(tmp_val);
     if (tmp_mimic < 0)
         tmp_mimic = 0;
-    else if (tmp_mimic >= max_f_idx)
-        tmp_mimic = max_f_idx - 1;
+    else if (tmp_mimic >= static_cast<FEAT_IDX>(f_info.size()))
+        tmp_mimic = static_cast<FEAT_IDX>(f_info.size()) - 1;
 
     cave_set_feat(player_ptr, y, x, tmp_feat);
     g_ptr->mimic = (int16_t)tmp_mimic;
@@ -383,7 +533,7 @@ void wiz_create_feature(player_type *player_ptr)
 static bool select_debugging_floor(player_type *player_ptr, int dungeon_type)
 {
     auto max_depth = d_info[dungeon_type].maxdepth;
-    if ((max_depth == 0) || (dungeon_type > w_ptr->max_d_idx)) {
+    if ((max_depth == 0) || (dungeon_type > static_cast<int>(d_info.size()))) {
         dungeon_type = DUNGEON_ANGBAND;
     }
 
@@ -485,11 +635,10 @@ void wiz_learn_items_all(player_type *player_ptr)
 {
     object_type forge;
     object_type *q_ptr;
-    for (KIND_OBJECT_IDX i = 1; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->level <= command_arg) {
+    for (const auto &k_ref : k_info) {
+        if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;
-            q_ptr->prep(i);
+            q_ptr->prep(k_ref.idx);
             object_aware(player_ptr, q_ptr);
         }
     }
@@ -544,6 +693,7 @@ void wiz_reset_class(player_type *player_ptr)
     player_ptr->pclass = i2enum<player_class_type>(tmp_int);
     cp_ptr = &class_info[player_ptr->pclass];
     mp_ptr = &m_info[player_ptr->pclass];
+    PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
@@ -565,6 +715,8 @@ void wiz_reset_realms(player_type *player_ptr)
         return;
 
     player_ptr->realm1 = static_cast<int16_t>(atoi(tmp_val));
+
+    PlayerClass(player_ptr).init_specific_data();
 
     sprintf(ppp, "2st Realm (None=0, 1-%d): ", MAX_REALM - 1);
     sprintf(tmp_val, "%d", player_ptr->realm2);
@@ -595,11 +747,7 @@ void wiz_dump_options(void)
         return;
     }
 
-    int **exist;
-    C_MAKE(exist, NUM_O_SET, int *);
-    C_MAKE(*exist, NUM_O_BIT * NUM_O_SET, int);
-    for (int i = 1; i < NUM_O_SET; i++)
-        exist[i] = *exist + i * NUM_O_BIT;
+    std::vector<std::vector<int>> exist(NUM_O_SET, std::vector<int>(NUM_O_BIT));
 
     for (int i = 0; option_info[i].o_desc; i++) {
         const option_type *ot_ptr = &option_info[i];
@@ -625,8 +773,6 @@ void wiz_dump_options(void)
         fputc('\n', fff);
     }
 
-    C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
-    C_KILL(exist, NUM_O_SET, int *);
     angband_fclose(fff);
     msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
 }

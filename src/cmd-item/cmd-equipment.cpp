@@ -30,6 +30,8 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -96,8 +98,7 @@ void do_cmd_wield(player_type *player_ptr)
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     OBJECT_IDX need_switch_wielding = 0;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     concptr q = _("どれを装備しますか? ", "Wear/Wield which item? ");
     concptr s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
@@ -124,7 +125,8 @@ void do_cmd_wield(player_type *player_ptr)
                 need_switch_wielding = INVEN_SUB_HAND;
         } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
             slot = INVEN_MAIN_HAND;
-        else if (o_ptr_mh->k_idx && !o_ptr_mh->is_melee_weapon() && o_ptr_sh->k_idx && !o_ptr_sh->is_melee_weapon()) {
+        else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx &&
+                 ((o_ptr->tval == TV_CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_wieldable_in_etheir_hand)))
@@ -223,7 +225,7 @@ void do_cmd_wield(player_type *player_ptr)
     }
 
     check_find_art_quest_completion(player_ptr, o_ptr);
-    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         identify_item(player_ptr, o_ptr);
         autopick_alter_item(player_ptr, item, false);
     }
@@ -302,8 +304,7 @@ void do_cmd_takeoff(player_type *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     concptr q = _("どれを装備からはずしますか? ", "Take off which item? ");
     concptr s = _("はずせる装備がない。", "You are not wearing anything to take off.");

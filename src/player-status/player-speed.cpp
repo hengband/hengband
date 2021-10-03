@@ -8,8 +8,10 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
@@ -107,14 +109,14 @@ int16_t PlayerSpeed::class_value()
             && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
             result += 3;
             if (!(PlayerRace(this->player_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->player_ptr).equals(player_race_type::SPRITE)
-                    || (this->player_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
+                    || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
                 result += (this->player_ptr->lev) / 10;
         }
     }
 
     if ((this->player_ptr->pclass == CLASS_MONK || this->player_ptr->pclass == CLASS_FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
         if (!(PlayerRace(this->player_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->player_ptr).equals(player_race_type::SPRITE)
-                || (this->player_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
+                || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
             result += (this->player_ptr->lev) / 10;
     }
 
@@ -141,7 +143,7 @@ int16_t PlayerSpeed::class_value()
 int16_t PlayerSpeed::personality_value()
 {
     int16_t result = 0;
-    if (this->player_ptr->pseikaku == PERSONALITY_MUNCHKIN && this->player_ptr->prace != player_race_type::KLACKON
+    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != player_race_type::KLACKON
         && this->player_ptr->prace != player_race_type::SPRITE) {
         result += (this->player_ptr->lev) / 10 + 5;
     }
@@ -234,7 +236,7 @@ int16_t PlayerSpeed::time_effect_value()
 int16_t PlayerSpeed::battleform_value()
 {
     int16_t result = 0;
-    if (any_bits(this->player_ptr->special_defense, KAMAE_SUZAKU))
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
         result += 10;
     return result;
 }
@@ -309,29 +311,22 @@ int16_t PlayerSpeed::riding_value()
  */
 int16_t PlayerSpeed::inventory_weight_value()
 {
-    SPEED result = 0;
-
-    int weight = calc_inventory_weight(this->player_ptr);
-    int count;
-
+    int16_t result = 0;
+    auto weight = calc_inventory_weight(this->player_ptr);
     if (this->player_ptr->riding) {
-        monster_type *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
-        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        count = 1500 + riding_r_ptr->level * 25;
-
-        if (this->player_ptr->skill_exp[SKILL_RIDING] < RIDING_EXP_SKILLED) {
-            weight += (this->player_ptr->wt * 3 * (RIDING_EXP_SKILLED - this->player_ptr->skill_exp[SKILL_RIDING])) / RIDING_EXP_SKILLED;
-        }
-
+        auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
+        auto *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
+        auto count = 1500 + riding_r_ptr->level * 25;
         if (weight > count) {
             result -= ((weight - count) / (count / 5));
         }
     } else {
-        count = (int)calc_weight_limit(this->player_ptr);
+        auto count = calc_weight_limit(this->player_ptr);
         if (weight > count) {
             result -= ((weight - count) / (count / 5));
         }
     }
+
     return result;
 }
 

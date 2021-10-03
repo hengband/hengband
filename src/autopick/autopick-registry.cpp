@@ -190,7 +190,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 
     autopick_entry_from_object(player_ptr, entry, o_ptr);
     entry->action = DO_AUTODESTROY;
-    add_autopick_list(entry);
+    autopick_list.push_back(*entry);
 
     concptr tmp = autopick_line_from_entry(entry);
     fprintf(pref_fff, "%s\n", tmp);

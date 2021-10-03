@@ -130,11 +130,8 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
     int n = dy + 1;
     int num_vertices = m * n;
 
-    int *visited;
-    C_MAKE(visited, num_vertices, int);
-    r_visit(player_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited);
+    std::vector<int> visited(num_vertices);
+    r_visit(player_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited.data());
     if (is_vault)
         fill_treasure(player_ptr, x1, x2, y1, y2, randint1(5));
-
-    C_KILL(visited, num_vertices, int);
 }

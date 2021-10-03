@@ -28,7 +28,7 @@ mam_type *initialize_mam_type(player_type *player_ptr, mam_type *mam_ptr, MONRAC
     mam_ptr->ac = tr_ptr->ac;
     mam_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     mam_ptr->blinked = false;
-    mam_ptr->do_silly_attack = (one_in_(2) && player_ptr->image);
+    mam_ptr->do_silly_attack = (one_in_(2) && player_ptr->hallucinated);
     mam_ptr->power = 0;
     mam_ptr->obvious = false;
     mam_ptr->known = (mam_ptr->m_ptr->cdis <= MAX_SIGHT) || (mam_ptr->t_ptr->cdis <= MAX_SIGHT);

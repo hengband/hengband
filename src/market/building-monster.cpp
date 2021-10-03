@@ -28,15 +28,12 @@ bool research_mon(player_type *player_ptr)
     bool notpicked;
     bool recall = false;
     uint16_t why = 0;
-    MONSTER_IDX *who;
 
     bool all = false;
     bool uniq = false;
     bool norm = false;
     char temp[MAX_MONSTER_NAME] = "";
 
-    static int old_sym = '\0';
-    static IDX old_i = 0;
     screen_save();
 
     char sym;
@@ -49,9 +46,9 @@ bool research_mon(player_type *player_ptr)
         return false;
     }
 
-    IDX i;
-    for (i = 0; ident_info[i]; ++i) {
-        if (sym == ident_info[i][0])
+    IDX ident_i;
+    for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
+        if (sym == ident_info[ident_i][0])
             break;
     }
 
@@ -75,8 +72,8 @@ bool research_mon(player_type *player_ptr)
         }
 
         sprintf(buf, _("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
-    } else if (ident_info[i]) {
-        sprintf(buf, "%c - %s.", sym, ident_info[i] + 2);
+    } else if (ident_info[ident_i]) {
+        sprintf(buf, "%c - %s.", sym, ident_info[ident_i] + 2);
     } else {
         sprintf(buf, "%c - %s", sym, _("無効な文字", "Unknown Symbol"));
     }
@@ -85,24 +82,21 @@ bool research_mon(player_type *player_ptr)
     prt(buf, 16, 10);
 
     /* Allocate the "who" array */
-    C_MAKE(who, max_r_idx, MONRACE_IDX);
+    std::vector<MONRACE_IDX> who;
 
     /* Collect matching monsters */
-    int n = 0;
-    for (i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-
+    for (const auto &r_ref : r_info) {
         /* Empty monster */
-        if (r_ptr->name.empty())
+        if (r_ref.idx == 0 || r_ref.name.empty())
             continue;
 
         /* XTRA HACK WHATSEARCH */
         /* Require non-unique monsters if needed */
-        if (norm && (r_ptr->flags1 & (RF1_UNIQUE)))
+        if (norm && (r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
         /* Require unique monsters if needed */
-        if (uniq && !(r_ptr->flags1 & (RF1_UNIQUE)))
+        if (uniq && !(r_ref.flags1 & (RF1_UNIQUE)))
             continue;
 
         /* 名前検索 */
@@ -120,9 +114,9 @@ bool research_mon(player_type *player_ptr)
 
             char temp2[MAX_MONSTER_NAME];
 #ifdef JP
-            strcpy(temp2, r_ptr->E_name.c_str());
+            strcpy(temp2, r_ref.E_name.c_str());
 #else
-            strcpy(temp2, r_ptr->name.c_str());
+            strcpy(temp2, r_ref.name.c_str());
 #endif
             for (int xx = 0; temp2[xx] && xx < 80; xx++) {
                 if (isupper(temp2[xx]))
@@ -130,18 +124,17 @@ bool research_mon(player_type *player_ptr)
             }
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_ptr->name.c_str(), temp))
+            if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.c_str(), temp))
 #else
             if (angband_strstr(temp2, temp))
 #endif
-                who[n++] = i;
-        } else if (all || (r_ptr->d_char == sym)) {
-            who[n++] = i;
+                who.push_back(r_ref.idx);
+        } else if (all || (r_ref.d_char == sym)) {
+            who.push_back(r_ref.idx);
         }
     }
 
-    if (n == 0) {
-        C_KILL(who, max_r_idx, MONRACE_IDX);
+    if (who.empty()) {
         screen_load();
 
         return false;
@@ -151,18 +144,20 @@ bool research_mon(player_type *player_ptr)
     char query = 'y';
 
     if (why) {
-        ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     }
 
-    if (old_sym == sym && old_i < n)
+    uint i;
+    static int old_sym = '\0';
+    static uint old_i = 0;
+    if (old_sym == sym && old_i < who.size())
         i = old_i;
     else
-        i = n - 1;
+        i = who.size() - 1;
 
     notpicked = true;
-    MONRACE_IDX r_idx;
     while (notpicked) {
-        r_idx = who[i];
+        auto r_idx = who[i];
         roff_top(r_idx);
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (true) {
@@ -187,7 +182,7 @@ bool research_mon(player_type *player_ptr)
             break;
 
         if (query == '-') {
-            if (++i == n) {
+            if (++i == who.size()) {
                 i = 0;
                 if (!expand_list)
                     break;
@@ -197,13 +192,12 @@ bool research_mon(player_type *player_ptr)
         }
 
         if (i-- == 0) {
-            i = n - 1;
+            i = who.size() - 1;
             if (!expand_list)
                 break;
         }
     }
 
-    C_KILL(who, max_r_idx, MONRACE_IDX);
     screen_load();
     return !notpicked;
 }

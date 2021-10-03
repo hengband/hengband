@@ -4,9 +4,8 @@
  * @author deskull
  * @details Ego-Item indexes (see "lib/edit/e_info.txt")
  */
-#include <vector>
-
 #include "object-enchant/object-ego.h"
+#include "artifact/random-art-effects.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
@@ -17,16 +16,12 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
+#include <vector>
 
 /*
  * The ego-item arrays
  */
 std::vector<ego_item_type> e_info;
-
-/*
- * Maximum number of ego-items in e_info.txt
- */
-EGO_IDX max_e_idx;
 
 /*!
  * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
@@ -38,15 +33,14 @@ EGO_IDX max_e_idx;
 byte get_random_ego(byte slot, bool good)
 {
     ProbabilityTable<EGO_IDX> prob_table;
-    for (EGO_IDX i = 1; i < max_e_idx; i++) {
-        ego_item_type *e_ptr = &e_info[i];
-        if (e_ptr->slot != slot || e_ptr->rarity <= 0)
+    for (const auto &e_ref : e_info) {
+        if (e_ref.idx == 0 || e_ref.slot != slot || e_ref.rarity <= 0)
             continue;
 
-        bool worthless = e_ptr->rating == 0 || e_ptr->gen_flags.has_any_of({ TRG::CURSED, TRG::HEAVY_CURSE, TRG::PERMA_CURSE });
+        bool worthless = e_ref.rating == 0 || e_ref.gen_flags.has_any_of({ TRG::CURSED, TRG::HEAVY_CURSE, TRG::PERMA_CURSE });
 
         if (good != worthless) {
-            prob_table.entry_item(i, (255 / e_ptr->rarity));
+            prob_table.entry_item(e_ref.idx, (255 / e_ref.rarity));
         }
     }
 
@@ -251,8 +245,8 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
     ego_invest_curse(o_ptr, gen_flags);
     ego_invest_extra_abilities(o_ptr, gen_flags);
 
-    if (e_ptr->act_idx)
-        o_ptr->xtra2 = (XTRA8)e_ptr->act_idx;
+    if (e_ptr->act_idx > RandomArtActType::NONE)
+        o_ptr->activation_id = e_ptr->act_idx;
 
     o_ptr->to_h += (HIT_PROB)e_ptr->base_to_h;
     o_ptr->to_d += (HIT_POINT)e_ptr->base_to_d;

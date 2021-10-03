@@ -18,13 +18,12 @@
 typedef struct unique_list_type {
     bool is_alive;
     uint16_t why;
-    IDX *who;
+    std::vector<MONRACE_IDX> who;
     int num_uniques[10];
     int num_uniques_surface;
     int num_uniques_over100;
     int num_uniques_total;
     int max_lev;
-    int n;
 } unique_list_type;
 
 unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr, bool is_alive)
@@ -35,7 +34,6 @@ unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr,
     unique_list_ptr->num_uniques_over100 = 0;
     unique_list_ptr->num_uniques_total = 0;
     unique_list_ptr->max_lev = -1;
-    unique_list_ptr->n = 0;
     for (IDX i = 0; i < 10; i++)
         unique_list_ptr->num_uniques[i] = 0;
 
@@ -111,8 +109,8 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
     }
 
     char buf[80];
-    for (int k = 0; k < unique_list_ptr->n; k++) {
-        monster_race *r_ptr = &r_info[unique_list_ptr->who[k]];
+    for (auto r_idx : unique_list_ptr->who) {
+        monster_race *r_ptr = &r_info[r_idx];
 
         if (r_ptr->defeat_level && r_ptr->defeat_time)
             sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
@@ -138,14 +136,15 @@ void do_cmd_knowledge_uniques(player_type *player_ptr, bool is_alive)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    C_MAKE(unique_list_ptr->who, max_r_idx, MONRACE_IDX);
-    for (IDX i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!sweep_uniques(r_ptr, unique_list_ptr->is_alive))
+    for (auto &r_ref : r_info) {
+        if (r_ref.idx == 0) {
+            continue;
+        }
+        if (!sweep_uniques(&r_ref, unique_list_ptr->is_alive))
             continue;
 
-        if (r_ptr->level) {
-            int lev = (r_ptr->level - 1) / 10;
+        if (r_ref.level) {
+            int lev = (r_ref.level - 1) / 10;
             if (lev < 10) {
                 unique_list_ptr->num_uniques[lev]++;
                 if (unique_list_ptr->max_lev < lev)
@@ -155,12 +154,11 @@ void do_cmd_knowledge_uniques(player_type *player_ptr, bool is_alive)
         } else
             unique_list_ptr->num_uniques_surface++;
 
-        unique_list_ptr->who[unique_list_ptr->n++] = i;
+        unique_list_ptr->who.push_back(r_ref.idx);
     }
 
-    ang_sort(player_ptr, unique_list_ptr->who, &unique_list_ptr->why, unique_list_ptr->n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, unique_list_ptr->who.data(), &unique_list_ptr->why, unique_list_ptr->who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     display_uniques(unique_list_ptr, fff);
-    C_KILL(unique_list_ptr->who, max_r_idx, int16_t);
     angband_fclose(fff);
     concptr title_desc
         = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");

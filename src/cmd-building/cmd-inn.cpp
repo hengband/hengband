@@ -5,6 +5,9 @@
 #include "io/write-diary.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
+#include "player-info/magic-eater-data-type.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
@@ -12,6 +15,7 @@
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -41,8 +45,9 @@ static bool buy_food(player_type *player_ptr)
  */
 static bool is_healthy_stay(player_type *player_ptr)
 {
-    if (!player_ptr->poisoned && !player_ptr->cut)
+    if (!player_ptr->poisoned && !player_ptr->effects()->cut()->is_cut()) {
         return true;
+    }
 
     msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
     msg_print(nullptr);
@@ -53,7 +58,7 @@ static bool is_healthy_stay(player_type *player_ptr)
 #ifdef JP
 static bool is_player_undead(player_type *player_ptr)
 {
-    return player_race_life(player_ptr, true) == PlayerRaceLife::UNDEAD;
+    return PlayerRace(player_ptr, true).life() == PlayerRaceLife::UNDEAD;
 }
 #endif
 
@@ -119,30 +124,32 @@ static bool has_a_nightmare(player_type *player_ptr)
  */
 static void back_to_health(player_type *player_ptr)
 {
-    auto effects = player_ptr->effects();
-    set_blind(player_ptr, 0);
-    set_confused(player_ptr, 0);
-    effects->stun()->reset();
+    BadStatusSetter bss(player_ptr);
+    (void)bss.blindness(0);
+    (void)bss.confusion(0);
+    player_ptr->effects()->stun()->reset();
     player_ptr->chp = player_ptr->mhp;
     player_ptr->csp = player_ptr->msp;
 }
 
 /*!
- * @brief 魔力喰いの残り回数回復(本当？ 要調査)
+ * @brief 魔道具術師の取り込んだ魔法をすべて完全に回復した状態にする
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void charge_magic_eating_energy(player_type *player_ptr)
 {
-    if (player_ptr->pclass != CLASS_MAGIC_EATER)
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    if (!magic_eater_data) {
         return;
-
-    int i;
-    for (i = 0; i < 72; i++) {
-        player_ptr->magic_num1[i] = player_ptr->magic_num2[i] * EATER_CHARGE;
     }
 
-    for (; i < MAX_SPELLS; i++) {
-        player_ptr->magic_num1[i] = 0;
+    for (auto tval : { TV_STAFF, TV_WAND }) {
+        for (auto &item : magic_eater_data->get_item_group(tval)) {
+            item.charge = item.count * EATER_CHARGE;
+        }
+    }
+    for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
+        item.charge = 0;
     }
 }
 

@@ -23,9 +23,8 @@ static errr rd_inventory(player_type *player_ptr)
     player_ptr->inven_cnt = 0;
     player_ptr->equip_cnt = 0;
 
-    if (player_ptr->inventory_list != nullptr)
-        C_KILL(player_ptr->inventory_list, INVEN_TOTAL, object_type);
-    C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
+    //! @todo std::make_shared の配列対応版は C++20 から
+    player_ptr->inventory_list = std::shared_ptr<object_type[]>{ new object_type[INVEN_TOTAL] };
 
     int slot = 0;
     while (true) {

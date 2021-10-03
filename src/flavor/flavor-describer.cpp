@@ -39,40 +39,48 @@
 
 static void describe_chest_trap(flavor_type *flavor_ptr)
 {
-    switch (chest_traps[flavor_ptr->o_ptr->pval]) {
-    case 0:
+    auto trap_kinds = chest_traps[flavor_ptr->o_ptr->pval];
+    if (trap_kinds.count() >= 2) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(マルチ・トラップ)", " (Multiple Traps)"));
+        return;
+    }
+
+    auto trap_kind = trap_kinds.first();
+    if (!trap_kind.has_value()) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(施錠)", " (Locked)"));
-        break;
-    case CHEST_LOSE_STR:
+        return;
+    }
+
+    switch (trap_kind.value()) {
+    case ChestTrapType::LOSE_STR:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
         break;
-    case CHEST_LOSE_CON:
+    case ChestTrapType::LOSE_CON:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
         break;
-    case CHEST_POISON:
+    case ChestTrapType::POISON:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
         break;
-    case CHEST_PARALYZE:
+    case ChestTrapType::PARALYZE:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
         break;
-    case CHEST_EXPLODE:
+    case ChestTrapType::EXPLODE:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(爆発装置)", " (Explosion Device)"));
         break;
-    case CHEST_SUMMON:
-    case CHEST_BIRD_STORM:
-    case CHEST_E_SUMMON:
-    case CHEST_H_SUMMON:
+    case ChestTrapType::SUMMON:
+    case ChestTrapType::BIRD_STORM:
+    case ChestTrapType::E_SUMMON:
+    case ChestTrapType::H_SUMMON:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(召喚のルーン)", " (Summoning Runes)"));
         break;
-    case CHEST_RUNES_OF_EVIL:
+    case ChestTrapType::RUNES_OF_EVIL:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(邪悪なルーン)", " (Gleaming Black Runes)"));
         break;
-    case CHEST_ALARM:
+    case ChestTrapType::ALARM:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(警報装置)", " (Alarm)"));
         break;
     default:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(マルチ・トラップ)", " (Multiple Traps)"));
-        break;
+        throw("Invalid chest trap type is specified!");
     }
 }
 
@@ -90,7 +98,7 @@ static void describe_chest(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->pval < 0) {
-        if (chest_traps[0 - flavor_ptr->o_ptr->pval])
+        if (chest_traps[0 - flavor_ptr->o_ptr->pval].any())
             flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
         else
             flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(非施錠)", " (unlocked)"));
@@ -258,8 +266,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
     tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128);
     flavor_ptr->avgdam *= tmul;
     flavor_ptr->avgdam /= (100 * 10);
-    if (player_ptr->concent)
-        flavor_ptr->avgdam = boost_concentration_damage(player_ptr, flavor_ptr->avgdam);
+    flavor_ptr->avgdam = boost_concentration_damage(player_ptr, flavor_ptr->avgdam);
 
     if (flavor_ptr->avgdam < 0)
         flavor_ptr->avgdam = 0;

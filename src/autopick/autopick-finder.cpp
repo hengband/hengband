@@ -41,7 +41,7 @@ int find_autopick_list(player_type *player_ptr, object_type *o_ptr)
 
     describe_flavor(player_ptr, o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
     str_tolower(o_name);
-    for (int i = 0; i < max_autopick; i++) {
+    for (auto i = 0U; i < autopick_list.size(); i++) {
         autopick_type *entry = &autopick_list[i];
         if (is_autopick_match(player_ptr, o_ptr, entry, o_name))
             return i;
@@ -311,7 +311,6 @@ void search_for_object(player_type *player_ptr, text_body_type *tb, object_type 
             continue;
 
         match = is_autopick_match(player_ptr, o_ptr, entry, o_name);
-        autopick_free_entry(entry);
         if (!match)
             continue;
 

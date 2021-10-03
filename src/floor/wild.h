@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#include <vector>
+
 #define NO_TOWN 6
 #define SECRET_TOWN 5
 
@@ -36,7 +38,7 @@ typedef struct wilderness_type {
 	byte entrance;
 } wilderness_type;
 
-extern wilderness_type **wilderness;
+extern std::vector<std::vector<wilderness_type>> wilderness;
 
 struct player_type;
 void set_floor_and_wall(DUNGEON_IDX type);

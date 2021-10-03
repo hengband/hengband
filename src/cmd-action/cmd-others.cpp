@@ -25,6 +25,8 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
@@ -101,8 +103,7 @@ static bool exe_alter(player_type *player_ptr)
  */
 void do_cmd_alter(player_type *player_ptr)
 {
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (command_arg) {
         command_rep = command_arg - 1;

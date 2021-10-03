@@ -13,6 +13,7 @@
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
+#include "game-option/game-play-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
@@ -472,7 +473,7 @@ void teleport_player_to(player_type *player_ptr, POSITION ny, POSITION nx, telep
                 break;
         }
 
-        bool is_anywhere = w_ptr->wizard;
+        bool is_anywhere = allow_debug_options;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
         is_anywhere
             &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;

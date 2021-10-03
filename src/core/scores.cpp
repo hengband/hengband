@@ -143,11 +143,6 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, display_pla
         return true;
     }
 
-    if (easy_band) {
-        msg_print(_("初心者モードではワールドスコアに登録できません。", "Since you are in the Easy Mode, you cannot send score to world score server."));
-        return true;
-    }
-
     auto is_registration = get_check_strict(
         current_player_ptr, _("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
     if (!is_registration) {
@@ -185,9 +180,8 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, display_pla
  */
 errr top_twenty(player_type *current_player_ptr)
 {
-    high_score the_score;
+    high_score the_score = {};
     char buf[32];
-    (void)WIPE(&the_score, high_score);
 
     /* Save the version */
     sprintf(the_score.what, "%u.%u.%u", FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
@@ -219,7 +213,7 @@ errr top_twenty(player_type *current_player_ptr)
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
     memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
@@ -322,7 +316,7 @@ errr predict_score(player_type *current_player_ptr)
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
     memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */

@@ -21,6 +21,8 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #ifdef JP
@@ -30,22 +32,24 @@
 
 void do_poly_wounds(player_type *player_ptr)
 {
-    int16_t wounds = player_ptr->cut;
     int16_t hit_p = (player_ptr->mhp - player_ptr->chp);
     int16_t change = damroll(player_ptr->lev, 5);
-    bool Nasty_effect = one_in_(5);
-    if (!(wounds || hit_p || Nasty_effect))
+    auto nasty_effect = one_in_(5);
+    auto player_cut = player_ptr->effects()->cut();
+    if (!player_cut->is_cut() && (hit_p == 0) && !nasty_effect)
         return;
 
     msg_print(_("傷がより軽いものに変化した。", "Your wounds are polymorphed into less serious ones."));
     hp_player(player_ptr, change);
-    if (Nasty_effect) {
-        msg_print(_("新たな傷ができた！", "A new wound was created!"));
-        take_hit(player_ptr, DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"));
-        set_cut(player_ptr, change);
-    } else {
-        set_cut(player_ptr, player_ptr->cut - (change / 2));
+    BadStatusSetter bss(player_ptr);
+    if (!nasty_effect) {
+        (void)bss.mod_cut(change / 2);
+        return;
     }
+
+    msg_print(_("新たな傷ができた！", "A new wound was created!"));
+    take_hit(player_ptr, DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"));
+    (void)bss.cut(change);
 }
 
 /*

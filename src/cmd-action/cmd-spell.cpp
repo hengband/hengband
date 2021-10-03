@@ -32,7 +32,9 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -624,9 +626,7 @@ void do_cmd_browse(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (player_ptr->pclass == CLASS_FORCETRAINER) {
         if (player_has_no_spellbooks(player_ptr)) {
@@ -783,9 +783,7 @@ void do_cmd_study(player_type *player_ptr)
         return;
     }
 
-    if (player_ptr->special_defense & KATA_MUSOU) {
-        set_action(player_ptr, ACTION_NONE);
-    }
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
 #ifdef JP
     if (player_ptr->new_spells < 10) {
@@ -1132,14 +1130,6 @@ bool do_cmd_cast(player_type *player_ptr)
     /* Spell failure chance */
     chance = spell_chance(player_ptr, spell, use_realm);
 
-    /* Sufficient mana */
-    if (need_mana <= player_ptr->csp) {
-        /* Use some mana */
-        player_ptr->csp -= need_mana;
-    } else
-        over_exerted = true;
-    player_ptr->redraw |= (PR_MANA);
-
     /* Failed spell */
     if (randint0(100) < chance) {
         if (flush_failure)
@@ -1347,19 +1337,21 @@ bool do_cmd_cast(player_type *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
+    /* Sufficient mana */
+    if (need_mana <= player_ptr->csp) {
+        /* Use some mana */
+        player_ptr->csp -= need_mana;
+    } else
+        over_exerted = true;
+    player_ptr->redraw |= (PR_MANA);
+
     /* Over-exert the player */
     if (over_exerted) {
         int oops = need_mana;
-
-        /* No mana left */
         player_ptr->csp = 0;
         player_ptr->csp_frac = 0;
-
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-
-        /* Hack -- Bypass free action */
-        (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(5 * oops + 1));
-
+        (void)BadStatusSetter(player_ptr).mod_paralysis(randint1(5 * oops + 1));
         switch (realm) {
         case REALM_LIFE:
             chg_virtue(player_ptr, V_VITALITY, -10);

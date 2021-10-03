@@ -16,6 +16,8 @@
 #include "main/sound-of-music.h"
 #include "monster-race/race-ability-mask.h"
 #include "mspell/monster-power-table.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
 #include "player/attack-defense-types.h"
 #include "status/experience.h"
 #include "system/angband.h"
@@ -28,60 +30,57 @@
  * @brief 青魔法のラーニング判定と成功した場合のラーニング処理
  * @param monspell ラーニングを試みるモンスター攻撃のID
  */
-void learn_spell(player_type *player_ptr, int monspell)
+void learn_spell(player_type *player_ptr, RF_ABILITY monspell)
 {
     if (player_ptr->action != ACTION_LEARN)
         return;
-    if (monspell < 0)
-        return;
-    if (player_ptr->magic_num2[monspell])
+    auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+    if (!bluemage_data || bluemage_data->learnt_blue_magics.has(monspell))
         return;
 
     auto effects = player_ptr->effects();
     auto is_stunned = effects->stun()->is_stunned();
-    if (player_ptr->confused || player_ptr->blind || player_ptr->image || is_stunned || player_ptr->paralyzed)
+    if (player_ptr->confused || player_ptr->blind || player_ptr->hallucinated || is_stunned || player_ptr->paralyzed)
         return;
-    if (randint1(player_ptr->lev + 70) > monster_powers[monspell].level + 40) {
-        player_ptr->magic_num2[monspell] = 1;
-        msg_format(_("%sを学習した！", "You have learned %s!"), monster_powers[monspell].name);
-        gain_exp(player_ptr, monster_powers[monspell].level * monster_powers[monspell].smana);
+    const auto &monster_power = monster_powers.at(monspell);
+    if (randint1(player_ptr->lev + 70) > monster_power.level + 40) {
+        bluemage_data->learnt_blue_magics.set(monspell);
+        msg_format(_("%sを学習した！", "You have learned %s!"), monster_power.name);
+        gain_exp(player_ptr, monster_power.level * monster_power.smana);
         sound(SOUND_STUDY);
-        player_ptr->new_mane = true;
+        bluemage_data->new_magic_learned = true;
         player_ptr->redraw |= PR_STATE;
     }
 }
 
 /*!
- * @brief モンスター特殊能力のフラグ配列から特定条件の魔法だけを抜き出す処理
+ * @brief モンスター特殊能力のフラグ配列から特定のタイプの能力だけを抜き出す処理
  * Extract monster spells mask for the given mode
- * @param f4 モンスター特殊能力の4番目のフラグ配列
- * @param f5 モンスター特殊能力の5番目のフラグ配列
- * @param f6 モンスター特殊能力の6番目のフラグ配列
- * @param mode 抜き出したい条件
- * @todo f4, f5, f6を構造体にまとめ直す
+ * @param ability_flags モンスター特殊能力のフラグ集合
+ * @param type 抜き出したいタイプ
  */
-void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, blue_magic_type mode)
+void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, BlueMagicType type)
 {
     ability_flags.clear();
 
-    switch (mode) {
-    case MONSPELL_TYPE_BOLT:
+    switch (type) {
+    case BlueMagicType::BOLT:
         ability_flags.set(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK).reset(RF_ABILITY::ROCKET);
         break;
 
-    case MONSPELL_TYPE_BALL:
+    case BlueMagicType::BALL:
         ability_flags.set(RF_ABILITY_BALL_MASK).reset(RF_ABILITY_BREATH_MASK);
         break;
 
-    case MONSPELL_TYPE_BREATH:
+    case BlueMagicType::BREATH:
         ability_flags.set(RF_ABILITY_BREATH_MASK);
         break;
 
-    case MONSPELL_TYPE_SUMMON:
+    case BlueMagicType::SUMMON:
         ability_flags.set(RF_ABILITY_SUMMON_MASK);
         break;
 
-    case MONSPELL_TYPE_OTHER:
+    case BlueMagicType::OTHER:
         ability_flags.set(RF_ABILITY_ATTACK_MASK);
         ability_flags.reset(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_INDIRECT_MASK);
         break;

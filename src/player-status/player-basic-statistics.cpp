@@ -77,7 +77,7 @@ int16_t PlayerBasicStatistics::class_value()
  */
 int16_t PlayerBasicStatistics::personality_value()
 {
-    const player_personality *a_ptr = &personality_info[this->player_ptr->pseikaku];
+    const player_personality *a_ptr = &personality_info[this->player_ptr->ppersonality];
     return a_ptr->a_adj[this->ability_type];
 }
 

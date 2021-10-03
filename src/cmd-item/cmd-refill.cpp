@@ -8,6 +8,8 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -103,8 +105,8 @@ void do_cmd_refill(player_type *player_ptr)
 {
     object_type *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (o_ptr->tval != TV_LITE)
         msg_print(_("光源を装備していない。", "You are not wielding a light."));

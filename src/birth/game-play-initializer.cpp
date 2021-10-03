@@ -12,6 +12,7 @@
 #include "monster-race/race-flags7.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
@@ -28,10 +29,9 @@
  */
 static void k_info_reset(void)
 {
-    for (int i = 0; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        k_ptr->tried = false;
-        k_ptr->aware = false;
+    for (auto &k_ref : k_info) {
+        k_ref.tried = false;
+        k_ref.aware = false;
     }
 }
 
@@ -42,32 +42,28 @@ static void k_info_reset(void)
  */
 void player_wipe_without_name(player_type *player_ptr)
 {
-    player_type tmp;
-
 #ifdef SET_UID
     int uid = player_ptr->player_uid;
 #endif
-    COPY(&tmp, player_ptr, player_type);
+    auto tmp = *player_ptr;
     if (player_ptr->last_message)
         string_free(player_ptr->last_message);
 
-    if (player_ptr->inventory_list != nullptr)
-        C_KILL(player_ptr->inventory_list, INVEN_TOTAL, object_type);
-
-    (void)WIPE(player_ptr, player_type);
+    *player_ptr = {};
 
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     player_ptr->current_floor_ptr = &floor_info;
-    C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
+    //! @todo std::make_shared の配列対応版は C++20 から
+    player_ptr->inventory_list = std::shared_ptr<object_type[]>{ new object_type[INVEN_TOTAL] };
     for (int i = 0; i < 4; i++)
         strcpy(player_ptr->history[i], "");
 
     for (int i = 0; i < max_q_idx; i++) {
         quest_type *const q_ptr = &quest[i];
-        q_ptr->status = QUEST_STATUS_UNTAKEN;
+        q_ptr->status = QuestStatusType::UNTAKEN;
         q_ptr->cur_num = 0;
         q_ptr->max_num = 0;
-        q_ptr->type = 0;
+        q_ptr->type = QuestKindType::NONE;
         q_ptr->level = 0;
         q_ptr->r_idx = 0;
         q_ptr->complev = 0;
@@ -79,23 +75,24 @@ void player_wipe_without_name(player_type *player_ptr)
     for (int i = 0; i < INVEN_TOTAL; i++)
         (&player_ptr->inventory_list[i])->wipe();
 
-    for (int i = 0; i < max_a_idx; i++) {
-        artifact_type *a_ptr = &a_info[i];
-        a_ptr->cur_num = 0;
+    for (auto &a_ref : a_info) {
+        a_ref.cur_num = 0;
     }
 
     k_info_reset();
-    for (int i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        r_ptr->cur_num = 0;
-        r_ptr->max_num = 100;
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            r_ptr->max_num = 1;
-        else if (r_ptr->flags7 & RF7_NAZGUL)
-            r_ptr->max_num = MAX_NAZGUL_NUM;
+    for (auto &r_ref : r_info) {
+        if (r_ref.idx == 0) {
+            continue;
+        }
+        r_ref.cur_num = 0;
+        r_ref.max_num = 100;
+        if (r_ref.flags1 & RF1_UNIQUE)
+            r_ref.max_num = 1;
+        else if (r_ref.flags7 & RF7_NAZGUL)
+            r_ref.max_num = MAX_NAZGUL_NUM;
 
-        r_ptr->r_pkills = 0;
-        r_ptr->r_akills = 0;
+        r_ref.r_pkills = 0;
+        r_ref.r_akills = 0;
     }
 
     player_ptr->food = PY_FOOD_FULL - 1;
@@ -132,32 +129,21 @@ void player_wipe_without_name(player_type *player_ptr)
     player_ptr->panic_save = 0;
 
     w_ptr->noscore = 0;
-    w_ptr->wizard = false;
     player_ptr->wait_report_score = false;
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
-    for (int i = 0; i < w_ptr->max_d_idx; i++)
-        max_dlv[i] = 0;
+    for (const auto &d_ref : d_info)
+        max_dlv[d_ref.idx] = 0;
 
     player_ptr->visit = 1;
     player_ptr->wild_mode = false;
-
-    for (int i = 0; i < MAX_SPELLS; i++) {
-        player_ptr->magic_num1[i] = 0;
-        player_ptr->magic_num2[i] = 0;
-    }
 
     player_ptr->max_plv = player_ptr->lev = 1;
     player_ptr->arena_number = 0;
     player_ptr->current_floor_ptr->inside_arena = false;
     player_ptr->current_floor_ptr->inside_quest = 0;
-    for (int i = 0; i < MAX_MANE; i++) {
-        player_ptr->mane_spell[i] = RF_ABILITY::MAX;
-        player_ptr->mane_dam[i] = 0;
-    }
 
-    player_ptr->mane_num = 0;
     player_ptr->exit_bldg = true;
     player_ptr->today_mon = 0;
     update_gambling_monsters(player_ptr);
@@ -195,7 +181,7 @@ void init_dungeon_quests(player_type *player_ptr)
     for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
         quest_type *q_ptr = &quest[i];
         monster_race *quest_r_ptr;
-        q_ptr->status = QUEST_STATUS_TAKEN;
+        q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
         quest_r_ptr = &r_info[q_ptr->r_idx];
         quest_r_ptr->flags1 |= RF1_QUESTOR;
@@ -205,11 +191,11 @@ void init_dungeon_quests(player_type *player_ptr)
     init_flags = INIT_ASSIGN;
     floor_ptr->inside_quest = QUEST_OBERON;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
+    quest[QUEST_OBERON].status = QuestStatusType::TAKEN;
 
     floor_ptr->inside_quest = QUEST_SERPENT;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
+    quest[QUEST_SERPENT].status = QuestStatusType::TAKEN;
     floor_ptr->inside_quest = 0;
 }
 
@@ -221,7 +207,7 @@ void init_dungeon_quests(player_type *player_ptr)
  */
 void init_turn(player_type *player_ptr)
 {
-    if (player_race_life(player_ptr) == PlayerRaceLife::UNDEAD) {
+    if (PlayerRace(player_ptr).life() == PlayerRaceLife::UNDEAD) {
         w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
         w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     } else {

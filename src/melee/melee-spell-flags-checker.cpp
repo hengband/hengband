@@ -27,6 +27,8 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 
+#include <iterator>
+
 static void decide_melee_spell_target(player_type *player_ptr, melee_spell_type *ms_ptr)
 {
     if ((player_ptr->pet_t_m_idx == 0) || !ms_ptr->pet)

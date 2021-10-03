@@ -347,7 +347,6 @@ hengband_SOURCES = \
 	load/monster-loader.cpp load/monster-loader.h \
 	load/old-feature-types.h \
 	load/load-util.cpp load/load-util.h \
-	load/load-v1-3-0.cpp load/load-v1-3-0.h \
 	load/load-v1-5-0.cpp load/load-v1-5-0.h \
 	load/load-v1-7-0.cpp load/load-v1-7-0.h \
 	load/load-zangband.cpp load/load-zangband.h \
@@ -356,6 +355,7 @@ hengband_SOURCES = \
 	load/lore-loader.cpp load/lore-loader.h \
 	load/option-loader.cpp load/option-loader.h \
 	load/player-attack-loader.cpp load/player-attack-loader.h \
+	load/player-class-specific-data-loader.cpp load/player-class-specific-data-loader.h \
 	load/player-info-loader.cpp load/player-info-loader.h \
 	load/savedata-flag-types.h \
 	load/savedata-old-flag-types.h \
@@ -607,9 +607,13 @@ hengband_SOURCES = \
 	object-hook/hook-quest.cpp object-hook/hook-quest.h \
 	object-hook/hook-weapon.cpp object-hook/hook-weapon.h \
 	\
+	object-use/item-use-checker.cpp object-use/item-use-checker.h \
 	object-use/quaff-execution.cpp object-use/quaff-execution.h \
 	object-use/read-execution.cpp object-use/read-execution.h \
 	object-use/throw-execution.cpp object-use/throw-execution.h \
+	object-use/use-execution.cpp object-use/use-execution.h \
+	object-use/zaprod-execution.cpp object-use/zaprod-execution.h \
+	object-use/zapwand-execution.cpp object-use/zapwand-execution.h \
 	\
 	perception/identification.cpp perception/identification.h \
 	perception/object-perception.cpp perception/object-perception.h \
@@ -659,20 +663,32 @@ hengband_SOURCES = \
 	player-base/player-race.cpp player-base/player-race.h \
 	\
 	player-info/alignment.cpp player-info/alignment.h \
+	player-info/bard-data-type.h \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
+	player-info/bluemage-data-type.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
 	player-info/class-types.h \
 	player-info/class-info.cpp player-info/class-info.h \
+	player-info/class-specific-data.h \
 	player-info/equipment-info.cpp player-info/equipment-info.h \
+	player-info/force-trainer-data-type.h \
+	player-info/magic-eater-data-type.cpp player-info/magic-eater-data-type.h \
+	player-info/mane-data-type.h \
 	player-info/mimic-info-table.cpp player-info/mimic-info-table.h \
+	player-info/monk-data-type.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
+	player-info/ninja-data-type.h \
 	player-info/race-ability-info.cpp player-info/race-ability-info.h \
 	player-info/race-info.cpp player-info/race-info.h \
 	player-info/race-types.h \
 	player-info/resistance-info.cpp player-info/resistance-info.h \
+	player-info/samurai-data-type.h \
 	player-info/self-info.cpp player-info/self-info.h \
 	player-info/self-info-util.cpp player-info/self-info-util.h \
+        player-info/smith-data-type.h \
+	player-info/sniper-data-type.h \
+        player-info/spell-hex-data-type.h \
 	player-info/weapon-effect-info.cpp player-info/weapon-effect-info.h \
 	\
 	player-status/player-hand-types.h \
@@ -734,6 +750,7 @@ hengband_SOURCES = \
 	save/info-writer.cpp save/info-writer.h \
 	save/item-writer.cpp save/item-writer.h \
 	save/monster-writer.cpp save/monster-writer.h \
+	save/player-class-specific-data-writer.cpp save/player-class-specific-data-writer.h \
 	save/player-writer.cpp save/player-writer.h \
 	save/save.cpp save/save.h \
 	save/save-util.cpp save/save-util.h \
@@ -747,6 +764,7 @@ hengband_SOURCES = \
 	specific-object/monster-ball.cpp specific-object/monster-ball.h \
 	specific-object/muramasa.cpp specific-object/muramasa.h \
 	specific-object/ring-of-power.cpp specific-object/ring-of-power.h \
+	specific-object/stone-of-lore.cpp specific-object/stone-of-lore.h \
 	specific-object/toragoroshi.cpp specific-object/toragoroshi.h \
 	specific-object/torch.cpp specific-object/torch.h \
 	\
@@ -838,7 +856,6 @@ hengband_SOURCES = \
 	sv-definition/sv-other-types.h \
 	\
 	system/alloc-entries.cpp system/alloc-entries.h \
-	system/alloc-entry-definition.h \
 	system/angband.h \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
@@ -872,6 +889,7 @@ hengband_SOURCES = \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
 	term/z-virt.cpp term/z-virt.h \
 	\
+	timed-effect/player-cut.cpp timed-effect/player-cut.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
 	\

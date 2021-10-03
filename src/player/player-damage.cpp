@@ -43,8 +43,10 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
+#include "player-info/samurai-data-type.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
@@ -279,11 +281,8 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
 
     if (player_ptr->sutemi)
         damage *= 2;
-    if (player_ptr->special_defense & KATA_IAI)
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::IAI))
         damage += (damage + 4) / 5;
-
-    if (easy_band)
-        damage = (damage + 1) / 2;
 
     if (damage_type != DAMAGE_USELIFE) {
         disturb(player_ptr, true, true);
@@ -322,7 +321,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
             }
         }
 
-        if (player_ptr->special_defense & KATA_MUSOU) {
+        if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
             damage /= 2;
             if ((damage == 0) && one_in_(2))
                 damage = 1;
@@ -387,7 +386,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
                     !player_ptr->paralyzed     ? ""
                         : player_ptr->free_act ? "彫像状態で"
                                                  : "麻痺状態で",
-                    player_ptr->image ? "幻覚に歪んだ" : "", hit_from);
+                    player_ptr->hallucinated ? "幻覚に歪んだ" : "", hit_from);
 #else
                 sprintf(dummy, "%s%s", hit_from, !player_ptr->paralyzed ? "" : " while helpless");
 #endif
@@ -405,7 +404,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
                     strcpy(buf, _("アリーナ", "in the Arena"));
                 else if (!is_in_dungeon(player_ptr))
                     strcpy(buf, _("地上", "on the surface"));
-                else if (q_idx && (is_fixed_quest_idx(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
+                else if (q_idx && (quest_type::is_fixed(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
                     strcpy(buf, _("クエスト", "in a quest"));
                 else
                     sprintf(buf, _("%d階", "level %d"), (int)player_ptr->current_floor_ptr->dun_level);
@@ -524,7 +523,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
 
         sound(SOUND_WARN);
         if (record_danger && (old_chp > warning)) {
-            if (player_ptr->image && damage_type == DAMAGE_ATTACK)
+            if (player_ptr->hallucinated && damage_type == DAMAGE_ATTACK)
                 hit_from = _("何か", "something");
 
             sprintf(tmp, _("%sによってピンチに陥った。", "was in a critical situation because of %s."), hit_from);

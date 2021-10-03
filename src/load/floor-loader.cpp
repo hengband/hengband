@@ -44,7 +44,6 @@
  */
 errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-    grid_template_type *templates;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
@@ -111,24 +110,23 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
     uint16_t limit;
     rd_u16b(&limit);
-    C_MAKE(templates, limit, grid_template_type);
+    std::vector<grid_template_type> templates(limit);
 
-    for (int i = 0; i < limit; i++) {
-        grid_template_type *ct_ptr = &templates[i];
+    for (auto &ct_ref : templates) {
         rd_u16b(&tmp16u);
-        ct_ptr->info = (BIT_FLAGS)tmp16u;
+        ct_ref.info = (BIT_FLAGS)tmp16u;
         if (h_older_than(1, 7, 0, 2)) {
             byte tmp8u;
             rd_byte(&tmp8u);
-            ct_ptr->feat = (int16_t)tmp8u;
+            ct_ref.feat = (int16_t)tmp8u;
             rd_byte(&tmp8u);
-            ct_ptr->mimic = (int16_t)tmp8u;
+            ct_ref.mimic = (int16_t)tmp8u;
         } else {
-            rd_s16b(&ct_ptr->feat);
-            rd_s16b(&ct_ptr->mimic);
+            rd_s16b(&ct_ref.feat);
+            rd_s16b(&ct_ref.mimic);
         }
 
-        rd_s16b(&ct_ptr->special);
+        rd_s16b(&ct_ref.special);
     }
 
     POSITION ymax = floor_ptr->height;
@@ -180,7 +178,6 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         }
     }
 
-    C_KILL(templates, limit, grid_template_type);
     rd_u16b(&limit);
     if (limit > w_ptr->max_o_idx)
         return 151;

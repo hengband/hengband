@@ -132,6 +132,7 @@
 #include <cstdlib>
 #include <locale>
 #include <string>
+#include <vector>
 
 #include <commdlg.h>
 #include <direct.h>
@@ -1296,7 +1297,7 @@ static void init_windows(void)
 {
     term_data *td;
     td = &data[0];
-    WIPE(td, term_data);
+    *td = {};
     td->name = win_term_name[0];
 
     td->rows = 24;
@@ -1312,7 +1313,7 @@ static void init_windows(void)
 
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
-        WIPE(td, term_data);
+        *td = {};
         td->name = win_term_name[i];
         td->rows = 24;
         td->cols = 80;
@@ -2235,11 +2236,10 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         for (int i = 0; i < dy; i++) {
 #ifdef JP
-            char *s;
             const auto &scr = data[0].t.scr->c;
 
-            C_MAKE(s, (dx + 1), char);
-            strncpy(s, &scr[oy + i][ox], dx);
+            std::vector<char> s(dx + 1);
+            strncpy(s.data(), &scr[oy + i][ox], dx);
 
             if (ox > 0) {
                 if (iskanji(scr[oy + i][ox - 1]))

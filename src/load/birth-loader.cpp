@@ -24,7 +24,7 @@ void load_quick_start(void)
     rd_byte(&tmp8u);
     previous_char.pclass = (player_class_type)tmp8u;
     rd_byte(&tmp8u);
-    previous_char.pseikaku = (player_personality_type)tmp8u;
+    previous_char.ppersonality = (player_personality_type)tmp8u;
     rd_byte(&tmp8u);
     previous_char.realm1 = (int16_t)tmp8u;
     rd_byte(&tmp8u);

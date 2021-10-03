@@ -42,11 +42,6 @@
 std::vector<vault_type> v_info;
 
 /*
- * Maximum number of vaults in v_info.txt
- */
-int16_t max_v_idx;
-
-/*
  * This function creates a random vault that looks like a collection of bubbles.
  * It works by getting a set of coordinates that represent the center of each
  * bubble.  The entire room is made by seeing which bubble center is closest. If
@@ -618,7 +613,7 @@ bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Pick a lesser vault */
     for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++) {
         /* Access a random vault record */
-        v_ptr = &v_info[randint0(max_v_idx)];
+        v_ptr = &v_info[randint0(v_info.size())];
 
         /* Accept the first lesser vault */
         if (v_ptr->typ == 7)
@@ -686,7 +681,7 @@ bool build_type8(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Pick a greater vault */
     for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++) {
         /* Access a random vault record */
-        v_ptr = &v_info[randint0(max_v_idx)];
+        v_ptr = &v_info[randint0(v_info.size())];
 
         /* Accept the first greater vault */
         if (v_ptr->typ == 8)
@@ -938,7 +933,6 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
     POSITION dy, dx;
     POSITION y1, x1, y2, x2, y, x, total;
     int m, n, num_vertices;
-    int *visited;
 
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("小型チェッカーランダムVaultを生成しました。", "Mini Checker Board Vault."));
 
@@ -1006,10 +1000,10 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
     num_vertices = m * n;
 
     /* initialize array of visited vertices */
-    C_MAKE(visited, num_vertices, int);
+    std::vector<int> visited(num_vertices);
 
     /* traverse the graph to create a spannng tree, pick a random root */
-    r_visit(player_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited);
+    r_visit(player_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited.data());
 
     /* Make it look like a checker board vault */
     for (x = x1; x <= x2; x++) {
@@ -1037,8 +1031,6 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
     /* Fill with monsters and treasure, highest difficulty */
     fill_treasure(player_ptr, x1, x2, y1, y2, 10);
-
-    C_KILL(visited, num_vertices, int);
 }
 
 /* Build a castle */
@@ -1159,7 +1151,7 @@ bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Pick a lesser vault */
     for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++) {
         /* Access a random vault record */
-        v_ptr = &v_info[randint0(max_v_idx)];
+        v_ptr = &v_info[randint0(v_info.size())];
 
         /* Accept the special fix room. */
         if (v_ptr->typ == 17)

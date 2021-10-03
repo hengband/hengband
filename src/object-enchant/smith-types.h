@@ -5,7 +5,7 @@
 /**
  * @brief アイテムに付与できる鍛冶効果の列挙体
  */
-enum class SmithEffect {
+enum class SmithEffect : int16_t {
     NONE = 0,
     STR = 1, //!< 腕力
     INT = 2, //!< 知能
@@ -152,6 +152,7 @@ enum class SmithEffect {
     ACT_DRAIN, //!< 吸血の矢発動
     ACT_CONFUSE, //!< パニック・モンスター発動
     ACT_DETECT_ALL, //!< 全感知発動
+    ACT_DETECT_UNIQUE, //!< ユニークモンスター感知発動
     ACT_MAP_LIGHT, //!< 魔法の地図と光発動
     ACT_SATIATE, //!< 空腹充足発動
     ACT_CURE_700, //!< 体力回復発動
@@ -180,7 +181,7 @@ enum class SmithCategory {
 /**
  * @brief 鍛冶エッセンスの列挙体
  */
-enum class SmithEssence {
+enum class SmithEssence : int16_t {
     NONE = 0,
     STR = 1, //!< 腕力
     INT = 2, //!< 知能
@@ -256,6 +257,4 @@ enum class SmithEssence {
 
     ATTACK = 100, //!< 攻撃
     AC = 101, //!< 防御
-
-    MAX = MAX_SPELLS, //!< エッセンス所持量はplayer_type::magic_num1[MAX_SPELLS]に格納するので、この値未満を割り当てる必要あり
 };

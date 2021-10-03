@@ -22,9 +22,11 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"
-#include <string>
-#include <vector>
+#include <array>
 #include <sstream>
+#include <string>
+#include <tuple>
+#include <vector>
 
 void wiz_enter_quest(player_type *player_ptr);
 void wiz_complete_quest(player_type *player_ptr);
@@ -33,12 +35,12 @@ void wiz_restore_monster_max_num();
 /*!
  * @brief ゲーム設定コマンド一覧表
  */
-std::vector<std::vector<std::string>> wizard_game_modifier_menu_table = {
-    { "t", _("プレイ時間変更", "Modify played time") },
-    { "q", _("現在のクエストを完了", "Complete current quest") },
-    { "Q", _("クエストに突入", "Enter quest") },
-    { "u", _("ユニーク/ナズグルの生存数を復元", "Restore living info of unique/nazgul") },
-    { "g", _("モンスター闘技場出場者更新", "Update gambling monster") },
+constexpr std::array wizard_game_modifier_menu_table = {
+    std::make_tuple('t', _("プレイ時間変更", "Modify played time")),
+    std::make_tuple('q', _("現在のクエストを完了", "Complete current quest")),
+    std::make_tuple('Q', _("クエストに突入", "Enter quest")),
+    std::make_tuple('u', _("ユニーク/ナズグルの生存数を復元", "Restore living info of unique/nazgul")),
+    std::make_tuple('g', _("モンスター闘技場出場者更新", "Update gambling monster")),
 };
 
 /*!
@@ -46,15 +48,14 @@ std::vector<std::vector<std::string>> wizard_game_modifier_menu_table = {
  */
 void display_wizard_game_modifier_menu()
 {
-    for (int y = 1; y < 6; y++)
+    for (auto y = 1U; y <= wizard_game_modifier_menu_table.size(); y++)
         term_erase(14, y, 64);
 
     int r = 1;
     int c = 15;
-    int sz = wizard_game_modifier_menu_table.size();
-    for (int i = 0; i < sz; i++) {
+    for (const auto &[symbol, desc] : wizard_game_modifier_menu_table) {
         std::stringstream ss;
-        ss << wizard_game_modifier_menu_table[i][0] << ") " << wizard_game_modifier_menu_table[i][1];
+        ss << symbol << ") " << desc;
         put_str(ss.str().c_str(), r++, c);
     }
 }
@@ -118,7 +119,7 @@ void wiz_enter_quest(player_type* player_ptr)
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[tmp_int].status = QUEST_STATUS_TAKEN;
+    quest[tmp_int].status = QuestStatusType::TAKEN;
     if (quest[tmp_int].dungeon == 0)
         exe_enter_quest(player_ptr, (QUEST_IDX)tmp_int);
 }
@@ -135,7 +136,7 @@ void wiz_complete_quest(player_type *player_ptr)
         return;
     }
 
-    if (quest[player_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
+    if (quest[player_ptr->current_floor_ptr->inside_quest].status == QuestStatusType::TAKEN)
         complete_quest(player_ptr, player_ptr->current_floor_ptr->inside_quest);
 }
 
@@ -144,14 +145,14 @@ void wiz_restore_monster_max_num()
     MONRACE_IDX r_idx = command_arg;
     if (r_idx <= 0) {
         std::stringstream ss;
-        ss << "Monster race (1-" << max_r_idx << "): ";
+        ss << "Monster race (1-" << r_info.size() << "): ";
 
         char tmp_val[160] = "\0";
         if (!get_string(ss.str().c_str(), tmp_val, 5))
             return;
 
         r_idx = (MONRACE_IDX)atoi(tmp_val);
-        if (r_idx <= 0 || r_idx >= max_r_idx)
+        if (r_idx <= 0 || r_idx >= static_cast<MONRACE_IDX>(r_info.size()))
             return;
     }
 

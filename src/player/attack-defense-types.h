@@ -20,8 +20,8 @@ enum special_defense_type {
     ACTION_REST = 2, /*!< 持続行動: 休憩 */
     ACTION_LEARN = 3, /*!< 持続行動: 青魔法ラーニング */
     ACTION_FISH = 4, /*!< 持続行動: 釣り */
-    ACTION_KAMAE = 5, /*!< 持続行動: 修行僧の構え */
-    ACTION_KATA = 6, /*!< 持続行動: 剣術家の型 */
+    ACTION_MONK_STANCE = 5, /*!< 持続行動: 修行僧の構え */
+    ACTION_SAMURAI_STANCE = 6, /*!< 持続行動: 剣術家の型 */
     ACTION_SING = 7, /*!< 持続行動: 歌 */
     ACTION_HAYAGAKE = 8, /*!< 持続行動: 早駆け */
     ACTION_SPELL = 9, /*!< 持続行動: 呪術 */

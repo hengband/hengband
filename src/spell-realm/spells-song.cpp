@@ -5,6 +5,8 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
+#include "player-base/player-class.h"
+#include "player-info/bard-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
@@ -148,50 +150,92 @@ void stop_singing(player_type *player_ptr)
 
 bool music_singing(player_type *player_ptr, int music_songs)
 {
-    return (player_ptr->pclass == CLASS_BARD) && (player_ptr->magic_num1[0] == music_songs);
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    return bird_data && (bird_data->singing_song == music_songs);
 }
 
 bool music_singing_any(player_type *player_ptr)
 {
-    return (player_ptr->pclass == CLASS_BARD) && (player_ptr->magic_num1[0] != 0);
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    return bird_data && (bird_data->singing_song != MUSIC_NONE);
 }
 
-int32_t get_singing_song_effect(const player_type *player_ptr)
+int32_t get_singing_song_effect(player_type *player_ptr)
 {
-    return player_ptr->magic_num1[0];
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return 0;
+    }
+
+    return bird_data->singing_song;
 }
 
 void set_singing_song_effect(player_type *player_ptr, const int32_t magic_num)
 {
-    player_ptr->magic_num1[0] = magic_num;
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return;
+    }
+
+    bird_data->singing_song = i2enum<realm_song_type>(magic_num);
 }
 
-int32_t get_interrupting_song_effect(const player_type *player_ptr)
+int32_t get_interrupting_song_effect(player_type *player_ptr)
 {
-    return player_ptr->magic_num1[1];
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return 0;
+    }
+
+    return bird_data->interrputing_song;
 }
 
 void set_interrupting_song_effect(player_type *player_ptr, const int32_t magic_num)
 {
-    player_ptr->magic_num1[1] = magic_num;
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return;
+    }
+
+    bird_data->interrputing_song = i2enum<realm_song_type>(magic_num);
 }
 
-int32_t get_singing_count(const player_type *player_ptr)
+int32_t get_singing_count(player_type *player_ptr)
 {
-    return player_ptr->magic_num1[2];
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return 0;
+    }
+
+    return bird_data->singing_duration;
 }
 
 void set_singing_count(player_type *player_ptr, const int32_t magic_num)
 {
-    player_ptr->magic_num1[2] = magic_num;
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return;
+    }
+
+    bird_data->singing_duration = magic_num;
 }
 
-byte get_singing_song_id(const player_type *player_ptr)
+byte get_singing_song_id(player_type *player_ptr)
 {
-    return player_ptr->magic_num2[0];
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return 0;
+    }
+
+    return bird_data->singing_song_spell_idx;
 }
 
 void set_singing_song_id(player_type *player_ptr, const byte magic_num)
 {
-    player_ptr->magic_num2[0] = magic_num;
+    auto bird_data = PlayerClass(player_ptr).get_specific_data<bard_data_type>();
+    if (!bird_data) {
+        return;
+    }
+
+    bird_data->singing_song_spell_idx = magic_num;
 }

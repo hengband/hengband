@@ -76,7 +76,6 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
 {
     player_type dummy;
     uint16_t why = 2;
-    MONRACE_IDX *who;
     char buf[1024];
     char nam[MAX_MONSTER_NAME + 10]; // ユニークには[U] が付くので少し伸ばす
     char lev[80];
@@ -94,7 +93,6 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
     char title[200];
     put_version(title);
 
-    C_MAKE(who, max_r_idx, MONRACE_IDX);
     fprintf(spoiler_file, "Monster Spoilers for %s\n", title);
     fprintf(spoiler_file, "------------------------------------------\n\n");
     fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
@@ -104,16 +102,15 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
         "----------",
         "---", "---", "---", "-----", "-----", "-------------------");
 
-    int n = 0;
-    for (auto i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!r_ptr->name.empty())
-            who[n++] = (int16_t)i;
+    std::vector<MONRACE_IDX> who;
+    for (const auto &r_ref : r_info) {
+        if (r_ref.idx > 0 && !r_ref.name.empty())
+            who.push_back(r_ref.idx);
     }
 
-    ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
-    for (auto i = 0; i < n; i++) {
-        monster_race *r_ptr = &r_info[who[i]];
+    ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
+    for (auto r_idx : who) {
+        monster_race *r_ptr = &r_info[r_idx];
         concptr name = r_ptr->name.c_str();
         if (filter_monster && !filter_monster(r_ptr)) {
             continue;
@@ -162,7 +159,6 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
     }
 
     fprintf(spoiler_file, "\n");
-    C_KILL(who, max_r_idx, int16_t);
     return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
                                                                 : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
@@ -200,19 +196,16 @@ spoiler_output_status spoil_mon_info(concptr fname)
     spoil_out(buf);
     spoil_out("------------------------------------------\n\n");
 
-    MONRACE_IDX *who;
-    C_MAKE(who, max_r_idx, MONRACE_IDX);
-    int n = 0;
-    for (int i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!r_ptr->name.empty())
-            who[n++] = (int16_t)i;
+    std::vector<MONRACE_IDX> who;
+    for (const auto &r_ref : r_info) {
+        if (r_ref.idx > 0 && !r_ref.name.empty())
+            who.push_back(r_ref.idx);
     }
 
     uint16_t why = 2;
-    ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
-    for (int i = 0; i < n; i++) {
-        monster_race *r_ptr = &r_info[who[i]];
+    ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
+    for (auto r_idx : who) {
+        monster_race *r_ptr = &r_info[r_idx];
         BIT_FLAGS flags1 = r_ptr->flags1;
         if (any_bits(flags1, RF1_UNIQUE)) {
             spoil_out("[U] ");
@@ -227,7 +220,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
         spoil_out(buf);
         sprintf(buf, "=== ");
         spoil_out(buf);
-        sprintf(buf, "Num:%d  ", who[i]);
+        sprintf(buf, "Num:%d  ", r_idx);
         spoil_out(buf);
         sprintf(buf, "Lev:%d  ", (int)r_ptr->level);
         spoil_out(buf);
@@ -251,11 +244,10 @@ spoiler_output_status spoil_mon_info(concptr fname)
         spoil_out(buf);
         sprintf(buf, "Exp:%ld\n", (long)(r_ptr->mexp));
         spoil_out(buf);
-        output_monster_spoiler(who[i], roff_func);
+        output_monster_spoiler(r_idx, roff_func);
         spoil_out(nullptr);
     }
 
-    C_KILL(who, max_r_idx, int16_t);
     return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
                                                                 : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }

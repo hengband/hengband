@@ -23,12 +23,12 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-movement-processor.h"
-#include "world/world.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
@@ -107,14 +107,15 @@ bool pattern_effect(player_type *player_ptr)
     if (!pattern_tile(floor_ptr, player_ptr->y, player_ptr->x))
         return false;
 
-    if ((PlayerRace(player_ptr).equals(player_race_type::AMBERITE)) && (player_ptr->cut > 0) && one_in_(10)) {
+    auto is_cut = player_ptr->effects()->cut()->is_cut();
+    if ((PlayerRace(player_ptr).equals(player_race_type::AMBERITE)) && is_cut && one_in_(10)) {
         wreck_the_pattern(player_ptr);
     }
 
     int pattern_type = f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
     switch (pattern_type) {
     case PATTERN_TILE_END:
-        (void)set_image(player_ptr, 0);
+        (void)BadStatusSetter(player_ptr).hallucination(0);
         (void)restore_all_status(player_ptr);
         (void)restore_level(player_ptr);
         (void)cure_critical_wounds(player_ptr, 1000);
@@ -177,7 +178,7 @@ bool pattern_seq(player_type *player_ptr, POSITION c_y, POSITION c_x, POSITION n
     if (pattern_type_new == PATTERN_TILE_START) {
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
-        if (!is_pattern_tile_cur && !player_ptr->confused && !is_stunned && !player_ptr->image) {
+        if (!is_pattern_tile_cur && !player_ptr->confused && !is_stunned && !player_ptr->hallucinated) {
             if (get_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？",
                     "If you start walking the Pattern, you must walk the whole way. Ok? ")))
                 return true;
@@ -238,8 +239,8 @@ bool pattern_seq(player_type *player_ptr, POSITION c_y, POSITION c_x, POSITION n
         ok_move = PATTERN_TILE_1;
         break;
     default:
-        if (w_ptr->wizard)
-            msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
+        msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
+        msg_print(_("不具合の可能性があります。開発者に連絡して下さい。", "There may be some problem. Please contact developers."));
         return true;
     }
 

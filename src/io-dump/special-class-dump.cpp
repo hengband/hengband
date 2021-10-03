@@ -13,11 +13,16 @@
 #include "object-enchant/object-smith.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
+#include "player-info/magic-eater-data-type.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 
 #include <algorithm>
+#include <iterator>
+#include <string>
 #include <vector>
 
 typedef struct {
@@ -31,48 +36,52 @@ typedef struct {
  */
 static void dump_magic_eater(player_type *player_ptr, FILE *fff)
 {
-    char s[EATER_EXT][MAX_NLEN];
+    auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    if (!magic_eater_data) {
+        return;
+    }
+
     fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
 
-    for (int ext = 0; ext < 3; ext++) {
-        tval_type tval = TV_NONE;
-        switch (ext) {
-        case 0:
-            tval = TV_STAFF;
+    for (auto tval : { TV_STAFF, TV_WAND, TV_ROD }) {
+        switch (tval) {
+        case TV_STAFF:
             fprintf(fff, _("\n[杖]\n", "\n[Staffs]\n"));
             break;
-        case 1:
-            tval = TV_WAND;
+        case TV_WAND:
             fprintf(fff, _("\n[魔法棒]\n", "\n[Wands]\n"));
             break;
-        case 2:
-            tval = TV_ROD;
+        case TV_ROD:
             fprintf(fff, _("\n[ロッド]\n", "\n[Rods]\n"));
+            break;
+        default:
             break;
         }
 
-        int eat_num = 0;
-        for (OBJECT_SUBTYPE_VALUE i = 0; i < EATER_EXT; i++) {
-            int idx = EATER_EXT * ext + i;
-            int magic_num = player_ptr->magic_num2[idx];
-            if (!magic_num)
+        const auto &item_group = magic_eater_data->get_item_group(tval);
+        std::vector<std::string> desc_list;
+        for (auto i = 0U; i < item_group.size(); ++i) {
+            auto &item = item_group[i];
+            if (item.count == 0)
                 continue;
 
             KIND_OBJECT_IDX k_idx = lookup_kind(tval, i);
             if (!k_idx)
                 continue;
-            sprintf(s[eat_num], "%23s (%2d)", k_info[k_idx].name.c_str(), magic_num);
-            eat_num++;
+
+            char buf[128];
+            snprintf(buf, sizeof(buf), "%23s (%2d)", k_info[k_idx].name.c_str(), item.count);
+            desc_list.emplace_back(buf);
         }
 
-        if (eat_num <= 0) {
+        if (desc_list.size() <= 0) {
             fputs(_("  (なし)\n", "  (none)\n"), fff);
             continue;
         }
 
-        OBJECT_SUBTYPE_VALUE i;
-        for (i = 0; i < eat_num; i++) {
-            fputs(s[i], fff);
+        uint i;
+        for (i = 0; i < desc_list.size(); i++) {
+            fputs(desc_list[i].c_str(), fff);
             if (i % 3 < 2)
                 fputs("    ", fff);
             else
@@ -120,28 +129,28 @@ static void dump_smith(player_type *player_ptr, FILE *fff)
  * @param spell_type 魔法の種類
  * @param learnt_spell_ptr 学習済魔法のテーブル
  */
-static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_type, learnt_spell_table *learnt_spell_ptr)
+static void add_monster_spell_type(char p[][80], int col, BlueMagicType spell_type, learnt_spell_table *learnt_spell_ptr)
 {
     learnt_spell_ptr->ability_flags.clear();
     set_rf_masks(learnt_spell_ptr->ability_flags, spell_type);
     switch (spell_type) {
-    case MONSPELL_TYPE_BOLT:
+    case BlueMagicType::BOLT:
         strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
         break;
 
-    case MONSPELL_TYPE_BALL:
+    case BlueMagicType::BALL:
         strcat(p[col], _("\n     [ボール型]\n", "\n     [Ball  Type]\n"));
         break;
 
-    case MONSPELL_TYPE_BREATH:
+    case BlueMagicType::BREATH:
         strcat(p[col], _("\n     [ブレス型]\n", "\n     [  Breath  ]\n"));
         break;
 
-    case MONSPELL_TYPE_SUMMON:
+    case BlueMagicType::SUMMON:
         strcat(p[col], _("\n     [召喚魔法]\n", "\n     [Summonning]\n"));
         break;
 
-    case MONSPELL_TYPE_OTHER:
+    case BlueMagicType::OTHER:
         strcat(p[col], _("\n     [ その他 ]\n", "\n     [Other Type]\n"));
         break;
     }
@@ -154,6 +163,11 @@ static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_
  */
 static void dump_blue_mage(player_type *player_ptr, FILE *fff)
 {
+    const auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+    if (!bluemage_data) {
+        return;
+    }
+
     char p[60][80];
     for (int i = 0; i < 60; i++) {
         p[i][0] = '\0';
@@ -162,10 +176,11 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
     int col = 0;
     strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
 
-    for (int spell_type = 1; spell_type < 6; spell_type++) {
+    for (auto spell_type : BLUE_MAGIC_TYPE_LIST) {
         col++;
         learnt_spell_table learnt_magic;
-        add_monster_spell_type(p, col, i2enum<blue_magic_type>(spell_type), &learnt_magic);
+        add_monster_spell_type(p, col, spell_type, &learnt_magic);
+        learnt_magic.ability_flags &= bluemage_data->learnt_blue_magics;
 
         std::vector<RF_ABILITY> learnt_spells;
         EnumClassFlagGroup<RF_ABILITY>::get_flags(learnt_magic.ability_flags, std::back_inserter(learnt_spells));
@@ -175,20 +190,16 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
         strcat(p[col], "       ");
 
         for (auto spell : learnt_spells) {
-            const int spellnum = enum2i(spell);
-            if (player_ptr->magic_num2[spellnum] == 0)
-                continue;
-
             pcol = true;
             int l1 = strlen(p[col]);
-            int l2 = strlen(monster_powers_short[spellnum]);
+            int l2 = strlen(monster_powers_short.at(spell));
             if ((l1 + l2) >= 75) {
                 strcat(p[col], "\n");
                 col++;
                 strcat(p[col], "       ");
             }
 
-            strcat(p[col], monster_powers_short[spellnum]);
+            strcat(p[col], monster_powers_short.at(spell));
             strcat(p[col], ", ");
         }
 

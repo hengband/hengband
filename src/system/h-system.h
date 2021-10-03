@@ -9,8 +9,16 @@
 
 #pragma once
 
+#include <ctype.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <memory.h>
 #include <stdarg.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 #include <wctype.h>
 
 // clang-format off
@@ -18,14 +26,6 @@
 #ifdef WINDOWS
   #include <io.h>
 #else
-  #include <ctype.h>
-  #include <errno.h>
-  #include <memory.h>
-  #include <stddef.h>
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <time.h>
   #ifdef SET_UID
     #include <pwd.h>
     #include <sys/file.h>

@@ -275,9 +275,9 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     }
 
-    entry->name = string_make(ptr);
+    entry->name = ptr;
     entry->action = act;
-    entry->insc = string_make(insc);
+    entry->insc = insc != nullptr ? insc : "";
 
     return true;
 }
@@ -291,7 +291,8 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
     bool name = true;
     GAME_TEXT name_str[MAX_NLEN + 32];
     name_str[0] = '\0';
-    entry->insc = string_make(quark_str(o_ptr->inscription));
+    auto insc = quark_str(o_ptr->inscription);
+    entry->insc = insc != nullptr ? insc : "";
     entry->action = DO_AUTOPICK | DO_DISPLAY;
     entry->flag[0] = entry->flag[1] = 0L;
     entry->dice = 0;
@@ -451,7 +452,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 
     if (!name) {
         str_tolower(name_str);
-        entry->name = string_make(name_str);
+        entry->name = name_str;
         return;
     }
 
@@ -464,7 +465,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
      */
     sprintf(name_str, "%s%s", is_hat_added ? "^" : "", o_name);
     str_tolower(name_str);
-    entry->name = string_make(name_str);
+    entry->name = name_str;
 }
 
 /*!
@@ -594,7 +595,7 @@ concptr autopick_line_from_entry(autopick_type *entry)
     else if (!IS_FLG(FLG_ARTIFACT))
         sepa_flag = false;
 
-    if (entry->name && entry->name[0]) {
+    if (!entry->name.empty()) {
         if (sepa_flag)
             strcat(buf, ":");
 
@@ -610,7 +611,7 @@ concptr autopick_line_from_entry(autopick_type *entry)
         buf[i] = '\0';
     }
 
-    if (!entry->insc)
+    if (entry->insc.empty())
         return string_make(buf);
 
     int i, j = 0;
@@ -635,7 +636,6 @@ concptr autopick_line_from_entry(autopick_type *entry)
 concptr autopick_line_from_entry_kill(autopick_type *entry)
 {
     concptr ptr = autopick_line_from_entry(entry);
-    autopick_free_entry(entry);
     return ptr;
 }
 

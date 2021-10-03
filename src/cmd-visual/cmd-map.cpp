@@ -22,7 +22,7 @@ void do_cmd_view_map(player_type *player_ptr)
 
     int cy, cx;
     display_map(player_ptr, &cy, &cx);
-    if ((max_autopick == 0) || player_ptr->wild_mode) {
+    if (autopick_list.empty() || player_ptr->wild_mode) {
         put_str(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"), 23, 30);
         move_cursor(cy, cx);
         inkey(true);

@@ -24,6 +24,8 @@
 #include "mspell/mspell-selector.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
+#include "player-base/player-class.h"
+#include "player-info/mane-data-type.h"
 #include "player/attack-defense-types.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
@@ -39,6 +41,8 @@
 #include "monster/monster-description-types.h"
 #endif
 
+#include <iterator>
+
 static void set_no_magic_mask(msa_type *msa_ptr)
 {
     if (!msa_ptr->no_inate)
@@ -51,7 +55,7 @@ static void check_mspell_stupid(player_type *player_ptr, msa_type *msa_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     msa_ptr->in_no_magic_dungeon = d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && floor_ptr->dun_level
-        && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
+        && (!floor_ptr->inside_quest || quest_type::is_fixed(floor_ptr->inside_quest));
     if (!msa_ptr->in_no_magic_dungeon || ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0))
         return;
 
@@ -263,18 +267,14 @@ static void check_mspell_imitation(player_type *player_ptr, msa_type *msa_ptr)
     if (msa_ptr->thrown_spell == RF_ABILITY::SPECIAL)
         return;
 
-    if (player_ptr->mane_num == MAX_MANE) {
-        player_ptr->mane_num--;
-        for (int i = 0; i < player_ptr->mane_num; i++) {
-            player_ptr->mane_spell[i] = player_ptr->mane_spell[i + 1];
-            player_ptr->mane_dam[i] = player_ptr->mane_dam[i + 1];
-        }
+    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+
+    if (mane_data->mane_list.size() == MAX_MANE) {
+        mane_data->mane_list.pop_front();
     }
 
-    player_ptr->mane_spell[player_ptr->mane_num] = msa_ptr->thrown_spell;
-    player_ptr->mane_dam[player_ptr->mane_num] = msa_ptr->dam;
-    player_ptr->mane_num++;
-    player_ptr->new_mane = true;
+    mane_data->mane_list.push_back({ msa_ptr->thrown_spell, msa_ptr->dam });
+    mane_data->new_mane = true;
     player_ptr->redraw |= PR_IMITATION;
 }
 

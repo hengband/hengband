@@ -1,7 +1,15 @@
 ﻿#include "window/main-window-stat-poster.h"
+#include "game-option/game-play-options.h"
 #include "io/input-key-requester.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
+#include "player-base/player-class.h"
+#include "player-info/bluemage-data-type.h"
+#include "player-info/mane-data-type.h"
+#include "player-info/monk-data-type.h"
+#include "player-info/ninja-data-type.h"
+#include "player-info/samurai-data-type.h"
+#include "player-info/sniper-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-status-table.h"
@@ -15,11 +23,11 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
-#include "window/main-window-row-column.h"
 #include "view/status-bars-table.h"
-#include "world/world.h"
+#include "window/main-window-row-column.h"
 
 /*!
  * @brief 32ビット変数配列の指定位置のビットフラグを1にする。
@@ -67,43 +75,14 @@ void print_stat(player_type *player_ptr, int stat)
  */
 void print_cut(player_type *player_ptr)
 {
-    int c = player_ptr->cut;
-    if (c > 1000) {
-        c_put_str(TERM_L_RED, _("致命傷      ", "Mortal wound"), ROW_CUT, COL_CUT);
+    auto player_cut = player_ptr->effects()->cut();
+    if (!player_cut->is_cut()) {
+        put_str("            ", ROW_CUT, COL_CUT);
         return;
     }
 
-    if (c > 200) {
-        c_put_str(TERM_RED, _("ひどい深手  ", "Deep gash   "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 100) {
-        c_put_str(TERM_RED, _("重傷        ", "Severe cut  "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 50) {
-        c_put_str(TERM_ORANGE, _("大変な傷    ", "Nasty cut   "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 25) {
-        c_put_str(TERM_ORANGE, _("ひどい傷    ", "Bad cut     "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c > 10) {
-        c_put_str(TERM_YELLOW, _("軽傷        ", "Light cut   "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    if (c) {
-        c_put_str(TERM_YELLOW, _("かすり傷    ", "Graze       "), ROW_CUT, COL_CUT);
-        return;
-    }
-
-    put_str("            ", ROW_CUT, COL_CUT);
+    auto [color, stat] = player_cut->get_expr();
+    c_put_str(color, stat.data(), ROW_CUT, COL_CUT);
 }
 
 /*!
@@ -128,7 +107,7 @@ void print_stun(player_type *player_ptr)
  */
 void print_hunger(player_type *player_ptr)
 {
-    if (w_ptr->wizard && player_ptr->current_floor_ptr->inside_arena)
+    if (allow_debug_options && player_ptr->current_floor_ptr->inside_arena)
         return;
 
     if (player_ptr->food < PY_FOOD_FAINT) {
@@ -201,7 +180,8 @@ void print_state(player_type *player_ptr)
 
     case ACTION_LEARN: {
         strcpy(text, _("学習", "lear"));
-        if (player_ptr->new_mane)
+        auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
+        if (bluemage_data->new_magic_learned)
             attr = TERM_L_RED;
         break;
     }
@@ -209,36 +189,34 @@ void print_state(player_type *player_ptr)
         strcpy(text, _("釣り", "fish"));
         break;
     }
-    case ACTION_KAMAE: {
-        int i;
-        for (i = 0; i < MAX_KAMAE; i++)
-            if (player_ptr->special_defense & (KAMAE_GENBU << i))
+    case ACTION_MONK_STANCE: {
+        if (auto stance = PlayerClass(player_ptr).get_monk_stance();
+            stance != MonkStance::NONE) {
+            switch (stance) {
+            case MonkStance::GENBU:
+                attr = TERM_GREEN;
                 break;
-        switch (i) {
-        case 0:
-            attr = TERM_GREEN;
-            break;
-        case 1:
-            attr = TERM_WHITE;
-            break;
-        case 2:
-            attr = TERM_L_BLUE;
-            break;
-        case 3:
-            attr = TERM_L_RED;
-            break;
+            case MonkStance::BYAKKO:
+                attr = TERM_WHITE;
+                break;
+            case MonkStance::SEIRYU:
+                attr = TERM_L_BLUE;
+                break;
+            case MonkStance::SUZAKU:
+                attr = TERM_L_RED;
+                break;
+            default:
+                break;
+            }
+            strcpy(text, monk_stances[enum2i(stance) - 1].desc);
         }
-
-        strcpy(text, monk_stances[i].desc);
         break;
     }
-    case ACTION_KATA: {
-        int i;
-        for (i = 0; i < MAX_KATA; i++)
-            if (player_ptr->special_defense & (KATA_IAI << i))
-                break;
-
-        strcpy(text, samurai_stances[i].desc);
+    case ACTION_SAMURAI_STANCE: {
+        if (auto stance = PlayerClass(player_ptr).get_samurai_stance();
+            stance != SamuraiStance::NONE) {
+            strcpy(text, samurai_stances[enum2i(stance) - 1].desc);
+        }
         break;
     }
     case ACTION_SING: {
@@ -351,12 +329,14 @@ void print_imitation(player_type *player_ptr)
     if (player_ptr->pclass != CLASS_IMITATOR)
         return;
 
-    if (player_ptr->mane_num == 0) {
+    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+
+    if (mane_data->mane_list.size() == 0) {
         put_str("    ", row_study, col_study);
         return;
     }
 
-    TERM_COLOR attr = player_ptr->new_mane ? TERM_L_RED : TERM_WHITE;
+    TERM_COLOR attr = mane_data->new_mane ? TERM_L_RED : TERM_WHITE;
     c_put_str(attr, _("まね", "Imit"), row_study, col_study);
 }
 
@@ -468,7 +448,7 @@ void print_status(player_type *player_ptr)
     if (player_ptr->tsuyoshi)
         ADD_BAR_FLAG(BAR_TSUYOSHI);
 
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         ADD_BAR_FLAG(BAR_HALLUCINATION);
 
     if (player_ptr->blind)
@@ -486,8 +466,8 @@ void print_status(player_type *player_ptr)
     if (player_ptr->tim_invis)
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
 
-    if (player_ptr->concent >= CONCENT_RADAR_THRESHOLD)
-    {
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
         ADD_BAR_FLAG(BAR_NIGHTSIGHT);
     }
@@ -534,7 +514,8 @@ void print_status(player_type *player_ptr)
     if (player_ptr->shield)
         ADD_BAR_FLAG(BAR_STONESKIN);
 
-    if (player_ptr->special_defense & NINJA_KAWARIMI)
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (ninja_data && ninja_data->kawarimi)
         ADD_BAR_FLAG(BAR_KAWARIMI);
 
     if (player_ptr->special_defense & DEFENSE_ACID)
@@ -603,7 +584,7 @@ void print_status(player_type *player_ptr)
         ADD_BAR_FLAG(BAR_ATTKACID);
     if (player_ptr->special_attack & ATTACK_POIS)
         ADD_BAR_FLAG(BAR_ATTKPOIS);
-    if (player_ptr->special_defense & NINJA_S_STEALTH)
+    if (ninja_data && ninja_data->s_stealth)
         ADD_BAR_FLAG(BAR_SUPERSTEALTH);
 
     if (player_ptr->tim_sh_fire)

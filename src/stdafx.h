@@ -7,12 +7,16 @@
 #include <list>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <optional>
 #include <queue>
+#include <set>
 #include <sstream>
 #include <stack>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
+#include <variant>
 #include <vector>

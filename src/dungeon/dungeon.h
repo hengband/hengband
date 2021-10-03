@@ -86,7 +86,7 @@ typedef struct dungeon_type {
 	int obj_good{};
 } dungeon_type;
 
-extern DEPTH *max_dlv;
+extern std::vector<DEPTH> max_dlv;
 extern std::vector<dungeon_type> d_info;
 
 struct player_type;

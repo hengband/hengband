@@ -30,7 +30,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
     concptr name = (mode & MD_TRUE_NAME) ? real_r_ptr(m_ptr)->name.c_str() : r_ptr->name.c_str();
     GAME_TEXT silly_name[1024];
     bool named = false;
-    if (player_ptr->image && !(mode & MD_IGNORE_HALLU)) {
+    if (player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU)) {
         if (one_in_(2)) {
             if (!get_rnd_line(_("silly_j.txt", "silly.txt"), m_ptr->r_idx, silly_name))
                 named = true;
@@ -40,7 +40,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
             monster_race *hallu_race;
 
             do {
-                hallu_race = &r_info[randint1(max_r_idx - 1)];
+                hallu_race = &r_info[randint1(r_info.size() - 1)];
             } while (hallu_race->name.empty() || (hallu_race->flags1 & RF1_UNIQUE));
 
             strcpy(silly_name, (hallu_race->name.c_str()));
@@ -175,7 +175,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
         (void)sprintf(desc, "%s?", name);
 #endif
     } else {
-        if ((r_ptr->flags1 & RF1_UNIQUE) && !(player_ptr->image && !(mode & MD_IGNORE_HALLU))) {
+        if ((r_ptr->flags1 & RF1_UNIQUE) && !(player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU))) {
             if (m_ptr->mflag2.has(MFLAG2::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
 #ifdef JP
                 char *t;

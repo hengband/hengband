@@ -6,6 +6,8 @@
 
 #include "term/z-virt.h"
 
+#include <optional>
+#include <vector>
 #include <windows.h>
 
 /*!
@@ -14,47 +16,32 @@
 class to_wchar {
 public:
     to_wchar(const char *src)
-        : buf(NULL)
-        , buf_size(0)
     {
         if (!src)
             return;
 
-        int size = ::MultiByteToWideChar(932, 0, src, -1, buf, 0);
+        int size = ::MultiByteToWideChar(932, 0, src, -1, NULL, 0);
         if (size > 0) {
-            buf_size = size + 1;
-            C_MAKE(buf, buf_size, WCHAR);
-            if (::MultiByteToWideChar(932, 0, src, -1, buf, buf_size) == 0) {
+            buf = std::vector<WCHAR>(size + 1);
+            if (::MultiByteToWideChar(932, 0, src, -1, (*buf).data(), (*buf).size()) == 0) {
                 // fail
-                kill();
+                buf = std::nullopt;
             }
         }
     }
 
-    virtual ~to_wchar()
-    {
-        kill();
-    }
+    virtual ~to_wchar() = default;
 
     to_wchar(const to_wchar &) = delete;
     to_wchar &operator=(const to_wchar &) = delete;
 
     WCHAR *wc_str()
     {
-        return buf;
+        return buf.has_value() ? (*buf).data() : NULL;
     }
 
 protected:
-    WCHAR *buf;
-    uint buf_size;
-
-    void kill()
-    {
-        if (buf) {
-            C_KILL(buf, buf_size, WCHAR);
-            buf = NULL;
-        }
-    }
+    std::optional<std::vector<WCHAR>> buf;
 };
 
 
@@ -64,47 +51,32 @@ protected:
 class to_multibyte {
 public:
     to_multibyte(const WCHAR *src)
-        : buf(NULL)
-        , buf_size(0)
     {
         if (!src)
             return;
 
-        int size = ::WideCharToMultiByte(932, 0, src, -1, buf, 0, NULL, NULL);
+        int size = ::WideCharToMultiByte(932, 0, src, -1, NULL, 0, NULL, NULL);
         if (size > 0) {
-            buf_size = size + 1;
-            C_MAKE(buf, buf_size, char);
-            if (::WideCharToMultiByte(932, 0, src, -1, buf, buf_size, NULL, NULL) == 0) {
+            buf = std::vector<char>(size + 1);
+            if (::WideCharToMultiByte(932, 0, src, -1, (*buf).data(), (*buf).size(), NULL, NULL) == 0) {
                 // fail
-                kill();
+                buf = std::nullopt;
             }
         }
     }
 
-    virtual ~to_multibyte()
-    {
-        kill();
-    }
+    virtual ~to_multibyte() = default;
 
     to_multibyte(const to_multibyte &) = delete;
     char* &operator=(const char* &) = delete;
 
     char *c_str()
     {
-        return buf;
+        return buf.has_value() ? (*buf).data() : NULL;
     }
 
 protected:
-    char *buf;
-    uint buf_size;
-
-    void kill()
-    {
-        if (buf) {
-            C_KILL(buf, buf_size, char);
-            buf = NULL;
-        }
-    }
+    std::optional<std::vector<char>> buf;
 };
 
 bool is_already_running(void);

@@ -53,7 +53,7 @@ static void check_riding_preservation(player_type *player_ptr)
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
-        (void)COPY(&party_mon[0], m_ptr, monster_type);
+        party_mon[0] = *m_ptr;
         delete_monster_idx(player_ptr, player_ptr->riding);
     }
 }
@@ -89,7 +89,7 @@ static void sweep_preserving_pet(player_type *player_ptr)
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr))
             continue;
 
-        (void)COPY(&party_mon[party_monster_num], &player_ptr->current_floor_ptr->m_list[i], monster_type);
+        party_mon[party_monster_num] = player_ptr->current_floor_ptr->m_list[i];
         party_monster_num++;
         delete_monster_idx(player_ptr, i);
     }
@@ -249,7 +249,7 @@ static void preserve_info(player_type *player_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
     for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
-        if ((quest[i].status == QUEST_STATUS_TAKEN) && ((quest[i].type == QUEST_TYPE_KILL_LEVEL) || (quest[i].type == QUEST_TYPE_RANDOM))
+        if ((quest[i].status == QuestStatusType::TAKEN) && ((quest[i].type == QuestKindType::KILL_LEVEL) || (quest[i].type == QuestKindType::RANDOM))
             && (quest[i].level == player_ptr->current_floor_ptr->dun_level) && (player_ptr->dungeon_idx == quest[i].dungeon)
             && !(quest[i].flags & QUEST_FLAG_PRESET)) {
             quest_r_idx = quest[i].r_idx;
@@ -411,8 +411,7 @@ void leave_floor(player_type *player_ptr)
 {
     preserve_pet(player_ptr);
     remove_all_mirrors(player_ptr, false);
-    if (player_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(player_ptr, false);
+    set_superstealth(player_ptr, false);
 
     new_floor_id = 0;
 

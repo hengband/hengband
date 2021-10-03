@@ -45,7 +45,7 @@ bool target_able(player_type *player_ptr, MONSTER_IDX m_idx)
     if (!monster_is_valid(m_ptr))
         return false;
 
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         return false;
 
     if (!m_ptr->ml)
@@ -72,7 +72,7 @@ static bool target_set_accept(player_type *player_ptr, POSITION y, POSITION x)
     if (player_bold(player_ptr, y, x))
         return true;
 
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         return false;
 
     grid_type *g_ptr;
@@ -167,7 +167,7 @@ void target_sensing_monsters_prepare(player_type *player_ptr, std::vector<MONSTE
     monster_list.clear();
 
     // 幻覚時は正常に感知できない
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         return;
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {

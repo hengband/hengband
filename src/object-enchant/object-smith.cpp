@@ -8,6 +8,8 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
+#include "player-info/smith-data-type.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -26,7 +28,7 @@ namespace {
  * @param consumption 1種あたりに使用する消費量
  * @return 所持しているエッセンスで付与可能な回数を返す
  */
-int addable_count(const player_type *player_ptr, std::vector<SmithEssence> essence_list, int consumption)
+int addable_count(smith_data_type *smith_data, std::vector<SmithEssence> essence_list, int consumption)
 {
     if (consumption <= 0) {
         return 0;
@@ -34,7 +36,7 @@ int addable_count(const player_type *player_ptr, std::vector<SmithEssence> essen
 
     std::vector<int> addable_count;
     for (auto essence : essence_list) {
-        int own_amount = player_ptr->magic_num1[enum2i(essence)];
+        int own_amount = smith_data->essences[essence];
         addable_count.push_back(own_amount / consumption);
     }
     return *std::min_element(addable_count.begin(), addable_count.end());
@@ -47,6 +49,7 @@ int addable_count(const player_type *player_ptr, std::vector<SmithEssence> essen
  */
 Smith::Smith(player_type *player_ptr)
     : player_ptr(player_ptr)
+    , smith_data(PlayerClass(player_ptr).get_specific_data<smith_data_type>())
 {
 }
 
@@ -216,7 +219,7 @@ TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
  * @return アイテムに付与されている発動効果の発動ID(random_art_activation_type型)
  * 付与されている発動効果が無い場合は std::nullopt
  */
-std::optional<random_art_activation_type> Smith::object_activation(const object_type *o_ptr)
+std::optional<RandomArtActType> Smith::object_activation(const object_type *o_ptr)
 {
     return o_ptr->smith_act_idx;
 }
@@ -256,17 +259,19 @@ std::vector<SmithEffect> Smith::get_effect_list(SmithCategory category)
  * @brief 指定した鍛冶効果のエッセンスを付与できる回数を取得する
  *
  * @param effect 鍛冶効果
- * @param item_number 同時に付与するスタックしたアイテム数。スタックしている場合アイテム数倍の数だけエッセンスが必要となる。
+ * @param o_ptr 鍛冶効果を付与するアイテムへのポインタ。nullptrの場合はデフォルトの消費量での回数が返される。
  * @return エッセンスを付与できる回数を返す
  */
-int Smith::get_addable_count(SmithEffect effect, int item_number) const
+int Smith::get_addable_count(SmithEffect effect, const object_type *o_ptr) const
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
         return 0;
     }
 
-    return addable_count(this->player_ptr, info.value()->need_essences, info.value()->consumption * item_number);
+    auto consumption = Smith::get_essence_consumption(effect, o_ptr);
+
+    return addable_count(this->smith_data.get(), info.value()->need_essences, consumption);
 }
 
 /*!
@@ -287,7 +292,7 @@ const std::vector<SmithEssence> &Smith::get_essence_list()
  */
 int Smith::get_essence_num_of_posessions(SmithEssence essence) const
 {
-    return this->player_ptr->magic_num1[enum2i(essence)];
+    return this->smith_data->essences[essence];
 }
 
 /*!
@@ -342,6 +347,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
     o_ptr->ix = old_o.ix;
     o_ptr->marked = old_o.marked;
     o_ptr->number = old_o.number;
+    o_ptr->discount = old_o.discount;
 
     if (o_ptr->tval == TV_DRAG_ARMOR)
         o_ptr->timeout = old_o.timeout;
@@ -403,8 +409,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
             continue;
         }
 
-        auto i = enum2i(essence);
-        this->player_ptr->magic_num1[i] = std::min(Smith::ESSENCE_AMOUNT_MAX, this->player_ptr->magic_num1[i] + drain_value);
+        this->smith_data->essences[essence] = std::min<int16_t>(Smith::ESSENCE_AMOUNT_MAX, this->smith_data->essences[essence] + drain_value);
         result.emplace_back(essence, drain_value);
     }
 
@@ -428,7 +433,7 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
 
     const auto total_consumption = this->get_essence_consumption(effect, o_ptr) * number;
     for (auto &&essence : info.value()->need_essences) {
-        this->player_ptr->magic_num1[enum2i(essence)] -= total_consumption;
+        this->smith_data->essences[essence] -= static_cast<int16_t>(total_consumption);
     }
 
     return info.value()->add_essence(this->player_ptr, o_ptr, number);

@@ -27,6 +27,7 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
@@ -43,17 +44,16 @@ static void set_bad_status_info(player_type *player_ptr, self_info_type *self_pt
     if (player_ptr->afraid)
         self_ptr->info[self_ptr->line++] = _("あなたは恐怖に侵されている。", "You are terrified.");
 
-    if (player_ptr->cut)
+    if (effects->cut()->is_cut())
         self_ptr->info[self_ptr->line++] = _("あなたは出血している。", "You are bleeding.");
 
-    auto is_stunned = effects->stun()->is_stunned();
-    if (is_stunned)
+    if (effects->stun()->is_stunned())
         self_ptr->info[self_ptr->line++] = _("あなたはもうろうとしている。", "You are stunned.");
 
     if (player_ptr->poisoned)
         self_ptr->info[self_ptr->line++] = _("あなたは毒に侵されている。", "You are poisoned.");
 
-    if (player_ptr->image)
+    if (player_ptr->hallucinated)
         self_ptr->info[self_ptr->line++] = _("あなたは幻覚を見ている。", "You are hallucinating.");
 }
 
@@ -289,8 +289,8 @@ void report_magics(player_type *player_ptr)
         info[i++] = _("あなたは毒に侵されている", "You are poisoned");
     }
 
-    if (player_ptr->image) {
-        info2[i] = report_magics_aux(player_ptr->image);
+    if (player_ptr->hallucinated) {
+        info2[i] = report_magics_aux(player_ptr->hallucinated);
         info[i++] = _("あなたは幻覚を見ている", "You are hallucinating");
     }
 

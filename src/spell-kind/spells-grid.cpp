@@ -72,7 +72,7 @@ void stair_creation(player_type *player_ptr)
     if (quest_number(player_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth))
         down = false;
 
-    if (!floor_ptr->dun_level || (!up && !down) || (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || floor_ptr->inside_arena
+    if (!floor_ptr->dun_level || (!up && !down) || (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) || floor_ptr->inside_arena
         || player_ptr->phase_out) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;

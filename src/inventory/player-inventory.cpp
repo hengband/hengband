@@ -195,7 +195,7 @@ void describe_pickup_item(player_type *player_ptr, OBJECT_IDX o_idx)
     INVENTORY_IDX slot = store_item_to_inventory(player_ptr, o_ptr);
     o_ptr = &player_ptr->inventory_list[slot];
     delete_object_idx(player_ptr, o_idx);
-    if (player_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         bool old_known = identify_item(player_ptr, o_ptr);
         autopick_alter_item(player_ptr, slot, (bool)(destroy_identify && !old_known));
         if (o_ptr->marked & OM_AUTODESTROY)
@@ -205,7 +205,7 @@ void describe_pickup_item(player_type *player_ptr, OBJECT_IDX o_idx)
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
-    if ((o_ptr->name1 == ART_CRIMSON) && (player_ptr->pseikaku == PERSONALITY_COMBAT)) {
+    if ((o_ptr->name1 == ART_CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
         msg_format("こうして、%sは『クリムゾン』を手に入れた。", player_ptr->name);
         msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
         msg_format("%sに襲いかかる．．．", player_ptr->name);

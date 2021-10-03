@@ -83,16 +83,19 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
         break;
 
     case 2:
-        if (name)
+        if (name) {
             return _("恐怖除去", "Remove Fear");
-        if (desc)
-            return _("恐怖を取り除く。", "Removes fear.");
-        {
-            if (cast)
-                set_afraid(player_ptr, 0);
         }
-        break;
 
+        if (desc) {
+            return _("恐怖を取り除く。", "Removes fear.");
+        }
+
+        if (cast) {
+            (void)BadStatusSetter(player_ptr).afraidness(0);
+        }
+
+        break;
     case 3:
         if (name)
             return _("威圧", "Scare Monster");
@@ -160,17 +163,21 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
         break;
 
     case 7:
-        if (name)
+        if (name) {
             return _("身体浄化", "Purify");
-        if (desc)
-            return _("傷、毒、朦朧から全快する。", "Heals all cuts, poisons and being stunned.");
-        {
-            if (cast) {
-                set_cut(player_ptr, 0);
-                set_poisoned(player_ptr, 0);
-                set_stun(player_ptr, 0);
-            }
         }
+
+        if (desc) {
+            return _("傷、毒、朦朧から全快する。", "Heals all cuts, poisons and being stunned.");
+        }
+
+        if (cast) {
+            BadStatusSetter bss(player_ptr);
+            (void)bss.cut(0);
+            (void)bss.poison(0);
+            (void)bss.stun(0);
+        }
+
         break;
 
     case 8:
@@ -307,30 +314,34 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
         }
         break;
 
-    case 15:
-        if (name)
+    case 15: {
+        if (name) {
             return _("聖なる御言葉", "Holy Word");
-        if (desc)
+        }
+
+        if (desc) {
             return _("視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。",
                 "Damages all evil monsters in sight, heals HP somewhat and completely cures fear, poisons, cuts and being stunned.");
-
-        {
-            int dam_sides = plev * 6;
-            int heal = 100;
-
-            if (info)
-                return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
-            if (cast) {
-                dispel_evil(player_ptr, randint1(dam_sides));
-                hp_player(player_ptr, heal);
-                set_afraid(player_ptr, 0);
-                set_poisoned(player_ptr, 0);
-                set_stun(player_ptr, 0);
-                set_cut(player_ptr, 0);
-            }
         }
-        break;
 
+        auto dam_sides = plev * 6;
+        auto heal = 100;
+        if (info) {
+            return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
+        }
+
+        if (cast) {
+            BadStatusSetter bss(player_ptr);
+            dispel_evil(player_ptr, randint1(dam_sides));
+            hp_player(player_ptr, heal);
+            (void)bss.afraidness(0);
+            (void)bss.poison(0);
+            (void)bss.stun(0);
+            (void)bss.cut(0);
+        }
+
+        break;
+    }    
     case 16:
         if (name)
             return _("開かれた道", "Unbarring Ways");
@@ -622,44 +633,46 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
         break;
 
     case 31:
-        if (name)
+        if (name) {
             return _("聖戦", "Crusade");
-        if (desc)
+        }
+
+        if (desc) {
             return _("視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、"
                      "ヒーロー、祝福、加速、対邪悪結界を得る。",
                 "Attempts to charm all good monsters in sight and scares all non-charmed monsters. Summons a great number of knights. Gives heroism, bless, "
                 "speed and protection from evil to the caster.");
-
-        {
-            if (cast) {
-                int base = 25;
-                int sp_sides = 20 + plev;
-                int sp_base = plev;
-
-                int i;
-                crusade(player_ptr);
-                for (i = 0; i < 12; i++) {
-                    int attempt = 10;
-                    POSITION my = 0, mx = 0;
-
-                    while (attempt--) {
-                        scatter(player_ptr, &my, &mx, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-
-                        /* Require empty grids */
-                        if (is_cave_empty_bold2(player_ptr, my, mx))
-                            break;
-                    }
-                    if (attempt < 0)
-                        continue;
-                    summon_specific(player_ptr, -1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
-                }
-                set_hero(player_ptr, randint1(base) + base, false);
-                set_blessed(player_ptr, randint1(base) + base, false);
-                set_fast(player_ptr, randint1(sp_sides) + sp_base, false);
-                set_protevil(player_ptr, randint1(base) + base, false);
-                set_afraid(player_ptr, 0);
-            }
         }
+        
+        if (cast) {
+            auto base = 25;
+            auto sp_sides = 20 + plev;
+            auto sp_base = plev;
+            crusade(player_ptr);
+            for (auto i = 0; i < 12; i++) {
+                auto attempt = 10;
+                POSITION my = 0, mx = 0;
+                while (attempt--) {
+                    scatter(player_ptr, &my, &mx, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
+                    if (is_cave_empty_bold2(player_ptr, my, mx)) {
+                        break;
+                    }
+                }
+
+                if (attempt < 0) {
+                    continue;
+                }
+
+                summon_specific(player_ptr, -1, my, mx, plev, SUMMON_KNIGHTS, PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE);
+            }
+
+            set_hero(player_ptr, randint1(base) + base, false);
+            set_blessed(player_ptr, randint1(base) + base, false);
+            set_fast(player_ptr, randint1(sp_sides) + sp_base, false);
+            set_protevil(player_ptr, randint1(base) + base, false);
+            (void)BadStatusSetter(player_ptr).afraidness(0);
+        }
+
         break;
     }
 

@@ -277,16 +277,18 @@ concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
         break;
 
     case 13:
-        if (name)
+        if (name) {
             return _("解毒", "Cure Poison");
-        if (desc)
-            return _("毒を体内から完全に取り除く。", "Cures yourself of any poisons.");
-
-        {
-            if (cast) {
-                set_poisoned(player_ptr, 0);
-            }
         }
+
+        if (desc) {
+            return _("毒を体内から完全に取り除く。", "Cures yourself of any poisons.");
+        }
+
+        if (cast) {
+            (void)BadStatusSetter(player_ptr).poison(0);
+        }
+
         break;
 
     case 14:

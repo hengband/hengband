@@ -206,7 +206,7 @@ static void display_equipments_compensation(player_type *player_ptr, int row, in
             TERM_COLOR a = TERM_SLATE;
             char c = '.';
             if (flags.has(TR_STATUS_LIST[stat])) {
-                compensate_stat_by_weapon(&c, &a, o_ptr, TR_STATUS_LIST[stat], flags);
+                compensate_stat_by_weapon(&c, &a, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
             } else if (flags.has(TR_SUST_STATUS_LIST[stat])) {
                 a = TERM_GREEN;
                 c = 's';

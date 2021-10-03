@@ -34,4 +34,5 @@ enum sv_wand_type {
     SV_WAND_ROCKETS = 29,
     SV_WAND_STRIKING = 30,
     SV_WAND_GENOCIDE = 31,
+    SV_WAND_MAX,
 };

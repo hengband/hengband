@@ -22,42 +22,31 @@ concptr argv0 = nullptr;
 /*
  * Determine if string "t" is equal to string "t"
  */
-bool streq(concptr a, concptr b)
+bool streq(std::string_view a, std::string_view b)
 {
-	return (!strcmp(a, b));
+    return a == b;
 }
-
 
 /*
  * Determine if string "t" is a suffix of string "s"
  */
-bool suffix(concptr s, concptr t)
+bool suffix(std::string_view s, std::string_view t)
 {
-	int tlen = strlen(t);
-	int slen = strlen(s);
+    //! @todo C++20 では ends_with が使用可能
+    if (t.size() > s.size()) {
+        return false;
+    }
 
-	/* Check for incompatible lengths */
-	if (tlen > slen) return false;
-
-	/* Compare "t" to the end of "s" */
-	return (!strcmp(s + slen - tlen, t));
+    return s.compare(s.size() - t.size(), s.npos, t) == 0;
 }
-
 
 /*
  * Determine if string "t" is a prefix of string "s"
  */
-bool prefix(concptr s, concptr t)
+bool prefix(std::string_view s, std::string_view t)
 {
-	/* Scan "t" */
-	while (*t)
-	{
-		/* Compare content and length */
-		if (*t++ != *s++) return false;
-	}
-
-	/* Matched, we have a prefix */
-	return true;
+    //! @todo C++20 では starts_with が使用可能
+    return s.substr(0, t.size()) == t;
 }
 
 

@@ -12,6 +12,7 @@
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
 #include "game-option/play-record-options.h"
 #include "io/files-util.h"
 #include "io/report.h"
@@ -71,8 +72,7 @@ MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_
 bool MonsterDamageProcessor::mon_take_hit(concptr note)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    monster_type exp_mon;
-    (void)COPY(&exp_mon, m_ptr, monster_type);
+    auto exp_mon = *m_ptr;
 
     auto exp_dam = (m_ptr->hp > this->dam) ? this->dam : m_ptr->hp;
 
@@ -87,7 +87,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
     }
 
-    if (w_ptr->wizard) {
+    if (allow_debug_options) {
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
     }
 
@@ -108,9 +108,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
 
     this->set_redraw();
     (void)set_monster_csleep(this->player_ptr, this->m_idx, 0);
-    if (this->player_ptr->special_defense & NINJA_S_STEALTH) {
-        set_superstealth(this->player_ptr, false);
-    }
+    set_superstealth(this->player_ptr, false);
 
     return this->m_idx == 0;
 }
@@ -281,7 +279,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (((m_ptr->ml == 0) || this->player_ptr->image) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (((m_ptr->ml == 0) || this->player_ptr->hallucinated) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
         return;
     }
 

@@ -1,16 +1,13 @@
 ﻿#include "cmd-io/macro-util.h"
 
-/* Array of macro types [MACRO_MAX] */
-bool *macro__cmd;
-
 /* Current macro action [1024] */
-char *macro__buf;
+std::vector<char> macro__buf;
 
 /* Array of macro patterns [MACRO_MAX] */
-concptr *macro__pat;
+std::vector<std::string> macro__pat;
 
 /* Array of macro actions [MACRO_MAX] */
-concptr *macro__act;
+std::vector<std::string> macro__act;
 
 /* Number of active macros */
 int16_t macro__num;
@@ -93,7 +90,7 @@ int macro_find_ready(concptr pat)
         if (!prefix(pat, macro__pat[i]))
             continue;
 
-        t = strlen(macro__pat[i]);
+        t = macro__pat[i].size();
         if ((n >= 0) && (s > t))
             continue;
 
@@ -126,14 +123,12 @@ errr macro_add(concptr pat, concptr act)
         return -1;
 
     int n = macro_find_exact(pat);
-    if (n >= 0) {
-        string_free(macro__act[n]);
-    } else {
+    if (n < 0) {
         n = macro__num++;
-        macro__pat[n] = string_make(pat);
+        macro__pat[n] = pat;
     }
 
-    macro__act[n] = string_make(act);
+    macro__act[n] = act;
     macro__use[(byte)(pat[0])] = true;
     return 0;
 }

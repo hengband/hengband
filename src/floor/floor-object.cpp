@@ -54,12 +54,11 @@
  */
 static errr get_obj_num_prep(void)
 {
-    alloc_entry *table = alloc_kind_table;
-    for (OBJECT_IDX i = 0; i < alloc_kind_size; i++) {
-        if (!get_obj_num_hook || (*get_obj_num_hook)(table[i].index)) {
-            table[i].prob2 = table[i].prob1;
+    for (auto &entry : alloc_kind_table) {
+        if (!get_obj_num_hook || (*get_obj_num_hook)(entry.index)) {
+            entry.prob2 = entry.prob1;
         } else {
-            table[i].prob2 = 0;
+            entry.prob2 = 0;
         }
     }
 
@@ -82,61 +81,78 @@ static void object_mention(player_type *player_ptr, object_type *o_ptr)
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
+static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, int rq_level)
+{
+    if (any_bits(mode, AM_GREAT)) {
+        if (rq_level > 0) {
+            return rq_level + 10 + randint1(10);
+        } else {
+            return floor_ptr->object_level + 15;
+        }
+    }
+
+    if (any_bits(mode, AM_GOOD)) {
+        return floor_ptr->object_level + 10;
+    }
+
+    return floor_ptr->object_level;
+}
+
+static void set_ammo_quantity(object_type *j_ptr)
+{
+    auto is_ammo = j_ptr->tval == TV_SPIKE;
+    is_ammo |= j_ptr->tval == TV_SHOT;
+    is_ammo |= j_ptr->tval == TV_ARROW;
+    is_ammo |= j_ptr->tval == TV_BOLT;
+    if (is_ammo && !j_ptr->is_fixed_artifact()) {
+        j_ptr->number = damroll(6, 7);
+    }
+}
+
 /*!
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
- * @return 生成に成功したらTRUEを返す。
+ * @param rq_floor ランダムクエスト討伐対象のレベル
+ * @return アイテムの生成成功可否
  * @details
- * This routine plays nasty games to generate the "special artifacts".\n
- * This routine uses "floor_ptr->object_level" for the "generation level".\n
- * We assume that the given object has been "wiped".\n
+ * rq_levelは、ユニークのレベルであってランダムクエストの階層ではない
+ * ランダムクエストではない場合、-1が入る
  */
-bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode)
+bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, int rq_level)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     PERCENTAGE prob = ((mode & AM_GOOD) ? 10 : 1000);
-    DEPTH base = ((mode & AM_GOOD) ? (floor_ptr->object_level + 10) : floor_ptr->object_level);
+    auto base = get_base_floor(floor_ptr, mode, rq_level);
     if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
-        KIND_OBJECT_IDX k_idx;
-        if ((mode & AM_GOOD) && !get_obj_num_hook) {
+        if (any_bits(mode, AM_GOOD) && !get_obj_num_hook) {
             get_obj_num_hook = kind_is_good;
         }
 
-        if (get_obj_num_hook)
+        if (get_obj_num_hook) {
             get_obj_num_prep();
+        }
 
-        k_idx = get_obj_num(player_ptr, base, mode);
+        auto k_idx = get_obj_num(player_ptr, base, mode);
         if (get_obj_num_hook) {
             get_obj_num_hook = nullptr;
             get_obj_num_prep();
         }
 
-        if (!k_idx)
+        if (k_idx == 0) {
             return false;
+        }
 
         j_ptr->prep(k_idx);
     }
 
     apply_magic_to_object(player_ptr, j_ptr, floor_ptr->object_level, mode);
-    switch (j_ptr->tval) {
-    case TV_SPIKE:
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
-        if (!j_ptr->name1) {
-            j_ptr->number = (byte)damroll(6, 7);
-        }
-    
-        break;
-    default:
-        break;
-    }
-
-    if (cheat_peek)
+    set_ammo_quantity(j_ptr);
+    if (cheat_peek) {
         object_mention(player_ptr, j_ptr);
+    }
 
     return true;
 }
@@ -205,7 +221,7 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
  */
 void floor_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    const floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
     object_type *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;
@@ -332,15 +348,14 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
     bool plural = (j_ptr->number != 1);
 #endif
     describe_flavor(player_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+
+    // 破損.
     if (!j_ptr->is_artifact() && (randint0(100) < chance)) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (w_ptr->wizard)
-            msg_print(_("(破損)", "(breakage)"));
-
         return 0;
     }
 
@@ -401,15 +416,13 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
         }
     }
 
+    // ドロップグリッド確保不能.
     if (!flag && !j_ptr->is_artifact()) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (w_ptr->wizard)
-            msg_print(_("(床スペースがない)", "(no floor space)"));
-
         return 0;
     }
 
@@ -438,16 +451,13 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
             }
         }
 
+        // ドロップグリッド確保不能.
         if (!candidates) {
 #ifdef JP
             msg_format("%sは消えた。", o_name);
 #else
             msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-
-            if (w_ptr->wizard)
-                msg_print(_("(床スペースがない)", "(no floor space)"));
-
             if (preserve_mode) {
                 if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
                     a_info[j_ptr->name1].cur_num = 0;
@@ -489,15 +499,13 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
     if (!done)
         o_idx = o_pop(floor_ptr);
 
+    // アイテム多過.
     if (!done && !o_idx) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-        if (w_ptr->wizard)
-            msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
-
         if (j_ptr->is_fixed_artifact()) {
             a_info[j_ptr->name1].cur_num = 0;
         }

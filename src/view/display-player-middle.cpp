@@ -7,7 +7,9 @@
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/race-types.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -69,19 +71,16 @@ static void display_sub_hand(player_type *player_ptr)
     if ((player_ptr->pclass != CLASS_MONK) || ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) == 0))
         return;
 
-    if ((player_ptr->special_defense & KAMAE_MASK) == 0) {
+    PlayerClass pc(player_ptr);
+    if (pc.monk_stance_is(MonkStance::NONE)) {
         display_player_one_line(ENTRY_POSTURE, _("構えなし", "none"), TERM_YELLOW);
         return;
     }
 
-    int kamae_num;
-    for (kamae_num = 0; kamae_num < MAX_KAMAE; kamae_num++) {
-        if ((player_ptr->special_defense >> kamae_num) & KAMAE_GENBU)
-            break;
-    }
+    uint stance_num = enum2i(pc.get_monk_stance()) - 1;
 
-    if (kamae_num < MAX_KAMAE) {
-        display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), monk_stances[kamae_num].desc), TERM_YELLOW);
+    if (stance_num < monk_stances.size()) {
+        display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), monk_stances[stance_num].desc), TERM_YELLOW);
     }
 }
 

@@ -318,9 +318,8 @@ void lite_room(player_type *player_ptr, const POSITION y1, const POSITION x1)
     cave_temp_room_lite(player_ptr, points);
 
     // 超隠密状態の更新。
-    if (player_ptr->special_defense & NINJA_S_STEALTH) {
-        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW)
-            set_superstealth(player_ptr, false);
+    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+        set_superstealth(player_ptr, false);
     }
 }
 

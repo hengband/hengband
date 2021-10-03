@@ -285,7 +285,7 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
             snprintf(str, sizeof(str), "%-49s  (\?\?)/%d", title.str().c_str(), consumption);
         }
 
-        auto col = (smith.get_addable_count(effect, 1) > 0) ? TERM_WHITE : TERM_RED;
+        auto col = (smith.get_addable_count(effect) > 0) ? TERM_WHITE : TERM_RED;
         c_prt(col, str, ctr + 2, x);
     }
 }
@@ -415,7 +415,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
 
             effect_idx = page * effect_num_per_page + i;
             /* Totally Illegal */
-            if ((effect_idx < 0) || (effect_idx >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[effect_idx], 1) <= 0) {
+            if ((effect_idx < 0) || (effect_idx >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[effect_idx]) <= 0) {
                 bell();
                 continue;
             }
@@ -462,7 +462,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
         msg_format(_("%d個あるのでエッセンスは%d必要です。", "For %d items, it will take %d essences."), o_ptr->number, use_essence);
     }
 
-    if (smith.get_addable_count(effect, o_ptr->number) == 0) {
+    if (smith.get_addable_count(effect, o_ptr) == 0) {
         msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
         return;
     }
@@ -481,7 +481,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
         } else if (o_ptr->pval == 0) {
             char tmp[80];
             char tmp_val[8];
-            auto limit = std::min(5, smith.get_addable_count(effect, o_ptr->number));
+            auto limit = std::min(5, smith.get_addable_count(effect, o_ptr));
 
             sprintf(tmp, _("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
             strcpy(tmp_val, "1");
@@ -503,7 +503,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
 
     msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence * add_essence_count);
 
-    if (smith.get_addable_count(effect, o_ptr->number) < add_essence_count) {
+    if (smith.get_addable_count(effect, o_ptr) < add_essence_count) {
         msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
         return;
     }

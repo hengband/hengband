@@ -30,6 +30,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+#include <string>
+
 //!< @todo コールバック関数に変更するので、いずれ消す.
 #define PREF_TYPE_NORMAL 0
 #define PREF_TYPE_AUTOPICK 1
@@ -62,7 +64,9 @@ static errr process_pref_file_aux(player_type *player_ptr, concptr name, int pre
     int line = -1;
     errr err = 0;
     bool bypass = false;
-    while (angband_fgets(fp, file_read__buf, FILE_READ_BUFF_SIZE) == 0) {
+    std::vector<char> file_read__buf(FILE_READ_BUFF_SIZE);
+    std::string error_line;
+    while (angband_fgets(fp, file_read__buf.data(), file_read__buf.size()) == 0) {
         line++;
         if (!file_read__buf[0])
             continue;
@@ -75,13 +79,13 @@ static errr process_pref_file_aux(player_type *player_ptr, concptr name, int pre
 
         if (file_read__buf[0] == '#')
             continue;
-        strcpy(file_read__swp, file_read__buf);
+        error_line = file_read__buf.data();
 
         /* Process "?:<expr>" */
         if ((file_read__buf[0] == '?') && (file_read__buf[1] == ':')) {
             char f;
             char *s;
-            s = file_read__buf + 2;
+            s = file_read__buf.data() + 2;
             concptr v = process_pref_file_expr(player_ptr, &s, &f);
             bypass = streq(v, "0");
             continue;
@@ -99,13 +103,13 @@ static errr process_pref_file_aux(player_type *player_ptr, concptr name, int pre
             depth_count++;
             switch (preftype) {
             case PREF_TYPE_AUTOPICK:
-                (void)process_autopick_file(player_ptr, file_read__buf + 2);
+                (void)process_autopick_file(player_ptr, file_read__buf.data() + 2);
                 break;
             case PREF_TYPE_HISTPREF:
-                (void)process_histpref_file(player_ptr, file_read__buf + 2);
+                (void)process_histpref_file(player_ptr, file_read__buf.data() + 2);
                 break;
             default:
-                (void)process_pref_file(player_ptr, file_read__buf + 2);
+                (void)process_pref_file(player_ptr, file_read__buf.data() + 2);
                 break;
             }
 
@@ -113,12 +117,12 @@ static errr process_pref_file_aux(player_type *player_ptr, concptr name, int pre
             continue;
         }
 
-        err = interpret_pref_file(player_ptr, file_read__buf);
+        err = interpret_pref_file(player_ptr, file_read__buf.data());
         if (err != 0) {
             if (preftype != PREF_TYPE_AUTOPICK)
                 break;
 
-            process_autopick_file_command(file_read__buf);
+            process_autopick_file_command(file_read__buf.data());
             err = 0;
         }
     }
@@ -127,7 +131,7 @@ static errr process_pref_file_aux(player_type *player_ptr, concptr name, int pre
         /* Print error message */
         /* ToDo: Add better error messages */
         msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), _(name, err), line, _(err, name));
-        msg_format(_("('%s'を解析中)", "Parsing '%s'"), file_read__swp);
+        msg_format(_("('%s'を解析中)", "Parsing '%s'"), error_line.c_str());
         msg_print(nullptr);
     }
 

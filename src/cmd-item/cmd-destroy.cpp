@@ -20,6 +20,8 @@
 #include "object/item-use-flags.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -194,8 +196,7 @@ static void exe_destroy_item(player_type *player_ptr, destroy_type *destroy_ptr)
  */
 void do_cmd_destroy(player_type *player_ptr)
 {
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     object_type forge;
     destroy_type tmp_destroy;

@@ -518,12 +518,12 @@ void fix_object(player_type *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static monster_type *monster_on_floor_items(const floor_type *floor_ptr, const grid_type *g_ptr)
+static const monster_type *monster_on_floor_items(floor_type *floor_ptr, const grid_type *g_ptr)
 {
     if (g_ptr->m_idx == 0)
         return nullptr;
 
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (!monster_is_valid(m_ptr) || !m_ptr->ml)
         return nullptr;
 
@@ -550,7 +550,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
     term_clear();
     term_gotoxy(0, 0);
 
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto *g_ptr = &floor_ptr->grid_array[y][x];
     char line[1024];
 
@@ -558,7 +558,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
     if (player_bold(player_ptr, y, x))
         sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
     else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
-        if (player_ptr->image) {
+        if (player_ptr->hallucinated) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
             const monster_race *const r_ptr = &r_info[m_ptr->ap_r_idx];
@@ -597,7 +597,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
 
         term_gotoxy(0, term_y);
 
-        if (player_ptr->image) {
+        if (player_ptr->hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
             describe_flavor(player_ptr, line, o_ptr, 0);

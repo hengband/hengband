@@ -1,6 +1,5 @@
 ﻿#include "game-option/birth-options.h"
 
-bool easy_band; /* Easy Mode (*) */
 bool smart_learn; /* Monsters learn from their mistakes (*) */
 bool smart_cheat; /* Monsters exploit players weaknesses (*) */
 bool vanilla_town; /* Use 'vanilla' town without quests and wilderness */

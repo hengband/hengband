@@ -80,9 +80,9 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    shape_buffer(personality_explanations[player_ptr->pseikaku], 78, temp, sizeof(temp));
+    shape_buffer(personality_explanations[player_ptr->ppersonality], 78, temp, sizeof(temp));
     fprintf(fff, "\n");
-    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->pseikaku].title);
+    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->ppersonality].title);
 
     t = temp;
     for (int i = 0; i < A_MAX; i++) {

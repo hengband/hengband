@@ -6,7 +6,6 @@
 
 #include "spell/spells-object.h"
 #include "avatar/avatar.h"
-#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -32,10 +31,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-info/class-info.h"
-#include "player/player-damage.h"
 #include "racial/racial-android.h"
-#include "spell-kind/spells-perception.h"
-#include "status/bad-status-setter.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -124,19 +120,21 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
         fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
 
         if (insta_art || fixed_art) {
-            for (a_idx = 1; a_idx < max_a_idx; a_idx++) {
-                if (insta_art && !a_info[a_idx].gen_flags.has(TRG::INSTA_ART))
+            for (const auto &a_ref : a_info) {
+                if (a_ref.idx == 0)
                     continue;
-                if (a_info[a_idx].tval != k_info[k_idx].tval)
+                if (insta_art && !a_ref.gen_flags.has(TRG::INSTA_ART))
                     continue;
-                if (a_info[a_idx].sval != k_info[k_idx].sval)
+                if (a_ref.tval != k_info[k_idx].tval)
                     continue;
-                if (a_info[a_idx].cur_num > 0)
+                if (a_ref.sval != k_info[k_idx].sval)
+                    continue;
+                if (a_ref.cur_num > 0)
                     continue;
                 break;
             }
 
-            if (a_idx >= max_a_idx)
+            if (a_idx >= static_cast<ARTIFACT_IDX>(a_info.size()))
                 continue;
         }
 
@@ -194,7 +192,7 @@ void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, boo
         i_ptr->wipe();
 
         /* Make a good (or great) object (if possible) */
-        if (!make_object(player_ptr, i_ptr, mode))
+        if (!make_object(player_ptr, i_ptr, mode, -1))
             continue;
 
         if (known) {
@@ -353,48 +351,6 @@ void brand_bolts(player_type *player_ptr)
     if (flush_failure)
         flush();
     msg_print(_("炎で強化するのに失敗した。", "The fiery enchantment failed."));
-}
-
-/*!
- * @brief 知識の石の発動を実行する / Do activation of the stone of lore.
- * @param player_ptr プレイヤー情報への参照ポインタ
- * @return 実行したらTRUE、しなかったらFALSE
- * @details
- * 鑑定を実行した後HPを消費する。1/5で混乱し、1/20で追加ダメージ。
- * MPがある場合はさらにMPを20消費する。不足する場合は麻痺及び混乱。
- */
-bool perilous_secrets(player_type *player_ptr)
-{
-    if (!ident_spell(player_ptr, false))
-        return false;
-
-    if (player_ptr->msp > 0) {
-        if (20 <= player_ptr->csp)
-            player_ptr->csp -= 20;
-        else {
-            int oops = 20 - player_ptr->csp;
-
-            player_ptr->csp = 0;
-            player_ptr->csp_frac = 0;
-
-            msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
-
-            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(5 * oops + 1));
-            (void)set_confused(player_ptr, player_ptr->confused + randint1(5 * oops + 1));
-        }
-
-        player_ptr->redraw |= (PR_MANA);
-    }
-
-    take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"));
-
-    if (one_in_(5))
-        (void)set_confused(player_ptr, player_ptr->confused + randint1(10));
-
-    if (one_in_(20))
-        take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"));
-
-    return true;
 }
 
 /*!

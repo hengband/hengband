@@ -7,7 +7,6 @@ typedef struct quest_type quest_type;
 void load_zangband_options(void);
 void set_zangband_realm(player_type *player_ptr);
 void set_zangband_skill(player_type *player_ptr);
-void set_zangband_spells(player_type *player_ptr);
 void set_zangband_race(player_type *player_ptr);
 void set_zangband_bounty_uniques(player_type *player_ptr);
 void set_zangband_mimic(player_type *player_ptr);

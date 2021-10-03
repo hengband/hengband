@@ -21,7 +21,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果のIDを返す
  */
-int activation_index(const object_type *o_ptr)
+RandomArtActType activation_index(const object_type *o_ptr)
 {
     if (auto act_idx = Smith::object_activation(o_ptr); act_idx.has_value()) {
         return act_idx.value();
@@ -36,7 +36,7 @@ int activation_index(const object_type *o_ptr)
     if (!o_ptr->is_random_artifact() && k_info[o_ptr->k_idx].flags.has(TR_ACTIVATE))
         return k_info[o_ptr->k_idx].act_idx;
 
-    return o_ptr->xtra2;
+    return o_ptr->activation_id;
 }
 
 /*!
@@ -45,13 +45,14 @@ int activation_index(const object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果構造体のポインタを返す
  */
-const activation_type *find_activation_info(const object_type *o_ptr)
+std::optional<const activation_type *> find_activation_info(const object_type *o_ptr)
 {
-    const int index = activation_index(o_ptr);
-    const activation_type *p;
-    for (p = activation_info; p->flag != nullptr; ++p)
-        if (p->index == index)
-            return p;
+    const auto index = activation_index(o_ptr);
+    for (const auto &p : activation_info) {
+        if (p.index == index) {
+            return &p;
+        }
+    }
 
-    return nullptr;
+    return std::nullopt;
 }

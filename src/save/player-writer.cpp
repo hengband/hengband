@@ -3,13 +3,17 @@
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
 #include "save/info-writer.h"
+#include "save/player-class-specific-data-writer.h"
 #include "save/save-util.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
+
+#include <variant>
 
 /*!
  * @brief セーブデータに領域情報を書き込む / Write player realms
@@ -40,7 +44,7 @@ void wr_player(player_type *player_ptr)
 
     wr_byte((byte)player_ptr->prace);
     wr_byte((byte)player_ptr->pclass);
-    wr_byte((byte)player_ptr->pseikaku);
+    wr_byte((byte)player_ptr->ppersonality);
     wr_byte((byte)player_ptr->psex);
     wr_relams(player_ptr);
     wr_byte(0);
@@ -81,22 +85,13 @@ void wr_player(player_type *player_ptr)
     for (int i = 0; i < MAX_SKILLS; i++)
         wr_s16b(player_ptr->skill_exp[i]);
 
-    for (int i = 0; i < MAX_SPELLS; i++)
-        wr_s32b(player_ptr->magic_num1[i]);
-
-    for (int i = 0; i < MAX_SPELLS; i++)
-        wr_byte(player_ptr->magic_num2[i]);
+    std::visit(PlayerClassSpecificDataWriter(), player_ptr->class_specific_data);
 
     wr_byte((byte)player_ptr->start_race);
     wr_s32b(player_ptr->old_race1);
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
-    for (int i = 0; i < MAX_MANE; i++) {
-        wr_s16b((int16_t)player_ptr->mane_spell[i]);
-        wr_s16b((int16_t)player_ptr->mane_dam[i]);
-    }
 
-    wr_s16b(player_ptr->mane_num);
     for (int i = 0; i < MAX_BOUNTY; i++)
         wr_s16b(w_ptr->bounty_r_idx[i]);
 
@@ -126,7 +121,7 @@ void wr_player(player_type *player_ptr)
     wr_u32b(player_ptr->csp_frac);
     wr_s16b(player_ptr->max_plv);
 
-    byte tmp8u = (byte)w_ptr->max_d_idx;
+    byte tmp8u = (byte)d_info.size();
     wr_byte(tmp8u);
     for (int i = 0; i < tmp8u; i++)
         wr_s16b((int16_t)max_dlv[i]);
@@ -136,7 +131,6 @@ void wr_player(player_type *player_ptr)
     wr_s16b(0);
     wr_s16b(0);
     wr_s16b(player_ptr->sc);
-    wr_s16b(player_ptr->concent);
 
     auto effects = player_ptr->effects();
     wr_s16b(0); /* old "rest" */
@@ -151,10 +145,10 @@ void wr_player(player_type *player_ptr)
     wr_s16b(player_ptr->fast);
     wr_s16b(player_ptr->slow);
     wr_s16b(player_ptr->afraid);
-    wr_s16b(player_ptr->cut);
+    wr_s16b(effects->cut()->current());
     wr_s16b(effects->stun()->current());
     wr_s16b(player_ptr->poisoned);
-    wr_s16b(player_ptr->image);
+    wr_s16b(player_ptr->hallucinated);
     wr_s16b(player_ptr->protevil);
     wr_s16b(player_ptr->invuln);
     wr_s16b(player_ptr->ult_res);

@@ -39,8 +39,7 @@ which are affected by the sex and race of the character.  In general,
 these attributes are only used to provide "flavor" to the character,
 to assist in role playing, but they do have a few minor effects on
 the game.  For example, background history affects social class, which
-affects the amount of money the character will start with.  And weight
-affects riding ability.
+affects the amount of money the character will start with.
 
 In addition to these attributes, there are several statistics which
 are used to determine your character's relative skills and abilities

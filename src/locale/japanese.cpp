@@ -164,11 +164,10 @@ void sjis2euc(char *str)
 {
     int i;
     unsigned char c1, c2;
-    unsigned char *tmp;
 
     int len = strlen(str);
 
-    C_MAKE(tmp, len + 1, byte);
+    std::vector<char> tmp(len + 1);
 
     for (i = 0; i < len; i++) {
         c1 = str[i];
@@ -188,9 +187,7 @@ void sjis2euc(char *str)
             tmp[i] = c1;
     }
     tmp[len] = 0;
-    strcpy(str, (char *)tmp);
-
-    C_KILL(tmp, len + 1, byte);
+    strcpy(str, tmp.data());
 }
 
 /*!
@@ -202,11 +199,10 @@ void euc2sjis(char *str)
 {
     int i;
     unsigned char c1, c2;
-    unsigned char *tmp;
 
     int len = strlen(str);
 
-    C_MAKE(tmp, len + 1, byte);
+    std::vector<char> tmp(len + 1);
 
     for (i = 0; i < len; i++) {
         c1 = str[i];
@@ -227,9 +223,7 @@ void euc2sjis(char *str)
             tmp[i] = c1;
     }
     tmp[len] = 0;
-    strcpy(str, (char *)tmp);
-
-    C_KILL(tmp, len + 1, byte);
+    strcpy(str, tmp.data());
 }
 
 /*!
@@ -481,24 +475,20 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
 
 #elif defined(SJIS) && defined(WINDOWS)
 
-    LPWSTR utf16buf;
     int input_len = strlen(utf8_str) + 1; /* include termination character */
 
-    C_MAKE(utf16buf, input_len, WCHAR);
+    std::vector<WCHAR> utf16buf(input_len);
 
     /* UTF-8 -> UTF-16 */
-    if (MultiByteToWideChar(CP_UTF8, 0, utf8_str, input_len, utf16buf, input_len) == 0) {
-        C_KILL(utf16buf, input_len, WCHAR);
+    if (MultiByteToWideChar(CP_UTF8, 0, utf8_str, input_len, utf16buf.data(), input_len) == 0) {
         return false;
     }
 
     /* UTF-8 -> SJIS(CP932) */
-    if (WideCharToMultiByte(932, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, nullptr, nullptr) == 0) {
-        C_KILL(utf16buf, input_len, WCHAR);
+    if (WideCharToMultiByte(932, 0, utf16buf.data(), -1, sys_str_buffer, sys_str_buflen, nullptr, nullptr) == 0) {
         return false;
     }
 
-    C_KILL(utf16buf, input_len, WCHAR);
     return true;
 
 #endif
@@ -517,14 +507,12 @@ void guess_convert_to_system_encoding(char *strbuf, int buflen)
         return;
 
     if (is_utf8_str(strbuf)) {
-        char *work;
-        C_MAKE(work, buflen, char);
-        angband_strcpy(work, strbuf, buflen);
-        if (!utf8_to_sys(work, strbuf, buflen)) {
+        std::vector<char> work(buflen);
+        angband_strcpy(work.data(), strbuf, buflen);
+        if (!utf8_to_sys(work.data(), strbuf, buflen)) {
             msg_print("警告:文字コードの変換に失敗しました");
             msg_print(nullptr);
         }
-        C_KILL(work, buflen, char);
     }
 }
 

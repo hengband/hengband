@@ -24,6 +24,10 @@
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
+#include "player-base/player-class.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
@@ -36,6 +40,7 @@
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -50,9 +55,9 @@ static bool confirm_leave_level(player_type *player_ptr, bool down_stair)
 {
     quest_type *q_ptr = &quest[player_ptr->current_floor_ptr->inside_quest];
     if (confirm_quest && player_ptr->current_floor_ptr->inside_quest
-        && (q_ptr->type == QUEST_TYPE_RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QUEST_STATUS_COMPLETED)
+        && (q_ptr->type == QuestKindType::RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED)
             || (q_ptr->flags & QUEST_FLAG_TOWER
-                && ((q_ptr->status != QUEST_STATUS_STAGE_COMPLETED) || (down_stair && (quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED)))))) {
+                && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[QUEST_TOWER1].status != QuestStatusType::COMPLETED)))))) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
         return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
@@ -69,8 +74,7 @@ void do_cmd_go_up(player_type *player_ptr)
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int up_num = 0;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (f_ptr->flags.has_not(FF::LESS)) {
         msg_print(_("ここには上り階段が見当たらない。", "I see no up staircase here."));
@@ -86,15 +90,17 @@ void do_cmd_go_up(player_type *player_ptr)
         else
             msg_print(_("上の階に登った。", "You enter the up staircase."));
 
+        sound(SOUND_STAIRWAY);
+
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (!quest[player_ptr->current_floor_ptr->inside_quest].status) {
-            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
+        if (quest[player_ptr->current_floor_ptr->inside_quest].status == QuestStatusType::UNTAKEN) {
+            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[player_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+            quest[player_ptr->current_floor_ptr->inside_quest].status = QuestStatusType::TAKEN;
         }
 
         if (!player_ptr->current_floor_ptr->inside_quest) {
@@ -122,12 +128,12 @@ void do_cmd_go_up(player_type *player_ptr)
     if (autosave_l)
         do_cmd_save_game(player_ptr, true);
 
-    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_RANDOM) {
+    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = 0;
     }
 
-    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
+    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
         player_ptr->current_floor_ptr->dun_level = 0;
@@ -161,6 +167,8 @@ void do_cmd_go_up(player_type *player_ptr)
             msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
     }
 
+    sound(SOUND_STAIRWAY);
+
     player_ptr->leaving = true;
 }
 
@@ -172,8 +180,7 @@ void do_cmd_go_down(player_type *player_ptr)
 {
     bool fall_trap = false;
     int down_num = 0;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -199,16 +206,18 @@ void do_cmd_go_down(player_type *player_ptr)
         else
             msg_print(_("下の階に降りた。", "You enter the down staircase."));
 
+        sound(SOUND_STAIRWAY);
+
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (!quest[player_ptr->current_floor_ptr->inside_quest].status) {
-            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) {
+        if (quest[player_ptr->current_floor_ptr->inside_quest].status == QuestStatusType::UNTAKEN) {
+            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[player_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+            quest[player_ptr->current_floor_ptr->inside_quest].status = QuestStatusType::TAKEN;
         }
 
         if (!player_ptr->current_floor_ptr->inside_quest) {
@@ -276,6 +285,8 @@ void do_cmd_go_down(player_type *player_ptr)
             else
                 msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));
         }
+
+        sound(SOUND_STAIRWAY);
     }
 
     player_ptr->leaving = true;
@@ -310,8 +321,9 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
     if (get_rep_dir(player_ptr, &dir, false)) {
         PlayerEnergy energy(player_ptr);
         energy.set_player_turn_energy(100);
-        if ((dir != 5) && (player_ptr->special_defense & KATA_MUSOU))
-            set_action(player_ptr, ACTION_NONE);
+        if (dir != 5) {
+            PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+        }
 
         if (player_ptr->wild_mode) {
             energy.mul_player_turn_energy((MAX_HGT + MAX_WID) / 2);
@@ -355,8 +367,7 @@ void do_cmd_run(player_type *player_ptr)
     if (cmd_limit_confused(player_ptr))
         return;
 
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     if (get_rep_dir(player_ptr, &dir, false)) {
         player_ptr->running = (command_arg ? command_arg : 1000);
@@ -424,8 +435,7 @@ void do_cmd_rest(player_type *player_ptr)
     if (command_arg > 9999)
         command_arg = 9999;
 
-    if (player_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(player_ptr, false);
+    set_superstealth(player_ptr, false);
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (command_arg > 100)
@@ -433,9 +443,10 @@ void do_cmd_rest(player_type *player_ptr)
 
     auto effects = player_ptr->effects();
     auto is_stunned = effects->stun()->is_stunned();
+    auto is_cut = effects->cut()->is_cut();
     if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp == player_ptr->msp) && !player_ptr->blind && !player_ptr->confused
-        && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !player_ptr->cut && !player_ptr->slow && !player_ptr->paralyzed
-        && !player_ptr->image && !player_ptr->word_recall && !player_ptr->alter_reality)
+        && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed
+        && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality)
         chg_virtue(player_ptr, V_DILIGENCE, -1);
 
     player_ptr->resting = command_arg;

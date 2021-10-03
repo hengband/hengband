@@ -380,32 +380,33 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
         }
         break;
 
-    case 17:
-        if (name)
+    case 17: {
+        if (name) {
             return _("悪魔のクローク", "Devil Cloak");
-        if (desc)
+        }
+
+        if (desc) {
             return _("恐怖を取り除き、一定時間、炎と冷気の耐性、炎のオーラを得る。耐性は装備による耐性に累積する。",
                 "Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to those from equipment for more powerful "
                 "resistances.");
-
-        {
-            TIME_EFFECT base = 20;
-
-            if (info)
-                return info_duration(base, base);
-
-            if (cast) {
-                TIME_EFFECT dur = randint1(base) + base;
-
-                set_oppose_fire(player_ptr, dur, false);
-                set_oppose_cold(player_ptr, dur, false);
-                set_tim_sh_fire(player_ptr, dur, false);
-                set_afraid(player_ptr, 0);
-                break;
-            }
         }
-        break;
 
+        TIME_EFFECT base = 20;
+        if (info) {
+            return info_duration(base, base);
+        }
+
+        if (cast) {
+            TIME_EFFECT dur = randint1(base) + base;
+            set_oppose_fire(player_ptr, dur, false);
+            set_oppose_cold(player_ptr, dur, false);
+            set_tim_sh_fire(player_ptr, dur, false);
+            (void)BadStatusSetter(player_ptr).afraidness(0);
+            break;
+        }
+
+        break;
+    }
     case 18:
         if (name)
             return _("溶岩流", "Lava Flow");

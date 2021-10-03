@@ -115,11 +115,6 @@ FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
-/*
- * Maximum number of terrain features in f_info.txt
- */
-FEAT_IDX max_f_idx;
-
 /*!
  * @brief 地形が罠持ちであるかの判定を行う。 / Return TRUE if the given feature is a trap
  * @param feat 地形情報のID
@@ -271,10 +266,8 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
         update_local_illumination(player_ptr, yy, xx);
     }
 
-    if (player_ptr->special_defense & NINJA_S_STEALTH) {
-        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
-            set_superstealth(player_ptr, false);
-        }
+    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+        set_superstealth(player_ptr, false);
     }
 }
 

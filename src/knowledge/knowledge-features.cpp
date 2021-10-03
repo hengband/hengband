@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-features.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon.h"
+#include "game-option/game-play-options.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
@@ -29,14 +30,13 @@
 static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 {
     FEAT_IDX feat_cnt = 0;
-    for (FEAT_IDX i = 0; i < max_f_idx; i++) {
-        feature_type *f_ptr = &f_info[i];
-        if (f_ptr->name.empty())
+    for (const auto &f_ref : f_info) {
+        if (f_ref.name.empty())
             continue;
-        if (f_ptr->mimic != i)
+        if (f_ref.mimic != f_ref.idx)
             continue;
 
-        feat_idx[feat_cnt++] = i;
+        feat_idx[feat_cnt++] = f_ref.idx;
         if (mode & 0x01)
             break;
     }
@@ -67,9 +67,9 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         if (per_page == 1) {
             c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
             c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], (unsigned char)f_ptr->x_char[lighting_level]), row_i,
-                f_idx_col - ((w_ptr->wizard || visual_only) ? 6 : 2));
+                f_idx_col - ((allow_debug_options || visual_only) ? 6 : 2));
         }
-        if (w_ptr->wizard || visual_only) {
+        if (allow_debug_options || visual_only) {
             c_prt(attr, format("%d", f_idx), row_i, f_idx_col);
         }
 
@@ -95,16 +95,13 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
  */
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
-    TERM_COLOR attr_old[F_LIT_MAX];
-    (void)C_WIPE(attr_old, F_LIT_MAX, TERM_COLOR);
-    SYMBOL_CODE char_old[F_LIT_MAX];
-    (void)C_WIPE(char_old, F_LIT_MAX, SYMBOL_CODE);
+    TERM_COLOR attr_old[F_LIT_MAX] = {};
+    SYMBOL_CODE char_old[F_LIT_MAX] = {};
 
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
 
-    FEAT_IDX *feat_idx;
-    C_MAKE(feat_idx, max_f_idx, FEAT_IDX);
+    std::vector<FEAT_IDX> feat_idx(f_info.size());
 
     concptr feature_group_text[] = { "terrains", nullptr };
     int len;
@@ -122,7 +119,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             if (len > max)
                 max = len;
 
-            if (collect_features(feat_idx, 0x01)) {
+            if (collect_features(feat_idx.data(), 0x01)) {
                 grp_idx[grp_cnt++] = i;
             }
         }
@@ -168,11 +165,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 prt(_("グループ", "Group"), 4, 0);
             prt(_("名前", "Name"), 4, max + 3);
             if (use_bigtile) {
-                if (w_ptr->wizard || visual_only)
+                if (allow_debug_options || visual_only)
                     prt("Idx", 4, 62);
                 prt(_("文字 ( l/ d)", "Sym ( l/ d)"), 4, 66);
             } else {
-                if (w_ptr->wizard || visual_only)
+                if (allow_debug_options || visual_only)
                     prt("Idx", 4, 64);
                 prt(_("文字 (l/d)", "Sym (l/d)"), 4, 68);
             }
@@ -199,7 +196,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             display_group_list(0, 6, max, browser_rows, grp_idx, feature_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                feat_cnt = collect_features(feat_idx, 0x00);
+                feat_cnt = collect_features(feat_idx.data(), 0x00);
             }
 
             while (feat_cur < feat_top)
@@ -209,10 +206,10 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
 
         if (!visual_list) {
-            display_feature_list(max + 3, 6, browser_rows, feat_idx, feat_cur, feat_top, visual_only, F_LIT_STANDARD);
+            display_feature_list(max + 3, 6, browser_rows, feat_idx.data(), feat_cur, feat_top, visual_only, F_LIT_STANDARD);
         } else {
             feat_top = feat_cur;
-            display_feature_list(max + 3, 6, 1, feat_idx, feat_cur, feat_top, visual_only, *lighting_level);
+            display_feature_list(max + 3, 6, 1, feat_idx.data(), feat_cur, feat_top, visual_only, *lighting_level);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
@@ -335,8 +332,6 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
         }
     }
-
-    C_KILL(feat_idx, max_f_idx, FEAT_IDX);
 }
 
 /*
@@ -349,20 +344,20 @@ void do_cmd_knowledge_dungeon(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    for (int i = 1; i < w_ptr->max_d_idx; i++) {
+    for (const auto &d_ref : d_info) {
         bool seiha = false;
 
-        if (!d_info[i].maxdepth)
+        if (d_ref.idx == 0 || !d_ref.maxdepth)
             continue;
-        if (!max_dlv[i])
+        if (!max_dlv[d_ref.idx])
             continue;
-        if (d_info[i].final_guardian) {
-            if (!r_info[d_info[i].final_guardian].max_num)
+        if (d_ref.final_guardian) {
+            if (!r_info[d_ref.final_guardian].max_num)
                 seiha = true;
-        } else if (max_dlv[i] == d_info[i].maxdepth)
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth)
             seiha = true;
 
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
+        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
     }
 
     angband_fclose(fff);

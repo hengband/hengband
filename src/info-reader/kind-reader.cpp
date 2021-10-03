@@ -1,4 +1,5 @@
 ﻿#include "info-reader/kind-reader.h"
+#include "artifact/random-art-effects.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
@@ -36,7 +37,7 @@ static bool grab_one_kind_flag(object_kind *k_ptr, std::string_view what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_k_info(std::string_view buf, angband_header *head)
+errr parse_k_info(std::string_view buf, angband_header *)
 {
     static object_kind *k_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
@@ -49,12 +50,13 @@ errr parse_k_info(std::string_view buf, angband_header *head)
         auto i = std::stoi(tokens[1]);
         if (i < error_idx)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-        if (i >= head->info_num)
-            return PARSE_ERROR_OUT_OF_BOUNDS;
+        if (i >= static_cast<int>(k_info.size())) {
+            k_info.resize(i + 1);
+        }
 
         error_idx = i;
         k_ptr = &k_info[i];
-        k_ptr->idx = i;
+        k_ptr->idx = static_cast<KIND_OBJECT_IDX>(i);
 #ifdef JP
         k_ptr->name = tokens[2];
 #endif
@@ -149,10 +151,10 @@ errr parse_k_info(std::string_view buf, angband_header *head)
         if (tokens.size() < 2 || tokens[1].size() == 0)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         auto n = grab_one_activation_flag(tokens[1].c_str());
-        if (n <= 0)
+        if (n <=RandomArtActType::NONE)
             return PARSE_ERROR_INVALID_FLAG;
 
-        k_ptr->act_idx = (IDX)n;
+        k_ptr->act_idx = n;
     } else if (tokens[0] == "F") {
         // F:flags
         if (tokens.size() < 2 || tokens[1].size() == 0)

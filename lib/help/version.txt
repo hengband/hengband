@@ -213,7 +213,7 @@ Implemented 'Saved Floors':
 - Tuned interface to list stack of items in the look command with easy_floor.
 - Added new service of buildings in town which evaluate effects of your AC.
 - Added disturb_high: disturb whenever high-level monster moves
-- Added allow_debug_opts: allow use of debug/cheat options
+- Added allow_debug_options: allow use of debug/cheat options
 - Changed 'munchkin_death' into a cheat option 'cheat_save'.
 - Removed terrain_streams and stupid_monsters.
 - Fixed typos and grammar errors on English. (Thanks to John Mikula)

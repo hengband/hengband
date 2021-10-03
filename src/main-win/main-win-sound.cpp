@@ -14,6 +14,7 @@
 #include "main/sound-definitions-table.h"
 
 #include <memory>
+#include <queue>
 
 #include <mmsystem.h>
 

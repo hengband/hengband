@@ -270,13 +270,13 @@ void show_bounty(void)
  */
 void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 {
-    int max_dl = 3, i;
+    int max_dl = 3;
     if (!conv_old) {
-        for (i = 0; i < w_ptr->max_d_idx; i++) {
-            if (max_dlv[i] < d_info[i].mindepth)
+        for (const auto &d_ref : d_info) {
+            if (max_dlv[d_ref.idx] < d_ref.mindepth)
                 continue;
-            if (max_dl < max_dlv[i])
-                max_dl = max_dlv[i];
+            if (max_dl < max_dlv[d_ref.idx])
+                max_dl = max_dlv[d_ref.idx];
         }
     } else {
         max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);

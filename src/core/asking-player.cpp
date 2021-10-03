@@ -16,6 +16,9 @@
 
 #include <climits>
 #include <algorithm>
+#include <iostream>
+#include <string>
+#include <sstream>
 
 /*
  * Get some string input at the cursor location.
@@ -413,4 +416,26 @@ void pause_line(int row)
 
     (void)inkey();
     prt("", row, 0);
+}
+
+bool get_value(const char *text, int min, int max, int *value)
+{
+    std::stringstream st;
+    int val;
+    char tmp_val[10] = "";
+    st << text << "(" << min << "-" << max << "): ";
+    int digit = std::max(std::to_string(min).length(), std::to_string(max).length());
+    while (true) {
+        if (!get_string(st.str().c_str(), tmp_val, digit))
+            return false;
+
+        val = atoi(tmp_val);
+
+        if (min <= val && max >= val) {
+            break;
+        }
+        msg_format(_("%dから%dの間で指定して下さい。", "It must be between %d to %d."), min, max);
+    }
+    *value = val;
+    return true;
 }

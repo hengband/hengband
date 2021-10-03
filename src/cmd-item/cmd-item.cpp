@@ -18,7 +18,6 @@
 #include "cmd-item/cmd-eat.h"
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"
-#include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "combat/shoot.h"
@@ -39,12 +38,17 @@
 #include "object-hook/hook-magic.h"
 #include "object-use/quaff-execution.h"
 #include "object-use/read-execution.h"
+#include "object-use/use-execution.h"
+#include "object-use/zaprod-execution.h"
+#include "object-use/zapwand-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
+#include "player-info/samurai-data-type.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -107,8 +111,7 @@ void do_cmd_drop(player_type *player_ptr)
     OBJECT_IDX item;
     int amt = 1;
     object_type *o_ptr;
-    if (player_ptr->special_defense & KATA_MUSOU)
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
     concptr q = _("どのアイテムを落としますか? ", "Drop which item? ");
     concptr s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
@@ -232,8 +235,7 @@ void do_cmd_use(player_type *player_ptr)
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
 
     concptr q = _("どれを使いますか？", "Use which item? ");
     concptr s = _("使えるものがありません。", "You have nothing to use.");
@@ -250,22 +252,22 @@ void do_cmd_use(player_type *player_ptr)
         exe_eat_food(player_ptr, item);
         break;
     case TV_WAND:
-        exe_aim_wand(player_ptr, item);
+        ObjectZapWandEntity(player_ptr).execute(item);
         break;
     case TV_STAFF:
-        exe_use_staff(player_ptr, item);
+        ObjectUseEntity(player_ptr, item).execute();
         break;
     case TV_ROD:
-        exe_zap_rod(player_ptr, item);
+        ObjectZapRodEntity(player_ptr).execute(item);
         break;
     case TV_POTION:
-        exe_quaff_potion(player_ptr, item);
+        ObjectQuaffEntity(player_ptr).execute(item);
         break;
     case TV_SCROLL:
         if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
             return;
 
-        exe_read(player_ptr, item, true);
+        ObjectReadEntity(player_ptr, item).execute(true);
         break;
     case TV_SHOT:
     case TV_ARROW:
@@ -288,8 +290,7 @@ void do_cmd_activate(player_type *player_ptr)
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(player_ptr, ACTION_NONE);
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
 
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");

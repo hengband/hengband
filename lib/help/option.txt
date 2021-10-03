@@ -439,12 +439,12 @@ Send score dump to the world score server    [send_score]
     record of your character to the world score board on the Internet
     when your character dies.
 
-***** <allow_debug_opts>
-Allow use of debug/cheat options  [allow_debug_opts]
+***** <allow_debug_options>
+Allow use of debug/cheat options  [allow_debug_options]
     Since use of debug command(^A), wizard mode(^W), and Cheating
     options ('C' in options panel) mark the player as a "Cheater"
     who can't register their score, these debug/cheat options are
-    forbidden to use on default.  The allow_debug_opts option removes
+    forbidden to use on default.  The allow_debug_options option removes
     these restrictions, and allow the player to become a "Cheater".
 
 
@@ -842,14 +842,6 @@ Manually haggle in stores    [manual_haggle]
     percent sales tax on items which you would have otherwise been
     forced to haggle for.  If this option is set, auto-haggle is
     disabled.
-
-***** <easy_band>
-Easy Mode (*)    [easy_band]
-    This option enables easy game mode for beginners. If this option is
-    set, you take only half damage from any enemy's attack compared
-    to normal mode, and monster's summoning spells become much
-    weaker. But your score will be estimated to be negative number,
-    and you cannot send score record to world score board.
 
 ***** <smart_learn>
 Monsters learn from their mistakes (*)    [smart_learn]

@@ -19,3 +19,4 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode);
 bool get_com(concptr prompt, char *command, bool z_escape);
 QUANTITY get_quantity(concptr prompt, QUANTITY max);
 void pause_line(int row);
+bool get_value(const char *text, int min, int max, int *value);
