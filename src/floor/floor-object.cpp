@@ -98,6 +98,17 @@ static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, int rq_level)
     return floor_ptr->object_level;
 }
 
+static void set_ammo_quantity(object_type *j_ptr)
+{
+    auto is_ammo = j_ptr->tval == TV_SPIKE;
+    is_ammo |= j_ptr->tval == TV_SHOT;
+    is_ammo |= j_ptr->tval == TV_ARROW;
+    is_ammo |= j_ptr->tval == TV_BOLT;
+    if (is_ammo && !j_ptr->is_fixed_artifact()) {
+        j_ptr->number = damroll(6, 7);
+    }
+}
+
 /*!
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
@@ -138,20 +149,7 @@ bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, in
     }
 
     apply_magic_to_object(player_ptr, j_ptr, floor_ptr->object_level, mode);
-    switch (j_ptr->tval) {
-    case TV_SPIKE:
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
-        if (!j_ptr->name1) {
-            j_ptr->number = (byte)damroll(6, 7);
-        }
-    
-        break;
-    default:
-        break;
-    }
-
+    set_ammo_quantity(j_ptr);
     if (cheat_peek) {
         object_mention(player_ptr, j_ptr);
     }
