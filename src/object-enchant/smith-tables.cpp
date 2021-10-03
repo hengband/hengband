@@ -495,7 +495,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
     make_info<ActivationSmithInfo>(SmithEffect::ACT_PHASE_DOOR, _("ショート・テレポート", "blink"), SmithCategory::ACTIVATION, { SmithEssence::TELEPORT }, 30, RandomArtActType::PHASE_DOOR),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_TELEPORT, _("テレポート", "teleport"), SmithCategory::ACTIVATION, { SmithEssence::TELEPORT }, 40, RandomArtActType::TELEPORT),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_SPEED, _("スピード", "speed"), SmithCategory::ACTIVATION, { SmithEssence::SPEED }, 25, RandomArtActType::SPEED),
-    make_info<ActivationSmithInfo>(SmithEffect::ACT_STONE_MUD, _("岩石溶解", "stone to mud"), SmithCategory::ACTIVATION, { SmithEssence::TUNNEL }, 25, RandomArtActType::STONE_MUD),
+    make_info<ActivationSmithInfo>(SmithEffect::ACT_STONE_MUD, _("岩石溶解", "stone to mud"), SmithCategory::ACTIVATION, { SmithEssence::TUNNEL }, 100, RandomArtActType::STONE_MUD),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_LIGHT, _("イルミネーション", "light area"), SmithCategory::ACTIVATION, { SmithEssence::LITE }, 30, RandomArtActType::LIGHT),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_MAP_LIGHT, _("魔法の地図と光", "light & map area"), SmithCategory::ACTIVATION, { SmithEssence::SEARCH, SmithEssence::LITE }, 30, RandomArtActType::MAP_LIGHT),
     make_info<ActivationSmithInfo>(SmithEffect::ACT_DETECT_ALL, _("全感知", "detection"), SmithCategory::ACTIVATION, { SmithEssence::SEARCH, SmithEssence::TELEPATHY }, 30, RandomArtActType::DETECT_ALL),
