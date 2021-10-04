@@ -192,7 +192,7 @@ void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, boo
         i_ptr->wipe();
 
         /* Make a good (or great) object (if possible) */
-        if (!make_object(player_ptr, i_ptr, mode, -1))
+        if (!make_object(player_ptr, i_ptr, mode))
             continue;
 
         if (known) {

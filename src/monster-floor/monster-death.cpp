@@ -289,7 +289,7 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
 
             dump_gold++;
         } else {
-            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode, -1))
+            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode))
                 continue;
 
             dump_item++;

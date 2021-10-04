@@ -81,11 +81,11 @@ static void object_mention(player_type *player_ptr, object_type *o_ptr)
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
-static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, int rq_level)
+static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, std::optional<int> rq_level)
 {
     if (any_bits(mode, AM_GREAT)) {
-        if (rq_level > 0) {
-            return rq_level + 10 + randint1(10);
+        if (rq_level.has_value()) {
+            return rq_level.value() + 10 + randint1(10);
         } else {
             return floor_ptr->object_level + 15;
         }
@@ -121,7 +121,7 @@ static void set_ammo_quantity(object_type *j_ptr)
  * rq_levelは、ユニークのレベルであってランダムクエストの階層ではない
  * ランダムクエストではない場合、-1が入る
  */
-bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, int rq_level)
+bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, std::optional<int> rq_level)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     PERCENTAGE prob = ((mode & AM_GOOD) ? 10 : 1000);

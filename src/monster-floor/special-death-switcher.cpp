@@ -122,7 +122,7 @@ static void on_dead_raal(player_type *player_ptr, monster_death_type *md_ptr)
     else
         get_obj_num_hook = kind_is_book;
 
-    make_object(player_ptr, q_ptr, md_ptr->mo_mode, -1);
+    (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -342,7 +342,7 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
 static bool make_equipment(player_type *player_ptr, object_type *q_ptr, const BIT_FLAGS drop_mode, const bool is_object_hook_null)
 {
     q_ptr->wipe();
-    (void)make_object(player_ptr, q_ptr, drop_mode, -1);
+    (void)make_object(player_ptr, q_ptr, drop_mode);
     if (!is_object_hook_null) {
         return true;
     }
@@ -436,7 +436,7 @@ static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_ty
     object_type *q_ptr = &forge;
     q_ptr->wipe();
     get_obj_num_hook = object_hook_pf;
-    (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode, -1);
+    (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
