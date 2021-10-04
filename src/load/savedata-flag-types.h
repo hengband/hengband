@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum savedata_item_flag_type {
+enum class SaveDataItemFlagType {
 	SAVE_ITEM_PVAL = 0x00000001,
 	SAVE_ITEM_DISCOUNT = 0x00000002,
 	SAVE_ITEM_NUMBER = 0x00000004,
@@ -33,7 +33,7 @@ enum savedata_item_flag_type {
 	SAVE_ITEM_STACK_IDX = 0x20000000,
 };
 
-enum savedata_monster_flag_type {
+enum class SaveDataMonsterFlagType {
 	SAVE_MON_AP_R_IDX = 0x00000001,
 	SAVE_MON_SUB_ALIGN = 0x00000002,
 	SAVE_MON_CSLEEP = 0x00000004,
