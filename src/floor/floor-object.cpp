@@ -81,11 +81,11 @@ static void object_mention(player_type *player_ptr, object_type *o_ptr)
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
-static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, int rq_level)
+static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
     if (any_bits(mode, AM_GREAT)) {
-        if (rq_level > 0) {
-            return rq_level + 10 + randint1(10);
+        if (rq_mon_level.has_value()) {
+            return rq_mon_level.value() + 10 + randint1(10);
         } else {
             return floor_ptr->object_level + 15;
         }
@@ -115,17 +115,14 @@ static void set_ammo_quantity(object_type *j_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
- * @param rq_floor ランダムクエスト討伐対象のレベル
+ * @param rq_mon_level ランダムクエスト討伐対象のレベル。ランダムクエスト以外の生成であれば無効値
  * @return アイテムの生成成功可否
- * @details
- * rq_levelは、ユニークのレベルであってランダムクエストの階層ではない
- * ランダムクエストではない場合、-1が入る
  */
-bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, int rq_level)
+bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    PERCENTAGE prob = ((mode & AM_GOOD) ? 10 : 1000);
-    auto base = get_base_floor(floor_ptr, mode, rq_level);
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
+    auto base = get_base_floor(floor_ptr, mode, rq_mon_level);
     if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
         if (any_bits(mode, AM_GOOD) && !get_obj_num_hook) {
             get_obj_num_hook = kind_is_good;

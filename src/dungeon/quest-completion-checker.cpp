@@ -253,7 +253,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
         while (true) {
             item.wipe();
             auto &r_ref = r_info[this->m_ptr->r_idx];
-            make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, r_ref.level);
+            (void)make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, r_ref.level);
             if (!this->check_quality(item)) {
                 continue;
             }

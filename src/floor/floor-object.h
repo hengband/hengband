@@ -2,6 +2,7 @@
 
 #include "object/item-tester-hooker.h"
 #include "system/angband.h"
+#include <optional>
 
 class ObjectIndexList;
 
@@ -9,7 +10,7 @@ struct floor_type;
 struct object_type;;
 struct player_type;
 class ItemTester;
-bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, int rq_level);
+bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level = std::nullopt);
 bool make_gold(player_type *player_ptr, object_type *j_ptr);
 void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x);
 void floor_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num);

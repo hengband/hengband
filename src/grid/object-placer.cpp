@@ -77,7 +77,7 @@ void place_object(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
 
     q_ptr = &forge;
     q_ptr->wipe();
-    if (!make_object(player_ptr, q_ptr, mode, -1))
+    if (!make_object(player_ptr, q_ptr, mode))
         return;
 
     OBJECT_IDX o_idx = o_pop(floor_ptr);

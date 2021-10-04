@@ -102,7 +102,7 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
         /* Otherwise drop an item */
         else {
             /* Make a good object */
-            if (!make_object(this->player_ptr, q_ptr, mode, -1))
+            if (!make_object(this->player_ptr, q_ptr, mode))
                 continue;
         }
 
