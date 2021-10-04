@@ -257,7 +257,7 @@ parse_error_type parse_fixed_map(player_type *player_ptr, concptr name, int ymin
             char *s;
             s = buf + 2;
             concptr v = parse_fixed_map_expression(player_ptr, &s, &f);
-            bypass = (streq(v, "0") ? true : false);
+            bypass = streq(v, "0");
             continue;
         }
 

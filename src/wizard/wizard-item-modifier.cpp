@@ -766,9 +766,9 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
     bool wish_randart = false;
     bool wish_ego = false;
     bool exam_base = true;
-    bool ok_art = (randint0(100) < prob) ? true : false;
-    bool ok_ego = (randint0(100) < 50 + prob) ? true : false;
-    bool must = (prob < 0) ? true : false;
+    bool ok_art = randint0(100) < prob;
+    bool ok_ego = randint0(100) < 50 + prob;
+    bool must = prob < 0;
     bool blessed = false;
     bool fixed = true;
 

@@ -251,7 +251,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 
     (void)apply_artifact(player_ptr, q_ptr);
 
-    return drop_near(player_ptr, q_ptr, -1, y, x) ? true : false;
+    return drop_near(player_ptr, q_ptr, -1, y, x) > 0;
 }
 
 /*!

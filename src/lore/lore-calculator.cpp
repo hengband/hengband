@@ -58,7 +58,7 @@ bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
     DEPTH level = r_ptr->level;
     MONSTER_NUMBER kills = r_ptr->r_tkills;
 
-    bool known = (r_ptr->r_cast_spell == MAX_UCHAR) ? true : false;
+    bool known = r_ptr->r_cast_spell == MAX_UCHAR;
 
     if (know_everything || known)
         return true;

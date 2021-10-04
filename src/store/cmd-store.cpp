@@ -30,6 +30,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "world/world.h"
@@ -147,7 +148,7 @@ void do_cmd_store(player_type *player_ptr)
         request_command(player_ptr, true);
         store_process_command(player_ptr);
 
-        bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? true : false;
+        bool need_redraw_store_inv = any_bits(player_ptr->update, PU_BONUS);
         w_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
