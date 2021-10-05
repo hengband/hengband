@@ -4,6 +4,7 @@
 #include "player-info/race-types.h"
 #include "realm/realm-types.h"
 #include "system/angband.h"
+#include <vector>
 
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 
@@ -19,8 +20,8 @@ struct building_type {
     int16_t actions[8]; /*!< 町の施設処理における行動ID */
     int16_t action_restr[8]; /*!< 町の施設処理の規制処理ID */
 
-    PlayerClassType member_class[MAX_CLASS]; /* which classes are part of guild */
-    PlayerRaceType member_race[MAX_RACES]; /* which classes are part of guild */
+    std::vector<short> member_class; /* which classes are part of guild */
+    std::vector<short> member_race; /* which classes are part of guild */
     int16_t member_realm[MAX_MAGIC + 1]; /* ギルド (店主？)ごとの魔法領域ID / which realms are part of guild */
 };
 

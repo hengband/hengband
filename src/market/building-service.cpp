@@ -21,7 +21,7 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (enum2i(bldg->member_race[enum2i(player_ptr->prace)]) == BUILDING_OWNER) {
+    if (bldg->member_race[enum2i(player_ptr->prace)] == BUILDING_OWNER) {
         return true;
     }
 
