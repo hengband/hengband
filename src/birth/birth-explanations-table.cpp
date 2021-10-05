@@ -1,7 +1,8 @@
 ﻿#include "birth/birth-explanations-table.h"
+#include "system/angband.h"
 
 /*! 種族の解説メッセージテーブル */
-concptr race_explanations[MAX_RACES] = {
+const std::vector<std::string_view> race_explanations = {
     _("人間は基本となるキャラクタです。他の全ての種族は人間と比較されます。人間はどんな職業に就くこともでき、どの職業でも平均的にこなせます。人間は寿命が短いため、レベル上昇が他のどんな種族よりも早くなる傾向があります。また、特別な修正や特性は持っていません。",
         "The human is the base character.  All other races are compared to them.  Humans can choose any class and are average at everything.  Humans tend to go up levels faster than most other races because of their shorter life spans.  No racial adjustments or intrinsics occur to characters choosing human."),
 
@@ -118,8 +119,7 @@ concptr race_explanations[MAX_RACES] = {
 };
 
 /*! 職業の解説メッセージテーブル */
-concptr class_explanations[MAX_CLASS] =
-{
+const std::vector<std::string_view> class_explanations = {
     _("戦士は、直面する問題のほとんどを細切れに叩き切ることで解決するキャラクタです。が、時折退却して魔法の道具の世話になることもあります。不運にも、高レベルなアイテムの多くは彼らが扱える範囲を越えています。",
         "A Warrior is a hack-and-slash character, who solves most of his or her problems by cutting them to pieces, but will occasionally fall back on the help of a magical device.  Unfortunately, many high-level devices may be forever beyond their use."),
 
@@ -202,14 +202,14 @@ concptr class_explanations[MAX_CLASS] =
         "A Ninja is a fearful assassin lurking in darkness.  He or she can navigate effectively with no light source, catch enemies unawares, and kill with a single blow.  Ninjas can use Ninjutsu, and are good at locating hidden traps and doors, disarming traps and picking locks.  Since heavy armor, heavy weapons, or shields will restrict their motion greatly, they prefer light clothes, and become faster and more stealthy as they gain levels.  A Ninja knows no fear and, at high level, becomes almost immune to poison and able to see invisible things.  Dexterity determines a Ninja's ability to use Ninjutsu."),
 
     _("スナイパーは一撃必殺を狙う恐るべき射手です。精神を高めることにより、射撃の威力と精度を高めます。また、魔法を使うことはできませんが、研ぎ澄まされた精神から繰り出される射撃術はさらなる威力をもたらすことでしょう。テクニックが必要とされる職業です。",
-      "Snipers are good at shooting, and they can kill targets by a few shots. After they concentrate deeply, they can demonstrate their shooting talents. You can see the incredible firepower of their shots."),
+        "Snipers are good at shooting, and they can kill targets by a few shots. After they concentrate deeply, they can demonstrate their shooting talents. You can see the incredible firepower of their shots."),
 
     _("元素使いはエレメンタルの力を駆使して戦う魔法使いです。扱える属性は限られますが、その力を十二分に引き出すことができます。魔法に必要な能力は賢さです。",
-      "An Elementalist is a spell caster that specializes in tapping elemental forces.  They have a limited, but powerful, repertoire of spells.  Wisdom determines an Elementalist's spell casting ability.")
+        "An Elementalist is a spell caster that specializes in tapping elemental forces.  They have a limited, but powerful, repertoire of spells.  Wisdom determines an Elementalist's spell casting ability.")
 };
 
 /*! 性格の解説メッセージテーブル */
-concptr personality_explanations[MAX_PERSONALITIES] = {
+const std::vector<std::string_view> personality_explanations = {
     _("ふつうは、特に特筆するべき部分がない性格です。あらゆる技能を平均的にこなします。",
         "\"Ordinary\" is a personality with no special skills or talents, with unmodified stats and skills."),
 
@@ -252,7 +252,7 @@ concptr personality_explanations[MAX_PERSONALITIES] = {
 };
 
 /*! 魔法領域の詳細解説メッセージテーブル */
-concptr realm_explanations[VALID_REALM] = {
+const std::vector<std::string_view> realm_explanations = {
     _("生命は回復能力に優れた魔法です。治療や防御、感知魔法が多く含まれていますが、攻撃呪文もわずかに持っています。特に高レベルの呪文にはアンデッドを塵に帰す力をあると言われています。",
         "Life magic is very good for healing; it relies mostly on healing, protection and detection spells.  Also life magic has a few attack spells as well.  It's said that some high level spells of life magic can disintegrate Undead monsters into ash."),
 
@@ -290,11 +290,11 @@ concptr realm_explanations[VALID_REALM] = {
         "The books of Kenjutsu describe various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorize them, you don't have to carry them.  When using a technique, wielding a weapon is required."),
 
     _("呪術は忌むべき領域です。複数の呪いの言葉を歌のように紡ぎながら詠唱します。多くの呪文は詠唱し続けることによって効果が持続されます。呪文には相手の行動を束縛するもの、ダメージを与えるもの、攻撃に対して反撃するものが多くあります。",
-      "Hex is an unsavory realm, like the death and demon realms.  Some of the spells can act continuously by stringing together curses like a song.  Spells may obstruct monsters' actions, deal damage to monsters in sight, or return damage to monsters who have damaged the caster."),
+        "Hex is an unsavory realm, like the death and demon realms.  Some of the spells can act continuously by stringing together curses like a song.  Spells may obstruct monsters' actions, deal damage to monsters in sight, or return damage to monsters who have damaged the caster."),
 };
 
 /*! 魔法領域の簡易解説メッセージテーブル */
-concptr realm_subinfo[VALID_REALM] = {
+const std::vector<std::string_view> realm_subinfo = {
     _("感知と防御と回復に優れています", "Good at detection and healing."),
     _("攻撃はできませんが非常に便利です", "Utility and protective spells."),
     _("感知と防御に優れています", "Good at detection and defence."),

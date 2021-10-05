@@ -25,6 +25,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/patron.h"
+#include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
@@ -167,7 +168,7 @@ static bool let_player_select_race(player_type *player_ptr)
             return false;
 
         clear_from(10);
-        shape_buffer(race_explanations[enum2i(player_ptr->prace)], 74, temp, sizeof(temp));
+        shape_buffer(race_explanations[enum2i(player_ptr->prace)].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
@@ -197,7 +198,7 @@ static bool let_player_select_class(player_type *player_ptr)
             return false;
 
         clear_from(10);
-        shape_buffer(class_explanations[player_ptr->pclass], 74, temp, sizeof(temp));
+        shape_buffer(class_explanations[player_ptr->pclass].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 9; i++) {
             if (t[0] == 0)
@@ -226,7 +227,7 @@ static bool let_player_select_personality(player_type *player_ptr)
             return false;
 
         clear_from(10);
-        shape_buffer(personality_explanations[player_ptr->ppersonality], 74, temp, sizeof(temp));
+        shape_buffer(personality_explanations[player_ptr->ppersonality].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)

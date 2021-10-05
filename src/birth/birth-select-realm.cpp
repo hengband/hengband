@@ -4,6 +4,7 @@
 #include "core/asking-player.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
+#include "realm/realm-names-table.h"
 #include "player/player-realm.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -162,7 +163,7 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
         sprintf(birth_realm_ptr->buf, "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
         prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
-        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
+        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1].data(), 4, 40);
     }
 
     c_put_str(TERM_YELLOW, birth_realm_ptr->cur, 12 + (birth_realm_ptr->cs / 5), 2 + 15 * (birth_realm_ptr->cs % 5));
@@ -338,7 +339,7 @@ bool get_player_realms(player_type *player_ptr)
             break;
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1], 74, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
@@ -374,7 +375,7 @@ bool get_player_realms(player_type *player_ptr)
             break;
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1], 74, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)

@@ -1,13 +1,10 @@
 ﻿#pragma once
 
-#include "player-info/race-types.h"
-#include "player-info/class-types.h"
-#include "player/player-personality.h"
-#include "realm/realm-names-table.h"
-#include "system/angband.h"
+#include <string>
+#include <vector>
 
-extern concptr race_explanations[MAX_RACES];
-extern concptr class_explanations[MAX_CLASS];
-extern concptr personality_explanations[MAX_PERSONALITIES];
-extern concptr realm_explanations[VALID_REALM];
-extern concptr realm_subinfo[VALID_REALM];
+extern const std::vector<std::string_view> race_explanations;
+extern const std::vector<std::string_view> class_explanations;
+extern const std::vector<std::string_view> personality_explanations;
+extern const std::vector<std::string_view> realm_explanations;
+extern const std::vector<std::string_view> realm_subinfo;
