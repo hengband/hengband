@@ -57,7 +57,7 @@ bool android_inside_weapon(player_type *player_ptr)
 void calc_android_exp(player_type *player_ptr)
 {
     uint32_t total_exp = 0;
-    if (player_ptr->is_dead || (player_ptr->prace != player_race_type::ANDROID))
+    if (player_ptr->is_dead || (player_ptr->prace != PlayerRaceType::ANDROID))
         return;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {

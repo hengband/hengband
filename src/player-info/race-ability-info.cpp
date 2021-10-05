@@ -12,37 +12,37 @@
 void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
 {
     switch (player_ptr->prace) {
-    case player_race_type::DWARF:
+    case PlayerRaceType::DWARF:
         if (player_ptr->lev >= 5)
             self_ptr->info[self_ptr->line++] = _("あなたは罠とドアと階段を感知できる。(5 MP)", "You can find traps, doors and stairs (cost 5).");
 
         break;
-    case player_race_type::NIBELUNG:
+    case PlayerRaceType::NIBELUNG:
         if (player_ptr->lev >= 10)
             self_ptr->info[self_ptr->line++] = _("あなたは罠とドアと階段を感知できる。(5 MP)", "You can find traps, doors and stairs (cost 5).");
 
         break;
-    case player_race_type::HOBBIT:
+    case PlayerRaceType::HOBBIT:
         if (player_ptr->lev >= 15)
             self_ptr->info[self_ptr->line++] = _("あなたは食料を生成できる。(10 MP)", "You can produce food (cost 10).");
 
         break;
-    case player_race_type::GNOME:
+    case PlayerRaceType::GNOME:
         if (player_ptr->lev >= 5)
             self_ptr->info[self_ptr->line++] = _("あなたは範囲 10 以内にテレポートできる。(5 MP)", "You can teleport, range 10 (cost 5).");
 
         break;
-    case player_race_type::HALF_ORC:
+    case PlayerRaceType::HALF_ORC:
         if (player_ptr->lev >= 3)
             self_ptr->info[self_ptr->line++] = _("あなたは恐怖を除去できる。(5 MP)", "You can remove fear (cost 5).");
 
         break;
-    case player_race_type::HALF_TROLL:
+    case PlayerRaceType::HALF_TROLL:
         if (player_ptr->lev >= 10)
             self_ptr->info[self_ptr->line++] = _("あなたは狂暴化することができる。(12 MP) ", "You can enter a berserk fury (cost 12).");
 
         break;
-    case player_race_type::AMBERITE:
+    case PlayerRaceType::AMBERITE:
         if (player_ptr->lev >= 30)
             self_ptr->info[self_ptr->line++] = _("あなたはシャドウシフトすることができる。(50 MP)", "You can Shift Shadows (cost 50).");
 
@@ -50,27 +50,27 @@ void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
             self_ptr->info[self_ptr->line++] = _("あなたは「パターン」を心に描いて歩くことができる。(75 MP)", "You can mentally Walk the Pattern (cost 75).");
 
         break;
-    case player_race_type::BARBARIAN:
+    case PlayerRaceType::BARBARIAN:
         if (player_ptr->lev >= 8)
             self_ptr->info[self_ptr->line++] = _("あなたは狂暴化することができる。(10 MP) ", "You can enter a berserk fury (cost 10).");
 
         break;
-    case player_race_type::HALF_OGRE:
+    case PlayerRaceType::HALF_OGRE:
         if (player_ptr->lev >= 25)
             self_ptr->info[self_ptr->line++] = _("あなたは爆発のルーンを仕掛けることができる。(35 MP)", "You can set an Explosive Rune (cost 35).");
 
         break;
-    case player_race_type::HALF_GIANT:
+    case PlayerRaceType::HALF_GIANT:
         if (player_ptr->lev >= 20)
             self_ptr->info[self_ptr->line++] = _("あなたは石の壁を壊すことができる。(10 MP)", "You can break stone walls (cost 10).");
 
         break;
-    case player_race_type::HALF_TITAN:
+    case PlayerRaceType::HALF_TITAN:
         if (player_ptr->lev >= 15)
             self_ptr->info[self_ptr->line++] = _("あなたはモンスターをスキャンすることができる。(10 MP)", "You can probe monsters (cost 10).");
 
         break;
-    case player_race_type::CYCLOPS:
+    case PlayerRaceType::CYCLOPS:
         if (player_ptr->lev >= 20) {
             sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."),
                 (3 * player_ptr->lev) / 2);
@@ -78,12 +78,12 @@ void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
         }
 
         break;
-    case player_race_type::YEEK:
+    case PlayerRaceType::YEEK:
         if (player_ptr->lev >= 15)
             self_ptr->info[self_ptr->line++] = _("あなたは恐怖を呼び起こす叫び声を発することができる。(15 MP)", "You can make a terrifying scream (cost 15).");
 
         break;
-    case player_race_type::KLACKON:
+    case PlayerRaceType::KLACKON:
         if (player_ptr->lev >= 9) {
             sprintf(
                 self_ptr->plev_buf, _("あなたは %d ダメージの酸を吹きかけることができる。(9 MP)", "You can spit acid, dam. %d (cost 9)."), player_ptr->lev);
@@ -91,7 +91,7 @@ void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
         }
 
         break;
-    case player_race_type::KOBOLD:
+    case PlayerRaceType::KOBOLD:
         if (player_ptr->lev >= 12) {
             sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの毒矢を投げることができる。(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."),
                 player_ptr->lev);
@@ -99,7 +99,7 @@ void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
         }
 
         break;
-    case player_race_type::DARK_ELF:
+    case PlayerRaceType::DARK_ELF:
         if (player_ptr->lev >= 2) {
             sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのマジック・ミサイルの呪文を使える。(2 MP)", "You can cast a Magic Missile, dam %d (cost 2)."),
                 (3 + ((player_ptr->lev - 1) / 5)));
@@ -107,19 +107,19 @@ void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
         }
 
         break;
-    case player_race_type::DRACONIAN:
+    case PlayerRaceType::DRACONIAN:
         sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのブレスを吐くことができる。(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * player_ptr->lev,
             player_ptr->lev);
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
-    case player_race_type::MIND_FLAYER:
+    case PlayerRaceType::MIND_FLAYER:
         if (player_ptr->lev >= 15)
             sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの精神攻撃をすることができる。(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."),
                 player_ptr->lev);
 
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
-    case player_race_type::IMP:
+    case PlayerRaceType::IMP:
         if (player_ptr->lev >= 30) {
             sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのファイア・ボールの呪文を使える。(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."),
                 player_ptr->lev);
@@ -134,19 +134,19 @@ void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
         }
 
         break;
-    case player_race_type::GOLEM:
+    case PlayerRaceType::GOLEM:
         if (player_ptr->lev >= 20)
             self_ptr->info[self_ptr->line++]
                 = _("あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)", "You can turn your skin to stone, dur d20+30 (cost 15).");
 
         break;
-    case player_race_type::ZOMBIE:
-    case player_race_type::SKELETON:
+    case PlayerRaceType::ZOMBIE:
+    case PlayerRaceType::SKELETON:
         if (player_ptr->lev >= 30)
             self_ptr->info[self_ptr->line++] = _("あなたは失った経験値を回復することができる。(30 MP)", "You can restore lost experience (cost 30).");
 
         break;
-    case player_race_type::VAMPIRE:
+    case PlayerRaceType::VAMPIRE:
         if (player_ptr->lev < 2)
             break;
 
@@ -154,29 +154,29 @@ void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
             player_ptr->lev * 2, 1 + (player_ptr->lev / 3));
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
-    case player_race_type::SPECTRE:
+    case PlayerRaceType::SPECTRE:
         if (player_ptr->lev >= 4)
             self_ptr->info[self_ptr->line++] = _("あなたは泣き叫んで敵を恐怖させることができる。(6 MP)", "You can wail to terrify your enemies (cost 6).");
 
         break;
-    case player_race_type::SPRITE:
+    case PlayerRaceType::SPRITE:
         if (player_ptr->lev >= 12)
             self_ptr->info[self_ptr->line++]
                 = _("あなたは敵を眠らせる魔法の粉を投げることができる。(12 MP)", "You can throw magical dust which induces sleep (cost 12).");
 
         break;
-    case player_race_type::BALROG:
+    case PlayerRaceType::BALROG:
         sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
             3 * player_ptr->lev, 10 + player_ptr->lev / 3);
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
-    case player_race_type::KUTAR:
+    case PlayerRaceType::KUTAR:
         if (player_ptr->lev >= 20)
             self_ptr->info[self_ptr->line++]
                 = _("あなたは d20+30 ターンの間横に伸びることができる。(15 MP)", "You can expand horizontally, dur d20+30 (cost 15).");
 
         break;
-    case player_race_type::ANDROID:
+    case PlayerRaceType::ANDROID:
         if (player_ptr->lev < 10)
             sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのレイガンを撃つことができる。(7 MP)", "You can fire a ray gun with damage %d (cost 7)."),
                 (player_ptr->lev + 1) / 2);

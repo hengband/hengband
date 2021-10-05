@@ -334,79 +334,79 @@ void initialize_virtues(player_type *player_ptr)
 
     /* Get one virtue based on race */
     switch (player_ptr->prace) {
-    case player_race_type::HUMAN:
-    case player_race_type::HALF_ELF:
-    case player_race_type::DUNADAN:
+    case PlayerRaceType::HUMAN:
+    case PlayerRaceType::HALF_ELF:
+    case PlayerRaceType::DUNADAN:
         player_ptr->vir_types[i++] = V_INDIVIDUALISM;
         break;
-    case player_race_type::ELF:
-    case player_race_type::SPRITE:
-    case player_race_type::ENT:
-    case player_race_type::MERFOLK:
+    case PlayerRaceType::ELF:
+    case PlayerRaceType::SPRITE:
+    case PlayerRaceType::ENT:
+    case PlayerRaceType::MERFOLK:
         player_ptr->vir_types[i++] = V_NATURE;
         break;
-    case player_race_type::HOBBIT:
-    case player_race_type::HALF_OGRE:
+    case PlayerRaceType::HOBBIT:
+    case PlayerRaceType::HALF_OGRE:
         player_ptr->vir_types[i++] = V_TEMPERANCE;
         break;
-    case player_race_type::DWARF:
-    case player_race_type::KLACKON:
-    case player_race_type::ANDROID:
+    case PlayerRaceType::DWARF:
+    case PlayerRaceType::KLACKON:
+    case PlayerRaceType::ANDROID:
         player_ptr->vir_types[i++] = V_DILIGENCE;
         break;
-    case player_race_type::GNOME:
-    case player_race_type::CYCLOPS:
+    case PlayerRaceType::GNOME:
+    case PlayerRaceType::CYCLOPS:
         player_ptr->vir_types[i++] = V_KNOWLEDGE;
         break;
-    case player_race_type::HALF_ORC:
-    case player_race_type::AMBERITE:
-    case player_race_type::KOBOLD:
+    case PlayerRaceType::HALF_ORC:
+    case PlayerRaceType::AMBERITE:
+    case PlayerRaceType::KOBOLD:
         player_ptr->vir_types[i++] = V_HONOUR;
         break;
-    case player_race_type::HALF_TROLL:
-    case player_race_type::BARBARIAN:
+    case PlayerRaceType::HALF_TROLL:
+    case PlayerRaceType::BARBARIAN:
         player_ptr->vir_types[i++] = V_VALOUR;
         break;
-    case player_race_type::HIGH_ELF:
-    case player_race_type::KUTAR:
+    case PlayerRaceType::HIGH_ELF:
+    case PlayerRaceType::KUTAR:
         player_ptr->vir_types[i++] = V_VITALITY;
         break;
-    case player_race_type::HALF_GIANT:
-    case player_race_type::GOLEM:
-    case player_race_type::ARCHON:
-    case player_race_type::BALROG:
+    case PlayerRaceType::HALF_GIANT:
+    case PlayerRaceType::GOLEM:
+    case PlayerRaceType::ARCHON:
+    case PlayerRaceType::BALROG:
         player_ptr->vir_types[i++] = V_JUSTICE;
         break;
-    case player_race_type::HALF_TITAN:
+    case PlayerRaceType::HALF_TITAN:
         player_ptr->vir_types[i++] = V_HARMONY;
         break;
-    case player_race_type::YEEK:
+    case PlayerRaceType::YEEK:
         player_ptr->vir_types[i++] = V_SACRIFICE;
         break;
-    case player_race_type::MIND_FLAYER:
+    case PlayerRaceType::MIND_FLAYER:
         player_ptr->vir_types[i++] = V_ENLIGHTEN;
         break;
-    case player_race_type::DARK_ELF:
-    case player_race_type::DRACONIAN:
-    case player_race_type::S_FAIRY:
+    case PlayerRaceType::DARK_ELF:
+    case PlayerRaceType::DRACONIAN:
+    case PlayerRaceType::S_FAIRY:
         player_ptr->vir_types[i++] = V_ENCHANT;
         break;
-    case player_race_type::NIBELUNG:
+    case PlayerRaceType::NIBELUNG:
         player_ptr->vir_types[i++] = V_PATIENCE;
         break;
-    case player_race_type::IMP:
+    case PlayerRaceType::IMP:
         player_ptr->vir_types[i++] = V_FAITH;
         break;
-    case player_race_type::ZOMBIE:
-    case player_race_type::SKELETON:
-    case player_race_type::VAMPIRE:
-    case player_race_type::SPECTRE:
+    case PlayerRaceType::ZOMBIE:
+    case PlayerRaceType::SKELETON:
+    case PlayerRaceType::VAMPIRE:
+    case PlayerRaceType::SPECTRE:
         player_ptr->vir_types[i++] = V_UNLIFE;
         break;
-    case player_race_type::BEASTMAN:
+    case PlayerRaceType::BEASTMAN:
         player_ptr->vir_types[i++] = V_CHANCE;
         break;
-    case player_race_type::MAX:
+    case PlayerRaceType::MAX:
         break;
     }
 

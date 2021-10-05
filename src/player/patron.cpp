@@ -201,7 +201,7 @@ void Patron::gain_level_reward(int chosen_reward) const
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.c_str());
             msg_print(_("「汝は良く行いたり！続けよ！」", "'Well done, mortal! Lead on!'"));
 
-            if (this->player_ptr->prace == player_race_type::ANDROID) {
+            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else if (this->player_ptr->exp < PY_MAX_EXP) {
                 int32_t ee = (this->player_ptr->exp / 2) + 10;
@@ -219,7 +219,7 @@ void Patron::gain_level_reward(int chosen_reward) const
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.c_str());
             msg_print(_("「下僕よ、汝それに値せず。」", "'Thou didst not deserve that, slave.'"));
 
-            if (this->player_ptr->prace == player_race_type::ANDROID) {
+            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else {
                 lose_exp(player_ptr, this->player_ptr->exp / 6);

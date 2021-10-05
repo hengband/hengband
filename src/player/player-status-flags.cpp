@@ -488,7 +488,7 @@ bool has_pass_wall(player_type *player_ptr)
 {
     bool pow = false;
 
-    if (player_ptr->wraith_form || player_ptr->tim_pass_wall || (!player_ptr->mimic_form && player_ptr->prace == player_race_type::SPECTRE)) {
+    if (player_ptr->wraith_form || player_ptr->tim_pass_wall || (!player_ptr->mimic_form && player_ptr->prace == PlayerRaceType::SPECTRE)) {
         pow = true;
     }
 
@@ -1658,7 +1658,7 @@ bool has_good_luck(player_type *player_ptr)
 BIT_FLAGS player_aggravate_state(player_type *player_ptr)
 {
     if (player_ptr->cursed.has(TRC::AGGRAVATE)) {
-        if ((PlayerRace(player_ptr).equals(player_race_type::S_FAIRY)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
+        if ((PlayerRace(player_ptr).equals(PlayerRaceType::S_FAIRY)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
             return AGGRAVATE_S_FAIRY;
         }
         return AGGRAVATE_NORMAL;

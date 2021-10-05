@@ -34,7 +34,7 @@ int16_t PlayerDexterity::race_value()
 {
     int16_t result = PlayerBasicStatistics::race_value();
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::ENT)) {
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ENT)) {
         if (this->player_ptr->lev > 25)
             result--;
         if (this->player_ptr->lev > 40)

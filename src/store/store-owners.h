@@ -14,7 +14,7 @@ struct owner_type {
     concptr owner_name; //!< 名前 / Name
     PRICE max_cost; //!< 買取上限 / Purse limit
     byte inflate; //!< 価格上乗せ率 / Inflation
-    player_race_type owner_race; //!< 店主種族 / Owner race
+    PlayerRaceType owner_race; //!< 店主種族 / Owner race
 };
 
 extern const owner_type owners[MAX_STORES][MAX_OWNERS];

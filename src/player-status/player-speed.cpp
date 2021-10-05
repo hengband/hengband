@@ -60,10 +60,10 @@ int16_t PlayerSpeed::race_value()
 {
     int16_t result = 0;
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->player_ptr).equals(player_race_type::SPRITE))
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE))
         result += (this->player_ptr->lev) / 10;
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::MERFOLK)) {
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::MERFOLK)) {
         floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
         feature_type *f_ptr = &f_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
         if (f_ptr->flags.has(FF::WATER)) {
@@ -108,14 +108,14 @@ int16_t PlayerSpeed::class_value()
         } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr))
             && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
             result += 3;
-            if (!(PlayerRace(this->player_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->player_ptr).equals(player_race_type::SPRITE)
+            if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE)
                     || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
                 result += (this->player_ptr->lev) / 10;
         }
     }
 
     if ((this->player_ptr->pclass == CLASS_MONK || this->player_ptr->pclass == CLASS_FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
-        if (!(PlayerRace(this->player_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->player_ptr).equals(player_race_type::SPRITE)
+        if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE)
                 || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
             result += (this->player_ptr->lev) / 10;
     }
@@ -143,8 +143,8 @@ int16_t PlayerSpeed::class_value()
 int16_t PlayerSpeed::personality_value()
 {
     int16_t result = 0;
-    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != player_race_type::KLACKON
-        && this->player_ptr->prace != player_race_type::SPRITE) {
+    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != PlayerRaceType::KLACKON
+        && this->player_ptr->prace != PlayerRaceType::SPRITE) {
         result += (this->player_ptr->lev) / 10 + 5;
     }
     return result;

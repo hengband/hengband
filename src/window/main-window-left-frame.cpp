@@ -63,7 +63,7 @@ void print_exp(player_type *player_ptr)
 {
     char out_val[32];
 
-    if ((!exp_need) || (player_ptr->prace == player_race_type::ANDROID)) {
+    if ((!exp_need) || (player_ptr->prace == PlayerRaceType::ANDROID)) {
         (void)sprintf(out_val, "%8ld", (long)player_ptr->exp);
     } else {
         if (player_ptr->lev >= PY_MAX_LEVEL) {
@@ -74,7 +74,7 @@ void print_exp(player_type *player_ptr)
     }
 
     if (player_ptr->exp >= player_ptr->max_exp) {
-        if (player_ptr->prace == player_race_type::ANDROID)
+        if (player_ptr->prace == PlayerRaceType::ANDROID)
             put_str(_("強化 ", "Cst "), ROW_EXP, 0);
         else
             put_str(_("経験 ", "EXP "), ROW_EXP, 0);

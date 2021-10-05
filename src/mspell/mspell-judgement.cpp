@@ -268,7 +268,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_FIRE)) {
-        if (!((player_ptr->prace == player_race_type::BALROG) && player_ptr->lev > 44)) {
+        if (!((player_ptr->prace == PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
             if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)))
                 return true;
 

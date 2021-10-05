@@ -20,7 +20,7 @@ void load_quick_start(void)
     rd_byte(&tmp8u);
     previous_char.psex = i2enum<player_sex>(tmp8u);
     rd_byte(&tmp8u);
-    previous_char.prace = (player_race_type)tmp8u;
+    previous_char.prace = (PlayerRaceType)tmp8u;
     rd_byte(&tmp8u);
     previous_char.pclass = (player_class_type)tmp8u;
     rd_byte(&tmp8u);

@@ -108,7 +108,7 @@ bool pattern_effect(player_type *player_ptr)
         return false;
 
     auto is_cut = player_ptr->effects()->cut()->is_cut();
-    if ((PlayerRace(player_ptr).equals(player_race_type::AMBERITE)) && is_cut && one_in_(10)) {
+    if ((PlayerRace(player_ptr).equals(PlayerRaceType::AMBERITE)) && is_cut && one_in_(10)) {
         wreck_the_pattern(player_ptr);
     }
 
@@ -145,7 +145,7 @@ bool pattern_effect(player_type *player_ptr)
         break;
 
     default:
-        if (PlayerRace(player_ptr).equals(player_race_type::AMBERITE) && !one_in_(2))
+        if (PlayerRace(player_ptr).equals(PlayerRaceType::AMBERITE) && !one_in_(2))
             return true;
         else if (!is_invuln(player_ptr))
             take_hit(player_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"));

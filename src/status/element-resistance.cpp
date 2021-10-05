@@ -109,7 +109,7 @@ bool set_oppose_fire(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
     if (player_ptr->is_dead)
         return false;
 
-    if ((PlayerRace(player_ptr).equals(player_race_type::BALROG) && (player_ptr->lev > 44)) || (player_ptr->mimic_form == MIMIC_DEMON))
+    if ((PlayerRace(player_ptr).equals(PlayerRaceType::BALROG) && (player_ptr->lev > 44)) || (player_ptr->mimic_form == MIMIC_DEMON))
         v = 1;
     if (v) {
         if (player_ptr->oppose_fire && !do_dec) {
@@ -236,7 +236,7 @@ bool is_oppose_fire(player_type *player_ptr)
 {
     return player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)
         || (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU) || (player_ptr->mimic_form == MIMIC_DEMON)
-            || (PlayerRace(player_ptr).equals(player_race_type::BALROG) && player_ptr->lev > 44));
+            || (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG) && player_ptr->lev > 44));
 }
 
 bool is_oppose_cold(player_type *player_ptr)
