@@ -232,6 +232,8 @@ void player_outfit(player_type *player_ptr)
         add_outfit(player_ptr, q_ptr);
     }
 
+    // @todo 本来read-onlyであるべきプリセットテーブルを書き換えている. 良くないパターン.
+    // 「状況によって特別に持たせたいアイテム」は別途定義すべき.
     if (player_ptr->pclass != CLASS_SORCERER) {
         if (player_ptr->ppersonality == PERSONALITY_SEXY) {
             player_init[player_ptr->pclass][2] = std::make_tuple(ItemKindType::HAFTED, SV_WHIP);            
