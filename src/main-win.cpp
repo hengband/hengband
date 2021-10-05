@@ -120,6 +120,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -1933,20 +1934,12 @@ static void term_keypress(char *str)
  */
 static bool process_keydown(WPARAM wParam, LPARAM lParam)
 {
-    bool mc = false;
-    bool ms = false;
-    bool ma = false;
-
-    if (GetKeyState(VK_CONTROL) & 0x8000)
-        mc = true;
-    if (GetKeyState(VK_SHIFT) & 0x8000)
-        ms = true;
-    if (GetKeyState(VK_MENU) & 0x8000)
-        ma = true;
-
-    term_no_press = (ma) ? true : false;
+    auto mc = any_bits(static_cast<ushort>(GetKeyState(VK_CONTROL)), 0x8000);
+    auto ms = any_bits(static_cast<ushort>(GetKeyState(VK_SHIFT)), 0x8000);
+    auto ma = any_bits(static_cast<ushort>(GetKeyState(VK_MENU)), 0x8000);
+    term_no_press = ma;
     if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)])) {
-        bool ext_key = (lParam & 0x1000000L) ? true : false;
+        bool ext_key = any_bits(static_cast<ulong>(lParam), 0x1000000UL);
         bool numpad = false;
 
         term_keypress(31);

@@ -206,7 +206,7 @@ bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_F
     }
 
     if (!(mpe_mode & MPE_DONT_PICKUP))
-        carry(player_ptr, (mpe_mode & MPE_DO_PICKUP) ? true : false);
+        carry(player_ptr, any_bits(mpe_mode, MPE_DO_PICKUP));
 
     if (!player_ptr->running) {
         // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新
@@ -246,7 +246,7 @@ bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_F
             disclose_grid(player_ptr, player_ptr->y, player_ptr->x);
         }
 
-        hit_trap(player_ptr, (mpe_mode & MPE_BREAK_TRAP) ? true : false);
+        hit_trap(player_ptr, any_bits(mpe_mode, MPE_BREAK_TRAP));
         if (!player_bold(player_ptr, ny, nx) || player_ptr->is_dead || player_ptr->leaving)
             return false;
     }

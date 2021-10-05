@@ -314,8 +314,8 @@ errr load_item(void)
             k_ptr = &dummy;
 
         rd_byte(&tmp8u);
-        k_ptr->aware = (tmp8u & 0x01) ? true : false;
-        k_ptr->tried = (tmp8u & 0x02) ? true : false;
+        k_ptr->aware = any_bits(tmp8u, 0x01);
+        k_ptr->tried = any_bits(tmp8u, 0x02);
     }
 
     load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));

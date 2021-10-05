@@ -30,7 +30,7 @@ bool can_player_ride_pet(player_type *player_ptr, grid_type *g_ptr, bool now_rid
     MONSTER_IDX old_riding = player_ptr->riding;
     bool old_riding_two_hands = player_ptr->riding_ryoute;
     bool old_old_riding_two_hands = player_ptr->old_riding_ryoute;
-    bool old_pf_two_hands = (player_ptr->pet_extra_flags & PF_TWO_HANDS) ? true : false;
+    bool old_pf_two_hands = any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS);
     w_ptr->character_xtra = true;
 
     if (now_riding)

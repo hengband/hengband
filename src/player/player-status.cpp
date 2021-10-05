@@ -2680,7 +2680,7 @@ void check_experience(player_type *player_ptr)
     set_bits(player_ptr->redraw, PR_EXP);
     handle_stuff(player_ptr);
 
-    bool android = (player_ptr->prace == player_race_type::ANDROID ? true : false);
+    bool android = player_ptr->prace == player_race_type::ANDROID;
     PLAYER_LEVEL old_lev = player_ptr->lev;
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
