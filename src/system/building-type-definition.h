@@ -19,7 +19,7 @@ struct building_type {
     int16_t actions[8]; /*!< 町の施設処理における行動ID */
     int16_t action_restr[8]; /*!< 町の施設処理の規制処理ID */
 
-    player_class_type member_class[MAX_CLASS]; /* which classes are part of guild */
+    PlayerClassType member_class[MAX_CLASS]; /* which classes are part of guild */
     PlayerRaceType member_race[MAX_RACES]; /* which classes are part of guild */
     int16_t member_realm[MAX_MAGIC + 1]; /* ギルド (店主？)ごとの魔法領域ID / which realms are part of guild */
 };

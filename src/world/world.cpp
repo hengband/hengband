@@ -63,7 +63,7 @@ void update_playtime(void)
 /*!
  * @brief 勝利したクラスを追加する
  */
-void add_winner_class(player_class_type c)
+void add_winner_class(PlayerClassType c)
 {
     if (!w_ptr->noscore)
         w_ptr->sf_winner.set(c);
@@ -72,7 +72,7 @@ void add_winner_class(player_class_type c)
 /*!
  * @brief 引退したクラスを追加する
  */
-void add_retired_class(player_class_type c)
+void add_retired_class(PlayerClassType c)
 {
     if (!w_ptr->noscore)
         w_ptr->sf_retired.set(c);
@@ -81,7 +81,7 @@ void add_retired_class(player_class_type c)
 /*!
  * @brief 勝利したクラスか判定する
  */
-bool is_winner_class(player_class_type c)
+bool is_winner_class(PlayerClassType c)
 {
     if (c == MAX_CLASS)
         return false;
@@ -91,7 +91,7 @@ bool is_winner_class(player_class_type c)
 /*!
  * @brief 引退したクラスか判定する
  */
-bool is_retired_class(player_class_type c)
+bool is_retired_class(PlayerClassType c)
 {
     if (c == MAX_CLASS)
         return false;

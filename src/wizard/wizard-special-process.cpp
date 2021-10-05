@@ -690,7 +690,7 @@ void wiz_reset_class(player_type *player_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_CLASS)
         return;
 
-    player_ptr->pclass = i2enum<player_class_type>(tmp_int);
+    player_ptr->pclass = i2enum<PlayerClassType>(tmp_int);
     cp_ptr = &class_info[player_ptr->pclass];
     mp_ptr = &m_info[player_ptr->pclass];
     PlayerClass(player_ptr).init_specific_data();

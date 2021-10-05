@@ -33,7 +33,7 @@ public:
 
     player_sex psex{}; /* Sex index */
     PlayerRaceType prace{}; /* Race index */
-    player_class_type pclass{}; /* Class index */
+    PlayerClassType pclass{}; /* Class index */
     player_personality_type ppersonality{}; /* Personality index */
     int16_t realm1{}; /* First magic realm */
     int16_t realm2{}; /* Second magic realm */

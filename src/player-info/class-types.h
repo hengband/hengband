@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum player_class_type {
+enum PlayerClassType {
 	CLASS_WARRIOR = 0,
     CLASS_MAGE = 1,
     CLASS_PRIEST = 2,

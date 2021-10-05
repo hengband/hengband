@@ -71,7 +71,7 @@ void rd_base_info(player_type *player_ptr)
     player_ptr->prace = (PlayerRaceType)tmp8u;
 
     rd_byte(&tmp8u);
-    player_ptr->pclass = (player_class_type)tmp8u;
+    player_ptr->pclass = (PlayerClassType)tmp8u;
 
     rd_byte(&tmp8u);
     player_ptr->ppersonality = (player_personality_type)tmp8u;
