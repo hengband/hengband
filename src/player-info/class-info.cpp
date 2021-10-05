@@ -30,7 +30,7 @@ const player_class_info *cp_ptr;
  *      HD, Exp, pet_upkeep_div
  * </pre>
  */
-const player_class_info class_info[MAX_CLASS] = {
+const std::vector<player_class_info> class_info = {
     {
 #ifdef JP
         "戦士",
@@ -262,7 +262,7 @@ const player_class_info class_info[MAX_CLASS] = {
  * </pre>
  */
 #ifdef JP
-const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] = {
+const std::vector<std::vector<concptr>> player_titles = {
     /* Warrior */
     {
         "新参兵",
@@ -653,7 +653,7 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] = {
 };
 
 #else
-const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] = {
+const std::vector<std::vector<concptr>> player_titles = {
     /* Warrior */
     {
         "Rookie",
