@@ -74,4 +74,4 @@ struct player_class_info {
 
 extern const player_class_info *cp_ptr;
 extern const std::vector<player_class_info> class_info;
-extern const std::vector<std::vector<concptr>> player_titles;
+extern const std::vector<std::vector<std::string_view>> player_titles;
