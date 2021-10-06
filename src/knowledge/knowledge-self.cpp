@@ -70,9 +70,10 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    shape_buffer(class_explanations[player_ptr->pclass].data(), 78, temp, sizeof(temp));
+    auto short_pclass = enum2i(player_ptr->pclass);
+    shape_buffer(class_explanations[short_pclass].data(), 78, temp, sizeof(temp));
     fprintf(fff, "\n");
-    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[player_ptr->pclass].title);
+    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[short_pclass].title);
 
     t = temp;
     for (int i = 0; i < 10; i++) {
@@ -140,7 +141,7 @@ static void dump_winner_classes(FILE *fff)
     size_t max_len = 75;
     std::string s = "";
     std::string l = "";
-    for (int c = 0; c < MAX_CLASS; c++) {
+    for (int c = 0; c < enum2i(PlayerClassType::MAX); c++) {
         if (w_ptr->sf_winner.has_not(i2enum<PlayerClassType>(c)))
             continue;
 

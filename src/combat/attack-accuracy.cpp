@@ -124,7 +124,7 @@ static bool decide_attack_hit(player_type *player_ptr, player_attack_type *pa_pt
             n *= 2;
 
         success_hit = one_in_(n);
-    } else if ((player_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || pa_ptr->surprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
+    } else if ((player_ptr->pclass == PlayerClassType::NINJA) && ((pa_ptr->backstab || pa_ptr->surprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
         success_hit = true;
     else
         success_hit = test_hit_norm(player_ptr, chance, r_ptr->ac, pa_ptr->m_ptr->ml);

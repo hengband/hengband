@@ -210,7 +210,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             DICE_SID sides = 6;
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
-            if (player_ptr->pclass == CLASS_PRIEST || player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_SORCERER)
+            if (player_ptr->pclass == PlayerClassType::PRIEST || player_ptr->pclass == PlayerClassType::HIGH_MAGE || player_ptr->pclass == PlayerClassType::SORCERER)
                 base = plev + plev / 2;
             else
                 base = plev + plev / 4;

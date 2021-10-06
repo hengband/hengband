@@ -183,11 +183,11 @@ HIT_POINT calc_attack_damage_with_slay(player_type *player_ptr, object_type *o_p
 
         mult = mult_brand(player_ptr, mult, flgs, m_ptr);
 
-        if (player_ptr->pclass == CLASS_SAMURAI) {
+        if (player_ptr->pclass == PlayerClassType::SAMURAI) {
             mult = mult_hissatsu(player_ptr, mult, flgs, m_ptr, mode);
         }
 
-        if ((player_ptr->pclass != CLASS_SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+        if ((player_ptr->pclass != PlayerClassType::SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
             player_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
             player_ptr->redraw |= (PR_MANA);
             mult = mult * 3 / 2 + 20;

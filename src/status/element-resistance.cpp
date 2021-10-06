@@ -190,7 +190,7 @@ bool set_oppose_pois(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if ((player_ptr->pclass == CLASS_NINJA) && (player_ptr->lev > 44))
+    if ((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))
         v = 1;
     if (player_ptr->is_dead)
         return false;
@@ -247,5 +247,5 @@ bool is_oppose_cold(player_type *player_ptr)
 bool is_oppose_pois(player_type *player_ptr)
 {
     return player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST)
-        || (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU) || (player_ptr->pclass == CLASS_NINJA && player_ptr->lev > 44));
+        || (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU) || (player_ptr->pclass == PlayerClassType::NINJA && player_ptr->lev > 44));
 }

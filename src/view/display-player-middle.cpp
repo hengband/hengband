@@ -68,7 +68,7 @@ static void display_sub_hand(player_type *player_ptr)
         return;
     }
 
-    if ((player_ptr->pclass != CLASS_MONK) || ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) == 0))
+    if ((player_ptr->pclass != PlayerClassType::MONK) || ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) == 0))
         return;
 
     PlayerClass pc(player_ptr);

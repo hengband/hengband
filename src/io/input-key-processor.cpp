@@ -307,11 +307,11 @@ void process_command(player_type *player_ptr)
         break;
     }
     case 'G': {
-        if (player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_RED_MAGE || player_ptr->pclass == CLASS_ELEMENTALIST)
+        if (player_ptr->pclass == PlayerClassType::SORCERER || player_ptr->pclass == PlayerClassType::RED_MAGE || player_ptr->pclass == PlayerClassType::ELEMENTALIST)
             msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
-        else if (player_ptr->pclass == CLASS_SAMURAI)
+        else if (player_ptr->pclass == PlayerClassType::SAMURAI)
             do_cmd_gain_hissatsu(player_ptr);
-        else if (player_ptr->pclass == CLASS_MAGIC_EATER)
+        else if (player_ptr->pclass == PlayerClassType::MAGIC_EATER)
             import_magic_device(player_ptr);
         else
             do_cmd_study(player_ptr);
@@ -319,16 +319,16 @@ void process_command(player_type *player_ptr)
         break;
     }
     case 'b': {
-        if ((player_ptr->pclass == CLASS_MINDCRAFTER) || (player_ptr->pclass == CLASS_BERSERKER) || (player_ptr->pclass == CLASS_NINJA)
-            || (player_ptr->pclass == CLASS_MIRROR_MASTER))
+        if ((player_ptr->pclass == PlayerClassType::MINDCRAFTER) || (player_ptr->pclass == PlayerClassType::BERSERKER) || (player_ptr->pclass == PlayerClassType::NINJA)
+            || (player_ptr->pclass == PlayerClassType::MIRROR_MASTER))
             do_cmd_mind_browse(player_ptr);
-        else if (player_ptr->pclass == CLASS_ELEMENTALIST)
+        else if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
             do_cmd_element_browse(player_ptr);
-        else if (player_ptr->pclass == CLASS_SMITH)
+        else if (player_ptr->pclass == PlayerClassType::SMITH)
             do_cmd_kaji(player_ptr, true);
-        else if (player_ptr->pclass == CLASS_MAGIC_EATER)
+        else if (player_ptr->pclass == PlayerClassType::MAGIC_EATER)
             do_cmd_magic_eater(player_ptr, true, false);
-        else if (player_ptr->pclass == CLASS_SNIPER)
+        else if (player_ptr->pclass == PlayerClassType::SNIPER)
             do_cmd_snipe_browse(player_ptr);
         else
             do_cmd_browse(player_ptr);
@@ -340,37 +340,37 @@ void process_command(player_type *player_ptr)
             break;
         }
 
-        if ((player_ptr->pclass == CLASS_WARRIOR) || (player_ptr->pclass == CLASS_ARCHER) || (player_ptr->pclass == CLASS_CAVALRY)) {
+        if ((player_ptr->pclass == PlayerClassType::WARRIOR) || (player_ptr->pclass == PlayerClassType::ARCHER) || (player_ptr->pclass == PlayerClassType::CAVALRY)) {
             msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
             break;
         }
 
-        if (floor_ptr->dun_level && d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && (player_ptr->pclass != CLASS_BERSERKER)
-            && (player_ptr->pclass != CLASS_SMITH)) {
+        if (floor_ptr->dun_level && d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && (player_ptr->pclass != PlayerClassType::BERSERKER)
+            && (player_ptr->pclass != PlayerClassType::SMITH)) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(nullptr);
             break;
         }
 
-        if (player_ptr->anti_magic && (player_ptr->pclass != CLASS_BERSERKER) && (player_ptr->pclass != CLASS_SMITH)) {
+        if (player_ptr->anti_magic && (player_ptr->pclass != PlayerClassType::BERSERKER) && (player_ptr->pclass != PlayerClassType::SMITH)) {
             concptr which_power = _("魔法", "magic");
             switch (player_ptr->pclass) {
-            case CLASS_MINDCRAFTER:
+            case PlayerClassType::MINDCRAFTER:
                 which_power = _("超能力", "psionic powers");
                 break;
-            case CLASS_IMITATOR:
+            case PlayerClassType::IMITATOR:
                 which_power = _("ものまね", "imitation");
                 break;
-            case CLASS_SAMURAI:
+            case PlayerClassType::SAMURAI:
                 which_power = _("必殺剣", "hissatsu");
                 break;
-            case CLASS_MIRROR_MASTER:
+            case PlayerClassType::MIRROR_MASTER:
                 which_power = _("鏡魔法", "mirror magic");
                 break;
-            case CLASS_NINJA:
+            case PlayerClassType::NINJA:
                 which_power = _("忍術", "ninjutsu");
                 break;
-            case CLASS_ELEMENTALIST:
+            case PlayerClassType::ELEMENTALIST:
                 which_power = _("元素魔法", "magic");
                 break;
             default:
@@ -384,28 +384,28 @@ void process_command(player_type *player_ptr)
             break;
         }
 
-        if (is_shero(player_ptr) && (player_ptr->pclass != CLASS_BERSERKER)) {
+        if (is_shero(player_ptr) && (player_ptr->pclass != PlayerClassType::BERSERKER)) {
             msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
             PlayerEnergy(player_ptr).reset_player_turn();
             break;
         }
 
-        if ((player_ptr->pclass == CLASS_MINDCRAFTER) || (player_ptr->pclass == CLASS_BERSERKER) || (player_ptr->pclass == CLASS_NINJA)
-            || (player_ptr->pclass == CLASS_MIRROR_MASTER))
+        if ((player_ptr->pclass == PlayerClassType::MINDCRAFTER) || (player_ptr->pclass == PlayerClassType::BERSERKER) || (player_ptr->pclass == PlayerClassType::NINJA)
+            || (player_ptr->pclass == PlayerClassType::MIRROR_MASTER))
             do_cmd_mind(player_ptr);
-        else if (player_ptr->pclass == CLASS_ELEMENTALIST)
+        else if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
             do_cmd_element(player_ptr);
-        else if (player_ptr->pclass == CLASS_IMITATOR)
+        else if (player_ptr->pclass == PlayerClassType::IMITATOR)
             do_cmd_mane(player_ptr, false);
-        else if (player_ptr->pclass == CLASS_MAGIC_EATER)
+        else if (player_ptr->pclass == PlayerClassType::MAGIC_EATER)
             do_cmd_magic_eater(player_ptr, false, false);
-        else if (player_ptr->pclass == CLASS_SAMURAI)
+        else if (player_ptr->pclass == PlayerClassType::SAMURAI)
             do_cmd_hissatsu(player_ptr);
-        else if (player_ptr->pclass == CLASS_BLUE_MAGE)
+        else if (player_ptr->pclass == PlayerClassType::BLUE_MAGE)
             do_cmd_cast_learned(player_ptr);
-        else if (player_ptr->pclass == CLASS_SMITH)
+        else if (player_ptr->pclass == PlayerClassType::SMITH)
             do_cmd_kaji(player_ptr, false);
-        else if (player_ptr->pclass == CLASS_SNIPER)
+        else if (player_ptr->pclass == PlayerClassType::SNIPER)
             do_cmd_snipe(player_ptr);
         else
             (void)do_cmd_cast(player_ptr);

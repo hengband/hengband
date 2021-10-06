@@ -586,7 +586,7 @@ bool ObjectQuaffEntity::check_can_quaff()
 bool ObjectQuaffEntity::booze()
 {
     bool ident = false;
-    if (this->player_ptr->pclass != CLASS_MONK)
+    if (this->player_ptr->pclass != PlayerClassType::MONK)
         chg_virtue(this->player_ptr, V_HARMONY, -1);
     else if (!has_resist_conf(this->player_ptr))
         this->player_ptr->special_attack |= ATTACK_SUIKEN;
@@ -604,7 +604,7 @@ bool ObjectQuaffEntity::booze()
         ident = true;
     }
 
-    if (one_in_(13) && (this->player_ptr->pclass != CLASS_MONK)) {
+    if (one_in_(13) && (this->player_ptr->pclass != PlayerClassType::MONK)) {
         ident = true;
         if (one_in_(3))
             lose_all_info(this->player_ptr);

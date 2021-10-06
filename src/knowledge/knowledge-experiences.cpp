@@ -41,7 +41,7 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
                     continue;
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[4 - i][num];
-                SUB_EXP weapon_max = s_info[player_ptr->pclass].w_max[4 - i][num];
+                SUB_EXP weapon_max = s_info[enum2i(player_ptr->pclass)].w_max[4 - i][num];
                 strip_name(tmp, k_ref.idx);
                 fprintf(fff, "%-25s ", tmp);
                 if (show_actual_value)
@@ -160,7 +160,7 @@ void do_cmd_knowledge_skill_exp(player_type *player_ptr)
 
     for (int i = 0; i < SKILL_MAX; i++) {
         SUB_EXP skill_exp = player_ptr->skill_exp[i];
-        SUB_EXP skill_max = s_info[player_ptr->pclass].s_max[i];
+        SUB_EXP skill_max = s_info[enum2i(player_ptr->pclass)].s_max[i];
         fprintf(fff, "%-20s ", skill_name[i]);
         if (show_actual_value)
             fprintf(fff, "%4d/%4d ", MIN(skill_exp, skill_max), skill_max);

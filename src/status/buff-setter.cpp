@@ -98,7 +98,7 @@ void reset_tim_flags(player_type *player_ptr)
         (void)set_monster_invulner(player_ptr, player_ptr->riding, 0, false);
     }
 
-    if (player_ptr->pclass == CLASS_BARD) {
+    if (player_ptr->pclass == PlayerClassType::BARD) {
         set_singing_song_effect(player_ptr, MUSIC_NONE);
         set_singing_song_id(player_ptr, 0);
     }
@@ -380,7 +380,7 @@ bool set_shero(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
     if (player_ptr->is_dead)
         return false;
 
-    if (player_ptr->pclass == CLASS_BERSERKER) {
+    if (player_ptr->pclass == PlayerClassType::BERSERKER) {
         v = 1;
         return false;
     }

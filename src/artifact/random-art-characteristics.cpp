@@ -79,8 +79,8 @@ void curse_artifact(player_type *player_ptr, object_type *o_ptr)
     o_ptr->curse_flags.set({ TRC::HEAVY_CURSE, TRC::CURSED });
     o_ptr->art_flags.reset(TR_BLESSED);
     add_negative_flags(o_ptr);
-    if ((player_ptr->pclass != CLASS_WARRIOR) && (player_ptr->pclass != CLASS_ARCHER) && (player_ptr->pclass != CLASS_CAVALRY)
-        && (player_ptr->pclass != CLASS_BERSERKER) && (player_ptr->pclass != CLASS_SMITH) && one_in_(3))
+    if ((player_ptr->pclass != PlayerClassType::WARRIOR) && (player_ptr->pclass != PlayerClassType::ARCHER) && (player_ptr->pclass != PlayerClassType::CAVALRY)
+        && (player_ptr->pclass != PlayerClassType::BERSERKER) && (player_ptr->pclass != PlayerClassType::SMITH) && one_in_(3))
         o_ptr->art_flags.set(TR_NO_MAGIC);
 }
 

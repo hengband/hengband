@@ -280,7 +280,7 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     auto cur = player_ptr->skill_exp[SKILL_SHIELD];
-    auto max = s_info[player_ptr->pclass].s_max[SKILL_SHIELD];
+    auto max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_SHIELD];
     if (cur >= max) {
         return;
     }

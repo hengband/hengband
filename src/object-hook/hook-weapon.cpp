@@ -21,8 +21,9 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     }
 
     /* Favorite weapons are varied depend on the class */
+    auto short_pclass = enum2i(player_ptr->pclass);
     switch (player_ptr->pclass) {
-    case CLASS_PRIEST: {
+    case PlayerClassType::PRIEST: {
         auto flgs = object_flags_known(o_ptr);
 
         if (flgs.has_not(TR_BLESSED) && !(o_ptr->tval == ItemKindType::HAFTED))
@@ -30,15 +31,15 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
         break;
     }
 
-    case CLASS_MONK:
-    case CLASS_FORCETRAINER:
+    case PlayerClassType::MONK:
+    case PlayerClassType::FORCETRAINER:
         /* Icky to wield? */
-        if (!(s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval]))
+        if (!(s_info[short_pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval]))
             return false;
         break;
 
-    case CLASS_BEASTMASTER:
-    case CLASS_CAVALRY: {
+    case PlayerClassType::BEASTMASTER:
+    case PlayerClassType::CAVALRY: {
         auto flgs = object_flags_known(o_ptr);
 
         /* Is it known to be suitable to using while riding? */
@@ -48,14 +49,14 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
         break;
     }
 
-    case CLASS_SORCERER:
-        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] < WEAPON_EXP_MASTER)
+    case PlayerClassType::SORCERER:
+        if (s_info[short_pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] < WEAPON_EXP_MASTER)
             return false;
         break;
 
-    case CLASS_NINJA:
+    case PlayerClassType::NINJA:
         /* Icky to wield? */
-        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+        if (s_info[short_pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
             return false;
         break;
 

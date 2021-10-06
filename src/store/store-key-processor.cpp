@@ -148,16 +148,16 @@ void store_process_command(player_type *player_ptr)
         break;
     }
     case 'b': {
-        if ((player_ptr->pclass == CLASS_MINDCRAFTER) || (player_ptr->pclass == CLASS_BERSERKER) || (player_ptr->pclass == CLASS_NINJA)
-            || (player_ptr->pclass == CLASS_MIRROR_MASTER))
+        if ((player_ptr->pclass == PlayerClassType::MINDCRAFTER) || (player_ptr->pclass == PlayerClassType::BERSERKER) || (player_ptr->pclass == PlayerClassType::NINJA)
+            || (player_ptr->pclass == PlayerClassType::MIRROR_MASTER))
             do_cmd_mind_browse(player_ptr);
-        else if (player_ptr->pclass == CLASS_ELEMENTALIST)
+        else if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
             do_cmd_element_browse(player_ptr);
-        else if (player_ptr->pclass == CLASS_SMITH)
+        else if (player_ptr->pclass == PlayerClassType::SMITH)
             do_cmd_kaji(player_ptr, true);
-        else if (player_ptr->pclass == CLASS_MAGIC_EATER)
+        else if (player_ptr->pclass == PlayerClassType::MAGIC_EATER)
             do_cmd_magic_eater(player_ptr, true, false);
-        else if (player_ptr->pclass == CLASS_SNIPER)
+        else if (player_ptr->pclass == PlayerClassType::SNIPER)
             do_cmd_snipe_browse(player_ptr);
         else
             do_cmd_browse(player_ptr);

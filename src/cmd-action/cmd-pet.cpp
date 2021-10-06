@@ -500,9 +500,9 @@ void do_cmd_pet(player_type *player_ptr)
             powers[num++] = PET_TWO_HANDS;
         } else {
             switch (player_ptr->pclass) {
-            case CLASS_MONK:
-            case CLASS_FORCETRAINER:
-            case CLASS_BERSERKER:
+            case PlayerClassType::MONK:
+            case PlayerClassType::FORCETRAINER:
+            case PlayerClassType::BERSERKER:
                 if (empty_hands(player_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
                     if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("片手で格闘する", "use one hand to control the pet you are riding");

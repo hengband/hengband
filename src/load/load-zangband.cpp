@@ -89,10 +89,10 @@ void set_zangband_realm(player_type *player_ptr)
 
 void set_zangband_skill(player_type *player_ptr)
 {
-    if (player_ptr->pclass != CLASS_BEASTMASTER)
+    if (player_ptr->pclass != PlayerClassType::BEASTMASTER)
         player_ptr->skill_exp[SKILL_RIDING] /= 2;
 
-    player_ptr->skill_exp[SKILL_RIDING] = MIN(player_ptr->skill_exp[SKILL_RIDING], s_info[player_ptr->pclass].s_max[SKILL_RIDING]);
+    player_ptr->skill_exp[SKILL_RIDING] = MIN(player_ptr->skill_exp[SKILL_RIDING], s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING]);
 }
 
 void set_zangband_race(player_type *player_ptr)
@@ -202,22 +202,22 @@ void set_zangband_quest(player_type *player_ptr, quest_type *const q_ptr, int lo
 
 void set_zangband_class(player_type *player_ptr)
 {
-    if (h_older_than(0, 2, 2) && (player_ptr->pclass == CLASS_BEASTMASTER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 2, 2) && (player_ptr->pclass == PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 3, 2) && (player_ptr->pclass == CLASS_ARCHER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 3, 2) && (player_ptr->pclass == PlayerClassType::ARCHER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 2, 6) && (player_ptr->pclass == CLASS_SORCERER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 2, 6) && (player_ptr->pclass == PlayerClassType::SORCERER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 4, 7) && (player_ptr->pclass == CLASS_BLUE_MAGE) && !player_ptr->is_dead) {
+    if (h_older_than(0, 4, 7) && (player_ptr->pclass == PlayerClassType::BLUE_MAGE) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }

@@ -220,7 +220,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
             chg_virtue(player_ptr, V_HONOUR, -1);
             chg_virtue(player_ptr, V_JUSTICE, -1);
             chg_virtue(player_ptr, V_COMPASSION, -1);
-        } else if (player_ptr->pclass != CLASS_BERSERKER) {
+        } else if (player_ptr->pclass != PlayerClassType::BERSERKER) {
             if (get_check(_("本当に攻撃しますか？", "Really hit it? "))) {
                 chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
                 chg_virtue(player_ptr, V_HONOUR, -1);
@@ -251,7 +251,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     }
 
     if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
-        if ((player_ptr->skill_exp[SKILL_TWO_WEAPON] < s_info[player_ptr->pclass].s_max[SKILL_TWO_WEAPON])
+        if ((player_ptr->skill_exp[SKILL_TWO_WEAPON] < s_info[enum2i(player_ptr->pclass)].s_max[SKILL_TWO_WEAPON])
             && ((player_ptr->skill_exp[SKILL_TWO_WEAPON] - 1000) / 200 < r_ptr->level)) {
             if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_BEGINNER)
                 player_ptr->skill_exp[SKILL_TWO_WEAPON] += 80;
@@ -268,7 +268,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
 
     if (player_ptr->riding) {
         int cur = player_ptr->skill_exp[SKILL_RIDING];
-        int max = s_info[player_ptr->pclass].s_max[SKILL_RIDING];
+        int max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING];
 
         if (cur < max) {
             DEPTH ridinglevel = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level;

@@ -382,11 +382,11 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_SPELL: {
-            if ((this->player_ptr->pclass == CLASS_WARRIOR) || (this->player_ptr->pclass == CLASS_IMITATOR) || (this->player_ptr->pclass == CLASS_MINDCRAFTER)
-                || (this->player_ptr->pclass == CLASS_SORCERER) || (this->player_ptr->pclass == CLASS_ARCHER) || (this->player_ptr->pclass == CLASS_MAGIC_EATER)
-                || (this->player_ptr->pclass == CLASS_RED_MAGE) || (this->player_ptr->pclass == CLASS_SAMURAI) || (this->player_ptr->pclass == CLASS_BLUE_MAGE)
-                || (this->player_ptr->pclass == CLASS_CAVALRY) || (this->player_ptr->pclass == CLASS_BERSERKER) || (this->player_ptr->pclass == CLASS_SMITH)
-                || (this->player_ptr->pclass == CLASS_MIRROR_MASTER) || (this->player_ptr->pclass == CLASS_NINJA) || (this->player_ptr->pclass == CLASS_SNIPER))
+            if ((this->player_ptr->pclass == PlayerClassType::WARRIOR) || (this->player_ptr->pclass == PlayerClassType::IMITATOR) || (this->player_ptr->pclass == PlayerClassType::MINDCRAFTER)
+                || (this->player_ptr->pclass == PlayerClassType::SORCERER) || (this->player_ptr->pclass == PlayerClassType::ARCHER) || (this->player_ptr->pclass == PlayerClassType::MAGIC_EATER)
+                || (this->player_ptr->pclass == PlayerClassType::RED_MAGE) || (this->player_ptr->pclass == PlayerClassType::SAMURAI) || (this->player_ptr->pclass == PlayerClassType::BLUE_MAGE)
+                || (this->player_ptr->pclass == PlayerClassType::CAVALRY) || (this->player_ptr->pclass == PlayerClassType::BERSERKER) || (this->player_ptr->pclass == PlayerClassType::SMITH)
+                || (this->player_ptr->pclass == PlayerClassType::MIRROR_MASTER) || (this->player_ptr->pclass == PlayerClassType::NINJA) || (this->player_ptr->pclass == PlayerClassType::SNIPER))
                 break;
 
             this->player_ptr->add_spells++;
@@ -527,7 +527,7 @@ bool ObjectReadEntity::check_can_read()
         return false;
     }
 
-    if (this->player_ptr->pclass == CLASS_BERSERKER) {
+    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
         msg_print(_("巻物なんて読めない。", "You cannot read."));
         return false;
     }

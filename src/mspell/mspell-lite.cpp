@@ -181,7 +181,7 @@ void decide_lite_area(player_type *player_ptr, msa_type *msa_ptr)
     if (msa_ptr->ability_flags.has_not(RF_ABILITY::DARKNESS))
         return;
 
-    bool can_use_lite_area = (player_ptr->pclass == CLASS_NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
+    bool can_use_lite_area = (player_ptr->pclass == PlayerClassType::NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
         && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
 
     if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
@@ -192,6 +192,6 @@ void decide_lite_area(player_type *player_ptr, msa_type *msa_ptr)
         return;
     }
 
-    if ((player_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
+    if ((player_ptr->pclass == PlayerClassType::NINJA) && !can_use_lite_area)
         msa_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
 }

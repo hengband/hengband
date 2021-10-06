@@ -111,8 +111,9 @@ static int32_t get_autoroller_prob(int *minval)
  */
 static void decide_initial_stat(player_type *player_ptr, int *cval)
 {
-    auto &class_ptr = class_info[player_ptr->pclass];
-    auto &magic_ptr = m_info[player_ptr->pclass];
+    auto pclass = enum2i(player_ptr->pclass);
+    auto &class_ptr = class_info[pclass];
+    auto &magic_ptr = m_info[pclass];
     auto is_magic_user = magic_ptr.spell_stat == A_INT || magic_ptr.spell_stat == A_WIS || magic_ptr.spell_stat == A_CHR;
     auto is_attacker = class_ptr.num > 3;
 

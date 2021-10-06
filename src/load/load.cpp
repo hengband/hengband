@@ -212,16 +212,17 @@ static errr exe_reading_savefile(player_type *player_ptr)
     if (load_hp_result != 0)
         return load_hp_result;
 
+    auto short_pclass = enum2i(player_ptr->pclass);
     sp_ptr = &sex_info[player_ptr->psex];
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
-    cp_ptr = &class_info[player_ptr->pclass];
+    cp_ptr = &class_info[short_pclass];
     ap_ptr = &personality_info[player_ptr->ppersonality];
 
     set_zangband_class(player_ptr);
-    mp_ptr = &m_info[player_ptr->pclass];
+    mp_ptr = &m_info[short_pclass];
 
     load_spells(player_ptr);
-    if (player_ptr->pclass == CLASS_MINDCRAFTER)
+    if (player_ptr->pclass == PlayerClassType::MINDCRAFTER)
         player_ptr->add_spells = 0;
 
     errr load_inventory_result = load_inventory(player_ptr);
@@ -288,7 +289,7 @@ static errr rd_savefile(player_type *player_ptr)
  */
 static bool can_takeover_savefile(const player_type *player_ptr)
 {
-    if (loading_savefile_version_is_older_than(8) && player_ptr->pclass == CLASS_SMITH) {
+    if (loading_savefile_version_is_older_than(8) && player_ptr->pclass == PlayerClassType::SMITH) {
         return false;
     }
 

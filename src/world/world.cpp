@@ -83,7 +83,7 @@ void add_retired_class(PlayerClassType c)
  */
 bool is_winner_class(PlayerClassType c)
 {
-    if (c == MAX_CLASS)
+    if (c == PlayerClassType::MAX)
         return false;
     return w_ptr->sf_winner.has(c);
 }
@@ -93,7 +93,7 @@ bool is_winner_class(PlayerClassType c)
  */
 bool is_retired_class(PlayerClassType c)
 {
-    if (c == MAX_CLASS)
+    if (c == PlayerClassType::MAX)
         return false;
     return w_ptr->sf_retired.has(c);
 }

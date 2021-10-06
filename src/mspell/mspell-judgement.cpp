@@ -251,7 +251,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->dustrobe)
         return true;
 
-    if (player_ptr->shero && (player_ptr->pclass != CLASS_BERSERKER))
+    if (player_ptr->shero && (player_ptr->pclass != PlayerClassType::BERSERKER))
         return true;
 
     if (player_ptr->mimic_form == MIMIC_DEMON_LORD)
@@ -293,7 +293,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has_any_of({ RF_ABILITY::BR_POIS, RF_ABILITY::BR_NUKE }) && !((player_ptr->pclass == CLASS_NINJA) && (player_ptr->lev > 44))) {
+    if (r_ptr->ability_flags.has_any_of({ RF_ABILITY::BR_POIS, RF_ABILITY::BR_NUKE }) && !((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
         if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST))
             return true;
 

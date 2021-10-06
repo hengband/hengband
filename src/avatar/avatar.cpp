@@ -227,108 +227,108 @@ void initialize_virtues(player_type *player_ptr)
     /* Get pre-defined types */
     /* 1 or more virtues based on class */
     switch (player_ptr->pclass) {
-    case CLASS_WARRIOR:
-    case CLASS_SAMURAI:
+    case PlayerClassType::WARRIOR:
+    case PlayerClassType::SAMURAI:
         player_ptr->vir_types[i++] = V_VALOUR;
         player_ptr->vir_types[i++] = V_HONOUR;
         break;
-    case CLASS_MAGE:
+    case PlayerClassType::MAGE:
         player_ptr->vir_types[i++] = V_KNOWLEDGE;
         player_ptr->vir_types[i++] = V_ENCHANT;
         break;
-    case CLASS_PRIEST:
+    case PlayerClassType::PRIEST:
         player_ptr->vir_types[i++] = V_FAITH;
         player_ptr->vir_types[i++] = V_TEMPERANCE;
         break;
-    case CLASS_ROGUE:
-    case CLASS_SNIPER:
+    case PlayerClassType::ROGUE:
+    case PlayerClassType::SNIPER:
         player_ptr->vir_types[i++] = V_HONOUR;
         break;
-    case CLASS_RANGER:
-    case CLASS_ARCHER:
+    case PlayerClassType::RANGER:
+    case PlayerClassType::ARCHER:
         player_ptr->vir_types[i++] = V_NATURE;
         player_ptr->vir_types[i++] = V_TEMPERANCE;
         break;
-    case CLASS_PALADIN:
+    case PlayerClassType::PALADIN:
         player_ptr->vir_types[i++] = V_JUSTICE;
         player_ptr->vir_types[i++] = V_VALOUR;
         player_ptr->vir_types[i++] = V_HONOUR;
         player_ptr->vir_types[i++] = V_FAITH;
         break;
-    case CLASS_WARRIOR_MAGE:
-    case CLASS_RED_MAGE:
+    case PlayerClassType::WARRIOR_MAGE:
+    case PlayerClassType::RED_MAGE:
         player_ptr->vir_types[i++] = V_ENCHANT;
         player_ptr->vir_types[i++] = V_VALOUR;
         break;
-    case CLASS_CHAOS_WARRIOR:
+    case PlayerClassType::CHAOS_WARRIOR:
         player_ptr->vir_types[i++] = V_CHANCE;
         player_ptr->vir_types[i++] = V_INDIVIDUALISM;
         break;
-    case CLASS_MONK:
-    case CLASS_FORCETRAINER:
+    case PlayerClassType::MONK:
+    case PlayerClassType::FORCETRAINER:
         player_ptr->vir_types[i++] = V_FAITH;
         player_ptr->vir_types[i++] = V_HARMONY;
         player_ptr->vir_types[i++] = V_TEMPERANCE;
         player_ptr->vir_types[i++] = V_PATIENCE;
         break;
-    case CLASS_MINDCRAFTER:
-    case CLASS_MIRROR_MASTER:
+    case PlayerClassType::MINDCRAFTER:
+    case PlayerClassType::MIRROR_MASTER:
         player_ptr->vir_types[i++] = V_HARMONY;
         player_ptr->vir_types[i++] = V_ENLIGHTEN;
         player_ptr->vir_types[i++] = V_PATIENCE;
         break;
-    case CLASS_HIGH_MAGE:
-    case CLASS_SORCERER:
+    case PlayerClassType::HIGH_MAGE:
+    case PlayerClassType::SORCERER:
         player_ptr->vir_types[i++] = V_ENLIGHTEN;
         player_ptr->vir_types[i++] = V_ENCHANT;
         player_ptr->vir_types[i++] = V_KNOWLEDGE;
         break;
-    case CLASS_TOURIST:
+    case PlayerClassType::TOURIST:
         player_ptr->vir_types[i++] = V_ENLIGHTEN;
         player_ptr->vir_types[i++] = V_CHANCE;
         break;
-    case CLASS_IMITATOR:
+    case PlayerClassType::IMITATOR:
         player_ptr->vir_types[i++] = V_CHANCE;
         break;
-    case CLASS_BLUE_MAGE:
+    case PlayerClassType::BLUE_MAGE:
         player_ptr->vir_types[i++] = V_CHANCE;
         player_ptr->vir_types[i++] = V_KNOWLEDGE;
         break;
-    case CLASS_BEASTMASTER:
+    case PlayerClassType::BEASTMASTER:
         player_ptr->vir_types[i++] = V_NATURE;
         player_ptr->vir_types[i++] = V_CHANCE;
         player_ptr->vir_types[i++] = V_VITALITY;
         break;
-    case CLASS_MAGIC_EATER:
+    case PlayerClassType::MAGIC_EATER:
         player_ptr->vir_types[i++] = V_ENCHANT;
         player_ptr->vir_types[i++] = V_KNOWLEDGE;
         break;
-    case CLASS_BARD:
+    case PlayerClassType::BARD:
         player_ptr->vir_types[i++] = V_HARMONY;
         player_ptr->vir_types[i++] = V_COMPASSION;
         break;
-    case CLASS_CAVALRY:
+    case PlayerClassType::CAVALRY:
         player_ptr->vir_types[i++] = V_VALOUR;
         player_ptr->vir_types[i++] = V_HARMONY;
         break;
-    case CLASS_BERSERKER:
+    case PlayerClassType::BERSERKER:
         player_ptr->vir_types[i++] = V_VALOUR;
         player_ptr->vir_types[i++] = V_INDIVIDUALISM;
         break;
-    case CLASS_SMITH:
+    case PlayerClassType::SMITH:
         player_ptr->vir_types[i++] = V_HONOUR;
         player_ptr->vir_types[i++] = V_KNOWLEDGE;
         break;
-    case CLASS_NINJA:
+    case PlayerClassType::NINJA:
         player_ptr->vir_types[i++] = V_PATIENCE;
         player_ptr->vir_types[i++] = V_KNOWLEDGE;
         player_ptr->vir_types[i++] = V_FAITH;
         player_ptr->vir_types[i++] = V_UNLIFE;
         break;
-    case CLASS_ELEMENTALIST:
+    case PlayerClassType::ELEMENTALIST:
         player_ptr->vir_types[i++] = V_NATURE;
         break;
-    case MAX_CLASS:
+    case PlayerClassType::MAX:
         break;
     };
 

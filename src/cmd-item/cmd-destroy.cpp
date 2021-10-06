@@ -114,10 +114,10 @@ static bool decide_magic_book_exp(player_type *player_ptr, destroy_type *destroy
     if (player_ptr->prace == PlayerRaceType::ANDROID)
         return false;
 
-    if ((player_ptr->pclass == CLASS_WARRIOR) || (player_ptr->pclass == CLASS_BERSERKER))
+    if ((player_ptr->pclass == PlayerClassType::WARRIOR) || (player_ptr->pclass == PlayerClassType::BERSERKER))
         return true;
 
-    if (player_ptr->pclass != CLASS_PALADIN)
+    if (player_ptr->pclass != PlayerClassType::PALADIN)
         return false;
 
     bool gain_expr = false;

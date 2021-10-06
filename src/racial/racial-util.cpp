@@ -7,7 +7,7 @@ rc_type::rc_type(player_type *player_ptr)
 {
     this->ask = true;
     this->lvl = player_ptr->lev;
-    this->is_warrior = (player_ptr->pclass == CLASS_WARRIOR || player_ptr->pclass == CLASS_BERSERKER);
+    this->is_warrior = (player_ptr->pclass == PlayerClassType::WARRIOR || player_ptr->pclass == PlayerClassType::BERSERKER);
 }
 
 void rc_type::add_power(rpi_type& rpi, int number)

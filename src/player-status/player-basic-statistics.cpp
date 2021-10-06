@@ -64,7 +64,7 @@ int16_t PlayerBasicStatistics::race_value()
  */
 int16_t PlayerBasicStatistics::class_value()
 {
-    const player_class_info *c_ptr = &class_info[this->player_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
     return c_ptr->c_adj[this->ability_type];
 }
 

@@ -202,7 +202,7 @@ void redraw_stuff(player_type *player_ptr)
         print_speed(player_ptr);
     }
 
-    if (player_ptr->pclass == CLASS_IMITATOR) {
+    if (player_ptr->pclass == PlayerClassType::IMITATOR) {
         if (player_ptr->redraw & (PR_IMITATION)) {
             player_ptr->redraw &= ~(PR_IMITATION);
             print_imitation(player_ptr);

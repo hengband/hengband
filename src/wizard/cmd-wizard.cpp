@@ -153,10 +153,10 @@ bool exe_cmd_debug(player_type *player_ptr, char cmd)
         break;
     case 'E':
         switch (player_ptr->pclass) {
-        case CLASS_BLUE_MAGE:
+        case PlayerClassType::BLUE_MAGE:
             wiz_learn_blue_magic_all(player_ptr);
             break;
-        case CLASS_SMITH:
+        case PlayerClassType::SMITH:
             wiz_fillup_all_smith_essences(player_ptr);
             break;
         default:
@@ -228,7 +228,7 @@ bool exe_cmd_debug(player_type *player_ptr, char cmd)
         wiz_lite(player_ptr, false);
         break;
     case 'w':
-        wiz_lite(player_ptr, (bool)(player_ptr->pclass == CLASS_NINJA));
+        wiz_lite(player_ptr, (bool)(player_ptr->pclass == PlayerClassType::NINJA));
         break;
     case 'x':
         gain_exp(player_ptr, command_arg ? command_arg : (player_ptr->exp + 1));

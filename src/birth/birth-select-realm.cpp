@@ -114,7 +114,7 @@ static void impose_first_realm(const player_type *player_ptr, uint32_t *choices)
     if (player_ptr->realm2 == REALM_SELECT_CANCEL)
         return;
 
-    if (player_ptr->pclass != CLASS_PRIEST)
+    if (player_ptr->pclass != PlayerClassType::PRIEST)
         return;
 
     if (is_good_realm(player_ptr->realm1)) {
@@ -318,7 +318,7 @@ bool get_player_realms(player_type *player_ptr)
     player_ptr->realm1 = REALM_NONE;
     player_ptr->realm2 = REALM_SELECT_CANCEL;
 
-    if (player_ptr->pclass == CLASS_ELEMENTALIST) {
+    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST) {
         player_ptr->element = select_element_realm(player_ptr);
         if (player_ptr->element == REALM_SELECT_CANCEL)
             return false;
@@ -332,7 +332,7 @@ bool get_player_realms(player_type *player_ptr)
     while (true) {
         char temp[80 * 10];
         int count = 0;
-        player_ptr->realm1 = select_realm(player_ptr, realm_choices1[player_ptr->pclass], &count);
+        player_ptr->realm1 = select_realm(player_ptr, realm_choices1[enum2i(player_ptr->pclass)], &count);
         if (player_ptr->realm1 == REALM_SELECT_CANCEL)
             return false;
         if (!player_ptr->realm1)
@@ -367,7 +367,7 @@ bool get_player_realms(player_type *player_ptr)
     while (true) {
         char temp[80 * 8];
         int count = 0;
-        player_ptr->realm2 = select_realm(player_ptr, realm_choices2[player_ptr->pclass], &count);
+        player_ptr->realm2 = select_realm(player_ptr, realm_choices2[enum2i(player_ptr->pclass)], &count);
 
         if (player_ptr->realm2 == REALM_SELECT_CANCEL)
             return false;

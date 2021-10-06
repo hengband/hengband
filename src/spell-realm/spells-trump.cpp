@@ -34,7 +34,7 @@ void cast_shuffle(player_type *player_ptr)
     int vir = virtue_number(player_ptr, V_CHANCE);
     int i;
 
-    if ((player_ptr->pclass == CLASS_ROGUE) || (player_ptr->pclass == CLASS_HIGH_MAGE) || (player_ptr->pclass == CLASS_SORCERER))
+    if ((player_ptr->pclass == PlayerClassType::ROGUE) || (player_ptr->pclass == PlayerClassType::HIGH_MAGE) || (player_ptr->pclass == PlayerClassType::SORCERER))
         die = (randint1(110)) + plev / 5;
     else
         die = randint1(120);

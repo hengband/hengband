@@ -61,7 +61,7 @@ PERCENTAGE racial_chance(player_type *player_ptr, rpi_type *rpi_ptr)
         difficulty -= lev_adj;
     }
 
-    auto special_easy = player_ptr->pclass == CLASS_IMITATOR;
+    auto special_easy = player_ptr->pclass == PlayerClassType::IMITATOR;
     special_easy &= player_ptr->inventory_list[INVEN_NECK].name1 == ART_GOGO_PENDANT;
     special_easy &= rpi_ptr->racial_name.compare("倍返し") == 0;
     if (special_easy) {

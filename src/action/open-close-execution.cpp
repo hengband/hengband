@@ -305,7 +305,7 @@ bool exe_bash(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));
-    if (player_ptr->pclass == CLASS_BERSERKER)
+    if (player_ptr->pclass == PlayerClassType::BERSERKER)
         temp *= 2;
 
     if (temp < 1)

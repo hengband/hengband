@@ -177,7 +177,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
                 health_track(player_ptr, g_ptr->m_idx);
             }
 
-            if ((stormbringer && (randint1(1000) > 666)) || (player_ptr->pclass == CLASS_BERSERKER)) {
+            if ((stormbringer && (randint1(1000) > 666)) || (player_ptr->pclass == PlayerClassType::BERSERKER)) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
                 can_move = false;
             } else if (monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat, r_ptr, 0)) {
@@ -249,7 +249,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
         player_ptr->running = 0;
         can_move = false;
     } else if (f_ptr->flags.has(FF::TREE) && !p_can_kill_walls) {
-        if ((player_ptr->pclass != CLASS_RANGER) && !player_ptr->levitation && (!player_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
+        if ((player_ptr->pclass != PlayerClassType::RANGER) && !player_ptr->levitation && (!player_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
             energy.mul_player_turn_energy(2);
         }
     } else if ((do_pickup != easy_disarm) && f_ptr->flags.has(FF::DISARM) && !g_ptr->mimic) {

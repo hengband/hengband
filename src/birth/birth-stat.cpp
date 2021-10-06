@@ -94,7 +94,7 @@ uint16_t get_expfact(player_type *player_ptr)
 
     if (player_ptr->prace != PlayerRaceType::ANDROID)
         expfact += cp_ptr->c_exp;
-    if (((player_ptr->pclass == CLASS_MONK) || (player_ptr->pclass == CLASS_FORCETRAINER) || (player_ptr->pclass == CLASS_NINJA))
+    if (((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER) || (player_ptr->pclass == PlayerClassType::NINJA))
         && ((player_ptr->prace == PlayerRaceType::KLACKON) || (player_ptr->prace == PlayerRaceType::SPRITE)))
         expfact -= 15;
 
@@ -115,17 +115,18 @@ void get_extra(player_type *player_ptr, bool roll_hitdie)
     player_ptr->old_realm = 0;
 
     for (int i = 0; i < 64; i++) {
-        if (player_ptr->pclass == CLASS_SORCERER)
+        if (player_ptr->pclass == PlayerClassType::SORCERER)
             player_ptr->spell_exp[i] = SPELL_EXP_MASTER;
-        else if (player_ptr->pclass == CLASS_RED_MAGE)
+        else if (player_ptr->pclass == PlayerClassType::RED_MAGE)
             player_ptr->spell_exp[i] = SPELL_EXP_SKILLED;
         else
             player_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
     }
 
+    auto pclass = enum2i(player_ptr->pclass);
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 64; j++)
-            player_ptr->weapon_exp[i][j] = s_info[player_ptr->pclass].w_start[i][j];
+            player_ptr->weapon_exp[i][j] = s_info[pclass].w_start[i][j];
 
     auto sexy_tval = ItemKindType::HAFTED - TV_WEAPON_BEGIN;
     if ((player_ptr->ppersonality == PERSONALITY_SEXY) && (player_ptr->weapon_exp[sexy_tval][SV_WHIP] < WEAPON_EXP_BEGINNER)) {
@@ -133,9 +134,9 @@ void get_extra(player_type *player_ptr, bool roll_hitdie)
     }
 
     for (int i = 0; i < MAX_SKILLS; i++)
-        player_ptr->skill_exp[i] = s_info[player_ptr->pclass].s_start[i];
+        player_ptr->skill_exp[i] = s_info[pclass].s_start[i];
 
-    if (player_ptr->pclass == CLASS_SORCERER)
+    if (player_ptr->pclass == PlayerClassType::SORCERER)
         player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
     else
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;

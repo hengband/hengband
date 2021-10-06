@@ -43,7 +43,7 @@ TrFlags PlayerClass::tr_flags() const
     const auto plev = this->player_ptr->lev;
 
     switch (this->player_ptr->pclass) {
-    case CLASS_WARRIOR: {
+    case PlayerClassType::WARRIOR: {
         if (plev > 29)
             flags.set(TR_RES_FEAR);
         if (plev > 44)
@@ -51,19 +51,19 @@ TrFlags PlayerClass::tr_flags() const
 
         break;
     }
-    case CLASS_SAMURAI: {
+    case PlayerClassType::SAMURAI: {
         if (plev > 29)
             flags.set(TR_RES_FEAR);
 
         break;
     }
-    case CLASS_PALADIN: {
+    case PlayerClassType::PALADIN: {
         if (plev > 39)
             flags.set(TR_RES_FEAR);
 
         break;
     }
-    case CLASS_CHAOS_WARRIOR: {
+    case PlayerClassType::CHAOS_WARRIOR: {
         if (plev > 29)
             flags.set(TR_RES_CHAOS);
         if (plev > 39)
@@ -71,8 +71,8 @@ TrFlags PlayerClass::tr_flags() const
 
         break;
     }
-    case CLASS_MONK:
-    case CLASS_FORCETRAINER: {
+    case PlayerClassType::MONK:
+    case PlayerClassType::FORCETRAINER: {
         if ((plev > 9) && !heavy_armor(this->player_ptr))
             flags.set(TR_SPEED);
         if ((plev > 24) && !heavy_armor(this->player_ptr))
@@ -80,7 +80,7 @@ TrFlags PlayerClass::tr_flags() const
 
         break;
     }
-    case CLASS_NINJA: {
+    case PlayerClassType::NINJA: {
         if (heavy_armor(this->player_ptr)) {
             flags.set(TR_SPEED);
         } else {
@@ -101,7 +101,7 @@ TrFlags PlayerClass::tr_flags() const
 
         break;
     }
-    case CLASS_MINDCRAFTER: {
+    case PlayerClassType::MINDCRAFTER: {
         if (plev > 9)
             flags.set(TR_RES_FEAR);
         if (plev > 19)
@@ -113,11 +113,11 @@ TrFlags PlayerClass::tr_flags() const
 
         break;
     }
-    case CLASS_BARD: {
+    case PlayerClassType::BARD: {
         flags.set(TR_RES_SOUND);
         break;
     }
-    case CLASS_BERSERKER: {
+    case PlayerClassType::BERSERKER: {
         flags.set(TR_SUST_STR);
         flags.set(TR_SUST_DEX);
         flags.set(TR_SUST_CON);
@@ -129,13 +129,13 @@ TrFlags PlayerClass::tr_flags() const
 
         break;
     }
-    case CLASS_MIRROR_MASTER: {
+    case PlayerClassType::MIRROR_MASTER: {
         if (plev > 39)
             flags.set(TR_REFLECT);
 
         break;
     }
-    case CLASS_ELEMENTALIST:
+    case PlayerClassType::ELEMENTALIST:
         if (has_element_resist(this->player_ptr, ElementRealm::FIRE, 1))
             flags.set(TR_RES_FIRE);
         if (has_element_resist(this->player_ptr, ElementRealm::FIRE, 30))
@@ -223,23 +223,23 @@ TrFlags PlayerClass::form_tr_flags() const
 
 bool PlayerClass::can_resist_stun() const
 {
-    return (this->player_ptr->pclass == CLASS_BERSERKER) && (this->player_ptr->lev > 34);
+    return (this->player_ptr->pclass == PlayerClassType::BERSERKER) && (this->player_ptr->lev > 34);
 }
 
 bool PlayerClass::is_wizard() const
 {
-    auto is_wizard = this->player_ptr->pclass == CLASS_MAGE;
-    is_wizard |= this->player_ptr->pclass == CLASS_HIGH_MAGE;
-    is_wizard |= this->player_ptr->pclass == CLASS_SORCERER;
-    is_wizard |= this->player_ptr->pclass == CLASS_MAGIC_EATER;
-    is_wizard |= this->player_ptr->pclass == CLASS_BLUE_MAGE;
-    is_wizard |= this->player_ptr->pclass == CLASS_ELEMENTALIST;
+    auto is_wizard = this->player_ptr->pclass == PlayerClassType::MAGE;
+    is_wizard |= this->player_ptr->pclass == PlayerClassType::HIGH_MAGE;
+    is_wizard |= this->player_ptr->pclass == PlayerClassType::SORCERER;
+    is_wizard |= this->player_ptr->pclass == PlayerClassType::MAGIC_EATER;
+    is_wizard |= this->player_ptr->pclass == PlayerClassType::BLUE_MAGE;
+    is_wizard |= this->player_ptr->pclass == PlayerClassType::ELEMENTALIST;
     return is_wizard;
 }
 
 bool PlayerClass::lose_balance()
 {
-    if (this->player_ptr->pclass != CLASS_SAMURAI) {
+    if (this->player_ptr->pclass != PlayerClassType::SAMURAI) {
         return false;
     }
 
@@ -334,37 +334,37 @@ void PlayerClass::set_monk_stance(MonkStance stance) const
 void PlayerClass::init_specific_data()
 {
     switch (this->player_ptr->pclass) {
-    case CLASS_SMITH:
+    case PlayerClassType::SMITH:
         this->player_ptr->class_specific_data = std::make_shared<smith_data_type>();
         break;
-    case CLASS_FORCETRAINER:
+    case PlayerClassType::FORCETRAINER:
         this->player_ptr->class_specific_data = std::make_shared<force_trainer_data_type>();
         break;
-    case CLASS_BLUE_MAGE:
+    case PlayerClassType::BLUE_MAGE:
         this->player_ptr->class_specific_data = std::make_shared<bluemage_data_type>();
         break;
-    case CLASS_MAGIC_EATER:
+    case PlayerClassType::MAGIC_EATER:
         this->player_ptr->class_specific_data = std::make_shared<magic_eater_data_type>();
         break;
-    case CLASS_BARD:
+    case PlayerClassType::BARD:
         this->player_ptr->class_specific_data = std::make_shared<bard_data_type>();
         break;
-    case CLASS_IMITATOR:
+    case PlayerClassType::IMITATOR:
         this->player_ptr->class_specific_data = std::make_shared<mane_data_type>();
         break;
-    case CLASS_SNIPER:
+    case PlayerClassType::SNIPER:
         this->player_ptr->class_specific_data = std::make_shared<sniper_data_type>();
         break;
-    case CLASS_SAMURAI:
+    case PlayerClassType::SAMURAI:
         this->player_ptr->class_specific_data = std::make_shared<samurai_data_type>();
         break;
-    case CLASS_MONK:
+    case PlayerClassType::MONK:
         this->player_ptr->class_specific_data = std::make_shared<monk_data_type>();
         break;
-    case CLASS_NINJA:
+    case PlayerClassType::NINJA:
         this->player_ptr->class_specific_data = std::make_shared<ninja_data_type>();
         break;
-    case CLASS_HIGH_MAGE:
+    case PlayerClassType::HIGH_MAGE:
         if (this->player_ptr->realm1 == REALM_HEX) {
             this->player_ptr->class_specific_data = std::make_shared<spell_hex_data_type>();
         } else {

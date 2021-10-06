@@ -136,112 +136,112 @@ void sense_inventory1(player_type *player_ptr)
         return;
 
     switch (player_ptr->pclass) {
-    case CLASS_WARRIOR:
-    case CLASS_ARCHER:
-    case CLASS_SAMURAI:
-    case CLASS_CAVALRY: {
+    case PlayerClassType::WARRIOR:
+    case PlayerClassType::ARCHER:
+    case PlayerClassType::SAMURAI:
+    case PlayerClassType::CAVALRY: {
         if (0 != randint0(9000L / (plev * plev + 40)))
             return;
 
         heavy = true;
         break;
     }
-    case CLASS_SMITH: {
+    case PlayerClassType::SMITH: {
         if (0 != randint0(6000L / (plev * plev + 50)))
             return;
 
         heavy = true;
         break;
     }
-    case CLASS_MAGE:
-    case CLASS_HIGH_MAGE:
-    case CLASS_SORCERER:
-    case CLASS_MAGIC_EATER:
-    case CLASS_ELEMENTALIST: {
+    case PlayerClassType::MAGE:
+    case PlayerClassType::HIGH_MAGE:
+    case PlayerClassType::SORCERER:
+    case PlayerClassType::MAGIC_EATER:
+    case PlayerClassType::ELEMENTALIST: {
         if (0 != randint0(240000L / (plev + 5)))
             return;
 
         break;
     }
-    case CLASS_PRIEST:
-    case CLASS_BARD: {
+    case PlayerClassType::PRIEST:
+    case PlayerClassType::BARD: {
         if (0 != randint0(10000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_ROGUE:
-    case CLASS_NINJA: {
+    case PlayerClassType::ROGUE:
+    case PlayerClassType::NINJA: {
         if (0 != randint0(20000L / (plev * plev + 40)))
             return;
 
         heavy = true;
         break;
     }
-    case CLASS_RANGER: {
+    case PlayerClassType::RANGER: {
         if (0 != randint0(95000L / (plev * plev + 40)))
             return;
 
         heavy = true;
         break;
     }
-    case CLASS_PALADIN:
-    case CLASS_SNIPER: {
+    case PlayerClassType::PALADIN:
+    case PlayerClassType::SNIPER: {
         if (0 != randint0(77777L / (plev * plev + 40)))
             return;
 
         heavy = true;
         break;
     }
-    case CLASS_WARRIOR_MAGE:
-    case CLASS_RED_MAGE: {
+    case PlayerClassType::WARRIOR_MAGE:
+    case PlayerClassType::RED_MAGE: {
         if (0 != randint0(75000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_MINDCRAFTER:
-    case CLASS_IMITATOR:
-    case CLASS_BLUE_MAGE:
-    case CLASS_MIRROR_MASTER: {
+    case PlayerClassType::MINDCRAFTER:
+    case PlayerClassType::IMITATOR:
+    case PlayerClassType::BLUE_MAGE:
+    case PlayerClassType::MIRROR_MASTER: {
         if (0 != randint0(55000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_CHAOS_WARRIOR: {
+    case PlayerClassType::CHAOS_WARRIOR: {
         if (0 != randint0(80000L / (plev * plev + 40)))
             return;
 
         heavy = true;
         break;
     }
-    case CLASS_MONK:
-    case CLASS_FORCETRAINER: {
+    case PlayerClassType::MONK:
+    case PlayerClassType::FORCETRAINER: {
         if (0 != randint0(20000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_TOURIST: {
+    case PlayerClassType::TOURIST: {
         if (0 != randint0(20000L / ((plev + 50) * (plev + 50))))
             return;
 
         heavy = true;
         break;
     }
-    case CLASS_BEASTMASTER: {
+    case PlayerClassType::BEASTMASTER: {
         if (0 != randint0(65000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_BERSERKER: {
+    case PlayerClassType::BERSERKER: {
         heavy = true;
         break;
     }
 
-    case MAX_CLASS:
+    case PlayerClassType::MAX:
         break;
     }
 
@@ -308,64 +308,64 @@ void sense_inventory2(player_type *player_ptr)
         return;
 
     switch (player_ptr->pclass) {
-    case CLASS_WARRIOR:
-    case CLASS_ARCHER:
-    case CLASS_SAMURAI:
-    case CLASS_CAVALRY:
-    case CLASS_BERSERKER:
-    case CLASS_SNIPER: {
+    case PlayerClassType::WARRIOR:
+    case PlayerClassType::ARCHER:
+    case PlayerClassType::SAMURAI:
+    case PlayerClassType::CAVALRY:
+    case PlayerClassType::BERSERKER:
+    case PlayerClassType::SNIPER: {
         return;
     }
-    case CLASS_SMITH:
-    case CLASS_PALADIN:
-    case CLASS_CHAOS_WARRIOR:
-    case CLASS_IMITATOR:
-    case CLASS_BEASTMASTER:
-    case CLASS_NINJA: {
+    case PlayerClassType::SMITH:
+    case PlayerClassType::PALADIN:
+    case PlayerClassType::CHAOS_WARRIOR:
+    case PlayerClassType::IMITATOR:
+    case PlayerClassType::BEASTMASTER:
+    case PlayerClassType::NINJA: {
         if (0 != randint0(240000L / (plev + 5)))
             return;
 
         break;
     }
-    case CLASS_RANGER:
-    case CLASS_WARRIOR_MAGE:
-    case CLASS_RED_MAGE:
-    case CLASS_MONK: {
+    case PlayerClassType::RANGER:
+    case PlayerClassType::WARRIOR_MAGE:
+    case PlayerClassType::RED_MAGE:
+    case PlayerClassType::MONK: {
         if (0 != randint0(95000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_PRIEST:
-    case CLASS_BARD:
-    case CLASS_ROGUE:
-    case CLASS_FORCETRAINER:
-    case CLASS_MINDCRAFTER: {
+    case PlayerClassType::PRIEST:
+    case PlayerClassType::BARD:
+    case PlayerClassType::ROGUE:
+    case PlayerClassType::FORCETRAINER:
+    case PlayerClassType::MINDCRAFTER: {
         if (0 != randint0(20000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_MAGE:
-    case CLASS_HIGH_MAGE:
-    case CLASS_SORCERER:
-    case CLASS_MAGIC_EATER:
-    case CLASS_MIRROR_MASTER:
-    case CLASS_BLUE_MAGE:
-    case CLASS_ELEMENTALIST: {
+    case PlayerClassType::MAGE:
+    case PlayerClassType::HIGH_MAGE:
+    case PlayerClassType::SORCERER:
+    case PlayerClassType::MAGIC_EATER:
+    case PlayerClassType::MIRROR_MASTER:
+    case PlayerClassType::BLUE_MAGE:
+    case PlayerClassType::ELEMENTALIST: {
         if (0 != randint0(9000L / (plev * plev + 40)))
             return;
 
         break;
     }
-    case CLASS_TOURIST: {
+    case PlayerClassType::TOURIST: {
         if (0 != randint0(20000L / ((plev + 50) * (plev + 50))))
             return;
 
         break;
     }
 
-    case MAX_CLASS:
+    case PlayerClassType::MAX:
         break;
     }
 
