@@ -683,7 +683,8 @@ void wiz_reset_class(player_type *player_ptr)
     sprintf(ppp, "Class (0-%d): ", enum2i(PlayerClassType::MAX) - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", player_ptr->pclass);
+    auto short_pclass = enum2i(player_ptr->pclass);
+    sprintf(tmp_val, "%d", short_pclass);
 
     if (!get_string(ppp, tmp_val, 2))
         return;
@@ -693,7 +694,6 @@ void wiz_reset_class(player_type *player_ptr)
         return;
 
     player_ptr->pclass = i2enum<PlayerClassType>(tmp_int);
-    auto short_pclass = enum2i(player_ptr->pclass);
     cp_ptr = &class_info[short_pclass];
     mp_ptr = &m_info[short_pclass];
     PlayerClass(player_ptr).init_specific_data();
