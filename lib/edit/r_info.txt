@@ -26637,13 +26637,10 @@ F:FORCE_MAXHP | NO_FEAR | NO_CONF | NO_SLEEP | CAN_FLY | KILL_BODY
 D:$At first glance, it appears to be just an adorable white rabbit.
 But this rabbit is the guardian of the Cave of Caerbannog, 
 D:$where the clue to the Holy Grail lies.
-
 D:$This legendary black beast is the origin of all vorpal bunnies and killer rabbits.
 D:$Its incisors have slaughtered many knights and fools who have approached it recklessly.
 D:$Fear its incisors!
-
 D:$"Monty Python and the Holy Grail"
-
 D:一見すると愛らしいただの白い兎であるが、
 D:この兎こそが聖杯の手がかりが眠る「カルバノグの洞窟」の守護者、伝説の黒き獣にして、
 D:全てのヴォーパルバニー、殺人兎の始祖である。
