@@ -104,6 +104,9 @@ TrFlags object_flags_known(const object_type *o_ptr)
         auto tr_flags = Smith::get_effect_tr_flags(effect.value());
         flgs.set(tr_flags);
     }
+    if (Smith::object_activation(o_ptr).has_value()) {
+        flgs.set(TR_ACTIVATE);
+    }
 
     return flgs;
 }
