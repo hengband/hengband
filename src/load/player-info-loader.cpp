@@ -68,7 +68,7 @@ void rd_base_info(player_type *player_ptr)
 
     byte tmp8u;
     rd_byte(&tmp8u);
-    player_ptr->prace = (player_race_type)tmp8u;
+    player_ptr->prace = (PlayerRaceType)tmp8u;
 
     rd_byte(&tmp8u);
     player_ptr->pclass = (player_class_type)tmp8u;
@@ -141,7 +141,7 @@ static void set_race(player_type *player_ptr)
 {
     byte tmp8u;
     rd_byte(&tmp8u);
-    player_ptr->start_race = (player_race_type)tmp8u;
+    player_ptr->start_race = (PlayerRaceType)tmp8u;
     int32_t tmp32s;
     rd_s32b(&tmp32s);
     player_ptr->old_race1 = (BIT_FLAGS)tmp32s;

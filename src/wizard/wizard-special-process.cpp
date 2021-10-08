@@ -458,7 +458,7 @@ void wiz_change_status(player_type *player_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (player_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == PlayerRaceType::ANDROID)
         return;
 
     player_ptr->max_exp = tmp_long;
@@ -662,7 +662,7 @@ void wiz_reset_race(player_type *player_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_RACES)
         return;
 
-    player_ptr->prace = i2enum<player_race_type>(tmp_int);
+    player_ptr->prace = i2enum<PlayerRaceType>(tmp_int);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
     player_ptr->window_flags |= PW_PLAYER;

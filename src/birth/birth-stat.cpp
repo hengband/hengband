@@ -92,10 +92,10 @@ uint16_t get_expfact(player_type *player_ptr)
 {
     uint16_t expfact = rp_ptr->r_exp;
 
-    if (player_ptr->prace != player_race_type::ANDROID)
+    if (player_ptr->prace != PlayerRaceType::ANDROID)
         expfact += cp_ptr->c_exp;
     if (((player_ptr->pclass == CLASS_MONK) || (player_ptr->pclass == CLASS_FORCETRAINER) || (player_ptr->pclass == CLASS_NINJA))
-        && ((player_ptr->prace == player_race_type::KLACKON) || (player_ptr->prace == player_race_type::SPRITE)))
+        && ((player_ptr->prace == PlayerRaceType::KLACKON) || (player_ptr->prace == PlayerRaceType::SPRITE)))
         expfact -= 15;
 
     return expfact;

@@ -37,7 +37,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
     switch (player_ptr->prace) {
-    case player_race_type::DWARF:
+    case PlayerRaceType::DWARF:
         rpi = rpi_type(_("ドアと罠 感知", "Detect Doors+Traps"));
         rpi.text = _("近くの全ての扉と罠、階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
         rpi.min_level = 5;
@@ -46,7 +46,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::NIBELUNG:
+    case PlayerRaceType::NIBELUNG:
         rpi = rpi_type(_("ドアと罠 感知", "Detect Doors+Traps"));
         rpi.text = _("近くの全ての扉と罠、階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
         rpi.min_level = 10;
@@ -55,7 +55,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 10;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::HOBBIT:
+    case PlayerRaceType::HOBBIT:
         rpi = rpi_type(_("食糧生成", "Create Food"));
         rpi.text = _("食料を一つ作り出す。", "Produces a Ration of Food.");
         rpi.min_level = 15;
@@ -64,7 +64,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 10;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::GNOME:
+    case PlayerRaceType::GNOME:
         rpi = rpi_type(_("ショート・テレポート", "Blink"));
         rpi.info = format("%s%d", KWD_SPHERE, 10);
         rpi.text = _("近距離のテレポートをする。", "Teleports you a short distance.");
@@ -74,7 +74,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::HALF_ORC:
+    case PlayerRaceType::HALF_ORC:
         rpi = rpi_type(_("恐怖除去", "Remove Fear"));
         rpi.text = _("恐怖を取り除く。", "Removes fear.");
         rpi.min_level = 3;
@@ -83,7 +83,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = rc_ptr->is_warrior ? 5 : 10;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::HALF_TROLL:
+    case PlayerRaceType::HALF_TROLL:
         rpi = rpi_type(_("狂戦士化", "Berserk"));
         rpi.info = format("%s%d+d%d", KWD_DURATION, 10, rc_ptr->lvl);
         rpi.text = _("狂戦士化し、恐怖を除去する。防御力が少し低下する。", "Gives a bonus to hit and HP, immunity to fear for a while. But decreases AC.");
@@ -93,7 +93,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = rc_ptr->is_warrior ? 6 : 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::BARBARIAN:
+    case PlayerRaceType::BARBARIAN:
         rpi = rpi_type(_("狂戦士化", "Berserk"));
         rpi.info = format("%s%d+d%d", KWD_DURATION, 10, rc_ptr->lvl);
         rpi.text = _("狂戦士化し、恐怖を除去する。防御力が少し低下する。", "Gives a bonus to hit and HP, immunity to fear for a while. But decreases AC.");
@@ -103,7 +103,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = rc_ptr->is_warrior ? 6 : 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::AMBERITE:
+    case PlayerRaceType::AMBERITE:
         rpi = rpi_type(_("シャドウ・シフト", "Shadow Shifting"));
         rpi.text = _("現在の階を再構成する。", "Recreates current dungeon level.");
         rpi.min_level = 30;
@@ -120,7 +120,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 50;
         rc_ptr->add_power(rpi, RC_IDX_RACE_1);
         break;
-    case player_race_type::HALF_OGRE:
+    case PlayerRaceType::HALF_OGRE:
         rpi = rpi_type(_("爆発のルーン", "Explosive Rune"));
         rpi.text = _("自分のいる床の上に、モンスターが上を通ろうとすると爆発するルーンを描く。",
             "Sets a rune on the floor beneath you which exprodes if a monster through upon it. Monsters can try to disarm it.");
@@ -130,7 +130,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 15;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::HALF_GIANT:
+    case PlayerRaceType::HALF_GIANT:
         rpi = rpi_type(_("岩石溶解", "Stone to Mud"));
         rpi.text = _("壁を溶かして床にする。", "Turns one rock square to mud.");
         rpi.min_level = 20;
@@ -139,7 +139,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::HALF_TITAN:
+    case PlayerRaceType::HALF_TITAN:
         rpi = rpi_type(_("スキャン・モンスター", "Probing"));
         rpi.text = _("モンスターの属性、残り体力、最大体力、スピード、正体を知る。", "Probes all monsters' alignment, HP, speed and their true character.");
         rpi.min_level = 15;
@@ -148,7 +148,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::CYCLOPS:
+    case PlayerRaceType::CYCLOPS:
         rpi = rpi_type(_("岩石投げ", "Throw Boulder"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3 / 2);
         rpi.text = _("弱い魔法のボールを放つ", "Fires a weak boll of magic.");
@@ -158,7 +158,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::YEEK:
+    case PlayerRaceType::YEEK:
         rpi = rpi_type(_("モンスター恐慌", "Scare Monster"));
         rpi.text = _("モンスター1体を恐怖させる。抵抗されると無効。", "Attempts to scare a monster.");
         rpi.min_level = 15;
@@ -167,7 +167,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 10;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::SPECTRE:
+    case PlayerRaceType::SPECTRE:
         rpi = rpi_type(_("モンスター恐慌", "Scare Monster"));
         rpi.text = _("モンスター1体を恐怖させる。抵抗されると無効。", "Attempts to scare a monster.");
         rpi.min_level = 4;
@@ -176,7 +176,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 3;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::KLACKON:
+    case PlayerRaceType::KLACKON:
         rpi = rpi_type(_("酸の唾", "Spit Acid"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
         if (rc_ptr->lvl >= 25)
@@ -189,7 +189,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 14;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::KOBOLD:
+    case PlayerRaceType::KOBOLD:
         rpi = rpi_type(_("毒のダーツ", "Poison Dart"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
         rpi.text = _("毒の矢を放つ", "Fires a bolt of poison.");
@@ -199,7 +199,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 14;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::DARK_ELF:
+    case PlayerRaceType::DARK_ELF:
         rpi = rpi_type(_("マジック・ミサイル", "Magic Missile"));
         rpi.info = format("%s%dd%d", KWD_DAM, 3 + ((rc_ptr->lvl - 1) / 5), 4);
         rpi.text = _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
@@ -209,7 +209,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 9;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::DRACONIAN:
+    case PlayerRaceType::DRACONIAN:
         rpi = rpi_type(_("ブレス", "Breath Weapon"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("元素のブレスを放つ", "Fires a breath of an element.");
@@ -219,7 +219,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 12;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::MIND_FLAYER:
+    case PlayerRaceType::MIND_FLAYER:
         rpi = rpi_type(_("精神攻撃", "Mind Blast"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
         rpi.text = _("モンスター1体に精神攻撃を行う。", "Deals a PSI damage to a monster.");
@@ -229,7 +229,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 14;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::IMP:
+    case PlayerRaceType::IMP:
         if (rc_ptr->lvl > 30) {
             rpi = rpi_type(_("ファイア・ボール", "Fire Ball"));
             rpi.text = _("火炎のボールを放つ。", "Fires a ball of fire.");
@@ -244,7 +244,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 15;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::GOLEM:
+    case PlayerRaceType::GOLEM:
         rpi = rpi_type(_("肌石化", "Stone Skin"));
         rpi.info = format("%s%d+d%d", KWD_DURATION, 30, 20);
         rpi.text = _("一定期間防御力を高める。", "Increases your AC temporary");
@@ -254,8 +254,8 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 8;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::SKELETON:
-    case player_race_type::ZOMBIE:
+    case PlayerRaceType::SKELETON:
+    case PlayerRaceType::ZOMBIE:
         rpi = rpi_type(_("経験値復活", "Restore Experience"));
         rpi.text = _("経験値を回復する。", "Restores experience.");
         rpi.min_level = 30;
@@ -264,7 +264,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 18;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::VAMPIRE:
+    case PlayerRaceType::VAMPIRE:
         rpi = rpi_type(_("吸血", "Vampiric Drain"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("隣接したモンスター1体から生命力を吸い取る。吸い取った生命力によって満腹度があがる。",
@@ -275,7 +275,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 9;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::SPRITE:
+    case PlayerRaceType::SPRITE:
         rpi = rpi_type(_("眠り粉", "Sleeping Dust"));
         rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
         rpi.text = _("モンスター1体を眠らせる。抵抗されると無効。", "Attempts to put a monster to sleep.");
@@ -285,7 +285,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 15;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::BALROG:
+    case PlayerRaceType::BALROG:
         rpi = rpi_type(_("地獄/火炎のブレス", "Nether or Fire Breath"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
         rpi.text = _("火炎または地獄のブレスを放つ。", "Fires a breath of fire or nether.");
@@ -295,7 +295,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 20;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::KUTAR:
+    case PlayerRaceType::KUTAR:
         rpi = rpi_type(_("横に伸びる", "Expand Horizontally"));
         rpi.info = format("%s%d+d%d", KWD_DURATION, 30, 20);
         rpi.text = _("横に伸びて防御力を高める。魔法防御力は低下する。",
@@ -306,7 +306,7 @@ void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 8;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
-    case player_race_type::ANDROID:
+    case PlayerRaceType::ANDROID:
         if (player_ptr->lev < 10) {
             rpi = rpi_type(_("レイガン", "Ray Gun"));
             rpi.info = format("%s%d", KWD_DAM, (rc_ptr->lvl + 1) / 2);

@@ -37,7 +37,7 @@ void player_immunity(player_type *player_ptr, TrFlags &flags)
     if (p_flags.has(TR_IM_DARK))
         flags.set(TR_RES_DARK);
 
-    if (PlayerRace(player_ptr).equals(player_race_type::SPECTRE))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE))
         flags.set(TR_RES_NETHER);
 }
 

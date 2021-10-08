@@ -5,7 +5,7 @@
 /*!
  * @details 既にplayer_raceが存在するので_typeと付けた
  */
-enum class player_race_type {
+enum class PlayerRaceType {
     HUMAN = 0,
     HALF_ELF = 1,
     ELF = 2,
@@ -47,4 +47,4 @@ enum class player_race_type {
     MAX,
 };
 
-constexpr auto MAX_RACES = enum2i(player_race_type::MAX);
+constexpr auto MAX_RACES = enum2i(PlayerRaceType::MAX);

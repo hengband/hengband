@@ -32,7 +32,7 @@ public:
     POSITION oldpx{}; /* Previous player location -KMW- */
 
     player_sex psex{}; /* Sex index */
-    player_race_type prace{}; /* Race index */
+    PlayerRaceType prace{}; /* Race index */
     player_class_type pclass{}; /* Class index */
     player_personality_type ppersonality{}; /* Personality index */
     int16_t realm1{}; /* First magic realm */
@@ -130,7 +130,7 @@ public:
     TIME_EFFECT magicdef{};
     TIME_EFFECT tim_res_nether{}; /* Timed -- Nether resistance */
     TIME_EFFECT tim_res_time{}; /* Timed -- Time resistance */
-    int16_t mimic_form{}; // @todo 後でplayer_race_typeに差し替える.
+    int16_t mimic_form{}; // @todo 後でPlayerRaceTypeに差し替える.
     TIME_EFFECT tim_mimic{};
     TIME_EFFECT tim_sh_fire{};
     TIME_EFFECT tim_sh_holy{};
@@ -209,7 +209,7 @@ public:
     BIT_FLAGS8 knowledge{}; /* Knowledge about yourself */
     BIT_FLAGS visit{}; /* Visited towns */
 
-    player_race_type start_race{}; /* Race at birth */
+    PlayerRaceType start_race{}; /* Race at birth */
     BIT_FLAGS old_race1{}; /* Record of race changes */
     BIT_FLAGS old_race2{}; /* Record of race changes */
     int16_t old_realm{}; /* Record of realm changes */

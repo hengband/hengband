@@ -34,10 +34,10 @@ void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min
     int32_t turn_in_today = (w_ptr->game_turn + A_DAY / 4) % A_DAY;
 
     switch (player_ptr->start_race) {
-    case player_race_type::VAMPIRE:
-    case player_race_type::SKELETON:
-    case player_race_type::ZOMBIE:
-    case player_race_type::SPECTRE:
+    case PlayerRaceType::VAMPIRE:
+    case PlayerRaceType::SKELETON:
+    case PlayerRaceType::ZOMBIE:
+    case PlayerRaceType::SPECTRE:
         *day = (w_ptr->game_turn - A_DAY * 3 / 4) / A_DAY + 1;
         break;
     default:

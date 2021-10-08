@@ -248,13 +248,13 @@ bool check_drain_hp(player_type *player_ptr, const int32_t d)
     }
 
     switch (player_ptr->prace) {
-    case player_race_type::ZOMBIE:
-    case player_race_type::VAMPIRE:
-    case player_race_type::SPECTRE:
-    case player_race_type::SKELETON:
-    case player_race_type::BALROG:
-    case player_race_type::GOLEM:
-    case player_race_type::ANDROID:
+    case PlayerRaceType::ZOMBIE:
+    case PlayerRaceType::VAMPIRE:
+    case PlayerRaceType::SPECTRE:
+    case PlayerRaceType::SKELETON:
+    case PlayerRaceType::BALROG:
+    case PlayerRaceType::GOLEM:
+    case PlayerRaceType::ANDROID:
         return true;
     default:
         return resist_drain;

@@ -213,7 +213,7 @@ static void occur_chainsword_effect(player_type *player_ptr)
 
 static void curse_drain_exp(player_type *player_ptr)
 {
-    if ((player_ptr->prace == player_race_type::ANDROID) || (player_ptr->cursed.has_not(TRC::DRAIN_EXP)) || !one_in_(4))
+    if ((player_ptr->prace == PlayerRaceType::ANDROID) || (player_ptr->cursed.has_not(TRC::DRAIN_EXP)) || !one_in_(4))
         return;
 
     player_ptr->exp -= (player_ptr->lev + 1) / 2;

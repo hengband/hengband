@@ -57,7 +57,7 @@ static void check_nether_resistance(player_type *player_ptr, msr_type *msr_ptr)
     if (msr_ptr->smart.has_not(SM::RES_NETH))
         return;
 
-    if (PlayerRace(player_ptr).equals(player_race_type::SPECTRE)) {
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE)) {
         msr_ptr->ability_flags.reset(RF_ABILITY::BR_NETH);
         msr_ptr->ability_flags.reset(RF_ABILITY::BA_NETH);
         msr_ptr->ability_flags.reset(RF_ABILITY::BO_NETH);

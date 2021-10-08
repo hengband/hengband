@@ -160,7 +160,7 @@ static bool get_player_sex(player_type *player_ptr, char *buf)
 static bool let_player_select_race(player_type *player_ptr)
 {
     clear_from(10);
-    player_ptr->prace = player_race_type::HUMAN;
+    player_ptr->prace = PlayerRaceType::HUMAN;
     while (true) {
         char temp[80 * 10];
         if (!get_player_race(player_ptr))

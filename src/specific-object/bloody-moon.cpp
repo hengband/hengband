@@ -58,7 +58,7 @@ bool activate_bloody_moon(player_type *player_ptr, object_type *o_ptr)
 
     msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
     get_bloody_moon_flags(o_ptr);
-    if (player_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == PlayerRaceType::ANDROID)
         calc_android_exp(player_ptr);
 
     player_ptr->update |= PU_BONUS | PU_HP;

@@ -196,8 +196,8 @@ void do_cmd_wield(player_type *player_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != player_race_type::VAMPIRE)
-        && (player_ptr->prace != player_race_type::ANDROID)) {
+    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != PlayerRaceType::VAMPIRE)
+        && (player_ptr->prace != PlayerRaceType::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,
@@ -288,8 +288,8 @@ void do_cmd_wield(player_type *player_ptr)
         o_ptr->ident |= (IDENT_SENSE);
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && (player_ptr->prace != player_race_type::VAMPIRE) && (player_ptr->prace != player_race_type::ANDROID))
-        change_race(player_ptr, player_race_type::VAMPIRE, "");
+    if ((o_ptr->name1 == ART_STONEMASK) && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID))
+        change_race(player_ptr, PlayerRaceType::VAMPIRE, "");
 
     calc_android_exp(player_ptr);
     player_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;

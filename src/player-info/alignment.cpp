@@ -72,10 +72,10 @@ void PlayerAlignment::update_alignment()
         }
     } else {
         switch (player_ptr->prace) {
-        case player_race_type::ARCHON:
+        case PlayerRaceType::ARCHON:
             this->bias_good_alignment(200);
             break;
-        case player_race_type::BALROG:
+        case PlayerRaceType::BALROG:
             this->bias_evil_alignment(200);
             break;
 

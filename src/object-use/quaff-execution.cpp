@@ -438,7 +438,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             break;
 
         case SV_POTION_EXPERIENCE:
-            if (this->player_ptr->prace == player_race_type::ANDROID)
+            if (this->player_ptr->prace == PlayerRaceType::ANDROID)
                 break;
             chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
             if (this->player_ptr->exp < PY_MAX_EXP) {
@@ -511,7 +511,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         }
     }
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::SKELETON)) {
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
         (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, q_ptr->k_idx);
     }
@@ -534,7 +534,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 
     this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::SKELETON))
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON))
         return; //!< @note スケルトンは水分で飢えを満たせない
 
     switch (PlayerRace(this->player_ptr).food()) {

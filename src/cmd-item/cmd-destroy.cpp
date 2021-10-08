@@ -111,7 +111,7 @@ static bool select_destroying_item(player_type *player_ptr, destroy_type *destro
  */
 static bool decide_magic_book_exp(player_type *player_ptr, destroy_type *destroy_ptr)
 {
-    if (player_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == PlayerRaceType::ANDROID)
         return false;
 
     if ((player_ptr->pclass == CLASS_WARRIOR) || (player_ptr->pclass == CLASS_BERSERKER))

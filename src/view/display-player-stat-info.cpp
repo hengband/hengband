@@ -57,7 +57,7 @@ static int calc_basic_stat(player_type *player_ptr, int stat_num)
  */
 static int compensate_special_race(player_type *player_ptr, int stat_num)
 {
-    if (!PlayerRace(player_ptr).equals(player_race_type::ENT))
+    if (!PlayerRace(player_ptr).equals(PlayerRaceType::ENT))
         return 0;
 
     int r_adj = 0;

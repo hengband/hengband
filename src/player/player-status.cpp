@@ -1375,7 +1375,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *player_ptr)
 
     pow = 0;
 
-    if (!player_ptr->mimic_form && player_ptr->prace == player_race_type::ENT && !player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+    if (!player_ptr->mimic_form && player_ptr->prace == PlayerRaceType::ENT && !player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
         pow += player_ptr->lev * 10;
     }
 
@@ -1666,7 +1666,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         }
     }
 
-    if (PlayerRace(player_ptr).equals(player_race_type::GOLEM) || PlayerRace(player_ptr).equals(player_race_type::ANDROID)) {
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::GOLEM) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         ac += 10 + (player_ptr->lev * 2 / 5);
     }
 
@@ -2680,7 +2680,7 @@ void check_experience(player_type *player_ptr)
     set_bits(player_ptr->redraw, PR_EXP);
     handle_stuff(player_ptr);
 
-    bool android = player_ptr->prace == player_race_type::ANDROID;
+    bool android = player_ptr->prace == PlayerRaceType::ANDROID;
     PLAYER_LEVEL old_lev = player_ptr->lev;
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
@@ -2702,7 +2702,7 @@ void check_experience(player_type *player_ptr)
             if ((player_ptr->pclass == CLASS_CHAOS_WARRIOR) || player_ptr->muta.has(MUTA::CHAOS_GIFT)) {
                 level_reward = true;
             }
-            if (player_ptr->prace == player_race_type::BEASTMAN) {
+            if (player_ptr->prace == PlayerRaceType::BEASTMAN) {
                 if (one_in_(5))
                     level_mutation = true;
             }
@@ -2903,7 +2903,7 @@ long calc_score(player_type *player_ptr)
     if (ironman_downward)
         point *= 2;
     if (player_ptr->pclass == CLASS_BERSERKER) {
-        if (player_ptr->prace == player_race_type::SPECTRE)
+        if (player_ptr->prace == PlayerRaceType::SPECTRE)
             point = point / 5;
     }
 

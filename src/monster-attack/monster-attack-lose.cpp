@@ -33,7 +33,7 @@ void calc_blow_disease(player_type *player_ptr, monap_type *monap_ptr)
         monap_ptr->obvious = true;
 
     bool disease_possibility = randint1(100) > calc_nuke_damage_rate(player_ptr);
-    if (disease_possibility || (randint1(100) > 10) || (player_ptr->prace == player_race_type::ANDROID))
+    if (disease_possibility || (randint1(100) > 10) || (player_ptr->prace == PlayerRaceType::ANDROID))
         return;
 
     bool perm = one_in_(10);

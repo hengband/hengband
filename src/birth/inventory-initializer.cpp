@@ -87,11 +87,11 @@ void add_outfit(player_type *player_ptr, object_type *o_ptr)
 static void decide_initial_items(player_type *player_ptr, object_type *q_ptr)
 {
     switch (player_ptr->prace) {
-    case player_race_type::VAMPIRE:
+    case PlayerRaceType::VAMPIRE:
         /* Nothing! */
         /* Vampires can drain blood of creatures */
         break;
-    case player_race_type::BALROG:
+    case PlayerRaceType::BALROG:
         /* Demon can drain vitality from humanoid corpse */
         get_mon_num_prep(player_ptr, monster_hook_human, nullptr);
         for (int i = rand_range(3, 4); i > 0; i--) {
@@ -104,22 +104,22 @@ static void decide_initial_items(player_type *player_ptr, object_type *q_ptr)
         }
 
         break;
-    case player_race_type::SKELETON:
-    case player_race_type::GOLEM:
-    case player_race_type::ZOMBIE:
-    case player_race_type::SPECTRE:
+    case PlayerRaceType::SKELETON:
+    case PlayerRaceType::GOLEM:
+    case PlayerRaceType::ZOMBIE:
+    case PlayerRaceType::SPECTRE:
         /* Staff (of Nothing) */
         q_ptr->prep(lookup_kind(TV_STAFF, SV_STAFF_NOTHING));
         q_ptr->number = 1;
         add_outfit(player_ptr, q_ptr);
         break;
-    case player_race_type::ENT:
+    case PlayerRaceType::ENT:
         /* Potions of Water */
         q_ptr->prep(lookup_kind(TV_POTION, SV_POTION_WATER));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 23);
         add_outfit(player_ptr, q_ptr);
         break;
-    case player_race_type::ANDROID:
+    case PlayerRaceType::ANDROID:
         /* Flasks of oil */
         q_ptr->prep(lookup_kind(TV_FLASK, SV_ANY));
         apply_magic_to_object(player_ptr, q_ptr, 1, AM_NO_FIXED_ART);
@@ -147,7 +147,7 @@ void player_outfit(player_type *player_ptr)
     decide_initial_items(player_ptr, q_ptr);
     q_ptr = &forge;
 
-    if ((player_ptr->prace == player_race_type::VAMPIRE) && (player_ptr->pclass != CLASS_NINJA)) {
+    if ((player_ptr->prace == PlayerRaceType::VAMPIRE) && (player_ptr->pclass != CLASS_NINJA)) {
         q_ptr->prep(lookup_kind(TV_SCROLL, SV_SCROLL_DARKNESS));
         q_ptr->number = (ITEM_NUMBER)rand_range(2, 5);
         add_outfit(player_ptr, q_ptr);
@@ -160,7 +160,7 @@ void player_outfit(player_type *player_ptr)
     }
 
     q_ptr = &forge;
-    if (player_ptr->prace == player_race_type::MERFOLK) {
+    if (player_ptr->prace == PlayerRaceType::MERFOLK) {
         q_ptr->prep(lookup_kind(TV_RING, SV_RING_LEVITATION_FALL));
         q_ptr->number = 1;
         add_outfit(player_ptr, q_ptr);
@@ -235,7 +235,7 @@ void player_outfit(player_type *player_ptr)
         if (player_ptr->ppersonality == PERSONALITY_SEXY) {
             player_init[player_ptr->pclass][2][0] = TV_HAFTED;
             player_init[player_ptr->pclass][2][1] = SV_WHIP;
-        } else if (player_ptr->prace == player_race_type::MERFOLK) {
+        } else if (player_ptr->prace == PlayerRaceType::MERFOLK) {
             player_init[player_ptr->pclass][2][0] = TV_POLEARM;
             player_init[player_ptr->pclass][2][1] = SV_TRIDENT;
         }
@@ -244,16 +244,16 @@ void player_outfit(player_type *player_ptr)
     for (int i = 0; i < 3; i++) {
         int tv = player_init[player_ptr->pclass][i][0];
         OBJECT_SUBTYPE_VALUE sv = player_init[player_ptr->pclass][i][1];
-        if ((player_ptr->prace == player_race_type::ANDROID) && ((tv == TV_SOFT_ARMOR) || (tv == TV_HARD_ARMOR)))
+        if ((player_ptr->prace == PlayerRaceType::ANDROID) && ((tv == TV_SOFT_ARMOR) || (tv == TV_HARD_ARMOR)))
             continue;
 
         if (tv == TV_SORCERY_BOOK)
             tv = TV_LIFE_BOOK + player_ptr->realm1 - 1;
         else if (tv == TV_DEATH_BOOK)
             tv = TV_LIFE_BOOK + player_ptr->realm2 - 1;
-        else if (tv == TV_RING && sv == SV_RING_RES_FEAR && player_ptr->prace == player_race_type::BARBARIAN)
+        else if (tv == TV_RING && sv == SV_RING_RES_FEAR && player_ptr->prace == PlayerRaceType::BARBARIAN)
             sv = SV_RING_SUSTAIN_STR;
-        else if (tv == TV_RING && sv == SV_RING_SUSTAIN_INT && player_ptr->prace == player_race_type::MIND_FLAYER) {
+        else if (tv == TV_RING && sv == SV_RING_SUSTAIN_INT && player_ptr->prace == PlayerRaceType::MIND_FLAYER) {
             tv = TV_POTION;
             sv = SV_POTION_RESTORE_MANA;
         }
