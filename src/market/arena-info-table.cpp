@@ -1,6 +1,5 @@
 ﻿#include "market/arena-info-table.h"
 #include "monster-race/race-indice-types.h"
-#include "object/tval-types.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-potion-types.h"
@@ -14,7 +13,7 @@
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
  */
-const arena_type arena_info[MAX_ARENA_MONS + 2] = {
+const std::vector<arena_type> arena_info = {
     { MON_NOBORTA, TV_AMULET, SV_AMULET_ADORNMENT },
     { MON_MORI_TROLL, TV_FOOD, SV_FOOD_PINT_OF_WINE },
     { MON_IMP, TV_POTION, SV_POTION_SPEED },
@@ -59,3 +58,5 @@ const arena_type arena_info[MAX_ARENA_MONS + 2] = {
     { 0, TV_NONE, 0 }, /* Victory prizing */
     { MON_HAGURE, TV_SCROLL, SV_SCROLL_ARTIFACT },
 };
+
+const int MAX_ARENA_MONS = arena_info.size() - 2;
