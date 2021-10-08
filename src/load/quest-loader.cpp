@@ -14,24 +14,6 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
-/*!
- * @brief ランダムクエスト情報の読み込み
- * @param なし
- * @details MAX_TRIES: ランダムクエストのモンスターを確定するために試行する回数 /
- * Maximum number of tries for selection of a proper quest monster
- */
-void rd_unique_info(void)
-{
-    const int MAX_TRIES = 100;
-    for (auto &r_ref : r_info) {
-        r_ref.max_num = MAX_TRIES;
-        if (r_ref.flags1 & RF1_UNIQUE)
-            r_ref.max_num = 1;
-        else if (r_ref.flags7 & RF7_NAZGUL)
-            r_ref.max_num = MAX_NAZGUL_NUM;
-    }
-}
-
 errr load_town(void)
 {
     uint16_t max_towns_load;

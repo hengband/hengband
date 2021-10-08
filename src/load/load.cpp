@@ -190,7 +190,6 @@ static errr exe_reading_savefile(player_type *player_ptr)
     rd_version_info();
     rd_dummy3();
     rd_system_info();
-    rd_unique_info();
     errr load_lore_result = load_lore();
     if (load_lore_result != 0)
         return load_lore_result;
