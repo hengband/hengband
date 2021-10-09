@@ -229,9 +229,8 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint32_
         return;
     }
 
-    uint32_t state_backup[4];
-    Rand_state_backup(state_backup);
-    Rand_state_set(seed);
+    const auto state_backup = w_ptr->rng.get_state();
+    w_ptr->rng.set_state(seed);
     int table_size = sizeof(terrain_table[0]) / sizeof(int16_t);
     if (!corner)
         for (POSITION y1 = 0; y1 < MAX_HGT; y1++)
@@ -247,7 +246,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint32_
         floor_ptr->grid_array[MAX_HGT - 2][1].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][1].feat];
         floor_ptr->grid_array[1][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[1][MAX_WID - 2].feat];
         floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat];
-        Rand_state_restore(state_backup);
+        w_ptr->rng.set_state(state_backup);
         return;
     }
 
@@ -265,7 +264,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint32_
         for (POSITION x1 = 1; x1 < MAX_WID - 1; x1++)
             floor_ptr->grid_array[y1][x1].feat = terrain_table[terrain][floor_ptr->grid_array[y1][x1].feat];
 
-    Rand_state_restore(state_backup);
+    w_ptr->rng.set_state(state_backup);
 }
 
 /*!
@@ -356,14 +355,13 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
     if (!is_winner)
         return;
 
-    uint32_t state_backup[4];
-    Rand_state_backup(state_backup);
-    Rand_state_set(wilderness[y][x].seed);
+    const auto state_backup = w_ptr->rng.get_state();
+    w_ptr->rng.set_state(wilderness[y][x].seed);
     int dy = rand_range(6, floor_ptr->height - 6);
     int dx = rand_range(6, floor_ptr->width - 6);
     floor_ptr->grid_array[dy][dx].feat = feat_entrance;
     floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
-    Rand_state_restore(state_backup);
+    w_ptr->rng.set_state(state_backup);
 }
 
 /* Border of the wilderness area */

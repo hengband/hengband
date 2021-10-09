@@ -218,9 +218,8 @@ static void shuffle_flavors(tval_type tval)
  */
 void flavor_init(void)
 {
-    uint32_t state_backup[4];
-    Rand_state_backup(state_backup);
-    Rand_state_set(w_ptr->seed_flavor);
+    const auto state_backup = w_ptr->rng.get_state();
+    w_ptr->rng.set_state(w_ptr->seed_flavor);
     for (auto &k_ref : k_info) {
         if (k_ref.flavor_name.empty())
             continue;
@@ -236,7 +235,7 @@ void flavor_init(void)
     shuffle_flavors(TV_FOOD);
     shuffle_flavors(TV_POTION);
     shuffle_flavors(TV_SCROLL);
-    Rand_state_restore(state_backup);
+    w_ptr->rng.set_state(state_backup);
     for (auto &k_ref : k_info) {
         if (k_ref.idx == 0 || k_ref.name.empty())
             continue;

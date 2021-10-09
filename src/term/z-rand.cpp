@@ -15,6 +15,11 @@
 #endif
 
 #include "term/z-rand.h"
+#include "util/rng-xoshiro.h"
+#include "world/world.h"
+
+#include <optional>
+#include <random>
 
 /*
  * Angband 2.7.9 introduced a new (optimized) random number generator,
@@ -48,89 +53,38 @@
  * RNG algorithm was fully rewritten. Upper comment is OLD.
  */
 
-/*
- * Currently unused
- */
-uint16_t Rand_place;
-
-/*
- * Current "state" table for the RNG
- * Only index 0 to 3 are used
- */
-uint32_t Rand_state[RAND_DEG] = {
-    123456789,
-    362436069,
-    521288629,
-    88675123,
-};
-
-static uint32_t u32b_rotl(const uint32_t x, int k) { return (x << k) | (x >> (32 - k)); }
-
-/*
- * Initialize RNG state
- */
-static void Rand_seed(uint32_t seed, uint32_t *state)
-{
-    int i;
-
-    for (i = 1; i <= 4; ++i) {
-        seed = 1812433253UL * (seed ^ (seed >> 30)) + i;
-        state[i - 1] = seed;
-    }
-}
-
-/*
- * Xoshiro128** Algorithm
- */
-static uint32_t Rand_Xoshiro128starstar(uint32_t *state)
-{
-    const uint32_t result = u32b_rotl(state[1] * 5, 7) * 9;
-
-    const uint32_t t = state[1] << 9;
-
-    state[2] ^= state[0];
-    state[3] ^= state[1];
-    state[1] ^= state[2];
-    state[0] ^= state[3];
-
-    state[2] ^= t;
-
-    state[3] = u32b_rotl(state[3], 11);
-
-    return result;
-}
-
-static const uint32_t Rand_Xorshift_max = 0xFFFFFFFF;
-
-/*
- * Initialize the RNG using a new seed
- */
-void Rand_state_set(uint32_t seed) { Rand_seed(seed, Rand_state); }
-
 void Rand_state_init(void)
 {
 #ifdef RNG_DEVICE
+
+    Xoshiro128StarStar::state_type Rand_state{};
 
     FILE *fp = fopen(RNG_DEVICE, "r");
     int n;
 
     do {
-        n = fread(Rand_state, sizeof(Rand_state[0]), 4, fp);
+        n = fread(Rand_state.data(), sizeof(Rand_state[0]), 4, fp);
     } while (n != 4 || (Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
 
     fclose(fp);
 
+    w_ptr->rng.set_state(Rand_state);
+
 #elif defined(WINDOWS)
+
+    Xoshiro128StarStar::state_type Rand_state{};
 
     HCRYPTPROV hProvider;
 
     CryptAcquireContext(&hProvider, nullptr, nullptr, PROV_RSA_FULL, 0);
 
     do {
-        CryptGenRandom(hProvider, sizeof(Rand_state[0]) * 4, (BYTE *)Rand_state);
+        CryptGenRandom(hProvider, sizeof(Rand_state[0]) * 4, (BYTE *)Rand_state.data());
     } while ((Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
 
     CryptReleaseContext(hProvider, 0);
+
+    w_ptr->rng.set_state(Rand_state);
 
 #else
 
@@ -141,59 +95,19 @@ void Rand_state_init(void)
     seed = ((seed >> 3) * (getpid() << 1));
 #endif
     /* Seed the RNG */
-    Rand_state_set(seed);
+    w_ptr->rng.set_state(seed);
 
 #endif
 }
 
-/*
- * Backup the RNG state
- */
-void Rand_state_backup(uint32_t *backup_state)
+int rand_range(int a, int b)
 {
-    int i;
-
-    for (i = 0; i < 4; ++i) {
-        backup_state[i] = Rand_state[i];
+    if (a > b) {
+        return a;
     }
+    std::uniform_int_distribution<> d(a, b);
+    return d(w_ptr->rng);
 }
-
-/*
- * Restore the RNG state
- */
-void Rand_state_restore(uint32_t *backup_state)
-{
-    int i;
-
-    for (i = 0; i < 4; ++i) {
-        Rand_state[i] = backup_state[i];
-    }
-}
-
-/*
- * Extract a "random" number from 0 to m-1, via "ENERGY_DIVISION"
- */
-static int32_t Rand_div_impl(int32_t m, uint32_t *state)
-{
-    uint32_t scaling;
-    uint32_t past;
-    uint32_t ret;
-
-    /* Hack -- simple case */
-    if (m <= 1)
-        return 0;
-
-    scaling = Rand_Xorshift_max / m;
-    past = scaling * m;
-
-    do {
-        ret = Rand_Xoshiro128starstar(state);
-    } while (ret >= past);
-
-    return ret / scaling;
-}
-
-int32_t Rand_div(int32_t m) { return Rand_div_impl(m, Rand_state); }
 
 /*
  * The number of entries in the "randnor_table"
@@ -208,8 +122,8 @@ int32_t Rand_div(int32_t m) { return Rand_div_impl(m, Rand_state); }
 /*
  * The normal distribution table for the "randnor()" function (below)
  */
-static int16_t randnor_table[RANDNOR_NUM] =
-{
+static constexpr int16_t randnor_table[RANDNOR_NUM] = {
+    // clang-format off
 	206,     613,    1022,    1430,		1838,	 2245,	  2652,	   3058,
 	3463,    3867,    4271,    4673,	5075,	 5475,	  5874,	   6271,
 	6667,    7061,    7454,    7845,	8234,	 8621,	  9006,	   9389,
@@ -245,6 +159,7 @@ static int16_t randnor_table[RANDNOR_NUM] =
 	32759,   32760,   32760,   32761,   32761,	32761,	 32762,	  32762,
 	32763,   32763,   32763,   32764,   32764,	32764,	 32764,	  32765,
 	32765,   32765,   32765,   32766,   32766,	32766,	 32766,	  32767,
+    // clang-format on
 };
 
 /*
@@ -319,7 +234,10 @@ int16_t damroll(DICE_NUMBER num, DICE_SID sides)
 /*
  * Same as above, but always maximal
  */
-int16_t maxroll(DICE_NUMBER num, DICE_SID sides) { return (num * sides); }
+int16_t maxroll(DICE_NUMBER num, DICE_SID sides)
+{
+    return (num * sides);
+}
 
 /*
  * Given a numerator and a denominator, supply a properly rounded result,
@@ -360,17 +278,23 @@ int32_t div_round(int32_t n, int32_t d)
  */
 int32_t Rand_external(int32_t m)
 {
-    static bool initialized = false;
-    static uint32_t Rand_state_external[4];
-
-    if (!initialized) {
-        /* Initialize with new seed */
-        uint32_t seed = (uint32_t)time(nullptr);
-        Rand_seed(seed, Rand_state_external);
-        initialized = true;
+    if (m <= 0) {
+        return 0;
     }
 
-    return Rand_div_impl(m, Rand_state_external);
+    static std::optional<Xoshiro128StarStar> urbg_external;
+
+    if (!urbg_external.has_value()) {
+        /* Initialize with new seed */
+        auto seed = static_cast<uint32_t>(time(nullptr));
+        urbg_external = Xoshiro128StarStar(seed);
+    }
+
+    std::uniform_int_distribution<> d(0, m - 1);
+    return d(urbg_external.value());
 }
 
-bool next_bool() { return randint0(2) == 0; }
+bool next_bool()
+{
+    return randint0(2) == 0;
+}

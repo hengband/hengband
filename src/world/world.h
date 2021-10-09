@@ -3,6 +3,7 @@
 #include "player-info/class-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "util/rng-xoshiro.h"
 
 #define MAX_BOUNTY 20
 
@@ -28,6 +29,8 @@ struct world_type {
     MONSTER_IDX today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */
+
+    Xoshiro128StarStar rng; //!< Uniform random bit generator for <random>
 
     uint32_t seed_flavor{}; /* Hack -- consistent object colors */
     uint32_t seed_town{}; /* Hack -- consistent town layout */
