@@ -41,94 +41,94 @@
 #define N(JAPANESE, ENGLISH) ENGLISH
 #endif
 
-const std::vector<Patron> patron_list = {
+std::vector<Patron> patron_list = {
 
     Patron(N("スローター", "Slortar"),
         { REW_WRATH, REW_CURSE_WP, REW_CURSE_AR, REW_RUIN_ABL, REW_LOSE_ABL, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_POLY_WND, REW_POLY_SLF, REW_POLY_SLF,
             REW_POLY_SLF, REW_GAIN_ABL, REW_GAIN_ABL, REW_GAIN_EXP, REW_GOOD_OBJ, REW_CHAOS_WP, REW_GREA_OBJ, REW_AUGM_ABL, REW_AUGM_ABL },
-        A_CON, p_ptr),
+        A_CON),
 
     Patron(N("マベロード", "Mabelode"),
         { REW_WRATH, REW_CURSE_WP, REW_CURSE_AR, REW_H_SUMMON, REW_SUMMON_M, REW_SUMMON_M, REW_IGNORE, REW_IGNORE, REW_POLY_WND, REW_POLY_WND, REW_POLY_SLF,
             REW_HEAL_FUL, REW_HEAL_FUL, REW_GAIN_ABL, REW_SER_UNDE, REW_CHAOS_WP, REW_GOOD_OBJ, REW_GOOD_OBJ, REW_GOOD_OBS, REW_GOOD_OBS },
-        A_CON, p_ptr),
+        A_CON),
 
     Patron(N("チャードロス", "Chardros"),
         { REW_WRATH, REW_WRATH, REW_HURT_LOT, REW_PISS_OFF, REW_H_SUMMON, REW_SUMMON_M, REW_IGNORE, REW_IGNORE, REW_DESTRUCT, REW_SER_UNDE, REW_GENOCIDE,
             REW_MASS_GEN, REW_MASS_GEN, REW_DISPEL_C, REW_GOOD_OBJ, REW_CHAOS_WP, REW_GOOD_OBS, REW_GOOD_OBS, REW_AUGM_ABL, REW_AUGM_ABL },
-        A_STR, p_ptr),
+        A_STR),
 
     Patron(N("ハイオンハーン", "Hionhurn"),
         { REW_WRATH, REW_WRATH, REW_CURSE_WP, REW_CURSE_AR, REW_RUIN_ABL, REW_IGNORE, REW_IGNORE, REW_SER_UNDE, REW_DESTRUCT, REW_GENOCIDE, REW_MASS_GEN,
             REW_MASS_GEN, REW_HEAL_FUL, REW_GAIN_ABL, REW_GAIN_ABL, REW_CHAOS_WP, REW_GOOD_OBS, REW_GOOD_OBS, REW_AUGM_ABL, REW_AUGM_ABL },
-        A_STR, p_ptr),
+        A_STR),
 
     Patron(N("キシオムバーグ", "Xiombarg"),
         { REW_TY_CURSE, REW_TY_CURSE, REW_PISS_OFF, REW_RUIN_ABL, REW_LOSE_ABL, REW_IGNORE, REW_POLY_SLF, REW_POLY_SLF, REW_POLY_WND, REW_POLY_WND,
             REW_GENOCIDE, REW_DISPEL_C, REW_GOOD_OBJ, REW_GOOD_OBJ, REW_SER_MONS, REW_GAIN_ABL, REW_CHAOS_WP, REW_GAIN_EXP, REW_AUGM_ABL, REW_GOOD_OBS },
-        A_STR, p_ptr),
+        A_STR),
 
     Patron(N("ピアレー", "Pyaray"),
         { REW_WRATH, REW_TY_CURSE, REW_PISS_OFF, REW_H_SUMMON, REW_H_SUMMON, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_POLY_WND, REW_POLY_SLF, REW_POLY_SLF,
             REW_SER_DEMO, REW_HEAL_FUL, REW_GAIN_ABL, REW_GAIN_ABL, REW_CHAOS_WP, REW_DO_HAVOC, REW_GOOD_OBJ, REW_GREA_OBJ, REW_GREA_OBS },
-        A_INT, p_ptr),
+        A_INT),
 
     Patron(N("バラン", "Balaan"),
         { REW_TY_CURSE, REW_HURT_LOT, REW_CURSE_WP, REW_CURSE_AR, REW_RUIN_ABL, REW_SUMMON_M, REW_LOSE_EXP, REW_POLY_SLF, REW_POLY_SLF, REW_POLY_WND,
             REW_SER_UNDE, REW_HEAL_FUL, REW_HEAL_FUL, REW_GAIN_EXP, REW_GAIN_EXP, REW_CHAOS_WP, REW_GOOD_OBJ, REW_GOOD_OBS, REW_GREA_OBS, REW_AUGM_ABL },
-        A_STR, p_ptr),
+        A_STR),
 
     Patron(N("アリオッチ", "Arioch"),
         { REW_WRATH, REW_PISS_OFF, REW_RUIN_ABL, REW_LOSE_EXP, REW_H_SUMMON, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_POLY_SLF, REW_POLY_SLF,
             REW_MASS_GEN, REW_SER_DEMO, REW_HEAL_FUL, REW_CHAOS_WP, REW_CHAOS_WP, REW_GOOD_OBJ, REW_GAIN_EXP, REW_GREA_OBJ, REW_AUGM_ABL },
-        A_INT, p_ptr),
+        A_INT),
 
     Patron(N("イーカー", "Eequor"),
         { REW_WRATH, REW_TY_CURSE, REW_PISS_OFF, REW_CURSE_WP, REW_RUIN_ABL, REW_IGNORE, REW_IGNORE, REW_POLY_SLF, REW_POLY_SLF, REW_POLY_WND, REW_GOOD_OBJ,
             REW_GOOD_OBJ, REW_SER_MONS, REW_HEAL_FUL, REW_GAIN_EXP, REW_GAIN_ABL, REW_CHAOS_WP, REW_GOOD_OBS, REW_GREA_OBJ, REW_AUGM_ABL },
-        A_CON, p_ptr),
+        A_CON),
 
     Patron(N("ナージャン", "Narjhan"),
         { REW_WRATH, REW_CURSE_AR, REW_CURSE_WP, REW_CURSE_WP, REW_CURSE_AR, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_POLY_SLF, REW_POLY_SLF, REW_POLY_WND,
             REW_HEAL_FUL, REW_HEAL_FUL, REW_GAIN_EXP, REW_AUGM_ABL, REW_GOOD_OBJ, REW_GOOD_OBJ, REW_CHAOS_WP, REW_GREA_OBJ, REW_GREA_OBS },
-        A_CHR, p_ptr),
+        A_CHR),
 
     Patron(N("バロ", "Balo"),
         { REW_WRATH, REW_SER_DEMO, REW_CURSE_WP, REW_CURSE_AR, REW_LOSE_EXP, REW_GAIN_ABL, REW_LOSE_ABL, REW_POLY_WND, REW_POLY_SLF, REW_IGNORE, REW_DESTRUCT,
             REW_MASS_GEN, REW_CHAOS_WP, REW_GREA_OBJ, REW_HURT_LOT, REW_AUGM_ABL, REW_RUIN_ABL, REW_H_SUMMON, REW_GREA_OBS, REW_AUGM_ABL },
-        A_RANDOM, p_ptr),
+        A_RANDOM),
 
     Patron(N("コーン", "Khorne"),
         { REW_WRATH, REW_HURT_LOT, REW_HURT_LOT, REW_H_SUMMON, REW_H_SUMMON, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_SER_MONS, REW_SER_DEMO, REW_POLY_SLF,
             REW_POLY_WND, REW_HEAL_FUL, REW_GOOD_OBJ, REW_GOOD_OBJ, REW_CHAOS_WP, REW_GOOD_OBS, REW_GOOD_OBS, REW_GREA_OBJ, REW_GREA_OBS },
-        A_STR, p_ptr),
+        A_STR),
 
     Patron(N("スラーネッシュ", "Slaanesh"),
         { REW_WRATH, REW_PISS_OFF, REW_PISS_OFF, REW_RUIN_ABL, REW_LOSE_ABL, REW_LOSE_EXP, REW_IGNORE, REW_IGNORE, REW_POLY_WND, REW_SER_DEMO, REW_POLY_SLF,
             REW_HEAL_FUL, REW_HEAL_FUL, REW_GOOD_OBJ, REW_GAIN_EXP, REW_GAIN_EXP, REW_CHAOS_WP, REW_GAIN_ABL, REW_GREA_OBJ, REW_AUGM_ABL },
-        A_CHR, p_ptr),
+        A_CHR),
 
     Patron(N("ナーグル", "Nurgle"),
         { REW_WRATH, REW_PISS_OFF, REW_HURT_LOT, REW_RUIN_ABL, REW_LOSE_ABL, REW_LOSE_EXP, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_POLY_SLF, REW_POLY_SLF,
             REW_POLY_WND, REW_HEAL_FUL, REW_GOOD_OBJ, REW_GAIN_ABL, REW_GAIN_ABL, REW_SER_UNDE, REW_CHAOS_WP, REW_GREA_OBJ, REW_AUGM_ABL },
-        A_CON, p_ptr),
+        A_CON),
 
     Patron(N("ティーンチ", "Tzeentch"),
         { REW_WRATH, REW_CURSE_WP, REW_CURSE_AR, REW_RUIN_ABL, REW_LOSE_ABL, REW_LOSE_EXP, REW_IGNORE, REW_POLY_SLF, REW_POLY_SLF, REW_POLY_SLF, REW_POLY_SLF,
             REW_POLY_WND, REW_HEAL_FUL, REW_CHAOS_WP, REW_GREA_OBJ, REW_GAIN_ABL, REW_GAIN_ABL, REW_GAIN_EXP, REW_GAIN_EXP, REW_AUGM_ABL },
-        A_INT, p_ptr),
+        A_INT),
 
     Patron(N("カイン", "Khaine"),
         { REW_WRATH, REW_HURT_LOT, REW_PISS_OFF, REW_LOSE_ABL, REW_LOSE_EXP, REW_IGNORE, REW_IGNORE, REW_DISPEL_C, REW_DO_HAVOC, REW_DO_HAVOC, REW_POLY_SLF,
             REW_POLY_SLF, REW_GAIN_EXP, REW_GAIN_ABL, REW_GAIN_ABL, REW_SER_MONS, REW_GOOD_OBJ, REW_CHAOS_WP, REW_GREA_OBJ, REW_GOOD_OBS },
-        A_STR, p_ptr),
+        A_STR),
 
 };
 
 #ifdef JP
-Patron::Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr)
+Patron::Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat)
 #else
-Patron::Patron(const char *name, std::vector<patron_reward> reward_table, player_ability_type boost_stat, player_type *player_ptr)
+Patron::Patron(const char *name, std::vector<patron_reward> reward_table, player_ability_type boost_stat)
 #endif
     : name(name)
 #ifdef JP
@@ -136,12 +136,12 @@ Patron::Patron(const char *name, std::vector<patron_reward> reward_table, player
 #endif
     , reward_table(std::move(reward_table))
     , boost_stat(boost_stat)
-    , player_ptr(player_ptr)
 {
 }
 
-void Patron::gain_level_reward(int chosen_reward) const
+void Patron::gain_level_reward(player_type *player_ptr_, int chosen_reward)
 {
+    this->player_ptr = player_ptr_;
     char wrath_reason[32] = "";
     int nasty_chance = 6;
     int type;
@@ -561,8 +561,9 @@ void Patron::gain_level_reward(int chosen_reward) const
     }
 }
 
-void Patron::admire() const
+void Patron::admire(player_type *player_ptr_)
 {
+    this->player_ptr = player_ptr_;
     if ((this->player_ptr->pclass == CLASS_CHAOS_WARRIOR) || this->player_ptr->muta.has(MUTA::CHAOS_GIFT)) {
         msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), this->name.c_str());
         msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));

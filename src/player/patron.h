@@ -57,16 +57,20 @@ public:
     std::string name; //!< パトロン名
 #ifdef JP
     std::string ename; //!< PatronName
-    Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr);
+    Patron(const char *name, const char *ename, std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
 #else
-    Patron(const char *name, std::vector<patron_reward> reward_table, const player_ability_type boost_stat, player_type *player_ptr);
+    Patron(const char *name, std::vector<patron_reward> reward_table, const player_ability_type boost_stat);
 #endif
+    virtual ~Patron() = default;
+
+    // @note C4458 クラスメンバーの隠蔽 への対応として末尾に「_」を付ける.
+    void gain_level_reward(player_type *player_ptr_, int chosen_reward);
+    void admire(player_type *player_ptr_);
+
+private:
+    player_type *player_ptr = nullptr; //!< プレイヤー参照ポインタ
     std::vector<patron_reward> reward_table; //!< 報酬テーブル
     player_ability_type boost_stat; //!< 強化能力値傾向
-    player_type *player_ptr; //!< プレイヤー参照ポインタ
-    void gain_level_reward(int chosen_reward) const;
-    void admire() const;
-    virtual ~Patron() = default;
 };
 
-extern const std::vector<Patron> patron_list;
+extern std::vector<Patron> patron_list;

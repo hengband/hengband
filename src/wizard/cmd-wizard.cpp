@@ -191,7 +191,7 @@ bool exe_cmd_debug(player_type *player_ptr, char cmd)
         map_area(player_ptr, DETECT_RAD_ALL * 3);
         break;
     case 'r':
-        patron_list[player_ptr->chaos_patron].gain_level_reward(command_arg);
+        patron_list[player_ptr->chaos_patron].gain_level_reward(player_ptr, command_arg);
         break;
     case 'N':
         wiz_summon_pet(player_ptr, command_arg);
