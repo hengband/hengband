@@ -36,7 +36,7 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
         return;
     }
 
-    if (store_ptr->stock_num >= store_get_stock_max(STORE_HOME))
+    if (store_ptr->stock_num >= store_get_stock_max(StoreSaleType::HOME))
         return;
 
     int32_t value = object_value(o_ptr);
@@ -66,7 +66,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 {
     store_type *store_ptr;
     bool sort = false;
-    if (h_older_than(0, 3, 3) && (store_number == STORE_HOME)) {
+    if (h_older_than(0, 3, 3) && (i2enum<StoreSaleType>(store_number) == StoreSaleType::HOME)) {
         store_ptr = &town_info[1].store[store_number];
         if (store_ptr->stock_num)
             sort = true;
@@ -101,7 +101,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 
         rd_item(q_ptr);
 
-        auto stock_max = store_get_stock_max(i2enum<STORE_TYPE_IDX>(store_number));
+        auto stock_max = store_get_stock_max(i2enum<StoreSaleType>(store_number));
         if (store_ptr->stock_num >= stock_max)
             continue;
 

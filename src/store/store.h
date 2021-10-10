@@ -23,10 +23,10 @@ extern int cur_store_feat;
 extern bool allow_inc;
 
 struct player_type;
-int16_t store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup = true);
-void store_shuffle(player_type *player_ptr, int which);
-void store_maintenance(player_type *player_ptr, int town_num, int store_num, int chance);
-void store_init(int town_num, int store_num);
+int16_t store_get_stock_max(StoreSaleType sst, bool powerup = true);
+void store_shuffle(player_type *player_ptr, StoreSaleType which);
+void store_maintenance(player_type *player_ptr, int town_num, StoreSaleType store_num, int chance);
+void store_init(int town_num, StoreSaleType store_num);
 void store_examine(player_type *player_ptr);
 int store_check_num(object_type *o_ptr);
 int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j);

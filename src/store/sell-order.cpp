@@ -73,12 +73,12 @@ void store_sell(player_type *player_ptr)
     concptr s_none; //!< @note 売る/置くものがない場合のメッセージ
     concptr s_full; //!< @note もう置けない場合のメッセージ
     switch (cur_store_num) {
-    case STORE_HOME:
+    case StoreSaleType::HOME:
         q = _("どのアイテムを置きますか? ", "Drop which item? ");
         s_none = _("置けるアイテムを持っていません。", "You don't have any items to drop.");
         s_full = _("我が家にはもう置く場所がない。", "Your home is full.");
         break;
-    case STORE_MUSEUM:
+    case StoreSaleType::MUSEUM:
         q = _("どのアイテムを寄贈しますか? ", "Give which item? ");
         s_none = _("寄贈できるアイテムを持っていません。", "You don't have any items to give.");
         s_full = _("博物館はもう満杯だ。", "The Museum is full.");
@@ -118,7 +118,7 @@ void store_sell(player_type *player_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, q_ptr, 0);
-    if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM)) {
+    if ((cur_store_num != StoreSaleType::HOME) && (cur_store_num != StoreSaleType::MUSEUM)) {
         q_ptr->inscription = 0;
         q_ptr->feeling = FEEL_NONE;
     }
@@ -129,7 +129,7 @@ void store_sell(player_type *player_ptr)
     }
 
     bool placed = false;
-    if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM)) {
+    if ((cur_store_num != StoreSaleType::HOME) && (cur_store_num != StoreSaleType::MUSEUM)) {
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), o_name, index_to_label(item));
         msg_print(nullptr);
 
@@ -140,10 +140,10 @@ void store_sell(player_type *player_ptr)
             store_owner_says_comment(player_ptr);
 
             sound(SOUND_SELL);
-            if (cur_store_num == STORE_BLACK)
+            if (cur_store_num == StoreSaleType::BLACK)
                 chg_virtue(player_ptr, V_JUSTICE, -1);
 
-            if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))
+            if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != StoreSaleType::HOME))
                 chg_virtue(player_ptr, V_NATURE, 1);
 
             player_ptr->au += price;
@@ -183,7 +183,7 @@ void store_sell(player_type *player_ptr)
                 display_store_inventory(player_ptr);
             }
         }
-    } else if (cur_store_num == STORE_MUSEUM) {
+    } else if (cur_store_num == StoreSaleType::MUSEUM) {
         char o2_name[MAX_NLEN];
         describe_flavor(player_ptr, o2_name, q_ptr, OD_NAME_ONLY);
 

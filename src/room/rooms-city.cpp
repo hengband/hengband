@@ -99,7 +99,7 @@ static void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITI
  * @note
  * Note: ltcy and ltcx indicate "left top corner".
  */
-static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, int stores[], int n, const std::vector<ugbldg_type>& ugbldg)
+static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, StoreSaleType stores[], int n, const std::vector<ugbldg_type>& ugbldg)
 {
     int i;
     POSITION y, x;
@@ -143,7 +143,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
 
         if (auto it = std::find_if(f_info.begin(), f_info.end(),
                 [subtype = stores[i]](const feature_type &f_ref) {
-                    return f_ref.flags.has(FF::STORE) && (f_ref.subtype == subtype);
+                    return f_ref.flags.has(FF::STORE) && (i2enum<StoreSaleType>(static_cast<int>(f_ref.subtype)) == subtype);
                 });
             it != f_info.end()) {
             cave_set_feat(player_ptr, ltcy + y, ltcx + x, (*it).idx);
@@ -167,15 +167,15 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
  */
 bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
 {
-    int stores[] = {
-        STORE_GENERAL,
-        STORE_ARMOURY,
-        STORE_WEAPON,
-        STORE_TEMPLE,
-        STORE_ALCHEMIST,
-        STORE_MAGIC,
-        STORE_BLACK,
-        STORE_BOOK,
+    StoreSaleType stores[] = {
+        StoreSaleType::GENERAL,
+        StoreSaleType::ARMOURY,
+        StoreSaleType::WEAPON,
+        StoreSaleType::TEMPLE,
+        StoreSaleType::ALCHEMIST,
+        StoreSaleType::MAGIC,
+        StoreSaleType::BLACK,
+        StoreSaleType::BOOK,
     };
     int n = sizeof stores / sizeof(int);
     POSITION y1, x1, yval, xval;

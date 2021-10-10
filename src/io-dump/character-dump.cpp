@@ -495,7 +495,7 @@ static void dump_aux_equipment_inventory(player_type *player_ptr, FILE *fff)
 static void dump_aux_home_museum(player_type *player_ptr, FILE *fff)
 {
     store_type *store_ptr;
-    store_ptr = &town_info[1].store[STORE_HOME];
+    store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
 
     GAME_TEXT o_name[MAX_NLEN];
     if (store_ptr->stock_num) {
@@ -512,7 +512,7 @@ static void dump_aux_home_museum(player_type *player_ptr, FILE *fff)
         fprintf(fff, "\n\n");
     }
 
-    store_ptr = &town_info[1].store[STORE_MUSEUM];
+    store_ptr = &town_info[1].store[enum2i(StoreSaleType::MUSEUM)];
 
     if (store_ptr->stock_num == 0)
         return;

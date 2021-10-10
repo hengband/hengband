@@ -275,7 +275,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
     int n;
     do {
         n = randint0(MAX_STORES);
-        if ((n == STORE_HOME) || (n == STORE_MUSEUM)) {
+        if ((n == enum2i(StoreSaleType::HOME)) || (n == enum2i(StoreSaleType::MUSEUM))) {
             break;
         }
     } while (true);
@@ -292,7 +292,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
             msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.c_str());
         }
 
-        store_shuffle(this->player_ptr, n);
+        store_shuffle(this->player_ptr, i2enum<StoreSaleType>(n));
         break;
     }
 }

@@ -244,13 +244,13 @@ void process_world_aux_mutation(player_type *player_ptr)
 
         banish_monsters(player_ptr, 100);
         if (!is_in_dungeon(player_ptr) && player_ptr->town_num) {
-            int n;
+            StoreSaleType sst;
             do {
-                n = randint0(MAX_STORES);
-            } while ((n == STORE_HOME) || (n == STORE_MUSEUM));
+                sst = i2enum<StoreSaleType>(randint0(MAX_STORES));
+            } while ((sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM));
 
             msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));
-            store_shuffle(player_ptr, n);
+            store_shuffle(player_ptr, sst);
         }
         msg_print(nullptr);
     }

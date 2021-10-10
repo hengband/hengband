@@ -100,8 +100,8 @@ void player_birth(player_type *player_ptr)
 
     write_birth_diary(player_ptr);
     for (int i = 1; i < max_towns; i++) {
-        for (int j = 0; j < MAX_STORES; j++) {
-            store_init(i, j);
+        for (auto sst : StoreSaleType()) {
+            store_init(i, sst);
         }
     }
 
