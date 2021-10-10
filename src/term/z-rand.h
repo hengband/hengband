@@ -68,4 +68,3 @@ int16_t damroll(DICE_NUMBER num, DICE_SID sides);
 int16_t maxroll(DICE_NUMBER num, DICE_SID sides);
 int32_t div_round(int32_t n, int32_t d);
 int32_t Rand_external(int32_t m);
-bool next_bool();

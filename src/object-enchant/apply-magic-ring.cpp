@@ -411,7 +411,7 @@ void RingEnchanter::give_high_ego_index()
     case SV_RING_DAMAGE:
     case SV_RING_ACCURACY:
     case SV_RING_SLAYING:
-        if (next_bool()) {
+        if (one_in_(2)) {
             break;
         }
 
@@ -432,7 +432,7 @@ void RingEnchanter::give_high_ego_index()
         this->o_ptr->name2 = EGO_RING_HERO;
         break;
     case SV_RING_SHOTS:
-        if (next_bool()) {
+        if (one_in_(2)) {
             break;
         }
 
@@ -445,7 +445,7 @@ void RingEnchanter::give_high_ego_index()
         this->o_ptr->name2 = EGO_RING_TELE_AWAY;
         break;
     case SV_RING_RES_BLINDNESS:
-        this->o_ptr->name2 = next_bool() ? EGO_RING_RES_LITE : EGO_RING_RES_DARK;
+        this->o_ptr->name2 = one_in_(2) ? EGO_RING_RES_LITE : EGO_RING_RES_DARK;
         break;
     case SV_RING_LORDLY:
         if (!one_in_(20)) {
@@ -457,21 +457,21 @@ void RingEnchanter::give_high_ego_index()
         this->o_ptr->name2 = EGO_RING_TRUE;
         break;
     case SV_RING_FLAMES:
-        if (next_bool()) {
+        if (one_in_(2)) {
             break;
         }
 
         this->o_ptr->name2 = EGO_RING_DRAGON_F;
         break;
     case SV_RING_ICE:
-        if (next_bool()) {
+        if (one_in_(2)) {
             break;
         }
 
         this->o_ptr->name2 = EGO_RING_DRAGON_C;
         break;
     case SV_RING_WARNING:
-        if (next_bool()) {
+        if (one_in_(2)) {
             break;
         }
 

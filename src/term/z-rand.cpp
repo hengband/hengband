@@ -293,8 +293,3 @@ int32_t Rand_external(int32_t m)
     std::uniform_int_distribution<> d(0, m - 1);
     return d(urbg_external.value());
 }
-
-bool next_bool()
-{
-    return randint0(2) == 0;
-}
