@@ -460,7 +460,7 @@ static void on_dead_chest_mimic(player_type *player_ptr, monster_death_type *md_
         break;
     case MON_CHEST_MIMIC_11:
         mimic_inside = MON_CHEST_MIMIC_04;
-        num_summons = next_bool() ? 3 : 2;
+        num_summons = one_in_(2) ? 3 : 2;
         break;
     default:
         mimic_inside = (monster_race_type)-1;

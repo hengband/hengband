@@ -220,7 +220,7 @@ MONSTER_NUMBER summon_APOCRYPHA(player_type *player_ptr, POSITION y, POSITION x,
 {
     int count = 0;
     int num = 4 + randint1(4);
-    summon_type followers = next_bool() ? SUMMON_APOCRYPHA_FOLLOWERS : SUMMON_APOCRYPHA_DRAGONS;
+    summon_type followers = one_in_(2) ? SUMMON_APOCRYPHA_FOLLOWERS : SUMMON_APOCRYPHA_DRAGONS;
     for (int k = 0; k < num; k++)
         count += summon_specific(player_ptr, m_idx, y, x, 200, followers, PM_ALLOW_UNIQUE);
 

@@ -36,9 +36,14 @@ void wr_store(store_type *store_ptr)
 void wr_randomizer(void)
 {
     wr_u16b(0);
-    wr_u16b(Rand_place);
-    for (int i = 0; i < RAND_DEG; i++)
-        wr_u32b(Rand_state[i]);
+    wr_u16b(0);
+    const auto &state = w_ptr->rng.get_state();
+    for (const auto s : state) {
+        wr_u32b(s);
+    }
+    for (int i = state.size(); i < RAND_DEG; i++) {
+        wr_u32b(0);
+    }
 }
 
 /*!

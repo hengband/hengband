@@ -903,6 +903,7 @@ hengband_SOURCES = \
 	util/point-2d.h \
 	util/probability-table.h \
 	util/quarks.cpp util/quarks.h \
+	util/rng-xoshiro.cpp util/rng-xoshiro.h \
 	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
 	util/tag-sorter.cpp util/tag-sorter.h \

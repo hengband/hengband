@@ -53,9 +53,18 @@ void rd_randomizer(void)
 {
     uint16_t tmp16u;
     rd_u16b(&tmp16u);
-    rd_u16b(&Rand_place);
-    for (int i = 0; i < RAND_DEG; i++)
-        rd_u32b(&Rand_state[i]);
+    rd_u16b(&tmp16u);
+
+    Xoshiro128StarStar::state_type state;
+    for (auto &s : state) {
+        rd_u32b(&s);
+    }
+    w_ptr->rng.set_state(state);
+
+    uint32_t tmp32u;
+    for (int i = state.size(); i < RAND_DEG; i++) {
+        rd_u32b(&tmp32u);
+    }
 }
 
 /*!
