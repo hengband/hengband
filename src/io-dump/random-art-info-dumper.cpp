@@ -93,13 +93,13 @@ void spoil_random_artifact(player_type *player_ptr, concptr fname)
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
-            store_ptr = &town_info[1].store[STORE_HOME];
+            store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
-            store_ptr = &town_info[1].store[STORE_MUSEUM];
+            store_ptr = &town_info[1].store[enum2i(StoreSaleType::MUSEUM)];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);

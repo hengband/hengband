@@ -270,7 +270,7 @@ static void home_aware(player_type *player_ptr)
     object_type *o_ptr;
     store_type *store_ptr;
     for (int i = 1; i < max_towns; i++) {
-        store_ptr = &town_info[i].store[STORE_HOME];
+        store_ptr = &town_info[i].store[enum2i(StoreSaleType::HOME)];
         for (int j = 0; j < store_ptr->stock_num; j++) {
             o_ptr = &store_ptr->stock[j];
             if (!o_ptr->k_idx)
@@ -317,7 +317,7 @@ static void show_dead_home_items(player_type *player_ptr)
 {
     for (int l = 1; l < max_towns; l++) {
         store_type *store_ptr;
-        store_ptr = &town_info[l].store[STORE_HOME];
+        store_ptr = &town_info[l].store[enum2i(StoreSaleType::HOME)];
         if (store_ptr->stock_num == 0)
             continue;
 

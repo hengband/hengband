@@ -73,10 +73,10 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i)
     char out_val[160];
 
     switch (cur_store_num) {
-    case STORE_HOME:
+    case StoreSaleType::HOME:
         sprintf(out_val, _("どのアイテムを取りますか? ", "Which item do you want to take? "));
         break;
-    case STORE_BLACK:
+    case StoreSaleType::BLACK:
         sprintf(out_val, _("どれ? ", "Which item, huh? "));
         break;
     default:
@@ -112,7 +112,7 @@ static void take_item_from_home(player_type *player_ptr, object_type *o_ptr, obj
     store_item_increase(item, -amt);
     store_item_optimize(item);
 
-    auto combined_or_reordered = combine_and_reorder_home(player_ptr, STORE_HOME);
+    auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
 
     if (i == st_ptr->stock_num) {
         if (combined_or_reordered)
@@ -177,13 +177,13 @@ static void switch_store_stock(player_type *player_ptr, const int i, const COMMA
  */
 void store_purchase(player_type *player_ptr)
 {
-    if (cur_store_num == STORE_MUSEUM) {
+    if (cur_store_num == StoreSaleType::MUSEUM) {
         msg_print(_("博物館から取り出すことはできません。", "Items cannot be taken out of the Museum."));
         return;
     }
 
     if (st_ptr->stock_num <= 0) {
-        if (cur_store_num == STORE_HOME)
+        if (cur_store_num == StoreSaleType::HOME)
             msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
         else
             msg_print(_("現在商品の在庫を切らしています。", "I am currently out of stock."));
@@ -220,7 +220,7 @@ void store_purchase(player_type *player_ptr)
 
     PRICE best = price_item(player_ptr, j_ptr, ot_ptr->inflate, false);
     if (o_ptr->number > 1) {
-        if (cur_store_num != STORE_HOME) {
+        if (cur_store_num != StoreSaleType::HOME) {
             msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
         }
 
@@ -243,7 +243,7 @@ void store_purchase(player_type *player_ptr)
         return;
     }
 
-    if (cur_store_num == STORE_HOME) {
+    if (cur_store_num == StoreSaleType::HOME) {
         take_item_from_home(player_ptr, o_ptr, j_ptr, item);
         return;
     }
@@ -269,9 +269,9 @@ void store_purchase(player_type *player_ptr)
     }
 
     store_owner_says_comment(player_ptr);
-    if (cur_store_num == STORE_BLACK)
+    if (cur_store_num == StoreSaleType::BLACK)
         chg_virtue(player_ptr, V_JUSTICE, -1);
-    if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))
+    if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != StoreSaleType::HOME))
         chg_virtue(player_ptr, V_NATURE, -1);
 
     sound(SOUND_BUY);

@@ -27,7 +27,7 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
-    if (cur_store_num != STORE_HOME) {
+    if (cur_store_num != StoreSaleType::HOME) {
         stack_force_notes = false;
         stack_force_costs = false;
     }
@@ -37,7 +37,7 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
         j_ptr = &st_ptr->stock[slot];
         if (object_similar(j_ptr, o_ptr)) {
             object_absorb(j_ptr, o_ptr);
-            if (cur_store_num != STORE_HOME) {
+            if (cur_store_num != StoreSaleType::HOME) {
                 stack_force_notes = old_stack_force_notes;
                 stack_force_costs = old_stack_force_costs;
             }
@@ -46,7 +46,7 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
         }
     }
 
-    if (cur_store_num != STORE_HOME) {
+    if (cur_store_num != StoreSaleType::HOME) {
         stack_force_notes = old_stack_force_notes;
         stack_force_costs = old_stack_force_costs;
     }
@@ -56,7 +56,7 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
      * 隠し機能: オプション powerup_home が設定されていると
      *           我が家が 20 ページまで使える
      */
-    if ((cur_store_num != STORE_HOME) || powerup_home) {
+    if ((cur_store_num != StoreSaleType::HOME) || powerup_home) {
         if (st_ptr->stock_num >= st_ptr->stock_size) {
             return -1;
         }
@@ -164,14 +164,14 @@ static void exe_reorder_store_item(player_type *player_ptr, bool *flag)
  * @param store_num 店舗ID
  * @return 実際に整理が行われたならばTRUEを返す。
  */
-bool combine_and_reorder_home(player_type *player_ptr, const int store_num)
+bool combine_and_reorder_home(player_type *player_ptr, const StoreSaleType store_num)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
     store_type *old_st_ptr = st_ptr;
-    st_ptr = &town_info[1].store[store_num];
+    st_ptr = &town_info[1].store[enum2i(store_num)];
     bool flag = false;
-    if (store_num != STORE_HOME) {
+    if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;
         stack_force_costs = false;
     }
@@ -193,7 +193,7 @@ bool combine_and_reorder_home(player_type *player_ptr, const int store_num)
 
     exe_reorder_store_item(player_ptr, &flag);
     st_ptr = old_st_ptr;
-    if (store_num != STORE_HOME) {
+    if (store_num != StoreSaleType::HOME) {
         stack_force_notes = old_stack_force_notes;
         stack_force_costs = old_stack_force_costs;
     }

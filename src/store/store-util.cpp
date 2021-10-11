@@ -17,8 +17,28 @@
 #include "system/object-type-definition.h"
 #include "world/world-object.h"
 
-int cur_store_num = 0;
+StoreSaleType cur_store_num = StoreSaleType::GENERAL;
 store_type *st_ptr = nullptr;
+
+StoreSaleType begin(StoreSaleType)
+{
+    return StoreSaleType::GENERAL;
+}
+
+StoreSaleType end(StoreSaleType)
+{
+    return StoreSaleType::MAX;
+}
+
+StoreSaleType operator*(StoreSaleType s)
+{
+    return s;
+}
+
+StoreSaleType operator++(StoreSaleType &s)
+{
+    return s = StoreSaleType(std::underlying_type<StoreSaleType>::type(s) + 1);
+}
 
 /*!
  * @brief 店舗のオブジェクト数を増やす /
@@ -135,7 +155,7 @@ void store_create(
     for (int tries = 0; tries < 4; tries++) {
         KIND_OBJECT_IDX k_idx;
         DEPTH level;
-        if (cur_store_num == STORE_BLACK) {
+        if (cur_store_num == StoreSaleType::BLACK) {
             level = 25 + randint0(25);
             k_idx = get_obj_num(player_ptr, level, 0x00000000);
             if (k_idx == 0)
@@ -175,7 +195,7 @@ void store_create(
         if (q_ptr->tval == TV_CHEST)
             continue;
 
-        if (cur_store_num == STORE_BLACK) {
+        if (cur_store_num == StoreSaleType::BLACK) {
             if (black_market_crap(player_ptr, q_ptr) || (object_value(q_ptr) < 10))
                 continue;
         } else {

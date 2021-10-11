@@ -217,7 +217,7 @@ void do_cmd_knowledge_home(player_type *player_ptr)
         return;
 
     store_type *store_ptr;
-    store_ptr = &town_info[1].store[STORE_HOME];
+    store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
 
     if (store_ptr->stock_num) {
 #ifdef JP

@@ -44,7 +44,7 @@ void museum_remove_object(player_type *player_ptr)
     msg_format(_("%sの展示をやめさせた。", "You ordered to remove %s."), o_name);
     store_item_increase(item, -o_ptr->number);
     store_item_optimize(item);
-    (void)combine_and_reorder_home(player_ptr, STORE_MUSEUM);
+    (void)combine_and_reorder_home(player_ptr, StoreSaleType::MUSEUM);
     if (st_ptr->stock_num == 0)
         store_top = 0;
     else if (store_top >= st_ptr->stock_num)

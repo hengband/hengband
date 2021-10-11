@@ -417,8 +417,8 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         calc_android_exp(player_ptr);
 
     init_riding_pet(player_ptr, new_game);
-    (void)combine_and_reorder_home(player_ptr, STORE_HOME);
-    (void)combine_and_reorder_home(player_ptr, STORE_MUSEUM);
+    (void)combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
+    (void)combine_and_reorder_home(player_ptr, StoreSaleType::MUSEUM);
     select_floor_music(player_ptr);
     process_game_turn(player_ptr);
     close_game(player_ptr);

@@ -53,12 +53,12 @@ bool allow_inc = false;
  * @param store_idx 店舗ID
  * @return 店舗の最大スロット数
  */
-int16_t store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup)
+int16_t store_get_stock_max(StoreSaleType sst, bool powerup)
 {
-    switch (store_idx) {
-    case STORE_HOME:
+    switch (sst) {
+    case StoreSaleType::HOME:
         return powerup ? STORE_INVEN_MAX * 10 : STORE_INVEN_MAX;
-    case STORE_MUSEUM:
+    case StoreSaleType::MUSEUM:
         return STORE_INVEN_MAX * 50;
     default:
         return STORE_INVEN_MAX * 3 / 2;
@@ -76,7 +76,7 @@ int16_t store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup)
  */
 static int check_free_space(void)
 {
-    if ((cur_store_num == STORE_HOME) && !powerup_home) {
+    if ((cur_store_num == StoreSaleType::HOME) && !powerup_home) {
         if (st_ptr->stock_num < ((st_ptr->stock_size) / 10))
             return 1;
     } else if (st_ptr->stock_num < st_ptr->stock_size)
@@ -103,10 +103,10 @@ static int check_free_space(void)
 int store_check_num(object_type *o_ptr)
 {
     object_type *j_ptr;
-    if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) {
+    if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM)) {
         bool old_stack_force_notes = stack_force_notes;
         bool old_stack_force_costs = stack_force_costs;
-        if (cur_store_num != STORE_HOME) {
+        if (cur_store_num != StoreSaleType::HOME) {
             stack_force_notes = false;
             stack_force_costs = false;
         }
@@ -116,7 +116,7 @@ int store_check_num(object_type *o_ptr)
             if (!object_similar(j_ptr, o_ptr))
                 continue;
 
-            if (cur_store_num != STORE_HOME) {
+            if (cur_store_num != StoreSaleType::HOME) {
                 stack_force_notes = old_stack_force_notes;
                 stack_force_costs = old_stack_force_costs;
             }
@@ -124,7 +124,7 @@ int store_check_num(object_type *o_ptr)
             return -1;
         }
 
-        if (cur_store_num != STORE_HOME) {
+        if (cur_store_num != StoreSaleType::HOME) {
             stack_force_notes = old_stack_force_notes;
             stack_force_costs = old_stack_force_costs;
         }
@@ -159,7 +159,7 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
     char hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);
     char out_val[160];
 #ifdef JP
-    (void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s", (((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) ? "アイテム" : "商品"), lo, hi, pmt);
+    (void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s", (((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM)) ? "アイテム" : "商品"), lo, hi, pmt);
 #else
     (void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
 #endif
@@ -200,9 +200,9 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 void store_examine(player_type *player_ptr)
 {
     if (st_ptr->stock_num <= 0) {
-        if (cur_store_num == STORE_HOME)
+        if (cur_store_num == StoreSaleType::HOME)
             msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
-        else if (cur_store_num == STORE_MUSEUM)
+        else if (cur_store_num == StoreSaleType::MUSEUM)
             msg_print(_("博物館には何も置いてありません。", "The Museum is empty."));
         else
             msg_print(_("現在商品の在庫を切らしています。", "I am currently out of stock."));
@@ -239,13 +239,13 @@ void store_examine(player_type *player_ptr)
  * Shuffle one of the stores.
  * @param which 店舗種類のID
  */
-void store_shuffle(player_type *player_ptr, int which)
+void store_shuffle(player_type *player_ptr, StoreSaleType which)
 {
-    if ((which == STORE_HOME) || (which == STORE_MUSEUM))
+    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM))
         return;
 
     cur_store_num = which;
-    st_ptr = &town_info[player_ptr->town_num].store[cur_store_num];
+    st_ptr = &town_info[player_ptr->town_num].store[enum2i(cur_store_num)];
     int j = st_ptr->owner;
     while (true) {
         st_ptr->owner = (byte)randint0(MAX_OWNERS);
@@ -257,7 +257,7 @@ void store_shuffle(player_type *player_ptr, int which)
             if (i == player_ptr->town_num)
                 continue;
 
-            if (st_ptr->owner == town_info[i].store[cur_store_num].owner)
+            if (st_ptr->owner == town_info[i].store[enum2i(cur_store_num)].owner)
                 break;
         }
 
@@ -265,7 +265,7 @@ void store_shuffle(player_type *player_ptr, int which)
             break;
     }
 
-    ot_ptr = &owners[cur_store_num][st_ptr->owner];
+    ot_ptr = &owners[enum2i(cur_store_num)][st_ptr->owner];
     st_ptr->insult_cur = 0;
     st_ptr->store_open = 0;
     st_ptr->good_buy = 0;
@@ -289,16 +289,16 @@ void store_shuffle(player_type *player_ptr, int which)
  * @param store_num 店舗種類のID
  * @param chance 更新商品数
  */
-void store_maintenance(player_type *player_ptr, int town_num, int store_num, int chance)
+void store_maintenance(player_type *player_ptr, int town_num, StoreSaleType store_num, int chance)
 {
     cur_store_num = store_num;
-    if ((store_num == STORE_HOME) || (store_num == STORE_MUSEUM))
+    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM))
         return;
 
-    st_ptr = &town_info[town_num].store[store_num];
-    ot_ptr = &owners[store_num][st_ptr->owner];
+    st_ptr = &town_info[town_num].store[enum2i(store_num)];
+    ot_ptr = &owners[enum2i(store_num)][st_ptr->owner];
     st_ptr->insult_cur = 0;
-    if (store_num == STORE_BLACK) {
+    if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
             object_type *o_ptr = &st_ptr->stock[j];
             if (black_market_crap(player_ptr, o_ptr)) {
@@ -358,17 +358,17 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num, int
  * @param town_num 町のID
  * @param store_num 店舗種類のID
  */
-void store_init(int town_num, int store_num)
+void store_init(int town_num, StoreSaleType store_num)
 {
     cur_store_num = store_num;
-    st_ptr = &town_info[town_num].store[store_num];
+    st_ptr = &town_info[town_num].store[enum2i(store_num)];
     while (true) {
         st_ptr->owner = (byte)randint0(MAX_OWNERS);
         int i;
         for (i = 1; i < max_towns; i++) {
             if (i == town_num)
                 continue;
-            if (st_ptr->owner == town_info[i].store[store_num].owner)
+            if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner)
                 break;
         }
 
@@ -376,7 +376,7 @@ void store_init(int town_num, int store_num)
             break;
     }
 
-    ot_ptr = &owners[store_num][st_ptr->owner];
+    ot_ptr = &owners[enum2i(store_num)][st_ptr->owner];
     st_ptr->store_open = 0;
     st_ptr->insult_cur = 0;
     st_ptr->good_buy = 0;
@@ -386,3 +386,4 @@ void store_init(int town_num, int store_num)
     for (int k = 0; k < st_ptr->stock_size; k++)
         (&st_ptr->stock[k])->wipe();
 }
+

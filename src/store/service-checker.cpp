@@ -183,19 +183,19 @@ static bool check_store_book(const object_type *o_ptr)
 static bool switch_store_check(const object_type *o_ptr)
 {
     switch (cur_store_num) {
-    case STORE_GENERAL:
+    case StoreSaleType::GENERAL:
         return check_store_general(o_ptr);
-    case STORE_ARMOURY:
+    case StoreSaleType::ARMOURY:
         return check_store_armoury(o_ptr);
-    case STORE_WEAPON:
+    case StoreSaleType::WEAPON:
         return check_store_weapon(o_ptr);
-    case STORE_TEMPLE:
+    case StoreSaleType::TEMPLE:
         return check_store_temple(o_ptr);
-    case STORE_ALCHEMIST:
+    case StoreSaleType::ALCHEMIST:
         return check_store_alchemist(o_ptr);
-    case STORE_MAGIC:
+    case StoreSaleType::MAGIC:
         return check_store_magic(o_ptr);
-    case STORE_BOOK:
+    case StoreSaleType::BOOK:
         return check_store_book(o_ptr);
     default:
         return true;
@@ -212,7 +212,7 @@ static bool switch_store_check(const object_type *o_ptr)
  */
 bool store_will_buy(player_type *, const object_type *o_ptr)
 {
-    if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
+    if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM))
         return true;
 
     if (!switch_store_check(o_ptr))
@@ -311,7 +311,7 @@ static int mass_figurine_produce(const PRICE cost)
 static int mass_magic_produce(const PRICE cost)
 {
     int size = 1;
-    if ((cur_store_num != STORE_BLACK) || !one_in_(3))
+    if ((cur_store_num != StoreSaleType::BLACK) || !one_in_(3))
         return size;
 
     if (cost < 1601L)

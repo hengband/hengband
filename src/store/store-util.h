@@ -7,19 +7,24 @@
 
 #define STORE_OBJ_LEVEL 5 //!< 通常店舗の階層レベル / Magic Level for normal stores
 
-enum STORE_TYPE_IDX {
-    STORE_GENERAL   = 0, //!< 店舗の種類: 雑貨屋
-    STORE_ARMOURY   = 1, //!< 店舗の種類: 防具屋
-    STORE_WEAPON    = 2, //!< 店舗の種類: 武器屋
-    STORE_TEMPLE    = 3, //!< 店舗の種類: 寺院
-    STORE_ALCHEMIST = 4, //!< 店舗の種類: 錬金術の店
-    STORE_MAGIC     = 5, //!< 店舗の種類: 魔道具屋
-    STORE_BLACK     = 6, //!< 店舗の種類: ブラック・マーケット
-    STORE_HOME      = 7, //!< 店舗の種類: 我が家
-    STORE_BOOK      = 8, //!< 店舗の種類: 書店
-    STORE_MUSEUM    = 9, //!< 店舗の種類: 博物館
-    STORE_MAX       = 10
+enum class StoreSaleType {
+    GENERAL   = 0, //!< 店舗の種類: 雑貨屋
+    ARMOURY   = 1, //!< 店舗の種類: 防具屋
+    WEAPON    = 2, //!< 店舗の種類: 武器屋
+    TEMPLE    = 3, //!< 店舗の種類: 寺院
+    ALCHEMIST = 4, //!< 店舗の種類: 錬金術の店
+    MAGIC     = 5, //!< 店舗の種類: 魔道具屋
+    BLACK     = 6, //!< 店舗の種類: ブラック・マーケット
+    HOME      = 7, //!< 店舗の種類: 我が家
+    BOOK      = 8, //!< 店舗の種類: 書店
+    MUSEUM    = 9, //!< 店舗の種類: 博物館
+    MAX       = 10
 };
+
+StoreSaleType begin(StoreSaleType);
+StoreSaleType end(StoreSaleType);
+StoreSaleType operator*(StoreSaleType s);
+StoreSaleType operator++(StoreSaleType &s);
 
 using store_k_idx = std::vector<KIND_OBJECT_IDX>;
 
@@ -47,7 +52,7 @@ struct store_type {
     store_type &operator=(const store_type &) = delete;
 };
 
-extern int cur_store_num;
+extern StoreSaleType cur_store_num;
 extern store_type *st_ptr;
 
 struct player_type;

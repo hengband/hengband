@@ -76,27 +76,27 @@ void do_cmd_store(player_type *player_ptr)
     //   inner_town_num は、施設内で C コマンドなどを使ったときにそのままでは現在地の偽装がバレる
     //   ため、それを糊塗するためのグローバル変数。
     //   この辺はリファクタしたい。
-    int which = f_info[g_ptr->feat].subtype;
+    StoreSaleType which = i2enum<StoreSaleType>(f_info[g_ptr->feat].subtype);
     old_town_num = player_ptr->town_num;
-    if ((which == STORE_HOME) || (which == STORE_MUSEUM))
+    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM))
         player_ptr->town_num = 1;
     if (is_in_dungeon(player_ptr))
         player_ptr->town_num = NO_TOWN;
     inner_town_num = player_ptr->town_num;
 
-    if ((town_info[player_ptr->town_num].store[which].store_open >= w_ptr->game_turn) || ironman_shops) {
+    if ((town_info[player_ptr->town_num].store[enum2i(which)].store_open >= w_ptr->game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
         player_ptr->town_num = old_town_num;
         return;
     }
 
-    int maintain_num = (w_ptr->game_turn - town_info[player_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
+    int maintain_num = (w_ptr->game_turn - town_info[player_ptr->town_num].store[enum2i(which)].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
     if (maintain_num > 10)
         maintain_num = 10;
     if (maintain_num) {
         store_maintenance(player_ptr, player_ptr->town_num, which, maintain_num);
 
-        town_info[player_ptr->town_num].store[which].last_visit = w_ptr->game_turn;
+        town_info[player_ptr->town_num].store[enum2i(which)].last_visit = w_ptr->game_turn;
     }
 
     forget_lite(player_ptr->current_floor_ptr);
@@ -108,8 +108,8 @@ void do_cmd_store(player_type *player_ptr)
     get_com_no_macros = true;
     cur_store_num = which;
     cur_store_feat = g_ptr->feat;
-    st_ptr = &town_info[player_ptr->town_num].store[cur_store_num];
-    ot_ptr = &owners[cur_store_num][st_ptr->owner];
+    st_ptr = &town_info[player_ptr->town_num].store[enum2i(cur_store_num)];
+    ot_ptr = &owners[enum2i(cur_store_num)][st_ptr->owner];
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr);
@@ -124,11 +124,11 @@ void do_cmd_store(player_type *player_ptr)
             prt(_(" スペース) 次ページ", " SPACE) Next page"), 23 + xtra_stock, 0);
         }
 
-        if (cur_store_num == STORE_HOME) {
+        if (cur_store_num == StoreSaleType::HOME) {
             prt(_("g) アイテムを取る", "g) Get an item."), 21 + xtra_stock, 27);
             prt(_("d) アイテムを置く", "d) Drop an item."), 22 + xtra_stock, 27);
             prt(_("x) 家のアイテムを調べる", "x) eXamine an item in the home."), 23 + xtra_stock, 27);
-        } else if (cur_store_num == STORE_MUSEUM) {
+        } else if (cur_store_num == StoreSaleType::MUSEUM) {
             prt(_("d) アイテムを置く", "d) Drop an item."), 21 + xtra_stock, 27);
             prt(_("r) アイテムの展示をやめる", "r) order to Remove an item."), 22 + xtra_stock, 27);
             prt(_("x) 博物館のアイテムを調べる", "x) eXamine an item in the museum."), 23 + xtra_stock, 27);
@@ -154,8 +154,8 @@ void do_cmd_store(player_type *player_ptr)
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
             INVENTORY_IDX item = INVEN_PACK;
             object_type *o_ptr = &player_ptr->inventory_list[item];
-            if (cur_store_num != STORE_HOME) {
-                if (cur_store_num == STORE_MUSEUM)
+            if (cur_store_num != StoreSaleType::HOME) {
+                if (cur_store_num == StoreSaleType::MUSEUM)
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));
                 else
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて店から出た...", "Your pack is so full that you flee the store..."));

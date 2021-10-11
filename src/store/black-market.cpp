@@ -31,14 +31,13 @@ bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
     if (o_ptr->to_d > 0)
         return false;
 
-    for (int i = 0; i < MAX_STORES; i++) {
-        if (i == STORE_HOME)
+    for (auto sst : StoreSaleType()) {
+        if (sst == StoreSaleType::HOME || sst == StoreSaleType::MUSEUM) {
             continue;
-        if (i == STORE_MUSEUM)
-            continue;
+        }
 
-        for (int j = 0; j < town_info[player_ptr->town_num].store[i].stock_num; j++) {
-            object_type *j_ptr = &town_info[player_ptr->town_num].store[i].stock[j];
+        for (int j = 0; j < town_info[player_ptr->town_num].store[enum2i(sst)].stock_num; j++) {
+            object_type *j_ptr = &town_info[player_ptr->town_num].store[enum2i(sst)].stock[j];
             if (o_ptr->k_idx == j_ptr->k_idx)
                 return true;
         }

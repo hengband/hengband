@@ -19,24 +19,24 @@ errr init_towns(void)
     town_info = std::vector<town_type>(max_towns);
     for (int i = 1; i < max_towns; i++) {
         town_info[i].store = std::vector<store_type>(MAX_STORES);
-        for (int j = 0; j < MAX_STORES; j++) {
-            store_type *store_ptr = &town_info[i].store[j];
-            if ((i > 1) && (j == STORE_MUSEUM || j == STORE_HOME))
+        for (auto sst : StoreSaleType()) {
+            store_type *store_ptr = &town_info[i].store[enum2i(sst)];
+            if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME))
                 continue;
 
             /*
              * 我が家が 20 ページまで使える隠し機能のための準備。
              * オプションが有効でもそうでなくても一応スペースを作っておく。
              */
-            store_ptr->stock_size = store_get_stock_max(i2enum<STORE_TYPE_IDX>(j));
+            store_ptr->stock_size = store_get_stock_max(sst);
 
             store_ptr->stock = std::make_unique<object_type[]>(store_ptr->stock_size);
-            if ((j == STORE_BLACK) || (j == STORE_HOME) || (j == STORE_MUSEUM))
+            if ((sst == StoreSaleType::BLACK) || (sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM))
                 continue;
 
             for (int k = 0; k < STORE_INVEN_MAX; k++) {
-                int tv = store_regular_table[j][k].tval;
-                int sv = store_regular_table[j][k].sval;
+                int tv = store_regular_table[enum2i(sst)][k].tval;
+                int sv = store_regular_table[enum2i(sst)][k].sval;
                 if (tv == 0)
                     break;
 
@@ -49,8 +49,8 @@ errr init_towns(void)
             }
 
             for (int k = 0; k < STORE_CHOICES; k++) {
-                int tv = store_table[j][k].tval;
-                int sv = store_table[j][k].sval;
+                int tv = store_table[enum2i(sst)][k].tval;
+                int sv = store_table[enum2i(sst)][k].sval;
                 if (tv == 0)
                     break;
 
