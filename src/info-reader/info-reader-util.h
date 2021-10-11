@@ -15,6 +15,10 @@ extern int error_line; //!< エラーが発生した行
 enum class RandomArtActType : short;
 RandomArtActType grab_one_activation_flag(concptr what);
 
+#ifndef JP
+void append_english_text(std::string &text, std::string_view add);
+#endif
+
 /*!
  * @brief infoフラグ文字列をフラグビットに変換する
  * @param flags ビットフラグ変数
