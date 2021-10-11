@@ -18,7 +18,7 @@
 
 /* A tval grouper */
 struct grouper {
-    std::vector<tval_type> tval_set;
+    std::vector<ItemPrimaryType> tval_set;
     concptr name;
 };
 

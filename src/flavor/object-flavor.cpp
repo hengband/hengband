@@ -58,31 +58,31 @@ static bool object_easy_know(int i)
 {
     object_kind *k_ptr = &k_info[i];
     switch (k_ptr->tval) {
-    case TV_LIFE_BOOK:
-    case TV_SORCERY_BOOK:
-    case TV_NATURE_BOOK:
-    case TV_CHAOS_BOOK:
-    case TV_DEATH_BOOK:
-    case TV_TRUMP_BOOK:
-    case TV_ARCANE_BOOK:
-    case TV_CRAFT_BOOK:
-    case TV_DEMON_BOOK:
-    case TV_CRUSADE_BOOK:
-    case TV_MUSIC_BOOK:
-    case TV_HISSATSU_BOOK:
-    case TV_HEX_BOOK:
+    case ItemPrimaryType::TV_LIFE_BOOK:
+    case ItemPrimaryType::TV_SORCERY_BOOK:
+    case ItemPrimaryType::TV_NATURE_BOOK:
+    case ItemPrimaryType::TV_CHAOS_BOOK:
+    case ItemPrimaryType::TV_DEATH_BOOK:
+    case ItemPrimaryType::TV_TRUMP_BOOK:
+    case ItemPrimaryType::TV_ARCANE_BOOK:
+    case ItemPrimaryType::TV_CRAFT_BOOK:
+    case ItemPrimaryType::TV_DEMON_BOOK:
+    case ItemPrimaryType::TV_CRUSADE_BOOK:
+    case ItemPrimaryType::TV_MUSIC_BOOK:
+    case ItemPrimaryType::TV_HISSATSU_BOOK:
+    case ItemPrimaryType::TV_HEX_BOOK:
         return true;
-    case TV_FLASK:
-    case TV_JUNK:
-    case TV_BOTTLE:
-    case TV_SKELETON:
-    case TV_SPIKE:
-    case TV_WHISTLE:
+    case ItemPrimaryType::TV_FLASK:
+    case ItemPrimaryType::TV_JUNK:
+    case ItemPrimaryType::TV_BOTTLE:
+    case ItemPrimaryType::TV_SKELETON:
+    case ItemPrimaryType::TV_SPIKE:
+    case ItemPrimaryType::TV_WHISTLE:
         return true;
-    case TV_FOOD:
-    case TV_POTION:
-    case TV_SCROLL:
-    case TV_ROD:
+    case ItemPrimaryType::TV_FOOD:
+    case ItemPrimaryType::TV_POTION:
+    case ItemPrimaryType::TV_SCROLL:
+    case ItemPrimaryType::TV_ROD:
         return true;
 
     default:
@@ -189,7 +189,7 @@ void get_table_sindarin(char *out_string)
  * @param tval シャッフルしたいtval
  * @details 巻物、各種魔道具などに利用される。
  */
-static void shuffle_flavors(tval_type tval)
+static void shuffle_flavors(ItemPrimaryType tval)
 {
     std::vector<KIND_OBJECT_IDX> k_idx_list;
     for (const auto &k_ref : k_info) {
@@ -227,14 +227,14 @@ void flavor_init(void)
         k_ref.flavor = k_ref.idx;
     }
 
-    shuffle_flavors(TV_RING);
-    shuffle_flavors(TV_AMULET);
-    shuffle_flavors(TV_STAFF);
-    shuffle_flavors(TV_WAND);
-    shuffle_flavors(TV_ROD);
-    shuffle_flavors(TV_FOOD);
-    shuffle_flavors(TV_POTION);
-    shuffle_flavors(TV_SCROLL);
+    shuffle_flavors(ItemPrimaryType::TV_RING);
+    shuffle_flavors(ItemPrimaryType::TV_AMULET);
+    shuffle_flavors(ItemPrimaryType::TV_STAFF);
+    shuffle_flavors(ItemPrimaryType::TV_WAND);
+    shuffle_flavors(ItemPrimaryType::TV_ROD);
+    shuffle_flavors(ItemPrimaryType::TV_FOOD);
+    shuffle_flavors(ItemPrimaryType::TV_POTION);
+    shuffle_flavors(ItemPrimaryType::TV_SCROLL);
     w_ptr->rng.set_state(state_backup);
     for (auto &k_ref : k_info) {
         if (k_ref.idx == 0 || k_ref.name.empty())

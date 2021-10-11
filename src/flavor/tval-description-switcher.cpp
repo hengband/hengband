@@ -178,7 +178,7 @@ static void describe_book_life(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "生命の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Life Magic %";
     else
         flavor_ptr->basenm = "& Life Spellbook~ %";
@@ -190,7 +190,7 @@ static void describe_book_sorcery(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "仙術の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Sorcery %";
     else
         flavor_ptr->basenm = "& Sorcery Spellbook~ %";
@@ -202,7 +202,7 @@ static void describe_book_nature(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "自然の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Nature Magic %";
     else
         flavor_ptr->basenm = "& Nature Spellbook~ %";
@@ -214,7 +214,7 @@ static void describe_book_chaos(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "カオスの魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Chaos Magic %";
     else
         flavor_ptr->basenm = "& Chaos Spellbook~ %";
@@ -226,7 +226,7 @@ static void describe_book_death(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "暗黒の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Death Magic %";
     else
         flavor_ptr->basenm = "& Death Spellbook~ %";
@@ -238,7 +238,7 @@ static void describe_book_trump(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "トランプの魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Trump Magic %";
     else
         flavor_ptr->basenm = "& Trump Spellbook~ %";
@@ -250,7 +250,7 @@ static void describe_book_arcane(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "秘術の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Arcane Magic %";
     else
         flavor_ptr->basenm = "& Arcane Spellbook~ %";
@@ -262,7 +262,7 @@ static void describe_book_craft(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "匠の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Craft Magic %";
     else
         flavor_ptr->basenm = "& Craft Spellbook~ %";
@@ -274,7 +274,7 @@ static void describe_book_demon(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "悪魔の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Daemon Magic %";
     else
         flavor_ptr->basenm = "& Daemon Spellbook~ %";
@@ -286,7 +286,7 @@ static void describe_book_crusade(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "破邪の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Crusade Magic %";
     else
         flavor_ptr->basenm = "& Crusade Spellbook~ %";
@@ -298,7 +298,7 @@ static void describe_book_hex(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "呪術の魔法書%";
 #else
-    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)
         flavor_ptr->basenm = "& Book~ of Hex Magic %";
     else
         flavor_ptr->basenm = "& Hex Spellbook~ %";
@@ -308,119 +308,119 @@ static void describe_book_hex(flavor_type *flavor_ptr)
 void switch_tval_description(flavor_type *flavor_ptr)
 {
     switch (flavor_ptr->o_ptr->tval) {
-    case TV_NONE:
+    case ItemPrimaryType::TV_NONE:
         flavor_ptr->basenm = _("(なし)", "(Nothing)");
         break;
-    case TV_SKELETON:
-    case TV_BOTTLE:
-    case TV_JUNK:
-    case TV_SPIKE:
-    case TV_FLASK:
-    case TV_CHEST:
-    case TV_WHISTLE:
+    case ItemPrimaryType::TV_SKELETON:
+    case ItemPrimaryType::TV_BOTTLE:
+    case ItemPrimaryType::TV_JUNK:
+    case ItemPrimaryType::TV_SPIKE:
+    case ItemPrimaryType::TV_FLASK:
+    case ItemPrimaryType::TV_CHEST:
+    case ItemPrimaryType::TV_WHISTLE:
         break;
-    case TV_CAPTURE:
+    case ItemPrimaryType::TV_CAPTURE:
         describe_monster_ball(flavor_ptr);
         break;
-    case TV_FIGURINE:
-    case TV_STATUE:
+    case ItemPrimaryType::TV_FIGURINE:
+    case ItemPrimaryType::TV_STATUE:
         describe_statue(flavor_ptr);
         break;
-    case TV_CORPSE:
+    case ItemPrimaryType::TV_CORPSE:
         describe_corpse(flavor_ptr);
         break;
-    case TV_SHOT:
-    case TV_BOLT:
-    case TV_ARROW:
-    case TV_BOW:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_DIGGING:
+    case ItemPrimaryType::TV_SHOT:
+    case ItemPrimaryType::TV_BOLT:
+    case ItemPrimaryType::TV_ARROW:
+    case ItemPrimaryType::TV_BOW:
+    case ItemPrimaryType::TV_HAFTED:
+    case ItemPrimaryType::TV_POLEARM:
+    case ItemPrimaryType::TV_SWORD:
+    case ItemPrimaryType::TV_DIGGING:
         flavor_ptr->show_weapon = true;
         break;
-    case TV_BOOTS:
-    case TV_GLOVES:
-    case TV_CLOAK:
-    case TV_CROWN:
-    case TV_HELM:
-    case TV_SHIELD:
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR:
+    case ItemPrimaryType::TV_BOOTS:
+    case ItemPrimaryType::TV_GLOVES:
+    case ItemPrimaryType::TV_CLOAK:
+    case ItemPrimaryType::TV_CROWN:
+    case ItemPrimaryType::TV_HELM:
+    case ItemPrimaryType::TV_SHIELD:
+    case ItemPrimaryType::TV_SOFT_ARMOR:
+    case ItemPrimaryType::TV_HARD_ARMOR:
+    case ItemPrimaryType::TV_DRAG_ARMOR:
         flavor_ptr->show_armour = true;
         break;
-    case TV_LITE:
+    case ItemPrimaryType::TV_LITE:
         break;
-    case TV_AMULET:
+    case ItemPrimaryType::TV_AMULET:
         describe_amulet(flavor_ptr);
         break;
-    case TV_RING:
+    case ItemPrimaryType::TV_RING:
         describe_ring(flavor_ptr);
         break;
-    case TV_CARD:
+    case ItemPrimaryType::TV_CARD:
         break;
-    case TV_STAFF:
+    case ItemPrimaryType::TV_STAFF:
         describe_staff(flavor_ptr);
         break;
-    case TV_WAND:
+    case ItemPrimaryType::TV_WAND:
         describe_wand(flavor_ptr);
         break;
-    case TV_ROD:
+    case ItemPrimaryType::TV_ROD:
         describe_rod(flavor_ptr);
         break;
-    case TV_SCROLL:
+    case ItemPrimaryType::TV_SCROLL:
         describe_scroll(flavor_ptr);
         break;
-    case TV_POTION:
+    case ItemPrimaryType::TV_POTION:
         describe_potion(flavor_ptr);
         break;
-    case TV_FOOD:
+    case ItemPrimaryType::TV_FOOD:
         describe_food(flavor_ptr);
         break;
-    case TV_PARCHMENT:
+    case ItemPrimaryType::TV_PARCHMENT:
         flavor_ptr->basenm = _("羊皮紙 - %", "& Parchment~ - %");
         break;
-    case TV_LIFE_BOOK:
+    case ItemPrimaryType::TV_LIFE_BOOK:
         describe_book_life(flavor_ptr);
         break;
-    case TV_SORCERY_BOOK:
+    case ItemPrimaryType::TV_SORCERY_BOOK:
         describe_book_sorcery(flavor_ptr);
         break;
-    case TV_NATURE_BOOK:
+    case ItemPrimaryType::TV_NATURE_BOOK:
         describe_book_nature(flavor_ptr);
         break;
-    case TV_CHAOS_BOOK:
+    case ItemPrimaryType::TV_CHAOS_BOOK:
         describe_book_chaos(flavor_ptr);
         break;
-    case TV_DEATH_BOOK:
+    case ItemPrimaryType::TV_DEATH_BOOK:
         describe_book_death(flavor_ptr);
         break;
-    case TV_TRUMP_BOOK:
+    case ItemPrimaryType::TV_TRUMP_BOOK:
         describe_book_trump(flavor_ptr);
         break;
-    case TV_ARCANE_BOOK:
+    case ItemPrimaryType::TV_ARCANE_BOOK:
         describe_book_arcane(flavor_ptr);
         break;
-    case TV_CRAFT_BOOK:
+    case ItemPrimaryType::TV_CRAFT_BOOK:
         describe_book_craft(flavor_ptr);
         break;
-    case TV_DEMON_BOOK:
+    case ItemPrimaryType::TV_DEMON_BOOK:
         describe_book_demon(flavor_ptr);
         break;
-    case TV_CRUSADE_BOOK:
+    case ItemPrimaryType::TV_CRUSADE_BOOK:
         describe_book_crusade(flavor_ptr);
         break;
-    case TV_MUSIC_BOOK:
+    case ItemPrimaryType::TV_MUSIC_BOOK:
         flavor_ptr->basenm = _("歌集%", "& Song Book~ %");
         break;
-    case TV_HISSATSU_BOOK:
+    case ItemPrimaryType::TV_HISSATSU_BOOK:
         flavor_ptr->basenm = _("& 武芸の書%", "Book~ of Kendo %");
         break;
-    case TV_HEX_BOOK:
+    case ItemPrimaryType::TV_HEX_BOOK:
         describe_book_hex(flavor_ptr);
         break;
-    case TV_GOLD:
+    case ItemPrimaryType::TV_GOLD:
         strcpy(flavor_ptr->buf, flavor_ptr->basenm);
         return;
     default:

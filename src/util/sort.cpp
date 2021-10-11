@@ -244,8 +244,8 @@ bool ang_sort_art_comp(player_type *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by total kills */
     if (*why >= 3) {
         /* Extract total kills */
-        z1 = a_info[w1].tval;
-        z2 = a_info[w2].tval;
+        z1 = enum2i(a_info[w1].tval);
+        z2 = enum2i(a_info[w2].tval);
 
         /* Compare total kills */
         if (z1 < z2)

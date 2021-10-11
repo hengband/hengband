@@ -171,33 +171,33 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr))
         return false;
 
-    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != TV_CORPSE && o_ptr->tval != TV_STATUE) || !(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
+    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemPrimaryType::TV_CORPSE && o_ptr->tval != ItemPrimaryType::TV_STATUE) || !(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
         return false;
 
-    if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != TV_CORPSE || !angband_strchr("pht", r_info[o_ptr->pval].d_char)))
+    if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemPrimaryType::TV_CORPSE || !angband_strchr("pht", r_info[o_ptr->pval].d_char)))
         return false;
 
-    if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < TV_LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)))
+    if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < ItemPrimaryType::TV_LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)))
         return false;
 
     bool realm_except_class = player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_RED_MAGE;
 
-    if (IS_FLG(FLG_REALM1) && (get_realm1_book(player_ptr) != o_ptr->tval || realm_except_class))
+    if (IS_FLG(FLG_REALM1) && ((get_realm1_book(player_ptr) != o_ptr->tval) || realm_except_class))
         return false;
 
-    if (IS_FLG(FLG_REALM2) && (get_realm2_book(player_ptr) != o_ptr->tval || realm_except_class))
+    if (IS_FLG(FLG_REALM2) && ((get_realm2_book(player_ptr) != o_ptr->tval) || realm_except_class))
         return false;
 
-    if (IS_FLG(FLG_FIRST) && (o_ptr->tval < TV_LIFE_BOOK || 0 != o_ptr->sval))
+    if (IS_FLG(FLG_FIRST) && ((o_ptr->tval < ItemPrimaryType::TV_LIFE_BOOK) || (o_ptr->sval) != 0))
         return false;
 
-    if (IS_FLG(FLG_SECOND) && (o_ptr->tval < TV_LIFE_BOOK || 1 != o_ptr->sval))
+    if (IS_FLG(FLG_SECOND) && ((o_ptr->tval < ItemPrimaryType::TV_LIFE_BOOK) || (o_ptr->sval) != 1))
         return false;
 
-    if (IS_FLG(FLG_THIRD) && (o_ptr->tval < TV_LIFE_BOOK || 2 != o_ptr->sval))
+    if (IS_FLG(FLG_THIRD) && ((o_ptr->tval < ItemPrimaryType::TV_LIFE_BOOK) || (o_ptr->sval) != 2))
         return false;
 
-    if (IS_FLG(FLG_FOURTH) && (o_ptr->tval < TV_LIFE_BOOK || 3 != o_ptr->sval))
+    if (IS_FLG(FLG_FOURTH) && ((o_ptr->tval < ItemPrimaryType::TV_LIFE_BOOK) || (o_ptr->sval) != 3))
         return false;
 
     if (IS_FLG(FLG_WEAPONS)) {
@@ -214,62 +214,62 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
             return false;
     } else if (IS_FLG(FLG_DEVICES)) {
         switch (o_ptr->tval) {
-        case TV_SCROLL:
-        case TV_STAFF:
-        case TV_WAND:
-        case TV_ROD:
+        case ItemPrimaryType::TV_SCROLL:
+        case ItemPrimaryType::TV_STAFF:
+        case ItemPrimaryType::TV_WAND:
+        case ItemPrimaryType::TV_ROD:
             break;
         default:
             return false;
         }
     } else if (IS_FLG(FLG_LIGHTS)) {
-        if (!(o_ptr->tval == TV_LITE))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_LITE))
             return false;
     } else if (IS_FLG(FLG_JUNKS)) {
         switch (o_ptr->tval) {
-        case TV_SKELETON:
-        case TV_BOTTLE:
-        case TV_JUNK:
-        case TV_STATUE:
+        case ItemPrimaryType::TV_SKELETON:
+        case ItemPrimaryType::TV_BOTTLE:
+        case ItemPrimaryType::TV_JUNK:
+        case ItemPrimaryType::TV_STATUE:
             break;
         default:
             return false;
         }
     } else if (IS_FLG(FLG_CORPSES)) {
-        if (o_ptr->tval != TV_CORPSE && o_ptr->tval != TV_SKELETON)
+        if (o_ptr->tval != ItemPrimaryType::TV_CORPSE && o_ptr->tval != ItemPrimaryType::TV_SKELETON)
             return false;
     } else if (IS_FLG(FLG_SPELLBOOKS)) {
-        if (!(o_ptr->tval >= TV_LIFE_BOOK))
+        if (!(o_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK))
             return false;
     } else if (IS_FLG(FLG_HAFTED)) {
-        if (!(o_ptr->tval == TV_HAFTED))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_HAFTED))
             return false;
     } else if (IS_FLG(FLG_SHIELDS)) {
-        if (!(o_ptr->tval == TV_SHIELD))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_SHIELD))
             return false;
     } else if (IS_FLG(FLG_BOWS)) {
-        if (!(o_ptr->tval == TV_BOW))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_BOW))
             return false;
     } else if (IS_FLG(FLG_RINGS)) {
-        if (!(o_ptr->tval == TV_RING))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_RING))
             return false;
     } else if (IS_FLG(FLG_AMULETS)) {
-        if (!(o_ptr->tval == TV_AMULET))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_AMULET))
             return false;
     } else if (IS_FLG(FLG_SUITS)) {
-        if (!(o_ptr->tval == TV_DRAG_ARMOR || o_ptr->tval == TV_HARD_ARMOR || o_ptr->tval == TV_SOFT_ARMOR))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_DRAG_ARMOR || o_ptr->tval == ItemPrimaryType::TV_HARD_ARMOR || o_ptr->tval == ItemPrimaryType::TV_SOFT_ARMOR))
             return false;
     } else if (IS_FLG(FLG_CLOAKS)) {
-        if (!(o_ptr->tval == TV_CLOAK))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_CLOAK))
             return false;
     } else if (IS_FLG(FLG_HELMS)) {
-        if (!(o_ptr->tval == TV_CROWN || o_ptr->tval == TV_HELM))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_CROWN || o_ptr->tval == ItemPrimaryType::TV_HELM))
             return false;
     } else if (IS_FLG(FLG_GLOVES)) {
-        if (!(o_ptr->tval == TV_GLOVES))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_GLOVES))
             return false;
     } else if (IS_FLG(FLG_BOOTS)) {
-        if (!(o_ptr->tval == TV_BOOTS))
+        if (!(o_ptr->tval == ItemPrimaryType::TV_BOOTS))
             return false;
     }
 

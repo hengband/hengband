@@ -16,14 +16,14 @@ magic_eater_data_type::magic_eater_data_type()
  * @param tval 魔道具の種類(TV_STAFF/TV_WAND/TV_ROD)を指定する
  * @return tvalで指定した種類の取り込んだ魔道具のデータ配列の参照
  */
-std::vector<magic_eater_data_type::magic_type> &magic_eater_data_type::get_item_group(tval_type tval)
+std::vector<magic_eater_data_type::magic_type> &magic_eater_data_type::get_item_group(ItemPrimaryType tval)
 {
     switch (tval) {
-    case TV_STAFF:
+    case ItemPrimaryType::TV_STAFF:
         return this->staves;
-    case TV_WAND:
+    case ItemPrimaryType::TV_WAND:
         return this->wands;
-    case TV_ROD:
+    case ItemPrimaryType::TV_ROD:
         return this->rods;
     default:
         // ダミーデータ。通常使用されることはない。

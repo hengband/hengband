@@ -102,7 +102,7 @@ void store_delete(void)
     if (randint0(100) < 50)
         num = 1;
 
-    if ((st_ptr->stock[what].tval == TV_ROD) || (st_ptr->stock[what].tval == TV_WAND))
+    if ((st_ptr->stock[what].tval == ItemPrimaryType::TV_ROD) || (st_ptr->stock[what].tval == ItemPrimaryType::TV_WAND))
         st_ptr->stock[what].pval -= num * st_ptr->stock[what].pval / st_ptr->stock[what].number;
 
     store_item_increase(what, -num);
@@ -125,7 +125,7 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(object_type *j
             continue;
         if (o_ptr->k_idx != j_ptr->k_idx)
             continue;
-        if (o_ptr->tval != TV_STAFF && o_ptr->tval != TV_WAND)
+        if (o_ptr->tval != ItemPrimaryType::TV_STAFF && o_ptr->tval != ItemPrimaryType::TV_WAND)
             continue;
         list.push_back(o_ptr->pval);
     }
@@ -182,7 +182,7 @@ void store_create(
             q_ptr->pval = pval;
         }
 
-        if (q_ptr->tval == TV_LITE) {
+        if (q_ptr->tval == ItemPrimaryType::TV_LITE) {
             if (q_ptr->sval == SV_LITE_TORCH)
                 q_ptr->xtra4 = FUEL_TORCH / 2;
 
@@ -192,7 +192,7 @@ void store_create(
 
         object_known(q_ptr);
         q_ptr->ident |= IDENT_STORE;
-        if (q_ptr->tval == TV_CHEST)
+        if (q_ptr->tval == ItemPrimaryType::TV_CHEST)
             continue;
 
         if (cur_store_num == StoreSaleType::BLACK) {
@@ -228,7 +228,7 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
     if (o_ptr->k_idx != j_ptr->k_idx)
         return false;
 
-    if ((o_ptr->pval != j_ptr->pval) && (o_ptr->tval != TV_WAND) && (o_ptr->tval != TV_ROD))
+    if ((o_ptr->pval != j_ptr->pval) && (o_ptr->tval != ItemPrimaryType::TV_WAND) && (o_ptr->tval != ItemPrimaryType::TV_ROD))
         return false;
 
     if (o_ptr->to_h != j_ptr->to_h)
@@ -264,13 +264,13 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
     if (o_ptr->ds != j_ptr->ds)
         return false;
 
-    if (o_ptr->tval == TV_CHEST)
+    if (o_ptr->tval == ItemPrimaryType::TV_CHEST)
         return false;
 
-    if (o_ptr->tval == TV_STATUE)
+    if (o_ptr->tval == ItemPrimaryType::TV_STATUE)
         return false;
 
-    if (o_ptr->tval == TV_CAPTURE)
+    if (o_ptr->tval == ItemPrimaryType::TV_CAPTURE)
         return false;
 
     if (o_ptr->discount != j_ptr->discount)
@@ -292,11 +292,11 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
  */
 static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
 {
-    int max_num = (o_ptr->tval == TV_ROD) ? MIN(99, MAX_SHORT / k_info[o_ptr->k_idx].pval) : 99;
+    int max_num = (o_ptr->tval == ItemPrimaryType::TV_ROD) ? MIN(99, MAX_SHORT / k_info[o_ptr->k_idx].pval) : 99;
     int total = o_ptr->number + j_ptr->number;
     int diff = (total > max_num) ? total - max_num : 0;
     o_ptr->number = (total > max_num) ? max_num : total;
-    if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
+    if ((o_ptr->tval == ItemPrimaryType::TV_ROD) || (o_ptr->tval == ItemPrimaryType::TV_WAND))
         o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
 }
 
@@ -346,7 +346,7 @@ int store_carry(object_type *o_ptr)
             break;
         if (o_ptr->sval > j_ptr->sval)
             continue;
-        if (o_ptr->tval == TV_ROD) {
+        if (o_ptr->tval == ItemPrimaryType::TV_ROD) {
             if (o_ptr->pval < j_ptr->pval)
                 break;
             if (o_ptr->pval > j_ptr->pval)

@@ -120,56 +120,56 @@ void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH le
     }
 
     switch (o_ptr->tval) {
-    case TV_DIGGING:
-    case TV_HAFTED:
-    case TV_BOW:
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
+    case ItemPrimaryType::TV_DIGGING:
+    case ItemPrimaryType::TV_HAFTED:
+    case ItemPrimaryType::TV_BOW:
+    case ItemPrimaryType::TV_SHOT:
+    case ItemPrimaryType::TV_ARROW:
+    case ItemPrimaryType::TV_BOLT:
         if (power != 0) {
             apply_magic_weapon(player_ptr, o_ptr, lev, power);
         }
 
         break;
-    case TV_POLEARM:
+    case ItemPrimaryType::TV_POLEARM:
         if ((power != 0) && (o_ptr->sval != SV_DEATH_SCYTHE)) {
             apply_magic_weapon(player_ptr, o_ptr, lev, power);
         }
 
         break;
-    case TV_SWORD:
+    case ItemPrimaryType::TV_SWORD:
         if ((power != 0) && (o_ptr->sval != SV_POISON_NEEDLE)) {
             apply_magic_weapon(player_ptr, o_ptr, lev, power);
         }
 
         break;
-    case TV_SHIELD:
+    case ItemPrimaryType::TV_SHIELD:
         ShieldEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_CLOAK:
+    case ItemPrimaryType::TV_CLOAK:
         CloakEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_HELM:
+    case ItemPrimaryType::TV_HELM:
         HelmEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_CROWN:
+    case ItemPrimaryType::TV_CROWN:
         CrownEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_BOOTS:
+    case ItemPrimaryType::TV_BOOTS:
         BootsEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_DRAG_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_SOFT_ARMOR:
+    case ItemPrimaryType::TV_DRAG_ARMOR:
+    case ItemPrimaryType::TV_HARD_ARMOR:
+    case ItemPrimaryType::TV_SOFT_ARMOR:
         ArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_GLOVES:
+    case ItemPrimaryType::TV_GLOVES:
         GlovesEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_RING:
+    case ItemPrimaryType::TV_RING:
         RingEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_AMULET:
+    case ItemPrimaryType::TV_AMULET:
         AmuletEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     default:
@@ -177,7 +177,7 @@ void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH le
         break;
     }
 
-    if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality == PERSONALITY_SEXY)) {
+    if ((o_ptr->tval == ItemPrimaryType::TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality == PERSONALITY_SEXY)) {
         o_ptr->pval = 3;
         o_ptr->art_flags.set(TR_STR);
         o_ptr->art_flags.set(TR_INT);

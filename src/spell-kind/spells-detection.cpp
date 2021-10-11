@@ -185,7 +185,7 @@ bool detect_objects_gold(player_type *player_ptr, POSITION range)
         if (distance(player_ptr->y, player_ptr->x, y, x) > range2)
             continue;
 
-        if (o_ptr->tval == TV_GOLD) {
+        if (o_ptr->tval == ItemPrimaryType::TV_GOLD) {
             o_ptr->marked |= OM_FOUND;
             lite_spot(player_ptr, y, x);
             detect = true;
@@ -232,7 +232,7 @@ bool detect_objects_normal(player_type *player_ptr, POSITION range)
         if (distance(player_ptr->y, player_ptr->x, y, x) > range2)
             continue;
 
-        if (o_ptr->tval != TV_GOLD) {
+        if (o_ptr->tval != ItemPrimaryType::TV_GOLD) {
             o_ptr->marked |= OM_FOUND;
             lite_spot(player_ptr, y, x);
             detect = true;
@@ -271,7 +271,7 @@ bool detect_objects_magic(player_type *player_ptr, POSITION range)
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
 
-    tval_type tv;
+    ItemPrimaryType tv;
     bool detect = false;
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
@@ -288,11 +288,11 @@ bool detect_objects_magic(player_type *player_ptr, POSITION range)
             continue;
 
         tv = o_ptr->tval;
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || (tv == TV_WHISTLE) || (tv == TV_AMULET) || (tv == TV_RING) || (tv == TV_STAFF)
-            || (tv == TV_WAND) || (tv == TV_ROD) || (tv == TV_SCROLL) || (tv == TV_POTION) || (tv == TV_LIFE_BOOK) || (tv == TV_SORCERY_BOOK)
-            || (tv == TV_NATURE_BOOK) || (tv == TV_CHAOS_BOOK) || (tv == TV_DEATH_BOOK) || (tv == TV_TRUMP_BOOK) || (tv == TV_ARCANE_BOOK)
-            || (tv == TV_CRAFT_BOOK) || (tv == TV_DEMON_BOOK) || (tv == TV_CRUSADE_BOOK) || (tv == TV_MUSIC_BOOK) || (tv == TV_HISSATSU_BOOK)
-            || (tv == TV_HEX_BOOK) || ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0))) {
+        if (o_ptr->is_artifact() || o_ptr->is_ego() || (tv == ItemPrimaryType::TV_WHISTLE) || (tv == ItemPrimaryType::TV_AMULET) || (tv == ItemPrimaryType::TV_RING) || (tv == ItemPrimaryType::TV_STAFF)
+            || (tv == ItemPrimaryType::TV_WAND) || (tv == ItemPrimaryType::TV_ROD) || (tv == ItemPrimaryType::TV_SCROLL) || (tv == ItemPrimaryType::TV_POTION) || (tv == ItemPrimaryType::TV_LIFE_BOOK) || (tv == ItemPrimaryType::TV_SORCERY_BOOK)
+            || (tv == ItemPrimaryType::TV_NATURE_BOOK) || (tv == ItemPrimaryType::TV_CHAOS_BOOK) || (tv == ItemPrimaryType::TV_DEATH_BOOK) || (tv == ItemPrimaryType::TV_TRUMP_BOOK) || (tv == ItemPrimaryType::TV_ARCANE_BOOK)
+            || (tv == ItemPrimaryType::TV_CRAFT_BOOK) || (tv == ItemPrimaryType::TV_DEMON_BOOK) || (tv == ItemPrimaryType::TV_CRUSADE_BOOK) || (tv == ItemPrimaryType::TV_MUSIC_BOOK) || (tv == ItemPrimaryType::TV_HISSATSU_BOOK)
+            || (tv == ItemPrimaryType::TV_HEX_BOOK) || ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0))) {
             o_ptr->marked |= OM_FOUND;
             lite_spot(player_ptr, y, x);
             detect = true;

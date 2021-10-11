@@ -245,33 +245,33 @@ void do_cmd_use(player_type *player_ptr)
         return;
 
     switch (o_ptr->tval) {
-    case TV_SPIKE:
+    case ItemPrimaryType::TV_SPIKE:
         do_cmd_spike(player_ptr);
         break;
-    case TV_FOOD:
+    case ItemPrimaryType::TV_FOOD:
         exe_eat_food(player_ptr, item);
         break;
-    case TV_WAND:
+    case ItemPrimaryType::TV_WAND:
         ObjectZapWandEntity(player_ptr).execute(item);
         break;
-    case TV_STAFF:
+    case ItemPrimaryType::TV_STAFF:
         ObjectUseEntity(player_ptr, item).execute();
         break;
-    case TV_ROD:
+    case ItemPrimaryType::TV_ROD:
         ObjectZapRodEntity(player_ptr).execute(item);
         break;
-    case TV_POTION:
+    case ItemPrimaryType::TV_POTION:
         ObjectQuaffEntity(player_ptr).execute(item);
         break;
-    case TV_SCROLL:
+    case ItemPrimaryType::TV_SCROLL:
         if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
             return;
 
         ObjectReadEntity(player_ptr, item).execute(true);
         break;
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
+    case ItemPrimaryType::TV_SHOT:
+    case ItemPrimaryType::TV_ARROW:
+    case ItemPrimaryType::TV_BOLT:
         exe_fire(player_ptr, item, &player_ptr->inventory_list[INVEN_BOW], SP_NONE);
         break;
     default:

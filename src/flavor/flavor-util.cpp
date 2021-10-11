@@ -378,62 +378,62 @@ char *object_desc_count_japanese(char *t, object_type *o_ptr)
 {
     t = object_desc_num(t, o_ptr->number);
     switch (o_ptr->tval) {
-    case TV_BOLT:
-    case TV_ARROW:
-    case TV_POLEARM:
-    case TV_STAFF:
-    case TV_WAND:
-    case TV_ROD:
-    case TV_DIGGING: {
+    case ItemPrimaryType::TV_BOLT:
+    case ItemPrimaryType::TV_ARROW:
+    case ItemPrimaryType::TV_POLEARM:
+    case ItemPrimaryType::TV_STAFF:
+    case ItemPrimaryType::TV_WAND:
+    case ItemPrimaryType::TV_ROD:
+    case ItemPrimaryType::TV_DIGGING: {
         t = object_desc_str(t, "本");
         break;
     }
-    case TV_SCROLL: {
+    case ItemPrimaryType::TV_SCROLL: {
         t = object_desc_str(t, "巻");
         break;
     }
-    case TV_POTION: {
+    case ItemPrimaryType::TV_POTION: {
         t = object_desc_str(t, "服");
         break;
     }
-    case TV_LIFE_BOOK:
-    case TV_SORCERY_BOOK:
-    case TV_NATURE_BOOK:
-    case TV_CHAOS_BOOK:
-    case TV_DEATH_BOOK:
-    case TV_TRUMP_BOOK:
-    case TV_ARCANE_BOOK:
-    case TV_CRAFT_BOOK:
-    case TV_DEMON_BOOK:
-    case TV_CRUSADE_BOOK:
-    case TV_MUSIC_BOOK:
-    case TV_HISSATSU_BOOK:
-    case TV_HEX_BOOK: {
+    case ItemPrimaryType::TV_LIFE_BOOK:
+    case ItemPrimaryType::TV_SORCERY_BOOK:
+    case ItemPrimaryType::TV_NATURE_BOOK:
+    case ItemPrimaryType::TV_CHAOS_BOOK:
+    case ItemPrimaryType::TV_DEATH_BOOK:
+    case ItemPrimaryType::TV_TRUMP_BOOK:
+    case ItemPrimaryType::TV_ARCANE_BOOK:
+    case ItemPrimaryType::TV_CRAFT_BOOK:
+    case ItemPrimaryType::TV_DEMON_BOOK:
+    case ItemPrimaryType::TV_CRUSADE_BOOK:
+    case ItemPrimaryType::TV_MUSIC_BOOK:
+    case ItemPrimaryType::TV_HISSATSU_BOOK:
+    case ItemPrimaryType::TV_HEX_BOOK: {
         t = object_desc_str(t, "冊");
         break;
     }
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR:
-    case TV_CLOAK: {
+    case ItemPrimaryType::TV_SOFT_ARMOR:
+    case ItemPrimaryType::TV_HARD_ARMOR:
+    case ItemPrimaryType::TV_DRAG_ARMOR:
+    case ItemPrimaryType::TV_CLOAK: {
         t = object_desc_str(t, "着");
         break;
     }
-    case TV_SWORD:
-    case TV_HAFTED:
-    case TV_BOW: {
+    case ItemPrimaryType::TV_SWORD:
+    case ItemPrimaryType::TV_HAFTED:
+    case ItemPrimaryType::TV_BOW: {
         t = object_desc_str(t, "振");
         break;
     }
-    case TV_BOOTS: {
+    case ItemPrimaryType::TV_BOOTS: {
         t = object_desc_str(t, "足");
         break;
     }
-    case TV_CARD: {
+    case ItemPrimaryType::TV_CARD: {
         t = object_desc_str(t, "枚");
         break;
     }
-    case TV_FOOD: {
+    case ItemPrimaryType::TV_FOOD: {
         if (o_ptr->sval == SV_FOOD_JERKY) {
             t = object_desc_str(t, "切れ");
             break;

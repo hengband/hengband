@@ -118,7 +118,7 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
 {
     char buf[MAX_NLEN];
     describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
-    TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
+    TERM_COLOR attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
 
     if (player_ptr->hallucinated) {
         attr = TERM_WHITE;

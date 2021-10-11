@@ -45,26 +45,26 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
     describe_flavor(player_ptr, buf, q_ptr, OD_NAME_ONLY | OD_STORE);
     strcpy(dam, "");
     switch (q_ptr->tval) {
-    case TV_SHOT:
-    case TV_BOLT:
-    case TV_ARROW:
+    case ItemPrimaryType::TV_SHOT:
+    case ItemPrimaryType::TV_BOLT:
+    case ItemPrimaryType::TV_ARROW:
         sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_DIGGING:
+    case ItemPrimaryType::TV_HAFTED:
+    case ItemPrimaryType::TV_POLEARM:
+    case ItemPrimaryType::TV_SWORD:
+    case ItemPrimaryType::TV_DIGGING:
         sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
-    case TV_BOOTS:
-    case TV_GLOVES:
-    case TV_CLOAK:
-    case TV_CROWN:
-    case TV_HELM:
-    case TV_SHIELD:
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR:
+    case ItemPrimaryType::TV_BOOTS:
+    case ItemPrimaryType::TV_GLOVES:
+    case ItemPrimaryType::TV_CLOAK:
+    case ItemPrimaryType::TV_CROWN:
+    case ItemPrimaryType::TV_HELM:
+    case ItemPrimaryType::TV_SHIELD:
+    case ItemPrimaryType::TV_SOFT_ARMOR:
+    case ItemPrimaryType::TV_HARD_ARMOR:
+    case ItemPrimaryType::TV_DRAG_ARMOR:
         sprintf(dam, "%d", q_ptr->ac);
         break;
     default:

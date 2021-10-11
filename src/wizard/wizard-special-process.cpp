@@ -120,7 +120,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
 {
     KIND_OBJECT_IDX list;
     char ch;
-    for (list = 0; (list < 80) && (tvals[list].tval > TV_NONE); list++) {
+    for (list = 0; (list < 80) && (tvals[list].tval > ItemPrimaryType::TV_NONE); list++) {
         auto row = 2 + (list % 20);
         auto col = _(32, 24) * (list / 20);
         ch = listsym[list];
@@ -146,7 +146,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
     return selection;
 }
 
-static KIND_OBJECT_IDX wiz_select_sval(const tval_type tval, concptr tval_description)
+static KIND_OBJECT_IDX wiz_select_sval(const ItemPrimaryType tval, concptr tval_description)
 {
     auto num = 0;
     KIND_OBJECT_IDX choice[80]{};
@@ -206,8 +206,8 @@ static KIND_OBJECT_IDX wiz_create_itemtype()
         return 0;
     }
 
-    tval_type tval = i2enum<tval_type>(tvals[selection.value()].tval);
-    concptr tval_description = tvals[selection.value()].desc;
+    auto tval = tvals[selection.value()].tval;
+    auto tval_description = tvals[selection.value()].desc;
     term_clear();
     return wiz_select_sval(tval, tval_description);
 }
@@ -420,7 +420,7 @@ void wiz_change_status(player_type *player_ptr)
     if (tmp_s16b > WEAPON_EXP_MASTER)
         tmp_s16b = WEAPON_EXP_MASTER;
 
-    for (int j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++) {
+    for (auto j = 0; j <= enum2i(TV_WEAPON_END) - enum2i(TV_WEAPON_BEGIN); j++) {
         for (int i = 0; i < 64; i++) {
             player_ptr->weapon_exp[j][i] = tmp_s16b;
             if (player_ptr->weapon_exp[j][i] > s_info[player_ptr->pclass].w_max[j][i])

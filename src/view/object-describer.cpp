@@ -20,7 +20,7 @@
 void inven_item_charges(player_type *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &player_ptr->inventory_list[item];
-    if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND))
+    if ((o_ptr->tval != ItemPrimaryType::TV_STAFF) && (o_ptr->tval != ItemPrimaryType::TV_WAND))
         return;
     if (!o_ptr->is_known())
         return;
@@ -92,7 +92,7 @@ void display_koff(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 
     term_putstr(0, 0, -1, TERM_WHITE, o_name);
     sval = q_ptr->sval;
-    use_realm = tval2realm(q_ptr->tval);
+    use_realm = tval2realm(enum2i(q_ptr->tval));
 
     if (player_ptr->realm1 || player_ptr->realm2) {
         if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2))

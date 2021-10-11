@@ -14,7 +14,9 @@
 
 #pragma once
 
-enum tval_type {
+#include "util/enum-converter.h"
+
+enum class ItemPrimaryType : short {
     TV_NONE = 0,
     TV_SKELETON = 1, /* Skeletons ('s'), not specified */
     TV_BOTTLE = 2, /* Empty bottles ('!') */
@@ -72,13 +74,13 @@ enum tval_type {
     TV_GOLD = 127, /* Gold can only be picked up by players */
 };
 
-#define TV_EQUIP_BEGIN TV_SHOT
-#define TV_EQUIP_END TV_CARD
-#define TV_MISSILE_BEGIN TV_SHOT
-#define TV_MISSILE_END TV_BOLT
-#define TV_WEARABLE_BEGIN TV_BOW
-#define TV_WEARABLE_END TV_CARD
-#define TV_WEAPON_BEGIN TV_BOW
-#define TV_WEAPON_END TV_SWORD
-#define TV_ARMOR_BEGIN TV_BOOTS
-#define TV_ARMOR_END TV_DRAG_ARMOR
+#define TV_EQUIP_BEGIN ItemPrimaryType::TV_SHOT
+#define TV_EQUIP_END ItemPrimaryType::TV_CARD
+#define TV_MISSILE_BEGIN ItemPrimaryType::TV_SHOT
+#define TV_MISSILE_END ItemPrimaryType::TV_BOLT
+#define TV_WEARABLE_BEGIN ItemPrimaryType::TV_BOW
+#define TV_WEARABLE_END ItemPrimaryType::TV_CARD
+#define TV_WEAPON_BEGIN ItemPrimaryType::TV_BOW
+#define TV_WEAPON_END ItemPrimaryType::TV_SWORD
+#define TV_ARMOR_BEGIN ItemPrimaryType::TV_BOOTS
+#define TV_ARMOR_END ItemPrimaryType::TV_DRAG_ARMOR

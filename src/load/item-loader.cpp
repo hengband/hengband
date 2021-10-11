@@ -254,7 +254,7 @@ void rd_item(object_type *o_ptr)
     }
 
     if (o_ptr->name2 == EGO_LITE_DARKNESS) {
-        if (o_ptr->tval != TV_LITE) {
+        if (o_ptr->tval != ItemPrimaryType::TV_LITE) {
             o_ptr->art_flags.set(TR_LITE_M1);
             return;
         }
@@ -270,7 +270,7 @@ void rd_item(object_type *o_ptr)
         return;
     }
 
-    if (o_ptr->tval == TV_LITE) {
+    if (o_ptr->tval == ItemPrimaryType::TV_LITE) {
         if (o_ptr->is_fixed_artifact()) {
             o_ptr->art_flags.set(TR_LITE_3);
             return;

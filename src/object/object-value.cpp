@@ -27,23 +27,23 @@ static PRICE object_value_base(const object_type *o_ptr)
         return (k_info[o_ptr->k_idx].cost);
 
     switch (o_ptr->tval) {
-    case TV_FOOD:
+    case ItemPrimaryType::TV_FOOD:
         return (5L);
-    case TV_POTION:
+    case ItemPrimaryType::TV_POTION:
         return (20L);
-    case TV_SCROLL:
+    case ItemPrimaryType::TV_SCROLL:
         return (20L);
-    case TV_STAFF:
+    case ItemPrimaryType::TV_STAFF:
         return (70L);
-    case TV_WAND:
+    case ItemPrimaryType::TV_WAND:
         return (50L);
-    case TV_ROD:
+    case ItemPrimaryType::TV_ROD:
         return (90L);
-    case TV_RING:
+    case ItemPrimaryType::TV_RING:
         return (45L);
-    case TV_AMULET:
+    case ItemPrimaryType::TV_AMULET:
         return (45L);
-    case TV_FIGURINE: {
+    case ItemPrimaryType::TV_FIGURINE: {
         DEPTH level = r_info[o_ptr->pval].level;
         if (level < 20)
             return level * 50L;
@@ -56,7 +56,7 @@ static PRICE object_value_base(const object_type *o_ptr)
         else
             return 14000 + (level - 50) * 2000L;
     }
-    case TV_CAPTURE:
+    case ItemPrimaryType::TV_CAPTURE:
         if (!o_ptr->pval)
             return 1000L;
         else
@@ -166,26 +166,26 @@ PRICE object_value_real(const object_type *o_ptr)
 
     /* Analyze pval bonus for normal object */
     switch (o_ptr->tval) {
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
-    case TV_BOW:
-    case TV_DIGGING:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_BOOTS:
-    case TV_GLOVES:
-    case TV_HELM:
-    case TV_CROWN:
-    case TV_SHIELD:
-    case TV_CLOAK:
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR:
-    case TV_LITE:
-    case TV_AMULET:
-    case TV_RING:
+    case ItemPrimaryType::TV_SHOT:
+    case ItemPrimaryType::TV_ARROW:
+    case ItemPrimaryType::TV_BOLT:
+    case ItemPrimaryType::TV_BOW:
+    case ItemPrimaryType::TV_DIGGING:
+    case ItemPrimaryType::TV_HAFTED:
+    case ItemPrimaryType::TV_POLEARM:
+    case ItemPrimaryType::TV_SWORD:
+    case ItemPrimaryType::TV_BOOTS:
+    case ItemPrimaryType::TV_GLOVES:
+    case ItemPrimaryType::TV_HELM:
+    case ItemPrimaryType::TV_CROWN:
+    case ItemPrimaryType::TV_SHIELD:
+    case ItemPrimaryType::TV_CLOAK:
+    case ItemPrimaryType::TV_SOFT_ARMOR:
+    case ItemPrimaryType::TV_HARD_ARMOR:
+    case ItemPrimaryType::TV_DRAG_ARMOR:
+    case ItemPrimaryType::TV_LITE:
+    case ItemPrimaryType::TV_AMULET:
+    case ItemPrimaryType::TV_RING:
         if (!o_ptr->pval)
             break;
         if (o_ptr->pval < 0)
@@ -224,48 +224,48 @@ PRICE object_value_real(const object_type *o_ptr)
     }
 
     switch (o_ptr->tval) {
-    case TV_WAND: {
+    case ItemPrimaryType::TV_WAND: {
         /* Pay extra for charges, depending on standard number of
          * charges.  Handle new-style wands correctly. -LM-
          */
         value += (value * o_ptr->pval / o_ptr->number / (k_ptr->pval * 2));
         break;
     }
-    case TV_STAFF: {
+    case ItemPrimaryType::TV_STAFF: {
         /* Pay extra for charges, depending on standard number of
          * charges.  -LM-
          */
         value += (value * o_ptr->pval / (k_ptr->pval * 2));
         break;
     }
-    case TV_RING:
-    case TV_AMULET: {
+    case ItemPrimaryType::TV_RING:
+    case ItemPrimaryType::TV_AMULET: {
         if (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a < 0)
             return (0L);
 
         value += ((o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) * 200L);
         break;
     }
-    case TV_BOOTS:
-    case TV_GLOVES:
-    case TV_CLOAK:
-    case TV_CROWN:
-    case TV_HELM:
-    case TV_SHIELD:
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR: {
+    case ItemPrimaryType::TV_BOOTS:
+    case ItemPrimaryType::TV_GLOVES:
+    case ItemPrimaryType::TV_CLOAK:
+    case ItemPrimaryType::TV_CROWN:
+    case ItemPrimaryType::TV_HELM:
+    case ItemPrimaryType::TV_SHIELD:
+    case ItemPrimaryType::TV_SOFT_ARMOR:
+    case ItemPrimaryType::TV_HARD_ARMOR:
+    case ItemPrimaryType::TV_DRAG_ARMOR: {
         if (o_ptr->to_a < 0)
             return (0L);
 
         value += (((o_ptr->to_h - k_ptr->to_h) + (o_ptr->to_d - k_ptr->to_d)) * 200L + (o_ptr->to_a) * 100L);
         break;
     }
-    case TV_BOW:
-    case TV_DIGGING:
-    case TV_HAFTED:
-    case TV_SWORD:
-    case TV_POLEARM: {
+    case ItemPrimaryType::TV_BOW:
+    case ItemPrimaryType::TV_DIGGING:
+    case ItemPrimaryType::TV_HAFTED:
+    case ItemPrimaryType::TV_SWORD:
+    case ItemPrimaryType::TV_POLEARM: {
         if (o_ptr->to_h + o_ptr->to_d < 0)
             return (0L);
 
@@ -274,9 +274,9 @@ PRICE object_value_real(const object_type *o_ptr)
         value += (o_ptr->ds - k_ptr->ds) * o_ptr->dd * 250L;
         break;
     }
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT: {
+    case ItemPrimaryType::TV_SHOT:
+    case ItemPrimaryType::TV_ARROW:
+    case ItemPrimaryType::TV_BOLT: {
         if (o_ptr->to_h + o_ptr->to_d < 0)
             return (0L);
 
@@ -285,7 +285,7 @@ PRICE object_value_real(const object_type *o_ptr)
         value += (o_ptr->ds - k_ptr->ds) * o_ptr->dd * 5L;
         break;
     }
-    case TV_FIGURINE: {
+    case ItemPrimaryType::TV_FIGURINE: {
         DEPTH level = r_info[o_ptr->pval].level;
         if (level < 20)
             value = level * 50L;
@@ -299,14 +299,14 @@ PRICE object_value_real(const object_type *o_ptr)
             value = 14000 + (level - 50) * 2000L;
         break;
     }
-    case TV_CAPTURE: {
+    case ItemPrimaryType::TV_CAPTURE: {
         if (!o_ptr->pval)
             value = 1000L;
         else
             value = ((r_info[o_ptr->pval].level) * 50L + 1000);
         break;
     }
-    case TV_CHEST: {
+    case ItemPrimaryType::TV_CHEST: {
         if (!o_ptr->pval)
             value = 0L;
         break;

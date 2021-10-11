@@ -72,6 +72,12 @@ const uint32_t realm_choices2[MAX_CLASS] = {
     (CH_NONE), /* Elementalist */
 };
 
-int16_t get_realm1_book(player_type *player_ptr) { return player_ptr->realm1 + TV_LIFE_BOOK - 1; }
+ItemPrimaryType get_realm1_book(player_type *player_ptr)
+{
+    return i2enum<ItemPrimaryType>(player_ptr->realm1 + enum2i(ItemPrimaryType::TV_LIFE_BOOK) - 1);
+}
 
-int16_t get_realm2_book(player_type *player_ptr) { return player_ptr->realm2 + TV_LIFE_BOOK - 1; }
+ItemPrimaryType get_realm2_book(player_type *player_ptr)
+{
+    return i2enum<ItemPrimaryType>(player_ptr->realm2 + enum2i(ItemPrimaryType::TV_LIFE_BOOK) - 1);
+}

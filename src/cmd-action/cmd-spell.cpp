@@ -655,7 +655,7 @@ void do_cmd_browse(player_type *player_ptr)
     /* Access the item's sval */
     sval = o_ptr->sval;
 
-    use_realm = tval2realm(o_ptr->tval);
+    use_realm = tval2realm(enum2i(o_ptr->tval));
 
     /* Track the object kind */
     object_kind_track(player_ptr, o_ptr->k_idx);
@@ -811,12 +811,12 @@ void do_cmd_study(player_type *player_ptr)
     /* Access the item's sval */
     sval = o_ptr->sval;
 
-    if (o_ptr->tval == get_realm2_book(player_ptr))
+    if (o_ptr->tval == get_realm2_book(player_ptr)) {
         increment = 32;
-    else if (o_ptr->tval != get_realm1_book(player_ptr)) {
+    } else if (o_ptr->tval != get_realm1_book(player_ptr)) {
         if (!get_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? ")))
             return;
-        change_realm2(player_ptr, tval2realm(o_ptr->tval));
+        change_realm2(player_ptr, tval2realm(enum2i(o_ptr->tval)));
         increment = 32;
     }
 
@@ -825,9 +825,9 @@ void do_cmd_study(player_type *player_ptr)
     handle_stuff(player_ptr);
 
     /* Mage -- Learn a selected spell */
-    if (mp_ptr->spell_book != TV_LIFE_BOOK) {
+    if (mp_ptr->spell_book != ItemPrimaryType::TV_LIFE_BOOK) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, o_ptr->tval - TV_LIFE_BOOK + 1) && (spell == -1))
+        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, enum2i(o_ptr->tval) - enum2i(ItemPrimaryType::TV_LIFE_BOOK) + 1) && (spell == -1))
             return;
     }
 
@@ -929,7 +929,7 @@ void do_cmd_study(player_type *player_ptr)
         /* Mention the result */
 #ifdef JP
         /* 英日切り替え機能に対応 */
-        if (mp_ptr->spell_book == TV_MUSIC_BOOK) {
+        if (mp_ptr->spell_book == ItemPrimaryType::TV_MUSIC_BOOK) {
             msg_format("%sを学んだ。", exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SPELL_NAME));
         } else {
             msg_format("%sの%sを学んだ。", exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SPELL_NAME), p);
@@ -942,13 +942,13 @@ void do_cmd_study(player_type *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     switch (mp_ptr->spell_book) {
-    case TV_LIFE_BOOK:
+    case ItemPrimaryType::TV_LIFE_BOOK:
         chg_virtue(player_ptr, V_FAITH, 1);
         break;
-    case TV_DEATH_BOOK:
+    case ItemPrimaryType::TV_DEATH_BOOK:
         chg_virtue(player_ptr, V_UNLIFE, 1);
         break;
-    case TV_NATURE_BOOK:
+    case ItemPrimaryType::TV_NATURE_BOOK:
         chg_virtue(player_ptr, V_NATURE, 1);
         break;
     default:
@@ -1062,7 +1062,7 @@ bool do_cmd_cast(player_type *player_ptr)
     handle_stuff(player_ptr);
 
     if ((player_ptr->pclass == CLASS_SORCERER) || (player_ptr->pclass == CLASS_RED_MAGE))
-        realm = o_ptr->tval - TV_LIFE_BOOK + 1;
+        realm = enum2i(o_ptr->tval) - enum2i(ItemPrimaryType::TV_LIFE_BOOK) + 1;
     else if (increment)
         realm = player_ptr->realm2;
     else
@@ -1071,8 +1071,8 @@ bool do_cmd_cast(player_type *player_ptr)
         /* Ask for a spell */
 #ifdef JP
     if (!get_spell(player_ptr, &spell,
-            ((mp_ptr->spell_book == TV_LIFE_BOOK)           ? "詠唱する"
-                    : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う"
+            ((mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)           ? "詠唱する"
+                    : (mp_ptr->spell_book == ItemPrimaryType::TV_MUSIC_BOOK) ? "歌う"
                                                             : "唱える"),
             sval, true, realm)) {
         if (spell == -2)
@@ -1080,14 +1080,14 @@ bool do_cmd_cast(player_type *player_ptr)
         return false;
     }
 #else
-    if (!get_spell(player_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"), sval, true, realm)) {
+    if (!get_spell(player_ptr, &spell, ((mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK) ? "recite" : "cast"), sval, true, realm)) {
         if (spell == -2)
             msg_format("You don't know any %ss in that book.", prayer);
         return false;
     }
 #endif
 
-    use_realm = tval2realm(o_ptr->tval);
+    use_realm = tval2realm(enum2i(o_ptr->tval));
     if (use_realm == REALM_HEX) {
         if (SpellHex(player_ptr).is_spelling_specific(spell)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
@@ -1112,11 +1112,11 @@ bool do_cmd_cast(player_type *player_ptr)
             /* Warning */
 #ifdef JP
         msg_format("その%sを%sのに十分なマジックポイントがない。", prayer,
-            ((mp_ptr->spell_book == TV_LIFE_BOOK)          ? "詠唱する"
-                    : (mp_ptr->spell_book == TV_LIFE_BOOK) ? "歌う"
+            ((mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK)          ? "詠唱する"
+                    : (mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK) ? "歌う"
                                                            : "唱える"));
 #else
-        msg_format("You do not have enough mana to %s this %s.", ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"), prayer);
+        msg_format("You do not have enough mana to %s this %s.", ((mp_ptr->spell_book == ItemPrimaryType::TV_LIFE_BOOK) ? "recite" : "cast"), prayer);
 #endif
 
         if (!over_exert)
@@ -1172,10 +1172,10 @@ bool do_cmd_cast(player_type *player_ptr)
         /* Failure casting may activate some side effect */
         exe_spell(player_ptr, realm, spell, SPELL_FAIL);
 
-        if ((o_ptr->tval == TV_CHAOS_BOOK) && (randint1(100) < spell)) {
+        if ((o_ptr->tval == ItemPrimaryType::TV_CHAOS_BOOK) && (randint1(100) < spell)) {
             msg_print(_("カオス的な効果を発生した！", "You produce a chaotic effect!"));
             wild_magic(player_ptr, spell);
-        } else if ((o_ptr->tval == TV_DEATH_BOOK) && (randint1(100) < spell)) {
+        } else if ((o_ptr->tval == ItemPrimaryType::TV_DEATH_BOOK) && (randint1(100) < spell)) {
             if ((sval == 3) && one_in_(2)) {
                 sanity_blast(player_ptr, 0, true);
             } else {
@@ -1185,7 +1185,7 @@ bool do_cmd_cast(player_type *player_ptr)
                 if ((spell > 15) && one_in_(6) && !player_ptr->hold_exp)
                     lose_exp(player_ptr, spell * 250);
             }
-        } else if ((o_ptr->tval == TV_MUSIC_BOOK) && (randint1(200) < spell)) {
+        } else if ((o_ptr->tval == ItemPrimaryType::TV_MUSIC_BOOK) && (randint1(200) < spell)) {
             msg_print(_("いやな音が響いた", "An infernal sound echoed."));
             aggravate_monsters(player_ptr, 0);
         }

@@ -331,7 +331,7 @@ static void show_dead_home_items(player_type *player_ptr)
                 sprintf(tmp_val, "%c) ", I2A(j));
                 prt(tmp_val, j + 2, 4);
                 describe_flavor(player_ptr, o_name, o_ptr, 0);
-                c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
+                c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, j + 2, 7);
             }
 
             prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);

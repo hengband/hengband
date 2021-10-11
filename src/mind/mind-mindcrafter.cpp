@@ -90,28 +90,28 @@ bool psychometry(player_type *player_ptr)
 
     bool okay = false;
     switch (o_ptr->tval) {
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
-    case TV_BOW:
-    case TV_DIGGING:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_BOOTS:
-    case TV_GLOVES:
-    case TV_HELM:
-    case TV_CROWN:
-    case TV_SHIELD:
-    case TV_CLOAK:
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR:
-    case TV_CARD:
-    case TV_RING:
-    case TV_AMULET:
-    case TV_LITE:
-    case TV_FIGURINE:
+    case ItemPrimaryType::TV_SHOT:
+    case ItemPrimaryType::TV_ARROW:
+    case ItemPrimaryType::TV_BOLT:
+    case ItemPrimaryType::TV_BOW:
+    case ItemPrimaryType::TV_DIGGING:
+    case ItemPrimaryType::TV_HAFTED:
+    case ItemPrimaryType::TV_POLEARM:
+    case ItemPrimaryType::TV_SWORD:
+    case ItemPrimaryType::TV_BOOTS:
+    case ItemPrimaryType::TV_GLOVES:
+    case ItemPrimaryType::TV_HELM:
+    case ItemPrimaryType::TV_CROWN:
+    case ItemPrimaryType::TV_SHIELD:
+    case ItemPrimaryType::TV_CLOAK:
+    case ItemPrimaryType::TV_SOFT_ARMOR:
+    case ItemPrimaryType::TV_HARD_ARMOR:
+    case ItemPrimaryType::TV_DRAG_ARMOR:
+    case ItemPrimaryType::TV_CARD:
+    case ItemPrimaryType::TV_RING:
+    case ItemPrimaryType::TV_AMULET:
+    case ItemPrimaryType::TV_LITE:
+    case ItemPrimaryType::TV_FIGURINE:
         okay = true;
         break;
 
