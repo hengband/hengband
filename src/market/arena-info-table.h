@@ -1,8 +1,17 @@
 ﻿#pragma once
 
+#include "object/tval-types.h"
 #include "system/angband.h"
-#include "system/building-type-definition.h"
+#include <vector>
 
-#define MAX_ARENA_MONS 41 /*<! 闘技場のイベント件数 -KMW- */
+/*!
+ * @brief 闘技場のモンスターエントリー構造体 / A structure type for on_defeat_arena_monster entry
+ */
+struct arena_type {
+    MONRACE_IDX r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
+    tval_type tval; /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */
+    OBJECT_SUBTYPE_VALUE sval; /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
+};
 
-extern const arena_type arena_info[MAX_ARENA_MONS + 2];
+extern const std::vector<arena_type> arena_info;
+extern const int MAX_ARENA_MONS; // 表彰式までの最大数.
