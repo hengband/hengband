@@ -20,26 +20,6 @@
 StoreSaleType cur_store_num = StoreSaleType::GENERAL;
 store_type *st_ptr = nullptr;
 
-StoreSaleType begin(StoreSaleType)
-{
-    return StoreSaleType::GENERAL;
-}
-
-StoreSaleType end(StoreSaleType)
-{
-    return StoreSaleType::MAX;
-}
-
-StoreSaleType operator*(StoreSaleType s)
-{
-    return s;
-}
-
-StoreSaleType operator++(StoreSaleType &s)
-{
-    return s = StoreSaleType(std::underlying_type<StoreSaleType>::type(s) + 1);
-}
-
 /*!
  * @brief 店舗のオブジェクト数を増やす /
  * Add the item "o_ptr" to a real stores inventory.

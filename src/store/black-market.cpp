@@ -31,7 +31,7 @@ bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
     if (o_ptr->to_d > 0)
         return false;
 
-    for (auto sst : StoreSaleType()) {
+    for (auto sst : STORE_SALE_TYPE_LIST) {
         if (sst == StoreSaleType::HOME || sst == StoreSaleType::MUSEUM) {
             continue;
         }

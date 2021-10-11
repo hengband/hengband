@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#include "util/enum-range.h"
+
 #include <memory>
 #include <vector>
 
@@ -21,10 +23,7 @@ enum class StoreSaleType {
     MAX       = 10
 };
 
-StoreSaleType begin(StoreSaleType);
-StoreSaleType end(StoreSaleType);
-StoreSaleType operator*(StoreSaleType s);
-StoreSaleType operator++(StoreSaleType &s);
+constexpr auto STORE_SALE_TYPE_LIST = EnumRange(StoreSaleType::GENERAL, StoreSaleType::MUSEUM);
 
 using store_k_idx = std::vector<KIND_OBJECT_IDX>;
 

@@ -19,7 +19,7 @@ errr init_towns(void)
     town_info = std::vector<town_type>(max_towns);
     for (int i = 1; i < max_towns; i++) {
         town_info[i].store = std::vector<store_type>(MAX_STORES);
-        for (auto sst : StoreSaleType()) {
+        for (auto sst : STORE_SALE_TYPE_LIST) {
             store_type *store_ptr = &town_info[i].store[enum2i(sst)];
             if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME))
                 continue;
