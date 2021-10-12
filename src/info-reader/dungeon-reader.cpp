@@ -128,7 +128,7 @@ errr parse_d_info(std::string_view buf, angband_header *)
 #else
         if (tokens[1][0] != '$')
             return PARSE_ERROR_NONE;
-        d_ptr->text.append(buf.substr(3));
+        append_english_text(d_ptr->text, buf.substr(3));
 #endif
     } else if (tokens[0] == "W") {
         // W:min_level:max_level:(1):mode:(2):(3):(4):(5):prob_pit:prob_nest

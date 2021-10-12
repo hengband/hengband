@@ -86,7 +86,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
 #else
         if (tokens[1][0] != '$')
             return PARSE_ERROR_NONE;
-        a_ptr->text.append(buf.substr(3));
+        append_english_text(a_ptr->text, buf.substr(3));
 #endif
     } else if (tokens[0] == "I") {
         // I:tval:sval:pval
