@@ -382,17 +382,17 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
         ADD_FLG(FLG_WANTED);
     }
 
-    if ((o_ptr->tval == ItemPrimaryType::TV_CORPSE || o_ptr->tval == ItemPrimaryType::TV_STATUE) && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE)) {
+    if ((o_ptr->tval == ItemKindType::CORPSE || o_ptr->tval == ItemKindType::STATUE) && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE)) {
         ADD_FLG(FLG_UNIQUE);
     }
 
-    if (o_ptr->tval == ItemPrimaryType::TV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char)) {
+    if (o_ptr->tval == ItemKindType::CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char)) {
         ADD_FLG(FLG_HUMAN);
     }
 
-    if (o_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK && !check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
+    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && !check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
         ADD_FLG(FLG_UNREADABLE);
-        if (o_ptr->tval != ItemPrimaryType::TV_ARCANE_BOOK)
+        if (o_ptr->tval != ItemKindType::ARCANE_BOOK)
             name = false;
     }
 
@@ -408,46 +408,46 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
         name = false;
     }
 
-    if (o_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK && 0 == o_ptr->sval)
+    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 0 == o_ptr->sval)
         ADD_FLG(FLG_FIRST);
-    if (o_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK && 1 == o_ptr->sval)
+    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 1 == o_ptr->sval)
         ADD_FLG(FLG_SECOND);
-    if (o_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK && 2 == o_ptr->sval)
+    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 2 == o_ptr->sval)
         ADD_FLG(FLG_THIRD);
-    if (o_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK && 3 == o_ptr->sval)
+    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 3 == o_ptr->sval)
         ADD_FLG(FLG_FOURTH);
 
     if (o_ptr->is_ammo())
         ADD_FLG(FLG_MISSILES);
-    else if (o_ptr->tval == ItemPrimaryType::TV_SCROLL || o_ptr->tval == ItemPrimaryType::TV_STAFF || o_ptr->tval == ItemPrimaryType::TV_WAND || o_ptr->tval == ItemPrimaryType::TV_ROD)
+    else if (o_ptr->tval == ItemKindType::SCROLL || o_ptr->tval == ItemKindType::STAFF || o_ptr->tval == ItemKindType::WAND || o_ptr->tval == ItemKindType::ROD)
         ADD_FLG(FLG_DEVICES);
-    else if (o_ptr->tval == ItemPrimaryType::TV_LITE)
+    else if (o_ptr->tval == ItemKindType::LITE)
         ADD_FLG(FLG_LIGHTS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_SKELETON || o_ptr->tval == ItemPrimaryType::TV_BOTTLE || o_ptr->tval == ItemPrimaryType::TV_JUNK || o_ptr->tval == ItemPrimaryType::TV_STATUE)
+    else if (o_ptr->tval == ItemKindType::SKELETON || o_ptr->tval == ItemKindType::BOTTLE || o_ptr->tval == ItemKindType::JUNK || o_ptr->tval == ItemKindType::STATUE)
         ADD_FLG(FLG_JUNKS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_CORPSE)
+    else if (o_ptr->tval == ItemKindType::CORPSE)
         ADD_FLG(FLG_CORPSES);
-    else if (o_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK)
+    else if (o_ptr->tval >= ItemKindType::LIFE_BOOK)
         ADD_FLG(FLG_SPELLBOOKS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_POLEARM || o_ptr->tval == ItemPrimaryType::TV_SWORD || o_ptr->tval == ItemPrimaryType::TV_DIGGING || o_ptr->tval == ItemPrimaryType::TV_HAFTED)
+    else if (o_ptr->tval == ItemKindType::POLEARM || o_ptr->tval == ItemKindType::SWORD || o_ptr->tval == ItemKindType::DIGGING || o_ptr->tval == ItemKindType::HAFTED)
         ADD_FLG(FLG_WEAPONS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_SHIELD)
+    else if (o_ptr->tval == ItemKindType::SHIELD)
         ADD_FLG(FLG_SHIELDS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_BOW)
+    else if (o_ptr->tval == ItemKindType::BOW)
         ADD_FLG(FLG_BOWS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_RING)
+    else if (o_ptr->tval == ItemKindType::RING)
         ADD_FLG(FLG_RINGS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_AMULET)
+    else if (o_ptr->tval == ItemKindType::AMULET)
         ADD_FLG(FLG_AMULETS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_DRAG_ARMOR || o_ptr->tval == ItemPrimaryType::TV_HARD_ARMOR || o_ptr->tval == ItemPrimaryType::TV_SOFT_ARMOR)
+    else if (o_ptr->tval == ItemKindType::DRAG_ARMOR || o_ptr->tval == ItemKindType::HARD_ARMOR || o_ptr->tval == ItemKindType::SOFT_ARMOR)
         ADD_FLG(FLG_SUITS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_CLOAK)
+    else if (o_ptr->tval == ItemKindType::CLOAK)
         ADD_FLG(FLG_CLOAKS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_HELM)
+    else if (o_ptr->tval == ItemKindType::HELM)
         ADD_FLG(FLG_HELMS);
-    else if (o_ptr->tval == ItemPrimaryType::TV_GLOVES)
+    else if (o_ptr->tval == ItemKindType::GLOVES)
         ADD_FLG(FLG_GLOVES);
-    else if (o_ptr->tval == ItemPrimaryType::TV_BOOTS)
+    else if (o_ptr->tval == ItemKindType::BOOTS)
         ADD_FLG(FLG_BOOTS);
 
     if (!name) {

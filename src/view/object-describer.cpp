@@ -20,7 +20,7 @@
 void inven_item_charges(player_type *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &player_ptr->inventory_list[item];
-    if ((o_ptr->tval != ItemPrimaryType::TV_STAFF) && (o_ptr->tval != ItemPrimaryType::TV_WAND))
+    if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
         return;
     if (!o_ptr->is_known())
         return;

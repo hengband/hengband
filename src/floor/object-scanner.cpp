@@ -120,7 +120,7 @@ COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION
         if (show_weights)
             l += 9;
 
-        if (o_ptr->tval != ItemPrimaryType::TV_GOLD)
+        if (o_ptr->tval != ItemKindType::GOLD)
             dont_need_to_show_weights = false;
 
         if (l > len)
@@ -151,7 +151,7 @@ COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION
 
         put_str(tmp_val, j + 1, col);
         c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
-        if (show_weights && (o_ptr->tval != ItemPrimaryType::TV_GOLD)) {
+        if (show_weights && (o_ptr->tval != ItemKindType::GOLD)) {
             int wgt = o_ptr->weight * o_ptr->number;
             sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
             prt(tmp_val, j + 1, wid - 9);

@@ -257,24 +257,24 @@ void sense_inventory1(player_type *player_ptr)
             continue;
 
         switch (o_ptr->tval) {
-        case ItemPrimaryType::TV_SHOT:
-        case ItemPrimaryType::TV_ARROW:
-        case ItemPrimaryType::TV_BOLT:
-        case ItemPrimaryType::TV_BOW:
-        case ItemPrimaryType::TV_DIGGING:
-        case ItemPrimaryType::TV_HAFTED:
-        case ItemPrimaryType::TV_POLEARM:
-        case ItemPrimaryType::TV_SWORD:
-        case ItemPrimaryType::TV_BOOTS:
-        case ItemPrimaryType::TV_GLOVES:
-        case ItemPrimaryType::TV_HELM:
-        case ItemPrimaryType::TV_CROWN:
-        case ItemPrimaryType::TV_SHIELD:
-        case ItemPrimaryType::TV_CLOAK:
-        case ItemPrimaryType::TV_SOFT_ARMOR:
-        case ItemPrimaryType::TV_HARD_ARMOR:
-        case ItemPrimaryType::TV_DRAG_ARMOR:
-        case ItemPrimaryType::TV_CARD: {
+        case ItemKindType::SHOT:
+        case ItemKindType::ARROW:
+        case ItemKindType::BOLT:
+        case ItemKindType::BOW:
+        case ItemKindType::DIGGING:
+        case ItemKindType::HAFTED:
+        case ItemKindType::POLEARM:
+        case ItemKindType::SWORD:
+        case ItemKindType::BOOTS:
+        case ItemKindType::GLOVES:
+        case ItemKindType::HELM:
+        case ItemKindType::CROWN:
+        case ItemKindType::SHIELD:
+        case ItemKindType::CLOAK:
+        case ItemKindType::SOFT_ARMOR:
+        case ItemKindType::HARD_ARMOR:
+        case ItemKindType::DRAG_ARMOR:
+        case ItemKindType::CARD: {
             okay = true;
             break;
         }
@@ -376,10 +376,10 @@ void sense_inventory2(player_type *player_ptr)
             continue;
 
         switch (o_ptr->tval) {
-        case ItemPrimaryType::TV_RING:
-        case ItemPrimaryType::TV_AMULET:
-        case ItemPrimaryType::TV_LITE:
-        case ItemPrimaryType::TV_FIGURINE: {
+        case ItemKindType::RING:
+        case ItemKindType::AMULET:
+        case ItemKindType::LITE:
+        case ItemKindType::FIGURINE: {
             okay = true;
             break;
         }
@@ -422,7 +422,7 @@ item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
         return FEEL_CURSED;
     if (o_ptr->is_broken())
         return FEEL_BROKEN;
-    if ((o_ptr->tval == ItemPrimaryType::TV_RING) || (o_ptr->tval == ItemPrimaryType::TV_AMULET))
+    if ((o_ptr->tval == ItemKindType::RING) || (o_ptr->tval == ItemKindType::AMULET))
         return FEEL_AVERAGE;
     if (o_ptr->to_a > 0)
         return FEEL_GOOD;

@@ -6,9 +6,9 @@
 /*!
  * 賞金首の報酬テーブル / List of prize object
  */
-enum class ItemPrimaryType : short;
+enum class ItemKindType : short;
 struct bounty_prize_type {
-    ItemPrimaryType tval; /*!< ベースアイテムのメイン種別ID */
+    ItemKindType tval; /*!< ベースアイテムのメイン種別ID */
     OBJECT_SUBTYPE_VALUE sval; /*!< ベースアイテムのサブ種別ID */
 };
 

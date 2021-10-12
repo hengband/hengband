@@ -23,13 +23,13 @@ bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
         return true;
 
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_SPIKE:
-    case ItemPrimaryType::TV_STAFF:
-    case ItemPrimaryType::TV_WAND:
-    case ItemPrimaryType::TV_ROD:
-    case ItemPrimaryType::TV_SCROLL:
-    case ItemPrimaryType::TV_POTION:
-    case ItemPrimaryType::TV_FOOD:
+    case ItemKindType::SPIKE:
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+    case ItemKindType::SCROLL:
+    case ItemKindType::POTION:
+    case ItemKindType::FOOD:
         return true;
     default:
         if (!o_ptr->is_known()) {
@@ -64,10 +64,10 @@ bool item_tester_learn_spell(player_type *player_ptr, const object_type *o_ptr)
         }
     }
 
-    if ((o_ptr->tval < ItemPrimaryType::TV_LIFE_BOOK) || (enum2i(o_ptr->tval) > (enum2i(ItemPrimaryType::TV_LIFE_BOOK) + MAX_REALM - 1)))
+    if ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (enum2i(o_ptr->tval) > (enum2i(ItemKindType::LIFE_BOOK) + MAX_REALM - 1)))
         return false;
 
-    if ((o_ptr->tval == ItemPrimaryType::TV_MUSIC_BOOK) && (player_ptr->pclass == CLASS_BARD))
+    if ((o_ptr->tval == ItemKindType::MUSIC_BOOK) && (player_ptr->pclass == CLASS_BARD))
         return true;
     else if (!is_magic(tval2realm(enum2i(o_ptr->tval))))
         return false;
@@ -83,9 +83,9 @@ bool item_tester_learn_spell(player_type *player_ptr, const object_type *o_ptr)
  */
 bool item_tester_high_level_book(const object_type *o_ptr)
 {
-    if ((o_ptr->tval == ItemPrimaryType::TV_LIFE_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_SORCERY_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_NATURE_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_CHAOS_BOOK)
-        || (o_ptr->tval == ItemPrimaryType::TV_DEATH_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_TRUMP_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_CRAFT_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_DEMON_BOOK)
-        || (o_ptr->tval == ItemPrimaryType::TV_CRUSADE_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_MUSIC_BOOK) || (o_ptr->tval == ItemPrimaryType::TV_HEX_BOOK)) {
+    if ((o_ptr->tval == ItemKindType::LIFE_BOOK) || (o_ptr->tval == ItemKindType::SORCERY_BOOK) || (o_ptr->tval == ItemKindType::NATURE_BOOK) || (o_ptr->tval == ItemKindType::CHAOS_BOOK)
+        || (o_ptr->tval == ItemKindType::DEATH_BOOK) || (o_ptr->tval == ItemKindType::TRUMP_BOOK) || (o_ptr->tval == ItemKindType::CRAFT_BOOK) || (o_ptr->tval == ItemKindType::DEMON_BOOK)
+        || (o_ptr->tval == ItemKindType::CRUSADE_BOOK) || (o_ptr->tval == ItemKindType::MUSIC_BOOK) || (o_ptr->tval == ItemKindType::HEX_BOOK)) {
         if (o_ptr->sval > 1)
             return true;
         else

@@ -16,7 +16,7 @@
 bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Only melee weapons match */
-    if (!(o_ptr->tval == ItemPrimaryType::TV_POLEARM || o_ptr->tval == ItemPrimaryType::TV_SWORD || o_ptr->tval == ItemPrimaryType::TV_DIGGING || o_ptr->tval == ItemPrimaryType::TV_HAFTED)) {
+    if (!(o_ptr->tval == ItemKindType::POLEARM || o_ptr->tval == ItemKindType::SWORD || o_ptr->tval == ItemKindType::DIGGING || o_ptr->tval == ItemKindType::HAFTED)) {
         return false;
     }
 
@@ -25,7 +25,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     case CLASS_PRIEST: {
         auto flgs = object_flags_known(o_ptr);
 
-        if (flgs.has_not(TR_BLESSED) && !(o_ptr->tval == ItemPrimaryType::TV_HAFTED))
+        if (flgs.has_not(TR_BLESSED) && !(o_ptr->tval == ItemKindType::HAFTED))
             return false;
         break;
     }

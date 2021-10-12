@@ -29,14 +29,14 @@
  */
 void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
 {
-    if ((o_ptr->tval != ItemPrimaryType::TV_WAND) && (o_ptr->tval != ItemPrimaryType::TV_ROD))
+    if ((o_ptr->tval != ItemKindType::WAND) && (o_ptr->tval != ItemKindType::ROD))
         return;
 
     q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
     if (amt < o_ptr->number)
         o_ptr->pval -= q_ptr->pval;
 
-    if ((o_ptr->tval != ItemPrimaryType::TV_ROD) || !o_ptr->timeout)
+    if ((o_ptr->tval != ItemKindType::ROD) || !o_ptr->timeout)
         return;
 
     if (q_ptr->pval > o_ptr->timeout)
@@ -59,7 +59,7 @@ void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
  */
 void reduce_charges(object_type *o_ptr, int amt)
 {
-    if (((o_ptr->tval == ItemPrimaryType::TV_WAND) || (o_ptr->tval == ItemPrimaryType::TV_ROD)) && (amt < o_ptr->number)) {
+    if (((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::ROD)) && (amt < o_ptr->number)) {
         o_ptr->pval -= o_ptr->pval * amt / o_ptr->number;
     }
 }
@@ -79,31 +79,31 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
         return 0;
 
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_CHEST:
-    case ItemPrimaryType::TV_CARD:
-    case ItemPrimaryType::TV_CAPTURE: {
+    case ItemKindType::CHEST:
+    case ItemKindType::CARD:
+    case ItemKindType::CAPTURE: {
         return 0;
     }
-    case ItemPrimaryType::TV_STATUE: {
+    case ItemKindType::STATUE: {
         if ((o_ptr->sval != SV_PHOTO) || (j_ptr->sval != SV_PHOTO))
             return 0;
         if (o_ptr->pval != j_ptr->pval)
             return 0;
         break;
     }
-    case ItemPrimaryType::TV_FIGURINE:
-    case ItemPrimaryType::TV_CORPSE: {
+    case ItemKindType::FIGURINE:
+    case ItemKindType::CORPSE: {
         if (o_ptr->pval != j_ptr->pval)
             return 0;
 
         break;
     }
-    case ItemPrimaryType::TV_FOOD:
-    case ItemPrimaryType::TV_POTION:
-    case ItemPrimaryType::TV_SCROLL: {
+    case ItemKindType::FOOD:
+    case ItemKindType::POTION:
+    case ItemKindType::SCROLL: {
         break;
     }
-    case ItemPrimaryType::TV_STAFF: {
+    case ItemKindType::STAFF: {
         if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known()))
             return 0;
 
@@ -112,41 +112,41 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
 
         break;
     }
-    case ItemPrimaryType::TV_WAND: {
+    case ItemKindType::WAND: {
         if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known()))
             return 0;
 
         break;
     }
-    case ItemPrimaryType::TV_ROD: {
+    case ItemKindType::ROD: {
         max_num = MIN(max_num, MAX_SHORT / k_info[o_ptr->k_idx].pval);
         break;
     }
-    case ItemPrimaryType::TV_BOW:
-    case ItemPrimaryType::TV_DIGGING:
-    case ItemPrimaryType::TV_HAFTED:
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_SWORD:
-    case ItemPrimaryType::TV_BOOTS:
-    case ItemPrimaryType::TV_GLOVES:
-    case ItemPrimaryType::TV_HELM:
-    case ItemPrimaryType::TV_CROWN:
-    case ItemPrimaryType::TV_SHIELD:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_SOFT_ARMOR:
-    case ItemPrimaryType::TV_HARD_ARMOR:
-    case ItemPrimaryType::TV_DRAG_ARMOR:
-    case ItemPrimaryType::TV_RING:
-    case ItemPrimaryType::TV_AMULET:
-    case ItemPrimaryType::TV_LITE:
-    case ItemPrimaryType::TV_WHISTLE: {
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::RING:
+    case ItemKindType::AMULET:
+    case ItemKindType::LITE:
+    case ItemKindType::WHISTLE: {
         if (!o_ptr->is_known() || !j_ptr->is_known())
             return 0;
     }
         /* Fall through */
-    case ItemPrimaryType::TV_BOLT:
-    case ItemPrimaryType::TV_ARROW:
-    case ItemPrimaryType::TV_SHOT: {
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::SHOT: {
         if (o_ptr->is_known() != j_ptr->is_known())
             return 0;
         if (o_ptr->feeling != j_ptr->feeling)
@@ -256,12 +256,12 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
         o_ptr->feeling = j_ptr->feeling;
     if (o_ptr->discount < j_ptr->discount)
         o_ptr->discount = j_ptr->discount;
-    if (o_ptr->tval == ItemPrimaryType::TV_ROD) {
+    if (o_ptr->tval == ItemKindType::ROD) {
         o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
         o_ptr->timeout += j_ptr->timeout * (j_ptr->number - diff) / j_ptr->number;
     }
 
-    if (o_ptr->tval == ItemPrimaryType::TV_WAND) {
+    if (o_ptr->tval == ItemKindType::WAND) {
         o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
     }
 }

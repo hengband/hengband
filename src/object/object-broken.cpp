@@ -55,39 +55,39 @@ bool BreakerAcid::hates(object_type *o_ptr) const
     /* Analyze the type */
     switch (o_ptr->tval) {
         /* Wearable items */
-    case ItemPrimaryType::TV_ARROW:
-    case ItemPrimaryType::TV_BOLT:
-    case ItemPrimaryType::TV_BOW:
-    case ItemPrimaryType::TV_SWORD:
-    case ItemPrimaryType::TV_HAFTED:
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_HELM:
-    case ItemPrimaryType::TV_CROWN:
-    case ItemPrimaryType::TV_SHIELD:
-    case ItemPrimaryType::TV_BOOTS:
-    case ItemPrimaryType::TV_GLOVES:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_SOFT_ARMOR:
-    case ItemPrimaryType::TV_HARD_ARMOR:
-    case ItemPrimaryType::TV_DRAG_ARMOR: {
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+    case ItemKindType::BOW:
+    case ItemKindType::SWORD:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR: {
         return true;
     }
 
     /* Staffs/Scrolls are wood/paper */
-    case ItemPrimaryType::TV_STAFF:
-    case ItemPrimaryType::TV_SCROLL: {
+    case ItemKindType::STAFF:
+    case ItemKindType::SCROLL: {
         return true;
     }
 
     /* Ouch */
-    case ItemPrimaryType::TV_CHEST: {
+    case ItemKindType::CHEST: {
         return true;
     }
 
     /* Junk is useless */
-    case ItemPrimaryType::TV_SKELETON:
-    case ItemPrimaryType::TV_BOTTLE:
-    case ItemPrimaryType::TV_JUNK: {
+    case ItemKindType::SKELETON:
+    case ItemKindType::BOTTLE:
+    case ItemKindType::JUNK: {
         return true;
     }
 
@@ -107,8 +107,8 @@ bool BreakerAcid::hates(object_type *o_ptr) const
 bool BreakerElec::hates(object_type *o_ptr) const
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_RING:
-    case ItemPrimaryType::TV_WAND: {
+    case ItemKindType::RING:
+    case ItemKindType::WAND: {
         return true;
     }
 
@@ -133,43 +133,43 @@ bool BreakerFire::hates(object_type *o_ptr) const
     /* Analyze the type */
     switch (o_ptr->tval) {
         /* Wearable */
-    case ItemPrimaryType::TV_LITE:
-    case ItemPrimaryType::TV_ARROW:
-    case ItemPrimaryType::TV_BOW:
-    case ItemPrimaryType::TV_HAFTED:
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_BOOTS:
-    case ItemPrimaryType::TV_GLOVES:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_SOFT_ARMOR: {
+    case ItemKindType::LITE:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOW:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR: {
         return true;
     }
 
     /* Books */
-    case ItemPrimaryType::TV_LIFE_BOOK:
-    case ItemPrimaryType::TV_SORCERY_BOOK:
-    case ItemPrimaryType::TV_NATURE_BOOK:
-    case ItemPrimaryType::TV_CHAOS_BOOK:
-    case ItemPrimaryType::TV_DEATH_BOOK:
-    case ItemPrimaryType::TV_TRUMP_BOOK:
-    case ItemPrimaryType::TV_ARCANE_BOOK:
-    case ItemPrimaryType::TV_CRAFT_BOOK:
-    case ItemPrimaryType::TV_DEMON_BOOK:
-    case ItemPrimaryType::TV_CRUSADE_BOOK:
-    case ItemPrimaryType::TV_MUSIC_BOOK:
-    case ItemPrimaryType::TV_HISSATSU_BOOK:
-    case ItemPrimaryType::TV_HEX_BOOK: {
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::ARCANE_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HISSATSU_BOOK:
+    case ItemKindType::HEX_BOOK: {
         return true;
     }
 
     /* Chests */
-    case ItemPrimaryType::TV_CHEST: {
+    case ItemKindType::CHEST: {
         return true;
     }
 
     /* Staffs/Scrolls burn */
-    case ItemPrimaryType::TV_STAFF:
-    case ItemPrimaryType::TV_SCROLL: {
+    case ItemKindType::STAFF:
+    case ItemKindType::SCROLL: {
         return true;
     }
 
@@ -189,9 +189,9 @@ bool BreakerFire::hates(object_type *o_ptr) const
 bool BreakerCold::hates(object_type *o_ptr) const
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_POTION:
-    case ItemPrimaryType::TV_FLASK:
-    case ItemPrimaryType::TV_BOTTLE: {
+    case ItemKindType::POTION:
+    case ItemKindType::FLASK:
+    case ItemKindType::BOTTLE: {
         return true;
     }
 
@@ -417,29 +417,29 @@ PERCENTAGE breakage_chance(player_type *player_ptr, object_type *o_ptr, bool has
     PERCENTAGE archer_bonus = (has_archer_bonus ? (PERCENTAGE)(player_ptr->lev - 1) / 7 + 4 : 0);
     switch (o_ptr->tval) {
         /* Always break */
-    case ItemPrimaryType::TV_FLASK:
-    case ItemPrimaryType::TV_POTION:
-    case ItemPrimaryType::TV_BOTTLE:
-    case ItemPrimaryType::TV_FOOD:
-    case ItemPrimaryType::TV_JUNK:
+    case ItemKindType::FLASK:
+    case ItemKindType::POTION:
+    case ItemKindType::BOTTLE:
+    case ItemKindType::FOOD:
+    case ItemKindType::JUNK:
         return 100;
 
         /* Often break */
-    case ItemPrimaryType::TV_LITE:
-    case ItemPrimaryType::TV_SCROLL:
-    case ItemPrimaryType::TV_SKELETON:
+    case ItemKindType::LITE:
+    case ItemKindType::SCROLL:
+    case ItemKindType::SKELETON:
         return 50;
 
         /* Sometimes break */
-    case ItemPrimaryType::TV_WAND:
-    case ItemPrimaryType::TV_SPIKE:
+    case ItemKindType::WAND:
+    case ItemKindType::SPIKE:
         return 25;
-    case ItemPrimaryType::TV_ARROW:
+    case ItemKindType::ARROW:
         return 20 - archer_bonus * 2;
 
         /* Rarely break */
-    case ItemPrimaryType::TV_SHOT:
-    case ItemPrimaryType::TV_BOLT:
+    case ItemKindType::SHOT:
+    case ItemKindType::BOLT:
         return 10 - archer_bonus;
     default:
         return 10;

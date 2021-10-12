@@ -8,22 +8,22 @@
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
  * @return 対応する矢/弾薬のベースアイテムID
  */
-ItemPrimaryType bow_tval_ammo(object_type *o_ptr)
+ItemKindType bow_tval_ammo(object_type *o_ptr)
 {
     switch (o_ptr->sval) {
     case SV_SLING:
-        return ItemPrimaryType::TV_SHOT;
+        return ItemKindType::SHOT;
     case SV_SHORT_BOW:
     case SV_LONG_BOW:
     case SV_NAMAKE_BOW:
-        return ItemPrimaryType::TV_ARROW;
+        return ItemKindType::ARROW;
     case SV_LIGHT_XBOW:
     case SV_HEAVY_XBOW:
-        return ItemPrimaryType::TV_BOLT;
+        return ItemKindType::BOLT;
     case SV_CRIMSON:
     case SV_HARP:
-        return ItemPrimaryType::TV_NO_AMMO;
+        return ItemKindType::NO_AMMO;
     }
 
-    return ItemPrimaryType::TV_NONE;
+    return ItemKindType::NONE;
 }

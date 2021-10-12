@@ -29,25 +29,25 @@ static bool is_blessed_item(const object_type *o_ptr)
 static bool check_store_general(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_ROD:
+    case ItemKindType::ROD:
         return (o_ptr->sval == SV_ROD_PESTICIDE);
-    case ItemPrimaryType::TV_POTION:
+    case ItemKindType::POTION:
         return (o_ptr->sval == SV_POTION_WATER);
-    case ItemPrimaryType::TV_WHISTLE:
-    case ItemPrimaryType::TV_FOOD:
-    case ItemPrimaryType::TV_LITE:
-    case ItemPrimaryType::TV_FLASK:
-    case ItemPrimaryType::TV_SPIKE:
-    case ItemPrimaryType::TV_SHOT:
-    case ItemPrimaryType::TV_ARROW:
-    case ItemPrimaryType::TV_BOLT:
-    case ItemPrimaryType::TV_DIGGING:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_BOTTLE:
-    case ItemPrimaryType::TV_FIGURINE:
-    case ItemPrimaryType::TV_STATUE:
-    case ItemPrimaryType::TV_CAPTURE:
-    case ItemPrimaryType::TV_CARD:
+    case ItemKindType::WHISTLE:
+    case ItemKindType::FOOD:
+    case ItemKindType::LITE:
+    case ItemKindType::FLASK:
+    case ItemKindType::SPIKE:
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+    case ItemKindType::DIGGING:
+    case ItemKindType::CLOAK:
+    case ItemKindType::BOTTLE:
+    case ItemKindType::FIGURINE:
+    case ItemKindType::STATUE:
+    case ItemKindType::CAPTURE:
+    case ItemKindType::CARD:
         return true;
     default:
         return false;
@@ -57,15 +57,15 @@ static bool check_store_general(const object_type *o_ptr)
 static bool check_store_armoury(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_BOOTS:
-    case ItemPrimaryType::TV_GLOVES:
-    case ItemPrimaryType::TV_CROWN:
-    case ItemPrimaryType::TV_HELM:
-    case ItemPrimaryType::TV_SHIELD:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_SOFT_ARMOR:
-    case ItemPrimaryType::TV_HARD_ARMOR:
-    case ItemPrimaryType::TV_DRAG_ARMOR:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::CROWN:
+    case ItemKindType::HELM:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
         return true;
     default:
         return false;
@@ -75,16 +75,16 @@ static bool check_store_armoury(const object_type *o_ptr)
 static bool check_store_weapon(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_SHOT:
-    case ItemPrimaryType::TV_BOLT:
-    case ItemPrimaryType::TV_ARROW:
-    case ItemPrimaryType::TV_BOW:
-    case ItemPrimaryType::TV_DIGGING:
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_SWORD:
-    case ItemPrimaryType::TV_HISSATSU_BOOK:
+    case ItemKindType::SHOT:
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::HISSATSU_BOOK:
         return true;
-    case ItemPrimaryType::TV_HAFTED:
+    case ItemKindType::HAFTED:
         return o_ptr->sval != SV_WIZSTAFF;
     default:
         return false;
@@ -94,22 +94,22 @@ static bool check_store_weapon(const object_type *o_ptr)
 static bool check_store_temple(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_LIFE_BOOK:
-    case ItemPrimaryType::TV_CRUSADE_BOOK:
-    case ItemPrimaryType::TV_SCROLL:
-    case ItemPrimaryType::TV_POTION:
-    case ItemPrimaryType::TV_HAFTED:
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::SCROLL:
+    case ItemKindType::POTION:
+    case ItemKindType::HAFTED:
         return true;
-    case ItemPrimaryType::TV_FIGURINE:
-    case ItemPrimaryType::TV_STATUE: {
+    case ItemKindType::FIGURINE:
+    case ItemKindType::STATUE: {
         monster_race *r_ptr = &r_info[o_ptr->pval];
         if (!(r_ptr->flags3 & RF3_EVIL))
             if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != nullptr))
                 return true;
     }
         /* Fall through */
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_SWORD:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
         if (is_blessed_item(o_ptr))
             return true;
 
@@ -122,8 +122,8 @@ static bool check_store_temple(const object_type *o_ptr)
 static bool check_store_alchemist(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_SCROLL:
-    case ItemPrimaryType::TV_POTION:
+    case ItemKindType::SCROLL:
+    case ItemKindType::POTION:
         return true;
     default:
         return false;
@@ -133,26 +133,26 @@ static bool check_store_alchemist(const object_type *o_ptr)
 static bool check_store_magic(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_SORCERY_BOOK:
-    case ItemPrimaryType::TV_NATURE_BOOK:
-    case ItemPrimaryType::TV_CHAOS_BOOK:
-    case ItemPrimaryType::TV_DEATH_BOOK:
-    case ItemPrimaryType::TV_TRUMP_BOOK:
-    case ItemPrimaryType::TV_ARCANE_BOOK:
-    case ItemPrimaryType::TV_CRAFT_BOOK:
-    case ItemPrimaryType::TV_DEMON_BOOK:
-    case ItemPrimaryType::TV_MUSIC_BOOK:
-    case ItemPrimaryType::TV_HEX_BOOK:
-    case ItemPrimaryType::TV_AMULET:
-    case ItemPrimaryType::TV_RING:
-    case ItemPrimaryType::TV_STAFF:
-    case ItemPrimaryType::TV_WAND:
-    case ItemPrimaryType::TV_ROD:
-    case ItemPrimaryType::TV_SCROLL:
-    case ItemPrimaryType::TV_POTION:
-    case ItemPrimaryType::TV_FIGURINE:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::ARCANE_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HEX_BOOK:
+    case ItemKindType::AMULET:
+    case ItemKindType::RING:
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+    case ItemKindType::SCROLL:
+    case ItemKindType::POTION:
+    case ItemKindType::FIGURINE:
         return true;
-    case ItemPrimaryType::TV_HAFTED:
+    case ItemKindType::HAFTED:
         return o_ptr->sval == SV_WIZSTAFF;
     default:
         return false;
@@ -162,18 +162,18 @@ static bool check_store_magic(const object_type *o_ptr)
 static bool check_store_book(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_SORCERY_BOOK:
-    case ItemPrimaryType::TV_NATURE_BOOK:
-    case ItemPrimaryType::TV_CHAOS_BOOK:
-    case ItemPrimaryType::TV_DEATH_BOOK:
-    case ItemPrimaryType::TV_LIFE_BOOK:
-    case ItemPrimaryType::TV_TRUMP_BOOK:
-    case ItemPrimaryType::TV_ARCANE_BOOK:
-    case ItemPrimaryType::TV_CRAFT_BOOK:
-    case ItemPrimaryType::TV_DEMON_BOOK:
-    case ItemPrimaryType::TV_CRUSADE_BOOK:
-    case ItemPrimaryType::TV_MUSIC_BOOK:
-    case ItemPrimaryType::TV_HEX_BOOK:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::ARCANE_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HEX_BOOK:
         return true;
     default:
         return false;
@@ -325,55 +325,55 @@ static int mass_magic_produce(const PRICE cost)
 static int switch_mass_production(object_type *o_ptr, const PRICE cost)
 {
     switch (o_ptr->tval) {
-    case ItemPrimaryType::TV_FOOD:
-    case ItemPrimaryType::TV_FLASK:
-    case ItemPrimaryType::TV_LITE:
+    case ItemKindType::FOOD:
+    case ItemKindType::FLASK:
+    case ItemKindType::LITE:
         return mass_lite_produce(cost);
-    case ItemPrimaryType::TV_POTION:
-    case ItemPrimaryType::TV_SCROLL:
+    case ItemKindType::POTION:
+    case ItemKindType::SCROLL:
         return mass_scroll_produce(o_ptr, cost);
-    case ItemPrimaryType::TV_LIFE_BOOK:
-    case ItemPrimaryType::TV_SORCERY_BOOK:
-    case ItemPrimaryType::TV_NATURE_BOOK:
-    case ItemPrimaryType::TV_CHAOS_BOOK:
-    case ItemPrimaryType::TV_DEATH_BOOK:
-    case ItemPrimaryType::TV_TRUMP_BOOK:
-    case ItemPrimaryType::TV_ARCANE_BOOK:
-    case ItemPrimaryType::TV_CRAFT_BOOK:
-    case ItemPrimaryType::TV_DEMON_BOOK:
-    case ItemPrimaryType::TV_CRUSADE_BOOK:
-    case ItemPrimaryType::TV_MUSIC_BOOK:
-    case ItemPrimaryType::TV_HISSATSU_BOOK:
-    case ItemPrimaryType::TV_HEX_BOOK:
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::ARCANE_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HISSATSU_BOOK:
+    case ItemKindType::HEX_BOOK:
         return mass_book_produce(cost);
-    case ItemPrimaryType::TV_SOFT_ARMOR:
-    case ItemPrimaryType::TV_HARD_ARMOR:
-    case ItemPrimaryType::TV_SHIELD:
-    case ItemPrimaryType::TV_GLOVES:
-    case ItemPrimaryType::TV_BOOTS:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_HELM:
-    case ItemPrimaryType::TV_CROWN:
-    case ItemPrimaryType::TV_SWORD:
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_HAFTED:
-    case ItemPrimaryType::TV_DIGGING:
-    case ItemPrimaryType::TV_BOW:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::SHIELD:
+    case ItemKindType::GLOVES:
+    case ItemKindType::BOOTS:
+    case ItemKindType::CLOAK:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SWORD:
+    case ItemKindType::POLEARM:
+    case ItemKindType::HAFTED:
+    case ItemKindType::DIGGING:
+    case ItemKindType::BOW:
         return mass_equipment_produce(o_ptr, cost);
-    case ItemPrimaryType::TV_SPIKE:
-    case ItemPrimaryType::TV_SHOT:
-    case ItemPrimaryType::TV_ARROW:
-    case ItemPrimaryType::TV_BOLT:
+    case ItemKindType::SPIKE:
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
         return mass_arrow_produce(cost);
-    case ItemPrimaryType::TV_FIGURINE:
+    case ItemKindType::FIGURINE:
         return mass_figurine_produce(cost);
-    case ItemPrimaryType::TV_CAPTURE:
-    case ItemPrimaryType::TV_STATUE:
-    case ItemPrimaryType::TV_CARD:
+    case ItemKindType::CAPTURE:
+    case ItemKindType::STATUE:
+    case ItemKindType::CARD:
         return 1;
-    case ItemPrimaryType::TV_ROD:
-    case ItemPrimaryType::TV_WAND:
-    case ItemPrimaryType::TV_STAFF:
+    case ItemKindType::ROD:
+    case ItemKindType::WAND:
+    case ItemKindType::STAFF:
         return mass_magic_produce(cost);
     default:
         return 1;
@@ -419,6 +419,6 @@ void mass_produce(player_type *, object_type *o_ptr)
 
     o_ptr->discount = discount;
     o_ptr->number = size - (size * discount / 100);
-    if ((o_ptr->tval == ItemPrimaryType::TV_ROD) || (o_ptr->tval == ItemPrimaryType::TV_WAND))
+    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND))
         o_ptr->pval *= (PARAMETER_VALUE)o_ptr->number;
 }

@@ -89,20 +89,20 @@
 #include <optional>
 #include <tuple>
 
-static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> check_magic_eater_spell_repeat(magic_eater_data_type *magic_eater_data)
+static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> check_magic_eater_spell_repeat(magic_eater_data_type *magic_eater_data)
 {
     COMMAND_CODE sn;
     if (!repeat_pull(&sn)) {
         return std::nullopt;
     }
 
-    auto tval = ItemPrimaryType::TV_NONE;
+    auto tval = ItemKindType::NONE;
     if (EATER_STAFF_BASE <= sn && sn < EATER_STAFF_BASE + EATER_ITEM_GROUP_SIZE) {
-        tval = ItemPrimaryType::TV_STAFF;
+        tval = ItemKindType::STAFF;
     } else if (EATER_WAND_BASE <= sn && sn < EATER_WAND_BASE + EATER_ITEM_GROUP_SIZE) {
-        tval = ItemPrimaryType::TV_WAND;
+        tval = ItemKindType::WAND;
     } else if (EATER_ROD_BASE <= sn && sn < EATER_ROD_BASE + EATER_ITEM_GROUP_SIZE) {
-        tval = ItemPrimaryType::TV_ROD;
+        tval = ItemKindType::ROD;
     }
 
     const auto &item_group = magic_eater_data->get_item_group(tval);
@@ -114,13 +114,13 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> check_ma
     auto &item = item_group[sval];
     /* Verify the spell */
     switch (tval) {
-    case ItemPrimaryType::TV_ROD:
-        if (item.charge <= k_info[lookup_kind(ItemPrimaryType::TV_ROD, sval)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+    case ItemKindType::ROD:
+        if (item.charge <= k_info[lookup_kind(ItemKindType::ROD, sval)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
             return std::make_tuple(tval, sval);
         }
         break;
-    case ItemPrimaryType::TV_STAFF:
-    case ItemPrimaryType::TV_WAND:
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
         if (item.charge >= EATER_CHARGE) {
             return std::make_tuple(tval, sval);
         }
@@ -137,11 +137,11 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> check_ma
  * @param only_browse 閲覧するだけならばTRUE
  * @return 選択した魔力のID、キャンセルならば-1を返す
  */
-static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_magic_eater(player_type *player_ptr, bool only_browse)
+static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magic_eater(player_type *player_ptr, bool only_browse)
 {
     char choice;
     bool flag, request_list;
-    auto tval = ItemPrimaryType::TV_NONE;
+    auto tval = ItemKindType::NONE;
     int ask = true;
     OBJECT_SUBTYPE_VALUE i = 0;
     char out_val[160];
@@ -158,7 +158,7 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
     if (use_menu) {
         screen_save();
 
-        while (tval == ItemPrimaryType::TV_NONE) {
+        while (tval == ItemKindType::NONE) {
 #ifdef JP
             prt(format(" %s 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
             prt(format(" %s 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
@@ -195,11 +195,11 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
             case 'x':
             case 'X':
                 if (menu_line == 1)
-                    tval = ItemPrimaryType::TV_STAFF;
+                    tval = ItemKindType::STAFF;
                 else if (menu_line == 2)
-                    tval = ItemPrimaryType::TV_WAND;
+                    tval = ItemKindType::WAND;
                 else
-                    tval = ItemPrimaryType::TV_ROD;
+                    tval = ItemKindType::ROD;
                 break;
             }
             if (menu_line > 3)
@@ -212,15 +212,15 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
                 return std::nullopt;
             }
             if (choice == 'A' || choice == 'a') {
-                tval = ItemPrimaryType::TV_STAFF;
+                tval = ItemKindType::STAFF;
                 break;
             }
             if (choice == 'B' || choice == 'b') {
-                tval = ItemPrimaryType::TV_WAND;
+                tval = ItemKindType::WAND;
                 break;
             }
             if (choice == 'C' || choice == 'c') {
-                tval = ItemPrimaryType::TV_ROD;
+                tval = ItemKindType::ROD;
                 break;
             }
         }
@@ -272,12 +272,12 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
 
             /* Print header(s) */
 #ifdef JP
-            prt(format("                           %s 失率                           %s 失率", (tval == ItemPrimaryType::TV_ROD ? "  状態  " : "使用回数"),
-                    (tval == ItemPrimaryType::TV_ROD ? "  状態  " : "使用回数")),
+            prt(format("                           %s 失率                           %s 失率", (tval == ItemKindType::ROD ? "  状態  " : "使用回数"),
+                    (tval == ItemKindType::ROD ? "  状態  " : "使用回数")),
                 y++, x);
 #else
-            prt(format("                           %s Fail                           %s Fail", (tval == ItemPrimaryType::TV_ROD ? "  Stat  " : " Charges"),
-                    (tval == ItemPrimaryType::TV_ROD ? "  Stat  " : " Charges")),
+            prt(format("                           %s Fail                           %s Fail", (tval == ItemKindType::ROD ? "  Stat  " : " Charges"),
+                    (tval == ItemKindType::ROD ? "  Stat  " : " Charges")),
                 y++, x);
 #endif
 
@@ -306,7 +306,7 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
                 }
                 x1 = ((ctr < ITEM_GROUP_SIZE / 2) ? x : x + 40);
                 y1 = ((ctr < ITEM_GROUP_SIZE / 2) ? y + ctr : y + ctr - ITEM_GROUP_SIZE / 2);
-                level = (tval == ItemPrimaryType::TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
+                level = (tval == ItemKindType::ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
                 chance = level * 4 / 5 + 20;
                 chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
                 level /= 2;
@@ -326,7 +326,7 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
                 col = TERM_WHITE;
 
                 if (k_idx) {
-                    if (tval == ItemPrimaryType::TV_ROD) {
+                    if (tval == ItemKindType::ROD) {
                         strcat(dummy,
                             format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), k_info[k_idx].name.c_str(),
                                 item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) + 1 : 0,
@@ -472,7 +472,7 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
                     continue;
             }
             auto &item = item_group[i];
-            if (tval == ItemPrimaryType::TV_ROD) {
+            if (tval == ItemKindType::ROD) {
                 if (item.charge > k_info[lookup_kind(tval, i)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(nullptr);
@@ -521,13 +521,13 @@ static std::optional<std::tuple<ItemPrimaryType, OBJECT_SUBTYPE_VALUE>> select_m
 
     COMMAND_CODE base = 0;
     switch (tval) {
-    case ItemPrimaryType::TV_STAFF:
+    case ItemKindType::STAFF:
         base = EATER_STAFF_BASE;
         break;
-    case ItemPrimaryType::TV_WAND:
+    case ItemKindType::WAND:
         base = EATER_WAND_BASE;
         break;
-    case ItemPrimaryType::TV_ROD:
+    case ItemKindType::ROD:
         base = EATER_ROD_BASE;
     default:
         break;
@@ -561,7 +561,7 @@ bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful
     auto [tval, sval] = result.value();
 
     auto k_idx = lookup_kind(tval, sval);
-    auto level = (tval == ItemPrimaryType::TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
+    auto level = (tval == ItemKindType::ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
     auto chance = level * 4 / 5 + 20;
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     level /= 2;
@@ -592,14 +592,14 @@ bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful
     } else {
         DIRECTION dir = 0;
 
-        if (tval == ItemPrimaryType::TV_ROD) {
+        if (tval == ItemKindType::ROD) {
             if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
                 if (!get_aim_dir(player_ptr, &dir))
                     return false;
             (void)rod_effect(player_ptr, sval, dir, &use_charge, powerful);
             if (!use_charge)
                 return false;
-        } else if (tval == ItemPrimaryType::TV_WAND) {
+        } else if (tval == ItemKindType::WAND) {
             if (!get_aim_dir(player_ptr, &dir))
                 return false;
             wand_effect(player_ptr, sval, dir, powerful, true);
@@ -616,7 +616,7 @@ bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful
     auto &item = magic_eater_data->get_item_group(tval)[sval];
 
     energy.set_player_turn_energy(100);
-    if (tval == ItemPrimaryType::TV_ROD)
+    if (tval == ItemKindType::ROD)
         item.charge += k_info[k_idx].pval * EATER_ROD_CHARGE;
     else
         item.charge -= EATER_CHARGE;

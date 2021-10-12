@@ -45,26 +45,26 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
     describe_flavor(player_ptr, buf, q_ptr, OD_NAME_ONLY | OD_STORE);
     strcpy(dam, "");
     switch (q_ptr->tval) {
-    case ItemPrimaryType::TV_SHOT:
-    case ItemPrimaryType::TV_BOLT:
-    case ItemPrimaryType::TV_ARROW:
+    case ItemKindType::SHOT:
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
         sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
-    case ItemPrimaryType::TV_HAFTED:
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_SWORD:
-    case ItemPrimaryType::TV_DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::DIGGING:
         sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
-    case ItemPrimaryType::TV_BOOTS:
-    case ItemPrimaryType::TV_GLOVES:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_CROWN:
-    case ItemPrimaryType::TV_HELM:
-    case ItemPrimaryType::TV_SHIELD:
-    case ItemPrimaryType::TV_SOFT_ARMOR:
-    case ItemPrimaryType::TV_HARD_ARMOR:
-    case ItemPrimaryType::TV_DRAG_ARMOR:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::CLOAK:
+    case ItemKindType::CROWN:
+    case ItemKindType::HELM:
+    case ItemKindType::SHIELD:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
         sprintf(dam, "%d", q_ptr->ac);
         break;
     default:

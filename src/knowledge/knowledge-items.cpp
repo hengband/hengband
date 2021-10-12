@@ -146,8 +146,8 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
                 continue;
         }
 
-        if (group_tval == ItemPrimaryType::TV_LIFE_BOOK) {
-            if (ItemPrimaryType::TV_LIFE_BOOK <= k_ref.tval && k_ref.tval <= ItemPrimaryType::TV_HEX_BOOK) {
+        if (group_tval == ItemKindType::LIFE_BOOK) {
+            if (ItemKindType::LIFE_BOOK <= k_ref.tval && k_ref.tval <= ItemKindType::HEX_BOOK) {
                 object_idx[object_cnt++] = k_ref.idx;
             } else
                 continue;

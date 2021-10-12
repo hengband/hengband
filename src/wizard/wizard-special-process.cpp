@@ -120,7 +120,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
 {
     KIND_OBJECT_IDX list;
     char ch;
-    for (list = 0; (list < 80) && (tvals[list].tval > ItemPrimaryType::TV_NONE); list++) {
+    for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
         auto row = 2 + (list % 20);
         auto col = _(32, 24) * (list / 20);
         ch = listsym[list];
@@ -146,7 +146,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
     return selection;
 }
 
-static KIND_OBJECT_IDX wiz_select_sval(const ItemPrimaryType tval, concptr tval_description)
+static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_description)
 {
     auto num = 0;
     KIND_OBJECT_IDX choice[80]{};

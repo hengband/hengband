@@ -37,7 +37,7 @@ errr init_towns(void)
             for (int k = 0; k < STORE_INVEN_MAX; k++) {
                 auto tv = store_regular_table[enum2i(sst)][k].tval;
                 auto sv = store_regular_table[enum2i(sst)][k].sval;
-                if (tv == ItemPrimaryType::TV_NONE)
+                if (tv == ItemKindType::NONE)
                     break;
 
                 KIND_OBJECT_IDX k_idx = lookup_kind(tv, sv);
@@ -51,7 +51,7 @@ errr init_towns(void)
             for (int k = 0; k < STORE_CHOICES; k++) {
                 auto tv = store_table[enum2i(sst)][k].tval;
                 auto sv = store_table[enum2i(sst)][k].sval;
-                if (tv == ItemPrimaryType::TV_NONE)
+                if (tv == ItemKindType::NONE)
                     break;
 
                 KIND_OBJECT_IDX k_idx = lookup_kind(tv, sv);

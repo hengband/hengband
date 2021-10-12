@@ -22,7 +22,7 @@ static const int SV_BOOK_MIN_GOOD = 2;
  */
 bool kind_is_cloak(KIND_OBJECT_IDX k_idx)
 {
-    return k_info[k_idx].tval == ItemPrimaryType::TV_CLOAK;
+    return k_info[k_idx].tval == ItemKindType::CLOAK;
 }
 
 /*!
@@ -32,7 +32,7 @@ bool kind_is_cloak(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
 {
-    return k_info[k_idx].tval == ItemPrimaryType::TV_POLEARM;
+    return k_info[k_idx].tval == ItemKindType::POLEARM;
 }
 
 /*!
@@ -43,7 +43,7 @@ bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
 bool kind_is_sword(KIND_OBJECT_IDX k_idx)
 {
     object_kind *k_ptr = &k_info[k_idx];
-    return (k_ptr->tval == ItemPrimaryType::TV_SWORD) && (k_ptr->sval > 2);
+    return (k_ptr->tval == ItemKindType::SWORD) && (k_ptr->sval > 2);
 }
 
 /*!
@@ -54,7 +54,7 @@ bool kind_is_sword(KIND_OBJECT_IDX k_idx)
 bool kind_is_book(KIND_OBJECT_IDX k_idx)
 {
     object_kind *k_ptr = &k_info[k_idx];
-    return (k_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK) && (k_ptr->tval <= ItemPrimaryType::TV_CRUSADE_BOOK);
+    return (k_ptr->tval >= ItemKindType::LIFE_BOOK) && (k_ptr->tval <= ItemKindType::CRUSADE_BOOK);
 }
 
 /*!
@@ -65,7 +65,7 @@ bool kind_is_book(KIND_OBJECT_IDX k_idx)
 bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
 {
     object_kind *k_ptr = &k_info[k_idx];
-    return (k_ptr->tval >= ItemPrimaryType::TV_LIFE_BOOK) && (k_ptr->tval <= ItemPrimaryType::TV_CRUSADE_BOOK) && (k_ptr->tval != ItemPrimaryType::TV_ARCANE_BOOK) && (k_ptr->sval > 1);
+    return (k_ptr->tval >= ItemKindType::LIFE_BOOK) && (k_ptr->tval <= ItemKindType::CRUSADE_BOOK) && (k_ptr->tval != ItemKindType::ARCANE_BOOK) && (k_ptr->sval > 1);
 }
 
 /*!
@@ -75,7 +75,7 @@ bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_armor(KIND_OBJECT_IDX k_idx)
 {
-    return k_info[k_idx].tval == ItemPrimaryType::TV_HARD_ARMOR;
+    return k_info[k_idx].tval == ItemKindType::HARD_ARMOR;
 }
 
 /*!
@@ -85,7 +85,7 @@ bool kind_is_armor(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
 {
-    return k_info[k_idx].tval == ItemPrimaryType::TV_HAFTED;
+    return k_info[k_idx].tval == ItemKindType::HAFTED;
 }
 
 /*!
@@ -95,7 +95,7 @@ bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_potion(KIND_OBJECT_IDX k_idx)
 {
-    return k_info[k_idx].tval == ItemPrimaryType::TV_POTION;
+    return k_info[k_idx].tval == ItemKindType::POTION;
 }
 
 /*!
@@ -105,7 +105,7 @@ bool kind_is_potion(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_boots(KIND_OBJECT_IDX k_idx)
 {
-    return k_info[k_idx].tval == ItemPrimaryType::TV_BOOTS;
+    return k_info[k_idx].tval == ItemKindType::BOOTS;
 }
 
 /*!
@@ -115,7 +115,7 @@ bool kind_is_boots(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_amulet(KIND_OBJECT_IDX k_idx)
 {
-    return k_info[k_idx].tval == ItemPrimaryType::TV_AMULET;
+    return k_info[k_idx].tval == ItemKindType::AMULET;
 }
 
 /*!
@@ -129,51 +129,51 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     object_kind *k_ptr = &k_info[k_idx];
     switch (k_ptr->tval) {
         /* Armor -- Good unless damaged */
-    case ItemPrimaryType::TV_HARD_ARMOR:
-    case ItemPrimaryType::TV_SOFT_ARMOR:
-    case ItemPrimaryType::TV_DRAG_ARMOR:
-    case ItemPrimaryType::TV_SHIELD:
-    case ItemPrimaryType::TV_CLOAK:
-    case ItemPrimaryType::TV_BOOTS:
-    case ItemPrimaryType::TV_GLOVES:
-    case ItemPrimaryType::TV_HELM:
-    case ItemPrimaryType::TV_CROWN:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
         return k_ptr->to_a >= 0;
 
     /* Weapons -- Good unless damaged */
-    case ItemPrimaryType::TV_BOW:
-    case ItemPrimaryType::TV_SWORD:
-    case ItemPrimaryType::TV_HAFTED:
-    case ItemPrimaryType::TV_POLEARM:
-    case ItemPrimaryType::TV_DIGGING:
+    case ItemKindType::BOW:
+    case ItemKindType::SWORD:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::DIGGING:
         return (k_ptr->to_h >= 0) && (k_ptr->to_d >= 0);
 
     /* Ammo -- Arrows/Bolts are good */
-    case ItemPrimaryType::TV_BOLT:
-    case ItemPrimaryType::TV_ARROW:
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
         return true;
 
     /* Books -- High level books are good (except Arcane books) */
-    case ItemPrimaryType::TV_LIFE_BOOK:
-    case ItemPrimaryType::TV_SORCERY_BOOK:
-    case ItemPrimaryType::TV_NATURE_BOOK:
-    case ItemPrimaryType::TV_CHAOS_BOOK:
-    case ItemPrimaryType::TV_DEATH_BOOK:
-    case ItemPrimaryType::TV_TRUMP_BOOK:
-    case ItemPrimaryType::TV_CRAFT_BOOK:
-    case ItemPrimaryType::TV_DEMON_BOOK:
-    case ItemPrimaryType::TV_CRUSADE_BOOK:
-    case ItemPrimaryType::TV_MUSIC_BOOK:
-    case ItemPrimaryType::TV_HISSATSU_BOOK:
-    case ItemPrimaryType::TV_HEX_BOOK:
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HISSATSU_BOOK:
+    case ItemKindType::HEX_BOOK:
         return k_ptr->sval >= SV_BOOK_MIN_GOOD;
 
     /* Rings -- Rings of Speed are good */
-    case ItemPrimaryType::TV_RING:
+    case ItemKindType::RING:
         return (k_ptr->sval == SV_RING_SPEED) || (k_ptr->sval == SV_RING_LORDLY);
 
     /* Amulets -- Amulets of the Magi and Resistance are good */
-    case ItemPrimaryType::TV_AMULET:
+    case ItemKindType::AMULET:
         return (k_ptr->sval == SV_AMULET_THE_MAGI) || (k_ptr->sval == SV_AMULET_RESISTANCE);
     default:
         return false;
@@ -186,7 +186,7 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
  * @param tval 検索したいベースアイテムのtval
  * @param sval 検索したいベースアイテムのsval
  */
-KIND_OBJECT_IDX lookup_kind(ItemPrimaryType tval, OBJECT_SUBTYPE_VALUE sval)
+KIND_OBJECT_IDX lookup_kind(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval)
 {
     int num = 0;
     KIND_OBJECT_IDX bk = 0;

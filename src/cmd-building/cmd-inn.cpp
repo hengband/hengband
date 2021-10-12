@@ -143,12 +143,12 @@ static void charge_magic_eating_energy(player_type *player_ptr)
         return;
     }
 
-    for (auto tval : { ItemPrimaryType::TV_STAFF, ItemPrimaryType::TV_WAND }) {
+    for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND }) {
         for (auto &item : magic_eater_data->get_item_group(tval)) {
             item.charge = item.count * EATER_CHARGE;
         }
     }
-    for (auto &item : magic_eater_data->get_item_group(ItemPrimaryType::TV_ROD)) {
+    for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
         item.charge = 0;
     }
 }

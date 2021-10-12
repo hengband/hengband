@@ -6,9 +6,9 @@
 /*!
  * ベースアイテムの大項目IDの種別名をまとめる構造体 / A structure to hold a tval and its description
  */
-enum class ItemPrimaryType : short;
+enum class ItemKindType : short;
 struct tval_desc {
-    ItemPrimaryType tval; /*!< 大項目のID */
+    ItemKindType tval; /*!< 大項目のID */
     concptr desc; /*!< 大項目名 */
 };
 

@@ -57,12 +57,12 @@ private:
  */
 class TvalItemTester : public CloneableItemTester<TvalItemTester> {
 public:
-    explicit TvalItemTester(ItemPrimaryType tval);
+    explicit TvalItemTester(ItemKindType tval);
 
 private:
     virtual bool okay_impl(const object_type *o_ptr) const;
 
-    ItemPrimaryType tval;
+    ItemKindType tval;
 };
 
 /*!

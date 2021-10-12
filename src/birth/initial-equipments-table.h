@@ -4,5 +4,5 @@
 #include <tuple>
 #include <vector>
 
-enum class ItemPrimaryType : short;
-extern std::vector<std::vector<std::tuple<ItemPrimaryType, byte>>> player_init;
+enum class ItemKindType : short;
+extern std::vector<std::vector<std::tuple<ItemKindType, byte>>> player_init;

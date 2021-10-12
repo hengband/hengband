@@ -158,10 +158,10 @@ static void process_destroy_magic_book(player_type *player_ptr, destroy_type *de
         return;
 
     gain_exp_by_destroying_magic_book(player_ptr, destroy_ptr);
-    if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemPrimaryType::TV_LIFE_BOOK) {
+    if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemKindType::LIFE_BOOK) {
         chg_virtue(player_ptr, V_UNLIFE, 1);
         chg_virtue(player_ptr, V_VITALITY, -1);
-    } else if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemPrimaryType::TV_DEATH_BOOK) {
+    } else if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemKindType::DEATH_BOOK) {
         chg_virtue(player_ptr, V_UNLIFE, -1);
         chg_virtue(player_ptr, V_VITALITY, 1);
     }

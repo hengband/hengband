@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-enum class ItemPrimaryType : short;
+enum class ItemKindType : short;
 struct object_type;
-ItemPrimaryType bow_tval_ammo(object_type *o_ptr);
+ItemKindType bow_tval_ammo(object_type *o_ptr);
