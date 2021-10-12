@@ -114,7 +114,7 @@ static bool decide_attack_hit(player_type *player_ptr, player_attack_type *pa_pt
     bool success_hit = false;
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
+    if (((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         int n = 1;
 
         if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr))
@@ -151,7 +151,7 @@ bool process_attack_hit(player_type *player_ptr, player_attack_type *pa_ptr, int
     pa_ptr->backstab = false; /* Clumsy! */
     pa_ptr->surprise_attack = false; /* Clumsy! */
 
-    if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
+    if ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
         process_death_scythe_reflection(player_ptr, pa_ptr);
     } else {
         sound(SOUND_MISS);

@@ -135,7 +135,7 @@ void print_sp(player_type *player_ptr)
 {
     char tmp[32];
     byte color;
-    if (!mp_ptr->spell_book && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
+    if ((mp_ptr->spell_book == ItemKindType::NONE) && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
         return;
 
     put_str(_("MP", "SP"), ROW_CURSP, COL_CURSP);

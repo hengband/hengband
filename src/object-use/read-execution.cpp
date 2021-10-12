@@ -101,7 +101,7 @@ void ObjectReadEntity::execute(bool known)
     auto ident = false;
     auto lev = k_info[o_ptr->k_idx].level;
     auto used_up = true;
-    if (o_ptr->tval == TV_SCROLL) {
+    if (o_ptr->tval == ItemKindType::SCROLL) {
         switch (o_ptr->sval) {
         case SV_SCROLL_DARKNESS: {
             if (!has_resist_blind(this->player_ptr) && !has_resist_dark(this->player_ptr))
@@ -485,7 +485,7 @@ void ObjectReadEntity::execute(bool known)
         msg_print(nullptr);
         msg_print(_("暗闇の中に繋ぎとめる。」", "and in the darkness bind them.'"));
         used_up = false;
-    } else if (o_ptr->tval == TV_PARCHMENT) {
+    } else if (o_ptr->tval == ItemKindType::PARCHMENT) {
         GAME_TEXT o_name[MAX_NLEN];
         char buf[1024];
         screen_save();

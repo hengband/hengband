@@ -91,7 +91,7 @@ static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *dam
         *basedam = monk_ave_damage[level][0];
 
     damage[hand] += *basedam;
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         damage[hand] = 1;
     if (damage[hand] < 0)
         damage[hand] = 0;
@@ -114,7 +114,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
 
     *basedam = 0;
     damage[hand] += *basedam;
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         damage[hand] = 1;
 
     if (damage[hand] < 0)
@@ -265,7 +265,7 @@ static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
 
         to_h[i] = 0;
         bool poison_needle = false;
-        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
             poison_needle = true;
         if (o_ptr->is_known()) {
             damage[i] += o_ptr->to_d * 100;
@@ -279,7 +279,7 @@ static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
         basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);
         basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flgs);
         damage[i] += basedam;
-        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
             damage[i] = 1;
         if (damage[i] < 0)
             damage[i] = 0;

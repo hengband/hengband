@@ -108,7 +108,7 @@ static void move_item_to_monster(player_type *player_ptr, monap_type *monap_ptr,
     j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;
-    if ((monap_ptr->o_ptr->tval == TV_ROD) || (monap_ptr->o_ptr->tval == TV_WAND)) {
+    if ((monap_ptr->o_ptr->tval == ItemKindType::ROD) || (monap_ptr->o_ptr->tval == ItemKindType::WAND)) {
         j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
         monap_ptr->o_ptr->pval -= j_ptr->pval;
     }
@@ -161,7 +161,7 @@ void process_eat_food(player_type *player_ptr, monap_type *monap_ptr)
         if (!monap_ptr->o_ptr->k_idx)
             continue;
 
-        if ((monap_ptr->o_ptr->tval != TV_FOOD) && !((monap_ptr->o_ptr->tval == TV_CORPSE) && (monap_ptr->o_ptr->sval)))
+        if ((monap_ptr->o_ptr->tval != ItemKindType::FOOD) && !((monap_ptr->o_ptr->tval == ItemKindType::CORPSE) && (monap_ptr->o_ptr->sval)))
             continue;
 
         describe_flavor(player_ptr, monap_ptr->o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -204,7 +204,7 @@ void process_eat_lite(player_type *player_ptr, monap_type *monap_ptr)
  */
 bool process_un_power(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if (((monap_ptr->o_ptr->tval != TV_STAFF) && (monap_ptr->o_ptr->tval != TV_WAND)) || (monap_ptr->o_ptr->pval == 0))
+    if (((monap_ptr->o_ptr->tval != ItemKindType::STAFF) && (monap_ptr->o_ptr->tval != ItemKindType::WAND)) || (monap_ptr->o_ptr->pval == 0))
         return false;
 
     bool is_magic_mastery = has_magic_mastery(player_ptr) != 0;
@@ -222,7 +222,7 @@ bool process_un_power(player_type *player_ptr, monap_type *monap_ptr)
     monap_ptr->obvious = true;
     HIT_POINT recovery = drain * kind_ptr->level;
 
-    if (monap_ptr->o_ptr->tval == TV_STAFF)
+    if (monap_ptr->o_ptr->tval == ItemKindType::STAFF)
         recovery *= monap_ptr->o_ptr->number;
 
     recovery = MIN(recovery, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);

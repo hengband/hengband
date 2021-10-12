@@ -18,7 +18,7 @@
 void reduce_lite_life(player_type* player_ptr)
 {
     object_type* o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if (o_ptr->tval != TV_LITE)
+    if (o_ptr->tval != ItemKindType::LITE)
         return;
 
     if (o_ptr->is_fixed_artifact() || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->xtra4 <= 0))

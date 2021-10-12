@@ -139,7 +139,7 @@ static void get_bare_knuckle_exp(player_type *player_ptr, player_attack_type *pa
  */
 static void get_weapon_exp(player_type *player_ptr, player_attack_type *pa_ptr)
 {
-    int tval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
+    int tval = enum2i(player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval) - enum2i(TV_WEAPON_BEGIN);
     OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].sval;
     int now_exp = player_ptr->weapon_exp[tval][sval];
     if (now_exp >= s_info[player_ptr->pclass].w_max[tval][sval])
@@ -195,7 +195,7 @@ static void calc_num_blow(player_type *player_ptr, player_attack_type *pa_ptr)
         pa_ptr->num_blow = player_ptr->num_blow[pa_ptr->hand];
 
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         pa_ptr->num_blow = 1;
 }
 
@@ -345,7 +345,7 @@ static void process_weapon_attack(player_type *player_ptr, player_attack_type *p
         *do_quake = true;
 
     auto do_impact = does_weapon_has_flag(player_ptr->impact, pa_ptr);
-    if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
+    if ((!(o_ptr->tval == ItemKindType::SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
         pa_ptr->attack_damage
             = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
 
@@ -498,7 +498,7 @@ static void apply_actual_attack(
     mineuchi(player_ptr, pa_ptr);
 
     pa_ptr->attack_damage = mon_damage_mod(player_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
-        (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((player_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
+        (bool)(((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((player_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
     critical_attack(player_ptr, pa_ptr);
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
         pa_ptr->attack_damage, pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);

@@ -167,28 +167,28 @@ static byte get_dungeon_feeling(player_type *player_ptr)
                 return 1;
         }
 
-        if (o_ptr->tval == TV_DRAG_ARMOR)
+        if (o_ptr->tval == ItemKindType::DRAG_ARMOR)
             delta += 30 * base;
 
-        if (o_ptr->tval == TV_SHIELD && o_ptr->sval == SV_DRAGON_SHIELD)
+        if (o_ptr->tval == ItemKindType::SHIELD && o_ptr->sval == SV_DRAGON_SHIELD)
             delta += 5 * base;
 
-        if (o_ptr->tval == TV_GLOVES && o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)
+        if (o_ptr->tval == ItemKindType::GLOVES && o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)
             delta += 5 * base;
 
-        if (o_ptr->tval == TV_BOOTS && o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)
+        if (o_ptr->tval == ItemKindType::BOOTS && o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)
             delta += 5 * base;
 
-        if (o_ptr->tval == TV_HELM && o_ptr->sval == SV_DRAGON_HELM)
+        if (o_ptr->tval == ItemKindType::HELM && o_ptr->sval == SV_DRAGON_HELM)
             delta += 5 * base;
 
-        if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_SPEED && !o_ptr->is_cursed())
+        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_SPEED && !o_ptr->is_cursed())
             delta += 25 * base;
 
-        if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_LORDLY && !o_ptr->is_cursed())
+        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_LORDLY && !o_ptr->is_cursed())
             delta += 15 * base;
 
-        if (o_ptr->tval == TV_AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !o_ptr->is_cursed())
+        if (o_ptr->tval == ItemKindType::AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !o_ptr->is_cursed())
             delta += 15 * base;
 
         if (!o_ptr->is_cursed() && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level)

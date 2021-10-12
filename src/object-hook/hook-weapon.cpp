@@ -16,7 +16,7 @@
 bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Only melee weapons match */
-    if (!(o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)) {
+    if (!(o_ptr->tval == ItemKindType::POLEARM || o_ptr->tval == ItemKindType::SWORD || o_ptr->tval == ItemKindType::DIGGING || o_ptr->tval == ItemKindType::HAFTED)) {
         return false;
     }
 
@@ -25,7 +25,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     case CLASS_PRIEST: {
         auto flgs = object_flags_known(o_ptr);
 
-        if (flgs.has_not(TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
+        if (flgs.has_not(TR_BLESSED) && !(o_ptr->tval == ItemKindType::HAFTED))
             return false;
         break;
     }
@@ -33,7 +33,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
         /* Icky to wield? */
-        if (!(s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval]))
+        if (!(s_info[player_ptr->pclass].w_max[enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN)][o_ptr->sval]))
             return false;
         break;
 
@@ -49,13 +49,13 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     }
 
     case CLASS_SORCERER:
-        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] < WEAPON_EXP_MASTER)
+        if (s_info[player_ptr->pclass].w_max[enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN)][o_ptr->sval] < WEAPON_EXP_MASTER)
             return false;
         break;
 
     case CLASS_NINJA:
         /* Icky to wield? */
-        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+        if (s_info[player_ptr->pclass].w_max[enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN)][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
             return false;
         break;
 

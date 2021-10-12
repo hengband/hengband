@@ -66,10 +66,10 @@
 static bool item_tester_hook_weapon_except_bow(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case TV_SWORD:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_DIGGING:
+    case ItemKindType::SWORD:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::DIGGING:
         return true;
     default:
         return false;

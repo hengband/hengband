@@ -35,9 +35,9 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
         for (int num = 0; num < 64; num++) {
             char tmp[30];
             for (const auto &k_ref : k_info) {
-                if ((k_ref.tval != TV_SWORD - i) || (k_ref.sval != num))
+                if ((enum2i(k_ref.tval) != enum2i(ItemKindType::SWORD) - i) || (k_ref.sval != num))
                     continue;
-                if ((k_ref.tval == TV_BOW) && (k_ref.sval == SV_CRIMSON || k_ref.sval == SV_HARP))
+                if ((k_ref.tval == ItemKindType::BOW) && (k_ref.sval == SV_CRIMSON || k_ref.sval == SV_HARP))
                     continue;
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[4 - i][num];

@@ -171,14 +171,14 @@ HIT_POINT calc_attack_damage_with_slay(player_type *player_ptr, object_type *o_p
 
     MULTIPLY mult = 10;
     switch (o_ptr->tval) {
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_DIGGING:
-    case TV_LITE: {
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::DIGGING:
+    case ItemKindType::LITE: {
         mult = mult_slaying(player_ptr, mult, flgs, m_ptr);
 
         mult = mult_brand(player_ptr, mult, flgs, m_ptr);

@@ -257,24 +257,24 @@ void sense_inventory1(player_type *player_ptr)
             continue;
 
         switch (o_ptr->tval) {
-        case TV_SHOT:
-        case TV_ARROW:
-        case TV_BOLT:
-        case TV_BOW:
-        case TV_DIGGING:
-        case TV_HAFTED:
-        case TV_POLEARM:
-        case TV_SWORD:
-        case TV_BOOTS:
-        case TV_GLOVES:
-        case TV_HELM:
-        case TV_CROWN:
-        case TV_SHIELD:
-        case TV_CLOAK:
-        case TV_SOFT_ARMOR:
-        case TV_HARD_ARMOR:
-        case TV_DRAG_ARMOR:
-        case TV_CARD: {
+        case ItemKindType::SHOT:
+        case ItemKindType::ARROW:
+        case ItemKindType::BOLT:
+        case ItemKindType::BOW:
+        case ItemKindType::DIGGING:
+        case ItemKindType::HAFTED:
+        case ItemKindType::POLEARM:
+        case ItemKindType::SWORD:
+        case ItemKindType::BOOTS:
+        case ItemKindType::GLOVES:
+        case ItemKindType::HELM:
+        case ItemKindType::CROWN:
+        case ItemKindType::SHIELD:
+        case ItemKindType::CLOAK:
+        case ItemKindType::SOFT_ARMOR:
+        case ItemKindType::HARD_ARMOR:
+        case ItemKindType::DRAG_ARMOR:
+        case ItemKindType::CARD: {
             okay = true;
             break;
         }
@@ -376,10 +376,10 @@ void sense_inventory2(player_type *player_ptr)
             continue;
 
         switch (o_ptr->tval) {
-        case TV_RING:
-        case TV_AMULET:
-        case TV_LITE:
-        case TV_FIGURINE: {
+        case ItemKindType::RING:
+        case ItemKindType::AMULET:
+        case ItemKindType::LITE:
+        case ItemKindType::FIGURINE: {
             okay = true;
             break;
         }
@@ -422,7 +422,7 @@ item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
         return FEEL_CURSED;
     if (o_ptr->is_broken())
         return FEEL_BROKEN;
-    if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
+    if ((o_ptr->tval == ItemKindType::RING) || (o_ptr->tval == ItemKindType::AMULET))
         return FEEL_AVERAGE;
     if (o_ptr->to_a > 0)
         return FEEL_GOOD;

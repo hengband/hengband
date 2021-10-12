@@ -25,5 +25,6 @@ extern const uint32_t realm_choices1[];
 extern const uint32_t realm_choices2[];
 
 struct player_type;
-int16_t get_realm1_book(player_type *player_ptr);
-int16_t get_realm2_book(player_type *player_ptr);
+enum class ItemKindType : short;
+ItemKindType get_realm1_book(player_type *player_ptr);
+ItemKindType get_realm2_book(player_type *player_ptr);

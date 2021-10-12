@@ -247,7 +247,7 @@ void wiz_identify_full_inventory(player_type *player_ptr)
  * @param row 表示列
  * @param col 表示行
  */
-static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
+static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
     uint32_t rarity[K_MAX_DEPTH] = {};
     uint32_t total[K_MAX_DEPTH] = {};
@@ -631,7 +631,7 @@ static void wiz_quantity_item(object_type *o_ptr)
         o_ptr->number = (byte)tmp_int;
     }
 
-    if (o_ptr->tval == TV_ROD)
+    if (o_ptr->tval == ItemKindType::ROD)
         o_ptr->pval = o_ptr->pval * o_ptr->number / tmp_qnt;
 }
 
@@ -713,7 +713,7 @@ static int is_slot_able_to_be_ego(player_type *player_ptr, object_type *o_ptr)
     if (slot > -1)
         return slot;
 
-    if ((o_ptr->tval == TV_SHOT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_BOLT))
+    if ((o_ptr->tval == ItemKindType::SHOT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::BOLT))
         return (INVEN_AMMO);
 
     return (-1);

@@ -24,7 +24,7 @@ struct artifact_type {
 
     std::string name; /*!< アーティファクト名(headerオフセット参照) / Name (offset) */
     std::string text; /*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
-	tval_type tval{};		/*!< ベースアイテム大項目ID / Artifact type */
+	ItemKindType tval{};		/*!< ベースアイテム大項目ID / Artifact type */
 	OBJECT_SUBTYPE_VALUE sval{};	/*!< ベースアイテム小項目ID / Artifact sub type */
 	PARAMETER_VALUE pval{};	/*!< pval修正値 / Artifact extra info */
 	HIT_PROB to_h{};			/*!< 命中ボーナス値 /  Bonus to hit */

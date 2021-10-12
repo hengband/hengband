@@ -134,7 +134,7 @@ static void compare_weapon_aux(player_type *player_ptr, object_type *o_ptr, int 
     int dmg_bonus = o_ptr->to_d + player_ptr->to_d[0];
 
     auto flgs = object_flags(o_ptr);
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         dokubari = true;
 
     bool impact = flgs.has(TR_IMPACT) || (player_ptr->impact != 0);

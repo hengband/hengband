@@ -165,7 +165,7 @@ void update_object_by_monster_movement(player_type *player_ptr, turn_flags *turn
 
         if (turn_flags_ptr->do_take) {
             /* Skip gold, corpse and statue */
-            if (o_ptr->tval == TV_GOLD || (o_ptr->tval == TV_CORPSE) || (o_ptr->tval == TV_STATUE))
+            if (o_ptr->tval == ItemKindType::GOLD || (o_ptr->tval == ItemKindType::CORPSE) || (o_ptr->tval == ItemKindType::STATUE))
                 continue;
         }
 

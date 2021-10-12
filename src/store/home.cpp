@@ -117,10 +117,10 @@ static void sweep_reorder_store_item(object_type *o_ptr, const int i, bool *comb
         ITEM_NUMBER remain = j_ptr->number + o_ptr->number - max_num;
         object_absorb(j_ptr, o_ptr);
         o_ptr->number = remain;
-        if (o_ptr->tval == TV_ROD) {
+        if (o_ptr->tval == ItemKindType::ROD) {
             o_ptr->pval = o_ptr->pval * remain / old_num;
             o_ptr->timeout = o_ptr->timeout * remain / old_num;
-        } else if (o_ptr->tval == TV_WAND) {
+        } else if (o_ptr->tval == ItemKindType::WAND) {
             o_ptr->pval = o_ptr->pval * remain / old_num;
         }
 

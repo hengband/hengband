@@ -258,7 +258,7 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
         return;
 
     if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact())
-        || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE))) {
+        || ((flavor_ptr->o_ptr->tval == ItemKindType::CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE))) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         return;
     }

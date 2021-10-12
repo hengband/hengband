@@ -35,12 +35,12 @@ errr init_towns(void)
                 continue;
 
             for (int k = 0; k < STORE_INVEN_MAX; k++) {
-                int tv = store_regular_table[enum2i(sst)][k].tval;
-                int sv = store_regular_table[enum2i(sst)][k].sval;
-                if (tv == 0)
+                auto tv = store_regular_table[enum2i(sst)][k].tval;
+                auto sv = store_regular_table[enum2i(sst)][k].sval;
+                if (tv == ItemKindType::NONE)
                     break;
 
-                KIND_OBJECT_IDX k_idx = lookup_kind(i2enum<tval_type>(tv), sv);
+                KIND_OBJECT_IDX k_idx = lookup_kind(tv, sv);
 
                 if (k_idx == 0)
                     continue;
@@ -49,12 +49,12 @@ errr init_towns(void)
             }
 
             for (int k = 0; k < STORE_CHOICES; k++) {
-                int tv = store_table[enum2i(sst)][k].tval;
-                int sv = store_table[enum2i(sst)][k].sval;
-                if (tv == 0)
+                auto tv = store_table[enum2i(sst)][k].tval;
+                auto sv = store_table[enum2i(sst)][k].sval;
+                if (tv == ItemKindType::NONE)
                     break;
 
-                KIND_OBJECT_IDX k_idx = lookup_kind(i2enum<tval_type>(tv), sv);
+                KIND_OBJECT_IDX k_idx = lookup_kind(tv, sv);
 
                 if (k_idx == 0)
                     continue;

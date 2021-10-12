@@ -93,9 +93,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
     /* Some "weapons" and "ammo" do extra damage */
     switch (arrow_ptr->tval) {
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT: {
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT: {
         if ((flags.has(TR_SLAY_ANIMAL)) && any_bits(race_ptr->flags3, RF3_ANIMAL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags3, RF3_ANIMAL);
@@ -962,7 +962,7 @@ HIT_POINT critical_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, i
     /* Extract "shot" power */
     i = player_ptr->to_h_b + plus_ammo;
 
-    if (player_ptr->tval_ammo == TV_BOLT)
+    if (player_ptr->tval_ammo == ItemKindType::BOLT)
         i = (player_ptr->skill_thb + (player_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
     else
         i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
@@ -972,7 +972,7 @@ HIT_POINT critical_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, i
 
     /* Snipers can shot more critically with crossbows */
     i += ((i * sniper_concent) / 5);
-    if ((player_ptr->pclass == CLASS_SNIPER) && (player_ptr->tval_ammo == TV_BOLT))
+    if ((player_ptr->pclass == CLASS_SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT))
         i *= 2;
 
     /* Good bow makes more critical */
@@ -1113,7 +1113,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *player_ptr, HIT_POINT plus_ammo, HIT
     /* Extract "shot" power */
     i = player_ptr->to_h_b + plus_ammo;
 
-    if (player_ptr->tval_ammo == TV_BOLT)
+    if (player_ptr->tval_ammo == ItemKindType::BOLT)
         i = (player_ptr->skill_thb + (player_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
     else
         i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
@@ -1123,7 +1123,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *player_ptr, HIT_POINT plus_ammo, HIT
 
     /* Snipers can shot more critically with crossbows */
     i += ((i * sniper_concent) / 5);
-    if ((player_ptr->pclass == CLASS_SNIPER) && (player_ptr->tval_ammo == TV_BOLT))
+    if ((player_ptr->pclass == CLASS_SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT))
         i *= 2;
 
     /* Good bow makes more critical */

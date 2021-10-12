@@ -127,7 +127,7 @@ bool object_type::is_weapon_armour_ammo() const
  */
 bool object_type::is_melee_weapon() const
 {
-    return (TV_DIGGING <= this->tval) && (this->tval <= TV_SWORD);
+    return (ItemKindType::DIGGING <= this->tval) && (this->tval <= ItemKindType::SWORD);
 }
 
 /*!
@@ -137,15 +137,15 @@ bool object_type::is_melee_weapon() const
 bool object_type::is_melee_ammo() const
 {
     switch (this->tval) {
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_DIGGING:
-    case TV_BOLT:
-    case TV_ARROW:
-    case TV_SHOT: {
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::DIGGING:
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::SHOT: {
         return true;
     }
-    case TV_SWORD: {
+    case ItemKindType::SWORD: {
         if (this->sval != SV_POISON_NEEDLE)
             return true;
     }
@@ -182,12 +182,12 @@ bool object_type::is_equipment() const
 bool object_type::is_orthodox_melee_weapons() const
 {
     switch (this->tval) {
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_DIGGING: {
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::DIGGING: {
         return true;
     }
-    case TV_SWORD: {
+    case ItemKindType::SWORD: {
         if (this->sval != SV_POISON_NEEDLE)
             return true;
     }
@@ -205,7 +205,7 @@ bool object_type::is_orthodox_melee_weapons() const
  */
 bool object_type::is_broken_weapon() const
 {
-    if (this->tval != TV_SWORD)
+    if (this->tval != ItemKindType::SWORD)
         return false;
 
     switch (this->sval) {
@@ -223,7 +223,7 @@ bool object_type::is_broken_weapon() const
  */
 bool object_type::is_throwable() const
 {
-    return (this->tval == TV_DIGGING) || (this->tval == TV_SWORD) || (this->tval == TV_POLEARM) || (this->tval == TV_HAFTED);
+    return (this->tval == ItemKindType::DIGGING) || (this->tval == ItemKindType::SWORD) || (this->tval == ItemKindType::POLEARM) || (this->tval == ItemKindType::HAFTED);
 }
 
 /*!
@@ -232,7 +232,7 @@ bool object_type::is_throwable() const
  */
 bool object_type::is_wieldable_in_etheir_hand() const
 {
-    return ((TV_DIGGING <= this->tval) && (this->tval <= TV_SWORD)) || (this->tval == TV_SHIELD) || (this->tval == TV_CAPTURE) || (this->tval == TV_CARD);
+    return ((ItemKindType::DIGGING <= this->tval) && (this->tval <= ItemKindType::SWORD)) || (this->tval == ItemKindType::SHIELD) || (this->tval == ItemKindType::CAPTURE) || (this->tval == ItemKindType::CARD);
 }
 
 /*!
@@ -241,7 +241,7 @@ bool object_type::is_wieldable_in_etheir_hand() const
  */
 bool object_type::refuse_enchant_weapon() const
 {
-    return (this->tval == TV_SWORD) && (this->sval == SV_POISON_NEEDLE);
+    return (this->tval == ItemKindType::SWORD) && (this->sval == SV_POISON_NEEDLE);
 }
 
 /*!
@@ -271,7 +271,7 @@ bool object_type::allow_enchant_melee_weapon() const
  */
 bool object_type::allow_two_hands_wielding() const
 {
-    return this->is_melee_weapon() && ((this->weight > 99) || (this->tval == TV_POLEARM));
+    return this->is_melee_weapon() && ((this->weight > 99) || (this->tval == ItemKindType::POLEARM));
 }
 
 /*!
@@ -290,14 +290,14 @@ bool object_type::is_ammo() const
  */
 bool object_type::is_convertible() const
 {
-    auto is_convertible = ((this->tval == TV_JUNK) || (this->tval == TV_SKELETON));
-    is_convertible |= ((this->tval == TV_CORPSE) && (this->sval == SV_SKELETON));
+    auto is_convertible = ((this->tval == ItemKindType::JUNK) || (this->tval == ItemKindType::SKELETON));
+    is_convertible |= ((this->tval == ItemKindType::CORPSE) && (this->sval == SV_SKELETON));
     return is_convertible;
 }
 
 bool object_type::is_lance() const
 {
-    auto is_lance = this->tval == TV_POLEARM;
+    auto is_lance = this->tval == ItemKindType::POLEARM;
     is_lance &= (this->sval == SV_LANCE) || (this->sval == SV_HEAVY_LANCE);
     return is_lance;
 }
@@ -318,18 +318,18 @@ bool object_type::is_armour() const
  */
 bool object_type::is_rare() const
 {
-    static const std::unordered_map<tval_type, const std::set<OBJECT_SUBTYPE_VALUE>> rare_table = {
-        { TV_HAFTED, { SV_MACE_OF_DISRUPTION, SV_WIZSTAFF } },
-        { TV_POLEARM, { SV_SCYTHE_OF_SLICING, SV_DEATH_SCYTHE } },
-        { TV_SWORD, { SV_BLADE_OF_CHAOS, SV_DIAMOND_EDGE, SV_POISON_NEEDLE, SV_HAYABUSA } },
-        { TV_SHIELD, { SV_DRAGON_SHIELD, SV_MIRROR_SHIELD } },
-        { TV_HELM, { SV_DRAGON_HELM } },
-        { TV_BOOTS, { SV_PAIR_OF_DRAGON_GREAVE } },
-        { TV_CLOAK, { SV_ELVEN_CLOAK, SV_ETHEREAL_CLOAK, SV_SHADOW_CLOAK, SV_MAGIC_RESISTANCE_CLOAK } },
-        { TV_GLOVES, { SV_SET_OF_DRAGON_GLOVES } },
-        { TV_SOFT_ARMOR, { SV_KUROSHOUZOKU, SV_ABUNAI_MIZUGI } },
-        { TV_HARD_ARMOR, { SV_MITHRIL_CHAIN_MAIL, SV_MITHRIL_PLATE_MAIL, SV_ADAMANTITE_PLATE_MAIL } },
-        { TV_DRAG_ARMOR, { /* Any */ } },
+    static const std::unordered_map<ItemKindType, const std::set<OBJECT_SUBTYPE_VALUE>> rare_table = {
+        { ItemKindType::HAFTED, { SV_MACE_OF_DISRUPTION, SV_WIZSTAFF } },
+        { ItemKindType::POLEARM, { SV_SCYTHE_OF_SLICING, SV_DEATH_SCYTHE } },
+        { ItemKindType::SWORD, { SV_BLADE_OF_CHAOS, SV_DIAMOND_EDGE, SV_POISON_NEEDLE, SV_HAYABUSA } },
+        { ItemKindType::SHIELD, { SV_DRAGON_SHIELD, SV_MIRROR_SHIELD } },
+        { ItemKindType::HELM, { SV_DRAGON_HELM } },
+        { ItemKindType::BOOTS, { SV_PAIR_OF_DRAGON_GREAVE } },
+        { ItemKindType::CLOAK, { SV_ELVEN_CLOAK, SV_ETHEREAL_CLOAK, SV_SHADOW_CLOAK, SV_MAGIC_RESISTANCE_CLOAK } },
+        { ItemKindType::GLOVES, { SV_SET_OF_DRAGON_GLOVES } },
+        { ItemKindType::SOFT_ARMOR, { SV_KUROSHOUZOKU, SV_ABUNAI_MIZUGI } },
+        { ItemKindType::HARD_ARMOR, { SV_MITHRIL_CHAIN_MAIL, SV_MITHRIL_PLATE_MAIL, SV_ADAMANTITE_PLATE_MAIL } },
+        { ItemKindType::DRAG_ARMOR, { /* Any */ } },
     };
 
     if (auto it = rare_table.find(this->tval); it != rare_table.end()) {
@@ -457,7 +457,7 @@ bool object_type::is_tried() const
  */
 bool object_type::is_potion() const
 {
-    return k_info[this->k_idx].tval == TV_POTION;
+    return k_info[this->k_idx].tval == ItemKindType::POTION;
 }
 
 /*!
@@ -467,7 +467,7 @@ bool object_type::is_potion() const
  */
 bool object_type::is_readable() const
 {
-    return (this->tval == TV_SCROLL) || (this->tval == TV_PARCHMENT) || (this->name1 == ART_GHB) || (this->name1 == ART_POWER);
+    return (this->tval == ItemKindType::SCROLL) || (this->tval == ItemKindType::PARCHMENT) || (this->name1 == ART_GHB) || (this->name1 == ART_POWER);
 }
 
 /*!
@@ -477,7 +477,7 @@ bool object_type::is_readable() const
  */
 bool object_type::can_refill_lantern() const
 {
-    return (this->tval == TV_FLASK) || ((this->tval == TV_LITE) && (this->sval == SV_LITE_LANTERN));
+    return (this->tval == ItemKindType::FLASK) || ((this->tval == ItemKindType::LITE) && (this->sval == SV_LITE_LANTERN));
 }
 
 /*!
@@ -487,7 +487,7 @@ bool object_type::can_refill_lantern() const
  */
 bool object_type::can_refill_torch() const
 {
-    return (this->tval == TV_LITE) && (this->sval == SV_LITE_TORCH);
+    return (this->tval == ItemKindType::LITE) && (this->sval == SV_LITE_TORCH);
 }
 
 /*!
@@ -497,7 +497,7 @@ bool object_type::can_refill_torch() const
  */
 bool object_type::is_rechargeable() const
 {
-    return (this->tval == TV_STAFF) || (this->tval == TV_WAND) || (this->tval == TV_ROD);
+    return (this->tval == ItemKindType::STAFF) || (this->tval == ItemKindType::WAND) || (this->tval == ItemKindType::ROD);
 }
 
 /*!
@@ -506,7 +506,7 @@ bool object_type::is_rechargeable() const
  */
 bool object_type::is_offerable() const
 {
-    if ((this->tval != TV_CORPSE) || (this->sval != SV_CORPSE)) {
+    if ((this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE)) {
         return false;
     }
 

@@ -299,7 +299,7 @@ void do_cmd_use_staff(player_type *player_ptr)
 
     q = _("どの杖を使いますか? ", "Use which staff? ");
     s = _("使える杖がない。", "You have no staff to use.");
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_STAFF)))
+    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::STAFF)))
         return;
 
     ObjectUseEntity(player_ptr, item).execute();

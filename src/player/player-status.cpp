@@ -530,7 +530,7 @@ static void update_max_hitpoints(player_type *player_ptr)
  */
 static void update_num_of_spells(player_type *player_ptr)
 {
-    if (!mp_ptr->spell_book)
+    if (mp_ptr->spell_book == ItemKindType::NONE)
         return;
     if (!w_ptr->character_generated)
         return;
@@ -548,7 +548,7 @@ static void update_num_of_spells(player_type *player_ptr)
 
     int num_allowed = (adj_mag_study[player_ptr->stat_index[mp_ptr->spell_stat]] * levels / 2);
     int bonus = 0;
-    if ((player_ptr->pclass != CLASS_SAMURAI) && (mp_ptr->spell_book != TV_LIFE_BOOK)) {
+    if ((player_ptr->pclass != CLASS_SAMURAI) && (mp_ptr->spell_book != ItemKindType::LIFE_BOOK)) {
         bonus = 4;
     }
 
@@ -739,7 +739,7 @@ static void update_num_of_spells(player_type *player_ptr)
 
         if (k > 32)
             k = 32;
-        if ((player_ptr->new_spells > k) && ((mp_ptr->spell_book == TV_LIFE_BOOK) || (mp_ptr->spell_book == TV_HISSATSU_BOOK))) {
+        if ((player_ptr->new_spells > k) && ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) || (mp_ptr->spell_book == ItemKindType::HISSATSU_BOOK))) {
             player_ptr->new_spells = (int16_t)k;
         }
     }
@@ -776,7 +776,7 @@ static void update_num_of_spells(player_type *player_ptr)
  */
 static void update_max_mana(player_type *player_ptr)
 {
-    if (!mp_ptr->spell_book && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
+    if ((mp_ptr->spell_book == ItemKindType::NONE) && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
         return;
 
     int levels;
@@ -827,9 +827,9 @@ static void update_max_mana(player_type *player_ptr)
     player_ptr->cumber_armor = false;
 
     int cur_wgt = 0;
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > TV_SWORD)
+    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > ItemKindType::SWORD)
         cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight;
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > TV_SWORD)
+    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > ItemKindType::SWORD)
         cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight;
     cur_wgt += player_ptr->inventory_list[INVEN_BODY].weight;
     cur_wgt += player_ptr->inventory_list[INVEN_HEAD].weight;
@@ -845,27 +845,27 @@ static void update_max_mana(player_type *player_ptr)
     case CLASS_FORCETRAINER:
     case CLASS_SORCERER:
     case CLASS_ELEMENTALIST: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight;
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight;
         break;
     }
     case CLASS_PRIEST:
     case CLASS_BARD:
     case CLASS_TOURIST: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight * 2 / 3;
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight * 2 / 3;
         break;
     }
     case CLASS_MINDCRAFTER:
     case CLASS_BEASTMASTER:
     case CLASS_MIRROR_MASTER: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight / 2;
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight / 2;
         break;
     }
@@ -873,17 +873,17 @@ static void update_max_mana(player_type *player_ptr)
     case CLASS_RANGER:
     case CLASS_RED_MAGE:
     case CLASS_WARRIOR_MAGE: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight / 3;
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight / 3;
         break;
     }
     case CLASS_PALADIN:
     case CLASS_CHAOS_WARRIOR: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight / 5;
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= TV_SWORD)
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD)
             cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight / 5;
         break;
     }
@@ -1021,27 +1021,27 @@ int16_t calc_num_fire(player_type *player_ptr, object_type *o_ptr)
     if (is_heavy_shoot(player_ptr, o_ptr))
         return (int16_t)num;
 
-    tval_type tval_ammo = bow_tval_ammo(o_ptr);
-    if ((player_ptr->pclass == CLASS_RANGER) && (tval_ammo == TV_ARROW)) {
+    ItemKindType tval_ammo = bow_tval_ammo(o_ptr);
+    if ((player_ptr->pclass == CLASS_RANGER) && (tval_ammo == ItemKindType::ARROW)) {
         num += (player_ptr->lev * 4);
     }
 
-    if ((player_ptr->pclass == CLASS_CAVALRY) && (tval_ammo == TV_ARROW)) {
+    if ((player_ptr->pclass == CLASS_CAVALRY) && (tval_ammo == ItemKindType::ARROW)) {
         num += (player_ptr->lev * 3);
     }
 
     if (player_ptr->pclass == CLASS_ARCHER) {
-        if (tval_ammo == TV_ARROW)
+        if (tval_ammo == ItemKindType::ARROW)
             num += ((player_ptr->lev * 5) + 50);
-        else if ((tval_ammo == TV_BOLT) || (tval_ammo == TV_SHOT))
+        else if ((tval_ammo == ItemKindType::BOLT) || (tval_ammo == ItemKindType::SHOT))
             num += (player_ptr->lev * 4);
     }
 
-    if (player_ptr->pclass == CLASS_WARRIOR && (tval_ammo <= TV_BOLT) && (tval_ammo >= TV_SHOT)) {
+    if (player_ptr->pclass == CLASS_WARRIOR && (tval_ammo <= ItemKindType::BOLT) && (tval_ammo >= ItemKindType::SHOT)) {
         num += (player_ptr->lev * 2);
     }
 
-    if ((player_ptr->pclass == CLASS_ROGUE) && (tval_ammo == TV_SHOT)) {
+    if ((player_ptr->pclass == CLASS_ROGUE) && (tval_ammo == ItemKindType::SHOT)) {
         num += (player_ptr->lev * 4);
     }
 
@@ -1483,7 +1483,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::FUUJIN))
                 num_blow -= 1;
 
-            if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+            if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
                 num_blow = 1;
 
             if (num_blow < 1)
@@ -1812,7 +1812,7 @@ int16_t calc_double_weapon_penalty(player_type *player_ptr, INVENTORY_IDX slot)
             penalty = MIN(0, penalty);
         }
 
-        if (player_ptr->inventory_list[slot].tval == TV_POLEARM)
+        if (player_ptr->inventory_list[slot].tval == ItemKindType::POLEARM)
             penalty += 10;
     }
     return (int16_t)penalty;
@@ -1852,7 +1852,7 @@ static int16_t calc_riding_bow_penalty(player_type *player_ptr)
     int16_t penalty = 0;
 
     if ((player_ptr->pclass == CLASS_BEASTMASTER) || (player_ptr->pclass == CLASS_CAVALRY)) {
-        if (player_ptr->tval_ammo != TV_ARROW)
+        if (player_ptr->tval_ammo != ItemKindType::ARROW)
             penalty = 5;
     } else {
         penalty = r_info[floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[SKILL_RIDING] / 80;
@@ -1861,7 +1861,7 @@ static int16_t calc_riding_bow_penalty(player_type *player_ptr)
             penalty = 30;
     }
 
-    if (player_ptr->tval_ammo == TV_BOLT)
+    if (player_ptr->tval_ammo == ItemKindType::BOLT)
         penalty *= 2;
 
     return penalty;
@@ -1978,7 +1978,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
 
     auto player_stun = player_ptr->effects()->stun();
     damage -= player_stun->get_damage_penalty();
-    if ((player_ptr->pclass == CLASS_PRIEST) && (flgs.has_not(TR_BLESSED)) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+    if ((player_ptr->pclass == CLASS_PRIEST) && (flgs.has_not(TR_BLESSED)) && ((o_ptr->tval == ItemKindType::SWORD) || (o_ptr->tval == ItemKindType::POLEARM))) {
         damage -= 2;
     } else if (player_ptr->pclass == CLASS_BERSERKER) {
         damage += player_ptr->lev / 6;
@@ -1986,7 +1986,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
             damage += player_ptr->lev / 6;
         }
     } else if (player_ptr->pclass == CLASS_SORCERER) {
-        if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+        if (!((o_ptr->tval == ItemKindType::HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
             damage -= 200;
         } else {
             damage -= 10;
@@ -2015,7 +2015,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int bonus_to_d = 0;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i))
+        if (!o_ptr->k_idx || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i))
             || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW)
             continue;
 
@@ -2161,7 +2161,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
         object_type *o_ptr = &player_ptr->inventory_list[slot];
         auto flgs = object_flags(o_ptr);
 
-        int tval = o_ptr->tval - TV_WEAPON_BEGIN;
+        auto tval = enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN);
         OBJECT_SUBTYPE_VALUE sval = o_ptr->sval;
 
         /* Traind bonuses */
@@ -2202,7 +2202,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
         }
 
         /* Class penalties */
-        if ((player_ptr->pclass == CLASS_PRIEST) && (flgs.has_not(TR_BLESSED)) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+        if ((player_ptr->pclass == CLASS_PRIEST) && (flgs.has_not(TR_BLESSED)) && ((o_ptr->tval == ItemKindType::SWORD) || (o_ptr->tval == ItemKindType::POLEARM))) {
             hit -= 2;
         } else if (player_ptr->pclass == CLASS_BERSERKER) {
             hit += player_ptr->lev / 5;
@@ -2210,7 +2210,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
                 hit += player_ptr->lev / 5;
             }
         } else if (player_ptr->pclass == CLASS_SORCERER) {
-            if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+            if (!((o_ptr->tval == ItemKindType::HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
                 hit -= 200;
             } else {
                 hit -= 30;
@@ -2243,7 +2243,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
         object_type *o_ptr = &player_ptr->inventory_list[i];
 
         /* Ignore empty hands, handed weapons, bows and capture balls */
-        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i))
+        if (!o_ptr->k_idx || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i))
             || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW)
             continue;
 
@@ -2364,7 +2364,7 @@ static int16_t calc_to_hit_bow(player_type *player_ptr, bool is_real_value)
 
     if (o_ptr->k_idx) {
         if (o_ptr->k_idx && !is_heavy_shoot(player_ptr, &player_ptr->inventory_list[INVEN_BOW])) {
-            if ((player_ptr->pclass == CLASS_SNIPER) && (player_ptr->tval_ammo == TV_BOLT)) {
+            if ((player_ptr->pclass == CLASS_SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT)) {
                 pow += (10 + (player_ptr->lev / 5));
             }
         }
@@ -2374,7 +2374,7 @@ static int16_t calc_to_hit_bow(player_type *player_ptr, bool is_real_value)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int bonus_to_h;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i))
+        if (!o_ptr->k_idx || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i))
             || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW)
             continue;
 

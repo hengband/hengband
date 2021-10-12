@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "object/tval-types.h"
-
-struct object_type;;
-tval_type bow_tval_ammo(object_type *o_ptr);
+enum class ItemKindType : short;
+struct object_type;
+ItemKindType bow_tval_ammo(object_type *o_ptr);

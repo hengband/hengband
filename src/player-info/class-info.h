@@ -21,7 +21,7 @@
  */
 
 struct player_magic {
-    tval_type spell_book{}; /* Tval of spell books (if any) */
+    ItemKindType spell_book{}; /* Tval of spell books (if any) */
     BIT_FLAGS8 spell_xtra{}; /* Something for later */
 
     int spell_stat{}; /* Stat for spells (if any)  */

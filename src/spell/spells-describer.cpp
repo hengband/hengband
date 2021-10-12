@@ -5,14 +5,14 @@
  * @param tval 魔法書のtval
  * @return 領域魔法の技能名称を保管した文字列ポインタ
  */
-concptr spell_category_name(tval_type tval)
+concptr spell_category_name(ItemKindType tval)
 {
     switch (tval) {
-    case TV_HISSATSU_BOOK:
+    case ItemKindType::HISSATSU_BOOK:
         return _("必殺技", "art");
-    case TV_LIFE_BOOK:
+    case ItemKindType::LIFE_BOOK:
         return _("祈り", "prayer");
-    case TV_MUSIC_BOOK:
+    case ItemKindType::MUSIC_BOOK:
         return _("歌", "song");
     default:
         return _("呪文", "spell");

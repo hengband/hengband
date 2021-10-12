@@ -703,18 +703,18 @@ void check_no_flowed(player_type *player_ptr)
     }
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        if ((player_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (player_ptr->inventory_list[i].sval == 2))
+        if ((player_ptr->inventory_list[i].tval == ItemKindType::NATURE_BOOK) && (player_ptr->inventory_list[i].sval == 2))
             has_sw = true;
-        if ((player_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (player_ptr->inventory_list[i].sval == 2))
+        if ((player_ptr->inventory_list[i].tval == ItemKindType::CRAFT_BOOK) && (player_ptr->inventory_list[i].sval == 2))
             has_kabe = true;
     }
 
     for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
-        if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2))
+        if ((o_ptr->tval == ItemKindType::NATURE_BOOK) && (o_ptr->sval == 2))
             has_sw = true;
-        if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2))
+        if ((o_ptr->tval == ItemKindType::CRAFT_BOOK) && (o_ptr->sval == 2))
             has_kabe = true;
     }
 
@@ -1599,15 +1599,15 @@ bool is_wielding_icky_weapon(player_type *player_ptr, int i)
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     auto flgs = object_flags(o_ptr);
 
-    auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
+    auto has_no_weapon = (o_ptr->tval == ItemKindType::NONE) || (o_ptr->tval == ItemKindType::SHIELD);
     if (player_ptr->pclass == CLASS_PRIEST) {
         auto is_suitable_weapon = flgs.has(TR_BLESSED);
-        is_suitable_weapon |= (o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM);
+        is_suitable_weapon |= (o_ptr->tval != ItemKindType::SWORD) && (o_ptr->tval != ItemKindType::POLEARM);
         return !has_no_weapon && !is_suitable_weapon;
     }
 
     if (player_ptr->pclass == CLASS_SORCERER) {
-        auto is_suitable_weapon = o_ptr->tval == TV_HAFTED;
+        auto is_suitable_weapon = o_ptr->tval == ItemKindType::HAFTED;
         is_suitable_weapon &= (o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER);
         return !has_no_weapon && !is_suitable_weapon;
     }
@@ -1624,7 +1624,7 @@ bool is_wielding_icky_riding_weapon(player_type *player_ptr, int i)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     auto flgs = object_flags(o_ptr);
-    auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
+    auto has_no_weapon = (o_ptr->tval == ItemKindType::NONE) || (o_ptr->tval == ItemKindType::SHIELD);
     auto is_suitable = o_ptr->is_lance() || flgs.has(TR_RIDING);
     return (player_ptr->riding > 0) && !has_no_weapon && !is_suitable;
 }
@@ -1634,10 +1634,11 @@ bool has_not_ninja_weapon(player_type *player_ptr, int i)
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         return false;
     }
-    int tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
+
+    auto tval = enum2i(player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval) - enum2i(TV_WEAPON_BEGIN);
     OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return player_ptr->pclass == CLASS_NINJA
-        && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != TV_SHIELD));
+        && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != ItemKindType::SHIELD));
 }
 
 bool has_not_monk_weapon(player_type *player_ptr, int i)
@@ -1645,7 +1646,8 @@ bool has_not_monk_weapon(player_type *player_ptr, int i)
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         return false;
     }
-    int tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
+    
+    auto tval = enum2i(player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval) - enum2i(TV_WEAPON_BEGIN);
     OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return ((player_ptr->pclass == CLASS_MONK) || (player_ptr->pclass == CLASS_FORCETRAINER)) && !(s_info[player_ptr->pclass].w_max[tval][sval]);
 }

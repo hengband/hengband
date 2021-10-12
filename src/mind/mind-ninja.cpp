@@ -103,7 +103,7 @@ bool kawarimi(player_type *player_ptr, bool success)
     teleport_player(player_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     q_ptr->wipe();
     const int SV_WOODEN_STATUE = 0;
-    q_ptr->prep(lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
+    q_ptr->prep(lookup_kind(ItemKindType::STATUE, SV_WOODEN_STATUE));
 
     q_ptr->pval = MON_NINJA;
     (void)drop_near(player_ptr, q_ptr, -1, y, x);
@@ -420,7 +420,7 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
             OBJECT_IDX slot;
 
             for (slot = 0; slot < INVEN_PACK; slot++) {
-                if (player_ptr->inventory_list[slot].tval == TV_SPIKE)
+                if (player_ptr->inventory_list[slot].tval == ItemKindType::SPIKE)
                     break;
             }
 

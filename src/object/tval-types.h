@@ -14,71 +14,73 @@
 
 #pragma once
 
-enum tval_type {
-    TV_NONE = 0,
-    TV_SKELETON = 1, /* Skeletons ('s'), not specified */
-    TV_BOTTLE = 2, /* Empty bottles ('!') */
-    TV_JUNK = 3, /* Sticks, Pottery, etc ('~') */
-    TV_WHISTLE = 4, /* Whistle ('~') */
-    TV_SPIKE = 5, /* Spikes ('~') */
-    TV_CHEST = 7, /* Chests ('&') */
-    TV_FIGURINE = 8, /* Magical figurines */
-    TV_STATUE = 9, /* Statue, what a silly object... */
-    TV_CORPSE = 10, /* Corpses and Skeletons, specific */
-    TV_CAPTURE = 11, /* Monster ball */
-    TV_NO_AMMO = 15, /* Ammo for crimson */
-    TV_SHOT = 16, /* Ammo for slings */
-    TV_ARROW = 17, /* Ammo for bows */
-    TV_BOLT = 18, /* Ammo for x-bows */
-    TV_BOW = 19, /* Slings/Bows/Xbows */
-    TV_DIGGING = 20, /* Shovels/Picks */
-    TV_HAFTED = 21, /* Priest Weapons */
-    TV_POLEARM = 22, /* Axes and Pikes */
-    TV_SWORD = 23, /* Edged Weapons */
-    TV_BOOTS = 30, /* Boots */
-    TV_GLOVES = 31, /* Gloves */
-    TV_HELM = 32, /* Helms */
-    TV_CROWN = 33, /* Crowns */
-    TV_SHIELD = 34, /* Shields */
-    TV_CLOAK = 35, /* Cloaks */
-    TV_SOFT_ARMOR = 36, /* Soft Armor */
-    TV_HARD_ARMOR = 37, /* Hard Armor */
-    TV_DRAG_ARMOR = 38, /* Dragon Scale Mail */
-    TV_LITE = 39, /* Lites (including Specials) */
-    TV_AMULET = 40, /* Amulets (including Specials) */
-    TV_RING = 45, /* Rings (including Specials) */
-    TV_CARD = 50,
-    TV_STAFF = 55,
-    TV_WAND = 65,
-    TV_ROD = 66,
-    TV_PARCHMENT = 69,
-    TV_SCROLL = 70,
-    TV_POTION = 75,
-    TV_FLASK = 77,
-    TV_FOOD = 80,
-    TV_LIFE_BOOK = 90,
-    TV_SORCERY_BOOK = 91,
-    TV_NATURE_BOOK = 92,
-    TV_CHAOS_BOOK = 93,
-    TV_DEATH_BOOK = 94,
-    TV_TRUMP_BOOK = 95,
-    TV_ARCANE_BOOK = 96,
-    TV_CRAFT_BOOK = 97,
-    TV_DEMON_BOOK = 98,
-    TV_CRUSADE_BOOK = 99,
-    TV_MUSIC_BOOK = 105,
-    TV_HISSATSU_BOOK = 106,
-    TV_HEX_BOOK = 107,
-    TV_GOLD = 127, /* Gold can only be picked up by players */
+#include "util/enum-converter.h"
+
+enum class ItemKindType : short {
+    NONE = 0,
+    SKELETON = 1, /* Skeletons ('s'), not specified */
+    BOTTLE = 2, /* Empty bottles ('!') */
+    JUNK = 3, /* Sticks, Pottery, etc ('~') */
+    WHISTLE = 4, /* Whistle ('~') */
+    SPIKE = 5, /* Spikes ('~') */
+    CHEST = 7, /* Chests ('&') */
+    FIGURINE = 8, /* Magical figurines */
+    STATUE = 9, /* Statue, what a silly object... */
+    CORPSE = 10, /* Corpses and Skeletons, specific */
+    CAPTURE = 11, /* Monster ball */
+    NO_AMMO = 15, /* Ammo for crimson */
+    SHOT = 16, /* Ammo for slings */
+    ARROW = 17, /* Ammo for bows */
+    BOLT = 18, /* Ammo for x-bows */
+    BOW = 19, /* Slings/Bows/Xbows */
+    DIGGING = 20, /* Shovels/Picks */
+    HAFTED = 21, /* Priest Weapons */
+    POLEARM = 22, /* Axes and Pikes */
+    SWORD = 23, /* Edged Weapons */
+    BOOTS = 30, /* Boots */
+    GLOVES = 31, /* Gloves */
+    HELM = 32, /* Helms */
+    CROWN = 33, /* Crowns */
+    SHIELD = 34, /* Shields */
+    CLOAK = 35, /* Cloaks */
+    SOFT_ARMOR = 36, /* Soft Armor */
+    HARD_ARMOR = 37, /* Hard Armor */
+    DRAG_ARMOR = 38, /* Dragon Scale Mail */
+    LITE = 39, /* Lites (including Specials) */
+    AMULET = 40, /* Amulets (including Specials) */
+    RING = 45, /* Rings (including Specials) */
+    CARD = 50,
+    STAFF = 55,
+    WAND = 65,
+    ROD = 66,
+    PARCHMENT = 69,
+    SCROLL = 70,
+    POTION = 75,
+    FLASK = 77,
+    FOOD = 80,
+    LIFE_BOOK = 90,
+    SORCERY_BOOK = 91,
+    NATURE_BOOK = 92,
+    CHAOS_BOOK = 93,
+    DEATH_BOOK = 94,
+    TRUMP_BOOK = 95,
+    ARCANE_BOOK = 96,
+    CRAFT_BOOK = 97,
+    DEMON_BOOK = 98,
+    CRUSADE_BOOK = 99,
+    MUSIC_BOOK = 105,
+    HISSATSU_BOOK = 106,
+    HEX_BOOK = 107,
+    GOLD = 127, /* Gold can only be picked up by players */
 };
 
-#define TV_EQUIP_BEGIN TV_SHOT
-#define TV_EQUIP_END TV_CARD
-#define TV_MISSILE_BEGIN TV_SHOT
-#define TV_MISSILE_END TV_BOLT
-#define TV_WEARABLE_BEGIN TV_BOW
-#define TV_WEARABLE_END TV_CARD
-#define TV_WEAPON_BEGIN TV_BOW
-#define TV_WEAPON_END TV_SWORD
-#define TV_ARMOR_BEGIN TV_BOOTS
-#define TV_ARMOR_END TV_DRAG_ARMOR
+#define TV_EQUIP_BEGIN ItemKindType::SHOT
+#define TV_EQUIP_END ItemKindType::CARD
+#define TV_MISSILE_BEGIN ItemKindType::SHOT
+#define TV_MISSILE_END ItemKindType::BOLT
+#define TV_WEARABLE_BEGIN ItemKindType::BOW
+#define TV_WEARABLE_END ItemKindType::CARD
+#define TV_WEAPON_BEGIN ItemKindType::BOW
+#define TV_WEAPON_END ItemKindType::SWORD
+#define TV_ARMOR_BEGIN ItemKindType::BOOTS
+#define TV_ARMOR_END ItemKindType::DRAG_ARMOR

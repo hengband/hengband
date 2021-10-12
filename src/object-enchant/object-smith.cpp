@@ -168,7 +168,7 @@ int Smith::get_essence_consumption(SmithEffect effect, const object_type *o_ptr)
         return consumption;
     }
 
-    if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_BOLT)) {
+    if ((o_ptr->tval >= ItemKindType::SHOT) && (o_ptr->tval <= ItemKindType::BOLT)) {
         consumption = (consumption + 9) / 10;
     }
 
@@ -187,7 +187,7 @@ std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffect effect)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
-        return std::make_unique<TvalItemTester>(TV_NONE);
+        return std::make_unique<TvalItemTester>(ItemKindType::NONE);
     }
 
     auto tester_func = [i = info.value()](const object_type *o_ptr) {
@@ -349,7 +349,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
     o_ptr->number = old_o.number;
     o_ptr->discount = old_o.discount;
 
-    if (o_ptr->tval == TV_DRAG_ARMOR)
+    if (o_ptr->tval == ItemKindType::DRAG_ARMOR)
         o_ptr->timeout = old_o.timeout;
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     object_aware(player_ptr, o_ptr);

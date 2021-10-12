@@ -464,7 +464,7 @@ bool restore_mana(player_type *player_ptr, bool magic_eater)
         // 取り込み数が10回未満: 3 回分回復
         // 取り込み数が10回以上: 取り込み回数/3 回分回復
         auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
-        for (auto tval : { TV_STAFF, TV_WAND }) {
+        for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND }) {
             for (auto &item : magic_eater_data->get_item_group(tval)) {
                 item.charge += (item.count < 10) ? EATER_CHARGE * 3 : item.count * EATER_CHARGE / 3;
                 item.charge = std::min(item.charge, item.count * EATER_CHARGE);
@@ -472,8 +472,8 @@ bool restore_mana(player_type *player_ptr, bool magic_eater)
         }
 
         auto sval = 0;
-        for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
-            KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, sval);
+        for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
+            KIND_OBJECT_IDX k_idx = lookup_kind(ItemKindType::ROD, sval);
             item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * k_info[k_idx].pval;
             item.charge = std::max(item.charge, 0);
             ++sval;

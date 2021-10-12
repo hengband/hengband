@@ -278,7 +278,7 @@ void do_cmd_zap_rod(player_type *player_ptr)
     auto q = _("どのロッドを振りますか? ", "Zap which rod? ");
     auto s = _("使えるロッドがない。", "You have no rod to zap.");
     OBJECT_IDX item;
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_ROD))) {
+    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::ROD))) {
         return;
     }
 

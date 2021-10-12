@@ -313,7 +313,7 @@ static bool get_spike(player_type *player_ptr, INVENTORY_IDX *ip)
         if (!o_ptr->k_idx)
             continue;
 
-        if (o_ptr->tval == TV_SPIKE) {
+        if (o_ptr->tval == ItemKindType::SPIKE) {
             *ip = i;
             return true;
         }

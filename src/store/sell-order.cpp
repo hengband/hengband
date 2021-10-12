@@ -113,7 +113,7 @@ void store_sell(player_type *player_ptr)
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
 
-    if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
+    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND))
         q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 
     GAME_TEXT o_name[MAX_NLEN];
@@ -143,7 +143,7 @@ void store_sell(player_type *player_ptr)
             if (cur_store_num == StoreSaleType::BLACK)
                 chg_virtue(player_ptr, V_JUSTICE, -1);
 
-            if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != StoreSaleType::HOME))
+            if ((o_ptr->tval == ItemKindType::BOTTLE) && (cur_store_num != StoreSaleType::HOME))
                 chg_virtue(player_ptr, V_NATURE, 1);
 
             player_ptr->au += price;
@@ -156,7 +156,7 @@ void store_sell(player_type *player_ptr)
             q_ptr->number = amt;
             q_ptr->ident |= IDENT_STORE;
 
-            if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
+            if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND))
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 
             PRICE value = object_value(q_ptr) * q_ptr->number;
@@ -166,7 +166,7 @@ void store_sell(player_type *player_ptr)
             if (record_sell)
                 exe_write_diary(player_ptr, DIARY_SELL, 0, o_name);
 
-            if (!((o_ptr->tval == TV_FIGURINE) && (value > 0)))
+            if (!((o_ptr->tval == ItemKindType::FIGURINE) && (value > 0)))
                 purchase_analyze(player_ptr, price, value, dummy);
 
             distribute_charges(o_ptr, q_ptr, amt);

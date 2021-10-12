@@ -112,9 +112,9 @@ void do_cmd_wield(player_type *player_ptr)
     const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
 
     switch (o_ptr->tval) {
-    case TV_CAPTURE:
-    case TV_SHIELD:
-    case TV_CARD:
+    case ItemKindType::CAPTURE:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CARD:
         if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
@@ -126,7 +126,7 @@ void do_cmd_wield(player_type *player_ptr)
         } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
             slot = INVEN_MAIN_HAND;
         else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx &&
-                 ((o_ptr->tval == TV_CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
+                 ((o_ptr->tval == ItemKindType::CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_wieldable_in_etheir_hand)))
@@ -134,10 +134,10 @@ void do_cmd_wield(player_type *player_ptr)
         }
 
         break;
-    case TV_DIGGING:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
         if (slot == INVEN_SUB_HAND) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
                 slot = INVEN_MAIN_HAND;
@@ -155,7 +155,7 @@ void do_cmd_wield(player_type *player_ptr)
         }
 
         break;
-    case TV_RING:
+    case ItemKindType::RING:
         if (player_ptr->inventory_list[INVEN_SUB_RING].k_idx && player_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
             q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
         else

@@ -65,7 +65,7 @@ bool recharge(player_type *player_ptr, int power)
     TIME_EFFECT recharge_amount;
     int recharge_strength;
     bool is_recharge_successful = true;
-    if (o_ptr->tval == TV_ROD) {
+    if (o_ptr->tval == ItemKindType::ROD) {
         recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
         if (one_in_(recharge_strength)) {
             is_recharge_successful = false;
@@ -77,7 +77,7 @@ bool recharge(player_type *player_ptr, int power)
                 o_ptr->timeout = 0;
         }
     } else {
-        if ((o_ptr->tval == TV_WAND) && (o_ptr->number > 1))
+        if ((o_ptr->tval == ItemKindType::WAND) && (o_ptr->number > 1))
             recharge_strength = (100 + power - lev - (8 * o_ptr->pval / o_ptr->number)) / 15;
         else
             recharge_strength = (100 + power - lev - (8 * o_ptr->pval)) / 15;
@@ -89,7 +89,7 @@ bool recharge(player_type *player_ptr, int power)
             is_recharge_successful = false;
         } else {
             recharge_amount = randint1(1 + k_ptr->pval / 2);
-            if ((o_ptr->tval == TV_WAND) && (o_ptr->number > 1)) {
+            if ((o_ptr->tval == ItemKindType::WAND) && (o_ptr->number > 1)) {
                 recharge_amount += (randint1(recharge_amount * (o_ptr->number - 1))) / 2;
                 if (recharge_amount < 1)
                     recharge_amount = 1;
@@ -97,7 +97,7 @@ bool recharge(player_type *player_ptr, int power)
                     recharge_amount = 12;
             }
 
-            if ((o_ptr->tval == TV_STAFF) && (o_ptr->number > 1)) {
+            if ((o_ptr->tval == ItemKindType::STAFF) && (o_ptr->number > 1)) {
                 recharge_amount /= (TIME_EFFECT)o_ptr->number;
                 if (recharge_amount < 1)
                     recharge_amount = 1;
@@ -118,9 +118,9 @@ bool recharge(player_type *player_ptr, int power)
     if (o_ptr->is_fixed_artifact()) {
         describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
-        if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout < 10000))
+        if ((o_ptr->tval == ItemKindType::ROD) && (o_ptr->timeout < 10000))
             o_ptr->timeout = (o_ptr->timeout + 100) * 2;
-        else if ((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF))
+        else if ((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::STAFF))
             o_ptr->pval = 0;
         return update_player(player_ptr);
     }
@@ -129,21 +129,21 @@ bool recharge(player_type *player_ptr, int power)
 
     if (PlayerClass(player_ptr).is_wizard()) {
         /* 10% chance to blow up one rod, otherwise draining. */
-        if (o_ptr->tval == TV_ROD) {
+        if (o_ptr->tval == ItemKindType::ROD) {
             if (one_in_(10))
                 fail_type = 2;
             else
                 fail_type = 1;
         }
         /* 75% chance to blow up one wand, otherwise draining. */
-        else if (o_ptr->tval == TV_WAND) {
+        else if (o_ptr->tval == ItemKindType::WAND) {
             if (!one_in_(3))
                 fail_type = 2;
             else
                 fail_type = 1;
         }
         /* 50% chance to blow up one staff, otherwise no effect. */
-        else if (o_ptr->tval == TV_STAFF) {
+        else if (o_ptr->tval == ItemKindType::STAFF) {
             if (one_in_(2))
                 fail_type = 2;
             else
@@ -151,32 +151,32 @@ bool recharge(player_type *player_ptr, int power)
         }
     } else {
         /* 33% chance to blow up one rod, otherwise draining. */
-        if (o_ptr->tval == TV_ROD) {
+        if (o_ptr->tval == ItemKindType::ROD) {
             if (one_in_(3))
                 fail_type = 2;
             else
                 fail_type = 1;
         }
         /* 20% chance of the entire stack, else destroy one wand. */
-        else if (o_ptr->tval == TV_WAND) {
+        else if (o_ptr->tval == ItemKindType::WAND) {
             if (one_in_(5))
                 fail_type = 3;
             else
                 fail_type = 2;
         }
         /* Blow up one staff. */
-        else if (o_ptr->tval == TV_STAFF) {
+        else if (o_ptr->tval == ItemKindType::STAFF) {
             fail_type = 2;
         }
     }
 
     if (fail_type == 1) {
-        if (o_ptr->tval == TV_ROD) {
+        if (o_ptr->tval == ItemKindType::ROD) {
             msg_print(_("魔力が逆噴射して、ロッドからさらに魔力を吸い取ってしまった！", "The recharge backfires, draining the rod further!"));
 
             if (o_ptr->timeout < 10000)
                 o_ptr->timeout = (o_ptr->timeout + 100) * 2;
-        } else if (o_ptr->tval == TV_WAND) {
+        } else if (o_ptr->tval == ItemKindType::WAND) {
             msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), o_name);
             o_ptr->pval = 0;
         }
@@ -188,9 +188,9 @@ bool recharge(player_type *player_ptr, int power)
         else
             msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-        if (o_ptr->tval == TV_ROD)
+        if (o_ptr->tval == ItemKindType::ROD)
             o_ptr->timeout = (o_ptr->number - 1) * k_ptr->pval;
-        if (o_ptr->tval == TV_WAND)
+        if (o_ptr->tval == ItemKindType::WAND)
             o_ptr->pval = 0;
 
         vary_item(player_ptr, item, -1);

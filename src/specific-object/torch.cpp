@@ -27,7 +27,7 @@
  */
 void torch_flags(object_type *o_ptr, TrFlags &flgs)
 {
-    if ((o_ptr->tval != TV_LITE) || (o_ptr->sval != SV_LITE_TORCH) || (o_ptr->xtra4 <= 0))
+    if ((o_ptr->tval != ItemKindType::LITE) || (o_ptr->sval != SV_LITE_TORCH) || (o_ptr->xtra4 <= 0))
         return;
 
     flgs.set(TR_BRAND_FIRE);
@@ -44,7 +44,7 @@ void torch_flags(object_type *o_ptr, TrFlags &flgs)
  */
 void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
 {
-    if ((o_ptr->tval != TV_LITE) || (o_ptr->sval != SV_LITE_TORCH) || (o_ptr->xtra4 <= 0))
+    if ((o_ptr->tval != ItemKindType::LITE) || (o_ptr->sval != SV_LITE_TORCH) || (o_ptr->xtra4 <= 0))
         return;
 
     *dd = 1;
@@ -58,7 +58,7 @@ void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
  */
 void torch_lost_fuel(object_type *o_ptr)
 {
-    if ((o_ptr->tval != TV_LITE) || (o_ptr->sval != SV_LITE_TORCH))
+    if ((o_ptr->tval != ItemKindType::LITE) || (o_ptr->sval != SV_LITE_TORCH))
         return;
 
     o_ptr->xtra4 -= (FUEL_TORCH / 25);
@@ -86,7 +86,7 @@ void update_lite_radius(player_type *player_ptr)
             player_ptr->cur_lite++;
 
         if (flgs.has_not(TR_DARK_SOURCE)) {
-            if (o_ptr->tval == TV_LITE) {
+            if (o_ptr->tval == ItemKindType::LITE) {
                 if ((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->xtra4 > 0))
                     continue;
 

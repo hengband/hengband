@@ -16,6 +16,7 @@
 
 #include <optional>
 
+enum class ItemKindType : short;
 enum class SmithEffect : int16_t;
 enum class RandomArtActType : short;
 
@@ -25,7 +26,7 @@ typedef struct object_type {
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
     IDX stack_idx{}; /*!< このアイテムを含むアイテムリスト内の位置(降順) */
-    tval_type tval{}; /*!< Item type (from kind) */
+    ItemKindType tval{}; /*!< Item type (from kind) */
 
     OBJECT_SUBTYPE_VALUE sval{}; /*!< Item sub-type (from kind) */
     PARAMETER_VALUE pval{}; /*!< Item extra-parameter */

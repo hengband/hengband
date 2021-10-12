@@ -374,7 +374,7 @@ void process_command(player_type *player_ptr)
                 which_power = _("元素魔法", "magic");
                 break;
             default:
-                if (mp_ptr->spell_book == TV_LIFE_BOOK)
+                if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
                     which_power = _("祈り", "prayer");
                 break;
             }

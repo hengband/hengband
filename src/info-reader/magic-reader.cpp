@@ -10,12 +10,12 @@ namespace {
 /*!
  * @brief 魔法タイプ名とtvalの対応表
  */
-const std::unordered_map<std::string_view, tval_type> name_to_tval = {
-    { "SORCERY", TV_SORCERY_BOOK },
-    { "LIFE", TV_LIFE_BOOK },
-    { "MUSIC", TV_MUSIC_BOOK },
-    { "HISSATSU", TV_HISSATSU_BOOK },
-    { "NONE", TV_NONE },
+const std::unordered_map<std::string_view, ItemKindType> name_to_tval = {
+    { "SORCERY", ItemKindType::SORCERY_BOOK },
+    { "LIFE", ItemKindType::LIFE_BOOK },
+    { "MUSIC", ItemKindType::MUSIC_BOOK },
+    { "HISSATSU", ItemKindType::HISSATSU_BOOK },
+    { "NONE", ItemKindType::NONE },
 };
 
 /*!

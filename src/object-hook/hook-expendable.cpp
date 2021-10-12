@@ -24,15 +24,15 @@
  */
 bool item_tester_hook_eatable(player_type *player_ptr, const object_type *o_ptr)
 {
-    if (o_ptr->tval == TV_FOOD)
+    if (o_ptr->tval == ItemKindType::FOOD)
         return true;
 
     auto food_type = PlayerRace(player_ptr).food();
     if (food_type == PlayerRaceFood::MANA) {
-        if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
+        if (o_ptr->tval == ItemKindType::STAFF || o_ptr->tval == ItemKindType::WAND)
             return true;
     } else if (food_type == PlayerRaceFood::CORPSE) {
-        if (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
+        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return true;
     }
 
@@ -47,10 +47,10 @@ bool item_tester_hook_eatable(player_type *player_ptr, const object_type *o_ptr)
  */
 bool item_tester_hook_quaff(player_type *player_ptr, const object_type *o_ptr)
 {
-    if (o_ptr->tval == TV_POTION)
+    if (o_ptr->tval == ItemKindType::POTION)
         return true;
 
-    if (PlayerRace(player_ptr).food() == PlayerRaceFood::OIL && o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
+    if (PlayerRace(player_ptr).food() == PlayerRaceFood::OIL && o_ptr->tval == ItemKindType::FLASK && o_ptr->sval == SV_FLASK_OIL)
         return true;
 
     return false;

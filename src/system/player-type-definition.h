@@ -399,7 +399,7 @@ public:
     int16_t num_fire{}; /* Number of shots */
 
     byte tval_xtra{}; /* (Unused)Correct xtra tval */
-    tval_type tval_ammo{}; /* Correct ammo tval */
+    ItemKindType tval_ammo{}; /* Correct ammo tval */
 
     int16_t pspeed{}; /*!< 現在の速度 / Current speed */
 

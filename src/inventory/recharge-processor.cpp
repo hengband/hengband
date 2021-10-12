@@ -84,7 +84,7 @@ void recharge_magic_items(player_type *player_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout)) {
+        if ((o_ptr->tval == ItemKindType::ROD) && (o_ptr->timeout)) {
             TIME_EFFECT temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
             if (temp > o_ptr->number)
                 temp = (TIME_EFFECT)o_ptr->number;
@@ -112,7 +112,7 @@ void recharge_magic_items(player_type *player_ptr)
         if (!o_ptr->is_valid())
             continue;
 
-        if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout)) {
+        if ((o_ptr->tval == ItemKindType::ROD) && (o_ptr->timeout)) {
             o_ptr->timeout -= (TIME_EFFECT)o_ptr->number;
             if (o_ptr->timeout < 0)
                 o_ptr->timeout = 0;

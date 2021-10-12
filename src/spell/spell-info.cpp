@@ -135,7 +135,7 @@ PERCENTAGE mod_spell_chance_2(player_type *player_ptr, PERCENTAGE chance)
  */
 PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_realm)
 {
-    if (!mp_ptr->spell_book)
+    if (mp_ptr->spell_book == ItemKindType::NONE)
         return 100;
     if (use_realm == REALM_HISSATSU)
         return 0;

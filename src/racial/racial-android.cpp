@@ -108,16 +108,16 @@ void calc_android_exp(player_type *player_ptr)
         value = object_value_real(q_ptr);
         if (value <= 0)
             continue;
-        if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality != PERSONALITY_SEXY))
+        if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality != PERSONALITY_SEXY))
             value /= 32;
         if (value > 5000000L)
             value = 5000000L;
-        if ((o_ptr->tval == TV_DRAG_ARMOR) || (o_ptr->tval == TV_CARD))
+        if ((o_ptr->tval == ItemKindType::DRAG_ARMOR) || (o_ptr->tval == ItemKindType::CARD))
             level /= 2;
 
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || (o_ptr->tval == TV_DRAG_ARMOR) || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
-            || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-            || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))) {
+        if (o_ptr->is_artifact() || o_ptr->is_ego() || (o_ptr->tval == ItemKindType::DRAG_ARMOR) || ((o_ptr->tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM))
+            || ((o_ptr->tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((o_ptr->tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
+            || ((o_ptr->tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))) {
             if (level > 65)
                 level = 35 + (level - 65) / 5;
             else if (level > 35)

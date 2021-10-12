@@ -45,7 +45,7 @@
 #include "view/display-messages.h"
 
 typedef struct {
-    tval_type tval;
+    ItemKindType tval;
     OBJECT_SUBTYPE_VALUE sval;
     PERCENTAGE prob;
     byte flag;
@@ -69,13 +69,13 @@ static int enchant_table[16] = { 0, 10, 50, 100, 200, 300, 400, 500, 650, 800, 9
 #define AMS_PILE 0x08 /* Drop 1-99 pile objects for one type */
 
 static amuse_type amuse_info[]
-    = { { TV_BOTTLE, SV_ANY, 5, AMS_NOTHING }, { TV_JUNK, SV_ANY, 3, AMS_MULTIPLE }, { TV_SPIKE, SV_ANY, 10, AMS_PILE }, { TV_STATUE, SV_ANY, 15, AMS_NOTHING },
-          { TV_CORPSE, SV_ANY, 15, AMS_NO_UNIQUE }, { TV_SKELETON, SV_ANY, 10, AMS_NO_UNIQUE }, { TV_FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
-          { TV_PARCHMENT, SV_ANY, 1, AMS_NOTHING }, { TV_POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, // Fishing Pole of Taikobo
-          { TV_SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, // Broken Dagger of Magician
-          { TV_SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING }, { TV_SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING }, { TV_SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
+    = { { ItemKindType::BOTTLE, SV_ANY, 5, AMS_NOTHING }, { ItemKindType::JUNK, SV_ANY, 3, AMS_MULTIPLE }, { ItemKindType::SPIKE, SV_ANY, 10, AMS_PILE }, { ItemKindType::STATUE, SV_ANY, 15, AMS_NOTHING },
+          { ItemKindType::CORPSE, SV_ANY, 15, AMS_NO_UNIQUE }, { ItemKindType::SKELETON, SV_ANY, 10, AMS_NO_UNIQUE }, { ItemKindType::FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
+          { ItemKindType::PARCHMENT, SV_ANY, 1, AMS_NOTHING }, { ItemKindType::POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, // Fishing Pole of Taikobo
+          { ItemKindType::SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, // Broken Dagger of Magician
+          { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING }, { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING }, { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
 
-          { TV_NONE, 0, 0, 0 } };
+          { ItemKindType::NONE, 0, 0, 0 } };
 
 /*!
  * @brief 誰得ドロップを行う。
@@ -88,7 +88,7 @@ static amuse_type amuse_info[]
 void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
     int t = 0;
-    for (int n = 0; amuse_info[n].tval != 0; n++) {
+    for (int n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
         t += amuse_info[n].prob;
     }
 
@@ -325,7 +325,7 @@ void brand_bolts(player_type *player_ptr)
         object_type *o_ptr = &player_ptr->inventory_list[i];
 
         /* Skip non-bolts */
-        if (o_ptr->tval != TV_BOLT)
+        if (o_ptr->tval != ItemKindType::BOLT)
             continue;
 
         /* Skip artifacts and ego-items */
@@ -402,7 +402,7 @@ bool enchant_equipment(player_type *player_ptr, object_type *o_ptr, int n, int e
     int prob = o_ptr->number * 100;
 
     /* Missiles are easy to enchant */
-    if ((o_ptr->tval == TV_BOLT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_SHOT)) {
+    if ((o_ptr->tval == ItemKindType::BOLT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::SHOT)) {
         prob = prob / 20;
     }
 
@@ -566,8 +566,8 @@ void brand_weapon(player_type *player_ptr, int brand_type)
         return;
 
     bool is_special_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed()
-        && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) && !((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE))
-        && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE));
+        && !((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) && !((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE))
+        && !((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE));
     if (!is_special_item) {
         if (flush_failure)
             flush();
@@ -584,7 +584,7 @@ void brand_weapon(player_type *player_ptr, int brand_type)
     concptr act = nullptr;
     switch (brand_type) {
     case 17:
-        if (o_ptr->tval == TV_SWORD) {
+        if (o_ptr->tval == ItemKindType::SWORD) {
             act = _("は鋭さを増した！", "becomes very sharp!");
 
             o_ptr->name2 = EGO_SHARPNESS;

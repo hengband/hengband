@@ -70,17 +70,17 @@ void rd_item_old(object_type *o_ptr)
 
     /* Type/Subtype */
     rd_byte(&tmp8u);
-    o_ptr->tval = i2enum<tval_type>(tmp8u);
+    o_ptr->tval = i2enum<ItemKindType>(tmp8u);
     rd_byte(&tmp8u);
     o_ptr->sval = tmp8u;
 
     if (h_older_than(0, 4, 4)) {
-        if (o_ptr->tval == 100)
-            o_ptr->tval = TV_GOLD;
-        if (o_ptr->tval == 98)
-            o_ptr->tval = TV_MUSIC_BOOK;
-        if (o_ptr->tval == 110)
-            o_ptr->tval = TV_HISSATSU_BOOK;
+        if (o_ptr->tval == i2enum <ItemKindType>(100))
+            o_ptr->tval = ItemKindType::GOLD;
+        if (o_ptr->tval == i2enum<ItemKindType>(98))
+            o_ptr->tval = ItemKindType::MUSIC_BOOK;
+        if (o_ptr->tval == i2enum<ItemKindType>(110))
+            o_ptr->tval = ItemKindType::HISSATSU_BOOK;
     }
 
     rd_s16b(&o_ptr->pval);
@@ -256,11 +256,11 @@ void rd_item_old(object_type *o_ptr)
         o_ptr->xtra3 = 0;
         o_ptr->xtra4 = 0;
         o_ptr->xtra5 = 0;
-        if ((o_ptr->tval == TV_CHEST) || (o_ptr->tval == TV_CAPTURE)) {
+        if ((o_ptr->tval == ItemKindType::CHEST) || (o_ptr->tval == ItemKindType::CAPTURE)) {
             o_ptr->xtra3 = o_ptr->xtra1;
             o_ptr->xtra1 = 0;
         }
-        if (o_ptr->tval == TV_CAPTURE) {
+        if (o_ptr->tval == ItemKindType::CAPTURE) {
             if (r_info[o_ptr->pval].flags1 & RF1_FORCE_MAXHP)
                 o_ptr->xtra5 = maxroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
             else
@@ -282,7 +282,7 @@ void rd_item_old(object_type *o_ptr)
     }
 
     if (h_older_than(1, 0, 5)
-        && (((o_ptr->tval == TV_LITE) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) || (o_ptr->tval == TV_FLASK))) {
+        && (((o_ptr->tval == ItemKindType::LITE) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) || (o_ptr->tval == ItemKindType::FLASK))) {
         o_ptr->xtra4 = o_ptr->pval;
         o_ptr->pval = 0;
     }
@@ -310,7 +310,7 @@ void rd_item_old(object_type *o_ptr)
         return;
 
     if (h_older_than(0, 4, 10) && (o_ptr->name2 == EGO_TWILIGHT))
-        o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_TWILIGHT_ROBE);
+        o_ptr->k_idx = lookup_kind(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE);
 
     if (h_older_than(0, 4, 9)) {
         if (o_ptr->art_flags.has(TR_MAGIC_MASTERY)) {

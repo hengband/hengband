@@ -86,7 +86,7 @@ static void describe_chest_trap(flavor_type *flavor_ptr)
 
 static void describe_chest(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->o_ptr->tval != TV_CHEST)
+    if (flavor_ptr->o_ptr->tval != ItemKindType::CHEST)
         return;
 
     if (!flavor_ptr->known)
@@ -175,16 +175,16 @@ static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
 static void describe_tval(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     switch (flavor_ptr->o_ptr->tval) {
-    case TV_SHOT:
-    case TV_BOLT:
-    case TV_ARROW:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_DIGGING:
+    case ItemKindType::SHOT:
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::DIGGING:
         describe_weapon_dice(player_ptr, flavor_ptr);
         break;
-    case TV_BOW:
+    case ItemKindType::BOW:
         describe_bow(player_ptr, flavor_ptr);
         break;
 
@@ -341,7 +341,7 @@ static void describe_charges_staff_wand(flavor_type *flavor_ptr)
 {
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    if ((flavor_ptr->o_ptr->tval == TV_STAFF) && (flavor_ptr->o_ptr->number > 1)) {
+    if ((flavor_ptr->o_ptr->tval == ItemKindType::STAFF) && (flavor_ptr->o_ptr->number > 1)) {
         flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "x ");
     }
@@ -430,7 +430,7 @@ static void describe_pval(flavor_type *flavor_ptr)
 
 static void describe_lamp_life(flavor_type *flavor_ptr)
 {
-    if ((flavor_ptr->o_ptr->tval != TV_LITE) || (flavor_ptr->o_ptr->is_fixed_artifact() || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))
+    if ((flavor_ptr->o_ptr->tval != ItemKindType::LITE) || (flavor_ptr->o_ptr->is_fixed_artifact() || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))
         return;
 
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
@@ -451,14 +451,14 @@ static void describe_remaining(flavor_type *flavor_ptr)
     if (!flavor_ptr->known)
         return;
 
-    if (((flavor_ptr->o_ptr->tval == TV_STAFF) || (flavor_ptr->o_ptr->tval == TV_WAND)))
+    if (((flavor_ptr->o_ptr->tval == ItemKindType::STAFF) || (flavor_ptr->o_ptr->tval == ItemKindType::WAND)))
         describe_charges_staff_wand(flavor_ptr);
-    else if (flavor_ptr->o_ptr->tval == TV_ROD)
+    else if (flavor_ptr->o_ptr->tval == ItemKindType::ROD)
         describe_charges_rod(flavor_ptr);
 
     describe_pval(flavor_ptr);
     describe_lamp_life(flavor_ptr);
-    if (flavor_ptr->o_ptr->timeout && (flavor_ptr->o_ptr->tval != TV_ROD))
+    if (flavor_ptr->o_ptr->timeout && (flavor_ptr->o_ptr->tval != ItemKindType::ROD))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
 }
 
@@ -475,8 +475,8 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (((flavor_ptr->o_ptr->tval == TV_RING) || (flavor_ptr->o_ptr->tval == TV_AMULET) || (flavor_ptr->o_ptr->tval == TV_LITE)
-            || (flavor_ptr->o_ptr->tval == TV_FIGURINE))
+    if (((flavor_ptr->o_ptr->tval == ItemKindType::RING) || (flavor_ptr->o_ptr->tval == ItemKindType::AMULET) || (flavor_ptr->o_ptr->tval == ItemKindType::LITE)
+            || (flavor_ptr->o_ptr->tval == ItemKindType::FIGURINE))
         && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE)) {
         strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
         return;
@@ -517,7 +517,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
         if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr)))
             describe_bow_power(player_ptr, flavor_ptr);
-        else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE))
+        else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == ItemKindType::SPIKE))
             describe_spike_power(player_ptr, flavor_ptr);
     }
 

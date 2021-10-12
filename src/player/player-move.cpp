@@ -79,7 +79,7 @@ static void discover_hidden_things(player_type *player_ptr, POSITION y, POSITION
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->tval != TV_CHEST)
+        if (o_ptr->tval != ItemKindType::CHEST)
             continue;
         if (chest_traps[o_ptr->pval].none())
             continue;

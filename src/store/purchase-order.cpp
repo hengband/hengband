@@ -271,7 +271,7 @@ void store_purchase(player_type *player_ptr)
     store_owner_says_comment(player_ptr);
     if (cur_store_num == StoreSaleType::BLACK)
         chg_virtue(player_ptr, V_JUSTICE, -1);
-    if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != StoreSaleType::HOME))
+    if ((o_ptr->tval == ItemKindType::BOTTLE) && (cur_store_num != StoreSaleType::HOME))
         chg_virtue(player_ptr, V_NATURE, -1);
 
     sound(SOUND_BUY);
@@ -305,7 +305,7 @@ void store_purchase(player_type *player_ptr)
     describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
-    if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
+    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND))
         o_ptr->pval -= j_ptr->pval;
 
     i = st_ptr->stock_num;

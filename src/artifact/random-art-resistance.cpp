@@ -18,7 +18,7 @@
  */
 static bool random_art_aura(object_type *o_ptr, tr_type tr_sh_flag)
 {
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || o_ptr->art_flags.has(tr_sh_flag))
+    if ((o_ptr->tval < ItemKindType::CLOAK) || (o_ptr->tval > ItemKindType::HARD_ARMOR) || o_ptr->art_flags.has(tr_sh_flag))
         return false;
 
     o_ptr->art_flags.set(tr_sh_flag);
@@ -165,7 +165,7 @@ static void set_bias_pois(object_type *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_aura_elec(object_type *o_ptr)
 {
-    if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
+    if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR)
         o_ptr->art_flags.set(TR_SH_ELEC);
     else
         random_resistance(o_ptr);
@@ -177,7 +177,7 @@ static void set_weird_bias_aura_elec(object_type *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_aura_fire(object_type *o_ptr)
 {
-    if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
+    if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR)
         o_ptr->art_flags.set(TR_SH_FIRE);
     else
         random_resistance(o_ptr);
@@ -189,7 +189,7 @@ static void set_weird_bias_aura_fire(object_type *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_reflection(object_type *o_ptr)
 {
-    if (o_ptr->tval == TV_SHIELD || o_ptr->tval == TV_CLOAK || o_ptr->tval == TV_HELM || o_ptr->tval == TV_HARD_ARMOR) {
+    if (o_ptr->tval == ItemKindType::SHIELD || o_ptr->tval == ItemKindType::CLOAK || o_ptr->tval == ItemKindType::HELM || o_ptr->tval == ItemKindType::HARD_ARMOR) {
         o_ptr->art_flags.set(TR_REFLECT);
         return;
     }
@@ -200,7 +200,7 @@ static void set_weird_bias_reflection(object_type *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_aura_cold(object_type *o_ptr)
 {
-    if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
+    if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR)
         o_ptr->art_flags.set(TR_SH_COLD);
     else
         random_resistance(o_ptr);

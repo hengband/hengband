@@ -128,7 +128,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
 static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[], BIT_FLAGS8 mode)
 {
     KIND_OBJECT_IDX object_cnt = 0;
-    byte group_tval = object_group_tval[grp_cur];
+    auto group_tval = object_group_tval[grp_cur];
     for (const auto &k_ref : k_info) {
         if (k_ref.name.empty())
             continue;
@@ -146,8 +146,8 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
                 continue;
         }
 
-        if (TV_LIFE_BOOK == group_tval) {
-            if (TV_LIFE_BOOK <= k_ref.tval && k_ref.tval <= TV_HEX_BOOK) {
+        if (group_tval == ItemKindType::LIFE_BOOK) {
+            if (ItemKindType::LIFE_BOOK <= k_ref.tval && k_ref.tval <= ItemKindType::HEX_BOOK) {
                 object_idx[object_cnt++] = k_ref.idx;
             } else
                 continue;
@@ -340,7 +340,12 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
             if (grp_cur >= grp_top + browser_rows)
                 grp_top = grp_cur - browser_rows + 1;
 
-            display_group_list(0, 6, max, browser_rows, grp_idx, object_group_text, grp_cur, grp_top);
+            std::vector<concptr> tmp_texts;
+            for (auto &text : object_group_text) {
+                tmp_texts.push_back(text);
+            }
+
+            display_group_list(0, 6, max, browser_rows, grp_idx, tmp_texts.data(), grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
                 object_cnt = collect_objects(grp_idx[grp_cur], object_idx.data(), mode);

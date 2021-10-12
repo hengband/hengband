@@ -172,7 +172,7 @@ bool affect_item(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION 
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             if (flags.has(TR_RES_CHAOS))
                 ignore = true;
-            else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS))
+            else if ((o_ptr->tval == ItemKindType::SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS))
                 ignore = true;
             break;
         }
@@ -197,7 +197,7 @@ bool affect_item(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION 
         }
         case GF_KILL_TRAP:
         case GF_KILL_DOOR: {
-            if (o_ptr->tval != TV_CHEST)
+            if (o_ptr->tval != ItemKindType::CHEST)
                 break;
             if (o_ptr->pval <= 0)
                 break;
@@ -212,7 +212,7 @@ bool affect_item(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION 
             break;
         }
         case GF_ANIM_DEAD: {
-            if (o_ptr->tval != TV_CORPSE)
+            if (o_ptr->tval != ItemKindType::CORPSE)
                 break;
 
             BIT_FLAGS mode = 0L;

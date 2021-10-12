@@ -168,7 +168,7 @@ static bool decide_random_art_cursed(const bool a_scroll, object_type *o_ptr)
     if (!a_scroll && one_in_(A_CURSED))
         return true;
 
-    if (((o_ptr->tval == TV_AMULET) || (o_ptr->tval == TV_RING)) && o_ptr->is_cursed())
+    if (((o_ptr->tval == ItemKindType::AMULET) || (o_ptr->tval == ItemKindType::RING)) && o_ptr->is_cursed())
         return true;
 
     return false;
@@ -201,7 +201,7 @@ static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powe
             break;
         case 3:
         case 4:
-            if (one_in_(2) && o_ptr->is_weapon_ammo() && (o_ptr->tval != TV_BOW)) {
+            if (one_in_(2) && o_ptr->is_weapon_ammo() && (o_ptr->tval != ItemKindType::BOW)) {
                 if (a_cursed && !one_in_(13))
                     break;
                 if (one_in_(13)) {
@@ -235,7 +235,7 @@ static void strengthen_pval(object_type *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BLOWS)) {
         o_ptr->pval = randint1(2);
-        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA))
             o_ptr->pval++;
     } else {
         do {
@@ -297,7 +297,7 @@ static void invest_negative_modified_value(object_type *o_ptr)
 
 static void reset_flags_poison_needle(object_type *o_ptr)
 {
-    if ((o_ptr->tval != TV_SWORD) || (o_ptr->sval != SV_POISON_NEEDLE))
+    if ((o_ptr->tval != ItemKindType::SWORD) || (o_ptr->sval != SV_POISON_NEEDLE))
         return;
 
     o_ptr->to_h = 0;
@@ -430,7 +430,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     }
 
     invest_negative_modified_value(o_ptr);
-    if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == TV_GLOVES))
+    if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == ItemKindType::GLOVES))
         o_ptr->art_flags.set(TR_FREE_ACT);
 
     reset_flags_poison_needle(o_ptr);

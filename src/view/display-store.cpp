@@ -72,7 +72,7 @@ void display_entry(player_type *player_ptr, int pos)
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         o_name[maxwid] = '\0';
-        c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
+        c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, i + 6, cur_col);
         if (show_weights) {
             WEIGHT wgt = o_ptr->weight;
             sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
@@ -89,7 +89,7 @@ void display_entry(player_type *player_ptr, int pos)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
     o_name[maxwid] = '\0';
-    c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
+    c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, i + 6, cur_col);
 
     if (show_weights) {
         int wgt = o_ptr->weight;

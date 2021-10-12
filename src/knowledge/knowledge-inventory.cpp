@@ -63,12 +63,12 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
  * @param tval アイテム主分類番号
  * @return 特殊なアイテムならTRUE
  */
-static bool determine_spcial_item_type(object_type *o_ptr, tval_type tval)
+static bool determine_spcial_item_type(object_type *o_ptr, ItemKindType tval)
 {
-    bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
-        || ((tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
-        || ((tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-        || ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
+    bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == ItemKindType::AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
+        || ((tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
+        || ((tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
+        || ((tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
 
     return is_special_item_type;
 }
@@ -79,7 +79,7 @@ static bool determine_spcial_item_type(object_type *o_ptr, tval_type tval)
  * @param tval アイテム主分類番号
  * @return 必要があるならTRUE
  */
-static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
+static bool check_item_knowledge(object_type *o_ptr, ItemKindType tval)
 {
     if (o_ptr->k_idx == 0)
         return false;
@@ -211,7 +211,7 @@ static void reset_label_number(int *label_number, FILE *fff)
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_wearing_equipment_resistances(player_type *player_ptr, tval_type tval, int *label_number, FILE *fff)
+static void show_wearing_equipment_resistances(player_type *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     char where[32];
     strcpy(where, _("装", "E "));
@@ -232,7 +232,7 @@ static void show_wearing_equipment_resistances(player_type *player_ptr, tval_typ
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_holding_equipment_resistances(player_type *player_ptr, tval_type tval, int *label_number, FILE *fff)
+static void show_holding_equipment_resistances(player_type *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     char where[32];
     strcpy(where, _("持", "I "));
@@ -253,7 +253,7 @@ static void show_holding_equipment_resistances(player_type *player_ptr, tval_typ
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_home_equipment_resistances(player_type *player_ptr, tval_type tval, int *label_number, FILE *fff)
+static void show_home_equipment_resistances(player_type *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     store_type *store_ptr;
     store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
@@ -282,11 +282,11 @@ void do_cmd_knowledge_inventory(player_type *player_ptr)
 
     fprintf(fff, "%s\n", inven_res_label);
     int label_number = 0;
-    for (int tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++) {
+    for (auto tval = enum2i(TV_WEARABLE_BEGIN); tval <= enum2i(TV_WEARABLE_END); tval++) {
         reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(player_ptr, i2enum<tval_type>(tval), &label_number, fff);
-        show_holding_equipment_resistances(player_ptr, i2enum<tval_type>(tval), &label_number, fff);
-        show_home_equipment_resistances(player_ptr, i2enum<tval_type>(tval), &label_number, fff);
+        show_wearing_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
+        show_holding_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
+        show_home_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
     }
 
     angband_fclose(fff);

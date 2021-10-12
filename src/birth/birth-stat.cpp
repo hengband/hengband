@@ -127,8 +127,9 @@ void get_extra(player_type *player_ptr, bool roll_hitdie)
         for (int j = 0; j < 64; j++)
             player_ptr->weapon_exp[i][j] = s_info[player_ptr->pclass].w_start[i][j];
 
-    if ((player_ptr->ppersonality == PERSONALITY_SEXY) && (player_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER)) {
-        player_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
+    auto sexy_tval = enum2i(ItemKindType::HAFTED) - enum2i(TV_WEAPON_BEGIN);
+    if ((player_ptr->ppersonality == PERSONALITY_SEXY) && (player_ptr->weapon_exp[sexy_tval][SV_WHIP] < WEAPON_EXP_BEGINNER)) {
+        player_ptr->weapon_exp[sexy_tval][SV_WHIP] = WEAPON_EXP_BEGINNER;
     }
 
     for (int i = 0; i < MAX_SKILLS; i++)

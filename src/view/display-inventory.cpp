@@ -56,7 +56,7 @@ COMMAND_CODE show_inventory(player_type *player_ptr, int target_item, BIT_FLAGS 
 
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
-        out_color[k] = tval_to_attr[o_ptr->tval % 128];
+        out_color[k] = tval_to_attr[enum2i(o_ptr->tval) % 128];
         if (o_ptr->timeout)
             out_color[k] = TERM_L_DARK;
 
@@ -163,7 +163,7 @@ void display_inventory(player_type *player_ptr, const ItemTester& item_tester)
         term_putstr(0, i, cur_col, TERM_WHITE, tmp_val);
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         n = strlen(o_name);
-        attr = tval_to_attr[o_ptr->tval % 128];
+        attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
         if (o_ptr->timeout) {
             attr = TERM_L_DARK;
         }

@@ -28,7 +28,7 @@ bool import_magic_device(player_type *player_ptr)
     if (!o_ptr)
         return false;
 
-    if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING) {
+    if (o_ptr->tval == ItemKindType::STAFF && o_ptr->sval == SV_STAFF_NOTHING) {
         msg_print(_("この杖には発動の為の能力は何も備わっていないようだ。", "This staff doesn't have any magical ability."));
         return false;
     }
@@ -48,12 +48,12 @@ bool import_magic_device(player_type *player_ptr)
 
     PARAMETER_VALUE pval = o_ptr->pval;
 
-    if (o_ptr->tval == TV_ROD) {
+    if (o_ptr->tval == ItemKindType::ROD) {
         target_item.count = std::min<byte>(target_item.count + o_ptr->number, 99);
     } else {
         for (auto num = o_ptr->number; num > 0; num--) {
             int gain_num = pval;
-            if (o_ptr->tval == TV_WAND)
+            if (o_ptr->tval == ItemKindType::WAND)
                 gain_num = (pval + num - 1) / num;
             if (target_item.count > 0) {
                 gain_num *= 256;
@@ -64,7 +64,7 @@ bool import_magic_device(player_type *player_ptr)
             target_item.count = std::min<byte>(target_item.count + gain_num, 99);
             target_item.charge += pval * EATER_CHARGE;
             target_item.charge = std::min(target_item.charge, target_item.count * EATER_CHARGE);
-            if (o_ptr->tval == TV_WAND)
+            if (o_ptr->tval == ItemKindType::WAND)
                 pval -= (pval + num - 1) / num;
         }
     }

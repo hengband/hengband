@@ -42,16 +42,16 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
         return true;
 
     if (player_ptr->prace == PlayerRaceType::BALROG) {
-        if (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
+        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return false;
     } else if (player_ptr->pclass == CLASS_ARCHER) {
-        if (o_ptr->tval == TV_SKELETON || (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
+        if (o_ptr->tval == ItemKindType::SKELETON || (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_SKELETON))
             return false;
     } else if (player_ptr->pclass == CLASS_NINJA) {
-        if (o_ptr->tval == TV_LITE && o_ptr->name2 == EGO_LITE_DARKNESS && o_ptr->is_known())
+        if (o_ptr->tval == ItemKindType::LITE && o_ptr->name2 == EGO_LITE_DARKNESS && o_ptr->is_known())
             return false;
     } else if (player_ptr->pclass == CLASS_BEASTMASTER || player_ptr->pclass == CLASS_CAVALRY) {
-        if (o_ptr->tval == TV_WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())
+        if (o_ptr->tval == ItemKindType::WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())
             return false;
     }
 
@@ -75,7 +75,7 @@ static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
             return false;
 
     if (leave_chest)
-        if ((o_ptr->tval == TV_CHEST) && o_ptr->pval)
+        if ((o_ptr->tval == ItemKindType::CHEST) && o_ptr->pval)
             return false;
 
     if (leave_wanted)
@@ -83,17 +83,17 @@ static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
             return false;
 
     if (leave_corpse)
-        if (o_ptr->tval == TV_CORPSE)
+        if (o_ptr->tval == ItemKindType::CORPSE)
             return false;
 
     if (leave_junk)
-        if ((o_ptr->tval == TV_SKELETON) || (o_ptr->tval == TV_BOTTLE) || (o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_STATUE))
+        if ((o_ptr->tval == ItemKindType::SKELETON) || (o_ptr->tval == ItemKindType::BOTTLE) || (o_ptr->tval == ItemKindType::JUNK) || (o_ptr->tval == ItemKindType::STATUE))
             return false;
 
     if (!is_leave_special_item(player_ptr, o_ptr))
         return false;
 
-    if (o_ptr->tval == TV_GOLD)
+    if (o_ptr->tval == ItemKindType::GOLD)
         return false;
 
     return true;

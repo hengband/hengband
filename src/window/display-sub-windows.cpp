@@ -265,7 +265,7 @@ static void display_equipment(player_type *player_ptr, const ItemTester& item_te
             attr = TERM_WHITE;
         } else {
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            attr = tval_to_attr[o_ptr->tval % 128];
+            attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
         }
 
         int n = strlen(o_name);
@@ -585,7 +585,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         object_type *const o_ptr = &floor_ptr->o_list[o_idx];
 
         // 未発見アイテムおよび金は対象外。
-        if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == TV_GOLD) {
+        if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == ItemKindType::GOLD) {
             continue;
         }
 
@@ -601,7 +601,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
             describe_flavor(player_ptr, line, o_ptr, 0);
-            TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
+            TERM_COLOR attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
             term_addstr(-1, attr, line);
         }
 

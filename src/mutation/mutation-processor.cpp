@@ -267,7 +267,7 @@ void process_world_aux_mutation(player_type *player_ptr)
 
         o_ptr = &player_ptr->inventory_list[INVEN_LITE];
 
-        if (o_ptr->tval == TV_LITE) {
+        if (o_ptr->tval == ItemKindType::LITE) {
             if (!o_ptr->is_fixed_artifact() && (o_ptr->xtra4 > 0)) {
                 hp_player(player_ptr, o_ptr->xtra4 / 20);
                 o_ptr->xtra4 /= 2;

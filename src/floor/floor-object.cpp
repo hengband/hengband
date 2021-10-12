@@ -100,10 +100,10 @@ static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, std::optional<i
 
 static void set_ammo_quantity(object_type *j_ptr)
 {
-    auto is_ammo = j_ptr->tval == TV_SPIKE;
-    is_ammo |= j_ptr->tval == TV_SHOT;
-    is_ammo |= j_ptr->tval == TV_ARROW;
-    is_ammo |= j_ptr->tval == TV_BOLT;
+    auto is_ammo = j_ptr->tval == ItemKindType::SPIKE;
+    is_ammo |= j_ptr->tval == ItemKindType::SHOT;
+    is_ammo |= j_ptr->tval == ItemKindType::ARROW;
+    is_ammo |= j_ptr->tval == ItemKindType::BOLT;
     if (is_ammo && !j_ptr->is_fixed_artifact()) {
         j_ptr->number = damroll(6, 7);
     }
@@ -543,7 +543,7 @@ OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE cha
 void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &floor_ptr->o_list[item];
-    if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND))
+    if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
         return;
     if (!o_ptr->is_known())
         return;

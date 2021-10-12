@@ -19,7 +19,7 @@ struct object_kind {
     std::string text; /*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
     std::string flavor_name; /*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
 
-    tval_type tval{}; /*!< ベースアイテム種別の大項目値 Object type */
+    ItemKindType tval{}; /*!< ベースアイテム種別の大項目値 Object type */
     OBJECT_SUBTYPE_VALUE sval{}; /*!< ベースアイテム種別の小項目値 Object sub type */
 
     PARAMETER_VALUE pval{}; /*!< ベースアイテムのpval（能力修正共通値） Object extra info */
