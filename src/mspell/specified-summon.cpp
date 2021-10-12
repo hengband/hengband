@@ -74,8 +74,10 @@ MONSTER_NUMBER summon_guardian(player_type *player_ptr, POSITION y, POSITION x, 
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 
     if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6)) {
-        simple_monspell_message(player_ptr, m_idx, t_idx, _("地面から水が吹き出した！", "Water blew off from the ground!"),
-            _("地面から水が吹き出した！", "Water blew off from the ground!"), TARGET_TYPE);
+        mspell_cast_msg_simple msg(_("地面から水が吹き出した！", "Water blew off from the ground!"),
+            _("地面から水が吹き出した！", "Water blew off from the ground!"));
+
+        simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
         if (mon_to_player)
             fire_ball_hide(player_ptr, GF_WATER_FLOW, 0, 3, 8);
@@ -274,7 +276,7 @@ MONSTER_NUMBER summon_THUNDERS(player_type *player_ptr, POSITION y, POSITION x, 
     for (auto k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_ANTI_TIGERS, PM_NONE);
     }
-    
+
     return count;
 }
 
@@ -311,7 +313,7 @@ MONSTER_NUMBER summon_PLASMA(player_type *player_ptr, POSITION y, POSITION x, in
     for (auto k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_PLASMA_VORTEX, PM_NONE);
     }
-    
+
     msg_print(_("プーラーズーマーッ！！", "P--la--s--ma--!!"));
     return count;
 }

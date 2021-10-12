@@ -114,9 +114,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(player_type *player_ptr, POS
     int count = 0, k;
     int num = 1 + randint1(3);
     BIT_FLAGS mode = 0L;
+    mspell_cast_msg_blind msg(_("%^sが何か大量に投げた。", "%^s spreads something."),
+        _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."));
 
-    monspell_message(player_ptr, m_idx, t_idx, _("%^sが何か大量に投げた。", "%^s spreads something."),
-        _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), TARGET_TYPE);
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     for (k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_GRENADE, mode);
@@ -139,6 +140,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(player_type *player_ptr, POS
  */
 static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    mspell_cast_msg_simple msg;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
@@ -151,8 +153,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *player_ptr, POSITION 
 
     disturb(player_ptr, true, true);
     if (one_in_(3) || !direct) {
-        simple_monspell_message(player_ptr, m_idx, t_idx, _("%^sは突然視界から消えた!", "You lose sight of %s!"),
-            _("%^sは突然急上昇して視界から消えた!", "You lose sight of %s!"), TARGET_TYPE);
+        msg.to_player = _("%^sは突然視界から消えた!", "You lose sight of %s!");
+        msg.to_mons = _("%^sは突然急上昇して視界から消えた!", "You lose sight of %s!");
+
+        simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
         teleport_away(player_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
         player_ptr->update |= (PU_MONSTERS);
@@ -163,8 +167,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *player_ptr, POSITION 
         sound(SOUND_FALL);
     }
 
-    simple_monspell_message(player_ptr, m_idx, t_idx, _("%^sがあなたを掴んで空中から投げ落とした。", "%^s snatches you, soars into the sky, and drops you."),
-        _("%^sが%sを掴んで空中から投げ落とした。", "%^s snatches %s, soars into the sky, and releases its grip."), TARGET_TYPE);
+    msg.to_player = _("%^sがあなたを掴んで空中から投げ落とした。", "%^s snatches you, soars into the sky, and drops you.");
+    msg.to_mons = _("%^sが%sを掴んで空中から投げ落とした。", "%^s snatches %s, soars into the sky, and releases its grip.");
+
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     bool fear, dead; /* dummy */
     HIT_POINT dam = damroll(4, 8);
@@ -175,13 +181,15 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *player_ptr, POSITION 
         teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
 
     if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && (tr_ptr->flags7 & RF7_CAN_FLY))) {
-        simple_monspell_message(player_ptr, m_idx, t_idx, _("あなたは静かに着地した。", "You float gently down to the ground."),
-            _("%^sは静かに着地した。", "%^s floats gently down to the ground."), TARGET_TYPE);
+        msg.to_player = _("あなたは静かに着地した。", "You float gently down to the ground.");
+        msg.to_mons = _("%^sは静かに着地した。", "%^s floats gently down to the ground.");
     } else {
-        simple_monspell_message(player_ptr, m_idx, t_idx, _("あなたは地面に叩きつけられた。", "You crashed into the ground."),
-            _("%^sは地面に叩きつけられた。", "%^s crashed into the ground."), TARGET_TYPE);
-        dam += damroll(6, 8);
+        msg.to_player = _("あなたは地面に叩きつけられた。", "You crashed into the ground.");
+        msg.to_mons = _("%^sは地面に叩きつけられた。", "%^s crashed into the ground.");
     }
+
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+    dam += damroll(6, 8);
 
     if (monster_to_player || (monster_to_monster && player_ptr->riding == t_idx)) {
         int get_damage = take_hit(player_ptr, DAMAGE_NOESCAPE, dam, m_name);
