@@ -92,7 +92,7 @@ void display_koff(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 
     term_putstr(0, 0, -1, TERM_WHITE, o_name);
     sval = q_ptr->sval;
-    use_realm = tval2realm(enum2i(q_ptr->tval));
+    use_realm = tval2realm(q_ptr->tval);
 
     if (player_ptr->realm1 || player_ptr->realm2) {
         if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2))

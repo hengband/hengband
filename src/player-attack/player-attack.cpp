@@ -139,7 +139,7 @@ static void get_bare_knuckle_exp(player_type *player_ptr, player_attack_type *pa
  */
 static void get_weapon_exp(player_type *player_ptr, player_attack_type *pa_ptr)
 {
-    int tval = enum2i(player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval) - enum2i(TV_WEAPON_BEGIN);
+    int tval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].sval;
     int now_exp = player_ptr->weapon_exp[tval][sval];
     if (now_exp >= s_info[player_ptr->pclass].w_max[tval][sval])

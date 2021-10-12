@@ -2161,7 +2161,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
         object_type *o_ptr = &player_ptr->inventory_list[slot];
         auto flgs = object_flags(o_ptr);
 
-        auto tval = enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN);
+        auto tval = o_ptr->tval - TV_WEAPON_BEGIN;
         OBJECT_SUBTYPE_VALUE sval = o_ptr->sval;
 
         /* Traind bonuses */

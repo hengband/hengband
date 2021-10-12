@@ -420,7 +420,7 @@ void wiz_change_status(player_type *player_ptr)
     if (tmp_s16b > WEAPON_EXP_MASTER)
         tmp_s16b = WEAPON_EXP_MASTER;
 
-    for (auto j = 0; j <= enum2i(TV_WEAPON_END) - enum2i(TV_WEAPON_BEGIN); j++) {
+    for (auto j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++) {
         for (int i = 0; i < 64; i++) {
             player_ptr->weapon_exp[j][i] = tmp_s16b;
             if (player_ptr->weapon_exp[j][i] > s_info[player_ptr->pclass].w_max[j][i])

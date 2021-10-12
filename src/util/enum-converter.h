@@ -33,3 +33,21 @@ constexpr EnumType i2enum(IntegerType integer_val)
 
     return static_cast<EnumType>(integer_val);
 }
+
+template <typename EnumType, std::enable_if_t<std::is_enum_v<EnumType>, std::nullptr_t> = nullptr>
+constexpr EnumType operator+(EnumType enum_val, int val)
+{
+    return static_cast<EnumType>(static_cast<std::underlying_type_t<EnumType>>(enum_val) + val);
+}
+
+template <typename EnumType, std::enable_if_t<std::is_enum_v<EnumType>, std::nullptr_t> = nullptr>
+constexpr EnumType operator-(EnumType enum_val, int val)
+{
+    return operator+(enum_val, -val);
+}
+
+template <typename EnumType, std::enable_if_t<std::is_enum_v<EnumType>, std::nullptr_t> = nullptr>
+constexpr int operator-(EnumType a, EnumType b)
+{
+    return static_cast<int>(a) - static_cast<int>(b);
+}

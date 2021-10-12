@@ -283,9 +283,9 @@ bool check_book_realm(player_type *player_ptr, const ItemKindType book_tval, con
     if (book_tval < ItemKindType::LIFE_BOOK)
         return false;
     if (player_ptr->pclass == CLASS_SORCERER) {
-        return is_magic(tval2realm(enum2i(book_tval)));
+        return is_magic(tval2realm(book_tval));
     } else if (player_ptr->pclass == CLASS_RED_MAGE) {
-        if (is_magic(tval2realm(enum2i(book_tval))))
+        if (is_magic(tval2realm(book_tval)))
             return ((book_tval == ItemKindType::ARCANE_BOOK) || (book_sval < 2));
     }
 

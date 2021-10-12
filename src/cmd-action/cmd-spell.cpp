@@ -655,7 +655,7 @@ void do_cmd_browse(player_type *player_ptr)
     /* Access the item's sval */
     sval = o_ptr->sval;
 
-    use_realm = tval2realm(enum2i(o_ptr->tval));
+    use_realm = tval2realm(o_ptr->tval);
 
     /* Track the object kind */
     object_kind_track(player_ptr, o_ptr->k_idx);
@@ -816,7 +816,7 @@ void do_cmd_study(player_type *player_ptr)
     } else if (o_ptr->tval != get_realm1_book(player_ptr)) {
         if (!get_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? ")))
             return;
-        change_realm2(player_ptr, tval2realm(enum2i(o_ptr->tval)));
+        change_realm2(player_ptr, tval2realm(o_ptr->tval));
         increment = 32;
     }
 
@@ -827,7 +827,7 @@ void do_cmd_study(player_type *player_ptr)
     /* Mage -- Learn a selected spell */
     if (mp_ptr->spell_book != ItemKindType::LIFE_BOOK) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, enum2i(o_ptr->tval) - enum2i(ItemKindType::LIFE_BOOK) + 1) && (spell == -1))
+        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, tval2realm(o_ptr->tval)) && (spell == -1))
             return;
     }
 
@@ -1062,7 +1062,7 @@ bool do_cmd_cast(player_type *player_ptr)
     handle_stuff(player_ptr);
 
     if ((player_ptr->pclass == CLASS_SORCERER) || (player_ptr->pclass == CLASS_RED_MAGE))
-        realm = enum2i(o_ptr->tval) - enum2i(ItemKindType::LIFE_BOOK) + 1;
+        realm = tval2realm(o_ptr->tval);
     else if (increment)
         realm = player_ptr->realm2;
     else
@@ -1087,7 +1087,7 @@ bool do_cmd_cast(player_type *player_ptr)
     }
 #endif
 
-    use_realm = tval2realm(enum2i(o_ptr->tval));
+    use_realm = tval2realm(o_ptr->tval);
     if (use_realm == REALM_HEX) {
         if (SpellHex(player_ptr).is_spelling_specific(spell)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
