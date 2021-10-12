@@ -122,10 +122,10 @@ static bool decide_magic_book_exp(player_type *player_ptr, destroy_type *destroy
 
     bool gain_expr = false;
     if (is_good_realm(player_ptr->realm1)) {
-        if (!is_good_realm(tval2realm(enum2i(destroy_ptr->q_ptr->tval))))
+        if (!is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
             gain_expr = true;
     } else {
-        if (is_good_realm(tval2realm(enum2i(destroy_ptr->q_ptr->tval))))
+        if (is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
             gain_expr = true;
     }
 

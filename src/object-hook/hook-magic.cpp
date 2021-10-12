@@ -69,11 +69,11 @@ bool item_tester_learn_spell(player_type *player_ptr, const object_type *o_ptr)
 
     if ((o_ptr->tval == ItemKindType::MUSIC_BOOK) && (player_ptr->pclass == CLASS_BARD))
         return true;
-    else if (!is_magic(tval2realm(enum2i(o_ptr->tval))))
+    else if (!is_magic(tval2realm(o_ptr->tval)))
         return false;
 
     return (get_realm1_book(player_ptr) == o_ptr->tval) || (get_realm2_book(player_ptr) == o_ptr->tval)
-        || (choices & (0x0001U << (tval2realm(enum2i(o_ptr->tval)) - 1)));
+        || (choices & (0x0001U << (tval2realm(o_ptr->tval) - 1)));
 }
 
 /*!
