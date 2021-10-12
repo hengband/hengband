@@ -33,7 +33,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
         /* Icky to wield? */
-        if (!(s_info[player_ptr->pclass].w_max[enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN)][o_ptr->sval]))
+        if (!(s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval]))
             return false;
         break;
 
@@ -49,13 +49,13 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     }
 
     case CLASS_SORCERER:
-        if (s_info[player_ptr->pclass].w_max[enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN)][o_ptr->sval] < WEAPON_EXP_MASTER)
+        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] < WEAPON_EXP_MASTER)
             return false;
         break;
 
     case CLASS_NINJA:
         /* Icky to wield? */
-        if (s_info[player_ptr->pclass].w_max[enum2i(o_ptr->tval) - enum2i(TV_WEAPON_BEGIN)][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
             return false;
         break;
 

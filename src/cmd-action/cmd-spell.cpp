@@ -827,7 +827,7 @@ void do_cmd_study(player_type *player_ptr)
     /* Mage -- Learn a selected spell */
     if (mp_ptr->spell_book != ItemKindType::LIFE_BOOK) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, enum2i(o_ptr->tval) - enum2i(ItemKindType::LIFE_BOOK) + 1) && (spell == -1))
+        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, o_ptr->tval - ItemKindType::LIFE_BOOK + 1) && (spell == -1))
             return;
     }
 
@@ -1062,7 +1062,7 @@ bool do_cmd_cast(player_type *player_ptr)
     handle_stuff(player_ptr);
 
     if ((player_ptr->pclass == CLASS_SORCERER) || (player_ptr->pclass == CLASS_RED_MAGE))
-        realm = enum2i(o_ptr->tval) - enum2i(ItemKindType::LIFE_BOOK) + 1;
+        realm = o_ptr->tval - ItemKindType::LIFE_BOOK + 1;
     else if (increment)
         realm = player_ptr->realm2;
     else
