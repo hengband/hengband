@@ -64,7 +64,7 @@ bool item_tester_learn_spell(player_type *player_ptr, const object_type *o_ptr)
         }
     }
 
-    if ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (enum2i(o_ptr->tval) > (enum2i(ItemKindType::LIFE_BOOK) + MAX_REALM - 1)))
+    if ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->tval > ItemKindType::HEX_BOOK))
         return false;
 
     if ((o_ptr->tval == ItemKindType::MUSIC_BOOK) && (player_ptr->pclass == CLASS_BARD))
