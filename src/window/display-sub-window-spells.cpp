@@ -36,17 +36,17 @@ static void display_spell_list(player_type *player_ptr)
 
     clear_from(0);
 
-    if (player_ptr->pclass == CLASS_SORCERER)
+    if (player_ptr->pclass == PlayerClassType::SORCERER)
         return;
-    if (player_ptr->pclass == CLASS_RED_MAGE)
+    if (player_ptr->pclass == PlayerClassType::RED_MAGE)
         return;
-    if (player_ptr->pclass == CLASS_SNIPER) {
+    if (player_ptr->pclass == PlayerClassType::SNIPER) {
         display_snipe_list(player_ptr);
         return;
     }
 
-    if ((player_ptr->pclass == CLASS_MINDCRAFTER) || (player_ptr->pclass == CLASS_BERSERKER) || (player_ptr->pclass == CLASS_NINJA)
-        || (player_ptr->pclass == CLASS_MIRROR_MASTER) || (player_ptr->pclass == CLASS_FORCETRAINER) || player_ptr->pclass == CLASS_ELEMENTALIST) {
+    if ((player_ptr->pclass == PlayerClassType::MINDCRAFTER) || (player_ptr->pclass == PlayerClassType::BERSERKER) || (player_ptr->pclass == PlayerClassType::NINJA)
+        || (player_ptr->pclass == PlayerClassType::MIRROR_MASTER) || (player_ptr->pclass == PlayerClassType::FORCETRAINER) || player_ptr->pclass == PlayerClassType::ELEMENTALIST) {
         PERCENTAGE minfail = 0;
         PLAYER_LEVEL plev = player_ptr->lev;
         PERCENTAGE chance = 0;
@@ -64,24 +64,24 @@ static void display_spell_list(player_type *player_ptr)
         put_str(_("Lv   MP 失率 効果", "Lv Mana Fail Info"), y, x + 35);
 
         switch (player_ptr->pclass) {
-        case CLASS_MINDCRAFTER:
+        case PlayerClassType::MINDCRAFTER:
             use_mind = mind_kind_type::MINDCRAFTER;
             break;
-        case CLASS_FORCETRAINER:
+        case PlayerClassType::FORCETRAINER:
             use_mind = mind_kind_type::KI;
             break;
-        case CLASS_BERSERKER:
+        case PlayerClassType::BERSERKER:
             use_mind = mind_kind_type::BERSERKER;
             use_hp = true;
             break;
-        case CLASS_MIRROR_MASTER:
+        case PlayerClassType::MIRROR_MASTER:
             use_mind = mind_kind_type::MIRROR_MASTER;
             break;
-        case CLASS_NINJA:
+        case PlayerClassType::NINJA:
             use_mind = mind_kind_type::NINJUTSU;
             use_hp = true;
             break;
-        case CLASS_ELEMENTALIST:
+        case PlayerClassType::ELEMENTALIST:
             use_mind = mind_kind_type::ELEMENTAL;
             break;
         default:

@@ -104,7 +104,7 @@ static void compensate_death_scythe_reflection_magnification(player_type *player
     if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) && (*magnification < 25))
         *magnification = 25;
 
-    if ((player_ptr->pclass != CLASS_SAMURAI) && (death_scythe_flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
+    if ((player_ptr->pclass != PlayerClassType::SAMURAI) && (death_scythe_flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
         player_ptr->csp -= (1 + (player_ptr->msp / 30));
         player_ptr->redraw |= (PR_MANA);
         *magnification = *magnification * 3 / 2 + 20;

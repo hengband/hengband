@@ -91,23 +91,23 @@ static cm_type *initialize_cm_type(player_type *player_ptr, cm_type *cm_ptr)
 static void switch_mind_kind(player_type *player_ptr, cm_type *cm_ptr)
 {
     switch (player_ptr->pclass) {
-    case CLASS_MINDCRAFTER:
+    case PlayerClassType::MINDCRAFTER:
         cm_ptr->use_mind = mind_kind_type::MINDCRAFTER;
         cm_ptr->mind_explanation = _("精神", "skill");
         break;
-    case CLASS_FORCETRAINER:
+    case PlayerClassType::FORCETRAINER:
         cm_ptr->use_mind = mind_kind_type::KI;
         cm_ptr->mind_explanation = _("気", "skill");
         break;
-    case CLASS_BERSERKER:
+    case PlayerClassType::BERSERKER:
         cm_ptr->use_mind = mind_kind_type::BERSERKER;
         cm_ptr->mind_explanation = _("怒り", "skill");
         break;
-    case CLASS_MIRROR_MASTER:
+    case PlayerClassType::MIRROR_MASTER:
         cm_ptr->use_mind = mind_kind_type::MIRROR_MASTER;
         cm_ptr->mind_explanation = _("鏡魔法", "skill");
         break;
-    case CLASS_NINJA:
+    case PlayerClassType::NINJA:
         cm_ptr->use_mind = mind_kind_type::NINJUTSU;
         cm_ptr->mind_explanation = _("精神", "skill");
         break;
@@ -302,7 +302,7 @@ static bool switch_mind_class(player_type *player_ptr, cm_type *cm_ptr)
 static void mind_turn_passing(player_type *player_ptr, cm_type *cm_ptr)
 {
     PlayerEnergy energy(player_ptr);
-    if (cm_ptr->on_mirror && (player_ptr->pclass == CLASS_MIRROR_MASTER)) {
+    if (cm_ptr->on_mirror && (player_ptr->pclass == PlayerClassType::MIRROR_MASTER)) {
         if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16) {
             energy.set_player_turn_energy(50);
             return;
@@ -403,18 +403,18 @@ void do_cmd_mind(player_type *player_ptr)
 static mind_kind_type decide_use_mind_browse(player_type *player_ptr)
 {
     switch (player_ptr->pclass) {
-    case CLASS_MINDCRAFTER:
+    case PlayerClassType::MINDCRAFTER:
         return mind_kind_type::MINDCRAFTER;
-    case CLASS_FORCETRAINER:
+    case PlayerClassType::FORCETRAINER:
         return mind_kind_type::KI;
-    case CLASS_BERSERKER:
+    case PlayerClassType::BERSERKER:
         return mind_kind_type::BERSERKER;
-    case CLASS_NINJA:
+    case PlayerClassType::NINJA:
         return mind_kind_type::NINJUTSU;
-    case CLASS_MIRROR_MASTER:
+    case PlayerClassType::MIRROR_MASTER:
         return mind_kind_type::MIRROR_MASTER;
     default:
-        return (mind_kind_type)0; // 実質CLASS_MINDCRAFTERと同じ.
+        return (mind_kind_type)0; // 実質PlayerClassType::MINDCRAFTERと同じ.
     }
 }
 

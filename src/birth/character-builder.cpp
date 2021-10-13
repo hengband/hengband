@@ -28,8 +28,10 @@
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/patron.h"
+#include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
+#include "realm/realm-names-table.h"
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
@@ -58,7 +60,7 @@ static void write_birth_diary(player_type *player_ptr)
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     sprintf(buf, _("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[player_ptr->pclass].title);
+    sprintf(buf, _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[enum2i(player_ptr->pclass)].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     if (player_ptr->realm1) {
         sprintf(buf, _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1],
@@ -71,7 +73,7 @@ static void write_birth_diary(player_type *player_ptr)
     }
     sprintf(buf, _("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
-    if (player_ptr->pclass == CLASS_CHAOS_WARRIOR) {
+    if (player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) {
         sprintf(buf, _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s."), indent, patron_list[player_ptr->chaos_patron].name.c_str());
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     }

@@ -148,11 +148,11 @@ void player_outfit(player_type *player_ptr)
     decide_initial_items(player_ptr, q_ptr);
     q_ptr = &forge;
 
-    if ((player_ptr->prace == PlayerRaceType::VAMPIRE) && (player_ptr->pclass != CLASS_NINJA)) {
+    if ((player_ptr->prace == PlayerRaceType::VAMPIRE) && (player_ptr->pclass != PlayerClassType::NINJA)) {
         q_ptr->prep(lookup_kind(ItemKindType::SCROLL, SV_SCROLL_DARKNESS));
         q_ptr->number = (ITEM_NUMBER)rand_range(2, 5);
         add_outfit(player_ptr, q_ptr);
-    } else if (player_ptr->pclass != CLASS_NINJA) {
+    } else if (player_ptr->pclass != PlayerClassType::NINJA) {
         q_ptr->prep(lookup_kind(ItemKindType::LITE, SV_LITE_TORCH));
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
         q_ptr->xtra4 = rand_range(3, 7) * 500;
@@ -167,31 +167,31 @@ void player_outfit(player_type *player_ptr)
         add_outfit(player_ptr, q_ptr);
     }
 
-    if ((player_ptr->pclass == CLASS_RANGER) || (player_ptr->pclass == CLASS_CAVALRY)) {
+    if ((player_ptr->pclass == PlayerClassType::RANGER) || (player_ptr->pclass == PlayerClassType::CAVALRY)) {
         q_ptr->prep(lookup_kind(ItemKindType::ARROW, SV_AMMO_NORMAL));
         q_ptr->number = (byte)rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
     }
 
-    if (player_ptr->pclass == CLASS_RANGER) {
+    if (player_ptr->pclass == PlayerClassType::RANGER) {
         q_ptr->prep(lookup_kind(ItemKindType::BOW, SV_SHORT_BOW));
         add_outfit(player_ptr, q_ptr);
-    } else if (player_ptr->pclass == CLASS_ARCHER) {
+    } else if (player_ptr->pclass == PlayerClassType::ARCHER) {
         q_ptr->prep(lookup_kind(ItemKindType::ARROW, SV_AMMO_NORMAL));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
-    } else if (player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_ELEMENTALIST) {
+    } else if (player_ptr->pclass == PlayerClassType::HIGH_MAGE || player_ptr->pclass == PlayerClassType::ELEMENTALIST) {
         q_ptr->prep(lookup_kind(ItemKindType::WAND, SV_WAND_MAGIC_MISSILE));
         q_ptr->number = 1;
         q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);
         add_outfit(player_ptr, q_ptr);
-    } else if (player_ptr->pclass == CLASS_SORCERER) {
+    } else if (player_ptr->pclass == PlayerClassType::SORCERER) {
         for (auto book_tval = enum2i(ItemKindType::LIFE_BOOK); book_tval <= enum2i(ItemKindType::LIFE_BOOK) + MAX_MAGIC - 1; book_tval++) {
             q_ptr->prep(lookup_kind(i2enum<ItemKindType>(book_tval), 0));
             q_ptr->number = 1;
             add_outfit(player_ptr, q_ptr);
         }
-    } else if (player_ptr->pclass == CLASS_TOURIST) {
+    } else if (player_ptr->pclass == PlayerClassType::TOURIST) {
         if (player_ptr->ppersonality != PERSONALITY_SEXY) {
             q_ptr->prep(lookup_kind(ItemKindType::SHOT, SV_AMMO_LIGHT));
             q_ptr->number = rand_range(15, 20);
@@ -222,26 +222,29 @@ void player_outfit(player_type *player_ptr)
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(player_ptr, q_ptr);
-    } else if (player_ptr->pclass == CLASS_NINJA) {
+    } else if (player_ptr->pclass == PlayerClassType::NINJA) {
         q_ptr->prep(lookup_kind(ItemKindType::SPIKE, 0));
         q_ptr->number = rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
-    } else if (player_ptr->pclass == CLASS_SNIPER) {
+    } else if (player_ptr->pclass == PlayerClassType::SNIPER) {
         q_ptr->prep(lookup_kind(ItemKindType::BOLT, SV_AMMO_NORMAL));
         q_ptr->number = rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
     }
 
-    if (player_ptr->pclass != CLASS_SORCERER) {
+    // @todo 本来read-onlyであるべきプリセットテーブルを書き換えている. 良くないパターン.
+    // 「状況によって特別に持たせたいアイテム」は別途定義すべき.
+    if (player_ptr->pclass != PlayerClassType::SORCERER) {
+        auto short_pclass = enum2i(player_ptr->pclass);
         if (player_ptr->ppersonality == PERSONALITY_SEXY) {
-            player_init[player_ptr->pclass][2] = std::make_tuple(ItemKindType::HAFTED, SV_WHIP);            
+            player_init[short_pclass][2] = std::make_tuple(ItemKindType::HAFTED, SV_WHIP);            
         } else if (player_ptr->prace == PlayerRaceType::MERFOLK) {
-            player_init[player_ptr->pclass][2] = std::make_tuple(ItemKindType::POLEARM, SV_TRIDENT);
+            player_init[short_pclass][2] = std::make_tuple(ItemKindType::POLEARM, SV_TRIDENT);
         }
     }
 
     for (auto i = 0; i < 3; i++) {
-        auto &[tv, sv] = player_init[player_ptr->pclass][i];
+        auto &[tv, sv] = player_init[enum2i(player_ptr->pclass)][i];
         if ((player_ptr->prace == PlayerRaceType::ANDROID) && ((tv == ItemKindType::SOFT_ARMOR) || (tv == ItemKindType::HARD_ARMOR)))
             continue;
 
@@ -258,10 +261,12 @@ void player_outfit(player_type *player_ptr)
 
         q_ptr = &forge;
         q_ptr->prep(lookup_kind(tv, sv));
-        if ((tv == ItemKindType::SWORD || tv == ItemKindType::HAFTED)
-            && (player_ptr->pclass == CLASS_ROGUE && player_ptr->realm1 == REALM_DEATH)) /* Only assassins get a poisoned weapon */
-            q_ptr->name2 = EGO_BRAND_POIS;
 
+        /* Only assassins get a poisoned weapon */
+        if (((tv == ItemKindType::SWORD) || (tv == ItemKindType::HAFTED)) && ((player_ptr->pclass == PlayerClassType::ROGUE) && (player_ptr->realm1 == REALM_DEATH))) {
+            q_ptr->name2 = EGO_BRAND_POIS;
+        }
+        
         add_outfit(player_ptr, q_ptr);
     }
 

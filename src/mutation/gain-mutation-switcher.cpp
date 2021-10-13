@@ -5,7 +5,7 @@
 
 void switch_gain_mutation(player_type *player_ptr, glm_type *glm_ptr)
 {
-    switch (glm_ptr->choose_mut ? glm_ptr->choose_mut : (player_ptr->pclass == CLASS_BERSERKER ? 74 + randint1(119) : randint1(193))) {
+    switch (glm_ptr->choose_mut ? glm_ptr->choose_mut : (player_ptr->pclass == PlayerClassType::BERSERKER ? 74 + randint1(119) : randint1(193))) {
     case 1:
     case 2:
     case 3:
@@ -288,7 +288,7 @@ void switch_gain_mutation(player_type *player_ptr, glm_type *glm_ptr)
         break;
     case 110:
     case 111:
-        if (player_ptr->pclass == CLASS_CHAOS_WARRIOR)
+        if (player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR)
             break;
 
         glm_ptr->muta_which = MUTA::CHAOS_GIFT;

@@ -96,7 +96,7 @@ void player_wipe_without_name(player_type *player_ptr)
     }
 
     player_ptr->food = PY_FOOD_FULL - 1;
-    if (player_ptr->pclass == CLASS_SORCERER) {
+    if (player_ptr->pclass == PlayerClassType::SORCERER) {
         player_ptr->spell_learned1 = player_ptr->spell_learned2 = 0xffffffffL;
         player_ptr->spell_worked1 = player_ptr->spell_worked2 = 0xffffffffL;
     } else {

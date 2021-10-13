@@ -45,10 +45,10 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
         return false;
 
     switch (player_ptr->pclass) {
-    case CLASS_WARRIOR:
-    case CLASS_ARCHER:
-    case CLASS_CAVALRY:
-    case CLASS_BERSERKER:
+    case PlayerClassType::WARRIOR:
+    case PlayerClassType::ARCHER:
+    case PlayerClassType::CAVALRY:
+    case PlayerClassType::BERSERKER:
         return true;
     default:
         o_ptr->art_flags.set(TR_AGGRAVATE);
@@ -92,17 +92,17 @@ static void invest_special_artifact_abilities(player_type *player_ptr, object_ty
 {
     switch (o_ptr->name1) {
     case ART_MURAMASA:
-        if (player_ptr->pclass != CLASS_SAMURAI) {
+        if (player_ptr->pclass != PlayerClassType::SAMURAI) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
             o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
-        if (player_ptr->pclass == CLASS_BARD)
+        if (player_ptr->pclass == PlayerClassType::BARD)
             o_ptr->art_flags.set(TR_DEC_MANA);
         return;
     case ART_XIAOLONG:
-        if (player_ptr->pclass == CLASS_MONK)
+        if (player_ptr->pclass == PlayerClassType::MONK)
             o_ptr->art_flags.set(TR_BLOWS);
         return;
     case ART_BLOOD:

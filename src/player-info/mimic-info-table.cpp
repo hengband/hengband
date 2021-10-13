@@ -99,7 +99,7 @@ const player_race_info mimic_info[MAX_MIMIC_FORMS] =
 			{ TR_RES_NETHER },
 			{ TR_SEE_INVIS },
 			{ TR_HOLD_EXP },
-			{ TR_LITE_1, 1, CLASS_NINJA, true },
+			{ TR_LITE_1, 1, PlayerClassType::NINJA, true },
 			{ TR_SPEED },
 		},
 	},

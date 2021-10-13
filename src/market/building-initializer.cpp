@@ -88,11 +88,11 @@ errr init_buildings(void)
             building[i].action_restr[j] = 0;
         }
 
-        for (int j = 0; j < MAX_CLASS; j++)
-            building[i].member_class[j] = CLASS_WARRIOR;
+        for (int j = 0; j < PLAYER_CLASS_TYPE_MAX; j++)
+            building[i].member_class[j] = static_cast<short>(PlayerClassType::WARRIOR);
 
         for (int j = 0; j < MAX_RACES; j++)
-            building[i].member_race[j] = PlayerRaceType::HUMAN;
+            building[i].member_race[j] = static_cast<short>(PlayerRaceType::HUMAN);
 
         for (int j = 0; j < MAX_MAGIC + 1; j++)
             building[i].member_realm[j] = 0;

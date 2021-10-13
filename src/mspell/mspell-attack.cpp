@@ -260,7 +260,7 @@ static void check_mspell_imitation(player_type *player_ptr, msa_type *msa_ptr)
 {
     bool seen = (!player_ptr->blind && msa_ptr->m_ptr->ml);
     bool can_imitate = player_has_los_bold(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
-    if (!seen || !can_imitate || (w_ptr->timewalk_m_idx != 0) || (player_ptr->pclass != CLASS_IMITATOR))
+    if (!seen || !can_imitate || (w_ptr->timewalk_m_idx != 0) || (player_ptr->pclass != PlayerClassType::IMITATOR))
         return;
 
     /* Not RF_ABILITY::SPECIAL */

@@ -211,7 +211,7 @@ errr top_twenty(player_type *current_player_ptr)
     sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
     snprintf(buf, sizeof(buf), "%2d", MIN(enum2i(current_player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
+    snprintf(buf, sizeof(buf), "%2d", enum2i(MIN(current_player_ptr->pclass, PlayerClassType::MAX)));
     memcpy(the_score.p_c, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);
@@ -314,7 +314,7 @@ errr predict_score(player_type *current_player_ptr)
     sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
     snprintf(buf, sizeof(buf), "%2d", MIN(enum2i(current_player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
+    snprintf(buf, sizeof(buf), "%2d", enum2i(MIN(current_player_ptr->pclass, PlayerClassType::MAX)));
     memcpy(the_score.p_c, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);

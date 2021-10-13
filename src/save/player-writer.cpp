@@ -21,7 +21,7 @@
  */
 static void wr_relams(player_type *player_ptr)
 {
-    if (player_ptr->pclass == CLASS_ELEMENTALIST)
+    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
         wr_byte((byte)player_ptr->element);
     else
         wr_byte((byte)player_ptr->realm1);

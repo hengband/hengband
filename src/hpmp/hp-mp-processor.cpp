@@ -304,7 +304,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
 
     regenmana(player_ptr, upkeep_factor, regen_amount);
-    if (player_ptr->pclass == CLASS_MAGIC_EATER) {
+    if (player_ptr->pclass == PlayerClassType::MAGIC_EATER) {
         regenmagic(player_ptr, regen_amount);
     }
 

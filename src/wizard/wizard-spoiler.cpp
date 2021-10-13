@@ -195,7 +195,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
     player_type dummy_p;
     dummy_p.lev = 1;
 
-    for (int c = 0; c < MAX_CLASS; c++) {
+    for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         auto class_ptr = &class_info[c];
         sprintf(buf, "[[Class: %s]]\n", class_ptr->title);
         spoil_out(buf);

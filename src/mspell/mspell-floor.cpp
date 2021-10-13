@@ -382,7 +382,7 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSIT
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
-    if ((player_ptr->pclass == CLASS_NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
+    if ((player_ptr->pclass == PlayerClassType::NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
         can_use_lite_area = true;
 
     if (monster_to_monster && !is_hostile(t_ptr))

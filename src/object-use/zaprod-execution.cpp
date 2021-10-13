@@ -84,7 +84,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
     }
 
     bool success;
-    if (this->player_ptr->pclass == CLASS_BERSERKER) {
+    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
         success = false;
     } else if (chance > fail) {
         success = randint0(chance * 2) >= fail;

@@ -203,7 +203,7 @@ errr init_v_info()
  */
 errr init_s_info()
 {
-    init_header(&s_head, MAX_CLASS);
+    init_header(&s_head, PLAYER_CLASS_TYPE_MAX);
     return init_info("s_info", s_head, s_info, parse_s_info, nullptr);
 }
 
@@ -214,6 +214,6 @@ errr init_s_info()
  */
 errr init_m_info()
 {
-    init_header(&m_head, MAX_CLASS);
+    init_header(&m_head, PLAYER_CLASS_TYPE_MAX);
     return init_info("m_info", m_head, m_info, parse_m_info, nullptr);
 }

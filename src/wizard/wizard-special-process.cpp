@@ -423,15 +423,17 @@ void wiz_change_status(player_type *player_ptr)
     for (auto j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++) {
         for (int i = 0; i < 64; i++) {
             player_ptr->weapon_exp[j][i] = tmp_s16b;
-            if (player_ptr->weapon_exp[j][i] > s_info[player_ptr->pclass].w_max[j][i])
-                player_ptr->weapon_exp[j][i] = s_info[player_ptr->pclass].w_max[j][i];
+            auto short_pclass = enum2i(player_ptr->pclass);
+            if (player_ptr->weapon_exp[j][i] > s_info[short_pclass].w_max[j][i])
+                player_ptr->weapon_exp[j][i] = s_info[short_pclass].w_max[j][i];
         }
     }
 
     for (int j = 0; j < 10; j++) {
         player_ptr->skill_exp[j] = tmp_s16b;
-        if (player_ptr->skill_exp[j] > s_info[player_ptr->pclass].s_max[j])
-            player_ptr->skill_exp[j] = s_info[player_ptr->pclass].s_max[j];
+        auto short_pclass = enum2i(player_ptr->pclass);
+        if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j])
+            player_ptr->skill_exp[j] = s_info[short_pclass].s_max[j];
     }
 
     int k;
@@ -678,21 +680,22 @@ void wiz_reset_race(player_type *player_ptr)
 void wiz_reset_class(player_type *player_ptr)
 {
     char ppp[80];
-    sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
+    sprintf(ppp, "Class (0-%d): ", PLAYER_CLASS_TYPE_MAX - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", player_ptr->pclass);
+    auto short_pclass = enum2i(player_ptr->pclass);
+    sprintf(tmp_val, "%d", short_pclass);
 
     if (!get_string(ppp, tmp_val, 2))
         return;
 
     int tmp_int = atoi(tmp_val);
-    if (tmp_int < 0 || tmp_int >= MAX_CLASS)
+    if (tmp_int < 0 || tmp_int >= PLAYER_CLASS_TYPE_MAX)
         return;
 
-    player_ptr->pclass = i2enum<player_class_type>(tmp_int);
-    cp_ptr = &class_info[player_ptr->pclass];
-    mp_ptr = &m_info[player_ptr->pclass];
+    player_ptr->pclass = i2enum<PlayerClassType>(tmp_int);
+    cp_ptr = &class_info[short_pclass];
+    mp_ptr = &m_info[short_pclass];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;

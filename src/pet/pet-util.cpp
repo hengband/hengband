@@ -85,7 +85,7 @@ PERCENTAGE calculate_upkeep(player_type *player_ptr)
             continue;
         }
 
-        if (player_ptr->pclass != CLASS_CAVALRY) {
+        if (player_ptr->pclass != PlayerClassType::CAVALRY) {
             total_friend_levels += (r_ptr->level + 5) * 10;
             continue;
         }

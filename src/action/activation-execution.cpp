@@ -88,7 +88,7 @@ static void decide_chance_fail(player_type *player_ptr, ae_type *ae_ptr)
 
 static void decide_activation_success(player_type *player_ptr, ae_type *ae_ptr)
 {
-    if (player_ptr->pclass == CLASS_BERSERKER) {
+    if (player_ptr->pclass == PlayerClassType::BERSERKER) {
         ae_ptr->success = false;
         return;
     }

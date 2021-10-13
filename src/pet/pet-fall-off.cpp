@@ -59,7 +59,7 @@ static bool calc_fall_off_possibility(player_type *player_ptr, const HIT_POINT d
         return true;
 
     int cur = player_ptr->skill_exp[SKILL_RIDING];
-    int max = s_info[player_ptr->pclass].s_max[SKILL_RIDING];
+    int max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING];
     int ridinglevel = r_ptr->level;
 
     int fall_off_level = r_ptr->level;
@@ -79,7 +79,7 @@ static bool calc_fall_off_possibility(player_type *player_ptr, const HIT_POINT d
     if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10)
         return true;
 
-    if ((((player_ptr->pclass == CLASS_BEASTMASTER) || (player_ptr->pclass == CLASS_CAVALRY)) && !player_ptr->riding_ryoute)
+    if ((((player_ptr->pclass == PlayerClassType::BEASTMASTER) || (player_ptr->pclass == PlayerClassType::CAVALRY)) && !player_ptr->riding_ryoute)
         || !one_in_(player_ptr->lev * (player_ptr->riding_ryoute ? 2 : 3) + 30)) {
         return false;
     }

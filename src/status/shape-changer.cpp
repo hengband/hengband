@@ -76,9 +76,9 @@ void change_race(player_type *player_ptr, PlayerRaceType new_race, concptr effec
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     player_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
 
-    bool is_special_class = player_ptr->pclass == CLASS_MONK;
-    is_special_class |= player_ptr->pclass == CLASS_FORCETRAINER;
-    is_special_class |= player_ptr->pclass == CLASS_NINJA;
+    bool is_special_class = player_ptr->pclass == PlayerClassType::MONK;
+    is_special_class |= player_ptr->pclass == PlayerClassType::FORCETRAINER;
+    is_special_class |= player_ptr->pclass == PlayerClassType::NINJA;
     bool is_special_race = player_ptr->prace == PlayerRaceType::KLACKON;
     is_special_race |= player_ptr->prace == PlayerRaceType::SPRITE;
     if (is_special_class && is_special_race)
@@ -86,7 +86,7 @@ void change_race(player_type *player_ptr, PlayerRaceType new_race, concptr effec
 
     get_height_weight(player_ptr);
 
-    if (player_ptr->pclass == CLASS_SORCERER)
+    if (player_ptr->pclass == PlayerClassType::SORCERER)
         player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
     else
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;

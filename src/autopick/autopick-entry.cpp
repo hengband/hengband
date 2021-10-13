@@ -396,7 +396,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
             name = false;
     }
 
-    bool realm_except_class = player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_RED_MAGE;
+    bool realm_except_class = player_ptr->pclass == PlayerClassType::SORCERER || player_ptr->pclass == PlayerClassType::RED_MAGE;
 
     if ((get_realm1_book(player_ptr) == o_ptr->tval) && !realm_except_class) {
         ADD_FLG(FLG_REALM1);

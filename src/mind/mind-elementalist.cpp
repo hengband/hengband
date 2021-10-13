@@ -1061,7 +1061,7 @@ process_result effect_monster_elemental_genocide(player_type *player_ptr, effect
  */
 bool has_element_resist(player_type *player_ptr, ElementRealm realm, PLAYER_LEVEL lev)
 {
-    if (player_ptr->pclass != CLASS_ELEMENTALIST)
+    if (player_ptr->pclass != PlayerClassType::ELEMENTALIST)
         return false;
 
     auto prealm = i2enum<ElementRealm>(player_ptr->element);

@@ -22,7 +22,7 @@ void load_quick_start(void)
     rd_byte(&tmp8u);
     previous_char.prace = (PlayerRaceType)tmp8u;
     rd_byte(&tmp8u);
-    previous_char.pclass = (player_class_type)tmp8u;
+    previous_char.pclass = (PlayerClassType)tmp8u;
     rd_byte(&tmp8u);
     previous_char.ppersonality = (player_personality_type)tmp8u;
     rd_byte(&tmp8u);

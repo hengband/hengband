@@ -170,7 +170,7 @@ bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_F
         if (mpe_mode & MPE_HANDLE_STUFF)
             handle_stuff(player_ptr);
 
-        if (player_ptr->pclass == CLASS_NINJA) {
+        if (player_ptr->pclass == PlayerClassType::NINJA) {
             if (g_ptr->info & (CAVE_GLOW))
                 set_superstealth(player_ptr, false);
             else if (player_ptr->cur_lite <= 0)

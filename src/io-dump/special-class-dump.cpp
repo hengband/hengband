@@ -231,15 +231,15 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
 void dump_aux_class_special(player_type *player_ptr, FILE *fff)
 {
     switch (player_ptr->pclass) {
-    case CLASS_MAGIC_EATER: {
+    case PlayerClassType::MAGIC_EATER: {
         dump_magic_eater(player_ptr, fff);
         return;
     }
-    case CLASS_SMITH: {
+    case PlayerClassType::SMITH: {
         dump_smith(player_ptr, fff);
         return;
     }
-    case CLASS_BLUE_MAGE: {
+    case PlayerClassType::BLUE_MAGE: {
         dump_blue_mage(player_ptr, fff);
         return;
     }

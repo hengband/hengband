@@ -93,13 +93,13 @@ static player_attack_type *initialize_player_attack_type(
 static void attack_classify(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     switch (player_ptr->pclass) {
-    case CLASS_ROGUE:
-    case CLASS_NINJA:
+    case PlayerClassType::ROGUE:
+    case PlayerClassType::NINJA:
         process_surprise_attack(player_ptr, pa_ptr);
         return;
-    case CLASS_MONK:
-    case CLASS_FORCETRAINER:
-    case CLASS_BERSERKER:
+    case PlayerClassType::MONK:
+    case PlayerClassType::FORCETRAINER:
+    case PlayerClassType::BERSERKER:
         if ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) && !player_ptr->riding)
             pa_ptr->monk_attack = true;
         return;
@@ -116,7 +116,7 @@ static void attack_classify(player_type *player_ptr, player_attack_type *pa_ptr)
 static void get_bare_knuckle_exp(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if ((r_ptr->level + 10) <= player_ptr->lev || (player_ptr->skill_exp[SKILL_MARTIAL_ARTS] >= s_info[player_ptr->pclass].s_max[SKILL_MARTIAL_ARTS]))
+    if ((r_ptr->level + 10) <= player_ptr->lev || (player_ptr->skill_exp[SKILL_MARTIAL_ARTS] >= s_info[enum2i(player_ptr->pclass)].s_max[SKILL_MARTIAL_ARTS]))
         return;
 
     if (player_ptr->skill_exp[SKILL_MARTIAL_ARTS] < WEAPON_EXP_BEGINNER)
@@ -142,7 +142,7 @@ static void get_weapon_exp(player_type *player_ptr, player_attack_type *pa_ptr)
     int tval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].sval;
     int now_exp = player_ptr->weapon_exp[tval][sval];
-    if (now_exp >= s_info[player_ptr->pclass].w_max[tval][sval])
+    if (now_exp >= s_info[enum2i(player_ptr->pclass)].w_max[tval][sval])
         return;
 
     SUB_EXP amount = 0;
@@ -444,7 +444,7 @@ static bool check_fear_death(player_type *player_ptr, player_attack_type *pa_ptr
         return false;
 
     *(pa_ptr->mdeath) = true;
-    if ((player_ptr->pclass == CLASS_BERSERKER) && player_ptr->energy_use) {
+    if ((player_ptr->pclass == PlayerClassType::BERSERKER) && player_ptr->energy_use) {
         PlayerEnergy energy(player_ptr);
         if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
             ENERGY energy_use;
@@ -498,7 +498,7 @@ static void apply_actual_attack(
     mineuchi(player_ptr, pa_ptr);
 
     pa_ptr->attack_damage = mon_damage_mod(player_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
-        (bool)(((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((player_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
+        ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((player_ptr->pclass == PlayerClassType::BERSERKER) && one_in_(2)));
     critical_attack(player_ptr, pa_ptr);
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
         pa_ptr->attack_damage, pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);

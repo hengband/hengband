@@ -257,13 +257,13 @@ static void generate_world(player_type *player_ptr, bool new_game)
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
 
-    if (player_ptr->pclass != CLASS_SORCERER) {
+    if (player_ptr->pclass != PlayerClassType::SORCERER) {
         auto begin = enum2i(TV_WEAPON_BEGIN);
         if (player_ptr->ppersonality == PERSONALITY_SEXY)
-            s_info[player_ptr->pclass].w_max[enum2i(ItemKindType::HAFTED) - begin][SV_WHIP] = WEAPON_EXP_MASTER;
+            s_info[enum2i(player_ptr->pclass)].w_max[enum2i(ItemKindType::HAFTED) - begin][SV_WHIP] = WEAPON_EXP_MASTER;
         if (player_ptr->prace == PlayerRaceType::MERFOLK) {
-            s_info[player_ptr->pclass].w_max[enum2i(ItemKindType::POLEARM) - begin][SV_TRIDENT] = WEAPON_EXP_MASTER;
-            s_info[player_ptr->pclass].w_max[enum2i(ItemKindType::POLEARM) - begin][SV_TRIFURCATE_SPEAR] = WEAPON_EXP_MASTER;
+            s_info[enum2i(player_ptr->pclass)].w_max[enum2i(ItemKindType::POLEARM) - begin][SV_TRIDENT] = WEAPON_EXP_MASTER;
+            s_info[enum2i(player_ptr->pclass)].w_max[enum2i(ItemKindType::POLEARM) - begin][SV_TRIFURCATE_SPEAR] = WEAPON_EXP_MASTER;
         }
     }
 
@@ -297,10 +297,10 @@ static void init_io(player_type *player_ptr)
 
 static void init_riding_pet(player_type *player_ptr, bool new_game)
 {
-    if (!new_game || ((player_ptr->pclass != CLASS_CAVALRY) && (player_ptr->pclass != CLASS_BEASTMASTER)))
+    if (!new_game || ((player_ptr->pclass != PlayerClassType::CAVALRY) && (player_ptr->pclass != PlayerClassType::BEASTMASTER)))
         return;
 
-    MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
+    MONRACE_IDX pet_r_idx = ((player_ptr->pclass == PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
     monster_race *r_ptr = &r_info[pet_r_idx];
     place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];

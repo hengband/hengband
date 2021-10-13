@@ -564,7 +564,7 @@ void Patron::gain_level_reward(player_type *player_ptr_, int chosen_reward)
 void Patron::admire(player_type *player_ptr_)
 {
     this->player_ptr = player_ptr_;
-    if ((this->player_ptr->pclass == CLASS_CHAOS_WARRIOR) || this->player_ptr->muta.has(MUTA::CHAOS_GIFT)) {
+    if ((this->player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || this->player_ptr->muta.has(MUTA::CHAOS_GIFT)) {
         msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), this->name.c_str());
         msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));
     }

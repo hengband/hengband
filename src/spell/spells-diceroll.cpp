@@ -88,9 +88,9 @@ bool common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster
  */
 PERCENTAGE beam_chance(player_type *player_ptr)
 {
-    if (player_ptr->pclass == CLASS_MAGE)
+    if (player_ptr->pclass == PlayerClassType::MAGE)
         return (PERCENTAGE)(player_ptr->lev);
-    if (player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_SORCERER)
+    if (player_ptr->pclass == PlayerClassType::HIGH_MAGE || player_ptr->pclass == PlayerClassType::SORCERER)
         return (PERCENTAGE)(player_ptr->lev + 10);
 
     return (PERCENTAGE)(player_ptr->lev / 2);

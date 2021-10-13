@@ -314,7 +314,7 @@ void do_cmd_takeoff(player_type *player_ptr)
 
     PlayerEnergy energy(player_ptr);
     if (o_ptr->is_cursed()) {
-        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (player_ptr->pclass != CLASS_BERSERKER)) {
+        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (player_ptr->pclass != PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;
         }

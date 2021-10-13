@@ -230,19 +230,18 @@ parse_error_type parse_line_building(char *buf)
         return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
     }
     case 'C': {
-        int n;
-        n = tokenize(s + 2, MAX_CLASS, zz, 0);
-        for (int i = 0; i < MAX_CLASS; i++) {
-            building[index].member_class[i] = i2enum<player_class_type>((i < n) ? atoi(zz[i]) : 1);
+        auto pct_max = PLAYER_CLASS_TYPE_MAX;
+        auto n = tokenize(s + 2, pct_max, zz, 0);
+        for (int i = 0; i < pct_max; i++) {
+            building[index].member_class.push_back((i < n) ? atoi(zz[i]) : 1);
         }
 
         break;
     }
     case 'R': {
-        int n;
-        n = tokenize(s + 2, MAX_RACES, zz, 0);
+        auto n = tokenize(s + 2, MAX_RACES, zz, 0);
         for (int i = 0; i < MAX_RACES; i++) {
-            building[index].member_race[i] = i2enum<PlayerRaceType>((i < n) ? atoi(zz[i]) : 1);
+            building[index].member_race[i] = (i < n) ? atoi(zz[i]) : 1;
         }
 
         break;

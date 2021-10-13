@@ -512,7 +512,7 @@ void teleport_away_followable(player_type *player_ptr, MONSTER_IDX m_idx)
         return;
 
     bool follow = false;
-    if (player_ptr->muta.has(MUTA::VTELEPORT) || (player_ptr->pclass == CLASS_IMITATOR))
+    if (player_ptr->muta.has(MUTA::VTELEPORT) || (player_ptr->pclass == PlayerClassType::IMITATOR))
         follow = true;
     else {
         object_type *o_ptr;

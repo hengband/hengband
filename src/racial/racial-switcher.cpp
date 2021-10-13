@@ -88,9 +88,9 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
 {
     DIRECTION dir = 0;
     switch (player_ptr->pclass) {
-    case CLASS_WARRIOR:
+    case PlayerClassType::WARRIOR:
         return sword_dancing(player_ptr);
-    case CLASS_HIGH_MAGE:
+    case PlayerClassType::HIGH_MAGE:
         if (player_ptr->realm1 == REALM_HEX) {
             auto retval = SpellHex(player_ptr).stop_spells_with_selection();
             if (retval) {
@@ -101,10 +101,10 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
         }
 
         /* Fall through */
-    case CLASS_MAGE:
-    case CLASS_SORCERER:
+    case PlayerClassType::MAGE:
+    case PlayerClassType::SORCERER:
         return eat_magic(player_ptr, player_ptr->lev * 2);
-    case CLASS_PRIEST:
+    case PlayerClassType::PRIEST:
         if (!is_good_realm(player_ptr->realm1)) {
             (void)dispel_monsters(player_ptr, player_ptr->lev * 4);
             turn_monsters(player_ptr, player_ptr->lev * 4);
@@ -113,29 +113,29 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
         }
 
         return bless_weapon(player_ptr);
-    case CLASS_ROGUE:
+    case PlayerClassType::ROGUE:
         return hit_and_away(player_ptr);
-    case CLASS_RANGER:
-    case CLASS_SNIPER:
+    case PlayerClassType::RANGER:
+    case PlayerClassType::SNIPER:
         msg_print(_("敵を調査した...", "You examine your foes..."));
         probing(player_ptr);
         return true;
-    case CLASS_PALADIN:
+    case PlayerClassType::PALADIN:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
         fire_beam(player_ptr, is_good_realm(player_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE, dir, player_ptr->lev * 3);
         return true;
-    case CLASS_WARRIOR_MAGE:
+    case PlayerClassType::WARRIOR_MAGE:
         if (command == -3)
             return comvert_hp_to_mp(player_ptr);
         else if (command == -4)
             return comvert_mp_to_hp(player_ptr);
 
         return true;
-    case CLASS_CHAOS_WARRIOR:
+    case PlayerClassType::CHAOS_WARRIOR:
         return confusing_light(player_ptr);
-    case CLASS_MONK:
+    case PlayerClassType::MONK:
         if (none_bits(empty_hands(player_ptr, true), EMPTY_HAND_MAIN)) {
             msg_print(_("素手じゃないとできません。", "You need to be barehanded."));
             return false;
@@ -158,10 +158,10 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
             return double_attack(player_ptr);
 
         return true;
-    case CLASS_MINDCRAFTER:
-    case CLASS_FORCETRAINER:
+    case PlayerClassType::MINDCRAFTER:
+    case PlayerClassType::FORCETRAINER:
         return clear_mind(player_ptr);
-    case CLASS_TOURIST:
+    case PlayerClassType::TOURIST:
         if (command == -3) {
             if (!get_aim_dir(player_ptr, &dir))
                 return false;
@@ -172,10 +172,10 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
         }
 
         return (command != -4) || identify_fully(player_ptr, false);
-    case CLASS_IMITATOR:
+    case PlayerClassType::IMITATOR:
         handle_stuff(player_ptr);
         return do_cmd_mane(player_ptr, true);
-    case CLASS_BEASTMASTER:
+    case PlayerClassType::BEASTMASTER:
         if (command == -3) {
             if (!get_aim_dir(player_ptr, &dir))
                 return false;
@@ -188,21 +188,21 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
             project_all_los(player_ptr, GF_CHARM_LIVING, player_ptr->lev);
 
         return true;
-    case CLASS_ARCHER:
+    case PlayerClassType::ARCHER:
         return create_ammo(player_ptr);
-    case CLASS_MAGIC_EATER:
+    case PlayerClassType::MAGIC_EATER:
         if (command == -3)
             return import_magic_device(player_ptr);
 
         return (command != -4) || (!cmd_limit_cast(player_ptr) && do_cmd_magic_eater(player_ptr, false, true));
-    case CLASS_BARD:
+    case PlayerClassType::BARD:
         if ((get_singing_song_effect(player_ptr) == 0) && (get_interrupting_song_effect(player_ptr) == 0))
             return false;
 
         stop_singing(player_ptr);
         PlayerEnergy(player_ptr).set_player_turn_energy(10);
         return true;
-    case CLASS_RED_MAGE:
+    case PlayerClassType::RED_MAGE:
         if (cmd_limit_cast(player_ptr))
             return false;
 
@@ -216,7 +216,7 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
             (void)do_cmd_cast(player_ptr);
         }
         return true;
-    case CLASS_SAMURAI:
+    case PlayerClassType::SAMURAI:
         if (command == -3) {
             concentration(player_ptr);
             return true;
@@ -235,20 +235,20 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
 
         set_bits(player_ptr->update, PU_BONUS);
         return true;
-    case CLASS_BLUE_MAGE:
+    case PlayerClassType::BLUE_MAGE:
         set_action(player_ptr, player_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);
         PlayerEnergy(player_ptr).reset_player_turn();
         return true;
-    case CLASS_CAVALRY:
+    case PlayerClassType::CAVALRY:
         return rodeo(player_ptr);
-    case CLASS_BERSERKER:
+    case PlayerClassType::BERSERKER:
         return recall_player(player_ptr, randint0(21) + 15);
-    case CLASS_SMITH:
+    case PlayerClassType::SMITH:
         if (player_ptr->lev <= 29)
             return ident_spell(player_ptr, true);
 
         return identify_fully(player_ptr, true);
-    case CLASS_MIRROR_MASTER:
+    case PlayerClassType::MIRROR_MASTER:
         if (command == -3) {
             remove_all_mirrors(player_ptr, true);
             return true;
@@ -258,9 +258,9 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
             return mirror_concentration(player_ptr);
 
         return true;
-    case CLASS_NINJA:
+    case PlayerClassType::NINJA:
         return hayagake(player_ptr);
-    case CLASS_ELEMENTALIST:
+    case PlayerClassType::ELEMENTALIST:
         if (command == -3)
             return clear_mind(player_ptr);
         if (command == -4)

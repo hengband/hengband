@@ -362,7 +362,7 @@ static HIT_POINT calcutate_capturable_hp(player_type *player_ptr, monster_type *
     if (is_pet(m_ptr))
         return hp * 4L;
 
-    if ((player_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
+    if ((player_ptr->pclass == PlayerClassType::BEASTMASTER) && monster_living(m_ptr->r_idx))
         return hp * 3 / 10;
 
     return hp * 3 / 20;

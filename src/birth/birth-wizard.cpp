@@ -25,6 +25,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/patron.h"
+#include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
@@ -167,7 +168,7 @@ static bool let_player_select_race(player_type *player_ptr)
             return false;
 
         clear_from(10);
-        shape_buffer(race_explanations[enum2i(player_ptr->prace)], 74, temp, sizeof(temp));
+        shape_buffer(race_explanations[enum2i(player_ptr->prace)].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
@@ -190,14 +191,14 @@ static bool let_player_select_race(player_type *player_ptr)
 static bool let_player_select_class(player_type *player_ptr)
 {
     clear_from(10);
-    player_ptr->pclass = CLASS_WARRIOR;
+    player_ptr->pclass = PlayerClassType::WARRIOR;
     while (true) {
         char temp[80 * 9];
         if (!get_player_class(player_ptr))
             return false;
 
         clear_from(10);
-        shape_buffer(class_explanations[player_ptr->pclass], 74, temp, sizeof(temp));
+        shape_buffer(class_explanations[enum2i(player_ptr->pclass)].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 9; i++) {
             if (t[0] == 0)
@@ -226,7 +227,7 @@ static bool let_player_select_personality(player_type *player_ptr)
             return false;
 
         clear_from(10);
-        shape_buffer(personality_explanations[player_ptr->ppersonality], 74, temp, sizeof(temp));
+        shape_buffer(personality_explanations[player_ptr->ppersonality].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)
@@ -290,7 +291,7 @@ static void display_initial_options(player_type *player_ptr)
     c_put_str(TERM_L_BLUE, buf, 6, 43);
 
     put_str(_("隠密", "Stealth"), 6, 47);
-    if (player_ptr->pclass == CLASS_BERSERKER)
+    if (player_ptr->pclass == PlayerClassType::BERSERKER)
         strcpy(buf, "xx");
     else
         sprintf(buf, "%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);

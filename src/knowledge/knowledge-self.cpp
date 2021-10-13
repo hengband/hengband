@@ -14,8 +14,10 @@
 #include "io-dump/dump-util.h"
 #include "player-info/alignment.h"
 #include "player-info/class-info.h"
+#include "player/player-personality.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
+#include "realm/realm-names-table.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -56,7 +58,7 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
         return;
 
     char temp[80 * 10];
-    shape_buffer(race_explanations[enum2i(player_ptr->prace)], 78, temp, sizeof(temp));
+    shape_buffer(race_explanations[enum2i(player_ptr->prace)].data(), 78, temp, sizeof(temp));
     fprintf(fff, "\n\n");
     fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(player_ptr->prace)].title);
     concptr t = temp;
@@ -68,9 +70,10 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    shape_buffer(class_explanations[player_ptr->pclass], 78, temp, sizeof(temp));
+    auto short_pclass = enum2i(player_ptr->pclass);
+    shape_buffer(class_explanations[short_pclass].data(), 78, temp, sizeof(temp));
     fprintf(fff, "\n");
-    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[player_ptr->pclass].title);
+    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[short_pclass].title);
 
     t = temp;
     for (int i = 0; i < 10; i++) {
@@ -80,7 +83,7 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    shape_buffer(personality_explanations[player_ptr->ppersonality], 78, temp, sizeof(temp));
+    shape_buffer(personality_explanations[player_ptr->ppersonality].data(), 78, temp, sizeof(temp));
     fprintf(fff, "\n");
     fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->ppersonality].title);
 
@@ -94,7 +97,7 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
 
     fprintf(fff, "\n");
     if (player_ptr->realm1) {
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1], 78, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1].data(), 78, temp, sizeof(temp));
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm1]);
 
         t = temp;
@@ -109,7 +112,7 @@ static void dump_yourself(player_type *player_ptr, FILE *fff)
 
     fprintf(fff, "\n");
     if (player_ptr->realm2) {
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1], 78, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1].data(), 78, temp, sizeof(temp));
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm2]);
 
         t = temp;
@@ -138,14 +141,14 @@ static void dump_winner_classes(FILE *fff)
     size_t max_len = 75;
     std::string s = "";
     std::string l = "";
-    for (int c = 0; c < MAX_CLASS; c++) {
-        if (w_ptr->sf_winner.has_not(i2enum<player_class_type>(c)))
+    for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
+        if (w_ptr->sf_winner.has_not(i2enum<PlayerClassType>(c)))
             continue;
 
         auto &cl = class_info[c];
         auto t = std::string(cl.title);
 
-        if (w_ptr->sf_retired.has_not(i2enum<player_class_type>(c)))
+        if (w_ptr->sf_retired.has_not(i2enum<PlayerClassType>(c)))
             t = "(" + t + ")";
 
         if (l.size() + t.size() + 2 > max_len) {

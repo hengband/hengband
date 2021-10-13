@@ -13,9 +13,10 @@
 constexpr byte FIRST_BOOK = 0;
 
 /*!
- * プレイヤーの職業毎の初期装備テーブル。/\n
- * Each player starts out with a few items, given as tval/sval pairs.\n
- * In addition, he always has some food and a few torches.\n
+ * @brief プレイヤーの職業毎の初期装備テーブル.
+ * @details
+ * 全ての職業が冒険開始時に3つのアイテムを持っている.
+ * そのtval/svalを記したリスト.
  */
 std::vector<std::vector<std::tuple<ItemKindType, byte>>> player_init = {
     {
