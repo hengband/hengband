@@ -476,14 +476,12 @@ public:
     template <typename Func>
     friend void rd_FlagGroup(FlagGroup<FlagType, MAX> &fg, Func rd_byte_func)
     {
-        uint8_t tmp_l, tmp_h;
-        rd_byte_func(&tmp_l);
-        rd_byte_func(&tmp_h);
+        auto tmp_l = rd_byte_func();
+        auto tmp_h = rd_byte_func();
         const auto fg_size = static_cast<uint16_t>((tmp_h << 8) | tmp_l);
 
         for (int i = 0; i < fg_size; i++) {
-            uint8_t flag_byte;
-            rd_byte_func(&flag_byte);
+            auto flag_byte = rd_byte_func();
             std::bitset<8> flag_bits(flag_byte);
             for (int j = 0; j < 8; j++) {
                 const size_t pos = i * 8 + j;

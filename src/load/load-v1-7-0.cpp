@@ -8,37 +8,23 @@
 
 void set_hp_old(player_type *player_ptr)
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    player_ptr->mhp = tmp16s;
+    player_ptr->mhp = rd_s16b();
 
-    rd_s16b(&tmp16s);
-    player_ptr->chp = tmp16s;
-
-    uint16_t tmp16u;
-    rd_u16b(&tmp16u);
-    player_ptr->chp_frac = (uint32_t)tmp16u;
+    player_ptr->chp = rd_s16b();
+    player_ptr->chp_frac = rd_u16b();
 }
 
 void set_mana_old(player_type *player_ptr)
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    player_ptr->msp = tmp16s;
+    player_ptr->msp = rd_s16b();
 
-    rd_s16b(&tmp16s);
-    player_ptr->csp = tmp16s;
-
-    uint16_t tmp16u;
-    rd_u16b(&tmp16u);
-    player_ptr->csp_frac = (uint32_t)tmp16u;
+    player_ptr->csp = rd_s16b();
+    player_ptr->csp_frac = rd_u16b();
 }
 
 void set_exp_frac_old(player_type *player_ptr)
 {
-    uint16_t tmp16u;
-    rd_u16b(&tmp16u);
-    player_ptr->exp_frac = (uint32_t)tmp16u;
+    player_ptr->exp_frac = rd_u16b();
 }
 
 void remove_water_cave(player_type* player_ptr)

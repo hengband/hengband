@@ -13,82 +13,69 @@
  */
 void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
-
-    rd_s16b(&tmp16s);
-    r_ptr->r_deaths = (MONSTER_NUMBER)tmp16s;
-
-    rd_s16b(&tmp16s);
-    r_ptr->r_pkills = (MONSTER_NUMBER)tmp16s;
+    r_ptr->r_sights = rd_s16b();
+    r_ptr->r_deaths = rd_s16b();
+    r_ptr->r_pkills = rd_s16b();
 
     if (h_older_than(1, 7, 0, 5)) {
         r_ptr->r_akills = r_ptr->r_pkills;
     } else {
-        rd_s16b(&tmp16s);
-        r_ptr->r_akills = (MONSTER_NUMBER)tmp16s;
+        r_ptr->r_akills = rd_s16b();
     }
 
-    rd_s16b(&tmp16s);
-    r_ptr->r_tkills = (MONSTER_NUMBER)tmp16s;
+    r_ptr->r_tkills = rd_s16b();
 
-    rd_byte(&r_ptr->r_wake);
-    rd_byte(&r_ptr->r_ignore);
+    r_ptr->r_wake = rd_byte();
+    r_ptr->r_ignore = rd_byte();
 
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    r_ptr->r_can_evolve = tmp8u > 0;
+    r_ptr->r_can_evolve = rd_byte() > 0;
     if (loading_savefile_version_is_older_than(6)) {
         // かつては未使用フラグr_ptr->r_xtra2だった.
-        rd_byte(&tmp8u);
+        strip_bytes(1);
     }
 
-    rd_byte(&tmp8u);
-    r_ptr->r_drop_gold = (ITEM_NUMBER)tmp8u;
-    rd_byte(&tmp8u);
-    r_ptr->r_drop_item = (ITEM_NUMBER)tmp8u;
+    r_ptr->r_drop_gold = rd_byte();
+    r_ptr->r_drop_item = rd_byte();
 
-    rd_byte(&tmp8u);
-    rd_byte(&r_ptr->r_cast_spell);
+    strip_bytes(1);
+    r_ptr->r_cast_spell = rd_byte();
 
-    rd_byte(&r_ptr->r_blows[0]);
-    rd_byte(&r_ptr->r_blows[1]);
-    rd_byte(&r_ptr->r_blows[2]);
-    rd_byte(&r_ptr->r_blows[3]);
+    r_ptr->r_blows[0] = rd_byte();
+    r_ptr->r_blows[1] = rd_byte();
+    r_ptr->r_blows[2] = rd_byte();
+    r_ptr->r_blows[3] = rd_byte();
 
-    rd_u32b(&r_ptr->r_flags1);
-    rd_u32b(&r_ptr->r_flags2);
-    rd_u32b(&r_ptr->r_flags3);
+    r_ptr->r_flags1 = rd_u32b();
+    r_ptr->r_flags2 = rd_u32b();
+    r_ptr->r_flags3 = rd_u32b();
     if (loading_savefile_version_is_older_than(3)) {
         uint32_t f4, f5, f6;
-        rd_u32b(&f4);
-        rd_u32b(&f5);
-        rd_u32b(&f6);
+        f4 = rd_u32b();
+        f5 = rd_u32b();
+        f6 = rd_u32b();
         if (h_older_than(1, 5, 0, 3))
             set_old_lore(r_ptr, f4, r_idx);
         else
-            rd_u32b(&r_ptr->r_flagsr);
+            r_ptr->r_flagsr = rd_u32b();
 
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
     } else {
-        rd_u32b(&r_ptr->r_flagsr);
+        r_ptr->r_flagsr = rd_u32b();
         rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
     }
 
-    rd_byte(&tmp8u);
-    r_ptr->max_num = (MONSTER_NUMBER)tmp8u;
+    r_ptr->max_num = rd_byte();
 
-    rd_s16b(&r_ptr->floor_id);
+    r_ptr->floor_id = rd_s16b();
 
     if (!loading_savefile_version_is_older_than(4)) {
-        rd_s16b(&r_ptr->defeat_level);
-        rd_u32b(&r_ptr->defeat_time);
+        r_ptr->defeat_level = rd_s16b();
+        r_ptr->defeat_time = rd_u32b();
     }
 
-    rd_byte(&tmp8u);
+    strip_bytes(1);
 
     r_ptr->r_flags1 &= r_ptr->flags1;
     r_ptr->r_flags2 &= r_ptr->flags2;
@@ -99,8 +86,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 
 errr load_lore(void)
 {
-    uint16_t loading_max_r_idx;
-    rd_u16b(&loading_max_r_idx);
+    auto loading_max_r_idx = rd_u16b();
 
     monster_race *r_ptr;
     monster_race dummy;

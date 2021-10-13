@@ -16,46 +16,36 @@ void load_quick_start(void)
         return;
     }
 
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    previous_char.psex = i2enum<player_sex>(tmp8u);
-    rd_byte(&tmp8u);
-    previous_char.prace = (PlayerRaceType)tmp8u;
-    rd_byte(&tmp8u);
-    previous_char.pclass = (PlayerClassType)tmp8u;
-    rd_byte(&tmp8u);
-    previous_char.ppersonality = (player_personality_type)tmp8u;
-    rd_byte(&tmp8u);
-    previous_char.realm1 = (int16_t)tmp8u;
-    rd_byte(&tmp8u);
-    previous_char.realm2 = (int16_t)tmp8u;
+    previous_char.psex = i2enum<player_sex>(rd_byte());
+    previous_char.prace = i2enum<PlayerRaceType>(rd_byte());
+    previous_char.pclass = i2enum<PlayerClassType>(rd_byte());
+    previous_char.ppersonality = i2enum<player_personality_type>(rd_byte());
+    previous_char.realm1 = rd_byte();
+    previous_char.realm2 = rd_byte();
 
-    rd_s16b(&previous_char.age);
-    rd_s16b(&previous_char.ht);
-    rd_s16b(&previous_char.wt);
-    rd_s16b(&previous_char.sc);
-    rd_s32b(&previous_char.au);
+    previous_char.age = rd_s16b();
+    previous_char.ht = rd_s16b();
+    previous_char.wt = rd_s16b();
+    previous_char.sc = rd_s16b();
+    previous_char.au = rd_s32b();
 
     for (int i = 0; i < A_MAX; i++)
-        rd_s16b(&previous_char.stat_max[i]);
+        previous_char.stat_max[i] = rd_s16b();
     for (int i = 0; i < A_MAX; i++)
-        rd_s16b(&previous_char.stat_max_max[i]);
+        previous_char.stat_max_max[i] = rd_s16b();
 
     for (int i = 0; i < PY_MAX_LEVEL; i++) {
-        int16_t tmp16s;
-        rd_s16b(&tmp16s);
-        previous_char.player_hp[i] = (HIT_POINT)tmp16s;
+        previous_char.player_hp[i] = rd_s16b();
     }
 
-    rd_s16b(&previous_char.chaos_patron);
+    previous_char.chaos_patron = rd_s16b();
 
     for (int i = 0; i < 8; i++)
-        rd_s16b(&previous_char.vir_types[i]);
+        previous_char.vir_types[i] = rd_s16b();
 
     for (int i = 0; i < 4; i++)
         rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
 
-    rd_byte(&tmp8u);
-    rd_byte(&tmp8u);
-    previous_char.quick_ok = (bool)tmp8u;
+    strip_bytes(1);
+    previous_char.quick_ok = rd_byte() != 0;
 }

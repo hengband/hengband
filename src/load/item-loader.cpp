@@ -29,15 +29,11 @@ void rd_item(object_type *o_ptr)
         return;
     }
 
-    BIT_FLAGS flags;
-    rd_u32b(&flags);
-    rd_s16b(&o_ptr->k_idx);
+    auto flags = rd_u32b();
+    o_ptr->k_idx = rd_s16b();
 
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    o_ptr->iy = (POSITION)tmp8u;
-    rd_byte(&tmp8u);
-    o_ptr->ix = (POSITION)tmp8u;
+    o_ptr->iy = rd_byte();
+    o_ptr->ix = rd_byte();
 
     object_kind *k_ptr;
     k_ptr = &k_info[o_ptr->k_idx];
@@ -45,86 +41,77 @@ void rd_item(object_type *o_ptr)
     o_ptr->sval = k_ptr->sval;
 
     if (any_bits(flags, SaveDataItemFlagType::PVAL))
-        rd_s16b(&o_ptr->pval);
+        o_ptr->pval = rd_s16b();
     else
         o_ptr->pval = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::DISCOUNT))
-        rd_byte(&o_ptr->discount);
+        o_ptr->discount = rd_byte();
     else
         o_ptr->discount = 0;
     if (any_bits(flags, SaveDataItemFlagType::NUMBER)) {
-        rd_byte(&tmp8u);
-        o_ptr->number = tmp8u;
+        o_ptr->number = rd_byte();
     } else
         o_ptr->number = 1;
 
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    o_ptr->weight = tmp16s;
+    o_ptr->weight = rd_s16b();
 
     if (any_bits(flags, SaveDataItemFlagType::NAME1)) {
         if (h_older_than(3, 0, 0, 2)) {
-            rd_byte(&tmp8u);
-            o_ptr->name1 = tmp8u;
+            o_ptr->name1 = rd_byte();
         } else {
-            rd_s16b(&tmp16s);
-            o_ptr->name1 = tmp16s;
+            o_ptr->name1 = rd_s16b();
         }
     } else
         o_ptr->name1 = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::NAME2)) {
-        rd_byte(&tmp8u);
-        o_ptr->name2 = tmp8u;
+        o_ptr->name2 = rd_byte();
     } else
         o_ptr->name2 = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::TIMEOUT))
-        rd_s16b(&o_ptr->timeout);
+        o_ptr->timeout = rd_s16b();
     else
         o_ptr->timeout = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::TO_H))
-        rd_s16b(&o_ptr->to_h);
+        o_ptr->to_h = rd_s16b();
     else
         o_ptr->to_h = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::TO_D)) {
-        rd_s16b(&tmp16s);
-        o_ptr->to_d = tmp16s;
+        o_ptr->to_d = rd_s16b();
     } else
         o_ptr->to_d = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::TO_A))
-        rd_s16b(&o_ptr->to_a);
+        o_ptr->to_a = rd_s16b();
     else
         o_ptr->to_a = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::AC))
-        rd_s16b(&o_ptr->ac);
+        o_ptr->ac = rd_s16b();
     else
         o_ptr->ac = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::DD)) {
-        rd_byte(&tmp8u);
-        o_ptr->dd = tmp8u;
+        o_ptr->dd = rd_byte();
     } else
         o_ptr->dd = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::DS)) {
-        rd_byte(&tmp8u);
-        o_ptr->ds = tmp8u;
+        o_ptr->ds = rd_byte();
     } else
         o_ptr->ds = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::IDENT))
-        rd_byte(&o_ptr->ident);
+        o_ptr->ident = rd_byte();
     else
         o_ptr->ident = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::MARKED))
-        rd_byte(&o_ptr->marked);
+        o_ptr->marked = rd_byte();
     else
         o_ptr->marked = 0;
 
@@ -140,8 +127,7 @@ void rd_item(object_type *o_ptr)
         auto start = 0;
         for (auto f : old_savefile_art_flags) {
             if (any_bits(flags, f)) {
-                uint32_t tmp32u;
-                rd_u32b(&tmp32u);
+                auto tmp32u = rd_u32b();
                 migrate_bitflag_to_flaggroup(o_ptr->art_flags, tmp32u, start);
             }
             start += 32;
@@ -156,8 +142,7 @@ void rd_item(object_type *o_ptr)
 
     if (any_bits(flags, SaveDataItemFlagType::CURSE_FLAGS)) {
         if (loading_savefile_version_is_older_than(5)) {
-            uint32_t tmp32u;
-            rd_u32b(&tmp32u);
+            auto tmp32u = rd_u32b();
             migrate_bitflag_to_flaggroup(o_ptr->curse_flags, tmp32u);
         } else {
             rd_FlagGroup(o_ptr->curse_flags, rd_byte);
@@ -168,61 +153,57 @@ void rd_item(object_type *o_ptr)
 
     /* Monster holding object */
     if (any_bits(flags, SaveDataItemFlagType::HELD_M_IDX))
-        rd_s16b(&o_ptr->held_m_idx);
+        o_ptr->held_m_idx = rd_s16b();
     else
         o_ptr->held_m_idx = 0;
 
     /* Special powers */
     if (any_bits(flags, SaveDataItemFlagType::XTRA1))
-        rd_byte(&o_ptr->xtra1);
+        o_ptr->xtra1 = rd_byte();
     else
         o_ptr->xtra1 = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::ACTIVATION_ID)) {
         if (h_older_than(3, 0, 0, 2)) {
-            rd_byte(&tmp8u);
-            o_ptr->activation_id = i2enum<RandomArtActType>(tmp8u);
+            o_ptr->activation_id = i2enum<RandomArtActType>(rd_byte());
         } else {
-            rd_s16b(&tmp16s);
-            o_ptr->activation_id = i2enum<RandomArtActType>(tmp16s);
+            o_ptr->activation_id = i2enum<RandomArtActType>(rd_s16b());
         }
     } else {
         o_ptr->activation_id = i2enum<RandomArtActType>(0);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::XTRA3))
-        rd_byte(&o_ptr->xtra3);
+        o_ptr->xtra3 = rd_byte();
     else
         o_ptr->xtra3 = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::XTRA4))
-        rd_s16b(&o_ptr->xtra4);
+        o_ptr->xtra4 = rd_s16b();
     else
         o_ptr->xtra4 = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::XTRA5))
-        rd_s16b(&o_ptr->xtra5);
+        o_ptr->xtra5 = rd_s16b();
     else
         o_ptr->xtra5 = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::FEELING))
-        rd_byte(&o_ptr->feeling);
+        o_ptr->feeling = rd_byte();
     else
         o_ptr->feeling = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::STACK_IDX))
-        rd_s16b(&o_ptr->stack_idx);
+        o_ptr->stack_idx = rd_s16b();
     else
         o_ptr->stack_idx = 0;
 
     if (any_bits(flags, SaveDataItemFlagType::SMITH) && !loading_savefile_version_is_older_than(7)) {
-        rd_s16b(&tmp16s);
-        if (tmp16s > 0) {
+        if (auto tmp16s = rd_s16b(); tmp16s > 0) {
             o_ptr->smith_effect = static_cast<SmithEffect>(tmp16s);
         }
 
-        rd_s16b(&tmp16s);
-        if (tmp16s > 0) {
+        if (auto tmp16s = rd_s16b(); tmp16s > 0) {
             o_ptr->smith_act_idx = static_cast<RandomArtActType>(tmp16s);
         }
     }
@@ -301,19 +282,17 @@ void rd_item(object_type *o_ptr)
  */
 errr load_item(void)
 {
-    uint16_t loading_max_k_idx;
-    rd_u16b(&loading_max_k_idx);
+    auto loading_max_k_idx = rd_u16b();
 
     object_kind *k_ptr;
     object_kind dummy;
-    byte tmp8u;
     for (auto i = 0U; i < loading_max_k_idx; i++) {
         if (i < k_info.size())
             k_ptr = &k_info[i];
         else
             k_ptr = &dummy;
 
-        rd_byte(&tmp8u);
+        auto tmp8u = rd_byte();
         k_ptr->aware = any_bits(tmp8u, 0x01);
         k_ptr->tried = any_bits(tmp8u, 0x02);
     }
@@ -328,27 +307,22 @@ errr load_item(void)
  */
 errr load_artifact(void)
 {
-    uint16_t loading_max_a_idx;
-    rd_u16b(&loading_max_a_idx);
+    auto loading_max_a_idx = rd_u16b();
 
     artifact_type *a_ptr;
     artifact_type dummy;
-    byte tmp8u;
     for (auto i = 0U; i < loading_max_a_idx; i++) {
         if (i < a_info.size())
             a_ptr = &a_info[i];
         else
             a_ptr = &dummy;
 
-        rd_byte(&tmp8u);
-        a_ptr->cur_num = tmp8u;
+        a_ptr->cur_num = rd_byte();
         if (h_older_than(1, 5, 0, 0)) {
             a_ptr->floor_id = 0;
-            rd_byte(&tmp8u);
-            rd_byte(&tmp8u);
-            rd_byte(&tmp8u);
+            strip_bytes(3);
         } else {
-            rd_s16b(&a_ptr->floor_id);
+            a_ptr->floor_id = rd_s16b();
         }
     }
 

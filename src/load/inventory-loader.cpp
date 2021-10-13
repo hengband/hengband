@@ -28,8 +28,7 @@ static errr rd_inventory(player_type *player_ptr)
 
     int slot = 0;
     while (true) {
-        uint16_t n;
-        rd_u16b(&n);
+        auto n = rd_u16b();
 
         if (n == 0xFFFF)
             break;
@@ -65,10 +64,8 @@ static errr rd_inventory(player_type *player_ptr)
 
 errr load_inventory(player_type *player_ptr)
 {
-    byte tmp8u;
     for (int i = 0; i < 64; i++) {
-        rd_byte(&tmp8u);
-        player_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
+        player_ptr->spell_order[i] = rd_byte();
     }
 
     if (!rd_inventory(player_ptr))
