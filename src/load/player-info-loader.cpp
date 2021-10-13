@@ -117,9 +117,9 @@ void rd_experience(player_type *player_ptr)
             player_ptr->spell_exp[i] = SPELL_EXP_MASTER;
 
     const int max_weapon_exp_size = h_older_than(0, 3, 6) ? 60 : 64;
-    for (int i = 0; i < 5; i++)
+    for (auto tval : TV_WEAPON_RANGE)
         for (int j = 0; j < max_weapon_exp_size; j++)
-            rd_s16b(&player_ptr->weapon_exp[i][j]);
+            rd_s16b(&player_ptr->weapon_exp[tval][j]);
 
     for (int i = 0; i < MAX_SKILLS; i++)
         rd_s16b(&player_ptr->skill_exp[i]);

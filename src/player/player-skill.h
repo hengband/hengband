@@ -1,6 +1,9 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+
+#include <array>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -42,14 +45,16 @@ enum skill_idx {
 
 extern const concptr exp_level_str[5];
 
+enum class ItemKindType : short;
+
 /*
  * Information about "skill"
  */
 typedef struct skill_table {
-    SUB_EXP w_start[5][64]{}; /* start weapon exp */
-    SUB_EXP w_max[5][64]{}; /* max weapon exp */
-    SUB_EXP s_start[10]{}; /* start skill */
-    SUB_EXP s_max[10]{}; /* max skill */
+    std::map<ItemKindType, std::array<SUB_EXP, 64>> w_start{}; /* start weapon exp */
+    std::map<ItemKindType, std::array<SUB_EXP, 64>> w_max{}; /* max weapon exp */
+    SUB_EXP s_start[MAX_SKILLS]{}; /* start skill */
+    SUB_EXP s_max[MAX_SKILLS]{}; /* max skill */
 } skill_table;
 
 extern std::vector<skill_table> s_info;

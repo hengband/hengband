@@ -258,12 +258,12 @@ static void generate_world(player_type *player_ptr, bool new_game)
     panel_col_min = floor_ptr->width;
 
     if (player_ptr->pclass != PlayerClassType::SORCERER) {
-        auto begin = enum2i(TV_WEAPON_BEGIN);
+        auto pclass = enum2i(player_ptr->pclass);
         if (player_ptr->ppersonality == PERSONALITY_SEXY)
-            s_info[enum2i(player_ptr->pclass)].w_max[enum2i(ItemKindType::HAFTED) - begin][SV_WHIP] = WEAPON_EXP_MASTER;
+            s_info[pclass].w_max[ItemKindType::HAFTED][SV_WHIP] = WEAPON_EXP_MASTER;
         if (player_ptr->prace == PlayerRaceType::MERFOLK) {
-            s_info[enum2i(player_ptr->pclass)].w_max[enum2i(ItemKindType::POLEARM) - begin][SV_TRIDENT] = WEAPON_EXP_MASTER;
-            s_info[enum2i(player_ptr->pclass)].w_max[enum2i(ItemKindType::POLEARM) - begin][SV_TRIFURCATE_SPEAR] = WEAPON_EXP_MASTER;
+            s_info[pclass].w_max[ItemKindType::POLEARM][SV_TRIDENT] = WEAPON_EXP_MASTER;
+            s_info[pclass].w_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = WEAPON_EXP_MASTER;
         }
     }
 

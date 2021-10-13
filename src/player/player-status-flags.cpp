@@ -1635,8 +1635,8 @@ bool has_not_ninja_weapon(player_type *player_ptr, int i)
         return false;
     }
 
-    auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
+    auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
+    auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return player_ptr->pclass == PlayerClassType::NINJA
         && !((s_info[enum2i(PlayerClassType::NINJA)].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != ItemKindType::SHIELD));
 }
@@ -1647,8 +1647,8 @@ bool has_not_monk_weapon(player_type *player_ptr, int i)
         return false;
     }
     
-    auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
+    auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
+    auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return ((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && !(s_info[enum2i(player_ptr->pclass)].w_max[tval][sval]);
 }
 
