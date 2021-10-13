@@ -192,7 +192,7 @@ void wiz_summon_random_enemy(player_type *player_ptr, int num)
 void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     if (r_idx <= 0) {
-        int val;
+        int val = 1;
         if(!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
             return;
         }
@@ -211,7 +211,7 @@ void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx)
 void wiz_summon_pet(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     if (r_idx <= 0) {
-        int val;
+        int val = 1;
         if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
             return;
         }

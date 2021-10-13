@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <charconv>
 
 /*
  * Get some string input at the cursor location.
@@ -422,7 +423,8 @@ bool get_value(const char *text, int min, int max, int *value)
 {
     std::stringstream st;
     int val;
-    char tmp_val[10] = "";
+    char tmp_val[12] = "";
+    std::to_chars(std::begin(tmp_val), std::end(tmp_val) - 1, *value);
     st << text << "(" << min << "-" << max << "): ";
     int digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
