@@ -2,6 +2,7 @@
 #include "floor/floor-town.h"
 #include "object/object-kind.h"
 #include "object/object-kind-hook.h"
+#include "player-info/class-types.h"
 #include "store/articles-on-sale.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
@@ -88,14 +89,9 @@ errr init_buildings(void)
             building[i].action_restr[j] = 0;
         }
 
-        for (int j = 0; j < PLAYER_CLASS_TYPE_MAX; j++)
-            building[i].member_class[j] = static_cast<short>(PlayerClassType::WARRIOR);
-
-        for (int j = 0; j < MAX_RACES; j++)
-            building[i].member_race[j] = static_cast<short>(PlayerRaceType::HUMAN);
-
-        for (int j = 0; j < MAX_MAGIC + 1; j++)
-            building[i].member_realm[j] = 0;
+        building[i].member_class.assign(PLAYER_CLASS_TYPE_MAX, static_cast<short>(PlayerClassType::WARRIOR));
+        building[i].member_race.assign(MAX_RACES, static_cast<short>(PlayerRaceType::HUMAN));
+        building[i].member_realm.assign(MAX_MAGIC + 1, 0);
     }
 
     return 0;
