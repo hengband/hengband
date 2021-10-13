@@ -49,8 +49,8 @@ struct world_type {
     uint16_t sf_lives{}; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file
     uint16_t sf_saves{}; //!< 現在のプレイで何回セーブしたか / Number of "saves" during this life
     uint32_t sf_play_time{}; //!< このセーブファイルで遊んだ合計のプレイ時間
-    FlagGroup<PlayerClassType, PlayerClassType::MAX> sf_winner{}; //!< このセーブファイルで*勝利*した職業
-    FlagGroup<PlayerClassType, PlayerClassType::MAX> sf_retired{}; //!< このセーブファイルで引退した職業
+    EnumClassFlagGroup<PlayerClassType> sf_winner{}; //!< このセーブファイルで*勝利*した職業
+    EnumClassFlagGroup<PlayerClassType> sf_retired{}; //!< このセーブファイルで引退した職業
 
     bool character_generated{}; /* The character exists */
     bool character_dungeon{}; /* The character has a dungeon */

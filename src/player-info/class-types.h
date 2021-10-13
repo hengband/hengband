@@ -32,3 +32,5 @@ enum class PlayerClassType : short {
     ELEMENTALIST = 28,
     MAX,
 };
+
+constexpr auto PLAYER_CLASS_TYPE_MAX = static_cast<short>(PlayerClassType::MAX);

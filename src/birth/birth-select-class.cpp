@@ -11,12 +11,12 @@
 
 static const char p2 = ')';
 
-static TERM_COLOR birth_class_color(int cs)
+static TERM_COLOR birth_class_color(PlayerClassType cs)
 {
-    if (i2enum<PlayerClassType>(cs) < PlayerClassType::MAX) {
-        if (is_retired_class(i2enum<PlayerClassType>(cs)))
+    if (cs < PlayerClassType::MAX) {
+        if (is_retired_class(cs))
             return TERM_L_DARK;
-        if (is_winner_class(i2enum<PlayerClassType>(cs)))
+        if (is_winner_class(cs))
             return TERM_SLATE;
     }
     return TERM_WHITE;
@@ -24,7 +24,7 @@ static TERM_COLOR birth_class_color(int cs)
 
 static void enumerate_class_list(char *sym)
 {
-    for (auto n = 0; i2enum<PlayerClassType>(n) < PlayerClassType::MAX; n++) {
+    for (auto n = 0; n < PLAYER_CLASS_TYPE_MAX; n++) {
         cp_ptr = &class_info[n];
         mp_ptr = &m_info[n];
         concptr str = cp_ptr->title;
@@ -39,7 +39,8 @@ static void enumerate_class_list(char *sym)
         else
             sprintf(buf, "%c%c%s", sym[n], p2, str);
 
-        c_put_str(birth_class_color(n), buf, 13 + (n / 4), 2 + 19 * (n % 4));
+        auto cs = i2enum<PlayerClassType>(n);
+        c_put_str(birth_class_color(cs), buf, 13 + (n / 4), 2 + 19 * (n % 4));
     }
 }
 
@@ -48,9 +49,10 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
     if (cs == *os)
         return;
 
-    c_put_str(birth_class_color(*os), cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
+    auto pclass = i2enum<PlayerClassType>(*os);
+    c_put_str(birth_class_color(pclass), cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
     put_str("                                   ", 3, 40);
-    if (i2enum<PlayerClassType>(cs) == PlayerClassType::MAX) {
+    if (cs == PLAYER_CLASS_TYPE_MAX) {
         sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
         put_str("                                   ", 4, 40);
         put_str("                                   ", 5, 40);
@@ -101,12 +103,12 @@ static void interpret_class_select_key_move(char c, int *cs)
     }
 
     if (c == '6') {
-        if (i2enum<PlayerClassType>(*cs) < PlayerClassType::MAX)
+        if (*cs < PLAYER_CLASS_TYPE_MAX)
             (*cs)++;
     }
 
     if (c == '2') {
-        if (i2enum<PlayerClassType>(*cs + 4) <= PlayerClassType::MAX)
+        if (*cs + 4 <= PLAYER_CLASS_TYPE_MAX)
             *cs += 4;
     }
 }
@@ -123,7 +125,7 @@ static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
 
         char buf[80];
         sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "),
-            sym[0], sym[enum2i(PlayerClassType::MAX) - 1]);
+            sym[0], sym[PLAYER_CLASS_TYPE_MAX - 1]);
 
         put_str(buf, 10, 6);
         char c = inkey();
@@ -135,7 +137,7 @@ static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == PlayerClassType::MAX) {
-                *k = randint0(enum2i(PlayerClassType::MAX));
+                *k = randint0(PLAYER_CLASS_TYPE_MAX);
                 cs = i2enum<PlayerClassType>(*k);
                 continue;
             } else {
@@ -147,19 +149,19 @@ static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
         int int_cs = enum2i(cs);
         interpret_class_select_key_move(c, &int_cs);
         if (c == '*') {
-            *k = randint0(enum2i(PlayerClassType::MAX));
+            *k = randint0(PLAYER_CLASS_TYPE_MAX);
             cs = i2enum<PlayerClassType>(*k);
             continue;
         }
 
         *k = (islower(c) ? A2I(c) : -1);
-        if ((*k >= 0) && (i2enum<PlayerClassType>(*k) < PlayerClassType::MAX)) {
+        if ((*k >= 0) && (*k < PLAYER_CLASS_TYPE_MAX)) {
             cs = i2enum<PlayerClassType>(*k);
             continue;
         }
 
         *k = (isupper(c) ? (26 + c - 'A') : -1);
-        if ((*k >= 26) && (i2enum<PlayerClassType>(*k) < PlayerClassType::MAX)) {
+        if ((*k >= 26) && (*k < PLAYER_CLASS_TYPE_MAX)) {
             cs = i2enum<PlayerClassType>(*k);
             continue;
         } else
@@ -183,7 +185,7 @@ bool get_player_class(player_type *player_ptr)
     put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。", "Any entries in parentheses should only be used by advanced players."), 11, 5);
     put_str("                                   ", 6, 40);
 
-    char sym[enum2i(PlayerClassType::MAX)];
+    char sym[PLAYER_CLASS_TYPE_MAX];
     enumerate_class_list(sym);
 
     char cur[80];

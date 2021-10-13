@@ -141,7 +141,7 @@ static void dump_winner_classes(FILE *fff)
     size_t max_len = 75;
     std::string s = "";
     std::string l = "";
-    for (int c = 0; c < enum2i(PlayerClassType::MAX); c++) {
+    for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         if (w_ptr->sf_winner.has_not(i2enum<PlayerClassType>(c)))
             continue;
 

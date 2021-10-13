@@ -88,7 +88,7 @@ errr init_buildings(void)
             building[i].action_restr[j] = 0;
         }
 
-        for (int j = 0; j < enum2i(PlayerClassType::MAX); j++)
+        for (int j = 0; j < PLAYER_CLASS_TYPE_MAX; j++)
             building[i].member_class[j] = static_cast<short>(PlayerClassType::WARRIOR);
 
         for (int j = 0; j < MAX_RACES; j++)
