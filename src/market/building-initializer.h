@@ -1,6 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
-errr init_towns(void);
-errr init_buildings(void);
+void init_towns(void);
+void init_buildings(void);

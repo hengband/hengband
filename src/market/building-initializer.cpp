@@ -7,15 +7,16 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/angband.h"
 #include "system/building-type-definition.h"
 #include "system/object-type-definition.h"
+#include <vector>
 
 /*!
  * @brief 町情報読み込みのメインルーチン /
  * Initialize town array
- * @return エラーコード
  */
-errr init_towns(void)
+void init_towns(void)
 {
     town_info = std::vector<town_type>(max_towns);
     for (int i = 1; i < max_towns; i++) {
@@ -64,16 +65,13 @@ errr init_towns(void)
             }
         }
     }
-
-    return 0;
 }
 
 /*!
  * @brief 店情報初期化のメインルーチン /
  * Initialize buildings
- * @return エラーコード
  */
-errr init_buildings(void)
+void init_buildings(void)
 {
     for (int i = 0; i < MAX_BLDG; i++) {
         building[i].name[0] = '\0';
@@ -93,6 +91,4 @@ errr init_buildings(void)
         building[i].member_race.assign(MAX_RACES, static_cast<short>(PlayerRaceType::HUMAN));
         building[i].member_realm.assign(MAX_MAGIC + 1, 0);
     }
-
-    return 0;
 }
