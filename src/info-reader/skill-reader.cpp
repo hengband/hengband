@@ -4,6 +4,7 @@
 #include "main/angband-headers.h"
 #include "object/tval-types.h"
 #include "player/player-skill.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 
 namespace {
@@ -47,8 +48,8 @@ errr parse_s_info(std::string_view buf, angband_header *head)
         if (tokens.size() < 5)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        int tval, sval, start, max;
-        info_set_value(tval, tokens[1]);
+        int tval_offset, sval, start, max;
+        info_set_value(tval_offset, tokens[1]);
         info_set_value(sval, tokens[2]);
         info_set_value(start, tokens[3]);
         info_set_value(max, tokens[4]);
@@ -61,6 +62,7 @@ errr parse_s_info(std::string_view buf, angband_header *head)
         if (max_exp == level_to_exp.end())
             return PARSE_ERROR_INVALID_FLAG;
 
+        auto tval = ItemKindType::BOW + tval_offset;
         s_ptr->w_start[tval][sval] = (SUB_EXP)start_exp->second;
         s_ptr->w_max[tval][sval] = (SUB_EXP)max_exp->second;
     } else if (tokens[0] == "S") {

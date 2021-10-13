@@ -2162,11 +2162,8 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
         object_type *o_ptr = &player_ptr->inventory_list[slot];
         auto flgs = object_flags(o_ptr);
 
-        auto tval = o_ptr->tval - TV_WEAPON_BEGIN;
-        OBJECT_SUBTYPE_VALUE sval = o_ptr->sval;
-
         /* Traind bonuses */
-        hit += (player_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
+        hit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - WEAPON_EXP_BEGINNER) / 200;
 
         /* Weight penalty */
         if (calc_weapon_weight_limit(player_ptr) < o_ptr->weight / 10) {

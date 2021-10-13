@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "util/enum-converter.h"
+#include "util/enum-range.h"
 
 enum class ItemKindType : short {
     NONE = 0,
@@ -84,3 +84,5 @@ enum class ItemKindType : short {
 #define TV_WEAPON_END ItemKindType::SWORD
 #define TV_ARMOR_BEGIN ItemKindType::BOOTS
 #define TV_ARMOR_END ItemKindType::DRAG_ARMOR
+
+constexpr auto TV_WEAPON_RANGE = EnumRange(TV_WEAPON_BEGIN, TV_WEAPON_END);
