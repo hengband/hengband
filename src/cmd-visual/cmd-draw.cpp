@@ -245,14 +245,14 @@ void do_cmd_messages(int num_now)
         case 'n':
         case KTRL('N'):
         case SKEY_PGDOWN:
-            i = MAX(0, i - num_lines);
+            i = std::max(0, i - num_lines);
             break;
         case '-':
-            i = MAX(0, i - 10);
+            i = std::max(0, i - 10);
             break;
         case '2':
         case SKEY_DOWN:
-            i = MAX(0, i - 1);
+            i = std::max(0, i - 1);
             break;
         }
 

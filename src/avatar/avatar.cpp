@@ -449,17 +449,17 @@ void chg_virtue(player_type *player_ptr, int virtue_id, int amount)
 
         if (amount > 0) {
             if ((amount + player_ptr->virtues[i] > 50) && one_in_(2)) {
-                player_ptr->virtues[i] = MAX(player_ptr->virtues[i], 50);
+                player_ptr->virtues[i] = std::max<short>(player_ptr->virtues[i], 50);
                 return;
             }
 
             if ((amount + player_ptr->virtues[i] > 80) && one_in_(2)) {
-                player_ptr->virtues[i] = MAX(player_ptr->virtues[i], 80);
+                player_ptr->virtues[i] = std::max<short>(player_ptr->virtues[i], 80);
                 return;
             }
 
             if ((amount + player_ptr->virtues[i] > 100) && one_in_(2)) {
-                player_ptr->virtues[i] = MAX(player_ptr->virtues[i], 100);
+                player_ptr->virtues[i] = std::max<short>(player_ptr->virtues[i], 100);
                 return;
             }
 

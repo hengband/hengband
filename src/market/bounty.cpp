@@ -279,7 +279,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
                 max_dl = max_dlv[d_ref.idx];
         }
     } else {
-        max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
+        max_dl = std::max(max_dlv[DUNGEON_ANGBAND], 3);
     }
 
     get_mon_num_prep_bounty(player_ptr);

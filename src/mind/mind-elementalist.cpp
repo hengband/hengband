@@ -879,7 +879,7 @@ static bool try_cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx,
         msg_print(_("元素の力が制御できない氾流となって解放された！", "Elemental power unleashes its power in an uncontrollable storm!"));
         project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, player_ptr->y, player_ptr->x, plev * 2, get_element_types(player_ptr->element)[0],
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
-        player_ptr->csp = MAX(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
+        player_ptr->csp = std::max(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
 
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         set_bits(player_ptr->redraw, PR_MANA);
@@ -1130,7 +1130,7 @@ static int interpret_realm_select_key(int cs, int n, char c)
  */
 static int get_element_realm(player_type *player_ptr, int is, int n)
 {
-    int cs = MAX(0, is);
+    int cs = std::max(0, is);
     int os = cs;
     int k;
 

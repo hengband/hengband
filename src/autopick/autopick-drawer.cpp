@@ -121,7 +121,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
         tb->dirty_flags |= DIRTY_ALL;
 
         by1 = MIN(tb->my, tb->cy);
-        by2 = MAX(tb->my, tb->cy);
+        by2 = std::max(tb->my, tb->cy);
     }
 
     int i;
@@ -171,7 +171,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
             int x0 = leftcol + tb->left;
             int len = strlen(tb->lines_list[tb->cy]);
             int bx1 = MIN(tb->mx, tb->cx);
-            int bx2 = MAX(tb->mx, tb->cx);
+            int bx2 = std::max(tb->mx, tb->cx);
 
             if (bx2 > len)
                 bx2 = len;

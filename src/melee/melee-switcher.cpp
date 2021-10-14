@@ -159,7 +159,7 @@ void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
     case RBE_SUPERHURT:
         if ((randint1(mam_ptr->rlev * 2 + 250) > (mam_ptr->ac + 200)) || one_in_(13)) {
             int tmp_damage = mam_ptr->damage - (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
-            mam_ptr->damage = MAX(mam_ptr->damage, tmp_damage * 2);
+            mam_ptr->damage = std::max(mam_ptr->damage, tmp_damage * 2);
             break;
         }
 

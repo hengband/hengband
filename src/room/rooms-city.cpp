@@ -35,9 +35,9 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
             center_y = rand_range(2, town_hgt - 3);
             center_x = rand_range(2, town_wid - 3);
             tmp = center_y - randint1(max_bldg_hgt);
-            cur_ugbldg->y0 = MAX(tmp, 1);
+            cur_ugbldg->y0 = std::max(tmp, 1);
             tmp = center_x - randint1(max_bldg_wid);
-            cur_ugbldg->x0 = MAX(tmp, 1);
+            cur_ugbldg->x0 = std::max(tmp, 1);
             tmp = center_y + randint1(max_bldg_hgt);
             cur_ugbldg->y1 = MIN(tmp, town_hgt - 2);
             tmp = center_x + randint1(max_bldg_wid);

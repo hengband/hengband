@@ -161,29 +161,29 @@ const byte adj_dex_blow[MAX_ADJ_DEX] = {
  *
  * First, from the player class, we extract some values:
  *
- * Warrior       num = 6; mul = 5; div = MAX(70, weapon_weight);
- * Berserker     num = 6; mul = 7; div = MAX(70, weapon_weight);
- * Mage          num = 3; mul = 2; div = MAX(100, weapon_weight);
- * Priest        num = 5; mul = 3; div = MAX(100, weapon_weight);
- * Mindcrafter   num = 5; mul = 3; div = MAX(100, weapon_weight);
- * Rogue         num = 5; mul = 3; div = MAX(40, weapon_weight);
- * Ranger        num = 5; mul = 4; div = MAX(70, weapon_weight);
- * Paladin       num = 5; mul = 4; div = MAX(70, weapon_weight);
- * Weaponsmith   num = 5; mul = 5; div = MAX(150, weapon_weight);
- * Warrior-Mage  num = 5; mul = 3; div = MAX(70, weapon_weight);
- * Chaos Warrior num = 5; mul = 4; div = MAX(70, weapon_weight);
- * Monk          num = 5; mul = 3; div = MAX(60, weapon_weight);
- * Tourist       num = 4; mul = 3; div = MAX(100, weapon_weight);
- * Imitator      num = 5; mul = 4; div = MAX(70, weapon_weight);
- * Beastmaster   num = 5; mul = 3; div = MAX(70, weapon_weight);
- * Cavalry(Ride) num = 5; mul = 4; div = MAX(70, weapon_weight);
- * Cavalry(Walk) num = 5; mul = 3; div = MAX(100, weapon_weight);
- * Sorcerer      num = 1; mul = 1; div = MAX(1, weapon_weight);
- * Archer        num = 4; mul = 2; div = MAX(70, weapon_weight);
- * Magic eater   num = 4; mul = 2; div = MAX(70, weapon_weight);
- * ForceTrainer  num = 4; mul = 2; div = MAX(60, weapon_weight);
- * Mirror Master num = 3; mul = 3; div = MAX(100, weapon_weight);
- * Ninja         num = 4; mul = 1; div = MAX(20, weapon_weight);
+ * Warrior       num = 6; mul = 5; div = std::max(70, weapon_weight);
+ * Berserker     num = 6; mul = 7; div = std::max(70, weapon_weight);
+ * Mage          num = 3; mul = 2; div = std::max(100, weapon_weight);
+ * Priest        num = 5; mul = 3; div = std::max(100, weapon_weight);
+ * Mindcrafter   num = 5; mul = 3; div = std::max(100, weapon_weight);
+ * Rogue         num = 5; mul = 3; div = std::max(40, weapon_weight);
+ * Ranger        num = 5; mul = 4; div = std::max(70, weapon_weight);
+ * Paladin       num = 5; mul = 4; div = std::max(70, weapon_weight);
+ * Weaponsmith   num = 5; mul = 5; div = std::max(150, weapon_weight);
+ * Warrior-Mage  num = 5; mul = 3; div = std::max(70, weapon_weight);
+ * Chaos Warrior num = 5; mul = 4; div = std::max(70, weapon_weight);
+ * Monk          num = 5; mul = 3; div = std::max(60, weapon_weight);
+ * Tourist       num = 4; mul = 3; div = std::max(100, weapon_weight);
+ * Imitator      num = 5; mul = 4; div = std::max(70, weapon_weight);
+ * Beastmaster   num = 5; mul = 3; div = std::max(70, weapon_weight);
+ * Cavalry(Ride) num = 5; mul = 4; div = std::max(70, weapon_weight);
+ * Cavalry(Walk) num = 5; mul = 3; div = std::max(100, weapon_weight);
+ * Sorcerer      num = 1; mul = 1; div = std::max(1, weapon_weight);
+ * Archer        num = 4; mul = 2; div = std::max(70, weapon_weight);
+ * Magic eater   num = 4; mul = 2; div = std::max(70, weapon_weight);
+ * ForceTrainer  num = 4; mul = 2; div = std::max(60, weapon_weight);
+ * Mirror Master num = 3; mul = 3; div = std::max(100, weapon_weight);
+ * Ninja         num = 4; mul = 1; div = std::max(20, weapon_weight);
  *
  * To get "P", we look up the relevant "adj_str_blow[]" (see above),
  * multiply it by "mul", and then divide it by "div".

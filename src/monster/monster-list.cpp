@@ -103,10 +103,10 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
 
     /* +1 per day after the base date */
     /* base dates : day5(1F), day18(10F,0F), day34(30F), day53(60F), day69(90F) */
-    over_days = MAX(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
+    over_days = std::max<int>(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
 
     /* starts from 1/25, reaches 1/3 after 44days from a max_level dependent base date */
-    pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - over_days / 2);
+    pls_kakuritu = std::max(NASTY_MON_MAX, NASTY_MON_BASE - over_days / 2);
     /* starts from 0, reaches +25lv after 75days from a max_level dependent base date */
     pls_max_level = MIN(NASTY_MON_PLUS_MAX, over_days / 3);
 

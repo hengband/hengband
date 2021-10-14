@@ -317,7 +317,7 @@ void exe_eat_food(player_type *player_ptr, INVENTORY_IDX item)
     } else {
         if (o_ptr->tval == ItemKindType::FOOD && o_ptr->sval == SV_FOOD_WAYBREAD) {
             /* Waybread is always fully satisfying. */
-            set_food(player_ptr, MAX(player_ptr->food, PY_FOOD_MAX - 1));
+            set_food(player_ptr, std::max<short>(player_ptr->food, PY_FOOD_MAX - 1));
         } else {
             /* Food can feed the player */
             (void)set_food(player_ptr, player_ptr->food + o_ptr->pval);

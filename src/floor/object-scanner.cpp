@@ -107,7 +107,7 @@ COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION
     char floor_label[52 + 1];
     bool dont_need_to_show_weights = true;
     term_get_size(&wid, &hgt);
-    int len = MAX((*min_width), 20);
+    int len = std::max((*min_width), 20);
     floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {

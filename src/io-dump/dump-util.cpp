@@ -61,8 +61,8 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		if (*visual_list_ptr) return false;
 
 		*visual_list_ptr = true;
-		*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
-		*char_left_ptr = MAX(0, *cur_char_ptr - 10);
+		*attr_top_ptr = std::max(0, (*cur_attr_ptr & 0x7f) - 5);
+		*char_left_ptr = std::max(0, *cur_char_ptr - 10);
 		attr_old = *cur_attr_ptr;
 		char_old = *cur_char_ptr;
 		return true;
@@ -86,7 +86,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		if (attr_idx || (!(char_idx & 0x80) && char_idx))
 		{
 			*cur_attr_ptr = attr_idx;
-			*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
+			*attr_top_ptr = std::max(0, (*cur_attr_ptr & 0x7f) - 5);
 			if (!*visual_list_ptr) *need_redraw = true;
 		}
 
@@ -94,7 +94,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		{
 			/* Set the char */
 			*cur_char_ptr = char_idx;
-			*char_left_ptr = MAX(0, *cur_char_ptr - 10);
+			*char_left_ptr = std::max(0, *cur_char_ptr - 10);
 			if (!*visual_list_ptr) *need_redraw = true;
 		}
 
@@ -123,9 +123,9 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 
 		*cur_attr_ptr = a;
 		*cur_char_ptr = c;
-		if ((ddx[d] < 0) && *char_left_ptr > MAX(0, (unsigned char)c - 10)) (*char_left_ptr)--;
+		if ((ddx[d] < 0) && *char_left_ptr > std::max(0, (unsigned char)c - 10)) (*char_left_ptr)--;
 		if ((ddx[d] > 0) && *char_left_ptr + eff_width < MIN(0xff, (unsigned char)c + 10)) (*char_left_ptr)++;
-		if ((ddy[d] < 0) && *attr_top_ptr > MAX(0, (int)(a & 0x7f) - 4)) (*attr_top_ptr)--;
+		if ((ddy[d] < 0) && *attr_top_ptr > std::max(0, (int)(a & 0x7f) - 4)) (*attr_top_ptr)--;
 		if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
 
 		return true;

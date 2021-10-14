@@ -237,7 +237,7 @@ void update_dungeon_feeling(player_type *player_ptr)
     if (player_ptr->phase_out)
         return;
 
-    int delay = MAX(10, 150 - player_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
+    int delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
     if (w_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra)
         return;
 

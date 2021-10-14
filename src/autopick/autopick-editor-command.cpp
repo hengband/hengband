@@ -183,7 +183,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         copy_text_to_yank(tb);
         if (tb->my == tb->cy) {
             int bx1 = MIN(tb->mx, tb->cx);
-            int bx2 = MAX(tb->mx, tb->cx);
+            int bx2 = std::max(tb->mx, tb->cx);
             int len = strlen(tb->lines_list[tb->cy]);
             if (bx2 > len)
                 bx2 = len;
@@ -192,7 +192,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             tb->cx = bx1;
         } else {
             int by1 = MIN(tb->my, tb->cy);
-            int by2 = MAX(tb->my, tb->cy);
+            int by2 = std::max(tb->my, tb->cy);
 
             for (int y = by2; y >= by1; y--) {
                 int len = strlen(tb->lines_list[y]);
@@ -218,7 +218,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
          * Pressing ^C ^V correctly duplicates the selection.
          */
         if (tb->my != tb->cy) {
-            tb->cy = MAX(tb->cy, tb->my);
+            tb->cy = std::max(tb->cy, tb->my);
             if (!tb->lines_list[tb->cy + 1]) {
                 if (!add_empty_line(tb))
                     break;
@@ -228,7 +228,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             break;
         }
 
-        tb->cx = MAX(tb->cx, tb->mx);
+        tb->cx = std::max(tb->cx, tb->mx);
         if (!tb->lines_list[tb->cy][tb->cx]) {
             if (!tb->lines_list[tb->cy + 1]) {
                 if (!add_empty_line(tb))

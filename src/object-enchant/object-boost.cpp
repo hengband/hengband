@@ -609,5 +609,5 @@ void make_weight_heavy(object_type *o_ptr)
  */
 void add_xtra_ac(object_type *o_ptr)
 {
-    o_ptr->ac += MAX(5, o_ptr->ac / 4);
+    o_ptr->ac += std::max(5, o_ptr->ac / 4);
 }

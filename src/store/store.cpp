@@ -309,7 +309,7 @@ void store_maintenance(player_type *player_ptr, int town_num, StoreSaleType stor
     }
 
     INVENTORY_IDX j = st_ptr->stock_num;
-    int remain = STORE_TURNOVER + MAX(0, j - STORE_MAX_KEEP);
+    int remain = STORE_TURNOVER + std::max(0, j - STORE_MAX_KEEP);
     int turn_over = 1;
     for (int i = 0; i < chance; i++) {
         auto n = randint0(remain);

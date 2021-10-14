@@ -1461,7 +1461,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             if (has_two_handed_weapons(player_ptr) && !has_disable_two_handed_bonus(player_ptr, 0))
                 str_index += (player_ptr->pclass == PlayerClassType::WARRIOR || player_ptr->pclass == PlayerClassType::BERSERKER) ? (player_ptr->lev / 23 + 1) : 1;
             if (player_ptr->pclass == PlayerClassType::NINJA)
-                str_index = MAX(0, str_index - 1);
+                str_index = std::max(0, str_index - 1);
             if (str_index > 11)
                 str_index = 11;
 
@@ -1806,7 +1806,7 @@ int16_t calc_double_weapon_penalty(player_type *player_ptr, INVENTORY_IDX slot)
                 penalty /= 2;
 
         if (flags.has(TR_SUPPORTIVE))
-            penalty = MAX(0, penalty - 10);
+            penalty = std::max(0, penalty - 10);
 
         if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA)
             && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI)) {
@@ -2078,7 +2078,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
             || !has_disable_two_handed_bonus(player_ptr, calc_hand)) {
             int bonus_to_d = 0;
             bonus_to_d = ((int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128) / 2;
-            damage += MAX(bonus_to_d, 1);
+            damage += std::max(bonus_to_d, 1);
         }
     }
 
@@ -2153,7 +2153,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
             || !has_disable_two_handed_bonus(player_ptr, calc_hand)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[player_ptr->stat_index[A_STR]]) - 128) + ((int)(adj_dex_th[player_ptr->stat_index[A_DEX]]) - 128);
-            hit += MAX(bonus_to_h, 1);
+            hit += std::max(bonus_to_h, 1);
         }
     }
 
