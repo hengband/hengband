@@ -45,7 +45,7 @@
 
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {
-    return f_ptr->flags.has_not(FF::GLASS) || (r_info[m_ptr->r_idx].flags2 & RF2_STUPID) || (m_ptr->hp >= MAX(m_ptr->maxhp / 3, 200));
+    return f_ptr->flags.has_not(FF::GLASS) || (r_info[m_ptr->r_idx].flags2 & RF2_STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
 }
 
 /*!

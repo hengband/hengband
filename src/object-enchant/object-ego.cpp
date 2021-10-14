@@ -282,7 +282,7 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
                 o_ptr->to_h += 5;
                 o_ptr->to_d -= 5;
             }
-            o_ptr->to_h = MAX(o_ptr->to_h, 15);
+            o_ptr->to_h = std::max<short>(o_ptr->to_h, 15);
         }
 
         if (gen_flags.has(TRG::MOD_VELOCITY)) {
@@ -290,11 +290,11 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
                 o_ptr->to_d += 5;
                 o_ptr->to_h -= 5;
             }
-            o_ptr->to_d = MAX(o_ptr->to_d, 15);
+            o_ptr->to_d = std::max(o_ptr->to_d, 15);
         }
 
         if ((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION) || (o_ptr->name2 == EGO_H_PROTECTION)) {
-            o_ptr->to_a = MAX(o_ptr->to_a, 15);
+            o_ptr->to_a = std::max<short>(o_ptr->to_a, 15);
         }
 
         if (e_ptr->max_pval) {

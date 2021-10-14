@@ -203,7 +203,7 @@ static void spell_damcalc(player_type *player_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_MIND_BLAST:
     case GF_BRAIN_SMASH:
-        if (100 + rlev / 2 <= MAX(5, player_ptr->skill_sav)) {
+        if (100 + rlev / 2 <= std::max<short>(5, player_ptr->skill_sav)) {
             dam = 0;
             ignore_wraith_form = true;
         }
@@ -279,7 +279,7 @@ static int blow_damcalc(monster_type *m_ptr, player_type *player_ptr, monster_bl
     switch (blow_ptr->effect) {
     case RBE_SUPERHURT: {
         int tmp_dam = dam - (dam * ((ac < 150) ? ac : 150) / 250);
-        dam = MAX(dam, tmp_dam * 2);
+        dam = std::max(dam, tmp_dam * 2);
         break;
     }
 

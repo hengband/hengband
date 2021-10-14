@@ -86,10 +86,10 @@ void building_recharge(player_type *player_ptr)
         }
     } else if (o_ptr->tval == ItemKindType::STAFF) {
         price = (k_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
-        price = MAX(10, price);
+        price = std::max(10, price);
     } else {
         price = (k_info[o_ptr->k_idx].cost / 10);
-        price = MAX(10, price);
+        price = std::max(10, price);
     }
 
     if (o_ptr->tval == ItemKindType::WAND && (o_ptr->pval / o_ptr->number >= k_ptr->pval)) {
@@ -201,13 +201,13 @@ void building_recharge_all(player_type *player_ptr)
 
         case ItemKindType::STAFF:
             price = (k_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
-            price = MAX(10, price);
+            price = std::max(10, price);
             price = (k_ptr->pval - o_ptr->pval) * price;
             break;
 
         case ItemKindType::WAND:
             price = (k_info[o_ptr->k_idx].cost / 10);
-            price = MAX(10, price);
+            price = std::max(10, price);
             price = (o_ptr->number * k_ptr->pval - o_ptr->pval) * price;
             break;
 

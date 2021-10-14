@@ -444,7 +444,7 @@ bool reset_recall(player_type *player_ptr)
     if (!select_dungeon)
         return false;
     sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
-    sprintf(tmp_val, "%d", (int)MAX(player_ptr->current_floor_ptr->dun_level, 1));
+    sprintf(tmp_val, "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
 
     if (!get_string(ppp, tmp_val, 10)) {
         return false;

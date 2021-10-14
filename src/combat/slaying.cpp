@@ -72,7 +72,7 @@ MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const TrFlags &flg
             atoffset(BIT_FLAGS, r_ptr, p->r_flag_offset) |= p->affect_race_flag;
         }
 
-        mult = MAX(mult, p->slay_mult);
+        mult = std::max(mult, p->slay_mult);
     }
 
     return mult;
@@ -122,11 +122,11 @@ MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs,
                 r_ptr->r_flags3 |= p->hurt_flag;
             }
 
-            mult = MAX(mult, 50);
+            mult = std::max<short>(mult, 50);
             continue;
         }
 
-        mult = MAX(mult, 25);
+        mult = std::max<short>(mult, 25);
     }
 
     return mult;

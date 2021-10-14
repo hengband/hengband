@@ -101,7 +101,7 @@ static void ninja_critical(player_type *player_ptr, player_attack_type *pa_ptr)
         return;
 
     if (is_unique || !is_weaken) {
-        pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
+        pa_ptr->attack_damage = std::max(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
         pa_ptr->drain_result *= 2;
         msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
     } else {

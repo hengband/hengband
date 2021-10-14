@@ -173,7 +173,7 @@ static int next_to_open(floor_type *floor_ptr, const POSITION cy, const POSITION
         }
     }
 
-    return MAX(len, blen);
+    return std::max(len, blen);
 }
 
 /*!

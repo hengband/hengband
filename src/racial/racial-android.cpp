@@ -65,7 +65,7 @@ void calc_android_exp(player_type *player_ptr)
         object_type forge;
         object_type *q_ptr = &forge;
         uint32_t value, exp;
-        DEPTH level = MAX(k_info[o_ptr->k_idx].level - 8, 1);
+        DEPTH level = std::max(k_info[o_ptr->k_idx].level - 8, 1);
 
         if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE))
             continue;
@@ -78,10 +78,10 @@ void calc_android_exp(player_type *player_ptr)
         q_ptr->curse_flags.clear();
 
         if (o_ptr->is_fixed_artifact()) {
-            level = (level + MAX(a_info[o_ptr->name1].level - 8, 5)) / 2;
+            level = (level + std::max(a_info[o_ptr->name1].level - 8, 5)) / 2;
             level += MIN(20, a_info[o_ptr->name1].rarity / (a_info[o_ptr->name1].gen_flags.has(TRG::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
-            level += MAX(3, (e_info[o_ptr->name2].rating - 5) / 2);
+            level += std::max(3, (e_info[o_ptr->name2].rating - 5) / 2);
         } else if (o_ptr->art_name) {
             int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
             int fake_level;
@@ -102,7 +102,7 @@ void calc_android_exp(player_type *player_ptr)
                     fake_level = 40;
             }
 
-            level = MAX(level, (level + MAX(fake_level - 8, 5)) / 2 + 3);
+            level = std::max(level, (level + std::max(fake_level - 8, 5)) / 2 + 3);
         }
 
         value = object_value_real(q_ptr);

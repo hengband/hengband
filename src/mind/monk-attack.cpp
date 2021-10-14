@@ -117,7 +117,7 @@ static int select_blow(player_type *player_ptr, player_attack_type *pa_ptr, int 
     }
 
     if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
-        min_level = MAX(1, pa_ptr->ma_ptr->min_level - 3);
+        min_level = std::max(1, pa_ptr->ma_ptr->min_level - 3);
     else
         min_level = pa_ptr->ma_ptr->min_level;
 

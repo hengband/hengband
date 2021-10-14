@@ -427,7 +427,7 @@ static void wiz_statistics(player_type *player_ptr, object_type *o_ptr)
         sprintf(tmp_val, "%ld", (long int)test_roll);
         if (get_string(p, tmp_val, 10))
             test_roll = atol(tmp_val);
-        test_roll = MAX(1, test_roll);
+        test_roll = std::max<uint>(1, test_roll);
         msg_format("Creating a lot of %s items. Base level = %d.", quality, player_ptr->current_floor_ptr->dun_level);
         msg_print(nullptr);
 

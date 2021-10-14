@@ -179,12 +179,12 @@ void update_gambling_monsters(player_type *player_ptr)
     mon_level = randint1(MIN(max_dl, 122)) + 5;
     if (randint0(100) < 60) {
         i = randint1(MIN(max_dl, 122)) + 5;
-        mon_level = MAX(i, mon_level);
+        mon_level = std::max(i, mon_level);
     }
 
     if (randint0(100) < 30) {
         i = randint1(MIN(max_dl, 122)) + 5;
-        mon_level = MAX(i, mon_level);
+        mon_level = std::max(i, mon_level);
     }
 
     while (true) {
@@ -370,7 +370,7 @@ bool monster_arena_comm(player_type *player_ptr)
     }
 
     msg_print(nullptr);
-    battle_odds = MAX(wager + 1, wager * battle_odds / 100);
+    battle_odds = std::max(wager + 1, wager * battle_odds / 100);
     kakekin = wager;
     player_ptr->au -= wager;
     reset_tim_flags(player_ptr);

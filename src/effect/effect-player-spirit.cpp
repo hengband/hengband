@@ -65,7 +65,7 @@ void effect_player_drain_mana(player_type *player_ptr, effect_player_type *ep_pt
 
 void effect_player_mind_blast(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, player_ptr->skill_sav)) && !check_multishadow(player_ptr)) {
+    if ((randint0(100 + ep_ptr->rlev / 2) < std::max<short>(5, player_ptr->skill_sav)) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         return;
     }
@@ -97,7 +97,7 @@ void effect_player_mind_blast(player_type *player_ptr, effect_player_type *ep_pt
 
 void effect_player_brain_smash(player_type *player_ptr, effect_player_type *ep_ptr)
 {
-    if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, player_ptr->skill_sav)) && !check_multishadow(player_ptr)) {
+    if ((randint0(100 + ep_ptr->rlev / 2) < std::max<short>(5, player_ptr->skill_sav)) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
         return;
     }
@@ -132,9 +132,9 @@ void effect_player_brain_smash(player_type *player_ptr, effect_player_type *ep_p
 
     (void)bss.mod_slowness(randint0(4) + 4, false);
 
-    while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, player_ptr->skill_sav)))
+    while (randint0(100 + ep_ptr->rlev / 2) > (std::max<short>(5, player_ptr->skill_sav)))
         (void)do_dec_stat(player_ptr, A_INT);
-    while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, player_ptr->skill_sav)))
+    while (randint0(100 + ep_ptr->rlev / 2) > (std::max<short>(5, player_ptr->skill_sav)))
         (void)do_dec_stat(player_ptr, A_WIS);
 
     if (!has_resist_chaos(player_ptr)) {

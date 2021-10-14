@@ -410,7 +410,7 @@ process_result effect_monster_capture(player_type *player_ptr, effect_monster_ty
 
     auto r_max_hp = em_ptr->r_ptr->hdice * em_ptr->r_ptr->hside;
     auto threshold_hp = calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, r_max_hp);
-    auto capturable_hp = MAX(2, calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
+    auto capturable_hp = std::max(2, calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
 
     if (threshold_hp < 2 || em_ptr->m_ptr->hp >= capturable_hp) {
         msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);

@@ -245,7 +245,7 @@ static void hissatsu_bloody_maelstroem(player_type *player_ptr, samurai_slaying_
 {
     auto player_cut = player_ptr->effects()->cut();
     if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_cut->is_cut() && monster_living(samurai_slaying_ptr->m_ptr->r_idx)) {
-        MULTIPLY tmp = MIN(100, MAX(10, player_cut->current() / 10));
+        MULTIPLY tmp = MIN(100, std::max(10, player_cut->current() / 10));
         if (samurai_slaying_ptr->mult < tmp)
             samurai_slaying_ptr->mult = tmp;
     }
@@ -308,7 +308,7 @@ MULTIPLY mult_hissatsu(player_type *player_ptr, MULTIPLY mult, const TrFlags &fl
 
 void concentration(player_type *player_ptr)
 {
-    int max_csp = MAX(player_ptr->msp * 4, player_ptr->lev * 5 + 5);
+    int max_csp = std::max(player_ptr->msp * 4, player_ptr->lev * 5 + 5);
 
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
@@ -428,7 +428,7 @@ int calc_attack_quality(player_type *player_ptr, player_attack_type *pa_ptr)
     }
 
     if (player_ptr->sutemi)
-        chance = MAX(chance * 3 / 2, chance + 60);
+        chance = std::max(chance * 3 / 2, chance + 60);
 
     int vir = virtue_number(player_ptr, V_VALOUR);
     if (vir != 0)

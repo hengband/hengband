@@ -538,7 +538,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
         flush();
     }
 
-    if (player_ptr->wild_mode && !player_ptr->leaving && (player_ptr->chp < MAX(warning, player_ptr->mhp / 5)))
+    if (player_ptr->wild_mode && !player_ptr->leaving && (player_ptr->chp < std::max(warning, player_ptr->mhp / 5)))
         change_wild_mode(player_ptr, false);
 
     return damage;

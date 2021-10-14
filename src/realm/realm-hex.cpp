@@ -264,7 +264,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
 
         if (cast) {
             int a = 3 - (player_ptr->pspeed - 100) / 10;
-            byte r = 3 + randint1(3) + MAX(0, MIN(3, a));
+            byte r = 3 + randint1(3) + std::max(0, MIN(3, a));
 
             if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
@@ -830,7 +830,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
         if (cast) {
             byte r;
             int a = 3 - (player_ptr->pspeed - 100) / 10;
-            r = 1 + randint1(2) + MAX(0, MIN(3, a));
+            r = 1 + randint1(2) + std::max(0, MIN(3, a));
 
             if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));

@@ -289,7 +289,7 @@ concptr do_nature_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
             int rad2 = DETECT_RAD_DEFAULT;
 
             if (info)
-                return info_radius(MAX(rad1, rad2));
+                return info_radius(std::max(rad1, rad2));
 
             if (cast) {
                 map_area(player_ptr, rad1);
