@@ -21,20 +21,17 @@
 
 #ifdef WINDOWS
 #include <windows.h>
+#define WAIT 100
 #else
 #include "system/h-basic.h"
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
+#define WAIT 100 * 1000 /* ブラウズ側のウエイト(us単位) */
 #endif
 
 #define RINGBUF_SIZE 1024 * 1024
 #define FRESH_QUEUE_SIZE 4096
-#ifdef WINDOWS
-#define WAIT 100
-#else
-#define WAIT 100 * 1000 /* ブラウズ側のウエイト(us単位) */
-#endif
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
 
