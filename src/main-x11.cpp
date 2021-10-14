@@ -108,6 +108,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include <algorithm>
 
 /*
  * Available graphic modes
@@ -1184,8 +1185,8 @@ static void sort_co_ord(co_ord *min, co_ord *max, const co_ord *b, const co_ord 
 {
     min->x = MIN(a->x, b->x);
     min->y = MIN(a->y, b->y);
-    max->x = MAX(a->x, b->x);
-    max->y = MAX(a->y, b->y);
+    max->x = std::max(a->x, b->x);
+    max->y = std::max(a->y, b->y);
 }
 
 /*

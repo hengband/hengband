@@ -207,7 +207,7 @@ static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_i
     if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON))
         return false;
 
-    if (ABS(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5)
+    if (std::abs(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5)
         return false;
 
     if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE)

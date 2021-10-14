@@ -27,12 +27,6 @@
 #define MIN(a,b)	(((a) > (b)) ? (b)  : (a))
 
 /*
- * Non-typed absolute value macro
- */
-#undef ABS
-#define ABS(a)		(((a) < 0)   ? (-(a)) : (a))
-
-/*
  * Refer to the member at offset of structure
  */
 #define atoffset(TYPE, STRUCT_PTR, OFFSET) (*(TYPE*)(((char*)STRUCT_PTR) + (OFFSET)))

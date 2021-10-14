@@ -83,10 +83,10 @@ bool ang_sort_comp_distance(player_type *player_ptr, vptr u, vptr v, int a, int 
     /* Absolute distance components */
     POSITION kx = x[a];
     kx -= player_ptr->x;
-    kx = ABS(kx);
+    kx = std::abs(kx);
     POSITION ky = y[a];
     ky -= player_ptr->y;
-    ky = ABS(ky);
+    ky = std::abs(ky);
 
     /* Approximate Double Distance to the first point */
     POSITION da = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
@@ -94,10 +94,10 @@ bool ang_sort_comp_distance(player_type *player_ptr, vptr u, vptr v, int a, int 
     /* Absolute distance components */
     kx = x[b];
     kx -= player_ptr->x;
-    kx = ABS(kx);
+    kx = std::abs(kx);
     ky = y[b];
     ky -= player_ptr->y;
-    ky = ABS(ky);
+    ky = std::abs(ky);
 
     /* Approximate Double Distance to the first point */
     POSITION db = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
