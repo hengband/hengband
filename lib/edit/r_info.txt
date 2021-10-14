@@ -26628,12 +26628,14 @@ N:1347:『カルバノグの殺人兎』
 E:The Killer Rabbit of Caerbannog
 G:r:w
 I:135:20d100:80:220:3
-W:40:4:0:20000:0:0
-B:BITE:HURT:40d1
-B:BITE:HURT:45d1
-B:BITE:HURT:50d1
+W:40:4:0:10000:0:0
+B:BITE:HURT:10d5
+B:BITE:HURT:15d4
+B:BITE:SUPERHURT:20d3
+B:SLASH:SUPERHURT:20d4
 F:UNIQUE | DROP_90 | DROP_GREAT | DROP_CORPSE | ANIMAL | EVIL
-F:FORCE_MAXHP | NO_FEAR | NO_CONF | NO_SLEEP | CAN_FLY | KILL_BODY
+F:FORCE_MAXHP | NO_STUN | NO_FEAR | NO_CONF | NO_SLEEP | RES_NETH
+F:RES_CHAO | RES_NEXU | CAN_FLY | KILL_BODY
 D:$At first glance, it appears to be just an adorable white rabbit.
 D:$  However, the very rabbit is the guardian of the Cave of Caerbannog,
 D:$ where the clue to the Holy Grail lies.
