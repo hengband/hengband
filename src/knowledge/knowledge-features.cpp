@@ -202,7 +202,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             while (feat_cur < feat_top)
                 feat_top = std::max(0, feat_top - browser_rows / 2);
             while (feat_cur >= feat_top + browser_rows)
-                feat_top = MIN(feat_cnt - browser_rows, feat_top + browser_rows / 2);
+                feat_top = std::min(feat_cnt - browser_rows, feat_top + browser_rows / 2);
         }
 
         if (!visual_list) {

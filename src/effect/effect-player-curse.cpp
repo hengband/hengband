@@ -28,7 +28,7 @@ void effect_player_curse_2(player_type *player_ptr, effect_player_type *ep_ptr)
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
     } else {
         if (!check_multishadow(player_ptr))
-            curse_equipment(player_ptr, 25, MIN(ep_ptr->rlev / 2 - 15, 5));
+            curse_equipment(player_ptr, 25, std::min(ep_ptr->rlev / 2 - 15, 5));
         ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
     }
 }
@@ -39,7 +39,7 @@ void effect_player_curse_3(player_type *player_ptr, effect_player_type *ep_ptr)
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
     } else {
         if (!check_multishadow(player_ptr))
-            curse_equipment(player_ptr, 33, MIN(ep_ptr->rlev / 2 - 15, 15));
+            curse_equipment(player_ptr, 33, std::min(ep_ptr->rlev / 2 - 15, 15));
         ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
     }
 }

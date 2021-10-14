@@ -197,7 +197,7 @@ static void show_tomb_detail(player_type *player_ptr, char *buf)
     if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
     {
         int dummy_len = strlen(killer);
-        strcpy(killer + MIN(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
+        strcpy(killer + std::min(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
     }
 
     center_string(buf, killer);

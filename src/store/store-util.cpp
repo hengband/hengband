@@ -272,7 +272,7 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
  */
 static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
 {
-    int max_num = (o_ptr->tval == ItemKindType::ROD) ? MIN(99, MAX_SHORT / k_info[o_ptr->k_idx].pval) : 99;
+    int max_num = (o_ptr->tval == ItemKindType::ROD) ? std::min(99, MAX_SHORT / k_info[o_ptr->k_idx].pval) : 99;
     int total = o_ptr->number + j_ptr->number;
     int diff = (total > max_num) ? total - max_num : 0;
     o_ptr->number = (total > max_num) ? max_num : total;

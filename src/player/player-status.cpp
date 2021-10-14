@@ -1438,7 +1438,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             int str_index, dex_index;
             int num = 0, wgt = 0, mul = 0, div = 0;
 
-            auto info = class_info[enum2i(player_ptr->pclass)];
+            auto &info = class_info[enum2i(player_ptr->pclass)];
             num = info.num;
             wgt = info.wgt;
             mul = info.mul;
@@ -1810,7 +1810,7 @@ int16_t calc_double_weapon_penalty(player_type *player_ptr, INVENTORY_IDX slot)
 
         if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA)
             && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI)) {
-            penalty = MIN(0, penalty);
+            penalty = std::min(0, penalty);
         }
 
         if (player_ptr->inventory_list[slot].tval == ItemKindType::POLEARM)
@@ -2850,7 +2850,7 @@ int16_t modify_stat_value(int value, int amount)
  */
 long calc_score(player_type *player_ptr)
 {
-    int arena_win = MIN(player_ptr->arena_number, MAX_ARENA_MONS);
+    int arena_win = std::min<short>(player_ptr->arena_number, MAX_ARENA_MONS);
 
     int mult = 100;
     if (!preserve_mode)

@@ -211,7 +211,7 @@ bool process_un_power(player_type *player_ptr, monap_type *monap_ptr)
     object_kind *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
-    HIT_POINT drain = is_magic_mastery ? MIN(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
+    HIT_POINT drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
     if (drain <= 0)
         return false;
 
@@ -225,7 +225,7 @@ bool process_un_power(player_type *player_ptr, monap_type *monap_ptr)
     if (monap_ptr->o_ptr->tval == ItemKindType::STAFF)
         recovery *= monap_ptr->o_ptr->number;
 
-    recovery = MIN(recovery, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);
+    recovery = std::min(recovery, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);
     monap_ptr->m_ptr->hp += recovery;
 
     if (player_ptr->health_who == monap_ptr->m_idx)

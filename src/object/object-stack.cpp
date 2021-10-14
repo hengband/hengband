@@ -119,7 +119,7 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
         break;
     }
     case ItemKindType::ROD: {
-        max_num = MIN(max_num, MAX_SHORT / k_info[o_ptr->k_idx].pval);
+        max_num = std::min(max_num, MAX_SHORT / k_info[o_ptr->k_idx].pval);
         break;
     }
     case ItemKindType::BOW:

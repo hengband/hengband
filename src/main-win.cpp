@@ -2197,8 +2197,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     case WM_LBUTTONDOWN: {
         if (macro_running())
             return 0;
-        mousex = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
-        mousey = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+        mousex = std::min(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+        mousey = std::min(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
         mouse_down = true;
         oldx = mousex;
         oldy = mousey;
@@ -2277,8 +2277,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             return 0;
 
         int dx, dy;
-        int cx = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
-        int cy = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+        int cx = std::min(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+        int cy = std::min(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
         int ox, oy;
 
         if (paint_rect) {

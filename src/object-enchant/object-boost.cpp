@@ -167,7 +167,7 @@ void add_esp_weak(object_type *o_ptr, bool extra)
         TR_ESP_UNIQUE,
     };
     const int MAX_ESP_WEAK = sizeof(weak_esp_list) / sizeof(weak_esp_list[0]);
-    const int add_count = MIN(MAX_ESP_WEAK, (extra) ? (3 + randint1(randint1(6))) : randint1(3));
+    const int add_count = std::min(MAX_ESP_WEAK, (extra) ? (3 + randint1(randint1(6))) : randint1(3));
 
     /* Add unduplicated weak esp flags randomly */
     for (i = 0; i < add_count; ++i) {

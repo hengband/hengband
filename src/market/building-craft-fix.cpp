@@ -75,11 +75,11 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
     to_ptr->art_flags.set(tr_idx);
     if (TR_PVAL_FLAG_MASK.has(tr_idx))
         to_ptr->pval = std::max<short>(to_ptr->pval, 1);
-    int bmax = MIN(3, std::max(1, 40 / (to_ptr->dd * to_ptr->ds)));
+    int bmax = std::min(3, std::max(1, 40 / (to_ptr->dd * to_ptr->ds)));
     if (tr_idx == TR_BLOWS)
-        to_ptr->pval = MIN(to_ptr->pval, bmax);
+        to_ptr->pval = std::min<short>(to_ptr->pval, bmax);
     if (tr_idx == TR_SPEED)
-        to_ptr->pval = MIN(to_ptr->pval, 4);
+        to_ptr->pval = std::min<short>(to_ptr->pval, 4);
 }
 
 /*!
@@ -224,8 +224,8 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     }
 
     if (k_ptr->flags.has(TR_BLOWS)) {
-        int bmax = MIN(3, std::max(1, 40 / (o_ptr->dd * o_ptr->ds)));
-        o_ptr->pval = MIN(o_ptr->pval, bmax);
+        int bmax = std::min(3, std::max(1, 40 / (o_ptr->dd * o_ptr->ds)));
+        o_ptr->pval = std::min<short>(o_ptr->pval, bmax);
     }
 
     give_one_ability_of_object(o_ptr, mo_ptr);

@@ -73,7 +73,7 @@ static bool calc_fall_off_possibility(player_type *player_ptr, const HIT_POINT d
         else
             inc += 1;
 
-        player_ptr->skill_exp[SKILL_RIDING] = MIN(max, cur + inc);
+        player_ptr->skill_exp[SKILL_RIDING] = std::min(max, cur + inc);
     }
 
     if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10)

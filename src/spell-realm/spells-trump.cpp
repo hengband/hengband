@@ -181,7 +181,7 @@ void cast_shuffle(player_type *player_ptr)
         msg_print(_("《恋人》だ。", "It's the Lovers."));
 
         if (get_aim_dir(player_ptr, &dir)) {
-            charm_monster(player_ptr, dir, MIN(player_ptr->lev, 20));
+            charm_monster(player_ptr, dir, std::min<short>(player_ptr->lev, 20));
         }
 
         return;

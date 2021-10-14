@@ -480,7 +480,7 @@ HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONR
     int shoot_dd, shoot_ds;
 
     monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
-    return monspell_damage_base(player_ptr, ms_type, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
+    return monspell_damage_base(player_ptr, ms_type, std::min(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
 }
 
 /*!

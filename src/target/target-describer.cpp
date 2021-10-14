@@ -128,7 +128,7 @@ static void evaluate_monster_exp(player_type *player_ptr, char *buf, monster_typ
 
     s64b_div(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
 
-    uint32_t num = MIN(999, exp_adv_frac);
+    auto num = std::min<uint>(999, exp_adv_frac);
     sprintf(buf, "%03ld", (long int)num);
 }
 

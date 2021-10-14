@@ -334,7 +334,7 @@ void SpellHex::gain_exp_master(const int spell)
 bool SpellHex::is_casting_full_capacity() const
 {
     auto k_max = (this->player_ptr->lev / 15) + 1;
-    k_max = MIN(k_max, MAX_KEEP);
+    k_max = std::min(k_max, MAX_KEEP);
     return this->get_casting_num() >= k_max;
 }
 

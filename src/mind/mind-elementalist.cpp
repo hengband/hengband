@@ -532,7 +532,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
     case ElementSpells::BREATH_2ND:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        dam = MIN(150, player_ptr->chp / 2);
+        dam = std::min(150, player_ptr->chp / 2);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_breath(player_ptr, typ, dir, dam, 3)) {
             if (typ == GF_HYPODYNAMIA) {

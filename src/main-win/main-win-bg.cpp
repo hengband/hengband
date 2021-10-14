@@ -6,6 +6,7 @@
 #include "main-win/main-win-bg.h"
 #include "main-win/graphics-win.h"
 #include "system/h-define.h"
+#include <algorithm>
 
 HBITMAP hBG = NULL;
 
@@ -53,10 +54,10 @@ void draw_bg(HDC hdc, RECT *r)
 
     do {
         int sx = nx % swid;
-        int cwid = MIN(swid - sx, r->right - nx);
+        int cwid = std::min<int>(swid - sx, r->right - nx);
         do {
             int sy = ny % shgt;
-            int chgt = MIN(shgt - sy, r->bottom - ny);
+            int chgt = std::min<int>(shgt - sy, r->bottom - ny);
             BitBlt(hdc, nx, ny, cwid, chgt, hdcSrc, sx, sy, SRCCOPY);
             ny += chgt;
         } while (ny < r->bottom);

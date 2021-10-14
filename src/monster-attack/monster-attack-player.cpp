@@ -293,7 +293,7 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
         increment += 1 + addition;
     }
 
-    player_ptr->skill_exp[SKILL_SHIELD] = MIN(max, cur + increment);
+    player_ptr->skill_exp[SKILL_SHIELD] = std::min<int>(max, cur + increment);
     player_ptr->update |= (PU_BONUS);
 }
 

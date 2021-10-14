@@ -92,7 +92,7 @@ void set_zangband_skill(player_type *player_ptr)
     if (player_ptr->pclass != PlayerClassType::BEASTMASTER)
         player_ptr->skill_exp[SKILL_RIDING] /= 2;
 
-    player_ptr->skill_exp[SKILL_RIDING] = MIN(player_ptr->skill_exp[SKILL_RIDING], s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING]);
+    player_ptr->skill_exp[SKILL_RIDING] = std::min(player_ptr->skill_exp[SKILL_RIDING], s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING]);
 }
 
 void set_zangband_race(player_type *player_ptr)

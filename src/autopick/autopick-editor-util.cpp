@@ -17,7 +17,7 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
     bool add = true;
     bool fixed = false;
     if (tb->mark) {
-        by1 = MIN(tb->my, tb->cy);
+        by1 = std::min(tb->my, tb->cy);
         by2 = std::max(tb->my, tb->cy);
     } else /* if (!tb->mark) */
     {
@@ -79,7 +79,7 @@ void toggle_command_letter(text_body_type *tb, byte flg)
     bool add = true;
     bool fixed = false;
     if (tb->mark) {
-        by1 = MIN(tb->my, tb->cy);
+        by1 = std::min(tb->my, tb->cy);
         by2 = std::max(tb->my, tb->cy);
     } else /* if (!tb->mark) */
     {
@@ -153,7 +153,7 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
     int by1, by2;
     if (tb->mark) {
-        by1 = MIN(tb->my, tb->cy);
+        by1 = std::min(tb->my, tb->cy);
         by2 = std::max(tb->my, tb->cy);
     } else {
         by1 = by2 = tb->cy;
@@ -261,7 +261,7 @@ void copy_text_to_yank(text_body_type *tb)
 
     kill_yank_chain(tb);
     if (tb->my != tb->cy) {
-        int by1 = MIN(tb->my, tb->cy);
+        int by1 = std::min(tb->my, tb->cy);
         int by2 = std::max(tb->my, tb->cy);
 
         for (int y = by1; y <= by2; y++) {
@@ -275,7 +275,7 @@ void copy_text_to_yank(text_body_type *tb)
     }
 
     char buf[MAX_LINELEN];
-    int bx1 = MIN(tb->mx, tb->cx);
+    int bx1 = std::min(tb->mx, tb->cx);
     int bx2 = std::max(tb->mx, tb->cx);
     if (bx2 > len)
         bx2 = len;

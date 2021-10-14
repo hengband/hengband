@@ -46,7 +46,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 
     clear_bldg(5, 23);
     maxbet = player_ptr->lev * 200;
-    maxbet = MIN(maxbet, player_ptr->au);
+    maxbet = std::min(maxbet, player_ptr->au);
 
     strcpy(out_val, "");
     sprintf(tmp_str, _("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);

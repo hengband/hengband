@@ -124,9 +124,9 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		*cur_attr_ptr = a;
 		*cur_char_ptr = c;
 		if ((ddx[d] < 0) && *char_left_ptr > std::max(0, (unsigned char)c - 10)) (*char_left_ptr)--;
-		if ((ddx[d] > 0) && *char_left_ptr + eff_width < MIN(0xff, (unsigned char)c + 10)) (*char_left_ptr)++;
+		if ((ddx[d] > 0) && *char_left_ptr + eff_width < std::min(0xff, (unsigned char)c + 10)) (*char_left_ptr)++;
 		if ((ddy[d] < 0) && *attr_top_ptr > std::max(0, (int)(a & 0x7f) - 4)) (*attr_top_ptr)--;
-		if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
+		if ((ddy[d] > 0) && *attr_top_ptr + height < std::min(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
 
 		return true;
 	}

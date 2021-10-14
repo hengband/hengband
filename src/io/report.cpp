@@ -154,7 +154,7 @@ size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
     BUF *buf = static_cast<BUF *>(userdata);
     const size_t remain = buf->size - buf->read_head;
-    const size_t copy_size = MIN(size * nitems, remain);
+    const size_t copy_size = std::min<size_t>(size * nitems, remain);
 
     strncpy(buffer, buf->data + buf->read_head, copy_size);
     buf->read_head += copy_size;

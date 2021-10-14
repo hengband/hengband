@@ -79,7 +79,7 @@ void calc_android_exp(player_type *player_ptr)
 
         if (o_ptr->is_fixed_artifact()) {
             level = (level + std::max(a_info[o_ptr->name1].level - 8, 5)) / 2;
-            level += MIN(20, a_info[o_ptr->name1].rarity / (a_info[o_ptr->name1].gen_flags.has(TRG::INSTA_ART) ? 10 : 3));
+            level += std::min(20, a_info[o_ptr->name1].rarity / (a_info[o_ptr->name1].gen_flags.has(TRG::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
             level += std::max(3, (e_info[o_ptr->name2].rating - 5) / 2);
         } else if (o_ptr->art_name) {
@@ -124,11 +124,11 @@ void calc_android_exp(player_type *player_ptr)
                 level = 25 + (level - 35) / 3;
             else if (level > 15)
                 level = 15 + (level - 15) / 2;
-            exp = MIN(100000L, value) / 2 * level * level;
+            exp = std::min<uint>(100000, value) / 2 * level * level;
             if (value > 100000L)
                 exp += (value - 100000L) / 8 * level * level;
         } else {
-            exp = MIN(100000L, value) * level;
+            exp = std::min<uint>(100000, value) * level;
             if (value > 100000L)
                 exp += (value - 100000L) / 4 * level;
         }

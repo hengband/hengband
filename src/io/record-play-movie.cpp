@@ -15,6 +15,8 @@
 #include "term/gameterm.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <algorithm>
+
 #ifdef JP
 #include "locale/japanese.h"
 #endif
@@ -175,7 +177,7 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
     } else if (string_is_repeat(buf2, len)) {
         int i;
         for (i = len; i > 0; i -= 127) {
-            sprintf(buf, "n%c%c%c%c%c", x + 1, y + 1, MIN(i, 127), col, buf2[0]);
+            sprintf(buf, "n%c%c%c%c%c", x + 1, y + 1, std::min<int>(i, 127), col, buf2[0]);
         }
     } else {
 #if defined(SJIS) && defined(JP)

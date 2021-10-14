@@ -137,7 +137,7 @@ static void dump_aux_last_message(player_type *player_ptr, FILE *fff)
 
     if (!w_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
-        for (int i = MIN(message_num(), 30); i >= 0; i--) {
+        for (int i = std::min(message_num(), 30); i >= 0; i--) {
             fprintf(fff, "> %s\n", message_str((int16_t)i));
         }
 
@@ -319,7 +319,7 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
         return;
     }
 
-    const long uniq_total = who.size();
+    const auto uniq_total = who.size();
     /* Defeated more than one normal monsters */
     if (uniq_total == 0) {
 #ifdef JP
@@ -340,7 +340,7 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
 
     /* Sort the array by dungeon depth of monsters */
     ang_sort(player_ptr, who.data(), &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
-    fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), MIN(uniq_total, 10));
+    fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), std::min<size_t>(uniq_total, 10));
 
     char buf[80];
     for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
