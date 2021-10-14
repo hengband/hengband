@@ -217,9 +217,9 @@ errr top_twenty(player_type *current_player_ptr)
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
-    sprintf(the_score.cur_lev, "%3d", std::min<short>(current_player_ptr->lev, 999));
+    sprintf(the_score.cur_lev, "%3d", std::min<ushort>(current_player_ptr->lev, 999));
     sprintf(the_score.cur_dun, "%3d", (int)current_player_ptr->current_floor_ptr->dun_level);
-    sprintf(the_score.max_lev, "%3d", std::min<short>(current_player_ptr->max_plv, 999));
+    sprintf(the_score.max_lev, "%3d", std::min<ushort>(current_player_ptr->max_plv, 999));
     sprintf(the_score.max_dun, "%3d", (int)max_dlv[current_player_ptr->dungeon_idx]);
 
     /* Save the cause of death (31 chars) */
@@ -320,12 +320,11 @@ errr predict_score(player_type *current_player_ptr)
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
-    sprintf(the_score.cur_lev, "%3d", std::min<short>(current_player_ptr->lev, 999));
+    sprintf(the_score.cur_lev, "%3d", std::min<ushort>(current_player_ptr->lev, 999));
     sprintf(the_score.cur_dun, "%3d", (int)current_player_ptr->current_floor_ptr->dun_level);
-    sprintf(the_score.max_lev, "%3d", std::min<short>(current_player_ptr->max_plv, 999));
+    sprintf(the_score.max_lev, "%3d", std::min<ushort>(current_player_ptr->max_plv, 999));
     sprintf(the_score.max_dun, "%3d", (int)max_dlv[current_player_ptr->dungeon_idx]);
 
-    /* Hack -- no cause of death */
     /* まだ死んでいないときの識別文字 */
     strcpy(the_score.how, _("yet", "nobody (yet!)"));
 

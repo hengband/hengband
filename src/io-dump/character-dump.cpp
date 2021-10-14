@@ -325,7 +325,7 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
 #ifdef JP
         fprintf(fff, "%d体の敵を倒しています。\n", norm_total);
 #else
-        fprintf(fff, "You have defeated %ld %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
+        fprintf(fff, "You have defeated %d %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
 #endif
         return;
     }
