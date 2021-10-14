@@ -44,8 +44,8 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 {
 	POSITION delta_y = y2 - y1;
 	POSITION delta_x = x2 - x1;
-	POSITION absolute_y = ABS(delta_y);
-	POSITION absolute_x = ABS(delta_x);
+	POSITION absolute_y = std::abs(delta_y);
+	POSITION absolute_x = std::abs(delta_x);
 	if ((absolute_x < 2) && (absolute_y < 2)) return true;
 
 	POSITION scanner_y;

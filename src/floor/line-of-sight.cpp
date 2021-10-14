@@ -50,8 +50,8 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 {
     POSITION dy = y2 - y1;
     POSITION dx = x2 - x1;
-    POSITION ay = ABS(dy);
-    POSITION ax = ABS(dx);
+    POSITION ay = std::abs(dy);
+    POSITION ax = std::abs(dx);
     if ((ax < 2) && (ay < 2))
         return true;
 

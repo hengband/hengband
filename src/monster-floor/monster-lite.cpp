@@ -43,7 +43,7 @@ static void update_monster_lite(
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
-            midpoint = ml_ptr->mon_fx + ((player_ptr->x - ml_ptr->mon_fx) * ABS(d)) / ABS(dpf);
+            midpoint = ml_ptr->mon_fx + ((player_ptr->x - ml_ptr->mon_fx) * std::abs(d)) / std::abs(dpf);
             if (x < midpoint) {
                 if (!cave_los_bold(player_ptr->current_floor_ptr, y, x + 1))
                     return;
@@ -57,7 +57,7 @@ static void update_monster_lite(
         if (((x < player_ptr->x) && (x > ml_ptr->mon_fx)) || ((x > player_ptr->x) && (x < ml_ptr->mon_fx))) {
             dpf = player_ptr->x - ml_ptr->mon_fx;
             d = x - ml_ptr->mon_fx;
-            midpoint = ml_ptr->mon_fy + ((player_ptr->y - ml_ptr->mon_fy) * ABS(d)) / ABS(dpf);
+            midpoint = ml_ptr->mon_fy + ((player_ptr->y - ml_ptr->mon_fy) * std::abs(d)) / std::abs(dpf);
             if (y < midpoint) {
                 if (!cave_los_bold(player_ptr->current_floor_ptr, y + 1, x))
                     return;
@@ -94,7 +94,7 @@ static void update_monster_dark(
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
-            midpoint = ml_ptr->mon_fx + ((player_ptr->x - ml_ptr->mon_fx) * ABS(d)) / ABS(dpf);
+            midpoint = ml_ptr->mon_fx + ((player_ptr->x - ml_ptr->mon_fx) * std::abs(d)) / std::abs(dpf);
             if (x < midpoint) {
                 if (!cave_los_bold(player_ptr->current_floor_ptr, y, x + 1) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x + 1, FF::PROJECT))
                     return;
@@ -108,7 +108,7 @@ static void update_monster_dark(
         if (((x < player_ptr->x) && (x > ml_ptr->mon_fx)) || ((x > player_ptr->x) && (x < ml_ptr->mon_fx))) {
             dpf = player_ptr->x - ml_ptr->mon_fx;
             d = x - ml_ptr->mon_fx;
-            midpoint = ml_ptr->mon_fy + ((player_ptr->y - ml_ptr->mon_fy) * ABS(d)) / ABS(dpf);
+            midpoint = ml_ptr->mon_fy + ((player_ptr->y - ml_ptr->mon_fy) * std::abs(d)) / std::abs(dpf);
             if (y < midpoint) {
                 if (!cave_los_bold(player_ptr->current_floor_ptr, y + 1, x) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y + 1, x, FF::PROJECT))
                     return;

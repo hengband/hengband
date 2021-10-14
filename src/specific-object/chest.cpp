@@ -80,7 +80,7 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
         floor_ptr->object_level = o_ptr->xtra3;
     } else {
         /* Determine the "value" of the items */
-        floor_ptr->object_level = ABS(o_ptr->pval) + 10;
+        floor_ptr->object_level = std::abs(o_ptr->pval) + 10;
     }
 
     /* Zero pval means empty chest */

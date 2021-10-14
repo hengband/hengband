@@ -390,7 +390,7 @@ static void describe_specific_pval(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
 #ifdef JP
 #else
-        if (ABS(flavor_ptr->o_ptr->pval) != 1)
+        if (std::abs(flavor_ptr->o_ptr->pval) != 1)
             flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
 #endif
 

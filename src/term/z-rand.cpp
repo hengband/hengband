@@ -155,7 +155,7 @@ int32_t div_round(int32_t n, int32_t d)
     tmp = n / d;
 
     /* Rounding */
-    if ((ABS(n) % ABS(d)) > randint0(ABS(d))) {
+    if ((std::abs(n) % std::abs(d)) > randint0(std::abs(d))) {
         /* Increase the absolute value */
         if (n * d > 0L)
             tmp += 1L;

@@ -130,8 +130,8 @@ static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSI
         if (dy && (y3 * dy <= 0))
             continue;
 
-        const POSITION x4 = ABS(x3);
-        const POSITION y4 = ABS(y3);
+        const POSITION x4 = std::abs(x3);
+        const POSITION y4 = std::abs(y3);
 
         // (dy,dx) が (-1,0) or (1,0) のとき、|x3| > |y3| なるものは除外。
         if (dy && !dx && (x4 > y4))
