@@ -222,7 +222,7 @@ void process_player_hp_mp(player_type *player_ptr)
             msg_print(_("熱い！", "It's hot!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"));
         }
-        if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_XX15) && !has_immune_elec(player_ptr)) {
+        if (auras.has(MonsterAuraType::ELEC) && !has_immune_elec(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_ELEC))
                 damage += damage / 3;
