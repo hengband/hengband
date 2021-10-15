@@ -41,7 +41,7 @@ static void switch_mind_mindcrafter(player_type *player_ptr, const PLAYER_LEVEL 
         break;
 #ifdef JP
     case 10:
-        sprintf(p, " 最大重量:%d.%dkg", lbtokg1(plev * 15), lbtokg2(plev * 15));
+        sprintf(p, " 最大重量:%d.%dkg", lb_to_kg_integer(plev * 15), lb_to_kg_few(plev * 15));
         break;
 #else
     case 10:

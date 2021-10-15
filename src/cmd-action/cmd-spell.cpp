@@ -231,7 +231,7 @@ concptr info_radius(POSITION rad)
 concptr info_weight(WEIGHT weight)
 {
 #ifdef JP
-    return format("最大重量:%d.%dkg", lbtokg1(weight), lbtokg2(weight));
+    return format("最大重量:%d.%dkg", lb_to_kg_integer(weight), lb_to_kg_few(weight));
 #else
     return format("max wgt %d", weight / 10);
 #endif

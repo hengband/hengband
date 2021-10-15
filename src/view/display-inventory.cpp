@@ -114,7 +114,7 @@ COMMAND_CODE show_inventory(player_type *player_ptr, int target_item, BIT_FLAGS 
         c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+            (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_few(wgt), wgt % 10));
             prt(tmp_val, j + 1, wid - 9);
         }
     }
@@ -186,7 +186,7 @@ void display_inventory(player_type *player_ptr, const ItemTester &item_tester)
 
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_few(wgt), wgt % 10));
             prt(tmp_val, i, wid - 9);
         }
     }

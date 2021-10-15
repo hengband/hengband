@@ -157,7 +157,7 @@ COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION
         c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
         if (show_weights && (o_ptr->tval != ItemKindType::GOLD)) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_few(wgt), wgt % 10));
             prt(tmp_val, j + 1, wid - 9);
         }
     }

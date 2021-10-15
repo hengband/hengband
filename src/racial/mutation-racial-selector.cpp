@@ -48,7 +48,7 @@ void select_mutation_racial(player_type *player_ptr, rc_type *rc_ptr)
     if (player_ptr->muta.has(MUTA::TELEKINES)) {
         rpi = rpi_type(_("念動力", "Telekinesis"));
 #ifdef JP
-        rpi.info = format("最大重量: %d.%dkg", lbtokg1(rc_ptr->lvl * 10), lbtokg2(rc_ptr->lvl * 10));
+        rpi.info = format("最大重量: %d.%dkg", lb_to_kg_integer(rc_ptr->lvl * 10), lb_to_kg_few(rc_ptr->lvl * 10));
 #else
         rpi.info = format("max wgt %d", rc_ptr->lvl * 10);
 #endif
