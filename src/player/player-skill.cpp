@@ -4,6 +4,13 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+/* Proficiency of weapons and misc. skills (except riding) */
+constexpr SUB_EXP WEAPON_EXP_UNSKILLED = 0;
+constexpr SUB_EXP WEAPON_EXP_BEGINNER = 4000;
+constexpr SUB_EXP WEAPON_EXP_SKILLED = 6000;
+constexpr SUB_EXP WEAPON_EXP_EXPERT = 7000;
+constexpr SUB_EXP WEAPON_EXP_MASTER = 8000;
+
 /*
  * The skill table
  */
@@ -22,6 +29,48 @@ const concptr exp_level_str[5] =
 PlayerSkill::PlayerSkill(player_type *player_ptr)
     : player_ptr(player_ptr)
 {
+}
+
+SUB_EXP PlayerSkill::weapon_exp_at(int level)
+{
+    switch (level) {
+    case EXP_LEVEL_UNSKILLED:
+        return WEAPON_EXP_UNSKILLED;
+    case EXP_LEVEL_BEGINNER:
+        return WEAPON_EXP_BEGINNER;
+    case EXP_LEVEL_SKILLED:
+        return WEAPON_EXP_SKILLED;
+    case EXP_LEVEL_EXPERT:
+        return WEAPON_EXP_EXPERT;
+    case EXP_LEVEL_MASTER:
+        return WEAPON_EXP_MASTER;
+    }
+
+    return WEAPON_EXP_UNSKILLED;
+}
+
+/*!
+ * @brief 武器や各種スキル（騎乗以外）の抽象的表現ランクを返す。 /  Return proficiency level of weapons and misc. skills (except riding)
+ * @param weapon_exp 経験値
+ * @return ランク値
+ */
+int PlayerSkill::weapon_exp_level(int weapon_exp)
+{
+    if (weapon_exp < WEAPON_EXP_BEGINNER)
+        return EXP_LEVEL_UNSKILLED;
+    else if (weapon_exp < WEAPON_EXP_SKILLED)
+        return EXP_LEVEL_BEGINNER;
+    else if (weapon_exp < WEAPON_EXP_EXPERT)
+        return EXP_LEVEL_SKILLED;
+    else if (weapon_exp < WEAPON_EXP_MASTER)
+        return EXP_LEVEL_EXPERT;
+    else
+        return EXP_LEVEL_MASTER;
+}
+
+bool PlayerSkill::valid_weapon_exp(int weapon_exp)
+{
+    return (WEAPON_EXP_UNSKILLED <= weapon_exp) && (weapon_exp <= WEAPON_EXP_MASTER);
 }
 
 void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
