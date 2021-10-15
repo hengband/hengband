@@ -68,6 +68,8 @@ public:
 
     void gain_melee_weapon_exp(const object_type *o_ptr);
     void gain_range_weapon_exp(const object_type *o_ptr);
+    void gain_martial_arts_skill_exp();
+    void gain_two_weapon_skill_exp();
 
 private:
     player_type *player_ptr;

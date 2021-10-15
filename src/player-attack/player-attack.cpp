@@ -116,20 +116,10 @@ static void attack_classify(player_type *player_ptr, player_attack_type *pa_ptr)
 static void get_bare_knuckle_exp(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if ((r_ptr->level + 10) <= player_ptr->lev || (player_ptr->skill_exp[SKILL_MARTIAL_ARTS] >= s_info[enum2i(player_ptr->pclass)].s_max[SKILL_MARTIAL_ARTS]))
+    if ((r_ptr->level + 10) <= player_ptr->lev)
         return;
 
-    if (player_ptr->skill_exp[SKILL_MARTIAL_ARTS] < WEAPON_EXP_BEGINNER)
-        player_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 40;
-    else if ((player_ptr->skill_exp[SKILL_MARTIAL_ARTS] < WEAPON_EXP_SKILLED))
-        player_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 5;
-    else if ((player_ptr->skill_exp[SKILL_MARTIAL_ARTS] < WEAPON_EXP_EXPERT) && (player_ptr->lev > 19))
-        player_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 1;
-    else if ((player_ptr->lev > 34))
-        if (one_in_(3))
-            player_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 1;
-
-    player_ptr->update |= (PU_BONUS);
+    PlayerSkill(player_ptr).gain_martial_arts_skill_exp();
 }
 
 /*!

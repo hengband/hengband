@@ -63,3 +63,43 @@ void PlayerSkill::gain_range_weapon_exp(const object_type *o_ptr)
     this->player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] += amount;
     set_bits(this->player_ptr->update, PU_BONUS);
 }
+
+void PlayerSkill::gain_martial_arts_skill_exp()
+{
+    auto now_exp = this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS];
+    if (now_exp >= s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_MARTIAL_ARTS])
+        return;
+
+    SUB_EXP amount = 0;
+    if (now_exp < WEAPON_EXP_BEGINNER)
+        amount = 40;
+    else if (now_exp < WEAPON_EXP_SKILLED)
+        amount = 5;
+    else if ((now_exp < WEAPON_EXP_EXPERT) && (this->player_ptr->lev > 19))
+        amount = 1;
+    else if ((this->player_ptr->lev > 34) && one_in_(3))
+        amount = 1;
+
+    this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS] += amount;
+    set_bits(this->player_ptr->update, PU_BONUS);
+}
+
+void PlayerSkill::gain_two_weapon_skill_exp()
+{
+    auto now_exp = this->player_ptr->skill_exp[SKILL_TWO_WEAPON];
+    if (now_exp >= s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_TWO_WEAPON])
+        return;
+
+    SUB_EXP amount = 0;
+    if (now_exp < WEAPON_EXP_BEGINNER)
+        amount = 80;
+    else if (now_exp < WEAPON_EXP_SKILLED)
+        amount = 4;
+    else if ((now_exp < WEAPON_EXP_EXPERT) && (this->player_ptr->lev > 19))
+        amount = 1;
+    else if ((this->player_ptr->lev > 34) && one_in_(3))
+        amount = 1;
+
+    this->player_ptr->skill_exp[SKILL_TWO_WEAPON] += amount;
+    set_bits(this->player_ptr->update, PU_BONUS);
+}

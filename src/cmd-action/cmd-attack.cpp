@@ -251,18 +251,8 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     }
 
     if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
-        if ((player_ptr->skill_exp[SKILL_TWO_WEAPON] < s_info[enum2i(player_ptr->pclass)].s_max[SKILL_TWO_WEAPON])
-            && ((player_ptr->skill_exp[SKILL_TWO_WEAPON] - 1000) / 200 < r_ptr->level)) {
-            if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_BEGINNER)
-                player_ptr->skill_exp[SKILL_TWO_WEAPON] += 80;
-            else if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_SKILLED)
-                player_ptr->skill_exp[SKILL_TWO_WEAPON] += 4;
-            else if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_EXPERT)
-                player_ptr->skill_exp[SKILL_TWO_WEAPON] += 1;
-            else if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_MASTER)
-                if (one_in_(3))
-                    player_ptr->skill_exp[SKILL_TWO_WEAPON] += 1;
-            player_ptr->update |= (PU_BONUS);
+        if (((player_ptr->skill_exp[SKILL_TWO_WEAPON] - 1000) / 200) < r_ptr->level) {
+            PlayerSkill(player_ptr).gain_two_weapon_skill_exp();
         }
     }
 
