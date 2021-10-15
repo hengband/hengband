@@ -375,7 +375,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                      * ARE Gorged, it won't cure
                      * us
                      */
-                    dam = player_ptr->food + MIN(5000, 100 * dam);
+                    dam = player_ptr->food + std::min(5000, 100 * dam);
 
                     /* Not gorged already */
                     if (player_ptr->food < PY_FOOD_MAX)

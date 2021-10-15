@@ -1152,11 +1152,11 @@ HIT_POINT calc_expect_crit_shot(player_type *player_ptr, WEIGHT weight, int plus
     k = 0;
     num = 0;
 
-    crit = MIN(500, 900 / weight);
+    crit = std::min(500, 900 / weight);
     num += dam * 3 / 2 * crit;
     k = crit;
 
-    crit = MIN(500, 1350 / weight);
+    crit = std::min(500, 1350 / weight);
     crit -= k;
     num += dam * 2 * crit;
     k += crit;

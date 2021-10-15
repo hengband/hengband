@@ -540,7 +540,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     switch (PlayerRace(this->player_ptr).food()) {
     case PlayerRaceFood::WATER:
         msg_print(_("水分を取り込んだ。", "You are moistened."));
-        set_food(this->player_ptr, MIN(this->player_ptr->food + q_ptr->pval + std::max(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
+        set_food(this->player_ptr, std::min<short>(this->player_ptr->food + q_ptr->pval + std::max<short>(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
         break;
     case PlayerRaceFood::OIL:
         if (q_ptr->tval == ItemKindType::FLASK) {

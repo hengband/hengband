@@ -571,7 +571,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
 
         /* Summon Demons and Angels */
         for (lev = player_ptr->current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16) {
-            num = levs[MIN(lev / 10, 9)];
+            num = levs[std::min(lev / 10, 9)];
             for (i = 0; i < num; i++) {
                 POSITION x1 = rand_spread(x, 7);
                 POSITION y1 = rand_spread(y, 5);

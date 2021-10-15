@@ -141,7 +141,7 @@ void building_recharge(player_type *player_ptr)
             max_charges = o_ptr->number * k_ptr->pval - o_ptr->pval;
 
         charges = (PARAMETER_VALUE)get_quantity(
-            format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? "), price), MIN(player_ptr->au / price, max_charges));
+            format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? "), price), std::min(player_ptr->au / price, max_charges));
 
         if (charges < 1)
             return;

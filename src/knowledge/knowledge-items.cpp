@@ -352,9 +352,10 @@ void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool v
             }
 
             while (object_cur < object_top)
-                object_top = std::max(0, object_top - browser_rows / 2);
+                object_top = std::max<short>(0, object_top - browser_rows / 2);
+
             while (object_cur >= object_top + browser_rows)
-                object_top = MIN(object_cnt - browser_rows, object_top + browser_rows / 2);
+                object_top = std::min<short>(object_cnt - browser_rows, object_top + browser_rows / 2);
         }
 
         if (!visual_list) {

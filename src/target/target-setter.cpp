@@ -467,7 +467,7 @@ static void decide_change_panel(player_type *player_ptr, ts_type *ts_ptr)
     POSITION dx = ddx[ts_ptr->distance];
     POSITION dy = ddy[ts_ptr->distance];
     if (ts_ptr->move_fast) {
-        int mag = MIN(ts_ptr->wid / 2, ts_ptr->hgt / 2);
+        int mag = std::min(ts_ptr->wid / 2, ts_ptr->hgt / 2);
         ts_ptr->x += dx * mag;
         ts_ptr->y += dy * mag;
     } else {

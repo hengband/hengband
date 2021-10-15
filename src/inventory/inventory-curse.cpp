@@ -344,7 +344,7 @@ static void curse_drain_hp(player_type *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, choose_cursed_obj_name(player_ptr, TRC::DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
-    take_hit(player_ptr, DAMAGE_LOSELIFE, MIN(player_ptr->lev * 2, 100), o_name);
+    take_hit(player_ptr, DAMAGE_LOSELIFE, std::min(player_ptr->lev * 2, 100), o_name);
 }
 
 static void curse_drain_mp(player_type *player_ptr)
@@ -355,7 +355,7 @@ static void curse_drain_mp(player_type *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, choose_cursed_obj_name(player_ptr, TRC::DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
-    player_ptr->csp -= MIN(player_ptr->lev, 50);
+    player_ptr->csp -= std::min<short>(player_ptr->lev, 50);
     if (player_ptr->csp < 0) {
         player_ptr->csp = 0;
         player_ptr->csp_frac = 0;
@@ -412,5 +412,5 @@ void execute_cursed_items_effect(player_type *player_ptr)
     else
         msg_print(_("なにかがあなたの体力を吸収した！", "Something drains life from you!"));
 
-    take_hit(player_ptr, DAMAGE_LOSELIFE, MIN(player_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"));
+    take_hit(player_ptr, DAMAGE_LOSELIFE, std::min<short>(player_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"));
 }

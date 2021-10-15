@@ -285,7 +285,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
                     inc += 1;
             }
 
-            player_ptr->skill_exp[SKILL_RIDING] = MIN(max, cur + inc);
+            player_ptr->skill_exp[SKILL_RIDING] = static_cast<short>(std::min(max, cur + inc));
             player_ptr->update |= (PU_BONUS);
         }
     }

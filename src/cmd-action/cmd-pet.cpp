@@ -619,7 +619,7 @@ void do_cmd_pet(player_type *player_ptr)
                         prt(buf, y + control, x);
                     }
 
-                    prt("", y + MIN(control, 17), x);
+                    prt("", y + std::min(control, 17), x);
                 }
 
                 /* Hide the list */

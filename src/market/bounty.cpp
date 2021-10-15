@@ -285,7 +285,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
     get_mon_num_prep_bounty(player_ptr);
 
     while (true) {
-        w_ptr->today_mon = get_mon_num(player_ptr, MIN(max_dl / 2, 40), max_dl, GMN_ARENA);
+        w_ptr->today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, GMN_ARENA);
         monster_race *r_ptr;
         r_ptr = &r_info[w_ptr->today_mon];
 

@@ -231,16 +231,16 @@ void do_cmd_messages(int num_now)
         case SKEY_UP:
         case '\n':
         case '\r':
-            i = MIN(i + 1, n - num_lines);
+            i = std::min(i + 1, n - num_lines);
             break;
         case '+':
-            i = MIN(i + 10, n - num_lines);
+            i = std::min(i + 10, n - num_lines);
             break;
         case 'p':
         case KTRL('P'):
         case ' ':
         case SKEY_PGUP:
-            i = MIN(i + num_lines, n - num_lines);
+            i = std::min(i + num_lines, n - num_lines);
             break;
         case 'n':
         case KTRL('N'):

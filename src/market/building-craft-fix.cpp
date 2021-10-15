@@ -75,11 +75,11 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
     to_ptr->art_flags.set(tr_idx);
     if (TR_PVAL_FLAG_MASK.has(tr_idx))
         to_ptr->pval = std::max<short>(to_ptr->pval, 1);
-    int bmax = MIN(3, std::max(1, 40 / (to_ptr->dd * to_ptr->ds)));
+    auto bmax = std::min<short>(3, std::max<short>(1, 40 / (to_ptr->dd * to_ptr->ds)));
     if (tr_idx == TR_BLOWS)
-        to_ptr->pval = MIN(to_ptr->pval, bmax);
+        to_ptr->pval = std::min<short>(to_ptr->pval, bmax);
     if (tr_idx == TR_SPEED)
-        to_ptr->pval = MIN(to_ptr->pval, 4);
+        to_ptr->pval = std::min<short>(to_ptr->pval, 4);
 }
 
 /*!
@@ -224,13 +224,13 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     }
 
     if (k_ptr->flags.has(TR_BLOWS)) {
-        int bmax = MIN(3, std::max(1, 40 / (o_ptr->dd * o_ptr->ds)));
-        o_ptr->pval = MIN(o_ptr->pval, bmax);
+        auto bmax = std::min<short>(3, std::max<short>(1, 40 / (o_ptr->dd * o_ptr->ds)));
+        o_ptr->pval = std::min<short>(o_ptr->pval, bmax);
     }
 
     give_one_ability_of_object(o_ptr, mo_ptr);
     o_ptr->to_d += std::max(0, (mo_ptr->to_d / 3));
-    o_ptr->to_h += std::max(0, (mo_ptr->to_h / 3));
+    o_ptr->to_h += std::max<short>(0, (mo_ptr->to_h / 3));
     o_ptr->to_a += std::max<short>(0, (mo_ptr->to_a));
 
     if ((o_ptr->name1 == ART_NARSIL) || (o_ptr->is_random_artifact() && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {

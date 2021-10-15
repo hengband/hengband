@@ -58,7 +58,7 @@ void do_cmd_store(player_type *player_ptr)
     TERM_LEN w, h;
     term_get_size(&w, &h);
 
-    xtra_stock = MIN(14 + 26, ((h > 24) ? (h - 24) : 0));
+    xtra_stock = std::min(14 + 26, ((h > 24) ? (h - 24) : 0));
     store_bottom = MIN_STOCK + xtra_stock;
 
     grid_type *g_ptr;

@@ -137,7 +137,7 @@ static void dump_aux_last_message(player_type *player_ptr, FILE *fff)
 
     if (!w_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
-        for (int i = MIN(message_num(), 30); i >= 0; i--) {
+        for (int i = std::min(message_num(), 30); i >= 0; i--) {
             fprintf(fff, "> %s\n", message_str((int16_t)i));
         }
 
@@ -290,7 +290,7 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
     std::vector<MONRACE_IDX> who;
 
     /* Count monster kills */
-    long norm_total = 0;
+    auto norm_total = 0;
     for (const auto &r_ref : r_info) {
         /* Ignore unused index */
         if (r_ref.idx == 0 || r_ref.name.empty())
@@ -319,28 +319,28 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
         return;
     }
 
-    const long uniq_total = who.size();
+    auto uniq_total = static_cast<int>(who.size());
     /* Defeated more than one normal monsters */
     if (uniq_total == 0) {
 #ifdef JP
-        fprintf(fff, "%ld体の敵を倒しています。\n", norm_total);
+        fprintf(fff, "%d体の敵を倒しています。\n", norm_total);
 #else
-        fprintf(fff, "You have defeated %ld %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
+        fprintf(fff, "You have defeated %d %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
 #endif
         return;
     }
 
     /* Defeated more than one unique monsters */
 #ifdef JP
-    fprintf(fff, "%ld体のユニーク・モンスターを含む、合計%ld体の敵を倒しています。\n", uniq_total, norm_total);
+    fprintf(fff, "%d体のユニーク・モンスターを含む、合計%d体の敵を倒しています。\n", uniq_total, norm_total);
 #else
-    fprintf(fff, "You have defeated %ld %s including %ld unique monster%s in total.\n", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total,
+    fprintf(fff, "You have defeated %d %s including %d unique monster%s in total.\n", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total,
         (uniq_total == 1 ? "" : "s"));
 #endif
 
     /* Sort the array by dungeon depth of monsters */
     ang_sort(player_ptr, who.data(), &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
-    fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), MIN(uniq_total, 10));
+    fprintf(fff, _("\n《上位%d体のユニーク・モンスター》\n", "\n< Unique monsters top %d >\n"), std::min(uniq_total, 10));
 
     char buf[80];
     for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
@@ -412,8 +412,7 @@ static void dump_aux_virtues(player_type *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [自分に関する情報]\n\n", "\n\n  [HP-rate & Max stat & Virtues]\n\n"));
 
-    int percent
-        = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
+    int percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
 
 #ifdef JP
     if (player_ptr->knowledge & KNOW_HPRATE)
@@ -466,8 +465,7 @@ static void dump_aux_equipment_inventory(player_type *player_ptr, FILE *fff)
         fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
         for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[i], 0);
-            if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
-                && has_two_handed_weapons(player_ptr))
+            if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr))
                 strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 
             fprintf(fff, "%c) %s\n", index_to_label(i), o_name);

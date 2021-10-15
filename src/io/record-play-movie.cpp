@@ -15,26 +15,25 @@
 #include "term/gameterm.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <algorithm>
+
 #ifdef JP
 #include "locale/japanese.h"
 #endif
 
 #ifdef WINDOWS
 #include <windows.h>
+#define WAIT 100
 #else
 #include "system/h-basic.h"
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
+#define WAIT 100 * 1000 /* ブラウズ側のウエイト(us単位) */
 #endif
 
 #define RINGBUF_SIZE 1024 * 1024
 #define FRESH_QUEUE_SIZE 4096
-#ifdef WINDOWS
-#define WAIT 100
-#else
-#define WAIT 100 * 1000 /* ブラウズ側のウエイト(us単位) */
-#endif
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
 
@@ -178,7 +177,7 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
     } else if (string_is_repeat(buf2, len)) {
         int i;
         for (i = len; i > 0; i -= 127) {
-            sprintf(buf, "n%c%c%c%c%c", x + 1, y + 1, MIN(i, 127), col, buf2[0]);
+            sprintf(buf, "n%c%c%c%c%c", x + 1, y + 1, std::min<int>(i, 127), col, buf2[0]);
         }
     } else {
 #if defined(SJIS) && defined(JP)

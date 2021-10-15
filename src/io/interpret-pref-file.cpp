@@ -379,7 +379,7 @@ static errr decide_template_modifier(int tok, char **zz)
         return 0;
 
     int zz_length = strlen(zz[1]);
-    zz_length = MIN(MAX_MACRO_MOD, zz_length);
+    zz_length = std::min(MAX_MACRO_MOD, zz_length);
     if (2 + zz_length != tok)
         return 1;
 

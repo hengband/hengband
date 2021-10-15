@@ -136,7 +136,7 @@ static bool is_riding_two_hands(player_type *player_ptr);
 static int16_t calc_riding_bow_penalty(player_type *player_ptr);
 static void put_equipment_warning(player_type *player_ptr);
 
-static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool is_real_value);
+static short calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool is_real_value);
 static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_real_value);
 
 static int16_t calc_to_hit_bow(player_type *player_ptr, bool is_real_value);
@@ -1438,7 +1438,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             int str_index, dex_index;
             int num = 0, wgt = 0, mul = 0, div = 0;
 
-            auto info = class_info[enum2i(player_ptr->pclass)];
+            auto &info = class_info[enum2i(player_ptr->pclass)];
             num = info.num;
             wgt = info.wgt;
             mul = info.mul;
@@ -1810,7 +1810,7 @@ int16_t calc_double_weapon_penalty(player_type *player_ptr, INVENTORY_IDX slot)
 
         if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA)
             && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI)) {
-            penalty = MIN(0, penalty);
+            penalty = std::min(0, penalty);
         }
 
         if (player_ptr->inventory_list[slot].tval == ItemKindType::POLEARM)
@@ -1959,7 +1959,7 @@ void put_equipment_warning(player_type *player_ptr)
     }
 }
 
-static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool is_real_value)
+static short calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     object_type *o_ptr = &player_ptr->inventory_list[slot];
     auto flgs = object_flags(o_ptr);
@@ -1970,7 +1970,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
     if (slot == INVEN_SUB_HAND)
         calc_hand = PLAYER_HAND_SUB;
 
-    int16_t damage = 0;
+    auto damage = 0;
     damage += ((int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128);
 
     if (is_shero(player_ptr)) {
@@ -2078,7 +2078,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
             || !has_disable_two_handed_bonus(player_ptr, calc_hand)) {
             int bonus_to_d = 0;
             bonus_to_d = ((int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128) / 2;
-            damage += std::max(bonus_to_d, 1);
+            damage += std::max<int>(bonus_to_d, 1);
         }
     }
 
@@ -2093,7 +2093,7 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
         }
     }
 
-    return damage;
+    return static_cast<short>(damage);
 }
 
 /*!
@@ -2101,9 +2101,9 @@ static int16_t calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool 
  * @details
  * 'slot' MUST be INVEN_MAIN_HAND or INVEM_SUB_HAND.
  */
-static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_real_value)
+static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
-    int16_t hit = 0;
+    auto hit = 0;
 
     /* Base bonuses */
     hit += ((int)(adj_dex_th[player_ptr->stat_index[A_DEX]]) - 128);
@@ -2153,7 +2153,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
             || !has_disable_two_handed_bonus(player_ptr, calc_hand)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[player_ptr->stat_index[A_STR]]) - 128) + ((int)(adj_dex_th[player_ptr->stat_index[A_DEX]]) - 128);
-            hit += std::max(bonus_to_h, 1);
+            hit += std::max<int>(bonus_to_h, 1);
         }
     }
 
@@ -2316,7 +2316,7 @@ static int16_t calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_
         }
     }
 
-    return hit;
+    return static_cast<short>(hit);
 }
 
 static int16_t calc_to_hit_bow(player_type *player_ptr, bool is_real_value)
@@ -2850,7 +2850,7 @@ int16_t modify_stat_value(int value, int amount)
  */
 long calc_score(player_type *player_ptr)
 {
-    int arena_win = MIN(player_ptr->arena_number, MAX_ARENA_MONS);
+    int arena_win = std::min<int>(player_ptr->arena_number, MAX_ARENA_MONS);
 
     int mult = 100;
     if (!preserve_mode)

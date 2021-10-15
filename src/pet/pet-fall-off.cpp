@@ -58,22 +58,22 @@ static bool calc_fall_off_possibility(player_type *player_ptr, const HIT_POINT d
     if (force)
         return true;
 
-    int cur = player_ptr->skill_exp[SKILL_RIDING];
-    int max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING];
-    int ridinglevel = r_ptr->level;
+    auto cur = player_ptr->skill_exp[SKILL_RIDING];
+    auto max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING];
+    auto ridinglevel = r_ptr->level;
 
     int fall_off_level = r_ptr->level;
     if (player_ptr->riding_ryoute)
         fall_off_level += 20;
 
     if ((cur < max) && (max > 1000) && (dam / 2 + ridinglevel) > (cur / 30 + 10)) {
-        int inc = 0;
+        short inc = 0;
         if (ridinglevel > (cur / 100 + 15))
             inc += 1 + (ridinglevel - cur / 100 - 15);
         else
             inc += 1;
 
-        player_ptr->skill_exp[SKILL_RIDING] = MIN(max, cur + inc);
+        player_ptr->skill_exp[SKILL_RIDING] = std::min<short>(max, cur + inc);
     }
 
     if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10)

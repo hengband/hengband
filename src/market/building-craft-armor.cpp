@@ -41,7 +41,7 @@ bool eval_ac(ARMOUR_CLASS iAC)
     if (iAC < 0)
         iAC = 0;
 
-    protection = 100 * MIN(iAC, 150) / 250;
+    protection = 100 * std::min<short>(iAC, 150) / 250;
     screen_save();
     clear_bldg(0, 22);
 
@@ -61,7 +61,7 @@ bool eval_ac(ARMOUR_CLASS iAC)
         put_str(format("%3d", lvl), row + 0, col);
 
         /* 回避率を計算 */
-        dodge = 5 + (MIN(100, 100 * (iAC * 3 / 4) / quality) * 9 + 5) / 10;
+        dodge = 5 + (std::min(100, 100 * (iAC * 3 / 4) / quality) * 9 + 5) / 10;
         put_str(format("%3d%%", dodge), row + 1, col);
 
         /* 100点の攻撃に対してのダメージ期待値を計算 */

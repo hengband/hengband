@@ -176,14 +176,14 @@ void update_gambling_monsters(player_type *player_ptr)
             max_dl = max_dlv[d_ref.idx];
     }
 
-    mon_level = randint1(MIN(max_dl, 122)) + 5;
+    mon_level = randint1(std::min(max_dl, 122)) + 5;
     if (randint0(100) < 60) {
-        i = randint1(MIN(max_dl, 122)) + 5;
+        i = randint1(std::min(max_dl, 122)) + 5;
         mon_level = std::max(i, mon_level);
     }
 
     if (randint0(100) < 30) {
-        i = randint1(MIN(max_dl, 122)) + 5;
+        i = randint1(std::min(max_dl, 122)) + 5;
         mon_level = std::max(i, mon_level);
     }
 
@@ -335,7 +335,7 @@ bool monster_arena_comm(player_type *player_ptr)
     maxbet = player_ptr->lev * 200;
 
     /* We can't bet more than we have */
-    maxbet = MIN(maxbet, player_ptr->au);
+    maxbet = std::min(maxbet, player_ptr->au);
 
     /* Get the wager */
     strcpy(out_val, "");

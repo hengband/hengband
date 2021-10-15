@@ -797,7 +797,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
         feature_type *old_f_ptr = &f_info[oldfeat];
 
         if (old_f_ptr->flags.has(FF::GLASS) && w_ptr->character_dungeon) {
-            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(floor_ptr->dun_level, 100) / 4, GF_SHARDS,
+            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, GF_SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }

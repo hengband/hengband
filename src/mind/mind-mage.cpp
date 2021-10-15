@@ -171,7 +171,7 @@ bool eat_magic(player_type *player_ptr, int power)
             msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), o_name);
             /* Reduce rod stack maximum timeout, drain wands. */
             if (o_ptr->tval == ItemKindType::ROD)
-                o_ptr->timeout = MIN(o_ptr->timeout, k_ptr->pval * (o_ptr->number - 1));
+                o_ptr->timeout = std::min<short>(o_ptr->timeout, k_ptr->pval * (o_ptr->number - 1));
             else if (o_ptr->tval == ItemKindType::WAND)
                 o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
         } else {

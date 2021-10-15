@@ -373,9 +373,10 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
             }
 
             while (mon_cur < mon_top)
-                mon_top = std::max(0, mon_top - browser_rows / 2);
+                mon_top = std::max<short>(0, mon_top - browser_rows / 2);
+
             while (mon_cur >= mon_top + browser_rows)
-                mon_top = MIN(mon_cnt - browser_rows, mon_top + browser_rows / 2);
+                mon_top = std::min<short>(mon_cnt - browser_rows, mon_top + browser_rows / 2);
         }
 
         if (!visual_list) {

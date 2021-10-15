@@ -287,13 +287,13 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     auto target_level = r_ptr->level;
-    auto increment = 0;
+    short increment = 0;
     if ((cur / 100) < target_level) {
         auto addition = (cur / 100 + 15) < target_level ? (target_level - (cur / 100 + 15)) : 0;
         increment += 1 + addition;
     }
 
-    player_ptr->skill_exp[SKILL_SHIELD] = MIN(max, cur + increment);
+    player_ptr->skill_exp[SKILL_SHIELD] = std::min<short>(max, cur + increment);
     player_ptr->update |= (PU_BONUS);
 }
 

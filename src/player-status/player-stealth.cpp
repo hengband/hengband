@@ -144,7 +144,7 @@ bool PlayerStealth::is_aggravated_s_fairy()
 int16_t PlayerStealth::set_exception_value(int16_t value)
 {
     if (this->is_aggravated_s_fairy()) {
-        value = MIN(value - 3, (value + 2) / 2);
+        value = std::min<int16_t>(value - 3, (value + 2) / 2);
     }
     return value;
 }

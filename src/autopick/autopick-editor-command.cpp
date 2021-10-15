@@ -182,7 +182,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
     case EC_CUT: {
         copy_text_to_yank(tb);
         if (tb->my == tb->cy) {
-            int bx1 = MIN(tb->mx, tb->cx);
+            int bx1 = std::min(tb->mx, tb->cx);
             int bx2 = std::max(tb->mx, tb->cx);
             int len = strlen(tb->lines_list[tb->cy]);
             if (bx2 > len)
@@ -191,7 +191,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             kill_line_segment(tb, tb->cy, bx1, bx2, true);
             tb->cx = bx1;
         } else {
-            int by1 = MIN(tb->my, tb->cy);
+            int by1 = std::min(tb->my, tb->cy);
             int by2 = std::max(tb->my, tb->cy);
 
             for (int y = by2; y >= by1; y--) {

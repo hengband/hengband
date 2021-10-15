@@ -139,7 +139,7 @@ static void attack_dispel(player_type *player_ptr, player_attack_type *pa_ptr)
     dispel_monster_status(player_ptr, pa_ptr->m_idx);
 
     auto sp = damroll(dd, 8);
-    player_ptr->csp = MIN(player_ptr->msp, player_ptr->csp + sp);
+    player_ptr->csp = std::min(player_ptr->msp, player_ptr->csp + sp);
     set_bits(player_ptr->redraw, PR_MANA);
 }
 
