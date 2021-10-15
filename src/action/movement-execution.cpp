@@ -216,7 +216,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
         } else if (f_ptr->flags.has(FF::CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
             /* Allow moving */
         } else if (f_ptr->flags.has(FF::WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
-            && (f_ptr->flags.has(FF::DEEP) || (riding_r_ptr->flags2 & RF2_XX14))) {
+            && (f_ptr->flags.has(FF::DEEP) || riding_r_ptr->aura_flags.has(MonsterAuraType::FIRE))) {
             msg_format(_("%sの上に行けない。", "Can't swim."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;

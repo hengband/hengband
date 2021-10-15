@@ -40,6 +40,9 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
     if (info_grab_one_flag(r_ptr->flagsr, r_info_flagsr, what))
         return true;
 
+    if (info_grab_one_flag(r_ptr->flagsr, r_info_flags_aura, what))
+        return true;
+
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
     return false;
 }

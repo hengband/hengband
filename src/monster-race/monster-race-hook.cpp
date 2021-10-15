@@ -277,7 +277,7 @@ bool mon_hook_shallow_water(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return false;
 
-    return none_bits(r_ptr->flags2, RF2_XX14);
+    return r_ptr->aura_flags.has_not(MonsterAuraType::FIRE);
 }
 
 /*!

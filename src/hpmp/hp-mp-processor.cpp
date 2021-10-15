@@ -210,7 +210,8 @@ void process_player_hp_mp(player_type *player_ptr)
 
     if (player_ptr->riding) {
         HIT_POINT damage;
-        if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_XX14) && !has_immune_fire(player_ptr)) {
+        auto auras = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].aura_flags;
+        if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_FIRE))
                 damage += damage / 3;

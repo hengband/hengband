@@ -455,16 +455,17 @@ void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr)
 
 void display_monster_aura(lore_type *lore_ptr)
 {
-    if ((lore_ptr->flags2 & RF2_XX14) && (lore_ptr->flags2 & RF2_XX15) && (lore_ptr->flags3 & RF3_XX10))
+    auto has_fire_aura = lore_ptr->aura_flags.has(MonsterAuraType::FIRE);
+    if (has_fire_aura && (lore_ptr->flags2 & RF2_XX15) && (lore_ptr->flags3 & RF3_XX10))
         hook_c_roff(
             TERM_VIOLET, format(_("%^sは炎と氷とスパークに包まれている。", "%^s is surrounded by flames, ice and electricity.  "), Who::who(lore_ptr->msex)));
-    else if ((lore_ptr->flags2 & RF2_XX14) && (lore_ptr->flags2 & RF2_XX15))
+    else if (has_fire_aura && (lore_ptr->flags2 & RF2_XX15))
         hook_c_roff(TERM_L_RED, format(_("%^sは炎とスパークに包まれている。", "%^s is surrounded by flames and electricity.  "), Who::who(lore_ptr->msex)));
-    else if ((lore_ptr->flags2 & RF2_XX14) && (lore_ptr->flags3 & RF3_XX10))
+    else if (has_fire_aura && (lore_ptr->flags3 & RF3_XX10))
         hook_c_roff(TERM_BLUE, format(_("%^sは炎と氷に包まれている。", "%^s is surrounded by flames and ice.  "), Who::who(lore_ptr->msex)));
     else if ((lore_ptr->flags3 & RF3_XX10) && (lore_ptr->flags2 & RF2_XX15))
         hook_c_roff(TERM_L_GREEN, format(_("%^sは氷とスパークに包まれている。", "%^s is surrounded by ice and electricity.  "), Who::who(lore_ptr->msex)));
-    else if (lore_ptr->flags2 & RF2_XX14)
+    else if (has_fire_aura)
         hook_c_roff(TERM_RED, format(_("%^sは炎に包まれている。", "%^s is surrounded by flames.  "), Who::who(lore_ptr->msex)));
     else if (lore_ptr->flags3 & RF3_XX10)
         hook_c_roff(TERM_BLUE, format(_("%^sは氷に包まれている。", "%^s is surrounded by ice.  "), Who::who(lore_ptr->msex)));
