@@ -58,3 +58,17 @@ typedef struct skill_table {
 } skill_table;
 
 extern std::vector<skill_table> s_info;
+
+struct object_type;
+struct player_type;
+
+class PlayerSkill {
+public:
+    PlayerSkill(player_type *player_ptr);
+
+    void gain_melee_weapon_exp(const object_type *o_ptr);
+    void gain_range_weapon_exp(const object_type *o_ptr);
+
+private:
+    player_type *player_ptr;
+};

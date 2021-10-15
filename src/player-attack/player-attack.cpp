@@ -139,24 +139,9 @@ static void get_bare_knuckle_exp(player_type *player_ptr, player_attack_type *pa
  */
 static void get_weapon_exp(player_type *player_ptr, player_attack_type *pa_ptr)
 {
-    auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval;
-    auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].sval;
-    int now_exp = player_ptr->weapon_exp[tval][sval];
-    if (now_exp >= s_info[enum2i(player_ptr->pclass)].w_max[tval][sval])
-        return;
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
 
-    SUB_EXP amount = 0;
-    if (now_exp < WEAPON_EXP_BEGINNER)
-        amount = 80;
-    else if (now_exp < WEAPON_EXP_SKILLED)
-        amount = 10;
-    else if ((now_exp < WEAPON_EXP_EXPERT) && (player_ptr->lev > 19))
-        amount = 1;
-    else if ((player_ptr->lev > 34) && one_in_(2))
-        amount = 1;
-
-    player_ptr->weapon_exp[tval][sval] += amount;
-    player_ptr->update |= (PU_BONUS);
+    PlayerSkill(player_ptr).gain_melee_weapon_exp(o_ptr);
 }
 
 /*!

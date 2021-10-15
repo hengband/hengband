@@ -637,20 +637,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                 }
 
                 if ((r_ptr->level + 10) > player_ptr->lev) {
-                    auto &now_exp = player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval];
-                    if (now_exp < s_info[enum2i(player_ptr->pclass)].w_max[j_ptr->tval][j_ptr->sval]) {
-                        SUB_EXP amount = 0;
-                        if (now_exp < WEAPON_EXP_BEGINNER)
-                            amount = 80;
-                        else if (now_exp < WEAPON_EXP_SKILLED)
-                            amount = 25;
-                        else if ((now_exp < WEAPON_EXP_EXPERT) && (player_ptr->lev > 19))
-                            amount = 10;
-                        else if (player_ptr->lev > 34)
-                            amount = 2;
-                        now_exp += amount;
-                        set_bits(player_ptr->update, PU_BONUS);
-                    }
+                    PlayerSkill(player_ptr).gain_range_weapon_exp(j_ptr);
                 }
 
                 if (player_ptr->riding) {
