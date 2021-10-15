@@ -150,25 +150,6 @@ static player_hand main_attack_hand(player_type *player_ptr);
 /*** Player information ***/
 
 /*!
- * @brief 騎乗スキルの抽象的ランクを返す。 / Return proficiency level of riding
- * @param weapon_exp 経験値
- * @return ランク値
- */
-int riding_exp_level(int riding_exp)
-{
-    if (riding_exp < RIDING_EXP_BEGINNER)
-        return EXP_LEVEL_UNSKILLED;
-    else if (riding_exp < RIDING_EXP_SKILLED)
-        return EXP_LEVEL_BEGINNER;
-    else if (riding_exp < RIDING_EXP_EXPERT)
-        return EXP_LEVEL_SKILLED;
-    else if (riding_exp < RIDING_EXP_MASTER)
-        return EXP_LEVEL_EXPERT;
-    else
-        return EXP_LEVEL_MASTER;
-}
-
-/*!
  * @brief プレイヤーの呪文レベルの抽象的ランクを返す。 / Return proficiency level of spells
  * @param spell_exp 経験値
  * @return ランク値

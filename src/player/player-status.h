@@ -9,7 +9,6 @@
 
 struct object_type;;
 struct player_type;
-int riding_exp_level(int riding_exp);
 int spell_exp_level(int spell_exp);
 
 WEIGHT calc_weapon_weight_limit(player_type *player_ptr);

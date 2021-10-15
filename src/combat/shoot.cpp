@@ -641,13 +641,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                 }
 
                 if (player_ptr->riding) {
-                    if ((player_ptr->skill_exp[SKILL_RIDING] < s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING])
-                        && ((player_ptr->skill_exp[SKILL_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200
-                            < r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level)
-                        && one_in_(2)) {
-                        player_ptr->skill_exp[SKILL_RIDING] += 1;
-                        set_bits(player_ptr->update, PU_BONUS);
-                    }
+                    PlayerSkill(player_ptr).gain_riding_skill_exp_on_range_attack();
                 }
 
                 /* Did we hit it (penalize range) */
