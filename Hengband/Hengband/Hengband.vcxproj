@@ -924,6 +924,7 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\load\player-class-specific-data-loader.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
+    <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
     <ClInclude Include="..\..\src\object-enchant\object-smith.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-info.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-tables.h" />

@@ -5115,6 +5115,9 @@
     <ClInclude Include="..\..\src\util\rng-xoshiro.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\monster-aura-types.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
