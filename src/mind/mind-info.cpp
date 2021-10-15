@@ -5,6 +5,10 @@
 #include "player-info/equipment-info.h"
 #include "system/player-type-definition.h"
 
+#ifdef JP
+#include "locale/japanese.h"
+#endif
+
 static void switch_mind_mindcrafter(player_type *player_ptr, const PLAYER_LEVEL plev, const int power, char *p)
 {
     switch (power) {

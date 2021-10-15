@@ -31,8 +31,8 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
-#include "player-info/samurai-data-type.h"
 #include "player-info/equipment-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -48,6 +48,10 @@
 #include "util/int-char-converter.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
+
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
 /*!
  * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
@@ -185,9 +189,7 @@ void do_cmd_wield(player_type *player_ptr)
         return;
     }
 
-    if (confirm_wear
-        && ((o_ptr->is_cursed() && o_ptr->is_known())
-            || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
+    if (confirm_wear && ((o_ptr->is_cursed() && o_ptr->is_known()) || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy, _("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name);
@@ -196,8 +198,7 @@ void do_cmd_wield(player_type *player_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != PlayerRaceType::VAMPIRE)
-        && (player_ptr->prace != PlayerRaceType::ANDROID)) {
+    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,

@@ -5,6 +5,10 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
+#ifdef JP
+#include "locale/japanese.h"
+#endif
+
 void select_mutation_racial(player_type *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
@@ -238,8 +242,7 @@ void select_mutation_racial(player_type *player_ptr, rc_type *rc_ptr)
     if (player_ptr->muta.has(MUTA::EARTHQUAKE)) {
         rpi = rpi_type(_("地震", "Earthquake"));
         rpi.info = format("%s%d", KWD_SPHERE, 10);
-        rpi.text
-            = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
+        rpi.text = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
         rpi.min_level = 12;
         rpi.cost = 12;
         rpi.stat = A_STR;

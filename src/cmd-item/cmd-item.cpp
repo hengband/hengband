@@ -68,6 +68,10 @@
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 
+#ifdef JP
+#include "locale/japanese.h"
+#endif
+
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list
  */

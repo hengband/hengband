@@ -48,10 +48,14 @@
 #include <sstream>
 #include <string>
 
+#ifdef JP
+#include "locale/japanese.h"
+#endif
+
 /*! サブウィンドウ表示用の ItemTester オブジェクト */
 static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();
 
-FixItemTesterSetter::FixItemTesterSetter(const ItemTester& item_tester)
+FixItemTesterSetter::FixItemTesterSetter(const ItemTester &item_tester)
 {
     fix_item_tester = item_tester.clone();
 }
@@ -230,7 +234,7 @@ void fix_monster_list(player_type *player_ptr)
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
  */
-static void display_equipment(player_type *player_ptr, const ItemTester& item_tester)
+static void display_equipment(player_type *player_ptr, const ItemTester &item_tester)
 {
     if (!player_ptr || !player_ptr->inventory_list)
         return;
@@ -259,8 +263,7 @@ static void display_equipment(player_type *player_ptr, const ItemTester& item_te
         term_erase(cur_col, cur_row, 255);
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
 
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
-            && has_two_handed_weapons(player_ptr)) {
+        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
         } else {

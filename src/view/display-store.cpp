@@ -19,6 +19,10 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
+#ifdef JP
+#include "locale/japanese.h"
+#endif
+
 /*!
  * @brief プレイヤーの所持金を表示する /
  * Displays players gold					-RAK-

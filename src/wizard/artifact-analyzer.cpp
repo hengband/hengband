@@ -12,6 +12,10 @@
 #include "util/quarks.h"
 #include "wizard/spoiler-util.h"
 
+#ifdef JP
+#include "locale/japanese.h"
+#endif
+
 /*!
  * @brief アーティファクトの特性一覧を出力する /
  * Write a line to the spoiler file and then "underline" it with hypens
@@ -69,11 +73,9 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
     auto flgs = object_flags(o_ptr);
     affects_list = pi_ptr->pval_affects;
     sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
-    if (flgs.has(TR_STR) && flgs.has(TR_INT) && flgs.has(TR_WIS) && flgs.has(TR_DEX) && flgs.has(TR_CON)
-        && flgs.has(TR_CHR)) {
+    if (flgs.has(TR_STR) && flgs.has(TR_INT) && flgs.has(TR_WIS) && flgs.has(TR_DEX) && flgs.has(TR_CON) && flgs.has(TR_CHR)) {
         *affects_list++ = _("全能力", "All stats");
-    } else if (flgs.has(TR_STR) || flgs.has(TR_INT) || flgs.has(TR_WIS) || flgs.has(TR_DEX) || flgs.has(TR_CON)
-        || flgs.has(TR_CHR)) {
+    } else if (flgs.has(TR_STR) || flgs.has(TR_INT) || flgs.has(TR_WIS) || flgs.has(TR_DEX) || flgs.has(TR_CON) || flgs.has(TR_CHR)) {
         affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
     }
 
@@ -142,11 +144,9 @@ static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
 {
     auto flgs = object_flags(o_ptr);
-    if (flgs.has(TR_SUST_STR) && flgs.has(TR_SUST_INT) && flgs.has(TR_SUST_WIS) && flgs.has(TR_SUST_DEX)
-        && flgs.has(TR_SUST_CON) && flgs.has(TR_SUST_CHR)) {
+    if (flgs.has(TR_SUST_STR) && flgs.has(TR_SUST_INT) && flgs.has(TR_SUST_WIS) && flgs.has(TR_SUST_DEX) && flgs.has(TR_SUST_CON) && flgs.has(TR_SUST_CHR)) {
         *sustain_list++ = _("全能力", "All stats");
-    } else if (flgs.has(TR_SUST_STR) || flgs.has(TR_SUST_INT) || flgs.has(TR_SUST_WIS) || flgs.has(TR_SUST_DEX)
-        || flgs.has(TR_SUST_CON) || flgs.has(TR_SUST_CHR)) {
+    } else if (flgs.has(TR_SUST_STR) || flgs.has(TR_SUST_INT) || flgs.has(TR_SUST_WIS) || flgs.has(TR_SUST_DEX) || flgs.has(TR_SUST_CON) || flgs.has(TR_SUST_CHR)) {
         sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
     }
 
