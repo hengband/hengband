@@ -26,27 +26,22 @@ void rd_options(void)
 {
     strip_bytes(16);
 
-    byte b;
-
     if (loading_savefile_version_is_older_than(9)) {
-        rd_byte(&b);
+        auto b = rd_byte();
         delay_factor = b * b * b;
     } else {
-        rd_s32b(&delay_factor);
+        delay_factor = rd_s32b();
     }
 
-    rd_byte(&b);
-    hitpoint_warn = b;
+    hitpoint_warn = rd_byte();
 
     if (h_older_than(1, 7, 0, 0)) {
         mana_warn = 2;
     } else {
-        rd_byte(&b);
-        mana_warn = b;
+        mana_warn = rd_byte();
     }
 
-    uint16_t c;
-    rd_u16b(&c);
+    auto c = rd_u16b();
 
     cheat_peek = any_bits(c, 0x0100);
     cheat_hear = any_bits(c, 0x0200);
@@ -60,17 +55,17 @@ void rd_options(void)
     cheat_sight = any_bits(c, 0x0040);
     cheat_immortal = any_bits(c, 0x0020);
 
-    rd_byte((byte *)&autosave_l);
-    rd_byte((byte *)&autosave_t);
-    rd_s16b(&autosave_freq);
+    autosave_l = rd_byte() != 0;
+    autosave_t = rd_byte() != 0;
+    autosave_freq = rd_s16b();
 
     BIT_FLAGS flag[8];
     for (int n = 0; n < 8; n++)
-        rd_u32b(&flag[n]);
+        flag[n] = rd_u32b();
 
     BIT_FLAGS mask[8];
     for (int n = 0; n < 8; n++)
-        rd_u32b(&mask[n]);
+        mask[n] = rd_u32b();
 
     for (auto n = 0; n < 8; n++) {
         for (auto i = 0; i < 32; i++) {
@@ -91,10 +86,10 @@ void rd_options(void)
 
     extract_option_vars();
     for (int n = 0; n < 8; n++)
-        rd_u32b(&flag[n]);
+        flag[n] = rd_u32b();
 
     for (int n = 0; n < 8; n++)
-        rd_u32b(&mask[n]);
+        mask[n] = rd_u32b();
 
     for (int n = 0; n < 8; n++) {
         for (int i = 0; i < 32; i++) {

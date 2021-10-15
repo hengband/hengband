@@ -60,19 +60,14 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
  */
 void rd_item_old(object_type *o_ptr)
 {
-    rd_s16b(&o_ptr->k_idx);
+    o_ptr->k_idx = rd_s16b();
 
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    o_ptr->iy = (POSITION)tmp8u;
-    rd_byte(&tmp8u);
-    o_ptr->ix = (POSITION)tmp8u;
+    o_ptr->iy = rd_byte();
+    o_ptr->ix = rd_byte();
 
     /* Type/Subtype */
-    rd_byte(&tmp8u);
-    o_ptr->tval = i2enum<ItemKindType>(tmp8u);
-    rd_byte(&tmp8u);
-    o_ptr->sval = tmp8u;
+    o_ptr->tval = i2enum<ItemKindType>(rd_byte());
+    o_ptr->sval = rd_byte();
 
     if (h_older_than(0, 4, 4)) {
         if (o_ptr->tval == i2enum <ItemKindType>(100))
@@ -83,40 +78,31 @@ void rd_item_old(object_type *o_ptr)
             o_ptr->tval = ItemKindType::HISSATSU_BOOK;
     }
 
-    rd_s16b(&o_ptr->pval);
-    rd_byte(&o_ptr->discount);
-    rd_byte(&tmp8u);
-    o_ptr->number = (ITEM_NUMBER)tmp8u;
+    o_ptr->pval = rd_s16b();
+    o_ptr->discount = rd_byte();
+    o_ptr->number = rd_byte();
 
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    o_ptr->weight = tmp16s;
+    o_ptr->weight = rd_s16b();
 
-    rd_byte(&tmp8u);
-    o_ptr->name1 = tmp8u;
+    o_ptr->name1 = rd_byte();
 
-    rd_byte(&tmp8u);
-    o_ptr->name2 = tmp8u;
+    o_ptr->name2 = rd_byte();
 
-    rd_s16b(&o_ptr->timeout);
-    rd_s16b(&o_ptr->to_h);
-    rd_s16b(&tmp16s);
-    o_ptr->to_d = tmp16s;
+    o_ptr->timeout = rd_s16b();
+    o_ptr->to_h = rd_s16b();
+    o_ptr->to_d = rd_s16b();
 
-    rd_s16b(&o_ptr->to_a);
-    rd_s16b(&o_ptr->ac);
-    rd_byte(&tmp8u);
-    o_ptr->dd = tmp8u;
+    o_ptr->to_a = rd_s16b();
+    o_ptr->ac = rd_s16b();
+    o_ptr->dd = rd_byte();
 
-    rd_byte(&tmp8u);
-    o_ptr->ds = tmp8u;
+    o_ptr->ds = rd_byte();
 
-    rd_byte(&o_ptr->ident);
-    rd_byte(&o_ptr->marked);
+    o_ptr->ident = rd_byte();
+    o_ptr->marked = rd_byte();
 
     for (int i = 0, count = (h_older_than(1, 3, 0, 0) ? 3 : 4); i < count; i++) {
-        uint32_t tmp32u;
-        rd_u32b(&tmp32u);
+        auto tmp32u = rd_u32b();
         migrate_bitflag_to_flaggroup(o_ptr->art_flags, tmp32u, i * 32);
     }
 
@@ -150,15 +136,13 @@ void rd_item_old(object_type *o_ptr)
         }
         o_ptr->art_flags.reset({ i2enum<tr_type>(93), i2enum<tr_type>(94), i2enum<tr_type>(95) });
     } else {
-        uint32_t tmp32u;
-        rd_u32b(&tmp32u);
+        auto tmp32u = rd_u32b();
         migrate_bitflag_to_flaggroup(o_ptr->curse_flags, tmp32u);
     }
 
-    rd_s16b(&o_ptr->held_m_idx);
-    rd_byte(&o_ptr->xtra1);
-    rd_byte(&tmp8u);
-    o_ptr->activation_id = i2enum<RandomArtActType>(tmp8u);
+    o_ptr->held_m_idx = rd_s16b();
+    o_ptr->xtra1 = rd_byte();
+    o_ptr->activation_id = i2enum<RandomArtActType>(rd_byte());
 
     if (h_older_than(1, 0, 10)) {
         if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN) {
@@ -271,14 +255,14 @@ void rd_item_old(object_type *o_ptr)
             o_ptr->xtra4 = o_ptr->xtra5;
         }
     } else {
-        rd_byte(&o_ptr->xtra3);
+        o_ptr->xtra3 = rd_byte();
         if (h_older_than(1, 3, 0, 1)) {
             if (o_ptr->is_smith() && o_ptr->xtra3 >= 1 + 96)
                 o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
         }
 
-        rd_s16b(&o_ptr->xtra4);
-        rd_s16b(&o_ptr->xtra5);
+        o_ptr->xtra4 = rd_s16b();
+        o_ptr->xtra5 = rd_s16b();
     }
 
     if (h_older_than(1, 0, 5)
@@ -287,7 +271,7 @@ void rd_item_old(object_type *o_ptr)
         o_ptr->pval = 0;
     }
 
-    rd_byte(&o_ptr->feeling);
+    o_ptr->feeling = rd_byte();
 
     char buf[128];
     rd_string(buf, sizeof(buf));
@@ -300,9 +284,7 @@ void rd_item_old(object_type *o_ptr)
     if (buf[0])
         o_ptr->art_name = quark_add(buf);
     {
-        int32_t tmp32s;
-
-        rd_s32b(&tmp32s);
+        auto tmp32s = rd_s32b();
         strip_bytes(tmp32s);
     }
 
@@ -341,12 +323,12 @@ void rd_item_old(object_type *o_ptr)
  */
 void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 {
-    rd_s16b(&m_ptr->r_idx);
+    m_ptr->r_idx = rd_s16b();
 
     if (h_older_than(1, 0, 12))
         m_ptr->ap_r_idx = m_ptr->r_idx;
     else
-        rd_s16b(&m_ptr->ap_r_idx);
+        m_ptr->ap_r_idx = rd_s16b();
 
     if (h_older_than(1, 0, 14)) {
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -357,42 +339,33 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
         if (r_ptr->flags3 & RF3_GOOD)
             m_ptr->sub_align |= SUB_ALIGN_GOOD;
     } else
-        rd_byte(&m_ptr->sub_align);
+        m_ptr->sub_align = rd_byte();
 
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    m_ptr->fy = (POSITION)tmp8u;
-    rd_byte(&tmp8u);
-    m_ptr->fx = (POSITION)tmp8u;
+    m_ptr->fy = rd_byte();
+    m_ptr->fx = rd_byte();
     m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
 
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    m_ptr->hp = tmp16s;
-    rd_s16b(&tmp16s);
-    m_ptr->maxhp = tmp16s;
+    m_ptr->hp = rd_s16b();
+    m_ptr->maxhp = rd_s16b();
 
     if (h_older_than(1, 0, 5)) {
         m_ptr->max_maxhp = m_ptr->maxhp;
     } else {
-        rd_s16b(&tmp16s);
-        m_ptr->max_maxhp = (HIT_POINT)tmp16s;
+        m_ptr->max_maxhp = rd_s16b();
     }
     if (h_older_than(2, 1, 2, 1)) {
         m_ptr->dealt_damage = 0;
     } else {
-        rd_s32b(&m_ptr->dealt_damage);
+        m_ptr->dealt_damage = rd_s32b();
     }
 
-    rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
-    rd_byte(&tmp8u);
-    m_ptr->mspeed = tmp8u;
+    m_ptr->mtimed[MTIMED_CSLEEP] = rd_s16b();
+    m_ptr->mspeed = rd_byte();
 
     if (h_older_than(0, 4, 2)) {
-        rd_byte(&tmp8u);
-        m_ptr->energy_need = (int16_t)tmp8u;
+        m_ptr->energy_need = rd_byte();
     } else
-        rd_s16b(&m_ptr->energy_need);
+        m_ptr->energy_need = rd_s16b();
 
     if (h_older_than(1, 0, 13))
         m_ptr->energy_need = 100 - m_ptr->energy_need;
@@ -401,36 +374,27 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
         m_ptr->mtimed[MTIMED_FAST] = 0;
         m_ptr->mtimed[MTIMED_SLOW] = 0;
     } else {
-        rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_FAST] = (int16_t)tmp8u;
-        rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_SLOW] = (int16_t)tmp8u;
+        m_ptr->mtimed[MTIMED_FAST] = rd_byte();
+        m_ptr->mtimed[MTIMED_SLOW] = rd_byte();
     }
 
-    rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_STUNNED] = (int16_t)tmp8u;
-    rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_CONFUSED] = (int16_t)tmp8u;
-    rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_MONFEAR] = (int16_t)tmp8u;
+    m_ptr->mtimed[MTIMED_STUNNED] = rd_byte();
+    m_ptr->mtimed[MTIMED_CONFUSED] = rd_byte();
+    m_ptr->mtimed[MTIMED_MONFEAR] = rd_byte();
 
     if (h_older_than(0, 0, 10)) {
         reset_target(m_ptr);
     } else if (h_older_than(0, 0, 11)) {
-        rd_s16b(&tmp16s);
+        strip_bytes(2);
         reset_target(m_ptr);
     } else {
-        rd_s16b(&tmp16s);
-        m_ptr->target_y = (POSITION)tmp16s;
-        rd_s16b(&tmp16s);
-        m_ptr->target_x = (POSITION)tmp16s;
+        m_ptr->target_y = rd_s16b();
+        m_ptr->target_x = rd_s16b();
     }
 
-    rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_INVULNER] = (int16_t)tmp8u;
+    m_ptr->mtimed[MTIMED_INVULNER] = rd_byte();
 
-    uint32_t tmp32u;
-    rd_u32b(&tmp32u);
+    auto tmp32u = rd_u32b();
     migrate_bitflag_to_flaggroup(m_ptr->smart, tmp32u);
 
     // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
@@ -444,8 +408,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     if (h_older_than(0, 4, 5)) {
         m_ptr->exp = 0;
     } else {
-        rd_u32b(&tmp32u);
-        m_ptr->exp = tmp32u;
+        m_ptr->exp = rd_u32b();
     }
 
     if (h_older_than(0, 2, 2)) {
@@ -454,7 +417,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
             m_ptr->mflag2.set(MFLAG2::KAGE);
         }
     } else {
-        rd_byte(&tmp8u);
+        auto tmp8u = rd_byte();
         constexpr auto base = enum2i(MFLAG2::KAGE);
         migrate_bitflag_to_flaggroup(m_ptr->mflag2, tmp8u, base, 7);
     }
@@ -473,7 +436,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
             m_ptr->nickname = quark_add(buf);
     }
 
-    rd_byte(&tmp8u);
+    strip_bytes(1);
 }
 
 static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const BIT_FLAGS rfr)
@@ -541,52 +504,39 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
  */
 errr rd_dungeon_old(player_type *player_ptr)
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->dun_level = (DEPTH)tmp16s;
+    floor_ptr->dun_level = rd_s16b();
     if (h_older_than(0, 3, 8))
         player_ptr->dungeon_idx = DUNGEON_ANGBAND;
     else {
-        byte tmp8u;
-        rd_byte(&tmp8u);
-        player_ptr->dungeon_idx = (IDX)tmp8u;
+        player_ptr->dungeon_idx = rd_byte();
     }
 
     floor_ptr->base_level = floor_ptr->dun_level;
-    rd_s16b(&tmp16s);
-    floor_ptr->base_level = (DEPTH)tmp16s;
+    floor_ptr->base_level = rd_s16b();
 
-    rd_s16b(&tmp16s);
-    floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
-    rd_s16b(&tmp16s);
-    player_ptr->y = (POSITION)tmp16s;
-    rd_s16b(&tmp16s);
-    player_ptr->x = (POSITION)tmp16s;
+    floor_ptr->num_repro = rd_s16b();
+    player_ptr->y = rd_s16b();
+    player_ptr->x = rd_s16b();
     if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {
         player_ptr->y = 33;
         player_ptr->x = 131;
     }
-    rd_s16b(&tmp16s);
-    floor_ptr->height = (POSITION)tmp16s;
-    rd_s16b(&tmp16s);
-    floor_ptr->width = (POSITION)tmp16s;
-    rd_s16b(&tmp16s); /* max_panel_rows */
-    rd_s16b(&tmp16s); /* max_panel_cols */
+    floor_ptr->height = rd_s16b();
+    floor_ptr->width = rd_s16b();
+    strip_bytes(2); /* max_panel_rows */
+    strip_bytes(2); /* max_panel_cols */
 
     int ymax = floor_ptr->height;
     int xmax = floor_ptr->width;
 
     for (int x = 0, y = 0; y < ymax;) {
         uint16_t info;
-        byte count;
-        rd_byte(&count);
+        auto count = rd_byte();
         if (h_older_than(0, 3, 6)) {
-            byte tmp8u;
-            rd_byte(&tmp8u);
-            info = (uint16_t)tmp8u;
+            info = rd_byte();
         } else {
-            rd_u16b(&info);
+            info = rd_u16b();
             info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT | CAVE_MNDK);
         }
 
@@ -603,10 +553,8 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     for (int x = 0, y = 0; y < ymax;) {
-        byte count;
-        rd_byte(&count);
-        byte tmp8u;
-        rd_byte(&tmp8u);
+        auto count = rd_byte();
+        auto tmp8u = rd_byte();
         for (int i = count; i > 0; i--) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
@@ -620,10 +568,8 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     for (int x = 0, y = 0; y < ymax;) {
-        byte count;
-        rd_byte(&count);
-        byte tmp8u;
-        rd_byte(&tmp8u);
+        auto count = rd_byte();
+        auto tmp8u = rd_byte();
         for (int i = count; i > 0; i--) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
@@ -637,9 +583,8 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     for (int x = 0, y = 0; y < ymax;) {
-        byte count;
-        rd_byte(&count);
-        rd_s16b(&tmp16s);
+        auto count =  rd_byte();
+        auto tmp16s = rd_s16b();
         for (int i = count; i > 0; i--) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
@@ -729,7 +674,7 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     uint16_t limit;
-    rd_u16b(&limit);
+    limit = rd_u16b();
     if (limit > w_ptr->max_o_idx) {
         load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
         return (151);
@@ -750,7 +695,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         list.add(floor_ptr, o_idx);
     }
 
-    rd_u16b(&limit);
+    limit = rd_u16b();
     if (limit > w_ptr->max_m_idx) {
         load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
         return (161);

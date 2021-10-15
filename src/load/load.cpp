@@ -86,7 +86,7 @@ static void rd_total_play_time()
     if (loading_savefile_version_is_older_than(4))
         return;
 
-    rd_u32b(&w_ptr->sf_play_time);
+    w_ptr->sf_play_time = rd_u32b();
 }
 
 /*!
@@ -107,8 +107,8 @@ static void load_player_world(player_type *player_ptr)
     rd_winner_class();
     rd_base_info(player_ptr);
     rd_player_info(player_ptr);
-    rd_byte((byte *)&preserve_mode);
-    rd_byte((byte *)&player_ptr->wait_report_score);
+    preserve_mode = rd_byte() != 0;
+    player_ptr->wait_report_score = rd_byte() != 0;
     rd_dummy2();
     rd_global_configurations(player_ptr);
     rd_extra(player_ptr);
@@ -121,17 +121,14 @@ static void load_player_world(player_type *player_ptr)
 
 static errr load_hp(player_type *player_ptr)
 {
-    uint16_t tmp16u;
-    rd_u16b(&tmp16u);
+    auto tmp16u = rd_u16b();
     if (tmp16u > PY_MAX_LEVEL) {
         load_note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
         return 25;
     }
 
     for (int i = 0; i < tmp16u; i++) {
-        int16_t tmp16s;
-        rd_s16b(&tmp16s);
-        player_ptr->player_hp[i] = (HIT_POINT)tmp16s;
+        player_ptr->player_hp[i] = rd_s16b();
     }
 
     return 0;
@@ -139,30 +136,28 @@ static errr load_hp(player_type *player_ptr)
 
 static void load_spells(player_type *player_ptr)
 {
-    rd_u32b(&player_ptr->spell_learned1);
-    rd_u32b(&player_ptr->spell_learned2);
-    rd_u32b(&player_ptr->spell_worked1);
-    rd_u32b(&player_ptr->spell_worked2);
-    rd_u32b(&player_ptr->spell_forgotten1);
-    rd_u32b(&player_ptr->spell_forgotten2);
+    player_ptr->spell_learned1 = rd_u32b();
+    player_ptr->spell_learned2 = rd_u32b();
+    player_ptr->spell_worked1 = rd_u32b();
+    player_ptr->spell_worked2 = rd_u32b();
+    player_ptr->spell_forgotten1 = rd_u32b();
+    player_ptr->spell_forgotten2 = rd_u32b();
 
     if (h_older_than(0, 0, 5))
         set_zangband_learnt_spells(player_ptr);
     else
-        rd_s16b(&player_ptr->learned_spells);
+        player_ptr->learned_spells = rd_s16b();
 
     if (h_older_than(0, 0, 6))
         player_ptr->add_spells = 0;
     else
-        rd_s16b(&player_ptr->add_spells);
+        player_ptr->add_spells = rd_s16b();
 }
 
 static errr verify_checksum()
 {
-    uint32_t n_v_check = v_check;
-    uint32_t o_v_check;
-    rd_u32b(&o_v_check);
-    if (o_v_check == n_v_check)
+    auto n_v_check = v_check;
+    if (rd_u32b() == n_v_check)
         return 0;
 
     load_note(_("チェックサムがおかしい", "Invalid checksum"));
@@ -171,10 +166,8 @@ static errr verify_checksum()
 
 static errr verify_encoded_checksum()
 {
-    uint32_t n_x_check = x_check;
-    uint32_t o_x_check;
-    rd_u32b(&o_x_check);
-    if (o_x_check == n_x_check)
+    auto n_x_check = x_check;
+    if (rd_u32b() == n_x_check)
         return 0;
 
     load_note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
@@ -233,11 +226,11 @@ static errr exe_reading_savefile(player_type *player_ptr)
     if (load_store_result != 0)
         return load_store_result;
 
-    rd_s16b(&player_ptr->pet_follow_distance);
+    player_ptr->pet_follow_distance = rd_s16b();
     if (h_older_than(0, 4, 10))
         set_zangband_pet(player_ptr);
     else
-        rd_u16b(&player_ptr->pet_extra_flags);
+        player_ptr->pet_extra_flags = rd_u16b();
 
     if (!h_older_than(1, 0, 9)) {
         std::vector<char> buf(SCREEN_BUF_MAX_SIZE);

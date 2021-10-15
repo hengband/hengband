@@ -54,44 +54,52 @@ byte sf_get(void)
 }
 
 /*!
- * @brief ロードファイルポインタから1バイトを読み込んでポインタに渡す
- * @param ip 読み込みポインタ
+ * @brief ロードファイルポインタから1バイトを読み込む
  */
-void rd_byte(byte *ip) { *ip = sf_get(); }
-
-/*!
- * @brief ロードファイルポインタから符号なし16bit値を読み込んでポインタに渡す
- * @param ip 読み込みポインタ
- */
-void rd_u16b(uint16_t *ip)
+byte rd_byte()
 {
-    (*ip) = sf_get();
-    (*ip) |= ((uint16_t)(sf_get()) << 8);
+    return sf_get();
 }
 
 /*!
- * @brief ロードファイルポインタから符号つき16bit値を読み込んでポインタに渡す
- * @param ip 読み込みポインタ
+ * @brief ロードファイルポインタから符号なし16bit値を読み込む
  */
-void rd_s16b(int16_t *ip) { rd_u16b((uint16_t *)ip); }
-
-/*!
- * @brief ロードファイルポインタから符号なし32bit値を読み込んでポインタに渡す
- * @param ip 読み込みポインタ
- */
-void rd_u32b(uint32_t *ip)
+uint16_t rd_u16b()
 {
-    (*ip) = sf_get();
-    (*ip) |= ((uint32_t)(sf_get()) << 8);
-    (*ip) |= ((uint32_t)(sf_get()) << 16);
-    (*ip) |= ((uint32_t)(sf_get()) << 24);
+    uint16_t val = sf_get();
+    val |= (static_cast<uint16_t>(sf_get()) << 8);
+
+    return val;
 }
 
 /*!
- * @brief ロードファイルポインタから符号つき32bit値を読み込んでポインタに渡す
- * @param ip 読み込みポインタ
+ * @brief ロードファイルポインタから符号つき16bit値を読み込む
  */
-void rd_s32b(int32_t *ip) { rd_u32b((uint32_t *)ip); }
+int16_t rd_s16b()
+{
+    return static_cast<int16_t>(rd_u16b());
+}
+
+/*!
+ * @brief ロードファイルポインタから符号なし32bit値を読み込む
+ */
+uint32_t rd_u32b()
+{
+    uint32_t val = sf_get();
+    val |= (static_cast<uint32_t>(sf_get()) << 8);
+    val |= (static_cast<uint32_t>(sf_get()) << 16);
+    val |= (static_cast<uint32_t>(sf_get()) << 24);
+
+    return val;
+}
+
+/*!
+ * @brief ロードファイルポインタから符号つき32bit値を読み込む
+ */
+int32_t rd_s32b()
+{
+    return static_cast<int32_t>(rd_u32b());
+}
 
 /*!
  * @brief ロードファイルポインタから文字列を読み込んでポインタに渡す / Hack -- read a string
@@ -101,8 +109,7 @@ void rd_s32b(int32_t *ip) { rd_u32b((uint32_t *)ip); }
 void rd_string(char *str, int max)
 {
     for (int i = 0; true; i++) {
-        byte tmp8u;
-        rd_byte(&tmp8u);
+        auto tmp8u = rd_byte();
         if (i < max)
             str[i] = tmp8u;
 
@@ -146,9 +153,9 @@ void rd_string(char *str, int max)
  */
 void strip_bytes(int n)
 {
-    byte tmp8u;
-    while (n--)
-        rd_byte(&tmp8u);
+    while (n-- > 0) {
+        (void)rd_byte();
+    }
 }
 
 /**

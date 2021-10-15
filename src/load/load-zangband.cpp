@@ -136,9 +136,7 @@ void set_zangband_reflection(player_type *player_ptr)
 
 void rd_zangband_dungeon()
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    max_dlv[DUNGEON_ANGBAND] = tmp16s;
+    max_dlv[DUNGEON_ANGBAND] = rd_s16b();
 }
 
 void set_zangband_game_turns(player_type *player_ptr)
@@ -151,16 +149,12 @@ void set_zangband_game_turns(player_type *player_ptr)
 
 void set_zangband_gambling_monsters(int i)
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    mon_odds[i] = tmp16s;
+    mon_odds[i] = rd_s16b();
 }
 
 void set_zangband_special_attack(player_type *player_ptr)
 {
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->special_attack = ATTACK_CONFUSE;
 
     player_ptr->ele_attack = 0;
@@ -174,16 +168,13 @@ void set_zangband_special_defense(player_type *player_ptr)
 
 void set_zangband_action(player_type *player_ptr)
 {
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->action = ACTION_LEARN;
 }
 
 void set_zangband_visited_towns(player_type *player_ptr)
 {
-    int32_t tmp32s;
-    rd_s32b(&tmp32s);
+    strip_bytes(4);
     player_ptr->visit = 1L;
 }
 
@@ -234,43 +225,36 @@ void set_zangband_learnt_spells(player_type *player_ptr)
 void set_zangband_pet(player_type *player_ptr)
 {
     player_ptr->pet_extra_flags = 0;
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->pet_extra_flags |= PF_OPEN_DOORS;
 
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
 
     if (h_older_than(0, 0, 4))
         player_ptr->pet_extra_flags |= PF_TELEPORT;
     else {
-        rd_byte(&tmp8u);
-        if (tmp8u)
+        if (rd_byte() != 0)
             player_ptr->pet_extra_flags |= PF_TELEPORT;
     }
 
     if (h_older_than(0, 0, 7))
         player_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
     else {
-        rd_byte(&tmp8u);
-        if (tmp8u)
+        if (rd_byte() != 0)
             player_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
     }
 
     if (h_older_than(0, 0, 8))
         player_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
     else {
-        rd_byte(&tmp8u);
-        if (tmp8u)
+        if (rd_byte() != 0)
             player_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
     }
 
     if (h_older_than(0, 0, 8))
         return;
 
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->pet_extra_flags |= PF_BALL_SPELL;
 }

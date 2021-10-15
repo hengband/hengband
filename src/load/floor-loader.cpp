@@ -49,96 +49,69 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     player_ptr->x = player_ptr->y = 0;
 
     if (!sf_ptr) {
-        int16_t tmp16s;
-        rd_s16b(&tmp16s);
-        floor_ptr->dun_level = (DEPTH)tmp16s;
+        floor_ptr->dun_level = rd_s16b();
         floor_ptr->base_level = floor_ptr->dun_level;
     } else {
-        int16_t tmp16s;
-        rd_s16b(&tmp16s);
-        if (tmp16s != sf_ptr->floor_id)
+        if (rd_s16b() != sf_ptr->floor_id)
             return 171;
 
-        byte tmp8u;
-        rd_byte(&tmp8u);
-        if (tmp8u != sf_ptr->savefile_id)
+        if (rd_byte() != sf_ptr->savefile_id)
             return 171;
 
-        rd_s16b(&tmp16s);
-        if (tmp16s != sf_ptr->dun_level)
+        if (rd_s16b() != sf_ptr->dun_level)
             return 171;
         floor_ptr->dun_level = sf_ptr->dun_level;
 
-        int32_t tmp32s;
-        rd_s32b(&tmp32s);
-        if (tmp32s != sf_ptr->last_visit)
+        if (rd_s32b() != sf_ptr->last_visit)
             return 171;
 
-        uint32_t tmp32u;
-        rd_u32b(&tmp32u);
-        if (tmp32u != sf_ptr->visit_mark)
+        if (rd_u32b() != sf_ptr->visit_mark)
             return 171;
 
-        rd_s16b(&tmp16s);
-        if (tmp16s != sf_ptr->upper_floor_id)
+        if (rd_s16b() != sf_ptr->upper_floor_id)
             return 171;
 
-        rd_s16b(&tmp16s);
-        if (tmp16s != sf_ptr->lower_floor_id)
+        if (rd_s16b() != sf_ptr->lower_floor_id)
             return 171;
     }
 
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    floor_ptr->base_level = (DEPTH)tmp16s;
-    rd_s16b(&tmp16s);
-    floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
+    floor_ptr->base_level = rd_s16b();
+    floor_ptr->num_repro = rd_s16b();
 
-    uint16_t tmp16u;
-    rd_u16b(&tmp16u);
-    player_ptr->y = (POSITION)tmp16u;
+    player_ptr->y = rd_u16b();
 
-    rd_u16b(&tmp16u);
-    player_ptr->x = (POSITION)tmp16u;
+    player_ptr->x = rd_u16b();
 
-    rd_s16b(&tmp16s);
-    floor_ptr->height = (POSITION)tmp16s;
-    rd_s16b(&tmp16s);
-    floor_ptr->width = (POSITION)tmp16s;
+    floor_ptr->height = rd_s16b();
+    floor_ptr->width = rd_s16b();
 
-    rd_byte(&player_ptr->feeling);
+    player_ptr->feeling = rd_byte();
 
-    uint16_t limit;
-    rd_u16b(&limit);
+    auto limit = rd_u16b();
     std::vector<grid_template_type> templates(limit);
 
     for (auto &ct_ref : templates) {
-        rd_u16b(&tmp16u);
-        ct_ref.info = (BIT_FLAGS)tmp16u;
+        ct_ref.info = rd_u16b();
         if (h_older_than(1, 7, 0, 2)) {
-            byte tmp8u;
-            rd_byte(&tmp8u);
-            ct_ref.feat = (int16_t)tmp8u;
-            rd_byte(&tmp8u);
-            ct_ref.mimic = (int16_t)tmp8u;
+            ct_ref.feat = rd_byte();
+            ct_ref.mimic = rd_byte();
         } else {
-            rd_s16b(&ct_ref.feat);
-            rd_s16b(&ct_ref.mimic);
+            ct_ref.feat = rd_s16b();
+            ct_ref.mimic = rd_s16b();
         }
 
-        rd_s16b(&ct_ref.special);
+        ct_ref.special = rd_s16b();
     }
 
     POSITION ymax = floor_ptr->height;
     POSITION xmax = floor_ptr->width;
     for (POSITION x = 0, y = 0; y < ymax;) {
-        byte count;
-        rd_byte(&count);
+        auto count = rd_byte();
 
         uint16_t id = 0;
         byte tmp8u;
         do {
-            rd_byte(&tmp8u);
+            tmp8u = rd_byte();
             id += tmp8u;
         } while (tmp8u == MAX_UCHAR);
 
@@ -178,7 +151,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         }
     }
 
-    rd_u16b(&limit);
+    limit = rd_u16b();
     if (limit > w_ptr->max_o_idx)
         return 151;
     for (int i = 1; i < limit; i++) {
@@ -195,7 +168,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         list.add(floor_ptr, o_idx, o_ptr->stack_idx);
     }
 
-    rd_u16b(&limit);
+    limit = rd_u16b();
     if (limit > w_ptr->max_m_idx)
         return 161;
 
@@ -225,12 +198,8 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
  */
 static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-    uint32_t n_x_check, n_v_check;
-    uint32_t o_x_check, o_v_check;
-
     load_xor_byte = 0;
-    byte tmp8u;
-    rd_byte(&tmp8u);
+    strip_bytes(1);
 
     v_check = 0L;
     x_check = 0L;
@@ -241,24 +210,18 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     w_ptr->h_ver_major = H_VER_MAJOR;
     loading_savefile_version = SAVEFILE_VERSION;
 
-    uint32_t tmp32u;
-    rd_u32b(&tmp32u);
-    if (saved_floor_file_sign != tmp32u)
+    if (saved_floor_file_sign != rd_u32b())
         return false;
 
     if (rd_saved_floor(player_ptr, sf_ptr))
         return false;
 
-    n_v_check = v_check;
-    rd_u32b(&o_v_check);
-
-    if (o_v_check != n_v_check)
+    auto n_v_check = v_check;
+    if (rd_u32b() != n_v_check)
         return false;
 
-    n_x_check = x_check;
-    rd_u32b(&o_x_check);
-
-    if (o_x_check != n_x_check)
+    auto n_x_check = x_check;
+    if (rd_u32b() != n_x_check)
         return false;
     return true;
 }

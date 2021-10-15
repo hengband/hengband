@@ -28,10 +28,10 @@ std::tuple<std::vector<int32_t>, std::vector<byte>> load_old_savfile_magic_num()
 
     if (loading_savefile_version_is_older_than(9)) {
         for (auto &item : magic_num1) {
-            rd_s32b(&item);
+            item = rd_s32b();
         }
         for (auto &item : magic_num2) {
-            rd_byte(&item);
+            item = rd_byte();
         }
     }
 
@@ -59,9 +59,8 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<smith_data_type> 
         }
     } else {
         while (true) {
-            int16_t essence, amount;
-            rd_s16b(&essence);
-            rd_s16b(&amount);
+            auto essence = rd_s16b();
+            auto amount = rd_s16b();
             if (essence < 0 && amount < 0) {
                 break;
             }
@@ -76,7 +75,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<force_trainer_dat
         auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
         force_trainer_data->ki = magic_num1[0];
     } else {
-        rd_s32b(&force_trainer_data->ki);
+        force_trainer_data->ki = rd_s32b();
     }
 }
 
@@ -109,13 +108,10 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<magic_eater_data_
         load_old_item_group(magic_eater_data->rods, 2);
     } else {
         auto load_item_group = [](auto &item_group) {
-            uint16_t item_count;
-            rd_u16b(&item_count);
+            auto item_count = rd_u16b();
             for (auto i = 0U; i < item_count; ++i) {
-                int32_t charge;
-                byte count;
-                rd_s32b(&charge);
-                rd_byte(&count);
+                auto charge = rd_s32b();
+                auto count = rd_byte();
                 if (i < item_group.size()) {
                     item_group[i].charge = charge;
                     item_group[i].count = count;
@@ -137,13 +133,10 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bard_data_type> &
         bird_data->singing_duration = magic_num1[2];
         bird_data->singing_song_spell_idx = magic_num2[0];
     } else {
-        int32_t tmp32s;
-        rd_s32b(&tmp32s);
-        bird_data->singing_song = i2enum<realm_song_type>(tmp32s);
-        rd_s32b(&tmp32s);
-        bird_data->interrputing_song = i2enum<realm_song_type>(tmp32s);
-        rd_s32b(&bird_data->singing_duration);
-        rd_byte(&bird_data->singing_song_spell_idx);
+        bird_data->singing_song = i2enum<realm_song_type>(rd_s32b());
+        bird_data->interrputing_song = i2enum<realm_song_type>(rd_s32b());
+        bird_data->singing_duration = rd_s32b();
+        bird_data->singing_song_spell_idx = rd_byte();
     }
 }
 
@@ -153,12 +146,10 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<mane_data_type> &
         // 古いセーブファイルのものまね師のデータは magic_num には保存されていないので読み捨てる
         load_old_savfile_magic_num();
     } else {
-        int16_t count;
-        rd_s16b(&count);
+        auto count = rd_s16b();
         for (; count > 0; --count) {
-            int16_t spell, damage;
-            rd_s16b(&spell);
-            rd_s16b(&damage);
+            auto spell = rd_s16b();
+            auto damage = rd_s16b();
             mane_data->mane_list.push_back({ i2enum<RF_ABILITY>(spell), damage });
         }
     }
@@ -170,7 +161,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<sniper_data_type>
         // 古いセーブファイルのスナイパーのデータは magic_num には保存されていないので読み捨てる
         load_old_savfile_magic_num();
     } else {
-        rd_s16b(&sniper_data->concent);
+        sniper_data->concent = rd_s16b();
     }
 }
 
@@ -180,9 +171,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<samurai_data_type
         // 古いセーブファイルの剣術家のデータは magic_num には保存されていないので読み捨てる
         load_old_savfile_magic_num();
     } else {
-        byte tmp8u;
-        rd_byte(&tmp8u);
-        samurai_data->stance = i2enum<SamuraiStance>(tmp8u);
+        samurai_data->stance = i2enum<SamuraiStance>(rd_byte());
     }
 }
 
@@ -192,9 +181,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<monk_data_type> &
         // 古いセーブファイルの修行僧のデータは magic_num には保存されていないので読み捨てる
         load_old_savfile_magic_num();
     } else {
-        byte tmp8u;
-        rd_byte(&tmp8u);
-        monk_data->stance = i2enum<MonkStance>(tmp8u);
+        monk_data->stance = i2enum<MonkStance>(rd_byte());
     }
 }
 
@@ -204,11 +191,8 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<ninja_data_type> 
         // 古いセーブファイルの忍者のデータは magic_num には保存されていないので読み捨てる
         load_old_savfile_magic_num();
     } else {
-        byte tmp8u;
-        rd_byte(&tmp8u);
-        ninja_data->kawarimi = tmp8u != 0;
-        rd_byte(&tmp8u);
-        ninja_data->s_stealth = tmp8u != 0;
+        ninja_data->kawarimi = rd_byte() != 0;
+        ninja_data->s_stealth = rd_byte() != 0;
     }
 }
 
@@ -222,10 +206,8 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<spell_hex_data_ty
         spell_hex_data->revenge_turn = magic_num2[2];
     } else {
         rd_FlagGroup(spell_hex_data->casting_spells, rd_byte);
-        rd_s32b(&spell_hex_data->revenge_power);
-        byte tmp8u;
-        rd_byte(&tmp8u);
-        spell_hex_data->revenge_type = i2enum<SpellHexRevengeType>(tmp8u);
-        rd_byte(&spell_hex_data->revenge_turn);
+        spell_hex_data->revenge_power = rd_s32b();
+        spell_hex_data->revenge_type = i2enum<SpellHexRevengeType>(rd_byte());
+        spell_hex_data->revenge_turn = rd_byte();
     }
 }
