@@ -1,10 +1,41 @@
 ﻿#include "load/lore-loader.h"
 #include "game-option/runtime-arguments.h"
-#include "monster-race/monster-race.h"
+#include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-v1-5-0.h"
-#include "load/angband-version-comparer.h"
+#include "monster-race/monster-race.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
 #include "system/monster-race-definition.h"
+#include "util/bit-flags-calculator.h"
+
+static void rd_r_flags2(monster_race *r_ptr)
+{
+    r_ptr->r_flags2 = rd_u32b();
+    if (loading_savefile_version_is_older_than(10)) {
+        if (any_bits(r_ptr->r_flags2, RF2_XX14)) {
+            r_ptr->r_aura_flags.set(MonsterAuraType::FIRE);
+        }
+
+        if (any_bits(r_ptr->r_flags3, RF3_XX10)) {
+            r_ptr->r_aura_flags.set(MonsterAuraType::COLD);
+        }
+
+        if (any_bits(r_ptr->r_flags2, RF2_XX15)) {
+            r_ptr->r_aura_flags.set(MonsterAuraType::ELEC);
+        }
+    }
+}
+
+static void rd_r_aura_flags(monster_race *r_ptr)
+{
+    if (loading_savefile_version_is_older_than(10)) {
+        return;
+    }
+
+    uint32_t auras = rd_s32b();
+    migrate_bitflag_to_flaggroup(r_ptr->r_aura_flags, auras, sizeof(uint32_t) * 8 * 0);
+}
 
 /*!
  * @brief モンスターの思い出を読み込む / Read the monster lore
@@ -46,13 +77,12 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     r_ptr->r_blows[3] = rd_byte();
 
     r_ptr->r_flags1 = rd_u32b();
-    r_ptr->r_flags2 = rd_u32b();
+    rd_r_flags2(r_ptr);
     r_ptr->r_flags3 = rd_u32b();
     if (loading_savefile_version_is_older_than(3)) {
-        uint32_t f4, f5, f6;
-        f4 = rd_u32b();
-        f5 = rd_u32b();
-        f6 = rd_u32b();
+        uint32_t f4 = rd_u32b();
+        uint32_t f5 = rd_u32b();
+        uint32_t f6 = rd_u32b();
         if (h_older_than(1, 5, 0, 3))
             set_old_lore(r_ptr, f4, r_idx);
         else
@@ -66,8 +96,8 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
         rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
     }
 
+    rd_r_aura_flags(r_ptr);
     r_ptr->max_num = rd_byte();
-
     r_ptr->floor_id = rd_s16b();
 
     if (!loading_savefile_version_is_older_than(4)) {
