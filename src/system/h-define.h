@@ -9,10 +9,6 @@
 #ifndef INCLUDED_H_DEFINE_H
 #define INCLUDED_H_DEFINE_H
 
-/*
- * The constants "TRUE" and "FALSE"
- */
-
 /**** Simple "Macros" ****/
 #ifdef JP
 #define lbtokg(x) ((int)((x)*5)) /*!< 変愚蛮怒基準のポンド→キログラム変換定義(全体) */
