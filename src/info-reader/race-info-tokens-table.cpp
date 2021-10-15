@@ -397,7 +397,7 @@ const std::unordered_map<std::string_view, race_flags_resistance> r_info_flagsr 
 	{ "RES_TELE", RFR_RES_TELE },
 };
 
-const std::unordered_map<std::string_view, MonsterAuraType> r_info_flags_aura = {
+const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags = {
     { "AURA_FIRE", MonsterAuraType::FIRE },
     { "AURA_COLD", MonsterAuraType::COLD },
     { "AURA_ELEC", MonsterAuraType::ELEC },

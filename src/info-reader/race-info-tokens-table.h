@@ -28,5 +28,5 @@ extern const std::unordered_map<std::string_view, race_flags7> r_info_flags7;
 extern const std::unordered_map<std::string_view, race_flags8> r_info_flags8;
 extern const std::unordered_map<std::string_view, race_flags9> r_info_flags9;
 extern const std::unordered_map<std::string_view, race_flags_resistance> r_info_flagsr;
-extern const std::unordered_map<std::string_view, MonsterAuraType> r_info_flags_aura;
+extern const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags;
 

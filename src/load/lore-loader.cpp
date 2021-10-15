@@ -32,9 +32,8 @@ static void rd_r_aura_flags(monster_race *r_ptr)
     if (loading_savefile_version_is_older_than(10)) {
         return;
     }
-
-    uint32_t auras = rd_s32b();
-    migrate_bitflag_to_flaggroup(r_ptr->r_aura_flags, auras, sizeof(uint32_t) * 8 * 0);
+    
+    rd_FlagGroup(r_ptr->r_aura_flags, rd_byte);
 }
 
 /*!
@@ -112,6 +111,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     r_ptr->r_flags3 &= r_ptr->flags3;
     r_ptr->r_flagsr &= r_ptr->flagsr;
     r_ptr->r_ability_flags &= r_ptr->ability_flags;
+    r_ptr->r_aura_flags &= r_ptr->aura_flags;
 }
 
 errr load_lore(void)
