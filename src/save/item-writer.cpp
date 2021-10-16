@@ -162,7 +162,7 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
         wr_s16b(o_ptr->stack_idx);
 
     if (any_bits(flags, SaveDataItemFlagType::SMITH)) {
-        if (o_ptr->smith_effect.has_value()){
+        if (o_ptr->smith_effect.has_value()) {
             wr_s16b(enum2i(o_ptr->smith_effect.value()));
         } else {
             wr_s16b(0);

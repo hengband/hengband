@@ -343,12 +343,9 @@ hengband_SOURCES = \
 	load/floor-loader.cpp load/floor-loader.h \
 	load/info-loader.cpp load/info-loader.h \
 	load/inventory-loader.cpp load/inventory-loader.h \
-	load/item-loader.cpp load/item-loader.h \
 	load/monster-loader.cpp load/monster-loader.h \
 	load/old-feature-types.h \
 	load/load-util.cpp load/load-util.h \
-	load/load-v1-5-0.cpp load/load-v1-5-0.h \
-	load/load-v1-7-0.cpp load/load-v1-7-0.h \
 	load/load-zangband.cpp load/load-zangband.h \
 	load/quest-loader.cpp load/quest-loader.h \
 	load/load.cpp load/load.h \
@@ -361,6 +358,10 @@ hengband_SOURCES = \
 	load/savedata-old-flag-types.h \
 	load/store-loader.cpp load/store-loader.h \
 	load/world-loader.cpp load/world-loader.h \
+	\
+	load/old/item-loader-savefile10.cpp load/old/item-loader-savefile10.h \
+	load/old/load-v1-5-0.cpp load/old/load-v1-5-0.h \
+	load/old/load-v1-7-0.cpp load/old/load-v1-7-0.h \
 	\
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \

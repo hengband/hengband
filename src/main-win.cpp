@@ -129,14 +129,12 @@
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
-
+#include <commdlg.h>
 #include <cstdlib>
+#include <direct.h>
 #include <locale>
 #include <string>
 #include <vector>
-
-#include <commdlg.h>
-#include <direct.h>
 
 /*
  * Window names
@@ -2057,7 +2055,7 @@ static void fit_term_size_to_window(term_data *td, bool recalc_window_size = fal
             handle_stuff(p_ptr);
         }
     }
-} 
+}
 
 /*!
  * @brief Windowのリサイズをハンドリング

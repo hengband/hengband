@@ -5,7 +5,7 @@
  * @details 互換性を最大限に確保するため、基本的に関数分割は行わないものとする.
  */
 
-#include "load/load-v1-5-0.h"
+#include "load/old/load-v1-5-0.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
@@ -13,10 +13,10 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "load/angband-version-comparer.h"
-#include "load/item-loader.h"
 #include "load/load-util.h"
 #include "load/monster-loader.h"
 #include "load/old-feature-types.h"
+#include "load/old/item-loader-savefile10.h"
 #include "mind/mind-weaponsmith.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
@@ -70,7 +70,7 @@ void rd_item_old(object_type *o_ptr)
     o_ptr->sval = rd_byte();
 
     if (h_older_than(0, 4, 4)) {
-        if (o_ptr->tval == i2enum <ItemKindType>(100))
+        if (o_ptr->tval == i2enum<ItemKindType>(100))
             o_ptr->tval = ItemKindType::GOLD;
         if (o_ptr->tval == i2enum<ItemKindType>(98))
             o_ptr->tval = ItemKindType::MUSIC_BOOK;
@@ -265,8 +265,7 @@ void rd_item_old(object_type *o_ptr)
         o_ptr->xtra5 = rd_s16b();
     }
 
-    if (h_older_than(1, 0, 5)
-        && (((o_ptr->tval == ItemKindType::LITE) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) || (o_ptr->tval == ItemKindType::FLASK))) {
+    if (h_older_than(1, 0, 5) && (((o_ptr->tval == ItemKindType::LITE) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) || (o_ptr->tval == ItemKindType::FLASK))) {
         o_ptr->xtra4 = o_ptr->pval;
         o_ptr->pval = 0;
     }
@@ -583,7 +582,7 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     for (int x = 0, y = 0; y < ymax;) {
-        auto count =  rd_byte();
+        auto count = rd_byte();
         auto tmp16s = rd_s16b();
         for (int i = count; i > 0; i--) {
             grid_type *g_ptr;

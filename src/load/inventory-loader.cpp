@@ -1,7 +1,7 @@
 ﻿#include "load/inventory-loader.h"
 #include "inventory/inventory-slot-types.h"
-#include "load/item-loader.h"
 #include "load/load-util.h"
+#include "load/old/item-loader-savefile10.h"
 #include "object/object-mark-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

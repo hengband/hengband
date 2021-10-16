@@ -494,10 +494,10 @@
     <ClCompile Include="..\..\src\load\dungeon-loader.cpp" />
     <ClCompile Include="..\..\src\load\extra-loader.cpp" />
     <ClCompile Include="..\..\src\load\inventory-loader.cpp" />
-    <ClCompile Include="..\..\src\load\item-loader.cpp" />
+    <ClCompile Include="..\..\src\load\old\item-loader-savefile10.cpp" />
     <ClCompile Include="..\..\src\load\load-util.cpp" />
-    <ClCompile Include="..\..\src\load\load-v1-5-0.cpp" />
-    <ClCompile Include="..\..\src\load\load-v1-7-0.cpp" />
+    <ClCompile Include="..\..\src\load\old\load-v1-5-0.cpp" />
+    <ClCompile Include="..\..\src\load\old\load-v1-7-0.cpp" />
     <ClCompile Include="..\..\src\load\load-zangband.cpp" />
     <ClCompile Include="..\..\src\load\lore-loader.cpp" />
     <ClCompile Include="..\..\src\load\monster-loader.cpp" />
@@ -1239,10 +1239,10 @@
     <ClInclude Include="..\..\src\load\dungeon-loader.h" />
     <ClInclude Include="..\..\src\load\extra-loader.h" />
     <ClInclude Include="..\..\src\load\inventory-loader.h" />
-    <ClInclude Include="..\..\src\load\item-loader.h" />
+    <ClInclude Include="..\..\src\load\old\item-loader-savefile10.h" />
     <ClInclude Include="..\..\src\load\load-util.h" />
-    <ClInclude Include="..\..\src\load\load-v1-7-0.h" />
-    <ClInclude Include="..\..\src\load\load-v1-5-0.h" />
+    <ClInclude Include="..\..\src\load\old\load-v1-7-0.h" />
+    <ClInclude Include="..\..\src\load\old\load-v1-5-0.h" />
     <ClInclude Include="..\..\src\load\load-zangband.h" />
     <ClInclude Include="..\..\src\load\lore-loader.h" />
     <ClInclude Include="..\..\src\load\monster-loader.h" />

@@ -1,7 +1,7 @@
 ﻿#include "load/monster-loader.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
-#include "load/load-v1-5-0.h"
+#include "load/old/load-v1-5-0.h"
 #include "load/savedata-flag-types.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"

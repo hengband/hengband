@@ -1,8 +1,8 @@
-﻿#include "load/load-v1-7-0.h"
+﻿#include "load/old/load-v1-7-0.h"
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
 #include "load/load-util.h"
-#include "load/load-v1-5-0.h"
+#include "load/old/load-v1-5-0.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -27,7 +27,7 @@ void set_exp_frac_old(player_type *player_ptr)
     player_ptr->exp_frac = rd_u16b();
 }
 
-void remove_water_cave(player_type* player_ptr)
+void remove_water_cave(player_type *player_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_quest != OLD_QUEST_WATER_CAVE)
         return;
