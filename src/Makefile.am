@@ -495,6 +495,7 @@ hengband_SOURCES = \
 	monster-floor/quantum-effect.cpp monster-floor/quantum-effect.h \
 	monster-floor/special-death-switcher.cpp monster-floor/special-death-switcher.h \
 	\
+	monster-race/monster-aura-types.h \
 	monster-race/monster-race.cpp monster-race/monster-race.h \
 	monster-race/monster-race-hook.cpp monster-race/monster-race-hook.h \
 	monster-race/race-ability-flags.h \

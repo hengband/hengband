@@ -40,6 +40,10 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
     if (info_grab_one_flag(r_ptr->flagsr, r_info_flagsr, what))
         return true;
 
+    if (EnumClassFlagGroup<MonsterAuraType>::grab_one_flag(r_ptr->aura_flags, r_info_aura_flags, what)) {
+        return true;
+    }
+
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
     return false;
 }
@@ -53,8 +57,9 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
  */
 static bool grab_one_spell_flag(monster_race *r_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<RF_ABILITY>::grab_one_flag(r_ptr->ability_flags, r_info_ability_flags, what))
+    if (EnumClassFlagGroup<RF_ABILITY>::grab_one_flag(r_ptr->ability_flags, r_info_ability_flags, what)) {
         return true;
+    }
 
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
     return false;
@@ -216,11 +221,13 @@ errr parse_r_info(std::string_view buf, angband_header *)
 
         const auto &flags = str_split(tokens[1], '|', true, 10);
         for (const auto &f : flags) {
-            if (f.size() == 0)
+            if (f.size() == 0) {
                 continue;
+            }
 
-            if (!grab_one_basic_flag(r_ptr, f))
+            if (!grab_one_basic_flag(r_ptr, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
+            }
         }
     } else if (tokens[0] == "S") {
         // S:flags

@@ -79,7 +79,7 @@ static void aura_fire_by_melee(player_type *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
-    if (((tr_ptr->flags2 & RF2_AURA_FIRE) == 0) || (mam_ptr->m_ptr->r_idx == 0))
+    if (tr_ptr->aura_flags.has_not(MonsterAuraType::FIRE) || (mam_ptr->m_ptr->r_idx == 0))
         return;
 
     if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) != 0) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
@@ -91,7 +91,7 @@ static void aura_fire_by_melee(player_type *player_ptr, mam_type *mam_ptr)
         msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), mam_ptr->m_name);
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr))
-        tr_ptr->r_flags2 |= RF2_AURA_FIRE;
+        tr_ptr->aura_flags.set(MonsterAuraType::FIRE);
 
     project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_FIRE,
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
@@ -101,7 +101,7 @@ static void aura_cold_by_melee(player_type *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
-    if (((tr_ptr->flags3 & RF3_AURA_COLD) == 0) || (mam_ptr->m_ptr->r_idx == 0))
+    if (tr_ptr->aura_flags.has_not(MonsterAuraType::COLD) || (mam_ptr->m_ptr->r_idx == 0))
         return;
 
     if (((r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) != 0) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
@@ -113,7 +113,7 @@ static void aura_cold_by_melee(player_type *player_ptr, mam_type *mam_ptr)
         msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), mam_ptr->m_name);
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr))
-        tr_ptr->r_flags3 |= RF3_AURA_COLD;
+        tr_ptr->aura_flags.set(MonsterAuraType::COLD);
 
     project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_COLD,
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
@@ -123,7 +123,7 @@ static void aura_elec_by_melee(player_type *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
-    if (((tr_ptr->flags2 & RF2_AURA_ELEC) == 0) || (mam_ptr->m_ptr->r_idx == 0))
+    if (tr_ptr->aura_flags.has_not(MonsterAuraType::ELEC) || (mam_ptr->m_ptr->r_idx == 0))
         return;
 
     if (((r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) != 0) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
@@ -135,7 +135,7 @@ static void aura_elec_by_melee(player_type *player_ptr, mam_type *mam_ptr)
         msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), mam_ptr->m_name);
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr))
-        tr_ptr->r_flags2 |= RF2_AURA_ELEC;
+        tr_ptr->aura_flags.set(MonsterAuraType::ELEC);
 
     project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_ELEC,
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);

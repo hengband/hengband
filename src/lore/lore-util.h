@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include <string>
-#include <unordered_map>
-
 #include "system/angband.h"
 #include "monster-attack/monster-attack-types.h"
+#include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "util/flag-group.h"
+#include <string>
+#include <unordered_map>
 
 enum monster_sex {
     MSEX_NONE = 0,
@@ -30,6 +30,7 @@ typedef struct lore_type {
     BIT_FLAGS flags2;
     BIT_FLAGS flags3;
     EnumClassFlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<MonsterAuraType> aura_flags;
 
     BIT_FLAGS flags7;
     BIT_FLAGS flagsr;

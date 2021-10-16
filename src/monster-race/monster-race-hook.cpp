@@ -277,7 +277,7 @@ bool mon_hook_shallow_water(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return false;
 
-    return none_bits(r_ptr->flags2, RF2_AURA_FIRE);
+    return r_ptr->aura_flags.has_not(MonsterAuraType::FIRE);
 }
 
 /*!
@@ -291,7 +291,7 @@ bool mon_hook_lava(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return false;
 
-    return (any_bits(r_ptr->flagsr, RFR_EFF_IM_FIRE_MASK) || any_bits(r_ptr->flags7, RF7_CAN_FLY)) && none_bits(r_ptr->flags3, RF3_AURA_COLD);
+    return (any_bits(r_ptr->flagsr, RFR_EFF_IM_FIRE_MASK) || any_bits(r_ptr->flags7, RF7_CAN_FLY)) && r_ptr->aura_flags.has_not(MonsterAuraType::COLD);
 }
 
 /*!

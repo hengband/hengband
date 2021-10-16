@@ -117,12 +117,12 @@ void rd_item(object_type *o_ptr)
 
     /* Object flags */
     if (loading_savefile_version_is_older_than(7)) {
-        constexpr savedata_item_older_than_7_flag_type old_savefile_art_flags[] = {
-            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS0,
-            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS1,
-            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS2,
-            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS3,
-            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS4,
+        constexpr SavedataItemOlderThan7FlagType old_savefile_art_flags[] = {
+            SavedataItemOlderThan7FlagType::ART_FLAGS0,
+            SavedataItemOlderThan7FlagType::ART_FLAGS1,
+            SavedataItemOlderThan7FlagType::ART_FLAGS2,
+            SavedataItemOlderThan7FlagType::ART_FLAGS3,
+            SavedataItemOlderThan7FlagType::ART_FLAGS4,
         };
         auto start = 0;
         for (auto f : old_savefile_art_flags) {
