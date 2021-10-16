@@ -681,6 +681,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         return (151);
     }
 
+    auto item_loader = ItemLoaderFactory::get_item_loader();
     for (int i = 1; i < limit; i++) {
         OBJECT_IDX o_idx = o_pop(floor_ptr);
         if (i != o_idx) {
@@ -689,7 +690,6 @@ errr rd_dungeon_old(player_type *player_ptr)
         }
 
         auto &item = floor_ptr->o_list[o_idx];
-        auto item_loader = ItemLoaderFactory::get_item_loader();
         item_loader->rd_item(&item);
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
         list.add(floor_ptr, o_idx);

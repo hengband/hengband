@@ -90,9 +90,9 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 
     store_ptr->last_visit = rd_s32b();
 
+    auto item_loader = ItemLoaderFactory::get_item_loader();
     for (int j = 0; j < inven_num; j++) {
         object_type item;
-        auto item_loader = ItemLoaderFactory::get_item_loader();
         item_loader->rd_item(&item);
         auto stock_max = store_get_stock_max(i2enum<StoreSaleType>(store_number));
         if (store_ptr->stock_num >= stock_max)

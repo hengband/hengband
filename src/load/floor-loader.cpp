@@ -155,6 +155,8 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     limit = rd_u16b();
     if (limit > w_ptr->max_o_idx)
         return 151;
+
+    auto item_loader = ItemLoaderFactory::get_item_loader();
     for (int i = 1; i < limit; i++) {
         auto o_idx = o_pop(floor_ptr);
         if (i != o_idx) {
@@ -162,7 +164,6 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         }
 
         auto &item = floor_ptr->o_list[o_idx];
-        auto item_loader = ItemLoaderFactory::get_item_loader();
         item_loader->rd_item(&item);
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
         list.add(floor_ptr, o_idx, item.stack_idx);
