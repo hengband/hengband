@@ -183,10 +183,7 @@ static errr exe_reading_savefile(player_type *player_ptr)
     rd_version_info();
     rd_dummy3();
     rd_system_info();
-    errr load_lore_result = load_lore();
-    if (load_lore_result != 0)
-        return load_lore_result;
-
+    load_lore();
     errr load_item_result = load_item();
     if (load_item_result != 0)
         return load_item_result;

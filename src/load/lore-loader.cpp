@@ -5,6 +5,7 @@
 #include "load/load-v1-5-0.h"
 #include "load/savedata-old-flag-types.h"
 #include "monster-race/monster-race.h"
+#include "system/angband.h"
 #include "system/monster-race-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -117,21 +118,14 @@ static void rd_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
     r_ptr->r_aura_flags &= r_ptr->aura_flags;
 }
 
-errr load_lore(void)
+void load_lore(void)
 {
     auto loading_max_r_idx = rd_u16b();
-
-    monster_race *r_ptr;
     monster_race dummy;
-    for (auto i = 0; i < loading_max_r_idx; i++) {
-        if (i < r_info.size())
-            r_ptr = &r_info[i];
-        else
-            r_ptr = &dummy;
-
-        rd_lore(r_ptr, i);
+    for (auto i = 0U; i < loading_max_r_idx; i++) {
+        auto *r_ptr = i < r_info.size() ? &r_info[i] : &dummy;
+        rd_lore(r_ptr, static_cast<MONRACE_IDX>(i));
     }
 
     load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
-    return 0;
 }
