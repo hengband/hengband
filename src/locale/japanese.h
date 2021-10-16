@@ -16,7 +16,7 @@ bool iskanji2(concptr s, int x);
 void guess_convert_to_system_encoding(char *strbuf, int buflen);
 
 int lb_to_kg_integer(int x);
-int lb_to_kg_few(int x);
+int lb_to_kg_fraction(int x);
 
 #ifdef EUC
 int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len);

@@ -114,7 +114,7 @@ COMMAND_CODE show_equipment(player_type *player_ptr, int target_item, BIT_FLAGS 
             continue;
 
         int wgt = o_ptr->weight * o_ptr->number;
-        (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_few(wgt), wgt % 10));
+        (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         prt(tmp_val, j + 1, wid - 9);
     }
 

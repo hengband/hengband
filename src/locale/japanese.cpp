@@ -538,11 +538,11 @@ int lb_to_kg_integer(int x)
 }
 
 /*!
- * 変愚蛮怒基準のポンド→キログラム変換定義(少数部)
+ * 変愚蛮怒基準のポンド→キログラム変換定義(小数部)
  * @param x ポンド値
- * @return キログラム値の少数部
+ * @return キログラム値の小数部
  */
-int lb_to_kg_few(int x)
+int lb_to_kg_fraction(int x)
 {
     return (lb_to_kg_all(x) % 100) / 10;
 }

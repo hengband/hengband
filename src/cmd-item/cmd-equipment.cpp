@@ -65,7 +65,7 @@ void do_cmd_equip(player_type *player_ptr)
     auto weight = calc_inventory_weight(player_ptr);
     auto weight_lim = calc_weight_limit(player_ptr);
 #ifdef JP
-    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_few(weight), weight * 100 / weight_lim);
+    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), weight * 100 / weight_lim);
 #else
     sprintf(out_val, "Equipment: carrying %d.%d pounds (%d%% of capacity). Command: ", weight / 10, weight % 10, weight * 100 / weight_lim);
 #endif

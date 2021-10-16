@@ -285,7 +285,7 @@ static void display_equipment(player_type *player_ptr, const ItemTester &item_te
         term_putstr(cur_col, cur_row, n, attr, o_name);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_few(wgt), wgt % 10));
+            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
 

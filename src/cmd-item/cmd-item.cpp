@@ -84,7 +84,7 @@ void do_cmd_inven(player_type *player_ptr)
     WEIGHT weight = calc_inventory_weight(player_ptr);
     WEIGHT weight_lim = calc_weight_limit(player_ptr);
 #ifdef JP
-    sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_few(weight),
+    sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight),
 #else
     sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", weight / 10, weight % 10,
 #endif

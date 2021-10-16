@@ -261,7 +261,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 {
     artifact_type *a_ptr = &a_info[o_ptr->name1];
     sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ptr->level, a_ptr->rarity,
-        _(lb_to_kg_integer(a_ptr->weight), a_ptr->weight / 10), _(lb_to_kg_few(a_ptr->weight), a_ptr->weight % 10), (long int)a_ptr->cost);
+        _(lb_to_kg_integer(a_ptr->weight), a_ptr->weight / 10), _(lb_to_kg_fraction(a_ptr->weight), a_ptr->weight % 10), (long int)a_ptr->cost);
 }
 
 /*!
@@ -306,5 +306,5 @@ void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr, obj_de
     analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
     desc_ptr->activation = activation_explanation(o_ptr);
     sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10),
-        _(lb_to_kg_few(o_ptr->weight), o_ptr->weight % 10));
+        _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10));
 }
