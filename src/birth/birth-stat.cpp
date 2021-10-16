@@ -126,9 +126,9 @@ void get_extra(player_type *player_ptr, bool roll_hitdie)
     auto pclass = enum2i(player_ptr->pclass);
     player_ptr->weapon_exp = s_info[pclass].w_start;
 
-    auto &whip_exp = player_ptr->weapon_exp[ItemKindType::HAFTED][SV_WHIP];
-    if ((player_ptr->ppersonality == PERSONALITY_SEXY) && (whip_exp < WEAPON_EXP_BEGINNER)) {
-        whip_exp = WEAPON_EXP_BEGINNER;
+    if (player_ptr->ppersonality == PERSONALITY_SEXY) {
+        auto &whip_exp = player_ptr->weapon_exp[ItemKindType::HAFTED][SV_WHIP];
+        whip_exp = std::max(whip_exp, PlayerSkill::weapon_exp_at(EXP_LEVEL_BEGINNER));
     }
 
     for (int i = 0; i < MAX_SKILLS; i++)

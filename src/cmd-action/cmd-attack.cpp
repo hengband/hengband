@@ -251,43 +251,13 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     }
 
     if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
-        if ((player_ptr->skill_exp[SKILL_TWO_WEAPON] < s_info[enum2i(player_ptr->pclass)].s_max[SKILL_TWO_WEAPON])
-            && ((player_ptr->skill_exp[SKILL_TWO_WEAPON] - 1000) / 200 < r_ptr->level)) {
-            if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_BEGINNER)
-                player_ptr->skill_exp[SKILL_TWO_WEAPON] += 80;
-            else if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_SKILLED)
-                player_ptr->skill_exp[SKILL_TWO_WEAPON] += 4;
-            else if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_EXPERT)
-                player_ptr->skill_exp[SKILL_TWO_WEAPON] += 1;
-            else if (player_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_MASTER)
-                if (one_in_(3))
-                    player_ptr->skill_exp[SKILL_TWO_WEAPON] += 1;
-            player_ptr->update |= (PU_BONUS);
+        if (((player_ptr->skill_exp[SKILL_TWO_WEAPON] - 1000) / 200) < r_ptr->level) {
+            PlayerSkill(player_ptr).gain_two_weapon_skill_exp();
         }
     }
 
     if (player_ptr->riding) {
-        int cur = player_ptr->skill_exp[SKILL_RIDING];
-        int max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING];
-
-        if (cur < max) {
-            DEPTH ridinglevel = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level;
-            DEPTH targetlevel = r_ptr->level;
-            int inc = 0;
-
-            if ((cur / 200 - 5) < targetlevel)
-                inc += 1;
-
-            if ((cur / 100) < ridinglevel) {
-                if ((cur / 100 + 15) < ridinglevel)
-                    inc += 1 + (ridinglevel - (cur / 100 + 15));
-                else
-                    inc += 1;
-            }
-
-            player_ptr->skill_exp[SKILL_RIDING] = static_cast<short>(std::min(max, cur + inc));
-            player_ptr->update |= (PU_BONUS);
-        }
+        PlayerSkill(player_ptr).gain_riding_skill_exp_on_melee_attack(r_ptr);
     }
 
     player_ptr->riding_t_m_idx = g_ptr->m_idx;

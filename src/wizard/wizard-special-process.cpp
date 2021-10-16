@@ -410,16 +410,13 @@ void wiz_change_status(player_type *player_ptr)
         player_ptr->stat_cur[i] = player_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
     }
 
-    sprintf(tmp_val, "%d", WEAPON_EXP_MASTER);
+    sprintf(tmp_val, "%d", PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER));
     if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
         return;
 
-    int16_t tmp_s16b = (int16_t)atoi(tmp_val);
-    if (tmp_s16b < WEAPON_EXP_UNSKILLED)
-        tmp_s16b = WEAPON_EXP_UNSKILLED;
-
-    if (tmp_s16b > WEAPON_EXP_MASTER)
-        tmp_s16b = WEAPON_EXP_MASTER;
+    auto tmp_s16b = std::clamp(static_cast<SUB_EXP>(atoi(tmp_val)),
+        PlayerSkill::weapon_exp_at(EXP_LEVEL_UNSKILLED),
+        PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER));
 
     for (auto tval : TV_WEAPON_RANGE) {
         for (int i = 0; i < 64; i++) {

@@ -50,7 +50,7 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
                     fprintf(fff, "!");
                 else
                     fprintf(fff, " ");
-                fprintf(fff, "%s", exp_level_str[weapon_exp_level(weapon_exp)]);
+                fprintf(fff, "%s", exp_level_str[PlayerSkill::weapon_exp_level(weapon_exp)]);
                 if (cheat_xtra)
                     fprintf(fff, " %d", weapon_exp);
                 fprintf(fff, "\n");
@@ -168,7 +168,7 @@ void do_cmd_knowledge_skill_exp(player_type *player_ptr)
             fprintf(fff, "!");
         else
             fprintf(fff, " ");
-        fprintf(fff, "%s", exp_level_str[(i == SKILL_RIDING) ? riding_exp_level(skill_exp) : weapon_exp_level(skill_exp)]);
+        fprintf(fff, "%s", exp_level_str[(i == SKILL_RIDING) ? PlayerSkill::riding_exp_level(skill_exp) : PlayerSkill::weapon_exp_level(skill_exp)]);
         if (cheat_xtra)
             fprintf(fff, " %d", skill_exp);
         fprintf(fff, "\n");

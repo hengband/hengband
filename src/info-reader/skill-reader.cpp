@@ -7,16 +7,6 @@
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 
-namespace {
-const std::unordered_map<int, int> level_to_exp = {
-    { EXP_LEVEL_UNSKILLED, WEAPON_EXP_UNSKILLED },
-    { EXP_LEVEL_BEGINNER, WEAPON_EXP_BEGINNER },
-    { EXP_LEVEL_SKILLED, WEAPON_EXP_SKILLED },
-    { EXP_LEVEL_EXPERT, WEAPON_EXP_EXPERT },
-    { EXP_LEVEL_MASTER, WEAPON_EXP_MASTER },
-};
-}
-
 /*!
  * @brief 職業技能情報(s_info)のパース関数 /
  * Initialize the "s_info" array, by parsing an ascii "template" file
@@ -54,17 +44,9 @@ errr parse_s_info(std::string_view buf, angband_header *head)
         info_set_value(start, tokens[3]);
         info_set_value(max, tokens[4]);
 
-        auto start_exp = level_to_exp.find(start);
-        if (start_exp == level_to_exp.end())
-            return PARSE_ERROR_INVALID_FLAG;
-
-        auto max_exp = level_to_exp.find(max);
-        if (max_exp == level_to_exp.end())
-            return PARSE_ERROR_INVALID_FLAG;
-
         auto tval = ItemKindType::BOW + tval_offset;
-        s_ptr->w_start[tval][sval] = (SUB_EXP)start_exp->second;
-        s_ptr->w_max[tval][sval] = (SUB_EXP)max_exp->second;
+        s_ptr->w_start[tval][sval] = PlayerSkill::weapon_exp_at(start);
+        s_ptr->w_max[tval][sval] = PlayerSkill::weapon_exp_at(max);
     } else if (tokens[0] == "S") {
         if (tokens.size() < 4)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -74,7 +56,7 @@ errr parse_s_info(std::string_view buf, angband_header *head)
         info_set_value(start, tokens[2]);
         info_set_value(max, tokens[3]);
 
-        if (start < WEAPON_EXP_UNSKILLED || start > WEAPON_EXP_MASTER || max < WEAPON_EXP_UNSKILLED || max > WEAPON_EXP_MASTER || start > max)
+        if (!PlayerSkill::valid_weapon_exp(start) || !PlayerSkill::valid_weapon_exp(max) || start > max)
             return PARSE_ERROR_INVALID_FLAG;
 
         s_ptr->s_start[num] = (SUB_EXP)start;

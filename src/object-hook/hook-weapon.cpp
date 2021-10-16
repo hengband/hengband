@@ -50,13 +50,13 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     }
 
     case PlayerClassType::SORCERER:
-        if (s_info[short_pclass].w_max[o_ptr->tval][o_ptr->sval] < WEAPON_EXP_MASTER)
+        if (s_info[short_pclass].w_max[o_ptr->tval][o_ptr->sval] < PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER))
             return false;
         break;
 
     case PlayerClassType::NINJA:
         /* Icky to wield? */
-        if (s_info[short_pclass].w_max[o_ptr->tval][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+        if (s_info[short_pclass].w_max[o_ptr->tval][o_ptr->sval] <= PlayerSkill::weapon_exp_at(EXP_LEVEL_BEGINNER))
             return false;
         break;
 
