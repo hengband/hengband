@@ -307,12 +307,10 @@ void init_angband(player_type *player_ptr, bool no_term)
         quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
 
     init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
-    if (init_towns())
-        quit(_("街を初期化できません", "Cannot initialize towns"));
+    init_towns();
 
     init_note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
-    if (init_buildings())
-        quit(_("建物を初期化できません", "Cannot initialize buildings"));
+    init_buildings();
 
     init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
     init_quests();
