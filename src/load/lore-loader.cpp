@@ -25,6 +25,26 @@ static void migrate_old_aura_flags(monster_race *r_ptr)
     }
 }
 
+static void rd_r_ability_flags(monster_race *r_ptr, const MONRACE_IDX r_idx)
+{
+    if (loading_savefile_version_is_older_than(3)) {
+        uint32_t f4 = rd_u32b();
+        uint32_t f5 = rd_u32b();
+        uint32_t f6 = rd_u32b();
+        if (h_older_than(1, 5, 0, 3))
+            set_old_lore(r_ptr, f4, r_idx);
+        else
+            r_ptr->r_flagsr = rd_u32b();
+
+        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
+        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
+        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
+    } else {
+        r_ptr->r_flagsr = rd_u32b();
+        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
+    }
+}
+
 static void rd_r_aura_flags(monster_race *r_ptr)
 {
     if (loading_savefile_version_is_older_than(10)) {
@@ -39,7 +59,7 @@ static void rd_r_aura_flags(monster_race *r_ptr)
  * @param r_ptr 読み込み先モンスター種族情報へのポインタ
  * @param r_idx 読み込み先モンスターID(種族特定用)
  */
-void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
+static void rd_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
 {
     r_ptr->r_sights = rd_s16b();
     r_ptr->r_deaths = rd_s16b();
@@ -77,23 +97,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     r_ptr->r_flags2 = rd_u32b();
     r_ptr->r_flags3 = rd_u32b();
     migrate_old_aura_flags(r_ptr);
-    if (loading_savefile_version_is_older_than(3)) {
-        uint32_t f4 = rd_u32b();
-        uint32_t f5 = rd_u32b();
-        uint32_t f6 = rd_u32b();
-        if (h_older_than(1, 5, 0, 3))
-            set_old_lore(r_ptr, f4, r_idx);
-        else
-            r_ptr->r_flagsr = rd_u32b();
-
-        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
-        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
-        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
-    } else {
-        r_ptr->r_flagsr = rd_u32b();
-        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
-    }
-
+    rd_r_ability_flags(r_ptr, r_idx);
     rd_r_aura_flags(r_ptr);
     r_ptr->max_num = rd_byte();
     r_ptr->floor_id = rd_s16b();
@@ -119,13 +123,13 @@ errr load_lore(void)
 
     monster_race *r_ptr;
     monster_race dummy;
-    for (auto i = 0U; i < loading_max_r_idx; i++) {
+    for (auto i = 0; i < loading_max_r_idx; i++) {
         if (i < r_info.size())
             r_ptr = &r_info[i];
         else
             r_ptr = &dummy;
 
-        rd_lore(r_ptr, (MONRACE_IDX)i);
+        rd_lore(r_ptr, i);
     }
 
     load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
