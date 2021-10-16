@@ -21,7 +21,7 @@ std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::get_item_loader()
     auto version = get_version();
     switch (version) {
     case ItemLoaderVersionType::LOAD10:
-        return std::make_shared<ItemLoader10>(ItemLoader10());
+        return std::make_shared<ItemLoader10>();
     case ItemLoaderVersionType::LOAD11:
         // dummy yet.
     default:
