@@ -9,7 +9,6 @@ struct player_type;
 class ArmorEnchanter : AbstractProtectorEnchanter {
 public:
     ArmorEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power);
-    ArmorEnchanter() = delete;
     virtual ~ArmorEnchanter() = default;
     void apply_magic() override;
 

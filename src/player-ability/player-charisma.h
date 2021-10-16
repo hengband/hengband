@@ -1,10 +1,11 @@
 ﻿#pragma once
+
 #include "player-status/player-basic-statistics.h"
 
+struct player_type;
 class PlayerCharisma : public PlayerBasicStatistics {
 public:
-    using PlayerBasicStatistics::PlayerBasicStatistics;
-    PlayerCharisma() = delete;
+    PlayerCharisma(player_type *player_ptr);
 
     BIT_FLAGS get_all_flags() override;
     BIT_FLAGS get_bad_flags() override;

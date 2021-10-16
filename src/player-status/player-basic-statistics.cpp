@@ -16,6 +16,11 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
+PlayerBasicStatistics::PlayerBasicStatistics(player_type *player_ptr)
+    : PlayerStatusBase(player_ptr)
+{
+}
+
 /*!
  * @brief 基礎ステータス補正値
  * @return ステータス補正値

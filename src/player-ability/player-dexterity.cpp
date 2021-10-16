@@ -14,6 +14,11 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+PlayerDexterity::PlayerDexterity(player_type* player_ptr)
+    : PlayerBasicStatistics(player_ptr)
+{
+}
+
 void PlayerDexterity::set_locals()
 {
     this->max_value = +99;

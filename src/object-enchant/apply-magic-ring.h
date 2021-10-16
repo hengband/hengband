@@ -8,7 +8,6 @@ struct player_type;
 class RingEnchanter : EnchanterBase {
 public:
     RingEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power);
-    RingEnchanter() = delete;
     virtual ~RingEnchanter() = default;
     void apply_magic() override;
 

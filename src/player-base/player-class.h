@@ -14,7 +14,6 @@ enum class MonkStance : uint8_t;
 
 class PlayerClass {
 public:
-    PlayerClass() = delete;
     PlayerClass(player_type *player_ptr);
     virtual ~PlayerClass() = default;
 

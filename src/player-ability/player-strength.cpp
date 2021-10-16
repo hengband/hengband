@@ -14,6 +14,11 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+PlayerStrength::PlayerStrength(player_type *player_ptr)
+    : PlayerBasicStatistics(player_ptr)
+{
+}
+
 void PlayerStrength::set_locals()
 {
     this->max_value = +99;

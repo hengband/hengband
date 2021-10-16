@@ -6,6 +6,11 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
+PlayerInfravision::PlayerInfravision(player_type *player_ptr)
+    : PlayerStatusBase(player_ptr)
+{
+}
+
 /*
  * @brief 赤外線視力 - 初期値、下限、上限
  */

@@ -6,7 +6,6 @@ struct player_type;
 class PlayerAlignment {
 public:
     PlayerAlignment(player_type *player_ptr);
-    PlayerAlignment() = delete;
     virtual ~PlayerAlignment() = default;
     concptr get_alignment_description(bool with_value = false);
     void update_alignment();
