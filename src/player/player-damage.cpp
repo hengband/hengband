@@ -70,7 +70,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-typedef HIT_POINT dam_func(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
+using dam_func = HIT_POINT (*)(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
 
 /*!
  * @brief 酸攻撃による装備のAC劣化処理 /
@@ -556,7 +556,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
  * @param dam_func ダメージ処理を行う関数の参照ポインタ
  * @param message オーラダメージを受けた際のメッセージ
  */
-static void process_aura_damage(monster_type *m_ptr, player_type *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func *dam_func, concptr message)
+static void process_aura_damage(monster_type *m_ptr, player_type *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->aura_flags.has_not(aura_flag) || immune) {
