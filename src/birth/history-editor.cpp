@@ -1,14 +1,12 @@
 ﻿#include "birth/history-editor.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
+#include "locale/japanese.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "view/display-player.h" // 暫定。後で消す.
-#ifdef  JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode

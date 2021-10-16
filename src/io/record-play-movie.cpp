@@ -11,15 +11,12 @@
 #include "io/files-util.h"
 #include "io/inet.h"
 #include "io/signal-handlers.h"
+#include "locale/japanese.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include <algorithm>
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 #ifdef WINDOWS
 #include <windows.h>
@@ -82,7 +79,7 @@ static errr init_buffer(void)
     fresh_queue.next = fresh_queue.tail = 0;
     ring.wptr = ring.rptr = ring.inlen = 0;
     fresh_queue.time[0] = 0;
-    ring.buf = static_cast<char*>(malloc(RINGBUF_SIZE));
+    ring.buf = static_cast<char *>(malloc(RINGBUF_SIZE));
     if (ring.buf == nullptr)
         return -1;
 

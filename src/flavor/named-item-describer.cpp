@@ -3,6 +3,7 @@
 #include "flavor/object-flavor-types.h"
 #include "flavor/tval-description-switcher.h"
 #include "game-option/text-display-options.h"
+#include "locale/english.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
@@ -16,7 +17,6 @@
 #include "util/string-processor.h"
 #ifdef JP
 #else
-#include "locale/english.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "system/monster-race-definition.h"
@@ -257,8 +257,7 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
     if (describe_prefix_en(flavor_ptr))
         return;
 
-    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact())
-        || ((flavor_ptr->o_ptr->tval == ItemKindType::CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE))) {
+    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || ((flavor_ptr->o_ptr->tval == ItemKindType::CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE))) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         return;
     }

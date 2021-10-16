@@ -9,6 +9,7 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
+#include "locale/japanese.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -47,10 +48,6 @@
 #include <mutex>
 #include <sstream>
 #include <string>
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*! サブウィンドウ表示用の ItemTester オブジェクト */
 static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();

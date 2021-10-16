@@ -16,6 +16,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "io/command-repeater.h"
+#include "locale/japanese.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-stack.h"
@@ -31,9 +32,6 @@
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 int store_top = 0;
 int store_bottom = 0;
@@ -386,4 +384,3 @@ void store_init(int town_num, StoreSaleType store_num)
     for (int k = 0; k < st_ptr->stock_size; k++)
         (&st_ptr->stock[k])->wipe();
 }
-

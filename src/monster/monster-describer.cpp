@@ -1,5 +1,6 @@
 ﻿#include "monster/monster-describer.h"
 #include "io/files-util.h"
+#include "locale/english.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-description-types.h"
@@ -12,10 +13,6 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#ifdef JP
-#else
-#include "locale/english.h"
-#endif
 
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.
@@ -256,7 +253,6 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     GAME_TEXT m_name[MAX_NLEN];
-
 
     monster_desc(player_ptr, m_name, m_ptr, 0);
 

@@ -5,6 +5,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
@@ -14,10 +15,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief 所持アイテムの表示を行う /

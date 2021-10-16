@@ -22,6 +22,7 @@
 #include "io/report.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "locale/japanese.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"
@@ -38,10 +39,6 @@
 #include "view/display-messages.h"
 #include "view/display-scores.h"
 #include "world/world.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief 所定ポインタへスコア情報を書き込む / Write one score to the highscore file

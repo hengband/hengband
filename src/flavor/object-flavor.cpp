@@ -18,6 +18,8 @@
 #include "grid/trap.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
+#include "locale/english.h"
+#include "locale/japanese.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-weaponsmith.h"
 #include "monster-race/monster-race.h"
@@ -39,12 +41,6 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "world/world.h"
-#ifdef JP
-#include "locale/japanese.h"
-#else
-#include "locale/english.h"
-#endif
-
 #include <utility>
 
 /*!

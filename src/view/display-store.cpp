@@ -4,6 +4,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
+#include "locale/japanese.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -18,10 +19,6 @@
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief プレイヤーの所持金を表示する /

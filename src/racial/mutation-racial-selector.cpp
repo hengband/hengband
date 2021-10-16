@@ -1,13 +1,10 @@
 ﻿#include "racial/mutation-racial-selector.h"
 #include "cmd-action/cmd-spell.h"
+#include "locale/japanese.h"
 #include "mutation/mutation-flag-types.h"
 #include "racial/racial-util.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 void select_mutation_racial(player_type *player_ptr, rc_type *rc_ptr)
 {

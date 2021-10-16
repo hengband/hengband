@@ -1,6 +1,7 @@
 ﻿#include "wizard/artifact-analyzer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "locale/japanese.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
@@ -11,10 +12,6 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "wizard/spoiler-util.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief アーティファクトの特性一覧を出力する /

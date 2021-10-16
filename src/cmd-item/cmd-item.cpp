@@ -33,6 +33,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "mind/snipe-types.h"
 #include "object-activation/activation-switcher.h"
 #include "object-hook/hook-magic.h"
@@ -67,10 +68,6 @@
 #include "util/quarks.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list

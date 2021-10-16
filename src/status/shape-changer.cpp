@@ -10,6 +10,7 @@
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
+#include "locale/english.h"
 #include "mutation/mutation-investor-remover.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
@@ -25,10 +26,6 @@
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
-#ifdef JP
-#else
-#include "locale/english.h"
-#endif
 
 void do_poly_wounds(player_type *player_ptr)
 {

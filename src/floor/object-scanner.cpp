@@ -4,6 +4,7 @@
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
@@ -12,10 +13,6 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief 床に落ちているオブジェクトの数を返す / scan floor items
