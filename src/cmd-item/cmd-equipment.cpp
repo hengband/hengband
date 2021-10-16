@@ -18,6 +18,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
@@ -31,8 +32,8 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
-#include "player-info/samurai-data-type.h"
 #include "player-info/equipment-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -61,13 +62,12 @@ void do_cmd_equip(player_type *player_ptr)
 
     screen_save();
     (void)show_equipment(player_ptr, 0, USE_FULL, AllMatchItemTester());
-    WEIGHT weight = calc_inventory_weight(player_ptr);
-    WEIGHT weight_lim = calc_weight_limit(player_ptr);
+    auto weight = calc_inventory_weight(player_ptr);
+    auto weight_lim = calc_weight_limit(player_ptr);
 #ifdef JP
-    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(weight), (int)lbtokg2(weight), (long int)((weight * 100) / weight_lim));
+    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), weight * 100 / weight_lim);
 #else
-    sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10), (int)(weight % 10),
-        (long int)((weight * 100) / weight_lim));
+    sprintf(out_val, "Equipment: carrying %d.%d pounds (%d%% of capacity). Command: ", weight / 10, weight % 10, weight * 100 / weight_lim);
 #endif
 
     prt(out_val, 0, 0);
@@ -185,9 +185,7 @@ void do_cmd_wield(player_type *player_ptr)
         return;
     }
 
-    if (confirm_wear
-        && ((o_ptr->is_cursed() && o_ptr->is_known())
-            || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
+    if (confirm_wear && ((o_ptr->is_cursed() && o_ptr->is_known()) || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy, _("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name);
@@ -196,8 +194,7 @@ void do_cmd_wield(player_type *player_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != PlayerRaceType::VAMPIRE)
-        && (player_ptr->prace != PlayerRaceType::ANDROID)) {
+    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,

@@ -9,6 +9,7 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
+#include "locale/japanese.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -51,7 +52,7 @@
 /*! サブウィンドウ表示用の ItemTester オブジェクト */
 static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();
 
-FixItemTesterSetter::FixItemTesterSetter(const ItemTester& item_tester)
+FixItemTesterSetter::FixItemTesterSetter(const ItemTester &item_tester)
 {
     fix_item_tester = item_tester.clone();
 }
@@ -230,7 +231,7 @@ void fix_monster_list(player_type *player_ptr)
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
  */
-static void display_equipment(player_type *player_ptr, const ItemTester& item_tester)
+static void display_equipment(player_type *player_ptr, const ItemTester &item_tester)
 {
     if (!player_ptr || !player_ptr->inventory_list)
         return;
@@ -259,8 +260,7 @@ static void display_equipment(player_type *player_ptr, const ItemTester& item_te
         term_erase(cur_col, cur_row, 255);
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
 
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
-            && has_two_handed_weapons(player_ptr)) {
+        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
         } else {
@@ -285,7 +285,7 @@ static void display_equipment(player_type *player_ptr, const ItemTester& item_te
         term_putstr(cur_col, cur_row, n, attr, o_name);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
 

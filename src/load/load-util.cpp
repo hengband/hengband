@@ -1,8 +1,6 @@
 ﻿#include "load/load-util.h"
-#include "term/screen-processor.h"
-#ifdef JP
 #include "locale/japanese.h"
-#endif
+#include "term/screen-processor.h"
 
 FILE *loading_savefile;
 uint32_t loading_savefile_version;

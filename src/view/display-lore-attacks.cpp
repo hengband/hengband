@@ -1,4 +1,5 @@
 ﻿#include "view/display-lore-attacks.h"
+#include "locale/japanese.h"
 #include "lore/combat-types-setter.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
@@ -6,9 +7,6 @@
 #include "monster-race/race-flags1.h"
 #include "system/monster-race-definition.h"
 #include "term/term-color-types.h"
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 #ifdef JP
 /*!
@@ -124,8 +122,7 @@ void display_monster_blows(lore_type *lore_ptr)
 
     int attack_numbers = 0;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (!lore_ptr->r_ptr->blow[m].method || (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT)
-            || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything)))
+        if (!lore_ptr->r_ptr->blow[m].method || (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT) || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything)))
             continue;
 
         set_monster_blow_method(lore_ptr, m);

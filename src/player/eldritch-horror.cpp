@@ -7,6 +7,7 @@
 #include "player/eldritch-horror.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "locale/english.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -31,10 +32,6 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#ifdef JP
-#else
-#include "locale/english.h"
-#endif
 
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
@@ -198,8 +195,7 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
     }
 
     /* 過去の効果無効率再現のため5回saving_throw 実行 */
-    if (saving_throw(player_ptr->skill_sav - power) && saving_throw(player_ptr->skill_sav - power) && saving_throw(player_ptr->skill_sav - power)
-        && saving_throw(player_ptr->skill_sav - power) && saving_throw(player_ptr->skill_sav - power)) {
+    if (saving_throw(player_ptr->skill_sav - power) && saving_throw(player_ptr->skill_sav - power) && saving_throw(player_ptr->skill_sav - power) && saving_throw(player_ptr->skill_sav - power) && saving_throw(player_ptr->skill_sav - power)) {
         return;
     }
 

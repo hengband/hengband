@@ -24,7 +24,6 @@
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/sort.h"
-
 #include <numeric>
 
 /*!

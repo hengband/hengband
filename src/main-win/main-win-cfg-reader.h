@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "system/h-type.h"
-
+#include "system/angband.h"
 #include <cstddef>
 #include <vector>
 #include <unordered_map>

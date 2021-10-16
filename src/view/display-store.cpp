@@ -4,6 +4,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
+#include "locale/japanese.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -75,7 +76,7 @@ void display_entry(player_type *player_ptr, int pos)
         c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, i + 6, cur_col);
         if (show_weights) {
             WEIGHT wgt = o_ptr->weight;
-            sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+            sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             put_str(out_val, i + 6, _(67, 68));
         }
 
@@ -93,7 +94,7 @@ void display_entry(player_type *player_ptr, int pos)
 
     if (show_weights) {
         int wgt = o_ptr->weight;
-        sprintf(out_val, "%3d.%1d", _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+        sprintf(out_val, "%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         put_str(out_val, i + 6, _(60, 61));
     }
 

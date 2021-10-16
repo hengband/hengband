@@ -516,4 +516,35 @@ void guess_convert_to_system_encoding(char *strbuf, int buflen)
     }
 }
 
+/*!
+ * @brief 変愚蛮怒基準のポンド→キログラム変換定義(全体)
+ * @param x ポンド値
+ * @return キログラム値
+ * @details 帝国ポンドとは完全にずれているが、気にするな！
+ */
+static int lb_to_kg_all(int x)
+{
+    return x * 5;
+}
+
+/*!
+ * @brief 変愚蛮怒基準のポンド→キログラム変換定義(整数部)
+ * @param x ポンド値
+ * @return キログラム値の整数部
+ */
+int lb_to_kg_integer(int x)
+{
+    return lb_to_kg_all(x) / 100;
+}
+
+/*!
+ * 変愚蛮怒基準のポンド→キログラム変換定義(小数部)
+ * @param x ポンド値
+ * @return キログラム値の小数部
+ */
+int lb_to_kg_fraction(int x)
+{
+    return (lb_to_kg_all(x) % 100) / 10;
+}
+
 #endif /* JP */

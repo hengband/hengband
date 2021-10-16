@@ -16,6 +16,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
+#include "locale/english.h"
 #include "lore/lore-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -41,11 +42,6 @@
 #include "view/display-messages.h"
 #include "view/display-monster-status.h"
 #include "window/display-sub-windows.h"
-
-#ifdef JP
-#else
-#include "locale/english.h"
-#endif
 
 static const int16_t CONTINUOUS_DESCRIPTION = 256;
 
@@ -544,19 +540,15 @@ char examine_grid(player_type *player_ptr, const POSITION y, const POSITION x, t
      * 安全を確保できたら構造体から外すことも検討する
      */
     eg_ptr->name = decide_target_floor(player_ptr, eg_ptr);
-    if (*eg_ptr->s2
-        && (eg_ptr->f_ptr->flags.has_none_of({FF::MOVE, FF::CAN_FLY})
-            || eg_ptr->f_ptr->flags.has_none_of({FF::LOS, FF::TREE}) || eg_ptr->f_ptr->flags.has(FF::TOWN))) {
+    if (*eg_ptr->s2 && (eg_ptr->f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY }) || eg_ptr->f_ptr->flags.has_none_of({ FF::LOS, FF::TREE }) || eg_ptr->f_ptr->flags.has(FF::TOWN))) {
         eg_ptr->s2 = _("の中", "in ");
     }
 
-    if (eg_ptr->f_ptr->flags.has(FF::STORE) || eg_ptr->f_ptr->flags.has(FF::QUEST_ENTER)
-        || (eg_ptr->f_ptr->flags.has(FF::BLDG) && !player_ptr->current_floor_ptr->inside_arena) || eg_ptr->f_ptr->flags.has(FF::ENTRANCE))
+    if (eg_ptr->f_ptr->flags.has(FF::STORE) || eg_ptr->f_ptr->flags.has(FF::QUEST_ENTER) || (eg_ptr->f_ptr->flags.has(FF::BLDG) && !player_ptr->current_floor_ptr->inside_arena) || eg_ptr->f_ptr->flags.has(FF::ENTRANCE))
         eg_ptr->s2 = _("の入口", "");
 #ifdef JP
 #else
-    else if (eg_ptr->f_ptr->flags.has(FF::FLOOR) || eg_ptr->f_ptr->flags.has(FF::TOWN) || eg_ptr->f_ptr->flags.has(FF::SHALLOW)
-        || eg_ptr->f_ptr->flags.has(FF::DEEP))
+    else if (eg_ptr->f_ptr->flags.has(FF::FLOOR) || eg_ptr->f_ptr->flags.has(FF::TOWN) || eg_ptr->f_ptr->flags.has(FF::SHALLOW) || eg_ptr->f_ptr->flags.has(FF::DEEP))
         eg_ptr->s3 = "";
     else
         eg_ptr->s3 = (is_a_vowel(eg_ptr->name[0])) ? "an " : "a ";

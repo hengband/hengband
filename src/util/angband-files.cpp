@@ -1,8 +1,6 @@
 ﻿#include "util/angband-files.h"
-#include "util/string-processor.h"
-#ifdef JP
 #include "locale/japanese.h"
-#endif
+#include "util/string-processor.h"
 
 #ifdef SET_UID
 

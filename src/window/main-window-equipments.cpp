@@ -6,16 +6,17 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
+#include "player/player-status-flags.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "player/player-status-flags.h"
 
 /*!
  * @brief メインウィンドウの右上に装備アイテムの表示させる
@@ -23,7 +24,7 @@
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equipment(player_type *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester& item_tester)
+COMMAND_CODE show_equipment(player_type *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     COMMAND_CODE i;
     int j, k, l;
@@ -41,15 +42,11 @@ COMMAND_CODE show_equipment(player_type *player_ptr, int target_item, BIT_FLAGS 
     int len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!(player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL))
-            && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
-                    && has_two_handed_weapons(player_ptr))
-                || (mode & IGNORE_BOTHHAND_SLOT)))
+        if (!(player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL)) && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) || (mode & IGNORE_BOTHHAND_SLOT)))
             continue;
 
         describe_flavor(player_ptr, o_name, o_ptr, 0);
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr)))
-            && has_two_handed_weapons(player_ptr)) {
+        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) {
             (void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
             out_color[k] = TERM_WHITE;
         } else {
@@ -117,7 +114,7 @@ COMMAND_CODE show_equipment(player_type *player_ptr, int target_item, BIT_FLAGS 
             continue;
 
         int wgt = o_ptr->weight * o_ptr->number;
-        (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+        (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         prt(tmp_val, j + 1, wid - 9);
     }
 

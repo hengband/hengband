@@ -26,6 +26,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-hook/hook-magic.h"
@@ -66,9 +67,6 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 static const int extra_magic_gain_exp = 4;
 
@@ -231,7 +229,7 @@ concptr info_radius(POSITION rad)
 concptr info_weight(WEIGHT weight)
 {
 #ifdef JP
-    return format("最大重量:%d.%dkg", lbtokg1(weight), lbtokg2(weight));
+    return format("最大重量:%d.%dkg", lb_to_kg_integer(weight), lb_to_kg_fraction(weight));
 #else
     return format("max wgt %d", weight / 10);
 #endif
@@ -357,8 +355,7 @@ static int get_spell(player_type *player_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     /* No "okay" spells */
     if (!okay)
         return false;
-    if (((use_realm) != player_ptr->realm1) && ((use_realm) != player_ptr->realm2) && (player_ptr->pclass != PlayerClassType::SORCERER)
-        && (player_ptr->pclass != PlayerClassType::RED_MAGE))
+    if (((use_realm) != player_ptr->realm1) && ((use_realm) != player_ptr->realm2) && (player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE))
         return false;
     if (((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE)) && !is_magic(use_realm))
         return false;
@@ -1071,9 +1068,9 @@ bool do_cmd_cast(player_type *player_ptr)
         /* Ask for a spell */
 #ifdef JP
     if (!get_spell(player_ptr, &spell,
-            ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK)           ? "詠唱する"
-                    : (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) ? "歌う"
-                                                            : "唱える"),
+            ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK)       ? "詠唱する"
+                : (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) ? "歌う"
+                                                                   : "唱える"),
             sval, true, realm)) {
         if (spell == -2)
             msg_format("その本には知っている%sがない。", prayer);
@@ -1112,9 +1109,9 @@ bool do_cmd_cast(player_type *player_ptr)
             /* Warning */
 #ifdef JP
         msg_format("その%sを%sのに十分なマジックポイントがない。", prayer,
-            ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK)          ? "詠唱する"
-                    : (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "歌う"
-                                                           : "唱える"));
+            ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK)      ? "詠唱する"
+                : (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "歌う"
+                                                                  : "唱える"));
 #else
         msg_format("You do not have enough mana to %s this %s.", ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"), prayer);
 #endif
@@ -1203,8 +1200,7 @@ bool do_cmd_cast(player_type *player_ptr)
             chg_virtue(player_ptr, V_CHANCE, 1);
 
         /* A spell was cast */
-        if (!(increment ? (player_ptr->spell_worked2 & (1UL << spell)) : (player_ptr->spell_worked1 & (1UL << spell))) && (player_ptr->pclass != PlayerClassType::SORCERER)
-            && (player_ptr->pclass != PlayerClassType::RED_MAGE)) {
+        if (!(increment ? (player_ptr->spell_worked2 & (1UL << spell)) : (player_ptr->spell_worked1 & (1UL << spell))) && (player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE)) {
             int e = s_ptr->sexp;
 
             /* The spell worked */
