@@ -8,6 +8,7 @@
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "load/angband-version-comparer.h"
+#include "load/item/item-loader-factory.h"
 #include "load/load-util.h"
 #include "load/old-feature-types.h"
 #include "load/old/item-loader-savefile10.h"
@@ -155,17 +156,16 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     if (limit > w_ptr->max_o_idx)
         return 151;
     for (int i = 1; i < limit; i++) {
-        OBJECT_IDX o_idx;
-        object_type *o_ptr;
-        o_idx = o_pop(floor_ptr);
-        if (i != o_idx)
+        auto o_idx = o_pop(floor_ptr);
+        if (i != o_idx) {
             return 152;
+        }
 
-        o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(o_ptr);
-
+        auto &item = floor_ptr->o_list[o_idx];
+        auto item_loader = ItemLoaderFactory::get_item_loader();
+        item_loader->rd_item(&item);
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
-        list.add(floor_ptr, o_idx, o_ptr->stack_idx);
+        list.add(floor_ptr, o_idx, item.stack_idx);
     }
 
     limit = rd_u16b();

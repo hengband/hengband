@@ -358,6 +358,10 @@ hengband_SOURCES = \
 	load/store-loader.cpp load/store-loader.h \
 	load/world-loader.cpp load/world-loader.h \
 	\
+	load/item/item-loader-base.cpp load/item/item-loader-base.h \
+	load/item/item-loader-factory.cpp load/item/item-loader-factory.h \
+	load/item/item-loader-version-types.h \
+	\
 	load/old/item-loader-savefile10.cpp load/old/item-loader-savefile10.h \
 	load/old/load-v1-5-0.cpp load/old/load-v1-5-0.h \
 	load/old/load-v1-7-0.cpp load/old/load-v1-7-0.h \

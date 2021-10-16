@@ -13,6 +13,8 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "load/angband-version-comparer.h"
+#include "load/item/item-loader-factory.h"
+#include "load/item/item-loader-version-types.h"
 #include "load/load-util.h"
 #include "load/old-feature-types.h"
 #include "load/old/item-loader-savefile10.h"
@@ -686,10 +688,9 @@ errr rd_dungeon_old(player_type *player_ptr)
             return (152);
         }
 
-        object_type *o_ptr;
-        o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(o_ptr);
-
+        auto &item = floor_ptr->o_list[o_idx];
+        auto item_loader = ItemLoaderFactory::get_item_loader();
+        item_loader->rd_item(&item);
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
         list.add(floor_ptr, o_idx);
     }

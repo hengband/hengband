@@ -2,6 +2,7 @@
 #include "avatar/avatar.h"
 #include "floor/floor-town.h"
 #include "load/angband-version-comparer.h"
+#include "load/item/item-loader-factory.h"
 #include "load/load-util.h"
 #include "load/old/item-loader-savefile10.h"
 #include "object/object-stack.h"
@@ -90,22 +91,18 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
     store_ptr->last_visit = rd_s32b();
 
     for (int j = 0; j < inven_num; j++) {
-        object_type forge;
-        object_type *q_ptr;
-        q_ptr = &forge;
-        q_ptr->wipe();
-
-        rd_item(q_ptr);
-
+        object_type item;
+        auto item_loader = ItemLoaderFactory::get_item_loader();
+        item_loader->rd_item(&item);
         auto stock_max = store_get_stock_max(i2enum<StoreSaleType>(store_number));
         if (store_ptr->stock_num >= stock_max)
             continue;
 
         if (sort) {
-            home_carry_load(player_ptr, store_ptr, q_ptr);
+            home_carry_load(player_ptr, store_ptr, &item);
         } else {
             int k = store_ptr->stock_num++;
-            (&store_ptr->stock[k])->copy_from(q_ptr);
+            (&store_ptr->stock[k])->copy_from(&item);
         }
     }
 

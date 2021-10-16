@@ -22,6 +22,7 @@
 #include "load/extra-loader.h"
 #include "load/info-loader.h"
 #include "load/inventory-loader.h"
+#include "load/item/item-loader-factory.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "load/lore-loader.h"
@@ -184,13 +185,14 @@ static errr exe_reading_savefile(player_type *player_ptr)
     rd_dummy3();
     rd_system_info();
     load_lore();
-    load_item();
+    auto item_loader = ItemLoaderFactory::get_item_loader();
+    item_loader->load_item();
     errr load_town_quest_result = load_town_quest(player_ptr);
     if (load_town_quest_result != 0)
         return load_town_quest_result;
 
     load_note(_("クエスト情報をロードしました", "Loaded Quests"));
-    load_artifact();
+    item_loader->load_artifact();
     load_player_world(player_ptr);
     errr load_hp_result = load_hp(player_ptr);
     if (load_hp_result != 0)

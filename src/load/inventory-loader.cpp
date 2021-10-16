@@ -1,5 +1,6 @@
 ﻿#include "load/inventory-loader.h"
 #include "inventory/inventory-slot-types.h"
+#include "load/item/item-loader-factory.h"
 #include "load/load-util.h"
 #include "load/old/item-loader-savefile10.h"
 #include "object/object-mark-types.h"
@@ -30,20 +31,19 @@ static errr rd_inventory(player_type *player_ptr)
     while (true) {
         auto n = rd_u16b();
 
-        if (n == 0xFFFF)
+        if (n == 0xFFFF) {
             break;
-        object_type forge;
-        object_type *q_ptr;
-        q_ptr = &forge;
-        q_ptr->wipe();
+        }
 
-        rd_item(q_ptr);
-        if (!q_ptr->k_idx)
+        object_type item;
+        auto item_loader = ItemLoaderFactory::get_item_loader();
+        item_loader->rd_item(&item);
+        if (!item.k_idx)
             return (53);
 
         if (n >= INVEN_MAIN_HAND) {
-            q_ptr->marked |= OM_TOUCHED;
-            (&player_ptr->inventory_list[n])->copy_from(q_ptr);
+            item.marked |= OM_TOUCHED;
+            player_ptr->inventory_list[n].copy_from(&item);
             player_ptr->equip_cnt++;
             continue;
         }
@@ -54,8 +54,8 @@ static errr rd_inventory(player_type *player_ptr)
         }
 
         n = slot++;
-        q_ptr->marked |= OM_TOUCHED;
-        (&player_ptr->inventory_list[n])->copy_from(q_ptr);
+        item.marked |= OM_TOUCHED;
+        player_ptr->inventory_list[n].copy_from(&item);
         player_ptr->inven_cnt++;
     }
 
