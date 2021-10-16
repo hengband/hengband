@@ -3,9 +3,8 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-v1-5-0.h"
+#include "load/savedata-old-flag-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags3.h"
 #include "system/monster-race-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -13,15 +12,15 @@ static void rd_r_flags2(monster_race *r_ptr)
 {
     r_ptr->r_flags2 = rd_u32b();
     if (loading_savefile_version_is_older_than(10)) {
-        if (any_bits(r_ptr->r_flags2, RF2_XX14)) {
+        if (any_bits(r_ptr->r_flags2, SavedataLoreOlderThan10FlagType::AURA_FIRE_OLD)) {
             r_ptr->r_aura_flags.set(MonsterAuraType::FIRE);
         }
 
-        if (any_bits(r_ptr->r_flags3, RF3_XX10)) {
+        if (any_bits(r_ptr->r_flags3, SavedataLoreOlderThan10FlagType::AURA_COLD_OLD)) {
             r_ptr->r_aura_flags.set(MonsterAuraType::COLD);
         }
 
-        if (any_bits(r_ptr->r_flags2, RF2_XX15)) {
+        if (any_bits(r_ptr->r_flags2, SavedataLoreOlderThan10FlagType::AURA_ELEC_OLD)) {
             r_ptr->r_aura_flags.set(MonsterAuraType::ELEC);
         }
     }
@@ -32,7 +31,7 @@ static void rd_r_aura_flags(monster_race *r_ptr)
     if (loading_savefile_version_is_older_than(10)) {
         return;
     }
-    
+
     rd_FlagGroup(r_ptr->r_aura_flags, rd_byte);
 }
 
