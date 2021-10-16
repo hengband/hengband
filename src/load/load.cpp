@@ -215,10 +215,7 @@ static errr exe_reading_savefile(player_type *player_ptr)
     if (load_inventory_result != 0)
         return load_inventory_result;
 
-    errr load_store_result = load_store(player_ptr);
-    if (load_store_result != 0)
-        return load_store_result;
-
+    load_store(player_ptr);
     player_ptr->pet_follow_distance = rd_s16b();
     if (h_older_than(0, 4, 10))
         set_zangband_pet(player_ptr);
