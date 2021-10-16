@@ -184,19 +184,13 @@ static errr exe_reading_savefile(player_type *player_ptr)
     rd_dummy3();
     rd_system_info();
     load_lore();
-    errr load_item_result = load_item();
-    if (load_item_result != 0)
-        return load_item_result;
-
+    load_item();
     errr load_town_quest_result = load_town_quest(player_ptr);
     if (load_town_quest_result != 0)
         return load_town_quest_result;
 
     load_note(_("クエスト情報をロードしました", "Loaded Quests"));
-    errr load_artifact_result = load_artifact();
-    if (load_artifact_result != 0)
-        return load_artifact_result;
-
+    load_artifact();
     load_player_world(player_ptr);
     errr load_hp_result = load_hp(player_ptr);
     if (load_hp_result != 0)

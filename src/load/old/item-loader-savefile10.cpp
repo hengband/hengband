@@ -11,6 +11,7 @@
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/angband.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -278,9 +279,8 @@ void rd_item(object_type *o_ptr)
 
 /*!
  * @brief アイテムオブジェクトの鑑定情報をロードする
- * @return 成功なら0
  */
-errr load_item(void)
+void load_item(void)
 {
     auto loading_max_k_idx = rd_u16b();
 
@@ -298,14 +298,12 @@ errr load_item(void)
     }
 
     load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
-    return 0;
 }
 
 /*!
  * @brief 固定アーティファクトの出現情報をロードする
- * @return 成功なら0
  */
-errr load_artifact(void)
+void load_artifact(void)
 {
     auto loading_max_a_idx = rd_u16b();
 
@@ -327,5 +325,4 @@ errr load_artifact(void)
     }
 
     load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
-    return 0;
 }
