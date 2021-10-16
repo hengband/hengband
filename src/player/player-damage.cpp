@@ -582,7 +582,7 @@ static void process_aura_damage(monster_type *m_ptr, player_type *player_ptr, bo
  */
 void touch_zap_player(monster_type *m_ptr, player_type *player_ptr)
 {
-    process_aura_damage(m_ptr, player_ptr, (bool)has_immune_fire(player_ptr), MonsterAuraType::FIRE, fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
-    process_aura_damage(m_ptr, player_ptr, (bool)has_immune_cold(player_ptr), MonsterAuraType::COLD, cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
-    process_aura_damage(m_ptr, player_ptr, (bool)has_immune_elec(player_ptr), MonsterAuraType::ELEC, elec_dam, _("電撃をくらった！", "You get zapped!"));
+    process_aura_damage(m_ptr, player_ptr, has_immune_fire(player_ptr) != 0, MonsterAuraType::FIRE, fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
+    process_aura_damage(m_ptr, player_ptr, has_immune_cold(player_ptr) != 0, MonsterAuraType::COLD, cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
+    process_aura_damage(m_ptr, player_ptr, has_immune_elec(player_ptr) != 0, MonsterAuraType::ELEC, elec_dam, _("電撃をくらった！", "You get zapped!"));
 }
