@@ -8,9 +8,8 @@
 #include "system/monster-race-definition.h"
 #include "util/bit-flags-calculator.h"
 
-static void rd_r_flags2(monster_race *r_ptr)
+static void migrate_old_aura_flags(monster_race *r_ptr)
 {
-    r_ptr->r_flags2 = rd_u32b();
     if (loading_savefile_version_is_older_than(10)) {
         if (any_bits(r_ptr->r_flags2, SavedataLoreOlderThan10FlagType::AURA_FIRE_OLD)) {
             r_ptr->r_aura_flags.set(MonsterAuraType::FIRE);
@@ -75,8 +74,9 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     r_ptr->r_blows[3] = rd_byte();
 
     r_ptr->r_flags1 = rd_u32b();
-    rd_r_flags2(r_ptr);
+    r_ptr->r_flags2 = rd_u32b();
     r_ptr->r_flags3 = rd_u32b();
+    migrate_old_aura_flags(r_ptr);
     if (loading_savefile_version_is_older_than(3)) {
         uint32_t f4 = rd_u32b();
         uint32_t f5 = rd_u32b();
