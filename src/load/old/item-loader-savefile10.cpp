@@ -4,7 +4,7 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
-#include "load/savedata-flag-types.h"
+#include "load/old/savedata10-item-flag-types.h"
 #include "load/savedata-old-flag-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"

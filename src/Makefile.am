@@ -343,7 +343,6 @@ hengband_SOURCES = \
 	load/floor-loader.cpp load/floor-loader.h \
 	load/info-loader.cpp load/info-loader.h \
 	load/inventory-loader.cpp load/inventory-loader.h \
-	load/monster-loader.cpp load/monster-loader.h \
 	load/old-feature-types.h \
 	load/load-util.cpp load/load-util.h \
 	load/load-zangband.cpp load/load-zangband.h \
@@ -362,6 +361,7 @@ hengband_SOURCES = \
 	load/old/item-loader-savefile10.cpp load/old/item-loader-savefile10.h \
 	load/old/load-v1-5-0.cpp load/old/load-v1-5-0.h \
 	load/old/load-v1-7-0.cpp load/old/load-v1-7-0.h \
+	load/old/monster-loader-savefile10.cpp load/old/monster-loader-savefile10.h \
 	\
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \
