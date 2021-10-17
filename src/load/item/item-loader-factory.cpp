@@ -16,7 +16,7 @@
  * @details ItemLoaderBaseは純粋仮想関数を含むので参照を返す必要がある.
  * (値を返す設計はコンパイルエラー)
  */
-std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::get_item_loader()
+std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
 {
     auto version = get_version();
     switch (version) {

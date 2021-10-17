@@ -28,7 +28,7 @@ static errr rd_inventory(player_type *player_ptr)
     player_ptr->inventory_list = std::shared_ptr<object_type[]>{ new object_type[INVEN_TOTAL] };
 
     int slot = 0;
-    auto item_loader = ItemLoaderFactory::get_item_loader();
+    auto item_loader = ItemLoaderFactory::create_loader();
     while (true) {
         auto n = rd_u16b();
 

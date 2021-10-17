@@ -681,7 +681,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         return (151);
     }
 
-    auto item_loader = ItemLoaderFactory::get_item_loader();
+    auto item_loader = ItemLoaderFactory::create_loader();
     for (int i = 1; i < limit; i++) {
         OBJECT_IDX o_idx = o_pop(floor_ptr);
         if (i != o_idx) {

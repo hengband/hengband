@@ -185,7 +185,7 @@ static errr exe_reading_savefile(player_type *player_ptr)
     rd_dummy3();
     rd_system_info();
     load_lore();
-    auto item_loader = ItemLoaderFactory::get_item_loader();
+    auto item_loader = ItemLoaderFactory::create_loader();
     item_loader->load_item();
     errr load_town_quest_result = load_town_quest(player_ptr);
     if (load_town_quest_result != 0)

@@ -6,7 +6,7 @@ enum class ItemLoaderVersionType;
 class ItemLoaderBase;
 class ItemLoaderFactory {
 public:
-    static std::shared_ptr<ItemLoaderBase> get_item_loader();
+    static std::shared_ptr<ItemLoaderBase> create_loader();
 
 private:
     ItemLoaderFactory() = delete;

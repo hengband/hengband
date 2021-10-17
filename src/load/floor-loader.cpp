@@ -156,7 +156,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     if (limit > w_ptr->max_o_idx)
         return 151;
 
-    auto item_loader = ItemLoaderFactory::get_item_loader();
+    auto item_loader = ItemLoaderFactory::create_loader();
     for (int i = 1; i < limit; i++) {
         auto o_idx = o_pop(floor_ptr);
         if (i != o_idx) {

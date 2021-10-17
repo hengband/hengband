@@ -93,7 +93,7 @@ static void rd_store(player_type *player_ptr, int town_number, int store_number)
     store_ptr->bad_buy = rd_s16b();
     store_ptr->last_visit = rd_s32b();
 
-    auto item_loader = ItemLoaderFactory::get_item_loader();
+    auto item_loader = ItemLoaderFactory::create_loader();
     for (int j = 0; j < inven_num; j++) {
         object_type item;
         item_loader->rd_item(&item);
