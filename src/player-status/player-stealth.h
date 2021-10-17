@@ -3,8 +3,7 @@
 
 class PlayerStealth : public PlayerStatusBase {
 public:
-    using PlayerStatusBase::PlayerStatusBase;
-    PlayerStealth() = delete;
+    PlayerStealth(player_type *player_ptr);
 
     BIT_FLAGS get_bad_flags() override;
 

@@ -16,6 +16,11 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
+PlayerStealth::PlayerStealth(player_type* player_ptr)
+    : PlayerStatusBase(player_ptr)
+{
+}
+
 /*!
  * @brief 隠密能力計算 - 種族
  * @return 隠密能力の増分

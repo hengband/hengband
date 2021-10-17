@@ -6,7 +6,6 @@ struct player_type;
 class MonsterSweepGrid {
 public:
     MonsterSweepGrid(player_type *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm);
-    MonsterSweepGrid() = delete;
     virtual ~MonsterSweepGrid() = default;
     player_type *player_ptr;
     MONSTER_IDX m_idx;

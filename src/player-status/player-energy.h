@@ -6,7 +6,6 @@ struct player_type;
 class PlayerEnergy {
 public:
     PlayerEnergy(player_type *player_ptr);
-    PlayerEnergy() = delete;
     virtual ~PlayerEnergy() = default;
     void set_player_turn_energy(ENERGY need_cost); // 代入.
     void add_player_turn_energy(ENERGY need_cost); // 加算.

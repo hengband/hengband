@@ -12,7 +12,6 @@ typedef std::vector<std::tuple<monster_race_type, monster_race_type, monster_rac
 class MonsterDamageProcessor {
 public:
     MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear);
-    MonsterDamageProcessor() = delete;
     virtual ~MonsterDamageProcessor() = default;
     bool mon_take_hit(concptr note);
 

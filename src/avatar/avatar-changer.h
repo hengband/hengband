@@ -7,7 +7,6 @@ struct player_type;
 class AvatarChanger {
 public:
     AvatarChanger(player_type *player_ptr, monster_type *m_ptr);
-    AvatarChanger() = delete;
     virtual ~AvatarChanger() = default;
     void change_virtue();
 

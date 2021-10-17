@@ -3,8 +3,7 @@
 
 class PlayerSpeed : public PlayerStatusBase {
 public:
-    using PlayerStatusBase::PlayerStatusBase;
-    PlayerSpeed() = delete;
+    PlayerSpeed(player_type *player_ptr);
 
 protected:
     void set_locals() override;

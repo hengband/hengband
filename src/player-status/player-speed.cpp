@@ -30,6 +30,11 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+PlayerSpeed::PlayerSpeed(player_type *player_ptr)
+    : PlayerStatusBase(player_ptr)
+{
+}
+
 /*!
  * @brief 速度 - 初期値、下限、上限
  * @details
@@ -105,18 +110,15 @@ int16_t PlayerSpeed::class_value()
     if (this->player_ptr->pclass == PlayerClassType::NINJA) {
         if (heavy_armor(this->player_ptr)) {
             result -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr))
-            && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
             result += 3;
-            if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE)
-                    || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
+            if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
                 result += (this->player_ptr->lev) / 10;
         }
     }
 
     if ((this->player_ptr->pclass == PlayerClassType::MONK || this->player_ptr->pclass == PlayerClassType::FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
-        if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE)
-                || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
+        if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
             result += (this->player_ptr->lev) / 10;
     }
 
@@ -143,8 +145,7 @@ int16_t PlayerSpeed::class_value()
 int16_t PlayerSpeed::personality_value()
 {
     int16_t result = 0;
-    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != PlayerRaceType::KLACKON
-        && this->player_ptr->prace != PlayerRaceType::SPRITE) {
+    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != PlayerRaceType::KLACKON && this->player_ptr->prace != PlayerRaceType::SPRITE) {
         result += (this->player_ptr->lev) / 10 + 5;
     }
     return result;
@@ -161,13 +162,11 @@ int16_t PlayerSpeed::special_weapon_set_value()
 {
     int16_t result = 0;
     if (has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
-        if ((this->player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN)
-            && (this->player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN)) {
+        if ((this->player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) && (this->player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN)) {
             result += 7;
         }
 
-        if ((this->player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
-            && (this->player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE)) {
+        if ((this->player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH) && (this->player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE)) {
             result += 5;
         }
     }

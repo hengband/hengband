@@ -3,8 +3,7 @@
 
 class PlayerInfravision : public PlayerStatusBase {
 public:
-    using PlayerStatusBase::PlayerStatusBase;
-    PlayerInfravision() = delete;
+    PlayerInfravision(player_type *player_ptr);
 
 protected:
     void set_locals() override;

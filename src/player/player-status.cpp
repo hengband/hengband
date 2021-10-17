@@ -226,6 +226,29 @@ WEIGHT calc_inventory_weight(player_type *player_ptr)
     }
     return weight;
 }
+
+static void update_ability_scores(player_type *player_ptr)
+{
+    PlayerStrength player_str(player_ptr);
+    PlayerIntelligence player_int(player_ptr);
+    PlayerWisdom player_wis(player_ptr);
+    PlayerDexterity player_dex(player_ptr);
+    PlayerConstitution player_con(player_ptr);
+    PlayerCharisma player_chr(player_ptr);
+    player_ptr->stat_add[A_STR] = player_str.modification_value();
+    player_ptr->stat_add[A_INT] = player_str.modification_value();
+    player_ptr->stat_add[A_WIS] = player_wis.modification_value();
+    player_ptr->stat_add[A_DEX] = player_dex.modification_value();
+    player_ptr->stat_add[A_CON] = player_con.modification_value();
+    player_ptr->stat_add[A_CHR] = player_chr.modification_value();
+    player_str.update_value();
+    player_int.update_value();
+    player_wis.update_value();
+    player_dex.update_value();
+    player_con.update_value();
+    player_chr.update_value();
+}
+
 /*!
  * @brief プレイヤーの全ステータスを更新する /
  * Calculate the players current "state", taking into account
@@ -322,20 +345,7 @@ static void update_bonuses(player_type *player_ptr)
         }
     }
 
-    player_ptr->stat_add[A_STR] = PlayerStrength(player_ptr).modification_value();
-    player_ptr->stat_add[A_INT] = PlayerIntelligence(player_ptr).modification_value();
-    player_ptr->stat_add[A_WIS] = PlayerWisdom(player_ptr).modification_value();
-    player_ptr->stat_add[A_DEX] = PlayerDexterity(player_ptr).modification_value();
-    player_ptr->stat_add[A_CON] = PlayerConstitution(player_ptr).modification_value();
-    player_ptr->stat_add[A_CHR] = PlayerCharisma(player_ptr).modification_value();
-
-    PlayerStrength(player_ptr).update_value();
-    PlayerIntelligence(player_ptr).update_value();
-    PlayerWisdom(player_ptr).update_value();
-    PlayerDexterity(player_ptr).update_value();
-    PlayerConstitution(player_ptr).update_value();
-    PlayerCharisma(player_ptr).update_value();
-
+    update_ability_scores(player_ptr);
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->k_idx) {
         player_ptr->tval_ammo = bow_tval_ammo(o_ptr);

@@ -9,7 +9,6 @@ struct player_type;
 struct player_race_info;
 class PlayerRace {
 public:
-    PlayerRace() = delete;
     PlayerRace(player_type *player_ptr, bool base_race = false);
     virtual ~PlayerRace() = default;
 

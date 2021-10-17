@@ -3,8 +3,8 @@
 #include "object/object-flags.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
-#include "player-info/monk-data-type.h"
 #include "player-info/mimic-info-table.h"
+#include "player-info/monk-data-type.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
@@ -13,6 +13,11 @@
 #include "spell-realm/spells-hex.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+
+PlayerIntelligence::PlayerIntelligence(player_type *player_ptr)
+    : PlayerBasicStatistics(player_ptr)
+{
+}
 
 void PlayerIntelligence::set_locals()
 {
