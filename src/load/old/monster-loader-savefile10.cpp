@@ -40,68 +40,21 @@ void MonsterLoader10::rd_monster(monster_type *m_ptr_)
         this->m_ptr->dealt_damage = rd_s32b();
     }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX))
-        this->m_ptr->ap_r_idx = rd_s16b();
-    else
-        this->m_ptr->ap_r_idx = this->m_ptr->r_idx;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN))
-        this->m_ptr->sub_align = rd_byte();
-    else
-        this->m_ptr->sub_align = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::CSLEEP))
-        this->m_ptr->mtimed[MTIMED_CSLEEP] = rd_s16b();
-    else
-        this->m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-
+    this->m_ptr->ap_r_idx = any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX) ? rd_s16b() : this->m_ptr->r_idx;
+    this->m_ptr->sub_align = any_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MTIMED_CSLEEP] = any_bits(flags, SaveDataMonsterFlagType::CSLEEP) ? rd_s16b() : 0;
     this->m_ptr->mspeed = rd_byte();
-
     this->m_ptr->energy_need = rd_s16b();
-
-    if (any_bits(flags, SaveDataMonsterFlagType::FAST)) {
-        this->m_ptr->mtimed[MTIMED_FAST] = rd_byte();
-    } else
-        this->m_ptr->mtimed[MTIMED_FAST] = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::SLOW)) {
-        this->m_ptr->mtimed[MTIMED_SLOW] = rd_byte();
-    } else
-        this->m_ptr->mtimed[MTIMED_SLOW] = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::STUNNED)) {
-        this->m_ptr->mtimed[MTIMED_STUNNED] = rd_byte();
-    } else
-        this->m_ptr->mtimed[MTIMED_STUNNED] = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::CONFUSED)) {
-        this->m_ptr->mtimed[MTIMED_CONFUSED] = rd_byte();
-    } else
-        this->m_ptr->mtimed[MTIMED_CONFUSED] = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::MONFEAR)) {
-        this->m_ptr->mtimed[MTIMED_MONFEAR] = rd_byte();
-    } else
-        this->m_ptr->mtimed[MTIMED_MONFEAR] = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::TARGET_Y)) {
-        this->m_ptr->target_y = rd_s16b();
-    } else
-        this->m_ptr->target_y = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::TARGET_X)) {
-        this->m_ptr->target_x = rd_s16b();
-    } else
-        this->m_ptr->target_x = 0;
-
-    if (any_bits(flags, SaveDataMonsterFlagType::INVULNER)) {
-        this->m_ptr->mtimed[MTIMED_INVULNER] = rd_byte();
-    } else
-        this->m_ptr->mtimed[MTIMED_INVULNER] = 0;
-
+    this->m_ptr->mtimed[MTIMED_FAST] = any_bits(flags, SaveDataMonsterFlagType::FAST) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MTIMED_SLOW] = any_bits(flags, SaveDataMonsterFlagType::SLOW) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MTIMED_STUNNED] = any_bits(flags, SaveDataMonsterFlagType::STUNNED) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MTIMED_CONFUSED] = any_bits(flags, SaveDataMonsterFlagType::CONFUSED) ? rd_byte() : 0;
+    this->m_ptr->mtimed[MTIMED_MONFEAR] = any_bits(flags, SaveDataMonsterFlagType::MONFEAR) ? rd_byte() : 0;
+    this->m_ptr->target_y = any_bits(flags, SaveDataMonsterFlagType::TARGET_Y) ? rd_s16b() : 0;
+    this->m_ptr->target_x = any_bits(flags, SaveDataMonsterFlagType::TARGET_X) ? rd_s16b() : 0;
+    this->m_ptr->mtimed[MTIMED_INVULNER] = any_bits(flags, SaveDataMonsterFlagType::INVULNER) ? rd_byte() : 0;
     this->m_ptr->mflag.clear();
     this->m_ptr->mflag2.clear();
-
     if (any_bits(flags, SaveDataMonsterFlagType::SMART)) {
         if (loading_savefile_version_is_older_than(2)) {
             auto tmp32u = rd_u32b();
@@ -121,11 +74,7 @@ void MonsterLoader10::rd_monster(monster_type *m_ptr_)
         this->m_ptr->smart.clear();
     }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::EXP)) {
-        this->m_ptr->exp = rd_u32b();
-    } else
-        this->m_ptr->exp = 0;
-
+    this->m_ptr->exp = any_bits(flags, SaveDataMonsterFlagType::EXP) ? rd_u32b() : 0;
     if (any_bits(flags, SaveDataMonsterFlagType::MFLAG2)) {
         if (loading_savefile_version_is_older_than(2)) {
             auto tmp8u = rd_byte();
@@ -140,11 +89,9 @@ void MonsterLoader10::rd_monster(monster_type *m_ptr_)
         char buf[128];
         rd_string(buf, sizeof(buf));
         this->m_ptr->nickname = quark_add(buf);
-    } else
+    } else {
         this->m_ptr->nickname = 0;
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::PARENT))
-        this->m_ptr->parent_m_idx = rd_s16b();
-    else
-        this->m_ptr->parent_m_idx = 0;
+    this->m_ptr->parent_m_idx = any_bits(flags, SaveDataMonsterFlagType::PARENT) ? rd_s16b() : 0;
 }
