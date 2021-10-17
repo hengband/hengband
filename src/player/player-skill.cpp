@@ -37,6 +37,30 @@ const concptr exp_level_str[5] =
     { "[Unskilled]", "[Beginner]", "[Skilled]", "[Expert]", "[Master]" };
 #endif
 
+namespace {
+
+using GainAmountList = std::array<int, EXP_LEVEL_MASTER>;
+
+void gain_attack_skill_exp(player_type *player_ptr, short &exp, const GainAmountList &gain_amount_list)
+{
+    auto gain_amount = 0;
+
+    if (exp < WEAPON_EXP_BEGINNER) {
+        gain_amount = std::min(gain_amount_list[EXP_LEVEL_UNSKILLED], WEAPON_EXP_BEGINNER - exp);
+    } else if (exp < WEAPON_EXP_SKILLED) {
+        gain_amount = std::min(gain_amount_list[EXP_LEVEL_BEGINNER], WEAPON_EXP_SKILLED - exp);
+    } else if ((exp < WEAPON_EXP_EXPERT) && (player_ptr->lev > 19)) {
+        gain_amount = std::min(gain_amount_list[EXP_LEVEL_SKILLED], WEAPON_EXP_EXPERT - exp);
+    } else if ((exp < WEAPON_EXP_MASTER) && (player_ptr->lev > 34)) {
+        gain_amount = std::min(gain_amount_list[EXP_LEVEL_EXPERT], WEAPON_EXP_MASTER - exp);
+    }
+
+    exp += static_cast<short>(gain_amount);
+    set_bits(player_ptr->update, PU_BONUS);
+}
+
+}
+
 PlayerSkill::PlayerSkill(player_type *player_ptr)
     : player_ptr(player_ptr)
 {
@@ -105,82 +129,46 @@ int PlayerSkill::riding_exp_level(int riding_exp)
 
 void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
 {
-    auto now_exp = this->player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval];
-    if (now_exp >= s_info[enum2i(this->player_ptr->pclass)].w_max[o_ptr->tval][o_ptr->sval])
-        return;
+    const GainAmountList gain_amount_list{ 80, 10, 1, (one_in_(2) ? 1 : 0) };
+    constexpr GainAmountList others_gain_amount_list{ 8, 1, 0, 0 };
 
-    SUB_EXP amount = 0;
-    if (now_exp < WEAPON_EXP_BEGINNER)
-        amount = 80;
-    else if (now_exp < WEAPON_EXP_SKILLED)
-        amount = 10;
-    else if ((now_exp < WEAPON_EXP_EXPERT) && (this->player_ptr->lev > 19))
-        amount = 1;
-    else if ((player_ptr->lev > 34) && one_in_(2))
-        amount = 1;
-
-    this->player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] += amount;
-    set_bits(this->player_ptr->update, PU_BONUS);
+    for (auto sval = 0U; sval < this->player_ptr->weapon_exp[o_ptr->tval].size(); ++sval) {
+        auto &now_exp = this->player_ptr->weapon_exp[o_ptr->tval][sval];
+        if (now_exp < s_info[enum2i(this->player_ptr->pclass)].w_max[o_ptr->tval][sval]) {
+            gain_attack_skill_exp(this->player_ptr, now_exp,
+                (static_cast<int>(sval) == o_ptr->sval) ? gain_amount_list : others_gain_amount_list);
+        }
+    }
 }
 
 void PlayerSkill::gain_range_weapon_exp(const object_type *o_ptr)
 {
-    auto now_exp = this->player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval];
-    if (now_exp >= s_info[enum2i(this->player_ptr->pclass)].w_max[o_ptr->tval][o_ptr->sval])
-        return;
+    constexpr GainAmountList gain_amount_list{ 80, 25, 10, 2 };
+    constexpr GainAmountList others_gain_amount_list{ 8, 2, 0, 0 };
 
-    SUB_EXP amount = 0;
-    if (now_exp < WEAPON_EXP_BEGINNER)
-        amount = 80;
-    else if (now_exp < WEAPON_EXP_SKILLED)
-        amount = 25;
-    else if ((now_exp < WEAPON_EXP_EXPERT) && (this->player_ptr->lev > 19))
-        amount = 10;
-    else if (this->player_ptr->lev > 34)
-        amount = 2;
-
-    this->player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] += amount;
-    set_bits(this->player_ptr->update, PU_BONUS);
+    for (auto sval = 0U; sval < this->player_ptr->weapon_exp[o_ptr->tval].size(); ++sval) {
+        auto &now_exp = this->player_ptr->weapon_exp[o_ptr->tval][sval];
+        if (now_exp < s_info[enum2i(this->player_ptr->pclass)].w_max[o_ptr->tval][sval]) {
+            gain_attack_skill_exp(this->player_ptr, now_exp,
+                (static_cast<int>(sval) == o_ptr->sval) ? gain_amount_list : others_gain_amount_list);
+        }
+    }
 }
 
 void PlayerSkill::gain_martial_arts_skill_exp()
 {
-    auto now_exp = this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS];
-    if (now_exp >= s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_MARTIAL_ARTS])
-        return;
-
-    SUB_EXP amount = 0;
-    if (now_exp < WEAPON_EXP_BEGINNER)
-        amount = 40;
-    else if (now_exp < WEAPON_EXP_SKILLED)
-        amount = 5;
-    else if ((now_exp < WEAPON_EXP_EXPERT) && (this->player_ptr->lev > 19))
-        amount = 1;
-    else if ((this->player_ptr->lev > 34) && one_in_(3))
-        amount = 1;
-
-    this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS] += amount;
-    set_bits(this->player_ptr->update, PU_BONUS);
+    if (this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS] < s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_MARTIAL_ARTS]) {
+        const GainAmountList gain_amount_list{ 40, 5, 1, (one_in_(3) ? 1 : 0) };
+        gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS], gain_amount_list);
+    }
 }
 
 void PlayerSkill::gain_two_weapon_skill_exp()
 {
-    auto now_exp = this->player_ptr->skill_exp[SKILL_TWO_WEAPON];
-    if (now_exp >= s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_TWO_WEAPON])
-        return;
-
-    SUB_EXP amount = 0;
-    if (now_exp < WEAPON_EXP_BEGINNER)
-        amount = 80;
-    else if (now_exp < WEAPON_EXP_SKILLED)
-        amount = 4;
-    else if ((now_exp < WEAPON_EXP_EXPERT) && (this->player_ptr->lev > 19))
-        amount = 1;
-    else if ((this->player_ptr->lev > 34) && one_in_(3))
-        amount = 1;
-
-    this->player_ptr->skill_exp[SKILL_TWO_WEAPON] += amount;
-    set_bits(this->player_ptr->update, PU_BONUS);
+    if (this->player_ptr->skill_exp[SKILL_TWO_WEAPON] < s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_TWO_WEAPON]) {
+        const GainAmountList gain_amount_list{ 80, 4, 1, (one_in_(3) ? 1 : 0) };
+        gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[SKILL_TWO_WEAPON], gain_amount_list);
+    }
 }
 
 void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const monster_race *r_ptr)
