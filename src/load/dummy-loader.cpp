@@ -1,6 +1,7 @@
 ﻿#include "load/dummy-loader.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
+#include "load/monster/monster-loader-factory.h"
 #include "load/old/monster-loader-savefile10.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -39,9 +40,10 @@ void rd_dummy_monsters(player_type *player_ptr)
         return;
 
     auto tmp16s = rd_s16b();
+    monster_type dummy_mon;
+    auto monster_loader = MonsterLoaderFactory::create_loader(player_ptr);
     for (int i = 0; i < tmp16s; i++) {
-        monster_type dummy_mon;
-        rd_monster(player_ptr, &dummy_mon);
+        monster_loader->rd_monster(&dummy_mon);
     }
 }
 

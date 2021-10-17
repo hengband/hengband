@@ -16,6 +16,7 @@
 #include "load/item/item-loader-factory.h"
 #include "load/item/item-loader-version-types.h"
 #include "load/load-util.h"
+#include "load/monster/monster-loader-factory.h"
 #include "load/old-feature-types.h"
 #include "load/old/item-loader-savefile10.h"
 #include "load/old/monster-loader-savefile10.h"
@@ -701,19 +702,17 @@ errr rd_dungeon_old(player_type *player_ptr)
         return (161);
     }
 
+    auto monster_loader = MonsterLoaderFactory::create_loader(player_ptr);
     for (int i = 1; i < limit; i++) {
-        MONSTER_IDX m_idx;
-        monster_type *m_ptr;
-        m_idx = m_pop(floor_ptr);
+        auto m_idx = m_pop(floor_ptr);
         if (i != m_idx) {
             load_note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
             return (162);
         }
 
-        m_ptr = &floor_ptr->m_list[m_idx];
-        rd_monster(player_ptr, m_ptr);
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+        auto m_ptr = &floor_ptr->m_list[m_idx];
+        monster_loader->rd_monster(m_ptr);
+        auto *g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
         g_ptr->m_idx = m_idx;
         real_r_ptr(m_ptr)->cur_num++;
     }

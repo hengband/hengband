@@ -361,6 +361,10 @@ hengband_SOURCES = \
 	load/item/item-loader-factory.cpp load/item/item-loader-factory.h \
 	load/item/item-loader-version-types.h \
 	\
+	load/monster/monster-loader-base.h \
+	load/monster/monster-loader-factory.cpp load/monster/monster-loader-factory.h \
+	load/monster/monster-loader-version-types.h \
+	\
 	load/old/item-flag-types-savefile10.h \
 	load/old/item-loader-savefile10.cpp load/old/item-loader-savefile10.h \
 	load/old/load-v1-5-0.cpp load/old/load-v1-5-0.h \

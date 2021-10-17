@@ -2370,6 +2370,9 @@
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp">
       <Filter>load\item</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp">
+      <Filter>load\monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5139,6 +5142,15 @@
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h">
       <Filter>load\item</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\load\monster\monster-loader-base.h">
+      <Filter>load\monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\monster\monster-loader-factory.h">
+      <Filter>load\monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\monster\monster-loader-version-types.h">
+      <Filter>load\monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5366,6 +5378,9 @@
     </Filter>
     <Filter Include="load\item">
       <UniqueIdentifier>{346bc9ba-a477-404f-bc72-2ad9c1ec6daf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="load\monster">
+      <UniqueIdentifier>{ad11aaea-5034-4df2-9a9b-d63457fdad55}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
