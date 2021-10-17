@@ -25,28 +25,6 @@
 static const int extra_min_magic_fail_rate = 2;
 
 /*!
- * @brief 呪文の経験値を返す /
- * Returns experience of a spell
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param spell 呪文ID
- * @param use_realm 魔法領域
- * @return 経験値
- */
-EXP experience_of_spell(player_type *player_ptr, SPELL_IDX spell, int16_t use_realm)
-{
-    if (player_ptr->pclass == PlayerClassType::SORCERER)
-        return SPELL_EXP_MASTER;
-    else if (player_ptr->pclass == PlayerClassType::RED_MAGE)
-        return SPELL_EXP_SKILLED;
-    else if (use_realm == player_ptr->realm1)
-        return player_ptr->spell_exp[spell];
-    else if (use_realm == player_ptr->realm2)
-        return player_ptr->spell_exp[spell + 32];
-    else
-        return 0;
-}
-
-/*!
  * @brief 呪文の消費MPを返す /
  * Modify mana consumption rate using spell exp and dec_mana
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -61,7 +39,7 @@ MANA_POINT mod_need_mana(player_type *player_ptr, MANA_POINT need_mana, SPELL_ID
 #define MANA_DIV 4
 #define DEC_MANA_DIV 3
     if ((realm > REALM_NONE) && (realm <= MAX_REALM)) {
-        need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(player_ptr, spell, realm)) + (MANA_CONST - 1);
+        need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - PlayerSkill(player_ptr).exp_of_spell(realm, spell)) + (MANA_CONST - 1);
         need_mana *= player_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
         need_mana /= MANA_CONST * MANA_DIV;
         if (need_mana < 1)
@@ -203,7 +181,7 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
 
     if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || (player_ptr->pclass == PlayerClassType::SORCERER)
         || (player_ptr->pclass == PlayerClassType::RED_MAGE)) {
-        EXP exp = experience_of_spell(player_ptr, spell, use_realm);
+        auto exp = PlayerSkill(player_ptr).exp_of_spell(use_realm, spell);
         if (exp >= SPELL_EXP_EXPERT)
             chance--;
         if (exp >= SPELL_EXP_MASTER)
@@ -267,12 +245,12 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
         if (use_realm == REALM_HISSATSU)
             need_mana = s_ptr->smana;
         else {
-            EXP exp = experience_of_spell(player_ptr, spell, use_realm);
+            auto exp = PlayerSkill(player_ptr).exp_of_spell(use_realm, spell);
             need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, use_realm);
             if ((increment == 64) || (s_ptr->slevel >= 99))
                 exp_level = EXP_LEVEL_UNSKILLED;
             else
-                exp_level = spell_exp_level(exp);
+                exp_level = PlayerSkill::spell_exp_level(exp);
 
             max = false;
             if (!increment && (exp_level == EXP_LEVEL_MASTER))

@@ -150,25 +150,6 @@ static player_hand main_attack_hand(player_type *player_ptr);
 /*** Player information ***/
 
 /*!
- * @brief プレイヤーの呪文レベルの抽象的ランクを返す。 / Return proficiency level of spells
- * @param spell_exp 経験値
- * @return ランク値
- */
-int spell_exp_level(int spell_exp)
-{
-    if (spell_exp < SPELL_EXP_BEGINNER)
-        return EXP_LEVEL_UNSKILLED;
-    else if (spell_exp < SPELL_EXP_SKILLED)
-        return EXP_LEVEL_BEGINNER;
-    else if (spell_exp < SPELL_EXP_EXPERT)
-        return EXP_LEVEL_SKILLED;
-    else if (spell_exp < SPELL_EXP_MASTER)
-        return EXP_LEVEL_EXPERT;
-    else
-        return EXP_LEVEL_MASTER;
-}
-
-/*!
  * @brief 遅延描画更新 / Delayed visual update
  * @details update_view(), update_lite(), update_mon_lite() においてのみ更新すること / Only used if update_view(), update_lite() or update_mon_lite() was called
  * @param player_ptr 主観となるプレイヤー構造体参照ポインタ

@@ -1,6 +1,8 @@
 ﻿#include "player/player-skill.h"
 #include "core/player-update-types.h"
 #include "monster-race/monster-race.h"
+#include "player-info/class-info.h"
+#include "player/player-realm.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -53,6 +55,32 @@ void gain_attack_skill_exp(player_type *player_ptr, short &exp, const GainAmount
         gain_amount = std::min(gain_amount_list[EXP_LEVEL_SKILLED], WEAPON_EXP_EXPERT - exp);
     } else if ((exp < WEAPON_EXP_MASTER) && (player_ptr->lev > 34)) {
         gain_amount = std::min(gain_amount_list[EXP_LEVEL_EXPERT], WEAPON_EXP_MASTER - exp);
+    }
+
+    exp += static_cast<short>(gain_amount);
+    set_bits(player_ptr->update, PU_BONUS);
+}
+
+void gain_spell_skill_exp_aux(player_type *player_ptr, short &exp, const GainAmountList &gain_amount_list, int spell_level)
+{
+    const auto dlev = player_ptr->current_floor_ptr->dun_level;
+    const auto plev = player_ptr->lev;
+
+    auto gain_amount = 0;
+    if (exp < SPELL_EXP_BEGINNER) {
+        gain_amount = std::min(gain_amount_list[EXP_LEVEL_UNSKILLED], SPELL_EXP_BEGINNER - exp);
+    } else if (exp < SPELL_EXP_SKILLED) {
+        if ((dlev > 4) && ((dlev + 10) > plev)) {
+            gain_amount = std::min(gain_amount_list[EXP_LEVEL_BEGINNER], SPELL_EXP_SKILLED - exp);
+        }
+    } else if (exp < SPELL_EXP_EXPERT) {
+        if (((dlev + 5) > plev) && ((dlev + 5) > spell_level)) {
+            gain_amount = std::min(gain_amount_list[EXP_LEVEL_SKILLED], SPELL_EXP_EXPERT - exp);
+        }
+    } else if (exp < SPELL_EXP_MASTER) {
+        if (((dlev + 5) > plev) && (dlev > spell_level)) {
+            gain_amount = std::min(gain_amount_list[EXP_LEVEL_EXPERT], SPELL_EXP_MASTER - exp);
+        }
     }
 
     exp += static_cast<short>(gain_amount);
@@ -122,6 +150,25 @@ int PlayerSkill::riding_exp_level(int riding_exp)
     else if (riding_exp < RIDING_EXP_EXPERT)
         return EXP_LEVEL_SKILLED;
     else if (riding_exp < RIDING_EXP_MASTER)
+        return EXP_LEVEL_EXPERT;
+    else
+        return EXP_LEVEL_MASTER;
+}
+
+/*!
+ * @brief プレイヤーの呪文レベルの抽象的ランクを返す。 / Return proficiency level of spells
+ * @param spell_exp 経験値
+ * @return ランク値
+ */
+int PlayerSkill::spell_exp_level(int spell_exp)
+{
+    if (spell_exp < SPELL_EXP_BEGINNER)
+        return EXP_LEVEL_UNSKILLED;
+    else if (spell_exp < SPELL_EXP_SKILLED)
+        return EXP_LEVEL_BEGINNER;
+    else if (spell_exp < SPELL_EXP_EXPERT)
+        return EXP_LEVEL_SKILLED;
+    else if (spell_exp < SPELL_EXP_MASTER)
         return EXP_LEVEL_EXPERT;
     else
         return EXP_LEVEL_MASTER;
@@ -226,6 +273,86 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam)
     else
         inc += 1;
 
-    player_ptr->skill_exp[SKILL_RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
+    this->player_ptr->skill_exp[SKILL_RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
     set_bits(this->player_ptr->update, PU_BONUS);
+}
+
+void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
+{
+    if (((spell_idx < 0) || (32 <= spell_idx)) ||
+        ((realm < 1) || (static_cast<int>(std::size(mp_ptr->info)) < realm)) ||
+        ((realm != this->player_ptr->realm1) && (realm != this->player_ptr->realm2))) {
+        return;
+    }
+
+    constexpr GainAmountList gain_amount_list_first{ 60, 8, 2, 1 };
+    constexpr GainAmountList gain_amount_list_second{ 60, 8, 2, 0 };
+
+    const auto is_first_realm = (realm == this->player_ptr->realm1);
+    const auto *s_ptr = &mp_ptr->info[realm - 1][spell_idx];
+
+    gain_spell_skill_exp_aux(this->player_ptr, this->player_ptr->spell_exp[spell_idx + (is_first_realm ? 0 : 32)],
+        (is_first_realm ? gain_amount_list_first : gain_amount_list_second), s_ptr->slevel);
+}
+
+void PlayerSkill::gain_continuous_spell_skill_exp(int realm, int spell_idx)
+{
+    if (((spell_idx < 0) || (32 <= spell_idx)) ||
+        ((realm != REALM_MUSIC) && (realm != REALM_HEX))) {
+        return;
+    }
+
+    const auto *s_ptr = &technic_info[realm - MIN_TECHNIC][spell_idx];
+
+    const GainAmountList gain_amount_list{ 5, (one_in_(2) ? 1 : 0), (one_in_(5) ? 1 : 0), (one_in_(5) ? 1 : 0) };
+
+    gain_spell_skill_exp_aux(this->player_ptr, this->player_ptr->spell_exp[spell_idx], gain_amount_list, s_ptr->slevel);
+}
+
+int PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
+{
+    if ((spell_idx < 0) || (static_cast<int>(std::size(this->player_ptr->spell_exp)) <= spell_idx)) {
+        return EXP_LEVEL_UNSKILLED;
+    }
+
+    auto &exp = this->player_ptr->spell_exp[spell_idx];
+
+    if (exp >= SPELL_EXP_EXPERT) {
+        exp = SPELL_EXP_MASTER;
+    } else if (exp >= SPELL_EXP_SKILLED) {
+        if (spell_idx >= 32) {
+            exp = SPELL_EXP_EXPERT;
+        } else {
+            exp += SPELL_EXP_EXPERT - SPELL_EXP_SKILLED;
+        }
+    } else if (exp >= SPELL_EXP_BEGINNER) {
+        exp = SPELL_EXP_SKILLED + (exp - SPELL_EXP_BEGINNER) * 2 / 3;
+    } else {
+        exp = SPELL_EXP_BEGINNER + exp / 3;
+    }
+
+    set_bits(this->player_ptr->update, PU_BONUS);
+
+    return PlayerSkill::spell_exp_level(exp);
+}
+
+/*!
+ * @brief 呪文の経験値を返す /
+ * Returns experience of a spell
+ * @param use_realm 魔法領域
+ * @param spell_idx 呪文ID
+ * @return 経験値
+ */
+EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
+{
+    if (this->player_ptr->pclass == PlayerClassType::SORCERER)
+        return SPELL_EXP_MASTER;
+    else if (this->player_ptr->pclass == PlayerClassType::RED_MAGE)
+        return SPELL_EXP_SKILLED;
+    else if (realm == this->player_ptr->realm1)
+        return this->player_ptr->spell_exp[spell_idx];
+    else if (realm == this->player_ptr->realm2)
+        return this->player_ptr->spell_exp[spell_idx + 32];
+    else
+        return 0;
 }

@@ -57,6 +57,7 @@ public:
     static bool valid_weapon_exp(int weapon_exp);
     static int weapon_exp_level(int weapon_exp);
     static int riding_exp_level(int riding_exp);
+    static int spell_exp_level(int spell_exp);
 
     void gain_melee_weapon_exp(const object_type *o_ptr);
     void gain_range_weapon_exp(const object_type *o_ptr);
@@ -65,6 +66,11 @@ public:
     void gain_riding_skill_exp_on_melee_attack(const monster_race *r_ptr);
     void gain_riding_skill_exp_on_range_attack();
     void gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam);
+    void gain_spell_skill_exp(int realm, int spell_idx);
+    void gain_continuous_spell_skill_exp(int realm, int spell_idx);
+    int gain_spell_skill_exp_over_learning(int spell_idx);
+
+    EXP exp_of_spell(int realm, int spell_idx) const;
 
 private:
     player_type *player_ptr;

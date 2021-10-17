@@ -63,19 +63,7 @@ void check_music(player_type *player_ptr)
         }
     }
 
-    if (player_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
-        player_ptr->spell_exp[spell] += 5;
-    else if (player_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
-        if (one_in_(2) && (player_ptr->current_floor_ptr->dun_level > 4) && ((player_ptr->current_floor_ptr->dun_level + 10) > player_ptr->lev))
-            player_ptr->spell_exp[spell] += 1;
-    } else if (player_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
-        if (one_in_(5) && ((player_ptr->current_floor_ptr->dun_level + 5) > player_ptr->lev)
-            && ((player_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel))
-            player_ptr->spell_exp[spell] += 1;
-    } else if (player_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
-        if (one_in_(5) && ((player_ptr->current_floor_ptr->dun_level + 5) > player_ptr->lev) && (player_ptr->current_floor_ptr->dun_level > s_ptr->slevel))
-            player_ptr->spell_exp[spell] += 1;
-    }
+    PlayerSkill(player_ptr).gain_continuous_spell_skill_exp(REALM_MUSIC, spell);
 
     exe_spell(player_ptr, REALM_MUSIC, spell, SPELL_CONTNUATION);
 }
