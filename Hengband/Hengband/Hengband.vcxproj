@@ -927,7 +927,7 @@
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-base.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-factory.h" />
-    <ClInclude Include="..\..\src\load\old\savedata10-monster-flag-types.h" />
+    <ClInclude Include="..\..\src\load\old\monster-flag-types-savefile10.h" />
     <ClInclude Include="..\..\src\load\player-class-specific-data-loader.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
@@ -1256,7 +1256,7 @@
     <ClInclude Include="..\..\src\load\option-loader.h" />
     <ClInclude Include="..\..\src\load\player-attack-loader.h" />
     <ClInclude Include="..\..\src\load\player-info-loader.h" />
-    <ClInclude Include="..\..\src\load\old\savedata10-item-flag-types.h" />
+    <ClInclude Include="..\..\src\load\old\item-flag-types-savefile10.h" />
     <ClInclude Include="..\..\src\load\store-loader.h" />
     <ClInclude Include="..\..\src\load\world-loader.h" />
     <ClInclude Include="..\..\src\racial\racial-util.h" />

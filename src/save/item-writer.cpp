@@ -1,6 +1,6 @@
 ﻿#include "save/item-writer.h"
 #include "artifact/random-art-effects.h"
-#include "load/old/savedata10-item-flag-types.h"
+#include "load/old/item-flag-types-savefile10.h"
 #include "object/object-kind.h"
 #include "save/save-util.h"
 #include "system/object-type-definition.h"

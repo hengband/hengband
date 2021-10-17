@@ -5124,10 +5124,10 @@
     <ClInclude Include="..\..\src\load\old\monster-loader-savefile10.h">
       <Filter>load\old</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\load\old\savedata10-item-flag-types.h">
+    <ClInclude Include="..\..\src\load\old\item-flag-types-savefile10.h">
       <Filter>load\old</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\load\old\savedata10-monster-flag-types.h">
+    <ClInclude Include="..\..\src\load\old\monster-flag-types-savefile10.h">
       <Filter>load\old</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\item\item-loader-base.h">

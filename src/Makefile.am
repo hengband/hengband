@@ -353,7 +353,6 @@ hengband_SOURCES = \
 	load/player-attack-loader.cpp load/player-attack-loader.h \
 	load/player-class-specific-data-loader.cpp load/player-class-specific-data-loader.h \
 	load/player-info-loader.cpp load/player-info-loader.h \
-	load/savedata-flag-types.h \
 	load/savedata-old-flag-types.h \
 	load/store-loader.cpp load/store-loader.h \
 	load/world-loader.cpp load/world-loader.h \
@@ -362,9 +361,11 @@ hengband_SOURCES = \
 	load/item/item-loader-factory.cpp load/item/item-loader-factory.h \
 	load/item/item-loader-version-types.h \
 	\
+	load/old/item-flag-types-savefile10.h \
 	load/old/item-loader-savefile10.cpp load/old/item-loader-savefile10.h \
 	load/old/load-v1-5-0.cpp load/old/load-v1-5-0.h \
 	load/old/load-v1-7-0.cpp load/old/load-v1-7-0.h \
+	load/old/monster-flag-types-savefile10.h \
 	load/old/monster-loader-savefile10.cpp load/old/monster-loader-savefile10.h \
 	\
 	locale/english.cpp locale/english.h \
