@@ -246,7 +246,7 @@ bool tgt_pt(player_type *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
             int dx = ddx[d];
             int dy = ddy[d];
             if (move_fast) {
-                int mag = MIN(info.wid / 2, info.hgt / 2);
+                int mag = std::min(info.wid / 2, info.hgt / 2);
                 info.x += dx * mag;
                 info.y += dy * mag;
             } else {

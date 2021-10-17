@@ -195,14 +195,14 @@ static spoiler_output_status spoil_player_spell(concptr fname)
     player_type dummy_p;
     dummy_p.lev = 1;
 
-    for (int c = 0; c < MAX_CLASS; c++) {
+    for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         auto class_ptr = &class_info[c];
         sprintf(buf, "[[Class: %s]]\n", class_ptr->title);
         spoil_out(buf);
 
         auto magic_ptr = &m_info[c];
         concptr book_name = "なし";
-        if (magic_ptr->spell_book != 0) {
+        if (magic_ptr->spell_book != ItemKindType::NONE) {
             object_type book;
             auto o_ptr = &book;
             o_ptr->prep(lookup_kind(magic_ptr->spell_book, 0));
@@ -215,7 +215,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
         sprintf(buf, "BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n", book_name, wiz_spell_stat[magic_ptr->spell_stat].data(), magic_ptr->spell_xtra,
             magic_ptr->spell_type, magic_ptr->spell_weight);
         spoil_out(buf);
-        if (!magic_ptr->spell_book) {
+        if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;
         }

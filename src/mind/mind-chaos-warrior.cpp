@@ -12,7 +12,7 @@ void acquire_chaos_weapon(player_type *player_ptr)
 {
     object_type forge;
     object_type *q_ptr = &forge;
-    tval_type dummy = TV_SWORD;
+    auto dummy = ItemKindType::SWORD;
     OBJECT_SUBTYPE_VALUE dummy2;
     switch (randint1(player_ptr->lev)) {
     case 0:

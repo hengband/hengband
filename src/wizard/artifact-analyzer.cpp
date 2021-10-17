@@ -1,6 +1,7 @@
 ﻿#include "wizard/artifact-analyzer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "locale/japanese.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
@@ -69,11 +70,9 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
     auto flgs = object_flags(o_ptr);
     affects_list = pi_ptr->pval_affects;
     sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
-    if (flgs.has(TR_STR) && flgs.has(TR_INT) && flgs.has(TR_WIS) && flgs.has(TR_DEX) && flgs.has(TR_CON)
-        && flgs.has(TR_CHR)) {
+    if (flgs.has(TR_STR) && flgs.has(TR_INT) && flgs.has(TR_WIS) && flgs.has(TR_DEX) && flgs.has(TR_CON) && flgs.has(TR_CHR)) {
         *affects_list++ = _("全能力", "All stats");
-    } else if (flgs.has(TR_STR) || flgs.has(TR_INT) || flgs.has(TR_WIS) || flgs.has(TR_DEX) || flgs.has(TR_CON)
-        || flgs.has(TR_CHR)) {
+    } else if (flgs.has(TR_STR) || flgs.has(TR_INT) || flgs.has(TR_WIS) || flgs.has(TR_DEX) || flgs.has(TR_CON) || flgs.has(TR_CHR)) {
         affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
     }
 
@@ -142,11 +141,9 @@ static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
 {
     auto flgs = object_flags(o_ptr);
-    if (flgs.has(TR_SUST_STR) && flgs.has(TR_SUST_INT) && flgs.has(TR_SUST_WIS) && flgs.has(TR_SUST_DEX)
-        && flgs.has(TR_SUST_CON) && flgs.has(TR_SUST_CHR)) {
+    if (flgs.has(TR_SUST_STR) && flgs.has(TR_SUST_INT) && flgs.has(TR_SUST_WIS) && flgs.has(TR_SUST_DEX) && flgs.has(TR_SUST_CON) && flgs.has(TR_SUST_CHR)) {
         *sustain_list++ = _("全能力", "All stats");
-    } else if (flgs.has(TR_SUST_STR) || flgs.has(TR_SUST_INT) || flgs.has(TR_SUST_WIS) || flgs.has(TR_SUST_DEX)
-        || flgs.has(TR_SUST_CON) || flgs.has(TR_SUST_CHR)) {
+    } else if (flgs.has(TR_SUST_STR) || flgs.has(TR_SUST_INT) || flgs.has(TR_SUST_WIS) || flgs.has(TR_SUST_DEX) || flgs.has(TR_SUST_CON) || flgs.has(TR_SUST_CHR)) {
         sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
     }
 
@@ -264,7 +261,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 {
     artifact_type *a_ptr = &a_info[o_ptr->name1];
     sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ptr->level, a_ptr->rarity,
-        _(lbtokg1(a_ptr->weight), a_ptr->weight / 10), _(lbtokg2(a_ptr->weight), a_ptr->weight % 10), (long int)a_ptr->cost);
+        _(lb_to_kg_integer(a_ptr->weight), a_ptr->weight / 10), _(lb_to_kg_fraction(a_ptr->weight), a_ptr->weight % 10), (long int)a_ptr->cost);
 }
 
 /*!
@@ -308,6 +305,6 @@ void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr, obj_de
     analyze_sustains(o_ptr, desc_ptr->sustains);
     analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
     desc_ptr->activation = activation_explanation(o_ptr);
-    sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lbtokg1(o_ptr->weight), o_ptr->weight / 10),
-        _(lbtokg2(o_ptr->weight), o_ptr->weight % 10));
+    sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10),
+        _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10));
 }

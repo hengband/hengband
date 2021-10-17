@@ -52,7 +52,7 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param tval 出力したいランダムアーティファクトの種類
  */
-static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_ptr, tval_type tval)
+static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_ptr, ItemKindType tval)
 {
     obj_desc_list artifact;
     if (!o_ptr->is_known() || !o_ptr->art_name || o_ptr->tval != tval)
@@ -93,13 +93,13 @@ void spoil_random_artifact(player_type *player_ptr, concptr fname)
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
-            store_ptr = &town_info[1].store[STORE_HOME];
+            store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
-            store_ptr = &town_info[1].store[STORE_MUSEUM];
+            store_ptr = &town_info[1].store[enum2i(StoreSaleType::MUSEUM)];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);

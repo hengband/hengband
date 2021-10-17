@@ -21,7 +21,7 @@
  */
 
 struct player_magic {
-    tval_type spell_book{}; /* Tval of spell books (if any) */
+    ItemKindType spell_book{}; /* Tval of spell books (if any) */
     BIT_FLAGS8 spell_xtra{}; /* Something for later */
 
     int spell_stat{}; /* Stat for spells (if any)  */
@@ -73,6 +73,5 @@ struct player_class_info {
 };
 
 extern const player_class_info *cp_ptr;
-extern const player_class_info class_info[MAX_CLASS];
-
-extern const concptr player_title[MAX_CLASS][10];
+extern const std::vector<player_class_info> class_info;
+extern const std::vector<std::vector<std::string_view>> player_titles;

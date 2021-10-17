@@ -5,7 +5,7 @@
 
 void display_monster_drop_quantity(lore_type *lore_ptr)
 {
-    lore_ptr->drop_quantity = MAX(lore_ptr->drop_gold, lore_ptr->drop_item);
+    lore_ptr->drop_quantity = std::max(lore_ptr->drop_gold, lore_ptr->drop_item);
     if (lore_ptr->drop_quantity == 1) {
         hooked_roff(_("一つの", " a"));
 #ifdef JP

@@ -193,7 +193,7 @@ bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     }
 
     case SV_WAND_CHARM_MONSTER: {
-        if (charm_monster(player_ptr, dir, MAX(20, lev)))
+        if (charm_monster(player_ptr, dir, std::max<short>(20, lev)))
             ident = true;
         break;
     }
@@ -331,7 +331,7 @@ void do_cmd_aim_wand(player_type *player_ptr)
 
     q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
     s = _("使える魔法棒がない。", "You have no wand to aim.");
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_WAND)))
+    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::WAND)))
         return;
 
     ObjectZapWandEntity(player_ptr).execute(item);

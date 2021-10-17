@@ -326,7 +326,7 @@ void print_imitation(player_type *player_ptr)
     TERM_LEN col_study = wid + COL_STUDY;
     TERM_LEN row_study = hgt + ROW_STUDY;
 
-    if (player_ptr->pclass != CLASS_IMITATOR)
+    if (player_ptr->pclass != PlayerClassType::IMITATOR)
         return;
 
     auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();

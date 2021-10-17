@@ -14,6 +14,11 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+PlayerConstitution::PlayerConstitution(player_type *player_ptr)
+    : PlayerBasicStatistics(player_ptr)
+{
+}
+
 void PlayerConstitution::set_locals()
 {
     this->max_value = +99;
@@ -34,7 +39,7 @@ int16_t PlayerConstitution::race_value()
 {
     int16_t result = PlayerBasicStatistics::race_value();
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::ENT)) {
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ENT)) {
         if (this->player_ptr->lev > 25)
             result++;
         if (this->player_ptr->lev > 40)

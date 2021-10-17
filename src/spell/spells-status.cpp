@@ -459,12 +459,12 @@ bool true_healing(player_type *player_ptr, HIT_POINT pow)
 
 bool restore_mana(player_type *player_ptr, bool magic_eater)
 {
-    if (player_ptr->pclass == CLASS_MAGIC_EATER && magic_eater) {
+    if (player_ptr->pclass == PlayerClassType::MAGIC_EATER && magic_eater) {
         // 魔力復活による、魔道具術師の取り込んだ魔法の回復量
         // 取り込み数が10回未満: 3 回分回復
         // 取り込み数が10回以上: 取り込み回数/3 回分回復
         auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
-        for (auto tval : { TV_STAFF, TV_WAND }) {
+        for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND }) {
             for (auto &item : magic_eater_data->get_item_group(tval)) {
                 item.charge += (item.count < 10) ? EATER_CHARGE * 3 : item.count * EATER_CHARGE / 3;
                 item.charge = std::min(item.charge, item.count * EATER_CHARGE);
@@ -472,8 +472,8 @@ bool restore_mana(player_type *player_ptr, bool magic_eater)
         }
 
         auto sval = 0;
-        for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
-            KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, sval);
+        for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
+            KIND_OBJECT_IDX k_idx = lookup_kind(ItemKindType::ROD, sval);
             item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * k_info[k_idx].pval;
             item.charge = std::max(item.charge, 0);
             ++sval;
@@ -587,7 +587,7 @@ bool cosmic_cast_off(player_type *player_ptr, object_type **o_ptr_ptr)
     (void)set_blessed(player_ptr, player_ptr->blessed + t, false);
     (void)set_fast(player_ptr, player_ptr->fast + t, false);
     (void)set_shero(player_ptr, player_ptr->shero + t, false);
-    if (player_ptr->pclass == CLASS_FORCETRAINER) {
+    if (player_ptr->pclass == PlayerClassType::FORCETRAINER) {
         set_current_ki(player_ptr, true, player_ptr->lev * 5 + 190);
         msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));
     }

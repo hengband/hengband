@@ -90,7 +90,7 @@ static void pass_game_turn_by_stay(void)
     if (w_ptr->dungeon_turn >= w_ptr->dungeon_turn_limit)
         return;
 
-    w_ptr->dungeon_turn += MIN((w_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
+    w_ptr->dungeon_turn += std::min<int>((w_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
     if (w_ptr->dungeon_turn > w_ptr->dungeon_turn_limit)
         w_ptr->dungeon_turn = w_ptr->dungeon_turn_limit;
 }
@@ -143,12 +143,12 @@ static void charge_magic_eating_energy(player_type *player_ptr)
         return;
     }
 
-    for (auto tval : { TV_STAFF, TV_WAND }) {
+    for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND }) {
         for (auto &item : magic_eater_data->get_item_group(tval)) {
             item.charge = item.count * EATER_CHARGE;
         }
     }
-    for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
+    for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
         item.charge = 0;
     }
 }

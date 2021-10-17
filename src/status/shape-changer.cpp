@@ -10,6 +10,7 @@
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
+#include "locale/english.h"
 #include "mutation/mutation-investor-remover.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
@@ -25,10 +26,6 @@
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
-#ifdef JP
-#else
-#include "locale/english.h"
-#endif
 
 void do_poly_wounds(player_type *player_ptr)
 {
@@ -55,10 +52,10 @@ void do_poly_wounds(player_type *player_ptr)
 /*
  * Change player race
  */
-void change_race(player_type *player_ptr, player_race_type new_race, concptr effect_msg)
+void change_race(player_type *player_ptr, PlayerRaceType new_race, concptr effect_msg)
 {
     concptr title = race_info[enum2i(new_race)].title;
-    player_race_type old_race = player_ptr->prace;
+    PlayerRaceType old_race = player_ptr->prace;
 #ifdef JP
     msg_format("あなたは%s%sに変化した！", effect_msg, title);
 #else
@@ -76,17 +73,17 @@ void change_race(player_type *player_ptr, player_race_type new_race, concptr eff
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     player_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
 
-    bool is_special_class = player_ptr->pclass == CLASS_MONK;
-    is_special_class |= player_ptr->pclass == CLASS_FORCETRAINER;
-    is_special_class |= player_ptr->pclass == CLASS_NINJA;
-    bool is_special_race = player_ptr->prace == player_race_type::KLACKON;
-    is_special_race |= player_ptr->prace == player_race_type::SPRITE;
+    bool is_special_class = player_ptr->pclass == PlayerClassType::MONK;
+    is_special_class |= player_ptr->pclass == PlayerClassType::FORCETRAINER;
+    is_special_class |= player_ptr->pclass == PlayerClassType::NINJA;
+    bool is_special_race = player_ptr->prace == PlayerRaceType::KLACKON;
+    is_special_race |= player_ptr->prace == PlayerRaceType::SPRITE;
     if (is_special_class && is_special_race)
         player_ptr->expfact -= 15;
 
     get_height_weight(player_ptr);
 
-    if (player_ptr->pclass == CLASS_SORCERER)
+    if (player_ptr->pclass == PlayerClassType::SORCERER)
         player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
     else
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
@@ -110,10 +107,10 @@ void do_poly_self(player_type *player_ptr)
     msg_print(_("あなたは変化の訪れを感じた...", "You feel a change coming over you..."));
     chg_virtue(player_ptr, V_CHANCE, 1);
 
-    if ((power > randint0(20)) && one_in_(3) && (player_ptr->prace != player_race_type::ANDROID)) {
+    if ((power > randint0(20)) && one_in_(3) && (player_ptr->prace != PlayerRaceType::ANDROID)) {
         char effect_msg[80] = "";
         char sex_msg[32] = "";
-        player_race_type new_race;
+        PlayerRaceType new_race;
 
         power -= 10;
         if ((power > randint0(5)) && one_in_(4)) {
@@ -157,8 +154,8 @@ void do_poly_self(player_type *player_ptr)
         }
 
         do {
-            new_race = (player_race_type)randint0(MAX_RACES);
-        } while ((new_race == player_ptr->prace) || (new_race == player_race_type::ANDROID));
+            new_race = (PlayerRaceType)randint0(MAX_RACES);
+        } while ((new_race == player_ptr->prace) || (new_race == PlayerRaceType::ANDROID));
 
         change_race(player_ptr, new_race, effect_msg);
     }
@@ -166,7 +163,7 @@ void do_poly_self(player_type *player_ptr)
     if ((power > randint0(30)) && one_in_(6)) {
         int tmp = 0;
         power -= 20;
-        msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), player_ptr->prace == player_race_type::ANDROID ? "機械" : "内臓");
+        msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), player_ptr->prace == PlayerRaceType::ANDROID ? "機械" : "内臓");
 
         while (tmp < A_MAX) {
             (void)dec_stat(player_ptr, tmp, randint1(6) + 6, one_in_(3));

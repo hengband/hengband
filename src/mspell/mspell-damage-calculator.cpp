@@ -11,6 +11,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief モンスターの使う呪文の威力を決定する /
@@ -474,12 +475,12 @@ HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONR
 {
     monster_race *r_ptr = &r_info[r_idx];
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? true : false;
+    bool powerful = any_bits(r_ptr->flags2, RF2_POWERFUL);
     HIT_POINT hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
     int shoot_dd, shoot_ds;
 
     monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
-    return monspell_damage_base(player_ptr, ms_type, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
+    return monspell_damage_base(player_ptr, ms_type, std::min(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
 }
 
 /*!

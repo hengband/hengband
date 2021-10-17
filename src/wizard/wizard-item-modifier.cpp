@@ -247,7 +247,7 @@ void wiz_identify_full_inventory(player_type *player_ptr)
  * @param row 表示列
  * @param col 表示行
  */
-static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
+static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
     uint32_t rarity[K_MAX_DEPTH] = {};
     uint32_t total[K_MAX_DEPTH] = {};
@@ -427,7 +427,7 @@ static void wiz_statistics(player_type *player_ptr, object_type *o_ptr)
         sprintf(tmp_val, "%ld", (long int)test_roll);
         if (get_string(p, tmp_val, 10))
             test_roll = atol(tmp_val);
-        test_roll = MAX(1, test_roll);
+        test_roll = std::max<uint>(1, test_roll);
         msg_format("Creating a lot of %s items. Base level = %d.", quality, player_ptr->current_floor_ptr->dun_level);
         msg_print(nullptr);
 
@@ -447,7 +447,7 @@ static void wiz_statistics(player_type *player_ptr, object_type *o_ptr)
             object_type forge;
             object_type *q_ptr = &forge;
             q_ptr->wipe();
-            make_object(player_ptr, q_ptr, mode, -1);
+            make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact())
                 a_info[q_ptr->name1].cur_num = 0;
 
@@ -631,7 +631,7 @@ static void wiz_quantity_item(object_type *o_ptr)
         o_ptr->number = (byte)tmp_int;
     }
 
-    if (o_ptr->tval == TV_ROD)
+    if (o_ptr->tval == ItemKindType::ROD)
         o_ptr->pval = o_ptr->pval * o_ptr->number / tmp_qnt;
 }
 
@@ -713,7 +713,7 @@ static int is_slot_able_to_be_ego(player_type *player_ptr, object_type *o_ptr)
     if (slot > -1)
         return slot;
 
-    if ((o_ptr->tval == TV_SHOT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_BOLT))
+    if ((o_ptr->tval == ItemKindType::SHOT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::BOLT))
         return (INVEN_AMMO);
 
     return (-1);
@@ -766,9 +766,9 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
     bool wish_randart = false;
     bool wish_ego = false;
     bool exam_base = true;
-    bool ok_art = (randint0(100) < prob) ? true : false;
-    bool ok_ego = (randint0(100) < 50 + prob) ? true : false;
-    bool must = (prob < 0) ? true : false;
+    bool ok_art = randint0(100) < prob;
+    bool ok_ego = randint0(100) < 50 + prob;
+    bool must = prob < 0;
     bool blessed = false;
     bool fixed = true;
 

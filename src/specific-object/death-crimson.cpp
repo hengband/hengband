@@ -32,7 +32,7 @@ static bool fire_crimson(player_type *player_ptr)
     }
 
     int num = 1;
-    if (player_ptr->pclass == CLASS_ARCHER) {
+    if (player_ptr->pclass == PlayerClassType::ARCHER) {
         if (player_ptr->lev >= 10)
             num++;
 

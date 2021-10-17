@@ -72,7 +72,7 @@ MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const TrFlags &flg
             atoffset(BIT_FLAGS, r_ptr, p->r_flag_offset) |= p->affect_race_flag;
         }
 
-        mult = MAX(mult, p->slay_mult);
+        mult = std::max(mult, p->slay_mult);
     }
 
     return mult;
@@ -122,11 +122,11 @@ MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs,
                 r_ptr->r_flags3 |= p->hurt_flag;
             }
 
-            mult = MAX(mult, 50);
+            mult = std::max<short>(mult, 50);
             continue;
         }
 
-        mult = MAX(mult, 25);
+        mult = std::max<short>(mult, 25);
     }
 
     return mult;
@@ -171,23 +171,23 @@ HIT_POINT calc_attack_damage_with_slay(player_type *player_ptr, object_type *o_p
 
     MULTIPLY mult = 10;
     switch (o_ptr->tval) {
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_DIGGING:
-    case TV_LITE: {
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::DIGGING:
+    case ItemKindType::LITE: {
         mult = mult_slaying(player_ptr, mult, flgs, m_ptr);
 
         mult = mult_brand(player_ptr, mult, flgs, m_ptr);
 
-        if (player_ptr->pclass == CLASS_SAMURAI) {
+        if (player_ptr->pclass == PlayerClassType::SAMURAI) {
             mult = mult_hissatsu(player_ptr, mult, flgs, m_ptr, mode);
         }
 
-        if ((player_ptr->pclass != CLASS_SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+        if ((player_ptr->pclass != PlayerClassType::SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
             player_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
             player_ptr->redraw |= (PR_MANA);
             mult = mult * 3 / 2 + 20;

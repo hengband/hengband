@@ -2,6 +2,7 @@
 #include "core/score-util.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
+#include "locale/japanese.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
@@ -10,10 +11,6 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief 指定された順位範囲でスコアを並べて表示する / Display the scores in a given range.

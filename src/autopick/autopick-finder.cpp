@@ -36,7 +36,7 @@
 int find_autopick_list(player_type *player_ptr, object_type *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
-    if (o_ptr->tval == TV_GOLD)
+    if (o_ptr->tval == ItemKindType::GOLD)
         return -1;
 
     describe_flavor(player_ptr, o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));

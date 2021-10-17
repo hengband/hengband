@@ -52,10 +52,10 @@ enum class PlayerRaceFood {
 struct player_race_condition {
     tr_type type{};
     PLAYER_LEVEL level{};
-    std::optional<player_class_type> pclass{};
+    std::optional<PlayerClassType> pclass{};
     bool not_class{};
 
-    player_race_condition(tr_type t, PLAYER_LEVEL l = 1, const std::optional<player_class_type> &c = std::nullopt, bool nc = false)
+    player_race_condition(tr_type t, PLAYER_LEVEL l = 1, const std::optional<PlayerClassType> &c = std::nullopt, bool nc = false)
         : type(t)
         , level(l)
         , pclass(c)

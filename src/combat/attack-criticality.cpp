@@ -54,7 +54,7 @@ HIT_POINT critical_norm(player_type *player_ptr, WEIGHT weight, int plus, HIT_PO
     int i = (weight + (meichuu * 3 + plus * 5) + player_ptr->skill_thn);
 
     /* Chance */
-    auto pow = (player_ptr->pclass == CLASS_NINJA) ? 4444 : 5000;
+    auto pow = (player_ptr->pclass == PlayerClassType::NINJA) ? 4444 : 5000;
     if (impact)
         pow /= 2;
 
@@ -101,7 +101,7 @@ static void ninja_critical(player_type *player_ptr, player_attack_type *pa_ptr)
         return;
 
     if (is_unique || !is_weaken) {
-        pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
+        pa_ptr->attack_damage = std::max(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
         pa_ptr->drain_result *= 2;
         msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
     } else {
@@ -119,7 +119,7 @@ void critical_attack(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
+    if (((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)) {
             pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
             msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
@@ -129,7 +129,7 @@ void critical_attack(player_type *player_ptr, player_attack_type *pa_ptr)
         return;
     }
 
-    bool is_ninja_hit = (player_ptr->pclass == CLASS_NINJA) && has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand)
+    bool is_ninja_hit = (player_ptr->pclass == PlayerClassType::NINJA) && has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand)
         && !player_ptr->is_icky_wield[pa_ptr->hand] && ((player_ptr->cur_lite <= 0) || one_in_(7));
     if (is_ninja_hit)
         ninja_critical(player_ptr, pa_ptr);

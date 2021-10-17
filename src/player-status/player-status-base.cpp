@@ -13,8 +13,8 @@
  * * コンストラクタでplayer_ptrをセット。メンバ変数を0クリア。
  */
 PlayerStatusBase::PlayerStatusBase(player_type *player_ptr)
+    : player_ptr(player_ptr)
 {
-    this->player_ptr = player_ptr;
     this->set_locals(); /* 初期化。基底クラスの0クリアが呼ばれる。*/
 }
 

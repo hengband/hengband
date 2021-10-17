@@ -1,5 +1,3 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
-errr load_lore(void);
+void load_lore(void);

@@ -426,7 +426,7 @@ static void build_vault(
                 /* Black market in a dungeon */
             case 'S':
                 set_cave_feat(floor_ptr, y, x, feat_black_market);
-                store_init(NO_TOWN, STORE_BLACK);
+                store_init(NO_TOWN, StoreSaleType::BLACK);
                 break;
 
                 /* The Pattern */

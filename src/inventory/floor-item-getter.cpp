@@ -310,7 +310,7 @@ bool get_item_floor(player_type *player_ptr, COMMAND_CODE *cp, concptr pmt, conc
                 get_item_label = show_equipment(player_ptr, fis_ptr->menu_line, mode, item_tester);
         } else if (command_wrk == USE_FLOOR) {
             int j = fis_ptr->floor_top;
-            fis_ptr->k = MIN(fis_ptr->floor_top + 23, fis_ptr->floor_num) - 1;
+            fis_ptr->k = std::min(fis_ptr->floor_top + 23, fis_ptr->floor_num) - 1;
             fis_ptr->n1 = I2A(j - fis_ptr->floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
             fis_ptr->n2 = I2A(fis_ptr->k - fis_ptr->floor_top);
             if (command_see)
@@ -417,7 +417,7 @@ bool get_item_floor(player_type *player_ptr, COMMAND_CODE *cp, concptr pmt, conc
             else if (command_wrk == USE_EQUIP)
                 max_line = fis_ptr->max_equip;
             else if (command_wrk == USE_FLOOR)
-                max_line = MIN(23, fis_ptr->floor_num);
+                max_line = std::min(23, fis_ptr->floor_num);
             switch (fis_ptr->which) {
             case ESCAPE:
             case 'z':
@@ -483,7 +483,7 @@ bool get_item_floor(player_type *player_ptr, COMMAND_CODE *cp, concptr pmt, conc
                 else if (command_wrk == USE_EQUIP)
                     max_line = fis_ptr->max_equip;
                 else if (command_wrk == USE_FLOOR)
-                    max_line = MIN(23, fis_ptr->floor_num);
+                    max_line = std::min(23, fis_ptr->floor_num);
 
                 if (fis_ptr->menu_line > max_line)
                     fis_ptr->menu_line = max_line;
@@ -535,7 +535,7 @@ bool get_item_floor(player_type *player_ptr, COMMAND_CODE *cp, concptr pmt, conc
                 else if (command_wrk == USE_EQUIP)
                     max_line = fis_ptr->max_equip;
                 else if (command_wrk == USE_FLOOR)
-                    max_line = MIN(23, fis_ptr->floor_num);
+                    max_line = std::min(23, fis_ptr->floor_num);
 
                 if (fis_ptr->menu_line > max_line)
                     fis_ptr->menu_line = max_line;

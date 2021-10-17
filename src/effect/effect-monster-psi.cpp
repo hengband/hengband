@@ -260,11 +260,11 @@ static void effect_monster_psi_drain_resist(player_type *player_ptr, effect_mons
 static void effect_monster_psi_drain_change_power(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     int b = damroll(5, em_ptr->dam) / 4;
-    concptr str = (player_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
+    concptr str = (player_ptr->pclass == PlayerClassType::MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
     concptr msg = _("あなたは%sの苦痛を%sに変換した！", (em_ptr->seen ? "You convert %s's pain into %s!" : "You convert %ss pain into %s!"));
     msg_format(msg, em_ptr->m_name, str);
 
-    b = MIN(player_ptr->msp, player_ptr->csp + b);
+    b = std::min(player_ptr->msp, player_ptr->csp + b);
     player_ptr->csp = b;
     set_bits(player_ptr->redraw, PR_MANA);
     set_bits(player_ptr->window_flags, PW_SPELL);

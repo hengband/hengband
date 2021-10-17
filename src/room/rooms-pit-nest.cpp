@@ -49,7 +49,7 @@ static int pick_vault_type(floor_type *floor_ptr, std::vector<nest_pit_type>& l_
         if (!(allow_flag_mask & (1UL << i)))
             continue;
 
-        table.entry_item(i, n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5));
+        table.entry_item(i, n_ptr->chance * MAX_DEPTH / (std::min(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5));
     }
 
     return !table.empty() ? table.pick_one_at_random() : -1;

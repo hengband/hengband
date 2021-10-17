@@ -13,6 +13,11 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+PlayerCharisma::PlayerCharisma(player_type *player_ptr)
+    : PlayerBasicStatistics(player_ptr)
+{
+}
+
 void PlayerCharisma::set_locals()
 {
     this->max_value = +99;

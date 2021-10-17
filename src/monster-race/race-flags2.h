@@ -15,8 +15,8 @@ enum race_flags2 {
     RF2_ATTR_ANY = 0x00000800, /*!< モンスター特性: ATTR_MULTIの色数が増える / TY: Attr_any */
     RF2_POWERFUL = 0x00001000, /*!< モンスター特性: 強力に魔法をあやつる / Monster has strong breath */
     RF2_ELDRITCH_HORROR = 0x00002000, /*!< モンスター特性: 狂気を呼び起こす / Sanity-blasting horror    */
-    RF2_AURA_FIRE = 0x00004000, /*!< モンスター特性: 火炎のオーラを持つ / Burns in melee */
-    RF2_AURA_ELEC = 0x00008000, /*!< モンスター特性: 電撃のオーラを持つ / Shocks in melee */
+    RF2_XX14 = 0x00004000, /*!< 予約領域。元火炎オーラ */
+    RF2_XX15 = 0x00008000, /*!< 予約領域。元電撃オーラ */
     RF2_OPEN_DOOR = 0x00010000, /*!< モンスター特性: ドアを開けることができる / Monster can open doors */
     RF2_BASH_DOOR = 0x00020000, /*!< モンスター特性: ドアを破壊することができる / Monster can bash doors */
     RF2_PASS_WALL = 0x00040000, /*!< モンスター特性: 壁を抜けることができる / Monster can pass walls */

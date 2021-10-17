@@ -30,7 +30,7 @@ const player_class_info *cp_ptr;
  *      HD, Exp, pet_upkeep_div
  * </pre>
  */
-const player_class_info class_info[MAX_CLASS] = {
+const std::vector<player_class_info> class_info = {
     {
 #ifdef JP
         "戦士",
@@ -261,803 +261,410 @@ const player_class_info class_info[MAX_CLASS] = {
  * needs only ten titles total.
  * </pre>
  */
-#ifdef JP
-const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] = {
+const std::vector<std::vector<std::string_view>> player_titles = {
     /* Warrior */
     {
-        "新参兵",
-        "兵士",
-        "傭兵",
-        "古参兵",
-        "剣士",
-        "闘士",
-        "英雄",
-        "男爵",
-        "伯爵",
-        "君主",
+        _("新参兵", "Rookie"),
+        _("兵士", "Soldier"),
+        _("傭兵", "Mercenary"),
+        _("古参兵", "Veteran"),
+        _("剣士", "Swordsman"),
+        _("闘士", "Champion"),
+        _("英雄", "Hero"),
+        _("男爵", "Baron"),
+        _("伯爵", "Duke"),
+        _("君主", "Lord"),
     },
 
     /* Mage */
     {
-        /*"見習い",*/
-        "練習生", /*丁稚、練習生 */
-        "奇術師", /*詐欺師、ペテン師 */
-        "幻術師",
-        "呪術師",
-        "召霊師",
-        "召魔師",
-        "魔術師",
-        "魔道師",
-        "イプシシマス",
-        "大魔道師",
+        _("練習生", "Apprentice"),
+        _("奇術師", "Trickster"),
+        _("幻術師", "Illusionist"),
+        _("呪術師", "Spellbinder"),
+        _("召霊師", "Evoker"),
+        _("召魔師", "Conjurer"),
+        _("魔術師", "Warlock"),
+        _("魔道師", "Sorcerer"),
+        _("イプシシマス", "Ipsissimus"),
+        _("大魔道師", "Archmage"),
     },
 
     /* Priest */
     {
-        "信者", /*信徒 */
-        "侍僧", /*教会奉仕者、見習い僧、伴僧、従者 */
-        "熟練僧",
-        "聖職者", /*聖職者 */
-        "伝道師", /*司祭評議員、修道会会員 */
-        "牧師", /*ラマ教の僧 */
-        "聖人", /*大司教、総主教、総大司教 */
-        "祭司", /*祭司、司祭 */
-        "祭司長", /*大祭司、祭司長 */
-        "教皇",
+        _("信者", "Believer"),
+        _("侍僧", "Acolyte"),
+        _("熟練僧", "Adept"),
+        _("聖職者", "Curate"),
+        _("伝道師", "Canon"),
+        _("牧師", "Priest"),
+        _("聖人", "High Priest"),
+        _("祭司", "Cardinal"),
+        _("祭司長", "Inquisitor"),
+        _("教皇", "Pope"),
     },
 
-    /* Rogues */
+    /* Rogue */
     {
-        /* "ごろつき",*/ /*ごろつき、風来坊、浮浪者 */
-        "すり", "追いはぎ", /*追い剥ぎ、強盗、泥棒 */
-        "夜盗", /*強盗、夜盗、泥棒 */
-        "こそ泥", /*こそ泥、小泥棒 */
-        "ペテン師", /*博徒、ペテン師、詐欺師 */
-        "ロウシーフ", "ハイシーフ", "マスター", /* "マスターシーフ", */
-        "アサシン", /* 暗殺者 */
-        "頭領", /*"ギルドマスター",*/
+        _("すり", "Cutpurse"),
+        _("追いはぎ", "Robber"),
+        _("夜盗", "Burglar"),
+        _("こそ泥", "Filcher"),
+        _("ペテン師", "Sharper"),
+        _("ロウシーフ", "Low Thief"),
+        _("ハイシーフ", "High Thief"),
+        _("マスター", "Master Thief"),
+        _("アサシン", "Assassin"),
+        _("頭領", "Guildmaster"),
     },
 
-    /* Rangers */
+    /* Ranger */
     {
-        "使い走り",
-        "馳夫",
-        "斥候", /*斥候、見張り、偵察兵 */
-        "狩人",
-        "追跡者",
-        "先導者",
-        "探険者", /*開拓者、探険者 */
-        "野伏",
-        "野伏頭",
-        "野伏の総領",
+        _("使い走り", "Runner"),
+        _("馳夫", "Strider"),
+        _("斥候", "Scout"),
+        _("狩人", "Courser"),
+        _("追跡者", "Tracker"),
+        _("先導者", "Guide"),
+        _("探険者", "Pathfinder"),
+        _("野伏", "Low Ranger"),
+        _("野伏頭", "High Ranger"),
+        _("野伏の総領", "Ranger Lord"),
     },
 
-    /* Paladins */
+    /* Paladin */
     {
-        "勇士", /*色男、愛人、しゃれ者、勇敢な人 */
-        "衛士",
-        "保護者",
-        "防衛者",
-        "護衛者",
-        "騎士",
-        "重騎士",
-        "聖騎士",
-        "上級聖騎士",
-        "聖騎士団長",
+        _("勇士", "Gallant"),
+        _("衛士", "Keeper"),
+        _("保護者", "Protector"),
+        _("防衛者", "Defender"),
+        _("護衛者", "Warder"),
+        _("騎士", "Knight"),
+        _("重騎士", "Guardian"),
+        _("聖騎士", "Low Paladin"),
+        _("上級聖騎士", "High Paladin"),
+        _("聖騎士団長", "Paladin Lord"),
     },
 
     /* Warrior-Mage */
     {
-        "見習い", "徒弟", /*丁稚、練習生 */
-        "一人前", "古参兵", "魔術兵士", "魔術闘士", "魔術の英雄", /* Mage-Hero */
-        "魔男爵",
-        /* "魔公爵", */
-        "戦闘魔術士", "知識の守護者", /* "ウィザードロード", */
+        _("見習い", "Novice"),
+        _("徒弟", "Apprentice"),
+        _("一人前", "Journeyman"),
+        _("古参兵", "Veteran"),
+        _("魔術兵士", "Enchanter"),
+        _("魔術闘士", "Champion"),
+        _("魔術の英雄", "Mage-Hero"),
+        _("魔男爵", "Baron Mage"),
+        _("戦闘魔術士", "Battlemage"),
+        _("知識の守護者", "Wizard Lord"),
     },
 
     /* Chaos Warrior */
     {
-        "新参兵",
-        "兵士",
-        "傭兵",
-        "古参兵",
-        "剣士",
-        "闘士",
-        "混沌の英雄",
-        "混沌の男爵",
-        "混沌の公爵",
-        "混沌の王者",
+        _("新参兵", "Rookie"),
+        _("兵士", "Soldier"),
+        _("傭兵", "Mercenary"),
+        _("古参兵", "Veteran"),
+        _("剣士", "Swordsman"),
+        _("闘士", "Champion"),
+        _("混沌の英雄", "Chaos Hero"),
+        _("混沌の男爵", "Chaos Baron"),
+        _("混沌の公爵", "Chaos Duke"),
+        _("混沌の王者", "Chaos Lord"),
     },
 
     /* Monk */
     {
-        "入門者",
-        "弟子",
-        "直弟子",
-        "師範代",
-        "師範",
-        "道場主",
-        "名人",
-        "大名人",
-        "拳聖",
-        "拳神",
+        _("入門者", "Initiate"),
+        _("弟子", "Brother"),
+        _("直弟子", "Disciple"),
+        _("師範代", "Immaculate"),
+        _("師範", "Master"),
+        _("道場主", "Soft Master"),
+        _("名人", "Hard Master"),
+        _("大名人", "Flower Master"),
+        _("拳聖", "Dragon Master"),
+        _("拳神", "Grand Master"),
     },
 
     /* Mindcrafter */
     {
-        "練習生", "見習い", "熟練士", "熟達士", "黙想士", "心術士", "サイキック", "サイオニック", "超能力者", "精神の支配者", /* "マインドマスター", */
+        _("練習生", "Trainee"),
+        _("見習い", "Acolyte"),
+        _("熟練士", "Adept"),
+        _("熟達士", "Immaculate"),
+        _("黙想士", "Contemplator"),
+        _("心術士", "Mentalist"),
+        _("サイキック", "Psychic"),
+        _("サイオニック", "Psionicist"),
+        _("超能力者", "Esper"),
+        _("精神の支配者", "Mindmaster"),
     },
 
-    /* High Mage; same as Mage */
+    /* High Mage */
     {
-        /*"見習い",*/
-        "練習生", /*丁稚、練習生 */
-        "奇術師", /*詐欺師、ペテン師 */
-        "幻術師",
-        "呪術師",
-        "召霊師",
-        "召魔師",
-        "魔術師",
-        "魔道師",
-        "イプシシマス",
-        "大魔道師",
+        _("練習生", "Apprentice"),
+        _("奇術師", "Trickster"),
+        _("幻術師", "Illusionist"),
+        _("呪術師", "Spellbinder"),
+        _("召霊師", "Evoker"),
+        _("召魔師", "Conjurer"),
+        _("魔術師", "Warlock"),
+        _("魔道師", "Sorcerer"),
+        _("イプシシマス", "Ipsissimus"),
+        _("大魔道師", "Archmage"),
     },
 
     /* Tourist */
     {
-        "プー太郎",
-        "観光客",
-        "周遊旅行者",
-        "遍歴者",
-        "旅行者",
-        "放浪者", /* "旅人", */
-        "航海者",
-        "探検家",
-        "冒険家",
-        "スペランカー",
+        _("プー太郎", "Rambler"),
+        _("観光客", "Sightseer"),
+        _("周遊旅行者", "Excursionist"),
+        _("遍歴者", "Peregrinator"),
+        _("旅行者", "Traveler"),
+        _("放浪者", "Journeyer"),
+        _("航海者", "Voyager"),
+        _("探検家", "Explorer"),
+        _("冒険家", "Adventurer"),
+        _("スペランカー", "Spelunker"),
     },
 
     /* Imitator */
     {
-        "これから",
-        "いまいち",
-        "まだまだ",
-        "ぼちぼち",
-        "そこそこ",
-        "まあまあ",
-        "なかなか",
-        "いけいけ",
-        "そうとう",
-        "えらい",
+        _("これから", "Yet"),
+        _("いまいち", "Lacks"),
+        _("まだまだ", "Still more"),
+        _("ぼちぼち", "So so"),
+        _("そこそこ", "All right"),
+        _("まあまあ", "Not bad"),
+        _("なかなか", "Considerable"),
+        _("いけいけ", "Go go"),
+        _("そうとう", "Sizable"),
+        _("えらい", "Great man"),
     },
 
     /* Beastmaster */
     {
-        "イモリ使い",
-        "ヘビ使い",
-        "クモ使い",
-        "狼使い",
-        "トラ使い",
-        "甲虫使い",
-        "ヒドラ使い",
-        "ハウンド使い",
-        "ムーマク使い",
-        "ドラゴン使い",
+        _("イモリ使い", "Newt Master"),
+        _("ヘビ使い", "Snake Master"),
+        _("クモ使い", "Spider Master"),
+        _("狼使い", "Wolf Master"),
+        _("トラ使い", "Tiger Master"),
+        _("甲虫使い", "Beetle Master"),
+        _("ヒドラ使い", "Hydra Master"),
+        _("ハウンド使い", "Hound Master"),
+        _("ムーマク使い", "Mumak Master"),
+        _("ドラゴン使い", "Dragon Master"),
     },
 
     /* Sorcerer; same as Mage */
     {
-        /*"見習い",*/
-        "練習生", /*丁稚、練習生 */
-        "奇術師", /*詐欺師、ペテン師 */
-        "幻術師",
-        "呪術師",
-        "召霊師",
-        "召魔師",
-        "魔術師",
-        "魔道師",
-        "イプシシマス",
-        "大魔道師",
+        _("練習生", "Apprentice"),
+        _("奇術師", "Trickster"),
+        _("幻術師", "Illusionist"),
+        _("呪術師", "Spellbinder"),
+        _("召霊師", "Evoker"),
+        _("召魔師", "Conjurer"),
+        _("魔術師", "Warlock"),
+        _("魔道師", "Sorcerer"),
+        _("イプシシマス", "Ipsissimus"),
+        _("大魔道師", "Archmage"),
     },
 
     /* Archer */
     {
-        "新参兵",
-        "兵士",
-        "傭兵",
-        "古参兵",
-        "剣士",
-        "闘士",
-        "英雄",
-        "男爵",
-        "伯爵",
-        "領主",
+        _("新参兵", "Rookie"),
+        _("兵士", "Soldier"),
+        _("傭兵", "Mercenary"),
+        _("古参兵", "Veteran"),
+        _("弩弓士", "Bowman"),
+        _("闘士", "Champion"),
+        _("英雄", "Hero"),
+        _("男爵", "Baron"),
+        _("伯爵", "Duke"),
+        _("領主", "Lord"),
     },
 
     /* Magic eater */
     {
-        "無知なる者",
-        "入門者",
-        "奇術師",
-        "秘術師",
-        "秘術師",
-        "熟練者",
-        "達人",
-        "達人",
-        "魔道師",
-        "全てを知る者",
+        _("無知なる者", "Apprentice"),
+        _("入門者", "Beginner"),
+        _("奇術師", "Jagguler"),
+        _("秘術師", "Skilled"),
+        _("秘術師", "Conjurer"),
+        _("熟練者", "Magician"),
+        _("達人", "Master"),
+        _("達人", "Master"),
+        _("魔道師", "Wizard"),
+        _("全てを知る者", "Almighty"),
     },
 
     /* Bard */
     {
-        "見習い", /*"Apprentice"*/
-        "作曲家", /*"Songsmith"*/
-        "吟遊詩人", /*"Bard"*/
-        "コンパニオン", /*"Companion"*/
-        "心の癒し手", /*"Minstrel"*/
-        "竪琴師", /*"Harper"*/
-        "伝承の紡ぎ手", /*"Loreweaver"*/
-        "詩神の申し子", /*"Muse"*/
-        "夢紡ぎ", /*"Dreamweaver"*/
-        "マスター", /*"Master Harper"*/
-    },
-
-    /* Red Mage; same as Warrior-Mage */
-    {
-        "見習い", "徒弟", /*丁稚、練習生 */
-        "一人前", "古参兵", "魔術兵士", "魔術闘士", "魔術の英雄", /* Mage-Hero */
-        "魔男爵",
-        /* "魔公爵", */
-        "戦闘魔術士", "知識の守護者", /* "ウィザードロード", */
-    },
-
-    /* Samurai */
-    {
-        "入門者",
-        "弟子",
-        "直弟子",
-        "師範代",
-        "師範",
-        "道場主",
-        "名人",
-        "大名人",
-        "剣聖",
-        "剣神",
-    },
-
-    /* ForceTrainer; same as Monk(?) */
-    {
-        "入門者",
-        "弟子",
-        "直弟子",
-        "師範代",
-        "師範",
-        "道場主",
-        "名人",
-        "大名人",
-        "拳聖",
-        "拳神",
-    },
-
-    /* Blue Mage; same as Mage */
-    {
-        /*"見習い",*/
-        "練習生", /*丁稚、練習生 */
-        "奇術師", /*詐欺師、ペテン師 */
-        "幻術師",
-        "呪術師",
-        "召霊師",
-        "召魔師",
-        "魔術師",
-        "魔道師",
-        "イプシシマス",
-        "大魔道師",
-    },
-
-    /* Cavalry */
-    {
-        "新参兵",
-        "兵士",
-        "傭兵",
-        "古参兵",
-        "剣士",
-        "闘士",
-        "英雄",
-        "男爵",
-        "伯爵",
-        "領主",
-    },
-
-    /* Berserker */
-    {
-        "バーサーカー",
-        "バーサーカー",
-        "バーサーカー",
-        "怒りの公爵",
-        "怒りの公爵",
-        "怒りの公爵",
-        "怒りの王",
-        "怒りの王",
-        "怒りの王",
-        "怒りの化身",
-    },
-
-    /* Weaponsmith */
-    {
-        "銅を鍛えし者",
-        "鉄を鍛えし者",
-        "鋼を鍛えし者",
-        "銀を鍛えし者",
-        "竜を鍛えし者",
-        "霊を鍛えし者",
-        "魔を鍛えし者",
-        "魂を鍛えし者",
-        "神を鍛えし者",
-        "全を鍛えし者",
-    },
-
-    /* Mirror Master */
-    {
-        "鏡を見る人",
-        "鏡磨き",
-        "鏡職人",
-        "鏡術師",
-        "鏡導師",
-        "鏡の賢者",
-        "鏡の王",
-        "鏡の皇帝",
-        "鏡の化身",
-        "ラフノール王",
-    },
-    /* Ninja */
-    {
-        "訓練生",
-        "仕手",
-        "熟達者",
-        "短刀使い",
-        "切り裂き",
-        "凄腕",
-        "漆黒の刃",
-        "闇の一撃",
-        "暗殺者",
-        "死の長き腕",
-    },
-
-    /* Sniper */
-    {
-        "新参兵",
-        "兵士",
-        "傭兵",
-        "古参兵",
-        "剣士",
-        "闘士",
-        "英雄",
-        "男爵",
-        "伯爵",
-        "領主",
-    },
-
-    /* Elementalist */
-    {
-        "練習生",
-        "奇術師",
-        "幻術師",
-        "呪術師",
-        "召霊師",
-        "召魔師",
-        "魔術師",
-        "魔道師",
-        "イプシシマス",
-        "大魔道師",
-    },
-};
-
-#else
-const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] = {
-    /* Warrior */
-    {
-        "Rookie",
-        "Soldier",
-        "Mercenary",
-        "Veteran",
-        "Swordsman",
-        "Champion",
-        "Hero",
-        "Baron",
-        "Duke",
-        "Lord",
-    },
-
-    /* Mage */
-    {
-        "Apprentice",
-        "Trickster",
-        "Illusionist",
-        "Spellbinder",
-        "Evoker",
-        "Conjurer",
-        "Warlock",
-        "Sorcerer",
-        "Ipsissimus",
-        "Archmage",
-    },
-
-    /* Priest */
-    {
-        "Believer",
-        "Acolyte",
-        "Adept",
-        "Curate",
-        "Canon",
-        "Priest",
-        "High Priest",
-        "Cardinal",
-        "Inquisitor",
-        "Pope",
-    },
-
-    /* Rogues */
-    {
-        "Cutpurse",
-        "Robber",
-        "Burglar",
-        "Filcher",
-        "Sharper",
-        "Low Thief",
-        "High Thief",
-        "Master Thief",
-        "Assassin",
-        "Guildmaster",
-    },
-
-    /* Rangers */
-    {
-        "Runner",
-        "Strider",
-        "Scout",
-        "Courser",
-        "Tracker",
-        "Guide",
-        "Pathfinder",
-        "Low Ranger",
-        "High Ranger",
-        "Ranger Lord",
-    },
-
-    /* Paladins */
-    {
-        "Gallant",
-        "Keeper",
-        "Protector",
-        "Defender",
-        "Warder",
-        "Knight",
-        "Guardian",
-        "Low Paladin",
-        "High Paladin",
-        "Paladin Lord",
-    },
-
-    /* Warrior-Mage */
-    {
-        "Novice",
-        "Apprentice",
-        "Journeyman",
-        "Veteran",
-        "Enchanter",
-        "Champion",
-        "Mage-Hero",
-        "Baron Mage",
-        "Battlemage",
-        "Wizard Lord",
-    },
-
-    /* Chaos Warrior */
-    {
-        "Rookie",
-        "Soldier",
-        "Mercenary",
-        "Veteran",
-        "Swordsman",
-        "Champion",
-        "Chaos Hero",
-        "Chaos Baron",
-        "Chaos Duke",
-        "Chaos Lord",
-    },
-
-    /* Monk */
-    {
-        "Initiate",
-        "Brother",
-        "Disciple",
-        "Immaculate",
-        "Master",
-        "Soft Master",
-        "Hard Master",
-        "Flower Master",
-        "Dragon Master",
-        "Grand Master",
-    },
-
-    /* Mindcrafter */
-    {
-        "Trainee",
-        "Acolyte",
-        "Adept",
-        "Immaculate",
-        "Contemplator",
-        "Mentalist",
-        "Psychic",
-        "Psionicist",
-        "Esper",
-        "Mindmaster",
-    },
-
-    /* High Mage; same as Mage */
-    {
-        "Apprentice",
-        "Trickster",
-        "Illusionist",
-        "Spellbinder",
-        "Evoker",
-        "Conjurer",
-        "Warlock",
-        "Sorcerer",
-        "Ipsissimus",
-        "Archmage",
-    },
-
-    /* Tourist */
-    {
-        "Rambler",
-        "Sightseer",
-        "Excursionist",
-        "Peregrinator",
-        "Traveler",
-        "Journeyer",
-        "Voyager",
-        "Explorer",
-        "Adventurer",
-        "Spelunker",
-    },
-
-    /* Imitator */
-    {
-        "Yet",
-        "Lacks",
-        "Still more",
-        "So so",
-        "All right",
-        "Not bad",
-        "Considerable",
-        "Go go",
-        "Sizable",
-        "Great man",
-    },
-
-    /* BeastMaster */
-    {
-        "Newt Master",
-        "Snake Master",
-        "Spider Master",
-        "Wolf Master",
-        "Tiger Master",
-        "Beetle Master",
-        "Hydra Master",
-        "Hound Master",
-        "Mumak Master",
-        "Dragon Master",
-    },
-
-    /* Sorcerer */
-    {
-        "Apprentice",
-        "Trickster",
-        "Illusionist",
-        "Spellbinder",
-        "Evoker",
-        "Conjurer",
-        "Warlock",
-        "Sorcerer",
-        "Ipsissimus",
-        "Archmage",
-    },
-
-    /* Archer */
-    {
-        "Rookie",
-        "Soldier",
-        "Mercenary",
-        "Veteran",
-        "Bowman",
-        "Champion",
-        "Hero",
-        "Baron",
-        "Duke",
-        "Lord",
-    },
-
-    /* Magic eater */
-    {
-        "Apprentice",
-        "Beginner",
-        "Jagguler",
-        "Skilled",
-        "Conjurer",
-        "Magician",
-        "Master",
-        "Master",
-        "Wizard",
-        "Almighty",
-    },
-
-    /* Bard */
-    {
-        "Apprentice", /*"Apprentice"*/
-        "Songsmith", /*"Songsmith"*/
-        "Bard", /*"Bard"*/
-        "Companion", /*"Companion"*/
-        "Minstrel", /*"Minstrel"*/
-        "Harper", /*"Harper"*/
-        "Loreweaver", /*"Loreweaver"*/
-        "Muse", /*"Muse"*/
-        "Dreamweaver", /*"Dreamweaver"*/
-        "Master Harper", /*"Master Harper"*/
+        _("見習い", "Apprentice"),
+        _("作曲家", "Songsmith"),
+        _("吟遊詩人", "Bard"),
+        _("コンパニオン", "Companion"),
+        _("心の癒し手", "Minstrel"),
+        _("竪琴師", "Harper"),
+        _("伝承の紡ぎ手", "Loreweaver"),
+        _("詩神の申し子", "Muse"),
+        _("夢紡ぎ", "Dreamweaver"),
+        _("マスター", "Master Harper"),
     },
 
     /* Red Mage */
     {
-        "Novice",
-        "Apprentice",
-        "Journeyman",
-        "Veteran",
-        "Enchanter",
-        "Champion",
-        "Mage-Hero",
-        "Baron Mage",
-        "Battlemage",
-        "Wizard Lord",
+        _("見習い", "Novice"),
+        _("徒弟", "Apprentice"),
+        _("一人前", "Journeyman"),
+        _("古参兵", "Veteran"),
+        _("魔術兵士", "Enchanter"),
+        _("魔術闘士", "Champion"),
+        _("魔術の英雄", "Mage-Hero"),
+        _("魔男爵", "Baron Mage"),
+        _("戦闘魔術士", "Battlemage"),
+        _("知識の守護者", "Wizard Lord"),
     },
 
     /* Samurai */
     {
-        "Initiate",
-        "Brother",
-        "Disciple",
-        "Immaculate",
-        "Master",
-        "Soft Master",
-        "Hard Master",
-        "Flower Master",
-        "Dragon Master",
-        "Grand Master",
+        _("入門者", "Initiate"),
+        _("弟子", "Brother"),
+        _("直弟子", "Disciple"),
+        _("師範代", "Immaculate"),
+        _("師範", "Master"),
+        _("道場主", "Soft Master"),
+        _("名人", "Hard Master"),
+        _("大名人", "Flower Master"),
+        _("剣聖", "Dragon Master"),
+        _("剣神", "Grand Master"),
     },
 
     /* ForceTrainer */
     {
-        "Initiate",
-        "Brother",
-        "Disciple",
-        "Immaculate",
-        "Master",
-        "Soft Master",
-        "Hard Master",
-        "Flower Master",
-        "Dragon Master",
-        "Grand Master",
+        _("入門者", "Initiate"),
+        _("弟子", "Brother"),
+        _("直弟子", "Disciple"),
+        _("師範代", "Immaculate"),
+        _("師範", "Master"),
+        _("道場主", "Soft Master"),
+        _("名人", "Hard Master"),
+        _("大名人", "Flower Master"),
+        _("拳聖", "Dragon Master"),
+        _("拳神", "Grand Master"),
     },
 
     /* Blue Mage */
     {
-        "Apprentice",
-        "Trickster",
-        "Illusionist",
-        "Spellbinder",
-        "Evoker",
-        "Conjurer",
-        "Warlock",
-        "Sorcerer",
-        "Ipsissimus",
-        "Archmage",
+        _("練習生", "Apprentice"),
+        _("奇術師", "Trickster"),
+        _("幻術師", "Illusionist"),
+        _("呪術師", "Spellbinder"),
+        _("召霊師", "Evoker"),
+        _("召魔師", "Conjurer"),
+        _("魔術師", "Warlock"),
+        _("魔道師", "Sorcerer"),
+        _("イプシシマス", "Ipsissimus"),
+        _("大魔道師", "Archmage"),
     },
 
     /* Cavalry */
     {
-        "Rookie",
-        "Soldier",
-        "Mercenary",
-        "Veteran",
-        "Swordsman",
-        "Champion",
-        "Hero",
-        "Baron",
-        "Duke",
-        "Lord",
+        _("新参兵", "Rookie"),
+        _("兵士", "Soldier"),
+        _("傭兵", "Mercenary"),
+        _("古参兵", "Veteran"),
+        _("剣士", "Swordsman"),
+        _("闘士", "Champion"),
+        _("英雄", "Hero"),
+        _("男爵", "Baron"),
+        _("伯爵", "Duke"),
+        _("領主", "Lord"),
     },
 
     /* Berserker */
     {
-        "Berserker",
-        "Berserker",
-        "Berserker",
-        "Rage Prince",
-        "Rage Prince",
-        "Rage Prince",
-        "Rage King",
-        "Rage King",
-        "Rage King",
-        "God of Rage",
+        _("バーサーカー", "Berserker"),
+        _("バーサーカー", "Berserker"),
+        _("バーサーカー", "Berserker"),
+        _("怒りの公爵", "Rage Prince"),
+        _("怒りの公爵", "Rage Prince"),
+        _("怒りの公爵", "Rage Prince"),
+        _("怒りの王", "Rage King"),
+        _("怒りの王", "Rage King"),
+        _("怒りの王", "Rage King"),
+        _("怒りの化身", "God of Rage"),
     },
 
     /* Weaponsmith */
     {
-        "Copper smith",
-        "Iron smith",
-        "Steel smith",
-        "Silver smith",
-        "Dragon smith",
-        "Spirit smith",
-        "Magic smith",
-        "Soul smith",
-        "God smith",
-        "AlmightySmith",
+        _("銅を鍛えし者", "Copper smith"),
+        _("鉄を鍛えし者", "Iron smith"),
+        _("鋼を鍛えし者", "Steel smith"),
+        _("銀を鍛えし者", "Silver smith"),
+        _("竜を鍛えし者", "Dragon smith"),
+        _("霊を鍛えし者", "Spirit smith"),
+        _("魔を鍛えし者", "Magic smith"),
+        _("魂を鍛えし者", "Soul smith"),
+        _("神を鍛えし者", "God smith"),
+        _("全を鍛えし者", "AlmightySmith"),
     },
 
     /* Mirror Master */
     {
-        "Mirrorstarer",
-        "Mirrorcleaner",
-        "Mirrormaker",
-        "Mirrormagician",
-        "Mirror Guru",
-        "Mirror Mage",
-        "Mirror King",
-        "Mirror Emperor",
-        "Mirror Avatar",
-        "Ruffnor King",
+        _("鏡を見る人", "Mirrorstarer"),
+        _("鏡磨き", "Mirrorcleaner"),
+        _("鏡職人", "Mirrormaker"),
+        _("鏡術師", "Mirrormagician"),
+        _("鏡導師", "Mirror Guru"),
+        _("鏡の賢者", "Mirror Mage"),
+        _("鏡の王", "Mirror King"),
+        _("鏡の皇帝", "Mirror Emperor"),
+        _("鏡の化身", "Mirror Avatar"),
+        _("ラフノール王", "Ruffnor King"),
     },
 
     /* Ninja */
     {
-        "Trainee",
-        "Myrmidon",
-        "Initiate",
-        "Knifer",
-        "Bladesman",
-        "Hashishin",
-        "Black Dagger",
-        "Shadowstrike",
-        "Assassinator",
-        "Death Lord",
+        _("訓練生", "Trainee"),
+        _("仕手", "Myrmidon"),
+        _("熟達者", "Initiate"),
+        _("短刀使い", "Knifer"),
+        _("切り裂き", "Bladesman"),
+        _("凄腕", "Hashishin"),
+        _("漆黒の刃", "Black Dagger"),
+        _("闇の一撃", "Shadowstrike"),
+        _("暗殺者", "Assassinator"),
+        _("死の長き腕", "Death Lord"),
     },
 
     /* Sniper */
     {
-        "Rookie",
-        "Soldier",
-        "Mercenary",
-        "Veteran",
-        "Swordsman",
-        "Champion",
-        "Hero",
-        "Baron",
-        "Duke",
-        "Lord",
+        _("新参兵", "Rookie"),
+        _("兵士", "Soldier"),
+        _("傭兵", "Mercenary"),
+        _("古参兵", "Veteran"),
+        _("剣士", "Swordsman"),
+        _("闘士", "Champion"),
+        _("英雄", "Hero"),
+        _("男爵", "Baron"),
+        _("伯爵", "Duke"),
+        _("領主", "Lord"),
     },
 
     /* Elementalist */
     {
-        "Apprentice",
-        "Trickster",
-        "Illusionist",
-        "Spellbinder",
-        "Evoker",
-        "Conjurer",
-        "Warlock",
-        "Sorcerer",
-        "Ipsissimus",
-        "Archmage",
+        _("練習生", "Apprentice"),
+        _("奇術師", "Trickster"),
+        _("幻術師", "Illusionist"),
+        _("呪術師", "Spellbinder"),
+        _("召霊師", "Evoker"),
+        _("召魔師", "Conjurer"),
+        _("魔術師", "Warlock"),
+        _("魔道師", "Sorcerer"),
+        _("イプシシマス", "Ipsissimus"),
+        _("大魔道師", "Archmage"),
     },
 };
-#endif

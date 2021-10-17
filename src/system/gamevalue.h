@@ -39,6 +39,8 @@
 #define MIN_M_ALLOC_TD          4 /*!< 街(昼間)の最低住人配置数 / The town starts out with 4 residents during the day */
 #define MIN_M_ALLOC_TN          8 /*!< 街(夜間)の最低住人配置数 / The town starts out with 8 residents during the night */
 
+#define MAX_SKILLS 10
+
 /*!
 * @brief モンスター増殖の最大数
 * @details

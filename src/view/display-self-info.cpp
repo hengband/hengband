@@ -92,7 +92,7 @@ void display_mimic_race_ability(player_type *player_ptr, self_info_type *self_pt
             break;
 
         sprintf(self_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
-            player_ptr->lev + MAX(1, player_ptr->lev / 10), player_ptr->lev + player_ptr->lev * MAX(1, player_ptr->lev / 10),
+            player_ptr->lev + std::max(1, player_ptr->lev / 10), player_ptr->lev + player_ptr->lev * std::max(1, player_ptr->lev / 10),
             1 + (player_ptr->lev / 3));
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;

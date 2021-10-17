@@ -8,7 +8,7 @@
 #define STORE_CHOICES   48 /* Number of items to choose stock from */
 
 typedef struct store_stock_item_type {
-    tval_type tval;
+    ItemKindType tval;
     OBJECT_SUBTYPE_VALUE sval;
 } store_stock_item_type;
 

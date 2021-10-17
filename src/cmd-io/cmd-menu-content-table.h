@@ -2,19 +2,20 @@
 
 #include "system/angband.h"
 
-typedef struct menu_content {
+struct menu_content {
     concptr name;
     byte cmd;
     bool fin;
-} menu_content;
+};
 
-typedef struct special_menu_content {
+enum class PlayerClassType : short;
+struct special_menu_content {
     concptr name;
     byte window;
     byte number;
     byte jouken;
-    byte jouken_naiyou;
-} special_menu_content;
+    PlayerClassType jouken_naiyou;
+};
 
 #define MAX_COMMAND_PER_SCREEN 10
 #define MAX_COMMAND_MENU_NUM 10

@@ -60,7 +60,7 @@ void object_aware(player_type *player_ptr, object_type *o_ptr)
         return;
 
     // 未鑑定名の無いアイテムは記録しない
-    if (!((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || o_ptr->tval == TV_FOOD))
+    if (!((o_ptr->tval >= ItemKindType::AMULET && o_ptr->tval <= ItemKindType::POTION) || o_ptr->tval == ItemKindType::FOOD))
         return;
 
     // playrecordに識別したアイテムを記録

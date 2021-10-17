@@ -17,11 +17,11 @@
  */
 bool is_owner(player_type *player_ptr, building_type *bldg)
 {
-    if (bldg->member_class[player_ptr->pclass] == BUILDING_OWNER) {
+    if (bldg->member_class[enum2i(player_ptr->pclass)] == BUILDING_OWNER) {
         return true;
     }
 
-    if (enum2i(bldg->member_race[enum2i(player_ptr->prace)]) == BUILDING_OWNER) {
+    if (bldg->member_race[enum2i(player_ptr->prace)] == BUILDING_OWNER) {
         return true;
     }
 
@@ -46,7 +46,7 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
  */
 bool is_member(player_type *player_ptr, building_type *bldg)
 {
-    if (bldg->member_class[player_ptr->pclass]) {
+    if (static_cast<bool>(bldg->member_class[enum2i(player_ptr->pclass)])) {
         return true;
     }
 
@@ -60,7 +60,7 @@ bool is_member(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (player_ptr->pclass != CLASS_SORCERER)
+    if (player_ptr->pclass != PlayerClassType::SORCERER)
         return false;
 
     for (int i = 0; i < MAX_MAGIC; i++) {

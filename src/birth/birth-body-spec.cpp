@@ -43,7 +43,7 @@ void get_ahw(player_type *player_ptr)
 void get_money(player_type *player_ptr)
 {
     int gold = (player_ptr->sc * 6) + randint1(100) + 300;
-    if (player_ptr->pclass == CLASS_TOURIST)
+    if (player_ptr->pclass == PlayerClassType::TOURIST)
         gold += 2000;
 
     for (int i = 0; i < A_MAX; i++) {
@@ -65,7 +65,7 @@ void get_money(player_type *player_ptr)
         gold /= 2;
     else if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         gold = 10000000;
-    if (player_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == PlayerRaceType::ANDROID)
         gold /= 5;
 
     player_ptr->au = gold;

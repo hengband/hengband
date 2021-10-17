@@ -143,7 +143,7 @@ static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
         if (samurai_slaying_ptr->mult < 15)
             samurai_slaying_ptr->mult = 25;
         else if (samurai_slaying_ptr->mult < 50)
-            samurai_slaying_ptr->mult = MIN(50, samurai_slaying_ptr->mult + 20);
+            samurai_slaying_ptr->mult = std::min<short>(50, samurai_slaying_ptr->mult + 20);
     }
 }
 
@@ -245,7 +245,7 @@ static void hissatsu_bloody_maelstroem(player_type *player_ptr, samurai_slaying_
 {
     auto player_cut = player_ptr->effects()->cut();
     if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_cut->is_cut() && monster_living(samurai_slaying_ptr->m_ptr->r_idx)) {
-        MULTIPLY tmp = MIN(100, MAX(10, player_cut->current() / 10));
+        auto tmp = std::min<short>(100, std::max<short>(10, player_cut->current() / 10));
         if (samurai_slaying_ptr->mult < tmp)
             samurai_slaying_ptr->mult = tmp;
     }
@@ -268,13 +268,13 @@ static void hissatsu_keiun_kininken(player_type *player_ptr, samurai_slaying_typ
             if (samurai_slaying_ptr->mult == 10)
                 samurai_slaying_ptr->mult = 70;
             else if (samurai_slaying_ptr->mult < 140)
-                samurai_slaying_ptr->mult = MIN(140, samurai_slaying_ptr->mult + 60);
+                samurai_slaying_ptr->mult = std::min<short>(140, samurai_slaying_ptr->mult + 60);
         }
 
     if (samurai_slaying_ptr->mult == 10)
         samurai_slaying_ptr->mult = 40;
     else if (samurai_slaying_ptr->mult < 60)
-        samurai_slaying_ptr->mult = MIN(60, samurai_slaying_ptr->mult + 30);
+        samurai_slaying_ptr->mult = std::min<short>(60, samurai_slaying_ptr->mult + 30);
 }
 
 /*!
@@ -308,7 +308,7 @@ MULTIPLY mult_hissatsu(player_type *player_ptr, MULTIPLY mult, const TrFlags &fl
 
 void concentration(player_type *player_ptr)
 {
-    int max_csp = MAX(player_ptr->msp * 4, player_ptr->lev * 5 + 5);
+    int max_csp = std::max(player_ptr->msp * 4, player_ptr->lev * 5 + 5);
 
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
@@ -428,7 +428,7 @@ int calc_attack_quality(player_type *player_ptr, player_attack_type *pa_ptr)
     }
 
     if (player_ptr->sutemi)
-        chance = MAX(chance * 3 / 2, chance + 60);
+        chance = std::max(chance * 3 / 2, chance + 60);
 
     int vir = virtue_number(player_ptr, V_VALOUR);
     if (vir != 0)

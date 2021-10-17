@@ -104,7 +104,7 @@ static void display_magic_realms(player_type *player_ptr)
         return;
 
     char tmp[64];
-    if (player_ptr->pclass == CLASS_ELEMENTALIST)
+    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
         sprintf(tmp, "%s", get_element_title(player_ptr->element));
     else if (player_ptr->realm2)
         sprintf(tmp, "%s, %s", realm_names[player_ptr->realm1], realm_names[player_ptr->realm2]);
@@ -312,7 +312,7 @@ void display_player(player_type *player_ptr, int mode)
     display_player_basic_info(player_ptr);
     display_magic_realms(player_ptr);
 
-    if ((player_ptr->pclass == CLASS_CHAOS_WARRIOR) || (player_ptr->muta.has(MUTA::CHAOS_GIFT)))
+    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(MUTA::CHAOS_GIFT)))
         display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.c_str(), TERM_L_BLUE);
 
     display_phisique(player_ptr);

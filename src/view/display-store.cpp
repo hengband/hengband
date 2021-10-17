@@ -4,6 +4,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
+#include "locale/japanese.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -64,7 +65,7 @@ void display_entry(player_type *player_ptr, int pos)
 
     /* Describe an item in the home */
     int maxwid = 75;
-    if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) {
+    if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM)) {
         maxwid = 75;
         if (show_weights)
             maxwid -= 10;
@@ -72,10 +73,10 @@ void display_entry(player_type *player_ptr, int pos)
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         o_name[maxwid] = '\0';
-        c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
+        c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, i + 6, cur_col);
         if (show_weights) {
             WEIGHT wgt = o_ptr->weight;
-            sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+            sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             put_str(out_val, i + 6, _(67, 68));
         }
 
@@ -89,11 +90,11 @@ void display_entry(player_type *player_ptr, int pos)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
     o_name[maxwid] = '\0';
-    c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
+    c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, i + 6, cur_col);
 
     if (show_weights) {
         int wgt = o_ptr->weight;
-        sprintf(out_val, "%3d.%1d", _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+        sprintf(out_val, "%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         put_str(out_val, i + 6, _(60, 61));
     }
 
@@ -129,9 +130,9 @@ void display_store_inventory(player_type *player_ptr)
         put_str(format(_("(%dページ)  ", "(Page %d)  "), store_top / store_bottom + 1), 5, _(20, 22));
     }
 
-    if (cur_store_num == STORE_HOME || cur_store_num == STORE_MUSEUM) {
+    if (cur_store_num == StoreSaleType::HOME || cur_store_num == StoreSaleType::MUSEUM) {
         k = st_ptr->stock_size;
-        if (cur_store_num == STORE_HOME && !powerup_home)
+        if (cur_store_num == StoreSaleType::HOME && !powerup_home)
             k /= 10;
 
         put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
@@ -147,7 +148,7 @@ void display_store_inventory(player_type *player_ptr)
 void display_store(player_type *player_ptr)
 {
     term_clear();
-    if (cur_store_num == STORE_HOME) {
+    if (cur_store_num == StoreSaleType::HOME) {
         put_str(_("我が家", "Your Home"), 3, 31);
         put_str(_("アイテムの一覧", "Item Description"), 5, 4);
         if (show_weights) {
@@ -159,7 +160,7 @@ void display_store(player_type *player_ptr)
         return;
     }
 
-    if (cur_store_num == STORE_MUSEUM) {
+    if (cur_store_num == StoreSaleType::MUSEUM) {
         put_str(_("博物館", "Museum"), 3, 31);
         put_str(_("アイテムの一覧", "Item Description"), 5, 4);
         if (show_weights) {

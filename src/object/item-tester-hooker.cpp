@@ -14,7 +14,7 @@
  *
  * @param tval テストOKとなるtvalを指定する
  */
-TvalItemTester::TvalItemTester(tval_type tval)
+TvalItemTester::TvalItemTester(ItemKindType tval)
     : tval(tval)
 {
 }
@@ -63,7 +63,7 @@ bool ItemTester::okay(const object_type *o_ptr) const
     if (o_ptr->k_idx == 0)
         return false;
 
-    if (o_ptr->tval == TV_GOLD) {
+    if (o_ptr->tval == ItemKindType::GOLD) {
         if (!show_gold_on_floor)
             return false;
     }

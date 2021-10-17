@@ -108,6 +108,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include <algorithm>
 
 /*
  * Available graphic modes
@@ -1182,10 +1183,10 @@ static void square_to_pixel(int *const x, int *const y, const int ox, const int 
  */
 static void sort_co_ord(co_ord *min, co_ord *max, const co_ord *b, const co_ord *a)
 {
-    min->x = MIN(a->x, b->x);
-    min->y = MIN(a->y, b->y);
-    max->x = MAX(a->x, b->x);
-    max->y = MAX(a->y, b->y);
+    min->x = std::min(a->x, b->x);
+    min->y = std::min(a->y, b->y);
+    max->x = std::max(a->x, b->x);
+    max->y = std::max(a->y, b->y);
 }
 
 /*

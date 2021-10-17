@@ -50,7 +50,7 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
 
     if (v > 0) {
         if (!this->player_ptr->blind) {
-            if (this->player_ptr->prace == player_race_type::ANDROID) {
+            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
                 msg_print(_("センサーをやられた！", "The sensor broke!"));
             } else {
                 msg_print(_("目が見えなくなってしまった！", "You are blind!"));
@@ -61,7 +61,7 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
         }
     } else {
         if (this->player_ptr->blind) {
-            if (this->player_ptr->prace == player_race_type::ANDROID) {
+            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
                 msg_print(_("センサーが復旧した。", "The sensor has been restored."));
             } else {
                 msg_print(_("やっと目が見えるようになった。", "You can see again."));
@@ -434,7 +434,7 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::GOLEM) || PlayerClass(this->player_ptr).can_resist_stun()) {
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::GOLEM) || PlayerClass(this->player_ptr).can_resist_stun()) {
         v = 0;
     }
 
@@ -626,7 +626,7 @@ void BadStatusSetter::stop_blooding(const PlayerCutRank new_rank)
         return;
     }
 
-    auto blood_stop_mes = PlayerRace(this->player_ptr).equals(player_race_type::ANDROID)
+    auto blood_stop_mes = PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)
         ? _("怪我が直った", "leaking fluid")
         : _("出血が止まった", "bleeding");
     msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);

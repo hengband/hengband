@@ -142,8 +142,8 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
  */
 void store_moves_val(int *mm, int y, int x)
 {
-	POSITION ax = ABS(x);
-	POSITION ay = ABS(y);
+	POSITION ax = std::abs(x);
+	POSITION ay = std::abs(y);
 
 	int move_val = 0;
 	if (y < 0) move_val += 8;

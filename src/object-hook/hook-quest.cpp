@@ -21,7 +21,7 @@ bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
 {
     int i;
 
-    if (o_ptr->tval != TV_CORPSE)
+    if (o_ptr->tval != ItemKindType::CORPSE)
         return false;
 
     if (vanilla_town)

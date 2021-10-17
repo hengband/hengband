@@ -71,7 +71,7 @@ void store_process_command(player_type *player_ptr)
             if (store_top < 0)
                 store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
 
-            if ((cur_store_num == STORE_HOME) && !powerup_home)
+            if ((cur_store_num == StoreSaleType::HOME) && !powerup_home)
                 if (store_top >= store_bottom)
                     store_top = store_bottom;
 
@@ -90,7 +90,7 @@ void store_process_command(player_type *player_ptr)
              * 隠しオプション(powerup_home)がセットされていないときは
              * 我が家では 2 ページまでしか表示しない
              */
-            auto inven_max = store_get_stock_max(STORE_HOME, powerup_home);
+            auto inven_max = store_get_stock_max(StoreSaleType::HOME, powerup_home);
             if (store_top >= st_ptr->stock_num || store_top >= inven_max)
                 store_top = 0;
 
@@ -148,16 +148,16 @@ void store_process_command(player_type *player_ptr)
         break;
     }
     case 'b': {
-        if ((player_ptr->pclass == CLASS_MINDCRAFTER) || (player_ptr->pclass == CLASS_BERSERKER) || (player_ptr->pclass == CLASS_NINJA)
-            || (player_ptr->pclass == CLASS_MIRROR_MASTER))
+        if ((player_ptr->pclass == PlayerClassType::MINDCRAFTER) || (player_ptr->pclass == PlayerClassType::BERSERKER) || (player_ptr->pclass == PlayerClassType::NINJA)
+            || (player_ptr->pclass == PlayerClassType::MIRROR_MASTER))
             do_cmd_mind_browse(player_ptr);
-        else if (player_ptr->pclass == CLASS_ELEMENTALIST)
+        else if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
             do_cmd_element_browse(player_ptr);
-        else if (player_ptr->pclass == CLASS_SMITH)
+        else if (player_ptr->pclass == PlayerClassType::SMITH)
             do_cmd_kaji(player_ptr, true);
-        else if (player_ptr->pclass == CLASS_MAGIC_EATER)
+        else if (player_ptr->pclass == PlayerClassType::MAGIC_EATER)
             do_cmd_magic_eater(player_ptr, true, false);
-        else if (player_ptr->pclass == CLASS_SNIPER)
+        else if (player_ptr->pclass == PlayerClassType::SNIPER)
             do_cmd_snipe_browse(player_ptr);
         else
             do_cmd_browse(player_ptr);
@@ -217,7 +217,7 @@ void store_process_command(player_type *player_ptr)
     }
     case '=': {
         do_cmd_options(player_ptr);
-        (void)combine_and_reorder_home(player_ptr, STORE_HOME);
+        (void)combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
         do_cmd_redraw(player_ptr);
         display_store(player_ptr);
         break;
@@ -259,7 +259,7 @@ void store_process_command(player_type *player_ptr)
         break;
     }
     default: {
-        if ((cur_store_num == STORE_MUSEUM) && (command_cmd == 'r')) {
+        if ((cur_store_num == StoreSaleType::MUSEUM) && (command_cmd == 'r')) {
             museum_remove_object(player_ptr);
         } else {
             msg_print(_("そのコマンドは店の中では使えません。", "That command does not work in stores."));

@@ -130,8 +130,8 @@ static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSI
         if (dy && (y3 * dy <= 0))
             continue;
 
-        const POSITION x4 = ABS(x3);
-        const POSITION y4 = ABS(y3);
+        const POSITION x4 = std::abs(x3);
+        const POSITION y4 = std::abs(y3);
 
         // (dy,dx) が (-1,0) or (1,0) のとき、|x3| > |y3| なるものは除外。
         if (dy && !dx && (x4 > y4))
@@ -467,7 +467,7 @@ static void decide_change_panel(player_type *player_ptr, ts_type *ts_ptr)
     POSITION dx = ddx[ts_ptr->distance];
     POSITION dy = ddy[ts_ptr->distance];
     if (ts_ptr->move_fast) {
-        int mag = MIN(ts_ptr->wid / 2, ts_ptr->hgt / 2);
+        int mag = std::min(ts_ptr->wid / 2, ts_ptr->hgt / 2);
         ts_ptr->x += dx * mag;
         ts_ptr->y += dy * mag;
     } else {

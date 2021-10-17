@@ -97,6 +97,7 @@
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
+#include <algorithm>
 #include <optional>
 #include <sstream>
 #include <tuple>
@@ -120,7 +121,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
 {
     KIND_OBJECT_IDX list;
     char ch;
-    for (list = 0; (list < 80) && (tvals[list].tval > TV_NONE); list++) {
+    for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
         auto row = 2 + (list % 20);
         auto col = _(32, 24) * (list / 20);
         ch = listsym[list];
@@ -146,7 +147,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
     return selection;
 }
 
-static KIND_OBJECT_IDX wiz_select_sval(const tval_type tval, concptr tval_description)
+static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_description)
 {
     auto num = 0;
     KIND_OBJECT_IDX choice[80]{};
@@ -206,8 +207,8 @@ static KIND_OBJECT_IDX wiz_create_itemtype()
         return 0;
     }
 
-    tval_type tval = i2enum<tval_type>(tvals[selection.value()].tval);
-    concptr tval_description = tvals[selection.value()].desc;
+    auto tval = tvals[selection.value()].tval;
+    auto tval_description = tvals[selection.value()].desc;
     term_clear();
     return wiz_select_sval(tval, tval_description);
 }
@@ -409,29 +410,25 @@ void wiz_change_status(player_type *player_ptr)
         player_ptr->stat_cur[i] = player_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
     }
 
-    sprintf(tmp_val, "%d", WEAPON_EXP_MASTER);
+    sprintf(tmp_val, "%d", PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER));
     if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
         return;
 
-    int16_t tmp_s16b = (int16_t)atoi(tmp_val);
-    if (tmp_s16b < WEAPON_EXP_UNSKILLED)
-        tmp_s16b = WEAPON_EXP_UNSKILLED;
+    auto tmp_s16b = std::clamp(static_cast<SUB_EXP>(atoi(tmp_val)),
+        PlayerSkill::weapon_exp_at(EXP_LEVEL_UNSKILLED),
+        PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER));
 
-    if (tmp_s16b > WEAPON_EXP_MASTER)
-        tmp_s16b = WEAPON_EXP_MASTER;
-
-    for (int j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++) {
+    for (auto tval : TV_WEAPON_RANGE) {
         for (int i = 0; i < 64; i++) {
-            player_ptr->weapon_exp[j][i] = tmp_s16b;
-            if (player_ptr->weapon_exp[j][i] > s_info[player_ptr->pclass].w_max[j][i])
-                player_ptr->weapon_exp[j][i] = s_info[player_ptr->pclass].w_max[j][i];
+            player_ptr->weapon_exp[tval][i] = std::min(tmp_s16b, s_info[enum2i(player_ptr->pclass)].w_max[tval][i]);
         }
     }
 
     for (int j = 0; j < 10; j++) {
         player_ptr->skill_exp[j] = tmp_s16b;
-        if (player_ptr->skill_exp[j] > s_info[player_ptr->pclass].s_max[j])
-            player_ptr->skill_exp[j] = s_info[player_ptr->pclass].s_max[j];
+        auto short_pclass = enum2i(player_ptr->pclass);
+        if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j])
+            player_ptr->skill_exp[j] = s_info[short_pclass].s_max[j];
     }
 
     int k;
@@ -458,7 +455,7 @@ void wiz_change_status(player_type *player_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (player_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == PlayerRaceType::ANDROID)
         return;
 
     player_ptr->max_exp = tmp_long;
@@ -662,7 +659,7 @@ void wiz_reset_race(player_type *player_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_RACES)
         return;
 
-    player_ptr->prace = i2enum<player_race_type>(tmp_int);
+    player_ptr->prace = i2enum<PlayerRaceType>(tmp_int);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
     player_ptr->window_flags |= PW_PLAYER;
@@ -678,21 +675,22 @@ void wiz_reset_race(player_type *player_ptr)
 void wiz_reset_class(player_type *player_ptr)
 {
     char ppp[80];
-    sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
+    sprintf(ppp, "Class (0-%d): ", PLAYER_CLASS_TYPE_MAX - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", player_ptr->pclass);
+    auto short_pclass = enum2i(player_ptr->pclass);
+    sprintf(tmp_val, "%d", short_pclass);
 
     if (!get_string(ppp, tmp_val, 2))
         return;
 
     int tmp_int = atoi(tmp_val);
-    if (tmp_int < 0 || tmp_int >= MAX_CLASS)
+    if (tmp_int < 0 || tmp_int >= PLAYER_CLASS_TYPE_MAX)
         return;
 
-    player_ptr->pclass = i2enum<player_class_type>(tmp_int);
-    cp_ptr = &class_info[player_ptr->pclass];
-    mp_ptr = &m_info[player_ptr->pclass];
+    player_ptr->pclass = i2enum<PlayerClassType>(tmp_int);
+    cp_ptr = &class_info[short_pclass];
+    mp_ptr = &m_info[short_pclass];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;

@@ -141,7 +141,7 @@ void process_player_hp_mp(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[INVEN_LITE];
         auto flgs = object_flags(o_ptr);
 
-        if (player_ptr->inventory_list[INVEN_LITE].tval && flgs.has_not(TR_DARK_SOURCE) && !has_resist_lite(player_ptr)) {
+        if ((player_ptr->inventory_list[INVEN_LITE].tval != ItemKindType::NONE) && flgs.has_not(TR_DARK_SOURCE) && !has_resist_lite(player_ptr)) {
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -210,7 +210,8 @@ void process_player_hp_mp(player_type *player_ptr)
 
     if (player_ptr->riding) {
         HIT_POINT damage;
-        if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !has_immune_fire(player_ptr)) {
+        auto auras = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].aura_flags;
+        if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_FIRE))
                 damage += damage / 3;
@@ -221,7 +222,8 @@ void process_player_hp_mp(player_type *player_ptr)
             msg_print(_("熱い！", "It's hot!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"));
         }
-        if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !has_immune_elec(player_ptr)) {
+
+        if (auras.has(MonsterAuraType::ELEC) && !has_immune_elec(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_ELEC))
                 damage += damage / 3;
@@ -232,7 +234,8 @@ void process_player_hp_mp(player_type *player_ptr)
             msg_print(_("痛い！", "It hurts!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"));
         }
-        if ((r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !has_immune_cold(player_ptr)) {
+
+        if (auras.has(MonsterAuraType::COLD) && !has_immune_cold(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_COLD))
                 damage += damage / 3;
@@ -304,7 +307,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
 
     regenmana(player_ptr, upkeep_factor, regen_amount);
-    if (player_ptr->pclass == CLASS_MAGIC_EATER) {
+    if (player_ptr->pclass == PlayerClassType::MAGIC_EATER) {
         regenmagic(player_ptr, regen_amount);
     }
 

@@ -60,7 +60,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
     }
 
-    if (o_ptr->tval == TV_FIGURINE) {
+    if (o_ptr->tval == ItemKindType::FIGURINE) {
         info[i++] = _("それは投げた時ペットに変化する。", "It will transform into a pet when thrown.");
     }
 
@@ -68,11 +68,11 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
     }
 
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
         info[i++] = _("それは相手を一撃で倒すことがある。", "It will attempt to instantly kill a monster.");
     }
 
-    if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) {
+    if ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) {
         info[i++] = _("それは自分自身に攻撃が返ってくることがある。", "It causes you to strike yourself sometimes.");
         info[i++] = _("それは無敵のバリアを切り裂く。", "It always penetrates invulnerability barriers.");
     }
@@ -105,7 +105,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは魔法抵抗力を下げる。", "It decreases your magic resistance.");
     }
 
-    if (o_ptr->tval == TV_STATUE) {
+    if (o_ptr->tval == ItemKindType::STATUE) {
         monster_race *r_ptr = &r_info[o_ptr->pval];
         if (o_ptr->pval == MON_BULLGATES)
             info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
@@ -685,7 +685,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     if (mode & SCROBJ_FAKE_OBJECT) {
         switch (o_ptr->tval) {
-        case TV_RING:
+        case ItemKindType::RING:
             switch (o_ptr->sval) {
             case SV_RING_LORDLY:
                 info[i++] = _("それは幾つかのランダムな耐性を授ける。", "It provides some random resistances.");
@@ -697,7 +697,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
             break;
 
-        case TV_AMULET:
+        case ItemKindType::AMULET:
             switch (o_ptr->sval) {
             case SV_AMULET_RESISTANCE:
                 info[i++] = _("それは毒への耐性を授ける事がある。", "It may provides resistance to poison.");
@@ -755,7 +755,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         prt("", k, 13);
     }
 
-    if ((o_ptr->tval == TV_STATUE) && (o_ptr->sval == SV_PHOTO)) {
+    if ((o_ptr->tval == ItemKindType::STATUE) && (o_ptr->sval == SV_PHOTO)) {
         monster_race *r_ptr = &r_info[o_ptr->pval];
         int namelen = strlen(r_ptr->name.c_str());
         prt(format("%s: '", r_ptr->name.c_str()), 1, 15);

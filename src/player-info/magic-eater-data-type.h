@@ -24,5 +24,5 @@ struct magic_eater_data_type {
     std::vector<magic_type> rods{}; //!< ロッドのデータ
     inline static std::vector<magic_type> none{}; //!< いずれの魔道具でもないダミー
 
-    std::vector<magic_type> &get_item_group(tval_type tval);
+    std::vector<magic_type> &get_item_group(ItemKindType tval);
 };

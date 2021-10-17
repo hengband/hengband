@@ -82,7 +82,7 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
         if (!(r_ptr->flags7 & RF7_AQUATIC)) {
             if (f_ptr->flags.has(FF::DEEP))
                 return false;
-            else if (r_ptr->flags2 & RF2_AURA_FIRE)
+            else if (r_ptr->aura_flags.has(MonsterAuraType::FIRE))
                 return false;
         }
     } else if (r_ptr->flags7 & RF7_AQUATIC)

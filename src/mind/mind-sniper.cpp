@@ -528,7 +528,7 @@ static bool cast_sniper_spell(player_type *player_ptr, int spell)
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     SPELL_IDX snipe_type = SP_NONE;
 
-    if (o_ptr->tval != TV_BOW) {
+    if (o_ptr->tval != ItemKindType::BOW) {
         msg_print(_("弓を装備していない！", "You wield no bow!"));
         return false;
     }

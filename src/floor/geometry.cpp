@@ -104,7 +104,7 @@ DIRECTION coords_to_dir(player_type *player_ptr, POSITION y, POSITION x)
 
     dy = y - player_ptr->y;
     dx = x - player_ptr->x;
-    if (ABS(dx) > 1 || ABS(dy) > 1)
+    if (std::abs(dx) > 1 || std::abs(dy) > 1)
         return 0;
 
     return d[dx + 1][dy + 1];

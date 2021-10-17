@@ -87,7 +87,7 @@ OBJECT_IDX get_obj_num(player_type *player_ptr, DEPTH level, BIT_FLAGS mode)
         KIND_OBJECT_IDX k_idx = entry.index;
         object_kind *k_ptr = &k_info[k_idx];
 
-        if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == TV_CHEST))
+        if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == ItemKindType::CHEST))
             continue;
 
         prob_table.entry_item(i, entry.prob2);

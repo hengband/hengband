@@ -127,7 +127,7 @@ void regenmagic(player_type *player_ptr, int regen_amount)
     const int dev = 30;
     const int mult = (dev + adj_mag_mana[player_ptr->stat_index[A_INT]]); /* x1 to x2 speed bonus for recharging */
 
-    for (auto tval : { TV_STAFF, TV_WAND }) {
+    for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND }) {
         for (auto &item : magic_eater_data->get_item_group(tval)) {
             const int maximum_charge = item.count * EATER_CHARGE;
             if (item.count == 0 || item.charge == maximum_charge) {
@@ -143,7 +143,7 @@ void regenmagic(player_type *player_ptr, int regen_amount)
         }
     }
 
-    for (auto &item : magic_eater_data->get_item_group(TV_ROD)) {
+    for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
         if (item.count == 0 || item.charge == 0) {
             continue;
         }
@@ -207,7 +207,7 @@ void regenerate_captured_monsters(player_type *player_ptr)
         object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        if (o_ptr->tval != TV_CAPTURE)
+        if (o_ptr->tval != ItemKindType::CAPTURE)
             continue;
         if (!o_ptr->pval)
             continue;

@@ -7,78 +7,78 @@
 static int get_history_chart(player_type *player_ptr)
 {
     switch (player_ptr->prace) {
-    case player_race_type::AMBERITE:
+    case PlayerRaceType::AMBERITE:
         return 67;
-    case player_race_type::HUMAN:
-    case player_race_type::BARBARIAN:
-    case player_race_type::DUNADAN:
+    case PlayerRaceType::HUMAN:
+    case PlayerRaceType::BARBARIAN:
+    case PlayerRaceType::DUNADAN:
         return 1;
-    case player_race_type::HALF_ELF:
+    case PlayerRaceType::HALF_ELF:
         return 4;
-    case player_race_type::ELF:
-    case player_race_type::HIGH_ELF:
+    case PlayerRaceType::ELF:
+    case PlayerRaceType::HIGH_ELF:
         return 7;
-    case player_race_type::HOBBIT:
+    case PlayerRaceType::HOBBIT:
         return 10;
-    case player_race_type::GNOME:
+    case PlayerRaceType::GNOME:
         return 13;
-    case player_race_type::DWARF:
+    case PlayerRaceType::DWARF:
         return 16;
-    case player_race_type::HALF_ORC:
+    case PlayerRaceType::HALF_ORC:
         return 19;
-    case player_race_type::HALF_TROLL:
+    case PlayerRaceType::HALF_TROLL:
         return 22;
-    case player_race_type::DARK_ELF:
+    case PlayerRaceType::DARK_ELF:
         return 69;
-    case player_race_type::HALF_OGRE:
+    case PlayerRaceType::HALF_OGRE:
         return 74;
-    case player_race_type::HALF_GIANT:
+    case PlayerRaceType::HALF_GIANT:
         return 75;
-    case player_race_type::HALF_TITAN:
+    case PlayerRaceType::HALF_TITAN:
         return 76;
-    case player_race_type::CYCLOPS:
+    case PlayerRaceType::CYCLOPS:
         return 77;
-    case player_race_type::YEEK:
+    case PlayerRaceType::YEEK:
         return 78;
-    case player_race_type::KOBOLD:
+    case PlayerRaceType::KOBOLD:
         return 82;
-    case player_race_type::KLACKON:
+    case PlayerRaceType::KLACKON:
         return 84;
-    case player_race_type::NIBELUNG:
+    case PlayerRaceType::NIBELUNG:
         return 87;
-    case player_race_type::DRACONIAN:
+    case PlayerRaceType::DRACONIAN:
         return 89;
-    case player_race_type::MIND_FLAYER:
+    case PlayerRaceType::MIND_FLAYER:
         return 92;
-    case player_race_type::IMP:
+    case PlayerRaceType::IMP:
         return 94;
-    case player_race_type::GOLEM:
+    case PlayerRaceType::GOLEM:
         return 98;
-    case player_race_type::SKELETON:
+    case PlayerRaceType::SKELETON:
         return 102;
-    case player_race_type::ZOMBIE:
+    case PlayerRaceType::ZOMBIE:
         return 107;
-    case player_race_type::VAMPIRE:
+    case PlayerRaceType::VAMPIRE:
         return 113;
-    case player_race_type::SPECTRE:
+    case PlayerRaceType::SPECTRE:
         return 118;
-    case player_race_type::SPRITE:
+    case PlayerRaceType::SPRITE:
         return 124;
-    case player_race_type::BEASTMAN:
+    case PlayerRaceType::BEASTMAN:
         return 129;
-    case player_race_type::ENT:
+    case PlayerRaceType::ENT:
         return 137;
-    case player_race_type::ARCHON:
+    case PlayerRaceType::ARCHON:
         return 142;
-    case player_race_type::BALROG:
+    case PlayerRaceType::BALROG:
         return 145;
-    case player_race_type::S_FAIRY:
+    case PlayerRaceType::S_FAIRY:
         return 148;
-    case player_race_type::KUTAR:
+    case PlayerRaceType::KUTAR:
         return 154;
-    case player_race_type::ANDROID:
+    case PlayerRaceType::ANDROID:
         return 155;
-    case player_race_type::MERFOLK:
+    case PlayerRaceType::MERFOLK:
         return 170;
     default:
         return 0;

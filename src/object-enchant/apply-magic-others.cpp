@@ -44,15 +44,15 @@ void apply_magic_others(player_type *player_ptr, object_type *o_ptr, int power)
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     switch (o_ptr->tval) {
-    case TV_WHISTLE: {
+    case ItemKindType::WHISTLE: {
         break;
     }
-    case TV_FLASK: {
+    case ItemKindType::FLASK: {
         o_ptr->xtra4 = o_ptr->pval;
         o_ptr->pval = 0;
         break;
     }
-    case TV_LITE: {
+    case ItemKindType::LITE: {
         if (o_ptr->sval == SV_LITE_TORCH) {
             if (o_ptr->pval > 0)
                 o_ptr->xtra4 = randint1(o_ptr->pval);
@@ -104,25 +104,25 @@ void apply_magic_others(player_type *player_ptr, object_type *o_ptr, int power)
 
         break;
     }
-    case TV_WAND:
-    case TV_STAFF: {
+    case ItemKindType::WAND:
+    case ItemKindType::STAFF: {
         /* The wand or staff gets a number of initial charges equal
          * to between 1/2 (+1) and the full object kind's pval. -LM-
          */
         o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
         break;
     }
-    case TV_ROD: {
+    case ItemKindType::ROD: {
         o_ptr->pval = k_ptr->pval;
         break;
     }
-    case TV_CAPTURE: {
+    case ItemKindType::CAPTURE: {
         o_ptr->pval = 0;
         object_aware(player_ptr, o_ptr);
         object_known(o_ptr);
         break;
     }
-    case TV_FIGURINE: {
+    case ItemKindType::FIGURINE: {
         PARAMETER_VALUE i = 1;
         int check;
         monster_race *r_ptr;
@@ -152,7 +152,7 @@ void apply_magic_others(player_type *player_ptr, object_type *o_ptr, int power)
 
         break;
     }
-    case TV_CORPSE: {
+    case ItemKindType::CORPSE: {
         PARAMETER_VALUE i = 1;
         int check;
         uint32_t match = 0;
@@ -183,7 +183,7 @@ void apply_magic_others(player_type *player_ptr, object_type *o_ptr, int power)
         object_known(o_ptr);
         break;
     }
-    case TV_STATUE: {
+    case ItemKindType::STATUE: {
         PARAMETER_VALUE i = 1;
         monster_race *r_ptr;
         while (true) {
@@ -204,7 +204,7 @@ void apply_magic_others(player_type *player_ptr, object_type *o_ptr, int power)
         object_known(o_ptr);
         break;
     }
-    case TV_CHEST: {
+    case ItemKindType::CHEST: {
         DEPTH obj_level = k_info[o_ptr->k_idx].level;
         if (obj_level <= 0)
             break;

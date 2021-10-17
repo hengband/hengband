@@ -15,7 +15,6 @@ struct player_type;
 struct spell_hex_data_type;
 class SpellHex {
 public:
-    SpellHex() = delete;
     SpellHex(player_type *player_ptr);
     SpellHex(player_type *player_ptr, monap_type *monap_ptr);
     virtual ~SpellHex() = default;

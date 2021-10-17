@@ -301,10 +301,10 @@ bool teleport_player_aux(player_type *player_ptr, POSITION dis, bool is_quantum_
     if (dis > MAX_TELEPORT_DISTANCE)
         dis = MAX_TELEPORT_DISTANCE;
 
-    int left = MAX(1, player_ptr->x - dis);
-    int right = MIN(player_ptr->current_floor_ptr->width - 2, player_ptr->x + dis);
-    int top = MAX(1, player_ptr->y - dis);
-    int bottom = MIN(player_ptr->current_floor_ptr->height - 2, player_ptr->y + dis);
+    int left = std::max(1, player_ptr->x - dis);
+    int right = std::min(player_ptr->current_floor_ptr->width - 2, player_ptr->x + dis);
+    int top = std::max(1, player_ptr->y - dis);
+    int bottom = std::min(player_ptr->current_floor_ptr->height - 2, player_ptr->y + dis);
     int total_candidates = 0;
     for (POSITION y = top; y <= bottom; y++) {
         for (POSITION x = left; x <= right; x++) {
@@ -512,7 +512,7 @@ void teleport_away_followable(player_type *player_ptr, MONSTER_IDX m_idx)
         return;
 
     bool follow = false;
-    if (player_ptr->muta.has(MUTA::VTELEPORT) || (player_ptr->pclass == CLASS_IMITATOR))
+    if (player_ptr->muta.has(MUTA::VTELEPORT) || (player_ptr->pclass == PlayerClassType::IMITATOR))
         follow = true;
     else {
         object_type *o_ptr;

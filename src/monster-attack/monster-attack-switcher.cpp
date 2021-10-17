@@ -311,7 +311,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         if (((randint1(monap_ptr->rlev * 2 + 300) > (monap_ptr->ac + 200)) || one_in_(13)) && !check_multishadow(player_ptr)) {
             monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
             msg_print(_("痛恨の一撃！", "It was a critical hit!"));
-            monap_ptr->damage = MAX(monap_ptr->damage, monap_ptr->damage * 2);
+            monap_ptr->damage = std::max(monap_ptr->damage, monap_ptr->damage * 2);
             monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
             break;
         }

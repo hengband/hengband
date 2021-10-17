@@ -30,7 +30,7 @@ bool write_level; //!< @todo *抹殺* したい…
  */
 concptr get_ordinal_number_suffix(int num)
 {
-    num = ABS(num) % 100;
+    num = std::abs(num) % 100;
     switch (num % 10) {
     case 1:
         return (num == 11) ? "th" : "st";

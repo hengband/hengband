@@ -25,7 +25,7 @@ OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapp
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if ((o_ptr->tval == TV_CHEST)
+        if ((o_ptr->tval == ItemKindType::CHEST)
             && (((!trapped) && (o_ptr->pval)) || /* non empty */
                 ((trapped) && (o_ptr->pval > 0)))) /* trapped only */
             return this_o_idx;

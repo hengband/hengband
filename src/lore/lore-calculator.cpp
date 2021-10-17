@@ -58,7 +58,7 @@ bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
     DEPTH level = r_ptr->level;
     MONSTER_NUMBER kills = r_ptr->r_tkills;
 
-    bool known = (r_ptr->r_cast_spell == MAX_UCHAR) ? true : false;
+    bool known = r_ptr->r_cast_spell == MAX_UCHAR;
 
     if (know_everything || known)
         return true;
@@ -149,5 +149,6 @@ void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->flags2 = lore_ptr->r_ptr->flags2;
     lore_ptr->flags3 = lore_ptr->r_ptr->flags3;
     lore_ptr->ability_flags = lore_ptr->r_ptr->ability_flags;
+    lore_ptr->aura_flags = lore_ptr->r_ptr->aura_flags;
     lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
 }

@@ -1457,15 +1457,6 @@
     <ClCompile Include="..\..\src\load\load-util.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load-v1-5-0.cpp">
-      <Filter>load</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\load\item-loader.cpp">
-      <Filter>load</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\load\monster-loader.cpp">
-      <Filter>load</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\load\load-zangband.cpp">
       <Filter>load</Filter>
     </ClCompile>
@@ -1482,9 +1473,6 @@
       <Filter>load</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\load\extra-loader.cpp">
-      <Filter>load</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\load\load-v1-7-0.cpp">
       <Filter>load</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\load\player-info-loader.cpp">
@@ -2360,6 +2348,30 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-use\zapwand-execution.cpp">
       <Filter>object-use</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\rng-xoshiro.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\old\load-v1-5-0.cpp">
+      <Filter>load\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\old\load-v1-7-0.cpp">
+      <Filter>load\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\old\item-loader-savefile10.cpp">
+      <Filter>load\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\old\monster-loader-savefile10.cpp">
+      <Filter>load\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\item\item-loader-base.cpp">
+      <Filter>load\item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp">
+      <Filter>load\item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp">
+      <Filter>load\monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4067,18 +4079,6 @@
     <ClInclude Include="..\..\src\load\load-util.h">
       <Filter>load</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\load\load-v1-5-0.h">
-      <Filter>load</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\load\item-loader.h">
-      <Filter>load</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\load\savedata-flag-types.h">
-      <Filter>load</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\load\monster-loader.h">
-      <Filter>load</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\load\load-zangband.h">
       <Filter>load</Filter>
     </ClInclude>
@@ -4095,9 +4095,6 @@
       <Filter>load</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\extra-loader.h">
-      <Filter>load</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\load\load-v1-7-0.h">
       <Filter>load</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\player-info-loader.h">
@@ -5010,6 +5007,9 @@
     <ClInclude Include="..\..\src\util\enum-converter.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\enum-range.h">
+      <Filter>util</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h">
       <Filter>load</Filter>
     </ClInclude>
@@ -5105,6 +5105,51 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\ninja-data-type.h">
       <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\rng-xoshiro.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\monster-aura-types.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\old\load-v1-5-0.h">
+      <Filter>load\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\old\load-v1-7-0.h">
+      <Filter>load\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\old\item-loader-savefile10.h">
+      <Filter>load\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\old\monster-loader-savefile10.h">
+      <Filter>load\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\old\item-flag-types-savefile10.h">
+      <Filter>load\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\old\monster-flag-types-savefile10.h">
+      <Filter>load\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\item\item-loader-base.h">
+      <Filter>load\item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\item\item-loader-factory.h">
+      <Filter>load\item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\item\item-loader-version-types.h">
+      <Filter>load\item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\monster\monster-loader-base.h">
+      <Filter>load\monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\monster\monster-loader-factory.h">
+      <Filter>load\monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\monster\monster-loader-version-types.h">
+      <Filter>load\monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5327,6 +5372,15 @@
     </Filter>
     <Filter Include="timed-effect">
       <UniqueIdentifier>{b9e618e1-f780-4f5f-9413-d0270ac53660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="load\old">
+      <UniqueIdentifier>{46523373-91fb-436b-89c6-14ad74b88f5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="load\item">
+      <UniqueIdentifier>{346bc9ba-a477-404f-bc72-2ad9c1ec6daf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="load\monster">
+      <UniqueIdentifier>{ad11aaea-5034-4df2-9a9b-d63457fdad55}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

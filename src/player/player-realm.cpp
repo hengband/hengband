@@ -5,7 +5,7 @@
 /*!
  * 職業毎に選択可能な第一領域魔法テーブル
  */
-const uint32_t realm_choices1[MAX_CLASS] = {
+const std::vector<BIT_FLAGS> realm_choices1 = {
     (CH_NONE), /* Warrior */
     (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Mage */
     (CH_LIFE | CH_DEATH | CH_DAEMON | CH_CRUSADE), /* Priest */
@@ -40,7 +40,7 @@ const uint32_t realm_choices1[MAX_CLASS] = {
 /*!
  * 職業毎に選択可能な第二領域魔法テーブル
  */
-const uint32_t realm_choices2[MAX_CLASS] = {
+const std::vector<BIT_FLAGS> realm_choices2 = {
     (CH_NONE), /* Warrior */
     (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Mage */
     (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Priest */
@@ -72,6 +72,12 @@ const uint32_t realm_choices2[MAX_CLASS] = {
     (CH_NONE), /* Elementalist */
 };
 
-int16_t get_realm1_book(player_type *player_ptr) { return player_ptr->realm1 + TV_LIFE_BOOK - 1; }
+ItemKindType get_realm1_book(player_type *player_ptr)
+{
+    return ItemKindType::LIFE_BOOK + player_ptr->realm1 - 1;
+}
 
-int16_t get_realm2_book(player_type *player_ptr) { return player_ptr->realm2 + TV_LIFE_BOOK - 1; }
+ItemKindType get_realm2_book(player_type *player_ptr)
+{
+    return ItemKindType::LIFE_BOOK + player_ptr->realm2 - 1;
+}

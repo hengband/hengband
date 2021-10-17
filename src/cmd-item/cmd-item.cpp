@@ -33,6 +33,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "mind/snipe-types.h"
 #include "object-activation/activation-switcher.h"
 #include "object-hook/hook-magic.h"
@@ -83,9 +84,9 @@ void do_cmd_inven(player_type *player_ptr)
     WEIGHT weight = calc_inventory_weight(player_ptr);
     WEIGHT weight_lim = calc_weight_limit(player_ptr);
 #ifdef JP
-    sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(weight), (int)lbtokg2(weight),
+    sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight),
 #else
-    sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10), (int)(weight % 10),
+    sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", weight / 10, weight % 10,
 #endif
         (long int)(weight * 100) / weight_lim);
 
@@ -245,33 +246,33 @@ void do_cmd_use(player_type *player_ptr)
         return;
 
     switch (o_ptr->tval) {
-    case TV_SPIKE:
+    case ItemKindType::SPIKE:
         do_cmd_spike(player_ptr);
         break;
-    case TV_FOOD:
+    case ItemKindType::FOOD:
         exe_eat_food(player_ptr, item);
         break;
-    case TV_WAND:
+    case ItemKindType::WAND:
         ObjectZapWandEntity(player_ptr).execute(item);
         break;
-    case TV_STAFF:
+    case ItemKindType::STAFF:
         ObjectUseEntity(player_ptr, item).execute();
         break;
-    case TV_ROD:
+    case ItemKindType::ROD:
         ObjectZapRodEntity(player_ptr).execute(item);
         break;
-    case TV_POTION:
+    case ItemKindType::POTION:
         ObjectQuaffEntity(player_ptr).execute(item);
         break;
-    case TV_SCROLL:
+    case ItemKindType::SCROLL:
         if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
             return;
 
         ObjectReadEntity(player_ptr, item).execute(true);
         break;
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT:
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
         exe_fire(player_ptr, item, &player_ptr->inventory_list[INVEN_BOW], SP_NONE);
         break;
     default:

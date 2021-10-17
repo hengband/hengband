@@ -2,14 +2,13 @@
 
 #include "object-enchant/tr-flags.h"
 
-enum class player_race_type;
+enum class PlayerRaceType;
 enum class PlayerRaceLife;
 enum class PlayerRaceFood;
 struct player_type;
 struct player_race_info;
 class PlayerRace {
 public:
-    PlayerRace() = delete;
     PlayerRace(player_type *player_ptr, bool base_race = false);
     virtual ~PlayerRace() = default;
 
@@ -20,7 +19,7 @@ public:
 
     bool is_mimic_nonliving() const;
     bool can_resist_cut() const;
-    bool equals(player_race_type prace) const;
+    bool equals(PlayerRaceType prace) const;
 
 private:
     player_type *player_ptr;

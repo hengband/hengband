@@ -32,31 +32,31 @@ static void race_dependent_mutation(player_type *player_ptr, glm_type *gm_ptr)
     if (gm_ptr->choose_mut != 0)
         return;
 
-    if (player_ptr->prace == player_race_type::VAMPIRE && player_ptr->muta.has_not(MUTA::HYPN_GAZE) && (randint1(10) < 7)) {
+    if (player_ptr->prace == PlayerRaceType::VAMPIRE && player_ptr->muta.has_not(MUTA::HYPN_GAZE) && (randint1(10) < 7)) {
         gm_ptr->muta_which = MUTA::HYPN_GAZE;
         gm_ptr->muta_desc = _("眼が幻惑的になった...", "Your eyes look mesmerizing...");
         return;
     }
 
-    if (player_ptr->prace == player_race_type::IMP && player_ptr->muta.has_not(MUTA::HORNS) && (randint1(10) < 7)) {
+    if (player_ptr->prace == PlayerRaceType::IMP && player_ptr->muta.has_not(MUTA::HORNS) && (randint1(10) < 7)) {
         gm_ptr->muta_which = MUTA::HORNS;
         gm_ptr->muta_desc = _("角が額から生えてきた！", "Horns pop forth into your forehead!");
         return;
     }
 
-    if (player_ptr->prace == player_race_type::YEEK && player_ptr->muta.has_not(MUTA::SHRIEK) && (randint1(10) < 7)) {
+    if (player_ptr->prace == PlayerRaceType::YEEK && player_ptr->muta.has_not(MUTA::SHRIEK) && (randint1(10) < 7)) {
         gm_ptr->muta_which = MUTA::SHRIEK;
         gm_ptr->muta_desc = _("声質がかなり強くなった。", "Your vocal cords get much tougher.");
         return;
     }
 
-    if (player_ptr->prace == player_race_type::BEASTMAN && player_ptr->muta.has_not(MUTA::POLYMORPH) && (randint1(10) < 2)) {
+    if (player_ptr->prace == PlayerRaceType::BEASTMAN && player_ptr->muta.has_not(MUTA::POLYMORPH) && (randint1(10) < 2)) {
         gm_ptr->muta_which = MUTA::POLYMORPH;
         gm_ptr->muta_desc = _("あなたの肉体は変化できるようになった、", "Your body seems mutable.");
         return;
     }
 
-    if (player_ptr->prace == player_race_type::MIND_FLAYER && player_ptr->muta.has_not(MUTA::TENTACLES) && (randint1(10) < 7)) {
+    if (player_ptr->prace == PlayerRaceType::MIND_FLAYER && player_ptr->muta.has_not(MUTA::TENTACLES) && (randint1(10) < 7)) {
         gm_ptr->muta_which = MUTA::TENTACLES;
         gm_ptr->muta_desc = _("邪悪な触手が口の周りに生えた。", "Evil-looking tentacles sprout from your mouth.");
     }

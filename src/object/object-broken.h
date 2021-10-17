@@ -12,8 +12,7 @@ PERCENTAGE breakage_chance(player_type *player_ptr, object_type *o_ptr, bool has
 class ObjectBreaker {
 protected:
     ObjectBreaker(tr_type ignore_flg);
-    ObjectBreaker() = delete;
-
+    
 public:
     virtual ~ObjectBreaker() = default;
     bool can_destroy(object_type *o_ptr) const;

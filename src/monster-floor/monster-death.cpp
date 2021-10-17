@@ -88,7 +88,7 @@ static void on_defeat_arena_monster(player_type *player_ptr, monster_death_type 
     else
         msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
 
-    if (arena_info[player_ptr->arena_number].tval) {
+    if (arena_info[player_ptr->arena_number].tval > ItemKindType::NONE) {
         object_type forge;
         object_type *q_ptr = &forge;
         q_ptr->prep(lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
@@ -135,7 +135,7 @@ static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
 
     object_type forge;
     object_type *q_ptr = &forge;
-    q_ptr->prep(lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
+    q_ptr->prep(lookup_kind(ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
     apply_magic_to_object(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
     q_ptr->pval = md_ptr->m_ptr->r_idx;
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -188,8 +188,7 @@ static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_t
 
 static KIND_OBJECT_IDX drop_dungeon_final_artifact(player_type *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
 {
-    KIND_OBJECT_IDX k_idx
-        = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+    auto k_idx = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
     if (d_info[player_ptr->dungeon_idx].final_artifact == 0)
         return k_idx;
 
@@ -289,7 +288,7 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
 
             dump_gold++;
         } else {
-            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode, -1))
+            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode))
                 continue;
 
             dump_item++;
@@ -317,7 +316,7 @@ static void on_defeat_last_boss(player_type *player_ptr)
     player_ptr->redraw |= PR_TITLE;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
-    patron_list[player_ptr->chaos_patron].admire();
+    patron_list[player_ptr->chaos_patron].admire(player_ptr);
     msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
     msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
     msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));

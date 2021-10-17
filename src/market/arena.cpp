@@ -98,7 +98,7 @@ static void go_to_arena(player_type *player_ptr)
     if (battle_metal_babble(player_ptr))
         return;
 
-    if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY)) {
+    if (player_ptr->riding && (player_ptr->pclass != PlayerClassType::BEASTMASTER) && (player_ptr->pclass != PlayerClassType::CAVALRY)) {
         msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
         msg_print(nullptr);
         return;
@@ -176,15 +176,15 @@ void update_gambling_monsters(player_type *player_ptr)
             max_dl = max_dlv[d_ref.idx];
     }
 
-    mon_level = randint1(MIN(max_dl, 122)) + 5;
+    mon_level = randint1(std::min(max_dl, 122)) + 5;
     if (randint0(100) < 60) {
-        i = randint1(MIN(max_dl, 122)) + 5;
-        mon_level = MAX(i, mon_level);
+        i = randint1(std::min(max_dl, 122)) + 5;
+        mon_level = std::max(i, mon_level);
     }
 
     if (randint0(100) < 30) {
-        i = randint1(MIN(max_dl, 122)) + 5;
-        mon_level = MAX(i, mon_level);
+        i = randint1(std::min(max_dl, 122)) + 5;
+        mon_level = std::max(i, mon_level);
     }
 
     while (true) {
@@ -335,7 +335,7 @@ bool monster_arena_comm(player_type *player_ptr)
     maxbet = player_ptr->lev * 200;
 
     /* We can't bet more than we have */
-    maxbet = MIN(maxbet, player_ptr->au);
+    maxbet = std::min(maxbet, player_ptr->au);
 
     /* Get the wager */
     strcpy(out_val, "");
@@ -370,7 +370,7 @@ bool monster_arena_comm(player_type *player_ptr)
     }
 
     msg_print(nullptr);
-    battle_odds = MAX(wager + 1, wager * battle_odds / 100);
+    battle_odds = std::max(wager + 1, wager * battle_odds / 100);
     kakekin = wager;
     player_ptr->au -= wager;
     reset_tim_flags(player_ptr);

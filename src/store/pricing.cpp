@@ -45,7 +45,7 @@ PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool fl
         if (adjust > 100)
             adjust = 100;
 
-        if (cur_store_num == STORE_BLACK)
+        if (cur_store_num == StoreSaleType::BLACK)
             price = price / 2;
 
         price = (price * adjust + 50L) / 100L;
@@ -54,7 +54,7 @@ PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool fl
         if (adjust < 100)
             adjust = 100;
 
-        if (cur_store_num == STORE_BLACK)
+        if (cur_store_num == StoreSaleType::BLACK)
             price = price * 2;
 
         price = (int32_t)(((uint32_t)price * (uint32_t)adjust + 50UL) / 100UL);

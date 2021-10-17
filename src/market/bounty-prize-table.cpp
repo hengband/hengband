@@ -1,29 +1,30 @@
 ﻿#include "market/bounty-prize-table.h"
+#include "object/tval-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"
 
 bounty_prize_type prize_list[MAX_BOUNTY] = {
-    { TV_POTION, SV_POTION_CURING },
-    { TV_POTION, SV_POTION_SPEED },
-    { TV_POTION, SV_POTION_SPEED },
-    { TV_POTION, SV_POTION_RESISTANCE },
-    { TV_POTION, SV_POTION_ENLIGHTENMENT },
+    { ItemKindType::POTION, SV_POTION_CURING },
+    { ItemKindType::POTION, SV_POTION_SPEED },
+    { ItemKindType::POTION, SV_POTION_SPEED },
+    { ItemKindType::POTION, SV_POTION_RESISTANCE },
+    { ItemKindType::POTION, SV_POTION_ENLIGHTENMENT },
 
-    { TV_POTION, SV_POTION_HEALING },
-    { TV_POTION, SV_POTION_RESTORE_MANA },
-    { TV_SCROLL, SV_SCROLL_STAR_DESTRUCTION },
-    { TV_POTION, SV_POTION_STAR_ENLIGHTENMENT },
-    { TV_SCROLL, SV_SCROLL_SUMMON_PET },
+    { ItemKindType::POTION, SV_POTION_HEALING },
+    { ItemKindType::POTION, SV_POTION_RESTORE_MANA },
+    { ItemKindType::SCROLL, SV_SCROLL_STAR_DESTRUCTION },
+    { ItemKindType::POTION, SV_POTION_STAR_ENLIGHTENMENT },
+    { ItemKindType::SCROLL, SV_SCROLL_SUMMON_PET },
 
-    { TV_SCROLL, SV_SCROLL_GENOCIDE },
-    { TV_POTION, SV_POTION_STAR_HEALING },
-    { TV_POTION, SV_POTION_STAR_HEALING },
-    { TV_POTION, SV_POTION_NEW_LIFE },
-    { TV_SCROLL, SV_SCROLL_MASS_GENOCIDE },
+    { ItemKindType::SCROLL, SV_SCROLL_GENOCIDE },
+    { ItemKindType::POTION, SV_POTION_STAR_HEALING },
+    { ItemKindType::POTION, SV_POTION_STAR_HEALING },
+    { ItemKindType::POTION, SV_POTION_NEW_LIFE },
+    { ItemKindType::SCROLL, SV_SCROLL_MASS_GENOCIDE },
 
-    { TV_POTION, SV_POTION_LIFE },
-    { TV_POTION, SV_POTION_LIFE },
-    { TV_POTION, SV_POTION_AUGMENTATION },
-    { TV_POTION, SV_POTION_INVULNERABILITY },
-    { TV_SCROLL, SV_SCROLL_ARTIFACT },
+    { ItemKindType::POTION, SV_POTION_LIFE },
+    { ItemKindType::POTION, SV_POTION_LIFE },
+    { ItemKindType::POTION, SV_POTION_AUGMENTATION },
+    { ItemKindType::POTION, SV_POTION_INVULNERABILITY },
+    { ItemKindType::SCROLL, SV_SCROLL_ARTIFACT },
 };

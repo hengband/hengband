@@ -99,7 +99,7 @@ static void check_darkness(player_type *player_ptr, melee_spell_type *ms_ptr)
     if (ms_ptr->ability_flags.has_not(RF_ABILITY::DARKNESS))
         return;
 
-    bool vs_ninja = (player_ptr->pclass == CLASS_NINJA) && !is_hostile(ms_ptr->t_ptr);
+    bool vs_ninja = (player_ptr->pclass == PlayerClassType::NINJA) && !is_hostile(ms_ptr->t_ptr);
     bool can_use_lite_area = vs_ninja && !(ms_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
     if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
         return;

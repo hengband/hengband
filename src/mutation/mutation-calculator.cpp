@@ -40,7 +40,7 @@ int calc_mutant_regenerate_mod(player_type *player_ptr)
     if (player_ptr->ppersonality == PERSONALITY_LUCKY)
         count--;
 
-    if (player_ptr->prace == player_race_type::BEASTMAN) {
+    if (player_ptr->prace == PlayerRaceType::BEASTMAN) {
         count -= 10;
         mod = 5;
     }

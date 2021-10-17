@@ -4,6 +4,7 @@
 #include "core/asking-player.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
+#include "realm/realm-names-table.h"
 #include "player/player-realm.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -113,7 +114,7 @@ static void impose_first_realm(const player_type *player_ptr, uint32_t *choices)
     if (player_ptr->realm2 == REALM_SELECT_CANCEL)
         return;
 
-    if (player_ptr->pclass != CLASS_PRIEST)
+    if (player_ptr->pclass != PlayerClassType::PRIEST)
         return;
 
     if (is_good_realm(player_ptr->realm1)) {
@@ -162,7 +163,7 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
         sprintf(birth_realm_ptr->buf, "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
         prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
-        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
+        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1].data(), 4, 40);
     }
 
     c_put_str(TERM_YELLOW, birth_realm_ptr->cur, 12 + (birth_realm_ptr->cs / 5), 2 + 15 * (birth_realm_ptr->cs % 5));
@@ -317,7 +318,7 @@ bool get_player_realms(player_type *player_ptr)
     player_ptr->realm1 = REALM_NONE;
     player_ptr->realm2 = REALM_SELECT_CANCEL;
 
-    if (player_ptr->pclass == CLASS_ELEMENTALIST) {
+    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST) {
         player_ptr->element = select_element_realm(player_ptr);
         if (player_ptr->element == REALM_SELECT_CANCEL)
             return false;
@@ -331,14 +332,14 @@ bool get_player_realms(player_type *player_ptr)
     while (true) {
         char temp[80 * 10];
         int count = 0;
-        player_ptr->realm1 = select_realm(player_ptr, realm_choices1[player_ptr->pclass], &count);
+        player_ptr->realm1 = select_realm(player_ptr, realm_choices1[enum2i(player_ptr->pclass)], &count);
         if (player_ptr->realm1 == REALM_SELECT_CANCEL)
             return false;
         if (!player_ptr->realm1)
             break;
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1], 74, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
@@ -366,7 +367,7 @@ bool get_player_realms(player_type *player_ptr)
     while (true) {
         char temp[80 * 8];
         int count = 0;
-        player_ptr->realm2 = select_realm(player_ptr, realm_choices2[player_ptr->pclass], &count);
+        player_ptr->realm2 = select_realm(player_ptr, realm_choices2[enum2i(player_ptr->pclass)], &count);
 
         if (player_ptr->realm2 == REALM_SELECT_CANCEL)
             return false;
@@ -374,7 +375,7 @@ bool get_player_realms(player_type *player_ptr)
             break;
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1], 74, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1].data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)

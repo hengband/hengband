@@ -80,11 +80,11 @@ static concptr item_activation_aux(object_type *o_ptr)
     case RandomArtActType::NONE:
         break;
     case RandomArtActType::BR_FIRE:
-        if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+        if ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_FLAMES))
             desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
         break;
     case RandomArtActType::BR_COLD:
-        if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+        if ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_ICE))
             desc = _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
         break;
     case RandomArtActType::BR_DRAGON:
@@ -138,10 +138,10 @@ static concptr item_activation_aux(object_type *o_ptr)
         /* Activations that have special timeout */
         switch (act_ptr->index) {
         case RandomArtActType::BR_FIRE:
-            sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250);
+            sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250);
             break;
         case RandomArtActType::BR_COLD:
-            sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250);
+            sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250);
             break;
         case RandomArtActType::TERROR:
             strcpy(timeout, _("3*(レベル+10) ターン毎", "every 3 * (level+10) turns"));
@@ -181,11 +181,11 @@ concptr activation_explanation(object_type *o_ptr)
         return item_activation_aux(o_ptr);
     }
 
-    if (o_ptr->tval == TV_WHISTLE) {
+    if (o_ptr->tval == ItemKindType::WHISTLE) {
         return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
     }
 
-    if (o_ptr->tval == TV_CAPTURE) {
+    if (o_ptr->tval == ItemKindType::CAPTURE) {
         return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
     }
 
@@ -210,57 +210,57 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
 int16_t wield_slot(player_type *player_ptr, const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
-    case TV_DIGGING:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD: {
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD: {
         if (!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
             return (INVEN_MAIN_HAND);
         if (player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
             return (INVEN_MAIN_HAND);
         return (INVEN_SUB_HAND);
     }
-    case TV_CAPTURE:
-    case TV_CARD:
-    case TV_SHIELD: {
+    case ItemKindType::CAPTURE:
+    case ItemKindType::CARD:
+    case ItemKindType::SHIELD: {
         if (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
             return (INVEN_SUB_HAND);
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
             return (INVEN_SUB_HAND);
         return (INVEN_MAIN_HAND);
     }
-    case TV_BOW: {
+    case ItemKindType::BOW: {
         return (INVEN_BOW);
     }
-    case TV_RING: {
+    case ItemKindType::RING: {
         if (!player_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
             return (INVEN_MAIN_RING);
 
         return (INVEN_SUB_RING);
     }
-    case TV_AMULET:
-    case TV_WHISTLE: {
+    case ItemKindType::AMULET:
+    case ItemKindType::WHISTLE: {
         return (INVEN_NECK);
     }
-    case TV_LITE: {
+    case ItemKindType::LITE: {
         return (INVEN_LITE);
     }
-    case TV_DRAG_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_SOFT_ARMOR: {
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::SOFT_ARMOR: {
         return (INVEN_BODY);
     }
-    case TV_CLOAK: {
+    case ItemKindType::CLOAK: {
         return (INVEN_OUTER);
     }
-    case TV_CROWN:
-    case TV_HELM: {
+    case ItemKindType::CROWN:
+    case ItemKindType::HELM: {
         return (INVEN_HEAD);
     }
-    case TV_GLOVES: {
+    case ItemKindType::GLOVES: {
         return (INVEN_ARMS);
     }
-    case TV_BOOTS: {
+    case ItemKindType::BOOTS: {
         return (INVEN_FEET);
     }
 
@@ -278,18 +278,18 @@ int16_t wield_slot(player_type *player_ptr, const object_type *o_ptr)
  * @param book_sval ベースアイテムのsval
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
-bool check_book_realm(player_type *player_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
+bool check_book_realm(player_type *player_ptr, const ItemKindType book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
 {
-    if (book_tval < TV_LIFE_BOOK)
+    if (book_tval < ItemKindType::LIFE_BOOK)
         return false;
-    if (player_ptr->pclass == CLASS_SORCERER) {
+    if (player_ptr->pclass == PlayerClassType::SORCERER) {
         return is_magic(tval2realm(book_tval));
-    } else if (player_ptr->pclass == CLASS_RED_MAGE) {
+    } else if (player_ptr->pclass == PlayerClassType::RED_MAGE) {
         if (is_magic(tval2realm(book_tval)))
-            return ((book_tval == TV_ARCANE_BOOK) || (book_sval < 2));
+            return ((book_tval == ItemKindType::ARCANE_BOOK) || (book_sval < 2));
     }
 
-    return (get_realm1_book(player_ptr) == book_tval || get_realm2_book(player_ptr) == book_tval);
+    return (get_realm1_book(player_ptr) == book_tval) || (get_realm2_book(player_ptr) == book_tval);
 }
 
 object_type *ref_item(player_type *player_ptr, INVENTORY_IDX item)
@@ -307,7 +307,7 @@ TERM_COLOR object_attr(object_type *o_ptr)
 {
     return ((k_info[o_ptr->k_idx].flavor)
             ? (k_info[k_info[o_ptr->k_idx].flavor].x_attr)
-            : ((!o_ptr->k_idx || (o_ptr->tval != TV_CORPSE) || (o_ptr->sval != SV_CORPSE) || (k_info[o_ptr->k_idx].x_attr != TERM_DARK))
+            : ((!o_ptr->k_idx || (o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->sval != SV_CORPSE) || (k_info[o_ptr->k_idx].x_attr != TERM_DARK))
                     ? (k_info[o_ptr->k_idx].x_attr)
                     : (r_info[o_ptr->pval].x_attr)));
 }

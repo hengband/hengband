@@ -11,7 +11,7 @@ enum race_flags3 {
     RF3_ANIMAL = 0x00000080, /*!< モンスター特性: 動物 / Animal */
     RF3_AMBERITE = 0x00000100, /*!< モンスター特性: アンバーの血族 / TY: Amberite */
     RF3_GOOD = 0x00000200, /*!< モンスター特性: 善良 / Good */
-    RF3_AURA_COLD = 0x00000400, /*!< モンスター特性: 冷気オーラ / Freezes in melee */
+    RF3_XX10 = 0x00000400, /*!< 予約領域。元冷気オーラ */
     RF3_NONLIVING = 0x00000800, /*!< モンスター特性: 無生物 / TY: Non-Living (?) */
     RF3_HURT_LITE = 0x00001000, /*!< モンスター特性: 通常の光(GF_WEAK_LITE)でダメージを受ける / Hurt by lite */
     RF3_HURT_ROCK = 0x00002000, /*!< モンスター特性: 岩石溶解(GF_KILL_WALL)でダメージを受ける / Hurt by rock remover */

@@ -52,7 +52,7 @@ static void calc_shot_params(player_type *player_ptr, object_type *o_ptr, int *s
 
     *shots = 1;
     *shot_frac = 0;
-    if (player_ptr->pclass != CLASS_ARCHER)
+    if (player_ptr->pclass != PlayerClassType::ARCHER)
         return;
 
     if (player_ptr->lev >= 10)
@@ -80,8 +80,8 @@ static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *dam
         return false;
     }
 
-    if (player_ptr->pclass == CLASS_FORCETRAINER)
-        level = MAX(1, level - 3);
+    if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
+        level = std::max<short>(1, level - 3);
     PlayerClass pc(player_ptr);
     if (pc.monk_stance_is(MonkStance::BYAKKO))
         *basedam = monk_ave_damage[level][1];
@@ -91,7 +91,7 @@ static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *dam
         *basedam = monk_ave_damage[level][0];
 
     damage[hand] += *basedam;
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         damage[hand] = 1;
     if (damage[hand] < 0)
         damage[hand] = 0;
@@ -114,7 +114,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
 
     *basedam = 0;
     damage[hand] += *basedam;
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         damage[hand] = 1;
 
     if (damage[hand] < 0)
@@ -144,7 +144,7 @@ static int strengthen_basedam(player_type *player_ptr, object_type *o_ptr, int b
     }
 
     // 理力
-    bool is_force = player_ptr->pclass != CLASS_SAMURAI;
+    bool is_force = player_ptr->pclass != PlayerClassType::SAMURAI;
     is_force &= flgs.has(TR_FORCE_WEAPON);
     is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
     if (is_force)
@@ -252,7 +252,7 @@ static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
     for (int i = 0; i < 2; i++) {
         int basedam;
         damage[i] = player_ptr->dis_to_d[i] * 100;
-        if (((player_ptr->pclass == CLASS_MONK) || (player_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
+        if (((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
             if (!calc_weapon_damage_limit(player_ptr, i, damage, &basedam, o_ptr))
                 break;
 
@@ -265,7 +265,7 @@ static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
 
         to_h[i] = 0;
         bool poison_needle = false;
-        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
             poison_needle = true;
         if (o_ptr->is_known()) {
             damage[i] += o_ptr->to_d * 100;
@@ -279,7 +279,7 @@ static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
         basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);
         basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flgs);
         damage[i] += basedam;
-        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
             damage[i] = 1;
         if (damage[i] < 0)
             damage[i] = 0;

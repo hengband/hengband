@@ -49,7 +49,7 @@ static int32_t get_autoroller_prob(int *minval)
 
     /* Copy */
     for (i = 0; i < 6; i++) {
-        tval[i] = MAX(8, minval[i]);
+        tval[i] = std::max(8, minval[i]);
         tot += tval[i];
     }
 
@@ -111,8 +111,9 @@ static int32_t get_autoroller_prob(int *minval)
  */
 static void decide_initial_stat(player_type *player_ptr, int *cval)
 {
-    auto &class_ptr = class_info[player_ptr->pclass];
-    auto &magic_ptr = m_info[player_ptr->pclass];
+    auto pclass = enum2i(player_ptr->pclass);
+    auto &class_ptr = class_info[pclass];
+    auto &magic_ptr = m_info[pclass];
     auto is_magic_user = magic_ptr.spell_stat == A_INT || magic_ptr.spell_stat == A_WIS || magic_ptr.spell_stat == A_CHR;
     auto is_attacker = class_ptr.num > 3;
 
@@ -142,7 +143,7 @@ static void decide_initial_stat(player_type *player_ptr, int *cval)
     }
 
     if (cval[A_DEX] == 0)
-        cval[A_DEX] = 17 - MAX(0, num_17 - 1);
+        cval[A_DEX] = 17 - std::max(0, num_17 - 1);
 
     for (int i = 0; i < A_MAX; i++)
         if (cval[i] == 0)

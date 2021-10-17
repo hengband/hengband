@@ -10,12 +10,13 @@
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
-#include "floor/pattern-walk.h"
 #include "floor/geometry.h"
+#include "floor/pattern-walk.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
+#include "locale/english.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
@@ -38,16 +39,12 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
-#include "system/player-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#ifdef JP
-#else
-#include "locale/english.h"
-#endif
 
 /*!
  * Determine if a "boundary" grid is "floor mimic"
@@ -155,8 +152,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
         stormbringer = true;
 
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    bool p_can_kill_walls = has_kill_wall(player_ptr) && f_ptr->flags.has(FF::HURT_DISI) && (!p_can_enter || f_ptr->flags.has_not(FF::LOS))
-        && f_ptr->flags.has_not(FF::PERMANENT);
+    bool p_can_kill_walls = has_kill_wall(player_ptr) && f_ptr->flags.has(FF::HURT_DISI) && (!p_can_enter || f_ptr->flags.has_not(FF::LOS)) && f_ptr->flags.has_not(FF::PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = true;
     bool do_past = false;
@@ -164,10 +160,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
-        if (!is_hostile(m_ptr)
-            && !(player_ptr->confused || player_ptr->hallucinated || !m_ptr->ml || is_stunned
-                || (player_ptr->muta.has(MUTA::BERS_RAGE) && is_shero(player_ptr)))
-            && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
+        if (!is_hostile(m_ptr) && !(player_ptr->confused || player_ptr->hallucinated || !m_ptr->ml || is_stunned || (player_ptr->muta.has(MUTA::BERS_RAGE) && is_shero(player_ptr))) && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
             monster_desc(player_ptr, m_name, m_ptr, 0);
             if (m_ptr->ml) {
@@ -177,7 +170,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
                 health_track(player_ptr, g_ptr->m_idx);
             }
 
-            if ((stormbringer && (randint1(1000) > 666)) || (player_ptr->pclass == CLASS_BERSERKER)) {
+            if ((stormbringer && (randint1(1000) > 666)) || (player_ptr->pclass == PlayerClassType::BERSERKER)) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
                 can_move = false;
             } else if (monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat, r_ptr, 0)) {
@@ -216,7 +209,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
         } else if (f_ptr->flags.has(FF::CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
             /* Allow moving */
         } else if (f_ptr->flags.has(FF::WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
-            && (f_ptr->flags.has(FF::DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
+            && (f_ptr->flags.has(FF::DEEP) || riding_r_ptr->aura_flags.has(MonsterAuraType::FIRE))) {
             msg_format(_("%sの上に行けない。", "Can't swim."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
@@ -249,7 +242,7 @@ void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool b
         player_ptr->running = 0;
         can_move = false;
     } else if (f_ptr->flags.has(FF::TREE) && !p_can_kill_walls) {
-        if ((player_ptr->pclass != CLASS_RANGER) && !player_ptr->levitation && (!player_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
+        if ((player_ptr->pclass != PlayerClassType::RANGER) && !player_ptr->levitation && (!player_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
             energy.mul_player_turn_energy(2);
         }
     } else if ((do_pickup != easy_disarm) && f_ptr->flags.has(FF::DISARM) && !g_ptr->mimic) {

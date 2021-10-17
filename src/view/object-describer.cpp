@@ -20,7 +20,7 @@
 void inven_item_charges(player_type *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &player_ptr->inventory_list[item];
-    if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND))
+    if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
         return;
     if (!o_ptr->is_known())
         return;
@@ -98,11 +98,11 @@ void display_koff(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
         if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2))
             return;
     } else {
-        if ((player_ptr->pclass != CLASS_SORCERER) && (player_ptr->pclass != CLASS_RED_MAGE))
+        if ((player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE))
             return;
         if (!is_magic(use_realm))
             return;
-        if ((player_ptr->pclass == CLASS_RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1))
+        if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1))
             return;
     }
 

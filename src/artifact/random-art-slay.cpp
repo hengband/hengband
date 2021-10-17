@@ -12,7 +12,7 @@
 
 static bool random_art_slay_bow(object_type *o_ptr)
 {
-    if (o_ptr->tval != TV_BOW)
+    if (o_ptr->tval != ItemKindType::BOW)
         return false;
 
     switch (randint1(6)) {
@@ -156,7 +156,7 @@ static bool switch_random_art_slay(object_type *o_ptr)
     case BIAS_INT:
         return random_art_brand_magical(o_ptr);
     case BIAS_PRIESTLY:
-        if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && o_ptr->art_flags.has_not(TR_BLESSED))
+        if (((o_ptr->tval == ItemKindType::SWORD) || (o_ptr->tval == ItemKindType::POLEARM)) && o_ptr->art_flags.has_not(TR_BLESSED))
             o_ptr->art_flags.set(TR_BLESSED);
 
         return false;
@@ -165,7 +165,7 @@ static bool switch_random_art_slay(object_type *o_ptr)
     case BIAS_RANGER:
         return random_art_slay_animal(o_ptr);
     case BIAS_ROGUE:
-        if ((((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_SPEAR)))
+        if ((((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_SPEAR)))
             && o_ptr->art_flags.has_not(TR_THROW)) {
             o_ptr->art_flags.set(TR_THROW);
         }
@@ -282,7 +282,7 @@ void random_slay(object_type *o_ptr)
         break;
     case 18:
     case 19:
-        if (o_ptr->tval != TV_SWORD) {
+        if (o_ptr->tval != ItemKindType::SWORD) {
             random_slay(o_ptr);
             break;
         }

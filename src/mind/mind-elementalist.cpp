@@ -497,7 +497,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         return psychometry(player_ptr);
     case ElementSpells::CURE:
         (void)hp_player(player_ptr, damroll(2, 8));
-        (void)BadStatusSetter(player_ptr).mod_cut(10);
+        (void)BadStatusSetter(player_ptr).mod_cut(-10);
         break;
     case ElementSpells::BOLT_2ND:
         if (!get_aim_dir(player_ptr, &dir))
@@ -532,7 +532,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
     case ElementSpells::BREATH_2ND:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        dam = MIN(150, player_ptr->chp / 2);
+        dam = std::min(150, player_ptr->chp / 2);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_breath(player_ptr, typ, dir, dam, 3)) {
             if (typ == GF_HYPODYNAMIA) {
@@ -879,7 +879,7 @@ static bool try_cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx,
         msg_print(_("元素の力が制御できない氾流となって解放された！", "Elemental power unleashes its power in an uncontrollable storm!"));
         project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, player_ptr->y, player_ptr->x, plev * 2, get_element_types(player_ptr->element)[0],
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
-        player_ptr->csp = MAX(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
+        player_ptr->csp = std::max(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
 
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         set_bits(player_ptr->redraw, PR_MANA);
@@ -1061,7 +1061,7 @@ process_result effect_monster_elemental_genocide(player_type *player_ptr, effect
  */
 bool has_element_resist(player_type *player_ptr, ElementRealm realm, PLAYER_LEVEL lev)
 {
-    if (player_ptr->pclass != CLASS_ELEMENTALIST)
+    if (player_ptr->pclass != PlayerClassType::ELEMENTALIST)
         return false;
 
     auto prealm = i2enum<ElementRealm>(player_ptr->element);
@@ -1130,7 +1130,7 @@ static int interpret_realm_select_key(int cs, int n, char c)
  */
 static int get_element_realm(player_type *player_ptr, int is, int n)
 {
-    int cs = MAX(0, is);
+    int cs = std::max(0, is);
     int os = cs;
     int k;
 

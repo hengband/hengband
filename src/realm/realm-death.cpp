@@ -37,10 +37,10 @@
  */
 concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
-    bool info = (mode == SPELL_INFO) ? true : false;
-    bool cast = (mode == SPELL_CAST) ? true : false;
+    bool name = mode == SPELL_NAME;
+    bool desc = mode == SPELL_DESCRIPTION;
+    bool info = mode == SPELL_INFO;
+    bool cast = mode == SPELL_CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -375,7 +375,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                      * ARE Gorged, it won't cure
                      * us
                      */
-                    dam = player_ptr->food + MIN(5000, 100 * dam);
+                    dam = player_ptr->food + std::min(5000, 100 * dam);
 
                     /* Not gorged already */
                     if (player_ptr->food < PY_FOOD_MAX)

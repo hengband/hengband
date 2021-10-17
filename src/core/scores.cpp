@@ -22,6 +22,7 @@
 #include "io/report.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "locale/japanese.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"
@@ -38,10 +39,6 @@
 #include "view/display-messages.h"
 #include "view/display-scores.h"
 #include "world/world.h"
-
-#ifdef JP
-#include "locale/japanese.h"
-#endif
 
 /*!
  * @brief 所定ポインタへスコア情報を書き込む / Write one score to the highscore file
@@ -209,17 +206,17 @@ errr top_twenty(player_type *current_player_ptr)
     /* Save the player info */
     sprintf(the_score.uid, "%7u", current_player_ptr->player_uid);
     sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
-    snprintf(buf, sizeof(buf), "%2d", MIN(enum2i(current_player_ptr->prace), MAX_RACES));
+    snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(current_player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
+    snprintf(buf, sizeof(buf), "%2d", enum2i(std::min(current_player_ptr->pclass, PlayerClassType::MAX)));
     memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
+    snprintf(buf, sizeof(buf), "%2d", std::min(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
-    sprintf(the_score.cur_lev, "%3d", MIN((uint16_t)current_player_ptr->lev, 999));
+    sprintf(the_score.cur_lev, "%3d", std::min<ushort>(current_player_ptr->lev, 999));
     sprintf(the_score.cur_dun, "%3d", (int)current_player_ptr->current_floor_ptr->dun_level);
-    sprintf(the_score.max_lev, "%3d", MIN((uint16_t)current_player_ptr->max_plv, 999));
+    sprintf(the_score.max_lev, "%3d", std::min<ushort>(current_player_ptr->max_plv, 999));
     sprintf(the_score.max_dun, "%3d", (int)max_dlv[current_player_ptr->dungeon_idx]);
 
     /* Save the cause of death (31 chars) */
@@ -312,20 +309,19 @@ errr predict_score(player_type *current_player_ptr)
     /* Save the player info */
     sprintf(the_score.uid, "%7u", current_player_ptr->player_uid);
     sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
-    snprintf(buf, sizeof(buf), "%2d", MIN(enum2i(current_player_ptr->prace), MAX_RACES));
+    snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(current_player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
+    snprintf(buf, sizeof(buf), "%2d", enum2i(std::min(current_player_ptr->pclass, PlayerClassType::MAX)));
     memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->ppersonality, MAX_PERSONALITIES));
+    snprintf(buf, sizeof(buf), "%2d", std::min(current_player_ptr->ppersonality, MAX_PERSONALITIES));
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
-    sprintf(the_score.cur_lev, "%3d", MIN((uint16_t)current_player_ptr->lev, 999));
+    sprintf(the_score.cur_lev, "%3d", std::min<ushort>(current_player_ptr->lev, 999));
     sprintf(the_score.cur_dun, "%3d", (int)current_player_ptr->current_floor_ptr->dun_level);
-    sprintf(the_score.max_lev, "%3d", MIN((uint16_t)current_player_ptr->max_plv, 999));
+    sprintf(the_score.max_lev, "%3d", std::min<ushort>(current_player_ptr->max_plv, 999));
     sprintf(the_score.max_dun, "%3d", (int)max_dlv[current_player_ptr->dungeon_idx]);
 
-    /* Hack -- no cause of death */
     /* まだ死んでいないときの識別文字 */
     strcpy(the_score.how, _("yet", "nobody (yet!)"));
 

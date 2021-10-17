@@ -9,7 +9,6 @@ struct player_type;
 class HelmEnchanter : AbstractProtectorEnchanter {
 public:
     HelmEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power);
-    HelmEnchanter() = delete;
     virtual ~HelmEnchanter() = default;
     void apply_magic() override;
 

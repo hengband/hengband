@@ -73,10 +73,10 @@ void call_the_void(player_type *player_ptr)
     }
 
 #ifdef JP
-    msg_format("あなたは%sを壁に近すぎる場所で唱えてしまった！", ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "祈り" : "呪文"));
+    msg_format("あなたは%sを壁に近すぎる場所で唱えてしまった！", ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "祈り" : "呪文"));
 #else
-    msg_format("You %s the %s too close to a wall!", ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"),
-        ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "prayer" : "spell"));
+    msg_format("You %s the %s too close to a wall!", ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"),
+        ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "prayer" : "spell"));
 #endif
     msg_print(_("大きな爆発音があった！", "There is a loud explosion!"));
 

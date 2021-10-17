@@ -14,8 +14,6 @@ public:
     bool learnable{ false }; //!< ラーニングを試みるか
     HIT_POINT dam{}; //! ダメージ量(ものまね用)
 
-    MonsterSpellResult() = delete;
-
     static MonsterSpellResult make_valid(HIT_POINT dam = 0)
     {
         return MonsterSpellResult(true, dam);

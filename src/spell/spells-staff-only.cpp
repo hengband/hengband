@@ -63,12 +63,12 @@ bool unleash_mana_storm(player_type *player_ptr, bool powerful)
     project(player_ptr, 0, (powerful ? 7 : 5), player_ptr->y, player_ptr->x, (randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA,
         PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
 
-    bool is_special_class = player_ptr->pclass != CLASS_MAGE;
-    is_special_class &= player_ptr->pclass != CLASS_HIGH_MAGE;
-    is_special_class &= player_ptr->pclass != CLASS_SORCERER;
-    is_special_class &= player_ptr->pclass != CLASS_MAGIC_EATER;
-    is_special_class &= player_ptr->pclass != CLASS_BLUE_MAGE;
-    is_special_class &= player_ptr->pclass != CLASS_ELEMENTALIST;
+    bool is_special_class = player_ptr->pclass != PlayerClassType::MAGE;
+    is_special_class &= player_ptr->pclass != PlayerClassType::HIGH_MAGE;
+    is_special_class &= player_ptr->pclass != PlayerClassType::SORCERER;
+    is_special_class &= player_ptr->pclass != PlayerClassType::MAGIC_EATER;
+    is_special_class &= player_ptr->pclass != PlayerClassType::BLUE_MAGE;
+    is_special_class &= player_ptr->pclass != PlayerClassType::ELEMENTALIST;
     if (is_special_class)
         (void)take_hit(player_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"));
 

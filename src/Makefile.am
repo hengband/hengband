@@ -343,12 +343,8 @@ hengband_SOURCES = \
 	load/floor-loader.cpp load/floor-loader.h \
 	load/info-loader.cpp load/info-loader.h \
 	load/inventory-loader.cpp load/inventory-loader.h \
-	load/item-loader.cpp load/item-loader.h \
-	load/monster-loader.cpp load/monster-loader.h \
 	load/old-feature-types.h \
 	load/load-util.cpp load/load-util.h \
-	load/load-v1-5-0.cpp load/load-v1-5-0.h \
-	load/load-v1-7-0.cpp load/load-v1-7-0.h \
 	load/load-zangband.cpp load/load-zangband.h \
 	load/quest-loader.cpp load/quest-loader.h \
 	load/load.cpp load/load.h \
@@ -357,10 +353,24 @@ hengband_SOURCES = \
 	load/player-attack-loader.cpp load/player-attack-loader.h \
 	load/player-class-specific-data-loader.cpp load/player-class-specific-data-loader.h \
 	load/player-info-loader.cpp load/player-info-loader.h \
-	load/savedata-flag-types.h \
 	load/savedata-old-flag-types.h \
 	load/store-loader.cpp load/store-loader.h \
 	load/world-loader.cpp load/world-loader.h \
+	\
+	load/item/item-loader-base.cpp load/item/item-loader-base.h \
+	load/item/item-loader-factory.cpp load/item/item-loader-factory.h \
+	load/item/item-loader-version-types.h \
+	\
+	load/monster/monster-loader-base.h \
+	load/monster/monster-loader-factory.cpp load/monster/monster-loader-factory.h \
+	load/monster/monster-loader-version-types.h \
+	\
+	load/old/item-flag-types-savefile10.h \
+	load/old/item-loader-savefile10.cpp load/old/item-loader-savefile10.h \
+	load/old/load-v1-5-0.cpp load/old/load-v1-5-0.h \
+	load/old/load-v1-7-0.cpp load/old/load-v1-7-0.h \
+	load/old/monster-flag-types-savefile10.h \
+	load/old/monster-loader-savefile10.cpp load/old/monster-loader-savefile10.h \
 	\
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \
@@ -495,6 +505,7 @@ hengband_SOURCES = \
 	monster-floor/quantum-effect.cpp monster-floor/quantum-effect.h \
 	monster-floor/special-death-switcher.cpp monster-floor/special-death-switcher.h \
 	\
+	monster-race/monster-aura-types.h \
 	monster-race/monster-race.cpp monster-race/monster-race.h \
 	monster-race/monster-race-hook.cpp monster-race/monster-race-hook.h \
 	monster-race/race-ability-flags.h \
@@ -897,12 +908,14 @@ hengband_SOURCES = \
 	util/buffer-shaper.cpp util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
 	util/enum-converter.h \
+	util/enum-range.h \
 	util/flag-group.h \
 	util/int-char-converter.h \
 	util/object-sort.cpp util/object-sort.h \
 	util/point-2d.h \
 	util/probability-table.h \
 	util/quarks.cpp util/quarks.h \
+	util/rng-xoshiro.cpp util/rng-xoshiro.h \
 	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
 	util/tag-sorter.cpp util/tag-sorter.h \

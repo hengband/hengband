@@ -49,7 +49,7 @@ void AmuletEnchanter::apply_magic()
 
     this->enchant();
     if ((one_in_(150) && (this->power > 0) && !this->o_ptr->is_cursed() && (this->level > 79)) || (this->power > 2)) {
-        this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
+        this->o_ptr->pval = std::min<short>(this->o_ptr->pval, 4);
         become_random_artifact(player_ptr, this->o_ptr, false);
         return;
     }

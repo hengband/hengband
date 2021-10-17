@@ -33,7 +33,7 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
 
     player_ptr->is_fired = false;
     j_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    if (!j_ptr->tval) {
+    if (j_ptr->tval == ItemKindType::NONE) {
         msg_print(_("射撃用の武器を持っていない。", "You have nothing to fire with."));
         flush();
         return;
@@ -62,7 +62,7 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
     }
 
     exe_fire(player_ptr, item, j_ptr, snipe_type);
-    if (!player_ptr->is_fired || player_ptr->pclass != CLASS_SNIPER)
+    if (!player_ptr->is_fired || player_ptr->pclass != PlayerClassType::SNIPER)
         return;
 
     if (snipe_type == SP_AWAY) {

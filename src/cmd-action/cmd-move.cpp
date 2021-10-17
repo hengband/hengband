@@ -406,7 +406,7 @@ void do_cmd_stay(player_type *player_ptr, bool pickup)
 void do_cmd_rest(player_type *player_ptr)
 {
     set_action(player_ptr, ACTION_NONE);
-    if ((player_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(player_ptr) != 0) || (get_interrupting_song_effect(player_ptr) != 0)))
+    if ((player_ptr->pclass == PlayerClassType::BARD) && ((get_singing_song_effect(player_ptr) != 0) || (get_interrupting_song_effect(player_ptr) != 0)))
         stop_singing(player_ptr);
 
     SpellHex spell_hex(player_ptr);

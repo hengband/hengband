@@ -90,7 +90,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     vary_item(this->player_ptr, item, -1);
     sound(SOUND_QUAFF);
     auto ident = false;
-    if (q_ptr->tval == TV_POTION) {
+    if (q_ptr->tval == ItemKindType::POTION) {
         switch (q_ptr->sval) {
         case SV_POTION_WATER:
             msg_print(_("口の中がさっぱりした。", "That was refreshing."));
@@ -438,7 +438,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             break;
 
         case SV_POTION_EXPERIENCE:
-            if (this->player_ptr->prace == player_race_type::ANDROID)
+            if (this->player_ptr->prace == PlayerRaceType::ANDROID)
                 break;
             chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
             if (this->player_ptr->exp < PY_MAX_EXP) {
@@ -511,7 +511,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         }
     }
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::SKELETON)) {
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
         (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, q_ptr->k_idx);
     }
@@ -534,16 +534,16 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 
     this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-    if (PlayerRace(this->player_ptr).equals(player_race_type::SKELETON))
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON))
         return; //!< @note スケルトンは水分で飢えを満たせない
 
     switch (PlayerRace(this->player_ptr).food()) {
     case PlayerRaceFood::WATER:
         msg_print(_("水分を取り込んだ。", "You are moistened."));
-        set_food(this->player_ptr, MIN(this->player_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
+        set_food(this->player_ptr, std::min<short>(this->player_ptr->food + q_ptr->pval + std::max<short>(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
         break;
     case PlayerRaceFood::OIL:
-        if (q_ptr->tval == TV_FLASK) {
+        if (q_ptr->tval == ItemKindType::FLASK) {
             msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
             set_food(this->player_ptr, this->player_ptr->food + 5000);
         } else {
@@ -586,7 +586,7 @@ bool ObjectQuaffEntity::check_can_quaff()
 bool ObjectQuaffEntity::booze()
 {
     bool ident = false;
-    if (this->player_ptr->pclass != CLASS_MONK)
+    if (this->player_ptr->pclass != PlayerClassType::MONK)
         chg_virtue(this->player_ptr, V_HARMONY, -1);
     else if (!has_resist_conf(this->player_ptr))
         this->player_ptr->special_attack |= ATTACK_SUIKEN;
@@ -604,7 +604,7 @@ bool ObjectQuaffEntity::booze()
         ident = true;
     }
 
-    if (one_in_(13) && (this->player_ptr->pclass != CLASS_MONK)) {
+    if (one_in_(13) && (this->player_ptr->pclass != PlayerClassType::MONK)) {
         ident = true;
         if (one_in_(3))
             lose_all_info(this->player_ptr);

@@ -91,7 +91,7 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
 
     get_mon_num_prep(player_ptr, monster_hook_tanuki, nullptr);
     int attempts = 1000;
-    DEPTH min = MIN(floor_ptr->base_level - 5, 50);
+    DEPTH min = std::min(floor_ptr->base_level - 5, 50);
     while (--attempts) {
         MONRACE_IDX ap_r_idx = get_mon_num(player_ptr, 0, floor_ptr->base_level + 10, 0);
         if (r_info[ap_r_idx].level >= min)
@@ -341,9 +341,8 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if (ironman_nightmare) {
-        uint32_t hp = m_ptr->max_maxhp * 2L;
-
-        m_ptr->max_maxhp = (HIT_POINT)MIN(30000, hp);
+        auto hp = m_ptr->max_maxhp * 2;
+        m_ptr->max_maxhp = std::min(30000, hp);
     }
 
     m_ptr->maxhp = m_ptr->max_maxhp;

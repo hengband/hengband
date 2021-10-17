@@ -83,10 +83,10 @@ bool ang_sort_comp_distance(player_type *player_ptr, vptr u, vptr v, int a, int 
     /* Absolute distance components */
     POSITION kx = x[a];
     kx -= player_ptr->x;
-    kx = ABS(kx);
+    kx = std::abs(kx);
     POSITION ky = y[a];
     ky -= player_ptr->y;
-    ky = ABS(ky);
+    ky = std::abs(ky);
 
     /* Approximate Double Distance to the first point */
     POSITION da = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
@@ -94,10 +94,10 @@ bool ang_sort_comp_distance(player_type *player_ptr, vptr u, vptr v, int a, int 
     /* Absolute distance components */
     kx = x[b];
     kx -= player_ptr->x;
-    kx = ABS(kx);
+    kx = std::abs(kx);
     ky = y[b];
     ky -= player_ptr->y;
-    ky = ABS(ky);
+    ky = std::abs(ky);
 
     /* Approximate Double Distance to the first point */
     POSITION db = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
@@ -244,8 +244,8 @@ bool ang_sort_art_comp(player_type *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by total kills */
     if (*why >= 3) {
         /* Extract total kills */
-        z1 = a_info[w1].tval;
-        z2 = a_info[w2].tval;
+        z1 = enum2i(a_info[w1].tval);
+        z2 = enum2i(a_info[w2].tval);
 
         /* Compare total kills */
         if (z1 < z2)

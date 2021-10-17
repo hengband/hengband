@@ -154,7 +154,7 @@ size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
     BUF *buf = static_cast<BUF *>(userdata);
     const size_t remain = buf->size - buf->read_head;
-    const size_t copy_size = MIN(size * nitems, remain);
+    const size_t copy_size = std::min<size_t>(size * nitems, remain);
 
     strncpy(buffer, buf->data + buf->read_head, copy_size);
     buf->read_head += copy_size;
@@ -415,7 +415,7 @@ bool report_score(player_type *player_ptr, display_player_pf display_player)
     sprintf(personality_desc, "%s ", ap_ptr->title);
 #endif
 
-    auto realm1_name = player_ptr->pclass == CLASS_ELEMENTALIST ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
+    auto realm1_name = player_ptr->pclass == PlayerClassType::ELEMENTALIST ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
     buf_sprintf(score, "name: %s\n", player_ptr->name);
     buf_sprintf(score, "version: %s\n", title);
     buf_sprintf(score, "score: %d\n", calc_score(player_ptr));

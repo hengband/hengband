@@ -165,7 +165,7 @@ void effect_player_nether(player_type *player_ptr, effect_player_type *ep_ptr)
 
     bool evaded = check_multishadow(player_ptr);
 
-    if (PlayerRace(player_ptr).equals(player_race_type::SPECTRE)) {
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE)) {
         if (!evaded) {
             msg_print(_("気分がよくなった。", "You feel invigorated!"));
             hp_player(player_ptr, ep_ptr->dam / 4);
@@ -484,7 +484,7 @@ static void effect_player_time_addition(player_type *player_ptr)
     case 3:
     case 4:
     case 5: {
-        if (player_ptr->prace == player_race_type::ANDROID)
+        if (player_ptr->prace == PlayerRaceType::ANDROID)
             break;
 
         msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));

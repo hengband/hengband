@@ -103,15 +103,15 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
 
     /* +1 per day after the base date */
     /* base dates : day5(1F), day18(10F,0F), day34(30F), day53(60F), day69(90F) */
-    over_days = MAX(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
+    over_days = std::max<int>(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
 
     /* starts from 1/25, reaches 1/3 after 44days from a max_level dependent base date */
-    pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - over_days / 2);
+    pls_kakuritu = std::max(NASTY_MON_MAX, NASTY_MON_BASE - over_days / 2);
     /* starts from 0, reaches +25lv after 75days from a max_level dependent base date */
-    pls_max_level = MIN(NASTY_MON_PLUS_MAX, over_days / 3);
+    pls_max_level = std::min(NASTY_MON_PLUS_MAX, over_days / 3);
 
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::MAZE)) {
-        pls_kakuritu = MIN(pls_kakuritu / 2, pls_kakuritu - 10);
+        pls_kakuritu = std::min(pls_kakuritu / 2, pls_kakuritu - 10);
         if (pls_kakuritu < 2)
             pls_kakuritu = 2;
         pls_max_level += 2;
@@ -207,7 +207,7 @@ static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_i
     if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON))
         return false;
 
-    if (ABS(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5)
+    if (std::abs(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5)
         return false;
 
     if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE)
@@ -360,8 +360,8 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
     }
 
     if (ironman_nightmare) {
-        uint32_t hp = m_ptr->max_maxhp * 2L;
-        m_ptr->max_maxhp = (HIT_POINT)MIN(30000, hp);
+        auto hp = m_ptr->max_maxhp * 2;
+        m_ptr->max_maxhp = std::min(30000, hp);
     }
 
     m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;

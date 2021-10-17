@@ -197,7 +197,7 @@ static void show_tomb_detail(player_type *player_ptr, char *buf)
     if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
     {
         int dummy_len = strlen(killer);
-        strcpy(killer + MIN(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
+        strcpy(killer + std::min(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
     }
 
     center_string(buf, killer);
@@ -216,7 +216,7 @@ void print_tomb(player_type *player_ptr)
     char buf[1024];
     read_dead_file(buf, sizeof(buf));
     concptr p = (w_ptr->total_winner || (player_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificent")
-                                                                                    : player_title[player_ptr->pclass][(player_ptr->lev - 1) / 5];
+                                                                          : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
 
     center_string(buf, player_ptr->name);
     put_str(buf, 6, 11);
@@ -270,7 +270,7 @@ static void home_aware(player_type *player_ptr)
     object_type *o_ptr;
     store_type *store_ptr;
     for (int i = 1; i < max_towns; i++) {
-        store_ptr = &town_info[i].store[STORE_HOME];
+        store_ptr = &town_info[i].store[enum2i(StoreSaleType::HOME)];
         for (int j = 0; j < store_ptr->stock_num; j++) {
             o_ptr = &store_ptr->stock[j];
             if (!o_ptr->k_idx)
@@ -317,7 +317,7 @@ static void show_dead_home_items(player_type *player_ptr)
 {
     for (int l = 1; l < max_towns; l++) {
         store_type *store_ptr;
-        store_ptr = &town_info[l].store[STORE_HOME];
+        store_ptr = &town_info[l].store[enum2i(StoreSaleType::HOME)];
         if (store_ptr->stock_num == 0)
             continue;
 
@@ -331,7 +331,7 @@ static void show_dead_home_items(player_type *player_ptr)
                 sprintf(tmp_val, "%c) ", I2A(j));
                 prt(tmp_val, j + 2, 4);
                 describe_flavor(player_ptr, o_name, o_ptr, 0);
-                c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
+                c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, j + 2, 7);
             }
 
             prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);

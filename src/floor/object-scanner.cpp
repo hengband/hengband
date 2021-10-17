@@ -1,9 +1,10 @@
 ﻿#include "floor/object-scanner.h"
-#include "floor/cave.h"
 #include "flavor/flavor-describer.h"
+#include "floor/cave.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
@@ -28,7 +29,7 @@
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-ITEM_NUMBER scan_floor_items(player_type *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester& item_tester)
+ITEM_NUMBER scan_floor_items(player_type *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
@@ -90,7 +91,7 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester& item_tester)
+COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester &item_tester)
 {
     COMMAND_CODE i, m;
     int j, k, l;
@@ -107,20 +108,20 @@ COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION
     char floor_label[52 + 1];
     bool dont_need_to_show_weights = true;
     term_get_size(&wid, &hgt);
-    int len = MAX((*min_width), 20);
+    int len = std::max((*min_width), 20);
     floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         o_ptr = &floor_ptr->o_list[floor_list[i]];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
-        out_color[k] = tval_to_attr[o_ptr->tval & 0x7F];
+        out_color[k] = tval_to_attr[enum2i(o_ptr->tval) & 0x7F];
         strcpy(out_desc[k], o_name);
         l = strlen(out_desc[k]) + 5;
         if (show_weights)
             l += 9;
 
-        if (o_ptr->tval != TV_GOLD)
+        if (o_ptr->tval != ItemKindType::GOLD)
             dont_need_to_show_weights = false;
 
         if (l > len)
@@ -151,9 +152,9 @@ COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION
 
         put_str(tmp_val, j + 1, col);
         c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
-        if (show_weights && (o_ptr->tval != TV_GOLD)) {
+        if (show_weights && (o_ptr->tval != ItemKindType::GOLD)) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, j + 1, wid - 9);
         }
     }

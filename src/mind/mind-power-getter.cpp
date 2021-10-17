@@ -94,23 +94,23 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
 void MindPowerGetter::select_mind_description()
 {
     switch (this->player_ptr->pclass)
-    case CLASS_MINDCRAFTER: {
+    case PlayerClassType::MINDCRAFTER: {
         this->use_mind = mind_kind_type::MINDCRAFTER;
         this->mind_description = _("超能力", "mindcraft");
         break;
-    case CLASS_FORCETRAINER:
+    case PlayerClassType::FORCETRAINER:
         this->use_mind = mind_kind_type::KI;
         this->mind_description = _("練気術", "Force");
         break;
-    case CLASS_BERSERKER:
+    case PlayerClassType::BERSERKER:
         this->use_mind = mind_kind_type::BERSERKER;
         this->mind_description = _("技", "brutal power");
         break;
-    case CLASS_MIRROR_MASTER:
+    case PlayerClassType::MIRROR_MASTER:
         this->use_mind = mind_kind_type::MIRROR_MASTER;
         this->mind_description = _("鏡魔法", "magic");
         break;
-    case CLASS_NINJA:
+    case PlayerClassType::NINJA:
         this->use_mind = mind_kind_type::NINJUTSU;
         this->mind_description = _("忍術", "ninjutsu");
         break;

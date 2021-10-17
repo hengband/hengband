@@ -2,7 +2,6 @@
 
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player-info/class-specific-data.h"
 #include "player-info/class-types.h"
@@ -13,8 +12,10 @@
 #include "system/system-variables.h"
 #include "util/flag-group.h"
 
-#define MAX_SKILLS 10
+#include <array>
+#include <map>
 
+enum class ItemKindType : short;
 enum class RF_ABILITY;
 
 struct floor_type;
@@ -32,13 +33,13 @@ public:
     POSITION oldpx{}; /* Previous player location -KMW- */
 
     player_sex psex{}; /* Sex index */
-    player_race_type prace{}; /* Race index */
-    player_class_type pclass{}; /* Class index */
+    PlayerRaceType prace{}; /* Race index */
+    PlayerClassType pclass{}; /* Class index */
     player_personality_type ppersonality{}; /* Personality index */
     int16_t realm1{}; /* First magic realm */
     int16_t realm2{}; /* Second magic realm */
     int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
-    
+
     DICE_SID hitdie{}; /* Hit dice (sides) */
     uint16_t expfact{}; /* Experience factor
                          * Note: was byte, causing overflow for Amberite
@@ -130,7 +131,7 @@ public:
     TIME_EFFECT magicdef{};
     TIME_EFFECT tim_res_nether{}; /* Timed -- Nether resistance */
     TIME_EFFECT tim_res_time{}; /* Timed -- Time resistance */
-    int16_t mimic_form{}; // @todo 後でplayer_race_typeに差し替える.
+    int16_t mimic_form{}; // @todo 後でPlayerRaceTypeに差し替える.
     TIME_EFFECT tim_mimic{};
     TIME_EFFECT tim_sh_fire{};
     TIME_EFFECT tim_sh_holy{};
@@ -184,7 +185,7 @@ public:
     SPELL_IDX spell_order[64]{}; /* order spells learned/remembered/forgotten */
 
     SUB_EXP spell_exp[64]{}; /* Proficiency of spells */
-    SUB_EXP weapon_exp[5][64]{}; /* Proficiency of weapons */
+    std::map<ItemKindType, std::array<SUB_EXP, 64>> weapon_exp{}; /* Proficiency of weapons */
     SUB_EXP skill_exp[MAX_SKILLS]{}; /* Proficiency of misc. skill */
 
     ClassSpecificData class_specific_data;
@@ -209,7 +210,7 @@ public:
     BIT_FLAGS8 knowledge{}; /* Knowledge about yourself */
     BIT_FLAGS visit{}; /* Visited towns */
 
-    player_race_type start_race{}; /* Race at birth */
+    PlayerRaceType start_race{}; /* Race at birth */
     BIT_FLAGS old_race1{}; /* Record of race changes */
     BIT_FLAGS old_race2{}; /* Record of race changes */
     int16_t old_realm{}; /* Record of realm changes */
@@ -399,7 +400,7 @@ public:
     int16_t num_fire{}; /* Number of shots */
 
     byte tval_xtra{}; /* (Unused)Correct xtra tval */
-    tval_type tval_ammo{}; /* Correct ammo tval */
+    ItemKindType tval_ammo{}; /* Correct ammo tval */
 
     int16_t pspeed{}; /*!< 現在の速度 / Current speed */
 

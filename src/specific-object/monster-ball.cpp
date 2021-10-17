@@ -170,7 +170,7 @@ static void check_monster_ball_use(player_type *player_ptr, ae_type *ae_ptr)
 
 bool exe_monster_capture(player_type *player_ptr, ae_type *ae_ptr)
 {
-    if (ae_ptr->o_ptr->tval != TV_CAPTURE)
+    if (ae_ptr->o_ptr->tval != ItemKindType::CAPTURE)
         return false;
 
     if (ae_ptr->o_ptr->pval == 0) {

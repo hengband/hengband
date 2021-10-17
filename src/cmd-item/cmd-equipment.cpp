@@ -18,6 +18,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
@@ -31,8 +32,8 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
-#include "player-info/samurai-data-type.h"
 #include "player-info/equipment-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -61,13 +62,12 @@ void do_cmd_equip(player_type *player_ptr)
 
     screen_save();
     (void)show_equipment(player_ptr, 0, USE_FULL, AllMatchItemTester());
-    WEIGHT weight = calc_inventory_weight(player_ptr);
-    WEIGHT weight_lim = calc_weight_limit(player_ptr);
+    auto weight = calc_inventory_weight(player_ptr);
+    auto weight_lim = calc_weight_limit(player_ptr);
 #ifdef JP
-    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(weight), (int)lbtokg2(weight), (long int)((weight * 100) / weight_lim));
+    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), weight * 100 / weight_lim);
 #else
-    sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10), (int)(weight % 10),
-        (long int)((weight * 100) / weight_lim));
+    sprintf(out_val, "Equipment: carrying %d.%d pounds (%d%% of capacity). Command: ", weight / 10, weight % 10, weight * 100 / weight_lim);
 #endif
 
     prt(out_val, 0, 0);
@@ -112,9 +112,9 @@ void do_cmd_wield(player_type *player_ptr)
     const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
 
     switch (o_ptr->tval) {
-    case TV_CAPTURE:
-    case TV_SHIELD:
-    case TV_CARD:
+    case ItemKindType::CAPTURE:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CARD:
         if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
@@ -126,7 +126,7 @@ void do_cmd_wield(player_type *player_ptr)
         } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
             slot = INVEN_MAIN_HAND;
         else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx &&
-                 ((o_ptr->tval == TV_CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
+                 ((o_ptr->tval == ItemKindType::CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_wieldable_in_etheir_hand)))
@@ -134,10 +134,10 @@ void do_cmd_wield(player_type *player_ptr)
         }
 
         break;
-    case TV_DIGGING:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
         if (slot == INVEN_SUB_HAND) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
                 slot = INVEN_MAIN_HAND;
@@ -155,7 +155,7 @@ void do_cmd_wield(player_type *player_ptr)
         }
 
         break;
-    case TV_RING:
+    case ItemKindType::RING:
         if (player_ptr->inventory_list[INVEN_SUB_RING].k_idx && player_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
             q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
         else
@@ -185,9 +185,7 @@ void do_cmd_wield(player_type *player_ptr)
         return;
     }
 
-    if (confirm_wear
-        && ((o_ptr->is_cursed() && o_ptr->is_known())
-            || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
+    if (confirm_wear && ((o_ptr->is_cursed() && o_ptr->is_known()) || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy, _("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name);
@@ -196,8 +194,7 @@ void do_cmd_wield(player_type *player_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != player_race_type::VAMPIRE)
-        && (player_ptr->prace != player_race_type::ANDROID)) {
+    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,
@@ -288,8 +285,8 @@ void do_cmd_wield(player_type *player_ptr)
         o_ptr->ident |= (IDENT_SENSE);
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && (player_ptr->prace != player_race_type::VAMPIRE) && (player_ptr->prace != player_race_type::ANDROID))
-        change_race(player_ptr, player_race_type::VAMPIRE, "");
+    if ((o_ptr->name1 == ART_STONEMASK) && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID))
+        change_race(player_ptr, PlayerRaceType::VAMPIRE, "");
 
     calc_android_exp(player_ptr);
     player_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
@@ -314,7 +311,7 @@ void do_cmd_takeoff(player_type *player_ptr)
 
     PlayerEnergy energy(player_ptr);
     if (o_ptr->is_cursed()) {
-        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (player_ptr->pclass != CLASS_BERSERKER)) {
+        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (player_ptr->pclass != PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;
         }

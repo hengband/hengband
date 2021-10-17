@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <vector>
 
 /* 職業ごとの選択可能な魔法領域 / Possible realms that can be chosen. */
 enum choosable_realm {
@@ -21,9 +22,10 @@ enum choosable_realm {
     CH_HEX = 0x20000,
 };
 
-extern const uint32_t realm_choices1[];
-extern const uint32_t realm_choices2[];
+extern const std::vector<BIT_FLAGS> realm_choices1;
+extern const std::vector<BIT_FLAGS> realm_choices2;
 
 struct player_type;
-int16_t get_realm1_book(player_type *player_ptr);
-int16_t get_realm2_book(player_type *player_ptr);
+enum class ItemKindType : short;
+ItemKindType get_realm1_book(player_type *player_ptr);
+ItemKindType get_realm2_book(player_type *player_ptr);

@@ -26,51 +26,46 @@ void rd_options(void)
 {
     strip_bytes(16);
 
-    byte b;
-
     if (loading_savefile_version_is_older_than(9)) {
-        rd_byte(&b);
+        auto b = rd_byte();
         delay_factor = b * b * b;
     } else {
-        rd_s32b(&delay_factor);
+        delay_factor = rd_s32b();
     }
 
-    rd_byte(&b);
-    hitpoint_warn = b;
+    hitpoint_warn = rd_byte();
 
     if (h_older_than(1, 7, 0, 0)) {
         mana_warn = 2;
     } else {
-        rd_byte(&b);
-        mana_warn = b;
+        mana_warn = rd_byte();
     }
 
-    uint16_t c;
-    rd_u16b(&c);
+    auto c = rd_u16b();
 
-    cheat_peek = (c & 0x0100) ? true : false;
-    cheat_hear = (c & 0x0200) ? true : false;
-    cheat_room = (c & 0x0400) ? true : false;
-    cheat_xtra = (c & 0x0800) ? true : false;
-    cheat_know = (c & 0x1000) ? true : false;
-    cheat_live = (c & 0x2000) ? true : false;
-    cheat_save = (c & 0x4000) ? true : false;
-    cheat_diary_output = (c & 0x8000) ? true : false;
-    cheat_turn = (c & 0x0080) ? true : false;
-    cheat_sight = (c & 0x0040) ? true : false;
-    cheat_immortal = (c & 0x0020) ? true : false;
+    cheat_peek = any_bits(c, 0x0100);
+    cheat_hear = any_bits(c, 0x0200);
+    cheat_room = any_bits(c, 0x0400);
+    cheat_xtra = any_bits(c, 0x0800);
+    cheat_know = any_bits(c, 0x1000);
+    cheat_live = any_bits(c, 0x2000);
+    cheat_save = any_bits(c, 0x4000);
+    cheat_diary_output = any_bits(c, 0x8000);
+    cheat_turn = any_bits(c, 0x0080);
+    cheat_sight = any_bits(c, 0x0040);
+    cheat_immortal = any_bits(c, 0x0020);
 
-    rd_byte((byte *)&autosave_l);
-    rd_byte((byte *)&autosave_t);
-    rd_s16b(&autosave_freq);
+    autosave_l = rd_byte() != 0;
+    autosave_t = rd_byte() != 0;
+    autosave_freq = rd_s16b();
 
     BIT_FLAGS flag[8];
     for (int n = 0; n < 8; n++)
-        rd_u32b(&flag[n]);
+        flag[n] = rd_u32b();
 
     BIT_FLAGS mask[8];
     for (int n = 0; n < 8; n++)
-        rd_u32b(&mask[n]);
+        mask[n] = rd_u32b();
 
     for (auto n = 0; n < 8; n++) {
         for (auto i = 0; i < 32; i++) {
@@ -91,10 +86,10 @@ void rd_options(void)
 
     extract_option_vars();
     for (int n = 0; n < 8; n++)
-        rd_u32b(&flag[n]);
+        flag[n] = rd_u32b();
 
     for (int n = 0; n < 8; n++)
-        rd_u32b(&mask[n]);
+        mask[n] = rd_u32b();
 
     for (int n = 0; n < 8; n++) {
         for (int i = 0; i < 32; i++) {

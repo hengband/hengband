@@ -69,7 +69,7 @@ static bool random_art_bias_charisma(object_type *o_ptr)
 
 static bool random_art_bias_magic_mastery(object_type *o_ptr)
 {
-    if ((o_ptr->tval != TV_GLOVES) || o_ptr->art_flags.has(TR_MAGIC_MASTERY))
+    if ((o_ptr->tval != ItemKindType::GLOVES) || o_ptr->art_flags.has(TR_MAGIC_MASTERY))
         return false;
 
     o_ptr->art_flags.set(TR_MAGIC_MASTERY);
@@ -125,7 +125,7 @@ static bool switch_random_art_bias(object_type *o_ptr)
 
 static bool random_art_bias_decrease_mana(object_type *o_ptr)
 {
-    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != TV_SOFT_ARMOR) || (o_ptr->sval != SV_ROBE)
+    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != ItemKindType::SOFT_ARMOR) || (o_ptr->sval != SV_ROBE)
         || o_ptr->art_flags.has(TR_DEC_MANA) || !one_in_(3))
         return false;
 
@@ -229,7 +229,7 @@ void random_plus(object_type *o_ptr)
         break;
     case 22:
     case 23:
-        if (o_ptr->tval == TV_BOW) {
+        if (o_ptr->tval == ItemKindType::BOW) {
             random_plus(o_ptr);
             break;
         }

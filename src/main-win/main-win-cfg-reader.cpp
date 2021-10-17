@@ -3,16 +3,14 @@
  * @brief Windows版固有実装(.cfgファイル処理)
  */
 
-#include "locale/japanese.h"
 #include "main-win/main-win-cfg-reader.h"
+#include "locale/japanese.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-tokenizer.h"
+#include "main/sound-definitions-table.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
-
-#include "main/sound-definitions-table.h"
-
 #include <windows.h>
 
 // 1つの項目に設定可能な最大ファイル数
@@ -103,7 +101,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
     char *tokens[SAMPLE_MAX];
 
     for (auto &section : sections) {
-    
+
         bool has_data = false;
         int index = 0;
         concptr read_key;

@@ -378,62 +378,62 @@ char *object_desc_count_japanese(char *t, object_type *o_ptr)
 {
     t = object_desc_num(t, o_ptr->number);
     switch (o_ptr->tval) {
-    case TV_BOLT:
-    case TV_ARROW:
-    case TV_POLEARM:
-    case TV_STAFF:
-    case TV_WAND:
-    case TV_ROD:
-    case TV_DIGGING: {
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::POLEARM:
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+    case ItemKindType::DIGGING: {
         t = object_desc_str(t, "本");
         break;
     }
-    case TV_SCROLL: {
+    case ItemKindType::SCROLL: {
         t = object_desc_str(t, "巻");
         break;
     }
-    case TV_POTION: {
+    case ItemKindType::POTION: {
         t = object_desc_str(t, "服");
         break;
     }
-    case TV_LIFE_BOOK:
-    case TV_SORCERY_BOOK:
-    case TV_NATURE_BOOK:
-    case TV_CHAOS_BOOK:
-    case TV_DEATH_BOOK:
-    case TV_TRUMP_BOOK:
-    case TV_ARCANE_BOOK:
-    case TV_CRAFT_BOOK:
-    case TV_DEMON_BOOK:
-    case TV_CRUSADE_BOOK:
-    case TV_MUSIC_BOOK:
-    case TV_HISSATSU_BOOK:
-    case TV_HEX_BOOK: {
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::ARCANE_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HISSATSU_BOOK:
+    case ItemKindType::HEX_BOOK: {
         t = object_desc_str(t, "冊");
         break;
     }
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR:
-    case TV_CLOAK: {
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::CLOAK: {
         t = object_desc_str(t, "着");
         break;
     }
-    case TV_SWORD:
-    case TV_HAFTED:
-    case TV_BOW: {
+    case ItemKindType::SWORD:
+    case ItemKindType::HAFTED:
+    case ItemKindType::BOW: {
         t = object_desc_str(t, "振");
         break;
     }
-    case TV_BOOTS: {
+    case ItemKindType::BOOTS: {
         t = object_desc_str(t, "足");
         break;
     }
-    case TV_CARD: {
+    case ItemKindType::CARD: {
         t = object_desc_str(t, "枚");
         break;
     }
-    case TV_FOOD: {
+    case ItemKindType::FOOD: {
         if (o_ptr->sval == SV_FOOD_JERKY) {
             t = object_desc_str(t, "切れ");
             break;

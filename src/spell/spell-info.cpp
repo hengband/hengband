@@ -34,9 +34,9 @@ static const int extra_min_magic_fail_rate = 2;
  */
 EXP experience_of_spell(player_type *player_ptr, SPELL_IDX spell, int16_t use_realm)
 {
-    if (player_ptr->pclass == CLASS_SORCERER)
+    if (player_ptr->pclass == PlayerClassType::SORCERER)
         return SPELL_EXP_MASTER;
-    else if (player_ptr->pclass == CLASS_RED_MAGE)
+    else if (player_ptr->pclass == PlayerClassType::RED_MAGE)
         return SPELL_EXP_SKILLED;
     else if (use_realm == player_ptr->realm1)
         return player_ptr->spell_exp[spell];
@@ -122,7 +122,7 @@ PERCENTAGE mod_spell_chance_2(player_type *player_ptr, PERCENTAGE chance)
         chance--;
     if (player_ptr->heavy_spell)
         chance += 5;
-    return MAX(chance, 0);
+    return std::max(chance, 0);
 }
 
 /*!
@@ -135,7 +135,7 @@ PERCENTAGE mod_spell_chance_2(player_type *player_ptr, PERCENTAGE chance)
  */
 PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_realm)
 {
-    if (!mp_ptr->spell_book)
+    if (mp_ptr->spell_book == ItemKindType::NONE)
         return 100;
     if (use_realm == REALM_HISSATSU)
         return 0;
@@ -151,14 +151,14 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
     chance -= 3 * (player_ptr->lev - s_ptr->slevel);
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if (player_ptr->riding)
-        chance += (MAX(r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[SKILL_RIDING] / 100 - 10, 0));
+        chance += (std::max(r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[SKILL_RIDING] / 100 - 10, 0));
 
     MANA_POINT need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, use_realm);
     if (need_mana > player_ptr->csp) {
         chance += 5 * (need_mana - player_ptr->csp);
     }
 
-    if ((use_realm != player_ptr->realm1) && ((player_ptr->pclass == CLASS_MAGE) || (player_ptr->pclass == CLASS_PRIEST)))
+    if ((use_realm != player_ptr->realm1) && ((player_ptr->pclass == PlayerClassType::MAGE) || (player_ptr->pclass == PlayerClassType::PRIEST)))
         chance += 5;
 
     PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]];
@@ -167,9 +167,9 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
             minfail = 5;
     }
 
-    if (((player_ptr->pclass == CLASS_PRIEST) || (player_ptr->pclass == CLASS_SORCERER)) && player_ptr->is_icky_wield[0])
+    if (((player_ptr->pclass == PlayerClassType::PRIEST) || (player_ptr->pclass == PlayerClassType::SORCERER)) && player_ptr->is_icky_wield[0])
         chance += 25;
-    if (((player_ptr->pclass == CLASS_PRIEST) || (player_ptr->pclass == CLASS_SORCERER)) && player_ptr->is_icky_wield[1])
+    if (((player_ptr->pclass == PlayerClassType::PRIEST) || (player_ptr->pclass == PlayerClassType::SORCERER)) && player_ptr->is_icky_wield[1])
         chance += 25;
 
     chance = mod_spell_chance_1(player_ptr, chance);
@@ -201,8 +201,8 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
         chance = 95;
     }
 
-    if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || (player_ptr->pclass == CLASS_SORCERER)
-        || (player_ptr->pclass == CLASS_RED_MAGE)) {
+    if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || (player_ptr->pclass == PlayerClassType::SORCERER)
+        || (player_ptr->pclass == PlayerClassType::RED_MAGE)) {
         EXP exp = experience_of_spell(player_ptr, spell, use_realm);
         if (exp >= SPELL_EXP_EXPERT)
             chance--;
@@ -240,7 +240,7 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
     put_str(buf, y, x + 29);
 
     int increment = 64;
-    if ((player_ptr->pclass == CLASS_SORCERER) || (player_ptr->pclass == CLASS_RED_MAGE))
+    if ((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE))
         increment = 0;
     else if (use_realm == player_ptr->realm1)
         increment = 0;
@@ -281,7 +281,7 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
                 max = true;
             else if (s_ptr->slevel >= 99)
                 max = true;
-            else if ((player_ptr->pclass == CLASS_RED_MAGE) && (exp_level >= EXP_LEVEL_SKILLED))
+            else if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && (exp_level >= EXP_LEVEL_SKILLED))
                 max = true;
 
             strncpy(ryakuji, exp_level_str[exp_level], 4);
@@ -306,7 +306,7 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
         strcpy(info, exe_spell(player_ptr, use_realm, spell, SPELL_INFO));
         concptr comment = info;
         byte line_attr = TERM_WHITE;
-        if ((player_ptr->pclass == CLASS_SORCERER) || (player_ptr->pclass == CLASS_RED_MAGE)) {
+        if ((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE)) {
             if (s_ptr->slevel > player_ptr->max_plv) {
                 comment = _("未知", "unknown");
                 line_attr = TERM_L_BLUE;

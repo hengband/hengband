@@ -89,10 +89,10 @@ void set_zangband_realm(player_type *player_ptr)
 
 void set_zangband_skill(player_type *player_ptr)
 {
-    if (player_ptr->pclass != CLASS_BEASTMASTER)
+    if (player_ptr->pclass != PlayerClassType::BEASTMASTER)
         player_ptr->skill_exp[SKILL_RIDING] /= 2;
 
-    player_ptr->skill_exp[SKILL_RIDING] = MIN(player_ptr->skill_exp[SKILL_RIDING], s_info[player_ptr->pclass].s_max[SKILL_RIDING]);
+    player_ptr->skill_exp[SKILL_RIDING] = std::min(player_ptr->skill_exp[SKILL_RIDING], s_info[enum2i(player_ptr->pclass)].s_max[SKILL_RIDING]);
 }
 
 void set_zangband_race(player_type *player_ptr)
@@ -136,9 +136,7 @@ void set_zangband_reflection(player_type *player_ptr)
 
 void rd_zangband_dungeon()
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    max_dlv[DUNGEON_ANGBAND] = tmp16s;
+    max_dlv[DUNGEON_ANGBAND] = rd_s16b();
 }
 
 void set_zangband_game_turns(player_type *player_ptr)
@@ -151,16 +149,12 @@ void set_zangband_game_turns(player_type *player_ptr)
 
 void set_zangband_gambling_monsters(int i)
 {
-    int16_t tmp16s;
-    rd_s16b(&tmp16s);
-    mon_odds[i] = tmp16s;
+    mon_odds[i] = rd_s16b();
 }
 
 void set_zangband_special_attack(player_type *player_ptr)
 {
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->special_attack = ATTACK_CONFUSE;
 
     player_ptr->ele_attack = 0;
@@ -174,16 +168,13 @@ void set_zangband_special_defense(player_type *player_ptr)
 
 void set_zangband_action(player_type *player_ptr)
 {
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->action = ACTION_LEARN;
 }
 
 void set_zangband_visited_towns(player_type *player_ptr)
 {
-    int32_t tmp32s;
-    rd_s32b(&tmp32s);
+    strip_bytes(4);
     player_ptr->visit = 1L;
 }
 
@@ -202,22 +193,22 @@ void set_zangband_quest(player_type *player_ptr, quest_type *const q_ptr, int lo
 
 void set_zangband_class(player_type *player_ptr)
 {
-    if (h_older_than(0, 2, 2) && (player_ptr->pclass == CLASS_BEASTMASTER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 2, 2) && (player_ptr->pclass == PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 3, 2) && (player_ptr->pclass == CLASS_ARCHER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 3, 2) && (player_ptr->pclass == PlayerClassType::ARCHER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 2, 6) && (player_ptr->pclass == CLASS_SORCERER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 2, 6) && (player_ptr->pclass == PlayerClassType::SORCERER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 4, 7) && (player_ptr->pclass == CLASS_BLUE_MAGE) && !player_ptr->is_dead) {
+    if (h_older_than(0, 4, 7) && (player_ptr->pclass == PlayerClassType::BLUE_MAGE) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
@@ -234,43 +225,36 @@ void set_zangband_learnt_spells(player_type *player_ptr)
 void set_zangband_pet(player_type *player_ptr)
 {
     player_ptr->pet_extra_flags = 0;
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->pet_extra_flags |= PF_OPEN_DOORS;
 
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
 
     if (h_older_than(0, 0, 4))
         player_ptr->pet_extra_flags |= PF_TELEPORT;
     else {
-        rd_byte(&tmp8u);
-        if (tmp8u)
+        if (rd_byte() != 0)
             player_ptr->pet_extra_flags |= PF_TELEPORT;
     }
 
     if (h_older_than(0, 0, 7))
         player_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
     else {
-        rd_byte(&tmp8u);
-        if (tmp8u)
+        if (rd_byte() != 0)
             player_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
     }
 
     if (h_older_than(0, 0, 8))
         player_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
     else {
-        rd_byte(&tmp8u);
-        if (tmp8u)
+        if (rd_byte() != 0)
             player_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
     }
 
     if (h_older_than(0, 0, 8))
         return;
 
-    rd_byte(&tmp8u);
-    if (tmp8u)
+    if (rd_byte() != 0)
         player_ptr->pet_extra_flags |= PF_BALL_SPELL;
 }

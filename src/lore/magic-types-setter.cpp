@@ -424,7 +424,7 @@ void set_teleport_types(lore_type *lore_ptr)
 void set_floor_types(player_type *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(RF_ABILITY::DARKNESS)) {
-        if ((player_ptr->pclass != CLASS_NINJA) || (lore_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {
+        if ((player_ptr->pclass != PlayerClassType::NINJA) || (lore_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {
             lore_ptr->vp[lore_ptr->vn] = _("暗闇", "create darkness");
             lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
         } else {

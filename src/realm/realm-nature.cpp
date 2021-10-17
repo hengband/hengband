@@ -50,10 +50,10 @@
  */
 concptr do_nature_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? true : false;
-    bool desc = (mode == SPELL_DESCRIPTION) ? true : false;
-    bool info = (mode == SPELL_INFO) ? true : false;
-    bool cast = (mode == SPELL_CAST) ? true : false;
+    bool name = mode == SPELL_NAME;
+    bool desc = mode == SPELL_DESCRIPTION;
+    bool info = mode == SPELL_INFO;
+    bool cast = mode == SPELL_CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -134,7 +134,7 @@ concptr do_nature_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 msg_print(_("食料を生成した。", "A food ration is produced."));
 
                 /* Create the food ration */
-                q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_RATION));
+                q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_RATION));
 
                 /* Drop the object from heaven */
                 (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
@@ -289,7 +289,7 @@ concptr do_nature_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
             int rad2 = DETECT_RAD_DEFAULT;
 
             if (info)
-                return info_radius(MAX(rad1, rad2));
+                return info_radius(std::max(rad1, rad2));
 
             if (cast) {
                 map_area(player_ptr, rad1);

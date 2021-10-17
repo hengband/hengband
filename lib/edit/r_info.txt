@@ -22125,7 +22125,7 @@ W:30:10:0:50:0:0
 F:HURT_FIRE | HURT_COLD | HURT_LITE | HURT_ROCK | NEVER_BLOW
 F:ATTR_CLEAR | NEVER_MOVE | MULTIPLY |
 F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
-D:$A mysterious clear jelly thing.  It looks ready to explode.
+D:$A mysterious clear jelly thing.
 D:透明でぷよぷよした謎の生物だ。
 
 N:1105:汗血馬

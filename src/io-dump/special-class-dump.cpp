@@ -43,15 +43,15 @@ static void dump_magic_eater(player_type *player_ptr, FILE *fff)
 
     fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
 
-    for (auto tval : { TV_STAFF, TV_WAND, TV_ROD }) {
+    for (auto tval : { ItemKindType::STAFF, ItemKindType::WAND, ItemKindType::ROD }) {
         switch (tval) {
-        case TV_STAFF:
+        case ItemKindType::STAFF:
             fprintf(fff, _("\n[杖]\n", "\n[Staffs]\n"));
             break;
-        case TV_WAND:
+        case ItemKindType::WAND:
             fprintf(fff, _("\n[魔法棒]\n", "\n[Wands]\n"));
             break;
-        case TV_ROD:
+        case ItemKindType::ROD:
             fprintf(fff, _("\n[ロッド]\n", "\n[Rods]\n"));
             break;
         default:
@@ -231,15 +231,15 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
 void dump_aux_class_special(player_type *player_ptr, FILE *fff)
 {
     switch (player_ptr->pclass) {
-    case CLASS_MAGIC_EATER: {
+    case PlayerClassType::MAGIC_EATER: {
         dump_magic_eater(player_ptr, fff);
         return;
     }
-    case CLASS_SMITH: {
+    case PlayerClassType::SMITH: {
         dump_smith(player_ptr, fff);
         return;
     }
-    case CLASS_BLUE_MAGE: {
+    case PlayerClassType::BLUE_MAGE: {
         dump_blue_mage(player_ptr, fff);
         return;
     }

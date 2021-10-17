@@ -180,7 +180,7 @@ bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
         case 20: {
             auto is_statue = stop_ty;
             is_statue |= player_ptr->free_act && (randint1(125) < player_ptr->skill_sav);
-            is_statue |= player_ptr->pclass == CLASS_BERSERKER;
+            is_statue |= player_ptr->pclass == PlayerClassType::BERSERKER;
             if (!is_statue) {
                 msg_print(_("彫像になった気分だ！", "You feel like a statue!"));
                 TIME_EFFECT turns = player_ptr->free_act ? randint1(3) : randint1(13);

@@ -111,13 +111,13 @@ static bool select_destroying_item(player_type *player_ptr, destroy_type *destro
  */
 static bool decide_magic_book_exp(player_type *player_ptr, destroy_type *destroy_ptr)
 {
-    if (player_ptr->prace == player_race_type::ANDROID)
+    if (player_ptr->prace == PlayerRaceType::ANDROID)
         return false;
 
-    if ((player_ptr->pclass == CLASS_WARRIOR) || (player_ptr->pclass == CLASS_BERSERKER))
+    if ((player_ptr->pclass == PlayerClassType::WARRIOR) || (player_ptr->pclass == PlayerClassType::BERSERKER))
         return true;
 
-    if (player_ptr->pclass != CLASS_PALADIN)
+    if (player_ptr->pclass != PlayerClassType::PALADIN)
         return false;
 
     bool gain_expr = false;
@@ -158,10 +158,10 @@ static void process_destroy_magic_book(player_type *player_ptr, destroy_type *de
         return;
 
     gain_exp_by_destroying_magic_book(player_ptr, destroy_ptr);
-    if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == TV_LIFE_BOOK) {
+    if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemKindType::LIFE_BOOK) {
         chg_virtue(player_ptr, V_UNLIFE, 1);
         chg_virtue(player_ptr, V_VITALITY, -1);
-    } else if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == TV_DEATH_BOOK) {
+    } else if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemKindType::DEATH_BOOK) {
         chg_virtue(player_ptr, V_UNLIFE, -1);
         chg_virtue(player_ptr, V_VITALITY, 1);
     }

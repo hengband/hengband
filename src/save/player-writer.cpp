@@ -21,7 +21,7 @@
  */
 static void wr_relams(player_type *player_ptr)
 {
-    if (player_ptr->pclass == CLASS_ELEMENTALIST)
+    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
         wr_byte((byte)player_ptr->element);
     else
         wr_byte((byte)player_ptr->realm1);
@@ -78,9 +78,9 @@ void wr_player(player_type *player_ptr)
     for (int i = 0; i < 64; i++)
         wr_s16b(player_ptr->spell_exp[i]);
 
-    for (int i = 0; i < 5; i++)
+    for (auto tval : TV_WEAPON_RANGE)
         for (int j = 0; j < 64; j++)
-            wr_s16b(player_ptr->weapon_exp[i][j]);
+            wr_s16b(player_ptr->weapon_exp[tval][j]);
 
     for (int i = 0; i < MAX_SKILLS; i++)
         wr_s16b(player_ptr->skill_exp[i]);

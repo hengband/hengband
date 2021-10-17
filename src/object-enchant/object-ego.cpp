@@ -146,7 +146,7 @@ static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_p
         auto n = xtra.tr_flags.size();
         if (n > 0) {
             auto f = xtra.tr_flags[randint0(n)];
-            auto except = (f == TR_VORPAL && o_ptr->tval != TV_SWORD);
+            auto except = (f == TR_VORPAL && o_ptr->tval != ItemKindType::SWORD);
             if (!except)
                 o_ptr->art_flags.set(f);
         }
@@ -206,7 +206,7 @@ void ego_invest_extra_attack(object_type *o_ptr, ego_item_type *e_ptr, DEPTH lev
         o_ptr->pval = randint1(e_ptr->max_pval * lev / 100 + 1);
         if (o_ptr->pval > 3)
             o_ptr->pval = 3;
-        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA))
             o_ptr->pval += randint1(2);
         return;
     }
@@ -282,7 +282,7 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
                 o_ptr->to_h += 5;
                 o_ptr->to_d -= 5;
             }
-            o_ptr->to_h = MAX(o_ptr->to_h, 15);
+            o_ptr->to_h = std::max<short>(o_ptr->to_h, 15);
         }
 
         if (gen_flags.has(TRG::MOD_VELOCITY)) {
@@ -290,11 +290,11 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
                 o_ptr->to_d += 5;
                 o_ptr->to_h -= 5;
             }
-            o_ptr->to_d = MAX(o_ptr->to_d, 15);
+            o_ptr->to_d = std::max(o_ptr->to_d, 15);
         }
 
         if ((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION) || (o_ptr->name2 == EGO_H_PROTECTION)) {
-            o_ptr->to_a = MAX(o_ptr->to_a, 15);
+            o_ptr->to_a = std::max<short>(o_ptr->to_a, 15);
         }
 
         if (e_ptr->max_pval) {
@@ -318,7 +318,7 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
             o_ptr->pval = randint1(o_ptr->pval);
         }
 
-        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EGO_ATTACKS))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EGO_ATTACKS))
             o_ptr->pval = 2;
     }
 }

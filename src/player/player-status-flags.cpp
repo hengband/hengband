@@ -488,7 +488,7 @@ bool has_pass_wall(player_type *player_ptr)
 {
     bool pow = false;
 
-    if (player_ptr->wraith_form || player_ptr->tim_pass_wall || (!player_ptr->mimic_form && player_ptr->prace == player_race_type::SPECTRE)) {
+    if (player_ptr->wraith_form || player_ptr->tim_pass_wall || (!player_ptr->mimic_form && player_ptr->prace == PlayerRaceType::SPECTRE)) {
         pow = true;
     }
 
@@ -703,28 +703,28 @@ void check_no_flowed(player_type *player_ptr)
     }
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        if ((player_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (player_ptr->inventory_list[i].sval == 2))
+        if ((player_ptr->inventory_list[i].tval == ItemKindType::NATURE_BOOK) && (player_ptr->inventory_list[i].sval == 2))
             has_sw = true;
-        if ((player_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (player_ptr->inventory_list[i].sval == 2))
+        if ((player_ptr->inventory_list[i].tval == ItemKindType::CRAFT_BOOK) && (player_ptr->inventory_list[i].sval == 2))
             has_kabe = true;
     }
 
     for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
-        if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2))
+        if ((o_ptr->tval == ItemKindType::NATURE_BOOK) && (o_ptr->sval == 2))
             has_sw = true;
-        if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2))
+        if ((o_ptr->tval == ItemKindType::CRAFT_BOOK) && (o_ptr->sval == 2))
             has_kabe = true;
     }
 
-    if (has_sw && ((player_ptr->realm1 == REALM_NATURE) || (player_ptr->realm2 == REALM_NATURE) || (player_ptr->pclass == CLASS_SORCERER))) {
+    if (has_sw && ((player_ptr->realm1 == REALM_NATURE) || (player_ptr->realm2 == REALM_NATURE) || (player_ptr->pclass == PlayerClassType::SORCERER))) {
         const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
         if (player_ptr->lev >= s_ptr->slevel)
             player_ptr->no_flowed = true;
     }
 
-    if (has_kabe && ((player_ptr->realm1 == REALM_CRAFT) || (player_ptr->realm2 == REALM_CRAFT) || (player_ptr->pclass == CLASS_SORCERER))) {
+    if (has_kabe && ((player_ptr->realm1 == REALM_CRAFT) || (player_ptr->realm2 == REALM_CRAFT) || (player_ptr->pclass == PlayerClassType::SORCERER))) {
         const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_WALL];
         if (player_ptr->lev >= s_ptr->slevel)
             player_ptr->no_flowed = true;
@@ -754,7 +754,7 @@ BIT_FLAGS has_reflect(player_type *player_ptr)
 
 BIT_FLAGS has_see_nocto(player_type *player_ptr)
 {
-    return (player_ptr->pclass == CLASS_NINJA) ? FLAG_CAUSE_CLASS : FLAG_CAUSE_NONE;
+    return (player_ptr->pclass == PlayerClassType::NINJA) ? FLAG_CAUSE_CLASS : FLAG_CAUSE_NONE;
 }
 
 BIT_FLAGS has_warning(player_type *player_ptr)
@@ -1550,7 +1550,7 @@ bool has_two_handed_weapons(player_type *player_ptr)
 BIT_FLAGS has_lite(player_type *player_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (player_ptr->pclass == CLASS_NINJA)
+    if (player_ptr->pclass == PlayerClassType::NINJA)
         return 0L;
 
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
@@ -1599,15 +1599,15 @@ bool is_wielding_icky_weapon(player_type *player_ptr, int i)
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     auto flgs = object_flags(o_ptr);
 
-    auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
-    if (player_ptr->pclass == CLASS_PRIEST) {
+    auto has_no_weapon = (o_ptr->tval == ItemKindType::NONE) || (o_ptr->tval == ItemKindType::SHIELD);
+    if (player_ptr->pclass == PlayerClassType::PRIEST) {
         auto is_suitable_weapon = flgs.has(TR_BLESSED);
-        is_suitable_weapon |= (o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM);
+        is_suitable_weapon |= (o_ptr->tval != ItemKindType::SWORD) && (o_ptr->tval != ItemKindType::POLEARM);
         return !has_no_weapon && !is_suitable_weapon;
     }
 
-    if (player_ptr->pclass == CLASS_SORCERER) {
-        auto is_suitable_weapon = o_ptr->tval == TV_HAFTED;
+    if (player_ptr->pclass == PlayerClassType::SORCERER) {
+        auto is_suitable_weapon = o_ptr->tval == ItemKindType::HAFTED;
         is_suitable_weapon &= (o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER);
         return !has_no_weapon && !is_suitable_weapon;
     }
@@ -1624,7 +1624,7 @@ bool is_wielding_icky_riding_weapon(player_type *player_ptr, int i)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     auto flgs = object_flags(o_ptr);
-    auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
+    auto has_no_weapon = (o_ptr->tval == ItemKindType::NONE) || (o_ptr->tval == ItemKindType::SHIELD);
     auto is_suitable = o_ptr->is_lance() || flgs.has(TR_RIDING);
     return (player_ptr->riding > 0) && !has_no_weapon && !is_suitable;
 }
@@ -1634,10 +1634,12 @@ bool has_not_ninja_weapon(player_type *player_ptr, int i)
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         return false;
     }
-    int tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
-    return player_ptr->pclass == CLASS_NINJA
-        && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != TV_SHIELD));
+
+    auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
+    auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
+    return player_ptr->pclass == PlayerClassType::NINJA &&
+           !((s_info[enum2i(PlayerClassType::NINJA)].w_max[tval][sval] > PlayerSkill::weapon_exp_at(EXP_LEVEL_BEGINNER)) &&
+               (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != ItemKindType::SHIELD));
 }
 
 bool has_not_monk_weapon(player_type *player_ptr, int i)
@@ -1645,9 +1647,10 @@ bool has_not_monk_weapon(player_type *player_ptr, int i)
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         return false;
     }
-    int tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
-    return ((player_ptr->pclass == CLASS_MONK) || (player_ptr->pclass == CLASS_FORCETRAINER)) && !(s_info[player_ptr->pclass].w_max[tval][sval]);
+    
+    auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
+    auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
+    return ((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && !(s_info[enum2i(player_ptr->pclass)].w_max[tval][sval]);
 }
 
 bool has_good_luck(player_type *player_ptr)
@@ -1658,7 +1661,7 @@ bool has_good_luck(player_type *player_ptr)
 BIT_FLAGS player_aggravate_state(player_type *player_ptr)
 {
     if (player_ptr->cursed.has(TRC::AGGRAVATE)) {
-        if ((PlayerRace(player_ptr).equals(player_race_type::S_FAIRY)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
+        if ((PlayerRace(player_ptr).equals(PlayerRaceType::S_FAIRY)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
             return AGGRAVATE_S_FAIRY;
         }
         return AGGRAVATE_NORMAL;
