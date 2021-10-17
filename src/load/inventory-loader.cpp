@@ -1,7 +1,8 @@
 ﻿#include "load/inventory-loader.h"
 #include "inventory/inventory-slot-types.h"
-#include "load/item-loader.h"
+#include "load/item/item-loader-factory.h"
 #include "load/load-util.h"
+#include "load/old/item-loader-savefile10.h"
 #include "object/object-mark-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -27,23 +28,22 @@ static errr rd_inventory(player_type *player_ptr)
     player_ptr->inventory_list = std::shared_ptr<object_type[]>{ new object_type[INVEN_TOTAL] };
 
     int slot = 0;
+    auto item_loader = ItemLoaderFactory::create_loader();
     while (true) {
         auto n = rd_u16b();
 
-        if (n == 0xFFFF)
+        if (n == 0xFFFF) {
             break;
-        object_type forge;
-        object_type *q_ptr;
-        q_ptr = &forge;
-        q_ptr->wipe();
+        }
 
-        rd_item(q_ptr);
-        if (!q_ptr->k_idx)
+        object_type item;
+        item_loader->rd_item(&item);
+        if (!item.k_idx)
             return (53);
 
         if (n >= INVEN_MAIN_HAND) {
-            q_ptr->marked |= OM_TOUCHED;
-            (&player_ptr->inventory_list[n])->copy_from(q_ptr);
+            item.marked |= OM_TOUCHED;
+            player_ptr->inventory_list[n].copy_from(&item);
             player_ptr->equip_cnt++;
             continue;
         }
@@ -54,8 +54,8 @@ static errr rd_inventory(player_type *player_ptr)
         }
 
         n = slot++;
-        q_ptr->marked |= OM_TOUCHED;
-        (&player_ptr->inventory_list[n])->copy_from(q_ptr);
+        item.marked |= OM_TOUCHED;
+        player_ptr->inventory_list[n].copy_from(&item);
         player_ptr->inven_cnt++;
     }
 

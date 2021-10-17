@@ -6,7 +6,7 @@
 #include "load/dummy-loader.h"
 #include "load/floor-loader.h"
 #include "load/load-util.h"
-#include "load/load-v1-5-0.h"
+#include "load/old/load-v1-5-0.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "save/floor-writer.h"
