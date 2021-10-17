@@ -271,6 +271,7 @@
     <ClCompile Include="..\..\src\core\score-util.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-base.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
+    <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp" />
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-info.cpp" />
@@ -927,6 +928,9 @@
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-base.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-factory.h" />
+    <ClInclude Include="..\..\src\load\monster\monster-loader-base.h" />
+    <ClInclude Include="..\..\src\load\monster\monster-loader-factory.h" />
+    <ClInclude Include="..\..\src\load\monster\monster-loader-version-types.h" />
     <ClInclude Include="..\..\src\load\old\monster-flag-types-savefile10.h" />
     <ClInclude Include="..\..\src\load\player-class-specific-data-loader.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
