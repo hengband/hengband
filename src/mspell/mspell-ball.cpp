@@ -159,8 +159,8 @@ MonsterSpellResult spell_RF5_BA_FIRE(player_type *player_ptr, POSITION y, POSITI
         msg.to_mons = _("%^sが%^sに向かって手榴弾を投げた。", "%^s throws a hand grenade.");
     } else {
         msg.blind = _("%^sが何かをつぶやいた。", "%^s mumbles.");
-        msg.to_mons = _("%^sがファイア・ボールの呪文を唱えた。", "%^s casts a fire ball.");
-        msg.to_player = _("%^sが%sに向かってファイア・ボールの呪文を唱えた。", "%^s casts a fire ball at %s.");
+        msg.to_player = _("%^sがファイア・ボールの呪文を唱えた。", "%^s casts a fire ball.");
+        msg.to_mons = _("%^sが%sに向かってファイア・ボールの呪文を唱えた。", "%^s casts a fire ball at %s.");
     }
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
