@@ -10,15 +10,13 @@
 
 /* Purpose: a simple random number generator -BEN- */
 
-#if defined(WINDOWS)
-#include <Windows.h>
-#endif
-
 #include "term/z-rand.h"
 #include "util/rng-xoshiro.h"
 #include "world/world.h"
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
 #include <optional>
 #include <random>
 
@@ -56,49 +54,19 @@
 
 void Rand_state_init(void)
 {
-#ifdef RNG_DEVICE
+    using element_type = Xoshiro128StarStar::state_type::value_type;
+    constexpr auto a = std::numeric_limits<element_type>::min();
+    constexpr auto b = std::numeric_limits<element_type>::max();
+
+    std::random_device rd;
+    std::uniform_int_distribution<element_type> dist(a, b);
 
     Xoshiro128StarStar::state_type Rand_state{};
-
-    FILE *fp = fopen(RNG_DEVICE, "r");
-    int n;
-
     do {
-        n = fread(Rand_state.data(), sizeof(Rand_state[0]), 4, fp);
-    } while (n != 4 || (Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
-
-    fclose(fp);
+        std::generate(Rand_state.begin(), Rand_state.end(), [&dist, &rd] { return dist(rd); });
+    } while (std::all_of(Rand_state.begin(), Rand_state.end(), [](auto s) { return s == 0; }));
 
     w_ptr->rng.set_state(Rand_state);
-
-#elif defined(WINDOWS)
-
-    Xoshiro128StarStar::state_type Rand_state{};
-
-    HCRYPTPROV hProvider;
-
-    CryptAcquireContext(&hProvider, nullptr, nullptr, PROV_RSA_FULL, 0);
-
-    do {
-        CryptGenRandom(hProvider, sizeof(Rand_state[0]) * 4, (BYTE *)Rand_state.data());
-    } while ((Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
-
-    CryptReleaseContext(hProvider, 0);
-
-    w_ptr->rng.set_state(Rand_state);
-
-#else
-
-    /* Basic seed */
-    uint32_t seed = (time(nullptr));
-#ifdef SET_UID
-    /* Mutate the seed on Unix machines */
-    seed = ((seed >> 3) * (getpid() << 1));
-#endif
-    /* Seed the RNG */
-    w_ptr->rng.set_state(seed);
-
-#endif
 }
 
 int rand_range(int a, int b)
