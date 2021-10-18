@@ -84,8 +84,6 @@ fi
 
 AC_CHECK_LIB(iconv, iconv_open)
 
-AC_CHECK_FILE(/dev/urandom, AC_DEFINE(RNG_DEVICE, "/dev/urandom", [Random Number Generation device file]))
-
 if test "$worldscore" != no; then
   PKG_CHECK_MODULES(libcurl, [libcurl])
 fi
