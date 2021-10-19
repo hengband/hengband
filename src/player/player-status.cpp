@@ -235,18 +235,11 @@ static void update_ability_scores(player_type *player_ptr)
     PlayerDexterity player_dex(player_ptr);
     PlayerConstitution player_con(player_ptr);
     PlayerCharisma player_chr(player_ptr);
-    player_ptr->stat_add[A_STR] = player_str.modification_value();
-    player_ptr->stat_add[A_INT] = player_str.modification_value();
-    player_ptr->stat_add[A_WIS] = player_wis.modification_value();
-    player_ptr->stat_add[A_DEX] = player_dex.modification_value();
-    player_ptr->stat_add[A_CON] = player_con.modification_value();
-    player_ptr->stat_add[A_CHR] = player_chr.modification_value();
-    player_str.update_value();
-    player_int.update_value();
-    player_wis.update_value();
-    player_dex.update_value();
-    player_con.update_value();
-    player_chr.update_value();
+    PlayerBasicStatistics *player_stats[] = { &player_str, &player_int, &player_wis, &player_dex, &player_con, &player_chr };
+    for (auto i = 0; i < A_MAX; ++i) {
+        player_ptr->stat_add[i] = player_stats[i]->modification_value();
+        player_stats[i]->update_value();
+    }
 }
 
 /*!
