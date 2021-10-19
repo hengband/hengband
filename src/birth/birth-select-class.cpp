@@ -117,9 +117,10 @@ static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
 {
     auto cs = player_ptr->pclass;
     auto os = PlayerClassType::MAX;
+    int int_os = enum2i(os);
+    int int_cs = enum2i(cs);
     while (true) {
-        int int_os = enum2i(os);
-        display_class_stat(enum2i(cs), &int_os, cur, sym);
+        display_class_stat(int_cs, &int_os, cur, sym);
         if (*k >= 0)
             break;
 
@@ -141,12 +142,11 @@ static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
                 cs = i2enum<PlayerClassType>(*k);
                 continue;
             } else {
-                *k = enum2i(cs);
+                *k = int_cs;
                 break;
             }
         }
 
-        int int_cs = enum2i(cs);
         interpret_class_select_key_move(c, &int_cs);
         if (c == '*') {
             *k = randint0(PLAYER_CLASS_TYPE_MAX);
