@@ -79,7 +79,10 @@ static void describe_chest_trap(flavor_type *flavor_ptr)
     case ChestTrapType::ALARM:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(警報装置)", " (Alarm)"));
         break;
-    default:
+    case ChestTrapType::SCATTER:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(アイテム散乱)", " (Scatter)"));
+        break;
+    case ChestTrapType::MAX:
         throw("Invalid chest trap type is specified!");
     }
 }
