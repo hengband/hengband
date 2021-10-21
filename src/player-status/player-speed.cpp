@@ -285,14 +285,14 @@ int16_t PlayerSpeed::riding_value()
     }
 
     if (riding_m_ptr->mspeed > 110) {
-        result = (int16_t)((speed - 110) * (this->player_ptr->skill_exp[SKILL_RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
+        result = (int16_t)((speed - 110) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
         if (result < 0)
             result = 0;
     } else {
         result = speed - 110;
     }
 
-    result += (this->player_ptr->skill_exp[SKILL_RIDING] + this->player_ptr->lev * 160L) / 3200;
+    result += (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] + this->player_ptr->lev * 160L) / 3200;
 
     if (monster_fast_remaining(riding_m_ptr))
         result += 10;

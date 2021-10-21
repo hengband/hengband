@@ -264,7 +264,7 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
 
             return false;
         }
-        if (r_info[m_ptr->r_idx].level > randint1((player_ptr->skill_exp[SKILL_RIDING] / 50 + player_ptr->lev / 2 + 20))) {
+        if (r_info[m_ptr->r_idx].level > randint1((player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 50 + player_ptr->lev / 2 + 20))) {
             msg_print(_("うまく乗れなかった。", "You failed to ride."));
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             return false;

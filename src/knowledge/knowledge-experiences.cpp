@@ -31,7 +31,7 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    for (auto tval : {ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW}) {
+    for (auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW }) {
         for (int num = 0; num < 64; num++) {
             char tmp[30];
             for (const auto &k_ref : k_info) {
@@ -150,9 +150,6 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
  */
 void do_cmd_knowledge_skill_exp(player_type *player_ptr)
 {
-    const char *skill_name[SKILL_MAX] = { _("マーシャルアーツ", "Martial Arts    "), _("二刀流          ", "Dual Wielding   "),
-        _("乗馬            ", "Riding          "), _("盾              ", "Shield          ") };
-
     FILE *fff = nullptr;
     char file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
@@ -161,14 +158,14 @@ void do_cmd_knowledge_skill_exp(player_type *player_ptr)
     for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         SUB_EXP skill_exp = player_ptr->skill_exp[i];
         SUB_EXP skill_max = s_info[enum2i(player_ptr->pclass)].s_max[i];
-        fprintf(fff, "%-20s ", skill_name[i]);
+        fprintf(fff, "%-20s ", PlayerSkill::skill_name(i));
         if (show_actual_value)
             fprintf(fff, "%4d/%4d ", std::min(skill_exp, skill_max), skill_max);
         if (skill_exp >= skill_max)
             fprintf(fff, "!");
         else
             fprintf(fff, " ");
-        fprintf(fff, "%s", exp_level_str[(i == SKILL_RIDING) ? PlayerSkill::riding_exp_level(skill_exp) : PlayerSkill::weapon_exp_level(skill_exp)]);
+        fprintf(fff, "%s", exp_level_str[(i == PlayerSkillKindType::RIDING) ? PlayerSkill::riding_exp_level(skill_exp) : PlayerSkill::weapon_exp_level(skill_exp)]);
         if (cheat_xtra)
             fprintf(fff, " %d", skill_exp);
         fprintf(fff, "\n");

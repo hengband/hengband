@@ -58,7 +58,7 @@ static bool calc_fall_off_possibility(player_type *player_ptr, const HIT_POINT d
     if (force)
         return true;
 
-    auto cur = player_ptr->skill_exp[SKILL_RIDING];
+    auto cur = player_ptr->skill_exp[PlayerSkillKindType::RIDING];
 
     int fall_off_level = r_ptr->level;
     if (player_ptr->riding_ryoute)

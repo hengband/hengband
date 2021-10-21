@@ -9,15 +9,15 @@
 #include <string>
 #include <vector>
 
-enum skill_idx {
-    SKILL_MARTIAL_ARTS = 0,
-    SKILL_TWO_WEAPON = 1,
-    SKILL_RIDING = 2,
-    SKILL_SHIELD = 3,
-    SKILL_MAX = 4,
+enum class PlayerSkillKindType {
+    MARTIAL_ARTS = 0,
+    TWO_WEAPON = 1,
+    RIDING = 2,
+    SHIELD = 3,
+    MAX,
 };
 
-constexpr auto PLAYER_SKILL_KIND_TYPE_RANGE = EnumRange(SKILL_MARTIAL_ARTS, SKILL_SHIELD);
+constexpr auto PLAYER_SKILL_KIND_TYPE_RANGE = EnumRange(PlayerSkillKindType::MARTIAL_ARTS, PlayerSkillKindType::SHIELD);
 
 /* Proficiency level */
 #define EXP_LEVEL_UNSKILLED 0
@@ -36,8 +36,8 @@ enum class ItemKindType : short;
 typedef struct skill_table {
     std::map<ItemKindType, std::array<SUB_EXP, 64>> w_start{}; /* start weapon exp */
     std::map<ItemKindType, std::array<SUB_EXP, 64>> w_max{}; /* max weapon exp */
-    std::map<skill_idx, SUB_EXP> s_start{}; /* start skill */
-    std::map<skill_idx, SUB_EXP> s_max{}; /* max skill */
+    std::map<PlayerSkillKindType, SUB_EXP> s_start{}; /* start skill */
+    std::map<PlayerSkillKindType, SUB_EXP> s_max{}; /* max skill */
 } skill_table;
 
 extern std::vector<skill_table> s_info;
@@ -56,6 +56,7 @@ public:
     static int weapon_exp_level(int weapon_exp);
     static int riding_exp_level(int riding_exp);
     static int spell_exp_level(int spell_exp);
+    static concptr skill_name(PlayerSkillKindType skill);
 
     void gain_melee_weapon_exp(const object_type *o_ptr);
     void gain_range_weapon_exp(const object_type *o_ptr);

@@ -2,6 +2,7 @@
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
+#include "player/player-skill.h"
 #include "save/info-writer.h"
 #include "save/player-class-specific-data-writer.h"
 #include "save/save-util.h"

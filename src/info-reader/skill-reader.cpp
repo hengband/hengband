@@ -59,7 +59,7 @@ errr parse_s_info(std::string_view buf, angband_header *head)
         if (!PlayerSkill::valid_weapon_exp(start) || !PlayerSkill::valid_weapon_exp(max) || start > max)
             return PARSE_ERROR_INVALID_FLAG;
 
-        auto skill = SKILL_MARTIAL_ARTS + num;
+        auto skill = PlayerSkillKindType::MARTIAL_ARTS + num;
         s_ptr->s_start[skill] = static_cast<SUB_EXP>(start);
         s_ptr->s_max[skill] = static_cast<SUB_EXP>(max);
     } else

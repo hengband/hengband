@@ -15,9 +15,8 @@
 #include <array>
 #include <map>
 
-#include "player/player-skill.h"
-
 enum class ItemKindType : short;
+enum class PlayerSkillKindType;
 enum class RF_ABILITY;
 
 struct floor_type;
@@ -188,7 +187,7 @@ public:
 
     SUB_EXP spell_exp[64]{}; /* Proficiency of spells */
     std::map<ItemKindType, std::array<SUB_EXP, 64>> weapon_exp{}; /* Proficiency of weapons */
-    std::map<skill_idx, SUB_EXP> skill_exp{}; /* Proficiency of misc. skill */
+    std::map<PlayerSkillKindType, SUB_EXP> skill_exp{}; /* Proficiency of misc. skill */
 
     ClassSpecificData class_specific_data;
 
