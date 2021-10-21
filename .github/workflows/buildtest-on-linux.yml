@@ -29,6 +29,18 @@ jobs:
       - name: Generate configure
         run: ./bootstrap
 
+      - name: Configure for compiling with clang (without using pre-compiled headers)
+        run: ./configure --disable-pch
+        env:
+          CXX: clang++-11
+          CXXFLAGS: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
+
+      - name: Build with clang
+        run: make -j$(nproc) 1> /dev/null
+
+      - name: Clean source tree
+        run: make clean
+
       - name: Configuratoin for Japanese version
         run: ./configure
 
@@ -42,16 +54,4 @@ jobs:
         run: ./configure --disable-japanese
 
       - name: Build English version
-        run: make -j$(nproc) 1> /dev/null
-
-      - name: Clean source tree
-        run: make clean
-
-      - name: Configure for compiling with clang (without using pre-compiled headers)
-        run: ./configure --disable-pch
-        env:
-          CXX: clang++-11
-          CXXFLAGS: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
-
-      - name: Build with clang
         run: make -j$(nproc) 1> /dev/null
