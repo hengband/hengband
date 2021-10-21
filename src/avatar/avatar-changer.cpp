@@ -173,7 +173,7 @@ void AvatarChanger::change_virtue_wild_thief()
             innocent = false;
         }
 
-        if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD)) {
+        if ((r_ptr->blow[i].effect == RaceBlowEffectType::EAT_ITEM) || (r_ptr->blow[i].effect == RaceBlowEffectType::EAT_GOLD)) {
             thief = true;
         }
     }

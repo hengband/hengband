@@ -46,4 +46,4 @@ typedef struct mbe_info_type {
     int explode_type; /* Explosion effect */
 } mbe_info_type;
 
-extern const mbe_info_type mbe_info[NB_RBE_TYPE];
+extern const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)];

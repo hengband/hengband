@@ -302,12 +302,12 @@ static void calc_blow_hungry(player_type *player_ptr, monap_type *monap_ptr)
 void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
-    case RBE_NONE:
+    case RaceBlowEffectType::NONE:
         // ここには来ないはずだが、何らかのバグで来た場合はプレイヤーの不利益に
         // ならないようダメージを 0 にしておく。
         monap_ptr->damage = 0;
         break;
-    case RBE_SUPERHURT: { /* AC軽減あり / Player armor reduces total damage */
+    case RaceBlowEffectType::SUPERHURT: { /* AC軽減あり / Player armor reduces total damage */
         if (((randint1(monap_ptr->rlev * 2 + 300) > (monap_ptr->ac + 200)) || one_in_(13)) && !check_multishadow(player_ptr)) {
             monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
             msg_print(_("痛恨の一撃！", "It was a critical hit!"));
@@ -317,22 +317,22 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         }
     }
         /* Fall through */
-    case RBE_HURT: { /* AC軽減あり / Player armor reduces total damage */
+    case RaceBlowEffectType::HURT: { /* AC軽減あり / Player armor reduces total damage */
         monap_ptr->obvious = true;
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         break;
     }
-    case RBE_POISON:
+    case RaceBlowEffectType::POISON:
         calc_blow_poison(player_ptr, monap_ptr);
         break;
-    case RBE_UN_BONUS:
+    case RaceBlowEffectType::UN_BONUS:
         calc_blow_disenchant(player_ptr, monap_ptr);
         break;
-    case RBE_UN_POWER:
+    case RaceBlowEffectType::UN_POWER:
         calc_blow_un_power(player_ptr, monap_ptr);
         break;
-    case RBE_EAT_GOLD:
+    case RaceBlowEffectType::EAT_GOLD:
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (monster_confused_remaining(monap_ptr->m_ptr) || player_ptr->is_dead || check_multishadow(player_ptr))
             break;
@@ -340,7 +340,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         monap_ptr->obvious = true;
         process_eat_gold(player_ptr, monap_ptr);
         break;
-    case RBE_EAT_ITEM: {
+    case RaceBlowEffectType::EAT_ITEM: {
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (!check_eat_item(player_ptr, monap_ptr))
             break;
@@ -349,7 +349,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         break;
     }
 
-    case RBE_EAT_FOOD: {
+    case RaceBlowEffectType::EAT_FOOD: {
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (player_ptr->is_dead || check_multishadow(player_ptr))
             break;
@@ -357,7 +357,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         process_eat_food(player_ptr, monap_ptr);
         break;
     }
-    case RBE_EAT_LITE: {
+    case RaceBlowEffectType::EAT_LITE: {
         monap_ptr->o_ptr = &player_ptr->inventory_list[INVEN_LITE];
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (player_ptr->is_dead || check_multishadow(player_ptr))
@@ -366,7 +366,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         process_eat_lite(player_ptr, monap_ptr);
         break;
     }
-    case RBE_ACID: {
+    case RaceBlowEffectType::ACID: {
         if (monap_ptr->explode)
             break;
 
@@ -377,7 +377,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         update_smart_learn(player_ptr, monap_ptr->m_idx, DRS_ACID);
         break;
     }
-    case RBE_ELEC: {
+    case RaceBlowEffectType::ELEC: {
         if (monap_ptr->explode)
             break;
 
@@ -387,7 +387,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         update_smart_learn(player_ptr, monap_ptr->m_idx, DRS_ELEC);
         break;
     }
-    case RBE_FIRE: {
+    case RaceBlowEffectType::FIRE: {
         if (monap_ptr->explode)
             break;
 
@@ -397,7 +397,7 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         update_smart_learn(player_ptr, monap_ptr->m_idx, DRS_FIRE);
         break;
     }
-    case RBE_COLD: {
+    case RaceBlowEffectType::COLD: {
         if (monap_ptr->explode)
             break;
 
@@ -407,40 +407,40 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
         update_smart_learn(player_ptr, monap_ptr->m_idx, DRS_COLD);
         break;
     }
-    case RBE_BLIND:
+    case RaceBlowEffectType::BLIND:
         calc_blow_blind(player_ptr, monap_ptr);
         break;
-    case RBE_CONFUSE:
+    case RaceBlowEffectType::CONFUSE:
         calc_blow_confusion(player_ptr, monap_ptr);
         break;
-    case RBE_TERRIFY:
+    case RaceBlowEffectType::TERRIFY:
         calc_blow_fear(player_ptr, monap_ptr);
         break;
-    case RBE_PARALYZE:
+    case RaceBlowEffectType::PARALYZE:
         calc_blow_paralysis(player_ptr, monap_ptr);
         break;
-    case RBE_LOSE_STR:
+    case RaceBlowEffectType::LOSE_STR:
         calc_blow_lose_strength(player_ptr, monap_ptr);
         break;
-    case RBE_LOSE_INT:
+    case RaceBlowEffectType::LOSE_INT:
         calc_blow_lose_intelligence(player_ptr, monap_ptr);
         break;
-    case RBE_LOSE_WIS:
+    case RaceBlowEffectType::LOSE_WIS:
         calc_blow_lose_wisdom(player_ptr, monap_ptr);
         break;
-    case RBE_LOSE_DEX:
+    case RaceBlowEffectType::LOSE_DEX:
         calc_blow_lose_dexterity(player_ptr, monap_ptr);
         break;
-    case RBE_LOSE_CON:
+    case RaceBlowEffectType::LOSE_CON:
         calc_blow_lose_constitution(player_ptr, monap_ptr);
         break;
-    case RBE_LOSE_CHR:
+    case RaceBlowEffectType::LOSE_CHR:
         calc_blow_lose_charisma(player_ptr, monap_ptr);
         break;
-    case RBE_LOSE_ALL:
+    case RaceBlowEffectType::LOSE_ALL:
         calc_blow_lose_all(player_ptr, monap_ptr);
         break;
-    case RBE_SHATTER: { /* AC軽減あり / Player armor reduces total damage */
+    case RaceBlowEffectType::SHATTER: { /* AC軽減あり / Player armor reduces total damage */
         monap_ptr->obvious = true;
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
@@ -449,49 +449,49 @@ void switch_monster_blow_to_player(player_type *player_ptr, monap_type *monap_pt
 
         break;
     }
-    case RBE_EXP_10:
+    case RaceBlowEffectType::EXP_10:
         calc_blow_drain_exp(player_ptr, monap_ptr, 10, 95);
         break;
-    case RBE_EXP_20:
+    case RaceBlowEffectType::EXP_20:
         calc_blow_drain_exp(player_ptr, monap_ptr, 20, 90);
         break;
-    case RBE_EXP_40:
+    case RaceBlowEffectType::EXP_40:
         calc_blow_drain_exp(player_ptr, monap_ptr, 40, 75);
         break;
-    case RBE_EXP_80:
+    case RaceBlowEffectType::EXP_80:
         calc_blow_drain_exp(player_ptr, monap_ptr, 80, 50);
         break;
-    case RBE_DISEASE:
+    case RaceBlowEffectType::DISEASE:
         calc_blow_disease(player_ptr, monap_ptr);
         break;
-    case RBE_TIME:
+    case RaceBlowEffectType::TIME:
         calc_blow_time(player_ptr, monap_ptr);
         break;
-    case RBE_DR_LIFE:
+    case RaceBlowEffectType::DR_LIFE:
         calc_blow_drain_life(player_ptr, monap_ptr);
         break;
-    case RBE_DR_MANA:
+    case RaceBlowEffectType::DR_MANA:
         calc_blow_drain_mana(player_ptr, monap_ptr);
         break;
-    case RBE_INERTIA:
+    case RaceBlowEffectType::INERTIA:
         calc_blow_inertia(player_ptr, monap_ptr);
         break;
-    case RBE_STUN:
+    case RaceBlowEffectType::STUN:
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (player_ptr->is_dead)
             break;
         process_stun_attack(player_ptr, monap_ptr);
         break;
-    case RBE_FLAVOR:
+    case RaceBlowEffectType::FLAVOR:
         // フレーバー打撃は自明かつダメージ 0。
         monap_ptr->obvious = true;
         monap_ptr->damage = 0;
         break;
-    case RBE_HUNGRY:
+    case RaceBlowEffectType::HUNGRY:
         calc_blow_hungry(player_ptr, monap_ptr);
         break;
 
-    case NB_RBE_TYPE:
+    case RaceBlowEffectType::MAX:
         break;
     }
 }

@@ -211,7 +211,7 @@ static void process_monster_attack_effect(player_type *player_ptr, mam_type *mam
 
 static void process_melee(player_type *player_ptr, mam_type *mam_ptr)
 {
-    if (mam_ptr->effect && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, monster_stunned_remaining(mam_ptr->m_ptr))) {
+    if (mam_ptr->effect != RaceBlowEffectType::NONE && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, monster_stunned_remaining(mam_ptr->m_ptr))) {
         describe_monster_missed_monster(player_ptr, mam_ptr);
         return;
     }
@@ -279,7 +279,7 @@ void repeat_melee(player_type *player_ptr, mam_type *mam_ptr)
         if (mam_ptr->method == RBM_SHOOT)
             continue;
 
-        mam_ptr->power = mbe_info[mam_ptr->effect].power;
+        mam_ptr->power = mbe_info[enum2i(mam_ptr->effect)].power;
         process_melee(player_ptr, mam_ptr);
         if (!is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr) || mam_ptr->do_silly_attack)
             continue;
