@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "object-enchant/tr-types.h"
 
-struct object_type;;
+struct object_type;
 struct player_type;
 
 bool potion_smash_effect(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx);

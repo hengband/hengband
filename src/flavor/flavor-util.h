@@ -6,7 +6,7 @@
 #include "object-enchant/tr-flags.h"
 
 typedef struct object_kind object_kind;
-struct object_type;;
+struct object_type;
 typedef struct flavor_type {
     char *buf;
     object_type *o_ptr;

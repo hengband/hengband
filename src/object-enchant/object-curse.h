@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct object_type;;
+struct object_type;
 struct player_type;
 enum class TRC;
 TRC get_curse(int power, object_type *o_ptr);

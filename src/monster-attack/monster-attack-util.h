@@ -6,7 +6,7 @@
 
 /* MONster-Attack-Player、地図のMAPと紛らわしいのでmonapとした */
 struct monster_type;
-struct object_type;;
+struct object_type;
 typedef struct monap_type {
 #ifdef JP
     int abbreviate; // 2回目以降の省略表現フラグ.

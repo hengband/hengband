@@ -4,5 +4,5 @@
  * @brief ランダムアーティファクトのスレイ付加処理ヘッダ
  */
 
-struct object_type;;
+struct object_type;
 void random_slay(object_type *o_ptr);

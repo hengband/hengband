@@ -5,7 +5,7 @@
 
 #define OBJ_GOLD_LIST 480 /* First "gold" entry */
 
-struct object_type;;
+struct object_type;
 struct player_type;
 concptr activation_explanation(object_type *o_ptr);
 char index_to_label(int i);
