@@ -6,7 +6,7 @@
 #include "object-enchant/tr-flags.h"
 
 struct monster_type;
-struct object_type;;
+struct object_type;
 struct player_type;
 MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr);
 MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr);

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct object_type;;
+struct object_type;
 struct player_type;
 bool activate_sunlight(player_type *player_ptr);
 bool activate_confusion(player_type *player_ptr);

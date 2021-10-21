@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 struct monster_type;
-struct object_type;;
+struct object_type;
 struct player_type;
 bool test_hit_fire(player_type *player_ptr, int chance, monster_type *m_ptr, int vis, char *o_name);
 HIT_POINT critical_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam);

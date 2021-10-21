@@ -266,7 +266,7 @@ struct ego_item_type {
 
 extern std::vector<ego_item_type> e_info;
 
-struct object_type;;
+struct object_type;
 struct player_type;
 byte get_random_ego(byte slot, bool good);
 void apply_ego(object_type *o_ptr, DEPTH lev);

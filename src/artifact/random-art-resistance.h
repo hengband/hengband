@@ -4,5 +4,5 @@
  * @brief ランダムアーティファクトの耐性付加処理ヘッダ
  */
 
-struct object_type;;
+struct object_type;
 void random_resistance(object_type *o_ptr);

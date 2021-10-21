@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct object_type;;
+struct object_type;
 struct player_type;
 struct text_body_type;
 int find_autopick_list(player_type *player_ptr, object_type *o_ptr);
