@@ -44,8 +44,8 @@ public:
      * @param il ONの状態で生成するフラグを指定した initializer_list
      */
     FlagGroup(std::initializer_list<FlagType> il)
+        : FlagGroup(il.begin(), il.end())
     {
-        set(il);
     }
 
     /**
@@ -61,7 +61,11 @@ public:
     template <typename InputIter>
     FlagGroup(InputIter first, InputIter last)
     {
-        set(first, last);
+        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
+
+        for (; first != last; ++first) {
+            set(*first);
+        }
     }
 
     /**
@@ -100,13 +104,7 @@ public:
     template <typename InputIter>
     FlagGroup<FlagType, MAX> &set(InputIter first, InputIter last)
     {
-        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
-
-        for (; first != last; ++first) {
-            set(*first);
-        }
-
-        return *this;
+        return set(FlagGroup(first, last));
     }
 
     /**
@@ -119,17 +117,6 @@ public:
     {
         bs_ |= rhs.bs_;
         return *this;
-    }
-
-    /**
-     * @brief 指定したinitializer_listに含まれるフラグをONにする
-     *
-     * @param list ONにするフラグを列挙したinitializer_list
-     * @return *thisを返す
-     */
-    FlagGroup<FlagType, MAX> &set(std::initializer_list<FlagType> list)
-    {
-        return set(std::begin(list), std::end(list));
     }
 
     /**
@@ -155,13 +142,7 @@ public:
     template <typename InputIter>
     FlagGroup<FlagType, MAX> &reset(InputIter first, InputIter last)
     {
-        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
-
-        for (; first != last; ++first) {
-            reset(*first);
-        }
-
-        return *this;
+        return reset(FlagGroup(first, last));
     }
 
     /**
@@ -174,17 +155,6 @@ public:
     {
         bs_ &= ~rhs.bs_;
         return *this;
-    }
-
-    /**
-     * @brief 指定したinitializer_listに含まれるフラグをOFFにする
-     *
-     * @param list OFFにするフラグを列挙したinitializer_list
-     * @return *thisを返す
-     */
-    FlagGroup<FlagType, MAX> &reset(std::initializer_list<FlagType> list)
-    {
-        return reset(std::begin(list), std::end(list));
     }
 
     /**
@@ -246,26 +216,7 @@ public:
     template <typename InputIter>
     [[nodiscard]] bool has_all_of(InputIter first, InputIter last) const
     {
-        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
-
-        for (; first != last; ++first) {
-            if (has_not(*first)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @brief 指定したinitializer_listに含まれるフラグがすべてONかどうかを調べる
-     *
-     * @param list 調べるフラグを列挙したinitializer_list
-     * @return すべてのフラグがONであればtrue、そうでなければfalse
-     */
-    [[nodiscard]] bool has_all_of(std::initializer_list<FlagType> list) const
-    {
-        return has_all_of(std::begin(list), std::end(list));
+        return has_all_of(FlagGroup(first, last));
     }
 
     /**
@@ -290,26 +241,7 @@ public:
     template <typename InputIter>
     [[nodiscard]] bool has_any_of(InputIter first, InputIter last) const
     {
-        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
-
-        for (; first != last; ++first) {
-            if (has(*first)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @brief 指定したinitializer_listに含まれるフラグのいずれかがONかどうかを調べる
-     *
-     * @param list 調べるフラグを列挙したinitializer_list
-     * @return いずれかのフラグがONであればtrue、そうでなければfalse
-     */
-    [[nodiscard]] bool has_any_of(std::initializer_list<FlagType> list) const
-    {
-        return has_any_of(std::begin(list), std::end(list));
+        return has_any_of(FlagGroup(first, last));
     }
 
     /**
@@ -334,20 +266,7 @@ public:
     template <typename InputIter>
     [[nodiscard]] bool has_none_of(InputIter first, InputIter last) const
     {
-        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
-
         return !has_any_of(first, last);
-    }
-
-    /**
-     * @brief 指定したinitializer_listに含まれるフラグがすべてOFFかどうかを調べる
-     *
-     * @param list 調べるフラグを列挙したinitializer_list
-     * @return すべてのフラグがOFFであればtrue、そうでなければfalse
-     */
-    [[nodiscard]] bool has_none_of(std::initializer_list<FlagType> list) const
-    {
-        return !has_any_of(list);
     }
 
     /**
