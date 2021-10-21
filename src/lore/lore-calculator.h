@@ -5,7 +5,7 @@
 enum class RF_ABILITY;
 
 struct lore_type;
-struct player_type;
+class player_type;
 void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char *msg);
 bool know_armour(MONRACE_IDX r_idx, const bool know_everything);
 bool know_damage(MONRACE_IDX r_idx, int i);

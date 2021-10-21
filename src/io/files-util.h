@@ -21,7 +21,7 @@ extern concptr ANGBAND_DIR_DEBUG_SAVE;
 extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 
-struct player_type;
+class player_type;
 typedef void (*display_player_pf)(player_type *, int);
 typedef void(*update_playtime_pf)(void);
 

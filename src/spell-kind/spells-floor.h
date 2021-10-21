@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 void wiz_lite(player_type *player_ptr, bool ninja);
 void wiz_dark(player_type *player_ptr);
 void map_area(player_type *player_ptr, POSITION range);

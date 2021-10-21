@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 void check_music(player_type *player_ptr);
 bool set_tim_stealth(player_type *player_ptr, TIME_EFFECT v, bool do_dec);
 void stop_singing(player_type *player_ptr);

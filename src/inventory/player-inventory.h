@@ -3,7 +3,7 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 class ItemTester;
 bool can_get_item(player_type *player_ptr, const ItemTester& item_tester);
 void py_pickup_floor(player_type *player_ptr, bool pickup);

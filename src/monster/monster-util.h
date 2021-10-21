@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 typedef bool (*monsterrace_hook_type)(player_type *, MONRACE_IDX);
 
 extern MONSTER_IDX hack_m_idx;

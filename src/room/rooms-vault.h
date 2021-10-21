@@ -19,7 +19,7 @@ typedef struct vault_type {
 extern std::vector<vault_type> v_info;
 
 struct dun_data_type;
-struct player_type;
+class player_type;
 bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr);
 bool build_type8(player_type *player_ptr, dun_data_type *dd_ptr);
 bool build_type10(player_type *player_ptr, dun_data_type *dd_ptr);

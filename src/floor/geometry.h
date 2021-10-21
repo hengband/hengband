@@ -28,7 +28,7 @@ extern const POSITION cdd[8];
 extern const POSITION ddx_cdd[8];
 extern const POSITION ddy_cdd[8];
 
-struct player_type;
+class player_type;
 DIRECTION coords_to_dir(player_type *player_ptr, POSITION y, POSITION x);
 POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);

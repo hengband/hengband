@@ -46,7 +46,7 @@ enum patron_reward {
     REW_SER_MONS = 36, /*!< カオスパトロンからの報酬: モンスターの下僕下賜 */
 };
 
-struct player_type;
+class player_type;
 enum player_ability_type : int;
 
 /*!

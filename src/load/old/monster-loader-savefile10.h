@@ -3,7 +3,7 @@
 #include "load/monster/monster-loader-base.h"
 
 struct monster_type;
-struct player_type;
+class player_type;
 class MonsterLoader10 : public MonsterLoaderBase {
 public:
     MonsterLoader10(player_type *player_ptr);

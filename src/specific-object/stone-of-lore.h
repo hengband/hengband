@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct player_type;
+class player_type;
 class StoneOfLore {
 public:
     StoneOfLore(player_type *player_ptr);

@@ -4,7 +4,7 @@
 #include "system/angband.h"
 
 struct lore_type;
-struct player_type;
+class player_type;
 void roff_top(MONRACE_IDX r_idx);
 void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode);
 void display_roff(player_type *player_ptr);

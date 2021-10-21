@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 typedef struct monap_type monap_type;
-struct player_type;
+class player_type;
 void process_eat_gold(player_type *player_ptr, monap_type *monap_ptr);
 bool check_eat_item(player_type *player_ptr, monap_type *monap_ptr);
 void process_eat_item(player_type *player_ptr, monap_type *monap_ptr);

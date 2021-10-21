@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 struct player_attack_type;
-struct player_type;
+class player_type;
 bool kawarimi(player_type *player_ptr, bool success);
 bool rush_attack(player_type *player_ptr, bool *mdeath);
 void process_surprise_attack(player_type *player_ptr, player_attack_type *pa_ptr);

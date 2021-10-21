@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 class ObjectReadEntity {
 public:
     ObjectReadEntity(player_type *player_ptr, INVENTORY_IDX item);

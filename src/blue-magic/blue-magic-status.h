@@ -5,7 +5,7 @@
  */
 
 struct bmc_type;
-struct player_type;
+class player_type;
 bool cast_blue_scare(player_type *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_blind(player_type *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_confusion(player_type *player_ptr, bmc_type *bmc_ptr);

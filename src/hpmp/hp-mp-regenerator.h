@@ -13,7 +13,7 @@
 
 extern int wild_regen;
 
-struct player_type;
+class player_type;
 void regenhp(player_type *player_ptr, int percent);
 void regenmana(player_type *player_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount);
 void regenmagic(player_type *player_ptr, int regen_amount);

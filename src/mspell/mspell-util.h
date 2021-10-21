@@ -12,7 +12,7 @@
 #define RF6_SPELL_START 32 * 5
 
 struct floor_type;
-struct player_type;
+class player_type;
 
 struct mspell_cast_msg {
     mspell_cast_msg(concptr to_player_true, concptr to_mons_true, concptr to_player_false, concptr to_mons_false);

@@ -8,6 +8,6 @@
 
 enum class RF_ABILITY;
 
-struct player_type;
+class player_type;
 PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr);
 void learnt_info(player_type *player_ptr, char *p, RF_ABILITY power);

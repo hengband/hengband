@@ -2,7 +2,7 @@
 
 #include "player-status/player-basic-statistics.h"
 
-struct player_type;
+class player_type;
 class PlayerConstitution : public PlayerBasicStatistics {
 public:
     PlayerConstitution(player_type *player_ptr);

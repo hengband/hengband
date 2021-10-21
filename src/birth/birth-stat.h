@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 int adjust_stat(int value, int amount);
 void get_stats(player_type* player_ptr);
 uint16_t get_expfact(player_type *player_ptr);

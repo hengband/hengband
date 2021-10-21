@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 bool activate_resistance_elements(player_type *player_ptr);
 bool activate_resistance_acid(player_type *player_ptr, concptr name);
 bool activate_resistance_elec(player_type *player_ptr, concptr name);

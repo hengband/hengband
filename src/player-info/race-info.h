@@ -111,5 +111,5 @@ struct player_race_info {
 
 extern const player_race_info *rp_ptr;
 
-struct player_type;
+class player_type;
 SYMBOL_CODE get_summon_symbol_from_player(player_type *player_ptr);

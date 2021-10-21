@@ -5,7 +5,7 @@
  */
 
 struct bmc_type;
-struct player_type;
+class player_type;
 bool cast_blue_drain_mana(player_type *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_mind_blast(player_type *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_brain_smash(player_type *player_ptr, bmc_type *bmc_ptr);

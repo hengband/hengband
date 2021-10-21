@@ -2,7 +2,7 @@
 #include "system/angband.h"
 #include "player/player-status-flags.h"
 
-struct player_type;
+class player_type;
 class PlayerStatusBase {
 public:
     virtual ~PlayerStatusBase() = default;

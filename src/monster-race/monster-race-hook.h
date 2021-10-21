@@ -9,7 +9,7 @@ extern int vault_aux_race;
 extern char vault_aux_char;
 extern EnumClassFlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
 
-struct player_type;
+class player_type;
 bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx);
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx);
 bool mon_hook_ocean(player_type *player_ptr, MONRACE_IDX r_idx);

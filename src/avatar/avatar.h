@@ -29,7 +29,7 @@ enum virtue_idx {
 #define VIRTUE_LARGE 1
 #define VIRTUE_SMALL 2
 
-struct player_type;
+class player_type;
 bool compare_virtue(player_type *player_ptr, int type, int num, int tekitou);
 int virtue_number(player_type *player_ptr, int type);
 extern concptr virtue[MAX_VIRTUE];

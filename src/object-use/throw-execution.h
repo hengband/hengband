@@ -13,7 +13,7 @@
 struct grid_type;
 struct monster_type;
 struct object_type;
-struct player_type;
+class player_type;
 class ObjectThrowEntity {
 public:
     ObjectThrowEntity() = default;

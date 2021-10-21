@@ -47,7 +47,7 @@ extern std::vector<skill_table> s_info;
 
 struct monster_race;
 struct object_type;
-struct player_type;
+class player_type;
 
 class PlayerSkill {
 public:

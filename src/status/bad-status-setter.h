@@ -8,7 +8,7 @@
  */
 enum class PlayerCutRank;
 enum class PlayerStunRank;
-struct player_type;
+class player_type;
 class BadStatusSetter {
 public:
     BadStatusSetter(player_type *player_ptr);

@@ -4,7 +4,7 @@
 
 struct floor_type;
 struct grid_type;
-struct player_type;
+class player_type;
 enum class FF;
 bool in_bounds(floor_type *floor_ptr, POSITION y, POSITION x);
 bool in_bounds2(floor_type *floor_ptr, POSITION y, POSITION x);

@@ -22,7 +22,7 @@ extern int16_t inner_town_num;
 extern int cur_store_feat;
 extern bool allow_inc;
 
-struct player_type;
+class player_type;
 int16_t store_get_stock_max(StoreSaleType sst, bool powerup = true);
 void store_shuffle(player_type *player_ptr, StoreSaleType which);
 void store_maintenance(player_type *player_ptr, int town_num, StoreSaleType store_num, int chance);

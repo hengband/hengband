@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 bool check_multishadow(player_type *player_ptr);
 bool mirror_concentration(player_type *player_ptr);
 void remove_all_mirrors(player_type *player_ptr, bool explode);

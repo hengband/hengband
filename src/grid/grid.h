@@ -42,7 +42,7 @@ enum grid_bold_type {
 
 struct floor_type;
 struct grid_type;
-struct player_type;
+class player_type;
 struct monster_race;
 enum class FF;
 bool new_player_spot(player_type *player_ptr);

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 class ObjectQuaffEntity {
 public:
     ObjectQuaffEntity(player_type *player_ptr);

@@ -20,7 +20,7 @@ enum class ItemKindType : short;
 enum class SmithEffect : int16_t;
 enum class RandomArtActType : short;
 
-struct player_type;
+class player_type;
 typedef struct object_type {
     KIND_OBJECT_IDX k_idx{}; /*!< Kind index (zero if "dead") */
     POSITION iy{}; /*!< Y-position on map, or zero */

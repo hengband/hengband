@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 typedef struct monap_type monap_type;
-struct player_type;
+class player_type;
 void process_blind_attack(player_type *player_ptr, monap_type *monap_ptr);
 void process_terrify_attack(player_type *player_ptr, monap_type *monap_ptr);
 void process_paralyze_attack(player_type *player_ptr, monap_type *monap_ptr);

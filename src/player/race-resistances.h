@@ -4,7 +4,7 @@
 
 #include "object-enchant/tr-flags.h"
 
-struct player_type;
+class player_type;
 void player_immunity(player_type *player_ptr, TrFlags &flags);
 void tim_player_immunity(player_type *player_ptr, TrFlags &flags);
 void known_obj_immunity(player_type *player_ptr, TrFlags &flags);

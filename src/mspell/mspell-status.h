@@ -4,7 +4,7 @@
 
 struct MonsterSpellResult;
 
-struct player_type;
+class player_type;
 
 struct mspell_cast_msg_bad_status_to_player {
     mspell_cast_msg_bad_status_to_player(concptr blind, concptr not_blind, concptr resist, concptr saved_throw);

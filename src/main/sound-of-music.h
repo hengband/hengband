@@ -10,7 +10,7 @@
 
 extern bool has_monster_music;
 
-struct player_type;
+class player_type;
 void bell(void);
 void sound(int num);
 errr play_music(int type, int num);

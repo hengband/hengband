@@ -46,7 +46,7 @@
 
 extern bool write_level;
 
-struct player_type;
+class player_type;
 #ifdef JP
 #else
 concptr get_ordinal_number_suffix(int num);

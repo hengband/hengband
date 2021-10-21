@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct player_type;
+class player_type;
 void print_title(player_type *player_ptr);
 void print_level(player_type *player_ptr);
 void print_exp(player_type *player_ptr);

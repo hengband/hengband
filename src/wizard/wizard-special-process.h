@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 void wiz_cure_all(player_type *player_ptr);
 void wiz_create_item(player_type *player_ptr);
 void wiz_create_named_art(player_type *player_ptr);

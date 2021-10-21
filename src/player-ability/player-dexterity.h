@@ -2,7 +2,7 @@
 
 #include "player-status/player-basic-statistics.h"
 
-struct player_type;
+class player_type;
 class PlayerDexterity : public PlayerBasicStatistics {
 public:
     PlayerDexterity(player_type *player_ptr);

@@ -6,7 +6,7 @@
 
 struct floor_type;
 struct monster_race;
-struct player_type;
+class player_type;
 MONSTER_IDX m_pop(floor_type *floor_ptr);
 
 MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option);

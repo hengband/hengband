@@ -21,7 +21,7 @@ enum class RF_ABILITY;
 struct floor_type;
 struct object_type;
 class TimedEffects;
-struct player_type {
+class player_type {
 public:
     player_type();
     int player_uid{};

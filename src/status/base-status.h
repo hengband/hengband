@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct player_type;
+class player_type;
 bool inc_stat(player_type *player_ptr, int stat);
 bool dec_stat(player_type *player_ptr, int stat, int amount, int permanent);
 bool res_stat(player_type *player_ptr, int stat);

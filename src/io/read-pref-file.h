@@ -5,7 +5,7 @@
 extern char auto_dump_header[];
 extern char auto_dump_footer[];
 
-struct player_type;
+class player_type;
 errr process_pref_file(player_type *player_ptr, concptr name, bool only_user_dir = false);
 errr process_autopick_file(player_type *player_ptr, concptr name);
 errr process_histpref_file(player_type *player_ptr, concptr name);

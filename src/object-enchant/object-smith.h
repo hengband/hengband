@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 struct object_type;
-struct player_type;
+class player_type;
 class ISmithInfo;
 struct essence_drain_type;
 class ItemTester;

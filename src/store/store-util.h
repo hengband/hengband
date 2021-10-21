@@ -54,7 +54,7 @@ struct store_type {
 extern StoreSaleType cur_store_num;
 extern store_type *st_ptr;
 
-struct player_type;
+class player_type;
 typedef bool (*black_market_crap_pf)(player_type *, object_type *);
 typedef bool (*store_will_buy_pf)(player_type *, const object_type *);
 typedef void (*mass_produce_pf)(player_type *, object_type *);

@@ -6,5 +6,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool break_trap);

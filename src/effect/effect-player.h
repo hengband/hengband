@@ -4,7 +4,7 @@
 
 struct ProjectResult;
 
-struct player_type;
+class player_type;
 using project_func = ProjectResult (*)(
     player_type *player_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag);
 

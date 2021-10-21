@@ -3,7 +3,7 @@
 #include "player-ability/player-ability-types.h"
 #include "player-status/player-status-base.h"
 
-struct player_type;
+class player_type;
 class PlayerBasicStatistics : public PlayerStatusBase {
 public:
     void update_value();

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 int32_t get_current_ki(player_type *player_ptr);
 void set_current_ki(player_type *player_ptr, bool is_reset, int32_t ki);
 bool clear_mind(player_type *player_ptr);

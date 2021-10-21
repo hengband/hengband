@@ -40,7 +40,7 @@ typedef struct wilderness_type {
 
 extern std::vector<std::vector<wilderness_type>> wilderness;
 
-struct player_type;
+class player_type;
 void set_floor_and_wall(DUNGEON_IDX type);
 void wilderness_gen(player_type *player_ptr);
 void wilderness_gen_small(player_type *player_ptr);

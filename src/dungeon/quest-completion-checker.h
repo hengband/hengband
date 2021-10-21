@@ -6,7 +6,7 @@
 
 struct monster_type;
 struct object_type;
-struct player_type;
+class player_type;
 struct quest_type;
 class QuestCompletionChecker {
 public:

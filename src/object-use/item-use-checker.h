@@ -2,7 +2,7 @@
 
 #include <string>
 
-struct player_type;
+class player_type;
 class ItemUseChecker {
 public:
     ItemUseChecker(player_type *player_ptr);

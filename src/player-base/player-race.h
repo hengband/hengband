@@ -5,7 +5,7 @@
 enum class PlayerRaceType;
 enum class PlayerRaceLife;
 enum class PlayerRaceFood;
-struct player_type;
+class player_type;
 struct player_race_info;
 class PlayerRace {
 public:

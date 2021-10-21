@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 struct monster_type;
-struct player_type;
+class player_type;
 class AvatarChanger {
 public:
     AvatarChanger(player_type *player_ptr, monster_type *m_ptr);

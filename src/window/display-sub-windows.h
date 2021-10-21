@@ -5,7 +5,7 @@
 #include <vector>
 
 struct floor_type;
-struct player_type;
+class player_type;
 class ItemTester;
 void fix_inventory(player_type *player_ptr);
 void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);

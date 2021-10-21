@@ -5,7 +5,7 @@
 struct monster_race;
 struct monster_type;
 struct old_race_flags;;
-struct player_type;
+class player_type;
 struct turn_flags;
 bool update_riding_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx);
 void update_player_type(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr);

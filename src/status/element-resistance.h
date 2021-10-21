@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 bool set_oppose_acid(player_type *player_ptr, TIME_EFFECT v, bool do_dec);
 bool set_oppose_elec(player_type *player_ptr, TIME_EFFECT v, bool do_dec);
 bool set_oppose_fire(player_type *player_ptr, TIME_EFFECT v, bool do_dec);

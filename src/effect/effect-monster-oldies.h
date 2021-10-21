@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 struct effect_monster_type;
-struct player_type;
+class player_type;
 process_result effect_monster_old_poly(effect_monster_type *em_ptr);
 process_result effect_monster_old_clone(player_type *player_ptr, effect_monster_type *em_ptr);
 process_result effect_monster_star_heal(player_type *player_ptr, effect_monster_type *em_ptr);

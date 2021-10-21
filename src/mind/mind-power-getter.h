@@ -5,7 +5,7 @@
 
 struct mind_power;
 struct mind_type;
-struct player_type;
+class player_type;
 class MindPowerGetter {
 public:
     MindPowerGetter(player_type *player_ptr);

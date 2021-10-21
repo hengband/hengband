@@ -7,7 +7,7 @@
 
 struct monster_race;
 struct monster_type;
-struct player_type;
+class player_type;
 typedef std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> combined_uniques;
 class MonsterDamageProcessor {
 public:

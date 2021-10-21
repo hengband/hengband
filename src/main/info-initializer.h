@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 errr init_misc(player_type *player_ptr);
 errr init_f_info();
 errr init_k_info();

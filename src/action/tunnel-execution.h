@@ -6,5 +6,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 bool exe_tunnel(player_type *player_ptr, POSITION y, POSITION x);

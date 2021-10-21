@@ -12,7 +12,7 @@ enum class SmithCategory;
 enum class SmithEssence : int16_t;
 enum class RandomArtActType : short;
 
-struct player_type;
+class player_type;
 struct object_type;
 
 /*!

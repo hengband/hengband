@@ -6,7 +6,7 @@
 #include <memory>
 
 struct object_type;
-struct player_type;
+class player_type;
 
 /*!
  * @brief アイテムの絞り込み条件をテストする基底クラス

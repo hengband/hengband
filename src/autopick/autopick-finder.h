@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 struct object_type;;
-struct player_type;
+class player_type;
 struct text_body_type;
 int find_autopick_list(player_type *player_ptr, object_type *o_ptr);
 bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp);

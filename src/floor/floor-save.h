@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 struct saved_floor_type;
 void init_saved_floors(player_type *player_ptr, bool force);
 void clear_saved_floor_files(player_type *player_ptr);

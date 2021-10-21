@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 class ObjectZapWandEntity {
 public:
     ObjectZapWandEntity(player_type *player_ptr);

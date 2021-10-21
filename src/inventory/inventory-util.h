@@ -4,7 +4,7 @@
 #include "system/angband.h"
 
 struct floor_type;
-struct player_type;
+class player_type;
 class ItemTester;
 bool is_ring_slot(int i);
 bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num);

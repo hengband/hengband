@@ -9,7 +9,7 @@ enum rate_calc_type_mode {
     CALC_MAX = 3,
 };
 
-struct player_type;
+class player_type;
 PERCENTAGE calc_acid_damage_rate(player_type *player_ptr);
 PERCENTAGE calc_elec_damage_rate(player_type *player_ptr);
 PERCENTAGE calc_fire_damage_rate(player_type *player_ptr);

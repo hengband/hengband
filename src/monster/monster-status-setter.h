@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 struct monster_type;
-struct player_type;
+class player_type;
 void set_friendly(monster_type *m_ptr);
 void set_pet(player_type *player_ptr, monster_type *m_ptr);
 void set_hostile(player_type *player_ptr, monster_type *m_ptr);

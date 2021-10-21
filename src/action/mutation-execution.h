@@ -5,5 +5,5 @@
  */
 
 enum class MUTA;
-struct player_type;
+class player_type;
 bool exe_mutation_power(player_type *player_ptr, MUTA power);

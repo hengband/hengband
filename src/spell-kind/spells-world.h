@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 void teleport_level(player_type *player_ptr, MONSTER_IDX m_idx);
 bool teleport_level_other(player_type *player_ptr);
 bool tele_town(player_type *player_ptr);

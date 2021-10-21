@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 void rd_dungeons(player_type *player_ptr);
 void rd_alter_reality(player_type *player_ptr);
 void set_gambling_monsters(void);

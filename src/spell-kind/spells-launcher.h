@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class player_type;
 bool fire_ball(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);
 bool fire_breath(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);
 bool fire_rocket(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);

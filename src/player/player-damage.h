@@ -10,7 +10,7 @@
 #define DAMAGE_USELIFE  6
 
 struct monster_type;
-struct player_type;
+class player_type;
 int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr kb_str);
 HIT_POINT acid_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
 HIT_POINT elec_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);

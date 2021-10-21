@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct player_type;
+class player_type;
 void print_stat(player_type *player_ptr, int stat);
 void print_cut(player_type *player_ptr);
 void print_stun(player_type *player_ptr);

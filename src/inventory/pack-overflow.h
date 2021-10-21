@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
+class player_type;
 void pack_overflow(player_type *player_ptr);

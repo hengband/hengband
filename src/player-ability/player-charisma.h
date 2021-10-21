@@ -2,7 +2,7 @@
 
 #include "player-status/player-basic-statistics.h"
 
-struct player_type;
+class player_type;
 class PlayerCharisma : public PlayerBasicStatistics {
 public:
     PlayerCharisma(player_type *player_ptr);

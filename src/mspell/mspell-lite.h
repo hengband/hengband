@@ -4,7 +4,7 @@
 
 struct monster_type;
 typedef struct msa_type msa_type;
-struct player_type;
+class player_type;
 typedef bool (*path_check_pf)(player_type *, POSITION, POSITION, POSITION, POSITION);
 enum class FF;
 bool adjacent_grid_check(player_type *player_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, FF f_flag, path_check_pf path_check);

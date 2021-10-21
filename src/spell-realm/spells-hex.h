@@ -11,7 +11,7 @@ enum class SpellHexRevengeType : byte {
 };
 
 struct monap_type;
-struct player_type;
+class player_type;
 struct spell_hex_data_type;
 class SpellHex {
 public:
