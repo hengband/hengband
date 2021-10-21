@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#include "util/enum-range.h"
+
 #include <array>
 #include <map>
 #include <string>
@@ -14,6 +16,8 @@ enum skill_idx {
     SKILL_SHIELD = 3,
     SKILL_MAX = 4,
 };
+
+constexpr auto PLAYER_SKILL_KIND_TYPE_RANGE = EnumRange(SKILL_MARTIAL_ARTS, SKILL_SHIELD);
 
 /* Proficiency level */
 #define EXP_LEVEL_UNSKILLED 0
@@ -32,8 +36,8 @@ enum class ItemKindType : short;
 typedef struct skill_table {
     std::map<ItemKindType, std::array<SUB_EXP, 64>> w_start{}; /* start weapon exp */
     std::map<ItemKindType, std::array<SUB_EXP, 64>> w_max{}; /* max weapon exp */
-    SUB_EXP s_start[MAX_SKILLS]{}; /* start skill */
-    SUB_EXP s_max[MAX_SKILLS]{}; /* max skill */
+    std::map<skill_idx, SUB_EXP> s_start{}; /* start skill */
+    std::map<skill_idx, SUB_EXP> s_max{}; /* max skill */
 } skill_table;
 
 extern std::vector<skill_table> s_info;

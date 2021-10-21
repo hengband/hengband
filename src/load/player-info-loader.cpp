@@ -108,8 +108,11 @@ void rd_experience(player_type *player_ptr)
         for (int j = 0; j < max_weapon_exp_size; j++)
             player_ptr->weapon_exp[tval][j] = rd_s16b();
 
-    for (int i = 0; i < MAX_SKILLS; i++)
+    for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE)
         player_ptr->skill_exp[i] = rd_s16b();
+
+    // resreved skills
+    strip_bytes(sizeof(int16_t) * (MAX_SKILLS - PLAYER_SKILL_KIND_TYPE_RANGE.size()));
 }
 
 void rd_skills(player_type *player_ptr)

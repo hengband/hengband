@@ -158,7 +158,7 @@ void do_cmd_knowledge_skill_exp(player_type *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    for (int i = 0; i < SKILL_MAX; i++) {
+    for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         SUB_EXP skill_exp = player_ptr->skill_exp[i];
         SUB_EXP skill_max = s_info[enum2i(player_ptr->pclass)].s_max[i];
         fprintf(fff, "%-20s ", skill_name[i]);

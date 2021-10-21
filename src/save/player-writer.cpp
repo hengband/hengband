@@ -82,8 +82,13 @@ void wr_player(player_type *player_ptr)
         for (int j = 0; j < 64; j++)
             wr_s16b(player_ptr->weapon_exp[tval][j]);
 
-    for (int i = 0; i < MAX_SKILLS; i++)
+    for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         wr_s16b(player_ptr->skill_exp[i]);
+    }
+    for (auto i = 0U; i < MAX_SKILLS - PLAYER_SKILL_KIND_TYPE_RANGE.size(); ++i) {
+        // resreved skills
+        wr_s16b(0);
+    }
 
     std::visit(PlayerClassSpecificDataWriter(), player_ptr->class_specific_data);
 

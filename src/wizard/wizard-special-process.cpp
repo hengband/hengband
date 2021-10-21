@@ -424,7 +424,7 @@ void wiz_change_status(player_type *player_ptr)
         }
     }
 
-    for (int j = 0; j < 10; j++) {
+    for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[j] = tmp_s16b;
         auto short_pclass = enum2i(player_ptr->pclass);
         if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j])
