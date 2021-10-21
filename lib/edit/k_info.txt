@@ -5903,6 +5903,7 @@ I:35:5:0
 W:50:0:0:2500
 A:25/8:50/4
 P:0:0d0:0:0:10
+F:LEVITATION
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD 
 D:$This unearthly, completely transparent body mantle folds and drapes in 
 D:$iridescent patterns around you.  It weighs absolutely nothing.
