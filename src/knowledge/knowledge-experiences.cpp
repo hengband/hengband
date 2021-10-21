@@ -88,7 +88,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
             if (s_ptr->slevel >= 99)
                 continue;
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
-            int exp_level = spell_exp_level(spell_exp);
+            auto exp_level = PlayerSkill::spell_exp_level(spell_exp);
             fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm1, i, SPELL_NAME));
             if (player_ptr->realm1 == REALM_HISSATSU) {
                 if (show_actual_value)
@@ -124,7 +124,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
                 continue;
 
             SUB_EXP spell_exp = player_ptr->spell_exp[i + 32];
-            int exp_level = spell_exp_level(spell_exp);
+            auto exp_level = PlayerSkill::spell_exp_level(spell_exp);
             fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm2, i, SPELL_NAME));
             if (show_actual_value)
                 fprintf(fff, "%4d/%4d ", std::min<short>(spell_exp, SPELL_EXP_MASTER), SPELL_EXP_MASTER);

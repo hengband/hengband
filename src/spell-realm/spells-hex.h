@@ -53,7 +53,4 @@ private:
     bool check_restart();
     int calc_need_mana();
     void gain_exp();
-    bool gain_exp_skilled(const int spell);
-    bool gain_exp_expert(const int spell);
-    void gain_exp_master(const int spell);
 };
