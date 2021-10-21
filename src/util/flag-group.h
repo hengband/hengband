@@ -3,6 +3,9 @@
 #include <bitset>
 #include <optional>
 
+template <typename T>
+class EnumRange;
+
 /**
  * @brief フラグ集合を扱う、FlagGroupクラス
  *
@@ -45,6 +48,19 @@ public:
      */
     FlagGroup(std::initializer_list<FlagType> il)
         : FlagGroup(il.begin(), il.end())
+    {
+    }
+
+    /**
+     * @brief FlagGroupクラスのコンストラクタ
+     *
+     * EnumRangeクラスで指定した範囲のフラグがON、それ以外はOFFの状態の
+     * FlagGroupクラスのインスタンスを生成する
+     *
+     * @param range 範囲を示すEnumRangeクラスのオブジェクト
+     */
+    FlagGroup(const EnumRange<FlagType> &range)
+        : FlagGroup(range.begin(), range.end())
     {
     }
 
