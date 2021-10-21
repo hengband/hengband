@@ -96,7 +96,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
                 fprintf(fff, "[--]");
             } else {
                 if (show_actual_value)
-                    fprintf(fff, "%4d/%4d ", std::min<short>(spell_exp, SPELL_EXP_MASTER), SPELL_EXP_MASTER);
+                    fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(EXP_LEVEL_MASTER));
                 if (exp_level >= EXP_LEVEL_MASTER)
                     fprintf(fff, "!");
                 else
@@ -127,7 +127,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
             auto exp_level = PlayerSkill::spell_exp_level(spell_exp);
             fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm2, i, SPELL_NAME));
             if (show_actual_value)
-                fprintf(fff, "%4d/%4d ", std::min<short>(spell_exp, SPELL_EXP_MASTER), SPELL_EXP_MASTER);
+                fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(EXP_LEVEL_MASTER));
             if (exp_level >= EXP_LEVEL_EXPERT)
                 fprintf(fff, "!");
             else

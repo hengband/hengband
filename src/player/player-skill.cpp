@@ -24,6 +24,13 @@ constexpr SUB_EXP RIDING_EXP_SKILLED = 2000;
 constexpr SUB_EXP RIDING_EXP_EXPERT = 5000;
 constexpr SUB_EXP RIDING_EXP_MASTER = 8000;
 
+/* Proficiency of spells */
+constexpr SUB_EXP SPELL_EXP_UNSKILLED = 0;
+constexpr SUB_EXP SPELL_EXP_BEGINNER = 900;
+constexpr SUB_EXP SPELL_EXP_SKILLED = 1200;
+constexpr SUB_EXP SPELL_EXP_EXPERT = 1400;
+constexpr SUB_EXP SPELL_EXP_MASTER = 1600;
+
 /*
  * The skill table
  */
@@ -112,6 +119,23 @@ SUB_EXP PlayerSkill::weapon_exp_at(int level)
     return WEAPON_EXP_UNSKILLED;
 }
 
+SUB_EXP PlayerSkill::spell_exp_at(int level)
+{
+    switch (level) {
+    case EXP_LEVEL_UNSKILLED:
+        return SPELL_EXP_UNSKILLED;
+    case EXP_LEVEL_BEGINNER:
+        return SPELL_EXP_BEGINNER;
+    case EXP_LEVEL_SKILLED:
+        return SPELL_EXP_SKILLED;
+    case EXP_LEVEL_EXPERT:
+        return SPELL_EXP_EXPERT;
+    case EXP_LEVEL_MASTER:
+        return SPELL_EXP_MASTER;
+    }
+
+    return SPELL_EXP_UNSKILLED;
+}
 /*!
  * @brief 武器や各種スキル（騎乗以外）の抽象的表現ランクを返す。 /  Return proficiency level of weapons and misc. skills (except riding)
  * @param weapon_exp 経験値

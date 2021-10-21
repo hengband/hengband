@@ -433,10 +433,10 @@ void wiz_change_status(player_type *player_ptr)
 
     int k;
     for (k = 0; k < 32; k++)
-        player_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(EXP_LEVEL_MASTER), tmp_s16b);
 
     for (; k < 64; k++)
-        player_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(EXP_LEVEL_EXPERT), tmp_s16b);
 
     sprintf(tmp_val, "%ld", (long)(player_ptr->au));
     if (!get_string("Gold: ", tmp_val, 9))

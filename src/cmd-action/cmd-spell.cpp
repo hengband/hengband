@@ -728,7 +728,7 @@ static void change_realm2(player_type *player_ptr, int16_t next_realm)
         player_ptr->spell_order[j] = 99;
 
     for (i = 32; i < 64; i++) {
-        player_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
+        player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(EXP_LEVEL_UNSKILLED);
     }
     player_ptr->spell_learned2 = 0L;
     player_ptr->spell_worked2 = 0L;
@@ -879,7 +879,7 @@ void do_cmd_study(player_type *player_ptr)
     }
 
     if (learned) {
-        int max_exp = (spell < 32) ? SPELL_EXP_MASTER : SPELL_EXP_EXPERT;
+        auto max_exp = PlayerSkill::spell_exp_at((spell < 32) ? EXP_LEVEL_MASTER : EXP_LEVEL_EXPERT);
         int old_exp = player_ptr->spell_exp[spell];
         concptr name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SPELL_NAME);
 

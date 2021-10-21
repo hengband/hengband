@@ -22,13 +22,6 @@ enum skill_idx {
 #define EXP_LEVEL_EXPERT 3
 #define EXP_LEVEL_MASTER 4
 
-/* Proficiency of spells */
-#define SPELL_EXP_UNSKILLED 0
-#define SPELL_EXP_BEGINNER 900
-#define SPELL_EXP_SKILLED 1200
-#define SPELL_EXP_EXPERT 1400
-#define SPELL_EXP_MASTER 1600
-
 extern const concptr exp_level_str[5];
 
 enum class ItemKindType : short;
@@ -54,6 +47,7 @@ public:
     PlayerSkill(player_type *player_ptr);
 
     static SUB_EXP weapon_exp_at(int level);
+    static SUB_EXP spell_exp_at(int level);
     static bool valid_weapon_exp(int weapon_exp);
     static int weapon_exp_level(int weapon_exp);
     static int riding_exp_level(int riding_exp);
