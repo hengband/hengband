@@ -952,6 +952,7 @@
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
     <ClInclude Include="..\..\src\monster-race\monster-kind-mask.h" />
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h" />
+    <ClInclude Include="..\..\src\monster-race\race-drop-flags.h" />
     <ClInclude Include="..\..\src\monster-race\race-kind-flags.h" />
     <ClInclude Include="..\..\src\monster-race\race-resistance-mask.h" />
     <ClInclude Include="..\..\src\monster-race\race-visual-flags.h" />
