@@ -27,7 +27,7 @@ typedef struct monap_type {
     object_type *o_ptr;
     bool obvious;
     HIT_POINT damage;
-    rbe_type effect;
+    RaceBlowEffectType effect;
     bool blinked;
     GAME_TEXT o_name[MAX_NLEN];
     HIT_POINT get_damage;

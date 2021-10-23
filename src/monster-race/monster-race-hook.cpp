@@ -839,7 +839,7 @@ bool monster_can_entry_arena(player_type *player_ptr, MONRACE_IDX r_idx)
         if (r_ptr->blow[i].method == RBM_EXPLODE)
             return false;
 
-        if (r_ptr->blow[i].effect != RBE_DR_MANA)
+        if (r_ptr->blow[i].effect != RaceBlowEffectType::DR_MANA)
             dam += r_ptr->blow[i].d_dice;
     }
 

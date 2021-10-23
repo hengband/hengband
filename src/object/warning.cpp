@@ -269,7 +269,7 @@ static int blow_damcalc(monster_type *m_ptr, player_type *player_ptr, monster_bl
 
     if (blow_ptr->method == RBM_EXPLODE) {
         dam = (dam + 1) / 2;
-        spell_damcalc(player_ptr, m_ptr, mbe_info[blow_ptr->effect].explode_type, dam, &dummy_max);
+        spell_damcalc(player_ptr, m_ptr, mbe_info[enum2i(blow_ptr->effect)].explode_type, dam, &dummy_max);
         dam = dummy_max;
         return dam;
     }
@@ -277,42 +277,42 @@ static int blow_damcalc(monster_type *m_ptr, player_type *player_ptr, monster_bl
     ARMOUR_CLASS ac = player_ptr->ac + player_ptr->to_a;
     bool check_wraith_form = true;
     switch (blow_ptr->effect) {
-    case RBE_SUPERHURT: {
+    case RaceBlowEffectType::SUPERHURT: {
         int tmp_dam = dam - (dam * ((ac < 150) ? ac : 150) / 250);
         dam = std::max(dam, tmp_dam * 2);
         break;
     }
 
-    case RBE_HURT:
-    case RBE_SHATTER:
+    case RaceBlowEffectType::HURT:
+    case RaceBlowEffectType::SHATTER:
         dam -= (dam * ((ac < 150) ? ac : 150) / 250);
         break;
 
-    case RBE_ACID:
+    case RaceBlowEffectType::ACID:
         spell_damcalc(player_ptr, m_ptr, GF_ACID, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
-    case RBE_ELEC:
+    case RaceBlowEffectType::ELEC:
         spell_damcalc(player_ptr, m_ptr, GF_ELEC, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
-    case RBE_FIRE:
+    case RaceBlowEffectType::FIRE:
         spell_damcalc(player_ptr, m_ptr, GF_FIRE, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
-    case RBE_COLD:
+    case RaceBlowEffectType::COLD:
         spell_damcalc(player_ptr, m_ptr, GF_COLD, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
-    case RBE_DR_MANA:
+    case RaceBlowEffectType::DR_MANA:
         dam = 0;
         check_wraith_form = false;
         break;
