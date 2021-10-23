@@ -13,6 +13,8 @@
  * The "hold_o_idx" field points to the first object of a stack
  * of objects (if any) being carried by the monster (see above).
  */
+constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
+
 struct floor_type;
 struct monster_race;
 typedef struct monster_type {
