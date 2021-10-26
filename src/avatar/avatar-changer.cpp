@@ -13,6 +13,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -35,7 +36,7 @@ void AvatarChanger::change_virtue()
 {
     this->change_virtue_non_beginner();
     this->change_virtue_unique();
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = real_r_ptr(this->m_ptr);
     if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER) {
         chg_virtue(this->player_ptr, V_COMPASSION, -1);
     }
