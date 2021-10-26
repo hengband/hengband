@@ -10,6 +10,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-range.h"
 #include "util/quarks.h"
 #include "wizard/spoiler-util.h"
 
@@ -70,9 +71,9 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
     auto flgs = object_flags(o_ptr);
     affects_list = pi_ptr->pval_affects;
     sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
-    if (flgs.has(TR_STR) && flgs.has(TR_INT) && flgs.has(TR_WIS) && flgs.has(TR_DEX) && flgs.has(TR_CON) && flgs.has(TR_CHR)) {
+    if (flgs.has_all_of(EnumRange(TR_STR, TR_CHR))) {
         *affects_list++ = _("全能力", "All stats");
-    } else if (flgs.has(TR_STR) || flgs.has(TR_INT) || flgs.has(TR_WIS) || flgs.has(TR_DEX) || flgs.has(TR_CON) || flgs.has(TR_CHR)) {
+    } else if (flgs.has_any_of(EnumRange(TR_STR, TR_CHR))) {
         affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
     }
 
@@ -141,9 +142,9 @@ static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
 {
     auto flgs = object_flags(o_ptr);
-    if (flgs.has(TR_SUST_STR) && flgs.has(TR_SUST_INT) && flgs.has(TR_SUST_WIS) && flgs.has(TR_SUST_DEX) && flgs.has(TR_SUST_CON) && flgs.has(TR_SUST_CHR)) {
+    if (flgs.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
         *sustain_list++ = _("全能力", "All stats");
-    } else if (flgs.has(TR_SUST_STR) || flgs.has(TR_SUST_INT) || flgs.has(TR_SUST_WIS) || flgs.has(TR_SUST_DEX) || flgs.has(TR_SUST_CON) || flgs.has(TR_SUST_CHR)) {
+    } else if (flgs.has_any_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
         sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
     }
 

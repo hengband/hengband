@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <iterator>
 #include <type_traits>
 
 /*!
@@ -17,6 +18,13 @@ public:
      */
     class iterator {
     public:
+        // std::iterator_traits に対応するための定義
+        using difference_type = int;
+        using value_type = EnumType;
+        using pointer = const EnumType *;
+        using reference = const EnumType &;
+        using iterator_category = std::input_iterator_tag;
+
         /*!
          * @brief 引数で与えた列挙値を指すイテレータオブジェクトを生成する
          *
