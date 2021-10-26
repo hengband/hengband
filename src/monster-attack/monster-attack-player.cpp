@@ -279,8 +279,8 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    auto cur = player_ptr->skill_exp[SKILL_SHIELD];
-    auto max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_SHIELD];
+    auto cur = player_ptr->skill_exp[PlayerSkillKindType::SHIELD];
+    auto max = s_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::SHIELD];
     if (cur >= max) {
         return;
     }
@@ -293,7 +293,7 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
         increment += 1 + addition;
     }
 
-    player_ptr->skill_exp[SKILL_SHIELD] = std::min<short>(max, cur + increment);
+    player_ptr->skill_exp[PlayerSkillKindType::SHIELD] = std::min<short>(max, cur + increment);
     player_ptr->update |= (PU_BONUS);
 }
 

@@ -55,9 +55,9 @@ bool rodeo(player_type *player_ptr)
         rlev = rlev * 3 / 2;
     if (rlev > 60)
         rlev = 60 + (rlev - 60) / 2;
-    if ((randint1(player_ptr->skill_exp[SKILL_RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2)
-        && !player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR))
-        && (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {
+    if ((randint1(player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2) &&
+        !player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR)) &&
+        (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {
         msg_format(_("%sを手なずけた。", "You tame %s."), m_name);
         set_pet(player_ptr, m_ptr);
     } else {

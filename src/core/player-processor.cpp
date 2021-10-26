@@ -193,7 +193,7 @@ void process_player(player_type *player_ptr)
 
         if (monster_stunned_remaining(m_ptr)) {
             if (set_monster_stunned(player_ptr, player_ptr->riding,
-                    (randint0(r_ptr->level) < player_ptr->skill_exp[SKILL_RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
+                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
@@ -202,7 +202,7 @@ void process_player(player_type *player_ptr)
 
         if (monster_confused_remaining(m_ptr)) {
             if (set_monster_confused(player_ptr, player_ptr->riding,
-                    (randint0(r_ptr->level) < player_ptr->skill_exp[SKILL_RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
+                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
@@ -211,7 +211,7 @@ void process_player(player_type *player_ptr)
 
         if (monster_fear_remaining(m_ptr)) {
             if (set_monster_monfear(player_ptr, player_ptr->riding,
-                    (randint0(r_ptr->level) < player_ptr->skill_exp[SKILL_RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
+                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);

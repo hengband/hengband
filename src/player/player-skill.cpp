@@ -24,6 +24,13 @@ constexpr SUB_EXP RIDING_EXP_SKILLED = 2000;
 constexpr SUB_EXP RIDING_EXP_EXPERT = 5000;
 constexpr SUB_EXP RIDING_EXP_MASTER = 8000;
 
+/* Proficiency of spells */
+constexpr SUB_EXP SPELL_EXP_UNSKILLED = 0;
+constexpr SUB_EXP SPELL_EXP_BEGINNER = 900;
+constexpr SUB_EXP SPELL_EXP_SKILLED = 1200;
+constexpr SUB_EXP SPELL_EXP_EXPERT = 1400;
+constexpr SUB_EXP SPELL_EXP_MASTER = 1600;
+
 /*
  * The skill table
  */
@@ -112,6 +119,23 @@ SUB_EXP PlayerSkill::weapon_exp_at(int level)
     return WEAPON_EXP_UNSKILLED;
 }
 
+SUB_EXP PlayerSkill::spell_exp_at(int level)
+{
+    switch (level) {
+    case EXP_LEVEL_UNSKILLED:
+        return SPELL_EXP_UNSKILLED;
+    case EXP_LEVEL_BEGINNER:
+        return SPELL_EXP_BEGINNER;
+    case EXP_LEVEL_SKILLED:
+        return SPELL_EXP_SKILLED;
+    case EXP_LEVEL_EXPERT:
+        return SPELL_EXP_EXPERT;
+    case EXP_LEVEL_MASTER:
+        return SPELL_EXP_MASTER;
+    }
+
+    return SPELL_EXP_UNSKILLED;
+}
 /*!
  * @brief 武器や各種スキル（騎乗以外）の抽象的表現ランクを返す。 /  Return proficiency level of weapons and misc. skills (except riding)
  * @param weapon_exp 経験値
@@ -174,6 +198,24 @@ int PlayerSkill::spell_exp_level(int spell_exp)
         return EXP_LEVEL_MASTER;
 }
 
+concptr PlayerSkill::skill_name(PlayerSkillKindType skill)
+{
+    switch (skill) {
+    case PlayerSkillKindType::MARTIAL_ARTS:
+        return _("マーシャルアーツ", "Martial Arts");
+    case PlayerSkillKindType::TWO_WEAPON:
+        return _("二刀流", "Dual Wielding");
+    case PlayerSkillKindType::RIDING:
+        return _("乗馬", "Riding");
+    case PlayerSkillKindType::SHIELD:
+        return _("盾", "Shield");
+    case PlayerSkillKindType::MAX:
+        break;
+    }
+
+    return _("不明", "Unknown");
+}
+
 void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
 {
     const GainAmountList gain_amount_list{ 80, 10, 1, (one_in_(2) ? 1 : 0) };
@@ -204,24 +246,24 @@ void PlayerSkill::gain_range_weapon_exp(const object_type *o_ptr)
 
 void PlayerSkill::gain_martial_arts_skill_exp()
 {
-    if (this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS] < s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_MARTIAL_ARTS]) {
+    if (this->player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS] < s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::MARTIAL_ARTS]) {
         const GainAmountList gain_amount_list{ 40, 5, 1, (one_in_(3) ? 1 : 0) };
-        gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[SKILL_MARTIAL_ARTS], gain_amount_list);
+        gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS], gain_amount_list);
     }
 }
 
 void PlayerSkill::gain_two_weapon_skill_exp()
 {
-    if (this->player_ptr->skill_exp[SKILL_TWO_WEAPON] < s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_TWO_WEAPON]) {
+    if (this->player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] < s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::TWO_WEAPON]) {
         const GainAmountList gain_amount_list{ 80, 4, 1, (one_in_(3) ? 1 : 0) };
-        gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[SKILL_TWO_WEAPON], gain_amount_list);
+        gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON], gain_amount_list);
     }
 }
 
 void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const monster_race *r_ptr)
 {
-    auto now_exp = this->player_ptr->skill_exp[SKILL_RIDING];
-    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_RIDING];
+    auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
+    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
     if (now_exp >= max_exp)
         return;
 
@@ -238,27 +280,27 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const monster_race *r_pt
             inc += 1;
     }
 
-    this->player_ptr->skill_exp[SKILL_RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
+    this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
     set_bits(this->player_ptr->update, PU_BONUS);
 }
 
 void PlayerSkill::gain_riding_skill_exp_on_range_attack()
 {
-    auto now_exp = this->player_ptr->skill_exp[SKILL_RIDING];
-    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_RIDING];
+    auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
+    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
     if (now_exp >= max_exp)
         return;
 
-    if (((this->player_ptr->skill_exp[SKILL_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level) && one_in_(2)) {
-        this->player_ptr->skill_exp[SKILL_RIDING] += 1;
+    if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level) && one_in_(2)) {
+        this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] += 1;
         set_bits(this->player_ptr->update, PU_BONUS);
     }
 }
 
 void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam)
 {
-    auto now_exp = this->player_ptr->skill_exp[SKILL_RIDING];
-    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[SKILL_RIDING];
+    auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
+    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
     if (now_exp >= max_exp || max_exp <= 1000)
         return;
 
@@ -273,7 +315,7 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam)
     else
         inc += 1;
 
-    this->player_ptr->skill_exp[SKILL_RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
+    this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
     set_bits(this->player_ptr->update, PU_BONUS);
 }
 

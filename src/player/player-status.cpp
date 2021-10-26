@@ -1555,7 +1555,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *player_ptr)
     const auto o_ptr_mh = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
     if (o_ptr_mh->is_armour() || o_ptr_sh->is_armour()) {
-        ac += player_ptr->skill_exp[SKILL_SHIELD] * (1 + player_ptr->lev / 22) / 2000;
+        ac += player_ptr->skill_exp[PlayerSkillKindType::SHIELD] * (1 + player_ptr->lev / 22) / 2000;
     }
 
     return ac;
@@ -1740,7 +1740,7 @@ int16_t calc_double_weapon_penalty(player_type *player_ptr, INVENTORY_IDX slot)
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         auto flags = object_flags(&player_ptr->inventory_list[INVEN_SUB_HAND]);
 
-        penalty = ((100 - player_ptr->skill_exp[SKILL_TWO_WEAPON] / 160) - (130 - player_ptr->inventory_list[slot].weight) / 8);
+        penalty = ((100 - player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] / 160) - (130 - player_ptr->inventory_list[slot].weight) / 8);
         if (((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN))
             || ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
                 && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE))) {
@@ -1802,7 +1802,7 @@ static int16_t calc_riding_bow_penalty(player_type *player_ptr)
         if (player_ptr->tval_ammo != ItemKindType::ARROW)
             penalty = 5;
     } else {
-        penalty = r_info[floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[SKILL_RIDING] / 80;
+        penalty = r_info[floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
         penalty += 30;
         if (penalty < 30)
             penalty = 30;
@@ -2088,7 +2088,7 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
                 break;
             /* fall through */
         case MELEE_TYPE_BAREHAND_TWO:
-            hit += (player_ptr->skill_exp[SKILL_MARTIAL_ARTS] - PlayerSkill::weapon_exp_at(EXP_LEVEL_BEGINNER)) / 200;
+            hit += (player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS] - PlayerSkill::weapon_exp_at(EXP_LEVEL_BEGINNER)) / 200;
             break;
 
         default:
@@ -2134,7 +2134,7 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
                 if ((player_ptr->pclass == PlayerClassType::BEASTMASTER) || (player_ptr->pclass == PlayerClassType::CAVALRY)) {
                     penalty = 5;
                 } else {
-                    penalty = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[SKILL_RIDING] / 80;
+                    penalty = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
                     penalty += 30;
                     if (penalty < 30) {
                         penalty = 30;
