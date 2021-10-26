@@ -45,8 +45,8 @@ errr parse_s_info(std::string_view buf, angband_header *head)
         info_set_value(max, tokens[4]);
 
         auto tval = ItemKindType::BOW + tval_offset;
-        s_ptr->w_start[tval][sval] = PlayerSkill::weapon_exp_at(start);
-        s_ptr->w_max[tval][sval] = PlayerSkill::weapon_exp_at(max);
+        s_ptr->w_start[tval][sval] = PlayerSkill::weapon_exp_at(i2enum<PlayerSkillRank>(start));
+        s_ptr->w_max[tval][sval] = PlayerSkill::weapon_exp_at(i2enum<PlayerSkillRank>(max));
     } else if (tokens[0] == "S") {
         if (tokens.size() < 4)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;

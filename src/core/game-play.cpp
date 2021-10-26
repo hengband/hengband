@@ -260,10 +260,10 @@ static void generate_world(player_type *player_ptr, bool new_game)
     if (player_ptr->pclass != PlayerClassType::SORCERER) {
         auto pclass = enum2i(player_ptr->pclass);
         if (player_ptr->ppersonality == PERSONALITY_SEXY)
-            s_info[pclass].w_max[ItemKindType::HAFTED][SV_WHIP] = PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER);
+            s_info[pclass].w_max[ItemKindType::HAFTED][SV_WHIP] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
         if (player_ptr->prace == PlayerRaceType::MERFOLK) {
-            s_info[pclass].w_max[ItemKindType::POLEARM][SV_TRIDENT] = PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER);
-            s_info[pclass].w_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER);
+            s_info[pclass].w_max[ItemKindType::POLEARM][SV_TRIDENT] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+            s_info[pclass].w_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
         }
     }
 
