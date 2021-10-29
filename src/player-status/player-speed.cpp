@@ -54,44 +54,10 @@ void PlayerSpeed::set_locals()
 /*!
  * @brief 速度計算 - 種族
  * @return 速度値の増減分
- * @details
- * ** クラッコンと妖精に加算(+レベル/10)
- * ** 悪魔変化/吸血鬼変化で加算(+3)
- * ** 魔王変化で加算(+5)
- * ** マーフォークがFF_WATER地形にいれば加算(+2+レベル/10)
- * ** そうでなく浮遊を持っていないなら減算(-2)
  */
 int16_t PlayerSpeed::race_value()
 {
-    int16_t result = 0;
-
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE))
-        result += (this->player_ptr->lev) / 10;
-
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::MERFOLK)) {
-        floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
-        feature_type *f_ptr = &f_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
-        if (f_ptr->flags.has(FF::WATER)) {
-            result += (2 + this->player_ptr->lev / 10);
-        } else if (!this->player_ptr->levitation) {
-            result -= 2;
-        }
-    }
-
-    if (this->player_ptr->mimic_form) {
-        switch (this->player_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            result += 3;
-            break;
-        case MIMIC_DEMON_LORD:
-            result += 5;
-            break;
-        case MIMIC_VAMPIRE:
-            result += 3;
-            break;
-        }
-    }
-    return result;
+    return PlayerRace(this->player_ptr).speed();
 }
 
 /*!

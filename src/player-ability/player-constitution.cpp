@@ -31,22 +31,12 @@ void PlayerConstitution::set_locals()
 /*!
  * @brief 耐久力補正計算 - 種族
  * @return 耐久力補正値
- * @details
- * * 種族による耐久力修正値。
- * * エントは別途レベル26,41,46到達ごとに加算(+1)
  */
 int16_t PlayerConstitution::race_value()
 {
     int16_t result = PlayerBasicStatistics::race_value();
 
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ENT)) {
-        if (this->player_ptr->lev > 25)
-            result++;
-        if (this->player_ptr->lev > 40)
-            result++;
-        if (this->player_ptr->lev > 45)
-            result++;
-    }
+    result += PlayerRace(this->player_ptr).additional_constitution();
 
     return result;
 }
