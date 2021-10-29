@@ -1,6 +1,7 @@
 ﻿#include "player-status/player-stealth.h"
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
@@ -29,14 +30,7 @@ PlayerStealth::PlayerStealth(player_type* player_ptr)
  */
 int16_t PlayerStealth::race_value()
 {
-    const player_race_info *tmp_rp_ptr;
-
-    if (this->player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[this->player_ptr->mimic_form];
-    else
-        tmp_rp_ptr = &race_info[enum2i(this->player_ptr->prace)];
-
-    return tmp_rp_ptr->r_stl;
+    return PlayerRace(this->player_ptr).get_info()->r_stl;
 }
 
 /*!
