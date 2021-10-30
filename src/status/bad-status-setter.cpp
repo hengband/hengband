@@ -434,7 +434,7 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::GOLEM) || PlayerClass(this->player_ptr).can_resist_stun()) {
+    if (PlayerRace(this->player_ptr).has_stun_immunity() || PlayerClass(this->player_ptr).has_stun_immunity()) {
         v = 0;
     }
 
@@ -473,7 +473,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    if (PlayerRace(this->player_ptr).can_resist_cut() && !this->player_ptr->mimic_form) {
+    if (PlayerRace(this->player_ptr).has_cut_immunity()) {
         v = 0;
     }
 
