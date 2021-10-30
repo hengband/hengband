@@ -102,13 +102,19 @@ bool PlayerRace::is_mimic_nonliving() const
     return any_bits(mimic_info[this->player_ptr->mimic_form].choice, nonliving_flag);
 }
 
-bool PlayerRace::can_resist_cut() const
+bool PlayerRace::has_cut_immunity() const
 {
-    auto can_resist_cut = this->player_ptr->prace == PlayerRaceType::GOLEM;
-    can_resist_cut |= this->player_ptr->prace == PlayerRaceType::SKELETON;
-    can_resist_cut |= this->player_ptr->prace == PlayerRaceType::SPECTRE;
-    can_resist_cut |= (this->player_ptr->prace == PlayerRaceType::ZOMBIE) && (this->player_ptr->lev > 11);
-    return can_resist_cut;
+    auto cut_immunity = PlayerRace(this->player_ptr).equals(PlayerRaceType::GOLEM);
+    cut_immunity |= PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON);
+    cut_immunity |= PlayerRace(this->player_ptr).equals(PlayerRaceType::SPECTRE);
+    cut_immunity |= PlayerRace(this->player_ptr).equals(PlayerRaceType::ZOMBIE) && (this->player_ptr->lev > 11);
+    return cut_immunity;
+}
+
+
+bool PlayerRace::has_stun_immunity() const
+{
+    return PlayerRace(this->player_ptr).equals(PlayerRaceType::GOLEM);
 }
 
 bool PlayerRace::equals(PlayerRaceType prace) const
