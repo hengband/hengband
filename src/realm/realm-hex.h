@@ -5,4 +5,4 @@
 #include "spell/spells-util.h"
 
 struct player_type;
-concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type mode);
+concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcessType mode);

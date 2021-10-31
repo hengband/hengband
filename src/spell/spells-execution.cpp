@@ -22,7 +22,7 @@
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はnullptrを返す。
  */
-concptr exe_spell(player_type *player_ptr, int16_t realm, SPELL_IDX spell, spell_type mode)
+concptr exe_spell(player_type *player_ptr, int16_t realm, SPELL_IDX spell, SpellProcessType mode)
 {
 	switch (realm)
 	{

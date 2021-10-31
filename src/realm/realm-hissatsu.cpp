@@ -62,14 +62,14 @@
  * @brief 剣術の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 剣術ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::CAST)
+ * @return SpellProcessType::NAME / SPELL_DESC 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
  */
-concptr do_hissatsu_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_hissatsu_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESCRIPTION;
-    bool cast = mode == SPELL_CAST;
+    bool name = mode == SpellProcessType::NAME;
+    bool desc = mode == SpellProcessType::DESCRIPTION;
+    bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;

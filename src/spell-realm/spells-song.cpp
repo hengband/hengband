@@ -65,7 +65,7 @@ void check_music(player_type *player_ptr)
 
     PlayerSkill(player_ptr).gain_continuous_spell_skill_exp(REALM_MUSIC, spell);
 
-    exe_spell(player_ptr, REALM_MUSIC, spell, SPELL_CONTNUATION);
+    exe_spell(player_ptr, REALM_MUSIC, spell, SpellProcessType::CONTNUATION);
 }
 
 /*!
@@ -129,7 +129,7 @@ void stop_singing(player_type *player_ptr)
     if (player_ptr->action == ACTION_SING)
         set_action(player_ptr, ACTION_NONE);
 
-    (void)exe_spell(player_ptr, REALM_MUSIC, get_singing_song_id(player_ptr), SPELL_STOP);
+    (void)exe_spell(player_ptr, REALM_MUSIC, get_singing_song_id(player_ptr), SpellProcessType::STOP);
     set_singing_song_effect(player_ptr, MUSIC_NONE);
     set_singing_song_id(player_ptr, 0);
     set_bits(player_ptr->update, PU_BONUS);
