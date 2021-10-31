@@ -342,7 +342,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
     if (ironman_nightmare) {
         auto hp = m_ptr->max_maxhp * 2;
-        m_ptr->max_maxhp = std::min(30000, hp);
+        m_ptr->max_maxhp = std::min(MONSTER_MAXHP, hp);
     }
 
     m_ptr->maxhp = m_ptr->max_maxhp;
