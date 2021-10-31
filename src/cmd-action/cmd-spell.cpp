@@ -728,7 +728,7 @@ static void change_realm2(player_type *player_ptr, int16_t next_realm)
         player_ptr->spell_order[j] = 99;
 
     for (i = 32; i < 64; i++) {
-        player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(EXP_LEVEL_UNSKILLED);
+        player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::UNSKILLED);
     }
     player_ptr->spell_learned2 = 0L;
     player_ptr->spell_worked2 = 0L;
@@ -879,7 +879,7 @@ void do_cmd_study(player_type *player_ptr)
     }
 
     if (learned) {
-        auto max_exp = PlayerSkill::spell_exp_at((spell < 32) ? EXP_LEVEL_MASTER : EXP_LEVEL_EXPERT);
+        auto max_exp = PlayerSkill::spell_exp_at((spell < 32) ? PlayerSkillRank::MASTER : PlayerSkillRank::EXPERT);
         int old_exp = player_ptr->spell_exp[spell];
         concptr name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SPELL_NAME);
 
@@ -897,7 +897,8 @@ void do_cmd_study(player_type *player_ptr)
         }
 
         auto new_rank = PlayerSkill(player_ptr).gain_spell_skill_exp_over_learning(spell);
-        msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), name, exp_level_str[new_rank]);
+        auto new_rank_str = PlayerSkill::skill_rank_str(new_rank);
+        msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), name, new_rank_str);
     } else {
         /* Find the next open entry in "player_ptr->spell_order[]" */
         for (i = 0; i < 64; i++) {

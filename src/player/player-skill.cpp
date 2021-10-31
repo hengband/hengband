@@ -36,32 +36,25 @@ constexpr SUB_EXP SPELL_EXP_MASTER = 1600;
  */
 std::vector<skill_table> s_info;
 
-/*!
- * @brief 技能値到達表記テーブル
- */
-const concptr exp_level_str[5] =
-#ifdef JP
-    { "[初心者]", "[入門者]", "[熟練者]", "[エキスパート]", "[達人]" };
-#else
-    { "[Unskilled]", "[Beginner]", "[Skilled]", "[Expert]", "[Master]" };
-#endif
-
 namespace {
 
-using GainAmountList = std::array<int, EXP_LEVEL_MASTER>;
+using GainAmountList = std::array<int, enum2i(PlayerSkillRank::MASTER)>;
 
 void gain_attack_skill_exp(player_type *player_ptr, short &exp, const GainAmountList &gain_amount_list)
 {
     auto gain_amount = 0;
+    auto calc_gain_amount = [&gain_amount_list, exp](PlayerSkillRank rank, int next_rank_exp) {
+        return std::min(gain_amount_list[enum2i(rank)], next_rank_exp - exp);
+    };
 
     if (exp < WEAPON_EXP_BEGINNER) {
-        gain_amount = std::min(gain_amount_list[EXP_LEVEL_UNSKILLED], WEAPON_EXP_BEGINNER - exp);
+        gain_amount = calc_gain_amount(PlayerSkillRank::UNSKILLED, WEAPON_EXP_BEGINNER);
     } else if (exp < WEAPON_EXP_SKILLED) {
-        gain_amount = std::min(gain_amount_list[EXP_LEVEL_BEGINNER], WEAPON_EXP_SKILLED - exp);
+        gain_amount = calc_gain_amount(PlayerSkillRank::BEGINNER, WEAPON_EXP_SKILLED);
     } else if ((exp < WEAPON_EXP_EXPERT) && (player_ptr->lev > 19)) {
-        gain_amount = std::min(gain_amount_list[EXP_LEVEL_SKILLED], WEAPON_EXP_EXPERT - exp);
+        gain_amount = calc_gain_amount(PlayerSkillRank::SKILLED, WEAPON_EXP_EXPERT);
     } else if ((exp < WEAPON_EXP_MASTER) && (player_ptr->lev > 34)) {
-        gain_amount = std::min(gain_amount_list[EXP_LEVEL_EXPERT], WEAPON_EXP_MASTER - exp);
+        gain_amount = calc_gain_amount(PlayerSkillRank::EXPERT, WEAPON_EXP_MASTER);
     }
 
     exp += static_cast<short>(gain_amount);
@@ -74,19 +67,23 @@ void gain_spell_skill_exp_aux(player_type *player_ptr, short &exp, const GainAmo
     const auto plev = player_ptr->lev;
 
     auto gain_amount = 0;
+    auto calc_gain_amount = [&gain_amount_list, exp](PlayerSkillRank rank, int next_rank_exp) {
+        return std::min(gain_amount_list[enum2i(rank)], next_rank_exp - exp);
+    };
+
     if (exp < SPELL_EXP_BEGINNER) {
-        gain_amount = std::min(gain_amount_list[EXP_LEVEL_UNSKILLED], SPELL_EXP_BEGINNER - exp);
+        gain_amount = calc_gain_amount(PlayerSkillRank::UNSKILLED, SPELL_EXP_BEGINNER);
     } else if (exp < SPELL_EXP_SKILLED) {
         if ((dlev > 4) && ((dlev + 10) > plev)) {
-            gain_amount = std::min(gain_amount_list[EXP_LEVEL_BEGINNER], SPELL_EXP_SKILLED - exp);
+            gain_amount = calc_gain_amount(PlayerSkillRank::BEGINNER, SPELL_EXP_SKILLED);
         }
     } else if (exp < SPELL_EXP_EXPERT) {
         if (((dlev + 5) > plev) && ((dlev + 5) > spell_level)) {
-            gain_amount = std::min(gain_amount_list[EXP_LEVEL_SKILLED], SPELL_EXP_EXPERT - exp);
+            gain_amount = calc_gain_amount(PlayerSkillRank::SKILLED, SPELL_EXP_EXPERT);
         }
     } else if (exp < SPELL_EXP_MASTER) {
         if (((dlev + 5) > plev) && (dlev > spell_level)) {
-            gain_amount = std::min(gain_amount_list[EXP_LEVEL_EXPERT], SPELL_EXP_MASTER - exp);
+            gain_amount = calc_gain_amount(PlayerSkillRank::EXPERT, SPELL_EXP_MASTER);
         }
     }
 
@@ -101,36 +98,36 @@ PlayerSkill::PlayerSkill(player_type *player_ptr)
 {
 }
 
-SUB_EXP PlayerSkill::weapon_exp_at(int level)
+SUB_EXP PlayerSkill::weapon_exp_at(PlayerSkillRank rank)
 {
-    switch (level) {
-    case EXP_LEVEL_UNSKILLED:
+    switch (rank) {
+    case PlayerSkillRank::UNSKILLED:
         return WEAPON_EXP_UNSKILLED;
-    case EXP_LEVEL_BEGINNER:
+    case PlayerSkillRank::BEGINNER:
         return WEAPON_EXP_BEGINNER;
-    case EXP_LEVEL_SKILLED:
+    case PlayerSkillRank::SKILLED:
         return WEAPON_EXP_SKILLED;
-    case EXP_LEVEL_EXPERT:
+    case PlayerSkillRank::EXPERT:
         return WEAPON_EXP_EXPERT;
-    case EXP_LEVEL_MASTER:
+    case PlayerSkillRank::MASTER:
         return WEAPON_EXP_MASTER;
     }
 
     return WEAPON_EXP_UNSKILLED;
 }
 
-SUB_EXP PlayerSkill::spell_exp_at(int level)
+SUB_EXP PlayerSkill::spell_exp_at(PlayerSkillRank rank)
 {
-    switch (level) {
-    case EXP_LEVEL_UNSKILLED:
+    switch (rank) {
+    case PlayerSkillRank::UNSKILLED:
         return SPELL_EXP_UNSKILLED;
-    case EXP_LEVEL_BEGINNER:
+    case PlayerSkillRank::BEGINNER:
         return SPELL_EXP_BEGINNER;
-    case EXP_LEVEL_SKILLED:
+    case PlayerSkillRank::SKILLED:
         return SPELL_EXP_SKILLED;
-    case EXP_LEVEL_EXPERT:
+    case PlayerSkillRank::EXPERT:
         return SPELL_EXP_EXPERT;
-    case EXP_LEVEL_MASTER:
+    case PlayerSkillRank::MASTER:
         return SPELL_EXP_MASTER;
     }
 
@@ -141,18 +138,18 @@ SUB_EXP PlayerSkill::spell_exp_at(int level)
  * @param weapon_exp 経験値
  * @return ランク値
  */
-int PlayerSkill::weapon_exp_level(int weapon_exp)
+PlayerSkillRank PlayerSkill::weapon_skill_rank(int weapon_exp)
 {
     if (weapon_exp < WEAPON_EXP_BEGINNER)
-        return EXP_LEVEL_UNSKILLED;
+        return PlayerSkillRank::UNSKILLED;
     else if (weapon_exp < WEAPON_EXP_SKILLED)
-        return EXP_LEVEL_BEGINNER;
+        return PlayerSkillRank::BEGINNER;
     else if (weapon_exp < WEAPON_EXP_EXPERT)
-        return EXP_LEVEL_SKILLED;
+        return PlayerSkillRank::SKILLED;
     else if (weapon_exp < WEAPON_EXP_MASTER)
-        return EXP_LEVEL_EXPERT;
+        return PlayerSkillRank::EXPERT;
     else
-        return EXP_LEVEL_MASTER;
+        return PlayerSkillRank::MASTER;
 }
 
 bool PlayerSkill::valid_weapon_exp(int weapon_exp)
@@ -165,18 +162,18 @@ bool PlayerSkill::valid_weapon_exp(int weapon_exp)
  * @param riding_exp 経験値
  * @return ランク値
  */
-int PlayerSkill::riding_exp_level(int riding_exp)
+PlayerSkillRank PlayerSkill::riding_skill_rank(int riding_exp)
 {
     if (riding_exp < RIDING_EXP_BEGINNER)
-        return EXP_LEVEL_UNSKILLED;
+        return PlayerSkillRank::UNSKILLED;
     else if (riding_exp < RIDING_EXP_SKILLED)
-        return EXP_LEVEL_BEGINNER;
+        return PlayerSkillRank::BEGINNER;
     else if (riding_exp < RIDING_EXP_EXPERT)
-        return EXP_LEVEL_SKILLED;
+        return PlayerSkillRank::SKILLED;
     else if (riding_exp < RIDING_EXP_MASTER)
-        return EXP_LEVEL_EXPERT;
+        return PlayerSkillRank::EXPERT;
     else
-        return EXP_LEVEL_MASTER;
+        return PlayerSkillRank::MASTER;
 }
 
 /*!
@@ -184,18 +181,18 @@ int PlayerSkill::riding_exp_level(int riding_exp)
  * @param spell_exp 経験値
  * @return ランク値
  */
-int PlayerSkill::spell_exp_level(int spell_exp)
+PlayerSkillRank PlayerSkill::spell_skill_rank(int spell_exp)
 {
     if (spell_exp < SPELL_EXP_BEGINNER)
-        return EXP_LEVEL_UNSKILLED;
+        return PlayerSkillRank::UNSKILLED;
     else if (spell_exp < SPELL_EXP_SKILLED)
-        return EXP_LEVEL_BEGINNER;
+        return PlayerSkillRank::BEGINNER;
     else if (spell_exp < SPELL_EXP_EXPERT)
-        return EXP_LEVEL_SKILLED;
+        return PlayerSkillRank::SKILLED;
     else if (spell_exp < SPELL_EXP_MASTER)
-        return EXP_LEVEL_EXPERT;
+        return PlayerSkillRank::EXPERT;
     else
-        return EXP_LEVEL_MASTER;
+        return PlayerSkillRank::MASTER;
 }
 
 concptr PlayerSkill::skill_name(PlayerSkillKindType skill)
@@ -214,6 +211,24 @@ concptr PlayerSkill::skill_name(PlayerSkillKindType skill)
     }
 
     return _("不明", "Unknown");
+}
+
+concptr PlayerSkill::skill_rank_str(PlayerSkillRank rank)
+{
+    switch (rank) {
+    case PlayerSkillRank::UNSKILLED:
+        return _("[初心者]", "[Unskilled]");
+    case PlayerSkillRank::BEGINNER:
+        return _("[入門者]", "[Beginner]");
+    case PlayerSkillRank::SKILLED:
+        return _("[熟練者]", "[Skilled]");
+    case PlayerSkillRank::EXPERT:
+        return _("[エキスパート]", "[Expert]");
+    case PlayerSkillRank::MASTER:
+        return _("[達人]", "[Master]");
+    }
+
+    return _("[不明]", "[Unknown]");
 }
 
 void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
@@ -351,10 +366,10 @@ void PlayerSkill::gain_continuous_spell_skill_exp(int realm, int spell_idx)
     gain_spell_skill_exp_aux(this->player_ptr, this->player_ptr->spell_exp[spell_idx], gain_amount_list, s_ptr->slevel);
 }
 
-int PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
+PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
 {
     if ((spell_idx < 0) || (static_cast<int>(std::size(this->player_ptr->spell_exp)) <= spell_idx)) {
-        return EXP_LEVEL_UNSKILLED;
+        return PlayerSkillRank::UNSKILLED;
     }
 
     auto &exp = this->player_ptr->spell_exp[spell_idx];
@@ -375,7 +390,7 @@ int PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
 
     set_bits(this->player_ptr->update, PU_BONUS);
 
-    return PlayerSkill::spell_exp_level(exp);
+    return PlayerSkill::spell_skill_rank(exp);
 }
 
 /*!

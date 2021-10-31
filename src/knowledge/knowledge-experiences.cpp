@@ -50,7 +50,8 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
                     fprintf(fff, "!");
                 else
                     fprintf(fff, " ");
-                fprintf(fff, "%s", exp_level_str[PlayerSkill::weapon_exp_level(weapon_exp)]);
+                auto skill_rank = PlayerSkill::weapon_skill_rank(weapon_exp);
+                fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
                 if (cheat_xtra)
                     fprintf(fff, " %d", weapon_exp);
                 fprintf(fff, "\n");
@@ -88,7 +89,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
             if (s_ptr->slevel >= 99)
                 continue;
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
-            auto exp_level = PlayerSkill::spell_exp_level(spell_exp);
+            auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
             fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm1, i, SPELL_NAME));
             if (player_ptr->realm1 == REALM_HISSATSU) {
                 if (show_actual_value)
@@ -96,12 +97,12 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
                 fprintf(fff, "[--]");
             } else {
                 if (show_actual_value)
-                    fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(EXP_LEVEL_MASTER));
-                if (exp_level >= EXP_LEVEL_MASTER)
+                    fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
+                if (skill_rank >= PlayerSkillRank::MASTER)
                     fprintf(fff, "!");
                 else
                     fprintf(fff, " ");
-                fprintf(fff, "%s", exp_level_str[exp_level]);
+                fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
             }
 
             if (cheat_xtra)
@@ -124,15 +125,15 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
                 continue;
 
             SUB_EXP spell_exp = player_ptr->spell_exp[i + 32];
-            auto exp_level = PlayerSkill::spell_exp_level(spell_exp);
+            auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
             fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm2, i, SPELL_NAME));
             if (show_actual_value)
-                fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(EXP_LEVEL_MASTER));
-            if (exp_level >= EXP_LEVEL_EXPERT)
+                fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
+            if (skill_rank >= PlayerSkillRank::EXPERT)
                 fprintf(fff, "!");
             else
                 fprintf(fff, " ");
-            fprintf(fff, "%s", exp_level_str[exp_level]);
+            fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
             if (cheat_xtra)
                 fprintf(fff, " %d", spell_exp);
             fprintf(fff, "\n");
@@ -165,7 +166,8 @@ void do_cmd_knowledge_skill_exp(player_type *player_ptr)
             fprintf(fff, "!");
         else
             fprintf(fff, " ");
-        fprintf(fff, "%s", exp_level_str[(i == PlayerSkillKindType::RIDING) ? PlayerSkill::riding_exp_level(skill_exp) : PlayerSkill::weapon_exp_level(skill_exp)]);
+        auto skill_rank = (i == PlayerSkillKindType::RIDING) ? PlayerSkill::riding_skill_rank(skill_exp) : PlayerSkill::weapon_skill_rank(skill_exp);
+        fprintf(fff, "%s", PlayerSkill::skill_rank_str(skill_rank));
         if (cheat_xtra)
             fprintf(fff, " %d", skill_exp);
         fprintf(fff, "\n");

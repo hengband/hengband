@@ -410,13 +410,13 @@ void wiz_change_status(player_type *player_ptr)
         player_ptr->stat_cur[i] = player_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
     }
 
-    sprintf(tmp_val, "%d", PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER));
+    sprintf(tmp_val, "%d", PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
     if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
         return;
 
     auto tmp_s16b = std::clamp(static_cast<SUB_EXP>(atoi(tmp_val)),
-        PlayerSkill::weapon_exp_at(EXP_LEVEL_UNSKILLED),
-        PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER));
+        PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED),
+        PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
 
     for (auto tval : TV_WEAPON_RANGE) {
         for (int i = 0; i < 64; i++) {
@@ -433,10 +433,10 @@ void wiz_change_status(player_type *player_ptr)
 
     int k;
     for (k = 0; k < 32; k++)
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(EXP_LEVEL_MASTER), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), tmp_s16b);
 
     for (; k < 64; k++)
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(EXP_LEVEL_EXPERT), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), tmp_s16b);
 
     sprintf(tmp_val, "%ld", (long)(player_ptr->au));
     if (!get_string("Gold: ", tmp_val, 9))

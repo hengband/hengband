@@ -101,7 +101,7 @@ void rd_experience(player_type *player_ptr)
 
     if ((player_ptr->pclass == PlayerClassType::SORCERER) && h_older_than(0, 4, 2))
         for (int i = 0; i < 64; i++)
-            player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(EXP_LEVEL_MASTER);
+            player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
 
     const int max_weapon_exp_size = h_older_than(0, 3, 6) ? 60 : 64;
     for (auto tval : TV_WEAPON_RANGE)

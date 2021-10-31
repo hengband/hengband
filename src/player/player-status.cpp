@@ -2088,7 +2088,7 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
                 break;
             /* fall through */
         case MELEE_TYPE_BAREHAND_TWO:
-            hit += (player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS] - PlayerSkill::weapon_exp_at(EXP_LEVEL_BEGINNER)) / 200;
+            hit += (player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS] - PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) / 200;
             break;
 
         default:
@@ -2109,7 +2109,7 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
         auto flgs = object_flags(o_ptr);
 
         /* Traind bonuses */
-        hit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - PlayerSkill::weapon_exp_at(EXP_LEVEL_BEGINNER)) / 200;
+        hit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) / 200;
 
         /* Weight penalty */
         if (calc_weapon_weight_limit(player_ptr) < o_ptr->weight / 10) {
