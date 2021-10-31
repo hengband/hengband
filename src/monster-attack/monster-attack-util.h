@@ -6,7 +6,7 @@
 
 /* MONster-Attack-Player、地図のMAPと紛らわしいのでmonapとした */
 struct monster_type;
-struct object_type;;
+struct object_type;
 typedef struct monap_type {
 #ifdef JP
     int abbreviate; // 2回目以降の省略表現フラグ.
@@ -27,7 +27,7 @@ typedef struct monap_type {
     object_type *o_ptr;
     bool obvious;
     HIT_POINT damage;
-    rbe_type effect;
+    RaceBlowEffectType effect;
     bool blinked;
     GAME_TEXT o_name[MAX_NLEN];
     HIT_POINT get_damage;

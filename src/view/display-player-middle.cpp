@@ -101,7 +101,7 @@ static void display_hit_damage(player_type *player_ptr)
     if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW))
         show_tohit += player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] / 400;
     else
-        show_tohit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - (PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER) / 2)) / 200;
+        show_tohit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200;
 
     show_tohit += player_ptr->skill_thb / BTH_PLUS_ADJ;
 

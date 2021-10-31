@@ -151,12 +151,12 @@ void describe_melee_method(player_type *player_ptr, mam_type *mam_ptr)
 void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->effect) {
-    case 0:
-    case RBE_DR_MANA:
+    case RaceBlowEffectType::NONE:
+    case RaceBlowEffectType::DR_MANA:
         mam_ptr->damage = 0;
         mam_ptr->pt = GF_NONE;
         break;
-    case RBE_SUPERHURT:
+    case RaceBlowEffectType::SUPERHURT:
         if ((randint1(mam_ptr->rlev * 2 + 250) > (mam_ptr->ac + 200)) || one_in_(13)) {
             int tmp_damage = mam_ptr->damage - (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
             mam_ptr->damage = std::max(mam_ptr->damage, tmp_damage * 2);
@@ -164,84 +164,84 @@ void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
         }
 
         /* Fall through */
-    case RBE_HURT:
+    case RaceBlowEffectType::HURT:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
         break;
-    case RBE_POISON:
-    case RBE_DISEASE:
+    case RaceBlowEffectType::POISON:
+    case RaceBlowEffectType::DISEASE:
         mam_ptr->pt = GF_POIS;
         break;
-    case RBE_UN_BONUS:
-    case RBE_UN_POWER:
+    case RaceBlowEffectType::UN_BONUS:
+    case RaceBlowEffectType::UN_POWER:
         mam_ptr->pt = GF_DISENCHANT;
         break;
-    case RBE_EAT_ITEM:
-    case RBE_EAT_GOLD:
+    case RaceBlowEffectType::EAT_ITEM:
+    case RaceBlowEffectType::EAT_GOLD:
         if ((player_ptr->riding != mam_ptr->m_idx) && one_in_(2))
             mam_ptr->blinked = true;
 
         break;
-    case RBE_EAT_FOOD:
-    case RBE_EAT_LITE:
-    case RBE_BLIND:
-    case RBE_LOSE_STR:
-    case RBE_LOSE_INT:
-    case RBE_LOSE_WIS:
-    case RBE_LOSE_DEX:
-    case RBE_LOSE_CON:
-    case RBE_LOSE_CHR:
-    case RBE_LOSE_ALL:
+    case RaceBlowEffectType::EAT_FOOD:
+    case RaceBlowEffectType::EAT_LITE:
+    case RaceBlowEffectType::BLIND:
+    case RaceBlowEffectType::LOSE_STR:
+    case RaceBlowEffectType::LOSE_INT:
+    case RaceBlowEffectType::LOSE_WIS:
+    case RaceBlowEffectType::LOSE_DEX:
+    case RaceBlowEffectType::LOSE_CON:
+    case RaceBlowEffectType::LOSE_CHR:
+    case RaceBlowEffectType::LOSE_ALL:
         break;
-    case RBE_ACID:
+    case RaceBlowEffectType::ACID:
         mam_ptr->pt = GF_ACID;
         break;
-    case RBE_ELEC:
+    case RaceBlowEffectType::ELEC:
         mam_ptr->pt = GF_ELEC;
         break;
-    case RBE_FIRE:
+    case RaceBlowEffectType::FIRE:
         mam_ptr->pt = GF_FIRE;
         break;
-    case RBE_COLD:
+    case RaceBlowEffectType::COLD:
         mam_ptr->pt = GF_COLD;
         break;
-    case RBE_CONFUSE:
+    case RaceBlowEffectType::CONFUSE:
         mam_ptr->pt = GF_CONFUSION;
         break;
-    case RBE_TERRIFY:
+    case RaceBlowEffectType::TERRIFY:
         mam_ptr->effect_type = BLOW_EFFECT_TYPE_FEAR;
         break;
-    case RBE_PARALYZE:
+    case RaceBlowEffectType::PARALYZE:
         mam_ptr->effect_type = BLOW_EFFECT_TYPE_SLEEP;
         break;
-    case RBE_SHATTER:
+    case RaceBlowEffectType::SHATTER:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
         if (mam_ptr->damage > 23)
             earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
 
         break;
-    case RBE_EXP_10:
-    case RBE_EXP_20:
-    case RBE_EXP_40:
-    case RBE_EXP_80:
+    case RaceBlowEffectType::EXP_10:
+    case RaceBlowEffectType::EXP_20:
+    case RaceBlowEffectType::EXP_40:
+    case RaceBlowEffectType::EXP_80:
         mam_ptr->pt = GF_NETHER;
         break;
-    case RBE_TIME:
+    case RaceBlowEffectType::TIME:
         mam_ptr->pt = GF_TIME;
         break;
-    case RBE_DR_LIFE:
+    case RaceBlowEffectType::DR_LIFE:
         mam_ptr->pt = GF_HYPODYNAMIA;
         mam_ptr->effect_type = BLOW_EFFECT_TYPE_HEAL;
         break;
-    case RBE_INERTIA:
+    case RaceBlowEffectType::INERTIA:
         mam_ptr->pt = GF_INERTIAL;
         break;
-    case RBE_STUN:
+    case RaceBlowEffectType::STUN:
         mam_ptr->pt = GF_SOUND;
         break;
-    case RBE_HUNGRY:
+    case RaceBlowEffectType::HUNGRY:
         mam_ptr->pt = GF_HUNGRY;
         break;
-    case RBE_FLAVOR:
+    case RaceBlowEffectType::FLAVOR:
         // フレーバー打撃には何の効果もない。
         mam_ptr->pt = GF_NONE;
         break;

@@ -431,7 +431,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
     if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
         chance = (player_ptr->skill_thb + (player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] / 400 + bonus) * BTH_PLUS_ADJ);
     else
-        chance = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER) / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
+        chance = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
 
     PlayerEnergy(player_ptr).set_player_turn_energy(bow_energy(j_ptr->sval));
     tmul = bow_tmul(j_ptr->sval);
@@ -946,7 +946,7 @@ HIT_POINT critical_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, i
     if (player_ptr->tval_ammo == ItemKindType::BOLT)
         i = (player_ptr->skill_thb + (player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
     else
-        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
+        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
 
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
@@ -1097,7 +1097,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *player_ptr, HIT_POINT plus_ammo, HIT
     if (player_ptr->tval_ammo == ItemKindType::BOLT)
         i = (player_ptr->skill_thb + (player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
     else
-        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(EXP_LEVEL_MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
+        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
 
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;

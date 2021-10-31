@@ -279,8 +279,8 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
         return;
     }
 
-    auto cur = player_ptr->skill_exp[SKILL_SHIELD];
-    auto max = s_info[enum2i(player_ptr->pclass)].s_max[SKILL_SHIELD];
+    auto cur = player_ptr->skill_exp[PlayerSkillKindType::SHIELD];
+    auto max = s_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::SHIELD];
     if (cur >= max) {
         return;
     }
@@ -293,7 +293,7 @@ static void gain_armor_exp(player_type *player_ptr, monap_type *monap_ptr)
         increment += 1 + addition;
     }
 
-    player_ptr->skill_exp[SKILL_SHIELD] = std::min<short>(max, cur + increment);
+    player_ptr->skill_exp[PlayerSkillKindType::SHIELD] = std::min<short>(max, cur + increment);
     player_ptr->update |= (PU_BONUS);
 }
 
@@ -404,11 +404,11 @@ static bool process_monster_blows(player_type *player_ptr, monap_type *monap_ptr
             break;
         }
 
-        // effect が RBE_NONE (無効値)になることはあり得ないはずだが、万一そう
+        // effect が RaceBlowEffectType::NONE (無効値)になることはあり得ないはずだが、万一そう
         // なっていたら単に攻撃を打ち切る。
         // r_info.txt の "B:" トークンに effect 以降を書き忘れた場合が該当する。
-        if (monap_ptr->effect == RBE_NONE) {
-            plog("unexpected: monap_ptr->effect == RBE_NONE");
+        if (monap_ptr->effect == RaceBlowEffectType::NONE) {
+            plog("unexpected: monap_ptr->effect == RaceBlowEffectType::NONE");
             break;
         }
 
@@ -419,10 +419,10 @@ static bool process_monster_blows(player_type *player_ptr, monap_type *monap_ptr
         // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
         monap_ptr->ac = player_ptr->ac + player_ptr->to_a;
         bool hit;
-        if (monap_ptr->effect == RBE_FLAVOR) {
+        if (monap_ptr->effect == RaceBlowEffectType::FLAVOR) {
             hit = true;
         } else {
-            const int power = mbe_info[monap_ptr->effect].power;
+            const int power = mbe_info[enum2i(monap_ptr->effect)].power;
             hit = check_hit_from_monster_to_player(player_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr));
         }
 

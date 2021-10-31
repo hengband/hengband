@@ -6,7 +6,7 @@
  * @brief モンスターの打撃効力テーブル /
  * The table of monsters' blow effects
  */
-const mbe_info_type mbe_info[NB_RBE_TYPE] = {
+const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
     {
         0,
         0,

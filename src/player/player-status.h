@@ -7,9 +7,8 @@
 
 #include "system/angband.h"
 
-struct object_type;;
+struct object_type;
 struct player_type;
-int spell_exp_level(int spell_exp);
 
 WEIGHT calc_weapon_weight_limit(player_type *player_ptr);
 WEIGHT calc_bow_weight_limit(player_type *player_ptr);

@@ -33,7 +33,7 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
     r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;
 
     for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].effect || r_ptr->blow[i].method) {
+        if (r_ptr->blow[i].effect != RaceBlowEffectType::NONE || r_ptr->blow[i].method) {
             if (r_ptr->r_blows[i] != MAX_UCHAR)
                 n++;
             r_ptr->r_blows[i] = MAX_UCHAR;

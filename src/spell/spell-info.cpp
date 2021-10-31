@@ -25,28 +25,6 @@
 static const int extra_min_magic_fail_rate = 2;
 
 /*!
- * @brief 呪文の経験値を返す /
- * Returns experience of a spell
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param spell 呪文ID
- * @param use_realm 魔法領域
- * @return 経験値
- */
-EXP experience_of_spell(player_type *player_ptr, SPELL_IDX spell, int16_t use_realm)
-{
-    if (player_ptr->pclass == PlayerClassType::SORCERER)
-        return SPELL_EXP_MASTER;
-    else if (player_ptr->pclass == PlayerClassType::RED_MAGE)
-        return SPELL_EXP_SKILLED;
-    else if (use_realm == player_ptr->realm1)
-        return player_ptr->spell_exp[spell];
-    else if (use_realm == player_ptr->realm2)
-        return player_ptr->spell_exp[spell + 32];
-    else
-        return 0;
-}
-
-/*!
  * @brief 呪文の消費MPを返す /
  * Modify mana consumption rate using spell exp and dec_mana
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -61,7 +39,7 @@ MANA_POINT mod_need_mana(player_type *player_ptr, MANA_POINT need_mana, SPELL_ID
 #define MANA_DIV 4
 #define DEC_MANA_DIV 3
     if ((realm > REALM_NONE) && (realm <= MAX_REALM)) {
-        need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(player_ptr, spell, realm)) + (MANA_CONST - 1);
+        need_mana = need_mana * (MANA_CONST + PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT) - PlayerSkill(player_ptr).exp_of_spell(realm, spell)) + (MANA_CONST - 1);
         need_mana *= player_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
         need_mana /= MANA_CONST * MANA_DIV;
         if (need_mana < 1)
@@ -151,7 +129,7 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
     chance -= 3 * (player_ptr->lev - s_ptr->slevel);
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if (player_ptr->riding)
-        chance += (std::max(r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[SKILL_RIDING] / 100 - 10, 0));
+        chance += (std::max(r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 100 - 10, 0));
 
     MANA_POINT need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, use_realm);
     if (need_mana > player_ptr->csp) {
@@ -203,10 +181,10 @@ PERCENTAGE spell_chance(player_type *player_ptr, SPELL_IDX spell, int16_t use_re
 
     if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || (player_ptr->pclass == PlayerClassType::SORCERER)
         || (player_ptr->pclass == PlayerClassType::RED_MAGE)) {
-        EXP exp = experience_of_spell(player_ptr, spell, use_realm);
-        if (exp >= SPELL_EXP_EXPERT)
+        auto exp = PlayerSkill(player_ptr).exp_of_spell(use_realm, spell);
+        if (exp >= PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT))
             chance--;
-        if (exp >= SPELL_EXP_MASTER)
+        if (exp >= PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER))
             chance--;
     }
 
@@ -248,7 +226,6 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
         increment = 32;
 
     int i;
-    int exp_level;
     const magic_type *s_ptr;
     char info[80];
     char out_val[160];
@@ -267,24 +244,25 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
         if (use_realm == REALM_HISSATSU)
             need_mana = s_ptr->smana;
         else {
-            EXP exp = experience_of_spell(player_ptr, spell, use_realm);
+            auto exp = PlayerSkill(player_ptr).exp_of_spell(use_realm, spell);
             need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, use_realm);
+            PlayerSkillRank skill_rank;
             if ((increment == 64) || (s_ptr->slevel >= 99))
-                exp_level = EXP_LEVEL_UNSKILLED;
+                skill_rank = PlayerSkillRank::UNSKILLED;
             else
-                exp_level = spell_exp_level(exp);
+                skill_rank = PlayerSkill::spell_skill_rank(exp);
 
             max = false;
-            if (!increment && (exp_level == EXP_LEVEL_MASTER))
+            if (!increment && (skill_rank == PlayerSkillRank::MASTER))
                 max = true;
-            else if ((increment == 32) && (exp_level >= EXP_LEVEL_EXPERT))
+            else if ((increment == 32) && (skill_rank >= PlayerSkillRank::EXPERT))
                 max = true;
             else if (s_ptr->slevel >= 99)
                 max = true;
-            else if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && (exp_level >= EXP_LEVEL_SKILLED))
+            else if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && (skill_rank >= PlayerSkillRank::SKILLED))
                 max = true;
 
-            strncpy(ryakuji, exp_level_str[exp_level], 4);
+            strncpy(ryakuji, PlayerSkill::skill_rank_str(skill_rank), 4);
             ryakuji[3] = ']';
             ryakuji[4] = '\0';
         }

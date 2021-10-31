@@ -728,7 +728,7 @@ static void change_realm2(player_type *player_ptr, int16_t next_realm)
         player_ptr->spell_order[j] = 99;
 
     for (i = 32; i < 64; i++) {
-        player_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
+        player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::UNSKILLED);
     }
     player_ptr->spell_learned2 = 0L;
     player_ptr->spell_worked2 = 0L;
@@ -879,9 +879,8 @@ void do_cmd_study(player_type *player_ptr)
     }
 
     if (learned) {
-        int max_exp = (spell < 32) ? SPELL_EXP_MASTER : SPELL_EXP_EXPERT;
+        auto max_exp = PlayerSkill::spell_exp_at((spell < 32) ? PlayerSkillRank::MASTER : PlayerSkillRank::EXPERT);
         int old_exp = player_ptr->spell_exp[spell];
-        int new_rank = EXP_LEVEL_UNSKILLED;
         concptr name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SPELL_NAME);
 
         if (old_exp >= max_exp) {
@@ -895,23 +894,11 @@ void do_cmd_study(player_type *player_ptr)
 #endif
         {
             return;
-        } else if (old_exp >= SPELL_EXP_EXPERT) {
-            player_ptr->spell_exp[spell] = SPELL_EXP_MASTER;
-            new_rank = EXP_LEVEL_MASTER;
-        } else if (old_exp >= SPELL_EXP_SKILLED) {
-            if (spell >= 32)
-                player_ptr->spell_exp[spell] = SPELL_EXP_EXPERT;
-            else
-                player_ptr->spell_exp[spell] += SPELL_EXP_EXPERT - SPELL_EXP_SKILLED;
-            new_rank = EXP_LEVEL_EXPERT;
-        } else if (old_exp >= SPELL_EXP_BEGINNER) {
-            player_ptr->spell_exp[spell] = SPELL_EXP_SKILLED + (old_exp - SPELL_EXP_BEGINNER) * 2 / 3;
-            new_rank = EXP_LEVEL_SKILLED;
-        } else {
-            player_ptr->spell_exp[spell] = SPELL_EXP_BEGINNER + old_exp / 3;
-            new_rank = EXP_LEVEL_BEGINNER;
         }
-        msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), name, exp_level_str[new_rank]);
+
+        auto new_rank = PlayerSkill(player_ptr).gain_spell_skill_exp_over_learning(spell);
+        auto new_rank_str = PlayerSkill::skill_rank_str(new_rank);
+        msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), name, new_rank_str);
     } else {
         /* Find the next open entry in "player_ptr->spell_order[]" */
         for (i = 0; i < 64; i++) {
@@ -1312,22 +1299,7 @@ bool do_cmd_cast(player_type *player_ptr)
             break;
         }
         if (any_bits(mp_ptr->spell_xtra, extra_magic_gain_exp)) {
-            int16_t cur_exp = player_ptr->spell_exp[(increment ? 32 : 0) + spell];
-            int16_t exp_gain = 0;
-
-            if (cur_exp < SPELL_EXP_BEGINNER)
-                exp_gain += 60;
-            else if (cur_exp < SPELL_EXP_SKILLED) {
-                if ((player_ptr->current_floor_ptr->dun_level > 4) && ((player_ptr->current_floor_ptr->dun_level + 10) > player_ptr->lev))
-                    exp_gain = 8;
-            } else if (cur_exp < SPELL_EXP_EXPERT) {
-                if (((player_ptr->current_floor_ptr->dun_level + 5) > player_ptr->lev) && ((player_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel))
-                    exp_gain = 2;
-            } else if ((cur_exp < SPELL_EXP_MASTER) && !increment) {
-                if (((player_ptr->current_floor_ptr->dun_level + 5) > player_ptr->lev) && (player_ptr->current_floor_ptr->dun_level > s_ptr->slevel))
-                    exp_gain = 1;
-            }
-            player_ptr->spell_exp[(increment ? 32 : 0) + spell] += exp_gain;
+            PlayerSkill(player_ptr).gain_spell_skill_exp(realm, spell);
         }
     }
 

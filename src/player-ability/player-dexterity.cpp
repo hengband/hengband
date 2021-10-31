@@ -31,22 +31,12 @@ void PlayerDexterity::set_locals()
 /*!
  * @brief 器用さ補正計算 - 種族
  * @return 器用さ補正値
- * @details
- * * 種族による器用さ修正値。
- * * エントは別途レベル26,41,46到達ごとに減算(-1)
  */
 int16_t PlayerDexterity::race_value()
 {
     int16_t result = PlayerBasicStatistics::race_value();
 
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ENT)) {
-        if (this->player_ptr->lev > 25)
-            result--;
-        if (this->player_ptr->lev > 40)
-            result--;
-        if (this->player_ptr->lev > 45)
-            result--;
-    }
+    result += PlayerRace(this->player_ptr).additional_dexterity();
 
     return result;
 }

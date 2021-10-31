@@ -4,7 +4,7 @@
 
 enum summon_type : int;
 
-struct object_type;;
+struct object_type;
 struct player_type;
 bool trump_summoning(player_type *player_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, summon_type type, BIT_FLAGS mode);
 bool cast_summon_demon(player_type *player_ptr, int power);

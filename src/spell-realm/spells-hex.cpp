@@ -254,76 +254,13 @@ int SpellHex::calc_need_mana()
 
 void SpellHex::gain_exp()
 {
+    PlayerSkill ps(player_ptr);
     for (auto spell : this->casting_spells) {
         if (!this->is_spelling_specific(spell)) {
             continue;
         }
 
-        if (this->player_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER) {
-            this->player_ptr->spell_exp[spell] += 5;
-            continue;
-        }
-
-        if (this->gain_exp_skilled(spell)) {
-            continue;
-        }
-
-        if (this->gain_exp_expert(spell)) {
-            continue;
-        }
-
-        this->gain_exp_master(spell);
-    }
-}
-
-bool SpellHex::gain_exp_skilled(const int spell)
-{
-    if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_SKILLED) {
-        return false;
-    }
-
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto gain_condition = one_in_(2);
-    gain_condition &= floor_ptr->dun_level > 4;
-    gain_condition &= (floor_ptr->dun_level + 10) > this->player_ptr->lev;
-    if (gain_condition) {
-        this->player_ptr->spell_exp[spell]++;
-    }
-
-    return true;
-}
-
-bool SpellHex::gain_exp_expert(const int spell)
-{
-    if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_EXPERT) {
-        return false;
-    }
-
-    const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto gain_condition = one_in_(5);
-    gain_condition &= (floor_ptr->dun_level + 5) > this->player_ptr->lev;
-    gain_condition &= (floor_ptr->dun_level + 5) > s_ptr->slevel;
-    if (gain_condition) {
-        this->player_ptr->spell_exp[spell]++;
-    }
-
-    return true;
-}
-
-void SpellHex::gain_exp_master(const int spell)
-{
-    if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_MASTER) {
-        return;
-    }
-
-    const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto gain_condition = one_in_(5);
-    gain_condition &= (floor_ptr->dun_level + 5) > this->player_ptr->lev;
-    gain_condition &= floor_ptr->dun_level > s_ptr->slevel;
-    if (gain_condition) {
-        this->player_ptr->spell_exp[spell]++;
+        ps.gain_continuous_spell_skill_exp(REALM_HEX, spell);
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <iterator>
 #include <type_traits>
 
 /*!
@@ -17,6 +18,13 @@ public:
      */
     class iterator {
     public:
+        // std::iterator_traits に対応するための定義
+        using difference_type = int;
+        using value_type = EnumType;
+        using pointer = const EnumType *;
+        using reference = const EnumType &;
+        using iterator_category = std::input_iterator_tag;
+
         /*!
          * @brief 引数で与えた列挙値を指すイテレータオブジェクトを生成する
          *
@@ -108,6 +116,16 @@ public:
     constexpr iterator end() const noexcept
     {
         return iterator(end_val);
+    }
+
+    /*!
+     * @brief 範囲に含まれる列挙値の種類数を取得する
+     *
+     * @return 範囲に含まれる列挙値の種類数
+     */
+    constexpr std::size_t size() const noexcept
+    {
+        return static_cast<std::size_t>(end_val) - static_cast<std::size_t>(begin_val);
     }
 
 private:

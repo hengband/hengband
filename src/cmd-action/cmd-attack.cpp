@@ -251,7 +251,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     }
 
     if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
-        if (((player_ptr->skill_exp[SKILL_TWO_WEAPON] - 1000) / 200) < r_ptr->level) {
+        if (((player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] - 1000) / 200) < r_ptr->level) {
             PlayerSkill(player_ptr).gain_two_weapon_skill_exp();
         }
     }

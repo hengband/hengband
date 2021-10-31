@@ -116,7 +116,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
 bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type *exp_mon)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = real_r_ptr(m_ptr);
     if (m_ptr->hp >= 0) {
         return false;
     }
@@ -168,6 +168,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
 
     if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
         r_ptr = real_r_ptr(m_ptr);
+        r_idx = real_r_idx(m_ptr);
         if (r_ptr->r_sights < MAX_SHORT) {
             r_ptr->r_sights++;
         }
@@ -278,7 +279,7 @@ void MonsterDamageProcessor::death_combined_uniques(const monster_race_type r_id
 void MonsterDamageProcessor::increase_kill_numbers()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = real_r_ptr(m_ptr);
     if (((m_ptr->ml == 0) || this->player_ptr->hallucinated) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
         return;
     }
@@ -301,7 +302,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
 void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = real_r_ptr(m_ptr);
     if (none_bits(r_ptr->flags3, RF3_AMBERITE) || one_in_(2)) {
         return;
     }
@@ -319,7 +320,7 @@ void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
 void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = real_r_ptr(m_ptr);
     if (none_bits(r_ptr->flags2, RF2_CAN_SPEAK)) {
         return;
     }
@@ -340,7 +341,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = real_r_ptr(m_ptr);
     if (note != nullptr) {
         msg_format("%^s%s", m_name, note);
         return;
@@ -381,7 +382,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = real_r_ptr(m_ptr);
     if (none_bits(r_ptr->flags1, RF1_UNIQUE) || m_ptr->mflag2.has(MFLAG2::CLONED) || vanilla_town) {
         return;
     }
