@@ -26623,3 +26623,27 @@ D:$ carries a magical sabre.
 D:$ This chairman of hell cleverly confuses people by speech. 
 D:翼から生えた二本の腕を持つ、巨大な鳥が、魔法のサーベルを携えている。
 D:この地獄の大議長は、弁舌巧みに人心を惑わす。
+
+N:1347:『カルバノグの殺人兎』
+E:The Killer Rabbit of Caerbannog
+G:r:w
+I:135:20d100:8:220:3
+W:40:4:0:10000:0:0
+B:BITE:HURT:10d5
+B:BITE:HURT:15d4
+B:BITE:SUPERHURT:20d3
+B:SLASH:SUPERHURT:20d4
+F:UNIQUE | DROP_90 | DROP_GREAT | DROP_CORPSE | ANIMAL | EVIL
+F:FORCE_MAXHP | NO_STUN | NO_FEAR | NO_CONF | NO_SLEEP | RES_NETH
+F:RES_CHAO | RES_NEXU | CAN_FLY | KILL_BODY
+D:$At first glance, it appears to be just an adorable white rabbit.
+D:$  However, the very rabbit is the guardian of the Cave of Caerbannog,
+D:$ where the clue to the Holy Grail lies.
+D:$  This legendary black beast is the origin of all vorpal bunnies and killer rabbits.
+D:$  Its incisors have slaughtered many knights and fools who have approached it recklessly.
+D:$  Fear its incisors!
+D:一見すると愛らしいただの白い兎であるが、
+D:この兎こそが聖杯の手がかりが眠る「カルバノグの洞窟」の守護者、伝説の黒き獣にして、
+D:全てのヴォーパルバニー、殺人兎の始祖である。
+D:その前歯は無謀にも近づく多くの騎士と愚か者を屠ってきた。　その前歯を恐れよ！
+D:（モンティ・パイソン・アンド・ホーリー・グレイル,1975）
