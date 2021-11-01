@@ -450,6 +450,10 @@ BIT_FLAGS get_player_flags(player_type *player_ptr, tr_type tr_flag)
         return has_vuln_lite(player_ptr);
     case TR_IM_DARK:
         return has_immune_dark(player_ptr);
+    case TR_SELF_FIRE:
+    case TR_SELF_COLD:
+    case TR_SELF_ELEC:
+        return check_equipment_flags(player_ptr, tr_flag);
 
     case TR_FLAG_MAX:
         break;

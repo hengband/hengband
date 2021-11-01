@@ -75,11 +75,20 @@ void set_body_improvement_info_3(player_type *player_ptr, self_info_type *self_p
     if (has_sh_fire(player_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは炎のオーラに包まれている。", "You are surrounded with a fiery aura.");
 
+    if (get_player_flags(player_ptr, TR_SELF_FIRE))
+        self_ptr->info[self_ptr->line++] = _("あなたは身を焼く炎に包まれている。", "You are beging damaged with fire.");
+
     if (has_sh_elec(player_ptr))
-        self_ptr->info[self_ptr->line++] = _("あなたは電気に包まれている。", "You are surrounded with electricity.");
+        self_ptr->info[self_ptr->line++] = _("あなたは電気のオーラに包まれている。", "You are surrounded with an electricity aura.");
+
+    if (get_player_flags(player_ptr, TR_SELF_ELEC))
+        self_ptr->info[self_ptr->line++] = _("あなたは身を焦がす電撃に包まれている。", "You are beging damaged with electricity.");
 
     if (has_sh_cold(player_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは冷気のオーラに包まれている。", "You are surrounded with an aura of coldness.");
+
+    if (get_player_flags(player_ptr, TR_SELF_COLD))
+        self_ptr->info[self_ptr->line++] = _("あなたは身も凍る冷気に包まれている。", "You are beging damaged with coldness.");
 
     if (player_ptr->tim_sh_holy)
         self_ptr->info[self_ptr->line++] = _("あなたは聖なるオーラに包まれている。", "You are surrounded with a holy aura.");

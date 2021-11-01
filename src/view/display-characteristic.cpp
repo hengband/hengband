@@ -558,6 +558,10 @@ static void display_stustain_aura_info(
     process_one_characteristic(player_ptr, row++, col, _("電気オーラ:", "Aura Elec :"), TR_SH_ELEC, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("冷気オーラ:", "Aura Cold :"), TR_SH_COLD, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("射撃無効  :", "Invl Arrow:"), TR_INVULN_ARROW, f, 0);
+    row++;
+    process_one_characteristic(player_ptr, row++, col, _("自傷火炎  :", "Self Fire :"), TR_SELF_FIRE, f, 0);
+    process_one_characteristic(player_ptr, row++, col, _("自傷電気  :", "Self Elec :"), TR_SELF_ELEC, f, 0);
+    process_one_characteristic(player_ptr, row++, col, _("自傷冷気  :", "Self Cold :"), TR_SELF_COLD, f, 0);
 }
 
 /*!
