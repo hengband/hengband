@@ -228,7 +228,7 @@ static int get_hissatsu_power(player_type *player_ptr, SPELL_IDX *sn)
                     }
 
                     /* Dump the spell --(-- */
-                    strcat(psi_desc, format(" %-18s%2d %3d", exe_spell(player_ptr, REALM_HISSATSU, i, SPELL_NAME), spell.slevel, spell.smana));
+                    strcat(psi_desc, format(" %-18s%2d %3d", exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME), spell.slevel, spell.smana));
                     prt(psi_desc, y + (line % 17) + (line >= 17), x + (line / 17) * 30);
                     prt("", y + (line % 17) + (line >= 17) + 1, x + (line / 17) * 30);
                 }
@@ -276,7 +276,7 @@ static int get_hissatsu_power(player_type *player_ptr, SPELL_IDX *sn)
             char tmp_val[160];
 
             /* Prompt */
-            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), exe_spell(player_ptr, REALM_HISSATSU, j, SPELL_NAME));
+            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), exe_spell(player_ptr, REALM_HISSATSU, j, SpellProcessType::NAME));
 
             /* Belay that order */
             if (!get_check(tmp_val))
@@ -345,7 +345,7 @@ void do_cmd_hissatsu(player_type *player_ptr)
 
     sound(SOUND_ZAP);
 
-    if (!exe_spell(player_ptr, REALM_HISSATSU, n, SPELL_CAST))
+    if (!exe_spell(player_ptr, REALM_HISSATSU, n, SpellProcessType::CAST))
         return;
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -406,7 +406,7 @@ void do_cmd_gain_hissatsu(player_type *player_ptr)
 
         player_ptr->spell_learned1 |= (1UL << i);
         player_ptr->spell_worked1 |= (1UL << i);
-        msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(player_ptr, REALM_HISSATSU, i, SPELL_NAME));
+        msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME));
         for (j = 0; j < 64; j++) {
             /* Stop at the first empty space */
             if (player_ptr->spell_order[j] == 99)

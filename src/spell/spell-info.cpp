@@ -281,7 +281,7 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
             continue;
         }
 
-        strcpy(info, exe_spell(player_ptr, use_realm, spell, SPELL_INFO));
+        strcpy(info, exe_spell(player_ptr, use_realm, spell, SpellProcessType::INFO));
         concptr comment = info;
         byte line_attr = TERM_WHITE;
         if ((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE)) {
@@ -307,10 +307,10 @@ void print_spells(player_type *player_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
         }
 
         if (use_realm == REALM_HISSATSU) {
-            strcat(out_val, format("%-25s %2d %4d", exe_spell(player_ptr, use_realm, spell, SPELL_NAME), s_ptr->slevel, need_mana));
+            strcat(out_val, format("%-25s %2d %4d", exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), s_ptr->slevel, need_mana));
         } else {
             strcat(out_val,
-                format("%-25s%c%-4s %2d %4d %3d%% %s", exe_spell(player_ptr, use_realm, spell, SPELL_NAME), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
+                format("%-25s%c%-4s %2d %4d %3d%% %s", exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
                     need_mana, spell_chance(player_ptr, spell, use_realm), comment));
         }
 

@@ -126,14 +126,14 @@ static void dump_smith(player_type *player_ptr, FILE *fff)
  * @brief ダンプする情報に学習済魔法の種類を追加する
  * @param p ダンプ用のバッファ
  * @param col 行数
- * @param spell_type 魔法の種類
+ * @param SpellProcessType 魔法の種類
  * @param learnt_spell_ptr 学習済魔法のテーブル
  */
-static void add_monster_spell_type(char p[][80], int col, BlueMagicType spell_type, learnt_spell_table *learnt_spell_ptr)
+static void add_monster_spell_type(char p[][80], int col, BlueMagicType SpellProcessType, learnt_spell_table *learnt_spell_ptr)
 {
     learnt_spell_ptr->ability_flags.clear();
-    set_rf_masks(learnt_spell_ptr->ability_flags, spell_type);
-    switch (spell_type) {
+    set_rf_masks(learnt_spell_ptr->ability_flags, SpellProcessType);
+    switch (SpellProcessType) {
     case BlueMagicType::BOLT:
         strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
         break;
@@ -176,10 +176,10 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
     int col = 0;
     strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
 
-    for (auto spell_type : BLUE_MAGIC_TYPE_LIST) {
+    for (auto SpellProcessType : BLUE_MAGIC_TYPE_LIST) {
         col++;
         learnt_spell_table learnt_magic;
-        add_monster_spell_type(p, col, spell_type, &learnt_magic);
+        add_monster_spell_type(p, col, SpellProcessType, &learnt_magic);
         learnt_magic.ability_flags &= bluemage_data->learnt_blue_magics;
 
         std::vector<RF_ABILITY> learnt_spells;

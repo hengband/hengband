@@ -226,7 +226,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 auto spell_ptr = &magic_ptr->info[r][i];
-                auto spell_name = exe_spell(&dummy_p, r, i, SPELL_NAME);
+                auto spell_name = exe_spell(&dummy_p, r, i, SpellProcessType::NAME);
                 sprintf(buf, "%-24s %2d %3d %3d %3d\n", spell_name, spell_ptr->slevel, spell_ptr->smana, spell_ptr->sfail, spell_ptr->sexp);
                 spoil_out(buf);
             }

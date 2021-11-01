@@ -67,7 +67,7 @@ SpellHex::SpellHex(player_type *player_ptr, monap_type *monap_ptr)
 void SpellHex::stop_all_spells()
 {
     for (auto spell : this->casting_spells) {
-        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_STOP);
+        exe_spell(this->player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
     }
 
     this->spell_hex_data->casting_spells.clear();
@@ -108,7 +108,7 @@ bool SpellHex::stop_spells_with_selection()
     screen_load();
     if (is_selected) {
         auto n = this->casting_spells[A2I(choice)];
-        exe_spell(this->player_ptr, REALM_HEX, n, SPELL_STOP);
+        exe_spell(this->player_ptr, REALM_HEX, n, SpellProcessType::STOP);
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
@@ -161,7 +161,7 @@ void SpellHex::display_casting_spells_list()
     prt(_("     名前", "     Name"), y, x + 5);
     for (auto spell : this->casting_spells) {
         term_erase(x, y + n + 1, 255);
-        auto spell_result = exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_NAME);
+        auto spell_result = exe_spell(this->player_ptr, REALM_HEX, spell, SpellProcessType::NAME);
         put_str(format("%c)  %s", I2A(n), spell_result), y + n + 1, x + 2);
         n++;
     }
@@ -192,7 +192,7 @@ void SpellHex::decrease_mana()
 
     this->gain_exp();
     for (auto spell : this->casting_spells) {
-        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_CONTNUATION);
+        exe_spell(this->player_ptr, REALM_HEX, spell, SpellProcessType::CONTNUATION);
     }
 }
 
@@ -286,10 +286,10 @@ void SpellHex::continue_revenge()
 
     switch (this->get_revenge_type()) {
     case SpellHexRevengeType::PATIENCE:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONTNUATION);
+        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SpellProcessType::CONTNUATION);
         return;
     case SpellHexRevengeType::REVENGE:
-        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONTNUATION);
+        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SpellProcessType::CONTNUATION);
         return;
     default:
         return;

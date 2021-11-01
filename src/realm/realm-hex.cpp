@@ -79,17 +79,17 @@ static bool item_tester_hook_weapon_except_bow(const object_type *o_ptr)
 /*!
  * @brief 呪術領域魔法の各処理を行う
  * @param spell 魔法ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP)
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP 時はnullptr文字列を返す。
  */
-concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type mode)
+concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcessType mode)
 {
-    auto name = mode == SPELL_NAME;
-    auto description = mode == SPELL_DESCRIPTION;
-    auto info = mode == SPELL_INFO;
-    auto cast = mode == SPELL_CAST;
-    auto continuation = mode == SPELL_CONTNUATION;
-    auto stop = mode == SPELL_STOP;
+    auto name = mode == SpellProcessType::NAME;
+    auto description = mode == SpellProcessType::DESCRIPTION;
+    auto info = mode == SpellProcessType::INFO;
+    auto cast = mode == SpellProcessType::CAST;
+    auto continuation = mode == SpellProcessType::CONTNUATION;
+    auto stop = mode == SpellProcessType::STOP;
     auto should_continue = true;
     HIT_POINT power;
     switch (spell) {
@@ -575,7 +575,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             object_type *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
-                exe_spell(player_ptr, REALM_HEX, spell, SPELL_STOP);
+                exe_spell(player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);
                 if (!spell_hex.is_spelling_any())
@@ -662,7 +662,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, spell_type m
             }
 
             if (!flag) {
-                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
+                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SpellProcessType::NAME));
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
                 if (!spell_hex.is_spelling_any()) {
