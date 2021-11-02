@@ -47,6 +47,7 @@ int16_t PlayerConstitution::race_value()
  * @details
  * * 一時効果による耐久力修正値
  * * 呪術の肉体強化で加算(+4)
+ * * ネオ・つよしスペシャル中で加算(+4)
  */
 int16_t PlayerConstitution::time_effect_value()
 {
@@ -57,6 +58,9 @@ int16_t PlayerConstitution::time_effect_value()
             result += 4;
         }
     }
+    if (this->player_ptr->tsuyoshi) {
+        result += 4;
+    }
 
     return result;
 }
@@ -64,35 +68,10 @@ int16_t PlayerConstitution::time_effect_value()
 /*!
  * @brief 耐久力補正計算 - 型
  * @return 耐久力補正値
- * @details
- * * 型による耐久力修正値
- * * 降鬼陣で加算(+5)
- * * 白虎の構えで減算(-3)
- * * 玄武の構えで加算(+3)
- * * 朱雀の構えで減算(-2)
- * * ネオ・つよしスペシャル中で加算(+4)
  */
 int16_t PlayerConstitution::battleform_value()
 {
-    int16_t result = 0;
-
-    PlayerClass pc(player_ptr);
-    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
-        result += 5;
-    }
-
-    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
-        result -= 3;
-    } else if (pc.monk_stance_is(MonkStance::GENBU)) {
-        result += 3;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
-        result -= 2;
-    }
-    if (this->player_ptr->tsuyoshi) {
-        result += 4;
-    }
-
-    return result;
+    return PlayerClass(this->player_ptr).battleform_constitution();
 }
 
 /*!

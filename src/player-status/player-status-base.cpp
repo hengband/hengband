@@ -31,7 +31,6 @@ int16_t PlayerStatusBase::get_value()
 
     pow += this->action_value();
     pow += this->battleform_value();
-    pow += this->class_base_value();
     pow += this->class_value();
     pow += this->equipments_value();
     pow += this->inventory_weight_value();
@@ -250,10 +249,6 @@ int16_t PlayerStatusBase::race_value()
     return 0;
 }
 int16_t PlayerStatusBase::class_value()
-{
-    return 0;
-}
-int16_t PlayerStatusBase::class_base_value()
 {
     return 0;
 }

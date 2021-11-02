@@ -29,28 +29,10 @@ void PlayerWisdom::set_locals()
 /*!
  * @brief 賢さ補正計算 - 型
  * @return 賢さ補正値
- * @details
- * * 型による賢さ修正値
- * * 降鬼陣で加算(+5)
- * * 玄武の構えで減算(-1)
- * * 朱雀の構えで加算(+1)
  */
 int16_t PlayerWisdom::battleform_value()
 {
-    int16_t result = 0;
-
-    PlayerClass pc(player_ptr);
-    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
-        result += 5;
-    }
-
-    if (pc.monk_stance_is(MonkStance::GENBU)) {
-        result -= 1;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
-        result += 1;
-    }
-
-    return result;
+    return PlayerClass(this->player_ptr).battleform_wisdom();
 }
 
 /*!

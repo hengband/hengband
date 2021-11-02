@@ -64,31 +64,10 @@ int16_t PlayerDexterity::time_effect_value()
 /*!
  * @brief 器用さ補正計算 - 型
  * @return 器用さ補正値
- * @details
- * * 型による器用さ修正値
- * * 降鬼陣で加算(+5)
- * * 白虎の構えで加算(+2)
- * * 玄武の構えで減算(-2)
- * * 朱雀の構えで加算(+2)
  */
 int16_t PlayerDexterity::battleform_value()
 {
-    int16_t result = 0;
-
-    PlayerClass pc(player_ptr);
-    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
-        result += 5;
-    }
-
-    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
-        result += 2;
-    } else if (pc.monk_stance_is(MonkStance::GENBU)) {
-        result -= 2;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
-        result += 2;
-    }
-
-    return result;
+    return PlayerClass(this->player_ptr).battleform_dexterity();
 }
 
 /*!

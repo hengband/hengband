@@ -5,7 +5,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player-base/player-race.h"
-#include "player-info/class-info.h"
+#include "player-base/player-class.h"
 #include "player-info/mimic-info-table.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"
@@ -64,7 +64,7 @@ int16_t PlayerBasicStatistics::race_value()
  */
 int16_t PlayerBasicStatistics::class_value()
 {
-    const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
+    const player_class_info *c_ptr = PlayerClass(this->player_ptr).get_info();
     return c_ptr->c_adj[this->ability_type];
 }
 

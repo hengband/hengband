@@ -132,7 +132,7 @@ bool PlayerRace::equals(PlayerRaceType prace) const
  * ** マーフォークがFF_WATER地形にいれば加算(+2+レベル/10)
  * ** そうでなく浮遊を持っていないなら減算(-2)
  */
-int16_t PlayerRace::speed() const
+int16_t PlayerRace::additional_speed() const
 {
     int16_t result = 0;
 

@@ -8,6 +8,7 @@
 #include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
+#include "player-base/player-race.h"
 #include "player-info/bard-data-type.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/equipment-info.h"
@@ -375,4 +376,253 @@ void PlayerClass::init_specific_data()
         this->player_ptr->class_specific_data = no_class_specific_data();
         break;
     }
+}
+
+/*!
+ * @brief プレイヤーの職業情報テーブルへのポインタを取得する
+ *
+ * @return プレイヤーの職業情報テーブルへのポインタ
+ */
+const player_class_info *PlayerClass::get_info() const
+{
+    return &class_info[enum2i(this->player_ptr->pclass)];
+}
+
+/*!
+ * @brief 速度計算 - 職業
+ * @return 速度値の増減分
+ * @details
+ * ** 忍者の装備が重ければ減算(-レベル/10)
+ * ** 忍者の装備が適正ならば加算(+3)さらにクラッコン、妖精、いかさま以外なら加算(+レベル/10)
+ * ** 錬気術師で装備が重くなくクラッコン、妖精、いかさま以外なら加算(+レベル/10)
+ * ** 狂戦士なら加算(+3),レベル20/30/40/50ごとに+1
+ */
+int16_t PlayerClass::additional_speed() const
+{
+    SPEED result = 0;
+
+    if (this->player_ptr->pclass == PlayerClassType::NINJA) {
+        if (heavy_armor(this->player_ptr)) {
+            result -= (this->player_ptr->lev) / 10;
+        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+            result += 3;
+            if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
+                result += (this->player_ptr->lev) / 10;
+        }
+    }
+
+    if ((this->player_ptr->pclass == PlayerClassType::MONK || this->player_ptr->pclass == PlayerClassType::FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
+        if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
+            result += (this->player_ptr->lev) / 10;
+    }
+
+    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
+        result += 2;
+        if (this->player_ptr->lev > 29)
+            result++;
+        if (this->player_ptr->lev > 39)
+            result++;
+        if (this->player_ptr->lev > 44)
+            result++;
+        if (this->player_ptr->lev > 49)
+            result++;
+    }
+    return result;
+}
+
+/*!
+ * @brief 速度計算 - 型
+ * @return 速度値の増減分
+ * @details
+ * ** 朱雀の構えなら加算(+10)
+ */
+int16_t PlayerClass::battleform_speed() const
+{
+    int16_t result = 0;
+    if (this->monk_stance_is(MonkStance::SUZAKU))
+        result += 10;
+    return result;
+}
+
+/*!
+ * @brief 隠密能力計算 - 職業
+ * @return 隠密能力
+ * @details
+ * * 忍者がheavy_armorならば減算(-レベル/10)
+ * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
+ */
+int16_t PlayerClass::stealth_value() const
+{
+    ACTION_SKILL_POWER result = 0;
+
+    const player_class_info *c_ptr = this->get_info();
+    result = c_ptr->c_stl + (c_ptr->x_stl * this->player_ptr->lev / 10);
+
+    if (this->player_ptr->pclass == PlayerClassType::NINJA) {
+        if (heavy_armor(this->player_ptr)) {
+            result -= (this->player_ptr->lev) / 10;
+        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) 
+                && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+            result += (this->player_ptr->lev) / 10;
+        }
+    }
+
+    return result;
+}
+
+
+/*!
+ * @brief 腕力補正計算 - 型
+ * @return 腕力補正値
+ * @details
+ * * 型による腕力修正値
+ * * 降鬼陣で加算(+5)
+ * * 白虎の構えで加算(+2)
+ * * 朱雀の構えで減算(-2)
+ */
+int16_t PlayerClass::battleform_strength() const
+{
+    int16_t result = 0;
+
+    if (this->samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+        result += 5;
+    }
+
+    if (this->monk_stance_is(MonkStance::BYAKKO)) {
+        result += 2;
+    } else if (this->monk_stance_is(MonkStance::SUZAKU)) {
+        result -= 2;
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 知力補正計算 - 型
+ * @return 知力補正値
+ * @details
+ * * 型による知力修正値
+ * * 降鬼陣で加算(+5)
+ * * 玄武の構えで減算(-1)
+ * * 朱雀の構えで加算(+1)
+ */
+int16_t PlayerClass::battleform_intelligence() const
+{
+    int16_t result = 0;
+
+    if (this->samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+        result += 5;
+    }
+
+    if (this->monk_stance_is(MonkStance::GENBU)) {
+        result -= 1;
+    } else if (this->monk_stance_is(MonkStance::SUZAKU)) {
+        result += 1;
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 賢さ補正計算 - 型
+ * @return 賢さ補正値
+ * @details
+ * * 型による賢さ修正値
+ * * 降鬼陣で加算(+5)
+ * * 玄武の構えで減算(-1)
+ * * 朱雀の構えで加算(+1)
+ */
+int16_t PlayerClass::battleform_wisdom() const
+{
+    int16_t result = 0;
+
+    if (this->samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+        result += 5;
+    }
+
+    if (this->monk_stance_is(MonkStance::GENBU)) {
+        result -= 1;
+    } else if (this->monk_stance_is(MonkStance::SUZAKU)) {
+        result += 1;
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 器用さ補正計算 - 型
+ * @return 器用さ補正値
+ * @details
+ * * 型による器用さ修正値
+ * * 降鬼陣で加算(+5)
+ * * 白虎の構えで加算(+2)
+ * * 玄武の構えで減算(-2)
+ * * 朱雀の構えで加算(+2)
+ */
+int16_t PlayerClass::battleform_dexterity() const
+{
+    int16_t result = 0;
+
+    if (this->samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+        result += 5;
+    }
+
+    if (this->monk_stance_is(MonkStance::BYAKKO)) {
+        result += 2;
+    } else if (this->monk_stance_is(MonkStance::GENBU)) {
+        result -= 2;
+    } else if (this->monk_stance_is(MonkStance::SUZAKU)) {
+        result += 2;
+    }
+
+    return result;
+}
+
+
+/*!
+ * @brief 耐久力補正計算 - 型
+ * @return 耐久力補正値
+ * @details
+ * * 型による耐久力修正値
+ * * 降鬼陣で加算(+5)
+ * * 白虎の構えで減算(-3)
+ * * 玄武の構えで加算(+3)
+ * * 朱雀の構えで減算(-2)
+ */
+int16_t PlayerClass::battleform_constitution() const
+{
+    int16_t result = 0;
+
+    if (this->samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+        result += 5;
+    }
+
+    if (this->monk_stance_is(MonkStance::BYAKKO)) {
+        result -= 3;
+    } else if (this->monk_stance_is(MonkStance::GENBU)) {
+        result += 3;
+    } else if (this->monk_stance_is(MonkStance::SUZAKU)) {
+        result -= 2;
+    }
+
+    return result;
+}
+
+
+/*!
+ * @brief 魅力補正計算 - 型
+ * @return 魅力補正値
+ * @details
+ * * 型による魅力修正値
+ * * 降鬼陣で加算(+5)
+ */
+int16_t PlayerClass::battleform_charisma() const
+{
+    int16_t result = 0;
+
+    if (this->samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+        result += 5;
+    }
+
+    return result;
 }

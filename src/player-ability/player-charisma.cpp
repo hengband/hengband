@@ -30,19 +30,10 @@ void PlayerCharisma::set_locals()
 /*!
  * @brief 魅力補正計算 - 型
  * @return 魅力補正値
- * @details
- * * 型による魅力修正値
- * * 降鬼陣で加算(+5)
  */
 int16_t PlayerCharisma::battleform_value()
 {
-    int16_t result = 0;
-
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
-        result += 5;
-    }
-
-    return result;
+    return PlayerClass(this->player_ptr).battleform_charisma();
 }
 
 /*!

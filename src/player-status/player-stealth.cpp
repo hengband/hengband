@@ -2,6 +2,7 @@
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
 #include "player-base/player-race.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
@@ -46,38 +47,12 @@ int16_t PlayerStealth::personality_value()
 }
 
 /*!
- * @brief 隠密能力計算 - 職業(基礎値)
- * @return 隠密能力の増分
- * @details
- * * 職業による加算
- */
-int16_t PlayerStealth::class_base_value()
-{
-    const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
-    return c_ptr->c_stl + (c_ptr->x_stl * this->player_ptr->lev / 10);
-}
-
-/*!
- * @brief 隠密能力計算 - 職業(追加分)
- * @return 隠密能力の増分
- * @details
- * * 忍者がheavy_armorならば減算(-レベル/10)
- * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
+ * @brief 隠密能力計算 - 職業
+ * @return 隠密能力
  */
 int16_t PlayerStealth::class_value()
 {
-    ACTION_SKILL_POWER result = 0;
-
-    if (this->player_ptr->pclass == PlayerClassType::NINJA) {
-        if (heavy_armor(this->player_ptr)) {
-            result -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr))
-            && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
-            result += (this->player_ptr->lev) / 10;
-        }
-    }
-
-    return result;
+    return PlayerClass(this->player_ptr).stealth_value();
 }
 
 /*!

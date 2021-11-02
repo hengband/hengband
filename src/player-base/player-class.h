@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 #include "object-enchant/tr-flags.h"
+#include "player-info/class-info.h"
 #include "system/player-type-definition.h"
 
 #include <initializer_list>
@@ -36,6 +37,17 @@ public:
     void init_specific_data();
     template <typename T>
     std::shared_ptr<T> get_specific_data() const;
+
+    const player_class_info *get_info() const;
+    int16_t additional_speed() const;
+    int16_t battleform_speed() const;
+    int16_t stealth_value() const;
+    int16_t battleform_strength() const;
+    int16_t battleform_intelligence() const;
+    int16_t battleform_wisdom() const;
+    int16_t battleform_dexterity() const;
+    int16_t battleform_constitution() const;
+    int16_t battleform_charisma() const;
 
 private:
     player_type *player_ptr;

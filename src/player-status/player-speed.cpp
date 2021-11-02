@@ -57,49 +57,16 @@ void PlayerSpeed::set_locals()
  */
 int16_t PlayerSpeed::race_value()
 {
-    return PlayerRace(this->player_ptr).speed();
+    return PlayerRace(this->player_ptr).additional_speed();
 }
 
 /*!
  * @brief 速度計算 - 職業
  * @return 速度値の増減分
- * @details
- * ** 忍者の装備が重ければ減算(-レベル/10)
- * ** 忍者の装備が適正ならば加算(+3)さらにクラッコン、妖精、いかさま以外なら加算(+レベル/10)
- * ** 錬気術師で装備が重くなくクラッコン、妖精、いかさま以外なら加算(+レベル/10)
- * ** 狂戦士なら加算(+3),レベル20/30/40/50ごとに+1
  */
 int16_t PlayerSpeed::class_value()
 {
-    SPEED result = 0;
-
-    if (this->player_ptr->pclass == PlayerClassType::NINJA) {
-        if (heavy_armor(this->player_ptr)) {
-            result -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
-            result += 3;
-            if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
-                result += (this->player_ptr->lev) / 10;
-        }
-    }
-
-    if ((this->player_ptr->pclass == PlayerClassType::MONK || this->player_ptr->pclass == PlayerClassType::FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
-        if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
-            result += (this->player_ptr->lev) / 10;
-    }
-
-    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
-        result += 2;
-        if (this->player_ptr->lev > 29)
-            result++;
-        if (this->player_ptr->lev > 39)
-            result++;
-        if (this->player_ptr->lev > 44)
-            result++;
-        if (this->player_ptr->lev > 49)
-            result++;
-    }
-    return result;
+    return PlayerClass(this->player_ptr).additional_speed();
 }
 
 /*!
@@ -195,15 +162,10 @@ int16_t PlayerSpeed::time_effect_value()
 /*!
  * @brief 速度計算 - 型
  * @return 速度値の増減分
- * @details
- * ** 朱雀の構えなら加算(+10)
  */
 int16_t PlayerSpeed::battleform_value()
 {
-    int16_t result = 0;
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
-        result += 10;
-    return result;
+    return PlayerClass(player_ptr).battleform_speed();
 }
 
 /*!

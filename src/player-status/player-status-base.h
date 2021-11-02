@@ -23,7 +23,6 @@ protected:
     virtual void set_locals();
     virtual int16_t race_value();
     virtual int16_t class_value();
-    virtual int16_t class_base_value();
     virtual int16_t personality_value();
     virtual int16_t equipments_value();
     virtual int16_t time_effect_value();
