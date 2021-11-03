@@ -19,7 +19,7 @@ public:
     virtual ~PlayerClass() = default;
 
     TrFlags tr_flags() const;
-    TrFlags form_tr_flags() const;
+    TrFlags stance_tr_flags() const;
 
     bool has_stun_immunity() const;
     bool is_wizard() const;
@@ -40,14 +40,14 @@ public:
 
     const player_class_info *get_info() const;
     int16_t additional_speed() const;
-    int16_t battleform_speed() const;
+    int16_t stance_speed() const;
     int16_t stealth_value() const;
-    int16_t battleform_strength() const;
-    int16_t battleform_intelligence() const;
-    int16_t battleform_wisdom() const;
-    int16_t battleform_dexterity() const;
-    int16_t battleform_constitution() const;
-    int16_t battleform_charisma() const;
+    int16_t stance_strength() const;
+    int16_t stance_intelligence() const;
+    int16_t stance_wisdom() const;
+    int16_t stance_dexterity() const;
+    int16_t stance_constitution() const;
+    int16_t stance_charisma() const;
 
 private:
     player_type *player_ptr;

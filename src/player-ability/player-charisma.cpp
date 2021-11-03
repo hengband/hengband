@@ -31,9 +31,9 @@ void PlayerCharisma::set_locals()
  * @brief 魅力補正計算 - 型
  * @return 魅力補正値
  */
-int16_t PlayerCharisma::battleform_value()
+int16_t PlayerCharisma::stance_value()
 {
-    return PlayerClass(this->player_ptr).battleform_charisma();
+    return PlayerClass(this->player_ptr).stance_charisma();
 }
 
 /*!

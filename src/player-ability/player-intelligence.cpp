@@ -32,9 +32,9 @@ void PlayerIntelligence::set_locals()
  * @brief 知力補正計算 - 型
  * @return 知力補正値
  */
-int16_t PlayerIntelligence::battleform_value()
+int16_t PlayerIntelligence::stance_value()
 {
-    return PlayerClass(this->player_ptr).battleform_intelligence();
+    return PlayerClass(this->player_ptr).stance_intelligence();
 }
 
 /*!

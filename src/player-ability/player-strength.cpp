@@ -75,9 +75,9 @@ int16_t PlayerStrength::time_effect_value()
  * @brief 腕力補正計算 - 型
  * @return 腕力補正値
  */
-int16_t PlayerStrength::battleform_value()
+int16_t PlayerStrength::stance_value()
 {
-    return PlayerClass(this->player_ptr).battleform_strength();
+    return PlayerClass(this->player_ptr).stance_strength();
 }
 
 /*!

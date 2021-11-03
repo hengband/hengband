@@ -12,7 +12,7 @@ protected:
     int16_t personality_value() override;
     int16_t equipments_value() override;
     int16_t time_effect_value() override;
-    int16_t battleform_value() override;
+    int16_t stance_value() override;
     int16_t mutation_value() override;
     int16_t riding_value() override;
     int16_t inventory_weight_value() override;

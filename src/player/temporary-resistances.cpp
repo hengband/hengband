@@ -24,7 +24,7 @@
 void tim_player_flags(player_type *player_ptr, TrFlags &flags)
 {
     BIT_FLAGS tmp_effect_flag = FLAG_CAUSE_MAGIC_TIME_EFFECT;
-    set_bits(tmp_effect_flag, FLAG_CAUSE_BATTLE_FORM);
+    set_bits(tmp_effect_flag, FLAG_CAUSE_STANCE);
     BIT_FLAGS race_class_flag = FLAG_CAUSE_CLASS;
     set_bits(race_class_flag, FLAG_CAUSE_RACE);
 

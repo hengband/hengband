@@ -30,9 +30,9 @@ void PlayerWisdom::set_locals()
  * @brief 賢さ補正計算 - 型
  * @return 賢さ補正値
  */
-int16_t PlayerWisdom::battleform_value()
+int16_t PlayerWisdom::stance_value()
 {
-    return PlayerClass(this->player_ptr).battleform_wisdom();
+    return PlayerClass(this->player_ptr).stance_wisdom();
 }
 
 /*!

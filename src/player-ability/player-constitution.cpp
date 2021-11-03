@@ -69,9 +69,9 @@ int16_t PlayerConstitution::time_effect_value()
  * @brief 耐久力補正計算 - 型
  * @return 耐久力補正値
  */
-int16_t PlayerConstitution::battleform_value()
+int16_t PlayerConstitution::stance_value()
 {
-    return PlayerClass(this->player_ptr).battleform_constitution();
+    return PlayerClass(this->player_ptr).stance_constitution();
 }
 
 /*!

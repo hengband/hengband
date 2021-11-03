@@ -163,9 +163,9 @@ int16_t PlayerSpeed::time_effect_value()
  * @brief 速度計算 - 型
  * @return 速度値の増減分
  */
-int16_t PlayerSpeed::battleform_value()
+int16_t PlayerSpeed::stance_value()
 {
-    return PlayerClass(player_ptr).battleform_speed();
+    return PlayerClass(player_ptr).stance_speed();
 }
 
 /*!

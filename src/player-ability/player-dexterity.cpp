@@ -65,9 +65,9 @@ int16_t PlayerDexterity::time_effect_value()
  * @brief 器用さ補正計算 - 型
  * @return 器用さ補正値
  */
-int16_t PlayerDexterity::battleform_value()
+int16_t PlayerDexterity::stance_value()
 {
-    return PlayerClass(this->player_ptr).battleform_dexterity();
+    return PlayerClass(this->player_ptr).stance_dexterity();
 }
 
 /*!

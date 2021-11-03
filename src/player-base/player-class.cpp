@@ -177,7 +177,7 @@ TrFlags PlayerClass::tr_flags() const
     return flags;
 }
 
-TrFlags PlayerClass::form_tr_flags() const
+TrFlags PlayerClass::stance_tr_flags() const
 {
     TrFlags flags;
 
@@ -436,7 +436,7 @@ int16_t PlayerClass::additional_speed() const
  * @details
  * ** 朱雀の構えなら加算(+10)
  */
-int16_t PlayerClass::battleform_speed() const
+int16_t PlayerClass::stance_speed() const
 {
     int16_t result = 0;
     if (this->monk_stance_is(MonkStance::SUZAKU))
@@ -480,7 +480,7 @@ int16_t PlayerClass::stealth_value() const
  * * 白虎の構えで加算(+2)
  * * 朱雀の構えで減算(-2)
  */
-int16_t PlayerClass::battleform_strength() const
+int16_t PlayerClass::stance_strength() const
 {
     int16_t result = 0;
 
@@ -506,7 +506,7 @@ int16_t PlayerClass::battleform_strength() const
  * * 玄武の構えで減算(-1)
  * * 朱雀の構えで加算(+1)
  */
-int16_t PlayerClass::battleform_intelligence() const
+int16_t PlayerClass::stance_intelligence() const
 {
     int16_t result = 0;
 
@@ -532,7 +532,7 @@ int16_t PlayerClass::battleform_intelligence() const
  * * 玄武の構えで減算(-1)
  * * 朱雀の構えで加算(+1)
  */
-int16_t PlayerClass::battleform_wisdom() const
+int16_t PlayerClass::stance_wisdom() const
 {
     int16_t result = 0;
 
@@ -559,7 +559,7 @@ int16_t PlayerClass::battleform_wisdom() const
  * * 玄武の構えで減算(-2)
  * * 朱雀の構えで加算(+2)
  */
-int16_t PlayerClass::battleform_dexterity() const
+int16_t PlayerClass::stance_dexterity() const
 {
     int16_t result = 0;
 
@@ -589,7 +589,7 @@ int16_t PlayerClass::battleform_dexterity() const
  * * 玄武の構えで加算(+3)
  * * 朱雀の構えで減算(-2)
  */
-int16_t PlayerClass::battleform_constitution() const
+int16_t PlayerClass::stance_constitution() const
 {
     int16_t result = 0;
 
@@ -616,7 +616,7 @@ int16_t PlayerClass::battleform_constitution() const
  * * 型による魅力修正値
  * * 降鬼陣で加算(+5)
  */
-int16_t PlayerClass::battleform_charisma() const
+int16_t PlayerClass::stance_charisma() const
 {
     int16_t result = 0;
 
