@@ -328,7 +328,7 @@ spells_type get_element_type(int realm_idx, int n)
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
-static spells_type get_element_spells_type(player_type *player_ptr, int n)
+static spells_type get_element_spells_type(PlayerType *player_ptr, int n)
 {
     auto realm = element_types.at(i2enum<ElementRealm>(player_ptr->element));
     auto t = realm.type.at(n);
@@ -367,7 +367,7 @@ concptr get_element_name(int realm_idx, int n)
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static concptr get_element_tip(player_type *player_ptr, int spell_idx)
+static concptr get_element_tip(PlayerType *player_ptr, int spell_idx)
 {
     auto realm = i2enum<ElementRealm>(player_ptr->element);
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -381,7 +381,7 @@ static concptr get_element_tip(player_type *player_ptr, int spell_idx)
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static int get_elemental_elem(player_type *player_ptr, int spell_idx)
+static int get_elemental_elem(PlayerType *player_ptr, int spell_idx)
 {
     (void)player_ptr;
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -394,7 +394,7 @@ static int get_elemental_elem(player_type *player_ptr, int spell_idx)
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static mind_type get_elemental_info(player_type *player_ptr, int spell_idx)
+static mind_type get_elemental_info(PlayerType *player_ptr, int spell_idx)
 {
     (void)player_ptr;
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -408,7 +408,7 @@ static mind_type get_elemental_info(player_type *player_ptr, int spell_idx)
  * @param p バッファ
  * @return なし(pを更新)
  */
-void get_element_effect_info(player_type *player_ptr, int spell_idx, char *p)
+void get_element_effect_info(PlayerType *player_ptr, int spell_idx, char *p)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -470,7 +470,7 @@ void get_element_effect_info(player_type *player_ptr, int spell_idx, char *p)
  * @param spell_idx 呪文番号
  * @return 実行したらTRUE、キャンセルならFALSE
  */
-static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
+static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 {
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto power = element_powers.at(spell);
@@ -623,7 +623,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
  * @param spell_idx 呪文番号
  * @return 失敗率
  */
-static PERCENTAGE decide_element_chance(player_type *player_ptr, mind_type spell)
+static PERCENTAGE decide_element_chance(PlayerType *player_ptr, mind_type spell)
 {
     PERCENTAGE chance = spell.fail;
 
@@ -658,7 +658,7 @@ static PERCENTAGE decide_element_chance(player_type *player_ptr, mind_type spell
  * @param spell_idx 呪文番号
  * @return 消費MP
  */
-static MANA_POINT decide_element_mana_cost(player_type *player_ptr, mind_type spell)
+static MANA_POINT decide_element_mana_cost(PlayerType *player_ptr, mind_type spell)
 {
     (void)player_ptr;
     return spell.mana_cost;
@@ -671,7 +671,7 @@ static MANA_POINT decide_element_mana_cost(player_type *player_ptr, mind_type sp
  * @param only_browse 閲覧モードかどうか
  * @return 選んだらTRUE、選ばなかったらFALSE
  */
-bool get_element_power(player_type *player_ptr, SPELL_IDX *sn, bool only_browse)
+bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
 {
     SPELL_IDX i;
     int num = 0;
@@ -842,7 +842,7 @@ bool get_element_power(player_type *player_ptr, SPELL_IDX *sn, bool only_browse)
  * @param mana_cost 消費MP
  * @return 詠唱するならTRUE、しないならFALSE
  */
-static bool check_element_mp_sufficiency(player_type *player_ptr, int mana_cost)
+static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
 {
     if (mana_cost <= player_ptr->csp)
         return true;
@@ -861,7 +861,7 @@ static bool check_element_mp_sufficiency(player_type *player_ptr, int mana_cost)
  * @param chance 失敗率
  * @return 詠唱して実行したらTRUE、されなかったらFALSE
  */
-static bool try_cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
+static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
 {
     if (randint0(100) >= chance) {
         sound(SOUND_ZAP);
@@ -895,7 +895,7 @@ static bool try_cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx,
  * @brief 元素魔法コマンドのメインルーチン
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-void do_cmd_element(player_type *player_ptr)
+void do_cmd_element(PlayerType *player_ptr)
 {
     SPELL_IDX i;
     if (cmd_limit_confused(player_ptr) || !get_element_power(player_ptr, &i, false))
@@ -936,7 +936,7 @@ void do_cmd_element(player_type *player_ptr)
  * @brief 現在プレイヤーが使用可能な元素魔法の一覧表示
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-void do_cmd_element_browse(player_type *player_ptr)
+void do_cmd_element_browse(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
     char temp[62 * 5];
@@ -1019,7 +1019,7 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
  * @param em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
  */
-process_result effect_monster_elemental_genocide(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     auto type = get_element_type(player_ptr->element, 0);
     auto name = get_element_name(player_ptr->element, 0);
@@ -1059,7 +1059,7 @@ process_result effect_monster_elemental_genocide(player_type *player_ptr, effect
  * @details
  * レベルに応じて取得する耐性などの判定に使用する
  */
-bool has_element_resist(player_type *player_ptr, ElementRealm realm, PLAYER_LEVEL lev)
+bool has_element_resist(PlayerType *player_ptr, ElementRealm realm, PLAYER_LEVEL lev)
 {
     if (player_ptr->pclass != PlayerClassType::ELEMENTALIST)
         return false;
@@ -1128,7 +1128,7 @@ static int interpret_realm_select_key(int cs, int n, char c)
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static int get_element_realm(player_type *player_ptr, int is, int n)
+static int get_element_realm(PlayerType *player_ptr, int is, int n)
 {
     int cs = std::max(0, is);
     int os = cs;
@@ -1194,7 +1194,7 @@ static int get_element_realm(player_type *player_ptr, int is, int n)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 領域番号
  */
-byte select_element_realm(player_type *player_ptr)
+byte select_element_realm(PlayerType *player_ptr)
 {
     clear_from(10);
 
@@ -1240,7 +1240,7 @@ byte select_element_realm(player_type *player_ptr)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  */
-void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
+void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto plev = player_ptr->lev;
     auto realm = i2enum<ElementRealm>(player_ptr->element);
@@ -1330,14 +1330,14 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
 /*!
  * @todo 宣言だけ。後日適切な場所に移動
  */
-static bool door_to_darkness(player_type *player_ptr, POSITION dist);
+static bool door_to_darkness(PlayerType *player_ptr, POSITION dist);
 
 /*!
  * @brief クラスパワーを実行
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 実行したらTRUE、しなかったらFALSE
  */
-bool switch_element_execution(player_type *player_ptr)
+bool switch_element_execution(PlayerType *player_ptr)
 {
     auto realm = i2enum<ElementRealm>(player_ptr->element);
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -1424,7 +1424,7 @@ static bool is_target_grid_dark(floor_type *f_ptr, POSITION y, POSITION x)
  * @breif 暗いところ限定での次元の扉
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-static bool door_to_darkness(player_type *player_ptr, POSITION dist)
+static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
 {
     POSITION y = player_ptr->y;
     POSITION x = player_ptr->x;

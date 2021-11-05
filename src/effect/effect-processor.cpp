@@ -45,7 +45,7 @@
  * @param cury 現在の鏡のy座標
  * @param curx 現在の鏡のx座標
  */
-static void next_mirror(player_type *player_ptr, POSITION *next_y, POSITION *next_x, POSITION cury, POSITION curx)
+static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next_x, POSITION cury, POSITION curx)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
@@ -87,7 +87,7 @@ static void next_mirror(player_type *player_ptr, POSITION *next_y, POSITION *nex
  * @todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
-ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
+ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
     BIT_FLAGS flag)
 {
     int dist;

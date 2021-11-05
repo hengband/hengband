@@ -17,7 +17,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
  */
-bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
+bool object_is_bounty(PlayerType *player_ptr, object_type *o_ptr)
 {
     int i;
 

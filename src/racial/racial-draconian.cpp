@@ -7,7 +7,7 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-static void decide_breath_kind(player_type *player_ptr, int *breath_type, concptr *breath_type_description)
+static void decide_breath_kind(PlayerType *player_ptr, int *breath_type, concptr *breath_type_description)
 {
     if (randint1(100) >= player_ptr->lev)
         return;
@@ -119,7 +119,7 @@ static void decide_breath_kind(player_type *player_ptr, int *breath_type, concpt
     }
 }
 
-bool draconian_breath(player_type *player_ptr)
+bool draconian_breath(PlayerType *player_ptr)
 {
     int breath_type = (one_in_(3) ? GF_COLD : GF_FIRE);
     concptr breath_type_description = ((breath_type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));

@@ -80,10 +80,10 @@ typedef struct text_body_type {
 extern std::vector<autopick_type> autopick_list;
 extern object_type autopick_last_destroyed_object;
 
-struct player_type;
+class PlayerType;
 void free_text_lines(std::vector<concptr> &lines_list);
 int get_com_id(char key);
-void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx);
+void auto_inscribe_item(PlayerType *player_ptr, object_type *o_ptr, int idx);
 int count_line(text_body_type *tb);
 
 /*!

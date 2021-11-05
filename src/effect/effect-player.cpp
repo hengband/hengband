@@ -37,7 +37,7 @@
 #include <string>
 
 /*!
- * @brief effect_player_type構造体を初期化する
+ * @brief effect_PlayerType構造体を初期化する
  * @param ep_ptr 初期化前の構造体
  * @param who 魔法を唱えたモンスター (0ならプレイヤー自身)
  * @param dam 基本威力
@@ -46,7 +46,7 @@
  * @param monspell 効果元のモンスター魔法ID
  * @return 初期化後の構造体ポインタ
  */
-static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag)
+static effect_PlayerType *initialize_effect_player(effect_PlayerType *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag)
 {
     ep_ptr->rlev = 0;
     ep_ptr->m_ptr = nullptr;
@@ -64,7 +64,7 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  * @param ep_ptr プレイヤー効果構造体への参照ポインタ
  * @return 当たったらFALSE、反射したらTRUE
  */
-static bool process_bolt_reflection(player_type *player_ptr, effect_player_type *ep_ptr, project_func project)
+static bool process_bolt_reflection(PlayerType *player_ptr, effect_PlayerType *ep_ptr, project_func project)
 {
     auto can_reflect = (has_reflect(player_ptr) != 0);
     can_reflect &= any_bits(ep_ptr->flag, PROJECT_REFLECTABLE);
@@ -119,7 +119,7 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
  * @param x 目標X座標
  * @return 当たらなかったらFALSE、反射したらTRUE、当たったらCONTINUE
  */
-static process_result check_continue_player_effect(player_type *player_ptr, effect_player_type *ep_ptr, POSITION y, POSITION x, project_func project)
+static process_result check_continue_player_effect(PlayerType *player_ptr, effect_PlayerType *ep_ptr, POSITION y, POSITION x, project_func project)
 {
     if (!player_bold(player_ptr, y, x)) {
         return PROCESS_FALSE;
@@ -150,7 +150,7 @@ static process_result check_continue_player_effect(player_type *player_ptr, effe
  * @param ep_ptr プレイヤー効果構造体への参照ポインタ
  * @param who_name モンスター名
  */
-static void describe_effect_source(player_type *player_ptr, effect_player_type *ep_ptr, concptr who_name)
+static void describe_effect_source(PlayerType *player_ptr, effect_PlayerType *ep_ptr, concptr who_name)
 {
     if (ep_ptr->who > 0) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->who];
@@ -188,10 +188,10 @@ static void describe_effect_source(player_type *player_ptr, effect_player_type *
  * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_player(MONSTER_IDX who, player_type *player_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type,
+bool affect_player(MONSTER_IDX who, PlayerType *player_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type,
     BIT_FLAGS flag, project_func project)
 {
-    effect_player_type tmp_effect;
+    effect_PlayerType tmp_effect;
     auto *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag);
     auto check_result = check_continue_player_effect(player_ptr, ep_ptr, y, x, project);
     if (check_result != PROCESS_CONTINUE) {

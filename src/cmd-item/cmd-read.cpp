@@ -25,7 +25,7 @@
  * @brief 読むコマンドのメインルーチン /
  * Eat some food (from the pack or floor)
  */
-void do_cmd_read_scroll(player_type *player_ptr)
+void do_cmd_read_scroll(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;

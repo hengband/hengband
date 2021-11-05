@@ -35,7 +35,7 @@
  * @param m_idx 逃走するモンスターの参照ID
  * @param mm 移動方向を返す方向IDの参照ポインタ
  */
-MonsterSweepGrid::MonsterSweepGrid(player_type *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
+MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , mm(mm)

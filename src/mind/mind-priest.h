@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-bool bless_weapon(player_type *player_ptr);
+class PlayerType;
+bool bless_weapon(PlayerType *player_ptr);

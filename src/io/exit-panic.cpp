@@ -24,7 +24,7 @@
  * This routine is called only in very rare situations, and only
  * by certain visual systems, when they experience fatal errors.
  */
-void exit_game_panic(player_type *player_ptr)
+void exit_game_panic(PlayerType *player_ptr)
 {
 	if (!w_ptr->character_generated || w_ptr->character_saved)
 		quit(_("緊急事態", "panic"));

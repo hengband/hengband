@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+class PlayerType;
+bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);

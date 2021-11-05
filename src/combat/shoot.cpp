@@ -79,7 +79,7 @@
  * @return スレイ倍率をかけたダメージ量
  */
 static MULTIPLY calc_shot_damage_with_slay(
-    player_type *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
+    PlayerType *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
 {
     MULTIPLY mult = 10;
 
@@ -380,7 +380,7 @@ static MULTIPLY calc_shot_damage_with_slay(
  * Note that Bows of "Extra Shots" give an extra shot.
  * </pre>
  */
-void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
+void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 {
     DIRECTION dir;
     int i;
@@ -873,7 +873,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_fire(player_type *player_ptr, int chance, monster_type *m_ptr, int vis, char *o_name)
+bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int vis, char *o_name)
 {
     int k;
     ARMOUR_CLASS ac;
@@ -935,7 +935,7 @@ bool test_hit_fire(player_type *player_ptr, int chance, monster_type *m_ptr, int
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     int i, k;
     object_type *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
@@ -1086,7 +1086,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
  * @return ダメージ期待値
  * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
  */
-HIT_POINT calc_crit_ratio_shot(player_type *player_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
+HIT_POINT calc_crit_ratio_shot(PlayerType *player_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
     HIT_POINT i;
     object_type *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
@@ -1124,7 +1124,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *player_ptr, HIT_POINT plus_ammo, HIT
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     uint32_t num;
     int i, k, crit;
@@ -1167,7 +1167,7 @@ HIT_POINT calc_expect_crit_shot(player_type *player_ptr, WEIGHT weight, int plus
  * @param impact 強撃かどうか
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(player_type *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, bool dokubari, bool impact)
+HIT_POINT calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, bool dokubari, bool impact)
 {
     if (dokubari)
         return dam;

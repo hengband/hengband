@@ -11,7 +11,7 @@
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return オブジェクトが防具として装備できるならTRUEを返す。
  */
-bool item_tester_hook_wear(player_type *player_ptr, const object_type *o_ptr)
+bool item_tester_hook_wear(PlayerType *player_ptr, const object_type *o_ptr)
 {
     if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI))
         if (player_ptr->psex == SEX_MALE)

@@ -6,5 +6,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-void exe_activate(player_type *player_ptr, INVENTORY_IDX item);
+class PlayerType;
+void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item);

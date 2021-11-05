@@ -55,7 +55,7 @@ static bool find_breakleft;
  * @param x 移動元のX座標
  * @return 移動先が既知の壁ならばTRUE
  */
-static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITION x)
+static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
     y += ddy[dir];
     x += ddx[dir];
@@ -99,7 +99,7 @@ static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITIO
  *       \#x\#                  \@x\#\n
  *       \@\@p.                  p\n
  */
-static void run_init(player_type *player_ptr, DIRECTION dir)
+static void run_init(PlayerType *player_ptr, DIRECTION dir)
 {
     find_current = dir;
     find_prevdir = dir;
@@ -164,7 +164,7 @@ static void run_init(player_type *player_ptr, DIRECTION dir)
  * @param x 移動元のX座標
  * @return 移動先が未知の地形ならばTRUE
  */
-static bool see_nothing(player_type *player_ptr, DIRECTION dir, POSITION y, POSITION x)
+static bool see_nothing(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
     y += ddy[dir];
     x += ddx[dir];
@@ -190,7 +190,7 @@ static bool see_nothing(player_type *player_ptr, DIRECTION dir, POSITION y, POSI
  * ダッシュ移動が継続できるならばTRUEを返す。
  * Return TRUE if the running should be stopped
  */
-static bool run_test(player_type *player_ptr)
+static bool run_test(PlayerType *player_ptr)
 {
     DIRECTION prev_dir = find_prevdir;
     int max = (prev_dir & 0x01) + 1;
@@ -358,7 +358,7 @@ static bool run_test(player_type *player_ptr)
  * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
  */
-void run_step(player_type *player_ptr, DIRECTION dir)
+void run_step(PlayerType *player_ptr, DIRECTION dir)
 {
     if (dir) {
         ignore_avoid_run = true;

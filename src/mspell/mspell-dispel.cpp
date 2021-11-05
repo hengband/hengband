@@ -34,7 +34,7 @@
 /*!
  * @brief プレイヤーに魔力消去効果を与える。
  */
-static void dispel_player(player_type *player_ptr)
+static void dispel_player(PlayerType *player_ptr)
 {
     (void)set_fast(player_ptr, 0, true);
     set_lightspeed(player_ptr, 0, true);
@@ -112,7 +112,7 @@ static void dispel_player(player_type *player_ptr)
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;

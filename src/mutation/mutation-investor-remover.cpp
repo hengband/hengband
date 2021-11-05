@@ -11,7 +11,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static void sweep_gain_mutation(player_type *player_ptr, glm_type *gm_ptr)
+static void sweep_gain_mutation(PlayerType *player_ptr, glm_type *gm_ptr)
 {
     int attempts_left = 20;
     if (gm_ptr->choose_mut)
@@ -27,7 +27,7 @@ static void sweep_gain_mutation(player_type *player_ptr, glm_type *gm_ptr)
     }
 }
 
-static void race_dependent_mutation(player_type *player_ptr, glm_type *gm_ptr)
+static void race_dependent_mutation(PlayerType *player_ptr, glm_type *gm_ptr)
 {
     if (gm_ptr->choose_mut != 0)
         return;
@@ -62,7 +62,7 @@ static void race_dependent_mutation(player_type *player_ptr, glm_type *gm_ptr)
     }
 }
 
-static void neutralize_base_status(player_type *player_ptr, glm_type *gm_ptr)
+static void neutralize_base_status(PlayerType *player_ptr, glm_type *gm_ptr)
 {
     if (gm_ptr->muta_which == MUTA::PUNY) {
         if (player_ptr->muta.has(MUTA::HYPER_STR)) {
@@ -174,7 +174,7 @@ static void neutralize_base_status(player_type *player_ptr, glm_type *gm_ptr)
     }
 }
 
-static void neutralize_other_status(player_type *player_ptr, glm_type *gm_ptr)
+static void neutralize_other_status(PlayerType *player_ptr, glm_type *gm_ptr)
 {
     if (gm_ptr->muta_which == MUTA::COWARDICE) {
         if (player_ptr->muta.has(MUTA::FEARLESS)) {
@@ -202,7 +202,7 @@ static void neutralize_other_status(player_type *player_ptr, glm_type *gm_ptr)
  * @brief プレイヤーに突然変異を与える
  * @param choose_mut 与えたい突然変異のID、0ならばランダムに選択
  */
-bool gain_mutation(player_type *player_ptr, MUTATION_IDX choose_mut)
+bool gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
 {
     glm_type tmp_gm;
     glm_type *gm_ptr = initialize_glm_type(&tmp_gm, choose_mut);
@@ -228,7 +228,7 @@ bool gain_mutation(player_type *player_ptr, MUTATION_IDX choose_mut)
     return true;
 }
 
-static void sweep_lose_mutation(player_type *player_ptr, glm_type *glm_ptr)
+static void sweep_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
 {
     int attempts_left = 20;
     if (glm_ptr->choose_mut)
@@ -251,7 +251,7 @@ static void sweep_lose_mutation(player_type *player_ptr, glm_type *glm_ptr)
  * @brief プレイヤーから突然変異を取り除く
  * @param choose_mut 取り除きたい突然変異のID、0ならばランダムに消去
  */
-bool lose_mutation(player_type *player_ptr, MUTATION_IDX choose_mut)
+bool lose_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
 {
     glm_type tmp_glm;
     glm_type *glm_ptr = initialize_glm_type(&tmp_glm, choose_mut);
@@ -269,7 +269,7 @@ bool lose_mutation(player_type *player_ptr, MUTATION_IDX choose_mut)
     return true;
 }
 
-void lose_all_mutations(player_type *player_ptr)
+void lose_all_mutations(PlayerType *player_ptr)
 {
     if (player_ptr->muta.any()) {
         chg_virtue(player_ptr, V_CHANCE, -5);

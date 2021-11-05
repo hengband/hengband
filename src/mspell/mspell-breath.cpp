@@ -56,7 +56,7 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, int GF_TYPE, con
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF4_BREATH(player_type *player_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam, drs_type = 0;
     concptr type_s;

@@ -13,7 +13,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerCharisma::PlayerCharisma(player_type *player_ptr)
+PlayerCharisma::PlayerCharisma(PlayerType *player_ptr)
     : PlayerBasicStatistics(player_ptr)
 {
 }

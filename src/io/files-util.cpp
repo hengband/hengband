@@ -57,7 +57,7 @@ char debug_savefile[1024];
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(player_type *player_ptr, concptr name, display_player_pf display_player)
+errr file_character(PlayerType *player_ptr, concptr name, display_player_pf display_player)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
@@ -201,7 +201,7 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
  * @return エラーコード
  * @details
  */
-static errr counts_seek(player_type *player_ptr, int fd, uint32_t where, bool flag)
+static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool flag)
 {
     char temp1[128], temp2[128];
     auto short_pclass = enum2i(player_ptr->pclass);
@@ -244,7 +244,7 @@ static errr counts_seek(player_type *player_ptr, int fd, uint32_t where, bool fl
  * @return エラーコード
  * @details
  */
-uint32_t counts_read(player_type *player_ptr, int where)
+uint32_t counts_read(PlayerType *player_ptr, int where)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
@@ -267,7 +267,7 @@ uint32_t counts_read(player_type *player_ptr, int where)
  * @return エラーコード
  * @details
  */
-errr counts_write(player_type *player_ptr, int where, uint32_t count)
+errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));

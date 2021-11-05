@@ -48,7 +48,7 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
  */
-static std::optional<PRICE> prompt_to_sell(player_type *player_ptr, object_type *o_ptr)
+static std::optional<PRICE> prompt_to_sell(PlayerType *player_ptr, object_type *o_ptr)
 {
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, true);
 
@@ -67,7 +67,7 @@ static std::optional<PRICE> prompt_to_sell(player_type *player_ptr, object_type 
  * Sell an item to the store (or home)
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void store_sell(player_type *player_ptr)
+void store_sell(PlayerType *player_ptr)
 {
     concptr q; //!< @note プロンプトメッセージ
     concptr s_none; //!< @note 売る/置くものがない場合のメッセージ

@@ -15,7 +15,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param 換算レベル
  */
-PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr)
+PLAYER_LEVEL get_pseudo_monstetr_level(PlayerType *player_ptr)
 {
     PLAYER_LEVEL monster_level = player_ptr->lev + 40;
     return (monster_level * monster_level - 1550) / 130;
@@ -28,7 +28,7 @@ PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr)
  * @param msg 表示する文字列
  * @param tmp 返すメッセージを格納する配列
  */
-static void set_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
+static void set_bluemage_damage(PlayerType *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
 {
     int base_damage = monspell_bluemage_damage(player_ptr, ms_type, plev, BASE_DAM);
     int dice_num = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_NUM);
@@ -46,7 +46,7 @@ static void set_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLA
  * @param p 情報を返す文字列参照ポインタ
  * @param power モンスター魔法のID
  */
-void learnt_info(player_type *player_ptr, char *p, RF_ABILITY power)
+void learnt_info(PlayerType *player_ptr, char *p, RF_ABILITY power)
 {
     PLAYER_LEVEL plev = get_pseudo_monstetr_level(player_ptr);
 

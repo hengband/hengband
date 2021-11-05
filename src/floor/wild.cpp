@@ -285,7 +285,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint32_
  * If corner is set then only the corners of the area are needed.
  * </pre>
  */
-static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool border, bool corner)
+static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool border, bool corner)
 {
     player_ptr->town_num = wilderness[y][x].town;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -370,10 +370,10 @@ static border_type border;
 /*!
  * @brief 広域マップの生成 /
  * Build the wilderness area outside of the town.
- * @todo 広域マップは恒常生成にする予定、player_typeによる処理分岐は最終的に排除する。
+ * @todo 広域マップは恒常生成にする予定、PlayerTypeによる処理分岐は最終的に排除する。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void wilderness_gen(player_type *player_ptr)
+void wilderness_gen(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->height = MAX_HGT;
@@ -550,7 +550,7 @@ static int16_t conv_terrain2feat[MAX_WILDERNESS];
  * @brief 広域マップの生成(簡易処理版) /
  * Build the wilderness area. -DG-
  */
-void wilderness_gen_small(player_type *player_ptr)
+void wilderness_gen_small(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < MAX_WID; i++)
@@ -621,7 +621,7 @@ static wilderness_grid w_letter[255];
  * @param y 広域マップの高さを返す参照ポインタ
  * @param x 広域マップの幅を返す参照ポインタ
  */
-parse_error_type parse_line_wilderness(player_type *player_ptr, char *buf, int xmin, int xmax, int *y, int *x)
+parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xmin, int xmax, int *y, int *x)
 {
     if (!(buf[0] == 'W'))
         return (PARSE_ERROR_GENERIC);
@@ -833,7 +833,7 @@ void init_wilderness_terrains(void)
  * @param encount 襲撃時TRUE
  * @return 切り替えが行われた場合はTRUEを返す。
  */
-bool change_wild_mode(player_type *player_ptr, bool encount)
+bool change_wild_mode(PlayerType *player_ptr, bool encount)
 {
     generate_encounter = encount;
     if (player_ptr->leaving)

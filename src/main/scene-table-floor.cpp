@@ -10,9 +10,9 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 
-using scene_feel_func = bool (*)(player_type *player_ptr, scene_type *value);
+using scene_feel_func = bool (*)(PlayerType *player_ptr, scene_type *value);
 
-static bool scene_basic(player_type *player_ptr, scene_type *value)
+static bool scene_basic(PlayerType *player_ptr, scene_type *value)
 {
     if (player_ptr->ambush_flag) {
         value->type = TERM_XTRA_MUSIC_BASIC;
@@ -41,7 +41,7 @@ static bool scene_basic(player_type *player_ptr, scene_type *value)
     return false;
 }
 
-static bool scene_quest(player_type *player_ptr, scene_type *value)
+static bool scene_quest(PlayerType *player_ptr, scene_type *value)
 {
     const QUEST_IDX quest_id = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
     const bool enable = (quest_id > 0);
@@ -53,7 +53,7 @@ static bool scene_quest(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_quest_basic(player_type *player_ptr, scene_type *value)
+static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
 {
     const QUEST_IDX quest_id = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
     const bool enable = (quest_id > 0);
@@ -65,7 +65,7 @@ static bool scene_quest_basic(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_town(player_type *player_ptr, scene_type *value)
+static bool scene_town(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = !is_in_dungeon(player_ptr) && (player_ptr->town_num > 0);
     if (enable) {
@@ -75,7 +75,7 @@ static bool scene_town(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_town_basic(player_type *player_ptr, scene_type *value)
+static bool scene_town_basic(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = !is_in_dungeon(player_ptr) && (player_ptr->town_num > 0);
     if (enable) {
@@ -85,7 +85,7 @@ static bool scene_town_basic(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_field(player_type *player_ptr, scene_type *value)
+static bool scene_field(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = !is_in_dungeon(player_ptr);
     if (enable) {
@@ -101,7 +101,7 @@ static bool scene_field(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_dungeon_feeling(player_type *player_ptr, scene_type *value)
+static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = (player_ptr->feeling >= 2) && (player_ptr->feeling <= 5);
     if (enable) {
@@ -115,7 +115,7 @@ static bool scene_dungeon_feeling(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_dungeon(player_type *player_ptr, scene_type *value)
+static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = (player_ptr->dungeon_idx > 0);
     if (enable) {
@@ -125,7 +125,7 @@ static bool scene_dungeon(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_dungeon_basic(player_type *player_ptr, scene_type *value)
+static bool scene_dungeon_basic(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = is_in_dungeon(player_ptr);
     if (enable) {
@@ -142,7 +142,7 @@ static bool scene_dungeon_basic(player_type *player_ptr, scene_type *value)
     return enable;
 }
 
-static bool scene_mute(player_type *player_ptr, scene_type *value)
+static bool scene_mute(PlayerType *player_ptr, scene_type *value)
 {
     (void)player_ptr;
     value->type = TERM_XTRA_MUSIC_MUTE;
@@ -188,7 +188,7 @@ int get_scene_floor_count()
  * @param list BGM選曲リスト
  * @param from_index リストの更新開始位置
  */
-void refresh_scene_floor(player_type *player_ptr, scene_type_list &list, int from_index)
+void refresh_scene_floor(PlayerType *player_ptr, scene_type_list &list, int from_index)
 {
     for (auto func : scene_floor_def_list) {
         scene_type &item = list[from_index];

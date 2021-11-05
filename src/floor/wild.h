@@ -40,12 +40,12 @@ typedef struct wilderness_type {
 
 extern std::vector<std::vector<wilderness_type>> wilderness;
 
-struct player_type;
+class PlayerType;
 void set_floor_and_wall(DUNGEON_IDX type);
-void wilderness_gen(player_type *player_ptr);
-void wilderness_gen_small(player_type *player_ptr);
+void wilderness_gen(PlayerType *player_ptr);
+void wilderness_gen_small(PlayerType *player_ptr);
 errr init_wilderness(void);
 void init_wilderness_terrains(void);
 void seed_wilderness(void);
-parse_error_type parse_line_wilderness(player_type *player_ptr, char *buf, int xmin, int xmax, int *y, int *x);
-bool change_wild_mode(player_type *player_ptr, bool encount);
+parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xmin, int xmax, int *y, int *x);
+bool change_wild_mode(PlayerType *player_ptr, bool encount);

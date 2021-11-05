@@ -20,7 +20,7 @@
  * Leave a "rune of protection" which prevents monster movement
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool create_rune_protection_one(player_type *player_ptr)
+bool create_rune_protection_one(PlayerType *player_ptr)
 {
     if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -42,7 +42,7 @@ bool create_rune_protection_one(player_type *player_ptr)
  * @param x 設置場所
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool create_rune_explosion(player_type *player_ptr, POSITION y, POSITION x)
+bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!cave_clean_bold(floor_ptr, y, x)) {
@@ -61,7 +61,7 @@ bool create_rune_explosion(player_type *player_ptr, POSITION y, POSITION x)
  * @brief プレイヤーの手による能動的な階段生成処理 /
  * Create stairs at or move previously created stairs into the player location.
  */
-void stair_creation(player_type *player_ptr)
+void stair_creation(PlayerType *player_ptr)
 {
     bool up = true;
     if (ironman_downward)

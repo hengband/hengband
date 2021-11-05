@@ -37,7 +37,7 @@
  * @param path_check 射線を判定するための関数ポインタ
  * @return 有効な座標があった場合TRUEを返す
  */
-bool adjacent_grid_check(player_type *player_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, FF f_flag, path_check_pf path_check)
+bool adjacent_grid_check(PlayerType *player_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, FF f_flag, path_check_pf path_check)
 {
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
@@ -70,7 +70,7 @@ bool adjacent_grid_check(player_type *player_ptr, monster_type *m_ptr, POSITION 
     return false;
 }
 
-void decide_lite_range(player_type *player_ptr, msa_type *msa_ptr)
+void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->ability_flags.has_not(RF_ABILITY::BR_LITE))
         return;
@@ -106,7 +106,7 @@ static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
 }
 
-static void check_lite_area_by_mspell(player_type *player_ptr, msa_type *msa_ptr)
+static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->ability_flags.has(RF_ABILITY::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
         && in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
@@ -134,7 +134,7 @@ static void check_lite_area_by_mspell(player_type *player_ptr, msa_type *msa_ptr
     }
 }
 
-static void decide_lite_breath(player_type *player_ptr, msa_type *msa_ptr)
+static void decide_lite_breath(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->success)
         return;
@@ -160,7 +160,7 @@ static void decide_lite_breath(player_type *player_ptr, msa_type *msa_ptr)
     msa_ptr->success = true;
 }
 
-bool decide_lite_projection(player_type *player_ptr, msa_type *msa_ptr)
+bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     if (projectable(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
         feature_projection(player_ptr->current_floor_ptr, msa_ptr);
@@ -176,7 +176,7 @@ bool decide_lite_projection(player_type *player_ptr, msa_type *msa_ptr)
     return msa_ptr->success;
 }
 
-void decide_lite_area(player_type *player_ptr, msa_type *msa_ptr)
+void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->ability_flags.has_not(RF_ABILITY::DARKNESS))
         return;

@@ -66,7 +66,7 @@
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
  */
-bool summon_possible(player_type *player_ptr, POSITION y1, POSITION x1)
+bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = y1 - 2; y <= y1 + 2; y++) {
@@ -95,7 +95,7 @@ bool summon_possible(player_type *player_ptr, POSITION y1, POSITION x1)
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
-bool raise_possible(player_type *player_ptr, monster_type *m_ptr)
+bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
@@ -144,7 +144,7 @@ bool raise_possible(player_type *player_ptr, monster_type *m_ptr)
  * no equally friendly monster is\n
  * between the attacker and target.\n
  */
-bool clean_shot(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
+bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
@@ -187,7 +187,7 @@ bool clean_shot(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult bolt(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
+ProjectResult bolt(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -216,7 +216,7 @@ ProjectResult bolt(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult beam(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
+ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -245,7 +245,7 @@ ProjectResult beam(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult breath(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int target_type)
+ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int target_type)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

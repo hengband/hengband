@@ -138,7 +138,7 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
  * @param tap 文字色属性(タイル)
  * @param tcp 文字種属性(タイル)
  */
-void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
+void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];

@@ -16,7 +16,7 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_esp(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_esp(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -59,7 +59,7 @@ bool set_tim_esp(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_invis(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_invis(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -102,7 +102,7 @@ bool set_tim_invis(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_infra(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_infra(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;

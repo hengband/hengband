@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-int repair_broken_weapon(player_type *player_ptr, PRICE bcost);
+class PlayerType;
+int repair_broken_weapon(PlayerType *player_ptr, PRICE bcost);

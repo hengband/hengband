@@ -93,7 +93,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
  * @brief プレイヤーが現在ダンジョンに潜っているかどうかを返す。
  * @memo 現在はdun_levelが0でないかそうでないかに限るが可読性を高めるため。
  */
-bool is_in_dungeon(player_type *player_ptr)
+bool is_in_dungeon(PlayerType *player_ptr)
 {
     return player_ptr->current_floor_ptr->dun_level > 0;
 }

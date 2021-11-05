@@ -23,7 +23,7 @@
 /*!
  * @brief AvaterChangerコンストラクタ
  */
-AvatarChanger::AvatarChanger(player_type *player_ptr, monster_type *m_ptr)
+AvatarChanger::AvatarChanger(PlayerType *player_ptr, monster_type *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
 {

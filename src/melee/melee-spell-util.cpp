@@ -11,7 +11,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-melee_spell_type *initialize_melee_spell_type(player_type *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
+melee_spell_type *initialize_melee_spell_type(PlayerType *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
 {
     ms_ptr->m_idx = m_idx;
     ms_ptr->y = 0;

@@ -70,7 +70,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 配置に成功したらTRUEを返す
  */
-bool new_player_spot(player_type *player_ptr)
+bool new_player_spot(PlayerType *player_ptr)
 {
     POSITION y = 0, x = 0;
     int max_attempts = 10000;
@@ -135,7 +135,7 @@ bool new_player_spot(player_type *player_ptr)
  * @param g_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
-bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
+bool is_hidden_door(PlayerType *player_ptr, grid_type *g_ptr)
 {
     if ((g_ptr->mimic || g_ptr->cave_has_flag(FF::SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
         return true;
@@ -149,7 +149,7 @@ bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
  * @param x x座標
  * @return 指定された座標に照明がかかっているならTRUEを返す。。
  */
-bool check_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
+bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     /* Hack -- move towards player */
     POSITION yy = (y < player_ptr->y) ? (y + 1) : (y > player_ptr->y) ? (y - 1) : y;
@@ -187,7 +187,7 @@ bool check_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
  * @param y 視界先y座標
  * @param x 視界先x座標
  */
-void update_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
+void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int i;
     POSITION yy, xx;
@@ -238,7 +238,7 @@ void update_local_illumination(player_type *player_ptr, POSITION y, POSITION x)
  * @return 視覚に収められていないならTRUEを返す
  * @details player_can_see_bold()関数の返り値の否定を返している。
  */
-bool no_lite(player_type *player_ptr)
+bool no_lite(PlayerType *player_ptr)
 {
     return (!player_can_see_bold(player_ptr, player_ptr->y, player_ptr->x));
 }
@@ -246,7 +246,7 @@ bool no_lite(player_type *player_ptr)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(player_type *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
+void print_rel(PlayerType *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
 {
     /* Only do "legal" locations */
     if (panel_contains(y, x)) {
@@ -266,7 +266,7 @@ void print_rel(player_type *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y,
 }
 
 /*!
- * @todo ここにplayer_type を追加した時のコンパイルエラーに対処できなかったので保留
+ * @todo ここにPlayerType を追加した時のコンパイルエラーに対処できなかったので保留
  * Memorize interesting viewable object/features in the given grid
  *
  * This function should only be called on "legal" grids.
@@ -305,7 +305,7 @@ void print_rel(player_type *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y,
  * optimized primarily for the most common cases, that is, for the
  * non-marked floor grids.
  */
-void note_spot(player_type *player_ptr, POSITION y, POSITION x)
+void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -383,7 +383,7 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
  *
  * This function should only be called on "legal" grids
  */
-void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
+void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     /* Redraw if on screen */
     if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x)) {
@@ -639,7 +639,7 @@ static POSITION flow_y = 0;
  * We do not need a priority queue because the cost from grid
  * to grid is always "one" and we process them in order.
  */
-void update_flow(player_type *player_ptr)
+void update_flow(PlayerType *player_ptr)
 {
     POSITION x, y;
     DIRECTION d;
@@ -753,7 +753,7 @@ FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action)
  * Takes a location and action and changes the feature at that
  * location through applying the given action.
  */
-void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
+void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FF action)
 {
     /* Set old feature */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -804,7 +804,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
 }
 
 /* Remove a mirror */
-void remove_mirror(player_type *player_ptr, POSITION y, POSITION x)
+void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -836,7 +836,7 @@ void remove_mirror(player_type *player_ptr, POSITION y, POSITION x)
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode)
+bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -873,7 +873,7 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, teleport_flags mode)
+bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -922,7 +922,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
  * @param feat 地形ID
  * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
  */
-bool is_open(player_type *player_ptr, FEAT_IDX feat)
+bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
 {
     return f_info[feat].flags.has(FF::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, FF::CLOSE));
 }
@@ -933,7 +933,7 @@ bool is_open(player_type *player_ptr, FEAT_IDX feat)
  * @param mode 移動に関するオプションフラグ
  * @return 移動可能ならばTRUEを返す
  */
-bool player_can_enter(player_type *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
+bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
 {
     feature_type *f_ptr = &f_info[feature];
 
@@ -959,7 +959,7 @@ bool player_can_enter(player_type *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mod
     return true;
 }
 
-void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_type)
+void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type)
 {
     switch (gb_type) {
     case GB_FLOOR: {
@@ -1047,12 +1047,12 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
  * @param g_ptr グリッドへの参照ポインタ
  * @return 照明が消されている地形ならばTRUE
  */
-bool darkened_grid(player_type *player_ptr, grid_type *g_ptr)
+bool darkened_grid(PlayerType *player_ptr, grid_type *g_ptr)
 {
     return ((g_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && !player_ptr->see_nocto;
 }
 
-void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
+void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
     grid_type *const g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     place_grid(player_ptr, g_ptr, gb_type);
@@ -1074,7 +1074,7 @@ void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX featu
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-int count_dt(player_type *player_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under)
+int count_dt(PlayerType *player_ptr, POSITION *y, POSITION *x, bool (*test)(PlayerType *, FEAT_IDX), bool under)
 {
     int count = 0;
     for (DIRECTION d = 0; d < 9; d++) {

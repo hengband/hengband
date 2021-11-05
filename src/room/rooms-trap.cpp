@@ -18,7 +18,7 @@
  * @details
  * A special trap is placed at center of the room
  */
-bool build_type14(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y2, x2, yval, xval;
     POSITION y1, x1, xsize, ysize;

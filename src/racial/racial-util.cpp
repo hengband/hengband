@@ -3,7 +3,7 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
-rc_type::rc_type(player_type *player_ptr)
+rc_type::rc_type(PlayerType *player_ptr)
 {
     this->ask = true;
     this->lvl = player_ptr->lev;

@@ -53,7 +53,7 @@
 /*!
  * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
  */
-void do_cmd_equip(player_type *player_ptr)
+void do_cmd_equip(PlayerType *player_ptr)
 {
     char out_val[160];
     command_wrk = true;
@@ -89,7 +89,7 @@ void do_cmd_equip(player_type *player_ptr)
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_wield(player_type *player_ptr)
+void do_cmd_wield(PlayerType *player_ptr)
 {
     OBJECT_IDX item, slot;
     object_type forge;
@@ -297,7 +297,7 @@ void do_cmd_wield(player_type *player_ptr)
 /*!
  * @brief 装備を外すコマンドのメインルーチン / Take off an item
  */
-void do_cmd_takeoff(player_type *player_ptr)
+void do_cmd_takeoff(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;

@@ -34,7 +34,7 @@ typedef struct {
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_magic_eater(player_type *player_ptr, FILE *fff)
+static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
 {
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
     if (!magic_eater_data) {
@@ -98,7 +98,7 @@ static void dump_magic_eater(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_smith(player_type *player_ptr, FILE *fff)
+static void dump_smith(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [手に入れたエッセンス]\n\n", "\n\n  [Get Essence]\n\n"));
     fprintf(fff, _("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "));
@@ -161,7 +161,7 @@ static void add_monster_spell_type(char p[][80], int col, BlueMagicType SpellPro
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_blue_mage(player_type *player_ptr, FILE *fff)
+static void dump_blue_mage(PlayerType *player_ptr, FILE *fff)
 {
     const auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
     if (!bluemage_data) {
@@ -228,7 +228,7 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-void dump_aux_class_special(player_type *player_ptr, FILE *fff)
+void dump_aux_class_special(PlayerType *player_ptr, FILE *fff)
 {
     switch (player_ptr->pclass) {
     case PlayerClassType::MAGIC_EATER: {

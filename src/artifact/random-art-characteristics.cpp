@@ -73,7 +73,7 @@ static void add_negative_flags(object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void curse_artifact(player_type *player_ptr, object_type *o_ptr)
+void curse_artifact(PlayerType *player_ptr, object_type *o_ptr)
 {
     pval_subtraction(o_ptr);
     o_ptr->curse_flags.set({ TRC::HEAVY_CURSE, TRC::CURSED });
@@ -144,7 +144,7 @@ void get_random_name(object_type *o_ptr, char *return_name, bool armour, int pow
 }
 
 /*対邪平均ダメージの計算処理*/
-static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
+static HIT_POINT calc_arm_avgdamage(PlayerType *player_ptr, object_type *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     HIT_POINT base, forced, vorpal;
@@ -172,7 +172,7 @@ static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
     return dam;
 }
 
-bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
+bool has_extreme_damage_rate(PlayerType *player_ptr, object_type *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has(TR_VAMPIRIC)) {

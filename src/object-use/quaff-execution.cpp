@@ -56,7 +56,7 @@
  * @brief コンストラクタ
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-ObjectQuaffEntity::ObjectQuaffEntity(player_type *player_ptr)
+ObjectQuaffEntity::ObjectQuaffEntity(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

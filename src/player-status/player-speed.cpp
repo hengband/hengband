@@ -30,7 +30,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerSpeed::PlayerSpeed(player_type *player_ptr)
+PlayerSpeed::PlayerSpeed(PlayerType *player_ptr)
     : PlayerStatusBase(player_ptr)
 {
 }

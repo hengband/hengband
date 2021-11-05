@@ -166,7 +166,7 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
                 if (!make_fake_artifact(&obj, a_ref.idx))
                     continue;
 
-                player_type dummy;
+                PlayerType dummy;
                 obj_desc_list artifact;
                 object_analyze(&dummy, &obj, &artifact);
                 spoiler_print_art(&artifact);

@@ -72,7 +72,7 @@ void load_zangband_options(void)
         option_flag[5] |= (0x00000001U << 3);
 }
 
-void set_zangband_realm(player_type *player_ptr)
+void set_zangband_realm(PlayerType *player_ptr)
 {
     if (player_ptr->realm1 == 9)
         player_ptr->realm1 = REALM_MUSIC;
@@ -87,7 +87,7 @@ void set_zangband_realm(player_type *player_ptr)
         player_ptr->realm2 = REALM_HISSATSU;
 }
 
-void set_zangband_skill(player_type *player_ptr)
+void set_zangband_skill(PlayerType *player_ptr)
 {
     if (player_ptr->pclass != PlayerClassType::BEASTMASTER)
         player_ptr->skill_exp[PlayerSkillKindType::RIDING] /= 2;
@@ -95,7 +95,7 @@ void set_zangband_skill(player_type *player_ptr)
     player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min(player_ptr->skill_exp[PlayerSkillKindType::RIDING], s_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING]);
 }
 
-void set_zangband_race(player_type *player_ptr)
+void set_zangband_race(PlayerType *player_ptr)
 {
     player_ptr->start_race = player_ptr->prace;
     player_ptr->old_race1 = 0L;
@@ -103,7 +103,7 @@ void set_zangband_race(player_type *player_ptr)
     player_ptr->old_realm = 0;
 }
 
-void set_zangband_bounty_uniques(player_type *player_ptr)
+void set_zangband_bounty_uniques(PlayerType *player_ptr)
 {
     determine_bounty_uniques(player_ptr);
     for (int i = 0; i < MAX_BOUNTY; i++) {
@@ -113,7 +113,7 @@ void set_zangband_bounty_uniques(player_type *player_ptr)
     }
 }
 
-void set_zangband_mimic(player_type *player_ptr)
+void set_zangband_mimic(PlayerType *player_ptr)
 {
     player_ptr->tim_res_time = 0;
     player_ptr->mimic_form = 0;
@@ -121,13 +121,13 @@ void set_zangband_mimic(player_type *player_ptr)
     player_ptr->tim_sh_fire = 0;
 }
 
-void set_zangband_holy_aura(player_type *player_ptr)
+void set_zangband_holy_aura(PlayerType *player_ptr)
 {
     player_ptr->tim_sh_holy = 0;
     player_ptr->tim_eyeeye = 0;
 }
 
-void set_zangband_reflection(player_type *player_ptr)
+void set_zangband_reflection(PlayerType *player_ptr)
 {
     player_ptr->tim_reflect = 0;
     player_ptr->multishadow = 0;
@@ -139,7 +139,7 @@ void rd_zangband_dungeon()
     max_dlv[DUNGEON_ANGBAND] = rd_s16b();
 }
 
-void set_zangband_game_turns(player_type *player_ptr)
+void set_zangband_game_turns(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->generated_turn /= 2;
     player_ptr->feeling_turn /= 2;
@@ -152,7 +152,7 @@ void set_zangband_gambling_monsters(int i)
     mon_odds[i] = rd_s16b();
 }
 
-void set_zangband_special_attack(player_type *player_ptr)
+void set_zangband_special_attack(PlayerType *player_ptr)
 {
     if (rd_byte() != 0)
         player_ptr->special_attack = ATTACK_CONFUSE;
@@ -160,25 +160,25 @@ void set_zangband_special_attack(player_type *player_ptr)
     player_ptr->ele_attack = 0;
 }
 
-void set_zangband_special_defense(player_type *player_ptr)
+void set_zangband_special_defense(PlayerType *player_ptr)
 {
     player_ptr->ele_immune = 0;
     player_ptr->special_defense = 0;
 }
 
-void set_zangband_action(player_type *player_ptr)
+void set_zangband_action(PlayerType *player_ptr)
 {
     if (rd_byte() != 0)
         player_ptr->action = ACTION_LEARN;
 }
 
-void set_zangband_visited_towns(player_type *player_ptr)
+void set_zangband_visited_towns(PlayerType *player_ptr)
 {
     strip_bytes(4);
     player_ptr->visit = 1L;
 }
 
-void set_zangband_quest(player_type *player_ptr, quest_type *const q_ptr, int loading_quest_index, const QUEST_IDX old_inside_quest)
+void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loading_quest_index, const QUEST_IDX old_inside_quest)
 {
     if (q_ptr->flags & QUEST_FLAG_PRESET) {
         q_ptr->dungeon = 0;
@@ -191,7 +191,7 @@ void set_zangband_quest(player_type *player_ptr, quest_type *const q_ptr, int lo
     player_ptr->current_floor_ptr->inside_quest = old_inside_quest;
 }
 
-void set_zangband_class(player_type *player_ptr)
+void set_zangband_class(PlayerType *player_ptr)
 {
     if (h_older_than(0, 2, 2) && (player_ptr->pclass == PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
@@ -214,7 +214,7 @@ void set_zangband_class(player_type *player_ptr)
     }
 }
 
-void set_zangband_learnt_spells(player_type *player_ptr)
+void set_zangband_learnt_spells(PlayerType *player_ptr)
 {
     player_ptr->learned_spells = 0;
     for (int i = 0; i < 64; i++)
@@ -222,7 +222,7 @@ void set_zangband_learnt_spells(player_type *player_ptr)
             player_ptr->learned_spells++;
 }
 
-void set_zangband_pet(player_type *player_ptr)
+void set_zangband_pet(PlayerType *player_ptr)
 {
     player_ptr->pet_extra_flags = 0;
     if (rd_byte() != 0)

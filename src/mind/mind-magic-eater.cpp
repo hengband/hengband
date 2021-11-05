@@ -19,7 +19,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 取り込みを実行したらTRUE、キャンセルしたらFALSEを返す
  */
-bool import_magic_device(player_type *player_ptr)
+bool import_magic_device(PlayerType *player_ptr)
 {
     concptr q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
     concptr s = _("魔力を取り込めるアイテムがない。", "There's nothing with power to absorb.");

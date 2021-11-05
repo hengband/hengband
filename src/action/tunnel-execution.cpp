@@ -53,7 +53,7 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
  * Do not use twall anymore
  * Returns TRUE if repeated commands may continue
  */
-bool exe_tunnel(player_type *player_ptr, POSITION y, POSITION x)
+bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     feature_type *f_ptr, *mimic_f_ptr;

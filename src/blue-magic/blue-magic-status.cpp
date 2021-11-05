@@ -10,7 +10,7 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool cast_blue_scare(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_scare(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -20,7 +20,7 @@ bool cast_blue_scare(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_blind(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_blind(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -29,7 +29,7 @@ bool cast_blue_blind(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_confusion(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_confusion(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -39,7 +39,7 @@ bool cast_blue_confusion(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_slow(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_slow(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -48,7 +48,7 @@ bool cast_blue_slow(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_sleep(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_sleep(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;

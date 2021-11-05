@@ -51,7 +51,7 @@ using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
  * </pre>
  * @todo この辺、xとyが引数になっているが、player_ptr->xとplayer_ptr->yで全て置き換えが効くはず……
  */
-static void cave_temp_room_lite(player_type *player_ptr, const std::vector<Pos2D> &points)
+static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D> &points)
 {
     for (const auto &point : points) {
         const POSITION y = point.y;
@@ -100,7 +100,7 @@ static void cave_temp_room_lite(player_type *player_ptr, const std::vector<Pos2D
  * </pre>
  * @todo この辺、xとyが引数になっているが、player_ptr->xとplayer_ptr->yで全て置き換えが効くはず……
  */
-static void cave_temp_room_unlite(player_type *player_ptr, const std::vector<Pos2D> &points)
+static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2D> &points)
 {
     for (const auto &point : points) {
         const POSITION y = point.y;
@@ -209,7 +209,7 @@ static int next_to_walls_adj(floor_type *floor_ptr, const POSITION cy, const POS
  * @param pass_bold 地形条件を返す関数ポインタ
  */
 static void cave_temp_room_aux(
-    player_type *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const bool only_room, const PassBoldFunc pass_bold)
+    PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const bool only_room, const PassBoldFunc pass_bold)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -252,7 +252,7 @@ static void cave_temp_room_aux(
  * @param y 指定Y座標
  * @param x 指定X座標
  */
-static void cave_temp_lite_room_aux(player_type *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
+static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
     cave_temp_room_aux(player_ptr, points, y, x, false, cave_los_bold);
 }
@@ -272,7 +272,7 @@ static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) {
  * @param y 指定Y座標
  * @param x 指定X座標
  */
-static void cave_temp_unlite_room_aux(player_type *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
+static void cave_temp_unlite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
     cave_temp_room_aux(player_ptr, points, y, x, true, cave_pass_dark_bold);
 }
@@ -285,7 +285,7 @@ static void cave_temp_unlite_room_aux(player_type *player_ptr, std::vector<Pos2D
  *
  * NOTE: 部屋に限らないかも?
  */
-void lite_room(player_type *player_ptr, const POSITION y1, const POSITION x1)
+void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
     // 明るくするマスを記録する配列。
     std::vector<Pos2D> points;
@@ -329,7 +329,7 @@ void lite_room(player_type *player_ptr, const POSITION y1, const POSITION x1)
  * @param y1 指定Y座標
  * @param x1 指定X座標
  */
-void unlite_room(player_type *player_ptr, const POSITION y1, const POSITION x1)
+void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
     // 暗くするマスを記録する配列。
     std::vector<Pos2D> points;
@@ -368,7 +368,7 @@ void unlite_room(player_type *player_ptr, const POSITION y1, const POSITION x1)
  * @param magic 魔法による効果であればTRUE、スターライトの杖による効果であればFALSE
  * @return 常にTRUE
  */
-bool starlight(player_type *player_ptr, bool magic)
+bool starlight(PlayerType *player_ptr, bool magic)
 {
     if (!player_ptr->blind && !magic) {
         msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
@@ -402,7 +402,7 @@ bool starlight(player_type *player_ptr, bool magic)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
+bool lite_area(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorbs your light."));
@@ -428,7 +428,7 @@ bool lite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool unlite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
+bool unlite_area(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
 {
     if (!player_ptr->blind) {
         msg_print(_("暗闇が辺りを覆った。", "Darkness surrounds you."));
@@ -449,7 +449,7 @@ bool unlite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_line(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
+bool lite_line(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
     return (project_hook(player_ptr, GF_LITE_WEAK, dir, dam, flg));

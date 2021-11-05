@@ -21,7 +21,7 @@
 /*!
  * @brief ペット爆破処理 /
  */
-void discharge_minion(player_type *player_ptr)
+void discharge_minion(PlayerType *player_ptr)
 {
     bool okay = true;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {

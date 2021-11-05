@@ -59,7 +59,7 @@ int adjust_stat(int value, int amount)
  * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
  * For efficiency, we include a chunk of "calc_bonuses()".\n
  */
-void get_stats(player_type *player_ptr)
+void get_stats(PlayerType *player_ptr)
 {
     while (true) {
         int sum = 0;
@@ -88,7 +88,7 @@ void get_stats(player_type *player_ptr)
 /*!
  * @brief 経験値修正の合計値を計算
  */
-uint16_t get_expfact(player_type *player_ptr)
+uint16_t get_expfact(PlayerType *player_ptr)
 {
     uint16_t expfact = rp_ptr->r_exp;
 
@@ -104,7 +104,7 @@ uint16_t get_expfact(player_type *player_ptr)
 /*!
  * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
  */
-void get_extra(player_type *player_ptr, bool roll_hitdie)
+void get_extra(PlayerType *player_ptr, bool roll_hitdie)
 {
     player_ptr->expfact = get_expfact(player_ptr);
 
@@ -150,7 +150,7 @@ void get_extra(player_type *player_ptr, bool roll_hitdie)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 新生の薬やステータスシャッフルでもこの関数が呼ばれる
  */
-void get_max_stats(player_type *player_ptr)
+void get_max_stats(PlayerType *player_ptr)
 {
     int dice[6];
     while (true) {

@@ -49,7 +49,7 @@
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */
-void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         lev += randint0(player_ptr->lev / 2 + 10);

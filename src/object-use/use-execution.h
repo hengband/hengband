@@ -2,16 +2,16 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class PlayerType;
 class ObjectUseEntity {
 public:
-    ObjectUseEntity(player_type *player_ptr, INVENTORY_IDX item);
+    ObjectUseEntity(PlayerType *player_ptr, INVENTORY_IDX item);
     virtual ~ObjectUseEntity() = default;
 
     void execute();
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     INVENTORY_IDX item;
 
     bool check_can_use();

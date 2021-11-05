@@ -19,7 +19,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功したならばTRUEを返す
  */
-bool place_quest_monsters(player_type *player_ptr)
+bool place_quest_monsters(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < max_q_idx; i++) {

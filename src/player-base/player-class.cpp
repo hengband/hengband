@@ -29,7 +29,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerClass::PlayerClass(player_type *player_ptr)
+PlayerClass::PlayerClass(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -329,7 +329,7 @@ void PlayerClass::set_monk_stance(MonkStance stance) const
 
 /**
  * @brief プレイヤーの職業にで使用する職業固有データ領域を初期化する
- * @details 事前条件: player_type の職業や領域が決定済みであること
+ * @details 事前条件: PlayerType の職業や領域が決定済みであること
  */
 void PlayerClass::init_specific_data()
 {

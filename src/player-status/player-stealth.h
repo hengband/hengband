@@ -3,7 +3,7 @@
 
 class PlayerStealth : public PlayerStatusBase {
 public:
-    PlayerStealth(player_type *player_ptr);
+    PlayerStealth(PlayerType *player_ptr);
 
     BIT_FLAGS get_bad_flags() override;
 

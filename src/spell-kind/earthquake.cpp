@@ -49,7 +49,7 @@
  * @param m_idx 地震を起こしたモンスターID(0ならばプレイヤー)
  * @return 効力があった場合TRUEを返す
  */
-bool earthquake(player_type *player_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
+bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {

@@ -57,7 +57,7 @@
  * @param fear ダメージによってモンスターが恐慌状態に陥ったならばtrue
  * @param note モンスターが倒された際の特別なメッセージ述語
  */
-MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear)
+MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , dam(dam)

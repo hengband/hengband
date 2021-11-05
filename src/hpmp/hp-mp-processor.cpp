@@ -61,8 +61,8 @@
  * @details
  * ダメージを受けた場合、自然回復できない。
  */
-static bool deal_damege_by_feat(player_type *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
-    std::function<PERCENTAGE(player_type *)> damage_rate, std::function<void(player_type *, int)> additional_effect)
+static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
+    std::function<PERCENTAGE(PlayerType *)> damage_rate, std::function<void(PlayerType *, int)> additional_effect)
 {
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int damage = 0;
@@ -106,7 +106,7 @@ static bool deal_damege_by_feat(player_type *player_ptr, grid_type *g_ptr, concp
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
  *  / Handle timed damage and regeneration every 10 game turns
  */
-void process_player_hp_mp(player_type *player_ptr)
+void process_player_hp_mp(PlayerType *player_ptr)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -190,7 +190,7 @@ void process_player_hp_mp(player_type *player_ptr)
 
     if (f_ptr->flags.has(FF::POISON_PUDDLE) && !is_invuln(player_ptr)) {
         if (deal_damege_by_feat(player_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"), calc_acid_damage_rate,
-                [](player_type *player_ptr, int damage) {
+                [](PlayerType *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr))
                         (void)BadStatusSetter(player_ptr).mod_poison(static_cast<TIME_EFFECT>(damage));
                 })) {
@@ -340,7 +340,7 @@ void process_player_hp_mp(player_type *player_ptr)
 /*
  * Increase players hit points, notice effects
  */
-bool hp_player(player_type *player_ptr, int num)
+bool hp_player(PlayerType *player_ptr, int num)
 {
     int vir;
     vir = virtue_number(player_ptr, V_VITALITY);

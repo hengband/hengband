@@ -79,7 +79,7 @@ static bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *
  * any monster which might be in the destination grid.  Previously,\n
  * moving into walls was "free" and did NOT hit invisible monsters.\n
  */
-void exe_movement(player_type *player_ptr, DIRECTION dir, bool do_pickup, bool break_trap)
+void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool break_trap)
 {
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];

@@ -19,7 +19,7 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_acid(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_acid(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -60,7 +60,7 @@ bool set_oppose_acid(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_elec(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_elec(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -102,7 +102,7 @@ bool set_oppose_elec(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_fire(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -145,7 +145,7 @@ bool set_oppose_fire(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_cold(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_cold(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -186,7 +186,7 @@ bool set_oppose_cold(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_pois(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_oppose_pois(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -222,29 +222,29 @@ bool set_oppose_pois(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
     return true;
 }
 
-bool is_oppose_acid(player_type *player_ptr)
+bool is_oppose_acid(PlayerType *player_ptr)
 {
     return player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU);
 }
 
-bool is_oppose_elec(player_type *player_ptr)
+bool is_oppose_elec(PlayerType *player_ptr)
 {
     return player_ptr->oppose_elec || music_singing(player_ptr, MUSIC_RESIST) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU);
 }
 
-bool is_oppose_fire(player_type *player_ptr)
+bool is_oppose_fire(PlayerType *player_ptr)
 {
     return player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)
         || (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU) || (player_ptr->mimic_form == MIMIC_DEMON)
             || (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG) && player_ptr->lev > 44));
 }
 
-bool is_oppose_cold(player_type *player_ptr)
+bool is_oppose_cold(PlayerType *player_ptr)
 {
     return player_ptr->oppose_cold || music_singing(player_ptr, MUSIC_RESIST) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU);
 }
 
-bool is_oppose_pois(player_type *player_ptr)
+bool is_oppose_pois(PlayerType *player_ptr)
 {
     return player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST)
         || (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU) || (player_ptr->pclass == PlayerClassType::NINJA && player_ptr->lev > 44));

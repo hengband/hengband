@@ -34,7 +34,7 @@
  * @param rad 効力の半径
  * @return ターゲットを指定し、実行したならばTRUEを返す。
  */
-bool cast_wrath_of_the_god(player_type *player_ptr, HIT_POINT dam, POSITION rad)
+bool cast_wrath_of_the_god(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -108,7 +108,7 @@ bool cast_wrath_of_the_god(player_type *player_ptr, HIT_POINT dam, POSITION rad)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_holy(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_sh_holy(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -151,7 +151,7 @@ bool set_tim_sh_holy(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す
  * @details 呪術領域でも使えるが、汎用性と行数の兼ね合いを考えて破邪側に入れた
  */
-bool set_tim_eyeeye(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_eyeeye(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;

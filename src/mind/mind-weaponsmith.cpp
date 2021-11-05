@@ -50,7 +50,7 @@ static concptr const kaji_tips[5] = {
 /*!
  * @brief 所持しているエッセンス一覧を表示する
  */
-static void display_essence(player_type *player_ptr)
+static void display_essence(PlayerType *player_ptr)
 {
     constexpr auto row_count = 21U;
     constexpr auto column_width = 22U;
@@ -108,7 +108,7 @@ static void display_essence(player_type *player_ptr)
  * @brief エッセンスの抽出処理
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void drain_essence(player_type *player_ptr)
+static void drain_essence(PlayerType *player_ptr)
 {
     auto q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     auto s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
@@ -294,7 +294,7 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *player_ptr, SmithCategory mode)
+static void add_essence(PlayerType *player_ptr, SmithCategory mode)
 {
     OBJECT_IDX item;
     bool flag;
@@ -525,7 +525,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
 /*!
  * @brief エッセンスを消去する
  */
-static void erase_essence(player_type *player_ptr)
+static void erase_essence(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;
@@ -556,7 +556,7 @@ static void erase_essence(player_type *player_ptr)
  * @brief 鍛冶コマンドのメインルーチン
  * @param only_browse TRUEならばエッセンス一覧の表示のみを行う
  */
-void do_cmd_kaji(player_type *player_ptr, bool only_browse)
+void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
 {
     COMMAND_CODE mode = 0;
     char choice;

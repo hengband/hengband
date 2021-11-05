@@ -34,7 +34,7 @@
  * Note that the player ghosts are ignored.
  * </pre>
  */
-void do_cmd_query_symbol(player_type *player_ptr)
+void do_cmd_query_symbol(PlayerType *player_ptr)
 {
     char sym, query;
     char buf[256];

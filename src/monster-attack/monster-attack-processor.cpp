@@ -33,7 +33,7 @@
  * @details
  * 反攻撃の洞窟など、直接攻撃ができない場所では処理をスキップする
  */
-void exe_monster_attack_to_player(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
+void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -70,7 +70,7 @@ void exe_monster_attack_to_player(player_type *player_ptr, turn_flags *turn_flag
  * @param m_idx モンスターID
  * @param g_ptr グリッドへの参照ポインタ
  */
-static bool exe_monster_attack_to_monster(player_type *player_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
+static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -108,7 +108,7 @@ static bool exe_monster_attack_to_monster(player_type *player_ptr, MONSTER_IDX m
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return ターン消費が発生したらTRUE
  */
-bool process_monster_attack_to_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
+bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

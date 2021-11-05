@@ -26,7 +26,7 @@
  * Need to analyze size of the window.
  * Need more color coding.
  */
-static void display_spell_list(player_type *player_ptr)
+static void display_spell_list(PlayerType *player_ptr)
 {
     TERM_LEN y, x;
     int m[9];
@@ -173,7 +173,7 @@ static void display_spell_list(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * Hack -- display spells in sub-windows
  */
-void fix_spell(player_type *player_ptr)
+void fix_spell(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;

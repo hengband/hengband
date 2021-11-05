@@ -8,7 +8,7 @@
 /*!
  * @brief プレイヤーの身長体重を決める / Get character's height and weight
  */
-void get_height_weight(player_type *player_ptr)
+void get_height_weight(PlayerType *player_ptr)
 {
     int deviation;
     switch (player_ptr->psex) {
@@ -30,7 +30,7 @@ void get_height_weight(player_type *player_ptr)
  * @brief プレイヤーの年齢を決める。 / Computes character's age, height, and weight by henkma
  * @details 内部でget_height_weight()も呼び出している。
  */
-void get_ahw(player_type *player_ptr)
+void get_ahw(PlayerType *player_ptr)
 {
     player_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
     get_height_weight(player_ptr);
@@ -40,7 +40,7 @@ void get_ahw(player_type *player_ptr)
  * @brief プレイヤーの初期所持金を決める。 / Get the player's starting money
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void get_money(player_type *player_ptr)
+void get_money(PlayerType *player_ptr)
 {
     int gold = (player_ptr->sc * 6) + randint1(100) + 300;
     if (player_ptr->pclass == PlayerClassType::TOURIST)

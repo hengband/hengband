@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void store_sell(player_type *player_ptr);
+class PlayerType;
+void store_sell(PlayerType *player_ptr);

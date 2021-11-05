@@ -14,7 +14,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerStrength::PlayerStrength(player_type *player_ptr)
+PlayerStrength::PlayerStrength(PlayerType *player_ptr)
     : PlayerBasicStatistics(player_ptr)
 {
 }

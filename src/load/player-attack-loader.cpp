@@ -9,7 +9,7 @@
 #include "player/special-defense-types.h"
 #include "system/player-type-definition.h"
 
-void rd_special_attack(player_type *player_ptr)
+void rd_special_attack(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 9)) {
         set_zangband_special_attack(player_ptr);
@@ -20,7 +20,7 @@ void rd_special_attack(player_type *player_ptr)
     player_ptr->special_attack = rd_u32b();
 }
 
-void rd_special_action(player_type *player_ptr)
+void rd_special_action(PlayerType *player_ptr)
 {
     if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE)) {
         player_ptr->action = ACTION_MONK_STANCE;
@@ -32,7 +32,7 @@ void rd_special_action(player_type *player_ptr)
     }
 }
 
-void rd_special_defense(player_type *player_ptr)
+void rd_special_defense(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 12)) {
         set_zangband_special_defense(player_ptr);
@@ -43,7 +43,7 @@ void rd_special_defense(player_type *player_ptr)
     player_ptr->special_defense = rd_u32b();
 }
 
-void rd_action(player_type *player_ptr)
+void rd_action(PlayerType *player_ptr)
 {
     strip_bytes(1);
     player_ptr->action = rd_byte();

@@ -54,7 +54,7 @@ static int auto_dump_line_num;
  * @return エラーコード
  * @todo 関数名を変更する
  */
-static errr process_pref_file_aux(player_type *player_ptr, concptr name, int preftype)
+static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int preftype)
 {
     FILE *fp;
     fp = angband_fopen(name, "r");
@@ -153,7 +153,7 @@ static errr process_pref_file_aux(player_type *player_ptr, concptr name, int pre
  * allow conditional evaluation and filename inclusion.
  * </pre>
  */
-errr process_pref_file(player_type *player_ptr, concptr name, bool only_user_dir)
+errr process_pref_file(PlayerType *player_ptr, concptr name, bool only_user_dir)
 {
     char buf[1024];
     errr err1 = 0;
@@ -179,7 +179,7 @@ errr process_pref_file(player_type *player_ptr, concptr name, bool only_user_dir
  * @param name ファイル名
  * @details
  */
-errr process_autopick_file(player_type *player_ptr, concptr name)
+errr process_autopick_file(PlayerType *player_ptr, concptr name)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
@@ -195,7 +195,7 @@ errr process_autopick_file(player_type *player_ptr, concptr name)
  * @return エラーコード
  * @details
  */
-errr process_histpref_file(player_type *player_ptr, concptr name)
+errr process_histpref_file(PlayerType *player_ptr, concptr name)
 {
     bool old_character_xtra = w_ptr->character_xtra;
     char buf[1024];
@@ -278,7 +278,7 @@ void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
  */
-void load_all_pref_files(player_type *player_ptr)
+void load_all_pref_files(PlayerType *player_ptr)
 {
     char buf[1024];
     sprintf(buf, "user.prf");
@@ -307,7 +307,7 @@ void load_all_pref_files(player_type *player_ptr)
 /*!
  * @brief 生い立ちメッセージをファイルからロードする。
  */
-bool read_histpref(player_type *player_ptr)
+bool read_histpref(PlayerType *player_ptr)
 {
     char buf[80];
     errr err;

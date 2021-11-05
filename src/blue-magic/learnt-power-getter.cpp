@@ -250,7 +250,7 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
  * @param need_mana 青魔法を使うのに必要なMP
  * @return int 失敗率(%)を返す
  */
-int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
+int calculate_blue_magic_failure_probability(PlayerType *player_ptr, const monster_power &mp, int need_mana)
 {
     auto chance = mp.fail;
     if (player_ptr->lev > mp.level) {
@@ -312,7 +312,7 @@ static void close_blue_magic_name(char *buf, size_t buf_size, int index, int men
  * @param bluemage_data 青魔道士の固有データへの参照
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていないものは表示をスキップする)
  */
-static void describe_blue_magic_name(player_type *player_ptr, int menu_line, const bluemage_data_type &bluemage_data, const std::vector<RF_ABILITY> &blue_magics)
+static void describe_blue_magic_name(PlayerType *player_ptr, int menu_line, const bluemage_data_type &bluemage_data, const std::vector<RF_ABILITY> &blue_magics)
 {
     constexpr TERM_LEN y_base = 1;
     constexpr TERM_LEN x_base = 18;
@@ -360,7 +360,7 @@ static bool confirm_cast_blue_magic(RF_ABILITY spell)
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていない物は候補に出ず選択できない)
  * @return 選択した青魔法。選択をキャンセルした場合は std::nullopt
  */
-static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
+static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(PlayerType *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
 {
     char out_val[80];
     (void)strnfmt(out_val, sizeof(out_val), _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
@@ -417,7 +417,7 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *pla
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていない物は候補に出ず選択できない)
  * @return 選択した青魔法。選択をキャンセルした場合は std::nullopt
  */
-static std::optional<RF_ABILITY> select_learnt_spells_by_menu(player_type *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
+static std::optional<RF_ABILITY> select_learnt_spells_by_menu(PlayerType *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
 {
     char out_val[80];
     angband_strcpy(out_val, _("(ESC=中断) どの魔法を唱えますか？", "(ESC=exit) Use which magic? "), sizeof(out_val));
@@ -472,7 +472,7 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_menu(player_type *playe
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-std::optional<RF_ABILITY> get_learned_power(player_type *player_ptr)
+std::optional<RF_ABILITY> get_learned_power(PlayerType *player_ptr)
 {
     auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
     if (!bluemage_data) {

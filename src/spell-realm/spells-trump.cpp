@@ -26,7 +26,7 @@
  * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void cast_shuffle(player_type *player_ptr)
+void cast_shuffle(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     DIRECTION dir;
@@ -220,7 +220,7 @@ void cast_shuffle(player_type *player_ptr)
     gain_exp(player_ptr, ee);
 }
 
-void become_living_trump(player_type *player_ptr)
+void become_living_trump(PlayerType *player_ptr)
 {
     /* 1/7 Teleport control and 6/7 Random teleportation (uncontrolled) */
     MUTATION_IDX mutation = one_in_(7) ? 12 : 77;

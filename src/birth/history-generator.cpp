@@ -4,7 +4,7 @@
 #include "system/player-type-definition.h"
 #include "util/buffer-shaper.h"
 
-static int get_history_chart(player_type *player_ptr)
+static int get_history_chart(PlayerType *player_ptr)
 {
     switch (player_ptr->prace) {
     case PlayerRaceType::AMBERITE:
@@ -91,7 +91,7 @@ static int get_history_chart(player_type *player_ptr)
  * @param buf 生い立ち情報のバッファ
  * @details 画面表示と社会的地位の決定が密結合していて分離できない
  */
-static void decide_social_class(player_type *player_ptr, char *buf)
+static void decide_social_class(PlayerType *player_ptr, char *buf)
 {
     int social_class = randint1(4);
     int chart = get_history_chart(player_ptr);
@@ -118,7 +118,7 @@ static void decide_social_class(player_type *player_ptr, char *buf)
 /*!
  * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
  */
-void get_history(player_type *player_ptr)
+void get_history(PlayerType *player_ptr)
 {
     for (int i = 0; i < 4; i++)
         player_ptr->history[i][0] = '\0';

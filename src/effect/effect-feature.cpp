@@ -31,7 +31,7 @@
  * Line 2 -- forbid monsters
  * Line 3 -- forbid the player
  */
-static bool cave_naked_bold(player_type *player_ptr, POSITION y, POSITION x)
+static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     return cave_clean_bold(floor_ptr, y, x) && (floor_ptr->grid_array[y][x].m_idx == 0) && !player_bold(player_ptr, y, x);
@@ -63,7 +63,7 @@ static bool cave_naked_bold(player_type *player_ptr, POSITION y, POSITION x)
  * Perhaps we should affect doors?
  * </pre>
  */
-bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];

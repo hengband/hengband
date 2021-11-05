@@ -192,7 +192,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
     spoil_out(buf);
     spoil_out("------------------------------------------\n\n");
 
-    player_type dummy_p;
+    PlayerType dummy_p;
     dummy_p.lev = 1;
 
     for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {

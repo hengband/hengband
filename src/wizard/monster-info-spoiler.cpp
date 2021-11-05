@@ -74,7 +74,7 @@ static concptr attr_to_text(monster_race *r_ptr)
 
 spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const monster_race *)> filter_monster)
 {
-    player_type dummy;
+    PlayerType dummy;
     uint16_t why = 2;
     char buf[1024];
     char nam[MAX_MONSTER_NAME + 10]; // ユニークには[U] が付くので少し伸ばす
@@ -182,7 +182,7 @@ static void roff_func(TERM_COLOR attr, concptr str)
  */
 spoiler_output_status spoil_mon_info(concptr fname)
 {
-    player_type dummy;
+    PlayerType dummy;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");

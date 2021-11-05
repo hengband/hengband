@@ -139,7 +139,7 @@ Patron::Patron(const char *name, std::vector<patron_reward> reward_table, player
 {
 }
 
-void Patron::gain_level_reward(player_type *player_ptr_, int chosen_reward)
+void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 {
     this->player_ptr = player_ptr_;
     char wrath_reason[32] = "";
@@ -561,7 +561,7 @@ void Patron::gain_level_reward(player_type *player_ptr_, int chosen_reward)
     }
 }
 
-void Patron::admire(player_type *player_ptr_)
+void Patron::admire(PlayerType *player_ptr_)
 {
     this->player_ptr = player_ptr_;
     if ((this->player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || this->player_ptr->muta.has(MUTA::CHAOS_GIFT)) {

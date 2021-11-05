@@ -7,7 +7,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-void add_cheat_remove_flags_others(player_type *player_ptr, msr_type *msr_ptr)
+void add_cheat_remove_flags_others(PlayerType *player_ptr, msr_type *msr_ptr)
 {
     if (has_resist_neth(player_ptr))
         msr_ptr->smart.set(SM::RES_NETH);
@@ -52,7 +52,7 @@ void add_cheat_remove_flags_others(player_type *player_ptr, msr_type *msr_ptr)
         msr_ptr->smart.set(SM::IMM_MANA);
 }
 
-static void check_nether_resistance(player_type *player_ptr, msr_type *msr_ptr)
+static void check_nether_resistance(PlayerType *player_ptr, msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has_not(SM::RES_NETH))
         return;
@@ -86,7 +86,7 @@ static void check_lite_resistance(msr_type *msr_ptr)
         msr_ptr->ability_flags.reset(RF_ABILITY::BA_LITE);
 }
 
-static void check_dark_resistance(player_type *player_ptr, msr_type *msr_ptr)
+static void check_dark_resistance(PlayerType *player_ptr, msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has_not(SM::RES_DARK))
         return;
@@ -173,7 +173,7 @@ static void check_reflection(msr_type *msr_ptr)
         msr_ptr->ability_flags.reset(RF_ABILITY::MISSILE);
 }
 
-void check_high_resistances(player_type *player_ptr, msr_type *msr_ptr)
+void check_high_resistances(PlayerType *player_ptr, msr_type *msr_ptr)
 {
     check_nether_resistance(player_ptr, msr_ptr);
     check_lite_resistance(msr_ptr);

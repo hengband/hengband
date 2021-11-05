@@ -3,12 +3,12 @@
 #include <memory>
 
 enum class MonsterLoaderVersionType;
-struct player_type;
+class PlayerType;
 struct monster_type;
 class MonsterLoaderBase;
 class MonsterLoaderFactory {
 public:
-    static std::shared_ptr<MonsterLoaderBase> create_loader(player_type *player_ptr);
+    static std::shared_ptr<MonsterLoaderBase> create_loader(PlayerType *player_ptr);
 
 private:
     MonsterLoaderFactory() = delete;

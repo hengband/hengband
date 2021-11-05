@@ -82,7 +82,7 @@ static bool item_tester_hook_weapon_except_bow(const object_type *o_ptr)
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP)
  * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP 時はnullptr文字列を返す。
  */
-concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcessType mode)
+concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessType mode)
 {
     auto name = mode == SpellProcessType::NAME;
     auto description = mode == SpellProcessType::DESCRIPTION;

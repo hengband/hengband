@@ -58,7 +58,7 @@
  * @param o_ptr 食べるオブジェクト
  * @return 鑑定されるならTRUE、されないならFALSE
  */
-bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
+bool exe_eat_food_type_object(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->tval != ItemKindType::FOOD)
         return false;
@@ -150,7 +150,7 @@ bool exe_eat_food_type_object(player_type *player_ptr, object_type *o_ptr)
  * @param item オブジェクトのインベントリ番号
  * @return 食べようとしたらTRUE、しなかったらFALSE
  */
-bool exe_eat_charge_of_magic_device(player_type *player_ptr, object_type *o_ptr, INVENTORY_IDX item)
+bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, object_type *o_ptr, INVENTORY_IDX item)
 {
     if (o_ptr->tval != ItemKindType::STAFF && o_ptr->tval != ItemKindType::WAND)
         return false;
@@ -218,7 +218,7 @@ bool exe_eat_charge_of_magic_device(player_type *player_ptr, object_type *o_ptr,
  * @brief 食料を食べるコマンドのサブルーチン
  * @param item 食べるオブジェクトの所持品ID
  */
-void exe_eat_food(player_type *player_ptr, INVENTORY_IDX item)
+void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     if (music_singing_any(player_ptr))
         stop_singing(player_ptr);
@@ -332,7 +332,7 @@ void exe_eat_food(player_type *player_ptr, INVENTORY_IDX item)
  * @brief 食料を食べるコマンドのメインルーチン /
  * Eat some food (from the pack or floor)
  */
-void do_cmd_eat_food(player_type *player_ptr)
+void do_cmd_eat_food(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;

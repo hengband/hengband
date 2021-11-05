@@ -16,7 +16,7 @@
  * @param y 配置を試みたいマスのY座標
  * @param x 配置を試みたいマスのX座標
  */
-void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
+void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     bool up_stairs = true;
     bool down_stairs = true;

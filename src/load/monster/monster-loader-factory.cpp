@@ -16,7 +16,7 @@
  * @details MonsterLoaderBaseは純粋仮想関数を含むので参照を返す必要がある.
  * (値を返す設計はコンパイルエラー)
  */
-std::shared_ptr<MonsterLoaderBase> MonsterLoaderFactory::create_loader(player_type *player_ptr)
+std::shared_ptr<MonsterLoaderBase> MonsterLoaderFactory::create_loader(PlayerType *player_ptr)
 {
     auto version = get_version();
     switch (version) {

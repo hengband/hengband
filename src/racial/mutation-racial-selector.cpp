@@ -6,7 +6,7 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
-void select_mutation_racial(player_type *player_ptr, rc_type *rc_ptr)
+void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
     if (player_ptr->muta.has(MUTA::SPIT_ACID)) {

@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-bool eat_rock(player_type *player_ptr);
+class PlayerType;
+bool eat_rock(PlayerType *player_ptr);

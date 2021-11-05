@@ -32,7 +32,7 @@
  * accomplished by strong players using heavy weapons.
  * </pre>
  */
-void do_cmd_tunnel(player_type *player_ptr)
+void do_cmd_tunnel(PlayerType *player_ptr)
 {
     bool more = false;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });

@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void do_cmd_racial_power(player_type *player_ptr);
+class PlayerType;
+void do_cmd_racial_power(PlayerType *player_ptr);

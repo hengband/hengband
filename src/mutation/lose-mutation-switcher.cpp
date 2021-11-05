@@ -3,7 +3,7 @@
 #include "mutation/mutation-util.h"
 #include "system/player-type-definition.h"
 
-void switch_lose_mutation(player_type *player_ptr, glm_type *glm_ptr)
+void switch_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
 {
     switch ((glm_ptr->choose_mut != 0) ? glm_ptr->choose_mut : randint1(193)) {
     case 1:

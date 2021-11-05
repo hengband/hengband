@@ -19,7 +19,7 @@
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_reload_autopick(player_type *player_ptr)
+void do_cmd_reload_autopick(PlayerType *player_ptr)
 {
     if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? ")))
         return;
@@ -30,7 +30,7 @@ void do_cmd_reload_autopick(player_type *player_ptr)
 /*
  * Check the status of "autopick"
  */
-void do_cmd_knowledge_autopick(player_type *player_ptr)
+void do_cmd_knowledge_autopick(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

@@ -44,7 +44,7 @@
  * @return アイテムを拾えるならばTRUEを返す。
  * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
-bool can_get_item(player_type *player_ptr, const ItemTester& item_tester)
+bool can_get_item(PlayerType *player_ptr, const ItemTester& item_tester)
 {
     for (int j = 0; j < INVEN_TOTAL; j++)
         if (item_tester.okay(&player_ptr->inventory_list[j]))
@@ -59,7 +59,7 @@ bool can_get_item(player_type *player_ptr, const ItemTester& item_tester)
  * @brief 床上のアイテムを拾う選択用サブルーチン
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。
  */
-static bool py_pickup_floor_aux(player_type *player_ptr)
+static bool py_pickup_floor_aux(PlayerType *player_ptr)
 {
     OBJECT_IDX this_o_idx;
     OBJECT_IDX item;
@@ -80,7 +80,7 @@ static bool py_pickup_floor_aux(player_type *player_ptr)
  * @details
  * This is called by py_pickup() when easy_floor is TRUE.
  */
-void py_pickup_floor(player_type *player_ptr, bool pickup)
+void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 {
     GAME_TEXT o_name[MAX_NLEN];
     object_type *o_ptr;
@@ -172,7 +172,7 @@ void py_pickup_floor(player_type *player_ptr, bool pickup)
  * Add the given dungeon object to the character's inventory.\n
  * Delete the object afterwards.\n
  */
-void describe_pickup_item(player_type *player_ptr, OBJECT_IDX o_idx)
+void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
 #ifdef JP
     GAME_TEXT o_name[MAX_NLEN];
@@ -235,7 +235,7 @@ void describe_pickup_item(player_type *player_ptr, OBJECT_IDX o_idx)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup 自動拾い処理を行うならばTRUEとする
  */
-void carry(player_type *player_ptr, bool pickup)
+void carry(PlayerType *player_ptr, bool pickup)
 {
     verify_panel(player_ptr);
     player_ptr->update |= PU_MONSTERS;

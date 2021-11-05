@@ -198,7 +198,7 @@ static bool spell_world(RF_ABILITY spell)
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(player_type *player_ptr, RF_ABILITY spell)
+static bool spell_special(PlayerType *player_ptr, RF_ABILITY spell)
 {
     if (player_ptr->phase_out)
         return false;
@@ -260,7 +260,7 @@ static bool spell_dispel(RF_ABILITY spell)
  * This function may well be an efficiency bottleneck.\n
  * @todo 長過ぎる。切り分けが必要
  */
-RF_ABILITY choose_attack_spell(player_type *player_ptr, msa_type *msa_ptr)
+RF_ABILITY choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     std::vector<RF_ABILITY> escape;
     std::vector<RF_ABILITY> attack;

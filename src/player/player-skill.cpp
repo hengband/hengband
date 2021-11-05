@@ -40,7 +40,7 @@ namespace {
 
 using GainAmountList = std::array<int, enum2i(PlayerSkillRank::MASTER)>;
 
-void gain_attack_skill_exp(player_type *player_ptr, short &exp, const GainAmountList &gain_amount_list)
+void gain_attack_skill_exp(PlayerType *player_ptr, short &exp, const GainAmountList &gain_amount_list)
 {
     auto gain_amount = 0;
     auto calc_gain_amount = [&gain_amount_list, exp](PlayerSkillRank rank, int next_rank_exp) {
@@ -61,7 +61,7 @@ void gain_attack_skill_exp(player_type *player_ptr, short &exp, const GainAmount
     set_bits(player_ptr->update, PU_BONUS);
 }
 
-void gain_spell_skill_exp_aux(player_type *player_ptr, short &exp, const GainAmountList &gain_amount_list, int spell_level)
+void gain_spell_skill_exp_aux(PlayerType *player_ptr, short &exp, const GainAmountList &gain_amount_list, int spell_level)
 {
     const auto dlev = player_ptr->current_floor_ptr->dun_level;
     const auto plev = player_ptr->lev;
@@ -93,7 +93,7 @@ void gain_spell_skill_exp_aux(player_type *player_ptr, short &exp, const GainAmo
 
 }
 
-PlayerSkill::PlayerSkill(player_type *player_ptr)
+PlayerSkill::PlayerSkill(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

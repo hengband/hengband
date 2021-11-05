@@ -8,7 +8,7 @@
 #include "player-status/player-energy.h"
 #include "system/player-type-definition.h"
 
-PlayerEnergy::PlayerEnergy(player_type *player_ptr)
+PlayerEnergy::PlayerEnergy(PlayerType *player_ptr)
 {
     this->player_ptr = player_ptr;
 }
@@ -46,7 +46,7 @@ void PlayerEnergy::div_player_turn_energy(ENERGY need_cost)
 
 /*
  * @brief ターン消費をなくす (主にコマンド実行に失敗した場合)
- * @param player_type プレイヤーへの参照ポインタ
+ * @param PlayerType プレイヤーへの参照ポインタ
  */
 void PlayerEnergy::reset_player_turn()
 {

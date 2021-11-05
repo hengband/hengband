@@ -74,7 +74,7 @@ typedef struct cm_type {
 /*!
  * @brief 職業技能処理構造体の初期化
  */
-static cm_type *initialize_cm_type(player_type *player_ptr, cm_type *cm_ptr)
+static cm_type *initialize_cm_type(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     cm_ptr->n = 0;
     cm_ptr->b = 0;
@@ -88,7 +88,7 @@ static cm_type *initialize_cm_type(player_type *player_ptr, cm_type *cm_ptr)
 /*!
  * @brief 職業別の行使可能な技能種別を構造体に付加する
  */
-static void switch_mind_kind(player_type *player_ptr, cm_type *cm_ptr)
+static void switch_mind_kind(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     switch (player_ptr->pclass) {
     case PlayerClassType::MINDCRAFTER:
@@ -118,7 +118,7 @@ static void switch_mind_kind(player_type *player_ptr, cm_type *cm_ptr)
     }
 }
 
-static void decide_mind_ki_chance(player_type *player_ptr, cm_type *cm_ptr)
+static void decide_mind_ki_chance(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if (cm_ptr->use_mind != mind_kind_type::KI)
         return;
@@ -141,7 +141,7 @@ static void decide_mind_ki_chance(player_type *player_ptr, cm_type *cm_ptr)
             cm_ptr->mana_cost += (j + 1) * 3 / 2;
 }
 
-static bool check_mind_hp_mp_sufficiency(player_type *player_ptr, cm_type *cm_ptr)
+static bool check_mind_hp_mp_sufficiency(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == mind_kind_type::BERSERKER) || (cm_ptr->use_mind == mind_kind_type::NINJUTSU)) {
         if (cm_ptr->mana_cost > player_ptr->chp) {
@@ -162,7 +162,7 @@ static bool check_mind_hp_mp_sufficiency(player_type *player_ptr, cm_type *cm_pt
     return get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
 }
 
-static void decide_mind_chance(player_type *player_ptr, cm_type *cm_ptr)
+static void decide_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if (cm_ptr->chance == 0)
         return;
@@ -193,7 +193,7 @@ static void decide_mind_chance(player_type *player_ptr, cm_type *cm_ptr)
         cm_ptr->chance += 5;
 }
 
-static void check_mind_mindcrafter(player_type *player_ptr, cm_type *cm_ptr)
+static void check_mind_mindcrafter(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if (cm_ptr->use_mind != mind_kind_type::MINDCRAFTER)
         return;
@@ -228,7 +228,7 @@ static void check_mind_mindcrafter(player_type *player_ptr, cm_type *cm_ptr)
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->plev * std::max(1, cm_ptr->plev / 10));
 }
 
-static void check_mind_mirror_master(player_type *player_ptr, cm_type *cm_ptr)
+static void check_mind_mirror_master(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if (cm_ptr->use_mind != mind_kind_type::MIRROR_MASTER)
         return;
@@ -254,7 +254,7 @@ static void check_mind_mirror_master(player_type *player_ptr, cm_type *cm_ptr)
     player_ptr->csp = std::max(0, player_ptr->csp - cm_ptr->plev * std::max(1, cm_ptr->plev / 10));
 }
 
-static void check_mind_class(player_type *player_ptr, cm_type *cm_ptr)
+static void check_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == mind_kind_type::BERSERKER) || (cm_ptr->use_mind == mind_kind_type::NINJUTSU))
         return;
@@ -272,7 +272,7 @@ static void check_mind_class(player_type *player_ptr, cm_type *cm_ptr)
     check_mind_mirror_master(player_ptr, cm_ptr);
 }
 
-static bool switch_mind_class(player_type *player_ptr, cm_type *cm_ptr)
+static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     switch (cm_ptr->use_mind) {
     case mind_kind_type::MINDCRAFTER:
@@ -299,7 +299,7 @@ static bool switch_mind_class(player_type *player_ptr, cm_type *cm_ptr)
     }
 }
 
-static void mind_turn_passing(player_type *player_ptr, cm_type *cm_ptr)
+static void mind_turn_passing(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     PlayerEnergy energy(player_ptr);
     if (cm_ptr->on_mirror && (player_ptr->pclass == PlayerClassType::MIRROR_MASTER)) {
@@ -312,7 +312,7 @@ static void mind_turn_passing(player_type *player_ptr, cm_type *cm_ptr)
     energy.set_player_turn_energy(100);
 }
 
-static bool judge_mind_chance(player_type *player_ptr, cm_type *cm_ptr)
+static bool judge_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if (randint0(100) >= cm_ptr->chance) {
         sound(SOUND_ZAP);
@@ -328,7 +328,7 @@ static bool judge_mind_chance(player_type *player_ptr, cm_type *cm_ptr)
     return true;
 }
 
-static void mind_reflection(player_type *player_ptr, cm_type *cm_ptr)
+static void mind_reflection(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     int oops = cm_ptr->mana_cost - cm_ptr->old_csp;
     if ((player_ptr->csp - cm_ptr->mana_cost) < 0)
@@ -345,7 +345,7 @@ static void mind_reflection(player_type *player_ptr, cm_type *cm_ptr)
     (void)dec_stat(player_ptr, A_WIS, 15 + randint1(10), perm);
 }
 
-static void process_hard_concentration(player_type *player_ptr, cm_type *cm_ptr)
+static void process_hard_concentration(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == mind_kind_type::BERSERKER) || (cm_ptr->use_mind == mind_kind_type::NINJUTSU)) {
         take_hit(player_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"));
@@ -371,7 +371,7 @@ static void process_hard_concentration(player_type *player_ptr, cm_type *cm_ptr)
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  */
-void do_cmd_mind(player_type *player_ptr)
+void do_cmd_mind(PlayerType *player_ptr)
 {
     cm_type tmp_cm;
     cm_type *cm_ptr = initialize_cm_type(player_ptr, &tmp_cm);
@@ -400,7 +400,7 @@ void do_cmd_mind(player_type *player_ptr)
     player_ptr->window_flags |= PW_SPELL;
 }
 
-static mind_kind_type decide_use_mind_browse(player_type *player_ptr)
+static mind_kind_type decide_use_mind_browse(PlayerType *player_ptr)
 {
     switch (player_ptr->pclass) {
     case PlayerClassType::MINDCRAFTER:
@@ -421,7 +421,7 @@ static mind_kind_type decide_use_mind_browse(player_type *player_ptr)
 /*!
  * @brief 現在プレイヤーが使用可能な特殊技能の一覧表示 /
  */
-void do_cmd_mind_browse(player_type *player_ptr)
+void do_cmd_mind_browse(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
     char temp[62 * 5];

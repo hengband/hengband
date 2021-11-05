@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 struct object_type;
-struct player_type;
+class PlayerType;
 class ISmithInfo;
 struct essence_drain_type;
 class ItemTester;
@@ -28,7 +28,7 @@ public:
     //! エッセンスとその抽出量を表すタプルのリスト
     using DrainEssenceResult = std::vector<std::tuple<SmithEssence, int>>;
 
-    Smith(player_type *player_ptr);
+    Smith(PlayerType *player_ptr);
 
     static const std::vector<SmithEssence> &get_essence_list();
     static concptr get_essence_name(SmithEssence essence);
@@ -58,6 +58,6 @@ private:
     static const std::vector<essence_drain_type> essence_drain_info_table;
     static const std::vector<std::shared_ptr<ISmithInfo>> smith_info_table;
 
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     std::shared_ptr<smith_data_type> smith_data;
 };

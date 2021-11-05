@@ -47,7 +47,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
  */
-errr init_misc(player_type *player_ptr)
+errr init_misc(PlayerType *player_ptr)
 {
     return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
 }

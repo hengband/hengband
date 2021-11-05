@@ -27,7 +27,7 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 
-void do_poly_wounds(player_type *player_ptr)
+void do_poly_wounds(PlayerType *player_ptr)
 {
     int16_t hit_p = (player_ptr->mhp - player_ptr->chp);
     int16_t change = damroll(player_ptr->lev, 5);
@@ -52,7 +52,7 @@ void do_poly_wounds(player_type *player_ptr)
 /*
  * Change player race
  */
-void change_race(player_type *player_ptr, PlayerRaceType new_race, concptr effect_msg)
+void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect_msg)
 {
     concptr title = race_info[enum2i(new_race)].title;
     PlayerRaceType old_race = player_ptr->prace;
@@ -100,7 +100,7 @@ void change_race(player_type *player_ptr, PlayerRaceType new_race, concptr effec
     lite_spot(player_ptr, player_ptr->y, player_ptr->x);
 }
 
-void do_poly_self(player_type *player_ptr)
+void do_poly_self(PlayerType *player_ptr)
 {
     int power = player_ptr->lev;
 

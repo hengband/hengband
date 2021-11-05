@@ -268,7 +268,7 @@ void prepare_chuukei_hooks(void)
 /*
  * Prepare z-term hooks to call send_*_to_chuukei_server()'s
  */
-void prepare_movie_hooks(player_type *player_ptr)
+void prepare_movie_hooks(PlayerType *player_ptr)
 {
     char buf[1024];
     char tmp[80];

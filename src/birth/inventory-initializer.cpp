@@ -35,7 +35,7 @@
 /*!
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。
  */
-void wield_all(player_type *player_ptr)
+void wield_all(PlayerType *player_ptr)
 {
     object_type object_type_body;
     for (INVENTORY_IDX item = INVEN_PACK - 1; item >= 0; item--) {
@@ -76,7 +76,7 @@ void wield_all(player_type *player_ptr)
  * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
  */
-void add_outfit(player_type *player_ptr, object_type *o_ptr)
+void add_outfit(PlayerType *player_ptr, object_type *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
@@ -85,7 +85,7 @@ void add_outfit(player_type *player_ptr, object_type *o_ptr)
     wield_all(player_ptr);
 }
 
-static void decide_initial_items(player_type *player_ptr, object_type *q_ptr)
+static void decide_initial_items(PlayerType *player_ptr, object_type *q_ptr)
 {
     switch (player_ptr->prace) {
     case PlayerRaceType::VAMPIRE:
@@ -139,7 +139,7 @@ static void decide_initial_items(player_type *player_ptr, object_type *q_ptr)
  * @brief 種族/職業/性格などに基づき初期所持アイテムを設定するメインセット関数。 / Init players with some belongings
  * @details Having an item makes the player "aware" of its purpose.
  */
-void player_outfit(player_type *player_ptr)
+void player_outfit(PlayerType *player_ptr)
 {
     object_type *q_ptr;
     object_type forge;

@@ -44,7 +44,7 @@
 /*!
  * @brief 探索コマンドのメインルーチン / Simple command to "search" for one turn
  */
-void do_cmd_search(player_type *player_ptr)
+void do_cmd_search(PlayerType *player_ptr)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
@@ -59,7 +59,7 @@ void do_cmd_search(player_type *player_ptr)
         search(player_ptr);
 }
 
-static bool exe_alter(player_type *player_ptr)
+static bool exe_alter(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_rep_dir(player_ptr, &dir, true))
@@ -101,7 +101,7 @@ static bool exe_alter(player_type *player_ptr)
  * @brief 特定のマスに影響を及ぼすための汎用的コマンド / Manipulate an adjacent grid in some way
  * @details
  */
-void do_cmd_alter(player_type *player_ptr)
+void do_cmd_alter(PlayerType *player_ptr)
 {
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
@@ -132,7 +132,7 @@ static bool decide_suicide(void)
     return i == '@';
 }
 
-static void accept_winner_message(player_type *player_ptr)
+static void accept_winner_message(PlayerType *player_ptr)
 {
     if (!w_ptr->total_winner || !last_words)
         return;
@@ -155,7 +155,7 @@ static void accept_winner_message(player_type *player_ptr)
  * commit suicide
  * @details
  */
-void do_cmd_suicide(player_type *player_ptr)
+void do_cmd_suicide(PlayerType *player_ptr)
 {
     flush();
     if (w_ptr->total_winner) {

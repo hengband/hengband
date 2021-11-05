@@ -12,7 +12,7 @@
  *
  * Currently, the "player" is displayed on the map.
  */
-void do_cmd_view_map(player_type *player_ptr)
+void do_cmd_view_map(PlayerType *player_ptr)
 {
     screen_save();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);

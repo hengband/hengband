@@ -16,7 +16,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 発動の方向ID
  */
-static void exe_ring_of_power(player_type *player_ptr, DIRECTION dir)
+static void exe_ring_of_power(PlayerType *player_ptr, DIRECTION dir)
 {
     switch (randint1(10)) {
     case 1:
@@ -53,7 +53,7 @@ static void exe_ring_of_power(player_type *player_ptr, DIRECTION dir)
     }
 }
 
-bool activate_ring_of_power(player_type *player_ptr, concptr name)
+bool activate_ring_of_power(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);

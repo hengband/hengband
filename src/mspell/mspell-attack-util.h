@@ -38,5 +38,5 @@ typedef struct msa_type {
     DEPTH rlev;
 } msa_type;
 
-struct player_type;
-msa_type *initialize_msa_type(player_type *player_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx);
+class PlayerType;
+msa_type *initialize_msa_type(PlayerType *player_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx);

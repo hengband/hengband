@@ -21,7 +21,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-QuestCompletionChecker::QuestCompletionChecker(player_type *player_ptr, monster_type *m_ptr)
+QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, monster_type *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
 {

@@ -9,7 +9,7 @@
 #include "util/enum-converter.h"
 #include "util/quarks.h"
 
-MonsterLoader10::MonsterLoader10(player_type *player_ptr)
+MonsterLoader10::MonsterLoader10(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

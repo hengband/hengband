@@ -50,7 +50,7 @@
  * @param mode 思い出の扱いに関するモード
  * @return 得られたモンスターIDの数 / The number of monsters in the group
  */
-static IDX collect_monsters(player_type *player_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
+static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
 {
     concptr group_char = monster_group_char[grp_cur];
     bool grp_unique = (monster_group_char[grp_cur] == (char *)-1L);
@@ -109,7 +109,7 @@ static IDX collect_monsters(player_type *player_ptr, IDX grp_cur, IDX mon_idx[],
  * Display current pets
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_knowledge_pets(player_type *player_ptr)
+void do_cmd_knowledge_pets(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -150,7 +150,7 @@ void do_cmd_knowledge_pets(player_type *player_ptr)
  * Total kill count
  * @note the player ghosts are ignored.
  */
-void do_cmd_knowledge_kill_count(player_type *player_ptr)
+void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -286,7 +286,7 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
  * @param direct_r_idx モンスターID
  * @todo 引数の詳細について加筆求む
  */
-void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
+void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -463,7 +463,7 @@ void do_cmd_knowledge_monsters(player_type *player_ptr, bool *need_redraw, bool 
  * List wanted monsters
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_knowledge_bounty(player_type *player_ptr)
+void do_cmd_knowledge_bounty(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

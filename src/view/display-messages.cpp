@@ -197,7 +197,7 @@ bool is_msg_window_flowed(void)
 /*
  * Hack -- flush
  */
-static void msg_flush(player_type *player_ptr, int x)
+static void msg_flush(PlayerType *player_ptr, int x)
 {
     byte a = TERM_L_BLUE;
     bool show_more = (num_more >= 0);

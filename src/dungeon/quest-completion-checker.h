@@ -6,17 +6,17 @@
 
 struct monster_type;
 struct object_type;
-struct player_type;
+class PlayerType;
 struct quest_type;
 class QuestCompletionChecker {
 public:
-    QuestCompletionChecker(player_type *player_ptr, monster_type *m_ptr);
+    QuestCompletionChecker(PlayerType *player_ptr, monster_type *m_ptr);
     virtual ~QuestCompletionChecker() = default;
 
     void complete();
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     monster_type *m_ptr;
     short quest_idx;
     quest_type *q_ptr = nullptr;

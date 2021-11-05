@@ -6,7 +6,7 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool demonic_breath(player_type *player_ptr)
+bool demonic_breath(PlayerType *player_ptr)
 {
     DIRECTION dir;
     int type = (one_in_(2) ? GF_NETHER : GF_FIRE);

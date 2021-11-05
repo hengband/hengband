@@ -26,7 +26,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  */
-void store_prt_gold(player_type *player_ptr)
+void store_prt_gold(PlayerType *player_ptr)
 {
     prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
     char out_val[64];
@@ -40,7 +40,7 @@ void store_prt_gold(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 表示行
  */
-void display_entry(player_type *player_ptr, int pos)
+void display_entry(PlayerType *player_ptr, int pos)
 {
     object_type *o_ptr;
     o_ptr = &st_ptr->stock[pos];
@@ -111,7 +111,7 @@ void display_entry(player_type *player_ptr, int pos)
  * @details
  * All prices are listed as "per individual object".  -BEN-
  */
-void display_store_inventory(player_type *player_ptr)
+void display_store_inventory(PlayerType *player_ptr)
 {
     int k;
     for (k = 0; k < store_bottom; k++) {
@@ -145,7 +145,7 @@ void display_store_inventory(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  */
-void display_store(player_type *player_ptr)
+void display_store(PlayerType *player_ptr)
 {
     term_clear();
     if (cur_store_num == StoreSaleType::HOME) {

@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-bool tgt_pt(player_type *player_ptr, POSITION *x, POSITION *y);
+class PlayerType;
+bool tgt_pt(PlayerType *player_ptr, POSITION *x, POSITION *y);

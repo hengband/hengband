@@ -146,7 +146,7 @@ static errr keymap_dump(concptr fname)
  * Could use some helpful instructions on this page.
  * </pre>
  */
-void do_cmd_macros(player_type *player_ptr)
+void do_cmd_macros(PlayerType *player_ptr)
 {
     char tmp[1024];
     char buf[1024];

@@ -26,7 +26,7 @@
  * @param power 基本効力
  * @return ターンを消費した場合TRUEを返す
  */
-bool eat_magic(player_type *player_ptr, int power)
+bool eat_magic(PlayerType *player_ptr, int power)
 {
     byte fail_type = 1;
     GAME_TEXT o_name[MAX_NLEN];

@@ -48,7 +48,7 @@
  * @param m_ptr 使用するモンスターの構造体参照ポインタ
  * @return ビームが到達可能ならばTRUEを返す
  */
-bool direct_beam(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
+bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
@@ -90,7 +90,7 @@ bool direct_beam(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
  * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
  * @return ブレスを直接当てられるならばTRUEを返す
  */
-bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
+bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
 {
     BIT_FLAGS flg;
     switch (typ) {
@@ -185,7 +185,7 @@ bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y
  * @param tx 目標X座標を返す参照ポインタ
  * @param flg 判定のフラグ配列
  */
-void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
+void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
     uint16_t path_g[128];
     int path_n = projection_path(player_ptr, path_g, get_max_range(player_ptr), sy, sx, *ty, *tx, flg);
@@ -210,7 +210,7 @@ void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITI
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。
  */
-bool dispel_check_monster(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+bool dispel_check_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
     monster_type *t_ptr = &player_ptr->current_floor_ptr->m_list[t_idx];
     if (monster_invulner_remaining(t_ptr))
@@ -231,7 +231,7 @@ bool dispel_check_monster(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
  * @param m_idx モンスターの構造体配列ID
  * @return 魔力消去をかけるべきならTRUEを返す。
  */
-bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
+bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     if (is_invuln(player_ptr))
         return true;

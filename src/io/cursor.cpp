@@ -35,7 +35,7 @@ void move_cursor_relative(int row, int col)
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  */
-void print_path(player_type *player_ptr, POSITION y, POSITION x)
+void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     uint16_t path_g[512];
     byte default_color = TERM_SLATE;
@@ -101,7 +101,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
+bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
 {
     TERM_LEN wid, hgt;
     get_screen_size(&wid, &hgt);

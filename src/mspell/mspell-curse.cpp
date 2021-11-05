@@ -28,7 +28,7 @@
  * @param MS_TYPE 呪文の番号
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-static MonsterSpellResult spell_RF5_CAUSE(player_type *player_ptr, int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx,
+static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx,
     concptr msg1, concptr msg2, concptr msg3, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid(dam);
@@ -72,7 +72,7 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *player_ptr, int GF_TYPE, 
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_CAUSE_1(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_CAUSE_1(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     concptr msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
     concptr msg2 = _("%^sがあなたを指さして呪った。", "%^s points at you and curses.");
@@ -94,7 +94,7 @@ MonsterSpellResult spell_RF5_CAUSE_1(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_CAUSE_2(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_CAUSE_2(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     concptr msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
     concptr msg2 = _("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly.");
@@ -116,7 +116,7 @@ MonsterSpellResult spell_RF5_CAUSE_2(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_CAUSE_3(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_CAUSE_3(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     concptr msg1 = _("%^sが何かを大声で叫んだ。", "%^s mumbles loudly.");
     concptr msg2 = _("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!");
@@ -138,7 +138,7 @@ MonsterSpellResult spell_RF5_CAUSE_3(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_CAUSE_4(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_CAUSE_4(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     concptr msg1 = _("%^sが「お前は既に死んでいる」と叫んだ。", "%^s screams the word 'DIE!'");
     concptr msg2 = _("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。", "%^s points at you, screaming the word DIE!");

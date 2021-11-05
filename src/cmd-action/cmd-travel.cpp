@@ -23,7 +23,7 @@
  * @param x 該当地点のX座標
  * @return コスト値
  */
-static int travel_flow_cost(player_type *player_ptr, POSITION y, POSITION x)
+static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int cost = 1;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -67,7 +67,7 @@ static int travel_flow_cost(player_type *player_ptr, POSITION y, POSITION x)
  * @param n 現在のコスト
  * @param wall プレイヤーが壁の中にいるならばTRUE
  */
-static void travel_flow_aux(player_type *player_ptr, POSITION y, POSITION x, int n, bool wall)
+static void travel_flow_aux(PlayerType *player_ptr, POSITION y, POSITION x, int n, bool wall)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -111,7 +111,7 @@ static void travel_flow_aux(player_type *player_ptr, POSITION y, POSITION x, int
  * @param ty 目標地点のY座標
  * @param tx 目標地点のX座標
  */
-static void travel_flow(player_type *player_ptr, POSITION ty, POSITION tx)
+static void travel_flow(PlayerType *player_ptr, POSITION ty, POSITION tx)
 {
     flow_head = flow_tail = 0;
     bool wall = false;
@@ -137,7 +137,7 @@ static void travel_flow(player_type *player_ptr, POSITION ty, POSITION tx)
 /*!
  * @brief トラベル処理のメインルーチン
  */
-void do_cmd_travel(player_type *player_ptr)
+void do_cmd_travel(PlayerType *player_ptr)
 {
     POSITION x, y;
     if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y)

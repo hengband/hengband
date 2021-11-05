@@ -25,7 +25,7 @@
  * @brief 10ゲームターンが進行するごとにプレイヤーの腹を減らす
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void starve_player(player_type *player_ptr)
+void starve_player(PlayerType *player_ptr)
 {
     if (player_ptr->phase_out)
         return;
@@ -95,7 +95,7 @@ void starve_player(player_type *player_ptr)
  * game turns, or 500/(100/5) = 25 player turns (if nothing else is
  * affecting the player speed).\n
  */
-bool set_food(player_type *player_ptr, TIME_EFFECT v)
+bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
 {
     int old_aux, new_aux;
 

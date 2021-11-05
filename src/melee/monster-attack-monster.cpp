@@ -38,7 +38,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-static void heal_monster_by_melee(player_type *player_ptr, mam_type *mam_ptr)
+static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     if (!monster_living(mam_ptr->m_idx) || (mam_ptr->damage <= 2))
         return;
@@ -58,7 +58,7 @@ static void heal_monster_by_melee(player_type *player_ptr, mam_type *mam_ptr)
         msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), mam_ptr->m_name);
 }
 
-static void process_blow_effect(player_type *player_ptr, mam_type *mam_ptr)
+static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     switch (mam_ptr->effect_type) {
@@ -75,7 +75,7 @@ static void process_blow_effect(player_type *player_ptr, mam_type *mam_ptr)
     }
 }
 
-static void aura_fire_by_melee(player_type *player_ptr, mam_type *mam_ptr)
+static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
@@ -97,7 +97,7 @@ static void aura_fire_by_melee(player_type *player_ptr, mam_type *mam_ptr)
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
-static void aura_cold_by_melee(player_type *player_ptr, mam_type *mam_ptr)
+static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
@@ -119,7 +119,7 @@ static void aura_cold_by_melee(player_type *player_ptr, mam_type *mam_ptr)
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
-static void aura_elec_by_melee(player_type *player_ptr, mam_type *mam_ptr)
+static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
@@ -141,7 +141,7 @@ static void aura_elec_by_melee(player_type *player_ptr, mam_type *mam_ptr)
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
-static bool check_same_monster(player_type *player_ptr, mam_type *mam_ptr)
+static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     if (mam_ptr->m_idx == mam_ptr->t_idx)
         return false;
@@ -156,7 +156,7 @@ static bool check_same_monster(player_type *player_ptr, mam_type *mam_ptr)
     return true;
 }
 
-static void redraw_health_bar(player_type *player_ptr, mam_type *mam_ptr)
+static void redraw_health_bar(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     if (!mam_ptr->t_ptr->ml)
         return;
@@ -191,7 +191,7 @@ static void describe_silly_melee(mam_type *mam_ptr)
 #endif
 }
 
-static void process_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
+static void process_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     if (mam_ptr->pt == GF_NONE)
         return;
@@ -209,7 +209,7 @@ static void process_monster_attack_effect(player_type *player_ptr, mam_type *mam
     aura_elec_by_melee(player_ptr, mam_ptr);
 }
 
-static void process_melee(player_type *player_ptr, mam_type *mam_ptr)
+static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     if (mam_ptr->effect != RaceBlowEffectType::NONE && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, monster_stunned_remaining(mam_ptr->m_ptr))) {
         describe_monster_missed_monster(player_ptr, mam_ptr);
@@ -228,7 +228,7 @@ static void process_melee(player_type *player_ptr, mam_type *mam_ptr)
     process_monster_attack_effect(player_ptr, mam_ptr);
 }
 
-static void thief_runaway_by_melee(player_type *player_ptr, mam_type *mam_ptr)
+static void thief_runaway_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     if (SpellHex(player_ptr).check_hex_barrier(mam_ptr->m_idx, HEX_ANTI_TELE)) {
         if (mam_ptr->see_m) {
@@ -247,7 +247,7 @@ static void thief_runaway_by_melee(player_type *player_ptr, mam_type *mam_ptr)
     }
 }
 
-static void explode_monster_by_melee(player_type *player_ptr, mam_type *mam_ptr)
+static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     if (!mam_ptr->explode)
         return;
@@ -264,7 +264,7 @@ static void explode_monster_by_melee(player_type *player_ptr, mam_type *mam_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_ptr モンスター乱闘構造体への参照ポインタ
  */
-void repeat_melee(player_type *player_ptr, mam_type *mam_ptr)
+void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
@@ -298,7 +298,7 @@ void repeat_melee(player_type *player_ptr, mam_type *mam_ptr)
  * @param t_idx 目標側モンスターの参照ID
  * @return 実際に打撃処理が行われた場合TRUEを返す
  */
-bool monst_attack_monst(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+bool monst_attack_monst(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
     mam_type tmp_mam;
     mam_type *mam_ptr = initialize_mam_type(player_ptr, &tmp_mam, m_idx, t_idx);

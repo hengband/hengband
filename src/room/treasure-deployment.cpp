@@ -20,7 +20,7 @@
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.
  */
-void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
+void fill_treasure(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
 {
     POSITION cx = (x1 + x2) / 2;
     POSITION cy = (y1 + y2) / 2;

@@ -34,7 +34,7 @@
  * @return
  * @details Execute a single editor command
  */
-ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
+ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int com_id)
 {
     switch (com_id) {
     case EC_QUIT: {

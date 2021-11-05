@@ -5,19 +5,19 @@
 /*!
  * @brief プレイヤー構造体実体 / Static player info record
  */
-player_type p_body;
+PlayerType p_body;
 
 /*!
  * @brief プレイヤー構造体へのグローバル参照ポインタ / Pointer to the player info
  */
-player_type *p_ptr = &p_body;
+PlayerType *p_ptr = &p_body;
 
-player_type::player_type()
+PlayerType::PlayerType()
     : timed_effects(std::make_shared<TimedEffects>())
 {
 }
 
-std::shared_ptr<TimedEffects> player_type::effects() const
+std::shared_ptr<TimedEffects> PlayerType::effects() const
 {
     return this->timed_effects;
 }

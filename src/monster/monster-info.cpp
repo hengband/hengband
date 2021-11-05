@@ -49,7 +49,7 @@ void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MFLAG2::FRIENDLY); }
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
     feature_type *f_ptr = &f_info[feat];
 
@@ -126,7 +126,7 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(player_type *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if (player_bold(player_ptr, y, x))
@@ -161,7 +161,7 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  * @param n_ptr モンスター2の構造体参照ポインタ
  * @return 敵対関係にあるならばTRUEを返す
  */
-bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
+bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *s_ptr = &r_info[n_ptr->r_idx];
@@ -201,7 +201,7 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
  * @details
  * If user is player, m_ptr == nullptr.
  */
-bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
+bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
 {
     byte sub_align1 = SUB_ALIGN_NEUTRAL;
     byte sub_align2 = SUB_ALIGN_NEUTRAL;
@@ -229,7 +229,7 @@ bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int
     return false;
 }
 
-bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr) { return m_ptr->ml && !player_ptr->hallucinated && (m_ptr->ap_r_idx == m_ptr->r_idx); }
+bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr) { return m_ptr->ml && !player_ptr->hallucinated && (m_ptr->ap_r_idx == m_ptr->r_idx); }
 
 /*  Determine monster race appearance index is same as race index */
 bool is_original_ap(monster_type *m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }
@@ -297,7 +297,7 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
  * @param m_idx モンスターID
  * @param m_name モンスター名を入力する配列
  */
-void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char *m_name)
+void monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx, char *m_name)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0x00);

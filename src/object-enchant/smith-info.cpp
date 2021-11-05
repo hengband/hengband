@@ -26,7 +26,7 @@ BasicSmithInfo::BasicSmithInfo(SmithEffect effect, concptr name, SmithCategory c
 {
 }
 
-bool BasicSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
+bool BasicSmithInfo::add_essence(PlayerType *, object_type *o_ptr, int) const
 {
     o_ptr->smith_effect = effect;
 
@@ -87,7 +87,7 @@ ActivationSmithInfo::ActivationSmithInfo(SmithEffect effect, concptr name, Smith
 {
 }
 
-bool ActivationSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
+bool ActivationSmithInfo::add_essence(PlayerType *, object_type *o_ptr, int) const
 {
     o_ptr->smith_act_idx = this->act_idx;
 
@@ -114,7 +114,7 @@ EnchantWeaponSmithInfo::EnchantWeaponSmithInfo(SmithEffect effect, concptr name,
 {
 }
 
-bool EnchantWeaponSmithInfo::add_essence(player_type *player_ptr, object_type *o_ptr, int) const
+bool EnchantWeaponSmithInfo::add_essence(PlayerType *player_ptr, object_type *o_ptr, int) const
 {
     const auto max_val = player_ptr->lev / 5 + 5;
     if ((o_ptr->to_h >= max_val) && (o_ptr->to_d >= max_val)) {
@@ -141,7 +141,7 @@ EnchantArmourSmithInfo::EnchantArmourSmithInfo(SmithEffect effect, concptr name,
 {
 }
 
-bool EnchantArmourSmithInfo::add_essence(player_type *player_ptr, object_type *o_ptr, int) const
+bool EnchantArmourSmithInfo::add_essence(PlayerType *player_ptr, object_type *o_ptr, int) const
 {
     const auto max_val = player_ptr->lev / 5 + 5;
     if (o_ptr->to_a >= max_val) {
@@ -163,7 +163,7 @@ SustainSmithInfo::SustainSmithInfo(SmithEffect effect, concptr name, SmithCatego
 {
 }
 
-bool SustainSmithInfo::add_essence(player_type *, object_type *o_ptr, int) const
+bool SustainSmithInfo::add_essence(PlayerType *, object_type *o_ptr, int) const
 {
     o_ptr->art_flags.set(TR_IGNORE_ACID);
     o_ptr->art_flags.set(TR_IGNORE_ELEC);
@@ -183,7 +183,7 @@ SlayingGlovesSmithInfo::SlayingGlovesSmithInfo(SmithEffect effect, concptr name,
 {
 }
 
-bool SlayingGlovesSmithInfo::add_essence(player_type *player_ptr, object_type *o_ptr, int number) const
+bool SlayingGlovesSmithInfo::add_essence(PlayerType *player_ptr, object_type *o_ptr, int number) const
 {
     BasicSmithInfo::add_essence(player_ptr, o_ptr, number);
 

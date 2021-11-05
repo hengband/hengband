@@ -4,10 +4,10 @@
 #include "object-enchant/tr-types.h"
 
 struct object_type;
-struct player_type;
+class PlayerType;
 
-bool potion_smash_effect(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx);
-PERCENTAGE breakage_chance(player_type *player_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type);
+bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx);
+PERCENTAGE breakage_chance(PlayerType *player_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type);
 
 class ObjectBreaker {
 protected:

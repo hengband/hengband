@@ -70,7 +70,7 @@
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
  */
-void do_cmd_pet_dismiss(player_type *player_ptr)
+void do_cmd_pet_dismiss(PlayerType *player_ptr)
 {
     monster_type *m_ptr;
     bool all_pets = false;
@@ -192,7 +192,7 @@ void do_cmd_pet_dismiss(player_type *player_ptr)
  * @param force 強制的に騎乗/下馬するならばTRUE
  * @return 騎乗/下馬できたらTRUE
  */
-bool do_cmd_riding(player_type *player_ptr, bool force)
+bool do_cmd_riding(PlayerType *player_ptr, bool force)
 {
     POSITION x, y;
     DIRECTION dir = 0;
@@ -303,7 +303,7 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
 /*!
  * @brief ペットに名前をつけるコマンドのメインルーチン
  */
-static void do_name_pet(player_type *player_ptr)
+static void do_name_pet(PlayerType *player_ptr)
 {
     monster_type *m_ptr;
     char out_val[20];
@@ -369,7 +369,7 @@ static void do_name_pet(player_type *player_ptr)
  * @brief ペットに関するコマンドリストのメインルーチン /
  * Issue a pet command
  */
-void do_cmd_pet(player_type *player_ptr)
+void do_cmd_pet(PlayerType *player_ptr)
 {
     COMMAND_CODE i = 0;
     int num;

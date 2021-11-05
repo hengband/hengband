@@ -12,7 +12,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerWisdom::PlayerWisdom(player_type *player_ptr)
+PlayerWisdom::PlayerWisdom(PlayerType *player_ptr)
     : PlayerBasicStatistics(player_ptr)
 {
 }

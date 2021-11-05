@@ -323,7 +323,7 @@ void rd_item_old(object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
-void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
+void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
 {
     m_ptr->r_idx = rd_s16b();
 
@@ -504,7 +504,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-errr rd_dungeon_old(player_type *player_ptr)
+errr rd_dungeon_old(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = rd_s16b();

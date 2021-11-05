@@ -16,7 +16,7 @@
  *
  * The doors must be INSIDE the allocated region.
  */
-void add_door(player_type *player_ptr, POSITION x, POSITION y)
+void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->grid_array[y][x].is_outer())
@@ -61,7 +61,7 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
  * @param x 配置したいフロアのX座標
  * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
  */
-void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type)
+void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_DOORS)) {
@@ -98,7 +98,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  */
-void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
+void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_DOORS)) {
@@ -118,7 +118,7 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
  * @param x ドアの配置を試みたいマスのX座標
  * @param room 部屋に接している場合向けのドア生成か否か
  */
-void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
+void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -176,7 +176,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
  * @param x ドアの配置を試みたいマスのX座標
  * @param type ドアの地形ID
  */
-void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
+void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_DOORS)) {

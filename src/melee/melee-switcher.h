@@ -8,7 +8,7 @@ enum be_type {
 };
 
 typedef struct mam_type mam_type;
-struct player_type;
-void describe_melee_method(player_type *player_ptr, mam_type *mam_ptr);
-void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr);
-void describe_monster_missed_monster(player_type *player_ptr, mam_type *mam_ptr);
+class PlayerType;
+void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr);
+void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr);
+void describe_monster_missed_monster(PlayerType *player_ptr, mam_type *mam_ptr);

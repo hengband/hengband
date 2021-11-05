@@ -45,7 +45,7 @@
  * Calculate spell damages
  * @return 警告を行う
  */
-object_type *choose_warning_item(player_type *player_ptr)
+object_type *choose_warning_item(PlayerType *player_ptr)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
 
@@ -77,7 +77,7 @@ object_type *choose_warning_item(player_type *player_ptr)
  * @param dam 基本ダメージ
  * @param max 算出した最大ダメージを返すポインタ
  */
-static void spell_damcalc(player_type *player_ptr, monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int *max)
+static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int *max)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = r_ptr->level;
@@ -248,7 +248,7 @@ static void spell_damcalc(player_type *player_ptr, monster_type *m_ptr, EFFECT_I
  * @param m_idx 魔法を行使するモンスターのID
  * @param max 算出した最大ダメージを返すポインタ
  */
-static void spell_damcalc_by_spellnum(player_type *player_ptr, RF_ABILITY ms_type, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
+static void spell_damcalc_by_spellnum(PlayerType *player_ptr, RF_ABILITY ms_type, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     HIT_POINT dam = monspell_damage(player_ptr, ms_type, m_idx, DAM_MAX);
@@ -262,7 +262,7 @@ static void spell_damcalc_by_spellnum(player_type *player_ptr, RF_ABILITY ms_typ
  * @param blow_ptr モンスターの打撃能力の構造体参照ポインタ
  * @return 算出された最大ダメージを返す。
  */
-static int blow_damcalc(monster_type *m_ptr, player_type *player_ptr, monster_blow *blow_ptr)
+static int blow_damcalc(monster_type *m_ptr, PlayerType *player_ptr, monster_blow *blow_ptr)
 {
     int dam = blow_ptr->d_dice * blow_ptr->d_side;
     int dummy_max = 0;
@@ -337,7 +337,7 @@ static int blow_damcalc(monster_type *m_ptr, player_type *player_ptr, monster_bl
  * @param yy 危険性を調査するマスのY座標
  * @return 警告を無視して進むことを選択するかか問題が無ければTRUE、警告に従ったならFALSEを返す。
  */
-bool process_warning(player_type *player_ptr, POSITION xx, POSITION yy)
+bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 {
     POSITION mx, my;
     grid_type *g_ptr;

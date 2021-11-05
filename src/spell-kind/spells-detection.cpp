@@ -37,7 +37,7 @@
  * @param known 地形から危険フラグを外すならTRUE
  * @return 効力があった場合TRUEを返す
  */
-static bool detect_feat_flag(player_type *player_ptr, POSITION range, FF flag, bool known)
+static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, FF flag, bool known)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -83,7 +83,7 @@ static bool detect_feat_flag(player_type *player_ptr, POSITION range, FF flag, b
  * @details
  * 吟遊詩人による感知についてはFALSEを返す
  */
-bool detect_traps(player_type *player_ptr, POSITION range, bool known)
+bool detect_traps(PlayerType *player_ptr, POSITION range, bool known)
 {
     bool detect = detect_feat_flag(player_ptr, range, FF::TRAP, known);
     if (!known && detect)
@@ -107,7 +107,7 @@ bool detect_traps(player_type *player_ptr, POSITION range, bool known)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_doors(player_type *player_ptr, POSITION range)
+bool detect_doors(PlayerType *player_ptr, POSITION range)
 {
     bool detect = detect_feat_flag(player_ptr, range, FF::DOOR, true);
 
@@ -126,7 +126,7 @@ bool detect_doors(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_stairs(player_type *player_ptr, POSITION range)
+bool detect_stairs(PlayerType *player_ptr, POSITION range)
 {
     bool detect = detect_feat_flag(player_ptr, range, FF::STAIRS, true);
 
@@ -145,7 +145,7 @@ bool detect_stairs(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_treasure(player_type *player_ptr, POSITION range)
+bool detect_treasure(PlayerType *player_ptr, POSITION range)
 {
     bool detect = detect_feat_flag(player_ptr, range, FF::HAS_GOLD, true);
 
@@ -163,7 +163,7 @@ bool detect_treasure(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_gold(player_type *player_ptr, POSITION range)
+bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
 {
     POSITION range2 = range;
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
@@ -211,7 +211,7 @@ bool detect_objects_gold(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_normal(player_type *player_ptr, POSITION range)
+bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
 {
     POSITION range2 = range;
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
@@ -266,7 +266,7 @@ bool detect_objects_normal(player_type *player_ptr, POSITION range)
  * It can probably be argued that this function is now too powerful.
  * </pre>
  */
-bool detect_objects_magic(player_type *player_ptr, POSITION range)
+bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -312,7 +312,7 @@ bool detect_objects_magic(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_normal(player_type *player_ptr, POSITION range)
+bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -351,7 +351,7 @@ bool detect_monsters_normal(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_invis(player_type *player_ptr, POSITION range)
+bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -396,7 +396,7 @@ bool detect_monsters_invis(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_evil(player_type *player_ptr, POSITION range)
+bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -441,7 +441,7 @@ bool detect_monsters_evil(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_nonliving(player_type *player_ptr, POSITION range)
+bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -481,7 +481,7 @@ bool detect_monsters_nonliving(player_type *player_ptr, POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_mind(player_type *player_ptr, POSITION range)
+bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -524,7 +524,7 @@ bool detect_monsters_mind(player_type *player_ptr, POSITION range)
  * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_string(player_type *player_ptr, POSITION range, concptr Match)
+bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Match)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -569,7 +569,7 @@ bool detect_monsters_string(player_type *player_ptr, POSITION range, concptr Mat
  * @param match_flag 感知フラグ
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_xxx(player_type *player_ptr, POSITION range, uint32_t match_flag)
+bool detect_monsters_xxx(PlayerType *player_ptr, POSITION range, uint32_t match_flag)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -625,7 +625,7 @@ bool detect_monsters_xxx(player_type *player_ptr, POSITION range, uint32_t match
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_all(player_type *player_ptr, POSITION range)
+bool detect_all(PlayerType *player_ptr, POSITION range)
 {
     bool detect = false;
     if (detect_traps(player_ptr, range, true))

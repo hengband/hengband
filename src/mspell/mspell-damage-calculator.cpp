@@ -66,7 +66,7 @@ static HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
 static HIT_POINT monspell_damage_base(
-    player_type *player_ptr, RF_ABILITY ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
+    PlayerType *player_ptr, RF_ABILITY ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
     HIT_POINT dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
@@ -450,7 +450,7 @@ void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_damage(player_type *player_ptr, RF_ABILITY ms_type, MONSTER_IDX m_idx, int TYPE)
+HIT_POINT monspell_damage(PlayerType *player_ptr, RF_ABILITY ms_type, MONSTER_IDX m_idx, int TYPE)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -471,7 +471,7 @@ HIT_POINT monspell_damage(player_type *player_ptr, RF_ABILITY ms_type, MONSTER_I
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONRACE_IDX r_idx, int TYPE)
+HIT_POINT monspell_race_damage(PlayerType *player_ptr, RF_ABILITY ms_type, MONRACE_IDX r_idx, int TYPE)
 {
     monster_race *r_ptr = &r_info[r_idx];
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -491,7 +491,7 @@ HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONR
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, int TYPE)
+HIT_POINT monspell_bluemage_damage(PlayerType *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, int TYPE)
 {
     int hp = player_ptr->chp;
     int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;

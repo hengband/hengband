@@ -31,7 +31,7 @@
  * the base-item.\n
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void building_recharge(player_type *player_ptr)
+void building_recharge(PlayerType *player_ptr)
 {
     msg_flag = false;
     clear_bldg(4, 18);
@@ -173,7 +173,7 @@ void building_recharge(player_type *player_ptr)
  * the base-item.\n
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void building_recharge_all(player_type *player_ptr)
+void building_recharge_all(PlayerType *player_ptr)
 {
     msg_flag = false;
     clear_bldg(4, 18);

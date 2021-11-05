@@ -74,7 +74,7 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
 
-static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, const ARTIFACT_IDX artifact_index)
+static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const ARTIFACT_IDX artifact_index)
 {
     if (artifact_index == 0)
         return;
@@ -91,7 +91,7 @@ static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, cons
     drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
-static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
+static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 {
     *qtwg_ptr->x = qtwg_ptr->xmin;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -311,7 +311,7 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
     return PARSE_ERROR_GENERIC;
 }
 
-static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
+static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
 {
     if (qtwg_ptr->buf[0] != 'P')
         return false;
@@ -393,7 +393,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
  * @return エラーコード
  * @todo クエスト情報のみを読み込む手段と実際にフロアデータまで読み込む処理は分離したい
  */
-parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
+parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
 {
     char *zz[33];
     if (!qtwg_ptr->buf[0])

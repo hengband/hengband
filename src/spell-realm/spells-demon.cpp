@@ -13,7 +13,7 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_fire(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_sh_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;

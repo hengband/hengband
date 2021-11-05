@@ -20,7 +20,7 @@
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void player_immunity(player_type *player_ptr, TrFlags &flags)
+void player_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
@@ -48,7 +48,7 @@ void player_immunity(player_type *player_ptr, TrFlags &flags)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void tim_player_immunity(player_type *player_ptr, TrFlags &flags)
+void tim_player_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
@@ -71,7 +71,7 @@ void tim_player_immunity(player_type *player_ptr, TrFlags &flags)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void known_obj_immunity(player_type *player_ptr, TrFlags &flags)
+void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
@@ -100,7 +100,7 @@ void known_obj_immunity(player_type *player_ptr, TrFlags &flags)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void player_vulnerability_flags(player_type *player_ptr, TrFlags &flags)
+void player_vulnerability_flags(PlayerType *player_ptr, TrFlags &flags)
 {
     flags.clear();
 

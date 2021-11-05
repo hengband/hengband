@@ -242,7 +242,7 @@ bool get_check(concptr prompt) { return get_check_strict(p_ptr, prompt, 0); }
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
+bool get_check_strict(PlayerType *player_ptr, concptr prompt, BIT_FLAGS mode)
 {
     char buf[80];
     if (!rogue_like_commands)

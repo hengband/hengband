@@ -59,7 +59,7 @@ mspell_cast_msg_bad_status_to_monster::mspell_cast_msg_bad_status_to_monster(con
  * @param resist 耐性の有無を判別するフラグ
  * @param saved_throw 抵抗に成功したか判別するフラグ
  */
-void spell_badstatus_message_to_player(player_type *player_ptr, MONSTER_IDX m_idx, const mspell_cast_msg_bad_status_to_player &msgs, bool resist,
+void spell_badstatus_message_to_player(PlayerType *player_ptr, MONSTER_IDX m_idx, const mspell_cast_msg_bad_status_to_player &msgs, bool resist,
     bool saved_throw)
 {
     GAME_TEXT m_name[MAX_NLEN];
@@ -89,7 +89,7 @@ void spell_badstatus_message_to_player(player_type *player_ptr, MONSTER_IDX m_id
  * @param resist 耐性の有無を判別するフラグ
  * @param saved_throw 抵抗に成功したか判別するフラグ
  */
-void spell_badstatus_message_to_mons(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_bad_status_to_monster &msgs, bool resist,
+void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_bad_status_to_monster &msgs, bool resist,
     bool saved_throw)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -133,7 +133,7 @@ void spell_badstatus_message_to_mons(player_type *player_ptr, MONSTER_IDX m_idx,
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
@@ -168,7 +168,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *player_ptr, POSITION y, POS
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF5_MIND_BLAST(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->blind && m_ptr->ml);
@@ -206,7 +206,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *player_ptr, POSITION y, POS
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->blind && m_ptr->ml);
@@ -241,7 +241,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *player_ptr, POSITION y, PO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -297,7 +297,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *player_ptr, M
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -362,7 +362,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *player_ptr, M
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -419,7 +419,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, player_type *player_ptr, MO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -475,7 +475,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *player_ptr, MO
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_HASTE(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     bool see_m = see_monster(player_ptr, m_idx);
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -507,7 +507,7 @@ MonsterSpellResult spell_RF6_HASTE(player_type *player_ptr, MONSTER_IDX m_idx, M
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -573,7 +573,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *player_ptr, MO
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_HEAL(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     const auto res = MonsterSpellResult::make_valid();
 
@@ -639,7 +639,7 @@ MonsterSpellResult spell_RF6_HEAL(player_type *player_ptr, MONSTER_IDX m_idx, MO
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_INVULNER(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->blind && m_ptr->ml);
@@ -680,7 +680,7 @@ MonsterSpellResult spell_RF6_INVULNER(player_type *player_ptr, MONSTER_IDX m_idx
  *
  * ラーニング可。
  */
-MonsterSpellResult spell_RF6_FORGET(player_type *player_ptr, MONSTER_IDX m_idx)
+MonsterSpellResult spell_RF6_FORGET(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     DEPTH rlev = monster_level_idx(player_ptr->current_floor_ptr, m_idx);
     GAME_TEXT m_name[MAX_NLEN];

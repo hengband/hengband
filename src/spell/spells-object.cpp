@@ -85,7 +85,7 @@ static amuse_type amuse_info[]
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool known)
+void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
     int t = 0;
     for (int n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
@@ -180,7 +180,7 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
  * @param special TRUEならば必ず特別品を落とす
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
+void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
     object_type *i_ptr;
     object_type object_type_body;
@@ -210,7 +210,7 @@ void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, boo
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_armor(player_type *player_ptr)
+bool curse_armor(PlayerType *player_ptr)
 {
     /* Curse the body armor */
     object_type *o_ptr;
@@ -268,7 +268,7 @@ bool curse_armor(player_type *player_ptr)
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr)
+bool curse_weapon_object(PlayerType *player_ptr, bool force, object_type *o_ptr)
 {
     if (!o_ptr->k_idx)
         return false;
@@ -318,7 +318,7 @@ bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr
  * Enchant some bolts
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void brand_bolts(player_type *player_ptr)
+void brand_bolts(PlayerType *player_ptr)
 {
     /* Use the first acceptable bolts */
     for (int i = 0; i < INVEN_PACK; i++) {
@@ -396,7 +396,7 @@ static void break_curse(object_type *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant_equipment(player_type *player_ptr, object_type *o_ptr, int n, int eflag)
+bool enchant_equipment(PlayerType *player_ptr, object_type *o_ptr, int n, int eflag)
 {
     /* Large piles resist enchantment */
     int prob = o_ptr->number * 100;
@@ -498,7 +498,7 @@ bool enchant_equipment(player_type *player_ptr, object_type *o_ptr, int n, int e
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
-bool enchant_spell(player_type *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
+bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
     FuncItemTester item_tester(&object_type::allow_enchant_weapon);
@@ -554,7 +554,7 @@ bool enchant_spell(player_type *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
  */
-void brand_weapon(player_type *player_ptr, int brand_type)
+void brand_weapon(PlayerType *player_ptr, int brand_type)
 {
     concptr q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");

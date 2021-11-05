@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void display_player_middle(player_type *player_ptr);
+class PlayerType;
+void display_player_middle(PlayerType *player_ptr);

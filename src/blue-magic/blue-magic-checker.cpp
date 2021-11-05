@@ -30,7 +30,7 @@
  * @brief 青魔法のラーニング判定と成功した場合のラーニング処理
  * @param monspell ラーニングを試みるモンスター攻撃のID
  */
-void learn_spell(player_type *player_ptr, RF_ABILITY monspell)
+void learn_spell(PlayerType *player_ptr, RF_ABILITY monspell)
 {
     if (player_ptr->action != ACTION_LEARN)
         return;

@@ -72,7 +72,7 @@
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list
  */
-void do_cmd_inven(player_type *player_ptr)
+void do_cmd_inven(PlayerType *player_ptr)
 {
     char out_val[160];
     command_wrk = false;
@@ -107,7 +107,7 @@ void do_cmd_inven(player_type *player_ptr)
 /*!
  * @brief アイテムを落とすコマンドのメインルーチン / Drop an item
  */
-void do_cmd_drop(player_type *player_ptr)
+void do_cmd_drop(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     int amt = 1;
@@ -144,7 +144,7 @@ void do_cmd_drop(player_type *player_ptr)
 /*!
  * @brief アイテムを調査するコマンドのメインルーチン / Observe an item which has been *identify*-ed
  */
-void do_cmd_observe(player_type *player_ptr)
+void do_cmd_observe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
@@ -170,7 +170,7 @@ void do_cmd_observe(player_type *player_ptr)
  * @brief アイテムの銘を消すコマンドのメインルーチン
  * Remove the inscription from an object XXX Mention item (when done)?
  */
-void do_cmd_uninscribe(player_type *player_ptr)
+void do_cmd_uninscribe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
@@ -196,7 +196,7 @@ void do_cmd_uninscribe(player_type *player_ptr)
  * @brief アイテムの銘を刻むコマンドのメインルーチン
  * Inscribe an object with a comment
  */
-void do_cmd_inscribe(player_type *player_ptr)
+void do_cmd_inscribe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
@@ -229,7 +229,7 @@ void do_cmd_inscribe(player_type *player_ptr)
  * @details
  * XXX - Add actions for other item types
  */
-void do_cmd_use(player_type *player_ptr)
+void do_cmd_use(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
@@ -285,7 +285,7 @@ void do_cmd_use(player_type *player_ptr)
  * @brief 装備を発動するコマンドのメインルーチン /
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_activate(player_type *player_ptr)
+void do_cmd_activate(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))

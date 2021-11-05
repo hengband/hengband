@@ -14,7 +14,7 @@ enum class MonkStance : uint8_t;
 
 class PlayerClass {
 public:
-    PlayerClass(player_type *player_ptr);
+    PlayerClass(PlayerType *player_ptr);
     virtual ~PlayerClass() = default;
 
     TrFlags tr_flags() const;
@@ -38,7 +38,7 @@ public:
     std::shared_ptr<T> get_specific_data() const;
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
 };
 
 /**

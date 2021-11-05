@@ -44,7 +44,7 @@
 #include "target/target-types.h"
 #include "view/display-messages.h"
 
-static bool cast_blue_dispel(player_type *player_ptr)
+static bool cast_blue_dispel(PlayerType *player_ptr)
 {
     if (!target_set(player_ptr, TARGET_KILL))
         return false;
@@ -58,7 +58,7 @@ static bool cast_blue_dispel(player_type *player_ptr)
     return true;
 }
 
-static bool cast_blue_rocket(player_type *player_ptr, bmc_type *bmc_ptr)
+static bool cast_blue_rocket(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -69,7 +69,7 @@ static bool cast_blue_rocket(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-static bool cast_blue_shoot(player_type *player_ptr, bmc_type *bmc_ptr)
+static bool cast_blue_shoot(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -80,7 +80,7 @@ static bool cast_blue_shoot(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-static bool cast_blue_hand_doom(player_type *player_ptr, bmc_type *bmc_ptr)
+static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -90,7 +90,7 @@ static bool cast_blue_hand_doom(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-static bool exe_blue_teleport_back(player_type *player_ptr, GAME_TEXT *m_name)
+static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
 {
     monster_type *m_ptr;
     monster_race *r_ptr;
@@ -123,7 +123,7 @@ static bool exe_blue_teleport_back(player_type *player_ptr, GAME_TEXT *m_name)
     return true;
 }
 
-static bool cast_blue_teleport_back(player_type *player_ptr)
+static bool cast_blue_teleport_back(PlayerType *player_ptr)
 {
     if (!target_set(player_ptr, TARGET_KILL))
         return false;
@@ -138,7 +138,7 @@ static bool cast_blue_teleport_back(player_type *player_ptr)
     return true;
 }
 
-static bool cast_blue_teleport_away(player_type *player_ptr, bmc_type *bmc_ptr)
+static bool cast_blue_teleport_away(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -147,7 +147,7 @@ static bool cast_blue_teleport_away(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-static bool cast_blue_psy_spear(player_type *player_ptr, bmc_type *bmc_ptr)
+static bool cast_blue_psy_spear(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -158,7 +158,7 @@ static bool cast_blue_psy_spear(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-static bool cast_blue_make_trap(player_type *player_ptr)
+static bool cast_blue_make_trap(PlayerType *player_ptr)
 {
     if (!target_set(player_ptr, TARGET_KILL))
         return false;
@@ -168,7 +168,7 @@ static bool cast_blue_make_trap(player_type *player_ptr)
     return true;
 }
 
-static bool switch_cast_blue_magic(player_type *player_ptr, bmc_type *bmc_ptr, RF_ABILITY spell)
+static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, RF_ABILITY spell)
 {
     switch (spell) {
     case RF_ABILITY::SHRIEK:
@@ -392,7 +392,7 @@ static bool switch_cast_blue_magic(player_type *player_ptr, bmc_type *bmc_ptr, R
  * @param success TRUEは成功時、FALSEは失敗時の処理を行う
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_learned_spell(player_type *player_ptr, RF_ABILITY spell, const bool success)
+bool cast_learned_spell(PlayerType *player_ptr, RF_ABILITY spell, const bool success)
 {
     bmc_type tmp_bm;
     bmc_type *bmc_ptr = initialize_blue_magic_type(player_ptr, &tmp_bm, success, get_pseudo_monstetr_level);

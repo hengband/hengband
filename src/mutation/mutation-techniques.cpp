@@ -26,7 +26,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return コマンドの入力方向に地形があればTRUE
  */
-bool eat_rock(player_type *player_ptr)
+bool eat_rock(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_direction(player_ptr, &dir, false, false))

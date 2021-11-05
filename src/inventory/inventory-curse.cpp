@@ -134,7 +134,7 @@ static void choise_cursed_item(TRC flag, object_type *o_ptr, int *choices, int *
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
  * 呪いがない場合nullptrを返す。
  */
-object_type *choose_cursed_obj_name(player_type *player_ptr, TRC flag)
+object_type *choose_cursed_obj_name(PlayerType *player_ptr, TRC flag)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
     int number = 0;
@@ -159,7 +159,7 @@ object_type *choose_cursed_obj_name(player_type *player_ptr, TRC flag)
  * @brief 呪われている、トランプエゴ等による装備品由来のテレポートを実行する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void curse_teleport(player_type *player_ptr)
+static void curse_teleport(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed_special.has_not(TRCS::TELEPORT_SELF)) || !one_in_(200))
         return;
@@ -200,7 +200,7 @@ static void curse_teleport(player_type *player_ptr)
 /*!
  * @details 元々呪い効果の発揮ルーチン中にいたので、整合性保持のためここに置いておく
  */
-static void occur_chainsword_effect(player_type *player_ptr)
+static void occur_chainsword_effect(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed_special.has_not(TRCS::CHAINSWORD)) || !one_in_(CHAINSWORD_NOISE))
         return;
@@ -211,7 +211,7 @@ static void occur_chainsword_effect(player_type *player_ptr)
     disturb(player_ptr, false, false);
 }
 
-static void curse_drain_exp(player_type *player_ptr)
+static void curse_drain_exp(PlayerType *player_ptr)
 {
     if ((player_ptr->prace == PlayerRaceType::ANDROID) || (player_ptr->cursed.has_not(TRC::DRAIN_EXP)) || !one_in_(4))
         return;
@@ -227,7 +227,7 @@ static void curse_drain_exp(player_type *player_ptr)
     check_experience(player_ptr);
 }
 
-static void multiply_low_curse(player_type *player_ptr)
+static void multiply_low_curse(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed.has_not(TRC::ADD_L_CURSE)) || !one_in_(2000))
         return;
@@ -246,7 +246,7 @@ static void multiply_low_curse(player_type *player_ptr)
     player_ptr->update |= (PU_BONUS);
 }
 
-static void multiply_high_curse(player_type *player_ptr)
+static void multiply_high_curse(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed.has_not(TRC::ADD_H_CURSE)) || !one_in_(2000))
         return;
@@ -265,7 +265,7 @@ static void multiply_high_curse(player_type *player_ptr)
     player_ptr->update |= (PU_BONUS);
 }
 
-static void curse_call_monster(player_type *player_ptr)
+static void curse_call_monster(PlayerType *player_ptr)
 {
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
     const int obj_desc_type = OD_OMIT_PREFIX | OD_NAME_ONLY;
@@ -307,7 +307,7 @@ static void curse_call_monster(player_type *player_ptr)
     }
 }
 
-static void curse_cowardice(player_type *player_ptr)
+static void curse_cowardice(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed.has_not(TRC::COWARDICE)) || !one_in_(1500))
         return;
@@ -324,7 +324,7 @@ static void curse_cowardice(player_type *player_ptr)
  * @brief 装備による狂戦士化の発作を引き起こす
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-static void curse_berserk_rage(player_type *player_ptr)
+static void curse_berserk_rage(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed.has_not(TRC::BERS_RAGE)) || !one_in_(1500))
         return;
@@ -336,7 +336,7 @@ static void curse_berserk_rage(player_type *player_ptr)
     (void)BadStatusSetter(player_ptr).afraidness(0);
 }
 
-static void curse_drain_hp(player_type *player_ptr)
+static void curse_drain_hp(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed.has_not(TRC::DRAIN_HP)) || !one_in_(666))
         return;
@@ -347,7 +347,7 @@ static void curse_drain_hp(player_type *player_ptr)
     take_hit(player_ptr, DAMAGE_LOSELIFE, std::min(player_ptr->lev * 2, 100), o_name);
 }
 
-static void curse_drain_mp(player_type *player_ptr)
+static void curse_drain_mp(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed.has_not(TRC::DRAIN_MANA)) || (player_ptr->csp == 0) || !one_in_(666))
         return;
@@ -364,7 +364,7 @@ static void curse_drain_mp(player_type *player_ptr)
     player_ptr->redraw |= PR_MANA;
 }
 
-static void occur_curse_effects(player_type *player_ptr)
+static void occur_curse_effects(PlayerType *player_ptr)
 {
     if ((player_ptr->cursed.has_none_of(TRC_P_FLAG_MASK) && player_ptr->cursed_special.has_none_of(TRCS_P_FLAG_MASK)) || player_ptr->phase_out
         || player_ptr->wild_mode)
@@ -397,7 +397,7 @@ static void occur_curse_effects(player_type *player_ptr)
  * / Handle curse effects once every 10 game turns
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void execute_cursed_items_effect(player_type *player_ptr)
+void execute_cursed_items_effect(PlayerType *player_ptr)
 {
     occur_curse_effects(player_ptr);
     if (!one_in_(999) || player_ptr->anti_magic || (one_in_(2) && has_resist_curse(player_ptr)))

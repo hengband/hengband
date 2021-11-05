@@ -36,7 +36,7 @@ process_result effect_monster_old_poly(effect_monster_type *em_ptr)
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_old_clone(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_old_clone(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -56,7 +56,7 @@ process_result effect_monster_old_clone(player_type *player_ptr, effect_monster_
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_star_heal(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_star_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -83,7 +83,7 @@ process_result effect_monster_star_heal(player_type *player_ptr, effect_monster_
 }
 
 // who == 0ならばプレイヤーなので、それの判定.
-static void effect_monster_old_heal_check_player(player_type *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->who != 0)
         return;
@@ -105,7 +105,7 @@ static void effect_monster_old_heal_check_player(player_type *player_ptr, effect
         chg_virtue(player_ptr, V_NATURE, 1);
 }
 
-static void effect_monster_old_heal_recovery(player_type *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (monster_stunned_remaining(em_ptr->m_ptr)) {
         if (em_ptr->seen_msg)
@@ -129,7 +129,7 @@ static void effect_monster_old_heal_recovery(player_type *player_ptr, effect_mon
     }
 }
 
-process_result effect_monster_old_heal(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_old_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -159,7 +159,7 @@ process_result effect_monster_old_heal(player_type *player_ptr, effect_monster_t
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_old_speed(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_old_speed(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -179,7 +179,7 @@ process_result effect_monster_old_speed(player_type *player_ptr, effect_monster_
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_old_slow(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_old_slow(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -203,7 +203,7 @@ process_result effect_monster_old_slow(player_type *player_ptr, effect_monster_t
  * @todo 「ユニークは (魔法では)常に眠らない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-process_result effect_monster_old_sleep(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -230,7 +230,7 @@ process_result effect_monster_old_sleep(player_type *player_ptr, effect_monster_
  * @todo 「ユニークは (魔法では)常に混乱しない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-process_result effect_monster_old_conf(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_old_conf(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;

@@ -35,7 +35,7 @@
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
  * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
  */
-concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;

@@ -26,7 +26,7 @@
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.
  */
-static void home_carry_load(player_type *player_ptr, store_type *store_ptr, object_type *o_ptr)
+static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, object_type *o_ptr)
 {
     for (auto i = 0; i < store_ptr->stock_num; i++) {
         auto *j_ptr = &store_ptr->stock[i];
@@ -65,7 +65,7 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
  * @param store_number 店舗ID
  * @return エラーID
  */
-static void rd_store(player_type *player_ptr, int town_number, int store_number)
+static void rd_store(PlayerType *player_ptr, int town_number, int store_number)
 {
     store_type *store_ptr;
     auto sort = false;
@@ -116,7 +116,7 @@ static void rd_store(player_type *player_ptr, int town_number, int store_number)
  * @param player_ptr プレイヤー情報への参照ポインタ(未使用)
  * @return 読み込み終わったら0、失敗したら22
  */
-void load_store(player_type *player_ptr)
+void load_store(PlayerType *player_ptr)
 {
     int16_t town_count = rd_u16b();
     int16_t store_count = rd_u16b();

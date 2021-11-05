@@ -82,7 +82,7 @@ static int damage;
  * @param power ものまねの効力の種類
  * @param dam ものまねの威力
  */
-static void mane_info(player_type *player_ptr, char *p, RF_ABILITY power, HIT_POINT dam)
+static void mane_info(PlayerType *player_ptr, char *p, RF_ABILITY power, HIT_POINT dam)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
 
@@ -139,7 +139,7 @@ static void mane_info(player_type *player_ptr, char *p, RF_ABILITY power, HIT_PO
  * when you run it. It's probably easy to fix but I haven't tried,
  * sorry.
  */
-static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
+static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
 {
     int i = 0;
     int num = 0;
@@ -310,7 +310,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
  * @param spell 発動するモンスター攻撃のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
+static bool use_mane(PlayerType *player_ptr, RF_ABILITY spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -1079,7 +1079,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
  * when you run it. It's probably easy to fix but I haven't tried,
  * sorry.
  */
-bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
+bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
 {
     int n = 0;
     PERCENTAGE chance;

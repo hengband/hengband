@@ -19,7 +19,7 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_protevil(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_protevil(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -61,7 +61,7 @@ bool set_protevil(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_invuln(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -121,7 +121,7 @@ bool set_invuln(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_regen(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -164,7 +164,7 @@ bool set_tim_regen(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_reflect(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -207,7 +207,7 @@ bool set_tim_reflect(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_pass_wall(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_pass_wall(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;

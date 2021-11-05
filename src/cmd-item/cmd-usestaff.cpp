@@ -50,7 +50,7 @@
  * @param known 判明済ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
+int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
     int k;
     bool ident = false;
@@ -283,7 +283,7 @@ int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_c
 /*!
  * @brief 杖を使うコマンドのメインルーチン /
  */
-void do_cmd_use_staff(player_type *player_ptr)
+void do_cmd_use_staff(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;

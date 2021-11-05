@@ -61,7 +61,7 @@ static void inscribe_nickname(ae_type *ae_ptr)
     ae_ptr->o_ptr->inscription = quark_add(buf);
 }
 
-static bool set_activation_target(player_type *player_ptr, ae_type *ae_ptr)
+static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     bool old_target_pet = target_pet;
     target_pet = true;
@@ -82,7 +82,7 @@ static bool set_activation_target(player_type *player_ptr, ae_type *ae_ptr)
     return true;
 }
 
-static void add_quark_to_inscription(player_type *player_ptr, ae_type *ae_ptr, concptr t, char *buf)
+static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, concptr t, char *buf)
 {
     if (!*t)
         return;
@@ -124,7 +124,7 @@ static void add_quark_to_inscription(player_type *player_ptr, ae_type *ae_ptr, c
     ae_ptr->o_ptr->inscription = quark_add(buf);
 }
 
-static void check_inscription_value(player_type *player_ptr, ae_type *ae_ptr)
+static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->inscription == 0)
         return;
@@ -141,7 +141,7 @@ static void check_inscription_value(player_type *player_ptr, ae_type *ae_ptr)
     add_quark_to_inscription(player_ptr, ae_ptr, t, buf);
 }
 
-static void check_monster_ball_use(player_type *player_ptr, ae_type *ae_ptr)
+static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0))
         return;
@@ -168,7 +168,7 @@ static void check_monster_ball_use(player_type *player_ptr, ae_type *ae_ptr)
     ae_ptr->success = true;
 }
 
-bool exe_monster_capture(player_type *player_ptr, ae_type *ae_ptr)
+bool exe_monster_capture(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->tval != ItemKindType::CAPTURE)
         return false;

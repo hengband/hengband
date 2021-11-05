@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct player_type;
+class PlayerType;
 struct rc_type;
-void select_mutation_racial(player_type *player_ptr, rc_type *rc_ptr);
+void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr);

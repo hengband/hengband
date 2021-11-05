@@ -13,7 +13,7 @@
 /*!
  * @brief 突然変異表示コマンドの実装 / List mutations we have...
  */
-void do_cmd_knowledge_mutations(player_type *player_ptr)
+void do_cmd_knowledge_mutations(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

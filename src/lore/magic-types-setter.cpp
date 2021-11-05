@@ -7,7 +7,7 @@
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 
-void set_breath_types(player_type *player_ptr, lore_type *lore_ptr)
+void set_breath_types(PlayerType *player_ptr, lore_type *lore_ptr)
 {
     lore_ptr->vn = 0;
     if (lore_ptr->ability_flags.has(RF_ABILITY::BR_ACID)) {
@@ -143,7 +143,7 @@ void set_breath_types(player_type *player_ptr, lore_type *lore_ptr)
     }
 }
 
-void set_ball_types(player_type *player_ptr, lore_type *lore_ptr)
+void set_ball_types(PlayerType *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(RF_ABILITY::BA_ACID)) {
         set_damage(player_ptr, lore_ptr, RF_ABILITY::BA_ACID, _("アシッド・ボール%s", "produce acid balls%s"));
@@ -218,7 +218,7 @@ void set_ball_types(player_type *player_ptr, lore_type *lore_ptr)
     }
 }
 
-void set_particular_types(player_type *player_ptr, lore_type *lore_ptr)
+void set_particular_types(PlayerType *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(RF_ABILITY::HAND_DOOM)) {
         lore_ptr->vp[lore_ptr->vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)");
@@ -274,7 +274,7 @@ void set_particular_types(player_type *player_ptr, lore_type *lore_ptr)
     }
 }
 
-void set_bolt_types(player_type *player_ptr, lore_type *lore_ptr)
+void set_bolt_types(PlayerType *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(RF_ABILITY::BO_ACID)) {
         set_damage(player_ptr, lore_ptr, RF_ABILITY::BO_ACID, _("アシッド・ボルト%s", "produce acid bolts%s"));
@@ -421,7 +421,7 @@ void set_teleport_types(lore_type *lore_ptr)
     }
 }
 
-void set_floor_types(player_type *player_ptr, lore_type *lore_ptr)
+void set_floor_types(PlayerType *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(RF_ABILITY::DARKNESS)) {
         if ((player_ptr->pclass != PlayerClassType::NINJA) || (lore_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {

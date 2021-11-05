@@ -14,7 +14,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerConstitution::PlayerConstitution(player_type *player_ptr)
+PlayerConstitution::PlayerConstitution(PlayerType *player_ptr)
     : PlayerBasicStatistics(player_ptr)
 {
 }

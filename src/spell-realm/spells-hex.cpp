@@ -40,7 +40,7 @@
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
 
-SpellHex::SpellHex(player_type *player_ptr)
+SpellHex::SpellHex(PlayerType *player_ptr)
     : player_ptr(player_ptr)
     , spell_hex_data(PlayerClass(player_ptr).get_specific_data<spell_hex_data_type>())
 {
@@ -55,7 +55,7 @@ SpellHex::SpellHex(player_type *player_ptr)
     }
 }
 
-SpellHex::SpellHex(player_type *player_ptr, monap_type *monap_ptr)
+SpellHex::SpellHex(PlayerType *player_ptr, monap_type *monap_ptr)
     : player_ptr(player_ptr)
     , monap_ptr(monap_ptr)
 {

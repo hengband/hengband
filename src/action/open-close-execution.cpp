@@ -36,7 +36,7 @@
  * @param x 対象を行うマスのX座標
  * @return 連続でコマンドを実行する時のみTRUE、1回きりの時はFALSE
  */
-bool exe_open(player_type *player_ptr, POSITION y, POSITION x)
+bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -91,7 +91,7 @@ bool exe_open(player_type *player_ptr, POSITION y, POSITION x)
  * Returns TRUE if repeated commands may continue
  * @todo 常にFALSEを返している
  */
-bool exe_close(player_type *player_ptr, POSITION y, POSITION x)
+bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX old_feat = g_ptr->feat;
@@ -130,7 +130,7 @@ bool exe_close(player_type *player_ptr, POSITION y, POSITION x)
  *	do_cmd_open_test() and exe_open().
  * </pre>
  */
-bool easy_open_door(player_type *player_ptr, POSITION y, POSITION x)
+bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int i, j;
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -186,7 +186,7 @@ bool easy_open_door(player_type *player_ptr, POSITION y, POSITION x)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
+bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
     bool more = false;
     object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
@@ -242,7 +242,7 @@ bool exe_disarm_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_ID
  * </pre>
  */
 
-bool exe_disarm(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
+bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -294,7 +294,7 @@ bool exe_disarm(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-bool exe_bash(player_type *player_ptr, POSITION y, POSITION x, DIRECTION dir)
+bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];

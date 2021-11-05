@@ -20,7 +20,7 @@
  * @param m_ptr モンスターの参照ポインタ
  * @param mode 呼称オプション
  */
-void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
+void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
     monster_race *r_ptr;
     r_ptr = &r_info[m_ptr->ap_r_idx];
@@ -247,7 +247,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
+void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

@@ -22,9 +22,9 @@ enum class RF_ABILITY;
 struct floor_type;
 struct object_type;
 class TimedEffects;
-struct player_type {
+class PlayerType {
 public:
-    player_type();
+    PlayerType();
     int player_uid{};
     int player_euid{};
     int player_egid{};
@@ -418,4 +418,4 @@ private:
     std::shared_ptr<TimedEffects> timed_effects;
 };
 
-extern player_type *p_ptr;
+extern PlayerType *p_ptr;

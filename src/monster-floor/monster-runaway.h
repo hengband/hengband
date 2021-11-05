@@ -2,6 +2,6 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class PlayerType;
 struct turn_flags;
-bool runaway_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
+bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);

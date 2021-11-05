@@ -40,7 +40,7 @@
  * @brief 混沌招来処理
  * @return 作用が実際にあった場合TRUEを返す
  */
-void call_chaos(player_type *player_ptr)
+void call_chaos(PlayerType *player_ptr)
 {
     int hurt_types[31] = { GF_ELEC, GF_POIS, GF_ACID, GF_COLD, GF_FIRE, GF_MISSILE, GF_ARROW, GF_PLASMA, GF_HOLY_FIRE, GF_WATER, GF_LITE, GF_DARK, GF_FORCE,
         GF_INERTIAL, GF_MANA, GF_METEOR, GF_ICE, GF_CHAOS, GF_NETHER, GF_DISENCHANT, GF_SHARDS, GF_SOUND, GF_NEXUS, GF_CONFUSION, GF_TIME, GF_GRAVITY,
@@ -90,7 +90,7 @@ void call_chaos(player_type *player_ptr)
  * or the player gets paralyzed.
  * </pre>
  */
-bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
+bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
 {
     BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     bool is_first_curse = true;
@@ -233,7 +233,7 @@ bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell ランダムな効果を選択するための基準ID
  */
-void wild_magic(player_type *player_ptr, int spell)
+void wild_magic(PlayerType *player_ptr, int spell)
 {
     int type = SUMMON_MOLD + randint0(6);
     if (type < SUMMON_MOLD)
@@ -344,7 +344,7 @@ void wild_magic(player_type *player_ptr, int spell)
  * while keeping the results quite random.  It also allows some potent\n
  * effects only at high level.
  */
-void cast_wonder(player_type *player_ptr, DIRECTION dir)
+void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;

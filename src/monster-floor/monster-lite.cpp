@@ -30,7 +30,7 @@
  * @param x X座標
  */
 static void update_monster_lite(
-    player_type *const player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
+    PlayerType *const player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
 {
     grid_type *g_ptr;
     int dpf, d;
@@ -82,7 +82,7 @@ static void update_monster_lite(
  * Add a square to the changes array
  */
 static void update_monster_dark(
-    player_type *const player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
+    PlayerType *const player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
 {
     grid_type *g_ptr;
     int midpoint, dpf, d;
@@ -131,12 +131,12 @@ static void update_monster_dark(
  * changes are drawn via lite_spot().
  * @todo player-status からのみ呼ばれている。しかしあちらは行数が酷いので要調整
  */
-void update_mon_lite(player_type *player_ptr)
+void update_mon_lite(PlayerType *player_ptr)
 {
     // 座標たちを記録する配列。
     std::vector<Pos2D> points;
 
-    void (*add_mon_lite)(player_type *, std::vector<Pos2D> &, const POSITION, const POSITION, const monster_lite_type *);
+    void (*add_mon_lite)(PlayerType *, std::vector<Pos2D> &, const POSITION, const POSITION, const monster_lite_type *);
     int dis_lim = (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS) && !player_ptr->see_nocto) ? (MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {

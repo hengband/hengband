@@ -50,5 +50,5 @@
 #define ENTRY_EXP_ANDR 43
 #define ENTRY_EXP_TO_ADV_ANDR 44
 
-struct player_type;
-void display_player_various(player_type *player_ptr);
+class PlayerType;
+void display_player_various(PlayerType *player_ptr);

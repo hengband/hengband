@@ -127,7 +127,7 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
  */
-void do_cmd_knowledge_uniques(player_type *player_ptr, bool is_alive)
+void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
 {
     unique_list_type tmp_list;
     unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);

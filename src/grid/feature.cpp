@@ -120,7 +120,7 @@ FEAT_IDX feat_ground_type[100], feat_wall_type[100];
  * @param feat 地形情報のID
  * @return 罠持ちの地形ならばTRUEを返す。
  */
-bool is_trap(player_type *player_ptr, FEAT_IDX feat)
+bool is_trap(PlayerType *player_ptr, FEAT_IDX feat)
 {
 	/* 関数ポインタの都合 */
 	(void)player_ptr;
@@ -132,7 +132,7 @@ bool is_trap(player_type *player_ptr, FEAT_IDX feat)
  * @param feat 地形情報のID
  * @return 閉じたドアのある地形ならばTRUEを返す。
  */
-bool is_closed_door(player_type *player_ptr, FEAT_IDX feat)
+bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat)
 {
 	/* 関数ポインタの都合 */
 	(void)player_ptr;
@@ -189,7 +189,7 @@ FEAT_IDX feat_jammed_door_random(int door_type)
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
+void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];

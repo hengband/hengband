@@ -59,7 +59,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param ninja 忍者かどうか
  */
-void wiz_lite(player_type *player_ptr, bool ninja)
+void wiz_lite(PlayerType *player_ptr, bool ninja)
 {
     /* Memorize objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
@@ -129,7 +129,7 @@ void wiz_lite(player_type *player_ptr, bool ninja)
 /*
  * Forget the dungeon map (ala "Thinking of Maud...").
  */
-void wiz_dark(player_type *player_ptr)
+void wiz_dark(PlayerType *player_ptr)
 {
     /* Forget every grid */
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
@@ -180,7 +180,7 @@ void wiz_dark(player_type *player_ptr)
 /*
  * Hack -- map the current panel (plus some) ala "magic mapping"
  */
-void map_area(player_type *player_ptr, POSITION range)
+void map_area(PlayerType *player_ptr, POSITION range)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
@@ -244,7 +244,7 @@ void map_area(player_type *player_ptr, POSITION range)
  * "earthquake" by using the "full" to select "destruction".
  * </pre>
  */
-bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
+bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
     /* Prevent destruction of quest levels and town */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;

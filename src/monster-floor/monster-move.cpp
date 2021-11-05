@@ -57,7 +57,7 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return 透過も破壊もしなかった場合はFALSE、それ以外はTRUE
  */
-static bool process_wall(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
+static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
@@ -104,7 +104,7 @@ static bool process_wall(player_type *player_ptr, turn_flags *turn_flags_ptr, mo
  * @param nx モンスターのX座標
  * @return ここではドアを開けず、ガラスのドアを開ける可能性があるならTRUE
  */
-static bool bash_normal_door(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
@@ -138,7 +138,7 @@ static bool bash_normal_door(player_type *player_ptr, turn_flags *turn_flags_ptr
  * @param g_ptr グリッドへの参照ポインタ
  * @param f_ptr 地形への参照ポインタ
  */
-static void bash_glass_door(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
+static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (!may_bash || ((r_ptr->flags2 & RF2_BASH_DOOR) == 0) || f_ptr->flags.has_not(FF::BASH)
@@ -170,7 +170,7 @@ static void bash_glass_door(player_type *player_ptr, turn_flags *turn_flags_ptr,
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_door(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
@@ -215,7 +215,7 @@ static bool process_door(player_type *player_ptr, turn_flags *turn_flags_ptr, mo
  * @param nx モンスターのX座標
  * @return ルーンのある/なし
  */
-static bool process_protection_rune(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -248,7 +248,7 @@ static bool process_protection_rune(player_type *player_ptr, turn_flags *turn_fl
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_explosive_rune(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -293,7 +293,7 @@ static bool process_explosive_rune(player_type *player_ptr, turn_flags *turn_fla
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_post_dig_wall(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
@@ -339,7 +339,7 @@ static bool process_post_dig_wall(player_type *player_ptr, turn_flags *turn_flag
  * @return 移動が阻害される何か (ドア等)があったらFALSE
  * @todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  */
-bool process_monster_movement(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, POSITION oy, POSITION ox, int *count)
+bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, POSITION oy, POSITION ox, int *count)
 {
     for (int i = 0; mm[i]; i++) {
         int d = mm[i];
@@ -450,7 +450,7 @@ bool process_monster_movement(player_type *player_ptr, turn_flags *turn_flags_pt
  * @param ox モンスターが元々いたX座標
  * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  */
-void process_speak_sound(player_type *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
+void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {
     if (player_ptr->phase_out)
         return;

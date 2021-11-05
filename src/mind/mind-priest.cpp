@@ -23,7 +23,7 @@
  * Bless a weapon
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
-bool bless_weapon(player_type *player_ptr)
+bool bless_weapon(PlayerType *player_ptr)
 {
     concptr q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
     concptr s = _("祝福できる武器がありません。", "You have weapon to bless.");

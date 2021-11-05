@@ -39,7 +39,7 @@ bool in_bounds2u(floor_type *floor_ptr, POSITION y, POSITION x) { return (y < fl
  * Line 2 -- forbid normal monsters
  * Line 3 -- forbid the player
  */
-bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
+bool is_cave_empty_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_empty_grid = cave_has_flag_bold(floor_ptr, y, x, FF::PLACE);
@@ -55,7 +55,7 @@ bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
  * Line 1 -- forbid non-empty grids
  * Line 2 -- forbid trees while dungeon generation
  */
-bool is_cave_empty_bold2(player_type *player_ptr, POSITION y, POSITION x)
+bool is_cave_empty_bold2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
     is_empty_grid &= w_ptr->character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::TREE);
@@ -70,7 +70,7 @@ bool cave_has_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, FF f_idx)
 /*
  * Determine if a "legal" grid is within "los" of the player
  */
-bool player_has_los_bold(player_type *player_ptr, POSITION y, POSITION x)
+bool player_has_los_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     return ((player_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_VIEW) != 0) || player_ptr->phase_out;
 }
@@ -78,7 +78,7 @@ bool player_has_los_bold(player_type *player_ptr, POSITION y, POSITION x)
 /*
  * Determine if player is on this grid
  */
-bool player_bold(player_type *player_ptr, POSITION y, POSITION x) { return (y == player_ptr->y) && (x == player_ptr->x); }
+bool player_bold(PlayerType *player_ptr, POSITION y, POSITION x) { return (y == player_ptr->y) && (x == player_ptr->x); }
 
 /*
  * Does the grid stop disintegration?

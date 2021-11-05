@@ -4,7 +4,7 @@
 #include "timed-effect/player-stun.h"
 #include "view/display-messages.h"
 
-ItemUseChecker::ItemUseChecker(player_type* player_ptr)
+ItemUseChecker::ItemUseChecker(PlayerType* player_ptr)
     : player_ptr(player_ptr)
 {
 }

@@ -66,7 +66,7 @@
  * @param fear 攻撃を受けたモンスターが恐慌状態に陥ったかを返す参照ポインタ
  * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
  */
-static void natural_attack(player_type *player_ptr, MONSTER_IDX m_idx, MUTA attack, bool *fear, bool *mdeath)
+static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, MUTA attack, bool *fear, bool *mdeath)
 {
     WEIGHT n_weight = 0;
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -167,7 +167,7 @@ static void natural_attack(player_type *player_ptr, MONSTER_IDX m_idx, MUTA atta
  * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
-bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_options mode)
+bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_options mode)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];

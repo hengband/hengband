@@ -3,7 +3,7 @@
 
 class PlayerSpeed : public PlayerStatusBase {
 public:
-    PlayerSpeed(player_type *player_ptr);
+    PlayerSpeed(PlayerType *player_ptr);
 
 protected:
     void set_locals() override;

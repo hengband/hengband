@@ -3,8 +3,8 @@
 #include "system/angband.h"
 
 struct object_type;
-struct player_type;
-void identify_pack(player_type *player_ptr);
-bool identify_item(player_type *player_ptr, object_type *o_ptr);
-bool ident_spell(player_type *player_ptr, bool only_equip);
-bool identify_fully(player_type *player_ptr, bool only_equip);
+class PlayerType;
+void identify_pack(PlayerType *player_ptr);
+bool identify_item(PlayerType *player_ptr, object_type *o_ptr);
+bool ident_spell(PlayerType *player_ptr, bool only_equip);
+bool identify_fully(PlayerType *player_ptr, bool only_equip);

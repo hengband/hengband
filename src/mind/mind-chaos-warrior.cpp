@@ -8,7 +8,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-void acquire_chaos_weapon(player_type *player_ptr)
+void acquire_chaos_weapon(PlayerType *player_ptr)
 {
     object_type forge;
     object_type *q_ptr = &forge;

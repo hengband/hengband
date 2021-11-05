@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct player_type;
-void do_cmd_knowledge_virtues(player_type *player_ptr);
-void do_cmd_knowledge_stat(player_type *player_ptr);
-void do_cmd_knowledge_home(player_type *player_ptr);
+class PlayerType;
+void do_cmd_knowledge_virtues(PlayerType *player_ptr);
+void do_cmd_knowledge_stat(PlayerType *player_ptr);
+void do_cmd_knowledge_home(PlayerType *player_ptr);

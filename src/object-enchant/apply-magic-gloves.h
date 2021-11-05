@@ -5,10 +5,10 @@
 #include "system/angband.h"
 
 struct object_type;
-struct player_type;
+class PlayerType;
 class GlovesEnchanter : AbstractProtectorEnchanter {
 public:
-    GlovesEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power);
+    GlovesEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power);
     virtual ~GlovesEnchanter() = default;
     void apply_magic() override;
 
@@ -19,5 +19,5 @@ protected:
     void give_cursed() override{};
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
 };

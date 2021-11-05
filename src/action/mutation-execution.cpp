@@ -61,7 +61,7 @@
  * @param power 発動させる突然変異レイシャルのID
  * @return レイシャルを実行した場合TRUE、キャンセルした場合FALSEを返す
  */
-bool exe_mutation_power(player_type *player_ptr, MUTA power)
+bool exe_mutation_power(PlayerType *player_ptr, MUTA power)
 {
     DIRECTION dir = 0;
     PLAYER_LEVEL lvl = player_ptr->lev;

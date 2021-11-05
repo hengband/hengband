@@ -23,7 +23,7 @@
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-static errr rd_dungeon(player_type *player_ptr)
+static errr rd_dungeon(PlayerType *player_ptr)
 {
     init_saved_floors(player_ptr, false);
     errr err = 0;
@@ -123,7 +123,7 @@ static errr rd_dungeon(player_type *player_ptr)
     return err;
 }
 
-errr restore_dungeon(player_type *player_ptr)
+errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
         for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)

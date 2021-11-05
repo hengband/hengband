@@ -4,7 +4,7 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 
-bool activate_charm_animal(player_type *player_ptr)
+bool activate_charm_animal(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -14,7 +14,7 @@ bool activate_charm_animal(player_type *player_ptr)
     return true;
 }
 
-bool activate_charm_undead(player_type *player_ptr)
+bool activate_charm_undead(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -24,7 +24,7 @@ bool activate_charm_undead(player_type *player_ptr)
     return true;
 }
 
-bool activate_charm_other(player_type *player_ptr)
+bool activate_charm_other(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -34,13 +34,13 @@ bool activate_charm_other(player_type *player_ptr)
     return true;
 }
 
-bool activate_charm_animals(player_type *player_ptr)
+bool activate_charm_animals(PlayerType *player_ptr)
 {
     (void)charm_animals(player_ptr, player_ptr->lev * 2);
     return true;
 }
 
-bool activate_charm_others(player_type *player_ptr)
+bool activate_charm_others(PlayerType *player_ptr)
 {
     (void)charm_monsters(player_ptr, player_ptr->lev * 2);
     return true;

@@ -67,7 +67,7 @@ typedef struct um_type {
  * @param ox 移動後の、モンスターのX座標
  * @return アイテム等に影響を及ぼしたらTRUE
  */
-bool update_riding_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
+bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -97,7 +97,7 @@ bool update_riding_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, 
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  */
-void update_player_type(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
+void update_PlayerType(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
 {
     if (turn_flags_ptr->do_view) {
         player_ptr->update |= PU_FLOW;
@@ -117,7 +117,7 @@ void update_player_type(player_type *player_ptr, turn_flags *turn_flags_ptr, mon
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  */
-void update_monster_race_flags(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
+void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (!is_original_ap_and_seen(player_ptr, m_ptr))
@@ -151,7 +151,7 @@ void update_monster_race_flags(player_type *player_ptr, turn_flags *turn_flags_p
  * @param window ウィンドウフラグ
  * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
  */
-void update_player_window(player_type *player_ptr, old_race_flags *old_race_flags_ptr)
+void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags_ptr)
 {
     monster_race *r_ptr;
     r_ptr = &r_info[player_ptr->monster_race_idx];
@@ -164,7 +164,7 @@ void update_player_window(player_type *player_ptr, old_race_flags *old_race_flag
     }
 }
 
-static um_type *initialize_um_type(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
+static um_type *initialize_um_type(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
 {
     um_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     um_ptr->do_disturb = disturb_move;
@@ -177,7 +177,7 @@ static um_type *initialize_um_type(player_type *player_ptr, um_type *um_ptr, MON
     return um_ptr;
 }
 
-static POSITION decide_updated_distance(player_type *player_ptr, um_type *um_ptr)
+static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
 {
     if (!um_ptr->full)
         return um_ptr->m_ptr->cdis;
@@ -211,7 +211,7 @@ static void update_smart_stupid_flags(monster_race *r_ptr)
  * @param m_idx モンスターID
  * @return WEIRD_MINDフラグがあるならTRUE
  */
-static bool update_weird_telepathy(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0)
@@ -230,7 +230,7 @@ static bool update_weird_telepathy(player_type *player_ptr, um_type *um_ptr, MON
     return true;
 }
 
-static void update_telepathy_sight(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
@@ -261,7 +261,7 @@ static void update_telepathy_sight(player_type *player_ptr, um_type *um_ptr, MON
         update_smart_stupid_flags(r_ptr);
 }
 
-static void update_specific_race_telepathy(player_type *player_ptr, um_type *um_ptr)
+static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_ptr)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((player_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
@@ -349,7 +349,7 @@ static void update_specific_race_telepathy(player_type *player_ptr, um_type *um_
     }
 }
 
-static bool check_cold_blood(player_type *player_ptr, um_type *um_ptr, const POSITION distance)
+static bool check_cold_blood(PlayerType *player_ptr, um_type *um_ptr, const POSITION distance)
 {
     if (distance > player_ptr->see_infra)
         return false;
@@ -363,7 +363,7 @@ static bool check_cold_blood(player_type *player_ptr, um_type *um_ptr, const POS
     return true;
 }
 
-static bool check_invisible(player_type *player_ptr, um_type *um_ptr)
+static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
 {
     if (!player_can_see_bold(player_ptr, um_ptr->fy, um_ptr->fx))
         return false;
@@ -387,7 +387,7 @@ static bool check_invisible(player_type *player_ptr, um_type *um_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
  */
-static void decide_sight_invisible_monster(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     POSITION distance = decide_updated_distance(player_ptr, um_ptr);
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
@@ -431,7 +431,7 @@ static void decide_sight_invisible_monster(player_type *player_ptr, um_type *um_
  * @param m_idx フロアのモンスター番号
  * @details 感知した結果、エルドリッチホラー持ちがいたら精神を破壊する
  */
-static void update_invisible_monster(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     if (um_ptr->m_ptr->ml)
         return;
@@ -465,7 +465,7 @@ static void update_invisible_monster(player_type *player_ptr, um_type *um_ptr, M
     }
 }
 
-static void update_visible_monster(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     if (!um_ptr->m_ptr->ml)
         return;
@@ -483,7 +483,7 @@ static void update_visible_monster(player_type *player_ptr, um_type *um_ptr, MON
         disturb(player_ptr, true, true);
 }
 
-static bool update_clear_monster(player_type *player_ptr, um_type *um_ptr)
+static bool update_clear_monster(PlayerType *player_ptr, um_type *um_ptr)
 {
     if (!um_ptr->easy)
         return false;
@@ -502,7 +502,7 @@ static bool update_clear_monster(player_type *player_ptr, um_type *um_ptr)
  * @param m_idx 更新するモンスター情報のID
  * @param full プレイヤーとの距離更新を行うならばtrue
  */
-void update_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool full)
+void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
 {
     um_type tmp_um;
     um_type *um_ptr = initialize_um_type(player_ptr, &tmp_um, m_idx, full);
@@ -535,7 +535,7 @@ void update_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool full)
  * @param full 距離更新を行うならtrue
  * @todo モンスターの感知状況しか更新していないように見える。関数名変更を検討する
  */
-void update_monsters(player_type *player_ptr, bool full)
+void update_monsters(PlayerType *player_ptr, bool full)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
@@ -552,7 +552,7 @@ void update_monsters(player_type *player_ptr, bool full)
  * @param m_idx 更新を行う「モンスター情報ID
  * @param what 学習対象ID
  */
-void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
+void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

@@ -20,7 +20,7 @@
  * @param base_race true の場合、仮に変身している場合でも元の種族について扱う。 false の場合変身している種族について扱う。
  * 引数を省略した場合は false
  */
-PlayerRace::PlayerRace(player_type *player_ptr, bool base_race)
+PlayerRace::PlayerRace(PlayerType *player_ptr, bool base_race)
     : player_ptr(player_ptr)
     , base_race(base_race)
 {

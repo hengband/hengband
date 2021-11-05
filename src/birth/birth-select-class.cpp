@@ -113,7 +113,7 @@ static void interpret_class_select_key_move(char c, int *cs)
     }
 }
 
-static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
+static bool select_class(PlayerType *player_ptr, char *cur, char *sym, int *k)
 {
     auto cs = player_ptr->pclass;
     auto os = PlayerClassType::MAX;
@@ -176,7 +176,7 @@ static bool select_class(player_type *player_ptr, char *cur, char *sym, int *k)
 /*!
  * @brief プレイヤーの職業選択を行う / Player class
  */
-bool get_player_class(player_type *player_ptr)
+bool get_player_class(PlayerType *player_ptr)
 {
     clear_from(10);
     put_str(

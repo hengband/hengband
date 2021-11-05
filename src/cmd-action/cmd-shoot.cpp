@@ -24,7 +24,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param snipe_type スナイパーの射撃術の種類
  */
-void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
+void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
 {
     OBJECT_IDX item;
     object_type *j_ptr, *ammo_ptr;

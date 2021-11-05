@@ -38,7 +38,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-process_result effect_monster_hypodynamia(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -66,7 +66,7 @@ process_result effect_monster_hypodynamia(player_type *player_ptr, effect_monste
 /*!
  * @todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
  */
-process_result effect_monster_death_ray(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -97,7 +97,7 @@ process_result effect_monster_death_ray(player_type *player_ptr, effect_monster_
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_kill_wall(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->r_ptr->flags3 & (RF3_HURT_ROCK)) == 0) {
         em_ptr->dam = 0;
@@ -149,7 +149,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
  * 寝た場合は試行終了。
  * 与える効果は減速、朦朧、混乱、睡眠。
  */
-process_result effect_monster_engetsu(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -239,7 +239,7 @@ process_result effect_monster_engetsu(player_type *player_ptr, effect_monster_ty
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_genocide(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -254,7 +254,7 @@ process_result effect_monster_genocide(player_type *player_ptr, effect_monster_t
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_photo(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_photo(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->who)
         msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
@@ -294,7 +294,7 @@ process_result effect_monster_wounds(effect_monster_type *em_ptr)
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ここのスイッチングで終るならTRUEかFALSE、後続処理を実行するならCONTINUE
  */
-process_result switch_effects_monster(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     switch (em_ptr->effect_type) {
     case GF_PSY_SPEAR:

@@ -12,7 +12,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-bool cast_blue_summon_kin(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_kin(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("援軍を召喚した。", "You summon one of your kin."));
     for (int k = 0; k < 1; k++) {
@@ -27,7 +27,7 @@ bool cast_blue_summon_kin(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_cyber(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_cyber(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("サイバーデーモンを召喚した！", "You summon a Cyberdemon!"));
     for (int k = 0; k < 1; k++) {
@@ -42,7 +42,7 @@ bool cast_blue_summon_cyber(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_monster(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_monster(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("仲間を召喚した。", "You summon help."));
     for (int k = 0; k < 1; k++) {
@@ -57,7 +57,7 @@ bool cast_blue_summon_monster(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_monsters(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_monsters(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("モンスターを召喚した！", "You summon monsters!"));
     for (int k = 0; k < bmc_ptr->plev / 15 + 2; k++) {
@@ -72,7 +72,7 @@ bool cast_blue_summon_monsters(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_ant(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_ant(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("アリを召喚した。", "You summon ants."));
     if (summon_specific(
@@ -86,7 +86,7 @@ bool cast_blue_summon_ant(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_spider(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_spider(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
     if (summon_specific(
@@ -100,7 +100,7 @@ bool cast_blue_summon_spider(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_hound(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_hound(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("ハウンドを召喚した。", "You summon hounds."));
     if (summon_specific(
@@ -114,7 +114,7 @@ bool cast_blue_summon_hound(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_hydra(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_hydra(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("ヒドラを召喚した。", "You summon a hydras."));
     if (summon_specific(
@@ -128,7 +128,7 @@ bool cast_blue_summon_hydra(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_angel(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_angel(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("天使を召喚した！", "You summon an angel!"));
     if (summon_specific(
@@ -142,7 +142,7 @@ bool cast_blue_summon_angel(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_demon(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_demon(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("混沌の宮廷から悪魔を召喚した！", "You summon a demon from the Courts of Chaos!"));
     if (summon_specific(
@@ -156,7 +156,7 @@ bool cast_blue_summon_demon(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_undead(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_undead(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("アンデッドの強敵を召喚した！", "You summon an undead adversary!"));
     if (summon_specific(
@@ -170,7 +170,7 @@ bool cast_blue_summon_undead(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_dragon(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_dragon(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("ドラゴンを召喚した！", "You summon a dragon!"));
     if (summon_specific(
@@ -184,7 +184,7 @@ bool cast_blue_summon_dragon(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_high_undead(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_high_undead(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("強力なアンデッドを召喚した！", "You summon a greater undead!"));
     if (summon_specific(player_ptr, (bmc_ptr->pet ? -1 : 0), player_ptr->y, player_ptr->x, bmc_ptr->summon_lev, SUMMON_HI_UNDEAD,
@@ -198,7 +198,7 @@ bool cast_blue_summon_high_undead(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_high_dragon(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_high_dragon(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("古代ドラゴンを召喚した！", "You summon an ancient dragon!"));
     if (summon_specific(player_ptr, (bmc_ptr->pet ? -1 : 0), player_ptr->y, player_ptr->x, bmc_ptr->summon_lev, SUMMON_HI_DRAGON,
@@ -212,7 +212,7 @@ bool cast_blue_summon_high_dragon(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_amberite(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_amberite(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("アンバーの王族を召喚した！", "You summon a Lord of Amber!"));
     if (summon_specific(player_ptr, (bmc_ptr->pet ? -1 : 0), player_ptr->y, player_ptr->x, bmc_ptr->summon_lev, SUMMON_AMBERITES,
@@ -226,7 +226,7 @@ bool cast_blue_summon_amberite(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_summon_unique(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_summon_unique(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     int count = 0;
     msg_print(_("特別な強敵を召喚した！", "You summon a special opponent!"));

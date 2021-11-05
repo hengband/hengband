@@ -2,6 +2,6 @@
 
 #include "object/tval-types.h"
 
-struct player_type;
+class PlayerType;
 class ItemTester;
-void display_inventory(player_type *player_ptr, const ItemTester& item_tester);
+void display_inventory(PlayerType *player_ptr, const ItemTester& item_tester);

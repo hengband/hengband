@@ -17,7 +17,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool door_creation(player_type *player_ptr, POSITION y, POSITION x)
+bool door_creation(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_DOOR, flg).notice;
@@ -30,7 +30,7 @@ bool door_creation(player_type *player_ptr, POSITION y, POSITION x)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool trap_creation(player_type *player_ptr, POSITION y, POSITION x)
+bool trap_creation(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg).notice;
@@ -41,7 +41,7 @@ bool trap_creation(player_type *player_ptr, POSITION y, POSITION x)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool tree_creation(player_type *player_ptr, POSITION y, POSITION x)
+bool tree_creation(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_TREE, flg).notice;
@@ -52,7 +52,7 @@ bool tree_creation(player_type *player_ptr, POSITION y, POSITION x)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool create_rune_protection_area(player_type *player_ptr, POSITION y, POSITION x)
+bool create_rune_protection_area(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
     return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_RUNE_PROTECTION, flg).notice;
@@ -63,7 +63,7 @@ bool create_rune_protection_area(player_type *player_ptr, POSITION y, POSITION x
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wall_stone(player_type *player_ptr)
+bool wall_stone(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     bool dummy = project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, GF_STONE_WALL, flg).notice;
@@ -77,7 +77,7 @@ bool wall_stone(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool destroy_doors_touch(player_type *player_ptr)
+bool destroy_doors_touch(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, GF_KILL_DOOR, flg).notice;
@@ -88,7 +88,7 @@ bool destroy_doors_touch(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool disarm_traps_touch(player_type *player_ptr)
+bool disarm_traps_touch(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, GF_KILL_TRAP, flg).notice;
@@ -99,7 +99,7 @@ bool disarm_traps_touch(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool sleep_monsters_touch(player_type *player_ptr)
+bool sleep_monsters_touch(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_KILL | PROJECT_HIDE;
     return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, player_ptr->lev, GF_OLD_SLEEP, flg).notice;
@@ -113,7 +113,7 @@ bool sleep_monsters_touch(player_type *player_ptr)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool animate_dead(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x)
+bool animate_dead(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
     return project(player_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg).notice;
@@ -123,7 +123,7 @@ bool animate_dead(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION
  * @brief 周辺破壊効果(プレイヤー中心)
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void wall_breaker(player_type *player_ptr)
+void wall_breaker(PlayerType *player_ptr)
 {
     POSITION y = 0, x = 0;
     int attempts = 1000;

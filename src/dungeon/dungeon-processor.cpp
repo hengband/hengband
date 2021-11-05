@@ -56,7 +56,7 @@
  * the user dies, or the game is terminated.\n
  * </p>
  */
-void process_dungeon(player_type *player_ptr, bool load_game)
+void process_dungeon(PlayerType *player_ptr, bool load_game)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->base_level = floor_ptr->dun_level;

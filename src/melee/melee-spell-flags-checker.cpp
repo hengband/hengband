@@ -29,7 +29,7 @@
 
 #include <iterator>
 
-static void decide_melee_spell_target(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void decide_melee_spell_target(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if ((player_ptr->pet_t_m_idx == 0) || !ms_ptr->pet)
         return;
@@ -40,7 +40,7 @@ static void decide_melee_spell_target(player_type *player_ptr, melee_spell_type 
         ms_ptr->target_idx = 0;
 }
 
-static void decide_indirection_melee_spell(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if ((ms_ptr->target_idx != 0) || (ms_ptr->m_ptr->target_y == 0))
         return;
@@ -62,7 +62,7 @@ static void decide_indirection_melee_spell(player_type *player_ptr, melee_spell_
     ms_ptr->ability_flags &= RF_ABILITY_INDIRECT_MASK;
 }
 
-static bool check_melee_spell_projection(player_type *player_ptr, melee_spell_type *ms_ptr)
+static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->target_idx != 0)
         return true;
@@ -94,7 +94,7 @@ static bool check_melee_spell_projection(player_type *player_ptr, melee_spell_ty
     return false;
 }
 
-static void check_darkness(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_darkness(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->ability_flags.has_not(RF_ABILITY::DARKNESS))
         return;
@@ -121,7 +121,7 @@ static void check_stupid(melee_spell_type *ms_ptr)
     ms_ptr->ability_flags &= RF_ABILITY_NOMAGIC_MASK;
 }
 
-static void check_arena(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_arena(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (!player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out)
         return;
@@ -131,7 +131,7 @@ static void check_arena(player_type *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags.reset(RF_ABILITY::SPECIAL);
 }
 
-static void check_melee_spell_distance(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     auto ball_mask_except_rocket = RF_ABILITY_BALL_MASK;
     ball_mask_except_rocket.reset(RF_ABILITY::ROCKET);
@@ -160,7 +160,7 @@ static void check_melee_spell_distance(player_type *player_ptr, melee_spell_type
     ms_ptr->ability_flags.reset(RF_ABILITY_BIG_BALL_MASK);
 }
 
-static void check_melee_spell_rocket(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_melee_spell_rocket(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->ability_flags.has_not(RF_ABILITY::ROCKET))
         return;
@@ -172,7 +172,7 @@ static void check_melee_spell_rocket(player_type *player_ptr, melee_spell_type *
         ms_ptr->ability_flags.reset(RF_ABILITY::ROCKET);
 }
 
-static void check_melee_spell_beam(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_melee_spell_beam(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BEAM_MASK)
         || direct_beam(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->m_ptr))
@@ -181,7 +181,7 @@ static void check_melee_spell_beam(player_type *player_ptr, melee_spell_type *ms
     ms_ptr->ability_flags.reset(RF_ABILITY_BEAM_MASK);
 }
 
-static void check_melee_spell_breath(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_melee_spell_breath(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BREATH_MASK))
         return;
@@ -204,7 +204,7 @@ static void check_melee_spell_breath(player_type *player_ptr, melee_spell_type *
     }
 }
 
-static void check_melee_spell_special(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_melee_spell_special(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->ability_flags.has_not(RF_ABILITY::SPECIAL))
         return;
@@ -226,7 +226,7 @@ static void check_melee_spell_special(player_type *player_ptr, melee_spell_type 
     ms_ptr->ability_flags.reset(RF_ABILITY::SPECIAL);
 }
 
-static void check_riding(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_riding(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->m_idx != player_ptr->riding)
         return;
@@ -234,7 +234,7 @@ static void check_riding(player_type *player_ptr, melee_spell_type *ms_ptr)
     ms_ptr->ability_flags.reset(RF_ABILITY_RIDING_MASK);
 }
 
-static void check_pet(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_pet(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (!ms_ptr->pet)
         return;
@@ -261,7 +261,7 @@ static void check_pet(player_type *player_ptr, melee_spell_type *ms_ptr)
     check_melee_spell_special(player_ptr, ms_ptr);
 }
 
-static void check_non_stupid(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_non_stupid(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
         return;
@@ -286,7 +286,7 @@ static void check_non_stupid(player_type *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags.reset(RF_ABILITY::SPECIAL);
 }
 
-static void check_smart(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void check_smart(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if ((ms_ptr->r_ptr->flags2 & RF2_SMART) == 0)
         return;
@@ -300,7 +300,7 @@ static void check_smart(player_type *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags.reset(RF_ABILITY::TELE_LEVEL);
 }
 
-static bool set_melee_spell_set(player_type *player_ptr, melee_spell_type *ms_ptr)
+static bool set_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->ability_flags.none())
         return false;
@@ -310,7 +310,7 @@ static bool set_melee_spell_set(player_type *player_ptr, melee_spell_type *ms_pt
     return !ms_ptr->spells.empty() && player_ptr->playing && !player_ptr->is_dead && !player_ptr->leaving;
 }
 
-bool check_melee_spell_set(player_type *player_ptr, melee_spell_type *ms_ptr)
+bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (monster_confused_remaining(ms_ptr->m_ptr))
         return false;

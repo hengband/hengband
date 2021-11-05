@@ -28,7 +28,7 @@
  * XAngband: determine if a given location is "interesting"
  * based on target_set_accept function.
  */
-static bool tgt_pt_accept(player_type *player_ptr, POSITION y, POSITION x)
+static bool tgt_pt_accept(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
@@ -59,7 +59,7 @@ static bool tgt_pt_accept(player_type *player_ptr, POSITION y, POSITION x)
  * XAngband: Prepare the "temp" array for "tget_pt"
  * based on target_set_prepare funciton.
  */
-static void tgt_pt_prepare(player_type *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs)
+static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs)
 {
     if (!expand_list)
         return;
@@ -114,7 +114,7 @@ struct tgt_pt_info {
     char prev_ch; //<! 前回入力キー
     std::function<bool(grid_type *)> callback; //<! 条件判定コールバック
 
-    void move_to_symbol(player_type *player_ptr);
+    void move_to_symbol(PlayerType *player_ptr);
 };
 
 /*!
@@ -123,7 +123,7 @@ struct tgt_pt_info {
  * @details 自分 (＠)の位置に戻ってくるような処理に見える.
  * コールバックにも依る？
  */
-void tgt_pt_info::move_to_symbol(player_type *player_ptr)
+void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
 {
     if (!expand_list || this->ys.empty())
         return;
@@ -170,7 +170,7 @@ void tgt_pt_info::move_to_symbol(player_type *player_ptr)
  * @param y_ptr y座標への参照ポインタ
  * @return 指定したらTRUE、キャンセルしたらFALSE
  */
-bool tgt_pt(player_type *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
+bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
 {
     tgt_pt_info info;
     get_screen_size(&info.wid, &info.hgt);

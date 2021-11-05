@@ -89,7 +89,7 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
  * Hook to determine if an object is contertible in an arrow/bolt
  * @return 製造を実際に行ったらTRUE、キャンセルしたらFALSEを返す
  */
-bool create_ammo(player_type *player_ptr)
+bool create_ammo(PlayerType *player_ptr)
 {
     if (cmd_limit_confused(player_ptr) || cmd_limit_blind(player_ptr))
         return false;

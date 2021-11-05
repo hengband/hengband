@@ -44,7 +44,7 @@
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
+errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     clear_cave(player_ptr);
@@ -197,7 +197,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
  * @param sf_ptr 保存フロア読み込み先
  * @return 成功したらtrue
  */
-static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
+static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     load_xor_byte = 0;
     strip_bytes(1);
@@ -234,7 +234,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
  * @param mode オプション
  * @return 成功したらtrue
  */
-bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
+bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
     /*
      * Temporary files are always written in system depended kanji

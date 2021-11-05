@@ -48,7 +48,7 @@ std::tuple<HIT_POINT, concptr, sound_type> apply_critical_norm_damage(int k, HIT
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_norm(player_type *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, combat_options mode, bool impact)
+HIT_POINT critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, combat_options mode, bool impact)
 {
     /* Extract "blow" power */
     int i = (weight + (meichuu * 3 + plus * 5) + player_ptr->skill_thn);
@@ -82,7 +82,7 @@ HIT_POINT critical_norm(player_type *player_ptr, WEIGHT weight, int plus, HIT_PO
  * チェックを通ったら、ユニークならば2倍ダメージ、それ以外は一撃死
  * @todo 3つの処理をdetailsに書くよりは関数自体を分割すべきだが、一旦後回しにする。他の項目と一緒に処理する
  */
-static void ninja_critical(player_type *player_ptr, player_attack_type *pa_ptr)
+static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     int maxhp = pa_ptr->m_ptr->maxhp;
@@ -115,7 +115,7 @@ static void ninja_critical(player_type *player_ptr, player_attack_type *pa_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-void critical_attack(player_type *player_ptr, player_attack_type *pa_ptr)
+void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];

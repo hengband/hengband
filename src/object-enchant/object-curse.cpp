@@ -59,7 +59,7 @@ TRC get_curse(int power, object_type *o_ptr)
  * @param chance 呪いの基本確率
  * @param heavy_chance さらに重い呪いとなる確率
  */
-void curse_equipment(player_type *player_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
+void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
 {
     if (randint1(100) > chance)
         return;

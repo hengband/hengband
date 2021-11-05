@@ -8,7 +8,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-void add_cheat_remove_flags_element(player_type *player_ptr, msr_type *msr_ptr)
+void add_cheat_remove_flags_element(PlayerType *player_ptr, msr_type *msr_ptr)
 {
     if (has_resist_acid(player_ptr))
         msr_ptr->smart.set(SM::RES_ACID);
