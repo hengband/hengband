@@ -348,6 +348,10 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_VUL_FIRE, {}, -1 },
     { TR_VUL_LITE, {}, -1 },
     { TR_IM_DARK, {}, 0 },
+
+    { TR_SELF_FIRE, { SmithEssence::BRAND_FIRE, SmithEssence::RES_FIRE }, 10 },
+    { TR_SELF_ELEC, { SmithEssence::BRAND_ELEC, SmithEssence::RES_ELEC }, 10 },
+    { TR_SELF_COLD, { SmithEssence::BRAND_COLD, SmithEssence::RES_COLD }, 10 },
 };
 
 namespace {

@@ -572,6 +572,18 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは冷気のバリアを張る。", "It produces a sheath of coldness.");
     }
 
+    if (flgs.has(TR_SELF_FIRE)) {
+        info[i++] = _("それはあなたを燃やす。", "It burns you.");
+    }
+
+    if (flgs.has(TR_SELF_ELEC)) {
+        info[i++] = _("それはあなたを電撃で包む。", "It electrocutes you.");
+    }
+
+    if (flgs.has(TR_SELF_COLD)) {
+        info[i++] = _("それはあなたを凍らせる。", "It freezes you.");
+    }
+
     if (flgs.has(TR_NO_MAGIC)) {
         info[i++] = _("それは反魔法バリアを張る。", "It produces an anti-magic shell.");
     }
