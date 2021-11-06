@@ -30,7 +30,7 @@ int16_t PlayerStatusBase::get_value()
     int16_t pow = this->default_value;
 
     pow += this->action_value();
-    pow += this->battleform_value();
+    pow += this->stance_value();
     pow += this->class_base_value();
     pow += this->class_value();
     pow += this->equipments_value();
@@ -67,8 +67,8 @@ BIT_FLAGS PlayerStatusBase::get_all_flags()
     if (this->race_value() != 0)
         set_bits(result, FLAG_CAUSE_RACE);
 
-    if (this->battleform_value() != 0)
-        set_bits(result, FLAG_CAUSE_BATTLE_FORM);
+    if (this->stance_value() != 0)
+        set_bits(result, FLAG_CAUSE_STANCE);
 
     if (this->mutation_value() != 0)
         set_bits(result, FLAG_CAUSE_MUTATION);
@@ -106,8 +106,8 @@ BIT_FLAGS PlayerStatusBase::get_good_flags()
     if (this->race_value() > 0)
         set_bits(result, FLAG_CAUSE_RACE);
 
-    if (this->battleform_value() > 0)
-        set_bits(result, FLAG_CAUSE_BATTLE_FORM);
+    if (this->stance_value() > 0)
+        set_bits(result, FLAG_CAUSE_STANCE);
 
     if (this->mutation_value() > 0)
         set_bits(result, FLAG_CAUSE_MUTATION);
@@ -145,8 +145,8 @@ BIT_FLAGS PlayerStatusBase::get_bad_flags()
     if (this->race_value() < 0)
         set_bits(result, FLAG_CAUSE_RACE);
 
-    if (this->battleform_value() < 0)
-        set_bits(result, FLAG_CAUSE_BATTLE_FORM);
+    if (this->stance_value() < 0)
+        set_bits(result, FLAG_CAUSE_STANCE);
 
     if (this->mutation_value() < 0)
         set_bits(result, FLAG_CAUSE_MUTATION);
@@ -265,7 +265,7 @@ int16_t PlayerStatusBase::time_effect_value()
 {
     return 0;
 }
-int16_t PlayerStatusBase::battleform_value()
+int16_t PlayerStatusBase::stance_value()
 {
     return 0;
 }

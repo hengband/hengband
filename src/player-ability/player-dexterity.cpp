@@ -71,7 +71,7 @@ int16_t PlayerDexterity::time_effect_value()
  * * 玄武の構えで減算(-2)
  * * 朱雀の構えで加算(+2)
  */
-int16_t PlayerDexterity::battleform_value()
+int16_t PlayerDexterity::stance_value()
 {
     int16_t result = 0;
 

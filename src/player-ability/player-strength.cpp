@@ -80,7 +80,7 @@ int16_t PlayerStrength::time_effect_value()
  * * 白虎の構えで加算(+2)
  * * 朱雀の構えで減算(-2)
  */
-int16_t PlayerStrength::battleform_value()
+int16_t PlayerStrength::stance_value()
 {
     int16_t result = 0;
 

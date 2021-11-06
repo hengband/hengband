@@ -37,7 +37,7 @@ void PlayerIntelligence::set_locals()
  * * 玄武の構えで減算(-1)
  * * 朱雀の構えで加算(+1)
  */
-int16_t PlayerIntelligence::battleform_value()
+int16_t PlayerIntelligence::stance_value()
 {
     int16_t result = 0;
 

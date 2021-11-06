@@ -12,7 +12,7 @@ public:
 
 protected:
     void set_locals() override;
-    int16_t battleform_value() override;
+    int16_t stance_value() override;
     int16_t mutation_value() override;
     int16_t set_exception_value(int16_t value) override;
     int16_t set_exception_use_status(int16_t value) override;
