@@ -72,7 +72,7 @@ int16_t PlayerConstitution::time_effect_value()
  * * 朱雀の構えで減算(-2)
  * * ネオ・つよしスペシャル中で加算(+4)
  */
-int16_t PlayerConstitution::battleform_value()
+int16_t PlayerConstitution::stance_value()
 {
     int16_t result = 0;
 

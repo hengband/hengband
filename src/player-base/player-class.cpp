@@ -176,7 +176,7 @@ TrFlags PlayerClass::tr_flags() const
     return flags;
 }
 
-TrFlags PlayerClass::form_tr_flags() const
+TrFlags PlayerClass::stance_tr_flags() const
 {
     TrFlags flags;
 

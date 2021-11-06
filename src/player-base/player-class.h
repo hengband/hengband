@@ -18,7 +18,7 @@ public:
     virtual ~PlayerClass() = default;
 
     TrFlags tr_flags() const;
-    TrFlags form_tr_flags() const;
+    TrFlags stance_tr_flags() const;
 
     bool has_stun_immunity() const;
     bool is_wizard() const;

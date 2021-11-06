@@ -23,7 +23,7 @@ enum flag_cause : uint32_t {
     FLAG_CAUSE_PERSONALITY = 0x01U << 14, /*!< 性格上の体得 */
     FLAG_CAUSE_MAGIC_TIME_EFFECT = 0x01U << 15, /*!< 魔法による時限効果 */
     FLAG_CAUSE_MUTATION = 0x01U << 16, /*!< 変異による効果 */
-    FLAG_CAUSE_BATTLE_FORM = 0x01U << 17, /*!< 構えによる効果 */
+    FLAG_CAUSE_STANCE = 0x01U << 17, /*!< 構えによる効果 */
     FLAG_CAUSE_RIDING = 0x01U << 18, /*!< 乗馬による効果 */
     FLAG_CAUSE_INVEN_PACK = 0x01U << 19, /*!< その他インベントリによる効果 重量超過等 */
     FLAG_CAUSE_ACTION = 0x01U << 20, /*!< ACTIONによる効果 探索モード等 */

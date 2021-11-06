@@ -34,7 +34,7 @@ void PlayerCharisma::set_locals()
  * * 型による魅力修正値
  * * 降鬼陣で加算(+5)
  */
-int16_t PlayerCharisma::battleform_value()
+int16_t PlayerCharisma::stance_value()
 {
     int16_t result = 0;
 

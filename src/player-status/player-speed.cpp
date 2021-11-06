@@ -198,7 +198,7 @@ int16_t PlayerSpeed::time_effect_value()
  * @details
  * ** 朱雀の構えなら加算(+10)
  */
-int16_t PlayerSpeed::battleform_value()
+int16_t PlayerSpeed::stance_value()
 {
     int16_t result = 0;
     if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
