@@ -414,7 +414,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
  */
 static bool check_fear_death(player_type *player_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
-    MonsterDamageProcessor mdp(player_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, pa_ptr->effect_type);
     if (!mdp.mon_take_hit(nullptr))
         return false;
 
@@ -539,6 +539,7 @@ void exe_player_attack_to_monster(player_type *player_ptr, POSITION y, POSITION 
         if (!process_attack_hit(player_ptr, pa_ptr, chance))
             continue;
 
+        pa_ptr->effect_type = melee_effect_type(player_ptr, o_ptr, pa_ptr->mode);
         apply_actual_attack(player_ptr, pa_ptr, &do_quake, is_zantetsu_nullified, is_ej_nullified);
         calc_drain(pa_ptr);
         if (check_fear_death(player_ptr, pa_ptr, num, is_lowlevel))

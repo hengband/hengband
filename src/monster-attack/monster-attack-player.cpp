@@ -243,7 +243,7 @@ static void monster_explode(player_type *player_ptr, monap_type *monap_ptr)
     }
 
     sound(SOUND_EXPLODE);
-    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear, GF_NONE);
     if (mdp.mon_take_hit(nullptr)) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;

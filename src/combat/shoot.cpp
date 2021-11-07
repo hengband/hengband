@@ -70,6 +70,70 @@
 #include "world/world-object.h"
 
 /*!
+ * @brief 矢弾の属性を定義する
+ * @param bow_ptr 弓のオブジェクト構造体参照ポインタ
+ * @param arrow_ptr 矢弾のオブジェクト構造体参照ポインタ
+ * @return スナイパーの射撃属性、弓矢の属性を考慮する。デフォルトはGF_PLAYER_SHOOT。
+ */
+EFFECT_ID shot_effect_type(player_type *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, SPELL_IDX snipe_type)
+{
+    TrFlags flags{};
+    auto arrow_flags = object_flags(arrow_ptr);
+    auto bow_flags = object_flags(bow_ptr);
+
+    flags = bow_flags | arrow_flags;
+
+    static const struct snipe_convert_table_t {
+        SPELL_IDX snipe_type;
+        EFFECT_ID effect_type;
+    } snipe_convert_table[] = {
+        { SP_LITE,      GF_LITE },
+        { SP_FIRE,      GF_FIRE },
+        { SP_COLD,      GF_COLD },
+        { SP_ELEC,      GF_ELEC },
+        { SP_KILL_WALL, GF_KILL_WALL },
+        { SP_EVILNESS,  GF_HELL_FIRE },
+        { SP_HOLYNESS,  GF_HOLY_FIRE },
+        { SP_FINAL,     GF_MANA },
+    };
+
+    static const struct brand_convert_table_t {
+        tr_type brand_type;
+        EFFECT_ID effect_type;
+    } brand_convert_table[] = {
+        { TR_BRAND_ACID,    GF_ACID },
+        { TR_BRAND_FIRE,    GF_FIRE },
+        { TR_BRAND_ELEC,    GF_ELEC },
+        { TR_BRAND_COLD,    GF_COLD },
+        { TR_BRAND_POIS,    GF_POIS },
+        { TR_SLAY_GOOD,     GF_HELL_FIRE },
+        { TR_KILL_GOOD,     GF_HELL_FIRE },
+        { TR_SLAY_EVIL,     GF_HOLY_FIRE },
+        { TR_KILL_EVIL,     GF_HOLY_FIRE },
+    };
+
+    for (size_t i = 0; i < sizeof(snipe_convert_table) / sizeof(snipe_convert_table[0]); ++i) {
+        const struct snipe_convert_table_t *p = &snipe_convert_table[i];
+
+        if (snipe_type == p->snipe_type)
+            return p->effect_type;
+    }
+
+    for (size_t i = 0; i < sizeof(brand_convert_table) / sizeof(brand_convert_table[0]); ++i) {
+        const struct brand_convert_table_t *p = &brand_convert_table[i];
+
+        if (flags.has(p->brand_type))
+            return p->effect_type;
+    }
+
+    if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
+        return GF_MANA;
+    }
+
+    return GF_PLAYER_SHOOT;
+}
+
+/*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /
  * Determines the odds of an object breaking when thrown at a monster
  * @param bow_ptr 弓のオブジェクト構造体参照ポインタ
@@ -392,8 +456,9 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
 
     object_type forge;
     object_type *q_ptr;
-
     object_type *o_ptr;
+
+    EFFECT_ID effect_type = GF_PLAYER_SHOOT;
 
     bool hit_body = false;
 
@@ -691,6 +756,8 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                             base_dam = tdam;
                         }
                     } else {
+
+                        effect_type = shot_effect_type(player_ptr, j_ptr, q_ptr, snipe_type);
                         /* Apply special damage */
                         tdam = calc_shot_damage_with_slay(player_ptr, j_ptr, q_ptr, tdam, m_ptr, snipe_type);
                         tdam = critical_shot(player_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
@@ -724,7 +791,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                     }
 
                     /* Hit the monster, check for death */
-                    MonsterDamageProcessor mdp(player_ptr, c_mon_ptr->m_idx, tdam, &fear);
+                    MonsterDamageProcessor mdp(player_ptr, c_mon_ptr->m_idx, tdam, &fear, effect_type);
                     if (mdp.mon_take_hit(extract_note_dies(real_r_idx(m_ptr)))) {
                         /* Dead monster */
                     }
