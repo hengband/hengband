@@ -14,6 +14,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
+#include "spell/spell-types.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -205,4 +206,72 @@ HIT_POINT calc_attack_damage_with_slay(player_type *player_ptr, object_type *o_p
     if (mult > 150)
         mult = 150;
     return (tdam * mult / 10);
+}
+
+EFFECT_ID melee_effect_type(player_type *player_ptr, object_type *o_ptr, combat_options mode)
+{
+    if (player_ptr->pclass == PlayerClassType::SAMURAI) {
+        static const struct samurai_convert_table_t {
+            combat_options hissatsu_type;
+            EFFECT_ID effect_type;
+        } samurai_convert_table[] = {
+            { HISSATSU_FIRE,    GF_FIRE },
+            { HISSATSU_COLD,    GF_COLD },
+            { HISSATSU_ELEC,    GF_ELEC },
+            { HISSATSU_POISON,  GF_POIS },
+            { HISSATSU_HAGAN,   GF_KILL_WALL },
+        };
+
+        for (size_t i = 0; i < sizeof(samurai_convert_table) / sizeof(samurai_convert_table[0]); ++i) {
+            const struct samurai_convert_table_t *p = &samurai_convert_table[i];
+
+            if (mode == p->hissatsu_type)
+                return p->effect_type;
+        }
+    }
+
+    auto flgs = object_flags(o_ptr);
+
+    if (player_ptr->special_attack & (ATTACK_ACID))
+        flgs.set(TR_BRAND_ACID);
+    if (player_ptr->special_attack & (ATTACK_COLD))
+        flgs.set(TR_BRAND_COLD);
+    if (player_ptr->special_attack & (ATTACK_ELEC))
+        flgs.set(TR_BRAND_ELEC);
+    if (player_ptr->special_attack & (ATTACK_FIRE))
+        flgs.set(TR_BRAND_FIRE);
+    if (player_ptr->special_attack & (ATTACK_POIS))
+        flgs.set(TR_BRAND_POIS);
+
+    if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD))
+        flgs.set(TR_SLAY_GOOD);
+    
+    static const struct brand_convert_table_t {
+        tr_type brand_type;
+        EFFECT_ID effect_type;
+    } brand_convert_table[] = {
+        { TR_BRAND_ACID, GF_ACID },
+        { TR_BRAND_FIRE, GF_FIRE },
+        { TR_BRAND_ELEC, GF_ELEC },
+        { TR_BRAND_COLD, GF_COLD },
+        { TR_BRAND_POIS, GF_POIS },
+        { TR_SLAY_GOOD, GF_HELL_FIRE },
+        { TR_KILL_GOOD, GF_HELL_FIRE },
+        { TR_SLAY_EVIL, GF_HOLY_FIRE },
+        { TR_KILL_EVIL, GF_HOLY_FIRE },
+    };
+
+    for (size_t i = 0; i < sizeof(brand_convert_table) / sizeof(brand_convert_table[0]); ++i) {
+        const struct brand_convert_table_t *p = &brand_convert_table[i];
+
+        if (flgs.has(p->brand_type))
+            return p->effect_type;
+    }
+
+    
+    if ((flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+        return GF_MANA;
+    }
+
+    return GF_ATTACK;
 }

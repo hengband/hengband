@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "spell/spell-types.h"
 
 struct grid_type;;
 struct monster_type;
