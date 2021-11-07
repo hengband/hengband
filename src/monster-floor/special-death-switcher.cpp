@@ -18,6 +18,7 @@
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "monster-floor/monster-death.h"
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -532,7 +533,15 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
     }
 }
 
-void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
+static void on_dead_swordfish(player_type *player_ptr, monster_death_type *md_ptr, EFFECT_ID effect_type)
+{
+    if ((effect_type != GF_COLD) || (randint1(100) >= 10))
+        return;
+
+    drop_single_artifact(player_ptr, md_ptr, ART_FROZEN_SWORDFISH);
+}
+
+void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr, EFFECT_ID effect_type)
 {
     switch (md_ptr->m_ptr->r_idx) {
     case MON_PINK_HORROR:
@@ -611,6 +620,9 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_CHEST_MIMIC_04:
     case MON_CHEST_MIMIC_11:
         on_dead_chest_mimic(player_ptr, md_ptr);
+        break;
+    case MON_SWORDFISH:
+        on_dead_swordfish(player_ptr, md_ptr, effect_type);
         break;
     default:
         on_dead_mimics(player_ptr, md_ptr);
