@@ -144,7 +144,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
     sound(SOUND_KILL);
     this->show_kill_message(note, m_name);
     this->show_bounty_message(m_name);
-    monster_death(this->player_ptr, this->m_idx, true);
+    monster_death(this->player_ptr, this->m_idx, true, this->effect_type);
     this->summon_special_unique();
     this->get_exp_from_mon(exp_mon, exp_mon->max_maxhp * 2);
     *this->fear = false;

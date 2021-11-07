@@ -11,6 +11,7 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/mspell.h"
+#include "spell/spell-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -33,7 +34,7 @@ static void vanish_nonunique(player_type *player_ptr, MONSTER_IDX m_idx, bool se
         msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
     }
 
-    monster_death(player_ptr, m_idx, false);
+    monster_death(player_ptr, m_idx, false, GF_NONE);
     delete_monster_idx(player_ptr, m_idx);
     if (is_pet(m_ptr) && !(m_ptr->ml))
         msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));

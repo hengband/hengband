@@ -12,6 +12,7 @@ enum monster_race_type {
     MON_LOUSE = 69,
     MON_PIRANHA = 70,
     MON_COPPER_COINS = 85,
+    MON_SWORDFISH = 88,
     MON_NOV_PALADIN = 97,
     MON_NOV_PRIEST_G = 109,
     MON_SILVER_COINS = 117,

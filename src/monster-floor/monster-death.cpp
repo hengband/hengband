@@ -165,25 +165,40 @@ static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_t
             continue;
         }
 
-        artifact_type *a_ptr = &a_info[a_idx];
-        if (a_ptr->cur_num == 1)
-            continue;
-
-        if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-            a_ptr->cur_num = 1;
-            if (w_ptr->character_dungeon)
-                a_ptr->floor_id = player_ptr->floor_id;
-
+        if (drop_single_artifact(player_ptr, md_ptr, a_idx))
             break;
-        }
-
-        if (!preserve_mode) {
-            a_ptr->cur_num = 1;
-            break;
-        }
     }
 
     return a_idx;
+}
+
+/*!
+ * @brief 特定アーティファクトのドロップ処理
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param md_ptr モンスター死亡構造体への参照ポインタ
+ * @param a_ix ドロップを試みるアーティファクトID
+ * @return ドロップするならtrue
+ */
+bool drop_single_artifact(player_type *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
+{
+    artifact_type *a_ptr = &a_info[a_idx];
+    if (a_ptr->cur_num == 1)
+        return false;
+
+    if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
+        a_ptr->cur_num = 1;
+        
+        if (w_ptr->character_dungeon) {
+            a_ptr->floor_id = player_ptr->floor_id;
+        }
+        
+        if (!preserve_mode) {
+            a_ptr->cur_num = 1;
+        }
+
+        return true;
+    }
+    return false;
 }
 
 static KIND_OBJECT_IDX drop_dungeon_final_artifact(player_type *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
@@ -339,7 +354,7 @@ static void on_defeat_last_boss(player_type *player_ptr)
  * it drops all of its objects, which may disappear in crowded rooms.
  * </pre>
  */
-void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
+void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, EFFECT_ID effect_type)
 {
     monster_death_type tmp_md;
     monster_death_type *md_ptr = initialize_monster_death_type(player_ptr, &tmp_md, m_idx, drop_item);
@@ -371,7 +386,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
     decide_drop_quality(md_ptr);
-    switch_special_death(player_ptr, md_ptr);
+    switch_special_death(player_ptr, md_ptr, effect_type);
     drop_artifact(player_ptr, md_ptr);
     int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
     coin_type = md_ptr->force_coin;

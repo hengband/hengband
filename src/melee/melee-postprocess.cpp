@@ -37,6 +37,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
+#include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -182,7 +183,7 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
     *(mam_pp_ptr->dead) = true;
     print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
     monster_gain_exp(player_ptr, mam_pp_ptr->who, mam_pp_ptr->m_ptr->r_idx);
-    monster_death(player_ptr, mam_pp_ptr->m_idx, false);
+    monster_death(player_ptr, mam_pp_ptr->m_idx, false, GF_NONE);
     delete_monster_idx(player_ptr, mam_pp_ptr->m_idx);
     *(mam_pp_ptr->fear) = false;
     return true;

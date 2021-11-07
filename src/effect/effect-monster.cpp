@@ -161,7 +161,7 @@ static void effect_damage_killed_pet(player_type *player_ptr, effect_monster_typ
     if (em_ptr->who > 0)
         monster_gain_exp(player_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
 
-    monster_death(player_ptr, em_ptr->g_ptr->m_idx, false);
+    monster_death(player_ptr, em_ptr->g_ptr->m_idx, false, em_ptr->effect_type);
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
     if (sad)
         msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
