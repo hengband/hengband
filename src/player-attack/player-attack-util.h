@@ -5,6 +5,7 @@
 #include "object-enchant/tr-flags.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief カオス効果種別
@@ -54,5 +55,5 @@ typedef struct player_attack_type {
     int drain_result{}; //!< 吸血した累積量
     int drain_left{}; //!< 吸血できる残量(最大MAX_VAMPIRIC_DRAIN)
     bool weak{}; //!< 打撃効果でモンスターが弱くなったかどうか
-    EFFECT_ID effect_type{}; //!< 与えたダメージの種類 
+    EffectFlags effect_flags{}; //!< 与えたダメージの種類 
 } player_attack_type;

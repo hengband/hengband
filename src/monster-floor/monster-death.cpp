@@ -337,12 +337,28 @@ static void on_defeat_last_boss(player_type *player_ptr)
     msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
 }
 
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
  * @param m_idx 死亡したモンスターのID
  * @param drop_item TRUEならばモンスターのドロップ処理を行う
- * @return 撃破されたモンスターの述語
+ * @param effect_type ラストアタックの属性 (単一属性)
+ */
+void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, EFFECT_ID effect_type)
+{
+    EffectFlags flags;
+    flags.clear();
+    flags.set((spells_type)effect_type);
+    monster_death(player_ptr, m_idx, drop_item, flags);
+}
+
+/*!
+ * @brief モンスターが死亡した時の処理 /
+ * Handle the "death" of a monster.
+ * @param m_idx 死亡したモンスターのID
+ * @param drop_item TRUEならばモンスターのドロップ処理を行う
+ * @param effect_flags ラストアタックの属性 (複数属性)
  * @details
  * <pre>
  * Disperse treasures centered at the monster location based on the
@@ -354,7 +370,7 @@ static void on_defeat_last_boss(player_type *player_ptr)
  * it drops all of its objects, which may disappear in crowded rooms.
  * </pre>
  */
-void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, EFFECT_ID effect_type)
+void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, EffectFlags effect_flags)
 {
     monster_death_type tmp_md;
     monster_death_type *md_ptr = initialize_monster_death_type(player_ptr, &tmp_md, m_idx, drop_item);
@@ -386,7 +402,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, E
     drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
     decide_drop_quality(md_ptr);
-    switch_special_death(player_ptr, md_ptr, effect_type);
+    switch_special_death(player_ptr, md_ptr, effect_flags);
     drop_artifact(player_ptr, md_ptr);
     int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
     coin_type = md_ptr->force_coin;

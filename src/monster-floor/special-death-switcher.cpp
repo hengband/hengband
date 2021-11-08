@@ -533,15 +533,15 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
     }
 }
 
-static void on_dead_swordfish(player_type *player_ptr, monster_death_type *md_ptr, EFFECT_ID effect_type)
+static void on_dead_swordfish(player_type *player_ptr, monster_death_type *md_ptr, EffectFlags effect_flags)
 {
-    if ((effect_type != GF_COLD) || (randint1(100) >= 10))
+    if (effect_flags.has_not(GF_COLD) || !md_ptr->drop_chosen_item || (randint1(100) >= 10))
         return;
 
     drop_single_artifact(player_ptr, md_ptr, ART_FROZEN_SWORDFISH);
 }
 
-void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr, EFFECT_ID effect_type)
+void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr, EffectFlags effect_flags)
 {
     switch (md_ptr->m_ptr->r_idx) {
     case MON_PINK_HORROR:
@@ -622,7 +622,7 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr, E
         on_dead_chest_mimic(player_ptr, md_ptr);
         break;
     case MON_SWORDFISH:
-        on_dead_swordfish(player_ptr, md_ptr, effect_type);
+        on_dead_swordfish(player_ptr, md_ptr, effect_flags);
         break;
     default:
         on_dead_mimics(player_ptr, md_ptr);

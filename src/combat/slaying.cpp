@@ -208,12 +208,15 @@ HIT_POINT calc_attack_damage_with_slay(player_type *player_ptr, object_type *o_p
     return (tdam * mult / 10);
 }
 
-EFFECT_ID melee_effect_type(player_type *player_ptr, object_type *o_ptr, combat_options mode)
+EffectFlags melee_effect_type(player_type *player_ptr, object_type *o_ptr, combat_options mode)
 {
+    EffectFlags effect_flags{};
+    effect_flags.set(GF_PLAYER_MELEE);
+
     if (player_ptr->pclass == PlayerClassType::SAMURAI) {
         static const struct samurai_convert_table_t {
             combat_options hissatsu_type;
-            EFFECT_ID effect_type;
+            spells_type effect_type;
         } samurai_convert_table[] = {
             { HISSATSU_FIRE,    GF_FIRE },
             { HISSATSU_COLD,    GF_COLD },
@@ -226,7 +229,7 @@ EFFECT_ID melee_effect_type(player_type *player_ptr, object_type *o_ptr, combat_
             const struct samurai_convert_table_t *p = &samurai_convert_table[i];
 
             if (mode == p->hissatsu_type)
-                return p->effect_type;
+                effect_flags.set(p->effect_type);
         }
     }
 
@@ -248,7 +251,7 @@ EFFECT_ID melee_effect_type(player_type *player_ptr, object_type *o_ptr, combat_
     
     static const struct brand_convert_table_t {
         tr_type brand_type;
-        EFFECT_ID effect_type;
+        spells_type effect_type;
     } brand_convert_table[] = {
         { TR_BRAND_ACID, GF_ACID },
         { TR_BRAND_FIRE, GF_FIRE },
@@ -265,13 +268,13 @@ EFFECT_ID melee_effect_type(player_type *player_ptr, object_type *o_ptr, combat_
         const struct brand_convert_table_t *p = &brand_convert_table[i];
 
         if (flgs.has(p->brand_type))
-            return p->effect_type;
+            effect_flags.set(p->effect_type);
     }
 
     
     if ((flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
-        return GF_MANA;
+        effect_flags.set(GF_MANA);
     }
 
-    return GF_ATTACK;
+    return effect_flags;
 }
