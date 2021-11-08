@@ -346,10 +346,11 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     m_ptr->maxhp = m_ptr->max_maxhp;
-    if (m_ptr->r_idx == MON_WOUNDED_BEAR)
-        m_ptr->hp = m_ptr->maxhp / 2;
-    else
+    if (r_ptr->cur_hp_per != 0) {
+        m_ptr->hp = m_ptr->maxhp * r_ptr->cur_hp_per / 100;
+    } else {
         m_ptr->hp = m_ptr->maxhp;
+    }
 
     m_ptr->dealt_damage = 0;
 
