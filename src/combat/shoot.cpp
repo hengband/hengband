@@ -75,8 +75,11 @@
  * @param arrow_ptr 矢弾のオブジェクト構造体参照ポインタ
  * @return スナイパーの射撃属性、弓矢の属性を考慮する。デフォルトはGF_PLAYER_SHOOT。
  */
-EFFECT_ID shot_effect_type(player_type *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, SPELL_IDX snipe_type)
+EffectFlags shot_effect_type(player_type *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, SPELL_IDX snipe_type)
 {
+    EffectFlags effect_flags{};
+    effect_flags.set(GF_PLAYER_SHOOT);
+
     TrFlags flags{};
     auto arrow_flags = object_flags(arrow_ptr);
     auto bow_flags = object_flags(bow_ptr);
@@ -85,7 +88,7 @@ EFFECT_ID shot_effect_type(player_type *player_ptr, object_type *bow_ptr, object
 
     static const struct snipe_convert_table_t {
         SPELL_IDX snipe_type;
-        EFFECT_ID effect_type;
+        spells_type effect_type;
     } snipe_convert_table[] = {
         { SP_LITE,      GF_LITE },
         { SP_FIRE,      GF_FIRE },
@@ -99,7 +102,7 @@ EFFECT_ID shot_effect_type(player_type *player_ptr, object_type *bow_ptr, object
 
     static const struct brand_convert_table_t {
         tr_type brand_type;
-        EFFECT_ID effect_type;
+        spells_type effect_type;
     } brand_convert_table[] = {
         { TR_BRAND_ACID,    GF_ACID },
         { TR_BRAND_FIRE,    GF_FIRE },
@@ -116,21 +119,21 @@ EFFECT_ID shot_effect_type(player_type *player_ptr, object_type *bow_ptr, object
         const struct snipe_convert_table_t *p = &snipe_convert_table[i];
 
         if (snipe_type == p->snipe_type)
-            return p->effect_type;
+            effect_flags.set(p->effect_type);
     }
 
     for (size_t i = 0; i < sizeof(brand_convert_table) / sizeof(brand_convert_table[0]); ++i) {
         const struct brand_convert_table_t *p = &brand_convert_table[i];
 
         if (flags.has(p->brand_type))
-            return p->effect_type;
+            effect_flags.set(p->effect_type);
     }
 
     if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
-        return GF_MANA;
+        effect_flags.set(GF_MANA);
     }
 
-    return GF_PLAYER_SHOOT;
+    return effect_flags;
 }
 
 /*!
@@ -458,7 +461,8 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
     object_type *q_ptr;
     object_type *o_ptr;
 
-    EFFECT_ID effect_type = GF_PLAYER_SHOOT;
+    EffectFlags effect_flags{};
+    effect_flags.set(GF_PLAYER_SHOOT);
 
     bool hit_body = false;
 
@@ -757,7 +761,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                         }
                     } else {
 
-                        effect_type = shot_effect_type(player_ptr, j_ptr, q_ptr, snipe_type);
+                        effect_flags = shot_effect_type(player_ptr, j_ptr, q_ptr, snipe_type);
                         /* Apply special damage */
                         tdam = calc_shot_damage_with_slay(player_ptr, j_ptr, q_ptr, tdam, m_ptr, snipe_type);
                         tdam = critical_shot(player_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
@@ -791,7 +795,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                     }
 
                     /* Hit the monster, check for death */
-                    MonsterDamageProcessor mdp(player_ptr, c_mon_ptr->m_idx, tdam, &fear, effect_type);
+                    MonsterDamageProcessor mdp(player_ptr, c_mon_ptr->m_idx, tdam, &fear, effect_flags);
                     if (mdp.mon_take_hit(extract_note_dies(real_r_idx(m_ptr)))) {
                         /* Dead monster */
                     }

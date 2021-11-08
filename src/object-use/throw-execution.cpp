@@ -435,11 +435,12 @@ void ObjectThrowEntity::attack_racial_power()
         this->m_ptr->hp - this->tdam, this->m_ptr->maxhp, this->m_ptr->max_maxhp);
 
     auto fear = false;
-    EFFECT_ID effect_type = GF_PLAYER_SHOOT;
+    EffectFlags effect_flags{};
+    effect_flags.set(GF_PLAYER_SHOOT);
     if (is_active_torch(this->o_ptr))
-        effect_type = GF_FIRE;
+        effect_flags.set(GF_FIRE);
 
-    MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear, effect_type);
+    MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear, effect_flags);
     if (mdp.mon_take_hit(extract_note_dies(real_r_idx(this->m_ptr)))) {
         return;
     }
