@@ -36,7 +36,7 @@
 #include "monster/monster-util.h"
 #include "object/warning.h"
 #include "player/player-status.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -397,7 +397,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
         if (any_bits(g_ptr->info, CAVE_MARK)) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
-            project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + damroll(7, 7)), GF_MANA,
+            project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + damroll(7, 7)), AttributeType::MANA,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     } else {

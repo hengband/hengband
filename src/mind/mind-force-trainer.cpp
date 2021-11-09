@@ -25,7 +25,7 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
@@ -197,7 +197,7 @@ bool shock_power(player_type *player_ptr)
     POSITION x = player_ptr->x + ddx[dir];
     PLAYER_LEVEL plev = player_ptr->lev;
     HIT_POINT dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
-    fire_beam(player_ptr, GF_MISSILE, dir, dam);
+    fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
     if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
         return true;
 
@@ -265,7 +265,7 @@ bool cast_force_spell(player_type *player_ptr, mind_force_trainer_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(player_ptr, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
+        fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
         break;
     case FLASH_LIGHT:
         (void)lite_area(player_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
@@ -278,7 +278,7 @@ bool cast_force_spell(player_type *player_ptr, mind_force_trainer_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
+        fire_beam(player_ptr, AttributeType::MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
         break;
     case MAGIC_RESISTANCE:
         set_resist_magic(player_ptr, randint1(20) + 20 + boost / 5, false);
@@ -289,7 +289,7 @@ bool cast_force_spell(player_type *player_ptr, mind_force_trainer_type spell)
         player_ptr->update |= (PU_BONUS);
         if (randint1(get_current_ki(player_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
-            fire_ball(player_ptr, GF_MANA, 0, get_current_ki(player_ptr) / 2, 10);
+            fire_ball(player_ptr, AttributeType::MANA, 0, get_current_ki(player_ptr) / 2, 10);
             auto data = PlayerClass(player_ptr).get_specific_data<force_trainer_data_type>();
             take_hit(player_ptr, DAMAGE_LOSELIFE, data->ki / 2, _("気の暴走", "Explosion of the Force"));
         } else
@@ -306,7 +306,7 @@ bool cast_force_spell(player_type *player_ptr, mind_force_trainer_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(player_ptr, GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
+        fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
         break;
     case DISPEL_MAGIC: {
         if (!target_set(player_ptr, TARGET_KILL))
@@ -334,13 +334,13 @@ bool cast_force_spell(player_type *player_ptr, mind_force_trainer_type spell)
         break;
     }
     case EXPLODING_FLAME:
-        fire_ball(player_ptr, GF_FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
+        fire_ball(player_ptr, AttributeType::FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
         break;
     case SUPER_KAMEHAMEHA:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
+        fire_beam(player_ptr, AttributeType::MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
         break;
     case LIGHT_SPEED:
         set_lightspeed(player_ptr, randint1(16) + 16 + boost / 20, false);

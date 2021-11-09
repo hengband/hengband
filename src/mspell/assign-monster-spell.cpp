@@ -20,7 +20,7 @@
 #include "mspell/mspell-summon.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
@@ -36,30 +36,30 @@ static MonsterSpellResult monspell_to_player_impl(player_type *player_ptr, RF_AB
     case RF_ABILITY::XXX2: break;   /* RF4_XXX2 */
     case RF_ABILITY::XXX3: break;   /* RF4_XXX3 */
     case RF_ABILITY::XXX4: break;   /* RF4_XXX4 */
-    case RF_ABILITY::BR_ACID: return spell_RF4_BREATH(player_ptr, GF_ACID, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ACID */
-    case RF_ABILITY::BR_ELEC: return spell_RF4_BREATH(player_ptr, GF_ELEC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ELEC */
-    case RF_ABILITY::BR_FIRE: return spell_RF4_BREATH(player_ptr, GF_FIRE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_FIRE */
-    case RF_ABILITY::BR_COLD: return spell_RF4_BREATH(player_ptr, GF_COLD, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_COLD */
-    case RF_ABILITY::BR_POIS: return spell_RF4_BREATH(player_ptr, GF_POIS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_POIS */
-    case RF_ABILITY::BR_NETH: return spell_RF4_BREATH(player_ptr, GF_NETHER, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_NETH */
-    case RF_ABILITY::BR_LITE: return spell_RF4_BREATH(player_ptr, GF_LITE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_LITE */
-    case RF_ABILITY::BR_DARK: return spell_RF4_BREATH(player_ptr, GF_DARK, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DARK */
-    case RF_ABILITY::BR_CONF: return spell_RF4_BREATH(player_ptr, GF_CONFUSION, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_CONF */
-    case RF_ABILITY::BR_SOUN: return spell_RF4_BREATH(player_ptr, GF_SOUND, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_SOUN */
-    case RF_ABILITY::BR_CHAO: return spell_RF4_BREATH(player_ptr, GF_CHAOS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_CHAO */
-    case RF_ABILITY::BR_DISE: return spell_RF4_BREATH(player_ptr, GF_DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_DISE */
-    case RF_ABILITY::BR_NEXU: return spell_RF4_BREATH(player_ptr, GF_NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NEXU */
-    case RF_ABILITY::BR_TIME: return spell_RF4_BREATH(player_ptr, GF_TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_TIME */
-    case RF_ABILITY::BR_INER: return spell_RF4_BREATH(player_ptr, GF_INERTIAL, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
-    case RF_ABILITY::BR_GRAV: return spell_RF4_BREATH(player_ptr, GF_GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
-    case RF_ABILITY::BR_SHAR: return spell_RF4_BREATH(player_ptr, GF_SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
-    case RF_ABILITY::BR_PLAS: return spell_RF4_BREATH(player_ptr, GF_PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
-    case RF_ABILITY::BR_FORC: return spell_RF4_BREATH(player_ptr, GF_FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_WALL */
-    case RF_ABILITY::BR_MANA: return spell_RF4_BREATH(player_ptr, GF_MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
+    case RF_ABILITY::BR_ACID: return spell_RF4_BREATH(player_ptr, AttributeType::ACID, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ACID */
+    case RF_ABILITY::BR_ELEC: return spell_RF4_BREATH(player_ptr, AttributeType::ELEC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ELEC */
+    case RF_ABILITY::BR_FIRE: return spell_RF4_BREATH(player_ptr, AttributeType::FIRE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_FIRE */
+    case RF_ABILITY::BR_COLD: return spell_RF4_BREATH(player_ptr, AttributeType::COLD, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_COLD */
+    case RF_ABILITY::BR_POIS: return spell_RF4_BREATH(player_ptr, AttributeType::POIS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_POIS */
+    case RF_ABILITY::BR_NETH: return spell_RF4_BREATH(player_ptr, AttributeType::NETHER, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_NETH */
+    case RF_ABILITY::BR_LITE: return spell_RF4_BREATH(player_ptr, AttributeType::LITE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_LITE */
+    case RF_ABILITY::BR_DARK: return spell_RF4_BREATH(player_ptr, AttributeType::DARK, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DARK */
+    case RF_ABILITY::BR_CONF: return spell_RF4_BREATH(player_ptr, AttributeType::CONFUSION, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_CONF */
+    case RF_ABILITY::BR_SOUN: return spell_RF4_BREATH(player_ptr, AttributeType::SOUND, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_SOUN */
+    case RF_ABILITY::BR_CHAO: return spell_RF4_BREATH(player_ptr, AttributeType::CHAOS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_CHAO */
+    case RF_ABILITY::BR_DISE: return spell_RF4_BREATH(player_ptr, AttributeType::DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_DISE */
+    case RF_ABILITY::BR_NEXU: return spell_RF4_BREATH(player_ptr, AttributeType::NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NEXU */
+    case RF_ABILITY::BR_TIME: return spell_RF4_BREATH(player_ptr, AttributeType::TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_TIME */
+    case RF_ABILITY::BR_INER: return spell_RF4_BREATH(player_ptr, AttributeType::INERTIAL, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
+    case RF_ABILITY::BR_GRAV: return spell_RF4_BREATH(player_ptr, AttributeType::GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
+    case RF_ABILITY::BR_SHAR: return spell_RF4_BREATH(player_ptr, AttributeType::SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
+    case RF_ABILITY::BR_PLAS: return spell_RF4_BREATH(player_ptr, AttributeType::PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
+    case RF_ABILITY::BR_FORC: return spell_RF4_BREATH(player_ptr, AttributeType::FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_WALL */
+    case RF_ABILITY::BR_MANA: return spell_RF4_BREATH(player_ptr, AttributeType::MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
     case RF_ABILITY::BA_NUKE: return spell_RF4_BA_NUKE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_NUKE */
-    case RF_ABILITY::BR_NUKE: return spell_RF4_BREATH(player_ptr, GF_NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
+    case RF_ABILITY::BR_NUKE: return spell_RF4_BREATH(player_ptr, AttributeType::NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
     case RF_ABILITY::BA_CHAO: return spell_RF4_BA_CHAO(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_CHAO */
-    case RF_ABILITY::BR_DISI: return spell_RF4_BREATH(player_ptr, GF_DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DISI */
+    case RF_ABILITY::BR_DISI: return spell_RF4_BREATH(player_ptr, AttributeType::DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DISI */
     case RF_ABILITY::BA_ACID: return spell_RF5_BA_ACID(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ACID */
     case RF_ABILITY::BA_ELEC: return spell_RF5_BA_ELEC(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ELEC */
     case RF_ABILITY::BA_FIRE: return spell_RF5_BA_FIRE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_FIRE */
@@ -144,30 +144,30 @@ static MonsterSpellResult monspell_to_monster_impl(
     case RF_ABILITY::XXX2: break;   /* RF4_XXX2 */
     case RF_ABILITY::XXX3: break;   /* RF4_XXX3 */
     case RF_ABILITY::XXX4: break;   /* RF4_XXX4 */
-    case RF_ABILITY::BR_ACID: return spell_RF4_BREATH(player_ptr, GF_ACID, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ACID */
-    case RF_ABILITY::BR_ELEC: return spell_RF4_BREATH(player_ptr, GF_ELEC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ELEC */
-    case RF_ABILITY::BR_FIRE: return spell_RF4_BREATH(player_ptr, GF_FIRE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_FIRE */
-    case RF_ABILITY::BR_COLD: return spell_RF4_BREATH(player_ptr, GF_COLD, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_COLD */
-    case RF_ABILITY::BR_POIS: return spell_RF4_BREATH(player_ptr, GF_POIS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_POIS */
-    case RF_ABILITY::BR_NETH: return spell_RF4_BREATH(player_ptr, GF_NETHER, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_NETH */
-    case RF_ABILITY::BR_LITE: return spell_RF4_BREATH(player_ptr, GF_LITE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_LITE */
-    case RF_ABILITY::BR_DARK: return spell_RF4_BREATH(player_ptr, GF_DARK, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_DARK */
-    case RF_ABILITY::BR_CONF: return spell_RF4_BREATH(player_ptr, GF_CONFUSION, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CONF */
-    case RF_ABILITY::BR_SOUN: return spell_RF4_BREATH(player_ptr, GF_SOUND, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_SOUN */
-    case RF_ABILITY::BR_CHAO: return spell_RF4_BREATH(player_ptr, GF_CHAOS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CHAO */
-    case RF_ABILITY::BR_DISE: return spell_RF4_BREATH(player_ptr, GF_DISENCHANT, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_DISE */
-    case RF_ABILITY::BR_NEXU: return spell_RF4_BREATH(player_ptr, GF_NEXUS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_NEXU */
-    case RF_ABILITY::BR_TIME: return spell_RF4_BREATH(player_ptr, GF_TIME, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_TIME */
-    case RF_ABILITY::BR_INER: return spell_RF4_BREATH(player_ptr, GF_INERTIAL, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
-    case RF_ABILITY::BR_GRAV: return spell_RF4_BREATH(player_ptr, GF_GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
-    case RF_ABILITY::BR_SHAR: return spell_RF4_BREATH(player_ptr, GF_SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
-    case RF_ABILITY::BR_PLAS: return spell_RF4_BREATH(player_ptr, GF_PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
-    case RF_ABILITY::BR_FORC: return spell_RF4_BREATH(player_ptr, GF_FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
-    case RF_ABILITY::BR_MANA: return spell_RF4_BREATH(player_ptr, GF_MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_MANA */
+    case RF_ABILITY::BR_ACID: return spell_RF4_BREATH(player_ptr, AttributeType::ACID, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ACID */
+    case RF_ABILITY::BR_ELEC: return spell_RF4_BREATH(player_ptr, AttributeType::ELEC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ELEC */
+    case RF_ABILITY::BR_FIRE: return spell_RF4_BREATH(player_ptr, AttributeType::FIRE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_FIRE */
+    case RF_ABILITY::BR_COLD: return spell_RF4_BREATH(player_ptr, AttributeType::COLD, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_COLD */
+    case RF_ABILITY::BR_POIS: return spell_RF4_BREATH(player_ptr, AttributeType::POIS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_POIS */
+    case RF_ABILITY::BR_NETH: return spell_RF4_BREATH(player_ptr, AttributeType::NETHER, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_NETH */
+    case RF_ABILITY::BR_LITE: return spell_RF4_BREATH(player_ptr, AttributeType::LITE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_LITE */
+    case RF_ABILITY::BR_DARK: return spell_RF4_BREATH(player_ptr, AttributeType::DARK, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_DARK */
+    case RF_ABILITY::BR_CONF: return spell_RF4_BREATH(player_ptr, AttributeType::CONFUSION, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CONF */
+    case RF_ABILITY::BR_SOUN: return spell_RF4_BREATH(player_ptr, AttributeType::SOUND, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_SOUN */
+    case RF_ABILITY::BR_CHAO: return spell_RF4_BREATH(player_ptr, AttributeType::CHAOS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CHAO */
+    case RF_ABILITY::BR_DISE: return spell_RF4_BREATH(player_ptr, AttributeType::DISENCHANT, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_DISE */
+    case RF_ABILITY::BR_NEXU: return spell_RF4_BREATH(player_ptr, AttributeType::NEXUS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_NEXU */
+    case RF_ABILITY::BR_TIME: return spell_RF4_BREATH(player_ptr, AttributeType::TIME, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_TIME */
+    case RF_ABILITY::BR_INER: return spell_RF4_BREATH(player_ptr, AttributeType::INERTIAL, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
+    case RF_ABILITY::BR_GRAV: return spell_RF4_BREATH(player_ptr, AttributeType::GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
+    case RF_ABILITY::BR_SHAR: return spell_RF4_BREATH(player_ptr, AttributeType::SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
+    case RF_ABILITY::BR_PLAS: return spell_RF4_BREATH(player_ptr, AttributeType::PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
+    case RF_ABILITY::BR_FORC: return spell_RF4_BREATH(player_ptr, AttributeType::FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
+    case RF_ABILITY::BR_MANA: return spell_RF4_BREATH(player_ptr, AttributeType::MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_MANA */
     case RF_ABILITY::BA_NUKE: return spell_RF4_BA_NUKE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BA_NUKE */
-    case RF_ABILITY::BR_NUKE: return spell_RF4_BREATH(player_ptr, GF_NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_NUKE */
+    case RF_ABILITY::BR_NUKE: return spell_RF4_BREATH(player_ptr, AttributeType::NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_NUKE */
     case RF_ABILITY::BA_CHAO: return spell_RF4_BA_CHAO(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BA_CHAO */
-    case RF_ABILITY::BR_DISI: return spell_RF4_BREATH(player_ptr, GF_DISINTEGRATE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_DISI */
+    case RF_ABILITY::BR_DISI: return spell_RF4_BREATH(player_ptr, AttributeType::DISINTEGRATE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_DISI */
     case RF_ABILITY::BA_ACID: return spell_RF5_BA_ACID(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_ACID */
     case RF_ABILITY::BA_ELEC: return spell_RF5_BA_ELEC(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_ELEC */
     case RF_ABILITY::BA_FIRE: return spell_RF5_BA_FIRE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_FIRE */

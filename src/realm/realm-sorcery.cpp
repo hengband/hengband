@@ -16,7 +16,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
@@ -285,7 +285,7 @@ concptr do_sorcery_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessT
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(player_ptr, GF_AWAY_ALL, dir, power);
+                fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
             }
         }
         break;

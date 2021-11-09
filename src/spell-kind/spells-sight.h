@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "effect/attribute-types.h"
 
 struct monster_race;
 struct monster_type;
 struct player_type;
-bool project_all_los(player_type *player_ptr, EFFECT_ID typ, HIT_POINT dam);
+bool project_all_los(player_type *player_ptr, AttributeType typ, HIT_POINT dam);
 bool speed_monsters(player_type *player_ptr);
 bool slow_monsters(player_type *player_ptr, int power);
 bool sleep_monsters(player_type *player_ptr, int power);

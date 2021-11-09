@@ -55,17 +55,17 @@
  * @param m_idx ダメージを与えたモンスターのID
  * @param dam 与えたダメージ量
  * @param fear ダメージによってモンスターが恐慌状態に陥ったならばtrue
- * @param effect_type 与えたダメージの種類 (単一属性)
+ * @param attribute 与えたダメージの種類 (単一属性)
  * @param note モンスターが倒された際の特別なメッセージ述語
  */
-MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, EFFECT_ID effect_type)
+MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeType attribute)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , dam(dam)
     , fear(fear)
 {
-    this->effect_flags.clear();
-    this->effect_flags.set((spells_type)effect_type);
+    this->attribute_flags.clear();
+    this->attribute_flags.set((AttributeType)attribute);
 }
 
 /*
@@ -74,15 +74,15 @@ MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_
  * @param m_idx ダメージを与えたモンスターのID
  * @param dam 与えたダメージ量
  * @param fear ダメージによってモンスターが恐慌状態に陥ったならばtrue
- * @param effect_flags 与えたダメージの種類 (複数属性)
+ * @param attribute_flags 与えたダメージの種類 (複数属性)
  * @param note モンスターが倒された際の特別なメッセージ述語
  */
-MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, EffectFlags effect_flags)
+MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeFlags attribute_flags)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , dam(dam)
     , fear(fear)
-    , effect_flags(effect_flags)
+    , attribute_flags(attribute_flags)
 {
 }
 
@@ -163,7 +163,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
     sound(SOUND_KILL);
     this->show_kill_message(note, m_name);
     this->show_bounty_message(m_name);
-    monster_death(this->player_ptr, this->m_idx, true, this->effect_flags);
+    monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);
     this->summon_special_unique();
     this->get_exp_from_mon(exp_mon, exp_mon->max_maxhp * 2);
     *this->fear = false;

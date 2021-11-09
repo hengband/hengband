@@ -226,7 +226,7 @@ void wiz_summon_pet(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param effect_idx 属性ID
  * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_enemy(player_type *player_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
+void wiz_kill_enemy(player_type *player_ptr, HIT_POINT dam, AttributeType effect_idx)
 {
     if (dam <= 0) {
         char tmp[80] = "";
@@ -237,19 +237,21 @@ void wiz_kill_enemy(player_type *player_ptr, HIT_POINT dam, EFFECT_ID effect_idx
 
         dam = (HIT_POINT)atoi(tmp_val);
     }
+    int max = (int)AttributeType::MAX;
+    int idx = (int)effect_idx;
 
-    if (effect_idx <= GF_NONE) {
+    if (idx <= 0) {
         char tmp[80] = "";
-        sprintf(tmp, "Effect ID (1-%d): ", MAX_GF - 1);
+        sprintf(tmp, "Effect ID (1-%d): ", max - 1);
         char tmp_val[10] = "";
         if (!get_string(tmp, tmp_val, 3))
             return;
 
-        effect_idx = (EFFECT_ID)atoi(tmp_val);
+        effect_idx = (AttributeType)atoi(tmp_val);
     }
 
-    if (effect_idx <= GF_NONE || effect_idx >= MAX_GF) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), MAX_GF - 1);
+    if (idx <= 0 || idx >= max) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max - 1);
         return;
     }
 
@@ -266,7 +268,7 @@ void wiz_kill_enemy(player_type *player_ptr, HIT_POINT dam, EFFECT_ID effect_idx
  * @param dam ダメージ量
  * @param effect_idx 属性ID
  */
-void wiz_kill_me(player_type *player_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
+void wiz_kill_me(player_type *player_ptr, HIT_POINT dam, AttributeType effect_idx)
 {
     if (dam <= 0) {
         char tmp[80] = "";
@@ -277,19 +279,21 @@ void wiz_kill_me(player_type *player_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
 
         dam = (HIT_POINT)atoi(tmp_val);
     }
+    int max = (int)AttributeType::MAX;
+    int idx = (int)effect_idx;
 
-    if (effect_idx <= GF_NONE) {
+    if (idx <= 0) {
         char tmp[80] = "";
-        sprintf(tmp, "Effect ID (1-%d): ", MAX_GF - 1);
+        sprintf(tmp, "Effect ID (1-%d): ", max - 1);
         char tmp_val[10] = "1";
         if (!get_string(tmp, tmp_val, 3))
             return;
 
-        effect_idx = (EFFECT_ID)atoi(tmp_val);
+        effect_idx = (AttributeType)atoi(tmp_val);
     }
 
-    if (effect_idx <= GF_NONE || effect_idx >= MAX_GF) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), MAX_GF - 1);
+    if (idx <= 0 || idx >= max) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max - 1);
         return;
     }
 

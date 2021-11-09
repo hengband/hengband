@@ -14,7 +14,7 @@ enum race_flags3 {
     RF3_XX10 = 0x00000400, /*!< 予約領域。元冷気オーラ */
     RF3_NONLIVING = 0x00000800, /*!< モンスター特性: 無生物 / TY: Non-Living (?) */
     RF3_HURT_LITE = 0x00001000, /*!< モンスター特性: 通常の光(GF_WEAK_LITE)でダメージを受ける / Hurt by lite */
-    RF3_HURT_ROCK = 0x00002000, /*!< モンスター特性: 岩石溶解(GF_KILL_WALL)でダメージを受ける / Hurt by rock remover */
+    RF3_HURT_ROCK = 0x00002000, /*!< モンスター特性: 岩石溶解(KILL_WALL)でダメージを受ける / Hurt by rock remover */
     RF3_HURT_FIRE = 0x00004000, /*!< モンスター特性: 火炎が弱点 / Hurt badly by fire */
     RF3_HURT_COLD = 0x00008000, /*!< モンスター特性: 冷気が弱点 / Hurt badly by cold */
     RF3_ANGEL = 0x00010000, /*!< モンスター特性: 天使 / ANGEL */

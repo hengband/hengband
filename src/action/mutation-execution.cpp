@@ -41,7 +41,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "status/element-resistance.h"
@@ -72,7 +72,7 @@ bool exe_mutation_power(player_type *player_ptr, MUTA power)
 
         stop_mouth(player_ptr);
         msg_print(_("酸を吐きかけた...", "You spit acid..."));
-        fire_ball(player_ptr, GF_ACID, dir, lvl, 1 + (lvl / 30));
+        fire_ball(player_ptr, AttributeType::ACID, dir, lvl, 1 + (lvl / 30));
         return true;
     case MUTA::BR_FIRE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -80,7 +80,7 @@ bool exe_mutation_power(player_type *player_ptr, MUTA power)
 
         stop_mouth(player_ptr);
         msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
-        fire_breath(player_ptr, GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
+        fire_breath(player_ptr, AttributeType::FIRE, dir, lvl * 2, 1 + (lvl / 20));
         return true;
     case MUTA::HYPN_GAZE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -105,11 +105,11 @@ bool exe_mutation_power(player_type *player_ptr, MUTA power)
             return false;
 
         msg_print(_("集中している...", "You concentrate..."));
-        fire_bolt(player_ptr, GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
+        fire_bolt(player_ptr, AttributeType::PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
         return true;
     case MUTA::RADIATION:
         msg_print(_("体から放射能が発生した！", "Radiation flows from your body!"));
-        fire_ball(player_ptr, GF_NUKE, 0, (lvl * 2), 3 + (lvl / 20));
+        fire_ball(player_ptr, AttributeType::NUKE, 0, (lvl * 2), 3 + (lvl / 20));
         return true;
     case MUTA::VAMPIRISM:
         vampirism(player_ptr);
@@ -139,7 +139,7 @@ bool exe_mutation_power(player_type *player_ptr, MUTA power)
         return true;
     case MUTA::SHRIEK:
         stop_mouth(player_ptr);
-        (void)fire_ball(player_ptr, GF_SOUND, 0, 2 * lvl, 8);
+        (void)fire_ball(player_ptr, AttributeType::SOUND, 0, 2 * lvl, 8);
         (void)aggravate_monsters(player_ptr, 0);
         return true;
     case MUTA::ILLUMINE:
@@ -225,7 +225,7 @@ bool exe_mutation_power(player_type *player_ptr, MUTA power)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_LITE, dir, 2 * lvl);
+        fire_beam(player_ptr, AttributeType::LITE, dir, 2 * lvl);
         return true;
     case MUTA::RECALL:
         return recall_player(player_ptr, randint0(21) + 15);
@@ -279,7 +279,7 @@ bool exe_mutation_power(player_type *player_ptr, MUTA power)
             return true;
         }
 
-        fire_bolt(player_ptr, GF_COLD, dir, 2 * lvl);
+        fire_bolt(player_ptr, AttributeType::COLD, dir, 2 * lvl);
         return true;
     }
     case MUTA::LAUNCHER: {

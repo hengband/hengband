@@ -6,7 +6,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
@@ -17,7 +17,7 @@ bool activate_teleport_away(player_type *player_ptr)
     if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    (void)fire_beam(player_ptr, GF_AWAY_ALL, dir, player_ptr->lev);
+    (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, player_ptr->lev);
     return true;
 }
 

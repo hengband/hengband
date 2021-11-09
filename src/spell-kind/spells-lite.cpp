@@ -18,7 +18,7 @@
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -388,7 +388,7 @@ bool starlight(player_type *player_ptr, bool magic)
                 break;
         }
 
-        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), GF_LITE_WEAK,
+        project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK,
             (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS));
     }
 
@@ -414,7 +414,7 @@ bool lite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
     }
 
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
-    (void)project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, GF_LITE_WEAK, flg);
+    (void)project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, AttributeType::LITE_WEAK, flg);
 
     lite_room(player_ptr, player_ptr->y, player_ptr->x);
 
@@ -435,7 +435,7 @@ bool unlite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
     }
 
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
-    (void)project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, GF_DARK_WEAK, flg);
+    (void)project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, AttributeType::DARK_WEAK, flg);
 
     unlite_room(player_ptr, player_ptr->y, player_ptr->x);
 
@@ -452,5 +452,5 @@ bool unlite_area(player_type *player_ptr, HIT_POINT dam, POSITION rad)
 bool lite_line(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
-    return (project_hook(player_ptr, GF_LITE_WEAK, dir, dam, flg));
+    return (project_hook(player_ptr, AttributeType::LITE_WEAK, dir, dam, flg));
 }

@@ -39,7 +39,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
@@ -190,7 +190,7 @@ bool activate_cure_lw(player_type *player_ptr)
 bool activate_grand_cross(player_type *player_ptr)
 {
     msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
-    (void)project(player_ptr, 0, 8, player_ptr->y, player_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
+    (void)project(player_ptr, 0, 8, player_ptr->y, player_ptr->x, (randint1(100) + 200) * 2, AttributeType::HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
     return true;
 }
 
@@ -277,7 +277,7 @@ bool activate_whirlwind(player_type *player_ptr)
 bool activate_blinding_light(player_type *player_ptr, concptr name)
 {
     msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
-    (void)fire_ball(player_ptr, GF_LITE, 0, 300, 6);
+    (void)fire_ball(player_ptr, AttributeType::LITE, 0, 300, 6);
     confuse_monsters(player_ptr, 3 * player_ptr->lev / 2);
     return true;
 }

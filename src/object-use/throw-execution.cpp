@@ -52,7 +52,7 @@
 #include "player/player-status-table.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -435,12 +435,12 @@ void ObjectThrowEntity::attack_racial_power()
         this->m_ptr->hp - this->tdam, this->m_ptr->maxhp, this->m_ptr->max_maxhp);
 
     auto fear = false;
-    EffectFlags effect_flags{};
-    effect_flags.set(GF_PLAYER_SHOOT);
+    AttributeFlags attribute_flags{};
+    attribute_flags.set(AttributeType::PLAYER_SHOOT);
     if (is_active_torch(this->o_ptr))
-        effect_flags.set(GF_FIRE);
+        attribute_flags.set(AttributeType::FIRE);
 
-    MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear, effect_flags);
+    MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear, attribute_flags);
     if (mdp.mon_take_hit(extract_note_dies(real_r_idx(this->m_ptr)))) {
         return;
     }

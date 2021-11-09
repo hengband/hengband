@@ -31,7 +31,7 @@
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -539,7 +539,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
     case TRAP_TRAPS: {
         msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
         /* Make some new traps */
-        project(player_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
+        project(player_ptr, 0, 1, y, x, 0, AttributeType::MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
 
         break;
     }
@@ -554,9 +554,9 @@ void hit_trap(player_type *player_ptr, bool break_trap)
 
     case TRAP_OPEN: {
         msg_print(_("大音響と共にまわりの壁が崩れた！", "Suddenly, surrounding walls are opened!"));
-        (void)project(player_ptr, 0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
-        (void)project(player_ptr, 0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
-        (void)project(player_ptr, 0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, y, x, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, y, x - 4, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(player_ptr, 0, 3, y, x + 4, 0, AttributeType::DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
         aggravate_monsters(player_ptr, 0);
 
         break;
@@ -609,7 +609,7 @@ void hit_trap(player_type *player_ptr, bool break_trap)
         msg_print(_("突然壁から水が溢れ出した！ピラニアがいる！", "Suddenly, the room is filled with water with piranhas!"));
 
         /* Water fills room */
-        fire_ball_hide(player_ptr, GF_WATER_FLOW, 0, 1, 10);
+        fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 1, 10);
 
         /* Summon Piranhas */
         num = 1 + player_ptr->current_floor_ptr->dun_level / 20;

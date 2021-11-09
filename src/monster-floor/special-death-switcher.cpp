@@ -30,7 +30,7 @@
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind-hook.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
@@ -145,7 +145,7 @@ static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
         msg_format(_("%sは辺りにログルスの残り香を撒き散らした！", "%^s sprinkled the remaining incense from Logrus!"), m_name);
     }
 
-    (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, GF_CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+    (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, AttributeType::CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 }
 
 static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type *md_ptr)
@@ -236,7 +236,7 @@ static void on_dead_rolento(player_type *player_ptr, monster_death_type *md_ptr)
         msg_format(_("%sは手榴弾を抱えて自爆した！", "%^s blew himself up with grenades!"), m_name);
     }
 
-    (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+    (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), AttributeType::FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 }
 
 static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *md_ptr)
@@ -533,15 +533,15 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
     }
 }
 
-static void on_dead_swordfish(player_type *player_ptr, monster_death_type *md_ptr, EffectFlags effect_flags)
+static void on_dead_swordfish(player_type *player_ptr, monster_death_type *md_ptr, AttributeFlags attribute_flags)
 {
-    if (effect_flags.has_not(GF_COLD) || !md_ptr->drop_chosen_item || (randint1(100) >= 10))
+    if (attribute_flags.has_not(AttributeType::COLD) || !md_ptr->drop_chosen_item || (randint1(100) >= 10))
         return;
 
     drop_single_artifact(player_ptr, md_ptr, ART_FROZEN_SWORDFISH);
 }
 
-void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr, EffectFlags effect_flags)
+void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr, AttributeFlags attribute_flags)
 {
     switch (md_ptr->m_ptr->r_idx) {
     case MON_PINK_HORROR:
@@ -622,7 +622,7 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr, E
         on_dead_chest_mimic(player_ptr, md_ptr);
         break;
     case MON_SWORDFISH:
-        on_dead_swordfish(player_ptr, md_ptr, effect_flags);
+        on_dead_swordfish(player_ptr, md_ptr, attribute_flags);
         break;
     default:
         on_dead_mimics(player_ptr, md_ptr);

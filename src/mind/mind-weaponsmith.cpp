@@ -467,13 +467,13 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
         return;
     }
 
-    const auto effect_flags = Smith::get_effect_tr_flags(effect);
+    const auto attribute_flags = Smith::get_effect_tr_flags(effect);
     auto add_essence_count = 1;
-    if (effect_flags.has_any_of(TR_PVAL_FLAG_MASK)) {
+    if (attribute_flags.has_any_of(TR_PVAL_FLAG_MASK)) {
         if (o_ptr->pval < 0) {
             msg_print(_("このアイテムの能力修正を強化することはできない。", "You cannot increase magic number of this item."));
             return;
-        } else if (effect_flags.has(TR_BLOWS)) {
+        } else if (attribute_flags.has(TR_BLOWS)) {
             if ((o_ptr->pval > 1) && !get_check(_("修正値は1になります。よろしいですか？", "The magic number of this weapon will become 1. Are you sure? "))) {
                 return;
             }

@@ -14,7 +14,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-arcane.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
@@ -60,7 +60,7 @@ concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessTy
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
             }
         }
         break;
@@ -538,7 +538,7 @@ concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessTy
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(player_ptr, GF_AWAY_ALL, dir, power);
+                fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
             }
         }
         break;
@@ -557,23 +557,23 @@ concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessTy
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                int type;
+                AttributeType type;
 
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
                 switch (randint1(4)) {
                 case 1:
-                    type = GF_FIRE;
+                    type = AttributeType::FIRE;
                     break;
                 case 2:
-                    type = GF_ELEC;
+                    type = AttributeType::ELEC;
                     break;
                 case 3:
-                    type = GF_COLD;
+                    type = AttributeType::COLD;
                     break;
                 default:
-                    type = GF_ACID;
+                    type = AttributeType::ACID;
                     break;
                 }
 

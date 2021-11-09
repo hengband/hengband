@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 
 enum class ElementRealm {
 	FIRE = 1,
@@ -20,7 +20,7 @@ struct effect_monster_type;
 struct rc_type;
 
 concptr get_element_title(int realm_idx);
-spells_type get_element_type(int realm_idx, int n);
+AttributeType get_element_type(int realm_idx, int n);
 concptr get_element_name(int realm_idx, int n);
 void do_cmd_element(player_type *player_ptr);
 void do_cmd_element_browse(player_type *player_ptr);

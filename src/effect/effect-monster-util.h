@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 
 struct grid_type;;
 struct monster_type;
@@ -39,11 +39,11 @@ typedef struct effect_monster_type {
     POSITION y;
     POSITION x;
     HIT_POINT dam;
-    EFFECT_ID effect_type;
+    AttributeType attribute;
     BIT_FLAGS flag;
     bool see_s_msg;
 } effect_monster_type;
 
 struct player_type;
 effect_monster_type *initialize_effect_monster(player_type *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x,
-    HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg);
+    HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg);

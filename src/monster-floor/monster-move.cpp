@@ -33,7 +33,7 @@
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -264,7 +264,7 @@ static bool process_explosive_rune(player_type *player_ptr, turn_flags *turn_fla
         if (g_ptr->info & CAVE_MARK) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(player_ptr, 0, 2, ny, nx, 2 * (player_ptr->lev + damroll(7, 7)), GF_MANA, project_flags);
+            project(player_ptr, 0, 2, ny, nx, 2 * (player_ptr->lev + damroll(7, 7)), AttributeType::MANA, project_flags);
         }
     } else {
         msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));

@@ -31,7 +31,7 @@
 #include "monster/monster-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -61,13 +61,14 @@ static void heal_monster_by_melee(player_type *player_ptr, mam_type *mam_ptr)
 static void process_blow_effect(player_type *player_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    switch (mam_ptr->effect_type) {
+    switch (mam_ptr->attribute) {
     case BLOW_EFFECT_TYPE_FEAR:
-        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage, GF_TURN_ALL,
-            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
+        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage,
+            AttributeType::TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BLOW_EFFECT_TYPE_SLEEP:
-        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
+        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, 
+            AttributeType::OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BLOW_EFFECT_TYPE_HEAL:
         heal_monster_by_melee(player_ptr, mam_ptr);
@@ -93,7 +94,7 @@ static void aura_fire_by_melee(player_type *player_ptr, mam_type *mam_ptr)
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr))
         tr_ptr->aura_flags.set(MonsterAuraType::FIRE);
 
-    project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_FIRE,
+    project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), AttributeType::FIRE,
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
@@ -115,7 +116,7 @@ static void aura_cold_by_melee(player_type *player_ptr, mam_type *mam_ptr)
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr))
         tr_ptr->aura_flags.set(MonsterAuraType::COLD);
 
-    project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_COLD,
+    project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), AttributeType::COLD,
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
@@ -137,7 +138,7 @@ static void aura_elec_by_melee(player_type *player_ptr, mam_type *mam_ptr)
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr))
         tr_ptr->aura_flags.set(MonsterAuraType::ELEC);
 
-    project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_ELEC,
+    project(player_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), AttributeType::ELEC,
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
@@ -193,7 +194,7 @@ static void describe_silly_melee(mam_type *mam_ptr)
 
 static void process_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
 {
-    if (mam_ptr->pt == GF_NONE)
+    if (mam_ptr->pt == AttributeType::NONE)
         return;
 
     if (!mam_ptr->explode)
@@ -222,8 +223,8 @@ static void process_melee(player_type *player_ptr, mam_type *mam_ptr)
     describe_silly_melee(mam_ptr);
     mam_ptr->obvious = true;
     mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
-    mam_ptr->effect_type = BLOW_EFFECT_TYPE_NONE;
-    mam_ptr->pt = GF_MISSILE;
+    mam_ptr->attribute = BLOW_EFFECT_TYPE_NONE;
+    mam_ptr->pt = AttributeType::MISSILE;
     decide_monster_attack_effect(player_ptr, mam_ptr);
     process_monster_attack_effect(player_ptr, mam_ptr);
 }

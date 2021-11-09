@@ -30,7 +30,7 @@
 #include "monster/monster-status.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-genocide.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -296,175 +296,175 @@ process_result effect_monster_wounds(effect_monster_type *em_ptr)
  */
 process_result switch_effects_monster(player_type *player_ptr, effect_monster_type *em_ptr)
 {
-    switch (em_ptr->effect_type) {
-    case GF_PSY_SPEAR:
-    case GF_MISSILE:
-    case GF_ARROW:
-    case GF_MANA:
-    case GF_METEOR:
-    case GF_BLOOD_CURSE:
-    case GF_SEEKER:
-    case GF_SUPER_RAY:
+    switch (em_ptr->attribute) {
+    case AttributeType::PSY_SPEAR:
+    case AttributeType::MISSILE:
+    case AttributeType::ARROW:
+    case AttributeType::MANA:
+    case AttributeType::METEOR:
+    case AttributeType::BLOOD_CURSE:
+    case AttributeType::SEEKER:
+    case AttributeType::SUPER_RAY:
         return effect_monster_nothing(em_ptr);
-    case GF_ACID:
+    case AttributeType::ACID:
         return effect_monster_acid(player_ptr, em_ptr);
-    case GF_ELEC:
+    case AttributeType::ELEC:
         return effect_monster_elec(player_ptr, em_ptr);
-    case GF_FIRE:
+    case AttributeType::FIRE:
         return effect_monster_fire(player_ptr, em_ptr);
-    case GF_COLD:
+    case AttributeType::COLD:
         return effect_monster_cold(player_ptr, em_ptr);
-    case GF_POIS:
+    case AttributeType::POIS:
         return effect_monster_pois(player_ptr, em_ptr);
-    case GF_NUKE:
+    case AttributeType::NUKE:
         return effect_monster_nuke(player_ptr, em_ptr);
-    case GF_HELL_FIRE:
+    case AttributeType::HELL_FIRE:
         return effect_monster_hell_fire(player_ptr, em_ptr);
-    case GF_HOLY_FIRE:
+    case AttributeType::HOLY_FIRE:
         return effect_monster_holy_fire(player_ptr, em_ptr);
-    case GF_PLASMA:
+    case AttributeType::PLASMA:
         return effect_monster_plasma(player_ptr, em_ptr);
-    case GF_NETHER:
+    case AttributeType::NETHER:
         return effect_monster_nether(player_ptr, em_ptr);
-    case GF_WATER:
+    case AttributeType::WATER:
         return effect_monster_water(player_ptr, em_ptr);
-    case GF_CHAOS:
+    case AttributeType::CHAOS:
         return effect_monster_chaos(player_ptr, em_ptr);
-    case GF_SHARDS:
+    case AttributeType::SHARDS:
         return effect_monster_shards(player_ptr, em_ptr);
-    case GF_ROCKET:
+    case AttributeType::ROCKET:
         return effect_monster_rocket(player_ptr, em_ptr);
-    case GF_SOUND:
+    case AttributeType::SOUND:
         return effect_monster_sound(player_ptr, em_ptr);
-    case GF_CONFUSION:
+    case AttributeType::CONFUSION:
         return effect_monster_confusion(player_ptr, em_ptr);
-    case GF_DISENCHANT:
+    case AttributeType::DISENCHANT:
         return effect_monster_disenchant(player_ptr, em_ptr);
-    case GF_NEXUS:
+    case AttributeType::NEXUS:
         return effect_monster_nexus(player_ptr, em_ptr);
-    case GF_FORCE:
+    case AttributeType::FORCE:
         return effect_monster_force(player_ptr, em_ptr);
-    case GF_INERTIAL:
+    case AttributeType::INERTIAL:
         return effect_monster_inertial(player_ptr, em_ptr);
-    case GF_TIME:
+    case AttributeType::TIME:
         return effect_monster_time(player_ptr, em_ptr);
-    case GF_GRAVITY:
+    case AttributeType::GRAVITY:
         return effect_monster_gravity(player_ptr, em_ptr);
-    case GF_DISINTEGRATE:
+    case AttributeType::DISINTEGRATE:
         return effect_monster_disintegration(player_ptr, em_ptr);
-    case GF_PSI:
+    case AttributeType::PSI:
         return effect_monster_psi(player_ptr, em_ptr);
-    case GF_PSI_DRAIN:
+    case AttributeType::PSI_DRAIN:
         return effect_monster_psi_drain(player_ptr, em_ptr);
-    case GF_TELEKINESIS:
+    case AttributeType::TELEKINESIS:
         return effect_monster_telekinesis(player_ptr, em_ptr);
-    case GF_DOMINATION:
+    case AttributeType::DOMINATION:
         return effect_monster_domination(player_ptr, em_ptr);
-    case GF_ICE:
+    case AttributeType::ICE:
         return effect_monster_icee_bolt(player_ptr, em_ptr);
-    case GF_HYPODYNAMIA:
+    case AttributeType::HYPODYNAMIA:
         return effect_monster_hypodynamia(player_ptr, em_ptr);
-    case GF_DEATH_RAY:
+    case AttributeType::DEATH_RAY:
         return effect_monster_death_ray(player_ptr, em_ptr);
-    case GF_OLD_POLY:
+    case AttributeType::OLD_POLY:
         return effect_monster_old_poly(em_ptr);
-    case GF_OLD_CLONE:
+    case AttributeType::OLD_CLONE:
         return effect_monster_old_clone(player_ptr, em_ptr);
-    case GF_STAR_HEAL:
+    case AttributeType::STAR_HEAL:
         return effect_monster_star_heal(player_ptr, em_ptr);
-    case GF_OLD_HEAL:
+    case AttributeType::OLD_HEAL:
         return effect_monster_old_heal(player_ptr, em_ptr);
-    case GF_OLD_SPEED:
+    case AttributeType::OLD_SPEED:
         return effect_monster_old_speed(player_ptr, em_ptr);
-    case GF_OLD_SLOW:
+    case AttributeType::OLD_SLOW:
         return effect_monster_old_slow(player_ptr, em_ptr);
-    case GF_OLD_SLEEP:
+    case AttributeType::OLD_SLEEP:
         return effect_monster_old_sleep(player_ptr, em_ptr);
-    case GF_STASIS_EVIL:
+    case AttributeType::STASIS_EVIL:
         return effect_monster_stasis(em_ptr, true);
-    case GF_STASIS:
+    case AttributeType::STASIS:
         return effect_monster_stasis(em_ptr, false);
-    case GF_CHARM:
+    case AttributeType::CHARM:
         return effect_monster_charm(player_ptr, em_ptr);
-    case GF_CONTROL_UNDEAD:
+    case AttributeType::CONTROL_UNDEAD:
         return effect_monster_control_undead(player_ptr, em_ptr);
-    case GF_CONTROL_DEMON:
+    case AttributeType::CONTROL_DEMON:
         return effect_monster_control_demon(player_ptr, em_ptr);
-    case GF_CONTROL_ANIMAL:
+    case AttributeType::CONTROL_ANIMAL:
         return effect_monster_control_animal(player_ptr, em_ptr);
-    case GF_CHARM_LIVING:
+    case AttributeType::CHARM_LIVING:
         return effect_monster_charm_living(player_ptr, em_ptr);
-    case GF_OLD_CONF:
+    case AttributeType::OLD_CONF:
         return effect_monster_old_conf(player_ptr, em_ptr);
-    case GF_STUN:
+    case AttributeType::STUN:
         return effect_monster_stun(em_ptr);
-    case GF_LITE_WEAK:
+    case AttributeType::LITE_WEAK:
         return effect_monster_lite_weak(player_ptr, em_ptr);
-    case GF_LITE:
+    case AttributeType::LITE:
         return effect_monster_lite(player_ptr, em_ptr);
-    case GF_DARK:
+    case AttributeType::DARK:
         return effect_monster_dark(player_ptr, em_ptr);
-    case GF_KILL_WALL:
+    case AttributeType::KILL_WALL:
         return effect_monster_kill_wall(player_ptr, em_ptr);
-    case GF_AWAY_UNDEAD:
+    case AttributeType::AWAY_UNDEAD:
         return effect_monster_away_undead(player_ptr, em_ptr);
-    case GF_AWAY_EVIL:
+    case AttributeType::AWAY_EVIL:
         return effect_monster_away_evil(player_ptr, em_ptr);
-    case GF_AWAY_ALL:
+    case AttributeType::AWAY_ALL:
         return effect_monster_away_all(player_ptr, em_ptr);
-    case GF_TURN_UNDEAD:
+    case AttributeType::TURN_UNDEAD:
         return effect_monster_turn_undead(player_ptr, em_ptr);
-    case GF_TURN_EVIL:
+    case AttributeType::TURN_EVIL:
         return effect_monster_turn_evil(player_ptr, em_ptr);
-    case GF_TURN_ALL:
+    case AttributeType::TURN_ALL:
         return effect_monster_turn_all(em_ptr);
-    case GF_DISP_UNDEAD:
+    case AttributeType::DISP_UNDEAD:
         return effect_monster_disp_undead(player_ptr, em_ptr);
-    case GF_DISP_EVIL:
+    case AttributeType::DISP_EVIL:
         return effect_monster_disp_evil(player_ptr, em_ptr);
-    case GF_DISP_GOOD:
+    case AttributeType::DISP_GOOD:
         return effect_monster_disp_good(player_ptr, em_ptr);
-    case GF_DISP_LIVING:
+    case AttributeType::DISP_LIVING:
         return effect_monster_disp_living(em_ptr);
-    case GF_DISP_DEMON:
+    case AttributeType::DISP_DEMON:
         return effect_monster_disp_demon(player_ptr, em_ptr);
-    case GF_DISP_ALL:
+    case AttributeType::DISP_ALL:
         return effect_monster_disp_all(em_ptr);
-    case GF_DRAIN_MANA:
+    case AttributeType::DRAIN_MANA:
         return effect_monster_drain_mana(player_ptr, em_ptr);
-    case GF_MIND_BLAST:
+    case AttributeType::MIND_BLAST:
         return effect_monster_mind_blast(player_ptr, em_ptr);
-    case GF_BRAIN_SMASH:
+    case AttributeType::BRAIN_SMASH:
         return effect_monster_brain_smash(player_ptr, em_ptr);
-    case GF_CAUSE_1:
+    case AttributeType::CAUSE_1:
         return effect_monster_curse_1(em_ptr);
-    case GF_CAUSE_2:
+    case AttributeType::CAUSE_2:
         return effect_monster_curse_2(em_ptr);
-    case GF_CAUSE_3:
+    case AttributeType::CAUSE_3:
         return effect_monster_curse_3(em_ptr);
-    case GF_CAUSE_4:
+    case AttributeType::CAUSE_4:
         return effect_monster_curse_4(em_ptr);
-    case GF_HAND_DOOM:
+    case AttributeType::HAND_DOOM:
         return effect_monster_hand_doom(em_ptr);
-    case GF_CAPTURE:
+    case AttributeType::CAPTURE:
         return effect_monster_capture(player_ptr, em_ptr);
-    case GF_ATTACK:
+    case AttributeType::ATTACK:
         return (process_result)do_cmd_attack(player_ptr, em_ptr->y, em_ptr->x, i2enum<combat_options>(em_ptr->dam));
-    case GF_ENGETSU:
+    case AttributeType::ENGETSU:
         return effect_monster_engetsu(player_ptr, em_ptr);
-    case GF_GENOCIDE:
+    case AttributeType::GENOCIDE:
         return effect_monster_genocide(player_ptr, em_ptr);
-    case GF_PHOTO:
+    case AttributeType::PHOTO:
         return effect_monster_photo(player_ptr, em_ptr);
-    case GF_CRUSADE:
+    case AttributeType::CRUSADE:
         return effect_monster_crusade(player_ptr, em_ptr);
-    case GF_WOUNDS:
+    case AttributeType::WOUNDS:
         return effect_monster_wounds(em_ptr);
-    case GF_E_GENOCIDE:
+    case AttributeType::E_GENOCIDE:
         return effect_monster_elemental_genocide(player_ptr, em_ptr);
-    case GF_VOID:
+    case AttributeType::VOID_MAGIC:
         return effect_monster_void(player_ptr, em_ptr);
-    case GF_ABYSS:
+    case AttributeType::ABYSS:
         return effect_monster_abyss(player_ptr, em_ptr);
     default: {
         em_ptr->skipped = true;

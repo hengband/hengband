@@ -38,7 +38,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
@@ -147,7 +147,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
         if (info)
             return info_damage(1, power, 0);
         if (cast || continuation) {
-            project_all_los(player_ptr, GF_POIS, randint1(power));
+            project_all_los(player_ptr, AttributeType::POIS, randint1(power));
         }
         break;
 
@@ -284,7 +284,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
             if ((spell_hex.get_revenge_turn() == 0) || (power >= 200)) {
                 msg_print(_("我慢が解かれた！", "My patience is at an end!"));
                 if (power) {
-                    project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
+                    project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, AttributeType::HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
 
                 if (allow_debug_options) {
@@ -355,7 +355,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
         if (info)
             return info_damage(1, power, 0);
         if (cast || continuation) {
-            project_all_los(player_ptr, GF_HYPODYNAMIA, randint1(power));
+            project_all_los(player_ptr, AttributeType::HYPODYNAMIA, randint1(power));
         }
         break;
 
@@ -596,7 +596,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
         if (info)
             return info_damage(1, power, 0);
         if (cast || continuation) {
-            project_all_los(player_ptr, GF_PSI_DRAIN, randint1(power));
+            project_all_los(player_ptr, AttributeType::PSI_DRAIN, randint1(power));
         }
         break;
 
@@ -855,7 +855,7 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
                         msg_print(_("復讐の時だ！", "Time for revenge!"));
                     } while (!get_aim_dir(player_ptr, &dir));
 
-                    fire_ball(player_ptr, GF_HELL_FIRE, dir, power, 1);
+                    fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, power, 1);
 
                     if (allow_debug_options) {
                         msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);

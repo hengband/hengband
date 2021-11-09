@@ -11,7 +11,7 @@
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
@@ -80,9 +80,9 @@ MONSTER_NUMBER summon_guardian(player_type *player_ptr, POSITION y, POSITION x, 
         simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
         if (mon_to_player)
-            fire_ball_hide(player_ptr, GF_WATER_FLOW, 0, 3, 8);
+            fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 3, 8);
         else if (mon_to_mon)
-            project(player_ptr, t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE);
+            project(player_ptr, t_idx, 8, y, x, 3, AttributeType::WATER_FLOW, PROJECT_GRID | PROJECT_HIDE);
     }
 
     int count = 0;

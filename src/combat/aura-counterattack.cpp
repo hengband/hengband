@@ -21,7 +21,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -46,7 +46,7 @@ static void aura_fire_by_monster_attack(player_type *player_ptr, monap_type *mon
     HIT_POINT dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, GF_FIRE);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::FIRE);
     if (mdp.mon_take_hit(_("は灰の山になった。", " turns into a pile of ash."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
@@ -69,7 +69,7 @@ static void aura_elec_by_monster_attack(player_type *player_ptr, monap_type *mon
     HIT_POINT dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, GF_ELEC);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::ELEC);
     if (mdp.mon_take_hit(_("は燃え殻の山になった。", " turns into a pile of cinders."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
@@ -92,7 +92,7 @@ static void aura_cold_by_monster_attack(player_type *player_ptr, monap_type *mon
     HIT_POINT dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, GF_COLD);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::COLD);
     if (mdp.mon_take_hit(_("は凍りついた。", " was frozen."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
@@ -112,7 +112,7 @@ static void aura_shards_by_monster_attack(player_type *player_ptr, monap_type *m
         HIT_POINT dam = damroll(2, 6);
         dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets sliced!"), monap_ptr->m_name);
-        MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, GF_SHARDS);
+        MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::SHARDS);
         if (mdp.mon_take_hit(_("はズタズタになった。", " is torn to pieces."))) {
             monap_ptr->blinked = false;
             monap_ptr->alive = false;
@@ -142,7 +142,7 @@ static void aura_holy_by_monster_attack(player_type *player_ptr, monap_type *mon
     HIT_POINT dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, GF_HOLY_FIRE);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::HOLY_FIRE);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
@@ -168,7 +168,7 @@ static void aura_force_by_monster_attack(player_type *player_ptr, monap_type *mo
     HIT_POINT dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, GF_MANA);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::MANA);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
@@ -201,7 +201,7 @@ static void aura_shadow_by_monster_attack(player_type *player_ptr, monap_type *m
 
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
-    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, GF_DARK);
+    MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::DARK);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
@@ -209,13 +209,14 @@ static void aura_shadow_by_monster_attack(player_type *player_ptr, monap_type *m
     }
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    EFFECT_ID typ[4][2] = { { INVEN_HEAD, GF_OLD_CONF }, { INVEN_SUB_HAND, GF_OLD_SLEEP }, { INVEN_ARMS, GF_TURN_ALL }, { INVEN_FEET, GF_OLD_SLOW } };
+    EFFECT_ID typ[4][2] = { { INVEN_HEAD, (EFFECT_ID)AttributeType::OLD_CONF }, { INVEN_SUB_HAND, (EFFECT_ID)AttributeType::OLD_SLEEP }, 
+                            { INVEN_ARMS, (EFFECT_ID)AttributeType::TURN_ALL }, { INVEN_FEET, (EFFECT_ID)AttributeType::OLD_SLOW } };
 
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < 4; j++) {
         o_armed_ptr = &player_ptr->inventory_list[typ[j][0]];
         if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed() && o_armed_ptr->is_armour())
-            project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), typ[j][1], flg);
+            project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), (AttributeType)typ[j][1], flg);
     }
 }
 

@@ -32,7 +32,7 @@
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -108,7 +108,7 @@ bool teleport_swap(player_type *player_ptr, DIRECTION dir)
 bool teleport_monster(player_type *player_ptr, DIRECTION dir, int distance)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
-    return (project_hook(player_ptr, GF_AWAY_ALL, dir, distance, flg));
+    return (project_hook(player_ptr, AttributeType::AWAY_ALL, dir, distance, flg));
 }
 
 /*!

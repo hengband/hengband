@@ -1,7 +1,7 @@
 ﻿#include "spell-kind/spells-charm.h"
 #include "effect/effect-characteristics.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -14,7 +14,7 @@
 bool charm_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-    return (project_hook(player_ptr, GF_CHARM, dir, plev, flg));
+    return (project_hook(player_ptr, AttributeType::CHARM, dir, plev, flg));
 }
 
 /*!
@@ -27,7 +27,7 @@ bool charm_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 bool control_one_undead(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-    return (project_hook(player_ptr, GF_CONTROL_UNDEAD, dir, plev, flg));
+    return (project_hook(player_ptr, AttributeType::CONTROL_UNDEAD, dir, plev, flg));
 }
 
 /*!
@@ -40,7 +40,7 @@ bool control_one_undead(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL ple
 bool control_one_demon(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-    return (project_hook(player_ptr, GF_CONTROL_DEMON, dir, plev, flg));
+    return (project_hook(player_ptr, AttributeType::CONTROL_DEMON, dir, plev, flg));
 }
 
 /*!
@@ -53,5 +53,5 @@ bool control_one_demon(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev
 bool charm_animal(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-    return (project_hook(player_ptr, GF_CONTROL_ANIMAL, dir, plev, flg));
+    return (project_hook(player_ptr, AttributeType::CONTROL_ANIMAL, dir, plev, flg));
 }

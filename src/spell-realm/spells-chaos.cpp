@@ -16,7 +16,7 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -49,17 +49,17 @@ void call_the_void(player_type *player_ptr)
     if (do_call) {
         for (int i = 1; i < 10; i++) {
             if (i - 5)
-                fire_ball(player_ptr, GF_ROCKET, i, 175, 2);
+                fire_ball(player_ptr, AttributeType::ROCKET, i, 175, 2);
         }
 
         for (int i = 1; i < 10; i++) {
             if (i - 5)
-                fire_ball(player_ptr, GF_MANA, i, 175, 3);
+                fire_ball(player_ptr, AttributeType::MANA, i, 175, 3);
         }
 
         for (int i = 1; i < 10; i++) {
             if (i - 5)
-                fire_ball(player_ptr, GF_NUKE, i, 175, 4);
+                fire_ball(player_ptr, AttributeType::NUKE, i, 175, 4);
         }
 
         return;
@@ -219,6 +219,6 @@ void cast_meteor(player_type *player_ptr, HIT_POINT dam, POSITION rad)
         if (count > 20)
             continue;
 
-        project(player_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
+        project(player_ptr, 0, rad, y, x, dam, AttributeType::METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
     }
 }

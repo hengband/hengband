@@ -12,7 +12,7 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
@@ -88,7 +88,7 @@ concptr do_life_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessType
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball_hide(player_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
         break;
@@ -200,7 +200,7 @@ concptr do_life_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessType
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball_hide(player_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
         break;
@@ -379,7 +379,7 @@ concptr do_life_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessType
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball_hide(player_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
+                fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
         break;
