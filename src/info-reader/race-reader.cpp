@@ -221,6 +221,13 @@ errr parse_r_info(std::string_view buf, angband_header *)
 
         const auto &flags = str_split(tokens[1], '|', true, 10);
         for (const auto &f : flags) {
+
+            const auto &s_tokens = str_split(f, '_', false, 2);
+            if (s_tokens.size() == 2 && s_tokens[0] == "PERHP") {
+                info_set_value(r_ptr->cur_hp_per, s_tokens[1]);
+                continue;
+            }
+
             if (f.size() == 0) {
                 continue;
             }
