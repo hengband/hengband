@@ -42,7 +42,7 @@
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/body-improvement.h"
@@ -409,7 +409,7 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
         set_tim_levitation(player_ptr, randint1(20) + 20, false);
         break;
     case HIDE_FLAMES:
-        fire_ball(player_ptr, GF_FIRE, 0, 50 + plev, plev / 10 + 2);
+        fire_ball(player_ptr, AttributeType::FIRE, 0, 50 + plev, plev / 10 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         set_oppose_fire(player_ptr, (TIME_EFFECT)plev, false);
         break;
@@ -446,7 +446,7 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(player_ptr, GF_OLD_CONF, dir, plev * 3, 3);
+        fire_ball(player_ptr, AttributeType::OLD_CONF, dir, plev * 3, 3);
         break;
     case SWAP_POSITION:
         project_length = -1;
@@ -466,15 +466,15 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
         set_oppose_acid(player_ptr, (TIME_EFFECT)plev, false);
         break;
     case HIDE_MIST:
-        fire_ball(player_ptr, GF_POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(player_ptr, GF_HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(player_ptr, GF_CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
     case PURGATORY_FLAME: {
         int num = damroll(3, 9);
         for (int k = 0; k < num; k++) {
-            EFFECT_ID typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
+            AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER : AttributeType::PLASMA;
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 
 /*
  * Convert a "pict" (P) into an "attr" (A)
@@ -28,7 +28,7 @@ extern TERM_COLOR tval_to_attr[128];
 extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
 
-extern TERM_COLOR gf_color[MAX_GF];
+extern TERM_COLOR gf_color[(int)AttributeType::MAX];
 extern TERM_COLOR color_char_to_attr(SYMBOL_CODE c);
 
-uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ);
+uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);

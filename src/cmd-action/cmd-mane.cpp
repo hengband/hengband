@@ -47,7 +47,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
@@ -351,7 +351,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("ロケットを発射した。", "You fire a rocket."));
-        fire_rocket(player_ptr, GF_ROCKET, dir, damage, 2);
+        fire_rocket(player_ptr, AttributeType::ROCKET, dir, damage, 2);
         break;
 
     case RF_ABILITY::SHOOT:
@@ -359,7 +359,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("矢を放った。", "You fire an arrow."));
-        fire_bolt(player_ptr, GF_ARROW, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ARROW, dir, damage);
         break;
 
     case RF_ABILITY::XXX2:
@@ -376,7 +376,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
-        fire_breath(player_ptr, GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::ACID, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_ELEC:
@@ -384,7 +384,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
-        fire_breath(player_ptr, GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::ELEC, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_FIRE:
@@ -392,7 +392,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
-        fire_breath(player_ptr, GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::FIRE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_COLD:
@@ -400,7 +400,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
-        fire_breath(player_ptr, GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::COLD, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_POIS:
@@ -408,7 +408,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
-        fire_breath(player_ptr, GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::POIS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_NETH:
@@ -416,7 +416,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
-        fire_breath(player_ptr, GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::NETHER, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_LITE:
@@ -424,7 +424,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
-        fire_breath(player_ptr, GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::LITE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_DARK:
@@ -432,7 +432,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
-        fire_breath(player_ptr, GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::DARK, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_CONF:
@@ -440,7 +440,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
-        fire_breath(player_ptr, GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_SOUN:
@@ -448,7 +448,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
-        fire_breath(player_ptr, GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::SOUND, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_CHAO:
@@ -456,7 +456,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
-        fire_breath(player_ptr, GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::CHAOS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_DISE:
@@ -464,7 +464,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
-        fire_breath(player_ptr, GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_NEXU:
@@ -472,7 +472,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
-        fire_breath(player_ptr, GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::NEXUS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_TIME:
@@ -480,7 +480,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
-        fire_breath(player_ptr, GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::TIME, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_INER:
@@ -488,7 +488,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
-        fire_breath(player_ptr, GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_GRAV:
@@ -496,7 +496,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
-        fire_breath(player_ptr, GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_SHAR:
@@ -504,7 +504,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
-        fire_breath(player_ptr, GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::SHARDS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_PLAS:
@@ -513,7 +513,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
 
-        fire_breath(player_ptr, GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::PLASMA, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_FORC:
@@ -522,7 +522,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
 
-        fire_breath(player_ptr, GF_FORCE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::FORCE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BR_MANA:
@@ -531,7 +531,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
 
-        fire_breath(player_ptr, GF_MANA, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::MANA, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BA_NUKE:
@@ -540,7 +540,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
 
-        fire_ball(player_ptr, GF_NUKE, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::NUKE, dir, damage, 2);
         break;
 
     case RF_ABILITY::BR_NUKE:
@@ -549,7 +549,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
 
-        fire_breath(player_ptr, GF_NUKE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::NUKE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
     case RF_ABILITY::BA_CHAO:
@@ -558,7 +558,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
 
-        fire_ball(player_ptr, GF_CHAOS, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::CHAOS, dir, damage, 4);
         break;
     case RF_ABILITY::BR_DISI:
         if (!get_aim_dir(player_ptr, &dir))
@@ -566,7 +566,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
 
-        fire_breath(player_ptr, GF_DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
         break;
     case RF_ABILITY::BA_ACID:
         if (!get_aim_dir(player_ptr, &dir))
@@ -574,7 +574,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
 
-        fire_ball(player_ptr, GF_ACID, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::ACID, dir, damage, 2);
         break;
     case RF_ABILITY::BA_ELEC:
         if (!get_aim_dir(player_ptr, &dir))
@@ -582,7 +582,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
 
-        fire_ball(player_ptr, GF_ELEC, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::ELEC, dir, damage, 2);
         break;
     case RF_ABILITY::BA_FIRE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -590,7 +590,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
 
-        fire_ball(player_ptr, GF_FIRE, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::FIRE, dir, damage, 2);
         break;
     case RF_ABILITY::BA_COLD:
         if (!get_aim_dir(player_ptr, &dir))
@@ -598,7 +598,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
 
-        fire_ball(player_ptr, GF_COLD, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::COLD, dir, damage, 2);
         break;
     case RF_ABILITY::BA_POIS:
         if (!get_aim_dir(player_ptr, &dir))
@@ -606,7 +606,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
 
-        fire_ball(player_ptr, GF_POIS, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::POIS, dir, damage, 2);
         break;
     case RF_ABILITY::BA_NETH:
         if (!get_aim_dir(player_ptr, &dir))
@@ -614,7 +614,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
 
-        fire_ball(player_ptr, GF_NETHER, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::NETHER, dir, damage, 2);
         break;
     case RF_ABILITY::BA_WATE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -622,7 +622,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
 
-        fire_ball(player_ptr, GF_WATER, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::WATER, dir, damage, 4);
         break;
     case RF_ABILITY::BA_MANA:
         if (!get_aim_dir(player_ptr, &dir))
@@ -630,7 +630,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
 
-        fire_ball(player_ptr, GF_MANA, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::MANA, dir, damage, 4);
         break;
     case RF_ABILITY::BA_DARK:
         if (!get_aim_dir(player_ptr, &dir))
@@ -638,42 +638,42 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
 
-        fire_ball(player_ptr, GF_DARK, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::DARK, dir, damage, 4);
         break;
     case RF_ABILITY::DRAIN_MANA:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_DRAIN_MANA, dir, randint1(plev * 3) + plev, 0);
+        fire_ball_hide(player_ptr, AttributeType::DRAIN_MANA, dir, randint1(plev * 3) + plev, 0);
         break;
     case RF_ABILITY::MIND_BLAST:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_MIND_BLAST, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::MIND_BLAST, dir, damage, 0);
         break;
     case RF_ABILITY::BRAIN_SMASH:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_BRAIN_SMASH, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::BRAIN_SMASH, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_1:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_1, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_1, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_2:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_2, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_2, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_3:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_3, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_3, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_4:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_4, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_4, dir, damage, 0);
         break;
     case RF_ABILITY::BO_ACID:
         if (!get_aim_dir(player_ptr, &dir))
@@ -681,7 +681,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
 
-        fire_bolt(player_ptr, GF_ACID, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ACID, dir, damage);
         break;
     case RF_ABILITY::BO_ELEC:
         if (!get_aim_dir(player_ptr, &dir))
@@ -689,7 +689,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
 
-        fire_bolt(player_ptr, GF_ELEC, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ELEC, dir, damage);
         break;
     case RF_ABILITY::BO_FIRE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -697,7 +697,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
 
-        fire_bolt(player_ptr, GF_FIRE, dir, damage);
+        fire_bolt(player_ptr, AttributeType::FIRE, dir, damage);
         break;
     case RF_ABILITY::BO_COLD:
         if (!get_aim_dir(player_ptr, &dir))
@@ -705,7 +705,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
 
-        fire_bolt(player_ptr, GF_COLD, dir, damage);
+        fire_bolt(player_ptr, AttributeType::COLD, dir, damage);
         break;
     case RF_ABILITY::BA_LITE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -713,7 +713,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
 
-        fire_ball(player_ptr, GF_LITE, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::LITE, dir, damage, 4);
         break;
     case RF_ABILITY::BO_NETH:
         if (!get_aim_dir(player_ptr, &dir))
@@ -721,7 +721,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
 
-        fire_bolt(player_ptr, GF_NETHER, dir, damage);
+        fire_bolt(player_ptr, AttributeType::NETHER, dir, damage);
         break;
     case RF_ABILITY::BO_WATE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -729,7 +729,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
 
-        fire_bolt(player_ptr, GF_WATER, dir, damage);
+        fire_bolt(player_ptr, AttributeType::WATER, dir, damage);
         break;
     case RF_ABILITY::BO_MANA:
         if (!get_aim_dir(player_ptr, &dir))
@@ -737,7 +737,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
 
-        fire_bolt(player_ptr, GF_MANA, dir, damage);
+        fire_bolt(player_ptr, AttributeType::MANA, dir, damage);
         break;
     case RF_ABILITY::BO_PLAS:
         if (!get_aim_dir(player_ptr, &dir))
@@ -745,7 +745,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
 
-        fire_bolt(player_ptr, GF_PLASMA, dir, damage);
+        fire_bolt(player_ptr, AttributeType::PLASMA, dir, damage);
         break;
     case RF_ABILITY::BO_ICEE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -753,7 +753,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
 
-        fire_bolt(player_ptr, GF_ICE, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ICE, dir, damage);
         break;
     case RF_ABILITY::MISSILE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -761,7 +761,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
 
-        fire_bolt(player_ptr, GF_MISSILE, dir, damage);
+        fire_bolt(player_ptr, AttributeType::MISSILE, dir, damage);
         break;
     case RF_ABILITY::SCARE:
         if (!get_aim_dir(player_ptr, &dir))
@@ -803,7 +803,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         else
             msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
-        fire_ball_hide(player_ptr, GF_HAND_DOOM, dir, 200, 0);
+        fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, dir, 200, 0);
         break;
     }
     case RF_ABILITY::HEAL: {
@@ -870,7 +870,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        (void)fire_beam(player_ptr, GF_AWAY_ALL, dir, plev);
+        (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, plev);
         break;
 
     case RF_ABILITY::TELE_LEVEL:
@@ -882,7 +882,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             return false;
         else
             msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
-        (void)fire_beam(player_ptr, GF_PSY_SPEAR, dir, damage);
+        (void)fire_beam(player_ptr, AttributeType::PSY_SPEAR, dir, damage);
         break;
 
     case RF_ABILITY::DARKNESS:

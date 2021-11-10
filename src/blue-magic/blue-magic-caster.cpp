@@ -27,7 +27,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
@@ -65,7 +65,7 @@ static bool cast_blue_rocket(player_type *player_ptr, bmc_type *bmc_ptr)
 
     msg_print(_("ロケットを発射した。", "You fire a rocket."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, RF_ABILITY::ROCKET, bmc_ptr->plev, DAM_ROLL);
-    fire_rocket(player_ptr, GF_ROCKET, bmc_ptr->dir, bmc_ptr->damage, 2);
+    fire_rocket(player_ptr, AttributeType::ROCKET, bmc_ptr->dir, bmc_ptr->damage, 2);
     return true;
 }
 
@@ -76,7 +76,7 @@ static bool cast_blue_shoot(player_type *player_ptr, bmc_type *bmc_ptr)
 
     msg_print(_("矢を放った。", "You fire an arrow."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, RF_ABILITY::SHOOT, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, GF_ARROW, bmc_ptr->dir, bmc_ptr->damage);
+    fire_bolt(player_ptr, AttributeType::ARROW, bmc_ptr->dir, bmc_ptr->damage);
     return true;
 }
 
@@ -86,7 +86,7 @@ static bool cast_blue_hand_doom(player_type *player_ptr, bmc_type *bmc_ptr)
         return false;
 
     msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
-    fire_ball_hide(player_ptr, GF_HAND_DOOM, bmc_ptr->dir, bmc_ptr->plev * 3, 0);
+    fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, bmc_ptr->dir, bmc_ptr->plev * 3, 0);
     return true;
 }
 
@@ -143,7 +143,7 @@ static bool cast_blue_teleport_away(player_type *player_ptr, bmc_type *bmc_ptr)
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
 
-    (void)fire_beam(player_ptr, GF_AWAY_ALL, bmc_ptr->dir, 100);
+    (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, bmc_ptr->dir, 100);
     return true;
 }
 
@@ -154,7 +154,7 @@ static bool cast_blue_psy_spear(player_type *player_ptr, bmc_type *bmc_ptr)
 
     msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, RF_ABILITY::PSY_SPEAR, bmc_ptr->plev, DAM_ROLL);
-    (void)fire_beam(player_ptr, GF_PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
+    (void)fire_beam(player_ptr, AttributeType::PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
     return true;
 }
 

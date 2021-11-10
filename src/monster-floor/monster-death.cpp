@@ -67,7 +67,7 @@ static void on_dead_explosion(player_type *player_ptr, monster_death_type *md_pt
             continue;
 
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        EFFECT_ID typ = mbe_info[enum2i(md_ptr->r_ptr->blow[i].effect)].explode_type;
+        AttributeType typ = mbe_info[enum2i(md_ptr->r_ptr->blow[i].effect)].explode_type;
         DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
         DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
         HIT_POINT damage = damroll(d_dice, d_side);
@@ -343,13 +343,13 @@ static void on_defeat_last_boss(player_type *player_ptr)
  * Handle the "death" of a monster.
  * @param m_idx 死亡したモンスターのID
  * @param drop_item TRUEならばモンスターのドロップ処理を行う
- * @param effect_type ラストアタックの属性 (単一属性)
+ * @param type ラストアタックの属性 (単一属性)
  */
-void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, EFFECT_ID effect_type)
+void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeType type)
 {
-    EffectFlags flags;
+    AttributeFlags flags;
     flags.clear();
-    flags.set((spells_type)effect_type);
+    flags.set(type);
     monster_death(player_ptr, m_idx, drop_item, flags);
 }
 
@@ -358,7 +358,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, E
  * Handle the "death" of a monster.
  * @param m_idx 死亡したモンスターのID
  * @param drop_item TRUEならばモンスターのドロップ処理を行う
- * @param effect_flags ラストアタックの属性 (複数属性)
+ * @param attribute_flags ラストアタックの属性 (複数属性)
  * @details
  * <pre>
  * Disperse treasures centered at the monster location based on the
@@ -370,7 +370,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, E
  * it drops all of its objects, which may disappear in crowded rooms.
  * </pre>
  */
-void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, EffectFlags effect_flags)
+void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeFlags attribute_flags)
 {
     monster_death_type tmp_md;
     monster_death_type *md_ptr = initialize_monster_death_type(player_ptr, &tmp_md, m_idx, drop_item);
@@ -402,7 +402,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item, E
     drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
     decide_drop_quality(md_ptr);
-    switch_special_death(player_ptr, md_ptr, effect_flags);
+    switch_special_death(player_ptr, md_ptr, attribute_flags);
     drop_artifact(player_ptr, md_ptr);
     int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
     coin_type = md_ptr->force_coin;

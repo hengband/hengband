@@ -28,7 +28,7 @@
 #include "mspell/mspell.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"
@@ -147,7 +147,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *player_ptr, POSITION y, POS
     }
 
     const auto dam = monspell_damage(player_ptr, RF_ABILITY::DRAIN_MANA, m_idx, DAM_ROLL);
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, false, TARGET_TYPE);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::DRAIN_MANA, dam, 0, false, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(player_ptr, m_idx, DRS_MANA);
 
@@ -187,7 +187,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *player_ptr, POSITION y, POS
     }
 
     const auto dam = monspell_damage(player_ptr, RF_ABILITY::MIND_BLAST, m_idx, DAM_ROLL);
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, false, TARGET_TYPE);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::MIND_BLAST, dam, 0, false, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
@@ -225,7 +225,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *player_ptr, POSITION y, PO
     }
 
     const auto dam = monspell_damage(player_ptr, RF_ABILITY::BRAIN_SMASH, m_idx, DAM_ROLL);
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, false, TARGET_TYPE);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::BRAIN_SMASH, dam, 0, false, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;

@@ -4,7 +4,7 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
@@ -40,13 +40,13 @@ static void exe_ring_of_power(player_type *player_ptr, DIRECTION dir)
     case 4:
     case 5:
     case 6:
-        fire_ball(player_ptr, GF_MANA, dir, 600, 3);
+        fire_ball(player_ptr, AttributeType::MANA, dir, 600, 3);
         break;
     case 7:
     case 8:
     case 9:
     case 10:
-        fire_bolt(player_ptr, GF_MANA, dir, 500);
+        fire_bolt(player_ptr, AttributeType::MANA, dir, 500);
         break;
     default:
         break;

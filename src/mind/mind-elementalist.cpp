@@ -53,6 +53,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
+#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"
@@ -105,9 +106,9 @@ enum class ElementSpells {
  */
 struct element_type {
     std::string_view title; //!< 領域名
-    std::array<spells_type, 3> type; //!< 属性タイプリスト
+    std::array<AttributeType, 3> type; //!< 属性タイプリスト
     std::array<std::string_view, 3> name; //!< 属性名リスト
-    std::unordered_map<spells_type, spells_type> extra; //!< 追加属性タイプ
+    std::unordered_map<AttributeType, AttributeType> extra; //!< 追加属性タイプ
 };
 
 /*!
@@ -131,7 +132,7 @@ static element_type_list element_types = {
     {
         ElementRealm::FIRE, {
             _("炎", "Fire"),
-            { GF_FIRE, GF_HELL_FIRE, GF_PLASMA },
+            { AttributeType::FIRE, AttributeType::HELL_FIRE, AttributeType::PLASMA },
             { _("火炎", "Fire"), _("業火", "Hell Fire"), _("プラズマ", "Plasma") },
             { },
         }
@@ -139,15 +140,15 @@ static element_type_list element_types = {
     {
         ElementRealm::ICE, {
             _("氷", "Ice"),
-            { GF_COLD, GF_INERTIAL, GF_TIME },
+            { AttributeType::COLD, AttributeType::INERTIAL, AttributeType::TIME },
             { _("冷気", "Ice"), _("遅鈍", "Inertia"), _("時間逆転", "Time Stream") },
-            { { GF_COLD, GF_ICE} },
+            { { AttributeType::COLD, AttributeType::ICE} },
         }
     },
     {
         ElementRealm::SKY, {
             _("空", "Sky"),
-            { GF_ELEC, GF_LITE, GF_MANA },
+            { AttributeType::ELEC, AttributeType::LITE, AttributeType::MANA },
             { _("電撃", "Lightning"), _("光", "Light"), _("魔力", "Mana") },
             { },
         }
@@ -155,7 +156,7 @@ static element_type_list element_types = {
     {
         ElementRealm::SEA, {
             _("海", "Sea"),
-            { GF_ACID, GF_WATER, GF_DISINTEGRATE },
+            { AttributeType::ACID, AttributeType::WATER, AttributeType::DISINTEGRATE },
             { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegration") },
             { },
         }
@@ -163,15 +164,15 @@ static element_type_list element_types = {
     {
         ElementRealm::DARKNESS, {
             _("闇", "Darkness"),
-            { GF_DARK, GF_NETHER, GF_VOID },
+            { AttributeType::DARK, AttributeType::NETHER, AttributeType::VOID_MAGIC },
             { _("暗黒", "Darkness"), _("地獄", "Nether"), _("虚無", "void") },
-            { { GF_DARK, GF_ABYSS } },
+            { { AttributeType::DARK, AttributeType::ABYSS } },
         }
     },
     {
         ElementRealm::CHAOS, {
             _("混沌", "Chaos"),
-            { GF_CONFUSION, GF_CHAOS, GF_NEXUS },
+            { AttributeType::CONFUSION, AttributeType::CHAOS, AttributeType::NEXUS },
             { _("混乱", "Confusion"), _("カオス", "Chaos"), _("因果混乱", "Nexus") },
             { },
         }
@@ -179,7 +180,7 @@ static element_type_list element_types = {
     {
         ElementRealm::EARTH, {
             _("地", "Earth"),
-            { GF_SHARDS, GF_FORCE, GF_METEOR },
+            { AttributeType::SHARDS, AttributeType::FORCE, AttributeType::METEOR },
             { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteor") },
             { },
         }
@@ -187,7 +188,7 @@ static element_type_list element_types = {
     {
         ElementRealm::DEATH, {
             _("瘴気", "Death"),
-            { GF_POIS, GF_HYPODYNAMIA, GF_DISENCHANT },
+            { AttributeType::POIS, AttributeType::HYPODYNAMIA, AttributeType::DISENCHANT },
             { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchantment") },
             { },
         }
@@ -305,7 +306,7 @@ concptr get_element_title(int realm_idx)
  * @param realm_idx 領域番号
  * @return 領域で使用できる属性リスト
  */
-static std::array<spells_type, 3> get_element_types(int realm_idx)
+static std::array<AttributeType, 3> get_element_types(int realm_idx)
 {
     auto realm = i2enum<ElementRealm>(realm_idx);
     return element_types.at(realm).type;
@@ -317,7 +318,7 @@ static std::array<spells_type, 3> get_element_types(int realm_idx)
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
-spells_type get_element_type(int realm_idx, int n)
+AttributeType get_element_type(int realm_idx, int n)
 {
     return get_element_types(realm_idx)[n];
 }
@@ -328,7 +329,7 @@ spells_type get_element_type(int realm_idx, int n)
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
-static spells_type get_element_spells_type(player_type *player_ptr, int n)
+static AttributeType get_element_spells_type(player_type *player_ptr, int n)
 {
     auto realm = element_types.at(i2enum<ElementRealm>(player_ptr->element));
     auto t = realm.type.at(n);
@@ -474,7 +475,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
 {
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto power = element_powers.at(spell);
-    spells_type typ;
+    AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
     HIT_POINT dam;
@@ -505,7 +506,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = damroll(8 + ((plev - 5) / 4), 8);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_bolt_or_beam(player_ptr, plev, typ, dir, dam)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -535,7 +536,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = std::min(150, player_ptr->chp / 2);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_breath(player_ptr, typ, dir, dam, 3)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -543,7 +544,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
     case ElementSpells::ANNIHILATE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_E_GENOCIDE, dir, plev + 50, 0);
+        fire_ball_hide(player_ptr, AttributeType::E_GENOCIDE, dir, plev + 50, 0);
         break;
     case ElementSpells::BOLT_3RD:
         if (!get_aim_dir(player_ptr, &dir))
@@ -563,7 +564,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = 75 + plev * 3 / 2;
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 3)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -591,7 +592,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = 115 + plev * 5 / 2;
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 4)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -971,38 +972,38 @@ void do_cmd_element_browse(player_type *player_ptr)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
+bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
 {
     switch (type) {
-    case GF_FIRE:
+    case AttributeType::FIRE:
         if (any_bits(r_ptr->flagsr, RFR_IM_FIRE))
             return false;
         break;
-    case GF_COLD:
+    case AttributeType::COLD:
         if (any_bits(r_ptr->flagsr, RFR_IM_COLD))
             return false;
         break;
-    case GF_ELEC:
+    case AttributeType::ELEC:
         if (any_bits(r_ptr->flagsr, RFR_IM_ELEC))
             return false;
         break;
-    case GF_ACID:
+    case AttributeType::ACID:
         if (any_bits(r_ptr->flagsr, RFR_IM_ACID))
             return false;
         break;
-    case GF_DARK:
+    case AttributeType::DARK:
         if (any_bits(r_ptr->flagsr, RFR_RES_DARK) || any_bits(r_ptr->r_flags3, RF3_HURT_LITE))
             return false;
         break;
-    case GF_CONFUSION:
+    case AttributeType::CONFUSION:
         if (any_bits(r_ptr->flags3, RF3_NO_CONF))
             return false;
         break;
-    case GF_SHARDS:
+    case AttributeType::SHARDS:
         if (any_bits(r_ptr->flagsr, RFR_RES_SHAR))
             return false;
         break;
-    case GF_POIS:
+    case AttributeType::POIS:
         if (any_bits(r_ptr->flagsr, RFR_IM_POIS))
             return false;
         break;
@@ -1305,8 +1306,7 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
     case ElementRealm::EARTH:
         rpi = rpi_type(_("地震", "Earthquake"));
         rpi.info = format("%s%d", KWD_SPHERE, 10);
-        rpi.text
-            = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
+        rpi.text = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
         rpi.min_level = 25;
         rpi.cost = 15;
         rpi.stat = A_WIS;
@@ -1348,8 +1348,8 @@ bool switch_element_execution(player_type *player_ptr)
         (void)lite_area(player_ptr, damroll(2, plev / 2), plev / 10);
         break;
     case ElementRealm::ICE:
-        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, GF_COLD, PROJECT_ITEM);
-        (void)project_all_los(player_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
+        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, AttributeType::COLD, PROJECT_ITEM);
+        (void)project_all_los(player_ptr, AttributeType::OLD_SLEEP, 20 + plev * 3 / 2);
         break;
     case ElementRealm::SKY:
         (void)recharge(player_ptr, 120);

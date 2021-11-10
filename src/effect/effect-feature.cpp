@@ -2,6 +2,7 @@
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
 #include "floor/cave.h"
@@ -16,7 +17,6 @@
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
-#include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -63,7 +63,7 @@ static bool cave_naked_bold(player_type *player_ptr, POSITION y, POSITION x)
  * Perhaps we should affect doors?
  * </pre>
  */
-bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType typ)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -78,40 +78,40 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
     if (f_ptr->flags.has(FF::TREE)) {
         concptr message;
         switch (typ) {
-        case GF_POIS:
-        case GF_NUKE:
-        case GF_DEATH_RAY:
+        case AttributeType::POIS:
+        case AttributeType::NUKE:
+        case AttributeType::DEATH_RAY:
             message = _("枯れた", "was blasted.");
             break;
-        case GF_TIME:
+        case AttributeType::TIME:
             message = _("縮んだ", "shrank.");
             break;
-        case GF_ACID:
+        case AttributeType::ACID:
             message = _("溶けた", "melted.");
             break;
-        case GF_COLD:
-        case GF_ICE:
+        case AttributeType::COLD:
+        case AttributeType::ICE:
             message = _("凍り、砕け散った", "was frozen and smashed.");
             break;
-        case GF_FIRE:
-        case GF_ELEC:
-        case GF_PLASMA:
+        case AttributeType::FIRE:
+        case AttributeType::ELEC:
+        case AttributeType::PLASMA:
             message = _("燃えた", "burns up!");
             break;
-        case GF_METEOR:
-        case GF_CHAOS:
-        case GF_MANA:
-        case GF_SEEKER:
-        case GF_SUPER_RAY:
-        case GF_SHARDS:
-        case GF_ROCKET:
-        case GF_SOUND:
-        case GF_DISENCHANT:
-        case GF_FORCE:
-        case GF_GRAVITY:
+        case AttributeType::METEOR:
+        case AttributeType::CHAOS:
+        case AttributeType::MANA:
+        case AttributeType::SEEKER:
+        case AttributeType::SUPER_RAY:
+        case AttributeType::SHARDS:
+        case AttributeType::ROCKET:
+        case AttributeType::SOUND:
+        case AttributeType::DISENCHANT:
+        case AttributeType::FORCE:
+        case AttributeType::GRAVITY:
             message = _("粉砕された", "was crushed.");
             break;
-        case GF_VOID:
+        case AttributeType::VOID_MAGIC:
             message = _("消滅した", "vanished.");
             break;
         default:
@@ -132,39 +132,39 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
     /* Analyze the type */
     switch (typ) {
         /* Ignore most effects */
-    case GF_CAPTURE:
-    case GF_HAND_DOOM:
-    case GF_CAUSE_1:
-    case GF_CAUSE_2:
-    case GF_CAUSE_3:
-    case GF_CAUSE_4:
-    case GF_MIND_BLAST:
-    case GF_BRAIN_SMASH:
-    case GF_DRAIN_MANA:
-    case GF_PSY_SPEAR:
-    case GF_FORCE:
-    case GF_HOLY_FIRE:
-    case GF_HELL_FIRE:
-    case GF_PSI:
-    case GF_PSI_DRAIN:
-    case GF_TELEKINESIS:
-    case GF_DOMINATION:
-    case GF_IDENTIFY:
-    case GF_ATTACK:
-    case GF_ACID:
-    case GF_ELEC:
-    case GF_COLD:
-    case GF_ICE:
-    case GF_FIRE:
-    case GF_PLASMA:
-    case GF_METEOR:
-    case GF_CHAOS:
-    case GF_MANA:
-    case GF_SEEKER:
-    case GF_SUPER_RAY: {
+    case AttributeType::CAPTURE:
+    case AttributeType::HAND_DOOM:
+    case AttributeType::CAUSE_1:
+    case AttributeType::CAUSE_2:
+    case AttributeType::CAUSE_3:
+    case AttributeType::CAUSE_4:
+    case AttributeType::MIND_BLAST:
+    case AttributeType::BRAIN_SMASH:
+    case AttributeType::DRAIN_MANA:
+    case AttributeType::PSY_SPEAR:
+    case AttributeType::FORCE:
+    case AttributeType::HOLY_FIRE:
+    case AttributeType::HELL_FIRE:
+    case AttributeType::PSI:
+    case AttributeType::PSI_DRAIN:
+    case AttributeType::TELEKINESIS:
+    case AttributeType::DOMINATION:
+    case AttributeType::IDENTIFY:
+    case AttributeType::ATTACK:
+    case AttributeType::ACID:
+    case AttributeType::ELEC:
+    case AttributeType::COLD:
+    case AttributeType::ICE:
+    case AttributeType::FIRE:
+    case AttributeType::PLASMA:
+    case AttributeType::METEOR:
+    case AttributeType::CHAOS:
+    case AttributeType::MANA:
+    case AttributeType::SEEKER:
+    case AttributeType::SUPER_RAY: {
         break;
     }
-    case GF_KILL_TRAP: {
+    case AttributeType::KILL_TRAP: {
         if (is_hidden_door(player_ptr, g_ptr)) {
             disclose_grid(player_ptr, y, x);
             if (known) {
@@ -198,7 +198,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         obvious = true;
         break;
     }
-    case GF_KILL_DOOR: {
+    case AttributeType::KILL_DOOR: {
         if (is_trap(player_ptr, g_ptr->feat) || f_ptr->flags.has(FF::DOOR)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
@@ -216,7 +216,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         obvious = true;
         break;
     }
-    case GF_JAM_DOOR: {
+    case AttributeType::JAM_DOOR: {
         if (f_ptr->flags.has_not(FF::SPIKE))
             break;
 
@@ -236,7 +236,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         obvious = true;
         break;
     }
-    case GF_KILL_WALL: {
+    case AttributeType::KILL_WALL: {
         if (f_ptr->flags.has_not(FF::HURT_ROCK))
             break;
 
@@ -249,7 +249,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         player_ptr->update |= (PU_FLOW);
         break;
     }
-    case GF_MAKE_DOOR: {
+    case AttributeType::MAKE_DOOR: {
         if (!cave_naked_bold(player_ptr, y, x))
             break;
         if (player_bold(player_ptr, y, x))
@@ -259,11 +259,11 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
             obvious = true;
         break;
     }
-    case GF_MAKE_TRAP: {
+    case AttributeType::MAKE_TRAP: {
         place_trap(player_ptr, y, x);
         break;
     }
-    case GF_MAKE_TREE: {
+    case AttributeType::MAKE_TREE: {
         if (!cave_naked_bold(player_ptr, y, x))
             break;
         if (player_bold(player_ptr, y, x))
@@ -273,7 +273,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
             obvious = true;
         break;
     }
-    case GF_MAKE_RUNE_PROTECTION: {
+    case AttributeType::MAKE_RUNE_PROTECTION: {
         if (!cave_naked_bold(player_ptr, y, x))
             break;
         g_ptr->info |= CAVE_OBJECT;
@@ -282,7 +282,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         lite_spot(player_ptr, y, x);
         break;
     }
-    case GF_STONE_WALL: {
+    case AttributeType::STONE_WALL: {
         if (!cave_naked_bold(player_ptr, y, x))
             break;
         if (player_bold(player_ptr, y, x))
@@ -290,7 +290,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         cave_set_feat(player_ptr, y, x, feat_granite);
         break;
     }
-    case GF_LAVA_FLOW: {
+    case AttributeType::LAVA_FLOW: {
         if (f_ptr->flags.has(FF::PERMANENT))
             break;
         if (dam == 1) {
@@ -303,7 +303,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
 
         break;
     }
-    case GF_WATER_FLOW: {
+    case AttributeType::WATER_FLOW: {
         if (f_ptr->flags.has(FF::PERMANENT))
             break;
         if (dam == 1) {
@@ -316,8 +316,8 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
 
         break;
     }
-    case GF_LITE_WEAK:
-    case GF_LITE: {
+    case AttributeType::LITE_WEAK:
+    case AttributeType::LITE: {
         if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
             break;
 
@@ -337,9 +337,9 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
 
         break;
     }
-    case GF_DARK_WEAK:
-    case GF_DARK:
-    case GF_ABYSS: {
+    case AttributeType::DARK_WEAK:
+    case AttributeType::DARK:
+    case AttributeType::ABYSS: {
         bool do_dark = !player_ptr->phase_out && !g_ptr->is_mirror();
         if (!do_dark)
             break;
@@ -383,13 +383,13 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
 
         break;
     }
-    case GF_SHARDS:
-    case GF_ROCKET: {
+    case AttributeType::SHARDS:
+    case AttributeType::ROCKET: {
         if (g_ptr->is_mirror()) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             remove_mirror(player_ptr, y, x);
-            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, GF_SHARDS,
+            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
 
@@ -405,12 +405,12 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         player_ptr->update |= (PU_FLOW);
         break;
     }
-    case GF_SOUND: {
+    case AttributeType::SOUND: {
         if (g_ptr->is_mirror() && player_ptr->lev < 40) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             remove_mirror(player_ptr, y, x);
-            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, GF_SHARDS,
+            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
 
@@ -426,7 +426,7 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         player_ptr->update |= (PU_FLOW);
         break;
     }
-    case GF_DISINTEGRATE: {
+    case AttributeType::DISINTEGRATE: {
         if (g_ptr->is_mirror() || g_ptr->is_rune_protection() || g_ptr->is_rune_explosion())
             remove_mirror(player_ptr, y, x);
 
@@ -437,6 +437,8 @@ bool affect_feature(player_type *player_ptr, MONSTER_IDX who, POSITION r, POSITI
         player_ptr->update |= (PU_FLOW);
         break;
     }
+    default:
+        break;
     }
 
     lite_spot(player_ptr, y, x);

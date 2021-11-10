@@ -392,7 +392,7 @@ static void effect_monster_captured(player_type *player_ptr, effect_monster_type
 }
 
 /*!
- * @brief モンスターボールで捕らえる効果(GF_CAPTURE)
+ * @brief モンスターボールで捕らえる効果(CAPTURE)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr 効果情報への参照ポインタ
  * @return 効果発動結果

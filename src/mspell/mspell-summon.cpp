@@ -17,7 +17,7 @@
 #include "mspell/mspell.h"
 #include "mspell/specified-summon.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"

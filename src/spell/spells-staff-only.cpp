@@ -4,7 +4,7 @@
 #include "hpmp/hp-mp-processor.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-sight.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "system/player-type-definition.h"
@@ -60,7 +60,7 @@ bool cleansing_nova(player_type *player_ptr, bool magic, bool powerful)
 bool unleash_mana_storm(player_type *player_ptr, bool powerful)
 {
     msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
-    project(player_ptr, 0, (powerful ? 7 : 5), player_ptr->y, player_ptr->x, (randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA,
+    project(player_ptr, 0, (powerful ? 7 : 5), player_ptr->y, player_ptr->x, (randint1(200) + (powerful ? 500 : 300)) * 2, AttributeType::MANA,
         PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
 
     bool is_special_class = player_ptr->pclass != PlayerClassType::MAGE;

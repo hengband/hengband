@@ -28,7 +28,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
@@ -93,7 +93,7 @@ void remove_all_mirrors(player_type *player_ptr, bool explode)
             if (!explode)
                 continue;
 
-            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, GF_SHARDS,
+            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }
@@ -168,7 +168,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                     if (!(player_ptr->blind) && panel_contains(y, x)) {
-                        uint16_t p = bolt_pict(y, x, y, x, GF_MANA);
+                        uint16_t p = bolt_pict(y, x, y, x, AttributeType::MANA);
                         print_rel(player_ptr, PICT_C(p), PICT_A(p), y, x);
                         move_cursor_relative(y, x);
                         term_fresh();
@@ -185,7 +185,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, GF_MANA);
+                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
                 }
             }
         }
@@ -197,7 +197,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_item(player_ptr, 0, 0, y, x, dam, GF_MANA);
+                    (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
                 }
             }
         }
@@ -209,7 +209,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_monster(player_ptr, 0, 0, y, x, dam, GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
+                    (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
                 }
             }
         }
@@ -235,7 +235,7 @@ void seal_of_mirror(player_type *player_ptr, HIT_POINT dam)
             if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                 continue;
 
-            if (!affect_monster(player_ptr, 0, 0, y, x, dam, GF_GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
+            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
                 continue;
 
             if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -443,9 +443,9 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
             return false;
 
         if (plev > 9 && g_ptr->is_mirror())
-            fire_beam(player_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+            fire_beam(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
         else
-            fire_bolt(player_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+            fire_bolt(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 
         break;
     case WRAPPED_MIRROR:
@@ -464,19 +464,19 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        (void)fire_beam(player_ptr, GF_AWAY_ALL, dir, plev);
+        (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, plev);
         break;
     case MIRROR_CRASHING:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(player_ptr, GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
+        fire_ball(player_ptr, AttributeType::SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case SLEEPING_MIRROR:
         for (x = 0; x < player_ptr->current_floor_ptr->width; x++)
             for (y = 0; y < player_ptr->current_floor_ptr->height; y++)
                 if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
-                    project(player_ptr, 0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP,
+                    project(player_ptr, 0, 2, y, x, (HIT_POINT)plev, AttributeType::OLD_SLEEP,
                         (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
 
         break;
@@ -484,7 +484,7 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
+        fire_beam(player_ptr, AttributeType::SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
         break;
     case SEALING_MIRROR:
         seal_of_mirror(player_ptr, plev * 4 + 100);
@@ -503,7 +503,7 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
+        fire_beam(player_ptr, AttributeType::SUPER_RAY, dir, 150 + randint1(2 * plev));
         break;
     case ILLUSION_LIGHT:
         tmp = g_ptr->is_mirror() ? 4 : 3;

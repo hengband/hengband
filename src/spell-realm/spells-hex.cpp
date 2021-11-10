@@ -16,7 +16,7 @@
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-song.h"
 #include "spell/spell-info.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
@@ -363,7 +363,7 @@ void SpellHex::eyes_on_eyes()
 #endif
     const auto y = this->monap_ptr->m_ptr->fy;
     const auto x = this->monap_ptr->m_ptr->fx;
-    project(this->player_ptr, 0, 0, y, x, this->monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
+    project(this->player_ptr, 0, 0, y, x, this->monap_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL);
     if (this->player_ptr->tim_eyeeye) {
         set_tim_eyeeye(this->player_ptr, this->player_ptr->tim_eyeeye - 5, true);
     }

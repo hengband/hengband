@@ -43,7 +43,7 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"

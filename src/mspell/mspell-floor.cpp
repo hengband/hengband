@@ -34,7 +34,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -419,10 +419,10 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSIT
         }
     } else if (monster_to_monster) {
         if (can_use_lite_area) {
-            (void)project(player_ptr, m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL);
+            (void)project(player_ptr, m_idx, 3, y, x, 0, AttributeType::LITE_WEAK, PROJECT_GRID | PROJECT_KILL);
             lite_room(player_ptr, y, x);
         } else {
-            (void)project(player_ptr, m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL);
+            (void)project(player_ptr, m_idx, 3, y, x, 0, AttributeType::DARK_WEAK, PROJECT_GRID | PROJECT_KILL);
             unlite_room(player_ptr, y, x);
         }
     }

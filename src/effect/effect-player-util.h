@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "effect/attribute-types.h"
 
 struct monster_type;
 typedef struct effect_player_type {
@@ -12,6 +13,6 @@ typedef struct effect_player_type {
 
     MONSTER_IDX who;
     HIT_POINT dam;
-    EFFECT_ID effect_type;
+    AttributeType attribute;
     BIT_FLAGS flag;
 } effect_player_type;

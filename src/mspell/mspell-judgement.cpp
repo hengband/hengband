@@ -29,7 +29,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -90,15 +90,15 @@ bool direct_beam(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
  * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
  * @return ブレスを直接当てられるならばTRUEを返す
  */
-bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
+bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, AttributeType typ, bool is_friend)
 {
     BIT_FLAGS flg;
     switch (typ) {
-    case GF_LITE:
-    case GF_LITE_WEAK:
+    case AttributeType::LITE:
+    case AttributeType::LITE_WEAK:
         flg = PROJECT_LOS;
         break;
-    case GF_DISINTEGRATE:
+    case AttributeType::DISINTEGRATE:
         flg = PROJECT_DISI;
         break;
     default:

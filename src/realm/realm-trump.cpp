@@ -15,7 +15,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-chaos.h"
 #include "spell-realm/spells-trump.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
@@ -166,7 +166,7 @@ concptr do_trump_spell(player_type *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(player_ptr, GF_AWAY_ALL, dir, power);
+                fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
             }
         }
         break;

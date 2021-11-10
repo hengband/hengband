@@ -29,7 +29,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -187,7 +187,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         disturb(player_ptr, false, true);
         msg_print(_("ブゥーーッ！おっと。", "BRRAAAP! Oops."));
         msg_print(nullptr);
-        fire_ball(player_ptr, GF_POIS, 0, player_ptr->lev, 3);
+        fire_ball(player_ptr, AttributeType::POIS, 0, player_ptr->lev, 3);
     }
 
     if (player_ptr->muta.has(MUTA::PROD_MANA) && !player_ptr->anti_magic && one_in_(9000)) {
@@ -199,7 +199,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         flush();
         msg_print(nullptr);
         (void)get_hack_dir(player_ptr, &dire);
-        fire_ball(player_ptr, GF_MANA, dire, player_ptr->lev * 2, 3);
+        fire_ball(player_ptr, AttributeType::MANA, dire, player_ptr->lev * 2, 3);
     }
 
     if (player_ptr->muta.has(MUTA::ATT_DEMON) && !player_ptr->anti_magic && (randint1(6666) == 666)) {
@@ -302,7 +302,7 @@ void process_world_aux_mutation(player_type *player_ptr)
         disturb(player_ptr, false, true);
         msg_print(_("周りの空間が歪んでいる気がする！", "You feel the world warping around you!"));
         msg_print(nullptr);
-        fire_ball(player_ptr, GF_CHAOS, 0, player_ptr->lev, 8);
+        fire_ball(player_ptr, AttributeType::CHAOS, 0, player_ptr->lev, 8);
     }
 
     if (player_ptr->muta.has(MUTA::NORMALITY) && one_in_(5000)) {
