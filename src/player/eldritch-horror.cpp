@@ -129,9 +129,9 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 
         see_eldritch_horror(m_name, r_ptr);
         switch (PlayerRace(player_ptr).life()) {
-        case PlayerRaceLife::DEMON:
+        case PlayerRaceLifeType::DEMON:
             return;
-        case PlayerRaceLife::UNDEAD:
+        case PlayerRaceLifeType::UNDEAD:
             if (saving_throw(25 + player_ptr->lev))
                 return;
             break;
@@ -179,11 +179,11 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 
         feel_eldritch_horror(desc, r_ptr);
         switch (PlayerRace(player_ptr).life()) {
-        case PlayerRaceLife::DEMON:
+        case PlayerRaceLifeType::DEMON:
             if (saving_throw(20 + player_ptr->lev))
                 return;
             break;
-        case PlayerRaceLife::UNDEAD:
+        case PlayerRaceLifeType::UNDEAD:
             if (saving_throw(10 + player_ptr->lev))
                 return;
             break;

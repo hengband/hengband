@@ -80,7 +80,7 @@ const player_race_info *PlayerRace::get_info() const
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 生命形態
  */
-PlayerRaceLife PlayerRace::life() const
+PlayerRaceLifeType PlayerRace::life() const
 {
     return this->get_info()->life;
 }

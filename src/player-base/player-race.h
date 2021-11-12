@@ -3,7 +3,7 @@
 #include "object-enchant/tr-flags.h"
 
 enum class PlayerRaceType;
-enum class PlayerRaceLife;
+enum class PlayerRaceLifeType;
 enum class PlayerRaceFood;
 struct player_type;
 struct player_race_info;
@@ -14,7 +14,7 @@ public:
 
     TrFlags tr_flags() const;
     const player_race_info *get_info() const;
-    PlayerRaceLife life() const;
+    PlayerRaceLifeType life() const;
     PlayerRaceFood food() const;
 
     bool is_mimic_nonliving() const;

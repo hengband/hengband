@@ -58,7 +58,7 @@ static bool is_healthy_stay(player_type *player_ptr)
 #ifdef JP
 static bool is_player_undead(player_type *player_ptr)
 {
-    return PlayerRace(player_ptr, true).life() == PlayerRaceLife::UNDEAD;
+    return PlayerRace(player_ptr, true).life() == PlayerRaceLifeType::UNDEAD;
 }
 #endif
 

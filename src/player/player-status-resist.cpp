@@ -237,7 +237,7 @@ PERCENTAGE calc_lite_damage_rate(player_type *player_ptr, rate_calc_type_mode mo
 
     if (race.tr_flags().has(TR_VUL_LITE)) {
         switch (race.life()) {
-        case PlayerRaceLife::UNDEAD:
+        case PlayerRaceLifeType::UNDEAD:
             per *= 2;
             break;
         default:
