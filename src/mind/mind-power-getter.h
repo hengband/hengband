@@ -24,7 +24,7 @@ private:
     const mind_type *spell = nullptr;
     bool flag = false;
     bool redraw = false;
-    mind_kind_type use_mind;
+    MindKindType use_mind;
     int menu_line;
     const mind_power *mind_ptr = nullptr;
     PERCENTAGE chance = 0;

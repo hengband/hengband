@@ -4,7 +4,7 @@
 /*!
  * @brief アイテム生成条件フラグ
  */
-enum class TRG {
+enum class ItemGenerationTraitType {
 	INSTA_ART         =  0, //!< 固定アーティファクトになる / Item must be an artifact
     QUESTITEM         =  1, //!< クエスト専用アイテム / quest level item -KMW-
     XTRA_POWER        =  2, //!< 追加能力を得る / Extra power

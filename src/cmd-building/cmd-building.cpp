@@ -217,7 +217,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         auto muta = player_ptr->muta;
         if (player_ptr->ppersonality == PERSONALITY_LUCKY) {
             // ラッキーマンの白オーラは突然変異治療の対象外
-            muta.reset(MUTA::GOOD_LUCK);
+            muta.reset(PlayerMutationType::GOOD_LUCK);
         }
         if (muta.any()) {
             while (!lose_mutation(player_ptr, 0))
@@ -305,7 +305,7 @@ void do_cmd_building(player_type *player_ptr)
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF::BLDG)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::BLDG)) {
         msg_print(_("ここには建物はない。", "You see no building here."));
         return;
     }

@@ -42,7 +42,7 @@ bool in_bounds2u(floor_type *floor_ptr, POSITION y, POSITION x) { return (y < fl
 bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_empty_grid = cave_has_flag_bold(floor_ptr, y, x, FF::PLACE);
+    bool is_empty_grid = cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PLACE);
     is_empty_grid &= !(floor_ptr->grid_array[y][x].m_idx);
     is_empty_grid &= !player_bold(player_ptr, y, x);
     return is_empty_grid;
@@ -58,11 +58,11 @@ bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
 bool is_cave_empty_bold2(player_type *player_ptr, POSITION y, POSITION x)
 {
     bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
-    is_empty_grid &= w_ptr->character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::TREE);
+    is_empty_grid &= w_ptr->character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::TREE);
     return is_empty_grid;
 }
 
-bool cave_has_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, FF f_idx)
+bool cave_has_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, FloorFeatureType f_idx)
 {
     return f_info[floor_ptr->grid_array[y][x].feat].flags.has(f_idx);
 }
@@ -85,8 +85,8 @@ bool player_bold(player_type *player_ptr, POSITION y, POSITION x) { return (y ==
  */
 bool cave_stop_disintegration(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-    return !cave_has_flag_bold(floor_ptr, y, x, FF::PROJECT)
-        && (!cave_has_flag_bold(floor_ptr, y, x, FF::HURT_DISI) || cave_has_flag_bold(floor_ptr, y, x, FF::PERMANENT));
+    return !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT)
+        && (!cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::HURT_DISI) || cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PERMANENT));
 }
 
 /*
@@ -101,7 +101,7 @@ bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return feat_
 /*
  * Determine if a "feature" supports "los"
  */
-bool feat_supports_los(FEAT_IDX f_idx) { return f_info[f_idx].flags.has(FF::LOS); }
+bool feat_supports_los(FEAT_IDX f_idx) { return f_info[f_idx].flags.has(FloorFeatureType::LOS); }
 
 /*
  * Determine if a "legal" grid is a "clean" floor grid
@@ -113,7 +113,7 @@ bool feat_supports_los(FEAT_IDX f_idx) { return f_info[f_idx].flags.has(FF::LOS)
  */
 bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, FF::FLOOR) && ((floor_ptr->grid_array[y][x].is_object()) == 0)
+    return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::FLOOR) && ((floor_ptr->grid_array[y][x].is_object()) == 0)
         && floor_ptr->grid_array[y][x].o_idx_list.empty();
 }
 
@@ -125,7 +125,7 @@ bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 bool cave_drop_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, FF::DROP) && ((floor_ptr->grid_array[y][x].is_object()) == 0);
+    return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::DROP) && ((floor_ptr->grid_array[y][x].is_object()) == 0);
 }
 
-bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_has_flag_bold(floor_ptr, y, x, FF::PATTERN); }
+bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PATTERN); }

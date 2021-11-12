@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-enum class MonkStance : uint8_t {
+enum class MonkStanceType : uint8_t {
     NONE = 0,
     GENBU = 1, //!< 玄武の構え
     BYAKKO = 2, //!< 白虎の構え
@@ -11,5 +11,5 @@ enum class MonkStance : uint8_t {
 };
 
 struct monk_data_type {
-    MonkStance stance{};
+    MonkStanceType stance{};
 };

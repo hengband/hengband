@@ -135,11 +135,11 @@ void stair_creation(player_type *player_ptr)
     dest_sf_ptr = get_sf_ptr(dest_floor_id);
     if (up) {
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FF::SHAFT)
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FloorFeatureType::SHAFT)
                                                                                               : feat_up_stair);
     } else {
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FF::SHAFT)
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FloorFeatureType::SHAFT)
                                                                                               : feat_down_stair);
     }
 

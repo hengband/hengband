@@ -191,18 +191,18 @@ void print_state(player_type *player_ptr)
     }
     case ACTION_MONK_STANCE: {
         if (auto stance = PlayerClass(player_ptr).get_monk_stance();
-            stance != MonkStance::NONE) {
+            stance != MonkStanceType::NONE) {
             switch (stance) {
-            case MonkStance::GENBU:
+            case MonkStanceType::GENBU:
                 attr = TERM_GREEN;
                 break;
-            case MonkStance::BYAKKO:
+            case MonkStanceType::BYAKKO:
                 attr = TERM_WHITE;
                 break;
-            case MonkStance::SEIRYU:
+            case MonkStanceType::SEIRYU:
                 attr = TERM_L_BLUE;
                 break;
-            case MonkStance::SUZAKU:
+            case MonkStanceType::SUZAKU:
                 attr = TERM_L_RED;
                 break;
             default:
@@ -214,7 +214,7 @@ void print_state(player_type *player_ptr)
     }
     case ACTION_SAMURAI_STANCE: {
         if (auto stance = PlayerClass(player_ptr).get_samurai_stance();
-            stance != SamuraiStance::NONE) {
+            stance != SamuraiStanceType::NONE) {
             strcpy(text, samurai_stances[enum2i(stance) - 1].desc);
         }
         break;

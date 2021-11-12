@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-/* TRCが何の略かは分からない (type / ??? / curse)*/
-enum class TRC {
+/* 旧TRC. 実態に即した名称に変更 */
+enum class CurseTraitType {
 	CURSED = 0,
     HEAVY_CURSE = 1,
     PERMA_CURSE = 2,
@@ -28,7 +28,7 @@ enum class TRC {
     MAX,
 };
 
-enum class TRCS {
+enum class CurseSpecialTraitType {
     TELEPORT_SELF = 0,
     CHAINSWORD = 1,
     MAX,

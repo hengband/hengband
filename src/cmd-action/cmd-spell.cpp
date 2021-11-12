@@ -623,7 +623,7 @@ void do_cmd_browse(player_type *player_ptr)
         return;
     }
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (player_ptr->pclass == PlayerClassType::FORCETRAINER) {
         if (player_has_no_spellbooks(player_ptr)) {
@@ -780,7 +780,7 @@ void do_cmd_study(player_type *player_ptr)
         return;
     }
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
 #ifdef JP
     if (player_ptr->new_spells < 10) {

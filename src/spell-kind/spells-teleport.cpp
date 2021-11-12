@@ -389,7 +389,7 @@ void teleport_player(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
                 monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
                 monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-                bool can_follow = r_ptr->ability_flags.has(RF_ABILITY::TPORT);
+                bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
                 can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
                 can_follow &= monster_csleep_remaining(m_ptr) == 0;
                 if (can_follow) {
@@ -432,7 +432,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *player_ptr, POSITION d
             monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-            bool can_follow = r_ptr->ability_flags.has(RF_ABILITY::TPORT);
+            bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
             can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
             can_follow &= monster_csleep_remaining(m_ptr) == 0;
             if (can_follow) {
@@ -512,7 +512,7 @@ void teleport_away_followable(player_type *player_ptr, MONSTER_IDX m_idx)
         return;
 
     bool follow = false;
-    if (player_ptr->muta.has(MUTA::VTELEPORT) || (player_ptr->pclass == PlayerClassType::IMITATOR))
+    if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || (player_ptr->pclass == PlayerClassType::IMITATOR))
         follow = true;
     else {
         object_type *o_ptr;

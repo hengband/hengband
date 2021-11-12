@@ -9,8 +9,8 @@
 #include <memory>
 #include <variant>
 
-enum class SamuraiStance : uint8_t;
-enum class MonkStance : uint8_t;
+enum class SamuraiStanceType : uint8_t;
+enum class MonkStanceType : uint8_t;
 
 class PlayerClass {
 public:
@@ -24,14 +24,14 @@ public:
     bool is_wizard() const;
 
     bool lose_balance();
-    void break_samurai_stance(std::initializer_list<SamuraiStance> stance_list);
-    SamuraiStance get_samurai_stance() const;
-    bool samurai_stance_is(SamuraiStance stance) const;
-    void set_samurai_stance(SamuraiStance stance) const;
+    void break_samurai_stance(std::initializer_list<SamuraiStanceType> stance_list);
+    SamuraiStanceType get_samurai_stance() const;
+    bool samurai_stance_is(SamuraiStanceType stance) const;
+    void set_samurai_stance(SamuraiStanceType stance) const;
 
-    MonkStance get_monk_stance() const;
-    bool monk_stance_is(MonkStance stance) const;
-    void set_monk_stance(MonkStance stance) const;
+    MonkStanceType get_monk_stance() const;
+    bool monk_stance_is(MonkStanceType stance) const;
+    void set_monk_stance(MonkStanceType stance) const;
 
     void init_specific_data();
     template <typename T>

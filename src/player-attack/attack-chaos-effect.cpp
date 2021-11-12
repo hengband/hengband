@@ -272,16 +272,16 @@ void change_monster_stat(player_type *player_ptr, player_attack_type *pa_ptr, co
         || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION))
         attack_confuse(player_ptr, pa_ptr);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::STUN)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::STUN)
         attack_stun(player_ptr, pa_ptr, false);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::SCARE)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::SCARE)
         attack_scare(player_ptr, pa_ptr, false);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::DISPELL)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::DISPELL)
         attack_dispel(player_ptr, pa_ptr);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::PROBE)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::PROBE)
         attack_probe(player_ptr, pa_ptr);
 
     if (pa_ptr->chaos_effect == CE_TELE_AWAY)

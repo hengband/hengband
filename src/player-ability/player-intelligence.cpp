@@ -42,13 +42,13 @@ int16_t PlayerIntelligence::stance_value()
     int16_t result = 0;
 
     PlayerClass pc(player_ptr);
-    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if (pc.samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         result += 5;
     }
 
-    if (pc.monk_stance_is(MonkStance::GENBU)) {
+    if (pc.monk_stance_is(MonkStanceType::GENBU)) {
         result -= 1;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::SUZAKU)) {
         result += 1;
     }
 
@@ -67,11 +67,11 @@ int16_t PlayerIntelligence::mutation_value()
 {
     int16_t result = 0;
     if (this->player_ptr->muta.any()) {
-        if (this->player_ptr->muta.has(MUTA::HYPER_INT)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::HYPER_INT)) {
             result += 4;
         }
 
-        if (this->player_ptr->muta.has(MUTA::MORONIC)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::MORONIC)) {
             result -= 4;
         }
     }

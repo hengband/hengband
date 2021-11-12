@@ -121,7 +121,7 @@ void process_monster(player_type *player_ptr, MONSTER_IDX m_idx)
     turn_flags_ptr->see_m = is_seen(player_ptr, m_ptr);
 
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
-    if (m_ptr->mflag2.has(MFLAG2::CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr)) {
         choose_new_monster(player_ptr, m_idx, false, 0);
         r_ptr = &r_info[m_ptr->r_idx];
     }
@@ -165,7 +165,7 @@ void process_monster(player_type *player_ptr, MONSTER_IDX m_idx)
      *  Try to flow by smell.
      */
     if (player_ptr->no_flowed && count > 2 && m_ptr->target_y)
-        m_ptr->mflag2.reset(MFLAG2::NOFLOW);
+        m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
 
     if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !monster_fear_remaining(m_ptr) && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware) {
         if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell) {
@@ -368,7 +368,7 @@ void process_special(player_type *player_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->ability_flags.has_not(RF_ABILITY::SPECIAL) || (m_ptr->r_idx != MON_OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out
+    if (r_ptr->ability_flags.has_not(MonsterAbilityType::SPECIAL) || (m_ptr->r_idx != MON_OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out
         || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
         return;
 
@@ -384,7 +384,7 @@ void process_special(player_type *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (count && is_original_ap_and_seen(player_ptr, m_ptr))
-        r_ptr->r_ability_flags.set(RF_ABILITY::SPECIAL);
+        r_ptr->r_ability_flags.set(MonsterAbilityType::SPECIAL);
 }
 
 /*!
@@ -552,8 +552,8 @@ void sweep_monster_process(player_type *player_ptr)
         if (!monster_is_valid(m_ptr) || player_ptr->wild_mode)
             continue;
 
-        if (m_ptr->mflag.has(MFLAG::BORN)) {
-            m_ptr->mflag.reset(MFLAG::BORN);
+        if (m_ptr->mflag.has(MonsterTemporaryFlagType::BORN)) {
+            m_ptr->mflag.reset(MonsterTemporaryFlagType::BORN);
             continue;
         }
 
@@ -570,7 +570,7 @@ void sweep_monster_process(player_type *player_ptr)
         process_monster(player_ptr, i);
         reset_target(m_ptr);
         if (player_ptr->no_flowed && one_in_(3))
-            m_ptr->mflag2.set(MFLAG2::NOFLOW);
+            m_ptr->mflag2.set(MonsterConstantFlagType::NOFLOW);
 
         if (!player_ptr->playing || player_ptr->is_dead || player_ptr->leaving)
             return;
@@ -588,7 +588,7 @@ bool decide_process_continue(player_type *player_ptr, monster_type *m_ptr)
     monster_race *r_ptr;
     r_ptr = &r_info[m_ptr->r_idx];
     if (!player_ptr->no_flowed) {
-        m_ptr->mflag2.reset(MFLAG2::NOFLOW);
+        m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }
 
     if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))

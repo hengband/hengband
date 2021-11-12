@@ -95,12 +95,12 @@ void wiz_lite(player_type *player_ptr, bool ninja)
                 f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
                 /* Perma-lite the grid */
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DF::DARKNESS) && !ninja) {
+                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
                     g_ptr->info |= (CAVE_GLOW);
                 }
 
                 /* Memorize normal features */
-                if (f_ptr->flags.has(FF::REMEMBER)) {
+                if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
                     /* Memorize the grid */
                     g_ptr->info |= (CAVE_MARK);
                 }
@@ -182,7 +182,7 @@ void wiz_dark(player_type *player_ptr)
  */
 void map_area(player_type *player_ptr, POSITION range)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         range /= 3;
 
     /* Scan that area */
@@ -203,7 +203,7 @@ void map_area(player_type *player_ptr, POSITION range)
             f_ptr = &f_info[feat];
 
             /* Memorize normal features */
-            if (f_ptr->flags.has(FF::REMEMBER)) {
+            if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
                 /* Memorize the object */
                 g_ptr->info |= (CAVE_MARK);
             }
@@ -217,7 +217,7 @@ void map_area(player_type *player_ptr, POSITION range)
                 f_ptr = &f_info[feat];
 
                 /* Memorize walls (etc) */
-                if (f_ptr->flags.has(FF::REMEMBER)) {
+                if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
                     /* Memorize the walls */
                     g_ptr->info |= (CAVE_MARK);
                 }
@@ -352,7 +352,7 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
             delete_all_items_from_floor(player_ptr, y, x);
 
             /* Destroy "non-permanent" grids */
-            if (g_ptr->cave_has_flag(FF::PERMANENT))
+            if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT))
                 continue;
 
             /* Wall (or floor) type */
@@ -419,7 +419,7 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
                 continue;
             }
 
-            if (d_info[floor_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+            if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
                 continue;
 
             DIRECTION i;
@@ -432,7 +432,7 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
                 if (!in_bounds2(floor_ptr, yy, xx))
                     continue;
                 cc_ptr = &floor_ptr->grid_array[yy][xx];
-                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FF::GLOW)) {
+                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

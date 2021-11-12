@@ -40,7 +40,7 @@ AbstractProtectorEnchanter::AbstractProtectorEnchanter(object_type *o_ptr, DEPTH
         }
 
         if (this->o_ptr->to_a < 0) {
-            this->o_ptr->curse_flags.set(TRC::CURSED);
+            this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
         }
     }
 }

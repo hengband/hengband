@@ -122,7 +122,7 @@ bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y
             if (!cave_los_bold(player_ptr->current_floor_ptr, ny, nx))
                 break;
         } else {
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT))
                 break;
         }
 
@@ -194,7 +194,7 @@ void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITI
     for (int i = 0; i < path_n; i++) {
         sy = get_grid_y(path_g[i]);
         sx = get_grid_x(path_g[i]);
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, sy, sx, FF::PROJECT))
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, sy, sx, FloorFeatureType::PROJECT))
             break;
 
         *ty = sy;
@@ -259,7 +259,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
 
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_ACID)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
@@ -267,7 +267,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_FIRE)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_FIRE)) {
         if (!((player_ptr->prace == PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
             if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)))
                 return true;
@@ -277,7 +277,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_ELEC)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ELEC)) {
         if (!has_immune_elec(player_ptr) && (player_ptr->oppose_elec || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
@@ -285,7 +285,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_COLD)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_COLD)) {
         if (!has_immune_cold(player_ptr) && (player_ptr->oppose_cold || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
@@ -293,7 +293,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has_any_of({ RF_ABILITY::BR_POIS, RF_ABILITY::BR_NUKE }) && !((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
+    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
         if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST))
             return true;
 

@@ -28,7 +28,7 @@ int wild_regen = 20;
  */
 void regenhp(player_type *player_ptr, int percent)
 {
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN))
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN))
         return;
     if (player_ptr->action == ACTION_HAYAGAKE)
         return;

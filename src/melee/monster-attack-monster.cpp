@@ -151,7 +151,7 @@ static bool check_same_monster(player_type *player_ptr, mam_type *mam_ptr)
     if (r_ptr->flags1 & RF1_NEVER_BLOW)
         return false;
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MELEE))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE))
         return false;
 
     return true;

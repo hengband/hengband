@@ -326,7 +326,7 @@ void do_cmd_hissatsu(player_type *player_ptr)
         return;
     }
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::IAI, SamuraiStance::FUUJIN, SamuraiStance::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::IAI, SamuraiStanceType::FUUJIN, SamuraiStanceType::KOUKIJIN });
 
     if (!get_hissatsu_power(player_ptr, &n))
         return;
@@ -373,7 +373,7 @@ void do_cmd_gain_hissatsu(player_type *player_ptr)
 
     bool gain = false;
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     if (cmd_limit_blind(player_ptr))
         return;

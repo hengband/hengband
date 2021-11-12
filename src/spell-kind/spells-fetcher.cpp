@@ -87,7 +87,7 @@ void fetch_item(player_type *player_ptr, DIRECTION dir, WEIGHT wgt, bool require
             g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
 
             if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr))
-                || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, FF::PROJECT))
+                || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, FloorFeatureType::PROJECT))
                 return;
         }
     }

@@ -27,7 +27,7 @@ int vault_aux_race;
 char vault_aux_char;
 
 /*! ブレス属性に基づくドラゴンpit生成時条件マスク / Breath mask for "monster pit (dragon)" */
-EnumClassFlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
+EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
 
 /*!
  * @brief pit/nestの基準となる単種モンスターを決める /
@@ -64,22 +64,22 @@ void vault_prep_dragon(player_type *player_ptr)
     vault_aux_dragon_mask4.clear();
     switch (randint0(6)) {
     case 0: /* Black */
-        vault_aux_dragon_mask4.set(RF_ABILITY::BR_ACID);
+        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_ACID);
         break;
     case 1: /* Blue */
-        vault_aux_dragon_mask4.set(RF_ABILITY::BR_ELEC);
+        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_ELEC);
         break;
     case 2: /* Red */
-        vault_aux_dragon_mask4.set(RF_ABILITY::BR_FIRE);
+        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_FIRE);
         break;
     case 3: /* White */
-        vault_aux_dragon_mask4.set(RF_ABILITY::BR_COLD);
+        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_COLD);
         break;
     case 4: /* Green */
-        vault_aux_dragon_mask4.set(RF_ABILITY::BR_POIS);
+        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_POIS);
         break;
     default: /* Multi-hued */
-        vault_aux_dragon_mask4.set({ RF_ABILITY::BR_ACID, RF_ABILITY::BR_ELEC, RF_ABILITY::BR_FIRE, RF_ABILITY::BR_COLD, RF_ABILITY::BR_POIS });
+        vault_aux_dragon_mask4.set({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS });
         break;
     }
 }
@@ -323,13 +323,13 @@ bool vault_aux_lite(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (r_ptr->ability_flags.has_none_of({ RF_ABILITY::BR_LITE, RF_ABILITY::BA_LITE }))
+    if (r_ptr->ability_flags.has_none_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE }))
         return false;
 
     if (any_bits(r_ptr->flags2, (RF2_PASS_WALL | RF2_KILL_WALL)))
         return false;
 
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_DISI))
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_DISI))
         return false;
 
     return true;
@@ -344,7 +344,7 @@ bool vault_aux_shards(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (r_ptr->ability_flags.has_not(RF_ABILITY::BR_SHAR))
+    if (r_ptr->ability_flags.has_not(MonsterAbilityType::BR_SHAR))
         return false;
 
     return true;

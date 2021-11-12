@@ -111,7 +111,7 @@ static void set_pet_params(player_type *player_ptr, monster_race **r_ptr, const 
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
     if (((*r_ptr)->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
-        m_ptr->mflag.set(MFLAG::PREVENT_MAGIC);
+        m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 }
 
@@ -315,9 +315,9 @@ static void update_new_floor_feature(player_type *player_ptr, saved_floor_type *
 
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     if ((player_ptr->change_floor_mode & CFM_UP) && !quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FF::SHAFT) : feat_down_stair;
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FloorFeatureType::SHAFT) : feat_down_stair;
     else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward)
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FF::SHAFT) : feat_up_stair;
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FloorFeatureType::SHAFT) : feat_up_stair;
 
     g_ptr->mimic = 0;
     g_ptr->special = player_ptr->floor_id;

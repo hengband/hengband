@@ -41,7 +41,7 @@ bool common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, monster_t
         return true;
     }
 
-    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET))
+    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET))
         return true;
 
     pow += (adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1);
@@ -70,7 +70,7 @@ bool common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster
         return true;
     }
 
-    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET))
+    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET))
         return true;
 
     pow += adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1;

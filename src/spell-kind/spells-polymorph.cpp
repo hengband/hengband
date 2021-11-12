@@ -75,7 +75,7 @@ bool polymorph_monster(player_type *player_ptr, POSITION y, POSITION x)
 
     if (floor_ptr->inside_arena || player_ptr->phase_out)
         return false;
-    if ((player_ptr->riding == g_ptr->m_idx) || m_ptr->mflag2.has(MFLAG2::KAGE))
+    if ((player_ptr->riding == g_ptr->m_idx) || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE))
         return false;
 
     monster_type back_m = *m_ptr;
@@ -90,7 +90,7 @@ bool polymorph_monster(player_type *player_ptr, POSITION y, POSITION x)
         mode |= PM_FORCE_FRIENDLY;
     if (is_pet(m_ptr))
         mode |= PM_FORCE_PET;
-    if (m_ptr->mflag2.has(MFLAG2::NOPET))
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::NOPET))
         mode |= PM_NO_PET;
 
     m_ptr->hold_o_idx_list.clear();

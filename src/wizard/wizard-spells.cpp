@@ -149,7 +149,7 @@ void wiz_learn_blue_magic_all(player_type *player_ptr)
     }
 
     for (auto type : BLUE_MAGIC_TYPE_LIST) {
-        EnumClassFlagGroup<RF_ABILITY> ability_flags;
+        EnumClassFlagGroup<MonsterAbilityType> ability_flags;
         set_rf_masks(ability_flags, type);
         bluemage_data->learnt_blue_magics.set(ability_flags);
     }

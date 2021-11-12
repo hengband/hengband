@@ -76,15 +76,15 @@ int16_t PlayerDexterity::stance_value()
     int16_t result = 0;
 
     PlayerClass pc(player_ptr);
-    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if (pc.samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         result += 5;
     }
 
-    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO)) {
         result += 2;
-    } else if (pc.monk_stance_is(MonkStance::GENBU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::GENBU)) {
         result -= 2;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::SUZAKU)) {
         result += 2;
     }
 
@@ -104,15 +104,15 @@ int16_t PlayerDexterity::mutation_value()
 {
     int16_t result = 0;
 
-    if (this->player_ptr->muta.has(MUTA::IRON_SKIN)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::IRON_SKIN)) {
         result -= 1;
     }
 
-    if (this->player_ptr->muta.has(MUTA::LIMBER)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::LIMBER)) {
         result += 3;
     }
 
-    if (this->player_ptr->muta.has(MUTA::ARTHRITIS)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::ARTHRITIS)) {
         result -= 3;
     }
 

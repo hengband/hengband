@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class RF_ABILITY {
+enum class MonsterAbilityType {
     SHRIEK = 0, /*!< モンスター能力: 叫ぶ / Shriek for help */
     XXX1 = 1, /*!< モンスター能力: 未使用 / XXX */
     DISPEL = 2, /*!< モンスター能力: 魔力消去 / Dispel magic */

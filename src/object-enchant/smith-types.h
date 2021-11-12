@@ -5,7 +5,7 @@
 /**
  * @brief アイテムに付与できる鍛冶効果の列挙体
  */
-enum class SmithEffect : int16_t {
+enum class SmithEffectType : int16_t {
     NONE = 0,
     STR = 1, //!< 腕力
     INT = 2, //!< 知能
@@ -165,7 +165,7 @@ enum class SmithEffect : int16_t {
 /**
  * @brief アイテムに付与できる鍛冶効果のカテゴリ
  */
-enum class SmithCategory {
+enum class SmithCategoryType {
     NONE = 0,
     WEAPON_ATTR = 1, //!< 武器属性
     RESISTANCE = 2, //!< 耐性
@@ -181,7 +181,7 @@ enum class SmithCategory {
 /**
  * @brief 鍛冶エッセンスの列挙体
  */
-enum class SmithEssence : int16_t {
+enum class SmithEssenceType : int16_t {
     NONE = 0,
     STR = 1, //!< 腕力
     INT = 2, //!< 知能

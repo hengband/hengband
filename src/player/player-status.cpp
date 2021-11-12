@@ -313,7 +313,7 @@ static void update_bonuses(player_type *player_ptr)
 
     player_ptr->lite = has_lite(player_ptr);
 
-    if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE)) {
+    if (!PlayerClass(player_ptr).monk_stance_is(MonkStanceType::NONE)) {
         if (none_bits(empty_hands_status, EMPTY_HAND_MAIN)) {
             set_action(player_ptr, ACTION_NONE);
         }
@@ -1099,7 +1099,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *player_ptr)
     pow = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
     pow += ((cp_ptr->x_sav * player_ptr->lev / 10) + (ap_ptr->a_sav * player_ptr->lev / 50));
 
-    if (player_ptr->muta.has(MUTA::MAGIC_RES))
+    if (player_ptr->muta.has(PlayerMutationType::MAGIC_RES))
         pow += (15 + (player_ptr->lev / 5));
 
     if (has_resist_curse(player_ptr))
@@ -1164,7 +1164,7 @@ static ACTION_SKILL_POWER calc_search(player_type *player_ptr)
             pow += (o_ptr->pval * 5);
     }
 
-    if (player_ptr->muta.has(MUTA::XTRA_EYES)) {
+    if (player_ptr->muta.has(PlayerMutationType::XTRA_EYES)) {
         pow += 15;
     }
 
@@ -1215,7 +1215,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *player_ptr)
         pow -= 15;
     }
 
-    if (player_ptr->muta.has(MUTA::XTRA_EYES)) {
+    if (player_ptr->muta.has(PlayerMutationType::XTRA_EYES)) {
         pow += 15;
     }
 
@@ -1427,7 +1427,7 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             else if ((player_ptr->pclass == PlayerClassType::ROGUE) && (o_ptr->weight < 50) && (player_ptr->stat_index[A_DEX] >= 30))
                 num_blow++;
 
-            if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::FUUJIN))
+            if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::FUUJIN))
                 num_blow -= 1;
 
             if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
@@ -1475,13 +1475,13 @@ static int16_t calc_num_blow(player_type *player_ptr, int i)
             num_blow /= 2;
 
         PlayerClass pc(player_ptr);
-        if (pc.monk_stance_is(MonkStance::GENBU)) {
+        if (pc.monk_stance_is(MonkStanceType::GENBU)) {
             num_blow -= 2;
             if ((player_ptr->pclass == PlayerClassType::MONK) && (player_ptr->lev > 42))
                 num_blow--;
             if (num_blow < 0)
                 num_blow = 0;
-        } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
+        } else if (pc.monk_stance_is(MonkStanceType::SUZAKU)) {
             num_blow /= 2;
         }
 
@@ -1527,8 +1527,8 @@ static int16_t calc_to_magic_chance(player_type *player_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        if (o_ptr->curse_flags.has(TRC::HARD_SPELL)) {
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::HARD_SPELL)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 chance += 10;
             } else {
                 chance += 3;
@@ -1598,8 +1598,8 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         if (is_real_value || o_ptr->is_known())
             ac += o_ptr->to_a;
 
-        if (o_ptr->curse_flags.has(TRC::LOW_AC)) {
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::LOW_AC)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 if (is_real_value || o_ptr->is_fully_known())
                     ac -= 30;
             } else {
@@ -1630,15 +1630,15 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         ac += 5;
     }
 
-    if (player_ptr->muta.has(MUTA::WART_SKIN)) {
+    if (player_ptr->muta.has(PlayerMutationType::WART_SKIN)) {
         ac += 5;
     }
 
-    if (player_ptr->muta.has(MUTA::SCALES)) {
+    if (player_ptr->muta.has(PlayerMutationType::SCALES)) {
         ac += 10;
     }
 
-    if (player_ptr->muta.has(MUTA::IRON_SKIN)) {
+    if (player_ptr->muta.has(PlayerMutationType::IRON_SKIN)) {
         ac += 25;
     }
 
@@ -1676,27 +1676,27 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
                 continue;
             if (!o_ptr->is_cursed())
                 continue;
-            if (o_ptr->curse_flags.has(TRC::CURSED))
+            if (o_ptr->curse_flags.has(CurseTraitType::CURSED))
                 ac += 5;
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
                 ac += 7;
-            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE))
+            if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE))
                 ac += 13;
         }
     }
 
     PlayerClass pc(player_ptr);
-    if (pc.monk_stance_is(MonkStance::GENBU)) {
+    if (pc.monk_stance_is(MonkStanceType::GENBU)) {
         ac += (player_ptr->lev * player_ptr->lev) / 50;
-    } else if (pc.monk_stance_is(MonkStance::BYAKKO)) {
+    } else if (pc.monk_stance_is(MonkStanceType::BYAKKO)) {
         ac -= 40;
-    } else if (pc.monk_stance_is(MonkStance::SEIRYU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::SEIRYU)) {
         ac -= 50;
-    } else if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    } else if (pc.samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         ac -= 50;
     }
 
-    if (player_ptr->ult_res || (pc.samurai_stance_is(SamuraiStance::MUSOU))) {
+    if (player_ptr->ult_res || (pc.samurai_stance_is(SamuraiStanceType::MUSOU))) {
         ac += 100;
     } else if (player_ptr->tsubureru || player_ptr->shield || player_ptr->magicdef) {
         ac += 50;
@@ -1947,13 +1947,13 @@ static short calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool is
 
     if ((player_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
         if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
-            if (o_ptr->curse_flags.has(TRC::CURSED)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
                 damage += 5;
             }
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 damage += 7;
             }
-            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
                 damage += 13;
             }
         }
@@ -2033,7 +2033,7 @@ static short calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool is
     }
 
     // 朱雀の構えをとっているとき、格闘ダメージに -(レベル)/6 の修正を得る。
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU)) {
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             damage -= (player_ptr->lev / 6);
         }
@@ -2117,8 +2117,8 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
         }
 
         /* Low melee penalty */
-        if ((o_ptr->is_fully_known() || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+        if ((o_ptr->is_fully_known() || is_real_value) && o_ptr->curse_flags.has(CurseTraitType::LOW_MELEE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 hit -= 15;
             } else {
                 hit -= 5;
@@ -2167,16 +2167,16 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
 
         /* Hex realm bonuses */
         if ((player_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
-            if (o_ptr->curse_flags.has(TRC::CURSED)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
                 hit += 5;
             }
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 hit += 7;
             }
-            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
                 hit += 13;
             }
-            if (o_ptr->curse_flags.has(TRC::TY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::TY_CURSE)) {
                 hit += 5;
             }
         }
@@ -2256,7 +2256,7 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
     hit -= calc_double_weapon_penalty(player_ptr, slot);
 
     // 朱雀の構えをとっているとき、格闘命中に -(レベル)/3 の修正を得る。
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU)) {
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU)) {
         if (is_martial_arts_mode(player_ptr) && calc_hand == PLAYER_HAND_MAIN) {
             hit -= (player_ptr->lev / 3);
         }
@@ -2276,8 +2276,8 @@ static int16_t calc_to_hit_bow(player_type *player_ptr, bool is_real_value)
         object_type *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_BOW];
         if (o_ptr->k_idx) {
-            if (o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
-                if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::LOW_MELEE)) {
+                if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                     pow -= 15;
                 } else {
                     pow -= 5;
@@ -2643,7 +2643,7 @@ void check_experience(player_type *player_ptr)
         if (player_ptr->lev > player_ptr->max_plv) {
             player_ptr->max_plv = player_ptr->lev;
 
-            if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || player_ptr->muta.has(MUTA::CHAOS_GIFT)) {
+            if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)) {
                 level_reward = true;
             }
             if (player_ptr->prace == PlayerRaceType::BEASTMAN) {

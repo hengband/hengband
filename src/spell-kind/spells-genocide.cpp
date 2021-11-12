@@ -58,7 +58,7 @@ bool genocide_aux(player_type *player_ptr, MONSTER_IDX m_idx, int power, bool pl
         resist = true;
     else if (player_cast && (r_ptr->level > randint0(power)))
         resist = true;
-    else if (player_cast && m_ptr->mflag2.has(MFLAG2::NOGENO))
+    else if (player_cast && m_ptr->mflag2.has(MonsterConstantFlagType::NOGENO))
         resist = true;
     else {
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
@@ -94,7 +94,7 @@ bool genocide_aux(player_type *player_ptr, MONSTER_IDX m_idx, int power, bool pl
         }
 
         if (one_in_(13))
-            m_ptr->mflag2.set(MFLAG2::NOGENO);
+            m_ptr->mflag2.set(MonsterConstantFlagType::NOGENO);
     }
 
     if (player_cast) {

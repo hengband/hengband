@@ -26,7 +26,7 @@
 #include <vector>
 
 typedef struct {
-    EnumClassFlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<MonsterAbilityType> ability_flags;
 } learnt_spell_table;
 
 /*!
@@ -107,7 +107,7 @@ static void dump_smith(player_type *player_ptr, FILE *fff)
     auto n = essences.size();
     std::vector<int> amounts;
     std::transform(essences.begin(), essences.end(), std::back_inserter(amounts),
-        [smith = Smith(player_ptr)](SmithEssence e) { return smith.get_essence_num_of_posessions(e); });
+        [smith = Smith(player_ptr)](SmithEssenceType e) { return smith.get_essence_num_of_posessions(e); });
 
     auto row = n / 3 + 1;
     for (auto i = 0U; i < row; i++) {
@@ -182,8 +182,8 @@ static void dump_blue_mage(player_type *player_ptr, FILE *fff)
         add_monster_spell_type(p, col, SpellProcessType, &learnt_magic);
         learnt_magic.ability_flags &= bluemage_data->learnt_blue_magics;
 
-        std::vector<RF_ABILITY> learnt_spells;
-        EnumClassFlagGroup<RF_ABILITY>::get_flags(learnt_magic.ability_flags, std::back_inserter(learnt_spells));
+        std::vector<MonsterAbilityType> learnt_spells;
+        EnumClassFlagGroup<MonsterAbilityType>::get_flags(learnt_magic.ability_flags, std::back_inserter(learnt_spells));
 
         col++;
         bool pcol = false;

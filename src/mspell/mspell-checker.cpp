@@ -292,7 +292,7 @@ ProjectResult breath(player_type *player_ptr, POSITION y, POSITION x, MONSTER_ID
  * @param spell 判定対象のID
  * @return 非魔術的な特殊技能ならばTRUEを返す。
  */
-bool spell_is_inate(RF_ABILITY spell)
+bool spell_is_inate(MonsterAbilityType spell)
 {
     return RF_ABILITY_NOMAGIC_MASK.has(spell);
 }

@@ -38,7 +38,7 @@
  * @brief モンスターを友好的にする
  * @param m_ptr モンスター情報構造体の参照ポインタ
  */
-void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MFLAG2::FRIENDLY); }
+void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MonsterConstantFlagType::FRIENDLY); }
 
 /*!
  * @brief モンスターが地形を踏破できるかどうかを返す
@@ -53,7 +53,7 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
 {
     feature_type *f_ptr = &f_info[feat];
 
-    if (f_ptr->flags.has(FF::PATTERN)) {
+    if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
             if (!(r_ptr->flags7 & RF7_CAN_FLY))
                 return false;
@@ -63,24 +63,24 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
         }
     }
 
-    if (f_ptr->flags.has(FF::CAN_FLY) && (r_ptr->flags7 & RF7_CAN_FLY))
+    if (f_ptr->flags.has(FloorFeatureType::CAN_FLY) && (r_ptr->flags7 & RF7_CAN_FLY))
         return true;
-    if (f_ptr->flags.has(FF::CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM))
+    if (f_ptr->flags.has(FloorFeatureType::CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM))
         return true;
-    if (f_ptr->flags.has(FF::CAN_PASS)) {
+    if (f_ptr->flags.has(FloorFeatureType::CAN_PASS)) {
         if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr)))
             return true;
     }
 
-    if (f_ptr->flags.has_not(FF::MOVE))
+    if (f_ptr->flags.has_not(FloorFeatureType::MOVE))
         return false;
 
-    if (f_ptr->flags.has(FF::MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN))
+    if (f_ptr->flags.has(FloorFeatureType::MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN))
         return true;
 
-    if (f_ptr->flags.has(FF::WATER)) {
+    if (f_ptr->flags.has(FloorFeatureType::WATER)) {
         if (!(r_ptr->flags7 & RF7_AQUATIC)) {
-            if (f_ptr->flags.has(FF::DEEP))
+            if (f_ptr->flags.has(FloorFeatureType::DEEP))
                 return false;
             else if (r_ptr->aura_flags.has(MonsterAuraType::FIRE))
                 return false;
@@ -88,27 +88,27 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
     } else if (r_ptr->flags7 & RF7_AQUATIC)
         return false;
 
-    if (f_ptr->flags.has(FF::LAVA)) {
+    if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
             return false;
     }
 
-    if (f_ptr->flags.has(FF::COLD_PUDDLE)) {
+    if (f_ptr->flags.has(FloorFeatureType::COLD_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
             return false;
     }
 
-    if (f_ptr->flags.has(FF::ELEC_PUDDLE)) {
+    if (f_ptr->flags.has(FloorFeatureType::ELEC_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
             return false;
     }
 
-    if (f_ptr->flags.has(FF::ACID_PUDDLE)) {
+    if (f_ptr->flags.has(FloorFeatureType::ACID_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
             return false;
     }
 
-    if (f_ptr->flags.has(FF::POISON_PUDDLE)) {
+    if (f_ptr->flags.has(FloorFeatureType::POISON_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
             return false;
     }
@@ -178,7 +178,7 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
     }
 
     if (check_hostile_align(m_ptr->sub_align, n_ptr->sub_align)) {
-        if (m_ptr->mflag2.has_not(MFLAG2::CHAMELEON) || n_ptr->mflag2.has_not(MFLAG2::CHAMELEON))
+        if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || n_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON))
             return true;
     }
 
@@ -234,9 +234,9 @@ bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr) { ret
 /*  Determine monster race appearance index is same as race index */
 bool is_original_ap(monster_type *m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }
 
-bool is_friendly(monster_type *m_ptr) { return m_ptr->mflag2.has(MFLAG2::FRIENDLY); }
+bool is_friendly(monster_type *m_ptr) { return m_ptr->mflag2.has(MonsterConstantFlagType::FRIENDLY); }
 
-bool is_pet(monster_type *m_ptr) { return m_ptr->mflag2.has(MFLAG2::PET); }
+bool is_pet(monster_type *m_ptr) { return m_ptr->mflag2.has(MonsterConstantFlagType::PET); }
 
 bool is_hostile(monster_type *m_ptr) { return !is_friendly(m_ptr) && !is_pet(m_ptr); }
 
@@ -281,7 +281,7 @@ monster_race *real_r_ptr(monster_type *m_ptr) { return &r_info[real_r_idx(m_ptr)
 MONRACE_IDX real_r_idx(monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         if (r_ptr->flags1 & RF1_UNIQUE)
             return MON_CHAMELEON_K;
         else

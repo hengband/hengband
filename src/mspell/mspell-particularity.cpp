@@ -38,7 +38,7 @@ MonsterSpellResult spell_RF4_ROCKET(player_type *player_ptr, POSITION y, POSITIO
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
-    const auto dam = monspell_damage(player_ptr, RF_ABILITY::ROCKET, m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::ROCKET, m_idx, DAM_ROLL);
     const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::ROCKET, dam, 2, false, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(player_ptr, m_idx, DRS_SHARD);
@@ -69,7 +69,7 @@ MonsterSpellResult spell_RF6_HAND_DOOM(player_type *player_ptr, POSITION y, POSI
 
     ProjectResult proj_res;
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        const auto dam = monspell_damage(player_ptr, RF_ABILITY::HAND_DOOM, m_idx, DAM_ROLL);
+        const auto dam = monspell_damage(player_ptr, MonsterAbilityType::HAND_DOOM, m_idx, DAM_ROLL);
         proj_res = breath(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, 0, false, MONSTER_TO_PLAYER);
     } else if (TARGET_TYPE == MONSTER_TO_MONSTER) {
         const auto dam = 20; /* Dummy power */
@@ -99,7 +99,7 @@ MonsterSpellResult spell_RF6_PSY_SPEAR(player_type *player_ptr, POSITION y, POSI
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
-    const auto dam = monspell_damage(player_ptr, RF_ABILITY::PSY_SPEAR, m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::PSY_SPEAR, m_idx, DAM_ROLL);
     const auto proj_res = beam(player_ptr, m_idx, y, x, AttributeType::PSY_SPEAR, dam, MONSTER_TO_PLAYER);
 
     auto res = MonsterSpellResult::make_valid(dam);

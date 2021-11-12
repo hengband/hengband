@@ -199,7 +199,7 @@ static void set_imitation(player_type *player_ptr)
         for (int i = 0; i < MAX_MANE; ++i) {
             auto spell = rd_s16b();
             auto damage = rd_s16b();
-            mane_data->mane_list.push_back({ i2enum<RF_ABILITY>(spell), damage });
+            mane_data->mane_list.push_back({ i2enum<MonsterAbilityType>(spell), damage });
         }
         auto count = rd_s16b();
         mane_data->mane_list.resize(count);

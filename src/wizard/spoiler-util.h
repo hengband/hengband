@@ -9,7 +9,7 @@
 /* Given an array, determine how many elements are in the array */
 #define N_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
 
-enum class spoiler_output_status {
+enum class SpoilerOutputResultType {
     SPOILER_OUTPUT_CANCEL,
     SPOILER_OUTPUT_SUCCESS,
     SPOILER_OUTPUT_FAIL_FOPEN,

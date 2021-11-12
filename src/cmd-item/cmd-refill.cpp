@@ -106,7 +106,7 @@ void do_cmd_refill(player_type *player_ptr)
     object_type *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_LITE];
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (o_ptr->tval != ItemKindType::LITE)
         msg_print(_("光源を装備していない。", "You are not wielding a light."));

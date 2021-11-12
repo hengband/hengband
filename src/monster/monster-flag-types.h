@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class MFLAG {
+enum class MonsterTemporaryFlagType {
     VIEW = 0, /* Monster is in line of sight */
     LOS = 1, /* Monster is marked for project_all_los(player_ptr, ) */
     ESP = 2, /* Monster is being sensed by ESP */
@@ -11,7 +11,7 @@ enum class MFLAG {
     MAX,
 };
 
-enum class MFLAG2 {
+enum class MonsterConstantFlagType {
     KAGE = 0, /* Monster is kage */
     NOPET = 1, /* Cannot make monster pet */
     NOGENO = 2, /* Cannot genocide */

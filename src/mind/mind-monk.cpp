@@ -14,7 +14,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-static void set_stance(player_type *player_ptr, const MonkStance new_stance)
+static void set_stance(player_type *player_ptr, const MonkStanceType new_stance)
 {
     set_action(player_ptr, ACTION_MONK_STANCE);
     PlayerClass pc(player_ptr);
@@ -51,7 +51,7 @@ bool choose_monk_stance(player_type *player_ptr)
     prt("", 1, 0);
     prt(_("        どの構えをとりますか？", "        Choose Stance: "), 1, 14);
 
-    auto new_stance = MonkStance::NONE;
+    auto new_stance = MonkStanceType::NONE;
     while (true) {
         char choice = inkey();
         if (choice == ESCAPE) {
@@ -69,16 +69,16 @@ bool choose_monk_stance(player_type *player_ptr)
         }
         
         if ((choice == 'b') || (choice == 'B')) {
-            new_stance = MonkStance::GENBU;
+            new_stance = MonkStanceType::GENBU;
             break;
         } else if (((choice == 'c') || (choice == 'C')) && (player_ptr->lev > 29)) {
-            new_stance = MonkStance::BYAKKO;
+            new_stance = MonkStanceType::BYAKKO;
             break;
         } else if (((choice == 'd') || (choice == 'D')) && (player_ptr->lev > 34)) {
-            new_stance = MonkStance::SEIRYU;
+            new_stance = MonkStanceType::SEIRYU;
             break;
         } else if (((choice == 'e') || (choice == 'E')) && (player_ptr->lev > 39)) {
-            new_stance = MonkStance::SUZAKU;
+            new_stance = MonkStanceType::SUZAKU;
             break;
         }
     }

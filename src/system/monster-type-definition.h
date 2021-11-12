@@ -38,8 +38,8 @@ typedef struct monster_type {
 	SPEED mspeed{};	        /*!< モンスターの個体加速値 / Monster "speed" */
 	ACTION_ENERGY energy_need{};	/*!< モンスター次ターンまでに必要な行動エネルギー / Monster "energy" */
 	POSITION cdis{};		/*!< 現在のプレイヤーから距離(逐一計算を避けるためのテンポラリ変数) Current dis from player */
-	EnumClassFlagGroup<MFLAG> mflag{};	/*!< モンスター個体に与えられた特殊フラグ1 (セーブ不要) / Extra monster flags */
-	EnumClassFlagGroup<MFLAG2> mflag2{};	/*!< モンスター個体に与えられた特殊フラグ2 (セーブ必要) / Extra monster flags */
+	EnumClassFlagGroup<MonsterTemporaryFlagType> mflag{};	/*!< モンスター個体に与えられた特殊フラグ1 (セーブ不要) / Extra monster flags */
+	EnumClassFlagGroup<MonsterConstantFlagType> mflag2{};	/*!< モンスター個体に与えられた特殊フラグ2 (セーブ必要) / Extra monster flags */
 	bool ml{};		/*!< モンスターがプレイヤーにとって視認できるか(処理のためのテンポラリ変数) Monster is "visible" */
 	ObjectIndexList hold_o_idx_list{};	/*!< モンスターが所持しているアイテムのリスト / Object list being held (if any) */
 	POSITION target_y{};		/*!< モンスターの攻撃目標対象Y座標 / Can attack !los player */
@@ -48,6 +48,6 @@ typedef struct monster_type {
 	EXP exp{}; /*!< モンスターの現在所持経験値 */
 
 	/* TODO: クローン、ペット、有効化は意義が異なるので別変数に切り離すこと。save/loadのバージョン更新が面倒そうだけど */
-	EnumClassFlagGroup<SM> smart{}; /*!< モンスターのプレイヤーに対する学習状態 / Field for "smart_learn" - Some bit-flags for the "smart" field */
+	EnumClassFlagGroup<MonsterSmartLearnType> smart{}; /*!< モンスターのプレイヤーに対する学習状態 / Field for "smart_learn" - Some bit-flags for the "smart" field */
 	MONSTER_IDX parent_m_idx{}; /*!< 召喚主のモンスターID */
 } monster_type;

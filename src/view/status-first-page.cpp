@@ -83,9 +83,9 @@ static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *dam
     if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
         level = std::max<short>(1, level - 3);
     PlayerClass pc(player_ptr);
-    if (pc.monk_stance_is(MonkStance::BYAKKO))
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO))
         *basedam = monk_ave_damage[level][1];
-    else if (pc.monk_stance_is(MonkStance::GENBU) || pc.monk_stance_is(MonkStance::SUZAKU))
+    else if (pc.monk_stance_is(MonkStanceType::GENBU) || pc.monk_stance_is(MonkStanceType::SUZAKU))
         *basedam = monk_ave_damage[level][2];
     else
         *basedam = monk_ave_damage[level][0];
@@ -300,15 +300,15 @@ static void display_first_page(player_type *player_ptr, int xthb, int *damage, i
     int xthn = player_ptr->skill_thn + (player_ptr->to_h_m * BTH_PLUS_ADJ);
 
     int muta_att = 0;
-    if (player_ptr->muta.has(MUTA::HORNS))
+    if (player_ptr->muta.has(PlayerMutationType::HORNS))
         muta_att++;
-    if (player_ptr->muta.has(MUTA::SCOR_TAIL))
+    if (player_ptr->muta.has(PlayerMutationType::SCOR_TAIL))
         muta_att++;
-    if (player_ptr->muta.has(MUTA::BEAK))
+    if (player_ptr->muta.has(PlayerMutationType::BEAK))
         muta_att++;
-    if (player_ptr->muta.has(MUTA::TRUNK))
+    if (player_ptr->muta.has(PlayerMutationType::TRUNK))
         muta_att++;
-    if (player_ptr->muta.has(MUTA::TENTACLES))
+    if (player_ptr->muta.has(PlayerMutationType::TENTACLES))
         muta_att++;
 
     int blows1 = can_attack_with_main_hand(player_ptr) ? player_ptr->num_blow[0] : 0;

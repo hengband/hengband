@@ -36,7 +36,7 @@ struct artifact_type {
 	WEIGHT weight{};		/*!< 重量 / Weight */
 	PRICE cost{};			/*!< 基本価格 / Artifact "cost" */
 	TrFlags flags{};       /*! アイテムフラグ / Artifact Flags */
-	EnumClassFlagGroup<TRG> gen_flags;	/*! アイテム生成フラグ / flags for generate */
+	EnumClassFlagGroup<ItemGenerationTraitType> gen_flags;	/*! アイテム生成フラグ / flags for generate */
 	DEPTH level{};		/*! 基本生成階 / Artifact level */
 	RARITY rarity{};		/*! レアリティ / Artifact rarity */
 	byte cur_num{};		/*! 現在の生成数 / Number created (0 or 1) */

@@ -201,7 +201,7 @@ int16_t PlayerSpeed::time_effect_value()
 int16_t PlayerSpeed::stance_value()
 {
     int16_t result = 0;
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU))
         result += 10;
     return result;
 }
@@ -219,15 +219,15 @@ int16_t PlayerSpeed::mutation_value()
     SPEED result = 0;
 
     const auto &muta = this->player_ptr->muta;
-    if (muta.has(MUTA::XTRA_FAT)) {
+    if (muta.has(PlayerMutationType::XTRA_FAT)) {
         result -= 2;
     }
 
-    if (muta.has(MUTA::XTRA_LEGS)) {
+    if (muta.has(PlayerMutationType::XTRA_LEGS)) {
         result += 3;
     }
 
-    if (muta.has(MUTA::SHORT_LEG)) {
+    if (muta.has(PlayerMutationType::SHORT_LEG)) {
         result -= 3;
     }
 

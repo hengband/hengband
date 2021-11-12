@@ -64,7 +64,7 @@ static bool check_no_blow(player_type *player_ptr, monap_type *monap_ptr)
         return false;
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 
@@ -471,7 +471,7 @@ static void postprocess_monster_blows(player_type *player_ptr, monap_type *monap
         msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
     }
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::IAI });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::IAI });
 }
 
 /*!
@@ -491,7 +491,7 @@ bool make_attack_normal(player_type *player_ptr, MONSTER_IDX m_idx)
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     monster_desc(player_ptr, monap_ptr->m_name, monap_ptr->m_ptr, 0);
     monster_desc(player_ptr, monap_ptr->ddesc, monap_ptr->m_ptr, MD_WRONGDOER_NAME);
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::IAI)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
         msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), monap_ptr->m_name);
         if (do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_IAI)) {
             return true;

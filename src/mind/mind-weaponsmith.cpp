@@ -244,7 +244,7 @@ static COMMAND_CODE choose_essence(void)
  * @param start_idx smith_effect_list の表示開始インデックス
  * @param line_max 表示する最大行数
  */
-static void display_smith_effect_list(const Smith &smith, const std::vector<SmithEffect> &smith_effect_list, int menu_line, int start_idx, int line_max)
+static void display_smith_effect_list(const Smith &smith, const std::vector<SmithEffectType> &smith_effect_list, int menu_line, int start_idx, int line_max)
 {
     auto x = 10;
 
@@ -294,7 +294,7 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *player_ptr, SmithCategory mode)
+static void add_essence(player_type *player_ptr, SmithCategoryType mode)
 {
     OBJECT_IDX item;
     bool flag;
@@ -492,7 +492,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
         }
 
         add_essence_count = o_ptr->pval;
-    } else if (effect == SmithEffect::SLAY_GLOVE) {
+    } else if (effect == SmithEffectType::SLAY_GLOVE) {
         char tmp_val[8] = "1";
         const auto max_val = player_ptr->lev / 7 + 3;
         if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {
@@ -703,10 +703,10 @@ void do_cmd_kaji(player_type *player_ptr, bool only_browse)
         mode = choose_essence();
         if (mode == 0)
             break;
-        add_essence(player_ptr, i2enum<SmithCategory>(mode));
+        add_essence(player_ptr, i2enum<SmithCategoryType>(mode));
         break;
     case 5:
-        add_essence(player_ptr, SmithCategory::ENCHANT);
+        add_essence(player_ptr, SmithCategoryType::ENCHANT);
         break;
     }
 }

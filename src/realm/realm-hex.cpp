@@ -208,16 +208,16 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
             } else {
                 int curse_rank = 0;
                 msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-                o_ptr->curse_flags.set(TRC::CURSED);
+                o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
                 if (o_ptr->is_artifact() || o_ptr->is_ego()) {
 
                     if (one_in_(3))
-                        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+                        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                     if (one_in_(666)) {
-                        o_ptr->curse_flags.set(TRC::TY_CURSE);
+                        o_ptr->curse_flags.set(CurseTraitType::TY_CURSE);
                         if (one_in_(666))
-                            o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                            o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
 
                         o_ptr->art_flags.set(TR_AGGRAVATE);
                         o_ptr->art_flags.set(TR_VORPAL);
@@ -525,16 +525,16 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
             } else {
                 int curse_rank = 0;
                 msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-                o_ptr->curse_flags.set(TRC::CURSED);
+                o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
                 if (o_ptr->is_artifact() || o_ptr->is_ego()) {
 
                     if (one_in_(3))
-                        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+                        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                     if (one_in_(666)) {
-                        o_ptr->curse_flags.set(TRC::TY_CURSE);
+                        o_ptr->curse_flags.set(CurseTraitType::TY_CURSE);
                         if (one_in_(666))
-                            o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                            o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
 
                         o_ptr->art_flags.set(TR_AGGRAVATE);
                         o_ptr->art_flags.set(TR_RES_POIS);
@@ -697,19 +697,19 @@ concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcess
             auto f = object_flags(o_ptr);
 
             player_ptr->csp += (player_ptr->lev / 5) + randint1(player_ptr->lev / 5);
-            if (f.has(TR_TY_CURSE) || o_ptr->curse_flags.has(TRC::TY_CURSE))
+            if (f.has(TR_TY_CURSE) || o_ptr->curse_flags.has(CurseTraitType::TY_CURSE))
                 player_ptr->csp += randint1(5);
             if (player_ptr->csp > player_ptr->msp)
                 player_ptr->csp = player_ptr->msp;
 
-            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
                 /* Nothing */
-            } else if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+            } else if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 if (one_in_(7)) {
                     msg_print(_("呪いを全て吸い取った。", "A heavy curse vanished."));
                     o_ptr->curse_flags.clear();
                 }
-            } else if (o_ptr->curse_flags.has(TRC::CURSED) && one_in_(3)) {
+            } else if (o_ptr->curse_flags.has(CurseTraitType::CURSED) && one_in_(3)) {
                 msg_print(_("呪いを全て吸い取った。", "A curse vanished."));
                 o_ptr->curse_flags.clear();
             }

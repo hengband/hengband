@@ -34,7 +34,7 @@ typedef struct old_race_flags {
 	BIT_FLAGS old_r_flags2;
 	BIT_FLAGS old_r_flags3;
 	BIT_FLAGS old_r_flagsr;
-	EnumClassFlagGroup<RF_ABILITY> old_r_ability_flags;
+	EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
 
 	byte old_r_blows0;
 	byte old_r_blows1;

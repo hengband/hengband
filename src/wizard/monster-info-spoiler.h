@@ -6,6 +6,6 @@
 #include <functional>
 
 struct monster_race;
-spoiler_output_status spoil_mon_desc_all(concptr fname);
-spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const monster_race *)> filter_monster = nullptr);
-spoiler_output_status spoil_mon_info(concptr fname);
+SpoilerOutputResultType spoil_mon_desc_all(concptr fname);
+SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const monster_race *)> filter_monster = nullptr);
+SpoilerOutputResultType spoil_mon_info(concptr fname);

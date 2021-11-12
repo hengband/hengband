@@ -67,7 +67,7 @@ static bool deal_damege_by_feat(player_type *player_ptr, grid_type *g_ptr, concp
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int damage = 0;
 
-    if (f_ptr->flags.has(FF::DEEP)) {
+    if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
         damage = 6000 + randint0(4000);
     } else if (!player_ptr->levitation) {
         damage = 3000 + randint0(2000);
@@ -128,7 +128,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
 
     const PlayerRace race(player_ptr);
-    if (race.life() == PlayerRaceLife::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
+    if (race.life() == PlayerRaceLifeType::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
         if (!is_in_dungeon(player_ptr) && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
             if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
@@ -156,7 +156,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::LAVA) && !is_invuln(player_ptr) && !has_immune_fire(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::LAVA) && !is_invuln(player_ptr) && !has_immune_fire(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -164,7 +164,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::COLD_PUDDLE) && !is_invuln(player_ptr) && !has_immune_cold(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::COLD_PUDDLE) && !is_invuln(player_ptr) && !has_immune_cold(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -172,7 +172,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::ELEC_PUDDLE) && !is_invuln(player_ptr) && !has_immune_elec(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::ELEC_PUDDLE) && !is_invuln(player_ptr) && !has_immune_elec(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -180,7 +180,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::ACID_PUDDLE) && !is_invuln(player_ptr) && !has_immune_acid(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::ACID_PUDDLE) && !is_invuln(player_ptr) && !has_immune_acid(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -188,7 +188,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::POISON_PUDDLE) && !is_invuln(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::POISON_PUDDLE) && !is_invuln(player_ptr)) {
         if (deal_damege_by_feat(player_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"), calc_acid_damage_rate,
                 [](player_type *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr))
@@ -199,7 +199,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has_all_of({ FF::WATER, FF::DEEP }) && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
+    if (f_ptr->flags.has_all_of({ FloorFeatureType::WATER, FloorFeatureType::DEEP }) && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
         if (calc_inventory_weight(player_ptr) > calc_weight_limit(player_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, randint1(player_ptr->lev), _("溺れ", "drowning"));
@@ -306,7 +306,7 @@ void process_player_hp_mp(player_type *player_ptr)
      * reduced below 0 hp by being inside a stone wall; others
      * WILL BE!
      */
-    if (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY })) {
+    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
         if (!is_invuln(player_ptr) && !player_ptr->wraith_form && !player_ptr->tim_pass_wall && ((player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr))) {
             concptr dam_desc;
             cave_no_regen = true;
@@ -339,10 +339,10 @@ void process_player_hp_mp(player_type *player_ptr)
         if (player_ptr->regenerate) {
             regen_amount = regen_amount * 2;
         }
-        if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
+        if (!PlayerClass(player_ptr).monk_stance_is(MonkStanceType::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::NONE)) {
             regen_amount /= 2;
         }
-        if (player_ptr->cursed.has(TRC::SLOW_REGEN)) {
+        if (player_ptr->cursed.has(CurseTraitType::SLOW_REGEN)) {
             regen_amount /= 5;
         }
     }
@@ -352,7 +352,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
 
     upkeep_factor = calculate_upkeep(player_ptr);
-    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         upkeep_factor += 100;
     }
 

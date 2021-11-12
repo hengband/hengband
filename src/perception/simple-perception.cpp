@@ -45,7 +45,7 @@ static void sense_inventory_aux(player_type *player_ptr, INVENTORY_IDX slot, boo
     if (!feel)
         return;
 
-    if ((player_ptr->muta.has(MUTA::BAD_LUCK)) && !randint0(13)) {
+    if ((player_ptr->muta.has(PlayerMutationType::BAD_LUCK)) && !randint0(13)) {
         switch (feel) {
         case FEEL_TERRIBLE: {
             feel = FEEL_SPECIAL;

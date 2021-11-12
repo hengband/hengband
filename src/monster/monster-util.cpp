@@ -57,34 +57,34 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
     dungeon_type *d_ptr = &d_info[d_idx];
     monster_race *r_ptr = &r_info[r_idx];
 
-    if (d_ptr->flags.has(DF::CHAMELEON)) {
+    if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx)
             return true;
     }
 
-    if (d_ptr->flags.has(DF::NO_MAGIC)) {
+    if (d_ptr->flags.has(DungeonFeatureType::NO_MAGIC)) {
         if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK))
             return false;
     }
 
-    if (d_ptr->flags.has(DF::NO_MELEE)) {
+    if (d_ptr->flags.has(DungeonFeatureType::NO_MELEE)) {
         if (r_idx == MON_CHAMELEON)
             return true;
         if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK)
             && r_ptr->ability_flags.has_none_of(
-                { RF_ABILITY::CAUSE_1, RF_ABILITY::CAUSE_2, RF_ABILITY::CAUSE_3, RF_ABILITY::CAUSE_4, RF_ABILITY::MIND_BLAST, RF_ABILITY::BRAIN_SMASH }))
+                { MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4, MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH }))
             return false;
     }
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (d_ptr->flags.has(DF::BEGINNER)) {
+    if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
         if (r_ptr->level > floor_ptr->dun_level)
             return false;
     }
 
     if (d_ptr->special_div >= 64)
         return true;
-    if (summon_specific_type && d_ptr->flags.has_not(DF::CHAMELEON))
+    if (summon_specific_type && d_ptr->flags.has_not(DungeonFeatureType::CHAMELEON))
         return true;
 
     byte a;
@@ -276,10 +276,10 @@ monsterrace_hook_type get_monster_hook(player_type *player_ptr)
 monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x)
 {
     feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
-    if (f_ptr->flags.has(FF::WATER))
-        return f_ptr->flags.has(FF::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
+    if (f_ptr->flags.has(FloorFeatureType::WATER))
+        return f_ptr->flags.has(FloorFeatureType::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
 
-    if (f_ptr->flags.has(FF::LAVA))
+    if (f_ptr->flags.has(FloorFeatureType::LAVA))
         return (monsterrace_hook_type)mon_hook_lava;
 
     return (monsterrace_hook_type)mon_hook_floor;

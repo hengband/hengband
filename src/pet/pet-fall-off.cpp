@@ -111,12 +111,12 @@ bool process_fall_off_horse(player_type *player_ptr, HIT_POINT dam, bool force)
                 continue;
 
             /* Skip non-empty grids */
-            if (!g_ptr->cave_has_flag(FF::MOVE) && !g_ptr->cave_has_flag(FF::CAN_FLY)) {
+            if (!g_ptr->cave_has_flag(FloorFeatureType::MOVE) && !g_ptr->cave_has_flag(FloorFeatureType::CAN_FLY)) {
                 if (!can_player_ride_pet(player_ptr, g_ptr, false))
                     continue;
             }
 
-            if (g_ptr->cave_has_flag(FF::PATTERN))
+            if (g_ptr->cave_has_flag(FloorFeatureType::PATTERN))
                 continue;
 
             /* Count "safe" grids */

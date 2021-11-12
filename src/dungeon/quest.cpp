@@ -278,7 +278,7 @@ void leave_quest_check(player_type *player_ptr)
         quest[QUEST_TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        a_info[q_ptr->k_idx].gen_flags.reset(TRG::QUESTITEM);
+        a_info[q_ptr->k_idx].gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
         r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
@@ -342,7 +342,7 @@ void do_cmd_quest(player_type *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF::QUEST_ENTER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }
