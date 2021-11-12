@@ -88,13 +88,13 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
  * Create a spoiler file for items
  * @param fname ファイル名
  */
-spoiler_output_status spoil_obj_desc(concptr fname)
+SpoilerOutputResultType spoil_obj_desc(concptr fname)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -138,6 +138,6 @@ spoiler_output_status spoil_obj_desc(concptr fname)
         }
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
 }
