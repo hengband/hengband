@@ -15,7 +15,7 @@ struct essence_drain_type;
 class ItemTester;
 struct smith_data_type;
 
-enum class SmithEffect : int16_t;
+enum class SmithEffectType : int16_t;
 enum class SmithCategory;
 enum class SmithEssence : int16_t;
 enum class RandomArtActType : short;
@@ -32,26 +32,26 @@ public:
 
     static const std::vector<SmithEssence> &get_essence_list();
     static concptr get_essence_name(SmithEssence essence);
-    static std::vector<SmithEffect> get_effect_list(SmithCategory category);
-    static concptr get_effect_name(SmithEffect effect);
-    static std::string get_need_essences_desc(SmithEffect effect);
-    static std::vector<SmithEssence> get_need_essences(SmithEffect effect);
-    static int get_essence_consumption(SmithEffect effect, const object_type *o_ptr = nullptr);
-    static std::unique_ptr<ItemTester> get_item_tester(SmithEffect effect);
-    static TrFlags get_effect_tr_flags(SmithEffect effect);
+    static std::vector<SmithEffectType> get_effect_list(SmithCategory category);
+    static concptr get_effect_name(SmithEffectType effect);
+    static std::string get_need_essences_desc(SmithEffectType effect);
+    static std::vector<SmithEssence> get_need_essences(SmithEffectType effect);
+    static int get_essence_consumption(SmithEffectType effect, const object_type *o_ptr = nullptr);
+    static std::unique_ptr<ItemTester> get_item_tester(SmithEffectType effect);
+    static TrFlags get_effect_tr_flags(SmithEffectType effect);
     static std::optional<RandomArtActType> object_activation(const object_type *o_ptr);
-    static std::optional<SmithEffect> object_effect(const object_type *o_ptr);
+    static std::optional<SmithEffectType> object_effect(const object_type *o_ptr);
 
     int get_essence_num_of_posessions(SmithEssence essence) const;
     DrainEssenceResult drain_essence(object_type *o_ptr);
-    bool add_essence(SmithEffect effect, object_type *o_ptr, int consumption);
+    bool add_essence(SmithEffectType effect, object_type *o_ptr, int consumption);
     void erase_essence(object_type *o_ptr) const;
-    int get_addable_count(SmithEffect smith_effect, const object_type *o_ptr = nullptr) const;
+    int get_addable_count(SmithEffectType smith_effect, const object_type *o_ptr = nullptr) const;
 
     static constexpr int ESSENCE_AMOUNT_MAX = 20000;
 
 private:
-    static std::optional<const ISmithInfo *> find_smith_info(SmithEffect effect);
+    static std::optional<const ISmithInfo *> find_smith_info(SmithEffectType effect);
 
     static const std::vector<SmithEssence> essence_list_order;
     static const std::unordered_map<SmithEssence, concptr> essence_to_name;

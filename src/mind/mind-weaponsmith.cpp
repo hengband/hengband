@@ -244,7 +244,7 @@ static COMMAND_CODE choose_essence(void)
  * @param start_idx smith_effect_list の表示開始インデックス
  * @param line_max 表示する最大行数
  */
-static void display_smith_effect_list(const Smith &smith, const std::vector<SmithEffect> &smith_effect_list, int menu_line, int start_idx, int line_max)
+static void display_smith_effect_list(const Smith &smith, const std::vector<SmithEffectType> &smith_effect_list, int menu_line, int start_idx, int line_max)
 {
     auto x = 10;
 
@@ -492,7 +492,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
         }
 
         add_essence_count = o_ptr->pval;
-    } else if (effect == SmithEffect::SLAY_GLOVE) {
+    } else if (effect == SmithEffectType::SLAY_GLOVE) {
         char tmp_val[8] = "1";
         const auto max_val = player_ptr->lev / 7 + 3;
         if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {

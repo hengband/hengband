@@ -17,7 +17,7 @@
 #include <optional>
 
 enum class ItemKindType : short;
-enum class SmithEffect : int16_t;
+enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
 struct player_type;
@@ -42,7 +42,7 @@ typedef struct object_type {
     XTRA16 xtra4{}; /*!< 複数の使用用途 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
     XTRA16 xtra5{}; /*!< 複数の使用用途 捕らえたモンスターの最大HP / Extra info captured monster's max HP */
 
-    std::optional<SmithEffect> smith_effect; //!< 鍛冶で付与された効果
+    std::optional<SmithEffectType> smith_effect; //!< 鍛冶で付与された効果
     std::optional<RandomArtActType> smith_act_idx; //!< 鍛冶で付与された発動効果のID
 
     HIT_PROB to_h{}; /*!< Plusses to hit */

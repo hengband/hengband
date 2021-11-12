@@ -117,7 +117,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
     if (flavor_ptr->tr_flags.has(TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (flavor_ptr->o_ptr->is_smith() && (Smith::object_effect(flavor_ptr->o_ptr) == SmithEffect::SLAY_GLOVE))
+    if (flavor_ptr->o_ptr->is_smith() && (Smith::object_effect(flavor_ptr->o_ptr) == SmithEffectType::SLAY_GLOVE))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
