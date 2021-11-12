@@ -43,18 +43,18 @@ void screen_save()
  *
  * This function must match exactly one call to "screen_save()".
  */
-void screen_load(SCREEN_LOAD_OPT opt)
+void screen_load(ScreenLoadOptType opt)
 {
     msg_print(nullptr);
 
     switch (opt) {
-    case SCREEN_LOAD_OPT::ONE:
+    case ScreenLoadOptType::ONE:
         term_load(false);
         w_ptr->character_icky_depth--;
         screen_depth--;
         break;
 
-    case SCREEN_LOAD_OPT::ALL:
+    case ScreenLoadOptType::ALL:
         term_load(true);
         w_ptr->character_icky_depth -= static_cast<byte>(screen_depth);
         screen_depth = 0;
