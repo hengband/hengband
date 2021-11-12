@@ -28,7 +28,7 @@ enum class CurseTraitType {
     MAX,
 };
 
-enum class TRCS {
+enum class CurseSpecialTraitType {
     TELEPORT_SELF = 0,
     CHAINSWORD = 1,
     MAX,

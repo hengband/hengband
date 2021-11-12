@@ -1074,7 +1074,7 @@ void update_curses(player_type *player_ptr)
         obj_curse_flags.reset({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE });
         player_ptr->cursed.set(obj_curse_flags);
         if (o_ptr->name1 == ART_CHAINSWORD)
-            player_ptr->cursed_special.set(TRCS::CHAINSWORD);
+            player_ptr->cursed_special.set(CurseSpecialTraitType::CHAINSWORD);
 
         if (flgs.has(TR_TELEPORT)) {
             if (o_ptr->is_cursed())
@@ -1085,14 +1085,14 @@ void update_curses(player_type *player_ptr)
                 /* {.} will stop random teleportation. */
                 if (o_ptr->inscription && angband_strchr(insc, '.')) {
                 } else {
-                    player_ptr->cursed_special.set(TRCS::TELEPORT_SELF);
+                    player_ptr->cursed_special.set(CurseSpecialTraitType::TELEPORT_SELF);
                 }
             }
         }
     }
 
     if (player_ptr->cursed.has(CurseTraitType::TELEPORT))
-        player_ptr->cursed_special.reset(TRCS::TELEPORT_SELF);
+        player_ptr->cursed_special.reset(CurseSpecialTraitType::TELEPORT_SELF);
 }
 
 BIT_FLAGS has_impact(player_type *player_ptr)

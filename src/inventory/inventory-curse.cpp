@@ -37,7 +37,7 @@
 namespace {
 const EnumClassFlagGroup<CurseTraitType> TRC_P_FLAG_MASK({ CurseTraitType::TY_CURSE, CurseTraitType::DRAIN_EXP, CurseTraitType::ADD_L_CURSE, CurseTraitType::ADD_H_CURSE, CurseTraitType::CALL_ANIMAL, CurseTraitType::CALL_DEMON,
     CurseTraitType::CALL_DRAGON, CurseTraitType::COWARDICE, CurseTraitType::TELEPORT, CurseTraitType::DRAIN_HP, CurseTraitType::DRAIN_MANA, CurseTraitType::CALL_UNDEAD, CurseTraitType::BERS_RAGE });
-const EnumClassFlagGroup<TRCS> TRCS_P_FLAG_MASK({ TRCS::TELEPORT_SELF, TRCS::CHAINSWORD });
+const EnumClassFlagGroup<CurseSpecialTraitType> TRCS_P_FLAG_MASK({ CurseSpecialTraitType::TELEPORT_SELF, CurseSpecialTraitType::CHAINSWORD });
 }
 
 static bool is_specific_curse(CurseTraitType flag)
@@ -161,7 +161,7 @@ object_type *choose_cursed_obj_name(player_type *player_ptr, CurseTraitType flag
  */
 static void curse_teleport(player_type *player_ptr)
 {
-    if ((player_ptr->cursed_special.has_not(TRCS::TELEPORT_SELF)) || !one_in_(200))
+    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::TELEPORT_SELF)) || !one_in_(200))
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
@@ -202,7 +202,7 @@ static void curse_teleport(player_type *player_ptr)
  */
 static void occur_chainsword_effect(player_type *player_ptr)
 {
-    if ((player_ptr->cursed_special.has_not(TRCS::CHAINSWORD)) || !one_in_(CHAINSWORD_NOISE))
+    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::CHAINSWORD)) || !one_in_(CHAINSWORD_NOISE))
         return;
 
     char noise[1024];
