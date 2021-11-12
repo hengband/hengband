@@ -54,7 +54,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<smith_data_type> 
         auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
         for (auto i = 0; i < OLD_SAVEFILE_MAX_SPELLS; ++i) {
             if (magic_num1[i] > 0) {
-                smith_data->essences[i2enum<SmithEssence>(i)] = static_cast<int16_t>(magic_num1[i]);
+                smith_data->essences[i2enum<SmithEssenceType>(i)] = static_cast<int16_t>(magic_num1[i]);
             }
         }
     } else {
@@ -64,7 +64,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<smith_data_type> 
             if (essence < 0 && amount < 0) {
                 break;
             }
-            smith_data->essences[i2enum<SmithEssence>(essence)] = amount;
+            smith_data->essences[i2enum<SmithEssenceType>(essence)] = amount;
         }
     }
 }

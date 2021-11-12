@@ -136,37 +136,37 @@ TrFlags PlayerClass::tr_flags() const
         break;
     }
     case PlayerClassType::ELEMENTALIST:
-        if (has_element_resist(this->player_ptr, ElementRealm::FIRE, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 1))
             flags.set(TR_RES_FIRE);
-        if (has_element_resist(this->player_ptr, ElementRealm::FIRE, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 30))
             flags.set(TR_IM_FIRE);
-        if (has_element_resist(this->player_ptr, ElementRealm::ICE, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 1))
             flags.set(TR_RES_COLD);
-        if (has_element_resist(this->player_ptr, ElementRealm::ICE, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 30))
             flags.set(TR_IM_COLD);
-        if (has_element_resist(this->player_ptr, ElementRealm::SKY, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 1))
             flags.set(TR_RES_ELEC);
-        if (has_element_resist(this->player_ptr, ElementRealm::SKY, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 30))
             flags.set(TR_IM_ELEC);
-        if (has_element_resist(this->player_ptr, ElementRealm::SEA, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 1))
             flags.set(TR_RES_ACID);
-        if (has_element_resist(this->player_ptr, ElementRealm::SEA, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 30))
             flags.set(TR_IM_ACID);
-        if (has_element_resist(this->player_ptr, ElementRealm::DARKNESS, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 1))
             flags.set(TR_RES_DARK);
-        if (has_element_resist(this->player_ptr, ElementRealm::DARKNESS, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 30))
             flags.set(TR_RES_NETHER);
-        if (has_element_resist(this->player_ptr, ElementRealm::CHAOS, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 1))
             flags.set(TR_RES_CONF);
-        if (has_element_resist(this->player_ptr, ElementRealm::CHAOS, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 30))
             flags.set(TR_RES_CHAOS);
-        if (has_element_resist(this->player_ptr, ElementRealm::EARTH, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 1))
             flags.set(TR_RES_SHARDS);
-        if (has_element_resist(this->player_ptr, ElementRealm::EARTH, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 30))
             flags.set(TR_REFLECT);
-        if (has_element_resist(this->player_ptr, ElementRealm::DEATH, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 1))
             flags.set(TR_RES_POIS);
-        if (has_element_resist(this->player_ptr, ElementRealm::DEATH, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 30))
             flags.set(TR_RES_DISEN);
         break;
     default:

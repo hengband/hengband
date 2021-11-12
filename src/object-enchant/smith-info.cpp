@@ -6,7 +6,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-ISmithInfo::ISmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssence> need_essences, int consumption)
+ISmithInfo::ISmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)
     : effect(effect)
     , name(name)
     , category(category)
@@ -20,7 +20,7 @@ TrFlags ISmithInfo::tr_flags() const
     return {};
 }
 
-BasicSmithInfo::BasicSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssence> need_essences, int consumption, TrFlags add_flags)
+BasicSmithInfo::BasicSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption, TrFlags add_flags)
     : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
     , add_flags(add_flags)
 {
@@ -81,7 +81,7 @@ bool BasicSmithInfo::can_give_smith_effect_impl(const object_type *o_ptr) const
     return o_ptr->is_weapon_armour_ammo() && o_ptr->is_wearable();
 }
 
-ActivationSmithInfo::ActivationSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssence> need_essences, int consumption, RandomArtActType act_idx)
+ActivationSmithInfo::ActivationSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption, RandomArtActType act_idx)
     : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
     , act_idx(act_idx)
 {
@@ -109,7 +109,7 @@ bool ActivationSmithInfo::can_give_smith_effect(const object_type *o_ptr) const
     return o_ptr->is_weapon_armour_ammo() && o_ptr->is_wearable();
 }
 
-EnchantWeaponSmithInfo::EnchantWeaponSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssence> need_essences, int consumption)
+EnchantWeaponSmithInfo::EnchantWeaponSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)
     : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
 {
 }
@@ -136,7 +136,7 @@ bool EnchantWeaponSmithInfo::can_give_smith_effect(const object_type *o_ptr) con
     return o_ptr->allow_enchant_weapon();
 }
 
-EnchantArmourSmithInfo::EnchantArmourSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssence> need_essences, int consumption)
+EnchantArmourSmithInfo::EnchantArmourSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)
     : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
 {
 }
@@ -158,7 +158,7 @@ bool EnchantArmourSmithInfo::can_give_smith_effect(const object_type *o_ptr) con
     return o_ptr->is_armour();
 }
 
-SustainSmithInfo::SustainSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssence> need_essences, int consumption)
+SustainSmithInfo::SustainSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)
     : ISmithInfo(effect, name, category, std::move(need_essences), consumption)
 {
 }
@@ -178,7 +178,7 @@ bool SustainSmithInfo::can_give_smith_effect(const object_type *o_ptr) const
     return o_ptr->is_weapon_armour_ammo();
 }
 
-SlayingGlovesSmithInfo::SlayingGlovesSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssence> need_essences, int consumption)
+SlayingGlovesSmithInfo::SlayingGlovesSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)
     : BasicSmithInfo(effect, name, category, std::move(need_essences), consumption, {})
 {
 }
