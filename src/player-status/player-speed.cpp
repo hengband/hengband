@@ -201,7 +201,7 @@ int16_t PlayerSpeed::time_effect_value()
 int16_t PlayerSpeed::stance_value()
 {
     int16_t result = 0;
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU))
         result += 10;
     return result;
 }

@@ -181,7 +181,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<monk_data_type> &
         // 古いセーブファイルの修行僧のデータは magic_num には保存されていないので読み捨てる
         load_old_savfile_magic_num();
     } else {
-        monk_data->stance = i2enum<MonkStance>(rd_byte());
+        monk_data->stance = i2enum<MonkStanceType>(rd_byte());
     }
 }
 

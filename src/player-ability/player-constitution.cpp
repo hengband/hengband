@@ -81,11 +81,11 @@ int16_t PlayerConstitution::stance_value()
         result += 5;
     }
 
-    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO)) {
         result -= 3;
-    } else if (pc.monk_stance_is(MonkStance::GENBU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::GENBU)) {
         result += 3;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::SUZAKU)) {
         result -= 2;
     }
     if (this->player_ptr->tsuyoshi) {

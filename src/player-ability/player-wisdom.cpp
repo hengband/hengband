@@ -44,9 +44,9 @@ int16_t PlayerWisdom::stance_value()
         result += 5;
     }
 
-    if (pc.monk_stance_is(MonkStance::GENBU)) {
+    if (pc.monk_stance_is(MonkStanceType::GENBU)) {
         result -= 1;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::SUZAKU)) {
         result += 1;
     }
 

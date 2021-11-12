@@ -203,13 +203,13 @@ TrFlags PlayerClass::stance_tr_flags() const
     }
 
     switch (this->get_monk_stance()) {
-    case MonkStance::GENBU:
+    case MonkStanceType::GENBU:
         flags.set(TR_REFLECT);
         break;
-    case MonkStance::SUZAKU:
+    case MonkStanceType::SUZAKU:
         flags.set(TR_LEVITATION);
         break;
-    case MonkStance::SEIRYU:
+    case MonkStanceType::SEIRYU:
         flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
         flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
         flags.set(TR_LEVITATION);
@@ -302,22 +302,22 @@ void PlayerClass::set_samurai_stance(SamuraiStanceType stance) const
     samurai_data->stance = stance;
 }
 
-MonkStance PlayerClass::get_monk_stance() const
+MonkStanceType PlayerClass::get_monk_stance() const
 {
     auto monk_data = this->get_specific_data<monk_data_type>();
     if (!monk_data) {
-        return MonkStance::NONE;
+        return MonkStanceType::NONE;
     }
 
     return monk_data->stance;
 }
 
-bool PlayerClass::monk_stance_is(MonkStance stance) const
+bool PlayerClass::monk_stance_is(MonkStanceType stance) const
 {
     return this->get_monk_stance() == stance;
 }
 
-void PlayerClass::set_monk_stance(MonkStance stance) const
+void PlayerClass::set_monk_stance(MonkStanceType stance) const
 {
     auto monk_data = this->get_specific_data<monk_data_type>();
     if (!monk_data) {

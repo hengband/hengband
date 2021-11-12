@@ -89,9 +89,9 @@ int16_t PlayerStrength::stance_value()
         result += 5;
     }
 
-    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO)) {
         result += 2;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::SUZAKU)) {
         result -= 2;
     }
 

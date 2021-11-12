@@ -83,9 +83,9 @@ static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *dam
     if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
         level = std::max<short>(1, level - 3);
     PlayerClass pc(player_ptr);
-    if (pc.monk_stance_is(MonkStance::BYAKKO))
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO))
         *basedam = monk_ave_damage[level][1];
-    else if (pc.monk_stance_is(MonkStance::GENBU) || pc.monk_stance_is(MonkStance::SUZAKU))
+    else if (pc.monk_stance_is(MonkStanceType::GENBU) || pc.monk_stance_is(MonkStanceType::SUZAKU))
         *basedam = monk_ave_damage[level][2];
     else
         *basedam = monk_ave_damage[level][0];

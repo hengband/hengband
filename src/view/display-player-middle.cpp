@@ -72,7 +72,7 @@ static void display_sub_hand(player_type *player_ptr)
         return;
 
     PlayerClass pc(player_ptr);
-    if (pc.monk_stance_is(MonkStance::NONE)) {
+    if (pc.monk_stance_is(MonkStanceType::NONE)) {
         display_player_one_line(ENTRY_POSTURE, _("構えなし", "none"), TERM_YELLOW);
         return;
     }

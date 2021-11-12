@@ -57,7 +57,7 @@ void set_action(player_type *player_ptr, uint8_t typ)
     }
     case ACTION_MONK_STANCE: {
         msg_print(_("構えをといた。", "You stop assuming the special stance."));
-        PlayerClass(player_ptr).set_monk_stance(MonkStance::NONE);
+        PlayerClass(player_ptr).set_monk_stance(MonkStanceType::NONE);
         break;
     }
     case ACTION_SAMURAI_STANCE: {

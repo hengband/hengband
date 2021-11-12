@@ -37,7 +37,7 @@ void starve_player(player_type *player_ptr)
         if (player_ptr->regenerate)
             digestion += 20;
         PlayerClass pc(player_ptr);
-        if (!pc.monk_stance_is(MonkStance::NONE) || !pc.samurai_stance_is(SamuraiStanceType::NONE))
+        if (!pc.monk_stance_is(MonkStanceType::NONE) || !pc.samurai_stance_is(SamuraiStanceType::NONE))
             digestion += 20;
         if (player_ptr->cursed.has(CurseTraitType::FAST_DIGEST))
             digestion += 30;

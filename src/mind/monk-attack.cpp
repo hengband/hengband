@@ -73,13 +73,13 @@ static int calc_stun_resistance(player_attack_type *pa_ptr)
 static int calc_max_blow_selection_times(player_type *player_ptr)
 {
     PlayerClass pc(player_ptr);
-    if (pc.monk_stance_is(MonkStance::BYAKKO))
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO))
         return (player_ptr->lev < 3 ? 1 : player_ptr->lev / 3);
 
-    if (pc.monk_stance_is(MonkStance::SUZAKU))
+    if (pc.monk_stance_is(MonkStanceType::SUZAKU))
         return 1;
 
-    if (pc.monk_stance_is(MonkStance::GENBU))
+    if (pc.monk_stance_is(MonkStanceType::GENBU))
         return 1;
 
     return player_ptr->lev < 7 ? 1 : player_ptr->lev / 7;
@@ -162,7 +162,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
 static WEIGHT calc_monk_attack_weight(player_type *player_ptr)
 {
     WEIGHT weight = 8;
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStance::SUZAKU))
+    if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU))
         weight = 4;
 
     if ((player_ptr->pclass == PlayerClassType::FORCETRAINER) && (get_current_ki(player_ptr) != 0)) {
