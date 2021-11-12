@@ -35,7 +35,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x1FFFFFFF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
 		{},
 	},
 	{
@@ -49,7 +49,7 @@ const player_race_info race_info[MAX_RACES] =
 		2,
 		0x1E77E7FF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {},
     },
 	{
@@ -63,7 +63,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x1E77E75B,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_LITE },
 		},
@@ -79,7 +79,7 @@ const player_race_info race_info[MAX_RACES] =
 		4,
 		0x1F6FFC0B,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_HOLD_EXP },
 		},
@@ -95,7 +95,7 @@ const player_race_info race_info[MAX_RACES] =
 		4,
 		0x1F67D60F,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_FREE_ACT },
 		},
@@ -111,7 +111,7 @@ const player_race_info race_info[MAX_RACES] =
 		5,
 		0x11890005,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_BLIND },
 		},
@@ -127,7 +127,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x1DD8818D,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_DARK },
 		},
@@ -143,7 +143,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x00880005,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_SUST_STR },
 			{ TR_REGEN, 15 },
@@ -163,7 +163,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x1FFFF7FF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_SUST_CON },
 			{ TR_REGEN },
@@ -180,7 +180,7 @@ const player_race_info race_info[MAX_RACES] =
 		4,
 		0x1F77E75B,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_LITE },
 			{ TR_SEE_INVIS },
@@ -197,7 +197,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x05C0A09D,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_FEAR },
 		},
@@ -213,7 +213,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x10A80407,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_SUST_STR },
 			{ TR_RES_DARK },
@@ -230,7 +230,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x08880011,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_SUST_STR },
 			{ TR_RES_SHARDS },
@@ -247,7 +247,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x123D4727,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_CHAOS },
 		},
@@ -263,7 +263,7 @@ const player_race_info race_info[MAX_RACES] =
 		1,
 		0x00888005,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_SOUND },
 		},
@@ -279,7 +279,7 @@ const player_race_info race_info[MAX_RACES] =
 		2,
 		0x1667360F,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_ACID },
 			{ TR_IM_ACID, 20 },
@@ -296,7 +296,7 @@ const player_race_info race_info[MAX_RACES] =
 		2,
 		0x004D8011,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_ACID },
 			{ TR_RES_CONF },
@@ -314,7 +314,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x1444A009,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_POIS },
 		},
@@ -330,7 +330,7 @@ const player_race_info race_info[MAX_RACES] =
 		5,
 		0x1569040F,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_DARK },
 			{ TR_RES_DISEN },
@@ -347,7 +347,7 @@ const player_race_info race_info[MAX_RACES] =
 		5,
 		0x1E77C7DF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_DARK },
 			{ TR_SEE_INVIS, 20 },
@@ -364,7 +364,7 @@ const player_race_info race_info[MAX_RACES] =
 		2,
 		0x07FFE757,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_FIRE, 5 },
 			{ TR_RES_COLD, 10 },
@@ -385,7 +385,7 @@ const player_race_info race_info[MAX_RACES] =
 		4,
 		0x12334746,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_SUST_INT },
 			{ TR_SUST_WIS },
@@ -404,7 +404,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x1DB537CB,
 		PlayerRaceLifeType::DEMON,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_FIRE },
 			{ TR_SEE_INVIS, 10 },
@@ -421,7 +421,7 @@ const player_race_info race_info[MAX_RACES] =
 		4,
 		0x00800001,
 		PlayerRaceLifeType::NONLIVING,
-		PlayerRaceFood::MANA,
+		PlayerRaceFoodType::MANA,
         {
 			{ TR_RES_POIS },
 			{ TR_SEE_INVIS },
@@ -441,7 +441,7 @@ const player_race_info race_info[MAX_RACES] =
 		2,
 		0x0234070F,
 		PlayerRaceLifeType::UNDEAD,
-		PlayerRaceFood::MANA,
+		PlayerRaceFoodType::MANA,
 		{
 			{ TR_RES_COLD, 10 },
 			{ TR_RES_POIS },
@@ -461,7 +461,7 @@ const player_race_info race_info[MAX_RACES] =
 		2,
 		0x00800001,
 		PlayerRaceLifeType::UNDEAD,
-		PlayerRaceFood::MANA,
+		PlayerRaceFoodType::MANA,
 		{
 			{ TR_RES_COLD, 5 },
 			{ TR_RES_POIS },
@@ -482,7 +482,7 @@ const player_race_info race_info[MAX_RACES] =
 		5,
 		0x067DC7FF,
 		PlayerRaceLifeType::UNDEAD,
-		PlayerRaceFood::BLOOD,
+		PlayerRaceFoodType::BLOOD,
 		{
 			{ TR_RES_COLD },
 			{ TR_RES_POIS },
@@ -504,7 +504,7 @@ const player_race_info race_info[MAX_RACES] =
 		5,
 		0x0631474A,
 		PlayerRaceLifeType::UNDEAD,
-		PlayerRaceFood::MANA,
+		PlayerRaceFoodType::MANA,
 		{
 			{ TR_RES_COLD },
 			{ TR_RES_POIS },
@@ -528,7 +528,7 @@ const player_race_info race_info[MAX_RACES] =
 		4,
 		0x1623F65E,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_LITE },
 			{ TR_LEVITATION },
@@ -546,7 +546,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x057887CF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_CONF },
 			{ TR_RES_SOUND },
@@ -563,7 +563,7 @@ const player_race_info race_info[MAX_RACES] =
 		  0,
 		0x10010005,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::WATER,
+		PlayerRaceFoodType::WATER,
         {
 			{ TR_VUL_FIRE }
 		},
@@ -579,7 +579,7 @@ const player_race_info race_info[MAX_RACES] =
 		3,
 		0x1779F777,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_SEE_INVIS },
 			{ TR_LEVITATION },
@@ -596,7 +596,7 @@ const player_race_info race_info[MAX_RACES] =
 		5,
 		0x07EDC4DB,
 		PlayerRaceLifeType::DEMON,
-		PlayerRaceFood::CORPSE,
+		PlayerRaceFoodType::CORPSE,
         {
 			{ TR_RES_FIRE },
 			{ TR_RES_NETHER },
@@ -615,7 +615,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x1FFFF7FF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_SUST_CON },
 		},
@@ -631,7 +631,7 @@ const player_race_info race_info[MAX_RACES] =
 		  4,
 		0x1E33C7DF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_VUL_LITE },
 			{ TR_LEVITATION },
@@ -648,7 +648,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x0C18B7AD,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_CONF },
 		},
@@ -664,7 +664,7 @@ const player_race_info race_info[MAX_RACES] =
 		0,
 		0x00800001,
 		PlayerRaceLifeType::NONLIVING,
-		PlayerRaceFood::OIL,
+		PlayerRaceFoodType::OIL,
         {
 			{ TR_VUL_ELEC },
 			{ TR_RES_POIS },
@@ -684,7 +684,7 @@ const player_race_info race_info[MAX_RACES] =
 		2,
 		0x1E77E7FF,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
         {
 			{ TR_RES_WATER },
 		},

@@ -91,7 +91,7 @@ PlayerRaceLifeType PlayerRace::life() const
  * @param base_race ミミック中も元種族の情報を返すならtrue
  * @return 食料形態
  */
-PlayerRaceFood PlayerRace::food() const
+PlayerRaceFoodType PlayerRace::food() const
 {
     return this->get_info()->food;
 }

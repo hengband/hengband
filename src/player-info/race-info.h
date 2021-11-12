@@ -36,7 +36,7 @@ enum class PlayerRaceLifeType {
 /*!
  * @brief プレイヤー種族の食料形態
  */
-enum class PlayerRaceFood {
+enum class PlayerRaceFoodType {
     RATION = 0, //!< 食料
     WATER = 1, //!< 水
     OIL = 2, //!< 油
@@ -104,7 +104,7 @@ struct player_race_info {
 
     uint32_t choice{}; //!< 似つかわしい職業(ミミック時はミミック種族属性) / Legal class choices
     PlayerRaceLifeType life{}; //!< 生命の形態
-    PlayerRaceFood food{}; //!< 食料の形態
+    PlayerRaceFoodType food{}; //!< 食料の形態
 
     std::vector<player_race_condition> extra_flags;
 };

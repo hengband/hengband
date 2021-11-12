@@ -4,7 +4,7 @@
 
 enum class PlayerRaceType;
 enum class PlayerRaceLifeType;
-enum class PlayerRaceFood;
+enum class PlayerRaceFoodType;
 struct player_type;
 struct player_race_info;
 class PlayerRace {
@@ -15,7 +15,7 @@ public:
     TrFlags tr_flags() const;
     const player_race_info *get_info() const;
     PlayerRaceLifeType life() const;
-    PlayerRaceFood food() const;
+    PlayerRaceFoodType food() const;
 
     bool is_mimic_nonliving() const;
     bool has_cut_immunity() const;

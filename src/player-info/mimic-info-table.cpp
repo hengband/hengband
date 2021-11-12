@@ -23,7 +23,7 @@ const player_race_info mimic_info[MAX_MIMIC_FORMS] =
 		0,
 		0x000000,
 		PlayerRaceLifeType::LIVING,
-		PlayerRaceFood::RATION,
+		PlayerRaceFoodType::RATION,
 		{ },
 	},
 	{
@@ -37,7 +37,7 @@ const player_race_info mimic_info[MAX_MIMIC_FORMS] =
 		5,
 		0x000003,
 		PlayerRaceLifeType::DEMON,
-		PlayerRaceFood::CORPSE,
+		PlayerRaceFoodType::CORPSE,
 		{
 			{ TR_RES_FIRE },
 			{ TR_RES_NETHER },
@@ -58,7 +58,7 @@ const player_race_info mimic_info[MAX_MIMIC_FORMS] =
 		20,
 		0x000003,
 		PlayerRaceLifeType::DEMON,
-		PlayerRaceFood::CORPSE,
+		PlayerRaceFoodType::CORPSE,
 		{
 			{ TR_IM_FIRE },
 			{ TR_RES_COLD },
@@ -90,7 +90,7 @@ const player_race_info mimic_info[MAX_MIMIC_FORMS] =
 		5,
 		0x000005,
 		PlayerRaceLifeType::UNDEAD,
-		PlayerRaceFood::BLOOD,
+		PlayerRaceFoodType::BLOOD,
 		{
 			{ TR_RES_COLD },
 			{ TR_RES_POIS },
