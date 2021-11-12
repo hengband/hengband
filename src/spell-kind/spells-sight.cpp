@@ -225,7 +225,7 @@ void aggravate_monsters(player_type *player_ptr, MONSTER_IDX who)
             }
 
             if (!is_pet(m_ptr))
-                m_ptr->mflag2.set(MFLAG2::NOPET);
+                m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
         }
 
         if (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
@@ -362,8 +362,8 @@ bool deathray_monsters(player_type *player_ptr)
 void probed_monster_info(char *buf, player_type *player_ptr, monster_type *m_ptr, monster_race *r_ptr)
 {
     if (!is_original_ap(m_ptr)) {
-        if (m_ptr->mflag2.has(MFLAG2::KAGE))
-            m_ptr->mflag2.reset(MFLAG2::KAGE);
+        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE))
+            m_ptr->mflag2.reset(MonsterConstantFlagType::KAGE);
 
         m_ptr->ap_r_idx = m_ptr->r_idx;
         lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);

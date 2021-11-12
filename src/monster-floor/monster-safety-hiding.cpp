@@ -49,7 +49,7 @@ static coordinate_candidate sweep_safe_coordinate(player_type *player_ptr, MONST
         if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, riding_mode))
             continue;
 
-        if (m_ptr->mflag2.has_not(MFLAG2::NOFLOW)) {
+        if (m_ptr->mflag2.has_not(MonsterConstantFlagType::NOFLOW)) {
             byte dist = g_ptr->get_distance(r_ptr);
             if (dist == 0)
                 continue;

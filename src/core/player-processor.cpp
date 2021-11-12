@@ -131,7 +131,7 @@ void process_player(player_type *player_ptr)
             if (!monster_is_valid(m_ptr))
                 continue;
 
-            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
+            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
             update_monster(player_ptr, m_idx, false);
         }
 
@@ -355,11 +355,11 @@ void process_player(player_type *player_ptr)
 
                 // 感知中のモンスターのフラグを落とす処理
                 // 感知したターンはMFLAG2_SHOWを落とし、次のターンに感知中フラグのMFLAG2_MARKを落とす
-                if (m_ptr->mflag2.has(MFLAG2::MARK)) {
-                    if (m_ptr->mflag2.has(MFLAG2::SHOW)) {
-                        m_ptr->mflag2.reset(MFLAG2::SHOW);
+                if (m_ptr->mflag2.has(MonsterConstantFlagType::MARK)) {
+                    if (m_ptr->mflag2.has(MonsterConstantFlagType::SHOW)) {
+                        m_ptr->mflag2.reset(MonsterConstantFlagType::SHOW);
                     } else {
-                        m_ptr->mflag2.reset(MFLAG2::MARK);
+                        m_ptr->mflag2.reset(MonsterConstantFlagType::MARK);
                         m_ptr->ml = false;
                         update_monster(player_ptr, m_idx, false);
                         if (player_ptr->health_who == m_idx)

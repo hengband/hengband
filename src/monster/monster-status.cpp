@@ -422,7 +422,7 @@ void monster_gain_exp(player_type *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
     }
 
     m_ptr->exp += new_exp;
-    if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         return;
     }
 

@@ -512,7 +512,7 @@ void update_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool full)
             um_ptr->do_disturb = true;
     }
 
-    if (um_ptr->m_ptr->mflag2.has(MFLAG2::MARK))
+    if (um_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::MARK))
         um_ptr->flag = true;
 
     decide_sight_invisible_monster(player_ptr, um_ptr, m_idx);

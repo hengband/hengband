@@ -11,7 +11,7 @@ enum class MonsterTemporaryFlagType {
     MAX,
 };
 
-enum class MFLAG2 {
+enum class MonsterConstantFlagType {
     KAGE = 0, /* Monster is kage */
     NOPET = 1, /* Cannot make monster pet */
     NOGENO = 2, /* Cannot genocide */

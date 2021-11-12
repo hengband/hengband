@@ -402,9 +402,9 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
     // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
     std::bitset<32> rd_bits_smart(tmp32u);
-    m_ptr->mflag2[MFLAG2::CLONED] = rd_bits_smart[22];
-    m_ptr->mflag2[MFLAG2::PET] = rd_bits_smart[23];
-    m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits_smart[28];
+    m_ptr->mflag2[MonsterConstantFlagType::CLONED] = rd_bits_smart[22];
+    m_ptr->mflag2[MonsterConstantFlagType::PET] = rd_bits_smart[23];
+    m_ptr->mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits_smart[28];
     m_ptr->smart.reset(i2enum<SM>(22)).reset(i2enum<SM>(23)).reset(i2enum<SM>(28));
 
     if (h_older_than(0, 4, 5)) {
@@ -416,16 +416,16 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     if (h_older_than(0, 2, 2)) {
         if (m_ptr->r_idx < 0) {
             m_ptr->r_idx = (0 - m_ptr->r_idx);
-            m_ptr->mflag2.set(MFLAG2::KAGE);
+            m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
         }
     } else {
         auto tmp8u = rd_byte();
-        constexpr auto base = enum2i(MFLAG2::KAGE);
+        constexpr auto base = enum2i(MonsterConstantFlagType::KAGE);
         migrate_bitflag_to_flaggroup(m_ptr->mflag2, tmp8u, base, 7);
     }
 
     if (h_older_than(1, 0, 12)) {
-        if (m_ptr->mflag2.has(MFLAG2::KAGE))
+        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE))
             m_ptr->ap_r_idx = MON_KAGE;
     }
 

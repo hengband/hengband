@@ -102,7 +102,7 @@ static void evaluate_monster_exp(player_type *player_ptr, char *buf, monster_typ
         return;
     }
 
-    if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MFLAG2::KAGE)) {
+    if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
         if (!allow_debug_options) {
             sprintf(buf, "??");
             return;

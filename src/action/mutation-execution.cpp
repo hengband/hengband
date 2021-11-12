@@ -248,7 +248,7 @@ bool exe_mutation_power(player_type *player_ptr, PlayerMutationType power)
         monster_race *r_ptr;
         r_ptr = &r_info[m_ptr->r_idx];
         if ((r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags1 & RF1_QUESTOR) && !(r_ptr->flags1 & RF1_UNIQUE) && !player_ptr->current_floor_ptr->inside_arena
-            && !player_ptr->current_floor_ptr->inside_quest && (r_ptr->level < randint1(player_ptr->lev + 50)) && m_ptr->mflag2.has_not(MFLAG2::NOGENO)) {
+            && !player_ptr->current_floor_ptr->inside_quest && (r_ptr->level < randint1(player_ptr->lev + 50)) && m_ptr->mflag2.has_not(MonsterConstantFlagType::NOGENO)) {
             if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
@@ -262,7 +262,7 @@ bool exe_mutation_power(player_type *player_ptr, PlayerMutationType power)
 
         msg_print(_("祈りは効果がなかった！", "Your invocation is ineffectual!"));
         if (one_in_(13))
-            m_ptr->mflag2.set(MFLAG2::NOGENO);
+            m_ptr->mflag2.set(MonsterConstantFlagType::NOGENO);
 
         return true;
     }
