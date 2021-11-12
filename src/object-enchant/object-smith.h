@@ -16,7 +16,7 @@ class ItemTester;
 struct smith_data_type;
 
 enum class SmithEffectType : int16_t;
-enum class SmithCategory;
+enum class SmithCategoryType;
 enum class SmithEssence : int16_t;
 enum class RandomArtActType : short;
 
@@ -32,7 +32,7 @@ public:
 
     static const std::vector<SmithEssence> &get_essence_list();
     static concptr get_essence_name(SmithEssence essence);
-    static std::vector<SmithEffectType> get_effect_list(SmithCategory category);
+    static std::vector<SmithEffectType> get_effect_list(SmithCategoryType category);
     static concptr get_effect_name(SmithEffectType effect);
     static std::string get_need_essences_desc(SmithEffectType effect);
     static std::vector<SmithEssence> get_need_essences(SmithEffectType effect);

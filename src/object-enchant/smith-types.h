@@ -165,7 +165,7 @@ enum class SmithEffectType : int16_t {
 /**
  * @brief アイテムに付与できる鍛冶効果のカテゴリ
  */
-enum class SmithCategory {
+enum class SmithCategoryType {
     NONE = 0,
     WEAPON_ATTR = 1, //!< 武器属性
     RESISTANCE = 2, //!< 耐性

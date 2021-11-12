@@ -242,7 +242,7 @@ std::optional<SmithEffectType> Smith::object_effect(const object_type *o_ptr)
  * @param category 鍛冶カテゴリ
  * @return 指定した鍛冶カテゴリの鍛冶効果のリスト
  */
-std::vector<SmithEffectType> Smith::get_effect_list(SmithCategory category)
+std::vector<SmithEffectType> Smith::get_effect_list(SmithCategoryType category)
 {
     std::vector<SmithEffectType> result;
 

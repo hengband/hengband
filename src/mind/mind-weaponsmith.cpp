@@ -294,7 +294,7 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *player_ptr, SmithCategory mode)
+static void add_essence(player_type *player_ptr, SmithCategoryType mode)
 {
     OBJECT_IDX item;
     bool flag;
@@ -703,10 +703,10 @@ void do_cmd_kaji(player_type *player_ptr, bool only_browse)
         mode = choose_essence();
         if (mode == 0)
             break;
-        add_essence(player_ptr, i2enum<SmithCategory>(mode));
+        add_essence(player_ptr, i2enum<SmithCategoryType>(mode));
         break;
     case 5:
-        add_essence(player_ptr, SmithCategory::ENCHANT);
+        add_essence(player_ptr, SmithCategoryType::ENCHANT);
         break;
     }
 }
