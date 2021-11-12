@@ -737,7 +737,7 @@ static void wishing_puff_of_smoke(void)
  * @param confirm 願わない場合に確認するかどうか
  * @return 願った結果
  */
-WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, bool allow_ego, bool confirm)
+WishResultType do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, bool allow_ego, bool confirm)
 {
     concptr fixed_str[] = {
 #ifdef JP
@@ -779,7 +779,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
             if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really? ")))
                 continue;
         }
-        return WishResult::NOTHING;
+        return WishResultType::NOTHING;
     }
 
 #ifndef JP
@@ -830,12 +830,12 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
 
     if (strlen(str) < 1) {
         msg_print(_("名前がない！", "What?"));
-        return WishResult::NOTHING;
+        return WishResultType::NOTHING;
     }
 
     if (!allow_art && wish_art) {
         msg_print(_("アーティファクトは願えない!", "You can not wish artifacts!"));
-        return WishResult::NOTHING;
+        return WishResultType::NOTHING;
     }
 
     if (cheat_xtra)
@@ -968,7 +968,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
 
     if ((a_ids.size() > 1) || (e_ids.size() > 1)) {
         msg_print(_("候補が多すぎる！", "Too many matches!"));
-        return WishResult::FAIL;
+        return WishResultType::FAIL;
     }
     
     if (a_ids.size() == 1) {
@@ -980,12 +980,12 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
             wishing_puff_of_smoke();
         }
 
-        return WishResult::ARTIFACT;
+        return WishResultType::ARTIFACT;
     }
     
     if (!allow_ego && (wish_ego || e_ids.size() > 0)) {
         msg_print(_("エゴアイテムは願えない！", "Can not wish ego item."));
-        return WishResult::NOTHING;
+        return WishResultType::NOTHING;
     }
     
     if (k_ids.size() == 1) {
@@ -1012,7 +1012,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
                 wishing_puff_of_smoke();
             }
 
-            return WishResult::ARTIFACT;
+            return WishResultType::ARTIFACT;
         }
 
         if (wish_randart) {
@@ -1027,10 +1027,10 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
             } else {
                 wishing_puff_of_smoke();
             }
-            return WishResult::ARTIFACT;
+            return WishResultType::ARTIFACT;
         }
 
-        WishResult res = WishResult::NOTHING;
+        WishResultType res = WishResultType::NOTHING;
         if (allow_ego && (wish_ego || e_ids.size() > 0)) {
             if (must || ok_ego) {
                 if (e_ids.size() > 0) {
@@ -1064,14 +1064,14 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
 
                     if (i == max_roll) {
                         msg_print(_("失敗！もう一度願ってみてください。", "Failed! Try again."));
-                        return WishResult::FAIL;
+                        return WishResultType::FAIL;
                     }
                 }
             } else {
                 wishing_puff_of_smoke();
             }
             
-            res = WishResult::EGO;
+            res = WishResultType::EGO;
         } else {
             for (int i = 0; i < 100; i++) {
                 o_ptr->prep(k_idx);
@@ -1079,7 +1079,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
                 if (!o_ptr->is_cursed())
                     break;
             }
-            res = WishResult::NORMAL;
+            res = WishResultType::NORMAL;
         }
 
         if (blessed && wield_slot(player_ptr, o_ptr) != -1)
@@ -1096,5 +1096,5 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
     }
 
     msg_print(_("うーん、そんなものは存在しないようだ。", "Ummmm, that is not existing..."));
-    return WishResult::FAIL;
+    return WishResultType::FAIL;
 }
