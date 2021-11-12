@@ -10,7 +10,7 @@ struct monster_race;
 typedef struct msr_type {
     monster_race *r_ptr;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
-    EnumClassFlagGroup<SM> smart;
+    EnumClassFlagGroup<MonsterSmartLearnType> smart;
 } msr_type;
 
 struct player_type;

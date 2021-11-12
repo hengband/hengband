@@ -48,6 +48,6 @@ typedef struct monster_type {
 	EXP exp{}; /*!< モンスターの現在所持経験値 */
 
 	/* TODO: クローン、ペット、有効化は意義が異なるので別変数に切り離すこと。save/loadのバージョン更新が面倒そうだけど */
-	EnumClassFlagGroup<SM> smart{}; /*!< モンスターのプレイヤーに対する学習状態 / Field for "smart_learn" - Some bit-flags for the "smart" field */
+	EnumClassFlagGroup<MonsterSmartLearnType> smart{}; /*!< モンスターのプレイヤーに対する学習状態 / Field for "smart_learn" - Some bit-flags for the "smart" field */
 	MONSTER_IDX parent_m_idx{}; /*!< 召喚主のモンスターID */
 } monster_type;

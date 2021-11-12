@@ -66,7 +66,7 @@ void MonsterLoader10::rd_monster(monster_type *m_ptr_)
             this->m_ptr->mflag2[MonsterConstantFlagType::CLONED] = rd_bits[22];
             this->m_ptr->mflag2[MonsterConstantFlagType::PET] = rd_bits[23];
             this->m_ptr->mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits[28];
-            this->m_ptr->smart.reset(i2enum<SM>(22)).reset(i2enum<SM>(23)).reset(i2enum<SM>(28));
+            this->m_ptr->smart.reset(i2enum<MonsterSmartLearnType>(22)).reset(i2enum<MonsterSmartLearnType>(23)).reset(i2enum<MonsterSmartLearnType>(28));
         } else {
             rd_FlagGroup(this->m_ptr->smart, rd_byte);
         }

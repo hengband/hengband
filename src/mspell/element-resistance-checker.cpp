@@ -11,58 +11,58 @@
 void add_cheat_remove_flags_element(player_type *player_ptr, msr_type *msr_ptr)
 {
     if (has_resist_acid(player_ptr))
-        msr_ptr->smart.set(SM::RES_ACID);
+        msr_ptr->smart.set(MonsterSmartLearnType::RES_ACID);
 
     if (is_oppose_acid(player_ptr))
-        msr_ptr->smart.set(SM::OPP_ACID);
+        msr_ptr->smart.set(MonsterSmartLearnType::OPP_ACID);
 
     if (has_immune_acid(player_ptr))
-        msr_ptr->smart.set(SM::IMM_ACID);
+        msr_ptr->smart.set(MonsterSmartLearnType::IMM_ACID);
 
     if (has_resist_elec(player_ptr))
-        msr_ptr->smart.set(SM::RES_ELEC);
+        msr_ptr->smart.set(MonsterSmartLearnType::RES_ELEC);
 
     if (is_oppose_elec(player_ptr))
-        msr_ptr->smart.set(SM::OPP_ELEC);
+        msr_ptr->smart.set(MonsterSmartLearnType::OPP_ELEC);
 
     if (has_immune_elec(player_ptr))
-        msr_ptr->smart.set(SM::IMM_ELEC);
+        msr_ptr->smart.set(MonsterSmartLearnType::IMM_ELEC);
 
     if (has_resist_fire(player_ptr))
-        msr_ptr->smart.set(SM::RES_FIRE);
+        msr_ptr->smart.set(MonsterSmartLearnType::RES_FIRE);
 
     if (is_oppose_fire(player_ptr))
-        msr_ptr->smart.set(SM::OPP_FIRE);
+        msr_ptr->smart.set(MonsterSmartLearnType::OPP_FIRE);
 
     if (has_immune_fire(player_ptr))
-        msr_ptr->smart.set(SM::IMM_FIRE);
+        msr_ptr->smart.set(MonsterSmartLearnType::IMM_FIRE);
 
     if (has_resist_cold(player_ptr))
-        msr_ptr->smart.set(SM::RES_COLD);
+        msr_ptr->smart.set(MonsterSmartLearnType::RES_COLD);
 
     if (is_oppose_cold(player_ptr))
-        msr_ptr->smart.set(SM::OPP_COLD);
+        msr_ptr->smart.set(MonsterSmartLearnType::OPP_COLD);
 
     if (has_immune_cold(player_ptr))
-        msr_ptr->smart.set(SM::IMM_COLD);
+        msr_ptr->smart.set(MonsterSmartLearnType::IMM_COLD);
 
     if (has_resist_pois(player_ptr))
-        msr_ptr->smart.set(SM::RES_POIS);
+        msr_ptr->smart.set(MonsterSmartLearnType::RES_POIS);
 
     if (is_oppose_pois(player_ptr))
-        msr_ptr->smart.set(SM::OPP_POIS);
+        msr_ptr->smart.set(MonsterSmartLearnType::OPP_POIS);
 }
 
 static void check_acid_resistance(msr_type *msr_ptr)
 {
-    if (msr_ptr->smart.has(SM::IMM_ACID)) {
+    if (msr_ptr->smart.has(MonsterSmartLearnType::IMM_ACID)) {
         msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ACID);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ACID);
         return;
     }
 
-    if (msr_ptr->smart.has_all_of({SM::OPP_ACID, SM::RES_ACID})) {
+    if (msr_ptr->smart.has_all_of({MonsterSmartLearnType::OPP_ACID, MonsterSmartLearnType::RES_ACID})) {
         if (int_outof(msr_ptr->r_ptr, 80))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
 
@@ -75,7 +75,7 @@ static void check_acid_resistance(msr_type *msr_ptr)
         return;
     }
 
-    if (msr_ptr->smart.has_any_of({SM::OPP_ACID, SM::RES_ACID})) {
+    if (msr_ptr->smart.has_any_of({MonsterSmartLearnType::OPP_ACID, MonsterSmartLearnType::RES_ACID})) {
         if (int_outof(msr_ptr->r_ptr, 30))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
 
@@ -89,14 +89,14 @@ static void check_acid_resistance(msr_type *msr_ptr)
 
 static void check_elec_resistance(msr_type *msr_ptr)
 {
-    if (msr_ptr->smart.has(SM::IMM_ELEC)) {
+    if (msr_ptr->smart.has(MonsterSmartLearnType::IMM_ELEC)) {
         msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ELEC);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ELEC);
         return;
     }
 
-    if (msr_ptr->smart.has_all_of({SM::OPP_ELEC, SM::RES_ELEC})) {
+    if (msr_ptr->smart.has_all_of({MonsterSmartLearnType::OPP_ELEC, MonsterSmartLearnType::RES_ELEC})) {
         if (int_outof(msr_ptr->r_ptr, 80))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
 
@@ -109,7 +109,7 @@ static void check_elec_resistance(msr_type *msr_ptr)
         return;
     }
 
-    if (msr_ptr->smart.has_any_of({SM::OPP_ELEC, SM::RES_ELEC})) {
+    if (msr_ptr->smart.has_any_of({MonsterSmartLearnType::OPP_ELEC, MonsterSmartLearnType::RES_ELEC})) {
         if (int_outof(msr_ptr->r_ptr, 30))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
 
@@ -123,14 +123,14 @@ static void check_elec_resistance(msr_type *msr_ptr)
 
 static void check_fire_resistance(msr_type *msr_ptr)
 {
-    if (msr_ptr->smart.has(SM::IMM_FIRE)) {
+    if (msr_ptr->smart.has(MonsterSmartLearnType::IMM_FIRE)) {
         msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BA_FIRE);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BO_FIRE);
         return;
     }
 
-    if (msr_ptr->smart.has_all_of({SM::OPP_FIRE, SM::RES_FIRE})) {
+    if (msr_ptr->smart.has_all_of({MonsterSmartLearnType::OPP_FIRE, MonsterSmartLearnType::RES_FIRE})) {
         if (int_outof(msr_ptr->r_ptr, 80))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
 
@@ -143,7 +143,7 @@ static void check_fire_resistance(msr_type *msr_ptr)
         return;
     }
 
-    if (msr_ptr->smart.has_any_of({SM::OPP_FIRE, SM::RES_FIRE})) {
+    if (msr_ptr->smart.has_any_of({MonsterSmartLearnType::OPP_FIRE, MonsterSmartLearnType::RES_FIRE})) {
         if (int_outof(msr_ptr->r_ptr, 30))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
 
@@ -157,7 +157,7 @@ static void check_fire_resistance(msr_type *msr_ptr)
 
 static void check_cold_resistance(msr_type *msr_ptr)
 {
-    if (msr_ptr->smart.has(SM::IMM_COLD)) {
+    if (msr_ptr->smart.has(MonsterSmartLearnType::IMM_COLD)) {
         msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BA_COLD);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BO_COLD);
@@ -165,7 +165,7 @@ static void check_cold_resistance(msr_type *msr_ptr)
         return;
     }
 
-    if (msr_ptr->smart.has_all_of({SM::OPP_COLD, SM::RES_COLD})) {
+    if (msr_ptr->smart.has_all_of({MonsterSmartLearnType::OPP_COLD, MonsterSmartLearnType::RES_COLD})) {
         if (int_outof(msr_ptr->r_ptr, 80))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
 
@@ -181,7 +181,7 @@ static void check_cold_resistance(msr_type *msr_ptr)
         return;
     }
 
-    if (msr_ptr->smart.has_any_of({SM::OPP_COLD, SM::RES_COLD})) {
+    if (msr_ptr->smart.has_any_of({MonsterSmartLearnType::OPP_COLD, MonsterSmartLearnType::RES_COLD})) {
         if (int_outof(msr_ptr->r_ptr, 30))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
 
@@ -198,7 +198,7 @@ static void check_cold_resistance(msr_type *msr_ptr)
 
 static void check_pois_resistance(msr_type *msr_ptr)
 {
-    if (msr_ptr->smart.has_all_of({SM::OPP_POIS, SM::RES_POIS})) {
+    if (msr_ptr->smart.has_all_of({MonsterSmartLearnType::OPP_POIS, MonsterSmartLearnType::RES_POIS})) {
         if (int_outof(msr_ptr->r_ptr, 80))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_POIS);
 
@@ -214,7 +214,7 @@ static void check_pois_resistance(msr_type *msr_ptr)
         return;
     }
 
-    if (msr_ptr->smart.has_any_of({SM::OPP_POIS, SM::RES_POIS})) {
+    if (msr_ptr->smart.has_any_of({MonsterSmartLearnType::OPP_POIS, MonsterSmartLearnType::RES_POIS})) {
         if (int_outof(msr_ptr->r_ptr, 30))
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_POIS);
 

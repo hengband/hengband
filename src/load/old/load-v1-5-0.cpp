@@ -405,7 +405,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     m_ptr->mflag2[MonsterConstantFlagType::CLONED] = rd_bits_smart[22];
     m_ptr->mflag2[MonsterConstantFlagType::PET] = rd_bits_smart[23];
     m_ptr->mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits_smart[28];
-    m_ptr->smart.reset(i2enum<SM>(22)).reset(i2enum<SM>(23)).reset(i2enum<SM>(28));
+    m_ptr->smart.reset(i2enum<MonsterSmartLearnType>(22)).reset(i2enum<MonsterSmartLearnType>(23)).reset(i2enum<MonsterSmartLearnType>(28));
 
     if (h_older_than(0, 4, 5)) {
         m_ptr->exp = 0;
