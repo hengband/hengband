@@ -67,7 +67,7 @@ void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH le
     if (has_good_luck(player_ptr)) {
         f1 += 5;
         f2 += 2;
-    } else if (player_ptr->muta.has(MUTA::BAD_LUCK)) {
+    } else if (player_ptr->muta.has(PlayerMutationType::BAD_LUCK)) {
         f1 -= 5;
         f2 -= 2;
     }

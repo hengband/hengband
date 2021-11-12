@@ -66,7 +66,7 @@
  * @param fear 攻撃を受けたモンスターが恐慌状態に陥ったかを返す参照ポインタ
  * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
  */
-static void natural_attack(player_type *player_ptr, MONSTER_IDX m_idx, MUTA attack, bool *fear, bool *mdeath)
+static void natural_attack(player_type *player_ptr, MONSTER_IDX m_idx, PlayerMutationType attack, bool *fear, bool *mdeath)
 {
     WEIGHT n_weight = 0;
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -75,31 +75,31 @@ static void natural_attack(player_type *player_ptr, MONSTER_IDX m_idx, MUTA atta
     int dice_num, dice_side;
     concptr atk_desc;
     switch (attack) {
-    case MUTA::SCOR_TAIL:
+    case PlayerMutationType::SCOR_TAIL:
         dice_num = 3;
         dice_side = 7;
         n_weight = 5;
         atk_desc = _("尻尾", "tail");
         break;
-    case MUTA::HORNS:
+    case PlayerMutationType::HORNS:
         dice_num = 2;
         dice_side = 6;
         n_weight = 15;
         atk_desc = _("角", "horns");
         break;
-    case MUTA::BEAK:
+    case PlayerMutationType::BEAK:
         dice_num = 2;
         dice_side = 4;
         n_weight = 5;
         atk_desc = _("クチバシ", "beak");
         break;
-    case MUTA::TRUNK:
+    case PlayerMutationType::TRUNK:
         dice_num = 1;
         dice_side = 4;
         n_weight = 35;
         atk_desc = _("象の鼻", "trunk");
         break;
-    case MUTA::TENTACLES:
+    case PlayerMutationType::TENTACLES:
         dice_num = 2;
         dice_side = 5;
         n_weight = 5;
@@ -140,14 +140,14 @@ static void natural_attack(player_type *player_ptr, MONSTER_IDX m_idx, MUTA atta
         anger_monster(player_ptr, m_ptr);
 
     switch (attack) {
-    case MUTA::SCOR_TAIL:
+    case PlayerMutationType::SCOR_TAIL:
         project(player_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, AttributeType::POIS, PROJECT_KILL);
         *mdeath = (m_ptr->r_idx == 0);
         break;
-    case MUTA::HORNS:
-    case MUTA::BEAK:
-    case MUTA::TRUNK:
-    case MUTA::TENTACLES:
+    case PlayerMutationType::HORNS:
+    case PlayerMutationType::BEAK:
+    case PlayerMutationType::TRUNK:
+    case PlayerMutationType::TENTACLES:
     default: {
         MonsterDamageProcessor mdp(player_ptr, m_idx, k, fear, AttributeType::ATTACK);
         *mdeath = mdp.mon_take_hit(nullptr);
@@ -174,7 +174,7 @@ bool do_cmd_attack(player_type *player_ptr, POSITION y, POSITION x, combat_optio
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
 
-    const std::initializer_list<MUTA> mutation_attack_methods = { MUTA::HORNS, MUTA::BEAK, MUTA::SCOR_TAIL, MUTA::TRUNK, MUTA::TENTACLES };
+    const std::initializer_list<PlayerMutationType> mutation_attack_methods = { PlayerMutationType::HORNS, PlayerMutationType::BEAK, PlayerMutationType::SCOR_TAIL, PlayerMutationType::TRUNK, PlayerMutationType::TENTACLES };
 
     disturb(player_ptr, false, true);
 

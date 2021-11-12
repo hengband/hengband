@@ -228,9 +228,9 @@ static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
 {
     int compensation = 0;
     if (stat == A_STR) {
-        if (player_ptr->muta.has(MUTA::HYPER_STR))
+        if (player_ptr->muta.has(PlayerMutationType::HYPER_STR))
             compensation += 4;
-        if (player_ptr->muta.has(MUTA::PUNY))
+        if (player_ptr->muta.has(PlayerMutationType::PUNY))
             compensation -= 4;
         if (player_ptr->tsuyoshi)
             compensation += 4;
@@ -238,31 +238,31 @@ static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
     }
 
     if (stat == A_WIS || stat == A_INT) {
-        if (player_ptr->muta.has(MUTA::HYPER_INT))
+        if (player_ptr->muta.has(PlayerMutationType::HYPER_INT))
             compensation += 4;
-        if (player_ptr->muta.has(MUTA::MORONIC))
+        if (player_ptr->muta.has(PlayerMutationType::MORONIC))
             compensation -= 4;
         return compensation;
     }
 
     if (stat == A_DEX) {
-        if (player_ptr->muta.has(MUTA::IRON_SKIN))
+        if (player_ptr->muta.has(PlayerMutationType::IRON_SKIN))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::LIMBER))
+        if (player_ptr->muta.has(PlayerMutationType::LIMBER))
             compensation += 3;
-        if (player_ptr->muta.has(MUTA::ARTHRITIS))
+        if (player_ptr->muta.has(PlayerMutationType::ARTHRITIS))
             compensation -= 3;
         return compensation;
     }
 
     if (stat == A_CON) {
-        if (player_ptr->muta.has(MUTA::RESILIENT))
+        if (player_ptr->muta.has(PlayerMutationType::RESILIENT))
             compensation += 4;
-        if (player_ptr->muta.has(MUTA::XTRA_FAT))
+        if (player_ptr->muta.has(PlayerMutationType::XTRA_FAT))
             compensation += 2;
-        if (player_ptr->muta.has(MUTA::ALBINO))
+        if (player_ptr->muta.has(PlayerMutationType::ALBINO))
             compensation -= 4;
-        if (player_ptr->muta.has(MUTA::FLESH_ROT))
+        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
             compensation -= 2;
         if (player_ptr->tsuyoshi)
             compensation += 4;
@@ -270,17 +270,17 @@ static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
     }
 
     if (stat == A_CHR) {
-        if (player_ptr->muta.has(MUTA::SILLY_VOI))
+        if (player_ptr->muta.has(PlayerMutationType::SILLY_VOI))
             compensation -= 4;
-        if (player_ptr->muta.has(MUTA::BLANK_FAC))
+        if (player_ptr->muta.has(PlayerMutationType::BLANK_FAC))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::FLESH_ROT))
+        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::SCALES))
+        if (player_ptr->muta.has(PlayerMutationType::SCALES))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::WART_SKIN))
+        if (player_ptr->muta.has(PlayerMutationType::WART_SKIN))
             compensation -= 2;
-        if (player_ptr->muta.has(MUTA::ILL_NORM))
+        if (player_ptr->muta.has(PlayerMutationType::ILL_NORM))
             compensation = 0;
         return compensation;
     }

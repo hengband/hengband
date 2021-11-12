@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class MUTA {
+enum class PlayerMutationType {
     SPIT_ACID = 0, /*!< 突然変異: 酸の唾 */
     BR_FIRE = 1, /*!< 突然変異: 炎のブレス */
     HYPN_GAZE = 2, /*!< 突然変異: 催眠睨み */

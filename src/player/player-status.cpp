@@ -1099,7 +1099,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *player_ptr)
     pow = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
     pow += ((cp_ptr->x_sav * player_ptr->lev / 10) + (ap_ptr->a_sav * player_ptr->lev / 50));
 
-    if (player_ptr->muta.has(MUTA::MAGIC_RES))
+    if (player_ptr->muta.has(PlayerMutationType::MAGIC_RES))
         pow += (15 + (player_ptr->lev / 5));
 
     if (has_resist_curse(player_ptr))
@@ -1164,7 +1164,7 @@ static ACTION_SKILL_POWER calc_search(player_type *player_ptr)
             pow += (o_ptr->pval * 5);
     }
 
-    if (player_ptr->muta.has(MUTA::XTRA_EYES)) {
+    if (player_ptr->muta.has(PlayerMutationType::XTRA_EYES)) {
         pow += 15;
     }
 
@@ -1215,7 +1215,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *player_ptr)
         pow -= 15;
     }
 
-    if (player_ptr->muta.has(MUTA::XTRA_EYES)) {
+    if (player_ptr->muta.has(PlayerMutationType::XTRA_EYES)) {
         pow += 15;
     }
 
@@ -1630,15 +1630,15 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         ac += 5;
     }
 
-    if (player_ptr->muta.has(MUTA::WART_SKIN)) {
+    if (player_ptr->muta.has(PlayerMutationType::WART_SKIN)) {
         ac += 5;
     }
 
-    if (player_ptr->muta.has(MUTA::SCALES)) {
+    if (player_ptr->muta.has(PlayerMutationType::SCALES)) {
         ac += 10;
     }
 
-    if (player_ptr->muta.has(MUTA::IRON_SKIN)) {
+    if (player_ptr->muta.has(PlayerMutationType::IRON_SKIN)) {
         ac += 25;
     }
 
@@ -2643,7 +2643,7 @@ void check_experience(player_type *player_ptr)
         if (player_ptr->lev > player_ptr->max_plv) {
             player_ptr->max_plv = player_ptr->lev;
 
-            if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || player_ptr->muta.has(MUTA::CHAOS_GIFT)) {
+            if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)) {
                 level_reward = true;
             }
             if (player_ptr->prace == PlayerRaceType::BEASTMAN) {

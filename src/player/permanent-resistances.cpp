@@ -25,26 +25,26 @@ static void add_mutation_flags(player_type *player_ptr, TrFlags &flags)
     if (player_ptr->muta.none())
         return;
 
-    if (player_ptr->muta.has(MUTA::FLESH_ROT))
+    if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
         flags.reset(TR_REGEN);
-    if (player_ptr->muta.has_any_of({ MUTA::XTRA_FAT, MUTA::XTRA_LEGS, MUTA::SHORT_LEG }))
+    if (player_ptr->muta.has_any_of({ PlayerMutationType::XTRA_FAT, PlayerMutationType::XTRA_LEGS, PlayerMutationType::SHORT_LEG }))
         flags.set(TR_SPEED);
-    if (player_ptr->muta.has(MUTA::ELEC_TOUC))
+    if (player_ptr->muta.has(PlayerMutationType::ELEC_TOUC))
         flags.set(TR_SH_ELEC);
-    if (player_ptr->muta.has(MUTA::FIRE_BODY)) {
+    if (player_ptr->muta.has(PlayerMutationType::FIRE_BODY)) {
         flags.set(TR_SH_FIRE);
         flags.set(TR_LITE_1);
     }
 
-    if (player_ptr->muta.has(MUTA::WINGS))
+    if (player_ptr->muta.has(PlayerMutationType::WINGS))
         flags.set(TR_LEVITATION);
-    if (player_ptr->muta.has(MUTA::FEARLESS))
+    if (player_ptr->muta.has(PlayerMutationType::FEARLESS))
         flags.set(TR_RES_FEAR);
-    if (player_ptr->muta.has(MUTA::REGEN))
+    if (player_ptr->muta.has(PlayerMutationType::REGEN))
         flags.set(TR_REGEN);
-    if (player_ptr->muta.has(MUTA::ESP))
+    if (player_ptr->muta.has(PlayerMutationType::ESP))
         flags.set(TR_TELEPATHY);
-    if (player_ptr->muta.has(MUTA::MOTION))
+    if (player_ptr->muta.has(PlayerMutationType::MOTION))
         flags.set(TR_FREE_ACT);
 }
 

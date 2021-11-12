@@ -76,7 +76,7 @@ struct rc_type {
      * @param rpi レイシャル/クラスパワー定義(参照渡し)
      * @param number 突然変異ID
      */
-    void add_power(rpi_type &rpi, MUTA flag);
+    void add_power(rpi_type &rpi, PlayerMutationType flag);
 
     /*!
      * @brief レイシャル/クラスパワー数を返す

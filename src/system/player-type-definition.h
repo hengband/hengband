@@ -151,7 +151,7 @@ public:
 
     int16_t chaos_patron{};
 
-    EnumClassFlagGroup<MUTA> muta{}; /*!< 突然変異 / mutations */
+    EnumClassFlagGroup<PlayerMutationType> muta{}; /*!< 突然変異 / mutations */
 
     int16_t virtues[8]{};
     int16_t vir_types[8]{};

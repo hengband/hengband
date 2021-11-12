@@ -16,7 +16,7 @@ void rc_type::add_power(rpi_type& rpi, int number)
     this->power_desc.push_back(std::move(rpi));
 }
 
-void rc_type::add_power(rpi_type &rpi, MUTA flag)
+void rc_type::add_power(rpi_type &rpi, PlayerMutationType flag)
 {
     add_power(rpi, enum2i(flag));
 }

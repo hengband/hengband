@@ -66,11 +66,11 @@ int16_t PlayerWisdom::mutation_value()
     int16_t result = 0;
 
     if (this->player_ptr->muta.any()) {
-        if (this->player_ptr->muta.has(MUTA::HYPER_INT)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::HYPER_INT)) {
             result += 4;
         }
 
-        if (this->player_ptr->muta.has(MUTA::MORONIC)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::MORONIC)) {
             result -= 4;
         }
     }

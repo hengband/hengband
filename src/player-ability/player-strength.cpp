@@ -111,11 +111,11 @@ int16_t PlayerStrength::mutation_value()
     int16_t result = 0;
 
     if (this->player_ptr->muta.any()) {
-        if (this->player_ptr->muta.has(MUTA::HYPER_STR)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::HYPER_STR)) {
             result += 4;
         }
 
-        if (this->player_ptr->muta.has(MUTA::PUNY)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::PUNY)) {
             result -= 4;
         }
     }

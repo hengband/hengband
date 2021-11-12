@@ -104,15 +104,15 @@ int16_t PlayerDexterity::mutation_value()
 {
     int16_t result = 0;
 
-    if (this->player_ptr->muta.has(MUTA::IRON_SKIN)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::IRON_SKIN)) {
         result -= 1;
     }
 
-    if (this->player_ptr->muta.has(MUTA::LIMBER)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::LIMBER)) {
         result += 3;
     }
 
-    if (this->player_ptr->muta.has(MUTA::ARTHRITIS)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::ARTHRITIS)) {
         result -= 3;
     }
 

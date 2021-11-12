@@ -654,7 +654,7 @@ BIT_FLAGS has_esp_telepathy(player_type *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->muta.has(MUTA::ESP)) {
+    if (player_ptr->muta.has(PlayerMutationType::ESP)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -795,7 +795,7 @@ BIT_FLAGS has_sh_fire(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_FIRE);
 
-    if (player_ptr->muta.has(MUTA::FIRE_BODY)) {
+    if (player_ptr->muta.has(PlayerMutationType::FIRE_BODY)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -810,7 +810,7 @@ BIT_FLAGS has_sh_elec(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_ELEC);
 
-    if (player_ptr->muta.has(MUTA::ELEC_TOUC))
+    if (player_ptr->muta.has(PlayerMutationType::ELEC_TOUC))
         result |= FLAG_CAUSE_MUTATION;
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_SHOCK_CLOAK) || player_ptr->ult_res) {
@@ -876,7 +876,7 @@ BIT_FLAGS has_free_act(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_FREE_ACT);
 
-    if (player_ptr->muta.has(MUTA::MOTION))
+    if (player_ptr->muta.has(PlayerMutationType::MOTION))
         result |= FLAG_CAUSE_MUTATION;
 
     if (player_ptr->ult_res || player_ptr->magicdef) {
@@ -956,7 +956,7 @@ BIT_FLAGS has_levitation(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_LEVITATION);
 
-    if (player_ptr->muta.has(MUTA::WINGS)) {
+    if (player_ptr->muta.has(PlayerMutationType::WINGS)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1006,14 +1006,14 @@ BIT_FLAGS has_regenerate(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_REGEN);
 
-    if (player_ptr->muta.has(MUTA::REGEN))
+    if (player_ptr->muta.has(PlayerMutationType::REGEN))
         result |= FLAG_CAUSE_MUTATION;
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_DEMON_AURA) || player_ptr->ult_res || player_ptr->tim_regen) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->muta.has(MUTA::FLESH_ROT))
+    if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
         result = 0L;
 
     return result;
@@ -1149,7 +1149,7 @@ BIT_FLAGS has_vuln_acid(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_ACID);
 
-    if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
+    if (player_ptr->muta.has(PlayerMutationType::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1173,7 +1173,7 @@ BIT_FLAGS has_vuln_elec(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_ELEC);
 
-    if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
+    if (player_ptr->muta.has(PlayerMutationType::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1197,7 +1197,7 @@ BIT_FLAGS has_vuln_fire(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_FIRE);
 
-    if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
+    if (player_ptr->muta.has(PlayerMutationType::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1221,7 +1221,7 @@ BIT_FLAGS has_vuln_cold(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_COLD);
 
-    if (player_ptr->muta.has(MUTA::VULN_ELEM)) {
+    if (player_ptr->muta.has(PlayerMutationType::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1411,7 +1411,7 @@ BIT_FLAGS has_resist_fear(player_type *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_FEAR);
 
-    if (player_ptr->muta.has(MUTA::FEARLESS))
+    if (player_ptr->muta.has(PlayerMutationType::FEARLESS))
         result |= FLAG_CAUSE_MUTATION;
 
     if (is_hero(player_ptr) || is_shero(player_ptr) || player_ptr->ult_res) {
@@ -1659,7 +1659,7 @@ bool has_not_monk_weapon(player_type *player_ptr, int i)
 
 bool has_good_luck(player_type *player_ptr)
 {
-    return (player_ptr->ppersonality == PERSONALITY_LUCKY) || (player_ptr->muta.has(MUTA::GOOD_LUCK));
+    return (player_ptr->ppersonality == PERSONALITY_LUCKY) || (player_ptr->muta.has(PlayerMutationType::GOOD_LUCK));
 }
 
 BIT_FLAGS player_aggravate_state(player_type *player_ptr)

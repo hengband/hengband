@@ -110,19 +110,19 @@ int16_t PlayerConstitution::mutation_value()
     int16_t result = 0;
 
     if (this->player_ptr->muta.any()) {
-        if (this->player_ptr->muta.has(MUTA::RESILIENT)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::RESILIENT)) {
             result += 4;
         }
 
-        if (this->player_ptr->muta.has(MUTA::ALBINO)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::ALBINO)) {
             result -= 4;
         }
 
-        if (this->player_ptr->muta.has(MUTA::XTRA_FAT)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::XTRA_FAT)) {
             result += 2;
         }
 
-        if (this->player_ptr->muta.has(MUTA::FLESH_ROT)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::FLESH_ROT)) {
             result -= 2;
         }
     }
