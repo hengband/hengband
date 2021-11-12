@@ -209,27 +209,27 @@ static chaotic_effect select_chaotic_effect(player_type *player_ptr, player_atta
  * @param pa_ptr プレイヤー攻撃情報への参照ポインタ
  * @return 魔術属性効果
  */
-static MagicalBrandEffect select_magical_brand_effect(player_type *player_ptr, player_attack_type *pa_ptr)
+static MagicalBrandEffectType select_magical_brand_effect(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     if (pa_ptr->flags.has_not(TR_BRAND_MAGIC))
-        return MagicalBrandEffect::NONE;
+        return MagicalBrandEffectType::NONE;
 
     if (one_in_(10))
         chg_virtue(player_ptr, V_CHANCE, 1);
 
     if (one_in_(5))
-        return MagicalBrandEffect::STUN;
+        return MagicalBrandEffectType::STUN;
 
     if (one_in_(5))
-        return MagicalBrandEffect::SCARE;
+        return MagicalBrandEffectType::SCARE;
 
     if (one_in_(10))
-        return MagicalBrandEffect::DISPELL;
+        return MagicalBrandEffectType::DISPELL;
 
     if (one_in_(16))
-        return MagicalBrandEffect::PROBE;
+        return MagicalBrandEffectType::PROBE;
 
-    return MagicalBrandEffect::EXTRA;
+    return MagicalBrandEffectType::EXTRA;
 }
 
 /*!
@@ -240,9 +240,9 @@ static MagicalBrandEffect select_magical_brand_effect(player_type *player_ptr, p
 static DICE_NUMBER magical_brand_extra_dice(player_attack_type *pa_ptr)
 {
     switch (pa_ptr->magical_effect) {
-    case MagicalBrandEffect::NONE:
+    case MagicalBrandEffectType::NONE:
         return 0;
-    case MagicalBrandEffect::EXTRA:
+    case MagicalBrandEffectType::EXTRA:
         return 1;
     default:
         return 2;

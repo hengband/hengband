@@ -22,7 +22,7 @@ enum chaotic_effect {
 /*!
  * @brief 魔術効果種別
  */
-enum class MagicalBrandEffect { NONE = 0, EXTRA = 1, STUN = 2, SCARE = 3, DISPELL = 4, PROBE = 5, MAX };
+enum class MagicalBrandEffectType { NONE = 0, EXTRA = 1, STUN = 2, SCARE = 3, DISPELL = 4, PROBE = 5, MAX };
 
 /*!
  * @brief プレイヤーの打撃に関する情報
@@ -48,7 +48,7 @@ typedef struct player_attack_type {
     int num_blow{}; //!< 打撃回数
     TrFlags flags{}; //!< 武器フラグ
     chaotic_effect chaos_effect{}; //!< カオス効果
-    MagicalBrandEffect magical_effect{}; //!< 魔術効果
+    MagicalBrandEffectType magical_effect{}; //!< 魔術効果
     bool *fear{}; //!< 恐怖したかどうか
     bool *mdeath{}; //!< 死んだかどうか
     bool can_drain{}; //!< 吸血できるかどうか
