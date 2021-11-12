@@ -214,7 +214,7 @@ void print_state(player_type *player_ptr)
     }
     case ACTION_SAMURAI_STANCE: {
         if (auto stance = PlayerClass(player_ptr).get_samurai_stance();
-            stance != SamuraiStance::NONE) {
+            stance != SamuraiStanceType::NONE) {
             strcpy(text, samurai_stances[enum2i(stance) - 1].desc);
         }
         break;

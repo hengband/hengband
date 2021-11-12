@@ -38,7 +38,7 @@ int16_t PlayerCharisma::stance_value()
 {
     int16_t result = 0;
 
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         result += 5;
     }
 

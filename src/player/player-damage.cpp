@@ -283,7 +283,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
 
     if (player_ptr->sutemi)
         damage *= 2;
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::IAI))
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::IAI))
         damage += (damage + 4) / 5;
 
     if (damage_type != DAMAGE_USELIFE) {
@@ -323,7 +323,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
             }
         }
 
-        if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
+        if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
             damage /= 2;
             if ((damage == 0) && one_in_(2))
                 damage = 1;

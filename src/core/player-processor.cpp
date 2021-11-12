@@ -248,7 +248,7 @@ void process_player(player_type *player_ptr)
         player_ptr->redraw |= PR_MANA;
     }
 
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         if (player_ptr->csp < 3) {
             set_action(player_ptr, ACTION_NONE);
         } else {

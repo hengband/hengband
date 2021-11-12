@@ -233,7 +233,7 @@ static bool update_weird_telepathy(player_type *player_ptr, um_type *um_ptr, MON
 static void update_telepathy_sight(player_type *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)

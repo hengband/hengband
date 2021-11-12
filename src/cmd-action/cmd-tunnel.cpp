@@ -35,7 +35,7 @@
 void do_cmd_tunnel(player_type *player_ptr)
 {
     bool more = false;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (command_arg) {
         command_rep = command_arg - 1;

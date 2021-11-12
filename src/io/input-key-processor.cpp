@@ -614,7 +614,7 @@ void process_command(player_type *player_ptr)
     case '`': {
         if (!player_ptr->wild_mode)
             do_cmd_travel(player_ptr);
-        PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+        PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
         break;
     }

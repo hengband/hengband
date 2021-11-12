@@ -171,7 +171,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<samurai_data_type
         // 古いセーブファイルの剣術家のデータは magic_num には保存されていないので読み捨てる
         load_old_savfile_magic_num();
     } else {
-        samurai_data->stance = i2enum<SamuraiStance>(rd_byte());
+        samurai_data->stance = i2enum<SamuraiStanceType>(rd_byte());
     }
 }
 

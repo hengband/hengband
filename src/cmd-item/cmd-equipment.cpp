@@ -98,7 +98,7 @@ void do_cmd_wield(player_type *player_ptr)
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     OBJECT_IDX need_switch_wielding = 0;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     concptr q = _("どれを装備しますか? ", "Wear/Wield which item? ");
     concptr s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
@@ -301,7 +301,7 @@ void do_cmd_takeoff(player_type *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     concptr q = _("どれを装備からはずしますか? ", "Take off which item? ");
     concptr s = _("はずせる装備がない。", "You are not wearing anything to take off.");

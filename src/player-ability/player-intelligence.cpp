@@ -42,7 +42,7 @@ int16_t PlayerIntelligence::stance_value()
     int16_t result = 0;
 
     PlayerClass pc(player_ptr);
-    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if (pc.samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         result += 5;
     }
 

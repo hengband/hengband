@@ -315,7 +315,7 @@ void concentration(player_type *player_ptr)
         return;
     }
 
-    if (!PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
+    if (!PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::NONE)) {
         msg_print(_("今は構えに集中している。", "You're already concentrating on your stance."));
         return;
     }
@@ -366,7 +366,7 @@ bool choose_samurai_stance(player_type *player_ptr)
     prt("", 1, 0);
     prt(_("        どの型で構えますか？", "        Choose Stance: "), 1, 14);
 
-    SamuraiStance new_stance = SamuraiStance::NONE;
+    SamuraiStanceType new_stance = SamuraiStanceType::NONE;
     while (true) {
         choice = inkey();
 
@@ -381,16 +381,16 @@ bool choose_samurai_stance(player_type *player_ptr)
             screen_load();
             return true;
         } else if ((choice == 'b') || (choice == 'B')) {
-            new_stance = SamuraiStance::IAI;
+            new_stance = SamuraiStanceType::IAI;
             break;
         } else if (((choice == 'c') || (choice == 'C')) && (player_ptr->lev > 29)) {
-            new_stance = SamuraiStance::FUUJIN;
+            new_stance = SamuraiStanceType::FUUJIN;
             break;
         } else if (((choice == 'd') || (choice == 'D')) && (player_ptr->lev > 34)) {
-            new_stance = SamuraiStance::KOUKIJIN;
+            new_stance = SamuraiStanceType::KOUKIJIN;
             break;
         } else if (((choice == 'e') || (choice == 'E')) && (player_ptr->lev > 39)) {
-            new_stance = SamuraiStance::MUSOU;
+            new_stance = SamuraiStanceType::MUSOU;
             break;
         }
     }
@@ -423,7 +423,7 @@ int calc_attack_quality(player_type *player_ptr, player_attack_type *pa_ptr)
     if (pa_ptr->mode == HISSATSU_IAI)
         chance += 60;
 
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         chance += 150;
     }
 
@@ -473,7 +473,7 @@ void mineuchi(player_type *player_ptr, player_attack_type *pa_ptr)
  */
 void musou_counterattack(player_type *player_ptr, monap_type *monap_ptr)
 {
-    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
+    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
         || (player_ptr->csp <= 7))
         return;
 
