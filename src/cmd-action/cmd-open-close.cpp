@@ -121,7 +121,7 @@ void do_cmd_open(player_type *player_ptr)
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         feat = g_ptr->get_feat_mimic();
         o_idx = chest_check(player_ptr->current_floor_ptr, y, x, false);
-        if (f_info[feat].flags.has_not(FF::OPEN) && !o_idx) {
+        if (f_info[feat].flags.has_not(FloorFeatureType::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (g_ptr->m_idx && player_ptr->riding != g_ptr->m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -170,7 +170,7 @@ void do_cmd_close(player_type *player_ptr)
         x = player_ptr->x + ddx[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         feat = g_ptr->get_feat_mimic();
-        if (f_info[feat].flags.has_not(FF::CLOSE)) {
+        if (f_info[feat].flags.has_not(FloorFeatureType::CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
         } else if (g_ptr->m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -280,7 +280,7 @@ void do_cmd_bash(player_type *player_ptr)
         x = player_ptr->x + ddx[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         feat = g_ptr->get_feat_mimic();
-        if (f_info[feat].flags.has_not(FF::BASH)) {
+        if (f_info[feat].flags.has_not(FloorFeatureType::BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
         } else if (g_ptr->m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -348,7 +348,7 @@ void do_cmd_spike(player_type *player_ptr)
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
     INVENTORY_IDX item;
-    if (f_info[feat].flags.has_not(FF::SPIKE)) {
+    if (f_info[feat].flags.has_not(FloorFeatureType::SPIKE)) {
         msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
     } else if (!get_spike(player_ptr, &item)) {
         msg_print(_("くさびを持っていない！", "You have no spikes!"));
@@ -359,7 +359,7 @@ void do_cmd_spike(player_type *player_ptr)
     } else {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_info[feat].name.c_str());
-        cave_alter_feat(player_ptr, y, x, FF::SPIKE);
+        cave_alter_feat(player_ptr, y, x, FloorFeatureType::SPIKE);
         vary_item(player_ptr, item, -1);
     }
 }

@@ -76,12 +76,12 @@ void do_cmd_go_up(player_type *player_ptr)
     int up_num = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
 
-    if (f_ptr->flags.has_not(FF::LESS)) {
+    if (f_ptr->flags.has_not(FloorFeatureType::LESS)) {
         msg_print(_("ここには上り階段が見当たらない。", "I see no up staircase here."));
         return;
     }
 
-    if (f_ptr->flags.has(FF::QUEST)) {
+    if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
         if (!confirm_leave_level(player_ptr, false))
             return;
 
@@ -139,7 +139,7 @@ void do_cmd_go_up(player_type *player_ptr)
         player_ptr->current_floor_ptr->dun_level = 0;
         up_num = 0;
     } else {
-        if (f_ptr->flags.has(FF::SHAFT)) {
+        if (f_ptr->flags.has(FloorFeatureType::SHAFT)) {
             prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
             up_num = 2;
         } else {
@@ -184,20 +184,20 @@ void do_cmd_go_down(player_type *player_ptr)
 
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    if (f_ptr->flags.has_not(FF::MORE)) {
+    if (f_ptr->flags.has_not(FloorFeatureType::MORE)) {
         msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
         return;
     }
 
-    if (f_ptr->flags.has(FF::TRAP))
+    if (f_ptr->flags.has(FloorFeatureType::TRAP))
         fall_trap = true;
 
-    if (f_ptr->flags.has(FF::QUEST_ENTER)) {
+    if (f_ptr->flags.has(FloorFeatureType::QUEST_ENTER)) {
         do_cmd_quest(player_ptr);
         return;
     }
 
-    if (f_ptr->flags.has(FF::QUEST)) {
+    if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
         if (!confirm_leave_level(player_ptr, true))
             return;
 
@@ -234,7 +234,7 @@ void do_cmd_go_down(player_type *player_ptr)
 
     DUNGEON_IDX target_dungeon = 0;
     if (!is_in_dungeon(player_ptr)) {
-        target_dungeon = f_ptr->flags.has(FF::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
+        target_dungeon = f_ptr->flags.has(FloorFeatureType::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
             return;
@@ -257,7 +257,7 @@ void do_cmd_go_down(player_type *player_ptr)
     if (autosave_l)
         do_cmd_save_game(player_ptr, true);
 
-    if (f_ptr->flags.has(FF::SHAFT))
+    if (f_ptr->flags.has(FloorFeatureType::SHAFT))
         down_num += 2;
     else
         down_num += 1;
@@ -296,7 +296,7 @@ void do_cmd_go_down(player_type *player_ptr)
         return;
     }
 
-    if (f_ptr->flags.has(FF::SHAFT))
+    if (f_ptr->flags.has(FloorFeatureType::SHAFT))
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
     else
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN);
@@ -338,7 +338,7 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
         more = true;
     }
 
-    if (player_ptr->wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF::TOWN)) {
+    if (player_ptr->wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::TOWN)) {
         int tmp = 120 + player_ptr->lev * 10 - wilderness[player_ptr->y][player_ptr->x].level + 5;
         if (tmp < 1)
             tmp = 1;

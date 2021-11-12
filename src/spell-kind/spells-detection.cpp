@@ -37,7 +37,7 @@
  * @param known 地形から危険フラグを外すならTRUE
  * @return 効力があった場合TRUEを返す
  */
-static bool detect_feat_flag(player_type *player_ptr, POSITION range, FF flag, bool known)
+static bool detect_feat_flag(player_type *player_ptr, POSITION range, FloorFeatureType flag, bool known)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         range /= 3;
@@ -50,7 +50,7 @@ static bool detect_feat_flag(player_type *player_ptr, POSITION range, FF flag, b
             if (dist > range)
                 continue;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-            if (flag == FF::TRAP) {
+            if (flag == FloorFeatureType::TRAP) {
                 /* Mark as detected */
                 if (dist <= range && known) {
                     if (dist <= range - 1)
@@ -85,9 +85,9 @@ static bool detect_feat_flag(player_type *player_ptr, POSITION range, FF flag, b
  */
 bool detect_traps(player_type *player_ptr, POSITION range, bool known)
 {
-    bool detect = detect_feat_flag(player_ptr, range, FF::TRAP, known);
+    bool detect = detect_feat_flag(player_ptr, range, FloorFeatureType::TRAP, known);
     if (!known && detect)
-        detect_feat_flag(player_ptr, range, FF::TRAP, true);
+        detect_feat_flag(player_ptr, range, FloorFeatureType::TRAP, true);
 
     if (known || detect)
         player_ptr->dtrap = true;
@@ -109,7 +109,7 @@ bool detect_traps(player_type *player_ptr, POSITION range, bool known)
  */
 bool detect_doors(player_type *player_ptr, POSITION range)
 {
-    bool detect = detect_feat_flag(player_ptr, range, FF::DOOR, true);
+    bool detect = detect_feat_flag(player_ptr, range, FloorFeatureType::DOOR, true);
 
     if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 0)
         detect = false;
@@ -128,7 +128,7 @@ bool detect_doors(player_type *player_ptr, POSITION range)
  */
 bool detect_stairs(player_type *player_ptr, POSITION range)
 {
-    bool detect = detect_feat_flag(player_ptr, range, FF::STAIRS, true);
+    bool detect = detect_feat_flag(player_ptr, range, FloorFeatureType::STAIRS, true);
 
     if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 0)
         detect = false;
@@ -147,7 +147,7 @@ bool detect_stairs(player_type *player_ptr, POSITION range)
  */
 bool detect_treasure(player_type *player_ptr, POSITION range)
 {
-    bool detect = detect_feat_flag(player_ptr, range, FF::HAS_GOLD, true);
+    bool detect = detect_feat_flag(player_ptr, range, FloorFeatureType::HAS_GOLD, true);
 
     if (music_singing(player_ptr, MUSIC_DETECT) && get_singing_count(player_ptr) > 6)
         detect = false;

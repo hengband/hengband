@@ -5,13 +5,13 @@
 struct floor_type;
 struct grid_type;
 struct player_type;
-enum class FF;
+enum class FloorFeatureType;
 bool in_bounds(floor_type *floor_ptr, POSITION y, POSITION x);
 bool in_bounds2(floor_type *floor_ptr, POSITION y, POSITION x);
 bool in_bounds2u(floor_type *floor_ptr, POSITION y, POSITION x);
 bool is_cave_empty_bold(player_type *player_ptr, POSITION x, POSITION y);
 bool is_cave_empty_bold2(player_type *player_ptr, POSITION x, POSITION y);
-bool cave_has_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, FF f_idx);
+bool cave_has_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, FloorFeatureType f_idx);
 bool player_has_los_bold(player_type *player_ptr, POSITION y, POSITION x);
 bool player_bold(player_type *player_ptr, POSITION y, POSITION x);
 bool cave_stop_disintegration(floor_type *floor_ptr, POSITION y, POSITION x);

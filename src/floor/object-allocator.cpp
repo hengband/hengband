@@ -77,13 +77,13 @@ bool alloc_stairs(player_type *player_ptr, FEAT_IDX feat, int num, int walls)
     int shaft_num = 0;
     feature_type *f_ptr = &f_info[feat];
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (f_ptr->flags.has(FF::LESS)) {
+    if (f_ptr->flags.has(FloorFeatureType::LESS)) {
         if (ironman_downward || !floor_ptr->dun_level)
             return true;
 
         if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth)
             shaft_num = (randint1(num + 1)) / 2;
-    } else if (f_ptr->flags.has(FF::MORE)) {
+    } else if (f_ptr->flags.has(FloorFeatureType::MORE)) {
         QUEST_IDX q_idx = quest_number(player_ptr, floor_ptr->dun_level);
         if (floor_ptr->dun_level > 1 && q_idx) {
             monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
@@ -135,7 +135,7 @@ bool alloc_stairs(player_type *player_ptr, FEAT_IDX feat, int num, int walls)
 
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, FF::SHAFT) : feat;
+            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, FloorFeatureType::SHAFT) : feat;
             g_ptr->info &= ~(CAVE_FLOOR);
             break;
         }

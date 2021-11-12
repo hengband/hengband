@@ -120,7 +120,7 @@ static void cave_temp_room_unlite(player_type *player_ptr, const std::vector<Pos
                 if (in_bounds2(player_ptr->current_floor_ptr, by, bx)) {
                     grid_type *cc_ptr = &player_ptr->current_floor_ptr->grid_array[by][bx];
 
-                    if (f_info[cc_ptr->get_feat_mimic()].flags.has(FF::GLOW)) {
+                    if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                         do_dark = false;
                         break;
                     }
@@ -132,7 +132,7 @@ static void cave_temp_room_unlite(player_type *player_ptr, const std::vector<Pos
         }
 
         g_ptr->info &= ~(CAVE_GLOW);
-        if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FF::REMEMBER)) {
+        if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::REMEMBER)) {
             if (!view_torch_grids)
                 g_ptr->info &= ~(CAVE_MARK);
             note_spot(player_ptr, y, x);
@@ -264,7 +264,7 @@ static void cave_temp_lite_room_aux(player_type *player_ptr, std::vector<Pos2D> 
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_has_flag_bold(floor_ptr, y, x, FF::PROJECT); }
+static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT); }
 
 /*!
  * @brief (y,x) が暗くすべきマスなら points に加える
@@ -382,7 +382,7 @@ bool starlight(player_type *player_ptr, bool magic)
 
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))
                 continue;
             if (!player_bold(player_ptr, y, x))
                 break;

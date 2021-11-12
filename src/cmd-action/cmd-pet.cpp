@@ -256,10 +256,10 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
             feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
-                (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY }) || f_ptr->flags.has_none_of({ FF::LOS, FF::TREE })) ? "中" : "上");
+                (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "中" : "上");
 #else
             msg_format("This monster is %s the %s.",
-                (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY }) || f_ptr->flags.has_none_of({ FF::LOS, FF::TREE })) ? "in" : "on", f_ptr->name.c_str());
+                (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "in" : "on", f_ptr->name.c_str());
 #endif
 
             return false;

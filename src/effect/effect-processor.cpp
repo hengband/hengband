@@ -329,7 +329,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
 
             if (affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::SUPER_RAY))
                 res.notice = true;
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
                 if (second_step)
                     continue;
                 break;
@@ -397,7 +397,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             if (!cave_los_bold(player_ptr->current_floor_ptr, ny, nx) && (rad > 0))
                 break;
         } else {
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FF::PROJECT) && (rad > 0))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT) && (rad > 0))
                 break;
         }
 

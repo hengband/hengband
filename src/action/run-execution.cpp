@@ -71,13 +71,13 @@ static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITIO
     int16_t feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr = &f_info[feat];
     if (!player_can_enter(player_ptr, feat, 0))
-        return f_ptr->flags.has_not(FF::DOOR);
+        return f_ptr->flags.has_not(FloorFeatureType::DOOR);
 
-    if (f_ptr->flags.has(FF::AVOID_RUN) && !ignore_avoid_run)
+    if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN) && !ignore_avoid_run)
         return true;
 
-    if (f_ptr->flags.has_none_of({FF::MOVE, FF::CAN_FLY}))
-        return f_ptr->flags.has_not(FF::DOOR);
+    if (f_ptr->flags.has_none_of({FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY}))
+        return f_ptr->flags.has_not(FloorFeatureType::DOOR);
 
     return false;
 }
@@ -113,7 +113,7 @@ static void run_init(player_type *player_ptr, DIRECTION dir)
     player_ptr->run_px = player_ptr->x;
     int row = player_ptr->y + ddy[dir];
     int col = player_ptr->x + ddx[dir];
-    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, FF::AVOID_RUN);
+    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, FloorFeatureType::AVOID_RUN);
     int i = chome[dir];
     if (see_wall(player_ptr, cycle[i + 1], player_ptr->y, player_ptr->x)) {
         find_breakleft = true;
@@ -235,15 +235,15 @@ static bool run_test(player_type *player_ptr)
 
         bool inv = true;
         if (g_ptr->is_mark()) {
-            bool notice = f_ptr->flags.has(FF::NOTICE);
-            if (notice && f_ptr->flags.has(FF::MOVE)) {
-                if (find_ignore_doors && f_ptr->flags.has_all_of({FF::DOOR, FF::CLOSE})) {
+            bool notice = f_ptr->flags.has(FloorFeatureType::NOTICE);
+            if (notice && f_ptr->flags.has(FloorFeatureType::MOVE)) {
+                if (find_ignore_doors && f_ptr->flags.has_all_of({FloorFeatureType::DOOR, FloorFeatureType::CLOSE})) {
                     notice = false;
-                } else if (find_ignore_stairs && f_ptr->flags.has(FF::STAIRS)) {
+                } else if (find_ignore_stairs && f_ptr->flags.has(FloorFeatureType::STAIRS)) {
                     notice = false;
-                } else if (f_ptr->flags.has(FF::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
+                } else if (f_ptr->flags.has(FloorFeatureType::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
                     notice = false;
-                } else if (f_ptr->flags.has_all_of({FF::WATER, FF::DEEP})
+                } else if (f_ptr->flags.has_all_of({FloorFeatureType::WATER, FloorFeatureType::DEEP})
                     && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
                     notice = false;
                 }

@@ -93,18 +93,18 @@ bool new_player_spot(player_type *player_ptr)
 
             if (max_attempts > 5000) /* Rule 1 */
             {
-                if (f_ptr->flags.has_not(FF::FLOOR))
+                if (f_ptr->flags.has_not(FloorFeatureType::FLOOR))
                     continue;
             } else /* Rule 2 */
             {
-                if (f_ptr->flags.has_not(FF::MOVE))
+                if (f_ptr->flags.has_not(FloorFeatureType::MOVE))
                     continue;
-                if (f_ptr->flags.has(FF::HIT_TRAP))
+                if (f_ptr->flags.has(FloorFeatureType::HIT_TRAP))
                     continue;
             }
 
             /* Refuse to start on anti-teleport grids in dungeon */
-            if (f_ptr->flags.has_not(FF::TELEPORTABLE))
+            if (f_ptr->flags.has_not(FloorFeatureType::TELEPORTABLE))
                 continue;
         }
         if (!player_can_enter(player_ptr, g_ptr->feat, 0))
@@ -137,7 +137,7 @@ bool new_player_spot(player_type *player_ptr)
  */
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
 {
-    if ((g_ptr->mimic || g_ptr->cave_has_flag(FF::SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
+    if ((g_ptr->mimic || g_ptr->cave_has_flag(FloorFeatureType::SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
         return true;
     else
         return false;
@@ -341,7 +341,7 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
         feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
         /* Memorize some "boring" grids */
-        if (f_ptr->flags.has_not(FF::REMEMBER)) {
+        if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
             /* Option -- memorize all torch-lit floors */
             if (view_torch_grids && ((g_ptr->info & (CAVE_LITE | CAVE_MNLT)) || player_ptr->see_nocto)) {
                 g_ptr->info |= (CAVE_MARK);
@@ -354,7 +354,7 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
         }
 
         /* Memorize normal grids */
-        else if (f_ptr->flags.has(FF::LOS)) {
+        else if (f_ptr->flags.has(FloorFeatureType::LOS)) {
             g_ptr->info |= (CAVE_MARK);
         }
 
@@ -701,10 +701,10 @@ void update_flow(player_type *player_ptr)
                 bool can_move = false;
                 switch (i) {
                 case FLOW_CAN_FLY:
-                    can_move = g_ptr->cave_has_flag(FF::MOVE) || g_ptr->cave_has_flag(FF::CAN_FLY);
+                    can_move = g_ptr->cave_has_flag(FloorFeatureType::MOVE) || g_ptr->cave_has_flag(FloorFeatureType::CAN_FLY);
                     break;
                 default:
-                    can_move = g_ptr->cave_has_flag(FF::MOVE);
+                    can_move = g_ptr->cave_has_flag(FloorFeatureType::MOVE);
                     break;
                 }
 
@@ -732,7 +732,7 @@ void update_flow(player_type *player_ptr)
  * Take a feature, determine what that feature becomes
  * through applying the given action.
  */
-FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action)
+FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FloorFeatureType action)
 {
     feature_type *f_ptr = &f_info[feat];
     int i;
@@ -743,7 +743,7 @@ FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action)
             return conv_dungeon_feat(floor_ptr, f_ptr->state[i].result);
     }
 
-    if (f_ptr->flags.has(FF::PERMANENT))
+    if (f_ptr->flags.has(FloorFeatureType::PERMANENT))
         return feat;
 
     return (feature_action_flags[enum2i(action)] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, f_ptr->destroyed) : feat;
@@ -753,7 +753,7 @@ FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action)
  * Takes a location and action and changes the feature at that
  * location through applying the given action.
  */
-void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
+void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FloorFeatureType action)
 {
     /* Set old feature */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -775,14 +775,14 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
         bool found = false;
 
         /* Handle gold */
-        if (old_f_ptr->flags.has(FF::HAS_GOLD) && f_ptr->flags.has_not(FF::HAS_GOLD)) {
+        if (old_f_ptr->flags.has(FloorFeatureType::HAS_GOLD) && f_ptr->flags.has_not(FloorFeatureType::HAS_GOLD)) {
             /* Place some gold */
             place_gold(player_ptr, y, x);
             found = true;
         }
 
         /* Handle item */
-        if (old_f_ptr->flags.has(FF::HAS_ITEM) && f_ptr->flags.has_not(FF::HAS_ITEM) && (randint0(100) < (15 - floor_ptr->dun_level / 2))) {
+        if (old_f_ptr->flags.has(FloorFeatureType::HAS_ITEM) && f_ptr->flags.has_not(FloorFeatureType::HAS_ITEM) && (randint0(100) < (15 - floor_ptr->dun_level / 2))) {
             /* Place object */
             place_object(player_ptr, y, x, 0L);
             found = true;
@@ -796,7 +796,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
     if (feature_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
         feature_type *old_f_ptr = &f_info[oldfeat];
 
-        if (old_f_ptr->flags.has(FF::GLASS) && w_ptr->character_dungeon) {
+        if (old_f_ptr->flags.has(FloorFeatureType::GLASS) && w_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
@@ -843,7 +843,7 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */
-    if (f_ptr->flags.has_not(FF::TELEPORTABLE))
+    if (f_ptr->flags.has_not(FloorFeatureType::TELEPORTABLE))
         return false;
 
     if (g_ptr->m_idx && (g_ptr->m_idx != m_idx))
@@ -879,7 +879,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */
-    if (f_ptr->flags.has_not(FF::TELEPORTABLE))
+    if (f_ptr->flags.has_not(FloorFeatureType::TELEPORTABLE))
         return false;
 
     /* No magical teleporting into vaults and such */
@@ -890,21 +890,21 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
         return false;
 
     /* don't teleport on a trap. */
-    if (f_ptr->flags.has(FF::HIT_TRAP))
+    if (f_ptr->flags.has(FloorFeatureType::HIT_TRAP))
         return false;
 
     if (!(mode & TELEPORT_PASSIVE)) {
         if (!player_can_enter(player_ptr, g_ptr->feat, 0))
             return false;
 
-        if (f_ptr->flags.has_all_of({ FF::WATER, FF::DEEP })) {
+        if (f_ptr->flags.has_all_of({ FloorFeatureType::WATER, FloorFeatureType::DEEP })) {
             if (!player_ptr->levitation && !player_ptr->can_swim)
                 return false;
         }
 
-        if (f_ptr->flags.has(FF::LAVA) && !has_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
+        if (f_ptr->flags.has(FloorFeatureType::LAVA) && !has_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
             /* Always forbid deep lava */
-            if (f_ptr->flags.has(FF::DEEP))
+            if (f_ptr->flags.has(FloorFeatureType::DEEP))
                 return false;
 
             /* Forbid shallow lava when the player don't have levitation */
@@ -924,7 +924,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
  */
 bool is_open(player_type *player_ptr, FEAT_IDX feat)
 {
-    return f_info[feat].flags.has(FF::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, FF::CLOSE));
+    return f_info[feat].flags.has(FloorFeatureType::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, FloorFeatureType::CLOSE));
 }
 
 /*!
@@ -941,19 +941,19 @@ bool player_can_enter(player_type *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mod
         return monster_can_cross_terrain(
             player_ptr, feature, &r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
 
-    if (f_ptr->flags.has(FF::PATTERN)) {
+    if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
         if (!(mode & CEM_P_CAN_ENTER_PATTERN))
             return false;
     }
 
-    if (f_ptr->flags.has(FF::CAN_FLY) && player_ptr->levitation)
+    if (f_ptr->flags.has(FloorFeatureType::CAN_FLY) && player_ptr->levitation)
         return true;
-    if (f_ptr->flags.has(FF::CAN_SWIM) && player_ptr->can_swim)
+    if (f_ptr->flags.has(FloorFeatureType::CAN_SWIM) && player_ptr->can_swim)
         return true;
-    if (f_ptr->flags.has(FF::CAN_PASS) && has_pass_wall(player_ptr))
+    if (f_ptr->flags.has(FloorFeatureType::CAN_PASS) && has_pass_wall(player_ptr))
         return true;
 
-    if (f_ptr->flags.has_not(FF::MOVE))
+    if (f_ptr->flags.has_not(FloorFeatureType::MOVE))
         return false;
 
     return true;
@@ -1001,7 +1001,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
     case GB_OUTER_NOPERM: {
         feature_type *f_ptr = &f_info[feat_wall_outer];
         if (permanent_wall(f_ptr)) {
-            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, FF::UNPERM);
+            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, FloorFeatureType::UNPERM);
         } else {
             g_ptr->feat = feat_wall_outer;
         }
@@ -1025,7 +1025,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
     case GB_SOLID_NOPERM: {
         feature_type *f_ptr = &f_info[feat_wall_solid];
         if ((g_ptr->info & CAVE_VAULT) && permanent_wall(f_ptr))
-            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, FF::UNPERM);
+            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, FloorFeatureType::UNPERM);
         else
             g_ptr->feat = feat_wall_solid;
         g_ptr->info &= ~(CAVE_MASK);
@@ -1106,7 +1106,7 @@ int count_dt(player_type *player_ptr, POSITION *y, POSITION *x, bool (*test)(pla
  */
 bool feat_uses_special(FEAT_IDX f_idx)
 {
-    return f_info[(f_idx)].flags.has(FF::SPECIAL);
+    return f_info[(f_idx)].flags.has(FloorFeatureType::SPECIAL);
 }
 
 /*

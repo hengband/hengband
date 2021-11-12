@@ -94,7 +94,7 @@ static bool target_set_accept(player_type *player_ptr, POSITION y, POSITION x)
         if (g_ptr->is_object())
             return true;
 
-        if (f_info[g_ptr->get_feat_mimic()].flags.has(FF::NOTICE))
+        if (f_info[g_ptr->get_feat_mimic()].flags.has(FloorFeatureType::NOTICE))
             return true;
     }
 

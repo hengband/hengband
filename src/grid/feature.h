@@ -24,7 +24,7 @@
  * @brief 地形状態変化指定構造体 / Feature state structure
  */
 typedef struct feature_state {
-    FF action{}; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
+    FloorFeatureType action{}; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
     std::string result_tag{}; /*!< 変化先ID / Result (f_info ID) */
     FEAT_IDX result{}; /*!< 変化先ID / Result (f_info ID) */
 } feature_state;
@@ -42,7 +42,7 @@ typedef struct feature_type {
     std::string destroyed_tag;
     FEAT_IDX mimic{}; /*!< 未確定時の外形地形ID / Feature to mimic */
     FEAT_IDX destroyed{}; /*!< *破壊*に巻き込まれた時の地形移行先(未実装？) / Default destroyed state */
-    EnumClassFlagGroup<FF> flags{}; /*!< 地形の基本特性ビット配列 / Flags */
+    EnumClassFlagGroup<FloorFeatureType> flags{}; /*!< 地形の基本特性ビット配列 / Flags */
     int16_t priority{}; /*!< 縮小表示で省略する際の表示優先度 / Map priority */
     feature_state state[MAX_FEAT_STATES]{}; /*!< feature_state テーブル */
     FEAT_SUBTYPE subtype{}; /*!< 副特性値 */
