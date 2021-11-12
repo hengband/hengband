@@ -53,7 +53,7 @@ static void display_spell_list(player_type *player_ptr)
         mind_type spell;
         char comment[80];
         char psi_desc[160];
-        mind_kind_type use_mind;
+        MindKindType use_mind;
         bool use_hp = false;
 
         y = 1;
@@ -65,27 +65,27 @@ static void display_spell_list(player_type *player_ptr)
 
         switch (player_ptr->pclass) {
         case PlayerClassType::MINDCRAFTER:
-            use_mind = mind_kind_type::MINDCRAFTER;
+            use_mind = MindKindType::MINDCRAFTER;
             break;
         case PlayerClassType::FORCETRAINER:
-            use_mind = mind_kind_type::KI;
+            use_mind = MindKindType::KI;
             break;
         case PlayerClassType::BERSERKER:
-            use_mind = mind_kind_type::BERSERKER;
+            use_mind = MindKindType::BERSERKER;
             use_hp = true;
             break;
         case PlayerClassType::MIRROR_MASTER:
-            use_mind = mind_kind_type::MIRROR_MASTER;
+            use_mind = MindKindType::MIRROR_MASTER;
             break;
         case PlayerClassType::NINJA:
-            use_mind = mind_kind_type::NINJUTSU;
+            use_mind = MindKindType::NINJUTSU;
             use_hp = true;
             break;
         case PlayerClassType::ELEMENTALIST:
-            use_mind = mind_kind_type::ELEMENTAL;
+            use_mind = MindKindType::ELEMENTAL;
             break;
         default:
-            use_mind = mind_kind_type::MINDCRAFTER;
+            use_mind = MindKindType::MINDCRAFTER;
             break;
         }
 
