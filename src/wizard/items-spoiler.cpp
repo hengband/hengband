@@ -107,7 +107,7 @@ spoiler_output_status spoil_obj_desc(concptr fname)
         std::vector<KIND_OBJECT_IDX> whats;
         for (auto tval : tval_list) {
             for (const auto &k_ref : k_info) {
-                if ((k_ref.tval == tval) && k_ref.gen_flags.has_not(TRG::INSTA_ART)) {
+                if ((k_ref.tval == tval) && k_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                     whats.push_back(k_ref.idx);
                 }
             }

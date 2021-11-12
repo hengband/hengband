@@ -116,14 +116,14 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
             continue;
 
         /* Search an artifact index if need */
-        insta_art = k_info[k_idx].gen_flags.has(TRG::INSTA_ART);
+        insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
 
         if (insta_art || fixed_art) {
             for (const auto &a_ref : a_info) {
                 if (a_ref.idx == 0)
                     continue;
-                if (insta_art && !a_ref.gen_flags.has(TRG::INSTA_ART))
+                if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART))
                     continue;
                 if (a_ref.tval != k_info[k_idx].tval)
                     continue;

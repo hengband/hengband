@@ -56,7 +56,7 @@ void object_aware(player_type *player_ptr, object_type *o_ptr)
         return;
 
     // アーティファクト専用ベースアイテムは記録しない
-    if (k_info[o_ptr->k_idx].gen_flags.has(TRG::INSTA_ART))
+    if (k_info[o_ptr->k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART))
         return;
 
     // 未鑑定名の無いアイテムは記録しない

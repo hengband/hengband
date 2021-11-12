@@ -278,7 +278,7 @@ void leave_quest_check(player_type *player_ptr)
         quest[QUEST_TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        a_info[q_ptr->k_idx].gen_flags.reset(TRG::QUESTITEM);
+        a_info[q_ptr->k_idx].gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
         r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);

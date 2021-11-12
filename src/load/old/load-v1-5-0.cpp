@@ -125,15 +125,15 @@ void rd_item_old(object_type *o_ptr)
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
-                if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
+                if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-                if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
+                if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             } else if (o_ptr->is_ego()) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
-                if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
+                if (e_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-                if (e_ptr->gen_flags.has(TRG::PERMA_CURSE))
+                if (e_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             }
         }

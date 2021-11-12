@@ -78,7 +78,7 @@ static void load_quest_details(player_type *player_ptr, quest_type *q_ptr, int l
 
     q_ptr->k_idx = rd_s16b();
     if (q_ptr->k_idx)
-        a_info[q_ptr->k_idx].gen_flags.set(TRG::QUESTITEM);
+        a_info[q_ptr->k_idx].gen_flags.set(ItemGenerationTraitType::QUESTITEM);
 
     q_ptr->flags = rd_byte();
 }

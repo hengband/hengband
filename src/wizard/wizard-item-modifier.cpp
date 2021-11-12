@@ -994,7 +994,7 @@ WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, boo
 
         artifact_type *a_ptr;
         ARTIFACT_IDX a_idx = 0;
-        if (k_ptr->gen_flags.has(TRG::INSTA_ART)) {
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &a_ref : a_info) {
                 if (a_ref.idx == 0 || a_ref.tval != k_ptr->tval || a_ref.sval != k_ptr->sval)
                     continue;

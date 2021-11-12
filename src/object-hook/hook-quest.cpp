@@ -57,7 +57,7 @@ bool object_is_quest_target(QUEST_IDX quest_idx, object_type *o_ptr)
         return false;
 
     artifact_type *a_ptr = &a_info[a_idx];
-    if (a_ptr->gen_flags.has(TRG::INSTA_ART))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))
         return false;
 
     return (o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval);

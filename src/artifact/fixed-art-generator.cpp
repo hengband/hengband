@@ -138,13 +138,13 @@ static void fixed_artifact_random_abilities(player_type *player_ptr, artifact_ty
 
     invest_special_artifact_abilities(player_ptr, o_ptr);
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_POWER))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_POWER))
         give_power = true;
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_H_RES))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_H_RES))
         give_resistance = true;
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_RES_OR_POWER)) {
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
         if (one_in_(2))
             give_resistance = true;
         else
@@ -157,7 +157,7 @@ static void fixed_artifact_random_abilities(player_type *player_ptr, artifact_ty
     if (give_resistance)
         one_high_resistance(o_ptr);
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_DICE)) {
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
         do {
             o_ptr->dd++;
         } while (one_in_(o_ptr->dd));
@@ -178,22 +178,22 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_
     if (!a_ptr->cost)
         set_bits(o_ptr->ident, IDENT_BROKEN);
 
-    if (a_ptr->gen_flags.has(TRG::CURSED))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::CURSED))
         o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
-    if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
         o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
 
-    if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
         o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
 
-    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0))
         o_ptr->curse_flags.set(get_curse(0, o_ptr));
 
-    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1))
         o_ptr->curse_flags.set(get_curse(1, o_ptr));
 
-    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2))
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
 }
 
@@ -281,10 +281,10 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
         if (a_ref.cur_num)
             continue;
 
-        if (a_ref.gen_flags.has(TRG::QUESTITEM))
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::QUESTITEM))
             continue;
 
-        if (a_ref.gen_flags.has(TRG::INSTA_ART))
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART))
             continue;
 
         if (a_ref.tval != o_ptr->tval)
@@ -343,9 +343,9 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
         if (a_ref.cur_num)
             continue;
-        if (a_ref.gen_flags.has(TRG::QUESTITEM))
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::QUESTITEM))
             continue;
-        if (!(a_ref.gen_flags.has(TRG::INSTA_ART)))
+        if (!(a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)))
             continue;
 
         /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /

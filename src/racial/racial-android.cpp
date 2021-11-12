@@ -79,7 +79,7 @@ void calc_android_exp(player_type *player_ptr)
 
         if (o_ptr->is_fixed_artifact()) {
             level = (level + std::max(a_info[o_ptr->name1].level - 8, 5)) / 2;
-            level += std::min(20, a_info[o_ptr->name1].rarity / (a_info[o_ptr->name1].gen_flags.has(TRG::INSTA_ART) ? 10 : 3));
+            level += std::min(20, a_info[o_ptr->name1].rarity / (a_info[o_ptr->name1].gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
             level += std::max(3, (e_info[o_ptr->name2].rating - 5) / 2);
         } else if (o_ptr->art_name) {
