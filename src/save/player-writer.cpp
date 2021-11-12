@@ -20,7 +20,7 @@
  * @brief セーブデータに領域情報を書き込む / Write player realms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void wr_relams(player_type *player_ptr)
+static void wr_relams(PlayerType *player_ptr)
 {
     if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
         wr_byte((byte)player_ptr->element);
@@ -33,7 +33,7 @@ static void wr_relams(player_type *player_ptr)
  * @brief セーブデータにプレイヤー情報を書き込む / Write some "player" info
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void wr_player(player_type *player_ptr)
+void wr_player(PlayerType *player_ptr)
 {
     wr_string(player_ptr->name);
     wr_string(player_ptr->died_from);

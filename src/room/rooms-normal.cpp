@@ -19,7 +19,7 @@
  * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y2, x2, yval, xval;
     POSITION y1, x1, xsize, ysize;
@@ -192,7 +192,7 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
  * @brief タイプ2の部屋…二重長方形の部屋を生成する / Type 2 -- Overlapping rectangular rooms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type2(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, xval, yval;
     POSITION y1a, x1a, y2a, x2a;
@@ -302,7 +302,7 @@ bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
  * the code below will work (with "bounds checking") for 5x5, or even\n
  * for unsymetric values like 4x3 or 5x3 or 3x4 or 3x5, or even larger.\n
  */
-bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, dy, dx, wy, wx;
     POSITION y1a, x1a, y2a, x2a;
@@ -539,7 +539,7 @@ bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
  *	4 - Inner room has a maze\n
  *	5 - A set of four inner rooms\n
  */
-bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y1, x1;
     POSITION y2, x2, tmp, yval, xval;
@@ -871,7 +871,7 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
  *\n
  * When done fill from the inside to find the walls,\n
  */
-bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type11(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION rad, x, y, x0, y0;
     int light = false;
@@ -915,7 +915,7 @@ bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
  *\n
  * When done fill from the inside to find the walls,\n
  */
-bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type12(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION rad, x, y, x0, y0;
     int light = false;

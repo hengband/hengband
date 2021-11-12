@@ -31,7 +31,7 @@ static concptr desc_stat_neg[]
  * Note that this function (used by stat potions) now restores\n
  * the stat BEFORE increasing it.\n
  */
-bool inc_stat(player_type *player_ptr, int stat)
+bool inc_stat(PlayerType *player_ptr, int stat)
 {
     BASE_STATUS gain;
     BASE_STATUS value = player_ptr->stat_cur[stat];
@@ -79,7 +79,7 @@ bool inc_stat(player_type *player_ptr, int stat)
  * if your stat is already drained, the "max" value will not drop all\n
  * the way down to the "cur" value.\n
  */
-bool dec_stat(player_type *player_ptr, int stat, int amount, int permanent)
+bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
 {
     bool res = false;
     BASE_STATUS cur = player_ptr->stat_cur[stat];
@@ -161,7 +161,7 @@ bool dec_stat(player_type *player_ptr, int stat, int amount, int permanent)
  * @param stat 回復ステータスID
  * @return 実際に回復した場合TRUEを返す。
  */
-bool res_stat(player_type *player_ptr, int stat)
+bool res_stat(PlayerType *player_ptr, int stat)
 {
     if (player_ptr->stat_cur[stat] != player_ptr->stat_max[stat]) {
         player_ptr->stat_cur[stat] = player_ptr->stat_max[stat];
@@ -176,7 +176,7 @@ bool res_stat(player_type *player_ptr, int stat)
 /*
  * Lose a "point"
  */
-bool do_dec_stat(player_type *player_ptr, int stat)
+bool do_dec_stat(PlayerType *player_ptr, int stat)
 {
     bool sust = false;
     switch (stat) {
@@ -222,7 +222,7 @@ bool do_dec_stat(player_type *player_ptr, int stat)
 /*
  * Restore lost "points" in a stat
  */
-bool do_res_stat(player_type *player_ptr, int stat)
+bool do_res_stat(PlayerType *player_ptr, int stat)
 {
     if (res_stat(player_ptr, stat)) {
         msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
@@ -235,7 +235,7 @@ bool do_res_stat(player_type *player_ptr, int stat)
 /*
  * Gain a "point" in a stat
  */
-bool do_inc_stat(player_type *player_ptr, int stat)
+bool do_inc_stat(PlayerType *player_ptr, int stat)
 {
     bool res = res_stat(player_ptr, stat);
     if (inc_stat(player_ptr, stat)) {
@@ -263,7 +263,7 @@ bool do_inc_stat(player_type *player_ptr, int stat)
 /*
  * Forget everything
  */
-bool lose_all_info(player_type *player_ptr)
+bool lose_all_info(PlayerType *player_ptr)
 {
     chg_virtue(player_ptr, V_KNOWLEDGE, -5);
     chg_virtue(player_ptr, V_ENLIGHTEN, -5);

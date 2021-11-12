@@ -31,7 +31,7 @@
  * @details
  * Sorry, it becomes not (void)...
  */
-void call_the_void(player_type *player_ptr)
+void call_the_void(PlayerType *player_ptr)
 {
     bool do_call = true;
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -101,7 +101,7 @@ void call_the_void(player_type *player_ptr)
  * @param player_ptr 術者の参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
-bool vanish_dungeon(player_type *player_ptr)
+bool vanish_dungeon(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest);
@@ -189,7 +189,7 @@ bool vanish_dungeon(player_type *player_ptr)
  * @param rad 効力の半径
  * @details このファイルにいるのは、spells-trump.c と比べて行数が少なかったため。それ以上の意図はない
  */
-void cast_meteor(player_type *player_ptr, HIT_POINT dam, POSITION rad)
+void cast_meteor(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
 {
     int b = 10 + randint1(10);
     for (int i = 0; i < b; i++) {

@@ -1,5 +1,5 @@
 ﻿#pragma once
 
 struct player_attack_type;
-struct player_type;
-void process_death_scythe_reflection(player_type *player_ptr, player_attack_type *pa_ptr);
+class PlayerType;
+void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type *pa_ptr);

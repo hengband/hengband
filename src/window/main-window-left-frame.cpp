@@ -22,7 +22,7 @@
 /*!
  * @brief プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
  */
-void print_title(player_type *player_ptr)
+void print_title(PlayerType *player_ptr)
 {
     GAME_TEXT str[14];
     concptr p = "";
@@ -43,7 +43,7 @@ void print_title(player_type *player_ptr)
 /*!
  * @brief プレイヤーのレベルを表示する / Prints level
  */
-void print_level(player_type *player_ptr)
+void print_level(PlayerType *player_ptr)
 {
     char tmp[32];
     sprintf(tmp, "%5d", player_ptr->lev);
@@ -59,7 +59,7 @@ void print_level(player_type *player_ptr)
 /*!
  * @brief プレイヤーの経験値を表示する / Display the experience
  */
-void print_exp(player_type *player_ptr)
+void print_exp(PlayerType *player_ptr)
 {
     char out_val[32];
 
@@ -88,7 +88,7 @@ void print_exp(player_type *player_ptr)
 /*!
  * @brief プレイヤーのACを表示する / Prints current AC
  */
-void print_ac(player_type *player_ptr)
+void print_ac(PlayerType *player_ptr)
 {
     char tmp[32];
 
@@ -107,7 +107,7 @@ void print_ac(player_type *player_ptr)
 /*!
  * @brief プレイヤーのHPを表示する / Prints Cur/Max hit points
  */
-void print_hp(player_type *player_ptr)
+void print_hp(PlayerType *player_ptr)
 {
     char tmp[32];
     put_str("HP", ROW_CURHP, COL_CURHP);
@@ -131,7 +131,7 @@ void print_hp(player_type *player_ptr)
 /*!
  * @brief プレイヤーのMPを表示する / Prints players max/cur spell points
  */
-void print_sp(player_type *player_ptr)
+void print_sp(PlayerType *player_ptr)
 {
     char tmp[32];
     byte color;
@@ -159,7 +159,7 @@ void print_sp(player_type *player_ptr)
  * @brief プレイヤーの所持金を表示する / Prints current gold
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_gold(player_type *player_ptr)
+void print_gold(PlayerType *player_ptr)
 {
     char tmp[32];
     put_str(_("＄ ", "AU "), ROW_GOLD, COL_GOLD);
@@ -171,7 +171,7 @@ void print_gold(player_type *player_ptr)
  * @brief 現在のフロアの深さを表示する / Prints depth in stat area
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_depth(player_type *player_ptr)
+void print_depth(PlayerType *player_ptr)
 {
     char depths[32];
     TERM_COLOR attr = TERM_WHITE;
@@ -242,7 +242,7 @@ void print_depth(player_type *player_ptr)
  * @brief プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_frame_basic(player_type *player_ptr)
+void print_frame_basic(PlayerType *player_ptr)
 {
     if (player_ptr->mimic_form) {
         print_field(mimic_info[player_ptr->mimic_form].title, ROW_RACE, COL_RACE);
@@ -286,7 +286,7 @@ void print_frame_basic(player_type *player_ptr)
  * health-bar stops tracking any monster that "disappears".
  * </pre>
  */
-void health_redraw(player_type *player_ptr, bool riding)
+void health_redraw(PlayerType *player_ptr, bool riding)
 {
     int16_t health_who;
     int row, col;

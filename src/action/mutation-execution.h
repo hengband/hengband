@@ -5,5 +5,5 @@
  */
 
 enum class PlayerMutationType;
-struct player_type;
-bool exe_mutation_power(player_type *player_ptr, PlayerMutationType power);
+class PlayerType;
+bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power);

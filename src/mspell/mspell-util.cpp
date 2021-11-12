@@ -32,7 +32,7 @@ mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mon
 * @param m_idx モンスターID
 * @return プレイヤーがモンスターを見ることができるならTRUE、そうでなければFALSEを返す。
 */
-bool see_monster(player_type* player_ptr, MONSTER_IDX m_idx)
+bool see_monster(PlayerType* player_ptr, MONSTER_IDX m_idx)
 {
     monster_type* m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     return is_seen(player_ptr, m_ptr);
@@ -62,7 +62,7 @@ bool monster_near_player(floor_type* floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return メッセージを表示した場合trueを返す。
  */
-bool monspell_message_base(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int TARGET_TYPE)
+bool monspell_message_base(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int TARGET_TYPE)
 {
     bool notice = false;
     floor_type* floor_ptr = player_ptr->current_floor_ptr;
@@ -110,7 +110,7 @@ bool monspell_message_base(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return メッセージを表示した場合trueを返す。
  */
-bool monspell_message(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int TARGET_TYPE)
+bool monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int TARGET_TYPE)
 {
     return monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.blind, msgs.blind, msgs.to_player, msgs.to_mons), player_ptr->blind > 0, TARGET_TYPE);
 }
@@ -123,7 +123,7 @@ bool monspell_message(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_
 * @param msgs メッセージの構造体
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void simple_monspell_message(player_type* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int TARGET_TYPE)
+void simple_monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int TARGET_TYPE)
 {
     monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.to_player, msgs.to_mons,
         msgs.to_player, msgs.to_mons), player_ptr->blind > 0, TARGET_TYPE);

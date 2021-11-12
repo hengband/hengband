@@ -51,7 +51,7 @@ typedef struct ts_type {
     bool move_fast; // カーソル移動を粗くする(1マスずつ移動しない)
 } ts_type;
 
-static ts_type *initialize_target_set_type(player_type *player_ptr, ts_type *ts_ptr, target_type mode)
+static ts_type *initialize_target_set_type(PlayerType *player_ptr, ts_type *ts_ptr, target_type mode)
 {
     ts_ptr->mode = mode;
     ts_ptr->y = player_ptr->y;
@@ -74,7 +74,7 @@ static ts_type *initialize_target_set_type(player_type *player_ptr, ts_type *ts_
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-static bool change_panel_xy(player_type *player_ptr, POSITION y, POSITION x)
+static bool change_panel_xy(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     POSITION dy = 0, dx = 0;
     TERM_LEN wid, hgt;
@@ -154,7 +154,7 @@ static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSI
     return b_i;
 }
 
-static void describe_projectablity(player_type *player_ptr, ts_type *ts_ptr)
+static void describe_projectablity(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     ts_ptr->y = ys_interest[ts_ptr->m];
     ts_ptr->x = xs_interest[ts_ptr->m];
@@ -186,7 +186,7 @@ static void menu_target(ts_type *ts_ptr)
         ts_ptr->query = 't';
 }
 
-static void switch_target_input(player_type *player_ptr, ts_type *ts_ptr)
+static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     ts_ptr->distance = 0;
     switch (ts_ptr->query) {
@@ -271,7 +271,7 @@ static void switch_target_input(player_type *player_ptr, ts_type *ts_ptr)
  * @brief カーソル移動に伴い、描画範囲、"interesting" 座標リスト、現在のターゲットを更新する。
  * @return カーソル移動によって描画範囲が変化したかどうか
  */
-static bool check_panel_changed(player_type *player_ptr, ts_type *ts_ptr)
+static bool check_panel_changed(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     // カーソル移動によって描画範囲が変化しないなら何もせずその旨を返す。
     if (!change_panel(player_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance]))
@@ -308,7 +308,7 @@ static bool check_panel_changed(player_type *player_ptr, ts_type *ts_ptr)
  *
  * 既に "interesting" な座標を発見している場合、この関数は何もしない。
  */
-static void sweep_targets(player_type *player_ptr, ts_type *ts_ptr)
+static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
@@ -354,7 +354,7 @@ static void sweep_targets(player_type *player_ptr, ts_type *ts_ptr)
     }
 }
 
-static bool set_target_grid(player_type *player_ptr, ts_type *ts_ptr)
+static bool set_target_grid(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     if (!ts_ptr->flag || ys_interest.empty())
         return false;
@@ -385,7 +385,7 @@ static bool set_target_grid(player_type *player_ptr, ts_type *ts_ptr)
     return true;
 }
 
-static void describe_grid_wizard(player_type *player_ptr, ts_type *ts_ptr)
+static void describe_grid_wizard(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     if (!cheat_sight)
         return;
@@ -396,7 +396,7 @@ static void describe_grid_wizard(player_type *player_ptr, ts_type *ts_ptr)
     strcat(ts_ptr->info, cheatinfo);
 }
 
-static void switch_next_grid_command(player_type *player_ptr, ts_type *ts_ptr)
+static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     switch (ts_ptr->query) {
     case ESCAPE:
@@ -459,7 +459,7 @@ static void switch_next_grid_command(player_type *player_ptr, ts_type *ts_ptr)
     }
 }
 
-static void decide_change_panel(player_type *player_ptr, ts_type *ts_ptr)
+static void decide_change_panel(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     if (ts_ptr->distance == 0)
         return;
@@ -499,7 +499,7 @@ static void decide_change_panel(player_type *player_ptr, ts_type *ts_ptr)
         ts_ptr->y = 1;
 }
 
-static void sweep_target_grids(player_type *player_ptr, ts_type *ts_ptr)
+static void sweep_target_grids(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     while (!ts_ptr->done) {
         if (set_target_grid(player_ptr, ts_ptr))
@@ -530,7 +530,7 @@ static void sweep_target_grids(player_type *player_ptr, ts_type *ts_ptr)
 /*
  * Handle "target" and "look".
  */
-bool target_set(player_type *player_ptr, target_type mode)
+bool target_set(PlayerType *player_ptr, target_type mode)
 {
     ts_type tmp_ts;
     ts_type *ts_ptr = initialize_target_set_type(player_ptr, &tmp_ts, mode);

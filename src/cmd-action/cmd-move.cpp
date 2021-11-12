@@ -51,7 +51,7 @@
  * @param down_stair TRUEならば階段を降りる処理、FALSEなら階段を昇る処理による内容
  * @return フロア移動を実際に行うならTRUE、キャンセルする場合はFALSE
  */
-static bool confirm_leave_level(player_type *player_ptr, bool down_stair)
+static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
     quest_type *q_ptr = &quest[player_ptr->current_floor_ptr->inside_quest];
     if (confirm_quest && player_ptr->current_floor_ptr->inside_quest
@@ -68,7 +68,7 @@ static bool confirm_leave_level(player_type *player_ptr, bool down_stair)
 /*!
  * @brief 階段を使って階層を昇る処理 / Go up one level
  */
-void do_cmd_go_up(player_type *player_ptr)
+void do_cmd_go_up(PlayerType *player_ptr)
 {
     bool go_up = false;
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
@@ -176,7 +176,7 @@ void do_cmd_go_up(player_type *player_ptr)
  * @brief 階段を使って階層を降りる処理 / Go down one level
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_go_down(player_type *player_ptr)
+void do_cmd_go_down(PlayerType *player_ptr)
 {
     bool fall_trap = false;
     int down_num = 0;
@@ -308,7 +308,7 @@ void do_cmd_go_down(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  */
-void do_cmd_walk(player_type *player_ptr, bool pickup)
+void do_cmd_walk(PlayerType *player_ptr, bool pickup)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
@@ -361,7 +361,7 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
  * Start running.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_run(player_type *player_ptr)
+void do_cmd_run(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (cmd_limit_confused(player_ptr))
@@ -382,7 +382,7 @@ void do_cmd_run(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  */
-void do_cmd_stay(player_type *player_ptr, bool pickup)
+void do_cmd_stay(PlayerType *player_ptr, bool pickup)
 {
     uint32_t mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
     if (command_arg) {
@@ -403,7 +403,7 @@ void do_cmd_stay(player_type *player_ptr, bool pickup)
  * Resting allows a player to safely restore his hp	-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_rest(player_type *player_ptr)
+void do_cmd_rest(PlayerType *player_ptr)
 {
     set_action(player_ptr, ACTION_NONE);
     if ((player_ptr->pclass == PlayerClassType::BARD) && ((get_singing_song_effect(player_ptr) != 0) || (get_interrupting_song_effect(player_ptr) != 0)))

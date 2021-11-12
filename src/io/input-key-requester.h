@@ -16,5 +16,5 @@ extern TERM_LEN command_gap;
 extern int16_t command_wrk;
 extern int16_t command_new;
 
-struct player_type;
-void request_command(player_type *player_ptr, int shopping);
+class PlayerType;
+void request_command(PlayerType *player_ptr, int shopping);

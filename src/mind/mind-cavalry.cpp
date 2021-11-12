@@ -26,7 +26,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 結果はどうあれ騎乗したらTRUE
  */
-bool rodeo(player_type *player_ptr)
+bool rodeo(PlayerType *player_ptr)
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_type *m_ptr;

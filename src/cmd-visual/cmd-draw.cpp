@@ -35,7 +35,7 @@
  * the "TERM_XTRA_REACT" hook before redrawing the windows.
  * </pre>
  */
-void do_cmd_redraw(player_type *player_ptr)
+void do_cmd_redraw(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
 
@@ -71,7 +71,7 @@ void do_cmd_redraw(player_type *player_ptr)
 /*!
  * @brief プレイヤーのステータス表示
  */
-void do_cmd_player_status(player_type *player_ptr)
+void do_cmd_player_status(PlayerType *player_ptr)
 {
     int mode = 0;
     char tmp[160];

@@ -14,7 +14,7 @@
  *
  * モンスターが特技を使う前にプレイヤーがモンスターを視認できているかどうかの判定用。
  */
-bool spell_learnable(player_type *player_ptr, MONSTER_IDX m_idx)
+bool spell_learnable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->blind && m_ptr->ml);

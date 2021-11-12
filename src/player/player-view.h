@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void update_view(player_type *player_ptr);
+class PlayerType;
+void update_view(PlayerType *player_ptr);

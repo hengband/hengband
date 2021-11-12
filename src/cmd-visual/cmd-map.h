@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void do_cmd_view_map(player_type *player_ptr);
+class PlayerType;
+void do_cmd_view_map(PlayerType *player_ptr);

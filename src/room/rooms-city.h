@@ -15,5 +15,5 @@ typedef struct ugbldg_type {
 } ugbldg_type;
 
 struct dun_data_type;
-struct player_type;
-bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr);
+class PlayerType;
+bool build_type16(PlayerType *player_ptr, dun_data_type *dd_ptr);

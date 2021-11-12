@@ -2,6 +2,6 @@
 
 #include "system/angband.h"
 
-struct player_type;
-bool hypodynamic_bolt(player_type *player_ptr, DIRECTION dir, HIT_POINT dam);
-bool death_ray(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+class PlayerType;
+bool hypodynamic_bolt(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam);
+bool death_ray(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);

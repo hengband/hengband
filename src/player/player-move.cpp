@@ -59,7 +59,7 @@ POSITION temp2_y[MAX_SHORT];
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
  */
-static void discover_hidden_things(player_type *player_ptr, POSITION y, POSITION x)
+static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -95,7 +95,7 @@ static void discover_hidden_things(player_type *player_ptr, POSITION y, POSITION
  * @brief プレイヤーの探索処理判定
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void search(player_type *player_ptr)
+void search(PlayerType *player_ptr)
 {
     PERCENTAGE chance = player_ptr->skill_srh;
     if (player_ptr->blind || no_lite(player_ptr))
@@ -117,7 +117,7 @@ void search(player_type *player_ptr)
  * @param mpe_mode 移動オプションフラグ
  * @return プレイヤーが死亡やフロア離脱を行わず、実際に移動が可能ならばTRUEを返す。
  */
-bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
+bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
@@ -271,7 +271,7 @@ bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_F
  * @param feat 地形ID
  * @return トラップが自動的に無効ならばTRUEを返す
  */
-bool trap_can_be_ignored(player_type *player_ptr, FEAT_IDX feat)
+bool trap_can_be_ignored(PlayerType *player_ptr, FEAT_IDX feat)
 {
     feature_type *f_ptr = &f_info[feat];
     if (f_ptr->flags.has_not(FloorFeatureType::TRAP))

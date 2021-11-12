@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct player_type;
-bool cleansing_nova(player_type *player_ptr, bool magic, bool powerful);
-bool unleash_mana_storm(player_type *player_ptr, bool powerful);
+class PlayerType;
+bool cleansing_nova(PlayerType *player_ptr, bool magic, bool powerful);
+bool unleash_mana_storm(PlayerType *player_ptr, bool powerful);

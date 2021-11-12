@@ -17,7 +17,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-PlayerBasicStatistics::PlayerBasicStatistics(player_type *player_ptr)
+PlayerBasicStatistics::PlayerBasicStatistics(PlayerType *player_ptr)
     : PlayerStatusBase(player_ptr)
 {
 }

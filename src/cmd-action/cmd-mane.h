@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-bool do_cmd_mane(player_type *player_ptr, bool baigaesi);
+class PlayerType;
+bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi);

@@ -44,7 +44,7 @@ OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapp
  * @details
  * If requested, count only trapped chests.
  */
-int count_chests(player_type *player_ptr, POSITION *y, POSITION *x, bool trapped)
+int count_chests(PlayerType *player_ptr, POSITION *y, POSITION *x, bool trapped)
 {
     int count = 0;
     for (DIRECTION d = 0; d < 9; d++) {

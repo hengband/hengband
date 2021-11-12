@@ -13,5 +13,5 @@ typedef struct ae_type {
     int fail;
 } ae_type;
 
-struct player_type;
-ae_type *initialize_ae_type(player_type *player_ptr, ae_type *ae_ptr, const INVENTORY_IDX item);
+class PlayerType;
+ae_type *initialize_ae_type(PlayerType *player_ptr, ae_type *ae_ptr, const INVENTORY_IDX item);

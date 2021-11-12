@@ -109,7 +109,7 @@ static int32_t get_autoroller_prob(int *minval)
  * 純メイジ系は耐と魔法の能力が17で腕器16。
  * デュアルかどうかは最大攻撃回数で決定。(4回以上)
  */
-static void decide_initial_stat(player_type *player_ptr, int *cval)
+static void decide_initial_stat(PlayerType *player_ptr, int *cval)
 {
     auto pclass = enum2i(player_ptr->pclass);
     auto &class_ptr = class_info[pclass];
@@ -196,7 +196,7 @@ static void display_autoroller_chance(int *cval)
  * @brief オートローラで得たい能力値の基準を決める。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-bool get_stat_limits(player_type *player_ptr)
+bool get_stat_limits(PlayerType *player_ptr)
 {
     clear_from(10);
     put_str(_("能力値を抽選します。最低限得たい能力値を設定して下さい。", "Set minimum stats for picking up your charactor."), 10, 10);
@@ -343,7 +343,7 @@ void initialize_chara_limit(chara_limit_type *chara_limit_ptr)
 /*!
  * @brief オートローラで得たい年齢、身長、体重、社会的地位の基準を決める。
  */
-bool get_chara_limits(player_type *player_ptr, chara_limit_type *chara_limit_ptr)
+bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 {
 #define MAXITEMS 8
 

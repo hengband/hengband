@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void phlogiston(player_type *player_ptr);
+class PlayerType;
+void phlogiston(PlayerType *player_ptr);

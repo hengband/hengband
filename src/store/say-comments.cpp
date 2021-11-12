@@ -15,7 +15,7 @@
  * Successful haggle.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void store_owner_says_comment(player_type *player_ptr)
+void store_owner_says_comment(PlayerType *player_ptr)
 {
     if (cur_store_num == StoreSaleType::BLACK)
         msg_print(comment_1_B[randint0(MAX_COMMENT_1)]);
@@ -37,7 +37,7 @@ void store_owner_says_comment(player_type *player_ptr)
  * @details
  * We paid "price", it was worth "value", and we thought it was worth "guess"
  */
-void purchase_analyze(player_type *player_ptr, PRICE price, PRICE value, PRICE guess)
+void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE guess)
 {
     /* Item was worthless, but we bought it */
     if ((value <= 0) && (price > value)) {

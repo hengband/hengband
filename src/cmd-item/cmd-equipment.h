@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct player_type;
-void do_cmd_equip(player_type *player_ptr);
-void do_cmd_wield(player_type *player_ptr);
-void do_cmd_takeoff(player_type *player_ptr);
+class PlayerType;
+void do_cmd_equip(PlayerType *player_ptr);
+void do_cmd_wield(PlayerType *player_ptr);
+void do_cmd_takeoff(PlayerType *player_ptr);

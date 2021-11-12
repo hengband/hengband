@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-bool polymorph_monster(player_type *player_ptr, POSITION y, POSITION x);
+class PlayerType;
+bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x);

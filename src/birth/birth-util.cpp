@@ -18,14 +18,14 @@ void birth_quit(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param helpfile ファイル名
  */
-void show_help(player_type* player_ptr, concptr helpfile)
+void show_help(PlayerType* player_ptr, concptr helpfile)
 {
     screen_save();
     (void)show_file(player_ptr, true, helpfile, nullptr, 0, 0);
     screen_load();
 }
 
-void birth_help_option(player_type *player_ptr, char c, birth_kind bk)
+void birth_help_option(PlayerType *player_ptr, char c, birth_kind bk)
 {
     concptr help_file;
     switch (bk) {

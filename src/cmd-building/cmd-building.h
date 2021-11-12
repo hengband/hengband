@@ -21,5 +21,5 @@ extern int battle_odds;
 extern PRICE kakekin;
 extern int sel_monster;
 
-struct player_type;
-void do_cmd_building(player_type *player_ptr);
+class PlayerType;
+void do_cmd_building(PlayerType *player_ptr);

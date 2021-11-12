@@ -31,7 +31,7 @@
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_ele_attack(player_type *player_ptr, uint32_t attack_type, TIME_EFFECT v)
+bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
 {
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
@@ -99,7 +99,7 @@ bool set_ele_attack(player_type *player_ptr, uint32_t attack_type, TIME_EFFECT v
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_ele_immune(player_type *player_ptr, uint32_t immune_type, TIME_EFFECT v)
+bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
 {
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
@@ -155,7 +155,7 @@ bool set_ele_immune(player_type *player_ptr, uint32_t immune_type, TIME_EFFECT v
 /*
  * Choose a warrior-mage elemental attack. -LM-
  */
-bool choose_ele_attack(player_type *player_ptr)
+bool choose_ele_attack(PlayerType *player_ptr)
 {
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
@@ -217,7 +217,7 @@ bool choose_ele_attack(player_type *player_ptr)
 /*
  * Choose a elemental immune. -LM-
  */
-bool choose_ele_immune(player_type *player_ptr, TIME_EFFECT immune_turn)
+bool choose_ele_immune(PlayerType *player_ptr, TIME_EFFECT immune_turn)
 {
     screen_save();
 
@@ -259,7 +259,7 @@ bool choose_ele_immune(player_type *player_ptr, TIME_EFFECT immune_turn)
  * pulish shield
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
-bool pulish_shield(player_type *player_ptr)
+bool pulish_shield(PlayerType *player_ptr)
 {
     concptr q = _("どの盾を磨きますか？", "Polish which shield? ");
     concptr s = _("磨く盾がありません。", "You have no shield to polish.");

@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-bool get_player_realms(player_type *player_ptr);
+class PlayerType;
+bool get_player_realms(PlayerType *player_ptr);

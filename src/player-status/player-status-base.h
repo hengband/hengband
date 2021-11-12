@@ -2,7 +2,7 @@
 #include "system/angband.h"
 #include "player/player-status-flags.h"
 
-struct player_type;
+class PlayerType;
 class PlayerStatusBase {
 public:
     virtual ~PlayerStatusBase() = default;
@@ -12,12 +12,12 @@ public:
     virtual BIT_FLAGS get_bad_flags();
 
 protected:
-    PlayerStatusBase(player_type *player_ptr);
+    PlayerStatusBase(PlayerType *player_ptr);
 
     int16_t default_value;
     int16_t min_value;
     int16_t max_value;
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     tr_type tr_flag;
     tr_type tr_bad_flag;
     virtual void set_locals();

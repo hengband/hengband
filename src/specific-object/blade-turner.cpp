@@ -9,7 +9,7 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool activate_bladeturner(player_type *player_ptr)
+bool activate_bladeturner(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))

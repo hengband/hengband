@@ -46,14 +46,14 @@
 /*
  * @brief Multishadow effects is determined by turn
  */
-bool check_multishadow(player_type *player_ptr) { return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0); }
+bool check_multishadow(PlayerType *player_ptr) { return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0); }
 
 /*!
  * 静水
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return ペットを操っている場合を除きTRUE
  */
-bool mirror_concentration(player_type *player_ptr)
+bool mirror_concentration(PlayerType *player_ptr)
 {
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
@@ -82,7 +82,7 @@ bool mirror_concentration(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param explode 爆発処理を伴うならばTRUE
  */
-void remove_all_mirrors(player_type *player_ptr, bool explode)
+void remove_all_mirrors(PlayerType *player_ptr, bool explode)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -104,7 +104,7 @@ void remove_all_mirrors(player_type *player_ptr, bool explode)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-bool binding_field(player_type *player_ptr, HIT_POINT dam)
+bool binding_field(PlayerType *player_ptr, HIT_POINT dam)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
@@ -228,7 +228,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-void seal_of_mirror(player_type *player_ptr, HIT_POINT dam)
+void seal_of_mirror(PlayerType *player_ptr, HIT_POINT dam)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -250,7 +250,7 @@ void seal_of_mirror(player_type *player_ptr, HIT_POINT dam)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
-bool confusing_light(player_type *player_ptr)
+bool confusing_light(PlayerType *player_ptr)
 {
     msg_print(_("辺りを睨んだ...", "You glare at nearby monsters..."));
     slow_monsters(player_ptr, player_ptr->lev);
@@ -265,7 +265,7 @@ bool confusing_light(player_type *player_ptr)
  * @brief 鏡設置処理
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool place_mirror(player_type *player_ptr)
+bool place_mirror(PlayerType *player_ptr)
 {
     if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -292,7 +292,7 @@ bool place_mirror(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return ターンを消費した場合TRUEを返す
  */
-bool mirror_tunnel(player_type *player_ptr)
+bool mirror_tunnel(PlayerType *player_ptr)
 {
     POSITION x = 0, y = 0;
     if (!tgt_pt(player_ptr, &x, &y))
@@ -307,7 +307,7 @@ bool mirror_tunnel(player_type *player_ptr)
 /*
  * Set "multishadow", notice observable changes
  */
-bool set_multishadow(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -349,7 +349,7 @@ bool set_multishadow(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_dustrobe(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -408,7 +408,7 @@ static int number_of_mirrors(floor_type *floor_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
+bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;

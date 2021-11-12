@@ -51,7 +51,7 @@
  * (cast magic) into "g" (get), and "s" (search) into "d" (drop).
  * </pre>
  */
-void do_cmd_store(player_type *player_ptr)
+void do_cmd_store(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;

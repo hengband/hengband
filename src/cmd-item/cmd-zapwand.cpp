@@ -51,7 +51,7 @@
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
+bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
 {
     bool ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
@@ -318,7 +318,7 @@ bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 /*!
  * @brief 魔法棒を使うコマンドのメインルーチン /
  */
-void do_cmd_aim_wand(player_type *player_ptr)
+void do_cmd_aim_wand(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;

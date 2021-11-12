@@ -28,8 +28,8 @@
 #include <tuple>
 #include <vector>
 
-void wiz_enter_quest(player_type *player_ptr);
-void wiz_complete_quest(player_type *player_ptr);
+void wiz_enter_quest(PlayerType *player_ptr);
+void wiz_complete_quest(PlayerType *player_ptr);
 void wiz_restore_monster_max_num();
 
 /*!
@@ -64,7 +64,7 @@ void display_wizard_game_modifier_menu()
  * @brief ゲーム設定コマンドの入力を受け付ける
  * @param player_ptr プレイヤーの情報へのポインタ
  */
-void wizard_game_modifier(player_type *player_ptr)
+void wizard_game_modifier(PlayerType *player_ptr)
 {
     screen_save();
     display_wizard_game_modifier_menu();
@@ -101,7 +101,7 @@ void wizard_game_modifier(player_type *player_ptr)
  * @brief 指定したクエストに突入する
  * @param プレイヤーの情報へのポインタ
  */
-void wiz_enter_quest(player_type* player_ptr)
+void wiz_enter_quest(PlayerType* player_ptr)
 {
     char ppp[30];
     char tmp_val[5];
@@ -128,7 +128,7 @@ void wiz_enter_quest(player_type* player_ptr)
  * @brief 指定したクエストを完了させる
  * @param プレイヤーの情報へのポインタ
  */
-void wiz_complete_quest(player_type *player_ptr)
+void wiz_complete_quest(PlayerType *player_ptr)
 {
     if (!player_ptr->current_floor_ptr->inside_quest) {
         msg_print("No current quest");

@@ -25,7 +25,7 @@ TvalItemTester::TvalItemTester(ItemKindType tval)
  * @param test_func そのオブジェクトが条件に合うならtrueを返すメンバ関数を指定する
  */
 FuncItemTester::FuncItemTester(TestMemberFunctionPtr test_func)
-    : test_func([f = test_func](player_type *, const object_type *o_ptr) { return (o_ptr->*f)(); })
+    : test_func([f = test_func](PlayerType *, const object_type *o_ptr) { return (o_ptr->*f)(); })
 {
 }
 
@@ -35,17 +35,17 @@ FuncItemTester::FuncItemTester(TestMemberFunctionPtr test_func)
  * @param test_func 引数に object_type へのポインタを取り、そのオブジェクトが条件に合うならtrueを返す関数を指定する
  */
 FuncItemTester::FuncItemTester(std::function<bool(const object_type *)> test_func)
-    : test_func([f = std::move(test_func)](player_type *, const object_type *o_ptr) { return f(o_ptr); })
+    : test_func([f = std::move(test_func)](PlayerType *, const object_type *o_ptr) { return f(o_ptr); })
 {
 }
 
 /*!
  * @brief Construct a new Func Item Tester:: Func Item Tester object
  *
- * @param test_func 引数に player_type へのポインタと object_type へのポインタを取り、そのオブジェクトが条件に合うならtrueを返す関数を指定する
- * @param player_ptr test_func の player_type へのポインタの引数に対して渡すポインタを指定する
+ * @param test_func 引数に PlayerType へのポインタと object_type へのポインタを取り、そのオブジェクトが条件に合うならtrueを返す関数を指定する
+ * @param player_ptr test_func の PlayerType へのポインタの引数に対して渡すポインタを指定する
  */
-FuncItemTester::FuncItemTester(std::function<bool(player_type *, const object_type *)> test_func, player_type *player_ptr)
+FuncItemTester::FuncItemTester(std::function<bool(PlayerType *, const object_type *)> test_func, PlayerType *player_ptr)
     : test_func(std::move(test_func))
     , player_ptr(player_ptr)
 {

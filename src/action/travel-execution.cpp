@@ -30,7 +30,7 @@ travel_type travel;
  * @param prev_dir 前回移動を行った元の方角ID
  * @return 次の方向
  */
-static DIRECTION travel_test(player_type *player_ptr, DIRECTION prev_dir)
+static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
 {
     if (player_ptr->blind || no_lite(player_ptr)) {
         msg_print(_("目が見えない！", "You cannot see!"));
@@ -91,7 +91,7 @@ static DIRECTION travel_test(player_type *player_ptr, DIRECTION prev_dir)
  * Travel command
  * @param player_ptr	プレイヤーへの参照ポインタ
  */
-void travel_step(player_type *player_ptr)
+void travel_step(PlayerType *player_ptr)
 {
     travel.dir = travel_test(player_ptr, travel.dir);
     if (!travel.dir) {

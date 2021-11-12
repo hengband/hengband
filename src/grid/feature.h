@@ -114,13 +114,13 @@ extern FEAT_IDX feat_ground_type[100];
 extern FEAT_IDX feat_wall_type[100];
 
 struct floor_type;
-struct player_type;
-bool is_closed_door(player_type *player_ptr, FEAT_IDX feat);
-bool is_trap(player_type *player_ptr, FEAT_IDX feat);
+class PlayerType;
+bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat);
+bool is_trap(PlayerType *player_ptr, FEAT_IDX feat);
 void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char);
 bool is_ascii_graphics(char x);
 bool permanent_wall(feature_type *f_ptr);
 FEAT_IDX feat_locked_door_random(int door_type);
 FEAT_IDX feat_jammed_door_random(int door_type);
-void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
+void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);

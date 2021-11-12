@@ -26,7 +26,7 @@
 /*!
  * @brief プレイヤーの全ての時限効果をリセットする。 / reset timed flags
  */
-void reset_tim_flags(player_type *player_ptr)
+void reset_tim_flags(PlayerType *player_ptr)
 {
     auto effects = player_ptr->effects();
     player_ptr->fast = 0; /* Timed -- Fast */
@@ -110,7 +110,7 @@ void reset_tim_flags(player_type *player_ptr)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_fast(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_fast(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -152,7 +152,7 @@ bool set_fast(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_shield(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -194,7 +194,7 @@ bool set_shield(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_magicdef(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -236,7 +236,7 @@ bool set_magicdef(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_blessed(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -278,7 +278,7 @@ bool set_blessed(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_hero(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -322,7 +322,7 @@ bool set_hero(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_mimic(player_type *player_ptr, TIME_EFFECT v, int16_t mimic_race_idx, bool do_dec)
+bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, int16_t mimic_race_idx, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -372,7 +372,7 @@ bool set_mimic(player_type *player_ptr, TIME_EFFECT v, int16_t mimic_race_idx, b
  * @param do_dec FALSEの場合現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_shero(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -420,7 +420,7 @@ bool set_shero(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_wraith_form(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -476,7 +476,7 @@ bool set_wraith_form(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tsuyoshi(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;

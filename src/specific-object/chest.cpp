@@ -30,7 +30,7 @@
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
 #define SV_CHEST_MIN_LARGE 4
 
-Chest::Chest(player_type *player_ptr)
+Chest::Chest(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

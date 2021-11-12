@@ -12,7 +12,7 @@ enum scan_floor_mode {
     SCAN_FLOOR_AT_MOST_ONE = 1U << 2, /*!< 高々1つのアイテムしか取得しない */
 };
 
-struct player_type;
+class PlayerType;
 class ItemTester;
-ITEM_NUMBER scan_floor_items(player_type *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester& item_tester);
-COMMAND_CODE show_floor_items(player_type *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester& item_tester);
+ITEM_NUMBER scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester& item_tester);
+COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester& item_tester);

@@ -20,7 +20,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 処理が実際に行われたらTRUEを返す
  */
-bool alchemy(player_type *player_ptr)
+bool alchemy(PlayerType *player_ptr)
 {
     bool force = false;
     if (command_arg > 0)

@@ -22,7 +22,7 @@
  * @details
  * Return the number of new flags learnt.  -Mogami-
  */
-int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
+int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     int n = 0;
     monster_race *r_ptr = &r_info[r_idx];
@@ -96,7 +96,7 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param num_item 手に入れたアイテム数
  * @param num_gold 手に入れた財宝の単位数
  */
-void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
+void lore_treasure(PlayerType *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

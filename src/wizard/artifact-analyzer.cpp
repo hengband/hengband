@@ -48,7 +48,7 @@ static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag
  * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
  */
-static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *desc_ptr)
+static void analyze_general(PlayerType *player_ptr, object_type *o_ptr, char *desc_ptr)
 {
     describe_flavor(player_ptr, desc_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
 }
@@ -273,7 +273,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  */
-void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
+void object_analyze(PlayerType *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {
     analyze_general(player_ptr, o_ptr, desc_ptr->description);
     analyze_pval(o_ptr, &desc_ptr->pval_info);
@@ -295,7 +295,7 @@ void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
  */
-void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
+void random_artifact_analyze(PlayerType *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {
     analyze_general(player_ptr, o_ptr, desc_ptr->description);
     analyze_pval(o_ptr, &desc_ptr->pval_info);

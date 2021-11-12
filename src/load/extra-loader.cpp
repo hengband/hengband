@@ -17,7 +17,7 @@
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void rd_extra(player_type *player_ptr)
+void rd_extra(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 7))
         player_ptr->riding = 0;

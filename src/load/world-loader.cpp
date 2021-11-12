@@ -26,7 +26,7 @@ static void rd_hengband_dungeons(void)
     }
 }
 
-void rd_dungeons(player_type *player_ptr)
+void rd_dungeons(PlayerType *player_ptr)
 {
     if (h_older_than(0, 3, 8))
         rd_zangband_dungeon();
@@ -41,7 +41,7 @@ void rd_dungeons(player_type *player_ptr)
  * @brief 現実変容処理の有無及びその残りターン数を読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void rd_alter_reality(player_type *player_ptr)
+void rd_alter_reality(PlayerType *player_ptr)
 {
     if (h_older_than(0, 3, 8))
         player_ptr->recall_dungeon = DUNGEON_ANGBAND;
@@ -70,12 +70,12 @@ void set_gambling_monsters(void)
 /*!
  * @details 自動拾い関係はこれしかないのでworldに突っ込むことにする。必要があれば再分割する
  */
-void rd_autopick(player_type *player_ptr)
+void rd_autopick(PlayerType *player_ptr)
 {
     player_ptr->autopick_autoregister = rd_byte() != 0;
 }
 
-static void set_undead_turn_limit(player_type *player_ptr)
+static void set_undead_turn_limit(PlayerType *player_ptr)
 {
     switch (player_ptr->start_race) {
     case PlayerRaceType::VAMPIRE:
@@ -90,7 +90,7 @@ static void set_undead_turn_limit(player_type *player_ptr)
     }
 }
 
-static void rd_world_info(player_type *player_ptr)
+static void rd_world_info(PlayerType *player_ptr)
 {
     set_undead_turn_limit(player_ptr);
     w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
@@ -122,7 +122,7 @@ static void rd_world_info(player_type *player_ptr)
     }
 }
 
-void rd_visited_towns(player_type *player_ptr)
+void rd_visited_towns(PlayerType *player_ptr)
 {
     if (h_older_than(0, 3, 9)) {
         player_ptr->visit = 1L;
@@ -137,7 +137,7 @@ void rd_visited_towns(player_type *player_ptr)
     player_ptr->visit = rd_u32b();
 }
 
-void rd_global_configurations(player_type *player_ptr)
+void rd_global_configurations(PlayerType *player_ptr)
 {
     w_ptr->seed_flavor = rd_u32b();
     w_ptr->seed_town = rd_u32b();
@@ -152,7 +152,7 @@ void rd_global_configurations(player_type *player_ptr)
     rd_world_info(player_ptr);
 }
 
-void load_wilderness_info(player_type *player_ptr)
+void load_wilderness_info(PlayerType *player_ptr)
 {
     player_ptr->wilderness_x = rd_s32b();
     player_ptr->wilderness_y = rd_s32b();

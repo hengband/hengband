@@ -21,7 +21,7 @@
  * @return 召喚条件が一致するならtrue
  * @details
  */
-bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
+bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     bool is_match = false;

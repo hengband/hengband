@@ -51,7 +51,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
  * After "compacting" (if needed), we "reorder" the objects into a more\n
  * compact order, and we reset the allocation info, and the "live" array.\n
  */
-void compact_objects(player_type *player_ptr, int size)
+void compact_objects(PlayerType *player_ptr, int size)
 {
     object_type *o_ptr;
     if (size) {

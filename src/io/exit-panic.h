@@ -5,5 +5,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-void exit_game_panic(player_type *player_ptr);
+class PlayerType;
+void exit_game_panic(PlayerType *player_ptr);

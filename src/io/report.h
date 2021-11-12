@@ -7,7 +7,7 @@ extern concptr screen_dump;
 #ifdef WORLD_SCORE
 #include "io/files-util.h"
 
-struct player_type;
-bool report_score(player_type *player_ptr, display_player_pf display_player);
-concptr make_screen_dump(player_type *player_ptr);
+class PlayerType;
+bool report_score(PlayerType *player_ptr, display_player_pf display_player);
+concptr make_screen_dump(PlayerType *player_ptr);
 #endif

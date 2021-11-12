@@ -17,7 +17,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-process_result effect_monster_drain_mana(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -62,7 +62,7 @@ process_result effect_monster_drain_mana(player_type *player_ptr, effect_monster
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_mind_blast(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -101,7 +101,7 @@ process_result effect_monster_mind_blast(player_type *player_ptr, effect_monster
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_brain_smash(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_brain_smash(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;

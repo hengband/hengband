@@ -21,7 +21,7 @@
  * @brief ターゲットを設定するコマンドのメインルーチン
  * Target command
  */
-void do_cmd_target(player_type *player_ptr)
+void do_cmd_target(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;
@@ -36,7 +36,7 @@ void do_cmd_target(player_type *player_ptr)
  * @brief 周囲を見渡すコマンドのメインルーチン
  * Look command
  */
-void do_cmd_look(player_type *player_ptr)
+void do_cmd_look(PlayerType *player_ptr)
 {
     set_bits(player_ptr->window_flags, PW_MONSTER_LIST | PW_FLOOR_ITEM_LIST);
     handle_stuff(player_ptr);
@@ -48,7 +48,7 @@ void do_cmd_look(player_type *player_ptr)
  * @brief 位置を確認するコマンドのメインルーチン
  * Allow the player to examine other sectors on the map
  */
-void do_cmd_locate(player_type *player_ptr)
+void do_cmd_locate(PlayerType *player_ptr)
 {
     DIRECTION dir;
     POSITION y1, x1;

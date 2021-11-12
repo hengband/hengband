@@ -198,7 +198,7 @@ static bool spell_world(MonsterAbilityType spell)
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(player_type *player_ptr, MonsterAbilityType spell)
+static bool spell_special(PlayerType *player_ptr, MonsterAbilityType spell)
 {
     if (player_ptr->phase_out)
         return false;
@@ -260,7 +260,7 @@ static bool spell_dispel(MonsterAbilityType spell)
  * This function may well be an efficiency bottleneck.\n
  * @todo 長過ぎる。切り分けが必要
  */
-MonsterAbilityType choose_attack_spell(player_type *player_ptr, msa_type *msa_ptr)
+MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     std::vector<MonsterAbilityType> escape;
     std::vector<MonsterAbilityType> attack;

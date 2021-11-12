@@ -140,7 +140,7 @@ static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
  * @param o_ptr アイテムへの参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  */
-static void do_cmd_knowledge_inventory_aux(player_type *player_ptr, FILE *fff, object_type *o_ptr, char *where)
+static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, object_type *o_ptr, char *where)
 {
     int i = 0;
     GAME_TEXT o_name[MAX_NLEN];
@@ -211,7 +211,7 @@ static void reset_label_number(int *label_number, FILE *fff)
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_wearing_equipment_resistances(player_type *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     char where[32];
     strcpy(where, _("装", "E "));
@@ -232,7 +232,7 @@ static void show_wearing_equipment_resistances(player_type *player_ptr, ItemKind
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_holding_equipment_resistances(player_type *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     char where[32];
     strcpy(where, _("持", "I "));
@@ -253,7 +253,7 @@ static void show_holding_equipment_resistances(player_type *player_ptr, ItemKind
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
  */
-static void show_home_equipment_resistances(player_type *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     store_type *store_ptr;
     store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
@@ -273,7 +273,7 @@ static void show_home_equipment_resistances(player_type *player_ptr, ItemKindTyp
  * @brief Display *ID* ed weapons/armors's resistances
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_knowledge_inventory(player_type *player_ptr)
+void do_cmd_knowledge_inventory(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

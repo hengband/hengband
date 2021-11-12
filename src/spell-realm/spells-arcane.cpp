@@ -10,7 +10,7 @@
  * @brief 寿命つき光源の燃素追加処理 /
  * Charge a lite (torch or latern)
  */
-void phlogiston(player_type *player_ptr)
+void phlogiston(PlayerType *player_ptr)
 {
     GAME_TURN max_flog = 0;
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_LITE];

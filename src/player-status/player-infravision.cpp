@@ -7,7 +7,7 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
-PlayerInfravision::PlayerInfravision(player_type *player_ptr)
+PlayerInfravision::PlayerInfravision(PlayerType *player_ptr)
     : PlayerStatusBase(player_ptr)
 {
 }

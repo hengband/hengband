@@ -51,7 +51,7 @@
  * good (Cure Light Wounds, Restore Strength, etc) or
  * bad (Poison, Weakness etc) or 'useless' (Slime Mold Juice, etc).
  */
-bool psychometry(player_type *player_ptr)
+bool psychometry(PlayerType *player_ptr)
 {
     concptr q = _("どのアイテムを調べますか？", "Meditate on which item? ");
     concptr s = _("調べるアイテムがありません。", "You have nothing appropriate.");
@@ -129,7 +129,7 @@ bool psychometry(player_type *player_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell)
+bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
 {
     bool b = false;
     int dam = 0;

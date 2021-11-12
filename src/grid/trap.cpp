@@ -163,7 +163,7 @@ void init_normal_traps(void)
  * Actually, it is not this routine, but the "trap instantiation"\n
  * code, which should also check for "trap doors" on quest levels.\n
  */
-FEAT_IDX choose_random_trap(player_type *player_ptr)
+FEAT_IDX choose_random_trap(PlayerType *player_ptr)
 {
     FEAT_IDX feat;
 
@@ -198,7 +198,7 @@ FEAT_IDX choose_random_trap(player_type *player_ptr)
  * @param y 秘匿したいマスのY座標
  * @param x 秘匿したいマスのX座標
  */
-void disclose_grid(player_type *player_ptr, POSITION y, POSITION x)
+void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -224,7 +224,7 @@ void disclose_grid(player_type *player_ptr, POSITION y, POSITION x)
  * when they are "discovered" (by detecting them or setting them off),\n
  * the trap is "instantiated" as a visible, "typed", trap.\n
  */
-void place_trap(player_type *player_ptr, POSITION y, POSITION x)
+void place_trap(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -251,7 +251,7 @@ void place_trap(player_type *player_ptr, POSITION y, POSITION x)
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match trap power against player armor.
  */
-static int check_hit_from_monster_to_player(player_type *player_ptr, int power)
+static int check_hit_from_monster_to_player(PlayerType *player_ptr, int power)
 {
     int k;
     ARMOUR_CLASS ac;
@@ -286,7 +286,7 @@ static int check_hit_from_monster_to_player(player_type *player_ptr, int power)
  * @brief 落とし穴系トラップの判定とプレイヤーの被害処理
  * @param trap_feat_type トラップの種別ID
  */
-static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
+static void hit_trap_pit(PlayerType *player_ptr, enum trap_type trap_feat_type)
 {
     HIT_POINT dam;
     concptr trap_name = "";
@@ -344,7 +344,7 @@ static void hit_trap_pit(player_type *player_ptr, enum trap_type trap_feat_type)
  * @brief ダーツ系トラップ（通常ダメージ）の判定とプレイヤーの被害処理
  * @return ダーツが命中した場合TRUEを返す
  */
-static bool hit_trap_dart(player_type *player_ptr)
+static bool hit_trap_dart(PlayerType *player_ptr)
 {
     bool hit = false;
 
@@ -364,7 +364,7 @@ static bool hit_trap_dart(player_type *player_ptr)
  * @brief ダーツ系トラップ（通常ダメージ＋能力値減少）の判定とプレイヤーの被害処理
  * @param stat 低下する能力値ID
  */
-static void hit_trap_lose_stat(player_type *player_ptr, int stat)
+static void hit_trap_lose_stat(PlayerType *player_ptr, int stat)
 {
     if (hit_trap_dart(player_ptr)) {
         do_dec_stat(player_ptr, stat);
@@ -374,7 +374,7 @@ static void hit_trap_lose_stat(player_type *player_ptr, int stat)
 /*!
  * @brief ダーツ系トラップ（通常ダメージ＋減速）の判定とプレイヤーの被害処理
  */
-static void hit_trap_slow(player_type *player_ptr)
+static void hit_trap_slow(PlayerType *player_ptr)
 {
     if (hit_trap_dart(player_ptr)) {
         (void)BadStatusSetter(player_ptr).mod_slowness(randint0(20) + 20, false);
@@ -387,7 +387,7 @@ static void hit_trap_slow(player_type *player_ptr)
  * @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
  * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
-void hit_trap(player_type *player_ptr, bool break_trap)
+void hit_trap(PlayerType *player_ptr, bool break_trap)
 {
     int i, num, dam;
     POSITION x = player_ptr->x, y = player_ptr->y;

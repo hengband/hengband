@@ -4,11 +4,11 @@
  * @brief プレイヤーの行動制約判定ヘッダ
  */
 
-struct player_type;
-bool cmd_limit_cast(player_type *player_ptr);
-bool cmd_limit_arena(player_type *player_ptr);
-bool cmd_limit_time_walk(player_type *player_ptr);
-bool cmd_limit_blind(player_type *player_ptr);
-bool cmd_limit_confused(player_type *player_ptr);
-bool cmd_limit_image(player_type *player_ptr);
-bool cmd_limit_stun(player_type *player_ptr);
+class PlayerType;
+bool cmd_limit_cast(PlayerType *player_ptr);
+bool cmd_limit_arena(PlayerType *player_ptr);
+bool cmd_limit_time_walk(PlayerType *player_ptr);
+bool cmd_limit_blind(PlayerType *player_ptr);
+bool cmd_limit_confused(PlayerType *player_ptr);
+bool cmd_limit_image(PlayerType *player_ptr);
+bool cmd_limit_stun(PlayerType *player_ptr);

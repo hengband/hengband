@@ -37,7 +37,7 @@
 /*!
  * @brief Auto-destroy marked item
  */
-static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX item)
+static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr;
     o_ptr = ref_item(player_ptr, item);
@@ -63,7 +63,7 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
  * Scan inventry in reverse order to prevent
  * skipping after inven_item_optimize()
  */
-void autopick_delayed_alter(player_type *player_ptr)
+void autopick_delayed_alter(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX item = INVEN_TOTAL - 1; item >= 0; item--)
         autopick_delayed_alter_aux(player_ptr, item);
@@ -84,7 +84,7 @@ void autopick_delayed_alter(player_type *player_ptr)
  * Auto-destroyer works only on inventory or on floor stack only when
  * requested.
  */
-void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destroy)
+void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX item, bool destroy)
 {
     object_type *o_ptr;
     o_ptr = ref_item(player_ptr, item);
@@ -97,7 +97,7 @@ void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destr
 /*!
  * @brief Automatically pickup/destroy items in this grid.
  */
-void autopick_pickup_items(player_type *player_ptr, grid_type *g_ptr)
+void autopick_pickup_items(PlayerType *player_ptr, grid_type *g_ptr)
 {
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         OBJECT_IDX this_o_idx = *it++;

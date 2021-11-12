@@ -1,15 +1,15 @@
 ﻿#pragma once
 
-struct player_type;
+class PlayerType;
 class WorldTurnProcessor {
 public:
-    WorldTurnProcessor(player_type *player_ptr);
+    WorldTurnProcessor(PlayerType *player_ptr);
     virtual ~WorldTurnProcessor() = default;
     void process_world();
     void print_time();
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     int hour = 0;
     int min = 0;
 

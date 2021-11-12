@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-bool get_player_personality(player_type *player_ptr);
+class PlayerType;
+bool get_player_personality(PlayerType *player_ptr);

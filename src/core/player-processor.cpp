@@ -67,7 +67,7 @@
 bool load = true;
 bool can_save = false;
 
-static void process_fishing(player_type *player_ptr)
+static void process_fishing(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
@@ -99,7 +99,7 @@ static void process_fishing(player_type *player_ptr)
     }
 }
 
-bool continuous_action_running(player_type *player_ptr)
+bool continuous_action_running(PlayerType *player_ptr)
 {
     return player_ptr->running || travel.run || command_rep || (player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH);
 }
@@ -111,7 +111,7 @@ bool continuous_action_running(player_type *player_ptr)
  * must come first just in case somebody manages to corrupt\n
  * the savefiles by clever use of menu commands or something.\n
  */
-void process_player(player_type *player_ptr)
+void process_player(PlayerType *player_ptr)
 {
     if (player_ptr->hack_mutation) {
         msg_print(_("何か変わった気がする！", "You feel different!"));
@@ -421,7 +421,7 @@ void process_player(player_type *player_ptr)
 /*!
  * @brief プレイヤーの行動エネルギーが充填される（＝プレイヤーのターンが回る）毎に行われる処理  / process the effects per 100 energy at player speed.
  */
-void process_upkeep_with_speed(player_type *player_ptr)
+void process_upkeep_with_speed(PlayerType *player_ptr)
 {
     if (!load && player_ptr->enchant_energy_need > 0 && !player_ptr->leaving) {
         player_ptr->enchant_energy_need -= SPEED_TO_ENERGY(player_ptr->pspeed);

@@ -39,7 +39,7 @@
  * @details
  * Assume there is no monster blocking the destination
  */
-static bool exe_open_chest(player_type *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
+static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
     bool flag = true;
     bool more = false;
@@ -86,7 +86,7 @@ static bool exe_open_chest(player_type *player_ptr, POSITION y, POSITION x, OBJE
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
-void do_cmd_open(player_type *player_ptr)
+void do_cmd_open(PlayerType *player_ptr)
 {
     POSITION y, x;
     DIRECTION dir;
@@ -144,7 +144,7 @@ void do_cmd_open(player_type *player_ptr)
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
-void do_cmd_close(player_type *player_ptr)
+void do_cmd_close(PlayerType *player_ptr)
 {
     POSITION y, x;
     DIRECTION dir;
@@ -189,7 +189,7 @@ void do_cmd_close(player_type *player_ptr)
  * @brief 箱、床のトラップ解除処理双方の統合メインルーチン /
  * Disarms a trap, or chest
  */
-void do_cmd_disarm(player_type *player_ptr)
+void do_cmd_disarm(PlayerType *player_ptr)
 {
     POSITION y, x;
     DIRECTION dir;
@@ -257,7 +257,7 @@ void do_cmd_disarm(player_type *player_ptr)
  * Creatures can also open or bash doors, see elsewhere.
  * </pre>
  */
-void do_cmd_bash(player_type *player_ptr)
+void do_cmd_bash(PlayerType *player_ptr)
 {
     POSITION y, x;
     DIRECTION dir;
@@ -306,7 +306,7 @@ void do_cmd_bash(player_type *player_ptr)
  * Let user choose a pile of spikes, perhaps?
  * </pre>
  */
-static bool get_spike(player_type *player_ptr, INVENTORY_IDX *ip)
+static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         object_type *o_ptr = &player_ptr->inventory_list[i];
@@ -331,7 +331,7 @@ static bool get_spike(player_type *player_ptr, INVENTORY_IDX *ip)
  * This command may NOT be repeated
  * </pre>
  */
-void do_cmd_spike(player_type *player_ptr)
+void do_cmd_spike(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (player_ptr->wild_mode)

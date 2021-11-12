@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-bool gamble_comm(player_type *player_ptr, int cmd);
+class PlayerType;
+bool gamble_comm(PlayerType *player_ptr, int cmd);

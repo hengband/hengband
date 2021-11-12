@@ -25,7 +25,7 @@ enum choosable_realm {
 extern const std::vector<BIT_FLAGS> realm_choices1;
 extern const std::vector<BIT_FLAGS> realm_choices2;
 
-struct player_type;
+class PlayerType;
 enum class ItemKindType : short;
-ItemKindType get_realm1_book(player_type *player_ptr);
-ItemKindType get_realm2_book(player_type *player_ptr);
+ItemKindType get_realm1_book(PlayerType *player_ptr);
+ItemKindType get_realm2_book(PlayerType *player_ptr);

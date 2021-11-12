@@ -118,7 +118,7 @@ static void set_race_flags(lore_type *lore_ptr)
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
+void process_monster_lore(PlayerType *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
 {
     lore_type tmp_lore;
     lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);

@@ -12,7 +12,7 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool activate_missile_1(player_type *player_ptr)
+bool activate_missile_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは眩しいくらいに明るく輝いている...", "It glows extremely brightly..."));
@@ -23,7 +23,7 @@ bool activate_missile_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_missile_2(player_type *player_ptr)
+bool activate_missile_2(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("魔法のトゲが現れた...", "It grows magical spikes..."));
@@ -34,7 +34,7 @@ bool activate_missile_2(player_type *player_ptr)
     return true;
 }
 
-bool activate_missile_3(player_type *player_ptr)
+bool activate_missile_3(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -45,7 +45,7 @@ bool activate_missile_3(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_acid_1(player_type *player_ptr)
+bool activate_bolt_acid_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは酸に覆われた...", "It is covered in acid..."));
@@ -56,7 +56,7 @@ bool activate_bolt_acid_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_elec_1(player_type *player_ptr)
+bool activate_bolt_elec_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは火花に覆われた...", "It is covered in sparks..."));
@@ -67,7 +67,7 @@ bool activate_bolt_elec_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_fire_1(player_type *player_ptr)
+bool activate_bolt_fire_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは炎に覆われた...", "It is covered in fire..."));
@@ -78,7 +78,7 @@ bool activate_bolt_fire_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_cold_1(player_type *player_ptr)
+bool activate_bolt_cold_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
@@ -89,7 +89,7 @@ bool activate_bolt_cold_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_hypodynamia_1(player_type *player_ptr, concptr name)
+bool activate_bolt_hypodynamia_1(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
@@ -100,7 +100,7 @@ bool activate_bolt_hypodynamia_1(player_type *player_ptr, concptr name)
     return true;
 }
 
-bool activate_bolt_hypodynamia_2(player_type *player_ptr)
+bool activate_bolt_hypodynamia_2(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("黒く輝いている...", "It glows black..."));
@@ -111,7 +111,7 @@ bool activate_bolt_hypodynamia_2(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_drain_1(player_type *player_ptr)
+bool activate_bolt_drain_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -124,7 +124,7 @@ bool activate_bolt_drain_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_drain_2(player_type *player_ptr)
+bool activate_bolt_drain_2(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -137,7 +137,7 @@ bool activate_bolt_drain_2(player_type *player_ptr)
     return true;
 }
 
-bool activate_bolt_mana(player_type *player_ptr, concptr name)
+bool activate_bolt_mana(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name);
@@ -148,7 +148,7 @@ bool activate_bolt_mana(player_type *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_pois_1(player_type *player_ptr)
+bool activate_ball_pois_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは濃緑色に脈動している...", "It throbs deep green..."));
@@ -159,7 +159,7 @@ bool activate_ball_pois_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_cold_1(player_type *player_ptr)
+bool activate_ball_cold_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
@@ -170,7 +170,7 @@ bool activate_ball_cold_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_cold_2(player_type *player_ptr)
+bool activate_ball_cold_2(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは青く激しく輝いた...", "It glows an intense blue..."));
@@ -181,7 +181,7 @@ bool activate_ball_cold_2(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_cold_3(player_type *player_ptr)
+bool activate_ball_cold_3(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("明るく白色に輝いている...", "It glows bright white..."));
@@ -192,7 +192,7 @@ bool activate_ball_cold_3(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_fire_1(player_type *player_ptr)
+bool activate_ball_fire_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
@@ -203,7 +203,7 @@ bool activate_ball_fire_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_fire_2(player_type *player_ptr, concptr name)
+bool activate_ball_fire_2(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name);
@@ -214,7 +214,7 @@ bool activate_ball_fire_2(player_type *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_fire_3(player_type *player_ptr)
+bool activate_ball_fire_3(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("深赤色に輝いている...", "It glows deep red..."));
@@ -225,7 +225,7 @@ bool activate_ball_fire_3(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_fire_4(player_type *player_ptr)
+bool activate_ball_fire_4(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
@@ -236,7 +236,7 @@ bool activate_ball_fire_4(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_elec_2(player_type *player_ptr)
+bool activate_ball_elec_2(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("電気がパチパチ音を立てた...", "It crackles with electricity..."));
@@ -247,7 +247,7 @@ bool activate_ball_elec_2(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_elec_3(player_type *player_ptr)
+bool activate_ball_elec_3(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("深青色に輝いている...", "It glows deep blue..."));
@@ -258,7 +258,7 @@ bool activate_ball_elec_3(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_acid_1(player_type *player_ptr)
+bool activate_ball_acid_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは黒く激しく輝いた...", "It glows an intense black..."));
@@ -269,7 +269,7 @@ bool activate_ball_acid_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_nuke_1(player_type *player_ptr)
+bool activate_ball_nuke_1(PlayerType *player_ptr)
 {
     DIRECTION dir;
     msg_print(_("それは緑に激しく輝いた...", "It glows an intense green..."));
@@ -280,7 +280,7 @@ bool activate_ball_nuke_1(player_type *player_ptr)
     return true;
 }
 
-bool activate_rocket(player_type *player_ptr)
+bool activate_rocket(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -291,7 +291,7 @@ bool activate_rocket(player_type *player_ptr)
     return true;
 }
 
-bool activate_ball_water(player_type *player_ptr, concptr name)
+bool activate_ball_water(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
@@ -302,7 +302,7 @@ bool activate_ball_water(player_type *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_lite(player_type *player_ptr, concptr name)
+bool activate_ball_lite(PlayerType *player_ptr, concptr name)
 {
     HIT_POINT num = damroll(5, 3);
     POSITION y = 0, x = 0;
@@ -324,7 +324,7 @@ bool activate_ball_lite(player_type *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_dark(player_type *player_ptr, concptr name)
+bool activate_ball_dark(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sが深い闇に覆われた...", "The %s is covered in pitch-darkness..."), name);
@@ -335,7 +335,7 @@ bool activate_ball_dark(player_type *player_ptr, concptr name)
     return true;
 }
 
-bool activate_ball_mana(player_type *player_ptr, concptr name)
+bool activate_ball_mana(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sが青白く光った．．．", "The %s becomes pale..."), name);

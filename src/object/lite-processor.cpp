@@ -15,7 +15,7 @@
  * @brief 10ゲームターンが進行する毎に光源の寿命を減らす処理
  * / Handle burning fuel every 10 game turns
  */
-void reduce_lite_life(player_type* player_ptr)
+void reduce_lite_life(PlayerType* player_ptr)
 {
     object_type* o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if (o_ptr->tval != ItemKindType::LITE)
@@ -38,7 +38,7 @@ void reduce_lite_life(player_type* player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 現在光源として使っているオブジェクトの構造体参照ポインタ
  */
-void notice_lite_change(player_type* player_ptr, object_type* o_ptr)
+void notice_lite_change(PlayerType* player_ptr, object_type* o_ptr)
 {
     if ((o_ptr->xtra4 < 100) || (!(o_ptr->xtra4 % 100))) {
         player_ptr->window_flags |= (PW_EQUIP);

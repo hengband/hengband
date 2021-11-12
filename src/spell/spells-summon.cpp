@@ -48,7 +48,7 @@
  * @param mode モンスター生成条件フラグ
  * @return モンスターが（敵対も含めて）召還されたならばTRUEを返す。
  */
-bool trump_summoning(player_type *player_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, summon_type type, BIT_FLAGS mode)
+bool trump_summoning(PlayerType *player_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
     /* Default level */
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -90,7 +90,7 @@ bool trump_summoning(player_type *player_ptr, int num, bool pet, POSITION y, POS
     return success;
 }
 
-bool cast_summon_demon(player_type *player_ptr, int power)
+bool cast_summon_demon(PlayerType *player_ptr, int power)
 {
     uint32_t flg = 0L;
     bool pet = !one_in_(3);
@@ -114,7 +114,7 @@ bool cast_summon_demon(player_type *player_ptr, int power)
     return true;
 }
 
-bool cast_summon_undead(player_type *player_ptr, int power)
+bool cast_summon_undead(PlayerType *player_ptr, int power)
 {
     bool pet = one_in_(3);
     summon_type type = (player_ptr->lev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
@@ -138,7 +138,7 @@ bool cast_summon_undead(player_type *player_ptr, int power)
     return true;
 }
 
-bool cast_summon_hound(player_type *player_ptr, int power)
+bool cast_summon_hound(PlayerType *player_ptr, int power)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     bool pet = !one_in_(5);
@@ -157,7 +157,7 @@ bool cast_summon_hound(player_type *player_ptr, int power)
     return true;
 }
 
-bool cast_summon_elemental(player_type *player_ptr, int power)
+bool cast_summon_elemental(PlayerType *player_ptr, int power)
 {
     bool pet = one_in_(3);
     BIT_FLAGS mode = 0L;
@@ -179,7 +179,7 @@ bool cast_summon_elemental(player_type *player_ptr, int power)
     return true;
 }
 
-bool cast_summon_octopus(player_type *player_ptr)
+bool cast_summon_octopus(PlayerType *player_ptr)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     bool pet = !one_in_(5);
@@ -199,7 +199,7 @@ bool cast_summon_octopus(player_type *player_ptr)
  * @brief 悪魔領域のグレーターデーモン召喚を処理する / Daemon spell Summon Greater Demon
  * @return 処理を実行したならばTRUEを返す。
  */
-bool cast_summon_greater_demon(player_type *player_ptr)
+bool cast_summon_greater_demon(PlayerType *player_ptr)
 {
     concptr q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
     concptr s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
@@ -232,7 +232,7 @@ bool cast_summon_greater_demon(player_type *player_ptr)
  * @param mode 召喚オプション
  * @return ターンを消費した場合TRUEを返す
  */
-bool summon_kin_player(player_type *player_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
+bool summon_kin_player(PlayerType *player_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     bool pet = (bool)(mode & PM_FORCE_PET);
     if (!pet)
@@ -248,7 +248,7 @@ bool summon_kin_player(player_type *player_ptr, DEPTH level, POSITION y, POSITIO
  * @param x 召喚位置X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-int summon_cyber(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x)
+int summon_cyber(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;
@@ -271,7 +271,7 @@ int summon_cyber(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION 
     return count;
 }
 
-void mitokohmon(player_type *player_ptr)
+void mitokohmon(PlayerType *player_ptr)
 {
     int count = 0;
     concptr sukekakusan = "";
@@ -329,7 +329,7 @@ void mitokohmon(player_type *player_ptr)
  * @return 作用が実際にあった場合TRUEを返す
  * @todo 引数にPOSITION x/yは必要か？ 要調査
  */
-int activate_hi_summon(player_type *player_ptr, POSITION y, POSITION x, bool can_pet)
+int activate_hi_summon(PlayerType *player_ptr, POSITION y, POSITION x, bool can_pet)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     bool pet = false;
@@ -423,7 +423,7 @@ int activate_hi_summon(player_type *player_ptr, POSITION y, POSITION x, bool can
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向ID
  */
-void cast_invoke_spirits(player_type *player_ptr, DIRECTION dir)
+void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;

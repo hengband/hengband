@@ -36,7 +36,7 @@
  * @param o_ptr アイテムへの参照ポインタ
  * @return 特別なクラス、かつそのクラス特有のアイテムであればFALSE、それ以外はTRUE
  */
-static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
+static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (!leave_special)
         return true;
@@ -61,7 +61,7 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief Automatically destroy items in this grid.
  */
-static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
+static bool is_opt_confirm_destroy(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (!destroy_items)
         return false;
@@ -99,7 +99,7 @@ static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
     return true;
 }
 
-void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int autopick_idx)
+void auto_destroy_item(PlayerType *player_ptr, object_type *o_ptr, int autopick_idx)
 {
     bool destroy = false;
     if (is_opt_confirm_destroy(player_ptr, o_ptr))

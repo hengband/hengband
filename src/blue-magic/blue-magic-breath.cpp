@@ -14,7 +14,7 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool cast_blue_breath_acid(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_acid(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -25,7 +25,7 @@ bool cast_blue_breath_acid(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_elec(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_elec(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -36,7 +36,7 @@ bool cast_blue_breath_elec(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_fire(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_fire(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -47,7 +47,7 @@ bool cast_blue_breath_fire(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_cold(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_cold(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -58,7 +58,7 @@ bool cast_blue_breath_cold(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_pois(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_pois(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -69,7 +69,7 @@ bool cast_blue_breath_pois(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_nether(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_nether(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -80,7 +80,7 @@ bool cast_blue_breath_nether(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_lite(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_lite(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -91,7 +91,7 @@ bool cast_blue_breath_lite(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_dark(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_dark(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -102,7 +102,7 @@ bool cast_blue_breath_dark(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_conf(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_conf(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -113,7 +113,7 @@ bool cast_blue_breath_conf(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_sound(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_sound(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -124,7 +124,7 @@ bool cast_blue_breath_sound(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_chaos(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_chaos(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -135,7 +135,7 @@ bool cast_blue_breath_chaos(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_disenchant(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_disenchant(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -146,7 +146,7 @@ bool cast_blue_breath_disenchant(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_nexus(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_nexus(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -157,7 +157,7 @@ bool cast_blue_breath_nexus(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_time(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_time(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -168,7 +168,7 @@ bool cast_blue_breath_time(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_inertia(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_inertia(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -179,7 +179,7 @@ bool cast_blue_breath_inertia(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_gravity(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_gravity(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -190,7 +190,7 @@ bool cast_blue_breath_gravity(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_shards(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_shards(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -201,7 +201,7 @@ bool cast_blue_breath_shards(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_plasma(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_plasma(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -212,7 +212,7 @@ bool cast_blue_breath_plasma(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_force(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_force(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -223,7 +223,7 @@ bool cast_blue_breath_force(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_mana(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_mana(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -234,7 +234,7 @@ bool cast_blue_breath_mana(player_type *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-bool cast_blue_breath_nuke(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_nuke(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
@@ -251,7 +251,7 @@ bool cast_blue_breath_nuke(player_type *player_ptr, bmc_type *bmc_ptr)
  * @param bmc_ptr 青魔法詠唱への参照ポインタ
  * @details 永久の刻は過ぎ去れリ.
  */
-bool cast_blue_breath_disintegration(player_type *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_breath_disintegration(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;

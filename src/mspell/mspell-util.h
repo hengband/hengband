@@ -12,7 +12,7 @@
 #define RF6_SPELL_START 32 * 5
 
 struct floor_type;
-struct player_type;
+class PlayerType;
 
 struct mspell_cast_msg {
     mspell_cast_msg(concptr to_player_true, concptr to_mons_true, concptr to_player_false, concptr to_mons_false);
@@ -38,8 +38,8 @@ struct mspell_cast_msg_simple {
     concptr to_mons; /*!< モンスター対象*/
 };
 
-bool see_monster(player_type *player_ptr, MONSTER_IDX m_idx);
+bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx);
 bool monster_near_player(floor_type *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx);
-bool monspell_message_base(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int TARGET_TYPE);
-bool monspell_message(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int TARGET_TYPE);
-void simple_monspell_message(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int TARGET_TYPE);
+bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int TARGET_TYPE);
+bool monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int TARGET_TYPE);
+void simple_monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int TARGET_TYPE);

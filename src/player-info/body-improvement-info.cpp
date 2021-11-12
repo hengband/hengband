@@ -5,7 +5,7 @@
 #include "system/player-type-definition.h"
 
 /*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
-void set_body_improvement_info_1(player_type *player_ptr, self_info_type *self_ptr)
+void set_body_improvement_info_1(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (is_blessed(player_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは高潔さを感じている。", "You feel rightous.");
@@ -30,7 +30,7 @@ void set_body_improvement_info_1(player_type *player_ptr, self_info_type *self_p
 }
 
 /*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
-void set_body_improvement_info_2(player_type *player_ptr, self_info_type *self_ptr)
+void set_body_improvement_info_2(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (player_ptr->new_spells)
         self_ptr->info[self_ptr->line++] = _("あなたは呪文や祈りを学ぶことができる。", "You can learn some spells/prayers.");
@@ -61,7 +61,7 @@ void set_body_improvement_info_2(player_type *player_ptr, self_info_type *self_p
 }
 
 /*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
-void set_body_improvement_info_3(player_type *player_ptr, self_info_type *self_ptr)
+void set_body_improvement_info_3(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (player_ptr->hold_exp)
         self_ptr->info[self_ptr->line++] = _("あなたは自己の経験値をしっかりと維持する。", "You have a firm hold on your experience.");
@@ -122,7 +122,7 @@ void set_body_improvement_info_3(player_type *player_ptr, self_info_type *self_p
 }
 
 /*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
-void set_body_improvement_info_4(player_type *player_ptr, self_info_type *self_ptr)
+void set_body_improvement_info_4(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (has_resist_fear(player_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは全く恐怖を感じない。", "You are completely fearless.");

@@ -125,7 +125,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-bool show_file(player_type *player_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
+bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {
     int wid, hgt;
     term_get_size(&wid, &hgt);

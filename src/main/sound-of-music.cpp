@@ -54,7 +54,7 @@ errr play_music(int type, int val)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 設定がない場合はミュートする。
  */
-void select_floor_music(player_type *player_ptr)
+void select_floor_music(PlayerType *player_ptr)
 {
     if (!use_music)
         return;
@@ -68,7 +68,7 @@ void select_floor_music(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monster_list モンスターリスト
  */
-void select_monster_music(player_type *player_ptr, const std::vector<MONSTER_IDX> &monster_list)
+void select_monster_music(PlayerType *player_ptr, const std::vector<MONSTER_IDX> &monster_list)
 {
     if (!use_music)
         return;

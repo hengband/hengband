@@ -14,7 +14,7 @@
 /*!
  * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理
  */
-void pack_overflow(player_type *player_ptr)
+void pack_overflow(PlayerType *player_ptr)
 {
     if (player_ptr->inventory_list[INVEN_PACK].k_idx == 0)
         return;

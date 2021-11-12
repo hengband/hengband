@@ -6,5 +6,5 @@
 
 enum class MonsterAbilityType;
 
-struct player_type;
-bool cast_learned_spell(player_type *player_ptr, MonsterAbilityType spell, const bool success);
+class PlayerType;
+bool cast_learned_spell(PlayerType *player_ptr, MonsterAbilityType spell, const bool success);

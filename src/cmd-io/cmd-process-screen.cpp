@@ -336,7 +336,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 記念撮影直前のグラフィックオプション
  */
-static bool update_use_graphics(player_type *player_ptr)
+static bool update_use_graphics(PlayerType *player_ptr)
 {
 	if (!use_graphics) return true;
 
@@ -352,7 +352,7 @@ static bool update_use_graphics(player_type *player_ptr)
  * Save a screen dump to a file
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_save_screen(player_type *player_ptr)
+void do_cmd_save_screen(PlayerType *player_ptr)
 {
 	prt(_("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] "), 0, 0);
 	bool html_dump;

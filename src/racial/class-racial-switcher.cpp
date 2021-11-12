@@ -6,7 +6,7 @@
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 
-void switch_class_racial(player_type *player_ptr, rc_type *rc_ptr)
+void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
     switch (player_ptr->pclass) {

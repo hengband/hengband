@@ -337,7 +337,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 /*
  * Dungeon
  */
-void do_cmd_knowledge_dungeon(player_type *player_ptr)
+void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

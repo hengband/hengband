@@ -20,7 +20,7 @@ void clear_bldg(int min_row, int max_row)
  * @brief 所持金を表示する。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void building_prt_gold(player_type *player_ptr)
+void building_prt_gold(PlayerType *player_ptr)
 {
     char tmp_str[80];
     prt(_("手持ちのお金: ", "Gold Remaining: "), 23, 53);

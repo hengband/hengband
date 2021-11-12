@@ -52,7 +52,7 @@
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
-static bool get_hack_dir(player_type *player_ptr, DIRECTION *dp)
+static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
 {
     *dp = 0;
     char command;
@@ -112,7 +112,7 @@ static bool get_hack_dir(player_type *player_ptr, DIRECTION *dp)
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理
  * / Handle mutation effects once every 10 game turns
  */
-void process_world_aux_mutation(player_type *player_ptr)
+void process_world_aux_mutation(PlayerType *player_ptr)
 {
     if (player_ptr->muta.none() || player_ptr->phase_out || player_ptr->wild_mode) {
         return;
@@ -471,7 +471,7 @@ void process_world_aux_mutation(player_type *player_ptr)
     }
 }
 
-bool drop_weapons(player_type *player_ptr)
+bool drop_weapons(PlayerType *player_ptr)
 {
     INVENTORY_IDX slot = 0;
     object_type *o_ptr = nullptr;

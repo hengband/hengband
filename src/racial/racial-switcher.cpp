@@ -84,7 +84,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-bool switch_class_racial_execution(player_type *player_ptr, const int32_t command)
+bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command)
 {
     DIRECTION dir = 0;
     switch (player_ptr->pclass) {
@@ -271,7 +271,7 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
     }
 }
 
-bool switch_mimic_racial_execution(player_type *player_ptr)
+bool switch_mimic_racial_execution(PlayerType *player_ptr)
 {
     switch (player_ptr->mimic_form) {
     case MIMIC_DEMON:
@@ -286,7 +286,7 @@ bool switch_mimic_racial_execution(player_type *player_ptr)
     }
 }
 
-bool switch_race_racial_execution(player_type *player_ptr, const int32_t command)
+bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
 {
     DIRECTION dir = 0;
     switch (player_ptr->prace) {

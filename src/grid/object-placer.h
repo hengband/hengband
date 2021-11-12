@@ -2,6 +2,6 @@
 
 #include "system/angband.h"
 
-struct player_type;
-void place_gold(player_type *player_ptr, POSITION y, POSITION x);
-void place_object(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
+class PlayerType;
+void place_gold(PlayerType *player_ptr, POSITION y, POSITION x);
+void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);

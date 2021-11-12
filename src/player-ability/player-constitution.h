@@ -2,10 +2,10 @@
 
 #include "player-status/player-basic-statistics.h"
 
-struct player_type;
+class PlayerType;
 class PlayerConstitution : public PlayerBasicStatistics {
 public:
-    PlayerConstitution(player_type *player_ptr);
+    PlayerConstitution(PlayerType *player_ptr);
 
 protected:
     void set_locals() override;
