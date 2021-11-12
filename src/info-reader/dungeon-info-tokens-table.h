@@ -5,6 +5,6 @@
 #include <string_view>
 #include <unordered_map>
 
-enum class DF;
+enum class DungeonFeatureType;
 
-extern const std::unordered_map<std::string_view, DF> d_info_flags;
+extern const std::unordered_map<std::string_view, DungeonFeatureType> d_info_flags;

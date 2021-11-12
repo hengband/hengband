@@ -104,7 +104,7 @@ static void check_darkness(player_type *player_ptr, melee_spell_type *ms_ptr)
     if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
         return;
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::DARKNESS);
         return;
     }

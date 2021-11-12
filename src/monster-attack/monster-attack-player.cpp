@@ -64,7 +64,7 @@ static bool check_no_blow(player_type *player_ptr, monap_type *monap_ptr)
         return false;
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 

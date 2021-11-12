@@ -20,7 +20,7 @@
  */
 static bool grab_one_dungeon_flag(dungeon_type *d_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<DF>::grab_one_flag(d_ptr->flags, d_info_flags, what))
+    if (EnumClassFlagGroup<DungeonFeatureType>::grab_one_flag(d_ptr->flags, d_info_flags, what))
         return true;
 
     msg_format(_("未知のダンジョン・フラグ '%s'。", "Unknown dungeon type flag '%s'."), what.data());

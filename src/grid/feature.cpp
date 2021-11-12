@@ -197,7 +197,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     if (!w_ptr->character_dungeon) {
         g_ptr->mimic = 0;
         g_ptr->feat = feat;
-        if (f_ptr->flags.has(FF::GLOW) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS)) {
+        if (f_ptr->flags.has(FF::GLOW) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
             for (DIRECTION i = 0; i < 9; i++) {
                 POSITION yy = y + ddy_ddd[i];
                 POSITION xx = x + ddx_ddd[i];
@@ -218,7 +218,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     g_ptr->mimic = 0;
     g_ptr->feat = feat;
     g_ptr->info &= ~(CAVE_OBJECT);
-    if (old_mirror && d_info[floor_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (old_mirror && d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         g_ptr->info &= ~(CAVE_GLOW);
         if (!view_torch_grids) {
             g_ptr->info &= ~(CAVE_MARK);
@@ -241,7 +241,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
         player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS;
     }
 
-    if (f_ptr->flags.has_not(FF::GLOW) || d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (f_ptr->flags.has_not(FF::GLOW) || d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 

@@ -264,7 +264,7 @@ void update_dungeon_feeling(player_type *player_ptr)
  */
 void glow_deep_lava_and_bldg(player_type *player_ptr)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         return;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
