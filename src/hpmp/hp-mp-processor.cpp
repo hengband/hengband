@@ -342,7 +342,7 @@ void process_player_hp_mp(player_type *player_ptr)
         if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
             regen_amount /= 2;
         }
-        if (player_ptr->cursed.has(TRC::SLOW_REGEN)) {
+        if (player_ptr->cursed.has(CurseTraitType::SLOW_REGEN)) {
             regen_amount /= 5;
         }
     }

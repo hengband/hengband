@@ -1026,7 +1026,7 @@ void update_curses(player_type *player_ptr)
     player_ptr->cursed_special.clear();
 
     if (player_ptr->ppersonality == PERSONALITY_SEXY)
-        player_ptr->cursed.set(TRC::AGGRAVATE);
+        player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -1034,51 +1034,51 @@ void update_curses(player_type *player_ptr)
             continue;
         auto flgs = object_flags(o_ptr);
         if (flgs.has(TR_AGGRAVATE))
-            player_ptr->cursed.set(TRC::AGGRAVATE);
+            player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
         if (flgs.has(TR_DRAIN_EXP))
-            player_ptr->cursed.set(TRC::DRAIN_EXP);
+            player_ptr->cursed.set(CurseTraitType::DRAIN_EXP);
         if (flgs.has(TR_TY_CURSE))
-            player_ptr->cursed.set(TRC::TY_CURSE);
+            player_ptr->cursed.set(CurseTraitType::TY_CURSE);
         if (flgs.has(TR_ADD_L_CURSE))
-            player_ptr->cursed.set(TRC::ADD_L_CURSE);
+            player_ptr->cursed.set(CurseTraitType::ADD_L_CURSE);
         if (flgs.has(TR_ADD_H_CURSE))
-            player_ptr->cursed.set(TRC::ADD_H_CURSE);
+            player_ptr->cursed.set(CurseTraitType::ADD_H_CURSE);
         if (flgs.has(TR_DRAIN_HP))
-            player_ptr->cursed.set(TRC::DRAIN_HP);
+            player_ptr->cursed.set(CurseTraitType::DRAIN_HP);
         if (flgs.has(TR_DRAIN_MANA))
-            player_ptr->cursed.set(TRC::DRAIN_MANA);
+            player_ptr->cursed.set(CurseTraitType::DRAIN_MANA);
         if (flgs.has(TR_CALL_ANIMAL))
-            player_ptr->cursed.set(TRC::CALL_ANIMAL);
+            player_ptr->cursed.set(CurseTraitType::CALL_ANIMAL);
         if (flgs.has(TR_CALL_DEMON))
-            player_ptr->cursed.set(TRC::CALL_DEMON);
+            player_ptr->cursed.set(CurseTraitType::CALL_DEMON);
         if (flgs.has(TR_CALL_DRAGON))
-            player_ptr->cursed.set(TRC::CALL_DRAGON);
+            player_ptr->cursed.set(CurseTraitType::CALL_DRAGON);
         if (flgs.has(TR_CALL_UNDEAD))
-            player_ptr->cursed.set(TRC::CALL_UNDEAD);
+            player_ptr->cursed.set(CurseTraitType::CALL_UNDEAD);
         if (flgs.has(TR_COWARDICE))
-            player_ptr->cursed.set(TRC::COWARDICE);
+            player_ptr->cursed.set(CurseTraitType::COWARDICE);
         if (flgs.has(TR_LOW_MELEE))
-            player_ptr->cursed.set(TRC::LOW_MELEE);
+            player_ptr->cursed.set(CurseTraitType::LOW_MELEE);
         if (flgs.has(TR_LOW_AC))
-            player_ptr->cursed.set(TRC::LOW_AC);
+            player_ptr->cursed.set(CurseTraitType::LOW_AC);
         if (flgs.has(TR_HARD_SPELL))
-            player_ptr->cursed.set(TRC::HARD_SPELL);
+            player_ptr->cursed.set(CurseTraitType::HARD_SPELL);
         if (flgs.has(TR_FAST_DIGEST))
-            player_ptr->cursed.set(TRC::FAST_DIGEST);
+            player_ptr->cursed.set(CurseTraitType::FAST_DIGEST);
         if (flgs.has(TR_SLOW_REGEN))
-            player_ptr->cursed.set(TRC::SLOW_REGEN);
+            player_ptr->cursed.set(CurseTraitType::SLOW_REGEN);
         if (flgs.has(TR_BERS_RAGE))
-            player_ptr->cursed.set(TRC::BERS_RAGE);
+            player_ptr->cursed.set(CurseTraitType::BERS_RAGE);
 
         auto obj_curse_flags = o_ptr->curse_flags;
-        obj_curse_flags.reset({ TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE });
+        obj_curse_flags.reset({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE });
         player_ptr->cursed.set(obj_curse_flags);
         if (o_ptr->name1 == ART_CHAINSWORD)
             player_ptr->cursed_special.set(TRCS::CHAINSWORD);
 
         if (flgs.has(TR_TELEPORT)) {
             if (o_ptr->is_cursed())
-                player_ptr->cursed.set(TRC::TELEPORT);
+                player_ptr->cursed.set(CurseTraitType::TELEPORT);
             else {
                 concptr insc = quark_str(o_ptr->inscription);
 
@@ -1091,7 +1091,7 @@ void update_curses(player_type *player_ptr)
         }
     }
 
-    if (player_ptr->cursed.has(TRC::TELEPORT))
+    if (player_ptr->cursed.has(CurseTraitType::TELEPORT))
         player_ptr->cursed_special.reset(TRCS::TELEPORT_SELF);
 }
 
@@ -1664,7 +1664,7 @@ bool has_good_luck(player_type *player_ptr)
 
 BIT_FLAGS player_aggravate_state(player_type *player_ptr)
 {
-    if (player_ptr->cursed.has(TRC::AGGRAVATE)) {
+    if (player_ptr->cursed.has(CurseTraitType::AGGRAVATE)) {
         if ((PlayerRace(player_ptr).equals(PlayerRaceType::S_FAIRY)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
             return AGGRAVATE_S_FAIRY;
         }

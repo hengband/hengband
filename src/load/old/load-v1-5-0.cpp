@@ -118,23 +118,23 @@ void rd_item_old(object_type *o_ptr)
         // バージョン 1.0.11 以前は tr_type の 93, 94, 95 は現在と違い呪い等の別の用途で使用されていたので番号をハードコーディングする
         o_ptr->curse_flags.clear();
         if (o_ptr->ident & 0x40) {
-            o_ptr->curse_flags.set(TRC::CURSED);
+            o_ptr->curse_flags.set(CurseTraitType::CURSED);
             if (o_ptr->art_flags.has(i2enum<tr_type>(94)))
-                o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+                o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
             if (o_ptr->art_flags.has(i2enum<tr_type>(95)))
-                o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-                    o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+                    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-                    o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                    o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             } else if (o_ptr->is_ego()) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
                 if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-                    o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+                    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (e_ptr->gen_flags.has(TRG::PERMA_CURSE))
-                    o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                    o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             }
         }
         o_ptr->art_flags.reset({ i2enum<tr_type>(93), i2enum<tr_type>(94), i2enum<tr_type>(95) });

@@ -429,15 +429,15 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
         total -= 10000;
     if (flgs.has(TR_BLESSED))
         total += 750;
-    if (o_ptr->curse_flags.has(TRC::ADD_L_CURSE))
+    if (o_ptr->curse_flags.has(CurseTraitType::ADD_L_CURSE))
         total -= 5000;
-    if (o_ptr->curse_flags.has(TRC::ADD_H_CURSE))
+    if (o_ptr->curse_flags.has(CurseTraitType::ADD_H_CURSE))
         total -= 12500;
-    if (o_ptr->curse_flags.has(TRC::CURSED))
+    if (o_ptr->curse_flags.has(CurseTraitType::CURSED))
         total -= 5000;
-    if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
+    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
         total -= 12500;
-    if (o_ptr->curse_flags.has(TRC::PERMA_CURSE))
+    if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE))
         total -= 15000;
 
     /* Also, give some extra for activatable powers... */

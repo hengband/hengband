@@ -317,7 +317,7 @@ public:
     BIT_FLAGS anti_magic{}; /* Anti-magic */
     BIT_FLAGS anti_tele{}; /* Prevent teleportation */
 
-    EnumClassFlagGroup<TRC> cursed{}; /* Player is cursed */
+    EnumClassFlagGroup<CurseTraitType> cursed{}; /* Player is cursed */
     EnumClassFlagGroup<TRCS> cursed_special{}; /* Player is special type cursed */
 
     bool can_swim{}; /* No damage falling */

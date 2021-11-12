@@ -328,7 +328,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
 
     // マイナス効果のあるアイテムから抽出する時のペナルティを計算
     int dec = 4;
-    if (o_ptr->curse_flags.has_any_of({ TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE }))
+    if (o_ptr->curse_flags.has_any_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE }))
         dec--;
 
     for (auto &&info : essence_drain_info_table) {

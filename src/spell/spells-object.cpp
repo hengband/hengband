@@ -250,7 +250,7 @@ bool curse_armor(player_type *player_ptr)
     o_ptr->art_flags.clear();
 
     /* Curse it */
-    o_ptr->curse_flags.set(TRC::CURSED);
+    o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -304,7 +304,7 @@ bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr
     o_ptr->art_flags.clear();
 
     /* Curse it */
-    o_ptr->curse_flags.set(TRC::CURSED);
+    o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -361,7 +361,7 @@ void brand_bolts(player_type *player_ptr)
 static void break_curse(object_type *o_ptr)
 {
     BIT_FLAGS is_curse_broken
-        = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
+        = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(CurseTraitType::PERMA_CURSE) && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE) && (randint0(100) < 25);
     if (!is_curse_broken) {
         return;
     }

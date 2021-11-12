@@ -60,7 +60,7 @@ typedef struct object_type {
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */
 
     TrFlags art_flags{}; /*!< Extra Flags for ego and artifacts */
-    EnumClassFlagGroup<TRC> curse_flags{}; /*!< Flags for curse */
+    EnumClassFlagGroup<CurseTraitType> curse_flags{}; /*!< Flags for curse */
     MONSTER_IDX held_m_idx{}; /*!< アイテムを所持しているモンスターID (いないなら 0) / Monster holding us (if any) */
     int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 

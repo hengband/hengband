@@ -25,10 +25,10 @@ static int exe_curse_removal(player_type *player_ptr, int all)
             continue;
         if (!o_ptr->is_cursed())
             continue;
-        if (!all && o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
+        if (!all && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
             continue;
-        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
-            o_ptr->curse_flags &= {TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE};
+        if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
+            o_ptr->curse_flags &= {CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE};
             continue;
         }
 

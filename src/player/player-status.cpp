@@ -1527,8 +1527,8 @@ static int16_t calc_to_magic_chance(player_type *player_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        if (o_ptr->curse_flags.has(TRC::HARD_SPELL)) {
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::HARD_SPELL)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 chance += 10;
             } else {
                 chance += 3;
@@ -1598,8 +1598,8 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
         if (is_real_value || o_ptr->is_known())
             ac += o_ptr->to_a;
 
-        if (o_ptr->curse_flags.has(TRC::LOW_AC)) {
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::LOW_AC)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 if (is_real_value || o_ptr->is_fully_known())
                     ac -= 30;
             } else {
@@ -1676,11 +1676,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *player_ptr, bool is_real_value)
                 continue;
             if (!o_ptr->is_cursed())
                 continue;
-            if (o_ptr->curse_flags.has(TRC::CURSED))
+            if (o_ptr->curse_flags.has(CurseTraitType::CURSED))
                 ac += 5;
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
                 ac += 7;
-            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE))
+            if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE))
                 ac += 13;
         }
     }
@@ -1947,13 +1947,13 @@ static short calc_to_damage(player_type *player_ptr, INVENTORY_IDX slot, bool is
 
     if ((player_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
         if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
-            if (o_ptr->curse_flags.has(TRC::CURSED)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
                 damage += 5;
             }
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 damage += 7;
             }
-            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
                 damage += 13;
             }
         }
@@ -2117,8 +2117,8 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
         }
 
         /* Low melee penalty */
-        if ((o_ptr->is_fully_known() || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+        if ((o_ptr->is_fully_known() || is_real_value) && o_ptr->curse_flags.has(CurseTraitType::LOW_MELEE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 hit -= 15;
             } else {
                 hit -= 5;
@@ -2167,16 +2167,16 @@ static short calc_to_hit(player_type *player_ptr, INVENTORY_IDX slot, bool is_re
 
         /* Hex realm bonuses */
         if ((player_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
-            if (o_ptr->curse_flags.has(TRC::CURSED)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
                 hit += 5;
             }
-            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 hit += 7;
             }
-            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
                 hit += 13;
             }
-            if (o_ptr->curse_flags.has(TRC::TY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::TY_CURSE)) {
                 hit += 5;
             }
         }
@@ -2276,8 +2276,8 @@ static int16_t calc_to_hit_bow(player_type *player_ptr, bool is_real_value)
         object_type *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_BOW];
         if (o_ptr->k_idx) {
-            if (o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
-                if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(CurseTraitType::LOW_MELEE)) {
+                if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                     pow -= 15;
                 } else {
                     pow -= 5;

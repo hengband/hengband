@@ -53,7 +53,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
     default:
         o_ptr->art_flags.set(TR_AGGRAVATE);
         o_ptr->art_flags.set(TR_TY_CURSE);
-        o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
+        o_ptr->curse_flags.set({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE });
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
         return false;
     }
@@ -94,7 +94,7 @@ static void invest_special_artifact_abilities(player_type *player_ptr, object_ty
     case ART_MURAMASA:
         if (player_ptr->pclass != PlayerClassType::SAMURAI) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
-            o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+            o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
@@ -179,13 +179,13 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_
         set_bits(o_ptr->ident, IDENT_BROKEN);
 
     if (a_ptr->gen_flags.has(TRG::CURSED))
-        o_ptr->curse_flags.set(TRC::CURSED);
+        o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
     if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
 
     if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-        o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+        o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
         o_ptr->curse_flags.set(get_curse(0, o_ptr));
