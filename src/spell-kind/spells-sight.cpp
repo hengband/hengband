@@ -56,17 +56,17 @@ bool project_all_los(player_type *player_ptr, AttributeType typ, HIT_POINT dam)
         if (!player_has_los_bold(player_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x))
             continue;
 
-        m_ptr->mflag.set(MFLAG::LOS);
+        m_ptr->mflag.set(MonsterTemporaryFlagType::LOS);
     }
 
     BIT_FLAGS flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
     bool obvious = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (m_ptr->mflag.has_not(MFLAG::LOS))
+        if (m_ptr->mflag.has_not(MonsterTemporaryFlagType::LOS))
             continue;
 
-        m_ptr->mflag.reset(MFLAG::LOS);
+        m_ptr->mflag.reset(MonsterTemporaryFlagType::LOS);
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 

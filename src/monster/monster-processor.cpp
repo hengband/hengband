@@ -552,8 +552,8 @@ void sweep_monster_process(player_type *player_ptr)
         if (!monster_is_valid(m_ptr) || player_ptr->wild_mode)
             continue;
 
-        if (m_ptr->mflag.has(MFLAG::BORN)) {
-            m_ptr->mflag.reset(MFLAG::BORN);
+        if (m_ptr->mflag.has(MonsterTemporaryFlagType::BORN)) {
+            m_ptr->mflag.reset(MonsterTemporaryFlagType::BORN);
             continue;
         }
 

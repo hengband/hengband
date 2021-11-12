@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class MFLAG {
+enum class MonsterTemporaryFlagType {
     VIEW = 0, /* Monster is in line of sight */
     LOS = 1, /* Monster is marked for project_all_los(player_ptr, ) */
     ESP = 2, /* Monster is being sensed by ESP */

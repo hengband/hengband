@@ -304,7 +304,7 @@ bool make_attack_spell(player_type *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    if (msa_ptr->m_ptr->mflag.has(MFLAG::PREVENT_MAGIC) || !is_hostile(msa_ptr->m_ptr)
+    if (msa_ptr->m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC) || !is_hostile(msa_ptr->m_ptr)
         || ((msa_ptr->m_ptr->cdis > get_max_range(player_ptr)) && !msa_ptr->m_ptr->target_y))
         return false;
 

@@ -412,7 +412,7 @@ bool process_monster_movement(player_type *player_ptr, turn_flags *turn_flags_pt
 
         monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
         if (m_ptr->ml
-            && (disturb_move || (disturb_near && m_ptr->mflag.has(MFLAG::VIEW) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))
+            && (disturb_move || (disturb_near && m_ptr->mflag.has(MonsterTemporaryFlagType::VIEW) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))
                 || (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= player_ptr->lev))) {
             if (is_hostile(m_ptr))
                 disturb(player_ptr, false, true);

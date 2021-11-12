@@ -344,12 +344,12 @@ void process_player(player_type *player_ptr)
                 }
 
                 // 出現して即魔法を使わないようにするフラグを落とす処理
-                if (m_ptr->mflag.has(MFLAG::PREVENT_MAGIC)) {
-                    m_ptr->mflag.reset(MFLAG::PREVENT_MAGIC);
+                if (m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC)) {
+                    m_ptr->mflag.reset(MonsterTemporaryFlagType::PREVENT_MAGIC);
                 }
 
-                if (m_ptr->mflag.has(MFLAG::SANITY_BLAST)) {
-                    m_ptr->mflag.reset(MFLAG::SANITY_BLAST);
+                if (m_ptr->mflag.has(MonsterTemporaryFlagType::SANITY_BLAST)) {
+                    m_ptr->mflag.reset(MonsterTemporaryFlagType::SANITY_BLAST);
                     sanity_blast(player_ptr, m_ptr, false);
                 }
 

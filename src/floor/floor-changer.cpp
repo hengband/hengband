@@ -111,7 +111,7 @@ static void set_pet_params(player_type *player_ptr, monster_race **r_ptr, const 
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
     if (((*r_ptr)->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
-        m_ptr->mflag.set(MFLAG::PREVENT_MAGIC);
+        m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 }
 

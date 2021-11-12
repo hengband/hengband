@@ -366,11 +366,11 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if (any_bits(r_ptr->flags1, RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
-        m_ptr->mflag.set(MFLAG::PREVENT_MAGIC);
+        m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 
     if (g_ptr->m_idx < hack_m_idx) {
-        m_ptr->mflag.set(MFLAG::BORN);
+        m_ptr->mflag.set(MonsterTemporaryFlagType::BORN);
     }
 
     if (any_bits(r_ptr->flags7, RF7_SELF_LD_MASK))

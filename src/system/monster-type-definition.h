@@ -38,7 +38,7 @@ typedef struct monster_type {
 	SPEED mspeed{};	        /*!< モンスターの個体加速値 / Monster "speed" */
 	ACTION_ENERGY energy_need{};	/*!< モンスター次ターンまでに必要な行動エネルギー / Monster "energy" */
 	POSITION cdis{};		/*!< 現在のプレイヤーから距離(逐一計算を避けるためのテンポラリ変数) Current dis from player */
-	EnumClassFlagGroup<MFLAG> mflag{};	/*!< モンスター個体に与えられた特殊フラグ1 (セーブ不要) / Extra monster flags */
+	EnumClassFlagGroup<MonsterTemporaryFlagType> mflag{};	/*!< モンスター個体に与えられた特殊フラグ1 (セーブ不要) / Extra monster flags */
 	EnumClassFlagGroup<MFLAG2> mflag2{};	/*!< モンスター個体に与えられた特殊フラグ2 (セーブ必要) / Extra monster flags */
 	bool ml{};		/*!< モンスターがプレイヤーにとって視認できるか(処理のためのテンポラリ変数) Monster is "visible" */
 	ObjectIndexList hold_o_idx_list{};	/*!< モンスターが所持しているアイテムのリスト / Object list being held (if any) */
