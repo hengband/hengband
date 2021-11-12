@@ -30,7 +30,7 @@
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
  * @return ペットがモンスターに近づくならばTRUE
  */
-static bool decide_pet_approch_direction(player_type *player_ptr, monster_type *m_ptr, monster_type *t_ptr)
+static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m_ptr, monster_type *t_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (!is_pet(m_ptr))
@@ -56,7 +56,7 @@ static bool decide_pet_approch_direction(player_type *player_ptr, monster_type *
  * @param y モンスターの移動方向Y
  * @param x モンスターの移動方向X
  */
-static void decide_enemy_approch_direction(player_type *player_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
+static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -101,7 +101,7 @@ static void decide_enemy_approch_direction(player_type *player_ptr, MONSTER_IDX 
  * @param mm 移動するべき方角IDを返す参照ポインタ
  * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
  */
-bool get_enemy_dir(player_type *player_ptr, MONSTER_IDX m_idx, int *mm)
+bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -145,7 +145,7 @@ bool get_enemy_dir(player_type *player_ptr, MONSTER_IDX m_idx, int *mm)
  * @return 不規則な方向へ歩くことになったらTRUE
  * @todo "5"とはもしかして「その場に留まる」という意味か？
  */
-static bool random_walk(player_type *player_ptr, DIRECTION *mm, monster_type *m_ptr)
+static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) && (randint0(100) < 75)) {
@@ -219,7 +219,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
  * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 移動先が存在すればTRUE
  */
-bool decide_monster_movement_direction(player_type *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
+bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

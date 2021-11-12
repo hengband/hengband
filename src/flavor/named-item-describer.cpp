@@ -350,7 +350,7 @@ static void describe_inscription(flavor_type *flavor_ptr)
     }
 }
 
-void describe_named_item(player_type *player_ptr, flavor_type *flavor_ptr)
+void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
     check_object_known_aware(flavor_ptr);
     switch_tval_description(flavor_ptr);

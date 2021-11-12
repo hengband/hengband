@@ -18,7 +18,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-ThrowCommand::ThrowCommand(player_type *player_ptr)
+ThrowCommand::ThrowCommand(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

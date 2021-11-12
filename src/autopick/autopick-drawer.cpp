@@ -17,7 +17,7 @@
 
 #define DESCRIPT_HGT 3
 
-static void process_dirty_expression(player_type *player_ptr, text_body_type *tb)
+static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
 {
     if ((tb->dirty_flags & DIRTY_EXPRESSION) == 0)
         return;
@@ -57,7 +57,7 @@ static void process_dirty_expression(player_type *player_ptr, text_body_type *tb
 /*!
  * @brief Draw text
  */
-void draw_text_editor(player_type *player_ptr, text_body_type *tb)
+void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
 {
     int by1 = 0, by2 = 0;
 

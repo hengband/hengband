@@ -19,7 +19,7 @@
  * If player has inscribed the object with "!!", let him know when it's recharged. -LM-
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  */
-static void recharged_notice(player_type *player_ptr, object_type *o_ptr)
+static void recharged_notice(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (!o_ptr->inscription)
         return;
@@ -49,7 +49,7 @@ static void recharged_notice(player_type *player_ptr, object_type *o_ptr)
  * @brief 10ゲームターンが進行するごとに魔道具の自然充填を行う処理
  * / Handle recharging objects once every 10 game turns
  */
-void recharge_magic_items(player_type *player_ptr)
+void recharge_magic_items(PlayerType *player_ptr)
 {
     int i;
     bool changed;

@@ -3,7 +3,7 @@
 #include "player-ability/player-ability-types.h"
 #include "player-status/player-status-base.h"
 
-struct player_type;
+class PlayerType;
 class PlayerBasicStatistics : public PlayerStatusBase {
 public:
     void update_value();
@@ -11,7 +11,7 @@ public:
     int16_t get_value() override;
 
 protected:
-    PlayerBasicStatistics(player_type *player_ptr);
+    PlayerBasicStatistics(PlayerType *player_ptr);
 
     player_ability_type ability_type{};
     int16_t race_value() override;

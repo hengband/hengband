@@ -2,8 +2,8 @@
 
 #include "system/angband.h"
 
-struct player_type;
-bool charm_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool control_one_undead(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool control_one_demon(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool charm_animal(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+class PlayerType;
+bool charm_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool control_one_undead(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool control_one_demon(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool charm_animal(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);

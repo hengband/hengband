@@ -34,11 +34,11 @@ enum pit_type : int {
 };
 
 /*! pit/nest型情報の構造体定義 */
-struct player_type;
+class PlayerType;
 struct nest_pit_type {
     concptr name; //<! 部屋名
-    bool (*hook_func)(player_type *player_ptr, MONRACE_IDX r_idx); //<! モンスターフィルタ関数
-    void (*prep_func)(player_type *player_ptr); //<! 能力フィルタ関数
+    bool (*hook_func)(PlayerType *player_ptr, MONRACE_IDX r_idx); //<! モンスターフィルタ関数
+    void (*prep_func)(PlayerType *player_ptr); //<! 能力フィルタ関数
     DEPTH level; //<! 相当階
     int chance; //!< 生成確率
 };
@@ -50,6 +50,6 @@ struct nest_mon_info_type {
 };
 
 struct dun_data_type;
-bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr);
-bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr);
-bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr);
+bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr);
+bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr);
+bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr);

@@ -6,7 +6,7 @@
 #include "util/bit-flags-calculator.h"
 
 /*!< @todo FEAELESS フラグも記述して問題ないと思われる */
-void set_mutation_info(player_type *player_ptr, self_info_type *self_ptr)
+void set_mutation_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (player_ptr->muta.none())
         return;

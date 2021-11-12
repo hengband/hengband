@@ -14,7 +14,7 @@
  * @details アンデッド種族は18:00からゲームを開始するので、この修正を予め行う。
  * @return 修正をかけた後のゲームターン
  */
-int32_t turn_real(player_type *player_ptr, int32_t hoge)
+int32_t turn_real(PlayerType *player_ptr, int32_t hoge)
 {
     switch (player_ptr->start_race) {
     case PlayerRaceType::VAMPIRE:
@@ -33,7 +33,7 @@ int32_t turn_real(player_type *player_ptr, int32_t hoge)
  * @details ターン及びターンを記録する変数をターンの限界の1日前まで巻き戻す.
  * @return 修正をかけた後のゲームターン
  */
-void prevent_turn_overflow(player_type *player_ptr)
+void prevent_turn_overflow(PlayerType *player_ptr)
 {
     if (w_ptr->game_turn < w_ptr->game_turn_limit)
         return;

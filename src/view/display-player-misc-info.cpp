@@ -12,7 +12,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * Special display, part 2a
  */
-void display_player_misc_info(player_type *player_ptr)
+void display_player_misc_info(PlayerType *player_ptr)
 {
     put_str(_("名前  :", "Name  :"), 1, 26);
     put_str(_("性別  :", "Sex   :"), 3, 1);

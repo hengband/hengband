@@ -9,7 +9,7 @@
  * @details
  *  使用可能レベル以上を条件とする。
  */
-void set_race_ability_info(player_type *player_ptr, self_info_type *self_ptr)
+void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     switch (player_ptr->prace) {
     case PlayerRaceType::DWARF:

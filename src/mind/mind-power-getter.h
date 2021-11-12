@@ -5,15 +5,15 @@
 
 struct mind_power;
 struct mind_type;
-struct player_type;
+class PlayerType;
 class MindPowerGetter {
 public:
-    MindPowerGetter(player_type *player_ptr);
+    MindPowerGetter(PlayerType *player_ptr);
     virtual ~MindPowerGetter() = default;
     bool get_mind_power(SPELL_IDX *sn, bool only_browse);
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     SPELL_IDX index = 0;
     int num = 0;
     TERM_LEN y = 1;

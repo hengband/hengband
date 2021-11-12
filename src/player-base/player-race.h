@@ -5,11 +5,11 @@
 enum class PlayerRaceType;
 enum class PlayerRaceLifeType;
 enum class PlayerRaceFoodType;
-struct player_type;
+class PlayerType;
 struct player_race_info;
 class PlayerRace {
 public:
-    PlayerRace(player_type *player_ptr, bool base_race = false);
+    PlayerRace(PlayerType *player_ptr, bool base_race = false);
     virtual ~PlayerRace() = default;
 
     TrFlags tr_flags() const;
@@ -28,6 +28,6 @@ public:
     int16_t additional_constitution() const;
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     bool base_race;
 };

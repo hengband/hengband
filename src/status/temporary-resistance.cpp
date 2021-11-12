@@ -13,7 +13,7 @@
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_levitation(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_levitation(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -49,7 +49,7 @@ bool set_tim_levitation(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
     return true;
 }
 
-bool set_ultimate_res(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_ultimate_res(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -88,7 +88,7 @@ bool set_ultimate_res(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
     return true;
 }
 
-bool set_tim_res_nether(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_res_nether(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -126,7 +126,7 @@ bool set_tim_res_nether(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
     return true;
 }
 
-bool set_tim_res_time(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_res_time(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;

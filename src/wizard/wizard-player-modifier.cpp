@@ -55,7 +55,7 @@ void display_wizard_player_modifier_menu()
  * @brief プレイヤー設定コマンドの入力を受け付ける
  * @param player_ptr プレイヤーの情報へのポインタ
  */
-void wizard_player_modifier(player_type *player_ptr)
+void wizard_player_modifier(PlayerType *player_ptr)
 {
     screen_save();
     display_wizard_player_modifier_menu();

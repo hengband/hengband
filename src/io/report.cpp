@@ -235,7 +235,7 @@ static bool http_post(concptr url, BUF *buf)
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(player_type *player_ptr, BUF *dumpbuf, display_player_pf display_player)
+static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf, display_player_pf display_player)
 {
     char buf[1024];
     FILE *fff;
@@ -274,7 +274,7 @@ static errr make_dump(player_type *player_ptr, BUF *dumpbuf, display_player_pf d
  * @brief スクリーンダンプを作成する/ Make screen dump to buffer
  * @return 作成したスクリーンダンプの参照ポインタ
  */
-concptr make_screen_dump(player_type *player_ptr)
+concptr make_screen_dump(PlayerType *player_ptr)
 {
     static concptr html_head[] = {
         "<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
@@ -403,7 +403,7 @@ concptr make_screen_dump(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 正常にスコアを送信できたらtrue、失敗時に送信を中止したらfalse
  */
-bool report_score(player_type *player_ptr, display_player_pf display_player)
+bool report_score(PlayerType *player_ptr, display_player_pf display_player)
 {
     auto *score = buf_new();
     char personality_desc[128];

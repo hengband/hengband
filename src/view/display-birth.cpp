@@ -14,7 +14,7 @@
  * @brief オートロール中のステータスを表示する / Display stat values, subset of "put_stats()"
  * @details See 'display_player(p_ptr, )' for screen layout constraints.
  */
-void birth_put_stats(player_type *player_ptr)
+void birth_put_stats(PlayerType *player_ptr)
 {
     if (!autoroller)
         return;

@@ -7,7 +7,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-bool activate_muramasa(player_type *player_ptr, object_type *o_ptr)
+bool activate_muramasa(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_MURAMASA)
         return false;

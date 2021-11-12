@@ -42,7 +42,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 各種賞金首のいずれかでも換金が行われたか否か。
  */
-bool exchange_cash(player_type *player_ptr)
+bool exchange_cash(PlayerType *player_ptr)
 {
     bool change = false;
     GAME_TEXT o_name[MAX_NLEN];
@@ -197,7 +197,7 @@ bool exchange_cash(player_type *player_ptr)
  * @brief 本日の賞金首情報を表示する。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void today_target(player_type *player_ptr)
+void today_target(PlayerType *player_ptr)
 {
     char buf[160];
     monster_race *r_ptr = &r_info[w_ptr->today_mon];
@@ -265,10 +265,10 @@ void show_bounty(void)
 
 /*!
  * @brief 今日の賞金首を確定する / Determine today's bounty monster
- * @param player_type プレイヤーへの参照ポインタ
+ * @param PlayerType プレイヤーへの参照ポインタ
  * @note conv_old is used if loaded 0.0.3 or older save file
  */
-void determine_daily_bounty(player_type *player_ptr, bool conv_old)
+void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 {
     int max_dl = 3;
     if (!conv_old) {
@@ -314,7 +314,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
  * @brief 賞金首となるユニークを確定する / Determine bounty uniques
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void determine_bounty_uniques(player_type *player_ptr)
+void determine_bounty_uniques(PlayerType *player_ptr)
 {
     get_mon_num_prep_bounty(player_ptr);
 

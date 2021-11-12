@@ -51,7 +51,7 @@ namespace {
  * @param tr_flag 特性フラグ
  * @return tr_flag が得られる要因となるフラグの集合
  */
-BIT_FLAGS common_cause_flags(player_type *player_ptr, tr_type tr_flag)
+BIT_FLAGS common_cause_flags(PlayerType *player_ptr, tr_type tr_flag)
 {
     BIT_FLAGS result = check_equipment_flags(player_ptr, tr_flag);
 
@@ -111,7 +111,7 @@ BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventor
 /*!
  * @brief 装備による所定の特性フラグを得ているかを一括して取得する関数。
  */
-BIT_FLAGS check_equipment_flags(player_type *player_ptr, tr_type tr_flag)
+BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
 {
     object_type *o_ptr;
     BIT_FLAGS result = 0L;
@@ -128,7 +128,7 @@ BIT_FLAGS check_equipment_flags(player_type *player_ptr, tr_type tr_flag)
     return result;
 }
 
-BIT_FLAGS player_flags_brand_pois(player_type *player_ptr)
+BIT_FLAGS player_flags_brand_pois(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_POIS);
 
@@ -138,7 +138,7 @@ BIT_FLAGS player_flags_brand_pois(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS player_flags_brand_acid(player_type *player_ptr)
+BIT_FLAGS player_flags_brand_acid(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_ACID);
 
@@ -148,7 +148,7 @@ BIT_FLAGS player_flags_brand_acid(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS player_flags_brand_elec(player_type *player_ptr)
+BIT_FLAGS player_flags_brand_elec(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_ELEC);
 
@@ -158,7 +158,7 @@ BIT_FLAGS player_flags_brand_elec(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS player_flags_brand_fire(player_type *player_ptr)
+BIT_FLAGS player_flags_brand_fire(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_FIRE);
 
@@ -168,7 +168,7 @@ BIT_FLAGS player_flags_brand_fire(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS player_flags_brand_cold(player_type *player_ptr)
+BIT_FLAGS player_flags_brand_cold(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_COLD);
 
@@ -183,7 +183,7 @@ BIT_FLAGS player_flags_brand_cold(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param tr_flag 要求する装備フラグ
  */
-BIT_FLAGS get_player_flags(player_type *player_ptr, tr_type tr_flag)
+BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
 {
     switch (tr_flag) {
     case TR_STR:
@@ -464,7 +464,7 @@ BIT_FLAGS get_player_flags(player_type *player_ptr, tr_type tr_flag)
 /*!
  * @brief プレイヤーが壁破壊進行を持っているかを返す。
  */
-bool has_kill_wall(player_type *player_ptr)
+bool has_kill_wall(PlayerType *player_ptr)
 {
     if (player_ptr->mimic_form == MIMIC_DEMON_LORD || music_singing(player_ptr, MUSIC_WALL)) {
         return true;
@@ -488,7 +488,7 @@ bool has_kill_wall(player_type *player_ptr)
  * * 時限で幽体化、壁抜けをもつか種族幽霊ならばひとまずTRUE。
  * * 但し騎乗中は乗騎が壁抜けを持っていなければ不能になる。
  */
-bool has_pass_wall(player_type *player_ptr)
+bool has_pass_wall(PlayerType *player_ptr)
 {
     bool pow = false;
 
@@ -511,7 +511,7 @@ bool has_pass_wall(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_xtra_might(player_type *player_ptr)
+BIT_FLAGS has_xtra_might(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_XTRA_MIGHT);
 }
@@ -521,7 +521,7 @@ BIT_FLAGS has_xtra_might(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_evil(player_type *player_ptr)
+BIT_FLAGS has_esp_evil(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_ESP_EVIL);
     if (player_ptr->realm1 == REALM_HEX) {
@@ -536,7 +536,7 @@ BIT_FLAGS has_esp_evil(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_animal(player_type *player_ptr)
+BIT_FLAGS has_esp_animal(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_ANIMAL);
 }
@@ -546,7 +546,7 @@ BIT_FLAGS has_esp_animal(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_undead(player_type *player_ptr)
+BIT_FLAGS has_esp_undead(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_UNDEAD);
 }
@@ -556,7 +556,7 @@ BIT_FLAGS has_esp_undead(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_demon(player_type *player_ptr)
+BIT_FLAGS has_esp_demon(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_DEMON);
 }
@@ -566,7 +566,7 @@ BIT_FLAGS has_esp_demon(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_orc(player_type *player_ptr)
+BIT_FLAGS has_esp_orc(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_ORC);
 }
@@ -576,7 +576,7 @@ BIT_FLAGS has_esp_orc(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_troll(player_type *player_ptr)
+BIT_FLAGS has_esp_troll(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_TROLL);
 }
@@ -586,7 +586,7 @@ BIT_FLAGS has_esp_troll(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_giant(player_type *player_ptr)
+BIT_FLAGS has_esp_giant(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_GIANT);
 }
@@ -596,7 +596,7 @@ BIT_FLAGS has_esp_giant(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_dragon(player_type *player_ptr)
+BIT_FLAGS has_esp_dragon(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_DRAGON);
 }
@@ -606,7 +606,7 @@ BIT_FLAGS has_esp_dragon(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_human(player_type *player_ptr)
+BIT_FLAGS has_esp_human(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_HUMAN);
 }
@@ -616,7 +616,7 @@ BIT_FLAGS has_esp_human(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_good(player_type *player_ptr)
+BIT_FLAGS has_esp_good(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_GOOD);
 }
@@ -626,7 +626,7 @@ BIT_FLAGS has_esp_good(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_nonliving(player_type *player_ptr)
+BIT_FLAGS has_esp_nonliving(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_NONLIVING);
 }
@@ -636,7 +636,7 @@ BIT_FLAGS has_esp_nonliving(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_unique(player_type *player_ptr)
+BIT_FLAGS has_esp_unique(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_ESP_UNIQUE);
 }
@@ -646,7 +646,7 @@ BIT_FLAGS has_esp_unique(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
-BIT_FLAGS has_esp_telepathy(player_type *player_ptr)
+BIT_FLAGS has_esp_telepathy(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_TELEPATHY);
 
@@ -661,27 +661,27 @@ BIT_FLAGS has_esp_telepathy(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_bless_blade(player_type *player_ptr)
+BIT_FLAGS has_bless_blade(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_BLESSED);
 }
 
-BIT_FLAGS has_easy2_weapon(player_type *player_ptr)
+BIT_FLAGS has_easy2_weapon(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_EASY2_WEAPON);
 }
 
-BIT_FLAGS has_down_saving(player_type *player_ptr)
+BIT_FLAGS has_down_saving(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_DOWN_SAVING);
 }
 
-BIT_FLAGS has_no_ac(player_type *player_ptr)
+BIT_FLAGS has_no_ac(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_NO_AC);
 }
 
-BIT_FLAGS has_invuln_arrow(player_type *player_ptr)
+BIT_FLAGS has_invuln_arrow(PlayerType *player_ptr)
 {
     if (player_ptr->blind)
         return 0;
@@ -689,7 +689,7 @@ BIT_FLAGS has_invuln_arrow(player_type *player_ptr)
     return common_cause_flags(player_ptr, TR_INVULN_ARROW);
 }
 
-void check_no_flowed(player_type *player_ptr)
+void check_no_flowed(PlayerType *player_ptr)
 {
     object_type *o_ptr;
     bool has_sw = false, has_kabe = false;
@@ -735,17 +735,17 @@ void check_no_flowed(player_type *player_ptr)
     }
 }
 
-BIT_FLAGS has_mighty_throw(player_type *player_ptr)
+BIT_FLAGS has_mighty_throw(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_MIGHTY_THROW);
 }
 
-BIT_FLAGS has_dec_mana(player_type *player_ptr)
+BIT_FLAGS has_dec_mana(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_DEC_MANA);
 }
 
-BIT_FLAGS has_reflect(player_type *player_ptr)
+BIT_FLAGS has_reflect(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_REFLECT);
 
@@ -756,12 +756,12 @@ BIT_FLAGS has_reflect(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_see_nocto(player_type *player_ptr)
+BIT_FLAGS has_see_nocto(PlayerType *player_ptr)
 {
     return (player_ptr->pclass == PlayerClassType::NINJA) ? FLAG_CAUSE_CLASS : FLAG_CAUSE_NONE;
 }
 
-BIT_FLAGS has_warning(player_type *player_ptr)
+BIT_FLAGS has_warning(PlayerType *player_ptr)
 {
     BIT_FLAGS result = 0L;
     object_type *o_ptr;
@@ -781,17 +781,17 @@ BIT_FLAGS has_warning(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_anti_magic(player_type *player_ptr)
+BIT_FLAGS has_anti_magic(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_NO_MAGIC);
 }
 
-BIT_FLAGS has_anti_tele(player_type *player_ptr)
+BIT_FLAGS has_anti_tele(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_NO_TELE);
 }
 
-BIT_FLAGS has_sh_fire(player_type *player_ptr)
+BIT_FLAGS has_sh_fire(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_FIRE);
 
@@ -806,7 +806,7 @@ BIT_FLAGS has_sh_fire(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sh_elec(player_type *player_ptr)
+BIT_FLAGS has_sh_elec(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_ELEC);
 
@@ -820,7 +820,7 @@ BIT_FLAGS has_sh_elec(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sh_cold(player_type *player_ptr)
+BIT_FLAGS has_sh_cold(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_COLD);
 
@@ -831,17 +831,17 @@ BIT_FLAGS has_sh_cold(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_easy_spell(player_type *player_ptr)
+BIT_FLAGS has_easy_spell(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_EASY_SPELL);
 }
 
-BIT_FLAGS has_heavy_spell(player_type *player_ptr)
+BIT_FLAGS has_heavy_spell(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_HEAVY_SPELL);
 }
 
-BIT_FLAGS has_hold_exp(player_type *player_ptr)
+BIT_FLAGS has_hold_exp(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_HOLD_EXP);
 
@@ -856,7 +856,7 @@ BIT_FLAGS has_hold_exp(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_see_inv(player_type *player_ptr)
+BIT_FLAGS has_see_inv(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SEE_INVIS);
 
@@ -867,12 +867,12 @@ BIT_FLAGS has_see_inv(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_magic_mastery(player_type *player_ptr)
+BIT_FLAGS has_magic_mastery(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_MAGIC_MASTERY);
 }
 
-BIT_FLAGS has_free_act(player_type *player_ptr)
+BIT_FLAGS has_free_act(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_FREE_ACT);
 
@@ -886,7 +886,7 @@ BIT_FLAGS has_free_act(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_str(player_type *player_ptr)
+BIT_FLAGS has_sustain_str(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_STR);
 
@@ -897,7 +897,7 @@ BIT_FLAGS has_sustain_str(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_int(player_type *player_ptr)
+BIT_FLAGS has_sustain_int(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_INT);
 
@@ -908,7 +908,7 @@ BIT_FLAGS has_sustain_int(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_wis(player_type *player_ptr)
+BIT_FLAGS has_sustain_wis(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_WIS);
 
@@ -919,7 +919,7 @@ BIT_FLAGS has_sustain_wis(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_dex(player_type *player_ptr)
+BIT_FLAGS has_sustain_dex(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_DEX);
 
@@ -930,7 +930,7 @@ BIT_FLAGS has_sustain_dex(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_con(player_type *player_ptr)
+BIT_FLAGS has_sustain_con(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_CON);
 
@@ -941,7 +941,7 @@ BIT_FLAGS has_sustain_con(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_chr(player_type *player_ptr)
+BIT_FLAGS has_sustain_chr(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SUST_CHR);
 
@@ -952,7 +952,7 @@ BIT_FLAGS has_sustain_chr(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_levitation(player_type *player_ptr)
+BIT_FLAGS has_levitation(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_LEVITATION);
 
@@ -978,7 +978,7 @@ BIT_FLAGS has_levitation(player_type *player_ptr)
     return result;
 }
 
-bool has_can_swim(player_type *player_ptr)
+bool has_can_swim(PlayerType *player_ptr)
 {
     bool can_swim = false;
     if (player_ptr->riding) {
@@ -991,7 +991,7 @@ bool has_can_swim(player_type *player_ptr)
     return can_swim;
 }
 
-BIT_FLAGS has_slow_digest(player_type *player_ptr)
+BIT_FLAGS has_slow_digest(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SLOW_DIGEST);
 
@@ -1002,7 +1002,7 @@ BIT_FLAGS has_slow_digest(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_regenerate(player_type *player_ptr)
+BIT_FLAGS has_regenerate(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_REGEN);
 
@@ -1019,7 +1019,7 @@ BIT_FLAGS has_regenerate(player_type *player_ptr)
     return result;
 }
 
-void update_curses(player_type *player_ptr)
+void update_curses(PlayerType *player_ptr)
 {
     object_type *o_ptr;
     player_ptr->cursed.clear();
@@ -1095,17 +1095,17 @@ void update_curses(player_type *player_ptr)
         player_ptr->cursed_special.reset(CurseSpecialTraitType::TELEPORT_SELF);
 }
 
-BIT_FLAGS has_impact(player_type *player_ptr)
+BIT_FLAGS has_impact(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_IMPACT);
 }
 
-BIT_FLAGS has_earthquake(player_type *player_ptr)
+BIT_FLAGS has_earthquake(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_EARTHQUAKE);
 }
 
-void update_extra_blows(player_type *player_ptr)
+void update_extra_blows(PlayerType *player_ptr)
 {
     object_type *o_ptr;
     player_ptr->extra_blows[0] = player_ptr->extra_blows[1] = 0;
@@ -1132,7 +1132,7 @@ void update_extra_blows(player_type *player_ptr)
     }
 }
 
-BIT_FLAGS has_resist_acid(player_type *player_ptr)
+BIT_FLAGS has_resist_acid(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_ACID);
 
@@ -1145,7 +1145,7 @@ BIT_FLAGS has_resist_acid(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_vuln_acid(player_type *player_ptr)
+BIT_FLAGS has_vuln_acid(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_ACID);
 
@@ -1156,7 +1156,7 @@ BIT_FLAGS has_vuln_acid(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_elec(player_type *player_ptr)
+BIT_FLAGS has_resist_elec(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_ELEC);
 
@@ -1169,7 +1169,7 @@ BIT_FLAGS has_resist_elec(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_vuln_elec(player_type *player_ptr)
+BIT_FLAGS has_vuln_elec(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_ELEC);
 
@@ -1180,7 +1180,7 @@ BIT_FLAGS has_vuln_elec(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_fire(player_type *player_ptr)
+BIT_FLAGS has_resist_fire(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_FIRE);
 
@@ -1193,7 +1193,7 @@ BIT_FLAGS has_resist_fire(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_vuln_fire(player_type *player_ptr)
+BIT_FLAGS has_vuln_fire(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_FIRE);
 
@@ -1204,7 +1204,7 @@ BIT_FLAGS has_vuln_fire(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_cold(player_type *player_ptr)
+BIT_FLAGS has_resist_cold(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_COLD);
 
@@ -1217,7 +1217,7 @@ BIT_FLAGS has_resist_cold(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_vuln_cold(player_type *player_ptr)
+BIT_FLAGS has_vuln_cold(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_COLD);
 
@@ -1228,7 +1228,7 @@ BIT_FLAGS has_vuln_cold(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_pois(player_type *player_ptr)
+BIT_FLAGS has_resist_pois(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_POIS);
 
@@ -1239,7 +1239,7 @@ BIT_FLAGS has_resist_pois(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_conf(player_type *player_ptr)
+BIT_FLAGS has_resist_conf(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CONF);
 
@@ -1254,7 +1254,7 @@ BIT_FLAGS has_resist_conf(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_sound(player_type *player_ptr)
+BIT_FLAGS has_resist_sound(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SOUND);
 
@@ -1265,7 +1265,7 @@ BIT_FLAGS has_resist_sound(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_lite(player_type *player_ptr)
+BIT_FLAGS has_resist_lite(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_LITE);
 
@@ -1276,7 +1276,7 @@ BIT_FLAGS has_resist_lite(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_vuln_lite(player_type *player_ptr)
+BIT_FLAGS has_vuln_lite(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_VUL_LITE);
 
@@ -1287,7 +1287,7 @@ BIT_FLAGS has_vuln_lite(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_dark(player_type *player_ptr)
+BIT_FLAGS has_resist_dark(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK);
 
@@ -1298,7 +1298,7 @@ BIT_FLAGS has_resist_dark(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_chaos(player_type *player_ptr)
+BIT_FLAGS has_resist_chaos(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CHAOS);
 
@@ -1309,7 +1309,7 @@ BIT_FLAGS has_resist_chaos(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_disen(player_type *player_ptr)
+BIT_FLAGS has_resist_disen(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DISEN);
 
@@ -1320,7 +1320,7 @@ BIT_FLAGS has_resist_disen(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_shard(player_type *player_ptr)
+BIT_FLAGS has_resist_shard(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SHARDS);
 
@@ -1331,7 +1331,7 @@ BIT_FLAGS has_resist_shard(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_nexus(player_type *player_ptr)
+BIT_FLAGS has_resist_nexus(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NEXUS);
 
@@ -1342,7 +1342,7 @@ BIT_FLAGS has_resist_nexus(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_blind(player_type *player_ptr)
+BIT_FLAGS has_resist_blind(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_BLIND);
 
@@ -1357,7 +1357,7 @@ BIT_FLAGS has_resist_blind(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_neth(player_type *player_ptr)
+BIT_FLAGS has_resist_neth(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NETHER);
 
@@ -1368,7 +1368,7 @@ BIT_FLAGS has_resist_neth(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_time(player_type *player_ptr)
+BIT_FLAGS has_resist_time(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_TIME);
 
@@ -1379,7 +1379,7 @@ BIT_FLAGS has_resist_time(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_water(player_type *player_ptr)
+BIT_FLAGS has_resist_water(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_WATER);
 
@@ -1396,7 +1396,7 @@ BIT_FLAGS has_resist_water(player_type *player_ptr)
  * @param プレイヤー情報への参照ポインタ
  * @return 呪力耐性を所持していればTRUE、なければFALSE
  */
-BIT_FLAGS has_resist_curse(player_type *player_ptr)
+BIT_FLAGS has_resist_curse(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CURSE);
 
@@ -1407,7 +1407,7 @@ BIT_FLAGS has_resist_curse(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_fear(player_type *player_ptr)
+BIT_FLAGS has_resist_fear(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_FEAR);
 
@@ -1421,7 +1421,7 @@ BIT_FLAGS has_resist_fear(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_acid(player_type *player_ptr)
+BIT_FLAGS has_immune_acid(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_ACID);
 
@@ -1433,7 +1433,7 @@ BIT_FLAGS has_immune_acid(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_elec(player_type *player_ptr)
+BIT_FLAGS has_immune_elec(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_ELEC);
 
@@ -1445,7 +1445,7 @@ BIT_FLAGS has_immune_elec(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_fire(player_type *player_ptr)
+BIT_FLAGS has_immune_fire(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_FIRE);
 
@@ -1457,7 +1457,7 @@ BIT_FLAGS has_immune_fire(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_cold(player_type *player_ptr)
+BIT_FLAGS has_immune_cold(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_COLD);
 
@@ -1469,7 +1469,7 @@ BIT_FLAGS has_immune_cold(player_type *player_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_dark(player_type *player_ptr)
+BIT_FLAGS has_immune_dark(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_DARK);
 
@@ -1480,7 +1480,7 @@ BIT_FLAGS has_immune_dark(player_type *player_ptr)
     return result;
 }
 
-melee_type player_melee_type(player_type *player_ptr)
+melee_type player_melee_type(PlayerType *player_ptr)
 {
     if (has_two_handed_weapons(player_ptr))
         return MELEE_TYPE_WEAPON_TWOHAND;
@@ -1513,7 +1513,7 @@ melee_type player_melee_type(player_type *player_ptr)
  *        利き手が素手かつ左手も素手もしくは盾を装備している事を意味する。
  * @details Includes martial arts and hand combats as weapons.
  */
-bool can_attack_with_main_hand(player_type *player_ptr)
+bool can_attack_with_main_hand(PlayerType *player_ptr)
 {
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND))
         return true;
@@ -1529,7 +1529,7 @@ bool can_attack_with_main_hand(player_type *player_ptr)
  *        非利き手で攻撃可能とは、非利き手に武器を持っている事に等しい
  * @details Exclude martial arts and hand combats from weapons.
  */
-bool can_attack_with_sub_hand(player_type *player_ptr)
+bool can_attack_with_sub_hand(PlayerType *player_ptr)
 {
     return has_melee_weapon(player_ptr, INVEN_SUB_HAND);
 }
@@ -1537,7 +1537,7 @@ bool can_attack_with_sub_hand(player_type *player_ptr)
 /*
  * @brief 両手持ち状態かどうかを判定する
  */
-bool has_two_handed_weapons(player_type *player_ptr)
+bool has_two_handed_weapons(PlayerType *player_ptr)
 {
     if (can_two_hands_wielding(player_ptr)) {
         if (can_attack_with_main_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB)
@@ -1551,7 +1551,7 @@ bool has_two_handed_weapons(player_type *player_ptr)
     return false;
 }
 
-BIT_FLAGS has_lite(player_type *player_ptr)
+BIT_FLAGS has_lite(PlayerType *player_ptr)
 {
     BIT_FLAGS result = 0L;
     if (player_ptr->pclass == PlayerClassType::NINJA)
@@ -1579,7 +1579,7 @@ BIT_FLAGS has_lite(player_type *player_ptr)
  *  Only can get hit bonuses when wieids an enough light weapon which is lighter than 5 times of weight limit.
  *  If its weight is 10 times heavier or more than weight limit, gets hit penalty in calc_to_hit().
  */
-bool has_disable_two_handed_bonus(player_type *player_ptr, int i)
+bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
 {
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i) && has_two_handed_weapons(player_ptr)) {
         object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
@@ -1598,7 +1598,7 @@ bool has_disable_two_handed_bonus(player_type *player_ptr, int i)
  * @brief ふさわしくない武器を持っているかどうかを返す。
  * @todo 相応しい時にFALSEで相応しくない時にTRUEという負論理は良くない、後で修正する
  */
-bool is_wielding_icky_weapon(player_type *player_ptr, int i)
+bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     auto flgs = object_flags(o_ptr);
@@ -1624,7 +1624,7 @@ bool is_wielding_icky_weapon(player_type *player_ptr, int i)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param i 武器を持っている手。0ならば利き手、1ならば反対の手
  */
-bool is_wielding_icky_riding_weapon(player_type *player_ptr, int i)
+bool is_wielding_icky_riding_weapon(PlayerType *player_ptr, int i)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
     auto flgs = object_flags(o_ptr);
@@ -1633,7 +1633,7 @@ bool is_wielding_icky_riding_weapon(player_type *player_ptr, int i)
     return (player_ptr->riding > 0) && !has_no_weapon && !is_suitable;
 }
 
-bool has_not_ninja_weapon(player_type *player_ptr, int i)
+bool has_not_ninja_weapon(PlayerType *player_ptr, int i)
 {
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         return false;
@@ -1646,7 +1646,7 @@ bool has_not_ninja_weapon(player_type *player_ptr, int i)
                (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != ItemKindType::SHIELD));
 }
 
-bool has_not_monk_weapon(player_type *player_ptr, int i)
+bool has_not_monk_weapon(PlayerType *player_ptr, int i)
 {
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         return false;
@@ -1657,12 +1657,12 @@ bool has_not_monk_weapon(player_type *player_ptr, int i)
     return ((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && !(s_info[enum2i(player_ptr->pclass)].w_max[tval][sval]);
 }
 
-bool has_good_luck(player_type *player_ptr)
+bool has_good_luck(PlayerType *player_ptr)
 {
     return (player_ptr->ppersonality == PERSONALITY_LUCKY) || (player_ptr->muta.has(PlayerMutationType::GOOD_LUCK));
 }
 
-BIT_FLAGS player_aggravate_state(player_type *player_ptr)
+BIT_FLAGS player_aggravate_state(PlayerType *player_ptr)
 {
     if (player_ptr->cursed.has(CurseTraitType::AGGRAVATE)) {
         if ((PlayerRace(player_ptr).equals(PlayerRaceType::S_FAIRY)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
@@ -1674,7 +1674,7 @@ BIT_FLAGS player_aggravate_state(player_type *player_ptr)
     return AGGRAVATE_NONE;
 }
 
-bool has_aggravate(player_type *player_ptr)
+bool has_aggravate(PlayerType *player_ptr)
 {
     return player_aggravate_state(player_ptr) == AGGRAVATE_NORMAL;
 }

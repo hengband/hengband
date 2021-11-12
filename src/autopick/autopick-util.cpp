@@ -52,7 +52,7 @@ int get_com_id(char key)
 /*!
  * @brief Auto inscription
  */
-void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
+void auto_inscribe_item(PlayerType *player_ptr, object_type *o_ptr, int idx)
 {
     if (idx < 0 || autopick_list[idx].insc.empty())
         return;

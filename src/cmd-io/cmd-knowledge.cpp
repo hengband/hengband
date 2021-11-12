@@ -22,7 +22,7 @@
 /*
  * Interact with "knowledge"
  */
-void do_cmd_knowledge(player_type *player_ptr)
+void do_cmd_knowledge(PlayerType *player_ptr)
 {
     int i, p = 0;
     bool need_redraw = false;

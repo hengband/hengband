@@ -19,7 +19,7 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool android_inside_weapon(player_type *player_ptr)
+bool android_inside_weapon(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -54,7 +54,7 @@ bool android_inside_weapon(player_type *player_ptr)
     return true;
 }
 
-void calc_android_exp(player_type *player_ptr)
+void calc_android_exp(PlayerType *player_ptr)
 {
     uint32_t total_exp = 0;
     if (player_ptr->is_dead || (player_ptr->prace != PlayerRaceType::ANDROID))

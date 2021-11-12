@@ -51,7 +51,7 @@ void get_bloody_moon_flags(object_type *o_ptr)
  * @param o_ptr ブラッディ・ムーンへの参照ポインタ
  * @return オブジェクト情報に異常がない限りTRUE
  */
-bool activate_bloody_moon(player_type *player_ptr, object_type *o_ptr)
+bool activate_bloody_moon(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_BLOOD)
         return false;

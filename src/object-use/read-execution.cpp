@@ -71,7 +71,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 読むオブジェクトの所持品ID
  */
-ObjectReadEntity::ObjectReadEntity(player_type *player_ptr, INVENTORY_IDX item)
+ObjectReadEntity::ObjectReadEntity(PlayerType *player_ptr, INVENTORY_IDX item)
     : player_ptr(player_ptr)
     , item(item)
 {

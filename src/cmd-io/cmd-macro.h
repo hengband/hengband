@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void do_cmd_macros(player_type *player_ptr);
+class PlayerType;
+void do_cmd_macros(PlayerType *player_ptr);

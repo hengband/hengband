@@ -88,7 +88,7 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
  * @param bcost 基本修復費用
  * @return 実際にかかった費用
  */
-static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
+static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 {
     clear_bldg(0, 22);
     int row = 7;
@@ -276,7 +276,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
  * @param bcost 基本鑑定費用
  * @return 実際にかかった費用
  */
-int repair_broken_weapon(player_type *player_ptr, PRICE bcost)
+int repair_broken_weapon(PlayerType *player_ptr, PRICE bcost)
 {
     PRICE cost;
     screen_save();

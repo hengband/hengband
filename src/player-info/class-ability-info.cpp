@@ -4,7 +4,7 @@
 #include "realm/realm-types.h"
 #include "system/player-type-definition.h"
 
-void set_class_ability_info(player_type *player_ptr, self_info_type *self_ptr)
+void set_class_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     switch (player_ptr->pclass) {
     case PlayerClassType::WARRIOR:

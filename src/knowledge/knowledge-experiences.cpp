@@ -24,7 +24,7 @@
 /*
  * Display weapon-exp
  */
-void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
+void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -69,7 +69,7 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
  * @brief 魔法の経験値を表示するコマンドのメインルーチン
  * Display spell-exp
  */
-void do_cmd_knowledge_spell_exp(player_type *player_ptr)
+void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -149,7 +149,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
  * @brief スキル情報を表示するコマンドのメインルーチン /
  * Display skill-exp
  */
-void do_cmd_knowledge_skill_exp(player_type *player_ptr)
+void do_cmd_knowledge_skill_exp(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     char file_name[FILE_NAME_SIZE];

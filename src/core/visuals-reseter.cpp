@@ -11,7 +11,7 @@
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void reset_visuals(player_type *player_ptr)
+void reset_visuals(PlayerType *player_ptr)
 {
     for (auto &f_ref : f_info) {
         for (int j = 0; j < F_LIT_MAX; j++) {

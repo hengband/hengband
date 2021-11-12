@@ -51,7 +51,7 @@ void init_quests(void)
  * Initialize some other arrays
  * @return エラーコード
  */
-void init_other(player_type *player_ptr)
+void init_other(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
     auto *floor_ptr = player_ptr->current_floor_ptr;

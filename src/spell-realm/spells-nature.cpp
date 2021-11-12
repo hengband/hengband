@@ -17,7 +17,7 @@
  * @param player_ptr 錆止め実行者の参照ポインタ
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
-bool rustproof(player_type *player_ptr)
+bool rustproof(PlayerType *player_ptr)
 {
     concptr q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
     concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");

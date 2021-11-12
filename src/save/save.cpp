@@ -48,7 +48,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-static bool wr_savefile_new(player_type *player_ptr, save_type type)
+static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
 {
     compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
@@ -231,7 +231,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
  * @details
  * Angband 2.8.0 will use "fd" instead of "fff" if possible
  */
-static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
+static bool save_player_aux(PlayerType *player_ptr, char *name, save_type type)
 {
     safe_setuid_grab(player_ptr);
     int file_permission = 0644;
@@ -274,7 +274,7 @@ static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-bool save_player(player_type *player_ptr, save_type type)
+bool save_player(PlayerType *player_ptr, save_type type)
 {
     char safe[1024];
     strcpy(safe, savefile);

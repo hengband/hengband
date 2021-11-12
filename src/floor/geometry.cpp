@@ -97,7 +97,7 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  * @param x 方角を確認したX座標
  * @return 方向ID
  */
-DIRECTION coords_to_dir(player_type *player_ptr, POSITION y, POSITION x)
+DIRECTION coords_to_dir(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     DIRECTION d[3][3] = { { 7, 4, 1 }, { 8, 5, 2 }, { 9, 6, 3 } };
     POSITION dy, dx;
@@ -145,7 +145,7 @@ DIRECTION coords_to_dir(player_type *player_ptr, POSITION y, POSITION x)
  * "glowing" grid.  This prevents the player from being able to "see" the\n
  * walls of illuminated rooms from a corridor outside the room.\n
  */
-bool player_can_see_bold(player_type *player_ptr, POSITION y, POSITION x)
+bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
 
@@ -238,7 +238,7 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
  * @return 個々のモンスターがプレイヤーが見えたらTRUE
  * @todo is_seen() の関数マクロをバラそうとしたがインクルード関係のコンパイルエラーで失敗
  */
-bool is_seen(player_type *player_ptr, monster_type *m_ptr)
+bool is_seen(PlayerType *player_ptr, monster_type *m_ptr)
 {
     bool is_inside_view = !ignore_unview;
     is_inside_view |= player_ptr->phase_out;

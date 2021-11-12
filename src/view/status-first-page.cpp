@@ -38,7 +38,7 @@ static TERM_COLOR likert_color = TERM_WHITE;
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
  */
-static void calc_shot_params(player_type *player_ptr, object_type *o_ptr, int *shots, int *shot_frac)
+static void calc_shot_params(PlayerType *player_ptr, object_type *o_ptr, int *shots, int *shot_frac)
 {
     if (o_ptr->k_idx == 0)
         return;
@@ -72,7 +72,7 @@ static void calc_shot_params(player_type *player_ptr, object_type *o_ptr, int *s
  * @param o_ptr 装備中の武器への参照ポインタ
  * @return 利き手ならTRUE、反対の手ならFALSE
  */
-static bool calc_weapon_damage_limit(player_type *player_ptr, int hand, int *damage, int *basedam, object_type *o_ptr)
+static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *damage, int *basedam, object_type *o_ptr)
 {
     PLAYER_LEVEL level = player_ptr->lev;
     if (hand > 0) {
@@ -131,7 +131,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
  * @param flgs オブジェクトフラグ群
  * @return 強化後の素手ダメージ
  */
-static int strengthen_basedam(player_type *player_ptr, object_type *o_ptr, int basedam, const TrFlags &flgs)
+static int strengthen_basedam(PlayerType *player_ptr, object_type *o_ptr, int basedam, const TrFlags &flgs)
 {
     if (o_ptr->is_fully_known() && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))) {
         /* vorpal blade */
@@ -244,7 +244,7 @@ static concptr likert(int x, int y)
  * @param damage 直接攻撃のダメージ
  * @param to_h 命中補正
  */
-static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
+static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
 {
     object_type *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];
@@ -295,7 +295,7 @@ static void calc_two_hands(player_type *player_ptr, int *damage, int *to_h)
  * @param shot_frac 射撃速度
  * @param display_player_one_line 1行表示用のコールバック関数
  */
-static void display_first_page(player_type *player_ptr, int xthb, int *damage, int shots, int shot_frac)
+static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, int shots, int shot_frac)
 {
     int xthn = player_ptr->skill_thn + (player_ptr->to_h_m * BTH_PLUS_ADJ);
 
@@ -375,7 +375,7 @@ static void display_first_page(player_type *player_ptr, int xthb, int *damage, i
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */
-void display_player_various(player_type *player_ptr)
+void display_player_various(PlayerType *player_ptr)
 {
     object_type *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];

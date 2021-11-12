@@ -13,7 +13,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return コマンドの入力先にモンスターがいたらTRUE
  */
-bool hit_and_away(player_type *player_ptr)
+bool hit_and_away(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_direction(player_ptr, &dir, false, false))
@@ -39,7 +39,7 @@ bool hit_and_away(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
-bool sword_dancing(player_type *player_ptr)
+bool sword_dancing(PlayerType *player_ptr)
 {
     DIRECTION dir;
     POSITION y = 0, x = 0;

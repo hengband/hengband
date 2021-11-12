@@ -137,7 +137,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> check_magic
  * @param only_browse 閲覧するだけならばTRUE
  * @return 選択した魔力のID、キャンセルならば-1を返す
  */
-static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magic_eater(player_type *player_ptr, bool only_browse)
+static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magic_eater(PlayerType *player_ptr, bool only_browse)
 {
     char choice;
     bool flag, request_list;
@@ -545,7 +545,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
  * @param powerful 強力発動中の処理ならばTRUE
  * @return 実際にコマンドを実行したならばTRUEを返す。
  */
-bool do_cmd_magic_eater(player_type *player_ptr, bool only_browse, bool powerful)
+bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
 {
     bool use_charge = true;
 

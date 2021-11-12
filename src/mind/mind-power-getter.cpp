@@ -21,7 +21,7 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
-MindPowerGetter::MindPowerGetter(player_type *player_ptr)
+MindPowerGetter::MindPowerGetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
     , menu_line(use_menu ? 1 : 0)
 {

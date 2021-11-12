@@ -4,5 +4,5 @@
 #include "system/angband.h"
 #include "spell/spells-util.h"
 
-struct player_type;
-concptr do_hex_spell(player_type *player_ptr, spell_hex_type spell, SpellProcessType mode);
+class PlayerType;
+concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessType mode);

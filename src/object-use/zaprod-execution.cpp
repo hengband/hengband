@@ -32,7 +32,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 使うオブジェクトの所持品ID
  */
-ObjectZapRodEntity::ObjectZapRodEntity(player_type* player_ptr)
+ObjectZapRodEntity::ObjectZapRodEntity(PlayerType* player_ptr)
     : player_ptr(player_ptr)
 {
 }

@@ -13,7 +13,7 @@
  * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 部位表現の文字列ポインタ
  */
-concptr mention_use(player_type *player_ptr, int i)
+concptr mention_use(PlayerType *player_ptr, int i)
 {
     concptr p;
 
@@ -89,7 +89,7 @@ concptr mention_use(player_type *player_ptr, int i)
  * @details
  * Currently, only used for items in the equipment, inventory.
  */
-concptr describe_use(player_type *player_ptr, int i)
+concptr describe_use(PlayerType *player_ptr, int i)
 {
     concptr p;
     switch (i) {

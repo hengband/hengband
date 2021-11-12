@@ -273,7 +273,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
  * hidden gold types are currently unused.
  * </pre>
  */
-void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
+void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 {
     int i;
     POSITION y, x, tx, ty;
@@ -413,7 +413,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
  * This happens in real world lava tubes.
  * </pre>
  */
-void place_trees(player_type *player_ptr, POSITION x, POSITION y)
+void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
 {
     int i, j;
     grid_type *g_ptr;
@@ -465,7 +465,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
  * @brief ダンジョンに＊破壊＊済み地形ランダムに施す /
  * Build a destroyed level
  */
-void destroy_level(player_type *player_ptr)
+void destroy_level(PlayerType *player_ptr)
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("階に*破壊*の痕跡を生成しました。", "Destroyed Level."));
 

@@ -30,7 +30,7 @@
  * @brief Check on the status of an active quest
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_checkquest(player_type *player_ptr)
+void do_cmd_checkquest(PlayerType *player_ptr)
 {
     screen_save();
     do_cmd_knowledge_quests(player_ptr);
@@ -40,9 +40,9 @@ void do_cmd_checkquest(player_type *player_ptr)
 /*!
  * @brief Print all active quests
  * @param player_ptr プレイヤーへの参照ポインタ
- * @todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
+ * @todo PlayerTypeではなくQUEST_IDXを引数にすべきかもしれない
  */
-static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
+static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
     char tmp_str[1024];
     char rand_tmp_str[512] = "\0";
@@ -176,7 +176,7 @@ static void do_cmd_knowledge_quests_current(player_type *player_ptr, FILE *fff)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
-static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX q_idx)
+static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, IDX q_idx)
 {
     char tmp_str[120];
     char playtime_str[16];
@@ -222,7 +222,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_completed(player_type *player_ptr, FILE *fff, QUEST_IDX quest_num[])
+void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
     fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
     QUEST_IDX total = 0;
@@ -245,7 +245,7 @@ void do_cmd_knowledge_quests_completed(player_type *player_ptr, FILE *fff, QUEST
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_failed(player_type *player_ptr, FILE *fff, QUEST_IDX quest_num[])
+void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
     fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
     QUEST_IDX total = 0;
@@ -289,7 +289,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
  * Print quest status of all active quests
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_knowledge_quests(player_type *player_ptr)
+void do_cmd_knowledge_quests(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

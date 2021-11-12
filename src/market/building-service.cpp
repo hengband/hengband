@@ -15,7 +15,7 @@
  * @param bldg 施設構造体の参照ポインタ
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  */
-bool is_owner(player_type *player_ptr, building_type *bldg)
+bool is_owner(PlayerType *player_ptr, building_type *bldg)
 {
     if (bldg->member_class[enum2i(player_ptr->pclass)] == BUILDING_OWNER) {
         return true;
@@ -44,7 +44,7 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  * @todo is_owner()との実質的な多重実装なので、リファクタリングを行うべきである。
  */
-bool is_member(player_type *player_ptr, building_type *bldg)
+bool is_member(PlayerType *player_ptr, building_type *bldg)
 {
     if (static_cast<bool>(bldg->member_class[enum2i(player_ptr->pclass)])) {
         return true;
@@ -76,7 +76,7 @@ bool is_member(player_type *player_ptr, building_type *bldg)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  */
-void display_buikding_service(player_type *player_ptr, building_type *bldg)
+void display_buikding_service(PlayerType *player_ptr, building_type *bldg)
 {
     char buff[20];
     byte action_color;

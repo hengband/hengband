@@ -51,7 +51,7 @@ static void check_item_selection_mode(item_selection_type *item_selection_ptr)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_item_tag_aux(player_type *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
+static bool check_item_tag_aux(PlayerType *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
 {
     if (!item_selection_ptr->floor || (*item_selection_ptr->cp >= 0))
         return false;
@@ -73,7 +73,7 @@ static bool check_item_tag_aux(player_type *player_ptr, item_selection_type *ite
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_item_tag_inventory(player_type *player_ptr, item_selection_type *item_selection_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_item_tag_inventory(PlayerType *player_ptr, item_selection_type *item_selection_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if ((!item_selection_ptr->inven || (*item_selection_ptr->cp < 0) || (*item_selection_ptr->cp >= INVEN_PACK))
         && (!item_selection_ptr->equip || (*item_selection_ptr->cp < INVEN_MAIN_HAND) || (*item_selection_ptr->cp >= INVEN_TOTAL)))
@@ -116,7 +116,7 @@ static bool check_item_tag_inventory(player_type *player_ptr, item_selection_typ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_item_tag(player_type *player_ptr, item_selection_type *item_selection_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_item_tag(PlayerType *player_ptr, item_selection_type *item_selection_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if (!repeat_pull(item_selection_ptr->cp))
         return false;
@@ -137,7 +137,7 @@ static bool check_item_tag(player_type *player_ptr, item_selection_type *item_se
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
  */
-static void test_inventory(player_type *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
+static void test_inventory(PlayerType *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
 {
     if (!item_selection_ptr->inven) {
         item_selection_ptr->i2 = -1;
@@ -157,7 +157,7 @@ static void test_inventory(player_type *player_ptr, item_selection_type *item_se
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
  */
-static void test_equipment(player_type *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
+static void test_equipment(PlayerType *player_ptr, item_selection_type *item_selection_ptr, const ItemTester& item_tester)
 {
     if (!item_selection_ptr->equip) {
         item_selection_ptr->e2 = -1;
@@ -187,7 +187,7 @@ static void test_equipment(player_type *player_ptr, item_selection_type *item_se
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * Return TRUE only if an acceptable item was chosen by the user
  */
-bool get_item(player_type *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester& item_tester)
+bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     static char prev_tag = '\0';
     if (easy_floor || use_menu)

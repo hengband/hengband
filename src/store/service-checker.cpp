@@ -210,7 +210,7 @@ static bool switch_store_check(const object_type *o_ptr)
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
-bool store_will_buy(player_type *, const object_type *o_ptr)
+bool store_will_buy(PlayerType *, const object_type *o_ptr)
 {
     if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM))
         return true;
@@ -409,7 +409,7 @@ static byte decide_discount_rate(const PRICE cost)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-void mass_produce(player_type *, object_type *o_ptr)
+void mass_produce(PlayerType *, object_type *o_ptr)
 {
     const PRICE cost = object_value(o_ptr);
     int size = switch_mass_production(o_ptr, cost);

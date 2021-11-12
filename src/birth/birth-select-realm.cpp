@@ -109,7 +109,7 @@ static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_rea
     return birth_realm_ptr;
 }
 
-static void impose_first_realm(const player_type *player_ptr, uint32_t *choices)
+static void impose_first_realm(const PlayerType *player_ptr, uint32_t *choices)
 {
     if (player_ptr->realm2 == REALM_SELECT_CANCEL)
         return;
@@ -124,7 +124,7 @@ static void impose_first_realm(const player_type *player_ptr, uint32_t *choices)
     }
 }
 
-static void analyze_realms(const player_type *player_ptr, const uint32_t choices, birth_realm_type *birth_realm_ptr)
+static void analyze_realms(const PlayerType *player_ptr, const uint32_t choices, birth_realm_type *birth_realm_ptr)
 {
     for (int i = 0; i < 32; i++) {
         if ((choices & (1UL << i)) == 0)
@@ -196,7 +196,7 @@ static void interpret_realm_select_key(birth_realm_type *birth_realm_ptr, char c
     }
 }
 
-static bool get_a_realm(player_type *player_ptr, birth_realm_type *birth_realm_ptr)
+static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_ptr)
 {
     birth_realm_ptr->os = birth_realm_ptr->n;
     while (true) {
@@ -254,7 +254,7 @@ static bool get_a_realm(player_type *player_ptr, birth_realm_type *birth_realm_p
  * @return 選択した魔法領域のID
  * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
  */
-static byte select_realm(player_type *player_ptr, uint32_t choices, int *count)
+static byte select_realm(PlayerType *player_ptr, uint32_t choices, int *count)
 {
     byte auto_select = count_realm_selection(choices, count);
     clear_from(10);
@@ -289,7 +289,7 @@ static void cleanup_realm_selection_window(void)
  * @param count 魔法領域の数
  * @return 選んだ魔法領域で良ければTRUE、再選択ならばFALSE
  */
-static bool check_realm_selection(player_type *player_ptr, int count)
+static bool check_realm_selection(PlayerType *player_ptr, int count)
 {
     if (count < 2) {
         prt(_("何かキーを押してください", "Hit any key."), 0, 0);
@@ -306,7 +306,7 @@ static bool check_realm_selection(player_type *player_ptr, int count)
  * @brief 選択した魔法領域の解説を表示する / Choose the magical realms
  * @return ユーザが魔法領域の確定を選んだらTRUEを返す。
  */
-bool get_player_realms(player_type *player_ptr)
+bool get_player_realms(PlayerType *player_ptr)
 {
     /* Clean up infomation of modifications */
     put_str("                                   ", 3, 40);

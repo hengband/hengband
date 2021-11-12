@@ -38,7 +38,7 @@
  * Future versions may restrict the ability to target "trappers"
  * and "mimics", but the semantics is a little bit weird.
  */
-bool target_able(player_type *player_ptr, MONSTER_IDX m_idx)
+bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -63,7 +63,7 @@ bool target_able(player_type *player_ptr, MONSTER_IDX m_idx)
 /*
  * Determine if a given location is "interesting"
  */
-static bool target_set_accept(player_type *player_ptr, POSITION y, POSITION x)
+static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
@@ -110,7 +110,7 @@ static bool target_set_accept(player_type *player_ptr, POSITION y, POSITION x)
  *
  * ys, xs は処理開始時にクリアされる。
  */
-void target_set_prepare(player_type *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs, const BIT_FLAGS mode)
+void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs, const BIT_FLAGS mode)
 {
     POSITION min_hgt, max_hgt, min_wid, max_wid;
     if (mode & TARGET_KILL) {
@@ -162,7 +162,7 @@ void target_set_prepare(player_type *player_ptr, std::vector<POSITION> &ys, std:
     std::swap(xs[0], xs[1]);
 }
 
-void target_sensing_monsters_prepare(player_type *player_ptr, std::vector<MONSTER_IDX> &monster_list)
+void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER_IDX> &monster_list)
 {
     monster_list.clear();
 

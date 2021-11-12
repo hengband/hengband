@@ -14,7 +14,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-void describe_melee_method(player_type *player_ptr, mam_type *mam_ptr)
+void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RBM_HIT: {
@@ -148,7 +148,7 @@ void describe_melee_method(player_type *player_ptr, mam_type *mam_ptr)
     }
 }
 
-void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
+void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->effect) {
     case RaceBlowEffectType::NONE:
@@ -251,7 +251,7 @@ void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
     }
 }
 
-void describe_monster_missed_monster(player_type *player_ptr, mam_type *mam_ptr)
+void describe_monster_missed_monster(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RBM_HIT:

@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-void spoil_random_artifact(player_type *player_ptr, concptr fname);
+class PlayerType;
+void spoil_random_artifact(PlayerType *player_ptr, concptr fname);

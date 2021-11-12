@@ -18,7 +18,7 @@
  * Need to analyze size of the window.
  * Need more color coding.
  */
-static bool fire_crimson(player_type *player_ptr)
+static bool fire_crimson(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -50,7 +50,7 @@ static bool fire_crimson(player_type *player_ptr)
     return true;
 }
 
-bool activate_crimson(player_type *player_ptr, object_type *o_ptr)
+bool activate_crimson(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_CRIMSON)
         return false;

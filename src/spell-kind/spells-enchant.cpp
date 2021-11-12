@@ -25,7 +25,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 生成が実際に試みられたらTRUEを返す
  */
-bool artifact_scroll(player_type *player_ptr)
+bool artifact_scroll(PlayerType *player_ptr)
 {
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
@@ -118,7 +118,7 @@ bool artifact_scroll(player_type *player_ptr)
  * Returns TRUE if something was mundanified, else FALSE.
  * </pre>
  */
-bool mundane_spell(player_type *player_ptr, bool only_equip)
+bool mundane_spell(PlayerType *player_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester = std::make_unique<AllMatchItemTester>();
     if (only_equip)

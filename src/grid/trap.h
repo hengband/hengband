@@ -57,9 +57,9 @@ const int MAX_NORMAL_TRAPS = TRAP_ALARM + 1;
 
 extern const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps;
 
-struct player_type;
+class PlayerType;
 void init_normal_traps(void);
-FEAT_IDX choose_random_trap(player_type *player_ptr);
-void disclose_grid(player_type *player_ptr, POSITION y, POSITION x);
-void place_trap(player_type *player_ptr, POSITION y, POSITION x);
-void hit_trap(player_type *player_ptr, bool break_trap);
+FEAT_IDX choose_random_trap(PlayerType *player_ptr);
+void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x);
+void place_trap(PlayerType *player_ptr, POSITION y, POSITION x);
+void hit_trap(PlayerType *player_ptr, bool break_trap);

@@ -8,8 +8,8 @@
 
 typedef struct artifact_type artifact_type;
 struct object_type;
-struct player_type;
-bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
-bool make_artifact(player_type *player_ptr, object_type *o_ptr);
-artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr);
-bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
+class PlayerType;
+bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
+bool make_artifact(PlayerType *player_ptr, object_type *o_ptr);
+artifact_type *apply_artifact(PlayerType *player_ptr, object_type *o_ptr);
+bool make_artifact_special(PlayerType *player_ptr, object_type *o_ptr);

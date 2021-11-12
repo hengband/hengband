@@ -32,7 +32,7 @@
  * @param mode 表示オプション
  * @return 特筆すべき情報が一つでもあった場合TRUE、一つもなく表示がキャンセルされた場合FALSEを返す。
  */
-bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
+bool screen_object(PlayerType *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 {
     char temp[70 * 20];
     concptr info[128];

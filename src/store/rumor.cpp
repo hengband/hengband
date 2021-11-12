@@ -41,7 +41,7 @@ concptr rumor_bind_name(char *base, concptr fullname)
     return v;
 }
 
-void display_rumor(player_type *player_ptr, bool ex)
+void display_rumor(PlayerType *player_ptr, bool ex)
 {
     char rumor[1024];
     int section = (ex && (randint0(3) == 0)) ? 1 : 0;

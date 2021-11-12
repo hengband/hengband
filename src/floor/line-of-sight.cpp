@@ -46,7 +46,7 @@
  *\n
  * Use the "update_view()" function to determine player line-of-sight.\n
  */
-bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     POSITION dy = y2 - y1;
     POSITION dx = x2 - x1;

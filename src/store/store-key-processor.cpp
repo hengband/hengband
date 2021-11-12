@@ -50,7 +50,7 @@ bool leave_store = false;
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-void store_process_command(player_type *player_ptr)
+void store_process_command(PlayerType *player_ptr)
 {
     repeat_check();
     if (rogue_like_commands && (command_cmd == 'l'))

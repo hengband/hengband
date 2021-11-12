@@ -9,7 +9,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details
  */
-void do_cmd_help(player_type *player_ptr)
+void do_cmd_help(PlayerType *player_ptr)
 {
 	screen_save();
 	(void)show_file(player_ptr, true, _("jhelp.hlp", "help.hlp"), nullptr, 0, 0);

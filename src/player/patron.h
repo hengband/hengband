@@ -46,7 +46,7 @@ enum patron_reward {
     REW_SER_MONS = 36, /*!< カオスパトロンからの報酬: モンスターの下僕下賜 */
 };
 
-struct player_type;
+class PlayerType;
 enum player_ability_type : int;
 
 /*!
@@ -64,11 +64,11 @@ public:
     virtual ~Patron() = default;
 
     // @note C4458 クラスメンバーの隠蔽 への対応として末尾に「_」を付ける.
-    void gain_level_reward(player_type *player_ptr_, int chosen_reward);
-    void admire(player_type *player_ptr_);
+    void gain_level_reward(PlayerType *player_ptr_, int chosen_reward);
+    void admire(PlayerType *player_ptr_);
 
 private:
-    player_type *player_ptr = nullptr; //!< プレイヤー参照ポインタ
+    PlayerType *player_ptr = nullptr; //!< プレイヤー参照ポインタ
     std::vector<patron_reward> reward_table; //!< 報酬テーブル
     player_ability_type boost_stat; //!< 強化能力値傾向
 };

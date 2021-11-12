@@ -12,7 +12,7 @@
 /*!
  * @brief Load an autopick preference file
  */
-void autopick_load_pref(player_type *player_ptr, bool disp_mes)
+void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
 {
     GAME_TEXT buf[80];
     init_autopick();
@@ -38,7 +38,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 /*!
  * @brief Get file name for autopick preference
  */
-concptr pickpref_filename(player_type *player_ptr, int filename_mode)
+concptr pickpref_filename(PlayerType *player_ptr, int filename_mode)
 {
     static const char namebase[] = _("picktype", "pickpref");
 
@@ -86,7 +86,7 @@ static std::vector<concptr> read_text_lines(concptr filename)
 /*!
  * @brief Copy the default autopick file to the user directory
  */
-static void prepare_default_pickpref(player_type *player_ptr)
+static void prepare_default_pickpref(PlayerType *player_ptr)
 {
     const concptr messages[] = { _("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
         _("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
@@ -132,7 +132,7 @@ static void prepare_default_pickpref(player_type *player_ptr)
  * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-std::vector<concptr> read_pickpref_text_lines(player_type *player_ptr, int *filename_mode_p)
+std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filename_mode_p)
 {
     /* Try a filename with player name */
     *filename_mode_p = PT_WITH_PNAME;

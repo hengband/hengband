@@ -20,7 +20,7 @@
  * @return 劣化処理に関するメッセージが発せられた場合はTRUEを返す /
  * Return "TRUE" if the player notices anything
  */
-bool apply_disenchant(player_type *player_ptr, BIT_FLAGS mode)
+bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 {
     int t = 0;
     switch (randint1(8)) {

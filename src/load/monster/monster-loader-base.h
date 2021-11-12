@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 struct monster_type;
-struct player_type;
+class PlayerType;
 class MonsterLoaderBase {
 public:
     virtual ~MonsterLoaderBase() = default;

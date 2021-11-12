@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type);
+class PlayerType;
+void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type);

@@ -46,7 +46,7 @@
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
-static std::optional<PRICE> prompt_to_buy(player_type *player_ptr, object_type *o_ptr)
+static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, object_type *o_ptr)
 {
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
 
@@ -97,7 +97,7 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i)
  * @param i お店のストック数(アドレス渡し)
  * @param 取得元インベントリ番号
  */
-static void take_item_from_home(player_type *player_ptr, object_type *o_ptr, object_type *j_ptr, const COMMAND_CODE item)
+static void take_item_from_home(PlayerType *player_ptr, object_type *o_ptr, object_type *j_ptr, const COMMAND_CODE item)
 {
     const int amt = j_ptr->number;
     distribute_charges(o_ptr, j_ptr, amt);
@@ -131,7 +131,7 @@ static void take_item_from_home(player_type *player_ptr, object_type *o_ptr, obj
     chg_virtue(player_ptr, V_SACRIFICE, 1);
 }
 
-static void shuffle_store(player_type *player_ptr)
+static void shuffle_store(PlayerType *player_ptr)
 {
     if (!one_in_(STORE_SHUFFLE)) {
         msg_print(_("店主は新たな在庫を取り出した。", "The shopkeeper brings out some new stock."));
@@ -148,7 +148,7 @@ static void shuffle_store(player_type *player_ptr)
     prt(buf, 3, 50);
 }
 
-static void switch_store_stock(player_type *player_ptr, const int i, const COMMAND_CODE item)
+static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAND_CODE item)
 {
     if (st_ptr->stock_num == 0) {
         shuffle_store(player_ptr);
@@ -175,7 +175,7 @@ static void switch_store_stock(player_type *player_ptr, const int i, const COMMA
  * Buy an item from a store 			-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void store_purchase(player_type *player_ptr)
+void store_purchase(PlayerType *player_ptr)
 {
     if (cur_store_num == StoreSaleType::MUSEUM) {
         msg_print(_("博物館から取り出すことはできません。", "Items cannot be taken out of the Museum."));

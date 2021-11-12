@@ -45,7 +45,7 @@
  * @param player_ptr プレイヤーの参照ポインタ
  * @return 現在溜まっている気の量
  */
-int32_t get_current_ki(player_type *player_ptr)
+int32_t get_current_ki(PlayerType *player_ptr)
 {
     auto data = PlayerClass(player_ptr).get_specific_data<force_trainer_data_type>();
 
@@ -58,7 +58,7 @@ int32_t get_current_ki(player_type *player_ptr)
  * @param is_reset TRUEなら気の量をkiにセットし、FALSEなら加減算を行う
  * @param ki 気の量
  */
-void set_current_ki(player_type *player_ptr, bool is_reset, int32_t ki)
+void set_current_ki(PlayerType *player_ptr, bool is_reset, int32_t ki)
 {
     auto data = PlayerClass(player_ptr).get_specific_data<force_trainer_data_type>();
     if (!data) {
@@ -73,7 +73,7 @@ void set_current_ki(player_type *player_ptr, bool is_reset, int32_t ki)
     data->ki += ki;
 }
 
-bool clear_mind(player_type *player_ptr)
+bool clear_mind(PlayerType *player_ptr)
 {
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
@@ -97,7 +97,7 @@ bool clear_mind(player_type *player_ptr)
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  */
-void set_lightspeed(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -142,7 +142,7 @@ void set_lightspeed(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_force(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -182,7 +182,7 @@ bool set_tim_sh_force(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 命中したらTRUE
  */
-bool shock_power(player_type *player_ptr)
+bool shock_power(PlayerType *player_ptr)
 {
     int boost = get_current_ki(player_ptr);
     if (heavy_armor(player_ptr))
@@ -252,7 +252,7 @@ bool shock_power(player_type *player_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_force_spell(player_type *player_ptr, mind_force_trainer_type spell)
+bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;

@@ -13,6 +13,6 @@ typedef struct msr_type {
     EnumClassFlagGroup<MonsterSmartLearnType> smart;
 } msr_type;
 
-struct player_type;
-msr_type *initialize_msr_type(player_type *player_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags);
+class PlayerType;
+msr_type *initialize_msr_type(PlayerType *player_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags);
 bool int_outof(monster_race *r_ptr, PERCENTAGE prob);

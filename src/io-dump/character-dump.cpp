@@ -54,7 +54,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_pet(player_type *player_ptr, FILE *fff)
+static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
 {
     bool pet = false;
     bool pet_settings = false;
@@ -109,7 +109,7 @@ static void dump_aux_pet(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_quest(player_type *player_ptr, FILE *fff)
+static void dump_aux_quest(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
     std::vector<QUEST_IDX> quest_num(max_q_idx);
@@ -130,7 +130,7 @@ static void dump_aux_quest(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_last_message(player_type *player_ptr, FILE *fff)
+static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 {
     if (!player_ptr->is_dead)
         return;
@@ -234,7 +234,7 @@ static void dump_aux_options(FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_arena(player_type *player_ptr, FILE *fff)
+static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
 {
     if (lite_town || vanilla_town)
         return;
@@ -281,7 +281,7 @@ static void dump_aux_arena(player_type *player_ptr, FILE *fff)
  * @brief 撃破モンスターの情報をファイルにダンプする
  * @param fff ファイルポインタ
  */
-static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
+static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
 
@@ -360,7 +360,7 @@ static void dump_aux_monsters(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_race_history(player_type *player_ptr, FILE *fff)
+static void dump_aux_race_history(PlayerType *player_ptr, FILE *fff)
 {
     if (!player_ptr->old_race1 && !player_ptr->old_race2)
         return;
@@ -388,7 +388,7 @@ static void dump_aux_race_history(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_realm_history(player_type *player_ptr, FILE *fff)
+static void dump_aux_realm_history(PlayerType *player_ptr, FILE *fff)
 {
     if (player_ptr->old_realm == 0)
         return;
@@ -408,7 +408,7 @@ static void dump_aux_realm_history(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_virtues(player_type *player_ptr, FILE *fff)
+static void dump_aux_virtues(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [自分に関する情報]\n\n", "\n\n  [HP-rate & Max stat & Virtues]\n\n"));
 
@@ -445,7 +445,7 @@ static void dump_aux_virtues(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_mutations(player_type *player_ptr, FILE *fff)
+static void dump_aux_mutations(PlayerType *player_ptr, FILE *fff)
 {
     if (player_ptr->muta.any()) {
         fprintf(fff, _("\n\n  [突然変異]\n\n", "\n\n  [Mutations]\n\n"));
@@ -458,7 +458,7 @@ static void dump_aux_mutations(player_type *player_ptr, FILE *fff)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_equipment_inventory(player_type *player_ptr, FILE *fff)
+static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
 {
     GAME_TEXT o_name[MAX_NLEN];
     if (player_ptr->equip_cnt) {
@@ -490,7 +490,7 @@ static void dump_aux_equipment_inventory(player_type *player_ptr, FILE *fff)
  * @brief 我が家と博物館のオブジェクト情報をファイルにダンプする
  * @param fff ファイルポインタ
  */
-static void dump_aux_home_museum(player_type *player_ptr, FILE *fff)
+static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
 {
     store_type *store_ptr;
     store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
@@ -552,7 +552,7 @@ static concptr get_check_sum(void)
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-void make_character_dump(player_type *player_ptr, FILE *fff, display_player_pf display_player)
+void make_character_dump(PlayerType *player_ptr, FILE *fff, display_player_pf display_player)
 {
     char title[127];
     put_version(title);

@@ -46,7 +46,7 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
-static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx)
+static bool is_friendly_idx(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]);
 }
@@ -57,7 +57,7 @@ static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx)
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool monster_hook_tanuki(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     bool unselectable = any_bits(r_ptr->flags1, RF1_UNIQUE);
@@ -80,7 +80,7 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
  */
-static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
+static MONRACE_IDX initial_r_appearance(PlayerType *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (is_chargeman(player_ptr) && any_bits(generate_mode, PM_JURAL) && none_bits(generate_mode, PM_MULTIPLY | PM_KAGE))
@@ -107,7 +107,7 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
  * @param r_idx 生成モンスター種族
  * @return ユニークの生成が不可能な条件ならFALSE、それ以外はTRUE
  */
-static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool check_unique_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     if (player_ptr->phase_out)
         return true;
@@ -142,7 +142,7 @@ static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param r_idx 生成モンスター種族
  * @return 生成が可能ならTRUE、不可能ならFALSE
  */
-static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool check_quest_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (quest_number(player_ptr, floor_ptr->dun_level) == 0)
@@ -175,7 +175,7 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param x 生成位置x座標
  * @return 生成が可能ならTRUE、不可能ならFALSE
  */
-static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, POSITION y, POSITION x)
+static bool check_procection_rune(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if (!g_ptr->is_rune_protection())
@@ -195,7 +195,7 @@ static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, PO
     return true;
 }
 
-static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
+static void warn_unique_generation(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     if (!player_ptr->warning || !w_ptr->character_dungeon)
         return;
@@ -239,7 +239,7 @@ static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];

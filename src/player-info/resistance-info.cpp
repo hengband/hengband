@@ -6,7 +6,7 @@
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
 
-void set_element_resistance_info(player_type *player_ptr, self_info_type *self_ptr)
+void set_element_resistance_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     const auto race_tr_flags = PlayerRace(player_ptr).tr_flags();
 
@@ -56,7 +56,7 @@ void set_element_resistance_info(player_type *player_ptr, self_info_type *self_p
         self_ptr->info[self_ptr->line++] = _("あなたは毒への耐性を持っている。", "You are resistant to poison.");
 }
 
-void set_high_resistance_info(player_type *player_ptr, self_info_type *self_ptr)
+void set_high_resistance_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (has_resist_lite(player_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは閃光への耐性を持っている。", "You are resistant to bright light.");

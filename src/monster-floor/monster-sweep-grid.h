@@ -2,12 +2,12 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class PlayerType;
 class MonsterSweepGrid {
 public:
-    MonsterSweepGrid(player_type *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm);
+    MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm);
     virtual ~MonsterSweepGrid() = default;
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     MONSTER_IDX m_idx;
     DIRECTION *mm;
     bool get_movable_grid();

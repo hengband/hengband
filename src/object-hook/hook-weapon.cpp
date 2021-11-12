@@ -13,7 +13,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが適正武器ならばTRUEを返す
  */
-bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
+bool object_is_favorite(PlayerType *player_ptr, const object_type *o_ptr)
 {
     /* Only melee weapons match */
     if (!(o_ptr->tval == ItemKindType::POLEARM || o_ptr->tval == ItemKindType::SWORD || o_ptr->tval == ItemKindType::DIGGING || o_ptr->tval == ItemKindType::HAFTED)) {

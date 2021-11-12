@@ -32,7 +32,7 @@
 /*
  * List virtues & status
  */
-void do_cmd_knowledge_virtues(player_type *player_ptr)
+void do_cmd_knowledge_virtues(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -52,7 +52,7 @@ void do_cmd_knowledge_virtues(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_yourself(player_type *player_ptr, FILE *fff)
+static void dump_yourself(PlayerType *player_ptr, FILE *fff)
 {
     if (!fff)
         return;
@@ -168,7 +168,7 @@ static void dump_winner_classes(FILE *fff)
  * List virtues & status
  *
  */
-void do_cmd_knowledge_stat(player_type *player_ptr)
+void do_cmd_knowledge_stat(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -210,7 +210,7 @@ void do_cmd_knowledge_stat(player_type *player_ptr)
  * List my home
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_knowledge_home(player_type *player_ptr)
+void do_cmd_knowledge_home(PlayerType *player_ptr)
 {
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
 

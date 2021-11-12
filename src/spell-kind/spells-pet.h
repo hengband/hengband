@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void discharge_minion(player_type *player_ptr);
+class PlayerType;
+void discharge_minion(PlayerType *player_ptr);

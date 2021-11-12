@@ -70,7 +70,7 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
  * @return ダメージ期待値
  */
 static uint32_t calc_expect_dice(
-    player_type *player_ptr, uint32_t dam, int mult, int div, bool force, WEIGHT weight, int plus, int16_t meichuu, bool dokubari, bool impact, int vorpal_mult, int vorpal_div)
+    PlayerType *player_ptr, uint32_t dam, int mult, int div, bool force, WEIGHT weight, int plus, int16_t meichuu, bool dokubari, bool impact, int vorpal_mult, int vorpal_div)
 {
     dam = calc_slaydam(dam, mult, div, force);
     dam = calc_expect_crit(player_ptr, weight, plus, dam, meichuu, dokubari, impact);
@@ -116,7 +116,7 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
  * Only accurate for the current weapon, because it includes\n
  * the current number of blows for the player.\n
  */
-static void compare_weapon_aux(player_type *player_ptr, object_type *o_ptr, int col, int r)
+static void compare_weapon_aux(PlayerType *player_ptr, object_type *o_ptr, int col, int r)
 {
     int blow = player_ptr->num_blow[0];
     bool force = false;
@@ -296,7 +296,7 @@ static void compare_weapon_aux(player_type *player_ptr, object_type *o_ptr, int 
 
 /*!
  * @brief 武器匠における武器一つ毎の完全情報を表示する。
- * @param player_type プレイヤーへの参照ポインタ
+ * @param PlayerType プレイヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @param row 表示する列の左端
  * @param col 表示する行の上端
@@ -306,7 +306,7 @@ static void compare_weapon_aux(player_type *player_ptr, object_type *o_ptr, int 
  * Only accurate for the current weapon, because it includes
  * various info about the player's +to_dam and number of blows.
  */
-static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN row, TERM_LEN col)
+static void list_weapon(PlayerType *player_ptr, object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 {
     GAME_TEXT o_name[MAX_NLEN];
     GAME_TEXT tmp_str[80];
@@ -345,7 +345,7 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
  * @param bcost 基本鑑定費用
  * @return 最終的にかかった費用
  */
-PRICE compare_weapons(player_type *player_ptr, PRICE bcost)
+PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 {
     object_type *o_ptr[2];
     object_type orig_weapon;

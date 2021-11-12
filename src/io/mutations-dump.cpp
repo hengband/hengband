@@ -13,7 +13,7 @@
  * @brief ファイルポインタを通じて突然変異の一覧を出力する
  * @param out_file 出力先ファイルポインタ
  */
-void dump_mutations(player_type *player_ptr, FILE *out_file)
+void dump_mutations(PlayerType *player_ptr, FILE *out_file)
 {
     if (!out_file)
         return;

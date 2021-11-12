@@ -23,7 +23,7 @@
  * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
  * @param sf_ptr 保存したいフロアの参照ポインタ
  */
-void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
+void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!sf_ptr) {
@@ -150,7 +150,7 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
  * @player_ptr プレイヤーへの参照ポインタ
  * @return 保存に成功したらTRUE
  */
-bool wr_dungeon(player_type *player_ptr)
+bool wr_dungeon(PlayerType *player_ptr)
 {
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
@@ -205,7 +205,7 @@ bool wr_dungeon(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ
  */
-static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
+static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
@@ -230,7 +230,7 @@ static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
  * @param sf_ptr 保存フロア参照ポインタ
  * @param mode 保存オプション
  */
-bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
+bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
     FILE *old_fff = nullptr;
     byte old_xor_byte = 0;

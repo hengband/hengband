@@ -17,7 +17,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-PlayerStealth::PlayerStealth(player_type* player_ptr)
+PlayerStealth::PlayerStealth(PlayerType* player_ptr)
     : PlayerStatusBase(player_ptr)
 {
 }

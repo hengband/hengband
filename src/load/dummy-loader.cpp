@@ -34,7 +34,7 @@ void rd_dummy2(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details もはや何に使われていたのか不明
  */
-void rd_dummy_monsters(player_type *player_ptr)
+void rd_dummy_monsters(PlayerType *player_ptr)
 {
     if (h_older_than(1, 5, 0, 2))
         return;

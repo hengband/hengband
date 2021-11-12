@@ -25,7 +25,7 @@
  * @brief 10ゲームターンが進行するごとに魔法効果の残りターンを減らしていく処理
  * / Handle timeout every 10 game turns
  */
-void reduce_magic_effects_timeout(player_type *player_ptr)
+void reduce_magic_effects_timeout(PlayerType *player_ptr)
 {
     if (player_ptr->tim_mimic) {
         (void)set_mimic(player_ptr, player_ptr->tim_mimic - 1, player_ptr->mimic_form, true);

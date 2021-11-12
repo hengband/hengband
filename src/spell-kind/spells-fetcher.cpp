@@ -34,7 +34,7 @@
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE
  */
-void fetch_item(player_type *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
+void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
     grid_type *g_ptr;
     object_type *o_ptr;
@@ -112,7 +112,7 @@ void fetch_item(player_type *player_ptr, DIRECTION dir, WEIGHT wgt, bool require
     player_ptr->redraw |= PR_MAP;
 }
 
-bool fetch_monster(player_type *player_ptr)
+bool fetch_monster(PlayerType *player_ptr)
 {
     monster_type *m_ptr;
     MONSTER_IDX m_idx;

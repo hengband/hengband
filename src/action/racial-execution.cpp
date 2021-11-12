@@ -25,7 +25,7 @@
  * @param command 発動するレイシャルのID
  * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
  */
-bool exe_racial_power(player_type *player_ptr, const int32_t command)
+bool exe_racial_power(PlayerType *player_ptr, const int32_t command)
 {
     if (command <= -3)
         return switch_class_racial_execution(player_ptr, command);
@@ -41,7 +41,7 @@ bool exe_racial_power(player_type *player_ptr, const int32_t command)
  * @param rpi_ptr 発動したいレイシャル・パワー情報の構造体参照ポインタ
  * @return 成功率(%)を返す
  */
-PERCENTAGE racial_chance(player_type *player_ptr, rpi_type *rpi_ptr)
+PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
 {
     if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->confused)
         return 0;
@@ -86,7 +86,7 @@ PERCENTAGE racial_chance(player_type *player_ptr, rpi_type *rpi_ptr)
         return ((sum * 100) / difficulty) / stat;
 }
 
-static void adjust_racial_power_difficulty(player_type *player_ptr, rpi_type *rpi_ptr, int *difficulty)
+static void adjust_racial_power_difficulty(PlayerType *player_ptr, rpi_type *rpi_ptr, int *difficulty)
 {
     if (*difficulty == 0)
         return;
@@ -110,7 +110,7 @@ static void adjust_racial_power_difficulty(player_type *player_ptr, rpi_type *rp
  * @param rpi_ptr 発動したいレイシャル・パワー情報の構造体参照ポインタ
  * @return racial_level_check_result
  */
-racial_level_check_result check_racial_level(player_type *player_ptr, rpi_type *rpi_ptr)
+racial_level_check_result check_racial_level(PlayerType *player_ptr, rpi_type *rpi_ptr)
 {
     PLAYER_LEVEL min_level = rpi_ptr->min_level;
     int use_stat = rpi_ptr->stat;

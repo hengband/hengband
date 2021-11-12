@@ -68,9 +68,9 @@ struct world_type {
 
 extern world_type *w_ptr;
 
-struct player_type;
+class PlayerType;
 bool is_daytime(void);
-void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min);
+void extract_day_hour_min(PlayerType *player_ptr, int *day, int *hour, int *min);
 void update_playtime(void);
 void add_winner_class(PlayerClassType c);
 void add_retired_class(PlayerClassType c);

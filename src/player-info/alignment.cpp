@@ -16,7 +16,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerAlignment::PlayerAlignment(player_type *player_ptr)
+PlayerAlignment::PlayerAlignment(PlayerType *player_ptr)
 {
     this->player_ptr = player_ptr;
 }

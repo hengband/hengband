@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct player_type;
-bool activate_genocide(player_type *player_ptr);
-bool activate_mass_genocide(player_type *player_ptr);
+class PlayerType;
+bool activate_genocide(PlayerType *player_ptr);
+bool activate_mass_genocide(PlayerType *player_ptr);

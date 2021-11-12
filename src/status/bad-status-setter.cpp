@@ -25,7 +25,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 
-BadStatusSetter::BadStatusSetter(player_type *player_ptr)
+BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

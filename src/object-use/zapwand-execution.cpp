@@ -25,7 +25,7 @@
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 
-ObjectZapWandEntity::ObjectZapWandEntity(player_type *player_ptr)
+ObjectZapWandEntity::ObjectZapWandEntity(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

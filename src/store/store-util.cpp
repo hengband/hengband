@@ -127,7 +127,7 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(object_type *j
  * </pre>
  */
 void store_create(
-    player_type *player_ptr, KIND_OBJECT_IDX fix_k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce)
+    PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce)
 {
     if (st_ptr->stock_num >= st_ptr->stock_size)
         return;

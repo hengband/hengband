@@ -31,7 +31,7 @@
  * "greed" value is always something (?).
  * </pre>
  */
-PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool flip)
+PRICE price_item(PlayerType *player_ptr, object_type *o_ptr, int greed, bool flip)
 {
     PRICE price = object_value(o_ptr);
     if (price <= 0)

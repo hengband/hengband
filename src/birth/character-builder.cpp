@@ -43,7 +43,7 @@
  * @brief プレイヤーキャラの作成結果を日記に書く
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void write_birth_diary(player_type *player_ptr)
+static void write_birth_diary(PlayerType *player_ptr)
 {
     concptr indent = "                            ";
 
@@ -85,7 +85,7 @@ static void write_birth_diary(player_type *player_ptr)
  * Note that we may be called with "junk" leftover in the various
  * fields, so we must be sure to clear them first.
  */
-void player_birth(player_type *player_ptr)
+void player_birth(PlayerType *player_ptr)
 {
     w_ptr->play_time = 0;
     wipe_monsters_list(player_ptr);

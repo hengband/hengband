@@ -43,7 +43,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-void day_break(player_type *player_ptr)
+void day_break(PlayerType *player_ptr)
 {
     msg_print(_("夜が明けた。", "The sun has risen."));
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -67,7 +67,7 @@ void day_break(player_type *player_ptr)
         set_superstealth(player_ptr, false);
 }
 
-void night_falls(player_type *player_ptr)
+void night_falls(PlayerType *player_ptr)
 {
     msg_print(_("日が沈んだ。", "The sun has fallen."));
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -108,7 +108,7 @@ static int rating_boost(int delta) { return delta * delta + 50 * delta; }
  * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
  * @return 算出されたダンジョンの雰囲気ランク
  */
-static byte get_dungeon_feeling(player_type *player_ptr)
+static byte get_dungeon_feeling(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
@@ -228,7 +228,7 @@ static byte get_dungeon_feeling(player_type *player_ptr)
  * @brief ダンジョンの雰囲気を更新し、変化があった場合メッセージを表示する
  * / Update dungeon feeling, and announce it if changed
  */
-void update_dungeon_feeling(player_type *player_ptr)
+void update_dungeon_feeling(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
@@ -262,7 +262,7 @@ void update_dungeon_feeling(player_type *player_ptr)
 /*
  * Glow deep lava and building entrances in the floor
  */
-void glow_deep_lava_and_bldg(player_type *player_ptr)
+void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         return;

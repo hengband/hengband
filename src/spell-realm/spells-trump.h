@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct player_type;
-void cast_shuffle(player_type *player_ptr);
-void become_living_trump(player_type *player_ptr);
+class PlayerType;
+void cast_shuffle(PlayerType *player_ptr);
+void become_living_trump(PlayerType *player_ptr);

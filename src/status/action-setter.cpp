@@ -32,7 +32,7 @@
  * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_MONK_STANCE / #ACTION_SAMURAI_STANCE / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
  * から選択。
  */
-void set_action(player_type *player_ptr, uint8_t typ)
+void set_action(PlayerType *player_ptr, uint8_t typ)
 {
     int prev_typ = player_ptr->action;
     if (typ == prev_typ) {

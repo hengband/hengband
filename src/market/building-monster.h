@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-bool research_mon(player_type *player_ptr);
+class PlayerType;
+bool research_mon(PlayerType *player_ptr);

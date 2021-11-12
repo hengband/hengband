@@ -19,7 +19,7 @@
  * @details
  * The location must be a legal, clean, floor grid.
  */
-void place_gold(player_type *player_ptr, POSITION y, POSITION x)
+void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -66,7 +66,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
  * This routine uses "object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
-void place_object(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];

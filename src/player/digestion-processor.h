@@ -9,6 +9,6 @@
 #define PY_FOOD_FAINT 500 /*!< 衰弱～衰弱(赤表示/麻痺)の閾値 / Food value (Fainting) */
 #define PY_FOOD_STARVE 100 /*!< 衰弱(赤表示/麻痺)～飢餓ダメージの閾値 / Food value (Starving) */
 
-struct player_type;
-void starve_player(player_type *player_ptr);
-bool set_food(player_type *player_ptr, TIME_EFFECT v);
+class PlayerType;
+void starve_player(PlayerType *player_ptr);
+bool set_food(PlayerType *player_ptr, TIME_EFFECT v);

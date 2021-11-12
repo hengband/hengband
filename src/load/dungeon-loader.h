@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-errr restore_dungeon(player_type *player_ptr);
+class PlayerType;
+errr restore_dungeon(PlayerType *player_ptr);

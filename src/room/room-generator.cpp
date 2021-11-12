@@ -27,7 +27,7 @@
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
  * @return 部屋の生成に成功した場合 TRUE を返す。
  */
-static bool room_build(player_type *player_ptr, dun_data_type *dd_ptr, EFFECT_ID typ)
+static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, EFFECT_ID typ)
 {
     switch (typ) {
     case ROOM_T_NORMAL:
@@ -86,7 +86,7 @@ static void move_prob_list(room_type dst, room_type src, int *prob_list)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 部屋生成に成功した場合 TRUE を返す。
  */
-bool generate_rooms(player_type *player_ptr, dun_data_type *dd_ptr)
+bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int crowded = 0;

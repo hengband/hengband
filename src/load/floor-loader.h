@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class PlayerType;
 struct saved_floor_type;
-errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr);
-bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode);
+errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr);
+bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode);

@@ -285,7 +285,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 /*!
  * @brief Get auto-picker entry from o_ptr.
  */
-void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, object_type *o_ptr)
+void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, object_type *o_ptr)
 {
     /* Assume that object name is to be added */
     bool name = true;
@@ -642,7 +642,7 @@ concptr autopick_line_from_entry_kill(autopick_type *entry)
 /*!
  * @brief Choose an item and get auto-picker entry from it.
  */
-bool entry_from_choosed_object(player_type *player_ptr, autopick_type *entry)
+bool entry_from_choosed_object(PlayerType *player_ptr, autopick_type *entry)
 {
     concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
     concptr s = _("アイテムを持っていない。", "You have nothing to enter.");

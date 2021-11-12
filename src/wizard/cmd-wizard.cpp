@@ -118,7 +118,7 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
  * @param cmd コマンドキー
  * @return コマンド終了ならTRUE、ページ送りならFALSE
  */
-bool exe_cmd_debug(player_type *player_ptr, char cmd)
+bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
 {
     switch (cmd) {
     case ' ':
@@ -280,7 +280,7 @@ bool exe_cmd_debug(player_type *player_ptr, char cmd)
  * @details
  * 番号を指定するには、それをN及びデバッグコマンドをXとしてとして「0N^aX」とする
  */
-void do_cmd_debug(player_type *player_ptr)
+void do_cmd_debug(PlayerType *player_ptr)
 {
     TERM_LEN hgt, wid;
     term_get_size(&wid, &hgt);

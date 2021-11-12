@@ -24,7 +24,7 @@
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equipment(player_type *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
+COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     COMMAND_CODE i;
     int j, k, l;

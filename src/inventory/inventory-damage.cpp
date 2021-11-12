@@ -25,7 +25,7 @@
  * Destruction taken from "melee.c" code for "stealing".
  * New-style wands and rods handled correctly. -LM-
  */
-void inventory_damage(player_type *player_ptr, const ObjectBreaker& breaker, int perc)
+void inventory_damage(PlayerType *player_ptr, const ObjectBreaker& breaker, int perc)
 {
     INVENTORY_IDX i;
     int j, amt;

@@ -29,7 +29,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 倍率 (実際は1/10になる)
  */
-static int calc_death_scythe_reflection_magnification_mimic_none(player_type *player_ptr)
+static int calc_death_scythe_reflection_magnification_mimic_none(PlayerType *player_ptr)
 {
     switch (player_ptr->prace) {
     case PlayerRaceType::YEEK:
@@ -64,7 +64,7 @@ static int calc_death_scythe_reflection_magnification_mimic_none(player_type *pl
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 倍率 (実際は1/10になる)
  */
-static int calc_death_scythe_reflection_magnification(player_type *player_ptr)
+static int calc_death_scythe_reflection_magnification(PlayerType *player_ptr)
 {
     switch (player_ptr->mimic_form) {
     case MIMIC_NONE:
@@ -84,7 +84,7 @@ static int calc_death_scythe_reflection_magnification(player_type *player_ptr)
  * @param magnification ダメージ倍率
  * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
  */
-static void compensate_death_scythe_reflection_magnification(player_type *player_ptr, int *magnification, const TrFlags &death_scythe_flags)
+static void compensate_death_scythe_reflection_magnification(PlayerType *player_ptr, int *magnification, const TrFlags &death_scythe_flags)
 {
     if ((player_ptr->alignment < 0) && (*magnification < 20))
         *magnification = 20;
@@ -133,7 +133,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-void process_death_scythe_reflection(player_type *player_ptr, player_attack_type *pa_ptr)
+void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     sound(SOUND_HIT);
     msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);

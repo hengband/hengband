@@ -11,7 +11,7 @@
  * @param change_color バッファへ詰める文字の変更有無
  */
 static void dump_player_status_with_screen_num(
-	player_type *player_ptr, FILE *fff, display_player_pf display_player,
+	PlayerType *player_ptr, FILE *fff, display_player_pf display_player,
 	int screen_num, TERM_LEN start_y, TERM_LEN end_y, bool change_color)
 {
 	TERM_COLOR a;
@@ -51,7 +51,7 @@ static void dump_player_status_with_screen_num(
  * @param fff ファイルポインタ
  * @param display_player 画面表示へのコールバック
  */
-void dump_aux_player_status(player_type *player_ptr, FILE *fff, display_player_pf display_player)
+void dump_aux_player_status(PlayerType *player_ptr, FILE *fff, display_player_pf display_player)
 {
 	dump_player_status_with_screen_num(player_ptr, fff, display_player, 0, 1, 22, false);
 	dump_player_status_with_screen_num(player_ptr, fff, display_player, 1, 10, 19, false);

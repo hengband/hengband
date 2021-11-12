@@ -246,7 +246,7 @@ concptr info_weight(WEIGHT weight)
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
  */
-static bool spell_okay(player_type *player_ptr, int spell, bool learned, bool study_pray, int use_realm)
+static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool study_pray, int use_realm)
 {
     const magic_type *s_ptr;
 
@@ -299,7 +299,7 @@ static bool spell_okay(player_type *player_ptr, int spell, bool learned, bool st
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(player_type *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
+static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
 {
     int i;
     SPELL_IDX spell = -1;
@@ -542,7 +542,7 @@ static int get_spell(player_type *player_ptr, SPELL_IDX *sn, concptr prompt, OBJ
  * @param browse_only 魔法と技能の閲覧を行うならばTRUE
  * @return 魔道書を一冊も持っていないならTRUEを返す
  */
-static void confirm_use_force(player_type *player_ptr, bool browse_only)
+static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
 {
     char which;
     COMMAND_CODE code;
@@ -576,12 +576,12 @@ static void confirm_use_force(player_type *player_ptr, bool browse_only)
     }
 }
 
-static FuncItemTester get_castable_spellbook_tester(player_type *player_ptr)
+static FuncItemTester get_castable_spellbook_tester(PlayerType *player_ptr)
 {
     return FuncItemTester([](auto p_ptr, auto o_ptr) { return check_book_realm(p_ptr, o_ptr->tval, o_ptr->sval); }, player_ptr);
 }
 
-static FuncItemTester get_learnable_spellbook_tester(player_type *player_ptr)
+static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
 {
     if (player_ptr->realm2 == REALM_NONE) {
         return get_castable_spellbook_tester(player_ptr);
@@ -601,7 +601,7 @@ static FuncItemTester get_learnable_spellbook_tester(player_type *player_ptr)
  * and in the dark, primarily to allow browsing in stores.
  * </pre>
  */
-void do_cmd_browse(player_type *player_ptr)
+void do_cmd_browse(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
@@ -714,7 +714,7 @@ void do_cmd_browse(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
  */
-static void change_realm2(player_type *player_ptr, int16_t next_realm)
+static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
 {
     int i, j = 0;
     char tmp[80];
@@ -751,7 +751,7 @@ static void change_realm2(player_type *player_ptr, int16_t next_realm)
  * @brief 魔法を学習するコマンドのメインルーチン /
  * Study a book to gain a new spell/prayer
  */
-void do_cmd_study(player_type *player_ptr)
+void do_cmd_study(PlayerType *player_ptr)
 {
     int i;
     OBJECT_IDX item;
@@ -959,7 +959,7 @@ void do_cmd_study(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 詠唱したらtrue
  */
-bool do_cmd_cast(player_type *player_ptr)
+bool do_cmd_cast(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;

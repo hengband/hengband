@@ -24,7 +24,7 @@
  * @brief 薬を飲むコマンドのメインルーチン /
  * Quaff some potion (from the pack or floor)
  */
-void do_cmd_quaff_potion(player_type *player_ptr)
+void do_cmd_quaff_potion(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;

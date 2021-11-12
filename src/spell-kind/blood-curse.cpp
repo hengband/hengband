@@ -17,7 +17,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-void blood_curse_to_enemy(player_type *player_ptr, MONSTER_IDX m_idx)
+void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
