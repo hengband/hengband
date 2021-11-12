@@ -70,7 +70,7 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
  */
 static bool grab_one_spell_monster_flag(dungeon_type *d_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<RF_ABILITY>::grab_one_flag(d_ptr->m_ability_flags, r_info_ability_flags, what))
+    if (EnumClassFlagGroup<MonsterAbilityType>::grab_one_flag(d_ptr->m_ability_flags, r_info_ability_flags, what))
         return true;
 
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());

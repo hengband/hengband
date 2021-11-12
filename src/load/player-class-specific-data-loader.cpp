@@ -83,8 +83,8 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<bluemage_data_typ
 {
     if (loading_savefile_version_is_older_than(9)) {
         auto [magic_num1, magic_num2] = load_old_savfile_magic_num();
-        for (int i = 0, count = std::min(enum2i(RF_ABILITY::MAX), OLD_SAVEFILE_MAX_SPELLS); i < count; ++i) {
-            bluemage_data->learnt_blue_magics.set(i2enum<RF_ABILITY>(i), magic_num2[i] != 0);
+        for (int i = 0, count = std::min(enum2i(MonsterAbilityType::MAX), OLD_SAVEFILE_MAX_SPELLS); i < count; ++i) {
+            bluemage_data->learnt_blue_magics.set(i2enum<MonsterAbilityType>(i), magic_num2[i] != 0);
         }
     } else {
         rd_FlagGroup(bluemage_data->learnt_blue_magics, rd_byte);
@@ -150,7 +150,7 @@ void PlayerClassSpecificDataLoader::operator()(std::shared_ptr<mane_data_type> &
         for (; count > 0; --count) {
             auto spell = rd_s16b();
             auto damage = rd_s16b();
-            mane_data->mane_list.push_back({ i2enum<RF_ABILITY>(spell), damage });
+            mane_data->mane_list.push_back({ i2enum<MonsterAbilityType>(spell), damage });
         }
     }
 }

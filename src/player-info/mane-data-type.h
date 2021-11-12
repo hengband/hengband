@@ -6,11 +6,11 @@
 
 constexpr int MAX_MANE = 16;
 
-enum class RF_ABILITY;
+enum class MonsterAbilityType;
 
 struct mane_data_type {
     struct mane_type {
-        RF_ABILITY spell{};
+        MonsterAbilityType spell{};
         HIT_POINT damage{};
     };
 

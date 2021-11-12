@@ -56,143 +56,143 @@ void add_cheat_remove_flags_element(player_type *player_ptr, msr_type *msr_ptr)
 static void check_acid_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_ACID)) {
-        msr_ptr->ability_flags.reset(RF_ABILITY::BR_ACID);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BA_ACID);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BO_ACID);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ACID);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ACID);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_ACID, SM::RES_ACID})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ACID);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ACID);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ACID);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ACID);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_ACID, SM::RES_ACID})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ACID);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ACID);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ACID);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ACID);
     }
 }
 
 static void check_elec_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_ELEC)) {
-        msr_ptr->ability_flags.reset(RF_ABILITY::BR_ELEC);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BA_ELEC);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BO_ELEC);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ELEC);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ELEC);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_ELEC, SM::RES_ELEC})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ELEC);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ELEC);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ELEC);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ELEC);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_ELEC, SM::RES_ELEC})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ELEC);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ELEC);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ELEC);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ELEC);
     }
 }
 
 static void check_fire_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_FIRE)) {
-        msr_ptr->ability_flags.reset(RF_ABILITY::BR_FIRE);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BA_FIRE);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BO_FIRE);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BA_FIRE);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_FIRE);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_FIRE, SM::RES_FIRE})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_FIRE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_FIRE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_FIRE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_FIRE);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_FIRE, SM::RES_FIRE})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_FIRE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_FIRE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_FIRE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_FIRE);
     }
 }
 
 static void check_cold_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_COLD)) {
-        msr_ptr->ability_flags.reset(RF_ABILITY::BR_COLD);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BA_COLD);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BO_COLD);
-        msr_ptr->ability_flags.reset(RF_ABILITY::BO_ICEE);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BA_COLD);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_COLD);
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ICEE);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_COLD, SM::RES_COLD})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_COLD);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_COLD);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_COLD);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ICEE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ICEE);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_COLD, SM::RES_COLD})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_COLD);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_COLD);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_COLD);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 20))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ICEE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ICEE);
     }
 }
 
@@ -200,26 +200,26 @@ static void check_pois_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has_all_of({SM::OPP_POIS, SM::RES_POIS})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_POIS);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_POIS);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_POIS);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_POIS);
 
         if (int_outof(msr_ptr->r_ptr, 60))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_NUKE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_NUKE);
 
         if (int_outof(msr_ptr->r_ptr, 60))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_NUKE);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_NUKE);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_POIS, SM::RES_POIS})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BR_POIS);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BR_POIS);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            msr_ptr->ability_flags.reset(RF_ABILITY::BA_POIS);
+            msr_ptr->ability_flags.reset(MonsterAbilityType::BA_POIS);
     }
 }
 

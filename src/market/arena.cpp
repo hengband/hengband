@@ -232,11 +232,11 @@ void update_gambling_monsters(player_type *player_ptr)
                 power[i] = power[i] * (r_ptr->speed - 20) / 100;
             if (num_taisei > 2)
                 power[i] = power[i] * (num_taisei * 2 + 5) / 10;
-            else if (r_ptr->ability_flags.has(RF_ABILITY::INVULNER))
+            else if (r_ptr->ability_flags.has(MonsterAbilityType::INVULNER))
                 power[i] = power[i] * 4 / 3;
-            else if (r_ptr->ability_flags.has(RF_ABILITY::HEAL))
+            else if (r_ptr->ability_flags.has(MonsterAbilityType::HEAL))
                 power[i] = power[i] * 4 / 3;
-            else if (r_ptr->ability_flags.has(RF_ABILITY::DRAIN_MANA))
+            else if (r_ptr->ability_flags.has(MonsterAbilityType::DRAIN_MANA))
                 power[i] = power[i] * 11 / 10;
             if (r_ptr->flags1 & RF1_RAND_25)
                 power[i] = power[i] * 9 / 10;

@@ -4,7 +4,7 @@
 
 #include <map>
 
-enum class RF_ABILITY;
+enum class MonsterAbilityType;
 
 /* Imitator */
 typedef struct monster_power {
@@ -19,5 +19,5 @@ typedef struct monster_power {
 
 #define MAX_MONSPELLS 96
 
-extern const std::map<RF_ABILITY, const monster_power> monster_powers;
-extern const std::map<RF_ABILITY, concptr> monster_powers_short;
+extern const std::map<MonsterAbilityType, const monster_power> monster_powers;
+extern const std::map<MonsterAbilityType, concptr> monster_powers_short;

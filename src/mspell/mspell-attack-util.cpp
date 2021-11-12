@@ -18,6 +18,6 @@ msa_type *initialize_msa_type(player_type *player_ptr, msa_type *msa_ptr, MONSTE
     msa_ptr->y_br_lite = 0;
     msa_ptr->do_spell = DO_SPELL_NONE;
     msa_ptr->dam = 0;
-    msa_ptr->thrown_spell = RF_ABILITY::MAX;
+    msa_ptr->thrown_spell = MonsterAbilityType::MAX;
     return msa_ptr;
 }

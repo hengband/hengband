@@ -72,7 +72,7 @@ bool adjacent_grid_check(player_type *player_ptr, monster_type *m_ptr, POSITION 
 
 void decide_lite_range(player_type *player_ptr, msa_type *msa_ptr)
 {
-    if (msa_ptr->ability_flags.has_not(RF_ABILITY::BR_LITE))
+    if (msa_ptr->ability_flags.has_not(MonsterAbilityType::BR_LITE))
         return;
 
     msa_ptr->y_br_lite = msa_ptr->y;
@@ -80,11 +80,11 @@ void decide_lite_range(player_type *player_ptr, msa_type *msa_ptr)
     if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
         feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
         if (f_ptr->flags.has_not(FF::LOS) && f_ptr->flags.has(FF::PROJECT) && one_in_(2))
-            msa_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
+            msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FF::LOS, los))
-        msa_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
+        msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
 
-    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE))
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE))
         return;
 
     msa_ptr->y_br_lite = 0;
@@ -97,18 +97,18 @@ static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
     if (f_ptr->flags.has(FF::PROJECT))
         return;
 
-    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_DISI) && f_ptr->flags.has(FF::HURT_DISI) && one_in_(2)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && f_ptr->flags.has(FF::HURT_DISI) && one_in_(2)) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         return;
     }
 
-    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE) && f_ptr->flags.has(FF::LOS) && one_in_(2))
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && f_ptr->flags.has(FF::LOS) && one_in_(2))
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
 }
 
 static void check_lite_area_by_mspell(player_type *player_ptr, msa_type *msa_ptr)
 {
-    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
         && in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
         && (one_in_(10) || (projectable(player_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
@@ -116,14 +116,14 @@ static void check_lite_area_by_mspell(player_type *player_ptr, msa_type *msa_ptr
         return;
     }
 
-    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
         && los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
         msa_ptr->success = true;
         return;
     }
 
-    if (msa_ptr->ability_flags.has_not(RF_ABILITY::BA_LITE) || (msa_ptr->m_ptr->cdis > get_max_range(player_ptr)))
+    if (msa_ptr->ability_flags.has_not(MonsterAbilityType::BA_LITE) || (msa_ptr->m_ptr->cdis > get_max_range(player_ptr)))
         return;
 
     POSITION by = msa_ptr->y, bx = msa_ptr->x;
@@ -150,7 +150,7 @@ static void decide_lite_breath(player_type *player_ptr, msa_type *msa_ptr)
         return;
 
     if (msa_ptr->success) {
-        msa_ptr->ability_flags.set(RF_ABILITY::BR_LITE);
+        msa_ptr->ability_flags.set(MonsterAbilityType::BR_LITE);
         return;
     }
 
@@ -178,7 +178,7 @@ bool decide_lite_projection(player_type *player_ptr, msa_type *msa_ptr)
 
 void decide_lite_area(player_type *player_ptr, msa_type *msa_ptr)
 {
-    if (msa_ptr->ability_flags.has_not(RF_ABILITY::DARKNESS))
+    if (msa_ptr->ability_flags.has_not(MonsterAbilityType::DARKNESS))
         return;
 
     bool can_use_lite_area = (player_ptr->pclass == PlayerClassType::NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
@@ -188,10 +188,10 @@ void decide_lite_area(player_type *player_ptr, msa_type *msa_ptr)
         return;
 
     if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
-        msa_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
+        msa_ptr->ability_flags.reset(MonsterAbilityType::DARKNESS);
         return;
     }
 
     if ((player_ptr->pclass == PlayerClassType::NINJA) && !can_use_lite_area)
-        msa_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
+        msa_ptr->ability_flags.reset(MonsterAbilityType::DARKNESS);
 }

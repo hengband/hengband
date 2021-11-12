@@ -29,7 +29,7 @@ typedef struct lore_type {
     BIT_FLAGS flags1;
     BIT_FLAGS flags2;
     BIT_FLAGS flags3;
-    EnumClassFlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     EnumClassFlagGroup<MonsterAuraType> aura_flags;
 
     BIT_FLAGS flags7;

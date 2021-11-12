@@ -8,8 +8,8 @@
 
 #include <optional>
 
-enum class RF_ABILITY;
+enum class MonsterAbilityType;
 struct player_type;
 struct monster_power;
 int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana);
-std::optional<RF_ABILITY> get_learned_power(player_type *player_ptr);
+std::optional<MonsterAbilityType> get_learned_power(player_type *player_ptr);

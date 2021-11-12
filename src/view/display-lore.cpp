@@ -556,14 +556,14 @@ void display_monster_collective(lore_type *lore_ptr)
  */
 void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
 {
-    if (lore_ptr->ability_flags.has(RF_ABILITY::ROCKET)) {
-        set_damage(player_ptr, lore_ptr, RF_ABILITY::ROCKET, _("ロケット%sを発射する", "shoot a rocket%s"));
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::ROCKET)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::ROCKET, _("ロケット%sを発射する", "shoot a rocket%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
         lore_ptr->rocket = true;
     }
 
-    if (lore_ptr->ability_flags.has_not(RF_ABILITY::SHOOT))
+    if (lore_ptr->ability_flags.has_not(MonsterAbilityType::SHOOT))
         return;
 
     int p = -1; /* Position of SHOOT */

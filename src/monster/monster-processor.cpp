@@ -368,7 +368,7 @@ void process_special(player_type *player_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->ability_flags.has_not(RF_ABILITY::SPECIAL) || (m_ptr->r_idx != MON_OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out
+    if (r_ptr->ability_flags.has_not(MonsterAbilityType::SPECIAL) || (m_ptr->r_idx != MON_OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out
         || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
         return;
 
@@ -384,7 +384,7 @@ void process_special(player_type *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (count && is_original_ap_and_seen(player_ptr, m_ptr))
-        r_ptr->r_ability_flags.set(RF_ABILITY::SPECIAL);
+        r_ptr->r_ability_flags.set(MonsterAbilityType::SPECIAL);
 }
 
 /*!

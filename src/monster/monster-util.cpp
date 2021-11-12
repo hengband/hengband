@@ -72,7 +72,7 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
             return true;
         if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK)
             && r_ptr->ability_flags.has_none_of(
-                { RF_ABILITY::CAUSE_1, RF_ABILITY::CAUSE_2, RF_ABILITY::CAUSE_3, RF_ABILITY::CAUSE_4, RF_ABILITY::MIND_BLAST, RF_ABILITY::BRAIN_SMASH }))
+                { MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4, MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH }))
             return false;
     }
 

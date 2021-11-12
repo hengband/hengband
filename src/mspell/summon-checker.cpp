@@ -84,7 +84,7 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         is_match = (r_ptr->d_char == 'g');
         break;
     case SUMMON_CYBER:
-        is_match = (r_ptr->d_char == 'U') && r_ptr->ability_flags.has(RF_ABILITY::ROCKET);
+        is_match = (r_ptr->d_char == 'U') && r_ptr->ability_flags.has(MonsterAbilityType::ROCKET);
         break;
     case SUMMON_KIN: {
         SYMBOL_CODE summon_kin_type = summoner_idx > 0 ? r_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);

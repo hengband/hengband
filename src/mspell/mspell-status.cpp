@@ -146,7 +146,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *player_ptr, POSITION y, POS
         msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(player_ptr, RF_ABILITY::DRAIN_MANA, m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::DRAIN_MANA, m_idx, DAM_ROLL);
     const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::DRAIN_MANA, dam, 0, false, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(player_ptr, m_idx, DRS_MANA);
@@ -186,7 +186,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *player_ptr, POSITION y, POS
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(player_ptr, RF_ABILITY::MIND_BLAST, m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::MIND_BLAST, m_idx, DAM_ROLL);
     const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::MIND_BLAST, dam, 0, false, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
@@ -224,7 +224,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *player_ptr, POSITION y, PO
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(player_ptr, RF_ABILITY::BRAIN_SMASH, m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BRAIN_SMASH, m_idx, DAM_ROLL);
     const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::BRAIN_SMASH, dam, 0, false, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);

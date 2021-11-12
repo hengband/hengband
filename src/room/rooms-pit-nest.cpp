@@ -89,17 +89,17 @@ static concptr pit_subtype_string(int type, bool nest)
         sprintf(inner_buf, "(%c)", vault_aux_char);
         break;
     case PIT_TYPE_DRAGON:
-        if (vault_aux_dragon_mask4.has_all_of({ RF_ABILITY::BR_ACID, RF_ABILITY::BR_ELEC, RF_ABILITY::BR_FIRE, RF_ABILITY::BR_COLD, RF_ABILITY::BR_POIS })) {
+        if (vault_aux_dragon_mask4.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
             strcpy(inner_buf, _("(万色)", "(multi-hued)"));
-        } else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_ACID)) {
+        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
             strcpy(inner_buf, _("(酸)", "(acid)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_ELEC)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
             strcpy(inner_buf, _("(稲妻)", "(lightning)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_FIRE)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
             strcpy(inner_buf, _("(火炎)", "(fire)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_COLD)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
             strcpy(inner_buf, _("(冷気)", "(frost)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_POIS)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
             strcpy(inner_buf, _("(毒)", "(poison)"));
         } else {
             strcpy(inner_buf, _("(未定義)", "(undefined)"));
