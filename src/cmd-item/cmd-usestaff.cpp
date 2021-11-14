@@ -50,7 +50,7 @@
  * @param known 判明済ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
+int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
     int k;
     bool ident = false;
@@ -272,7 +272,7 @@ int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_c
 
     case SV_STAFF_NOTHING: {
         msg_print(_("何も起らなかった。", "Nothing happens."));
-        if (PlayerRace(player_ptr).food() == PlayerRaceFood::MANA)
+        if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::MANA)
             msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
         break;
     }
@@ -283,7 +283,7 @@ int staff_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_c
 /*!
  * @brief 杖を使うコマンドのメインルーチン /
  */
-void do_cmd_use_staff(player_type *player_ptr)
+void do_cmd_use_staff(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;
@@ -295,7 +295,7 @@ void do_cmd_use_staff(player_type *player_ptr)
     if (cmd_limit_arena(player_ptr))
         return;
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     q = _("どの杖を使いますか? ", "Use which staff? ");
     s = _("使える杖がない。", "You have no staff to use.");

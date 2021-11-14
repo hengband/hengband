@@ -2,15 +2,15 @@
 
 #include "player-status/player-basic-statistics.h"
 
-struct player_type;
+class PlayerType;
 class PlayerDexterity : public PlayerBasicStatistics {
 public:
-    PlayerDexterity(player_type *player_ptr);
+    PlayerDexterity(PlayerType *player_ptr);
 
 protected:
     void set_locals() override;
     int16_t race_value() override;
     int16_t time_effect_value() override;
-    int16_t battleform_value() override;
+    int16_t stance_value() override;
     int16_t mutation_value() override;
 };

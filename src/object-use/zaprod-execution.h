@@ -2,16 +2,16 @@
 
 #include "system/angband.h"
 
-struct player_type;
+class PlayerType;
 class ObjectZapRodEntity {
 public:
-    ObjectZapRodEntity(player_type *player_ptr);
+    ObjectZapRodEntity(PlayerType *player_ptr);
     virtual ~ObjectZapRodEntity() = default;
 
     void execute(INVENTORY_IDX item);
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
 
     bool check_can_zap();
 };

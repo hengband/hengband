@@ -26,7 +26,7 @@ scene_monster_info scene_target_monster;
 
 inline static bool has_shadower_flag(monster_type *m_ptr)
 {
-    return m_ptr->mflag2.has(MFLAG2::KAGE);
+    return m_ptr->mflag2.has(MonsterConstantFlagType::KAGE);
 }
 
 inline static bool is_unique(monster_race *ap_r_ptr)
@@ -82,7 +82,7 @@ inline static bool can_mute_scene_monster()
  * @retval true モンスターAが優先
  * @retval false モンスターBが優先
  */
-static bool is_high_rate(player_type *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX m_idx2)
+static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX m_idx2)
 {
     // FIXME 視界内モンスターリストの比較関数と同じ処理
     auto floor_ptr = player_ptr->current_floor_ptr;
@@ -96,8 +96,8 @@ static bool is_high_rate(player_type *player_ptr, MONSTER_IDX m_idx1, MONSTER_ID
         return any_bits(ap_r_ptr1->flags1, RF1_UNIQUE);
 
     /* Shadowers first (あやしい影) */
-    if (m_ptr1->mflag2.has(MFLAG2::KAGE) != m_ptr2->mflag2.has(MFLAG2::KAGE))
-        return m_ptr1->mflag2.has(MFLAG2::KAGE);
+    if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE))
+        return m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE);
 
     /* Unknown monsters first */
     if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0))
@@ -119,7 +119,7 @@ static bool is_high_rate(player_type *player_ptr, MONSTER_IDX m_idx1, MONSTER_ID
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx BGM対象候補のモンスター
  */
-static void update_target_monster(player_type *player_ptr, MONSTER_IDX m_idx)
+static void update_target_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     if (scene_target_monster.ap_r_ptr && (scene_target_monster.m_idx == m_idx)) {
         // 同一モンスター。最後に見たゲームターンを更新。
@@ -144,9 +144,9 @@ static void update_target_monster(player_type *player_ptr, MONSTER_IDX m_idx)
     }
 }
 
-using scene_monster_func = bool (*)(player_type *player_ptr, scene_type *value);
+using scene_monster_func = bool (*)(PlayerType *player_ptr, scene_type *value);
 
-static bool scene_monster(player_type *player_ptr, scene_type *value)
+static bool scene_monster(PlayerType *player_ptr, scene_type *value)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
 
@@ -161,7 +161,7 @@ static bool scene_monster(player_type *player_ptr, scene_type *value)
     }
 }
 
-static bool scene_unique(player_type *player_ptr, scene_type *value)
+static bool scene_unique(PlayerType *player_ptr, scene_type *value)
 {
     (void)player_ptr;
 
@@ -174,7 +174,7 @@ static bool scene_unique(player_type *player_ptr, scene_type *value)
     return false;
 }
 
-static bool scene_unknown(player_type *player_ptr, scene_type *value)
+static bool scene_unknown(PlayerType *player_ptr, scene_type *value)
 {
     (void)player_ptr;
     if (is_unknown_monster(scene_target_monster.ap_r_ptr)) {
@@ -186,7 +186,7 @@ static bool scene_unknown(player_type *player_ptr, scene_type *value)
     return false;
 }
 
-static bool scene_high_level(player_type *player_ptr, scene_type *value)
+static bool scene_high_level(PlayerType *player_ptr, scene_type *value)
 {
     if (!is_unknown_monster(scene_target_monster.ap_r_ptr) && (scene_target_monster.ap_r_ptr->level >= player_ptr->lev)) {
         value->type = TERM_XTRA_MUSIC_BASIC;
@@ -226,7 +226,7 @@ int get_scene_monster_count()
  * @param list BGM選曲リスト
  * @param from_index リストの更新開始位置
  */
-void refresh_scene_monster(player_type *player_ptr, const std::vector<MONSTER_IDX> &monster_list, scene_type_list &list, int from_index)
+void refresh_scene_monster(PlayerType *player_ptr, const std::vector<MONSTER_IDX> &monster_list, scene_type_list &list, int from_index)
 {
     const bool mute = can_mute_scene_monster();
 

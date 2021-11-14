@@ -24,7 +24,7 @@
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inventory(player_type *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
+COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     COMMAND_CODE i;
     int k, l, z = 0;
@@ -127,7 +127,7 @@ COMMAND_CODE show_inventory(player_type *player_ptr, int target_item, BIT_FLAGS 
  * @brief 所持アイテム一覧を表示する /
  * Choice window "shadow" of the "show_inven()" function
  */
-void display_inventory(player_type *player_ptr, const ItemTester &item_tester)
+void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
 {
     int i, n, z = 0;
     TERM_COLOR attr = TERM_WHITE;

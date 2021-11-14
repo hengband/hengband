@@ -297,14 +297,14 @@ static bool parse_long_opt(const char *opt)
     init_stuff();
     init_angband(p_ptr, true);
     switch (output_all_spoilers()) {
-    case spoiler_output_status::SPOILER_OUTPUT_SUCCESS:
+    case SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS:
         puts("Successfully created a spoiler file.");
         quit(nullptr);
         break;
-    case spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN:
+    case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN:
         quit("Cannot create spoiler file.");
         break;
-    case spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE:
+    case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE:
         quit("Cannot close spoiler file.");
         break;
     default:

@@ -11,7 +11,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-static void add_cheat_remove_flags(player_type *player_ptr, msr_type *msr_ptr)
+static void add_cheat_remove_flags(PlayerType *player_ptr, msr_type *msr_ptr)
 {
     if (!smart_cheat)
         return;
@@ -28,7 +28,7 @@ static void add_cheat_remove_flags(player_type *player_ptr, msr_type *msr_ptr)
  * @param f5p モンスター魔法のフラグリスト2
  * @param f6p モンスター魔法のフラグリスト3
  */
-void remove_bad_spells(MONSTER_IDX m_idx, player_type *player_ptr, EnumClassFlagGroup<RF_ABILITY> &ability_flags)
+void remove_bad_spells(MONSTER_IDX m_idx, PlayerType *player_ptr, EnumClassFlagGroup<MonsterAbilityType> &ability_flags)
 {
     msr_type tmp_msr;
     msr_type *msr_ptr = initialize_msr_type(player_ptr, &tmp_msr, m_idx, ability_flags);

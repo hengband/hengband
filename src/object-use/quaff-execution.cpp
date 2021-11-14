@@ -56,7 +56,7 @@
  * @brief コンストラクタ
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-ObjectQuaffEntity::ObjectQuaffEntity(player_type *player_ptr)
+ObjectQuaffEntity::ObjectQuaffEntity(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -118,9 +118,9 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         case SV_POTION_SALT_WATER: {
             msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
             switch (PlayerRace(this->player_ptr).food()) {
-            case PlayerRaceFood::RATION:
-            case PlayerRaceFood::WATER:
-            case PlayerRaceFood::BLOOD:
+            case PlayerRaceFoodType::RATION:
+            case PlayerRaceFoodType::WATER:
+            case PlayerRaceFoodType::BLOOD:
                 (void)set_food(this->player_ptr, PY_FOOD_STARVE - 1);
                 break;
             default:
@@ -538,11 +538,11 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         return; //!< @note スケルトンは水分で飢えを満たせない
 
     switch (PlayerRace(this->player_ptr).food()) {
-    case PlayerRaceFood::WATER:
+    case PlayerRaceFoodType::WATER:
         msg_print(_("水分を取り込んだ。", "You are moistened."));
         set_food(this->player_ptr, std::min<short>(this->player_ptr->food + q_ptr->pval + std::max<short>(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
         break;
-    case PlayerRaceFood::OIL:
+    case PlayerRaceFoodType::OIL:
         if (q_ptr->tval == ItemKindType::FLASK) {
             msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
             set_food(this->player_ptr, this->player_ptr->food + 5000);
@@ -550,11 +550,11 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             set_food(this->player_ptr, this->player_ptr->food + ((q_ptr->pval) / 20));
         }
         break;
-    case PlayerRaceFood::BLOOD:
+    case PlayerRaceFoodType::BLOOD:
         (void)set_food(this->player_ptr, this->player_ptr->food + (q_ptr->pval / 10));
         break;
-    case PlayerRaceFood::MANA:
-    case PlayerRaceFood::CORPSE:
+    case PlayerRaceFoodType::MANA:
+    case PlayerRaceFoodType::CORPSE:
         set_food(this->player_ptr, this->player_ptr->food + ((q_ptr->pval) / 20));
         break;
     default:

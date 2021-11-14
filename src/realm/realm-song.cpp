@@ -19,7 +19,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-song.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
@@ -33,7 +33,7 @@
  * @param spell 領域魔法としてのID
  * @param song 魔法効果のID
  */
-static void start_singing(player_type *player_ptr, SPELL_IDX spell, int32_t song)
+static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
 {
     /* Remember the song index */
     set_singing_song_effect(player_ptr, song);
@@ -52,18 +52,18 @@ static void start_singing(player_type *player_ptr, SPELL_IDX spell, int32_t song
  * @brief 歌の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 歌ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST / SpellProcessType::FAIL / SPELL_CONT / SpellProcessType::STOP)
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST / SpellProcessType::FAIL / SPELL_CONT / SpellProcessType::STOP 時はnullptr文字列を返す。
  */
-concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESCRIPTION;
-    bool info = mode == SPELL_INFO;
-    bool cast = mode == SPELL_CAST;
-    bool fail = mode == SPELL_FAIL;
-    bool cont = mode == SPELL_CONTNUATION;
-    bool stop = mode == SPELL_STOP;
+    bool name = mode == SpellProcessType::NAME;
+    bool desc = mode == SpellProcessType::DESCRIPTION;
+    bool info = mode == SpellProcessType::INFO;
+    bool cast = mode == SpellProcessType::CAST;
+    bool fail = mode == SpellProcessType::FAIL;
+    bool cont = mode == SpellProcessType::CONTNUATION;
+    bool stop = mode == SpellProcessType::STOP;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -140,7 +140,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt(player_ptr, GF_SOUND, dir, damroll(dice, sides));
+                fire_bolt(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides));
             }
         }
         break;
@@ -250,7 +250,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cont) {
-                project_all_los(player_ptr, GF_TURN_ALL, power);
+                project_all_los(player_ptr, AttributeType::TURN_ALL, power);
             }
         }
 
@@ -374,7 +374,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(dice, sides, 0);
 
             if (cont) {
-                project_all_los(player_ptr, GF_PSI, damroll(dice, sides));
+                project_all_los(player_ptr, AttributeType::PSI, damroll(dice, sides));
             }
         }
 
@@ -406,7 +406,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
              * MP不足で鑑定が発動される前に歌が中断してしまうのを防止。
              */
             if (cont || cast) {
-                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, 0, GF_IDENTIFY, PROJECT_ITEM);
+                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, 0, AttributeType::IDENTIFY, PROJECT_ITEM);
             }
         }
 
@@ -486,7 +486,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(dice, sides, 0);
 
             if (cont) {
-                project_all_los(player_ptr, GF_SOUND, damroll(dice, sides));
+                project_all_los(player_ptr, AttributeType::SOUND, damroll(dice, sides));
             }
         }
 
@@ -560,7 +560,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
              * MP不足で効果が発動される前に歌が中断してしまうのを防止。
              */
             if (cont || cast) {
-                project(player_ptr, 0, 0, player_ptr->y, player_ptr->x, 0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE);
+                project(player_ptr, 0, 0, player_ptr->y, player_ptr->x, 0, AttributeType::DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE);
             }
         }
         break;
@@ -648,7 +648,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 msg_print(_("歌が空間を歪めた．．．", "Reality whirls wildly as you sing a dizzying melody..."));
-                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, GF_AWAY_ALL, PROJECT_KILL);
+                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, power, AttributeType::AWAY_ALL, PROJECT_KILL);
             }
         }
         break;
@@ -733,7 +733,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(player_ptr, GF_SOUND, dir, damroll(dice, sides));
+                fire_beam(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides));
             }
         }
         break;
@@ -957,7 +957,7 @@ concptr do_music_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_SOUND, dir, damroll(dice, sides), rad);
+                fire_ball(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides), rad);
             }
         }
         break;

@@ -50,7 +50,7 @@ static concptr const kaji_tips[5] = {
 /*!
  * @brief 所持しているエッセンス一覧を表示する
  */
-static void display_essence(player_type *player_ptr)
+static void display_essence(PlayerType *player_ptr)
 {
     constexpr auto row_count = 21U;
     constexpr auto column_width = 22U;
@@ -108,7 +108,7 @@ static void display_essence(player_type *player_ptr)
  * @brief エッセンスの抽出処理
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void drain_essence(player_type *player_ptr)
+static void drain_essence(PlayerType *player_ptr)
 {
     auto q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     auto s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
@@ -244,7 +244,7 @@ static COMMAND_CODE choose_essence(void)
  * @param start_idx smith_effect_list の表示開始インデックス
  * @param line_max 表示する最大行数
  */
-static void display_smith_effect_list(const Smith &smith, const std::vector<SmithEffect> &smith_effect_list, int menu_line, int start_idx, int line_max)
+static void display_smith_effect_list(const Smith &smith, const std::vector<SmithEffectType> &smith_effect_list, int menu_line, int start_idx, int line_max)
 {
     auto x = 10;
 
@@ -294,7 +294,7 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *player_ptr, SmithCategory mode)
+static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 {
     OBJECT_IDX item;
     bool flag;
@@ -467,13 +467,13 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
         return;
     }
 
-    const auto effect_flags = Smith::get_effect_tr_flags(effect);
+    const auto attribute_flags = Smith::get_effect_tr_flags(effect);
     auto add_essence_count = 1;
-    if (effect_flags.has_any_of(TR_PVAL_FLAG_MASK)) {
+    if (attribute_flags.has_any_of(TR_PVAL_FLAG_MASK)) {
         if (o_ptr->pval < 0) {
             msg_print(_("このアイテムの能力修正を強化することはできない。", "You cannot increase magic number of this item."));
             return;
-        } else if (effect_flags.has(TR_BLOWS)) {
+        } else if (attribute_flags.has(TR_BLOWS)) {
             if ((o_ptr->pval > 1) && !get_check(_("修正値は1になります。よろしいですか？", "The magic number of this weapon will become 1. Are you sure? "))) {
                 return;
             }
@@ -492,7 +492,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
         }
 
         add_essence_count = o_ptr->pval;
-    } else if (effect == SmithEffect::SLAY_GLOVE) {
+    } else if (effect == SmithEffectType::SLAY_GLOVE) {
         char tmp_val[8] = "1";
         const auto max_val = player_ptr->lev / 7 + 3;
         if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {
@@ -525,7 +525,7 @@ static void add_essence(player_type *player_ptr, SmithCategory mode)
 /*!
  * @brief エッセンスを消去する
  */
-static void erase_essence(player_type *player_ptr)
+static void erase_essence(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;
@@ -556,7 +556,7 @@ static void erase_essence(player_type *player_ptr)
  * @brief 鍛冶コマンドのメインルーチン
  * @param only_browse TRUEならばエッセンス一覧の表示のみを行う
  */
-void do_cmd_kaji(player_type *player_ptr, bool only_browse)
+void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
 {
     COMMAND_CODE mode = 0;
     char choice;
@@ -703,10 +703,10 @@ void do_cmd_kaji(player_type *player_ptr, bool only_browse)
         mode = choose_essence();
         if (mode == 0)
             break;
-        add_essence(player_ptr, i2enum<SmithCategory>(mode));
+        add_essence(player_ptr, i2enum<SmithCategoryType>(mode));
         break;
     case 5:
-        add_essence(player_ptr, SmithCategory::ENCHANT);
+        add_essence(player_ptr, SmithCategoryType::ENCHANT);
         break;
     }
 }

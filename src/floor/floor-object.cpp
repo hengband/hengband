@@ -70,7 +70,7 @@ static errr get_obj_num_prep(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
  */
-static void object_mention(player_type *player_ptr, object_type *o_ptr)
+static void object_mention(PlayerType *player_ptr, object_type *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
@@ -118,7 +118,7 @@ static void set_ammo_quantity(object_type *j_ptr)
  * @param rq_mon_level ランダムクエスト討伐対象のレベル。ランダムクエスト以外の生成であれば無効値
  * @return アイテムの生成成功可否
  */
-bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
+bool make_object(PlayerType *player_ptr, object_type *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
@@ -163,7 +163,7 @@ bool make_object(player_type *player_ptr, object_type *j_ptr, BIT_FLAGS mode, st
  * @details
  * The location must be a legal, clean, floor grid.
  */
-bool make_gold(player_type *player_ptr, object_type *j_ptr)
+bool make_gold(PlayerType *player_ptr, object_type *j_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
@@ -190,7 +190,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
  * @param y 削除したフロアマスのY座標
  * @param x 削除したフロアマスのX座標
  */
-void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x)
+void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -216,7 +216,7 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
  * @param item 増やしたいアイテムの所持スロット
  * @param num 増やしたいアイテムの数
  */
-void floor_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
@@ -239,7 +239,7 @@ void floor_item_increase(player_type *player_ptr, INVENTORY_IDX item, ITEM_NUMBE
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 消去したいアイテムの所持スロット
  */
-void floor_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
+void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
     if (!o_ptr->k_idx)
@@ -260,7 +260,7 @@ void floor_item_optimize(player_type *player_ptr, INVENTORY_IDX item)
  * @details
  * Handle "stacks" of objects correctly.
  */
-void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
+void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     object_type *j_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -330,7 +330,7 @@ ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx
  * the object can combine, stack, or be placed.  Artifacts will try very\n
  * hard to be placed, including "teleporting" to a useful grid if needed.\n
  */
-OBJECT_IDX drop_near(player_type *player_ptr, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
+OBJECT_IDX drop_near(PlayerType *player_ptr, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
 {
     int i, k, d, s;
     POSITION dy, dx;
@@ -569,7 +569,7 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param item メッセージの対象にしたいアイテム所持スロット
  */
-void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item)
+void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
     GAME_TEXT o_name[MAX_NLEN];
@@ -588,7 +588,7 @@ void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-object_type *choose_object(player_type *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester& item_tester)
+object_type *choose_object(PlayerType *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester& item_tester)
 {
     OBJECT_IDX item;
 

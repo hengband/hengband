@@ -34,7 +34,7 @@
  * @param m_name モンスター名称
  * @param see_m モンスターが視界内にいたらTRUE
  */
-static void escape_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name)
+static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (turn_flags_ptr->is_riding_mon) {
@@ -67,7 +67,7 @@ static void escape_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, 
  * @param see_m モンスターが視界内にいたらTRUE
  * @return モンスターがフロアから消えたらTRUE
  */
-bool runaway_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
+bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

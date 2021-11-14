@@ -58,7 +58,7 @@ static void handle_signal_suspend(int sig)
  * To prevent messy accidents, we should reset this global variable
  * whenever the user enters a keypress, or something like that.
  * </pre>
- * @todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
+ * @todo ここにPlayerTypeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  */
 static void handle_signal_simple(int sig)
 {

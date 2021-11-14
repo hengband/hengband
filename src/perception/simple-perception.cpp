@@ -32,7 +32,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param heavy 重度の擬似鑑定を行うならばTRUE
  */
-static void sense_inventory_aux(player_type *player_ptr, INVENTORY_IDX slot, bool heavy)
+static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
     object_type *o_ptr = &player_ptr->inventory_list[slot];
     GAME_TEXT o_name[MAX_NLEN];
@@ -45,7 +45,7 @@ static void sense_inventory_aux(player_type *player_ptr, INVENTORY_IDX slot, boo
     if (!feel)
         return;
 
-    if ((player_ptr->muta.has(MUTA::BAD_LUCK)) && !randint0(13)) {
+    if ((player_ptr->muta.has(PlayerMutationType::BAD_LUCK)) && !randint0(13)) {
         switch (feel) {
         case FEEL_TERRIBLE: {
             feel = FEEL_SPECIAL;
@@ -127,7 +127,7 @@ static void sense_inventory_aux(player_type *player_ptr, INVENTORY_IDX slot, boo
  *   Class 4 = Ranger  --> slow but heavy  (changed!)\n
  *   Class 5 = Paladin --> slow but heavy\n
  */
-void sense_inventory1(player_type *player_ptr)
+void sense_inventory1(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     bool heavy = false;
@@ -299,7 +299,7 @@ void sense_inventory1(player_type *player_ptr)
 /*!
  * @brief 1プレイヤーターン毎に武器、防具以外の擬似鑑定が行われるかを判定する。
  */
-void sense_inventory2(player_type *player_ptr)
+void sense_inventory2(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     object_type *o_ptr;

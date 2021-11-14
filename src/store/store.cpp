@@ -195,7 +195,7 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
  * @brief 店のアイテムを調べるコマンドのメインルーチン /
  * Examine an item in a store			   -JDL-
  */
-void store_examine(player_type *player_ptr)
+void store_examine(PlayerType *player_ptr)
 {
     if (st_ptr->stock_num <= 0) {
         if (cur_store_num == StoreSaleType::HOME)
@@ -237,7 +237,7 @@ void store_examine(player_type *player_ptr)
  * Shuffle one of the stores.
  * @param which 店舗種類のID
  */
-void store_shuffle(player_type *player_ptr, StoreSaleType which)
+void store_shuffle(PlayerType *player_ptr, StoreSaleType which)
 {
     if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM))
         return;
@@ -287,7 +287,7 @@ void store_shuffle(player_type *player_ptr, StoreSaleType which)
  * @param store_num 店舗種類のID
  * @param chance 更新商品数
  */
-void store_maintenance(player_type *player_ptr, int town_num, StoreSaleType store_num, int chance)
+void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store_num, int chance)
 {
     cur_store_num = store_num;
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM))

@@ -99,7 +99,7 @@ bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX 
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-bool get_tag(player_type *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester& item_tester)
+bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     COMMAND_CODE start, end;
     switch (mode) {
@@ -167,7 +167,7 @@ bool get_tag(player_type *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode
  * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
-bool get_item_okay(player_type *player_ptr, OBJECT_IDX i, const ItemTester& item_tester)
+bool get_item_okay(PlayerType *player_ptr, OBJECT_IDX i, const ItemTester& item_tester)
 {
     if ((i < 0) || (i >= INVEN_TOTAL))
         return false;
@@ -186,7 +186,7 @@ bool get_item_okay(player_type *player_ptr, OBJECT_IDX i, const ItemTester& item
  * @details The item can be negative to mean "item on floor".
  * Hack -- allow user to "prevent" certain choices
  */
-bool get_item_allow(player_type *player_ptr, INVENTORY_IDX item)
+bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     if (!command_cmd)
         return true;
@@ -218,7 +218,7 @@ bool get_item_allow(player_type *player_ptr, INVENTORY_IDX item)
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
-INVENTORY_IDX label_to_equipment(player_type *player_ptr, int c)
+INVENTORY_IDX label_to_equipment(PlayerType *player_ptr, int c)
 {
     INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_MAIN_HAND;
 
@@ -242,7 +242,7 @@ INVENTORY_IDX label_to_equipment(player_type *player_ptr, int c)
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  * @details Note that the label does NOT distinguish inven/equip.
  */
-INVENTORY_IDX label_to_inventory(player_type *player_ptr, int c)
+INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
 {
     INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
@@ -261,7 +261,7 @@ INVENTORY_IDX label_to_inventory(player_type *player_ptr, int c)
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
  */
-bool verify(player_type *player_ptr, concptr prompt, INVENTORY_IDX item)
+bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
 {
     GAME_TEXT o_name[MAX_NLEN];
     char out_val[MAX_NLEN + 20];
@@ -283,7 +283,7 @@ bool verify(player_type *player_ptr, concptr prompt, INVENTORY_IDX item)
  * @param label ラベルリストを取得する文字列参照ポインタ
  * @param mode 所持品リストか装備品リストかの切り替え
  */
-void prepare_label_string(player_type *player_ptr, char *label, BIT_FLAGS mode, const ItemTester& item_tester)
+void prepare_label_string(PlayerType *player_ptr, char *label, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     int offset = (mode == USE_EQUIP) ? INVEN_MAIN_HAND : 0;

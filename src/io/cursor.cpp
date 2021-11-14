@@ -35,7 +35,7 @@ void move_cursor_relative(int row, int col)
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  */
-void print_path(player_type *player_ptr, POSITION y, POSITION x)
+void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     uint16_t path_g[512];
     byte default_color = TERM_SLATE;
@@ -83,7 +83,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
             term_queue_bigchar(panel_col_of(nx), ny - panel_row_prt, a, c, ta, tc);
         }
 
-        if (g_ptr->is_mark() && !g_ptr->cave_has_flag(FF::PROJECT))
+        if (g_ptr->is_mark() && !g_ptr->cave_has_flag(FloorFeatureType::PROJECT))
             break;
 
         if (nx == x && ny == y)
@@ -101,7 +101,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
+bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
 {
     TERM_LEN wid, hgt;
     get_screen_size(&wid, &hgt);

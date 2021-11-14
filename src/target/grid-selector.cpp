@@ -28,7 +28,7 @@
  * XAngband: determine if a given location is "interesting"
  * based on target_set_accept function.
  */
-static bool tgt_pt_accept(player_type *player_ptr, POSITION y, POSITION x)
+static bool tgt_pt_accept(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
@@ -45,11 +45,11 @@ static bool tgt_pt_accept(player_type *player_ptr, POSITION y, POSITION x)
     if (!g_ptr->is_mark())
         return false;
 
-    if (g_ptr->cave_has_flag(FF::LESS) || g_ptr->cave_has_flag(FF::MORE) || g_ptr->cave_has_flag(FF::QUEST_ENTER)
-        || g_ptr->cave_has_flag(FF::QUEST_EXIT))
+    if (g_ptr->cave_has_flag(FloorFeatureType::LESS) || g_ptr->cave_has_flag(FloorFeatureType::MORE) || g_ptr->cave_has_flag(FloorFeatureType::QUEST_ENTER)
+        || g_ptr->cave_has_flag(FloorFeatureType::QUEST_EXIT))
         return true;
 
-    if (g_ptr->cave_has_flag(FF::STORE) || g_ptr->cave_has_flag(FF::BLDG))
+    if (g_ptr->cave_has_flag(FloorFeatureType::STORE) || g_ptr->cave_has_flag(FloorFeatureType::BLDG))
         return true;
 
     return false;
@@ -59,7 +59,7 @@ static bool tgt_pt_accept(player_type *player_ptr, POSITION y, POSITION x)
  * XAngband: Prepare the "temp" array for "tget_pt"
  * based on target_set_prepare funciton.
  */
-static void tgt_pt_prepare(player_type *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs)
+static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs)
 {
     if (!expand_list)
         return;
@@ -82,19 +82,19 @@ static void tgt_pt_prepare(player_type *player_ptr, std::vector<POSITION> &ys, s
  * @brief 指定したシンボルのマスかどうかを判定するための条件式コールバック
  */
 std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_back = {
-    { '<', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STAIRS) && g_ptr->cave_has_flag(FF::LESS); } },
-    { '>', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STAIRS) && g_ptr->cave_has_flag(FF::MORE); } },
-    { '+', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::BLDG); } },
-    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('0'); } },
-    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('1'); } },
-    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('2'); } },
-    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('3'); } },
-    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('4'); } },
-    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('5'); } },
-    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('6'); } },
-    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('7'); } },
-    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('8'); } },
-    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('9'); } },
+    { '<', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STAIRS) && g_ptr->cave_has_flag(FloorFeatureType::LESS); } },
+    { '>', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STAIRS) && g_ptr->cave_has_flag(FloorFeatureType::MORE); } },
+    { '+', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::BLDG); } },
+    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('0'); } },
+    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('1'); } },
+    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('2'); } },
+    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('3'); } },
+    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('4'); } },
+    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('5'); } },
+    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('6'); } },
+    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('7'); } },
+    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('8'); } },
+    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FloorFeatureType::STORE) && g_ptr->is_symbol('9'); } },
 };
 
 /*!
@@ -114,7 +114,7 @@ struct tgt_pt_info {
     char prev_ch; //<! 前回入力キー
     std::function<bool(grid_type *)> callback; //<! 条件判定コールバック
 
-    void move_to_symbol(player_type *player_ptr);
+    void move_to_symbol(PlayerType *player_ptr);
 };
 
 /*!
@@ -123,7 +123,7 @@ struct tgt_pt_info {
  * @details 自分 (＠)の位置に戻ってくるような処理に見える.
  * コールバックにも依る？
  */
-void tgt_pt_info::move_to_symbol(player_type *player_ptr)
+void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
 {
     if (!expand_list || this->ys.empty())
         return;
@@ -170,7 +170,7 @@ void tgt_pt_info::move_to_symbol(player_type *player_ptr)
  * @param y_ptr y座標への参照ポインタ
  * @return 指定したらTRUE、キャンセルしたらFALSE
  */
-bool tgt_pt(player_type *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
+bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
 {
     tgt_pt_info info;
     get_screen_size(&info.wid, &info.hgt);

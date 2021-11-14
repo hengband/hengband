@@ -9,7 +9,7 @@
 
 static const char p2 = ')';
 
-static void enumerate_personality_list(player_type *player_ptr, concptr *str, char *sym)
+static void enumerate_personality_list(PlayerType *player_ptr, concptr *str, char *sym)
 {
     char buf[80];
     for (int n = 0; n < MAX_PERSONALITIES; n++) {
@@ -65,7 +65,7 @@ static void display_personality_stat(int cs, int *os, concptr *str, char *cur, c
     *os = cs;
 }
 
-static void interpret_personality_select_key_move(player_type *player_ptr, char c, int *cs)
+static void interpret_personality_select_key_move(PlayerType *player_ptr, char c, int *cs)
 {
     if (c == '8') {
         if (*cs >= 4)
@@ -112,7 +112,7 @@ static void interpret_personality_select_key_move(player_type *player_ptr, char 
     }
 }
 
-static bool select_personality(player_type *player_ptr, int *k, concptr *str, char *sym)
+static bool select_personality(PlayerType *player_ptr, int *k, concptr *str, char *sym)
 {
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
@@ -184,7 +184,7 @@ static bool select_personality(player_type *player_ptr, int *k, concptr *str, ch
 /*!
  * @brief プレイヤーの性格選択を行う / Select player's personality
  */
-bool get_player_personality(player_type *player_ptr)
+bool get_player_personality(PlayerType *player_ptr)
 {
     clear_from(10);
     put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."),

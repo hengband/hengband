@@ -57,7 +57,7 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
  */
 static bool grab_one_spell_flag(monster_race *r_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<RF_ABILITY>::grab_one_flag(r_ptr->ability_flags, r_info_ability_flags, what)) {
+    if (EnumClassFlagGroup<MonsterAbilityType>::grab_one_flag(r_ptr->ability_flags, r_info_ability_flags, what)) {
         return true;
     }
 
@@ -221,6 +221,13 @@ errr parse_r_info(std::string_view buf, angband_header *)
 
         const auto &flags = str_split(tokens[1], '|', true, 10);
         for (const auto &f : flags) {
+
+            const auto &s_tokens = str_split(f, '_', false, 2);
+            if (s_tokens.size() == 2 && s_tokens[0] == "PERHP") {
+                info_set_value(r_ptr->cur_hp_per, s_tokens[1]);
+                continue;
+            }
+
             if (f.size() == 0) {
                 continue;
             }

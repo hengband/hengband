@@ -27,7 +27,7 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
@@ -51,7 +51,7 @@
  * good (Cure Light Wounds, Restore Strength, etc) or
  * bad (Poison, Weakness etc) or 'useless' (Slime Mold Juice, etc).
  */
-bool psychometry(player_type *player_ptr)
+bool psychometry(PlayerType *player_ptr)
 {
     concptr q = _("どのアイテムを調べますか？", "Meditate on which item? ");
     concptr s = _("調べるアイテムがありません。", "You have nothing appropriate.");
@@ -129,7 +129,7 @@ bool psychometry(player_type *player_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell)
+bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
 {
     bool b = false;
     int dam = 0;
@@ -169,9 +169,9 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
             return false;
 
         if (randint1(100) < plev * 2)
-            fire_beam(player_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
+            fire_beam(player_ptr, AttributeType::PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
         else
-            fire_ball(player_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
+            fire_ball(player_ptr, AttributeType::PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
         break;
     case MINOR_DISPLACEMENT:
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
@@ -184,7 +184,7 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
             if (!get_aim_dir(player_ptr, &dir))
                 return false;
 
-            fire_ball(player_ptr, GF_DOMINATION, dir, plev, 0);
+            fire_ball(player_ptr, AttributeType::DOMINATION, dir, plev, 0);
         } else {
             charm_monsters(player_ptr, plev * 2);
         }
@@ -194,7 +194,7 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(player_ptr, GF_TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
+        fire_ball(player_ptr, AttributeType::TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case CHARACTER_ARMOR:
         set_shield(player_ptr, (TIME_EFFECT)plev, false);
@@ -218,7 +218,7 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
     case MIND_WAVE:
         msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
         if (plev < 25)
-            project(player_ptr, 0, 2 + plev / 10, player_ptr->y, player_ptr->x, (plev * 3), GF_PSI, PROJECT_KILL);
+            project(player_ptr, 0, 2 + plev / 10, player_ptr->y, player_ptr->x, (plev * 3), AttributeType::PSI, PROJECT_KILL);
         else
             (void)mindblast_monsters(player_ptr, randint1(plev * ((plev - 5) / 10 + 1)));
 
@@ -247,7 +247,7 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
             return false;
 
         dam = damroll(plev / 2, 6);
-        if (fire_ball(player_ptr, GF_PSI_DRAIN, dir, dam, 0))
+        if (fire_ball(player_ptr, AttributeType::PSI_DRAIN, dir, dam, 0))
             player_ptr->energy_need += randint1(150);
 
         break;
@@ -255,7 +255,7 @@ bool cast_mindcrafter_spell(player_type *player_ptr, mind_mindcrafter_type spell
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_PSY_SPEAR, dir, randint1(plev * 3) + plev * 3);
+        fire_beam(player_ptr, AttributeType::PSY_SPEAR, dir, randint1(plev * 3) + plev * 3);
         break;
     case THE_WORLD:
         time_walk(player_ptr);

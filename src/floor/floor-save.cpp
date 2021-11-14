@@ -50,7 +50,7 @@ static void check_saved_tmp_files(const int fd, bool *force)
  * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除するフラグ
  * @details Make sure that old temporary files are not remaining as gurbages.
  */
-void init_saved_floors(player_type *player_ptr, bool force)
+void init_saved_floors(PlayerType *player_ptr, bool force)
 {
     char floor_savefile[sizeof(savefile) + 32];
     int fd = -1;
@@ -80,7 +80,7 @@ void init_saved_floors(player_type *player_ptr, bool force)
  * @details Should be called just before the game quit.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void clear_saved_floor_files(player_type *player_ptr)
+void clear_saved_floor_files(PlayerType *player_ptr)
 {
     char floor_savefile[sizeof(savefile) + 32];
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
@@ -119,7 +119,7 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param sf_ptr 保存フロアの参照ポインタ
  */
-void kill_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
+void kill_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     char floor_savefile[sizeof(savefile) + 32];
     if (!sf_ptr || (sf_ptr->floor_id == 0))
@@ -138,7 +138,7 @@ void kill_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     sf_ptr->floor_id = 0;
 }
 
-static FLOOR_IDX find_oldest_floor_idx(player_type *player_ptr)
+static FLOOR_IDX find_oldest_floor_idx(PlayerType *player_ptr)
 {
     FLOOR_IDX oldest_floor_idx = 0;
     uint32_t oldest_visit = 0xffffffffL;
@@ -162,7 +162,7 @@ static FLOOR_IDX find_oldest_floor_idx(player_type *player_ptr)
  * @details
  * If number of saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
  */
-FLOOR_IDX get_new_floor_id(player_type *player_ptr)
+FLOOR_IDX get_new_floor_id(PlayerType *player_ptr)
 {
     saved_floor_type *sf_ptr = nullptr;
     FLOOR_IDX fl_idx;
@@ -199,7 +199,7 @@ FLOOR_IDX get_new_floor_id(player_type *player_ptr)
  * @details
  * To prevent multiple generation of unique monster who is the minion of player
  */
-void precalc_cur_num_of_pet(player_type *player_ptr)
+void precalc_cur_num_of_pet(PlayerType *player_ptr)
 {
     monster_type *m_ptr;
     int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;

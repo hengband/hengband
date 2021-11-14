@@ -79,17 +79,17 @@ void object_type::prep(KIND_OBJECT_IDX ko_idx)
     if (k_info[this->k_idx].cost <= 0)
         this->ident |= (IDENT_BROKEN);
 
-    if (k_ptr->gen_flags.has(TRG::CURSED))
-        this->curse_flags.set(TRC::CURSED);
-    if (k_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-        this->curse_flags.set(TRC::HEAVY_CURSE);
-    if (k_ptr->gen_flags.has(TRG::PERMA_CURSE))
-        this->curse_flags.set(TRC::PERMA_CURSE);
-    if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED))
+        this->curse_flags.set(CurseTraitType::CURSED);
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+        this->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+        this->curse_flags.set(CurseTraitType::PERMA_CURSE);
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0))
         this->curse_flags.set(get_curse(0, this));
-    if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1))
         this->curse_flags.set(get_curse(1, this));
-    if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2))
         this->curse_flags.set(get_curse(2, this));
 }
 

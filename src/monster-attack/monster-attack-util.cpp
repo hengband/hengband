@@ -9,7 +9,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-monap_type *initialize_monap_type(player_type *player_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx)
+monap_type *initialize_monap_type(PlayerType *player_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx)
 {
 #ifdef JP
     monap_ptr->abbreviate = 0;

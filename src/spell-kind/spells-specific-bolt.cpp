@@ -1,7 +1,7 @@
 ﻿#include "spell-kind/spells-specific-bolt.h"
 #include "effect/effect-characteristics.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -11,10 +11,10 @@
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool hypodynamic_bolt(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
+bool hypodynamic_bolt(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, GF_HYPODYNAMIA, dir, dam, flg));
+    return (project_hook(player_ptr, AttributeType::HYPODYNAMIA, dir, dam, flg));
 }
 
 /*!
@@ -24,8 +24,8 @@ bool hypodynamic_bolt(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
  * @param plev プレイヤーレベル(効力はplev*200)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool death_ray(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool death_ray(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, GF_DEATH_RAY, dir, plev * 200, flg));
+    return (project_hook(player_ptr, AttributeType::DEATH_RAY, dir, plev * 200, flg));
 }

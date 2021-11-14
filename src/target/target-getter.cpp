@@ -30,7 +30,7 @@
  *
  * Note that confusion over-rides any (explicit?) user choice.
  */
-bool get_aim_dir(player_type *player_ptr, DIRECTION *dp)
+bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
 {
     DIRECTION dir = command_dir;
     if (use_old_target && target_okay(player_ptr))
@@ -100,7 +100,7 @@ bool get_aim_dir(player_type *player_ptr, DIRECTION *dp)
     return true;
 }
 
-bool get_direction(player_type *player_ptr, DIRECTION *dp, bool allow_under, bool with_steed)
+bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool with_steed)
 {
     DIRECTION dir = command_dir;
     COMMAND_CODE code;
@@ -186,7 +186,7 @@ bool get_direction(player_type *player_ptr, DIRECTION *dp, bool allow_under, boo
  * This function tracks and uses the "global direction", and uses
  * that as the "desired direction", to which "confusion" is applied.
  */
-bool get_rep_dir(player_type *player_ptr, DIRECTION *dp, bool under)
+bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
 {
     DIRECTION dir = command_dir;
     COMMAND_CODE code;

@@ -2,5 +2,5 @@
 
 #include <stdint.h>
 
-struct player_type;
-void set_action(player_type *player_ptr, uint8_t typ);
+class PlayerType;
+void set_action(PlayerType *player_ptr, uint8_t typ);

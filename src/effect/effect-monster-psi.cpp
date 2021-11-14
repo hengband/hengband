@@ -27,7 +27,7 @@
  * @param em_ptr モンスター効果への参照ポインタ
  * @return 完全な耐性を発動した場合TRUE、そうでなければFALSE
  */
-static bool resisted_psi_because_empty_mind(player_type *player_ptr, effect_monster_type *em_ptr)
+static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (none_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND))
         return false;
@@ -72,7 +72,7 @@ static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_
  * 1) UNDEADまたはDEMONである
  * 2) レベルが詠唱者の レベル/2 より大きい
  */
-static bool reflects_psi_with_currupted_mind(player_type *player_ptr, effect_monster_type *em_ptr)
+static bool reflects_psi_with_currupted_mind(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     bool is_corrupted = any_bits(em_ptr->r_ptr->flags3, RF3_UNDEAD | RF3_DEMON) && (em_ptr->r_ptr->level > player_ptr->lev / 2) && one_in_(2);
     if (!is_corrupted)
@@ -93,7 +93,7 @@ static bool reflects_psi_with_currupted_mind(player_type *player_ptr, effect_mon
  * 効果は、混乱、朦朧、恐怖、麻痺
  * 3/4の確率または影分身時はダメージ及び追加効果はない。
  */
-static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_psi_reflect_extra_effect(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (!one_in_(4) || check_multishadow(player_ptr)) {
         return;
@@ -131,7 +131,7 @@ static void effect_monster_psi_reflect_extra_effect(player_type *player_ptr, eff
  * @details
  * 耐性を発動した精神の堕落したモンスターは効力を跳ね返すことがある。
  */
-static void effect_monster_psi_resist(player_type *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_psi_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (resisted_psi_because_empty_mind(player_ptr, em_ptr))
         return;
@@ -185,7 +185,7 @@ static void effect_monster_psi_extra_effect(effect_monster_type *em_ptr)
 }
 
 /*!
- * @brief モンスターへのPsi攻撃(GF_PSI)の効果を発動する
+ * @brief モンスターへのPsi攻撃(PSI)の効果を発動する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
  * @return PROICESS_CONTINUE
@@ -193,7 +193,7 @@ static void effect_monster_psi_extra_effect(effect_monster_type *em_ptr)
  * 視界による影響を発動する。
  * モンスターの耐性とそれに不随した効果を発動する。
  */
-process_result effect_monster_psi(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_psi(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -212,13 +212,13 @@ process_result effect_monster_psi(player_type *player_ptr, effect_monster_type *
 }
 
 /*!
- * @brief モンスターのPsi攻撃(GF_PSI_DRAIN)に対する耐性を発動する
+ * @brief モンスターのPsi攻撃(PSI_DRAIN)に対する耐性を発動する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
  * @details
  * 耐性を発動した精神の堕落したモンスターは効力を跳ね返すことがある。
  */
-static void effect_monster_psi_drain_resist(player_type *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_psi_drain_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (resisted_psi_because_empty_mind(player_ptr, em_ptr))
         return;
@@ -253,11 +253,11 @@ static void effect_monster_psi_drain_resist(player_type *player_ptr, effect_mons
 }
 
 /*!
- * @brief モンスターへのPsi攻撃(GF_PSI_DRAIN)のダメージをMPに変換する
+ * @brief モンスターへのPsi攻撃(PSI_DRAIN)のダメージをMPに変換する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
  */
-static void effect_monster_psi_drain_change_power(player_type *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     int b = damroll(5, em_ptr->dam) / 4;
     concptr str = (player_ptr->pclass == PlayerClassType::MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
@@ -271,14 +271,14 @@ static void effect_monster_psi_drain_change_power(player_type *player_ptr, effec
 }
 
 /*!
- * @brief モンスターへのPsi攻撃(GF_PSI_DRAIN)の効果を発動する
+ * @brief モンスターへのPsi攻撃(PSI_DRAIN)の効果を発動する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
  * @return PROICESS_CONTINUE
  * @details
  * ダメージがないか3/4の確率で追加効果なし
  */
-process_result effect_monster_psi_drain(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_psi_drain(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -292,14 +292,14 @@ process_result effect_monster_psi_drain(player_type *player_ptr, effect_monster_
 }
 
 /*!
- * @brief モンスターへのテレキネシス(GF_TELEKINESIS)の効果を発動する
+ * @brief モンスターへのテレキネシス(TELEKINESIS)の効果を発動する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
  * @return PROICESS_CONTINUE
  * @details
  * 朦朧＋ショートテレポートアウェイ
  */
-process_result effect_monster_telekinesis(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_telekinesis(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;

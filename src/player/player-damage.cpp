@@ -70,7 +70,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-using dam_func = HIT_POINT (*)(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
+using dam_func = HIT_POINT (*)(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
 
 /*!
  * @brief 酸攻撃による装備のAC劣化処理 /
@@ -82,7 +82,7 @@ using dam_func = HIT_POINT (*)(player_type *player_ptr, HIT_POINT dam, concptr k
  * Note that the "base armor" of an object never changes.
  * If any armor is damaged (or resists), the player takes less damage.
  */
-static bool acid_minus_ac(player_type *player_ptr)
+static bool acid_minus_ac(PlayerType *player_ptr)
 {
     object_type *o_ptr = nullptr;
     switch (randint1(7)) {
@@ -144,7 +144,7 @@ static bool acid_minus_ac(player_type *player_ptr)
  * @return 修正HPダメージ量
  * @details 酸オーラは存在しないが関数ポインタのために引数だけは用意している
  */
-HIT_POINT acid_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
+HIT_POINT acid_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_acid(player_ptr);
@@ -177,7 +177,7 @@ HIT_POINT acid_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool 
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-HIT_POINT elec_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
+HIT_POINT elec_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_elec(player_ptr);
@@ -209,7 +209,7 @@ HIT_POINT elec_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool 
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-HIT_POINT fire_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
+HIT_POINT fire_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_fire(player_ptr);
@@ -241,7 +241,7 @@ HIT_POINT fire_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool 
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-HIT_POINT cold_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
+HIT_POINT cold_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_cold(player_ptr);
@@ -270,7 +270,7 @@ HIT_POINT cold_dam(player_type *player_ptr, HIT_POINT dam, concptr kb_str, bool 
  * the game when he dies, since the "You die." message is shown before
  * setting the player to "dead".
  */
-int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr hit_from)
+int take_hit(PlayerType *player_ptr, int damage_type, HIT_POINT damage, concptr hit_from)
 {
     int old_chp = player_ptr->chp;
 
@@ -283,7 +283,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
 
     if (player_ptr->sutemi)
         damage *= 2;
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::IAI))
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::IAI))
         damage += (damage + 4) / 5;
 
     if (damage_type != DAMAGE_USELIFE) {
@@ -323,7 +323,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
             }
         }
 
-        if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
+        if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
             damage /= 2;
             if ((damage == 0) && one_in_(2))
                 damage = 1;
@@ -556,7 +556,7 @@ int take_hit(player_type *player_ptr, int damage_type, HIT_POINT damage, concptr
  * @param dam_func ダメージ処理を行う関数の参照ポインタ
  * @param message オーラダメージを受けた際のメッセージ
  */
-static void process_aura_damage(monster_type *m_ptr, player_type *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
+static void process_aura_damage(monster_type *m_ptr, PlayerType *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->aura_flags.has_not(aura_flag) || immune) {
@@ -580,7 +580,7 @@ static void process_aura_damage(monster_type *m_ptr, player_type *player_ptr, bo
  * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void touch_zap_player(monster_type *m_ptr, player_type *player_ptr)
+void touch_zap_player(monster_type *m_ptr, PlayerType *player_ptr)
 {
     process_aura_damage(m_ptr, player_ptr, has_immune_fire(player_ptr) != 0, MonsterAuraType::FIRE, fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
     process_aura_damage(m_ptr, player_ptr, has_immune_cold(player_ptr) != 0, MonsterAuraType::COLD, cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));

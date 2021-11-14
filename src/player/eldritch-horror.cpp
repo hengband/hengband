@@ -82,7 +82,7 @@ static void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
  * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならnullptr
  * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
  */
-void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
+void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
 {
     if (player_ptr->phase_out || !w_ptr->character_dungeon)
         return;
@@ -129,9 +129,9 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 
         see_eldritch_horror(m_name, r_ptr);
         switch (PlayerRace(player_ptr).life()) {
-        case PlayerRaceLife::DEMON:
+        case PlayerRaceLifeType::DEMON:
             return;
-        case PlayerRaceLife::UNDEAD:
+        case PlayerRaceLifeType::UNDEAD:
             if (saving_throw(25 + player_ptr->lev))
                 return;
             break;
@@ -179,11 +179,11 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 
         feel_eldritch_horror(desc, r_ptr);
         switch (PlayerRace(player_ptr).life()) {
-        case PlayerRaceLife::DEMON:
+        case PlayerRaceLifeType::DEMON:
             if (saving_throw(20 + player_ptr->lev))
                 return;
             break;
-        case PlayerRaceLife::UNDEAD:
+        case PlayerRaceLifeType::UNDEAD:
             if (saving_throw(10 + player_ptr->lev))
                 return;
             break;
@@ -201,48 +201,48 @@ void sanity_blast(player_type *player_ptr, monster_type *m_ptr, bool necro)
 
     switch (randint1(22)) {
     case 1: {
-        if (player_ptr->muta.has_not(MUTA::MORONIC)) {
+        if (player_ptr->muta.has_not(PlayerMutationType::MORONIC)) {
             if ((player_ptr->stat_use[A_INT] < 4) && (player_ptr->stat_use[A_WIS] < 4)) {
                 msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
             } else {
                 msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
             }
 
-            if (player_ptr->muta.has(MUTA::HYPER_INT)) {
+            if (player_ptr->muta.has(PlayerMutationType::HYPER_INT)) {
                 msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
-                player_ptr->muta.reset(MUTA::HYPER_INT);
+                player_ptr->muta.reset(PlayerMutationType::HYPER_INT);
             }
 
-            player_ptr->muta.set(MUTA::MORONIC);
+            player_ptr->muta.set(PlayerMutationType::MORONIC);
         }
 
         break;
     }
     case 2: {
-        if (player_ptr->muta.has_not(MUTA::COWARDICE) && !has_resist_fear(player_ptr)) {
+        if (player_ptr->muta.has_not(PlayerMutationType::COWARDICE) && !has_resist_fear(player_ptr)) {
             msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
-            if (player_ptr->muta.has(MUTA::FEARLESS)) {
+            if (player_ptr->muta.has(PlayerMutationType::FEARLESS)) {
                 msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
-                player_ptr->muta.reset(MUTA::FEARLESS);
+                player_ptr->muta.reset(PlayerMutationType::FEARLESS);
             }
 
-            player_ptr->muta.set(MUTA::COWARDICE);
+            player_ptr->muta.set(PlayerMutationType::COWARDICE);
         }
 
         break;
     }
     case 3: {
-        if (player_ptr->muta.has_not(MUTA::HALLU) && !has_resist_chaos(player_ptr)) {
+        if (player_ptr->muta.has_not(PlayerMutationType::HALLU) && !has_resist_chaos(player_ptr)) {
             msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
-            player_ptr->muta.set(MUTA::HALLU);
+            player_ptr->muta.set(PlayerMutationType::HALLU);
         }
 
         break;
     }
     case 4: {
-        if (player_ptr->muta.has_not(MUTA::BERS_RAGE) && !has_resist_conf(player_ptr)) {
+        if (player_ptr->muta.has_not(PlayerMutationType::BERS_RAGE) && !has_resist_conf(player_ptr)) {
             msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
-            player_ptr->muta.set(MUTA::BERS_RAGE);
+            player_ptr->muta.set(PlayerMutationType::BERS_RAGE);
         }
 
         break;

@@ -55,7 +55,7 @@ static bool find_breakleft;
  * @param x 移動元のX座標
  * @return 移動先が既知の壁ならばTRUE
  */
-static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITION x)
+static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
     y += ddy[dir];
     x += ddx[dir];
@@ -71,13 +71,13 @@ static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITIO
     int16_t feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr = &f_info[feat];
     if (!player_can_enter(player_ptr, feat, 0))
-        return f_ptr->flags.has_not(FF::DOOR);
+        return f_ptr->flags.has_not(FloorFeatureType::DOOR);
 
-    if (f_ptr->flags.has(FF::AVOID_RUN) && !ignore_avoid_run)
+    if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN) && !ignore_avoid_run)
         return true;
 
-    if (f_ptr->flags.has_none_of({FF::MOVE, FF::CAN_FLY}))
-        return f_ptr->flags.has_not(FF::DOOR);
+    if (f_ptr->flags.has_none_of({FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY}))
+        return f_ptr->flags.has_not(FloorFeatureType::DOOR);
 
     return false;
 }
@@ -99,7 +99,7 @@ static bool see_wall(player_type *player_ptr, DIRECTION dir, POSITION y, POSITIO
  *       \#x\#                  \@x\#\n
  *       \@\@p.                  p\n
  */
-static void run_init(player_type *player_ptr, DIRECTION dir)
+static void run_init(PlayerType *player_ptr, DIRECTION dir)
 {
     find_current = dir;
     find_prevdir = dir;
@@ -113,7 +113,7 @@ static void run_init(player_type *player_ptr, DIRECTION dir)
     player_ptr->run_px = player_ptr->x;
     int row = player_ptr->y + ddy[dir];
     int col = player_ptr->x + ddx[dir];
-    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, FF::AVOID_RUN);
+    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, FloorFeatureType::AVOID_RUN);
     int i = chome[dir];
     if (see_wall(player_ptr, cycle[i + 1], player_ptr->y, player_ptr->x)) {
         find_breakleft = true;
@@ -164,7 +164,7 @@ static void run_init(player_type *player_ptr, DIRECTION dir)
  * @param x 移動元のX座標
  * @return 移動先が未知の地形ならばTRUE
  */
-static bool see_nothing(player_type *player_ptr, DIRECTION dir, POSITION y, POSITION x)
+static bool see_nothing(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
     y += ddy[dir];
     x += ddx[dir];
@@ -190,7 +190,7 @@ static bool see_nothing(player_type *player_ptr, DIRECTION dir, POSITION y, POSI
  * ダッシュ移動が継続できるならばTRUEを返す。
  * Return TRUE if the running should be stopped
  */
-static bool run_test(player_type *player_ptr)
+static bool run_test(PlayerType *player_ptr)
 {
     DIRECTION prev_dir = find_prevdir;
     int max = (prev_dir & 0x01) + 1;
@@ -235,15 +235,15 @@ static bool run_test(player_type *player_ptr)
 
         bool inv = true;
         if (g_ptr->is_mark()) {
-            bool notice = f_ptr->flags.has(FF::NOTICE);
-            if (notice && f_ptr->flags.has(FF::MOVE)) {
-                if (find_ignore_doors && f_ptr->flags.has_all_of({FF::DOOR, FF::CLOSE})) {
+            bool notice = f_ptr->flags.has(FloorFeatureType::NOTICE);
+            if (notice && f_ptr->flags.has(FloorFeatureType::MOVE)) {
+                if (find_ignore_doors && f_ptr->flags.has_all_of({FloorFeatureType::DOOR, FloorFeatureType::CLOSE})) {
                     notice = false;
-                } else if (find_ignore_stairs && f_ptr->flags.has(FF::STAIRS)) {
+                } else if (find_ignore_stairs && f_ptr->flags.has(FloorFeatureType::STAIRS)) {
                     notice = false;
-                } else if (f_ptr->flags.has(FF::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
+                } else if (f_ptr->flags.has(FloorFeatureType::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
                     notice = false;
-                } else if (f_ptr->flags.has_all_of({FF::WATER, FF::DEEP})
+                } else if (f_ptr->flags.has_all_of({FloorFeatureType::WATER, FloorFeatureType::DEEP})
                     && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
                     notice = false;
                 }
@@ -358,7 +358,7 @@ static bool run_test(player_type *player_ptr)
  * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
  */
-void run_step(player_type *player_ptr, DIRECTION dir)
+void run_step(PlayerType *player_ptr, DIRECTION dir)
 {
     if (dir) {
         ignore_avoid_run = true;

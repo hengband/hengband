@@ -66,7 +66,7 @@ static MONSTER_IDX place_monster_m_idx = 0;
  * @return 成功したらtrue
  *
  */
-bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
+bool mon_scatter(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
     POSITION place_x[MON_SCAT_MAXD];
     POSITION place_y[MON_SCAT_MAXD];
@@ -131,7 +131,7 @@ bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSIT
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
-bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
+bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -139,14 +139,14 @@ bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BI
     if (!mon_scatter(player_ptr, m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
         return false;
 
-    if (m_ptr->mflag2.has(MFLAG2::NOPET))
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::NOPET))
         mode |= PM_NO_PET;
 
     if (!place_monster_aux(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
         return false;
 
-    if (clone || m_ptr->mflag2.has(MFLAG2::CLONED)) {
-        floor_ptr->m_list[hack_m_idx_ii].mflag2.set({MFLAG2::CLONED, MFLAG2::NOPET});
+    if (clone || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED)) {
+        floor_ptr->m_list[hack_m_idx_ii].mflag2.set({MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET});
     }
 
     return true;
@@ -161,7 +161,7 @@ bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BI
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
     monster_race *r_ptr = &r_info[r_idx];
     int total = randint1(10);
@@ -217,7 +217,7 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
  * @param r_idx チェックするモンスター種族のID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[place_monster_idx];
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
@@ -262,7 +262,7 @@ static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param mode 生成オプション
  * @return 生成に成功したらtrue
  */
-bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
     monster_race *r_ptr = &r_info[r_idx];
 
@@ -334,7 +334,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
  * @param mode 生成オプション
  * @return 生成に成功したらtrue
  */
-bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
     MONRACE_IDX r_idx;
@@ -360,7 +360,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
  * @param x 生成地点x座標
  * @return 生成に成功したらtrue
  */
-bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specific_pf summon_specific)
+bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific_pf summon_specific)
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
@@ -396,7 +396,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
         return false;
 
     MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
-    if (floor_ptr->m_list[m_idx].mflag2.has(MFLAG2::CHAMELEON))
+    if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON))
         r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
 
     POSITION cy = y;
@@ -419,7 +419,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
  * @param def_val 現在の主の生成状態
  * @return 生成に成功したらtrue
  */
-bool alloc_guardian(player_type *player_ptr, bool def_val)
+bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
     MONRACE_IDX guardian = d_info[player_ptr->dungeon_idx].final_guardian;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -462,7 +462,7 @@ bool alloc_guardian(player_type *player_ptr, bool def_val)
  * Use "slp" to choose the initial "sleep" status
  * Use "floor_ptr->monster_level" for the monster level
  */
-bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific)
+bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific)
 {
     if (alloc_guardian(player_ptr, false))
         return true;

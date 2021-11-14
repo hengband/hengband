@@ -1,6 +1,6 @@
 ﻿#include "monster-attack/monster-attack-types.h"
 #include "monster-attack/monster-attack-effect.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 
 /*!
  * @brief モンスターの打撃効力テーブル /
@@ -9,188 +9,188 @@
 const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
     {
         0,
-        0,
+        AttributeType::NONE,
     }, /* None      */
 
     {
         60,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* HURT      */
 
     {
         5,
-        GF_POIS,
+        AttributeType::POIS,
     }, /* POISON    */
 
     {
         20,
-        GF_DISENCHANT,
+        AttributeType::DISENCHANT,
     }, /* UN_BONUS  */
 
     {
         15,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     },
     /* UN_POWER  */ /* ToDo: Apply the correct effects */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EAT_GOLD  */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EAT_ITEM  */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EAT_FOOD  */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EAT_LITE  */
 
     {
         0,
-        GF_ACID,
+        AttributeType::ACID,
     }, /* ACID      */
 
     {
         10,
-        GF_ELEC,
+        AttributeType::ELEC,
     }, /* ELEC      */
 
     {
         10,
-        GF_FIRE,
+        AttributeType::FIRE,
     }, /* FIRE      */
 
     {
         10,
-        GF_COLD,
+        AttributeType::COLD,
     }, /* COLD      */
 
     {
         2,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* BLIND     */
 
     {
         10,
-        GF_CONFUSION,
+        AttributeType::CONFUSION,
     }, /* CONFUSE   */
 
     {
         10,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* TERRIFY   */
 
     {
         2,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* PARALYZE  */
 
     {
         0,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* LOSE_STR  */
 
     {
         0,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* LOSE_INT  */
 
     {
         0,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* LOSE_WIS  */
 
     {
         0,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* LOSE_DEX  */
 
     {
         0,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* LOSE_CON  */
 
     {
         0,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* LOSE_CHR  */
 
     {
         2,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* LOSE_ALL  */
 
     {
         60,
-        GF_ROCKET,
+        AttributeType::ROCKET,
     }, /* SHATTER   */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EXP_10    */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EXP_20    */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EXP_40    */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EXP_80    */
 
     {
         5,
-        GF_POIS,
+        AttributeType::POIS,
     }, /* DISEASE   */
 
     {
         5,
-        GF_TIME,
+        AttributeType::TIME,
     }, /* TIME      */
 
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* EXP_VAMP  */
 
     {
         5,
-        GF_MANA,
+        AttributeType::MANA,
     }, /* DR_MANA   */
 
     {
         60,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* SUPERHURT */
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* INERTIA */
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* STUN */
     {
         5,
-        GF_MISSILE,
+        AttributeType::MISSILE,
     }, /* HUNGRY */
     {
         0,
-        GF_NONE,
+        AttributeType::NONE,
     }, /* FLAVOR */
 };

@@ -28,7 +28,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
@@ -46,14 +46,14 @@
 /*
  * @brief Multishadow effects is determined by turn
  */
-bool check_multishadow(player_type *player_ptr) { return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0); }
+bool check_multishadow(PlayerType *player_ptr) { return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0); }
 
 /*!
  * 静水
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return ペットを操っている場合を除きTRUE
  */
-bool mirror_concentration(player_type *player_ptr)
+bool mirror_concentration(PlayerType *player_ptr)
 {
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
@@ -82,7 +82,7 @@ bool mirror_concentration(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param explode 爆発処理を伴うならばTRUE
  */
-void remove_all_mirrors(player_type *player_ptr, bool explode)
+void remove_all_mirrors(PlayerType *player_ptr, bool explode)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -93,7 +93,7 @@ void remove_all_mirrors(player_type *player_ptr, bool explode)
             if (!explode)
                 continue;
 
-            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, GF_SHARDS,
+            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }
@@ -104,7 +104,7 @@ void remove_all_mirrors(player_type *player_ptr, bool explode)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-bool binding_field(player_type *player_ptr, HIT_POINT dam)
+bool binding_field(PlayerType *player_ptr, HIT_POINT dam)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
@@ -168,7 +168,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                     if (!(player_ptr->blind) && panel_contains(y, x)) {
-                        uint16_t p = bolt_pict(y, x, y, x, GF_MANA);
+                        uint16_t p = bolt_pict(y, x, y, x, AttributeType::MANA);
                         print_rel(player_ptr, PICT_C(p), PICT_A(p), y, x);
                         move_cursor_relative(y, x);
                         term_fresh();
@@ -185,7 +185,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, GF_MANA);
+                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
                 }
             }
         }
@@ -197,7 +197,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_item(player_ptr, 0, 0, y, x, dam, GF_MANA);
+                    (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
                 }
             }
         }
@@ -209,7 +209,7 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_monster(player_ptr, 0, 0, y, x, dam, GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
+                    (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
                 }
             }
         }
@@ -228,14 +228,14 @@ bool binding_field(player_type *player_ptr, HIT_POINT dam)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-void seal_of_mirror(player_type *player_ptr, HIT_POINT dam)
+void seal_of_mirror(PlayerType *player_ptr, HIT_POINT dam)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
             if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                 continue;
 
-            if (!affect_monster(player_ptr, 0, 0, y, x, dam, GF_GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
+            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
                 continue;
 
             if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -250,7 +250,7 @@ void seal_of_mirror(player_type *player_ptr, HIT_POINT dam)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
-bool confusing_light(player_type *player_ptr)
+bool confusing_light(PlayerType *player_ptr)
 {
     msg_print(_("辺りを睨んだ...", "You glare at nearby monsters..."));
     slow_monsters(player_ptr, player_ptr->lev);
@@ -265,7 +265,7 @@ bool confusing_light(player_type *player_ptr)
  * @brief 鏡設置処理
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool place_mirror(player_type *player_ptr)
+bool place_mirror(PlayerType *player_ptr)
 {
     if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -292,7 +292,7 @@ bool place_mirror(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return ターンを消費した場合TRUEを返す
  */
-bool mirror_tunnel(player_type *player_ptr)
+bool mirror_tunnel(PlayerType *player_ptr)
 {
     POSITION x = 0, y = 0;
     if (!tgt_pt(player_ptr, &x, &y))
@@ -307,7 +307,7 @@ bool mirror_tunnel(player_type *player_ptr)
 /*
  * Set "multishadow", notice observable changes
  */
-bool set_multishadow(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -349,7 +349,7 @@ bool set_multishadow(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_dustrobe(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -408,7 +408,7 @@ static int number_of_mirrors(floor_type *floor_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
+bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -443,9 +443,9 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
             return false;
 
         if (plev > 9 && g_ptr->is_mirror())
-            fire_beam(player_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+            fire_beam(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
         else
-            fire_bolt(player_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+            fire_bolt(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 
         break;
     case WRAPPED_MIRROR:
@@ -464,19 +464,19 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        (void)fire_beam(player_ptr, GF_AWAY_ALL, dir, plev);
+        (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, plev);
         break;
     case MIRROR_CRASHING:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(player_ptr, GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
+        fire_ball(player_ptr, AttributeType::SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case SLEEPING_MIRROR:
         for (x = 0; x < player_ptr->current_floor_ptr->width; x++)
             for (y = 0; y < player_ptr->current_floor_ptr->height; y++)
                 if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
-                    project(player_ptr, 0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP,
+                    project(player_ptr, 0, 2, y, x, (HIT_POINT)plev, AttributeType::OLD_SLEEP,
                         (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
 
         break;
@@ -484,7 +484,7 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
+        fire_beam(player_ptr, AttributeType::SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
         break;
     case SEALING_MIRROR:
         seal_of_mirror(player_ptr, plev * 4 + 100);
@@ -503,7 +503,7 @@ bool cast_mirror_spell(player_type *player_ptr, mind_mirror_master_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
+        fire_beam(player_ptr, AttributeType::SUPER_RAY, dir, 150 + randint1(2 * plev));
         break;
     case ILLUSION_LIGHT:
         tmp = g_ptr->is_mirror() ? 4 : 3;

@@ -33,7 +33,7 @@
  * @details
  * 反攻撃の洞窟など、直接攻撃ができない場所では処理をスキップする
  */
-void exe_monster_attack_to_player(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
+void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -47,7 +47,7 @@ void exe_monster_attack_to_player(player_type *player_ptr, turn_flags *turn_flag
         turn_flags_ptr->do_move = false;
     }
 
-    if (turn_flags_ptr->do_move && d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MELEE) && !monster_confused_remaining(m_ptr)) {
+    if (turn_flags_ptr->do_move && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE) && !monster_confused_remaining(m_ptr)) {
         if (!(r_ptr->flags2 & RF2_STUPID))
             turn_flags_ptr->do_move = false;
         else if (is_original_ap_and_seen(player_ptr, m_ptr))
@@ -70,7 +70,7 @@ void exe_monster_attack_to_player(player_type *player_ptr, turn_flags *turn_flag
  * @param m_idx モンスターID
  * @param g_ptr グリッドへの参照ポインタ
  */
-static bool exe_monster_attack_to_monster(player_type *player_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
+static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -86,7 +86,7 @@ static bool exe_monster_attack_to_monster(player_type *player_ptr, MONSTER_IDX m
         return false;
     if (monst_attack_monst(player_ptr, m_idx, g_ptr->m_idx))
         return true;
-    if (d_info[player_ptr->dungeon_idx].flags.has_not(DF::NO_MELEE))
+    if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MELEE))
         return false;
     if (monster_confused_remaining(m_ptr))
         return true;
@@ -108,7 +108,7 @@ static bool exe_monster_attack_to_monster(player_type *player_ptr, MONSTER_IDX m
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return ターン消費が発生したらTRUE
  */
-bool process_monster_attack_to_monster(player_type *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
+bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

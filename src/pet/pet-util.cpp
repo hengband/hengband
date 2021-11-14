@@ -24,7 +24,7 @@ int total_friends = 0;
  * @param now_riding trueなら下馬処理、falseならば騎乗処理
  * @return 可能ならばtrueを返す
  */
-bool can_player_ride_pet(player_type *player_ptr, grid_type *g_ptr, bool now_riding)
+bool can_player_ride_pet(PlayerType *player_ptr, grid_type *g_ptr, bool now_riding)
 {
     bool old_character_xtra = w_ptr->character_xtra;
     MONSTER_IDX old_riding = player_ptr->riding;
@@ -64,7 +64,7 @@ bool can_player_ride_pet(player_type *player_ptr, grid_type *g_ptr, bool now_rid
  * @brief ペットの維持コスト計算
  * @return 維持コスト(%)
  */
-PERCENTAGE calculate_upkeep(player_type *player_ptr)
+PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
 {
     bool has_a_unique = false;
     DEPTH total_friend_levels = 0;

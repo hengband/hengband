@@ -13,8 +13,8 @@ enum spell_flag_type {
     BASE_DAM = 8,
 };
 
-enum class RF_ABILITY;
-struct player_type;
-HIT_POINT monspell_damage(player_type *player_ptr, RF_ABILITY ms_type, MONSTER_IDX m_idx, int TYPE);
-HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONRACE_IDX r_idx, int TYPE);
-HIT_POINT monspell_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, int TYPE);
+enum class MonsterAbilityType;
+class PlayerType;
+HIT_POINT monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_IDX m_idx, int TYPE);
+HIT_POINT monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONRACE_IDX r_idx, int TYPE);
+HIT_POINT monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, int TYPE);

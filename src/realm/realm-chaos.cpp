@@ -15,7 +15,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-chaos.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
@@ -29,15 +29,15 @@
  * @brief カオス領域魔法の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
  */
-concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESCRIPTION;
-    bool info = mode == SPELL_INFO;
-    bool cast = mode == SPELL_CAST;
+    bool name = mode == SpellProcessType::NAME;
+    bool desc = mode == SpellProcessType::DESCRIPTION;
+    bool info = mode == SpellProcessType::INFO;
+    bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -60,7 +60,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(dice, sides));
             }
         }
         break;
@@ -144,10 +144,10 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_MISSILE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(dice, sides) + base, rad);
 
                 /*
-                 * Shouldn't actually use GF_MANA, as
+                 * Shouldn't actually use MANA, as
                  * it will destroy all items on the
                  * floor
                  */
@@ -172,7 +172,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_FIRE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, damroll(dice, sides));
             }
         }
         break;
@@ -194,7 +194,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_DISINTEGRATE, dir, damroll(dice, sides), 0);
+                fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, damroll(dice, sides), 0);
             }
         }
         break;
@@ -254,7 +254,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_CHAOS, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::CHAOS, dir, damroll(dice, sides));
             }
         }
         break;
@@ -274,7 +274,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 msg_print(_("ドーン！部屋が揺れた！", "BOOM! Shake the room!"));
-                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM);
+                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, AttributeType::SOUND, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;
@@ -296,7 +296,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(player_ptr, GF_MANA, dir, damroll(dice, sides));
+                fire_beam(player_ptr, AttributeType::MANA, dir, damroll(dice, sides));
             }
         }
         break;
@@ -318,7 +318,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_FIRE, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
             }
         }
         break;
@@ -339,7 +339,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(player_ptr, GF_AWAY_ALL, dir, power);
+                fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
             }
         }
         break;
@@ -377,7 +377,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_CHAOS, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::CHAOS, dir, dam, rad);
             }
         }
         break;
@@ -418,7 +418,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 for (dir = 0; dir <= 9; dir++)
-                    fire_beam(player_ptr, GF_ELEC, dir, damroll(dice, sides));
+                    fire_beam(player_ptr, AttributeType::ELEC, dir, damroll(dice, sides));
             }
         }
         break;
@@ -458,7 +458,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_DISINTEGRATE, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, dam, rad);
             }
         }
         break;
@@ -500,7 +500,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                     return nullptr;
 
                 msg_print(_("ロケット発射！", "You launch a rocket!"));
-                fire_rocket(player_ptr, GF_ROCKET, dir, dam, rad);
+                fire_rocket(player_ptr, AttributeType::ROCKET, dir, dam, rad);
             }
         }
         break;
@@ -547,7 +547,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_beam(player_ptr, GF_GRAVITY, dir, damroll(dice, sides));
+                fire_beam(player_ptr, AttributeType::GRAVITY, dir, damroll(dice, sides));
             }
         }
         break;
@@ -585,7 +585,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(0, 0, dam / 2);
 
             if (cast) {
-                fire_ball(player_ptr, GF_FIRE, 0, dam, rad);
+                fire_ball(player_ptr, AttributeType::FIRE, 0, dam, rad);
             }
         }
         break;
@@ -637,7 +637,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball(player_ptr, GF_MANA, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::MANA, dir, dam, rad);
             }
         }
         break;
@@ -659,7 +659,7 @@ concptr do_chaos_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_CHAOS, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::CHAOS, dir, dam, rad);
             }
         }
         break;

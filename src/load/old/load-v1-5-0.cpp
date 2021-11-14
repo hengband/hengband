@@ -118,23 +118,23 @@ void rd_item_old(object_type *o_ptr)
         // バージョン 1.0.11 以前は tr_type の 93, 94, 95 は現在と違い呪い等の別の用途で使用されていたので番号をハードコーディングする
         o_ptr->curse_flags.clear();
         if (o_ptr->ident & 0x40) {
-            o_ptr->curse_flags.set(TRC::CURSED);
+            o_ptr->curse_flags.set(CurseTraitType::CURSED);
             if (o_ptr->art_flags.has(i2enum<tr_type>(94)))
-                o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+                o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
             if (o_ptr->art_flags.has(i2enum<tr_type>(95)))
-                o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
-                if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-                    o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
-                if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-                    o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+                    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+                if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+                    o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             } else if (o_ptr->is_ego()) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
-                if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-                    o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
-                if (e_ptr->gen_flags.has(TRG::PERMA_CURSE))
-                    o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+                if (e_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+                    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+                if (e_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+                    o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             }
         }
         o_ptr->art_flags.reset({ i2enum<tr_type>(93), i2enum<tr_type>(94), i2enum<tr_type>(95) });
@@ -323,7 +323,7 @@ void rd_item_old(object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
-void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
+void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
 {
     m_ptr->r_idx = rd_s16b();
 
@@ -402,10 +402,10 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
     // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
     std::bitset<32> rd_bits_smart(tmp32u);
-    m_ptr->mflag2[MFLAG2::CLONED] = rd_bits_smart[22];
-    m_ptr->mflag2[MFLAG2::PET] = rd_bits_smart[23];
-    m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits_smart[28];
-    m_ptr->smart.reset(i2enum<SM>(22)).reset(i2enum<SM>(23)).reset(i2enum<SM>(28));
+    m_ptr->mflag2[MonsterConstantFlagType::CLONED] = rd_bits_smart[22];
+    m_ptr->mflag2[MonsterConstantFlagType::PET] = rd_bits_smart[23];
+    m_ptr->mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits_smart[28];
+    m_ptr->smart.reset(i2enum<MonsterSmartLearnType>(22)).reset(i2enum<MonsterSmartLearnType>(23)).reset(i2enum<MonsterSmartLearnType>(28));
 
     if (h_older_than(0, 4, 5)) {
         m_ptr->exp = 0;
@@ -416,16 +416,16 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     if (h_older_than(0, 2, 2)) {
         if (m_ptr->r_idx < 0) {
             m_ptr->r_idx = (0 - m_ptr->r_idx);
-            m_ptr->mflag2.set(MFLAG2::KAGE);
+            m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
         }
     } else {
         auto tmp8u = rd_byte();
-        constexpr auto base = enum2i(MFLAG2::KAGE);
+        constexpr auto base = enum2i(MonsterConstantFlagType::KAGE);
         migrate_bitflag_to_flaggroup(m_ptr->mflag2, tmp8u, base, 7);
     }
 
     if (h_older_than(1, 0, 12)) {
-        if (m_ptr->mflag2.has(MFLAG2::KAGE))
+        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE))
             m_ptr->ap_r_idx = MON_KAGE;
     }
 
@@ -504,7 +504,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-errr rd_dungeon_old(player_type *player_ptr)
+errr rd_dungeon_old(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = rd_s16b();

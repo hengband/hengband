@@ -21,7 +21,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-QuestCompletionChecker::QuestCompletionChecker(player_type *player_ptr, monster_type *m_ptr)
+QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, monster_type *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
 {
@@ -230,7 +230,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    while (cave_has_flag_bold(floor_ptr, y, x, FF::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
+    while (cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
         int ny;
         int nx;
         scatter(this->player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);

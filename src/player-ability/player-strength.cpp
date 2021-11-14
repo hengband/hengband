@@ -14,7 +14,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerStrength::PlayerStrength(player_type *player_ptr)
+PlayerStrength::PlayerStrength(PlayerType *player_ptr)
     : PlayerBasicStatistics(player_ptr)
 {
 }
@@ -80,18 +80,18 @@ int16_t PlayerStrength::time_effect_value()
  * * 白虎の構えで加算(+2)
  * * 朱雀の構えで減算(-2)
  */
-int16_t PlayerStrength::battleform_value()
+int16_t PlayerStrength::stance_value()
 {
     int16_t result = 0;
 
     PlayerClass pc(player_ptr);
-    if (pc.samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if (pc.samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         result += 5;
     }
 
-    if (pc.monk_stance_is(MonkStance::BYAKKO)) {
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO)) {
         result += 2;
-    } else if (pc.monk_stance_is(MonkStance::SUZAKU)) {
+    } else if (pc.monk_stance_is(MonkStanceType::SUZAKU)) {
         result -= 2;
     }
 
@@ -111,11 +111,11 @@ int16_t PlayerStrength::mutation_value()
     int16_t result = 0;
 
     if (this->player_ptr->muta.any()) {
-        if (this->player_ptr->muta.has(MUTA::HYPER_STR)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::HYPER_STR)) {
             result += 4;
         }
 
-        if (this->player_ptr->muta.has(MUTA::PUNY)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::PUNY)) {
             result -= 4;
         }
     }

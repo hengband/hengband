@@ -27,7 +27,7 @@
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
  */
-static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, KIND_OBJECT_IDX k)
+static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, KIND_OBJECT_IDX k)
 {
     object_type forge;
     object_type *q_ptr = &forge;
@@ -88,13 +88,13 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
  * Create a spoiler file for items
  * @param fname ファイル名
  */
-spoiler_output_status spoil_obj_desc(concptr fname)
+SpoilerOutputResultType spoil_obj_desc(concptr fname)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -107,7 +107,7 @@ spoiler_output_status spoil_obj_desc(concptr fname)
         std::vector<KIND_OBJECT_IDX> whats;
         for (auto tval : tval_list) {
             for (const auto &k_ref : k_info) {
-                if ((k_ref.tval == tval) && k_ref.gen_flags.has_not(TRG::INSTA_ART)) {
+                if ((k_ref.tval == tval) && k_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                     whats.push_back(k_ref.idx);
                 }
             }
@@ -117,7 +117,7 @@ spoiler_output_status spoil_obj_desc(concptr fname)
         }
 
         std::stable_sort(whats.begin(), whats.end(), [](auto k1_idx, auto k2_idx) {
-            player_type dummy;
+            PlayerType dummy;
             DEPTH d1, d2;
             PRICE p1, p2;
             kind_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d1, &p1, k1_idx);
@@ -132,12 +132,12 @@ spoiler_output_status spoil_obj_desc(concptr fname)
             char wgt[80];
             char chance[80];
             char dam[80];
-            player_type dummy;
+            PlayerType dummy;
             kind_info(&dummy, buf, dam, wgt, chance, &e, &v, k_idx);
             fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, static_cast<int>(e), chance, static_cast<long>(v));
         }
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
 }

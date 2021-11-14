@@ -62,7 +62,7 @@
  * Note - this should be used only on allocated regions
  * within another room.
  */
-void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0)
+void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
 {
     for (POSITION y = y0 - 1; y <= y0 + 1; y++) {
         place_bold(player_ptr, y, x0 - 1, GB_INNER);
@@ -96,12 +96,12 @@ void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0)
 /*
  * Builds a cave system in the center of the dungeon.
  */
-void build_cavern(player_type *player_ptr)
+void build_cavern(PlayerType *player_ptr)
 {
     bool light = false;
     bool done = false;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
+    if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
         light = true;
 
     POSITION xsize = floor_ptr->width - 1;
@@ -123,7 +123,7 @@ void build_cavern(player_type *player_ptr)
 /*
  * makes a lake/collapsed floor in the center of the dungeon
  */
-void build_lake(player_type *player_ptr, int type)
+void build_lake(PlayerType *player_ptr, int type)
 {
     if ((type < LAKE_T_LAVA) || (type > LAKE_T_FIRE_VAULT)) {
         msg_format("Invalid lake type (%d)", type);
@@ -155,7 +155,7 @@ void build_lake(player_type *player_ptr, int type)
  * The area inside the walls is not touched:
  * only granite is removed- normal walls stay
  */
-void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2)
+void build_room(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 {
     int temp;
     if ((x1 == x2) || (y1 == y2))
@@ -211,7 +211,7 @@ void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, 
  * The power variable is a measure of how well defended a region is.
  * This alters the possible choices.
  */
-void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power)
+void build_recursive_room(PlayerType *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power)
 {
     POSITION xsize = x2 - x1;
     POSITION ysize = y2 - y1;
@@ -349,7 +349,7 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
  * Note: no range checking is done so must be inside dungeon
  * This routine also stomps on doors
  */
-void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
+void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))

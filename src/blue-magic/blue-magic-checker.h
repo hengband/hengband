@@ -10,6 +10,6 @@
 
 enum class BlueMagicType;
 
-struct player_type;
-void learn_spell(player_type *player_ptr, RF_ABILITY monspell);
-void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, BlueMagicType type);
+class PlayerType;
+void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell);
+void set_rf_masks(EnumClassFlagGroup<MonsterAbilityType> &ability_flags, BlueMagicType type);

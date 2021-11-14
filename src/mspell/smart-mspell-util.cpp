@@ -8,7 +8,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-msr_type *initialize_msr_type(player_type *player_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<RF_ABILITY> &ability_flags)
+msr_type *initialize_msr_type(PlayerType *player_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     msr_ptr->r_ptr = &r_info[m_ptr->r_idx];

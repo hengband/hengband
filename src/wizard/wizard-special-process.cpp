@@ -110,7 +110,7 @@
  * @brief プレイヤーを完全回復する /
  * Cure everything instantly
  */
-void wiz_cure_all(player_type *player_ptr)
+void wiz_cure_all(PlayerType *player_ptr)
 {
     (void)life_stream(player_ptr, false, false);
     (void)restore_mana(player_ptr, true);
@@ -224,7 +224,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype()
  * Hack -- this routine always makes a "dungeon object", and applies
  * magic to it, and attempts to decline cursed items.
  */
-void wiz_create_item(player_type *player_ptr)
+void wiz_create_item(PlayerType *player_ptr)
 {
     screen_save();
     OBJECT_IDX k_idx = wiz_create_itemtype();
@@ -232,7 +232,7 @@ void wiz_create_item(player_type *player_ptr)
     if (!k_idx)
         return;
 
-    if (k_info[k_idx].gen_flags.has(TRG::INSTA_ART)) {
+    if (k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &a_ref : a_info) {
             if ((a_ref.idx == 0) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval))
                 continue;
@@ -258,7 +258,7 @@ void wiz_create_item(player_type *player_ptr)
  * @param a_idx 固定アーティファクトのID
  * @return 固定アーティファクトの名称(Ex. ★ロング・ソード『リンギル』)を保持する std::string オブジェクト
  */
-static std::string wiz_make_named_artifact_desc(player_type *player_ptr, ARTIFACT_IDX a_idx)
+static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, ARTIFACT_IDX a_idx)
 {
     const auto &a_ref = a_info[a_idx];
     object_type obj;
@@ -277,7 +277,7 @@ static std::string wiz_make_named_artifact_desc(player_type *player_ptr, ARTIFAC
  * @param a_idx_list 選択する候補となる固定アーティファクトのIDのリスト
  * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は std::nullopt を返す。
  */
-static std::optional<ARTIFACT_IDX> wiz_select_named_artifact(player_type *player_ptr, const std::vector<ARTIFACT_IDX> &a_idx_list)
+static std::optional<ARTIFACT_IDX> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<ARTIFACT_IDX> &a_idx_list)
 {
     constexpr auto MAX_PER_PAGE = 20UL;
     const auto page_max = (a_idx_list.size() - 1) / MAX_PER_PAGE + 1;
@@ -351,7 +351,7 @@ static std::vector<ARTIFACT_IDX> wiz_collect_group_a_idx(const grouper &group_ar
 /*!
  * @brief 固定アーティファクトを生成する / Create the artifact
  */
-void wiz_create_named_art(player_type *player_ptr)
+void wiz_create_named_art(PlayerType *player_ptr)
 {
     screen_save();
 
@@ -390,7 +390,7 @@ void wiz_create_named_art(player_type *player_ptr)
  * @brief プレイヤーの現能力値を調整する / Change various "permanent" player variables.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void wiz_change_status(player_type *player_ptr)
+void wiz_change_status(PlayerType *player_ptr)
 {
     int tmp_int;
     char tmp_val[160];
@@ -469,7 +469,7 @@ void wiz_change_status(player_type *player_ptr)
  * Create desired feature
  * @param creaturer_ptr プレイヤーへの参照ポインタ
  */
-void wiz_create_feature(player_type *player_ptr)
+void wiz_create_feature(PlayerType *player_ptr)
 {
     POSITION y, x;
     if (!tgt_pt(player_ptr, &x, &y))
@@ -507,9 +507,9 @@ void wiz_create_feature(player_type *player_ptr)
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
-    if (f_ptr->flags.has(FF::RUNE_PROTECTION) || f_ptr->flags.has(FF::RUNE_EXPLOSION))
+    if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION))
         g_ptr->info |= CAVE_OBJECT;
-    else if (f_ptr->flags.has(FF::MIRROR))
+    else if (f_ptr->flags.has(FloorFeatureType::MIRROR))
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
 
     note_spot(player_ptr, y, x);
@@ -527,7 +527,7 @@ void wiz_create_feature(player_type *player_ptr)
  * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
  * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
  */
-static bool select_debugging_floor(player_type *player_ptr, int dungeon_type)
+static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 {
     auto max_depth = d_info[dungeon_type].maxdepth;
     if ((max_depth == 0) || (dungeon_type > static_cast<int>(d_info.size()))) {
@@ -570,7 +570,7 @@ static bool select_debugging_floor(player_type *player_ptr, int dungeon_type)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 範囲外の値が選択されたら再入力を促す
  */
-static bool select_debugging_dungeon(player_type *player_ptr, DUNGEON_IDX *dungeon_type)
+static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeon_type)
 {
     if (command_arg > 0) {
         return true;
@@ -599,7 +599,7 @@ static bool select_debugging_dungeon(player_type *player_ptr, DUNGEON_IDX *dunge
  * @brief 任意のダンジョン及び階層に飛ぶtための選択処理
  * Go to any level
  */
-void wiz_jump_to_dungeon(player_type *player_ptr)
+void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     DUNGEON_IDX dungeon_type = 1;
     if (!select_debugging_dungeon(player_ptr, &dungeon_type)) {
@@ -628,7 +628,7 @@ void wiz_jump_to_dungeon(player_type *player_ptr)
  * Become aware of a lot of objects
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void wiz_learn_items_all(player_type *player_ptr)
+void wiz_learn_items_all(PlayerType *player_ptr)
 {
     object_type forge;
     object_type *q_ptr;
@@ -644,7 +644,7 @@ void wiz_learn_items_all(player_type *player_ptr)
 /*!
  * @brief プレイヤーの種族を変更する
  */
-void wiz_reset_race(player_type *player_ptr)
+void wiz_reset_race(PlayerType *player_ptr)
 {
     char ppp[80];
     sprintf(ppp, "Race (0-%d): ", MAX_RACES - 1);
@@ -672,7 +672,7 @@ void wiz_reset_race(player_type *player_ptr)
  * @brief プレイヤーの職業を変更する
  * @todo 魔法領域の再選択などがまだ不完全、要実装。
  */
-void wiz_reset_class(player_type *player_ptr)
+void wiz_reset_class(PlayerType *player_ptr)
 {
     char ppp[80];
     sprintf(ppp, "Class (0-%d): ", PLAYER_CLASS_TYPE_MAX - 1);
@@ -702,7 +702,7 @@ void wiz_reset_class(player_type *player_ptr)
  * @brief プレイヤーの領域を変更する
  * @todo 存在有無などは未判定。そのうちすべき。
  */
-void wiz_reset_realms(player_type *player_ptr)
+void wiz_reset_realms(PlayerType *player_ptr)
 {
     char ppp[80];
     char tmp_val[160];
@@ -800,7 +800,7 @@ void set_gametime(void)
 /*!
  * @brief プレイヤー近辺の全モンスターを消去する / Delete all nearby monsters
  */
-void wiz_zap_surrounding_monsters(player_type *player_ptr)
+void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
@@ -822,7 +822,7 @@ void wiz_zap_surrounding_monsters(player_type *player_ptr)
  * @brief フロアに存在する全モンスターを消去する / Delete all monsters
  * @param player_ptr 術者の参照ポインタ
  */
-void wiz_zap_floor_monsters(player_type *player_ptr)
+void wiz_zap_floor_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
@@ -839,7 +839,7 @@ void wiz_zap_floor_monsters(player_type *player_ptr)
     }
 }
 
-void cheat_death(player_type *player_ptr)
+void cheat_death(PlayerType *player_ptr)
 {
     if (player_ptr->sc)
         player_ptr->sc = player_ptr->age = 0;

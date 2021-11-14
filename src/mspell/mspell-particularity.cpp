@@ -17,7 +17,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -31,15 +31,15 @@
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF4_ROCKET(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かを射った。", "%^s shoots something."), _("%^sがロケットを発射した。", "%^s fires a rocket."),
         _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
-    const auto dam = monspell_damage(player_ptr, RF_ABILITY::ROCKET, m_idx, DAM_ROLL);
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_ROCKET, dam, 2, false, TARGET_TYPE);
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::ROCKET, m_idx, DAM_ROLL);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::ROCKET, dam, 2, false, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(player_ptr, m_idx, DRS_SHARD);
 
@@ -60,7 +60,7 @@ MonsterSpellResult spell_RF4_ROCKET(player_type *player_ptr, POSITION y, POSITIO
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF6_HAND_DOOM(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_HAND_DOOM(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_simple msg(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
         _("%^sが%sに<破滅の手>を放った！", "%^s invokes the Hand of Doom upon %s!"));
@@ -69,11 +69,11 @@ MonsterSpellResult spell_RF6_HAND_DOOM(player_type *player_ptr, POSITION y, POSI
 
     ProjectResult proj_res;
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        const auto dam = monspell_damage(player_ptr, RF_ABILITY::HAND_DOOM, m_idx, DAM_ROLL);
-        proj_res = breath(player_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, false, MONSTER_TO_PLAYER);
+        const auto dam = monspell_damage(player_ptr, MonsterAbilityType::HAND_DOOM, m_idx, DAM_ROLL);
+        proj_res = breath(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, 0, false, MONSTER_TO_PLAYER);
     } else if (TARGET_TYPE == MONSTER_TO_MONSTER) {
         const auto dam = 20; /* Dummy power */
-        proj_res = breath(player_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, false, MONSTER_TO_MONSTER);
+        proj_res = breath(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, 0, false, MONSTER_TO_MONSTER);
     }
 
     auto res = MonsterSpellResult::make_valid();
@@ -92,15 +92,15 @@ MonsterSpellResult spell_RF6_HAND_DOOM(player_type *player_ptr, POSITION y, POSI
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF6_PSY_SPEAR(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_PSY_SPEAR(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが光の剣を放った。", "%^s throw a Psycho-Spear."),
         _("%^sが%sに向かって光の剣を放った。", "%^s throw a Psycho-spear at %s."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
-    const auto dam = monspell_damage(player_ptr, RF_ABILITY::PSY_SPEAR, m_idx, DAM_ROLL);
-    const auto proj_res = beam(player_ptr, m_idx, y, x, GF_PSY_SPEAR, dam, MONSTER_TO_PLAYER);
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::PSY_SPEAR, m_idx, DAM_ROLL);
+    const auto proj_res = beam(player_ptr, m_idx, y, x, AttributeType::PSY_SPEAR, dam, MONSTER_TO_PLAYER);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;

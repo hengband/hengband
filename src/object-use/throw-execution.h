@@ -13,12 +13,12 @@
 struct grid_type;
 struct monster_type;
 struct object_type;
-struct player_type;
+class PlayerType;
 class ObjectThrowEntity {
 public:
     ObjectThrowEntity() = default;
     ObjectThrowEntity(
-        player_type *player_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
+        PlayerType *player_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
     virtual ~ObjectThrowEntity() = default;
 
     object_type *q_ptr;
@@ -45,7 +45,7 @@ public:
     void drop_thrown_item();
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     OBJECT_IDX shuriken;
     int mult;
     int msec;

@@ -11,12 +11,12 @@ enum class SpellHexRevengeType : byte {
 };
 
 struct monap_type;
-struct player_type;
+class PlayerType;
 struct spell_hex_data_type;
 class SpellHex {
 public:
-    SpellHex(player_type *player_ptr);
-    SpellHex(player_type *player_ptr, monap_type *monap_ptr);
+    SpellHex(PlayerType *player_ptr);
+    SpellHex(PlayerType *player_ptr, monap_type *monap_ptr);
     virtual ~SpellHex() = default;
 
     bool stop_spells_with_selection();
@@ -42,7 +42,7 @@ public:
     void set_revenge_type(SpellHexRevengeType type);
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     std::vector<int> casting_spells;
     monap_type *monap_ptr = nullptr;
     std::shared_ptr<spell_hex_data_type> spell_hex_data;

@@ -20,7 +20,7 @@
  * @param base_race true の場合、仮に変身している場合でも元の種族について扱う。 false の場合変身している種族について扱う。
  * 引数を省略した場合は false
  */
-PlayerRace::PlayerRace(player_type *player_ptr, bool base_race)
+PlayerRace::PlayerRace(PlayerType *player_ptr, bool base_race)
     : player_ptr(player_ptr)
     , base_race(base_race)
 {
@@ -80,7 +80,7 @@ const player_race_info *PlayerRace::get_info() const
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 生命形態
  */
-PlayerRaceLife PlayerRace::life() const
+PlayerRaceLifeType PlayerRace::life() const
 {
     return this->get_info()->life;
 }
@@ -91,7 +91,7 @@ PlayerRaceLife PlayerRace::life() const
  * @param base_race ミミック中も元種族の情報を返すならtrue
  * @return 食料形態
  */
-PlayerRaceFood PlayerRace::food() const
+PlayerRaceFoodType PlayerRace::food() const
 {
     return this->get_info()->food;
 }
@@ -142,7 +142,7 @@ int16_t PlayerRace::speed() const
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::MERFOLK)) {
         floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
         feature_type *f_ptr = &f_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
-        if (f_ptr->flags.has(FF::WATER)) {
+        if (f_ptr->flags.has(FloorFeatureType::WATER)) {
             result += (2 + this->player_ptr->lev / 10);
         } else if (!this->player_ptr->levitation) {
             result -= 2;

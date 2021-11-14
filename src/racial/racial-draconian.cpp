@@ -2,12 +2,12 @@
 #include "mind/mind-elementalist.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-static void decide_breath_kind(player_type *player_ptr, int *breath_type, concptr *breath_type_description)
+static void decide_breath_kind(PlayerType *player_ptr, AttributeType *breath_type, concptr *breath_type_description)
 {
     if (randint1(100) >= player_ptr->lev)
         return;
@@ -21,10 +21,10 @@ static void decide_breath_kind(player_type *player_ptr, int *breath_type, concpt
     case PlayerClassType::ARCHER:
     case PlayerClassType::SMITH:
         if (one_in_(3)) {
-            *breath_type = GF_MISSILE;
+            *breath_type = AttributeType::MISSILE;
             *breath_type_description = _("エレメント", "the elements");
         } else {
-            *breath_type = GF_SHARDS;
+            *breath_type = AttributeType::SHARDS;
             *breath_type_description = _("破片", "shards");
         }
 
@@ -38,20 +38,20 @@ static void decide_breath_kind(player_type *player_ptr, int *breath_type, concpt
     case PlayerClassType::BLUE_MAGE:
     case PlayerClassType::MIRROR_MASTER:
         if (one_in_(3)) {
-            *breath_type = GF_MANA;
+            *breath_type = AttributeType::MANA;
             *breath_type_description = _("魔力", "mana");
         } else {
-            *breath_type = GF_DISENCHANT;
+            *breath_type = AttributeType::DISENCHANT;
             *breath_type_description = _("劣化", "disenchantment");
         }
 
         break;
     case PlayerClassType::CHAOS_WARRIOR:
         if (!one_in_(3)) {
-            *breath_type = GF_CONFUSION;
+            *breath_type = AttributeType::CONFUSION;
             *breath_type_description = _("混乱", "confusion");
         } else {
-            *breath_type = GF_CHAOS;
+            *breath_type = AttributeType::CHAOS;
             *breath_type_description = _("カオス", "chaos");
         }
 
@@ -60,20 +60,20 @@ static void decide_breath_kind(player_type *player_ptr, int *breath_type, concpt
     case PlayerClassType::SAMURAI:
     case PlayerClassType::FORCETRAINER:
         if (!one_in_(3)) {
-            *breath_type = GF_CONFUSION;
+            *breath_type = AttributeType::CONFUSION;
             *breath_type_description = _("混乱", "confusion");
         } else {
-            *breath_type = GF_SOUND;
+            *breath_type = AttributeType::SOUND;
             *breath_type_description = _("轟音", "sound");
         }
 
         break;
     case PlayerClassType::MINDCRAFTER:
         if (!one_in_(3)) {
-            *breath_type = GF_CONFUSION;
+            *breath_type = AttributeType::CONFUSION;
             *breath_type_description = _("混乱", "confusion");
         } else {
-            *breath_type = GF_PSI;
+            *breath_type = AttributeType::PSI;
             *breath_type_description = _("精神エネルギー", "mental energy");
         }
 
@@ -81,10 +81,10 @@ static void decide_breath_kind(player_type *player_ptr, int *breath_type, concpt
     case PlayerClassType::PRIEST:
     case PlayerClassType::PALADIN:
         if (one_in_(3)) {
-            *breath_type = GF_HELL_FIRE;
+            *breath_type = AttributeType::HELL_FIRE;
             *breath_type_description = _("地獄の劫火", "hellfire");
         } else {
-            *breath_type = GF_HOLY_FIRE;
+            *breath_type = AttributeType::HOLY_FIRE;
             *breath_type_description = _("聖なる炎", "holy fire");
         }
 
@@ -92,20 +92,20 @@ static void decide_breath_kind(player_type *player_ptr, int *breath_type, concpt
     case PlayerClassType::ROGUE:
     case PlayerClassType::NINJA:
         if (one_in_(3)) {
-            *breath_type = GF_DARK;
+            *breath_type = AttributeType::DARK;
             *breath_type_description = _("暗黒", "darkness");
         } else {
-            *breath_type = GF_POIS;
+            *breath_type = AttributeType::POIS;
             *breath_type_description = _("毒", "poison");
         }
 
         break;
     case PlayerClassType::BARD:
         if (!one_in_(3)) {
-            *breath_type = GF_SOUND;
+            *breath_type = AttributeType::SOUND;
             *breath_type_description = _("轟音", "sound");
         } else {
-            *breath_type = GF_CONFUSION;
+            *breath_type = AttributeType::CONFUSION;
             *breath_type_description = _("混乱", "confusion");
         }
 
@@ -119,10 +119,10 @@ static void decide_breath_kind(player_type *player_ptr, int *breath_type, concpt
     }
 }
 
-bool draconian_breath(player_type *player_ptr)
+bool draconian_breath(PlayerType *player_ptr)
 {
-    int breath_type = (one_in_(3) ? GF_COLD : GF_FIRE);
-    concptr breath_type_description = ((breath_type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
+    AttributeType breath_type = (one_in_(3) ? AttributeType::COLD : AttributeType::FIRE);
+    concptr breath_type_description = ((breath_type == AttributeType::COLD) ? _("冷気", "cold") : _("炎", "fire"));
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
         return false;

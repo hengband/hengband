@@ -48,7 +48,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
@@ -71,7 +71,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 読むオブジェクトの所持品ID
  */
-ObjectReadEntity::ObjectReadEntity(player_type *player_ptr, INVENTORY_IDX item)
+ObjectReadEntity::ObjectReadEntity(PlayerType *player_ptr, INVENTORY_IDX item)
     : player_ptr(player_ptr)
     , item(item)
 {
@@ -415,7 +415,7 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_FIRE: {
-            fire_ball(this->player_ptr, GF_FIRE, 0, 666, 4);
+            fire_ball(this->player_ptr, AttributeType::FIRE, 0, 666, 4);
             if (!(is_oppose_fire(this->player_ptr) || has_resist_fire(this->player_ptr) || has_immune_fire(this->player_ptr)))
                 take_hit(this->player_ptr, DAMAGE_NOESCAPE, 50 + randint1(50), _("炎の巻物", "a Scroll of Fire"));
 
@@ -423,7 +423,7 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_ICE: {
-            fire_ball(this->player_ptr, GF_ICE, 0, 777, 4);
+            fire_ball(this->player_ptr, AttributeType::ICE, 0, 777, 4);
             if (!(is_oppose_cold(this->player_ptr) || has_resist_cold(this->player_ptr) || has_immune_cold(this->player_ptr)))
                 take_hit(this->player_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("氷の巻物", "a Scroll of Ice"));
 
@@ -431,7 +431,7 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_CHAOS: {
-            fire_ball(this->player_ptr, GF_CHAOS, 0, 1000, 4);
+            fire_ball(this->player_ptr, AttributeType::CHAOS, 0, 1000, 4);
             if (!has_resist_chaos(this->player_ptr))
                 take_hit(this->player_ptr, DAMAGE_NOESCAPE, 111 + randint1(111), _("ログルスの巻物", "a Scroll of Logrus"));
 

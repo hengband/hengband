@@ -66,12 +66,12 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-OBJECT_IDX get_obj_num(player_type *player_ptr, DEPTH level, BIT_FLAGS mode)
+OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
 {
     if (level > MAX_DEPTH - 1)
         level = MAX_DEPTH - 1;
 
-    if ((level > 0) && d_info[player_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
+    if ((level > 0) && d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         if (one_in_(GREAT_OBJ)) {
             level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
         }

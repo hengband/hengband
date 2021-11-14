@@ -51,7 +51,7 @@
  * (cast magic) into "g" (get), and "s" (search) into "d" (drop).
  * </pre>
  */
-void do_cmd_store(player_type *player_ptr)
+void do_cmd_store(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;
@@ -64,7 +64,7 @@ void do_cmd_store(player_type *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
 
-    if (!g_ptr->cave_has_flag(FF::STORE)) {
+    if (!g_ptr->cave_has_flag(FloorFeatureType::STORE)) {
         msg_print(_("ここには店がありません。", "You see no store here."));
         return;
     }

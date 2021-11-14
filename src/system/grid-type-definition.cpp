@@ -72,7 +72,7 @@ bool grid_type::is_mark() const
 
 bool grid_type::is_mirror() const
 {
-    return this->is_object() && f_info[this->mimic].flags.has(FF::MIRROR);
+    return this->is_object() && f_info[this->mimic].flags.has(FloorFeatureType::MIRROR);
 }
 
 /*
@@ -80,7 +80,7 @@ bool grid_type::is_mirror() const
  */
 bool grid_type::is_rune_protection() const
 {
-    return this->is_object() && f_info[this->mimic].flags.has(FF::RUNE_PROTECTION);
+    return this->is_object() && f_info[this->mimic].flags.has(FloorFeatureType::RUNE_PROTECTION);
 }
 
 /*
@@ -88,7 +88,7 @@ bool grid_type::is_rune_protection() const
  */
 bool grid_type::is_rune_explosion() const
 {
-    return this->is_object() && f_info[this->mimic].flags.has(FF::RUNE_EXPLOSION);
+    return this->is_object() && f_info[this->mimic].flags.has(FloorFeatureType::RUNE_EXPLOSION);
 }
 
 byte grid_type::get_cost(monster_race *r_ptr) const
@@ -116,7 +116,7 @@ FEAT_IDX grid_type::get_feat_mimic() const
     return f_info[this->mimic ? this->mimic : this->feat].mimic;
 }
 
-bool grid_type::cave_has_flag(FF feature_flags) const
+bool grid_type::cave_has_flag(FloorFeatureType feature_flags) const
 {
     return f_info[this->feat].flags.has(feature_flags);
 }

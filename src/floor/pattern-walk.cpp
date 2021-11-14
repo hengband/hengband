@@ -34,7 +34,7 @@
  * @brief パターン終点到達時のテレポート処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void pattern_teleport(player_type *player_ptr)
+void pattern_teleport(PlayerType *player_ptr)
 {
     DEPTH min_level = 0;
     DEPTH max_level = 99;
@@ -101,7 +101,7 @@ void pattern_teleport(player_type *player_ptr)
  * @brief 各種パターン地形上の特別な処理 / Returns TRUE if we are on the Pattern...
  * @return 実際にパターン地形上にプレイヤーが居た場合はTRUEを返す。
  */
-bool pattern_effect(player_type *player_ptr)
+bool pattern_effect(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!pattern_tile(floor_ptr, player_ptr->y, player_ptr->x))
@@ -164,12 +164,12 @@ bool pattern_effect(player_type *player_ptr)
  * @param n_x プレイヤーの移動先X座標
  * @return 移動処理が可能である場合（可能な場合に選択した場合）TRUEを返す。
  */
-bool pattern_seq(player_type *player_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
+bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
     feature_type *cur_f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
     feature_type *new_f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
-    bool is_pattern_tile_cur = cur_f_ptr->flags.has(FF::PATTERN);
-    bool is_pattern_tile_new = new_f_ptr->flags.has(FF::PATTERN);
+    bool is_pattern_tile_cur = cur_f_ptr->flags.has(FloorFeatureType::PATTERN);
+    bool is_pattern_tile_new = new_f_ptr->flags.has(FloorFeatureType::PATTERN);
     if (!is_pattern_tile_cur && !is_pattern_tile_new)
         return true;
 

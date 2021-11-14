@@ -29,7 +29,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerClass::PlayerClass(player_type *player_ptr)
+PlayerClass::PlayerClass(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -136,37 +136,37 @@ TrFlags PlayerClass::tr_flags() const
         break;
     }
     case PlayerClassType::ELEMENTALIST:
-        if (has_element_resist(this->player_ptr, ElementRealm::FIRE, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 1))
             flags.set(TR_RES_FIRE);
-        if (has_element_resist(this->player_ptr, ElementRealm::FIRE, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 30))
             flags.set(TR_IM_FIRE);
-        if (has_element_resist(this->player_ptr, ElementRealm::ICE, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 1))
             flags.set(TR_RES_COLD);
-        if (has_element_resist(this->player_ptr, ElementRealm::ICE, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 30))
             flags.set(TR_IM_COLD);
-        if (has_element_resist(this->player_ptr, ElementRealm::SKY, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 1))
             flags.set(TR_RES_ELEC);
-        if (has_element_resist(this->player_ptr, ElementRealm::SKY, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 30))
             flags.set(TR_IM_ELEC);
-        if (has_element_resist(this->player_ptr, ElementRealm::SEA, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 1))
             flags.set(TR_RES_ACID);
-        if (has_element_resist(this->player_ptr, ElementRealm::SEA, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 30))
             flags.set(TR_IM_ACID);
-        if (has_element_resist(this->player_ptr, ElementRealm::DARKNESS, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 1))
             flags.set(TR_RES_DARK);
-        if (has_element_resist(this->player_ptr, ElementRealm::DARKNESS, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 30))
             flags.set(TR_RES_NETHER);
-        if (has_element_resist(this->player_ptr, ElementRealm::CHAOS, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 1))
             flags.set(TR_RES_CONF);
-        if (has_element_resist(this->player_ptr, ElementRealm::CHAOS, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 30))
             flags.set(TR_RES_CHAOS);
-        if (has_element_resist(this->player_ptr, ElementRealm::EARTH, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 1))
             flags.set(TR_RES_SHARDS);
-        if (has_element_resist(this->player_ptr, ElementRealm::EARTH, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 30))
             flags.set(TR_REFLECT);
-        if (has_element_resist(this->player_ptr, ElementRealm::DEATH, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 1))
             flags.set(TR_RES_POIS);
-        if (has_element_resist(this->player_ptr, ElementRealm::DEATH, 30))
+        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 30))
             flags.set(TR_RES_DISEN);
         break;
     default:
@@ -176,17 +176,17 @@ TrFlags PlayerClass::tr_flags() const
     return flags;
 }
 
-TrFlags PlayerClass::form_tr_flags() const
+TrFlags PlayerClass::stance_tr_flags() const
 {
     TrFlags flags;
 
     switch (this->get_samurai_stance()) {
-    case SamuraiStance::FUUJIN:
+    case SamuraiStanceType::FUUJIN:
         if (!this->player_ptr->blind) {
             flags.set(TR_REFLECT);
         }
         break;
-    case SamuraiStance::MUSOU:
+    case SamuraiStanceType::MUSOU:
         flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
         flags.set({ TR_REFLECT, TR_RES_FEAR, TR_RES_LITE, TR_RES_DARK, TR_RES_BLIND, TR_RES_CONF,
             TR_RES_SOUND, TR_RES_SHARDS, TR_RES_NETHER, TR_RES_NEXUS, TR_RES_CHAOS, TR_RES_DISEN,
@@ -195,7 +195,7 @@ TrFlags PlayerClass::form_tr_flags() const
         flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
         flags.set({ TR_SUST_STR, TR_SUST_INT, TR_SUST_WIS, TR_SUST_DEX, TR_SUST_CON, TR_SUST_CHR });
         break;
-    case SamuraiStance::KOUKIJIN:
+    case SamuraiStanceType::KOUKIJIN:
         flags.set({ TR_VUL_ACID, TR_VUL_ELEC, TR_VUL_FIRE, TR_VUL_COLD });
         break;
     default:
@@ -203,13 +203,13 @@ TrFlags PlayerClass::form_tr_flags() const
     }
 
     switch (this->get_monk_stance()) {
-    case MonkStance::GENBU:
+    case MonkStanceType::GENBU:
         flags.set(TR_REFLECT);
         break;
-    case MonkStance::SUZAKU:
+    case MonkStanceType::SUZAKU:
         flags.set(TR_LEVITATION);
         break;
-    case MonkStance::SEIRYU:
+    case MonkStanceType::SEIRYU:
         flags.set({ TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS });
         flags.set({ TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD });
         flags.set(TR_LEVITATION);
@@ -243,11 +243,11 @@ bool PlayerClass::lose_balance()
         return false;
     }
 
-    if (this->samurai_stance_is(SamuraiStance::NONE)) {
+    if (this->samurai_stance_is(SamuraiStanceType::NONE)) {
         return false;
     }
 
-    this->set_samurai_stance(SamuraiStance::NONE);
+    this->set_samurai_stance(SamuraiStanceType::NONE);
     this->player_ptr->update |= PU_BONUS;
     this->player_ptr->update |= PU_MONSTERS;
     this->player_ptr->redraw |= PR_STATE;
@@ -256,17 +256,17 @@ bool PlayerClass::lose_balance()
     return true;
 }
 
-SamuraiStance PlayerClass::get_samurai_stance() const
+SamuraiStanceType PlayerClass::get_samurai_stance() const
 {
     auto samurai_data = this->get_specific_data<samurai_data_type>();
     if (!samurai_data) {
-        return SamuraiStance::NONE;
+        return SamuraiStanceType::NONE;
     }
 
     return samurai_data->stance;
 }
 
-bool PlayerClass::samurai_stance_is(SamuraiStance stance) const
+bool PlayerClass::samurai_stance_is(SamuraiStanceType stance) const
 {
     return this->get_samurai_stance() == stance;
 }
@@ -276,7 +276,7 @@ bool PlayerClass::samurai_stance_is(SamuraiStance stance) const
  *
  * @param stance_list 崩す型を指定する。取っている型が指定された型に含まれない場合は崩さない。
  */
-void PlayerClass::break_samurai_stance(std::initializer_list<SamuraiStance> stance_list)
+void PlayerClass::break_samurai_stance(std::initializer_list<SamuraiStanceType> stance_list)
 {
     auto samurai_data = this->get_specific_data<samurai_data_type>();
     if (!samurai_data) {
@@ -286,13 +286,13 @@ void PlayerClass::break_samurai_stance(std::initializer_list<SamuraiStance> stan
     for (auto stance : stance_list) {
         if (samurai_data->stance == stance) {
             set_action(player_ptr, ACTION_NONE);
-            samurai_data->stance = SamuraiStance::NONE;
+            samurai_data->stance = SamuraiStanceType::NONE;
             break;
         }
     }
 }
 
-void PlayerClass::set_samurai_stance(SamuraiStance stance) const
+void PlayerClass::set_samurai_stance(SamuraiStanceType stance) const
 {
     auto samurai_data = this->get_specific_data<samurai_data_type>();
     if (!samurai_data) {
@@ -302,22 +302,22 @@ void PlayerClass::set_samurai_stance(SamuraiStance stance) const
     samurai_data->stance = stance;
 }
 
-MonkStance PlayerClass::get_monk_stance() const
+MonkStanceType PlayerClass::get_monk_stance() const
 {
     auto monk_data = this->get_specific_data<monk_data_type>();
     if (!monk_data) {
-        return MonkStance::NONE;
+        return MonkStanceType::NONE;
     }
 
     return monk_data->stance;
 }
 
-bool PlayerClass::monk_stance_is(MonkStance stance) const
+bool PlayerClass::monk_stance_is(MonkStanceType stance) const
 {
     return this->get_monk_stance() == stance;
 }
 
-void PlayerClass::set_monk_stance(MonkStance stance) const
+void PlayerClass::set_monk_stance(MonkStanceType stance) const
 {
     auto monk_data = this->get_specific_data<monk_data_type>();
     if (!monk_data) {
@@ -329,7 +329,7 @@ void PlayerClass::set_monk_stance(MonkStance stance) const
 
 /**
  * @brief プレイヤーの職業にで使用する職業固有データ領域を初期化する
- * @details 事前条件: player_type の職業や領域が決定済みであること
+ * @details 事前条件: PlayerType の職業や領域が決定済みであること
  */
 void PlayerClass::init_specific_data()
 {

@@ -46,7 +46,7 @@ int16_t command_new; /* Command chaining from inven/equip view */
  */
 static char request_command_buffer[256];
 
-static char inkey_from_menu(player_type *player_ptr)
+static char inkey_from_menu(PlayerType *player_ptr)
 {
     char cmd;
     int basey, basex;
@@ -189,7 +189,7 @@ static char inkey_from_menu(player_type *player_ptr)
  *
  * Note that "player_ptr->command_new" may not work any more.
  */
-void request_command(player_type *player_ptr, int shopping)
+void request_command(PlayerType *player_ptr, int shopping)
 {
     int16_t cmd;
     int mode;

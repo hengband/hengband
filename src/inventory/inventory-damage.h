@@ -6,6 +6,6 @@
  * This seems like a pretty standard "typedef"
  */
 struct object_type;
-struct player_type;
+class PlayerType;
 
-void inventory_damage(player_type *player_ptr, const ObjectBreaker& breaker, int perc);
+void inventory_damage(PlayerType *player_ptr, const ObjectBreaker& breaker, int perc);

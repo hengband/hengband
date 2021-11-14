@@ -40,7 +40,7 @@ bool summon_unique_okay = false;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx))
@@ -65,7 +65,7 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
         && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr))
         return false;
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DF::CHAMELEON))
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON))
         return true;
 
     if (summon_specific_who > 0) {
@@ -97,7 +97,7 @@ static bool is_dead_summoning(summon_type type)
  * ダンジョン及びクエストはdun_level>0となる。
  * 荒野はdun_level==0なので、その場合荒野レベルを返す。
  */
-DEPTH get_dungeon_or_wilderness_level(player_type *player_ptr)
+DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level > 0)
@@ -117,7 +117,7 @@ DEPTH get_dungeon_or_wilderness_level(player_type *player_ptr)
  * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
-bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
+bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena)
@@ -180,7 +180,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
  * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
     if ((r_idx <= 0) || (r_idx >= static_cast<MONRACE_IDX>(r_info.size()))) {
         return false;

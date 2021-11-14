@@ -102,7 +102,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 実際にデバッグコマンドへ移行したらTRUEを返す。
  */
-static bool enter_debug_mode(player_type *player_ptr)
+static bool enter_debug_mode(PlayerType *player_ptr)
 {
     if (!w_ptr->noscore) {
         if (!allow_debug_options) {
@@ -130,7 +130,7 @@ static bool enter_debug_mode(player_type *player_ptr)
  * / Parse and execute the current command Give "Warning" on illegal commands.
  * @todo Make some "blocks"
  */
-void process_command(player_type *player_ptr)
+void process_command(PlayerType *player_ptr)
 {
     COMMAND_CODE old_now_message = now_message;
     repeat_check();
@@ -345,7 +345,7 @@ void process_command(player_type *player_ptr)
             break;
         }
 
-        if (floor_ptr->dun_level && d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && (player_ptr->pclass != PlayerClassType::BERSERKER)
+        if (floor_ptr->dun_level && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && (player_ptr->pclass != PlayerClassType::BERSERKER)
             && (player_ptr->pclass != PlayerClassType::SMITH)) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(nullptr);
@@ -614,7 +614,7 @@ void process_command(player_type *player_ptr)
     case '`': {
         if (!player_ptr->wild_mode)
             do_cmd_travel(player_ptr);
-        PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+        PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
         break;
     }

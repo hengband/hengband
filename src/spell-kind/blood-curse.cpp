@@ -6,7 +6,7 @@
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "status/base-status.h"
@@ -17,7 +17,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-void blood_curse_to_enemy(player_type *player_ptr, MONSTER_IDX m_idx)
+void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
@@ -43,7 +43,7 @@ void blood_curse_to_enemy(player_type *player_ptr, MONSTER_IDX m_idx)
             if (!count) {
                 int extra_dam = damroll(10, 10);
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
-                project(player_ptr, 0, 8, m_ptr->fy, m_ptr->fx, extra_dam, GF_MANA, curse_flg);
+                project(player_ptr, 0, 8, m_ptr->fy, m_ptr->fx, extra_dam, AttributeType::MANA, curse_flg);
                 if (!one_in_(6))
                     break;
             }
@@ -64,7 +64,7 @@ void blood_curse_to_enemy(player_type *player_ptr, MONSTER_IDX m_idx)
         case 10:
         case 11:
             msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
-            project(player_ptr, 0, 7, m_ptr->fy, m_ptr->fx, 50, GF_DISINTEGRATE, curse_flg);
+            project(player_ptr, 0, 7, m_ptr->fy, m_ptr->fx, 50, AttributeType::DISINTEGRATE, curse_flg);
             if (!one_in_(6))
                 break;
             /* Fall through */

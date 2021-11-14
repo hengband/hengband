@@ -33,7 +33,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return まだ優勝していないか、挑戦者モンスターとの戦いではFALSE
  */
-static bool process_ostensible_arena_victory(player_type *player_ptr)
+static bool process_ostensible_arena_victory(PlayerType *player_ptr)
 {
     if (player_ptr->arena_number != MAX_ARENA_MONS)
         return false;
@@ -57,7 +57,7 @@ static bool process_ostensible_arena_victory(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return まだパワー・ワイアーム以下を倒していないならFALSE、倒していたらTRUE
  */
-static bool battle_metal_babble(player_type *player_ptr)
+static bool battle_metal_babble(PlayerType *player_ptr)
 {
     if (player_ptr->arena_number <= MAX_ARENA_MONS)
         return false;
@@ -90,7 +90,7 @@ static bool battle_metal_babble(player_type *player_ptr)
     return true;
 }
 
-static void go_to_arena(player_type *player_ptr)
+static void go_to_arena(PlayerType *player_ptr)
 {
     if (process_ostensible_arena_victory(player_ptr))
         return;
@@ -113,7 +113,7 @@ static void go_to_arena(player_type *player_ptr)
     player_ptr->leave_bldg = true;
 }
 
-static void see_arena_poster(player_type *player_ptr)
+static void see_arena_poster(PlayerType *player_ptr)
 {
     if (player_ptr->arena_number == MAX_ARENA_MONS) {
         msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。", "You are victorious. Enter the arena for the ceremony."));
@@ -140,7 +140,7 @@ static void see_arena_poster(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
  */
-void arena_comm(player_type *player_ptr, int cmd)
+void arena_comm(PlayerType *player_ptr, int cmd)
 {
     switch (cmd) {
     case BACT_ARENA:
@@ -163,7 +163,7 @@ void arena_comm(player_type *player_ptr, int cmd)
  * @brief モンスター闘技場に参加するモンスターを更新する。
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void update_gambling_monsters(player_type *player_ptr)
+void update_gambling_monsters(PlayerType *player_ptr)
 {
     int total, i;
     int max_dl = 0;
@@ -232,11 +232,11 @@ void update_gambling_monsters(player_type *player_ptr)
                 power[i] = power[i] * (r_ptr->speed - 20) / 100;
             if (num_taisei > 2)
                 power[i] = power[i] * (num_taisei * 2 + 5) / 10;
-            else if (r_ptr->ability_flags.has(RF_ABILITY::INVULNER))
+            else if (r_ptr->ability_flags.has(MonsterAbilityType::INVULNER))
                 power[i] = power[i] * 4 / 3;
-            else if (r_ptr->ability_flags.has(RF_ABILITY::HEAL))
+            else if (r_ptr->ability_flags.has(MonsterAbilityType::HEAL))
                 power[i] = power[i] * 4 / 3;
-            else if (r_ptr->ability_flags.has(RF_ABILITY::DRAIN_MANA))
+            else if (r_ptr->ability_flags.has(MonsterAbilityType::DRAIN_MANA))
                 power[i] = power[i] * 11 / 10;
             if (r_ptr->flags1 & RF1_RAND_25)
                 power[i] = power[i] * 9 / 10;
@@ -272,7 +272,7 @@ void update_gambling_monsters(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 賭けを開始したか否か
  */
-bool monster_arena_comm(player_type *player_ptr)
+bool monster_arena_comm(PlayerType *player_ptr)
 {
     PRICE maxbet;
     PRICE wager;

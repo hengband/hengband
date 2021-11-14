@@ -72,7 +72,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
@@ -84,7 +84,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-bool switch_class_racial_execution(player_type *player_ptr, const int32_t command)
+bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command)
 {
     DIRECTION dir = 0;
     switch (player_ptr->pclass) {
@@ -124,7 +124,7 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_beam(player_ptr, is_good_realm(player_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE, dir, player_ptr->lev * 3);
+        fire_beam(player_ptr, is_good_realm(player_ptr->realm1) ? AttributeType::HOLY_FIRE : AttributeType::HELL_FIRE, dir, player_ptr->lev * 3);
         return true;
     case PlayerClassType::WARRIOR_MAGE:
         if (command == -3)
@@ -167,7 +167,7 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
                 return false;
 
             project_length = 1;
-            fire_beam(player_ptr, GF_PHOTO, dir, 1);
+            fire_beam(player_ptr, AttributeType::PHOTO, dir, 1);
             return true;
         }
 
@@ -180,12 +180,12 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
             if (!get_aim_dir(player_ptr, &dir))
                 return false;
 
-            (void)fire_ball_hide(player_ptr, GF_CHARM_LIVING, dir, player_ptr->lev, 0);
+            (void)fire_ball_hide(player_ptr, AttributeType::CHARM_LIVING, dir, player_ptr->lev, 0);
             return true;
         }
 
         if (command == -4)
-            project_all_los(player_ptr, GF_CHARM_LIVING, player_ptr->lev);
+            project_all_los(player_ptr, AttributeType::CHARM_LIVING, player_ptr->lev);
 
         return true;
     case PlayerClassType::ARCHER:
@@ -271,7 +271,7 @@ bool switch_class_racial_execution(player_type *player_ptr, const int32_t comman
     }
 }
 
-bool switch_mimic_racial_execution(player_type *player_ptr)
+bool switch_mimic_racial_execution(PlayerType *player_ptr)
 {
     switch (player_ptr->mimic_form) {
     case MIMIC_DEMON:
@@ -286,7 +286,7 @@ bool switch_mimic_racial_execution(player_type *player_ptr)
     }
 }
 
-bool switch_race_racial_execution(player_type *player_ptr, const int32_t command)
+bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
 {
     DIRECTION dir = 0;
     switch (player_ptr->prace) {
@@ -348,7 +348,7 @@ bool switch_race_racial_execution(player_type *player_ptr, const int32_t command
             return false;
 
         msg_print(_("巨大な岩を投げた。", "You throw a huge boulder."));
-        (void)fire_bolt(player_ptr, GF_MISSILE, dir, (3 * player_ptr->lev) / 2);
+        (void)fire_bolt(player_ptr, AttributeType::MISSILE, dir, (3 * player_ptr->lev) / 2);
         return true;
     case PlayerRaceType::YEEK:
         if (!get_aim_dir(player_ptr, &dir))
@@ -365,9 +365,9 @@ bool switch_race_racial_execution(player_type *player_ptr, const int32_t command
         stop_mouth(player_ptr);
         msg_print(_("酸を吐いた。", "You spit acid."));
         if (player_ptr->lev < 25)
-            (void)fire_bolt(player_ptr, GF_ACID, dir, player_ptr->lev);
+            (void)fire_bolt(player_ptr, AttributeType::ACID, dir, player_ptr->lev);
         else
-            (void)fire_ball(player_ptr, GF_ACID, dir, player_ptr->lev, 2);
+            (void)fire_ball(player_ptr, AttributeType::ACID, dir, player_ptr->lev, 2);
 
         return true;
     case PlayerRaceType::KOBOLD:
@@ -375,7 +375,7 @@ bool switch_race_racial_execution(player_type *player_ptr, const int32_t command
             return false;
 
         msg_print(_("毒のダーツを投げた。", "You throw a poisoned dart."));
-        (void)fire_bolt(player_ptr, GF_POIS, dir, player_ptr->lev);
+        (void)fire_bolt(player_ptr, AttributeType::POIS, dir, player_ptr->lev);
         return true;
     case PlayerRaceType::NIBELUNG:
         msg_print(_("周囲を調査した。", "You examine your surroundings."));
@@ -388,7 +388,7 @@ bool switch_race_racial_execution(player_type *player_ptr, const int32_t command
             return false;
 
         msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
-        (void)fire_bolt_or_beam(player_ptr, 10, GF_MISSILE, dir, damroll(3 + ((player_ptr->lev - 1) / 5), 4));
+        (void)fire_bolt_or_beam(player_ptr, 10, AttributeType::MISSILE, dir, damroll(3 + ((player_ptr->lev - 1) / 5), 4));
         return true;
     case PlayerRaceType::DRACONIAN:
         return draconian_breath(player_ptr);
@@ -397,7 +397,7 @@ bool switch_race_racial_execution(player_type *player_ptr, const int32_t command
             return false;
 
         msg_print(_("あなたは集中し、目が赤く輝いた...", "You concentrate and your eyes glow red..."));
-        (void)fire_bolt(player_ptr, GF_PSI, dir, player_ptr->lev);
+        (void)fire_bolt(player_ptr, AttributeType::PSI, dir, player_ptr->lev);
         return true;
     case PlayerRaceType::IMP:
         if (!get_aim_dir(player_ptr, &dir))
@@ -405,10 +405,10 @@ bool switch_race_racial_execution(player_type *player_ptr, const int32_t command
 
         if (player_ptr->lev >= 30) {
             msg_print(_("ファイア・ボールを放った。", "You cast a ball of fire."));
-            (void)fire_ball(player_ptr, GF_FIRE, dir, player_ptr->lev, 2);
+            (void)fire_ball(player_ptr, AttributeType::FIRE, dir, player_ptr->lev, 2);
         } else {
             msg_print(_("ファイア・ボルトを放った。", "You cast a bolt of fire."));
-            (void)fire_bolt(player_ptr, GF_FIRE, dir, player_ptr->lev);
+            (void)fire_bolt(player_ptr, AttributeType::FIRE, dir, player_ptr->lev);
         }
 
         return true;

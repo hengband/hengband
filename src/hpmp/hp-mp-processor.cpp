@@ -61,13 +61,13 @@
  * @details
  * ダメージを受けた場合、自然回復できない。
  */
-static bool deal_damege_by_feat(player_type *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
-    std::function<PERCENTAGE(player_type *)> damage_rate, std::function<void(player_type *, int)> additional_effect)
+static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
+    std::function<PERCENTAGE(PlayerType *)> damage_rate, std::function<void(PlayerType *, int)> additional_effect)
 {
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int damage = 0;
 
-    if (f_ptr->flags.has(FF::DEEP)) {
+    if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
         damage = 6000 + randint0(4000);
     } else if (!player_ptr->levitation) {
         damage = 3000 + randint0(2000);
@@ -106,7 +106,7 @@ static bool deal_damege_by_feat(player_type *player_ptr, grid_type *g_ptr, concp
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
  *  / Handle timed damage and regeneration every 10 game turns
  */
-void process_player_hp_mp(player_type *player_ptr)
+void process_player_hp_mp(PlayerType *player_ptr)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -118,7 +118,7 @@ void process_player_hp_mp(player_type *player_ptr)
             sound(SOUND_DAMAGE_OVER_TIME);
         }
     }
-    
+
     auto player_cut = player_ptr->effects()->cut();
     if (player_cut->is_cut() && !is_invuln(player_ptr)) {
         auto dam = player_cut->get_damage();
@@ -128,7 +128,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
 
     const PlayerRace race(player_ptr);
-    if (race.life() == PlayerRaceLife::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
+    if (race.life() == PlayerRaceLifeType::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
         if (!is_in_dungeon(player_ptr) && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
             if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
@@ -156,7 +156,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::LAVA) && !is_invuln(player_ptr) && !has_immune_fire(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::LAVA) && !is_invuln(player_ptr) && !has_immune_fire(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -164,7 +164,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::COLD_PUDDLE) && !is_invuln(player_ptr) && !has_immune_cold(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::COLD_PUDDLE) && !is_invuln(player_ptr) && !has_immune_cold(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -172,7 +172,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::ELEC_PUDDLE) && !is_invuln(player_ptr) && !has_immune_elec(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::ELEC_PUDDLE) && !is_invuln(player_ptr) && !has_immune_elec(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -180,7 +180,7 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::ACID_PUDDLE) && !is_invuln(player_ptr) && !has_immune_acid(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::ACID_PUDDLE) && !is_invuln(player_ptr) && !has_immune_acid(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -188,9 +188,9 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FF::POISON_PUDDLE) && !is_invuln(player_ptr)) {
+    if (f_ptr->flags.has(FloorFeatureType::POISON_PUDDLE) && !is_invuln(player_ptr)) {
         if (deal_damege_by_feat(player_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"), calc_acid_damage_rate,
-                [](player_type *player_ptr, int damage) {
+                [](PlayerType *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr))
                         (void)BadStatusSetter(player_ptr).mod_poison(static_cast<TIME_EFFECT>(damage));
                 })) {
@@ -199,13 +199,58 @@ void process_player_hp_mp(player_type *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has_all_of({ FF::WATER, FF::DEEP }) && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
+    if (f_ptr->flags.has_all_of({ FloorFeatureType::WATER, FloorFeatureType::DEEP }) && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
         if (calc_inventory_weight(player_ptr) > calc_weight_limit(player_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, randint1(player_ptr->lev), _("溺れ", "drowning"));
             cave_no_regen = true;
             sound(SOUND_TERRAIN_DAMAGE);
         }
+    }
+
+    if (get_player_flags(player_ptr, TR_SELF_FIRE) && !has_immune_fire(player_ptr)) {
+        HIT_POINT damage;
+        damage = player_ptr->lev;
+        if (race.tr_flags().has(TR_VUL_FIRE))
+            damage += damage / 3;
+        if (has_resist_fire(player_ptr))
+            damage = damage / 3;
+        if (is_oppose_fire(player_ptr))
+            damage = damage / 3;
+
+        damage = std::max(damage, 1);
+        msg_print(_("熱い！", "It's hot!"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"));
+    }
+
+    if (get_player_flags(player_ptr, TR_SELF_ELEC) && !has_immune_elec(player_ptr)) {
+        HIT_POINT damage;
+        damage = player_ptr->lev;
+        if (race.tr_flags().has(TR_VUL_ELEC))
+            damage += damage / 3;
+        if (has_resist_elec(player_ptr))
+            damage = damage / 3;
+        if (is_oppose_elec(player_ptr))
+            damage = damage / 3;
+
+        damage = std::max(damage, 1);
+        msg_print(_("痛い！", "It hurts!"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"));
+    }
+
+    if (get_player_flags(player_ptr, TR_SELF_COLD) && !has_immune_cold(player_ptr)) {
+        HIT_POINT damage;
+        damage = player_ptr->lev;
+        if (race.tr_flags().has(TR_VUL_COLD))
+            damage += damage / 3;
+        if (has_resist_cold(player_ptr))
+            damage = damage / 3;
+        if (is_oppose_cold(player_ptr))
+            damage = damage / 3;
+
+        damage = std::max(damage, 1);
+        msg_print(_("冷たい！", "It's cold!"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"));
     }
 
     if (player_ptr->riding) {
@@ -219,6 +264,8 @@ void process_player_hp_mp(player_type *player_ptr)
                 damage = damage / 3;
             if (is_oppose_fire(player_ptr))
                 damage = damage / 3;
+
+            damage = std::max(damage, 1);
             msg_print(_("熱い！", "It's hot!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"));
         }
@@ -231,6 +278,8 @@ void process_player_hp_mp(player_type *player_ptr)
                 damage = damage / 3;
             if (is_oppose_elec(player_ptr))
                 damage = damage / 3;
+
+            damage = std::max(damage, 1);
             msg_print(_("痛い！", "It hurts!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"));
         }
@@ -243,6 +292,8 @@ void process_player_hp_mp(player_type *player_ptr)
                 damage = damage / 3;
             if (is_oppose_cold(player_ptr))
                 damage = damage / 3;
+
+            damage = std::max(damage, 1);
             msg_print(_("冷たい！", "It's cold!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"));
         }
@@ -255,9 +306,8 @@ void process_player_hp_mp(player_type *player_ptr)
      * reduced below 0 hp by being inside a stone wall; others
      * WILL BE!
      */
-    if (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY })) {
-        if (!is_invuln(player_ptr) && !player_ptr->wraith_form && !player_ptr->tim_pass_wall
-            && ((player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr))) {
+    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
+        if (!is_invuln(player_ptr) && !player_ptr->wraith_form && !player_ptr->tim_pass_wall && ((player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr))) {
             concptr dam_desc;
             cave_no_regen = true;
 
@@ -289,10 +339,10 @@ void process_player_hp_mp(player_type *player_ptr)
         if (player_ptr->regenerate) {
             regen_amount = regen_amount * 2;
         }
-        if (!PlayerClass(player_ptr).monk_stance_is(MonkStance::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::NONE)) {
+        if (!PlayerClass(player_ptr).monk_stance_is(MonkStanceType::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::NONE)) {
             regen_amount /= 2;
         }
-        if (player_ptr->cursed.has(TRC::SLOW_REGEN)) {
+        if (player_ptr->cursed.has(CurseTraitType::SLOW_REGEN)) {
             regen_amount /= 5;
         }
     }
@@ -302,7 +352,7 @@ void process_player_hp_mp(player_type *player_ptr)
     }
 
     upkeep_factor = calculate_upkeep(player_ptr);
-    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         upkeep_factor += 100;
     }
 
@@ -340,7 +390,7 @@ void process_player_hp_mp(player_type *player_ptr)
 /*
  * Increase players hit points, notice effects
  */
-bool hp_player(player_type *player_ptr, int num)
+bool hp_player(PlayerType *player_ptr, int num)
 {
     int vir;
     vir = virtue_number(player_ptr, V_VITALITY);

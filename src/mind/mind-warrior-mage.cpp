@@ -5,7 +5,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-bool comvert_hp_to_mp(player_type *player_ptr)
+bool comvert_hp_to_mp(PlayerType *player_ptr)
 {
     int gain_sp = take_hit(player_ptr, DAMAGE_USELIFE, player_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless conversion from HP to SP")) / 5;
     if (!gain_sp) {
@@ -24,7 +24,7 @@ bool comvert_hp_to_mp(player_type *player_ptr)
     return true;
 }
 
-bool comvert_mp_to_hp(player_type *player_ptr)
+bool comvert_mp_to_hp(PlayerType *player_ptr)
 {
     if (player_ptr->csp >= player_ptr->lev / 5) {
         player_ptr->csp -= player_ptr->lev / 5;

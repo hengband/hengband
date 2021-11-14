@@ -32,7 +32,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
 
-static void set_bad_status_info(player_type *player_ptr, self_info_type *self_ptr)
+static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     auto effects = player_ptr->effects();
     if (player_ptr->blind)
@@ -57,64 +57,64 @@ static void set_bad_status_info(player_type *player_ptr, self_info_type *self_pt
         self_ptr->info[self_ptr->line++] = _("あなたは幻覚を見ている。", "You are hallucinating.");
 }
 
-static void set_curse_info(player_type *player_ptr, self_info_type *self_ptr)
+static void set_curse_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
-    if (player_ptr->cursed.has(TRC::TY_CURSE))
+    if (player_ptr->cursed.has(CurseTraitType::TY_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたは邪悪な怨念に包まれている。", "You carry an ancient foul curse.");
 
     if (has_aggravate(player_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたはモンスターを怒らせている。", "You aggravate monsters.");
 
-    if (player_ptr->cursed.has(TRC::DRAIN_EXP))
+    if (player_ptr->cursed.has(CurseTraitType::DRAIN_EXP))
         self_ptr->info[self_ptr->line++] = _("あなたは経験値を吸われている。", "You occasionally lose experience for no reason.");
 
-    if (player_ptr->cursed.has(TRC::SLOW_REGEN))
+    if (player_ptr->cursed.has(CurseTraitType::SLOW_REGEN))
         self_ptr->info[self_ptr->line++] = _("あなたの回復力は非常に遅い。", "You regenerate slowly.");
 
-    if (player_ptr->cursed.has(TRC::ADD_L_CURSE))
+    if (player_ptr->cursed.has(CurseTraitType::ADD_L_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたの弱い呪いは増える。", "Your weak curses multiply."); /* 暫定的 -- henkma */
 
-    if (player_ptr->cursed.has(TRC::ADD_H_CURSE))
+    if (player_ptr->cursed.has(CurseTraitType::ADD_H_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたの強い呪いは増える。", "Your heavy curses multiply."); /* 暫定的 -- henkma */
 
-    if (player_ptr->cursed.has(TRC::CALL_ANIMAL))
+    if (player_ptr->cursed.has(CurseTraitType::CALL_ANIMAL))
         self_ptr->info[self_ptr->line++] = _("あなたは動物に狙われている。", "You attract animals.");
 
-    if (player_ptr->cursed.has(TRC::CALL_DEMON))
+    if (player_ptr->cursed.has(CurseTraitType::CALL_DEMON))
         self_ptr->info[self_ptr->line++] = _("あなたは悪魔に狙われている。", "You attract demons.");
 
-    if (player_ptr->cursed.has(TRC::CALL_DRAGON))
+    if (player_ptr->cursed.has(CurseTraitType::CALL_DRAGON))
         self_ptr->info[self_ptr->line++] = _("あなたはドラゴンに狙われている。", "You attract dragons.");
 
-    if (player_ptr->cursed.has(TRC::COWARDICE))
+    if (player_ptr->cursed.has(CurseTraitType::COWARDICE))
         self_ptr->info[self_ptr->line++] = _("あなたは時々臆病になる。", "You are subject to cowardice.");
 
-    if (player_ptr->cursed.has(TRC::BERS_RAGE))
+    if (player_ptr->cursed.has(CurseTraitType::BERS_RAGE))
         self_ptr->info[self_ptr->line++] = _("あなたは狂戦士化の発作を起こす。", "You are subject to berserker fits.");
 
-    if (player_ptr->cursed.has(TRC::TELEPORT))
+    if (player_ptr->cursed.has(CurseTraitType::TELEPORT))
         self_ptr->info[self_ptr->line++] = _("あなたの位置はひじょうに不安定だ。", "Your position is very uncertain.");
 
-    if (player_ptr->cursed.has(TRC::LOW_MELEE))
+    if (player_ptr->cursed.has(CurseTraitType::LOW_MELEE))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は攻撃を外しやすい。", "Your weapon causes you to miss blows.");
 
-    if (player_ptr->cursed.has(TRC::LOW_AC))
+    if (player_ptr->cursed.has(CurseTraitType::LOW_AC))
         self_ptr->info[self_ptr->line++] = _("あなたは攻撃を受けやすい。", "You are subject to be hit.");
 
-    if (player_ptr->cursed.has(TRC::HARD_SPELL))
+    if (player_ptr->cursed.has(CurseTraitType::HARD_SPELL))
         self_ptr->info[self_ptr->line++] = _("あなたは魔法を失敗しやすい。", "Your spells fail more frequently.");
 
-    if (player_ptr->cursed.has(TRC::FAST_DIGEST))
+    if (player_ptr->cursed.has(CurseTraitType::FAST_DIGEST))
         self_ptr->info[self_ptr->line++] = _("あなたはすぐお腹がへる。", "You have a good appetite.");
 
-    if (player_ptr->cursed.has(TRC::DRAIN_HP))
+    if (player_ptr->cursed.has(CurseTraitType::DRAIN_HP))
         self_ptr->info[self_ptr->line++] = _("あなたは体力を吸われている。", "You occasionally lose hit points for no reason.");
 
-    if (player_ptr->cursed.has(TRC::DRAIN_MANA))
+    if (player_ptr->cursed.has(CurseTraitType::DRAIN_MANA))
         self_ptr->info[self_ptr->line++] = _("あなたは魔力を吸われている。", "You occasionally lose spell points for no reason.");
 }
 
-static void set_special_attack_info(player_type *player_ptr, self_info_type *self_ptr)
+static void set_special_attack_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (player_ptr->special_attack & ATTACK_CONFUSE)
         self_ptr->info[self_ptr->line++] = _("あなたの手は赤く輝いている。", "Your hands are glowing dull red.");
@@ -135,7 +135,7 @@ static void set_special_attack_info(player_type *player_ptr, self_info_type *sel
         self_ptr->info[self_ptr->line++] = _("あなたの手は毒に覆われている。", "You can strike the enemy with poison.");
 }
 
-static void set_esp_info(player_type *player_ptr, self_info_type *self_ptr)
+static void set_esp_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     if (player_ptr->telepathy)
         self_ptr->info[self_ptr->line++] = _("あなたはテレパシー能力を持っている。", "You have ESP.");
@@ -194,7 +194,7 @@ static void set_esp_info(player_type *player_ptr, self_info_type *self_ptr)
  * Use the "show_file()" method, perhaps.
  * </pre>
  */
-void self_knowledge(player_type *player_ptr)
+void self_knowledge(PlayerType *player_ptr)
 {
     self_info_type tmp_si;
     self_info_type *self_ptr = initialize_self_info_type(&tmp_si);
@@ -264,7 +264,7 @@ static concptr report_magic_durations[] = { _("ごく短い間", "for a short ti
 /*!
  * @brief 現在の一時的効果一覧を返す / Report all currently active magical effects.
  */
-void report_magics(player_type *player_ptr)
+void report_magics(PlayerType *player_ptr)
 {
     int i = 0;
     concptr info[128];

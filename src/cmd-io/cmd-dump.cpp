@@ -46,7 +46,7 @@
  * @details
  * Allow absolute file names?
  */
-void do_cmd_pref(player_type *player_ptr)
+void do_cmd_pref(PlayerType *player_ptr)
 {
     char buf[80];
     strcpy(buf, "");
@@ -59,7 +59,7 @@ void do_cmd_pref(player_type *player_ptr)
 /*
  * Interact with "colors"
  */
-void do_cmd_colors(player_type *player_ptr)
+void do_cmd_colors(PlayerType *player_ptr)
 {
     int i;
     char tmp[160];
@@ -203,7 +203,7 @@ void do_cmd_version(void)
  * Note that "feeling" is set to zero unless some time has passed.
  * Note that this is done when the level is GENERATED, not entered.
  */
-void do_cmd_feeling(player_type *player_ptr)
+void do_cmd_feeling(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;
@@ -240,7 +240,7 @@ void do_cmd_feeling(player_type *player_ptr)
  * Display the time and date
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_time(player_type *player_ptr)
+void do_cmd_time(PlayerType *player_ptr)
 {
     int day, hour, min;
     extract_day_hour_min(player_ptr, &day, &hour, &min);

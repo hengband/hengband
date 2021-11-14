@@ -17,7 +17,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
  */
-bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
+bool object_is_bounty(PlayerType *player_ptr, object_type *o_ptr)
 {
     int i;
 
@@ -57,7 +57,7 @@ bool object_is_quest_target(QUEST_IDX quest_idx, object_type *o_ptr)
         return false;
 
     artifact_type *a_ptr = &a_info[a_idx];
-    if (a_ptr->gen_flags.has(TRG::INSTA_ART))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))
         return false;
 
     return (o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval);

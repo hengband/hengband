@@ -8,7 +8,7 @@
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "spell-kind/earthquake.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -17,10 +17,10 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool door_creation(player_type *player_ptr, POSITION y, POSITION x)
+bool door_creation(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_DOOR, flg).notice;
+    return project(player_ptr, 0, 1, y, x, 0, AttributeType::MAKE_DOOR, flg).notice;
 }
 
 /*!
@@ -30,10 +30,10 @@ bool door_creation(player_type *player_ptr, POSITION y, POSITION x)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool trap_creation(player_type *player_ptr, POSITION y, POSITION x)
+bool trap_creation(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg).notice;
+    return project(player_ptr, 0, 1, y, x, 0, AttributeType::MAKE_TRAP, flg).notice;
 }
 
 /*!
@@ -41,10 +41,10 @@ bool trap_creation(player_type *player_ptr, POSITION y, POSITION x)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool tree_creation(player_type *player_ptr, POSITION y, POSITION x)
+bool tree_creation(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_TREE, flg).notice;
+    return project(player_ptr, 0, 1, y, x, 0, AttributeType::MAKE_TREE, flg).notice;
 }
 
 /*!
@@ -52,10 +52,10 @@ bool tree_creation(player_type *player_ptr, POSITION y, POSITION x)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool create_rune_protection_area(player_type *player_ptr, POSITION y, POSITION x)
+bool create_rune_protection_area(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
-    return project(player_ptr, 0, 1, y, x, 0, GF_MAKE_RUNE_PROTECTION, flg).notice;
+    return project(player_ptr, 0, 1, y, x, 0, AttributeType::MAKE_RUNE_PROTECTION, flg).notice;
 }
 
 /*!
@@ -63,10 +63,10 @@ bool create_rune_protection_area(player_type *player_ptr, POSITION y, POSITION x
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wall_stone(player_type *player_ptr)
+bool wall_stone(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    bool dummy = project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, GF_STONE_WALL, flg).notice;
+    bool dummy = project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, AttributeType::STONE_WALL, flg).notice;
     player_ptr->update |= (PU_FLOW);
     player_ptr->redraw |= (PR_MAP);
     return dummy;
@@ -77,10 +77,10 @@ bool wall_stone(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool destroy_doors_touch(player_type *player_ptr)
+bool destroy_doors_touch(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, GF_KILL_DOOR, flg).notice;
+    return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, AttributeType::KILL_DOOR, flg).notice;
 }
 
 /*!
@@ -88,10 +88,10 @@ bool destroy_doors_touch(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool disarm_traps_touch(player_type *player_ptr)
+bool disarm_traps_touch(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, GF_KILL_TRAP, flg).notice;
+    return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, AttributeType::KILL_TRAP, flg).notice;
 }
 
 /*!
@@ -99,10 +99,10 @@ bool disarm_traps_touch(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool sleep_monsters_touch(player_type *player_ptr)
+bool sleep_monsters_touch(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_KILL | PROJECT_HIDE;
-    return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, player_ptr->lev, GF_OLD_SLEEP, flg).notice;
+    return project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, player_ptr->lev, AttributeType::OLD_SLEEP, flg).notice;
 }
 
 /*!
@@ -113,17 +113,17 @@ bool sleep_monsters_touch(player_type *player_ptr)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool animate_dead(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x)
+bool animate_dead(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
-    return project(player_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg).notice;
+    return project(player_ptr, who, 5, y, x, 0, AttributeType::ANIM_DEAD, flg).notice;
 }
 
 /*!
  * @brief 周辺破壊効果(プレイヤー中心)
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void wall_breaker(player_type *player_ptr)
+void wall_breaker(PlayerType *player_ptr)
 {
     POSITION y = 0, x = 0;
     int attempts = 1000;
@@ -131,14 +131,14 @@ void wall_breaker(player_type *player_ptr)
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
 
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))
                 continue;
 
             if (!player_bold(player_ptr, y, x))
                 break;
         }
 
-        project(player_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
+        project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
         return;
     }
 
@@ -156,6 +156,6 @@ void wall_breaker(player_type *player_ptr)
                 break;
         }
 
-        project(player_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
+        project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
     }
 }

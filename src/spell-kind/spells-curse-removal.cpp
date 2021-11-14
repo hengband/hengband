@@ -16,7 +16,7 @@
  * @return 解呪されたアイテムの数
  * @details 永遠の呪いは解呪できない
  */
-static int exe_curse_removal(player_type *player_ptr, int all)
+static int exe_curse_removal(PlayerType *player_ptr, int all)
 {
     int cnt = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
@@ -25,10 +25,10 @@ static int exe_curse_removal(player_type *player_ptr, int all)
             continue;
         if (!o_ptr->is_cursed())
             continue;
-        if (!all && o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
+        if (!all && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
             continue;
-        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
-            o_ptr->curse_flags &= {TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE};
+        if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
+            o_ptr->curse_flags &= {CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE};
             continue;
         }
 
@@ -53,11 +53,11 @@ static int exe_curse_removal(player_type *player_ptr, int all)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 解呪に成功した装備数
  */
-int remove_curse(player_type *player_ptr) { return exe_curse_removal(player_ptr, false); }
+int remove_curse(PlayerType *player_ptr) { return exe_curse_removal(player_ptr, false); }
 
 /*!
  * @brief 装備の重い呪い解呪処理 /
  * Remove all curses
  * @return 解呪に成功した装備数
  */
-int remove_all_curse(player_type *player_ptr) { return exe_curse_removal(player_ptr, true); }
+int remove_all_curse(PlayerType *player_ptr) { return exe_curse_removal(player_ptr, true); }

@@ -10,7 +10,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -246,10 +246,10 @@ bool ObjectBreaker::can_destroy(object_type *o_ptr) const
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
+bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
 {
     int radius = 2;
-    int dt = 0;
+    AttributeType dt = AttributeType::NONE;
     int dam = 0;
     bool angry = false;
     object_kind *k_ptr = &k_info[k_idx];
@@ -299,81 +299,81 @@ bool potion_smash_effect(player_type *player_ptr, MONSTER_IDX who, POSITION y, P
         /* All of the above potions have no effect when shattered */
         return false;
     case SV_POTION_SLOWNESS:
-        dt = GF_OLD_SLOW;
+        dt = AttributeType::OLD_SLOW;
         dam = 5;
         angry = true;
         break;
     case SV_POTION_POISON:
-        dt = GF_POIS;
+        dt = AttributeType::POIS;
         dam = 3;
         angry = true;
         break;
     case SV_POTION_BLINDNESS:
-        dt = GF_DARK;
+        dt = AttributeType::DARK;
         angry = true;
         break;
     case SV_POTION_BOOZE:
-        dt = GF_OLD_CONF;
+        dt = AttributeType::OLD_CONF;
         angry = true;
         break;
     case SV_POTION_SLEEP:
-        dt = GF_OLD_SLEEP;
+        dt = AttributeType::OLD_SLEEP;
         angry = true;
         break;
     case SV_POTION_RUINATION:
     case SV_POTION_DETONATIONS:
-        dt = GF_SHARDS;
+        dt = AttributeType::SHARDS;
         dam = damroll(25, 25);
         angry = true;
         break;
     case SV_POTION_DEATH:
-        dt = GF_DEATH_RAY;
+        dt = AttributeType::DEATH_RAY;
         dam = k_ptr->level * 10;
         angry = true;
         radius = 1;
         break;
     case SV_POTION_SPEED:
-        dt = GF_OLD_SPEED;
+        dt = AttributeType::OLD_SPEED;
         break;
     case SV_POTION_CURE_LIGHT:
-        dt = GF_OLD_HEAL;
+        dt = AttributeType::OLD_HEAL;
         dam = damroll(2, 3);
         break;
     case SV_POTION_CURE_SERIOUS:
-        dt = GF_OLD_HEAL;
+        dt = AttributeType::OLD_HEAL;
         dam = damroll(4, 3);
         break;
     case SV_POTION_CURE_CRITICAL:
     case SV_POTION_CURING:
-        dt = GF_OLD_HEAL;
+        dt = AttributeType::OLD_HEAL;
         dam = damroll(6, 3);
         break;
     case SV_POTION_HEALING:
-        dt = GF_OLD_HEAL;
+        dt = AttributeType::OLD_HEAL;
         dam = damroll(10, 10);
         break;
     case SV_POTION_RESTORE_EXP:
-        dt = GF_STAR_HEAL;
+        dt = AttributeType::STAR_HEAL;
         dam = 0;
         radius = 1;
         break;
     case SV_POTION_LIFE:
-        dt = GF_STAR_HEAL;
+        dt = AttributeType::STAR_HEAL;
         dam = damroll(50, 50);
         radius = 1;
         break;
     case SV_POTION_STAR_HEALING:
-        dt = GF_OLD_HEAL;
+        dt = AttributeType::OLD_HEAL;
         dam = damroll(50, 50);
         radius = 1;
         break;
     case SV_POTION_RESTORE_MANA:
-        dt = GF_MANA;
+        dt = AttributeType::MANA;
         dam = damroll(10, 10);
         radius = 1;
         break;
     case SV_POTION_POLY_SELF:
-        dt = GF_NEXUS;
+        dt = AttributeType::NEXUS;
         dam = damroll(20, 20);
         radius = 1;
         break;
@@ -393,7 +393,7 @@ bool potion_smash_effect(player_type *player_ptr, MONSTER_IDX who, POSITION y, P
  * @details
  * Note that artifacts never break, see the "drop_near()" function.
  */
-PERCENTAGE breakage_chance(player_type *player_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
+PERCENTAGE breakage_chance(PlayerType *player_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
 {
     /* Examine the snipe type */
     if (snipe_type) {

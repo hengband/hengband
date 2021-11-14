@@ -24,7 +24,7 @@
  * @param i1 配列移動元添字
  * @param i2 配列移動先添字
  */
-static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTER_IDX i2)
+static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER_IDX i2)
 {
     if (i1 == i2)
         return;
@@ -92,7 +92,7 @@ static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTE
  * After "compacting" (if needed), we "reorder" the monsters into a more
  * compact order, and we reset the allocation info, and the "live" array.
  */
-void compact_monsters(player_type *player_ptr, int size)
+void compact_monsters(PlayerType *player_ptr, int size)
 {
     if (size)
         msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));

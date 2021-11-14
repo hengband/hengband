@@ -25,7 +25,7 @@
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_norm(player_type *player_ptr, int chance, ARMOUR_CLASS ac, bool visible)
+bool test_hit_norm(PlayerType *player_ptr, int chance, ARMOUR_CLASS ac, bool visible)
 {
     if (!visible)
         chance = (chance + 1) / 2;
@@ -39,7 +39,7 @@ bool test_hit_norm(player_type *player_ptr, int chance, ARMOUR_CLASS ac, bool vi
  * @param ac 敵AC
  * @return 命中確率
  */
-PERCENTAGE hit_chance(player_type *player_ptr, int reli, ARMOUR_CLASS ac)
+PERCENTAGE hit_chance(PlayerType *player_ptr, int reli, ARMOUR_CLASS ac)
 {
     PERCENTAGE chance = 5, chance_left = 90;
     if (reli <= 0)
@@ -63,7 +63,7 @@ PERCENTAGE hit_chance(player_type *player_ptr, int reli, ARMOUR_CLASS ac)
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
  */
-bool check_hit_from_monster_to_player(player_type *player_ptr, int power, DEPTH level, int stun)
+bool check_hit_from_monster_to_player(PlayerType *player_ptr, int power, DEPTH level, int stun)
 {
     int k = randint0(100);
     if (stun && one_in_(2))
@@ -109,7 +109,7 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param chance 基本命中値
  */
-static bool decide_attack_hit(player_type *player_ptr, player_attack_type *pa_ptr, int chance)
+static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
     bool success_hit = false;
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
@@ -142,7 +142,7 @@ static bool decide_attack_hit(player_type *player_ptr, player_attack_type *pa_pt
  * @param chance 基本命中値
  * @return 当たればTRUE、外れればFALSE
  */
-bool process_attack_hit(player_type *player_ptr, player_attack_type *pa_ptr, int chance)
+bool process_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if (decide_attack_hit(player_ptr, pa_ptr, chance))

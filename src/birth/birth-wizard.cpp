@@ -51,7 +51,7 @@
  */
 #define AUTOROLLER_STEP 54321L
 
-static void display_initial_birth_message(player_type *player_ptr)
+static void display_initial_birth_message(PlayerType *player_ptr)
 {
     term_clear();
     put_str(_("名前  :", "Name  :"), 1, 26);
@@ -69,7 +69,7 @@ static void display_initial_birth_message(player_type *player_ptr)
  * @param c 入力したコマンド
  * @details 他の関数名と被りそうだったので少し眺め
  */
-static void display_help_on_sex_select(player_type *player_ptr, char c)
+static void display_help_on_sex_select(PlayerType *player_ptr, char c)
 {
     if (c == '?')
         do_cmd_help(player_ptr);
@@ -87,7 +87,7 @@ static void display_help_on_sex_select(player_type *player_ptr, char c)
  * @buf 表示用バッファ
  * @return やり直すならFALSE、それ以外はTRUE
  */
-static bool get_player_sex(player_type *player_ptr, char *buf)
+static bool get_player_sex(PlayerType *player_ptr, char *buf)
 {
     const char p2 = ')';
     char cur[80];
@@ -158,7 +158,7 @@ static bool get_player_sex(player_type *player_ptr, char *buf)
     return true;
 }
 
-static bool let_player_select_race(player_type *player_ptr)
+static bool let_player_select_race(PlayerType *player_ptr)
 {
     clear_from(10);
     player_ptr->prace = PlayerRaceType::HUMAN;
@@ -188,7 +188,7 @@ static bool let_player_select_race(player_type *player_ptr)
     return true;
 }
 
-static bool let_player_select_class(player_type *player_ptr)
+static bool let_player_select_class(PlayerType *player_ptr)
 {
     clear_from(10);
     player_ptr->pclass = PlayerClassType::WARRIOR;
@@ -218,7 +218,7 @@ static bool let_player_select_class(player_type *player_ptr)
     return true;
 }
 
-static bool let_player_select_personality(player_type *player_ptr)
+static bool let_player_select_personality(PlayerType *player_ptr)
 {
     player_ptr->ppersonality = PERSONALITY_ORDINARY;
     while (true) {
@@ -248,7 +248,7 @@ static bool let_player_select_personality(player_type *player_ptr)
     return true;
 }
 
-static bool let_player_build_character(player_type *player_ptr)
+static bool let_player_build_character(PlayerType *player_ptr)
 {
     char buf[80];
     if (!get_player_sex(player_ptr, buf))
@@ -271,7 +271,7 @@ static bool let_player_build_character(player_type *player_ptr)
     return true;
 }
 
-static void display_initial_options(player_type *player_ptr)
+static void display_initial_options(PlayerType *player_ptr)
 {
     uint16_t expfact = get_expfact(player_ptr) - 100;
     int16_t adj[A_MAX];
@@ -348,7 +348,7 @@ static void auto_roller_count(void)
     auto_upper_round++;
 }
 
-static bool decide_initial_stat(player_type *player_ptr)
+static bool decide_initial_stat(PlayerType *player_ptr)
 {
     if (!autoroller)
         return true;
@@ -364,7 +364,7 @@ static bool decide_initial_stat(player_type *player_ptr)
     return accept;
 }
 
-static bool decide_body_spec(player_type *player_ptr, chara_limit_type chara_limit, bool *accept)
+static bool decide_body_spec(PlayerType *player_ptr, chara_limit_type chara_limit, bool *accept)
 {
     if (!*accept)
         return false;
@@ -386,7 +386,7 @@ static bool decide_body_spec(player_type *player_ptr, chara_limit_type chara_lim
     return *accept;
 }
 
-static bool display_auto_roller_count(player_type *player_ptr, const int col)
+static bool display_auto_roller_count(PlayerType *player_ptr, const int col)
 {
     if ((auto_round % AUTOROLLER_STEP) != 0)
         return false;
@@ -407,7 +407,7 @@ static bool display_auto_roller_count(player_type *player_ptr, const int col)
     return false;
 }
 
-static void exe_auto_roller(player_type *player_ptr, chara_limit_type chara_limit, const int col)
+static void exe_auto_roller(PlayerType *player_ptr, chara_limit_type chara_limit, const int col)
 {
     while (autoroller || autochara) {
         get_stats(player_ptr);
@@ -422,7 +422,7 @@ static void exe_auto_roller(player_type *player_ptr, chara_limit_type chara_limi
     }
 }
 
-static bool display_auto_roller_result(player_type *player_ptr, bool prev, char *c)
+static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *c)
 {
     BIT_FLAGS mode = 0;
     while (true) {
@@ -482,7 +482,7 @@ static bool display_auto_roller_result(player_type *player_ptr, bool prev, char 
  * @param chara_limit 社会的地位の要求水準
  * @details 2つめの結果以降は、'p'キーで1つ前のロール結果に戻せる。
  */
-static bool display_auto_roller(player_type *player_ptr, chara_limit_type chara_limit)
+static bool display_auto_roller(PlayerType *player_ptr, chara_limit_type chara_limit)
 {
     bool prev = false;
 
@@ -529,7 +529,7 @@ static bool display_auto_roller(player_type *player_ptr, chara_limit_type chara_
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details ついでにステータス限界もここで決めている
  */
-static void set_name_history(player_type *player_ptr)
+static void set_name_history(PlayerType *player_ptr)
 {
     clear_from(23);
     get_name(player_ptr);
@@ -547,7 +547,7 @@ static void set_name_history(player_type *player_ptr)
  * from continuously rolling up characters, which can be VERY
  * expensive CPU wise.  And it cuts down on player stupidity.
  */
-bool player_birth_wizard(player_type *player_ptr)
+bool player_birth_wizard(PlayerType *player_ptr)
 {
     display_initial_birth_message(player_ptr);
     const char p2 = ')';

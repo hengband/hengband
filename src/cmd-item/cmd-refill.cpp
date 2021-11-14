@@ -26,7 +26,7 @@
  * @brief ランタンに燃料を加えるコマンドのメインルーチン
  * Refill the players lamp (from the pack or floor)
  */
-static void do_cmd_refill_lamp(player_type *player_ptr)
+static void do_cmd_refill_lamp(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
@@ -63,7 +63,7 @@ static void do_cmd_refill_lamp(player_type *player_ptr)
  * @brief 松明を束ねるコマンドのメインルーチン
  * Refuel the players torch (from the pack or floor)
  */
-static void do_cmd_refill_torch(player_type *player_ptr)
+static void do_cmd_refill_torch(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
@@ -101,12 +101,12 @@ static void do_cmd_refill_torch(player_type *player_ptr)
  * @brief 燃料を補充するコマンドのメインルーチン
  * Refill the players lamp, or restock his torches
  */
-void do_cmd_refill(player_type *player_ptr)
+void do_cmd_refill(PlayerType *player_ptr)
 {
     object_type *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_LITE];
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (o_ptr->tval != ItemKindType::LITE)
         msg_print(_("光源を装備していない。", "You are not wielding a light."));

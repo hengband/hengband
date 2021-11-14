@@ -17,7 +17,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  */
-void inven_item_charges(player_type *player_ptr, INVENTORY_IDX item)
+void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &player_ptr->inventory_list[item];
     if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
@@ -48,7 +48,7 @@ void inven_item_charges(player_type *player_ptr, INVENTORY_IDX item)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  */
-void inven_item_describe(player_type *player_ptr, INVENTORY_IDX item)
+void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &player_ptr->inventory_list[item];
     GAME_TEXT o_name[MAX_NLEN];
@@ -72,7 +72,7 @@ void inven_item_describe(player_type *player_ptr, INVENTORY_IDX item)
  * @details
  * Include list of usable spells for readible books
  */
-void display_koff(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
+void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
     object_type forge;
     object_type *q_ptr;

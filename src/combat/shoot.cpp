@@ -53,7 +53,7 @@
 #include "player/player-personality-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -70,6 +70,73 @@
 #include "world/world-object.h"
 
 /*!
+ * @brief 矢弾の属性を定義する
+ * @param bow_ptr 弓のオブジェクト構造体参照ポインタ
+ * @param arrow_ptr 矢弾のオブジェクト構造体参照ポインタ
+ * @return スナイパーの射撃属性、弓矢の属性を考慮する。デフォルトはGF_PLAYER_SHOOT。
+ */
+AttributeFlags shot_attribute(PlayerType *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, SPELL_IDX snipe_type)
+{
+    AttributeFlags attribute_flags{};
+    attribute_flags.set(AttributeType::PLAYER_SHOOT);
+
+    TrFlags flags{};
+    auto arrow_flags = object_flags(arrow_ptr);
+    auto bow_flags = object_flags(bow_ptr);
+
+    flags = bow_flags | arrow_flags;
+
+    static const struct snipe_convert_table_t {
+        SPELL_IDX snipe_type;
+        AttributeType attribute;
+    } snipe_convert_table[] = {
+        { SP_LITE, AttributeType::LITE },
+        { SP_FIRE, AttributeType::FIRE },
+        { SP_COLD, AttributeType::COLD },
+        { SP_ELEC, AttributeType::ELEC },
+        { SP_KILL_WALL, AttributeType::KILL_WALL },
+        { SP_EVILNESS, AttributeType::HELL_FIRE },
+        { SP_HOLYNESS, AttributeType::HOLY_FIRE },
+        { SP_FINAL, AttributeType::MANA },
+    };
+
+    static const struct brand_convert_table_t {
+        tr_type brand_type;
+        AttributeType attribute;
+    } brand_convert_table[] = {
+        { TR_BRAND_ACID, AttributeType::ACID },
+        { TR_BRAND_FIRE, AttributeType::FIRE },
+        { TR_BRAND_ELEC, AttributeType::ELEC },
+        { TR_BRAND_COLD, AttributeType::COLD },
+        { TR_BRAND_POIS, AttributeType::POIS },
+        { TR_SLAY_GOOD, AttributeType::HELL_FIRE },
+        { TR_KILL_GOOD, AttributeType::HELL_FIRE },
+        { TR_SLAY_EVIL, AttributeType::HOLY_FIRE },
+        { TR_KILL_EVIL, AttributeType::HOLY_FIRE },
+    };
+
+    for (size_t i = 0; i < sizeof(snipe_convert_table) / sizeof(snipe_convert_table[0]); ++i) {
+        const struct snipe_convert_table_t *p = &snipe_convert_table[i];
+
+        if (snipe_type == p->snipe_type)
+            attribute_flags.set(p->attribute);
+    }
+
+    for (size_t i = 0; i < sizeof(brand_convert_table) / sizeof(brand_convert_table[0]); ++i) {
+        const struct brand_convert_table_t *p = &brand_convert_table[i];
+
+        if (flags.has(p->brand_type))
+            attribute_flags.set(p->attribute);
+    }
+
+    if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
+        attribute_flags.set(AttributeType::MANA);
+    }
+
+    return attribute_flags;
+}
+
+/*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /
  * Determines the odds of an object breaking when thrown at a monster
  * @param bow_ptr 弓のオブジェクト構造体参照ポインタ
@@ -79,7 +146,7 @@
  * @return スレイ倍率をかけたダメージ量
  */
 static MULTIPLY calc_shot_damage_with_slay(
-    player_type *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
+    PlayerType *player_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
 {
     MULTIPLY mult = 10;
 
@@ -380,7 +447,7 @@ static MULTIPLY calc_shot_damage_with_slay(
  * Note that Bows of "Extra Shots" give an extra shot.
  * </pre>
  */
-void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
+void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 {
     DIRECTION dir;
     int i;
@@ -392,8 +459,10 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
 
     object_type forge;
     object_type *q_ptr;
-
     object_type *o_ptr;
+
+    AttributeFlags attribute_flags{};
+    attribute_flags.set(AttributeType::PLAYER_SHOOT);
 
     bool hit_body = false;
 
@@ -543,7 +612,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
-                if (g_ptr->cave_has_flag(FF::HURT_ROCK) && !g_ptr->m_idx) {
+                if (g_ptr->cave_has_flag(FloorFeatureType::HURT_ROCK) && !g_ptr->m_idx) {
                     if (any_bits(g_ptr->info, (CAVE_MARK)))
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     /* Forget the wall */
@@ -551,7 +620,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                     set_bits(player_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
                     /* Destroy the wall */
-                    cave_alter_feat(player_ptr, ny, nx, FF::HURT_ROCK);
+                    cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::HURT_ROCK);
 
                     hit_body = true;
                     break;
@@ -559,7 +628,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FF::PROJECT) && !player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT) && !player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
                 break;
 
             /* Advance the distance */
@@ -598,7 +667,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
 
             /* Sniper */
             if (snipe_type == SP_KILL_TRAP) {
-                project(player_ptr, 0, 0, ny, nx, 0, GF_KILL_TRAP, (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM));
+                project(player_ptr, 0, 0, ny, nx, 0, AttributeType::KILL_TRAP, (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM));
             }
 
             /* Sniper */
@@ -691,6 +760,8 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                             base_dam = tdam;
                         }
                     } else {
+
+                        attribute_flags = shot_attribute(player_ptr, j_ptr, q_ptr, snipe_type);
                         /* Apply special damage */
                         tdam = calc_shot_damage_with_slay(player_ptr, j_ptr, q_ptr, tdam, m_ptr, snipe_type);
                         tdam = critical_shot(player_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
@@ -712,7 +783,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                         uint16_t flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
-                        project(player_ptr, 0, ((sniper_concent + 1) / 2 + 1), ny, nx, base_dam, GF_MISSILE, flg);
+                        project(player_ptr, 0, ((sniper_concent + 1) / 2 + 1), ny, nx, base_dam, AttributeType::MISSILE, flg);
                         break;
                     }
 
@@ -724,7 +795,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
                     }
 
                     /* Hit the monster, check for death */
-                    MonsterDamageProcessor mdp(player_ptr, c_mon_ptr->m_idx, tdam, &fear);
+                    MonsterDamageProcessor mdp(player_ptr, c_mon_ptr->m_idx, tdam, &fear, attribute_flags);
                     if (mdp.mon_take_hit(extract_note_dies(real_r_idx(m_ptr)))) {
                         /* Dead monster */
                     }
@@ -848,7 +919,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
 
             /* Carry object */
             m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, o_idx);
-        } else if (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT)) {
+        } else if (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(player_ptr, q_ptr, j, y, x);
         } else {
@@ -873,7 +944,7 @@ void exe_fire(player_type *player_ptr, INVENTORY_IDX item, object_type *j_ptr, S
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_fire(player_type *player_ptr, int chance, monster_type *m_ptr, int vis, char *o_name)
+bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int vis, char *o_name)
 {
     int k;
     ARMOUR_CLASS ac;
@@ -935,7 +1006,7 @@ bool test_hit_fire(player_type *player_ptr, int chance, monster_type *m_ptr, int
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     int i, k;
     object_type *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
@@ -1086,7 +1157,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
  * @return ダメージ期待値
  * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
  */
-HIT_POINT calc_crit_ratio_shot(player_type *player_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
+HIT_POINT calc_crit_ratio_shot(PlayerType *player_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
     HIT_POINT i;
     object_type *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
@@ -1124,7 +1195,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *player_ptr, HIT_POINT plus_ammo, HIT
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit_shot(player_type *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     uint32_t num;
     int i, k, crit;
@@ -1167,7 +1238,7 @@ HIT_POINT calc_expect_crit_shot(player_type *player_ptr, WEIGHT weight, int plus
  * @param impact 強撃かどうか
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(player_type *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, bool dokubari, bool impact)
+HIT_POINT calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, bool dokubari, bool impact)
 {
     if (dokubari)
         return dam;

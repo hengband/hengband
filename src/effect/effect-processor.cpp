@@ -1,5 +1,6 @@
 ﻿#include "effect/effect-processor.h"
 #include "core/stuff-handler.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
@@ -26,7 +27,6 @@
 #include "pet/pet-fall-off.h"
 #include "player/player-status.h"
 #include "spell/range-calc.h"
-#include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -45,7 +45,7 @@
  * @param cury 現在の鏡のy座標
  * @param curx 現在の鏡のx座標
  */
-static void next_mirror(player_type *player_ptr, POSITION *next_y, POSITION *next_x, POSITION cury, POSITION curx)
+static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next_x, POSITION cury, POSITION curx)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
@@ -87,8 +87,8 @@ static void next_mirror(player_type *player_ptr, POSITION *next_y, POSITION *nex
  * @todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
-ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
-    BIT_FLAGS flag)
+ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam,
+    const AttributeType typ, BIT_FLAGS flag)
 {
     int dist;
     POSITION y1;
@@ -169,15 +169,17 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
     }
 
     switch (typ) {
-    case GF_LITE:
-    case GF_LITE_WEAK:
+    case AttributeType::LITE:
+    case AttributeType::LITE_WEAK:
         if (breath || (flag & PROJECT_BEAM))
             flag |= (PROJECT_LOS);
         break;
-    case GF_DISINTEGRATE:
+    case AttributeType::DISINTEGRATE:
         flag |= (PROJECT_GRID);
         if (breath || (flag & PROJECT_BEAM))
             flag |= (PROJECT_DISI);
+        break;
+    default:
         break;
     }
 
@@ -185,7 +187,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
     path_n = projection_path(player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, flag);
     handle_stuff(player_ptr);
 
-    if (typ == GF_SEEKER) {
+    if (typ == AttributeType::SEEKER) {
         int j;
         int last_i = 0;
         project_m_n = 0;
@@ -228,7 +230,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                 }
             }
 
-            if (affect_item(player_ptr, 0, 0, y, x, dam, GF_SEEKER))
+            if (affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER))
                 res.notice = true;
             if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                 continue;
@@ -241,7 +243,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             for (j = last_i; j <= i; j++) {
                 y = get_grid_y(path_g[j]);
                 x = get_grid_x(path_g[j]);
-                if (affect_monster(player_ptr, 0, 0, y, x, dam, GF_SEEKER, flag, true))
+                if (affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER, flag, true))
                     res.notice = true;
                 if (!who && (project_m_n == 1) && !jump && (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
                     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -252,7 +254,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                     }
                 }
 
-                (void)affect_feature(player_ptr, 0, 0, y, x, dam, GF_SEEKER);
+                (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER);
             }
 
             last_i = i;
@@ -262,7 +264,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             POSITION py, px;
             py = get_grid_y(path_g[i]);
             px = get_grid_x(path_g[i]);
-            if (affect_monster(player_ptr, 0, 0, py, px, dam, GF_SEEKER, flag, true))
+            if (affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SEEKER, flag, true))
                 res.notice = true;
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
@@ -276,11 +278,11 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                 }
             }
 
-            (void)affect_feature(player_ptr, 0, 0, py, px, dam, GF_SEEKER);
+            (void)affect_feature(player_ptr, 0, 0, py, px, dam, AttributeType::SEEKER);
         }
 
         return res;
-    } else if (typ == GF_SUPER_RAY) {
+    } else if (typ == AttributeType::SUPER_RAY) {
         int j;
         int second_step = 0;
         project_m_n = 0;
@@ -325,9 +327,9 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                 }
             }
 
-            if (affect_item(player_ptr, 0, 0, y, x, dam, GF_SUPER_RAY))
+            if (affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::SUPER_RAY))
                 res.notice = true;
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
                 if (second_step)
                     continue;
                 break;
@@ -340,25 +342,21 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                 for (j = 0; j <= i; j++) {
                     y = get_grid_y(path_g[j]);
                     x = get_grid_x(path_g[j]);
-                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, GF_SUPER_RAY);
+                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::SUPER_RAY);
                 }
 
                 path_n = i;
                 second_step = i + 1;
                 path_n += projection_path(
                     player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y - 1, x - 1, flag);
-                path_n
-                    += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y - 1, x, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y - 1, x, flag);
                 path_n += projection_path(
                     player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y - 1, x + 1, flag);
-                path_n
-                    += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y, x - 1, flag);
-                path_n
-                    += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y, x + 1, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y, x - 1, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y, x + 1, flag);
                 path_n += projection_path(
                     player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y + 1, x - 1, flag);
-                path_n
-                    += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y + 1, x, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y + 1, x, flag);
                 path_n += projection_path(
                     player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y + 1, x + 1, flag);
             }
@@ -367,7 +365,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
         for (int i = 0; i < path_n; i++) {
             POSITION py = get_grid_y(path_g[i]);
             POSITION px = get_grid_x(path_g[i]);
-            (void)affect_monster(player_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flag, true);
+            (void)affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY, flag, true);
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
                     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -380,7 +378,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                 }
             }
 
-            (void)affect_feature(player_ptr, 0, 0, py, px, dam, GF_SUPER_RAY);
+            (void)affect_feature(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY);
         }
 
         return res;
@@ -399,7 +397,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             if (!cave_los_bold(player_ptr->current_floor_ptr, ny, nx) && (rad > 0))
                 break;
         } else {
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FF::PROJECT) && (rad > 0))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT) && (rad > 0))
                 break;
         }
 
@@ -485,12 +483,12 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
                             continue;
 
                         switch (typ) {
-                        case GF_LITE:
-                        case GF_LITE_WEAK:
+                        case AttributeType::LITE:
+                        case AttributeType::LITE_WEAK:
                             if (!los(player_ptr, by, bx, y, x))
                                 continue;
                             break;
-                        case GF_DISINTEGRATE:
+                        case AttributeType::DISINTEGRATE:
                             if (!in_disintegration_range(player_ptr->current_floor_ptr, by, bx, y, x))
                                 continue;
                             break;
@@ -612,9 +610,7 @@ ProjectResult project(player_type *player_ptr, const MONSTER_IDX who, POSITION r
             if (grids <= 1) {
                 monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
                 monster_race *ref_ptr = &r_info[m_ptr->r_idx];
-                if ((flag & PROJECT_REFLECTABLE) && player_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING)
-                    && ((player_ptr->current_floor_ptr->grid_array[y][x].m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || dist_hack > 1)
-                    && !one_in_(10)) {
+                if ((flag & PROJECT_REFLECTABLE) && player_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((player_ptr->current_floor_ptr->grid_array[y][x].m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || dist_hack > 1) && !one_in_(10)) {
                     POSITION t_y, t_x;
                     int max_attempts = 10;
                     do {

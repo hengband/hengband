@@ -66,7 +66,7 @@ FixItemTesterSetter::~FixItemTesterSetter()
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void fix_inventory(player_type *player_ptr)
+void fix_inventory(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -126,7 +126,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     term_addstr(-1, TERM_WHITE, " ");
     term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
 
-    if (r_ptr->r_tkills && m_ptr->mflag2.has_not(MFLAG2::KAGE)) {
+    if (r_ptr->r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
         sprintf(buf, " %2d", (int)r_ptr->level);
     } else {
         strcpy(buf, " ??");
@@ -198,7 +198,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
  * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void fix_monster_list(player_type *player_ptr)
+void fix_monster_list(PlayerType *player_ptr)
 {
     static std::vector<MONSTER_IDX> monster_list;
     std::once_flag once;
@@ -231,7 +231,7 @@ void fix_monster_list(player_type *player_ptr)
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
  */
-static void display_equipment(player_type *player_ptr, const ItemTester &item_tester)
+static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tester)
 {
     if (!player_ptr || !player_ptr->inventory_list)
         return;
@@ -304,7 +304,7 @@ static void display_equipment(player_type *player_ptr, const ItemTester &item_te
  * Hack -- display equipment in sub-windows
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void fix_equip(player_type *player_ptr)
+void fix_equip(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -325,7 +325,7 @@ void fix_equip(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * Hack -- display character in sub-windows
  */
-void fix_player(player_type *player_ptr)
+void fix_player(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -381,7 +381,7 @@ void fix_message(void)
  * @details
  * Note that the "player" symbol does NOT appear on the map.
  */
-void fix_overhead(player_type *player_ptr)
+void fix_overhead(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -408,7 +408,7 @@ void fix_overhead(player_type *player_ptr)
  * @brief 自分の周辺の地形をTermに表示する
  * @param プレイヤー情報への参照ポインタ
  */
-static void display_dungeon(player_type *player_ptr)
+static void display_dungeon(PlayerType *player_ptr)
 {
     TERM_COLOR ta = 0;
     SYMBOL_CODE tc = '\0';
@@ -445,7 +445,7 @@ static void display_dungeon(player_type *player_ptr)
  * @brief 自分の周辺のダンジョンの地形をサブウィンドウに表示する / display dungeon view around player in a sub window
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void fix_dungeon(player_type *player_ptr)
+void fix_dungeon(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -467,7 +467,7 @@ void fix_dungeon(player_type *player_ptr)
  * Hack -- display dungeon view in sub-windows
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void fix_monster(player_type *player_ptr)
+void fix_monster(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -491,7 +491,7 @@ void fix_monster(player_type *player_ptr)
  * Hack -- display object recall in sub-windows
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void fix_object(player_type *player_ptr)
+void fix_object(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -536,7 +536,7 @@ static const monster_type *monster_on_floor_items(floor_type *floor_ptr, const g
  * @param y 参照する座標グリッドのy座標
  * @param x 参照する座標グリッドのx座標
  */
-static void display_floor_item_list(player_type *player_ptr, const int y, const int x)
+static void display_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
     // Term の行数を取得。
     TERM_LEN term_h;
@@ -569,9 +569,9 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         concptr fn = f_ptr->name.c_str();
         char buf[512];
 
-        if (f_ptr->flags.has(FF::STORE) || (f_ptr->flags.has(FF::BLDG) && !floor_ptr->inside_arena))
+        if (f_ptr->flags.has(FloorFeatureType::STORE) || (f_ptr->flags.has(FloorFeatureType::BLDG) && !floor_ptr->inside_arena))
             sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
-        else if (f_ptr->flags.has(FF::WALL))
+        else if (f_ptr->flags.has(FloorFeatureType::WALL))
             sprintf(buf, _("%sの中", "in %s"), fn);
         else
             sprintf(buf, _("%s", "on %s"), fn);
@@ -612,7 +612,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
 /*!
  * @brief (y,x) のアイテム一覧をサブウィンドウに表示する / display item at (y,x) in sub-windows
  */
-void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
+void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
     for (int j = 0; j < 8; j++) {
         if (!angband_term[j])
@@ -636,7 +636,7 @@ void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
  * @brief サブウィンドウに所持品、装備品リストの表示を行う /
  * Flip "inven" and "equip" in any sub-windows
  */
-void toggle_inventory_equipment(player_type *player_ptr)
+void toggle_inventory_equipment(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         if (!angband_term[j])

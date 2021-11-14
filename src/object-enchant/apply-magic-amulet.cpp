@@ -23,7 +23,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-AmuletEnchanter::AmuletEnchanter(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power)
+AmuletEnchanter::AmuletEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , level(level)
@@ -75,7 +75,7 @@ void AmuletEnchanter::enchant()
         this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            this->o_ptr->curse_flags.set(TRC::CURSED);
+            this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
             this->o_ptr->pval = 0 - this->o_ptr->pval;
         }
 
@@ -88,7 +88,7 @@ void AmuletEnchanter::enchant()
 
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            this->o_ptr->curse_flags.set(TRC::CURSED);
+            this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
             this->o_ptr->pval = 0 - this->o_ptr->pval;
         }
 
@@ -96,7 +96,7 @@ void AmuletEnchanter::enchant()
     case SV_AMULET_NO_MAGIC:
     case SV_AMULET_NO_TELE:
         if (this->power < 0) {
-            this->o_ptr->curse_flags.set(TRC::CURSED);
+            this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
         }
 
         break;
@@ -118,7 +118,7 @@ void AmuletEnchanter::enchant()
         }
 
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        this->o_ptr->curse_flags.set(TRC::CURSED);
+        this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
         this->o_ptr->pval = 0 - (this->o_ptr->pval);
         break;
     case SV_AMULET_THE_MAGI:
@@ -128,7 +128,7 @@ void AmuletEnchanter::enchant()
         break;
     case SV_AMULET_DOOM:
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        this->o_ptr->curse_flags.set(TRC::CURSED);
+        this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
         this->o_ptr->pval = 0 - (randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level));
         this->o_ptr->to_a = 0 - (randint1(5) + (ARMOUR_CLASS)m_bonus(5, this->level));
         if (this->power > 0) {
@@ -143,7 +143,7 @@ void AmuletEnchanter::enchant()
         }
 
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        this->o_ptr->curse_flags.set(TRC::CURSED);
+        this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
         this->o_ptr->pval = 0 - this->o_ptr->pval;
         break;
     }
@@ -374,5 +374,5 @@ void AmuletEnchanter::give_cursed()
     }
 
     set_bits(this->o_ptr->ident, IDENT_BROKEN);
-    this->o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
+    this->o_ptr->curse_flags.set({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE });
 }

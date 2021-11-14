@@ -16,7 +16,7 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-specific-bolt.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
@@ -32,15 +32,15 @@
  * @brief 暗黒領域魔法の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
  */
-concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESCRIPTION;
-    bool info = mode == SPELL_INFO;
-    bool cast = mode == SPELL_CAST;
+    bool name = mode == SpellProcessType::NAME;
+    bool desc = mode == SpellProcessType::DESCRIPTION;
+    bool info = mode == SpellProcessType::INFO;
+    bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -91,20 +91,20 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                  * travel to the monster.
                  */
 
-                fire_ball(player_ptr, GF_HELL_FIRE, dir, damroll(dice, sides), rad);
+                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, damroll(dice, sides), rad);
 
                 if (one_in_(5)) {
                     /* Special effect first */
                     int effect = randint1(1000);
 
                     if (effect == 666)
-                        fire_ball_hide(player_ptr, GF_DEATH_RAY, dir, plev * 200, 0);
+                        fire_ball_hide(player_ptr, AttributeType::DEATH_RAY, dir, plev * 200, 0);
                     else if (effect < 500)
-                        fire_ball_hide(player_ptr, GF_TURN_ALL, dir, plev, 0);
+                        fire_ball_hide(player_ptr, AttributeType::TURN_ALL, dir, plev, 0);
                     else if (effect < 800)
-                        fire_ball_hide(player_ptr, GF_OLD_CONF, dir, plev, 0);
+                        fire_ball_hide(player_ptr, AttributeType::OLD_CONF, dir, plev, 0);
                     else
-                        fire_ball_hide(player_ptr, GF_STUN, dir, plev, 0);
+                        fire_ball_hide(player_ptr, AttributeType::STUN, dir, plev, 0);
                 }
             }
         }
@@ -145,7 +145,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_POIS, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::POIS, dir, dam, rad);
             }
         }
         break;
@@ -257,7 +257,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
             }
         }
         break;
@@ -279,7 +279,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_NETHER, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, damroll(dice, sides));
             }
         }
         break;
@@ -298,7 +298,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(0, 0, dam / 2);
 
             if (cast) {
-                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM);
+                project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, AttributeType::POIS, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;
@@ -319,7 +319,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball_hide(player_ptr, GF_GENOCIDE, dir, power, 0);
+                fire_ball_hide(player_ptr, AttributeType::GENOCIDE, dir, power, 0);
             }
         }
         break;
@@ -471,7 +471,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_DARK, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::DARK, dir, damroll(dice, sides));
             }
         }
         break;
@@ -574,7 +574,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_DARK, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::DARK, dir, dam, rad);
             }
         }
         break;
@@ -692,7 +692,7 @@ concptr do_death_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_HELL_FIRE, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, dam, rad);
                 take_hit(player_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"));
             }
         }

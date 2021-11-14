@@ -20,7 +20,7 @@
  * @param m_ptr モンスターの参照ポインタ
  * @param mode 呼称オプション
  */
-void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
+void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
     monster_race *r_ptr;
     r_ptr = &r_info[m_ptr->ap_r_idx];
@@ -173,7 +173,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
 #endif
     } else {
         if ((r_ptr->flags1 & RF1_UNIQUE) && !(player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU))) {
-            if (m_ptr->mflag2.has(MFLAG2::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
+            if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
 #ifdef JP
                 char *t;
                 char buf[128];
@@ -221,7 +221,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
         strcat(desc, _("(乗馬中)", "(riding)"));
     }
 
-    if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
+    if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         if (r_ptr->flags1 & RF1_UNIQUE) {
             strcat(desc, _("(カメレオンの王)", "(Chameleon Lord)"));
         } else {
@@ -247,7 +247,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
+void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

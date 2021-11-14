@@ -59,7 +59,7 @@
  * @brief 闘技場用のアリーナ地形を作成する / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *start_x)
+static void build_arena(PlayerType *player_ptr, POSITION *start_y, POSITION *start_x)
 {
     POSITION yval = SCREEN_HGT / 2;
     POSITION xval = SCREEN_WID / 2;
@@ -110,7 +110,7 @@ static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *st
 /*!
  * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
  */
-static void generate_challenge_arena(player_type *player_ptr)
+static void generate_challenge_arena(PlayerType *player_ptr)
 {
     POSITION qy = 0;
     POSITION qx = 0;
@@ -143,7 +143,7 @@ static void generate_challenge_arena(player_type *player_ptr)
  * @brief モンスター闘技場のフロア生成 / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
+static void build_battle(PlayerType *player_ptr, POSITION *y, POSITION *x)
 {
     POSITION yval = SCREEN_HGT / 2;
     POSITION xval = SCREEN_WID / 2;
@@ -202,7 +202,7 @@ static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 /*!
  * @brief モンスター闘技場への導入処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
  */
-static void generate_gambling_arena(player_type *player_ptr)
+static void generate_gambling_arena(PlayerType *player_ptr)
 {
     POSITION y, x;
     POSITION qy = 0;
@@ -230,7 +230,7 @@ static void generate_gambling_arena(player_type *player_ptr)
         if (!monster_is_valid(m_ptr))
             continue;
 
-        m_ptr->mflag2.set({ MFLAG2::MARK, MFLAG2::SHOW });
+        m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
         update_monster(player_ptr, i, false);
     }
 }
@@ -239,7 +239,7 @@ static void generate_gambling_arena(player_type *player_ptr)
  * @brief 固定マップクエストのフロア生成 / Generate a quest level
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void generate_fixed_floor(player_type *player_ptr)
+static void generate_fixed_floor(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 0; y < floor_ptr->height; y++)
@@ -264,19 +264,19 @@ static void generate_fixed_floor(player_type *player_ptr)
  * @param concptr
  * @return フロアの生成に成功したらTRUE
  */
-static bool level_gen(player_type *player_ptr, concptr *why)
+static bool level_gen(PlayerType *player_ptr, concptr *why)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
-    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || d_info[d_idx].flags.has(DF::BEGINNER)
-            || d_info[d_idx].flags.has(DF::SMALLEST))
-        && d_info[d_idx].flags.has_not(DF::BIG)) {
+    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)
+            || d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST))
+        && d_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
         int level_height;
         int level_width;
-        if (d_info[d_idx].flags.has(DF::SMALLEST)) {
+        if (d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) {
             level_height = 1;
             level_width = 1;
-        } else if (d_info[d_idx].flags.has(DF::BEGINNER)) {
+        } else if (d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)) {
             level_height = 2;
             level_width = 2;
         } else {
@@ -328,7 +328,7 @@ void wipe_generate_random_floor_flags(floor_type *floor_ptr)
  * @brief フロアの全情報を初期化する / Clear and empty floor.
  * @parama player_ptr プレイヤーへの参照ポインタ
  */
-void clear_cave(player_type *player_ptr)
+void clear_cave(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, object_type{});
@@ -372,7 +372,7 @@ static bool is_permanent_blocker(const floor_type *const floor_ptr, const int y,
 {
     const FEAT_IDX feat = floor_ptr->grid_array[y][x].feat;
     const auto &flags = f_info[feat].flags;
-    return flags.has(FF::PERMANENT) && flags.has_not(FF::MOVE);
+    return flags.has(FloorFeatureType::PERMANENT) && flags.has_not(FloorFeatureType::MOVE);
 }
 
 static void floor_is_connected_dfs(const floor_type *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
@@ -453,7 +453,7 @@ static bool floor_is_connected(const floor_type *const floor_ptr, const IsWallFu
  * @parama player_ptr プレイヤーへの参照ポインタ
  * @note Hack -- regenerate any "overflow" levels
  */
-void generate_floor(player_type *player_ptr)
+void generate_floor(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dungeon_idx = player_ptr->dungeon_idx;

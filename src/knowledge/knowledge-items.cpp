@@ -39,7 +39,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @todo okay = 既知のアーティファクト？ と思われるが確証がない分かりやすい変数名へ変更求む＆万が一未知である旨の配列なら負論理なのでゴソッと差し替えるべき
  */
-void do_cmd_knowledge_artifacts(player_type *player_ptr)
+void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -215,7 +215,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 /*
  * Describe fake object
  */
-static void desc_obj_fake(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
+static void desc_obj_fake(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
     object_type *o_ptr;
     object_type object_type_body;
@@ -236,7 +236,7 @@ static void desc_obj_fake(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 /**
  * @brief Display known objects
  */
-void do_cmd_knowledge_objects(player_type *player_ptr, bool *need_redraw, bool visual_only, KIND_OBJECT_IDX direct_k_idx)
+void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool visual_only, KIND_OBJECT_IDX direct_k_idx)
 {
     KIND_OBJECT_IDX object_old, object_top;
     KIND_OBJECT_IDX grp_idx[100];

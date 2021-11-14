@@ -42,7 +42,7 @@ void object_known(object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ＊鑑定＊済にするオブジェクトの構造体参照ポインタ
  */
-void object_aware(player_type *player_ptr, object_type *o_ptr)
+void object_aware(PlayerType *player_ptr, object_type *o_ptr)
 {
     const bool is_already_awared = o_ptr->is_aware();
 
@@ -56,7 +56,7 @@ void object_aware(player_type *player_ptr, object_type *o_ptr)
         return;
 
     // アーティファクト専用ベースアイテムは記録しない
-    if (k_info[o_ptr->k_idx].gen_flags.has(TRG::INSTA_ART))
+    if (k_info[o_ptr->k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART))
         return;
 
     // 未鑑定名の無いアイテムは記録しない

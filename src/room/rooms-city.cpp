@@ -68,7 +68,7 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n, std::vector<ugbl
 }
 
 /* Create a new floor room with optional light */
-static void generate_room_floor(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
+static void generate_room_floor(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
 {
     grid_type *g_ptr;
     for (POSITION y = y1; y <= y2; y++) {
@@ -82,7 +82,7 @@ static void generate_room_floor(player_type *player_ptr, POSITION y1, POSITION x
     }
 }
 
-static void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+static void generate_fill_perm_bold(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     for (POSITION y = y1; y <= y2; y++)
         for (POSITION x = x1; x <= x2; x++)
@@ -99,7 +99,7 @@ static void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITI
  * @note
  * Note: ltcy and ltcx indicate "left top corner".
  */
-static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, StoreSaleType stores[], int n, const std::vector<ugbldg_type>& ugbldg)
+static void build_stores(PlayerType *player_ptr, POSITION ltcy, POSITION ltcx, StoreSaleType stores[], int n, const std::vector<ugbldg_type>& ugbldg)
 {
     int i;
     POSITION y, x;
@@ -143,7 +143,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
 
         if (auto it = std::find_if(f_info.begin(), f_info.end(),
                 [subtype = stores[i]](const feature_type &f_ref) {
-                    return f_ref.flags.has(FF::STORE) && (i2enum<StoreSaleType>(static_cast<int>(f_ref.subtype)) == subtype);
+                    return f_ref.flags.has(FloorFeatureType::STORE) && (i2enum<StoreSaleType>(static_cast<int>(f_ref.subtype)) == subtype);
                 });
             it != f_info.end()) {
             cave_set_feat(player_ptr, ltcy + y, ltcx + x, (*it).idx);
@@ -165,7 +165,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
  * This function does NOT do anything about the owners of the stores,\n
  * nor the contents thereof.  It only handles the physical layout.\n
  */
-bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type16(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     StoreSaleType stores[] = {
         StoreSaleType::GENERAL,

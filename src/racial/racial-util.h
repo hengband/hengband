@@ -41,7 +41,7 @@ struct rpi_type {
 /*!
  * レイシャル/クラスパワー管理構造体
  */
-struct player_type;
+class PlayerType;
 struct rc_type {
     std::vector<rpi_type> power_desc{}; //!< パワー定義配列
     COMMAND_CODE command_code{}; //!< 使用しようとしているパワー番号
@@ -62,7 +62,7 @@ struct rc_type {
      * @param player_ptr プレイヤー情報への参照ポインタ
      * @return 管理構造体
      */
-    rc_type(player_type *player_ptr);
+    rc_type(PlayerType *player_ptr);
 
     /*!
      * @brief レイシャル/クラスパワー定義を追加
@@ -76,7 +76,7 @@ struct rc_type {
      * @param rpi レイシャル/クラスパワー定義(参照渡し)
      * @param number 突然変異ID
      */
-    void add_power(rpi_type &rpi, MUTA flag);
+    void add_power(rpi_type &rpi, PlayerMutationType flag);
 
     /*!
      * @brief レイシャル/クラスパワー数を返す

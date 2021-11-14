@@ -34,7 +34,7 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    if (!g_ptr->cave_has_flag(FF::TUNNEL)) {
+    if (!g_ptr->cave_has_flag(FloorFeatureType::TUNNEL)) {
         msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
         return false;
     }
@@ -53,7 +53,7 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
  * Do not use twall anymore
  * Returns TRUE if repeated commands may continue
  */
-bool exe_tunnel(player_type *player_ptr, POSITION y, POSITION x)
+bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     feature_type *f_ptr, *mimic_f_ptr;
@@ -70,22 +70,22 @@ bool exe_tunnel(player_type *player_ptr, POSITION y, POSITION x)
     mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
     name = mimic_f_ptr->name.c_str();
     sound(SOUND_DIG);
-    if (f_ptr->flags.has(FF::PERMANENT)) {
-        if (mimic_f_ptr->flags.has(FF::PERMANENT))
+    if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+        if (mimic_f_ptr->flags.has(FloorFeatureType::PERMANENT))
             msg_print(_("この岩は硬すぎて掘れないようだ。", "This seems to be permanent rock."));
         else
             msg_print(_("そこは掘れない!", "You can't tunnel through that!"));
-    } else if (f_ptr->flags.has(FF::CAN_DIG)) {
+    } else if (f_ptr->flags.has(FloorFeatureType::CAN_DIG)) {
         if (player_ptr->skill_dig > randint0(20 * power)) {
             msg_format(_("%sをくずした。", "You have removed the %s."), name);
-            cave_alter_feat(player_ptr, y, x, FF::TUNNEL);
+            cave_alter_feat(player_ptr, y, x, FloorFeatureType::TUNNEL);
             player_ptr->update |= PU_FLOW;
         } else {
             msg_format(_("%sをくずしている。", "You dig into the %s."), name);
             more = true;
         }
     } else {
-        bool tree = mimic_f_ptr->flags.has(FF::TREE);
+        bool tree = mimic_f_ptr->flags.has(FloorFeatureType::TREE);
         if (player_ptr->skill_dig > power + randint0(40 * power)) {
             if (tree)
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
@@ -94,10 +94,10 @@ bool exe_tunnel(player_type *player_ptr, POSITION y, POSITION x)
                 player_ptr->update |= (PU_FLOW);
             }
 
-            if (f_ptr->flags.has(FF::GLASS))
+            if (f_ptr->flags.has(FloorFeatureType::GLASS))
                 sound(SOUND_GLASS);
 
-            cave_alter_feat(player_ptr, y, x, FF::TUNNEL);
+            cave_alter_feat(player_ptr, y, x, FloorFeatureType::TUNNEL);
             chg_virtue(player_ptr, V_DILIGENCE, 1);
             chg_virtue(player_ptr, V_NATURE, -1);
         } else {

@@ -29,7 +29,7 @@
  * do_cmd_cast calls this function if the player's class is 'Blue-Mage'.
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool do_cmd_cast_learned(player_type *player_ptr)
+bool do_cmd_cast_learned(PlayerType *player_ptr)
 {
     if (cmd_limit_confused(player_ptr))
         return false;

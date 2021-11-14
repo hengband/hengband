@@ -28,7 +28,7 @@ bool is_daytime(void)
  * @param hour 時数を返すための参照ポインタ
  * @param min 分数を返すための参照ポインタ
  */
-void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min)
+void extract_day_hour_min(PlayerType *player_ptr, int *day, int *hour, int *min)
 {
     const int32_t A_DAY = TURNS_PER_TICK * TOWN_DAWN;
     int32_t turn_in_today = (w_ptr->game_turn + A_DAY / 4) % A_DAY;

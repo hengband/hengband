@@ -25,7 +25,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-util.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -41,19 +41,19 @@
  * @param ep_ptr 初期化前の構造体
  * @param who 魔法を唱えたモンスター (0ならプレイヤー自身)
  * @param dam 基本威力
- * @param effect_type 効果属性
+ * @param attribute 効果属性
  * @param flag 効果フラグ
  * @param monspell 効果元のモンスター魔法ID
  * @return 初期化後の構造体ポインタ
  */
-static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag)
+static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag)
 {
     ep_ptr->rlev = 0;
     ep_ptr->m_ptr = nullptr;
     ep_ptr->get_damage = 0;
     ep_ptr->who = who;
     ep_ptr->dam = dam;
-    ep_ptr->effect_type = effect_type;
+    ep_ptr->attribute = attribute;
     ep_ptr->flag = flag;
     return ep_ptr;
 }
@@ -64,7 +64,7 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  * @param ep_ptr プレイヤー効果構造体への参照ポインタ
  * @return 当たったらFALSE、反射したらTRUE
  */
-static bool process_bolt_reflection(player_type *player_ptr, effect_player_type *ep_ptr, project_func project)
+static bool process_bolt_reflection(PlayerType *player_ptr, effect_player_type *ep_ptr, project_func project)
 {
     auto can_reflect = (has_reflect(player_ptr) != 0);
     can_reflect &= any_bits(ep_ptr->flag, PROJECT_REFLECTABLE);
@@ -79,7 +79,7 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
     std::string mes;
     if (player_ptr->blind) {
         mes = _("何かが跳ね返った！", "Something bounces!");
-    } else if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::FUUJIN)) {
+    } else if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::FUUJIN)) {
         mes = _("風の如く武器を振るって弾き返した！", "The attack bounces!");
     } else {
         mes = _("攻撃が跳ね返った！", "The attack bounces!");
@@ -106,7 +106,7 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
         t_x = player_ptr->x - 1 + randint1(3);
     }
 
-    (*project)(player_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE));
+    (*project)(player_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->attribute, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE));
     disturb(player_ptr, true, true);
     return true;
 }
@@ -119,7 +119,7 @@ static bool process_bolt_reflection(player_type *player_ptr, effect_player_type 
  * @param x 目標X座標
  * @return 当たらなかったらFALSE、反射したらTRUE、当たったらCONTINUE
  */
-static process_result check_continue_player_effect(player_type *player_ptr, effect_player_type *ep_ptr, POSITION y, POSITION x, project_func project)
+static process_result check_continue_player_effect(PlayerType *player_ptr, effect_player_type *ep_ptr, POSITION y, POSITION x, project_func project)
 {
     if (!player_bold(player_ptr, y, x)) {
         return PROCESS_FALSE;
@@ -150,7 +150,7 @@ static process_result check_continue_player_effect(player_type *player_ptr, effe
  * @param ep_ptr プレイヤー効果構造体への参照ポインタ
  * @param who_name モンスター名
  */
-static void describe_effect_source(player_type *player_ptr, effect_player_type *ep_ptr, concptr who_name)
+static void describe_effect_source(PlayerType *player_ptr, effect_player_type *ep_ptr, concptr who_name)
 {
     if (ep_ptr->who > 0) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->who];
@@ -183,16 +183,16 @@ static void describe_effect_source(player_type *player_ptr, effect_player_type *
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
- * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param attribute 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_player(MONSTER_IDX who, player_type *player_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type,
+bool affect_player(MONSTER_IDX who, PlayerType *player_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute,
     BIT_FLAGS flag, project_func project)
 {
     effect_player_type tmp_effect;
-    auto *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag);
+    auto *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, attribute, flag);
     auto check_result = check_continue_player_effect(player_ptr, ep_ptr, y, x, project);
     if (check_result != PROCESS_CONTINUE) {
         return check_result == PROCESS_TRUE;
@@ -211,7 +211,7 @@ bool affect_player(MONSTER_IDX who, player_type *player_ptr, concptr who_name, i
         GAME_TEXT m_name_self[MAX_MONSTER_NAME];
         monster_desc(player_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);
-        (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
+        (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL);
         if (player_ptr->tim_eyeeye) {
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
         }

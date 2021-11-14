@@ -11,6 +11,7 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/mspell.h"
+#include "effect/attribute-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -24,7 +25,7 @@
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
  */
-static void vanish_nonunique(player_type *player_ptr, MONSTER_IDX m_idx, bool see_m)
+static void vanish_nonunique(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (see_m) {
@@ -33,7 +34,7 @@ static void vanish_nonunique(player_type *player_ptr, MONSTER_IDX m_idx, bool se
         msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
     }
 
-    monster_death(player_ptr, m_idx, false);
+    monster_death(player_ptr, m_idx, false, AttributeType::NONE);
     delete_monster_idx(player_ptr, m_idx);
     if (is_pet(m_ptr) && !(m_ptr->ml))
         msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));
@@ -51,7 +52,7 @@ static void vanish_nonunique(player_type *player_ptr, MONSTER_IDX m_idx, bool se
  * パターンは収縮どころか拡散しているが、この際気にしてはいけない
  * @todo ユニークとプレイヤーとの間でしか効果が発生しない。ユニークとその他のモンスター間では何もしなくてよい？
  */
-static void produce_quantum_effect(player_type *player_ptr, MONSTER_IDX m_idx, bool see_m)
+static void produce_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool coherent = los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
@@ -67,7 +68,7 @@ static void produce_quantum_effect(player_type *player_ptr, MONSTER_IDX m_idx, b
 
     bool target = one_in_(2);
     if (target)
-        (void)monspell_to_monster(player_ptr, RF_ABILITY::BLINK, m_ptr->fy, m_ptr->fx, m_idx, m_idx, true);
+        (void)monspell_to_monster(player_ptr, MonsterAbilityType::BLINK, m_ptr->fy, m_ptr->fx, m_idx, m_idx, true);
     else
         teleport_player_away(m_idx, player_ptr, 10, true);
 }
@@ -79,7 +80,7 @@ static void produce_quantum_effect(player_type *player_ptr, MONSTER_IDX m_idx, b
  * @param see_m モンスターが視界内にいたらTRUE
  * @return モンスターが量子的効果により消滅したらTRUE
  */
-bool process_quantum_effect(player_type *player_ptr, MONSTER_IDX m_idx, bool see_m)
+bool process_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

@@ -100,7 +100,7 @@ static void set_slay_info(self_info_type *self_ptr)
         self_ptr->info[self_ptr->line++] = _("あなたの武器はドラゴンに対して特に強い力を発揮する。", "Your weapon is especially deadly against dragons.");
 }
 
-void set_weapon_effect_info(player_type *player_ptr, self_info_type *self_ptr)
+void set_weapon_effect_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     if (o_ptr->k_idx == 0)

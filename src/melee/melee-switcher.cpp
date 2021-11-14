@@ -14,7 +14,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-void describe_melee_method(player_type *player_ptr, mam_type *mam_ptr)
+void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RBM_HIT: {
@@ -148,13 +148,13 @@ void describe_melee_method(player_type *player_ptr, mam_type *mam_ptr)
     }
 }
 
-void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
+void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->effect) {
     case RaceBlowEffectType::NONE:
     case RaceBlowEffectType::DR_MANA:
         mam_ptr->damage = 0;
-        mam_ptr->pt = GF_NONE;
+        mam_ptr->pt = AttributeType::NONE;
         break;
     case RaceBlowEffectType::SUPERHURT:
         if ((randint1(mam_ptr->rlev * 2 + 250) > (mam_ptr->ac + 200)) || one_in_(13)) {
@@ -169,11 +169,11 @@ void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
         break;
     case RaceBlowEffectType::POISON:
     case RaceBlowEffectType::DISEASE:
-        mam_ptr->pt = GF_POIS;
+        mam_ptr->pt = AttributeType::POIS;
         break;
     case RaceBlowEffectType::UN_BONUS:
     case RaceBlowEffectType::UN_POWER:
-        mam_ptr->pt = GF_DISENCHANT;
+        mam_ptr->pt = AttributeType::DISENCHANT;
         break;
     case RaceBlowEffectType::EAT_ITEM:
     case RaceBlowEffectType::EAT_GOLD:
@@ -193,25 +193,25 @@ void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
     case RaceBlowEffectType::LOSE_ALL:
         break;
     case RaceBlowEffectType::ACID:
-        mam_ptr->pt = GF_ACID;
+        mam_ptr->pt = AttributeType::ACID;
         break;
     case RaceBlowEffectType::ELEC:
-        mam_ptr->pt = GF_ELEC;
+        mam_ptr->pt = AttributeType::ELEC;
         break;
     case RaceBlowEffectType::FIRE:
-        mam_ptr->pt = GF_FIRE;
+        mam_ptr->pt = AttributeType::FIRE;
         break;
     case RaceBlowEffectType::COLD:
-        mam_ptr->pt = GF_COLD;
+        mam_ptr->pt = AttributeType::COLD;
         break;
     case RaceBlowEffectType::CONFUSE:
-        mam_ptr->pt = GF_CONFUSION;
+        mam_ptr->pt = AttributeType::CONFUSION;
         break;
     case RaceBlowEffectType::TERRIFY:
-        mam_ptr->effect_type = BLOW_EFFECT_TYPE_FEAR;
+        mam_ptr->attribute = BLOW_EFFECT_TYPE_FEAR;
         break;
     case RaceBlowEffectType::PARALYZE:
-        mam_ptr->effect_type = BLOW_EFFECT_TYPE_SLEEP;
+        mam_ptr->attribute = BLOW_EFFECT_TYPE_SLEEP;
         break;
     case RaceBlowEffectType::SHATTER:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
@@ -223,35 +223,35 @@ void decide_monster_attack_effect(player_type *player_ptr, mam_type *mam_ptr)
     case RaceBlowEffectType::EXP_20:
     case RaceBlowEffectType::EXP_40:
     case RaceBlowEffectType::EXP_80:
-        mam_ptr->pt = GF_NETHER;
+        mam_ptr->pt = AttributeType::NETHER;
         break;
     case RaceBlowEffectType::TIME:
-        mam_ptr->pt = GF_TIME;
+        mam_ptr->pt = AttributeType::TIME;
         break;
     case RaceBlowEffectType::DR_LIFE:
-        mam_ptr->pt = GF_HYPODYNAMIA;
-        mam_ptr->effect_type = BLOW_EFFECT_TYPE_HEAL;
+        mam_ptr->pt = AttributeType::HYPODYNAMIA;
+        mam_ptr->attribute = BLOW_EFFECT_TYPE_HEAL;
         break;
     case RaceBlowEffectType::INERTIA:
-        mam_ptr->pt = GF_INERTIAL;
+        mam_ptr->pt = AttributeType::INERTIAL;
         break;
     case RaceBlowEffectType::STUN:
-        mam_ptr->pt = GF_SOUND;
+        mam_ptr->pt = AttributeType::SOUND;
         break;
     case RaceBlowEffectType::HUNGRY:
-        mam_ptr->pt = GF_HUNGRY;
+        mam_ptr->pt = AttributeType::HUNGRY;
         break;
     case RaceBlowEffectType::FLAVOR:
         // フレーバー打撃には何の効果もない。
-        mam_ptr->pt = GF_NONE;
+        mam_ptr->pt = AttributeType::NONE;
         break;
     default:
-        mam_ptr->pt = GF_NONE;
+        mam_ptr->pt = AttributeType::NONE;
         break;
     }
 }
 
-void describe_monster_missed_monster(player_type *player_ptr, mam_type *mam_ptr)
+void describe_monster_missed_monster(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RBM_HIT:

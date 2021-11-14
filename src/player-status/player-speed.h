@@ -3,7 +3,7 @@
 
 class PlayerSpeed : public PlayerStatusBase {
 public:
-    PlayerSpeed(player_type *player_ptr);
+    PlayerSpeed(PlayerType *player_ptr);
 
 protected:
     void set_locals() override;
@@ -12,7 +12,7 @@ protected:
     int16_t personality_value() override;
     int16_t equipments_value() override;
     int16_t time_effect_value() override;
-    int16_t battleform_value() override;
+    int16_t stance_value() override;
     int16_t mutation_value() override;
     int16_t riding_value() override;
     int16_t inventory_weight_value() override;

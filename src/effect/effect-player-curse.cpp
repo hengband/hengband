@@ -11,7 +11,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-void effect_player_curse_1(player_type *player_ptr, effect_player_type *ep_ptr)
+void effect_player_curse_1(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
@@ -22,7 +22,7 @@ void effect_player_curse_1(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 }
 
-void effect_player_curse_2(player_type *player_ptr, effect_player_type *ep_ptr)
+void effect_player_curse_2(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
@@ -33,7 +33,7 @@ void effect_player_curse_2(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 }
 
-void effect_player_curse_3(player_type *player_ptr, effect_player_type *ep_ptr)
+void effect_player_curse_3(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
@@ -44,7 +44,7 @@ void effect_player_curse_3(player_type *player_ptr, effect_player_type *ep_ptr)
     }
 }
 
-void effect_player_curse_4(player_type *player_ptr, effect_player_type *ep_ptr)
+void effect_player_curse_4(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < player_ptr->skill_sav) && (ep_ptr->m_ptr->r_idx != MON_KENSHIROU) && !check_multishadow(player_ptr)) {
         msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));

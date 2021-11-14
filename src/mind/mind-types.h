@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class mind_kind_type {
+enum class MindKindType {
 	MINDCRAFTER = 0, /*!< 特殊能力: 超能力 */
     KI = 1, /*!< 特殊能力: 練気 */
     BERSERKER = 2, /*!< 特殊能力: 怒り */

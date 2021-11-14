@@ -12,7 +12,7 @@
 #include "spell-kind/spells-pet.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-realm/spells-demon.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
@@ -32,15 +32,15 @@
  * @brief 悪魔領域魔法の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
  */
-concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESCRIPTION;
-    bool info = mode == SPELL_INFO;
-    bool cast = mode == SPELL_CAST;
+    bool name = mode == SpellProcessType::NAME;
+    bool desc = mode == SpellProcessType::DESCRIPTION;
+    bool info = mode == SpellProcessType::INFO;
+    bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -63,7 +63,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(dice, sides));
             }
         }
         break;
@@ -163,7 +163,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_NETHER, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, damroll(dice, sides));
             }
         }
         break;
@@ -207,7 +207,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_HELL_FIRE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, damroll(dice, sides) + base, rad);
             }
         }
         break;
@@ -286,7 +286,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_PLASMA, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::PLASMA, dir, damroll(dice, sides));
             }
         }
         break;
@@ -308,7 +308,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_FIRE, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
             }
         }
         break;
@@ -343,7 +343,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_NETHER, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::NETHER, dir, dam, rad);
             }
         }
         break;
@@ -421,8 +421,8 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam / 2);
 
             if (cast) {
-                fire_ball(player_ptr, GF_FIRE, 0, dam, rad);
-                fire_ball_hide(player_ptr, GF_LAVA_FLOW, 0, 2 + randint1(2), rad);
+                fire_ball(player_ptr, AttributeType::FIRE, 0, dam, rad);
+                fire_ball_hide(player_ptr, AttributeType::LAVA_FLOW, 0, 2 + randint1(2), rad);
             }
         }
         break;
@@ -444,7 +444,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_PLASMA, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::PLASMA, dir, dam, rad);
             }
         }
         break;
@@ -505,7 +505,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball(player_ptr, GF_NEXUS, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::NEXUS, dir, dam, rad);
             }
         }
         break;
@@ -523,7 +523,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 else
                     msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
-                fire_ball_hide(player_ptr, GF_HAND_DOOM, dir, plev * 2, 0);
+                fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, dir, plev * 2, 0);
             }
         }
         break;
@@ -577,9 +577,9 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 return format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
 
             if (cast) {
-                fire_ball(player_ptr, GF_CHAOS, 0, dam, rad);
-                fire_ball(player_ptr, GF_CONFUSION, 0, dam, rad);
-                fire_ball(player_ptr, GF_CHARM, 0, power, rad);
+                fire_ball(player_ptr, AttributeType::CHAOS, 0, dam, rad);
+                fire_ball(player_ptr, AttributeType::CONFUSION, 0, dam, rad);
+                fire_ball(player_ptr, AttributeType::CHARM, 0, power, rad);
             }
         }
         break;
@@ -629,7 +629,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_NETHER, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::NETHER, dir, dam, rad);
             }
         }
         break;
@@ -652,7 +652,7 @@ concptr do_daemon_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball_hide(player_ptr, GF_BLOOD_CURSE, dir, dam, rad);
+                fire_ball_hide(player_ptr, AttributeType::BLOOD_CURSE, dir, dam, rad);
                 take_hit(player_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));
             }
         }

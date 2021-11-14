@@ -20,7 +20,7 @@
  * Extract a clean "base name".
  * Build the savefile name if needed.
  */
-void process_player_name(player_type *player_ptr, bool is_new_savefile)
+void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 {
     char old_player_base[32] = "";
     if (w_ptr->character_generated)
@@ -130,7 +130,7 @@ void process_player_name(player_type *player_ptr, bool is_new_savefile)
  * What a horrible name for a global function.
  * </pre>
  */
-void get_name(player_type *player_ptr)
+void get_name(PlayerType *player_ptr)
 {
     char tmp[64];
     strcpy(tmp, player_ptr->name);

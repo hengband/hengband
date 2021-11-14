@@ -52,6 +52,7 @@
 #include "player/player-status-table.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -65,7 +66,7 @@
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
-ObjectThrowEntity::ObjectThrowEntity(player_type *player_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
+ObjectThrowEntity::ObjectThrowEntity(PlayerType *player_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
     : q_ptr(q_ptr)
     , player_ptr(player_ptr)
     , shuriken(shuriken)
@@ -316,7 +317,7 @@ void ObjectThrowEntity::drop_thrown_item()
         return;
     }
 
-    auto is_bold = cave_has_flag_bold(this->player_ptr->current_floor_ptr, this->y, this->x, FF::PROJECT);
+    auto is_bold = cave_has_flag_bold(this->player_ptr->current_floor_ptr, this->y, this->x, FloorFeatureType::PROJECT);
     auto drop_y = is_bold ? this->y : this->prev_y;
     auto drop_x = is_bold ? this->x : this->prev_x;
     (void)drop_near(this->player_ptr, this->q_ptr, this->corruption_possibility, drop_y, drop_x);
@@ -381,7 +382,7 @@ bool ObjectThrowEntity::check_racial_target_bold()
     this->nx[this->cur_dis] = this->x;
     mmove2(&this->ny[this->cur_dis], &this->nx[this->cur_dis], this->player_ptr->y, this->player_ptr->x, this->ty, this->tx);
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (cave_has_flag_bold(floor_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis], FF::PROJECT)) {
+    if (cave_has_flag_bold(floor_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis], FloorFeatureType::PROJECT)) {
         return false;
     }
 
@@ -434,7 +435,12 @@ void ObjectThrowEntity::attack_racial_power()
         this->m_ptr->hp - this->tdam, this->m_ptr->maxhp, this->m_ptr->max_maxhp);
 
     auto fear = false;
-    MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear);
+    AttributeFlags attribute_flags{};
+    attribute_flags.set(AttributeType::PLAYER_SHOOT);
+    if (is_active_torch(this->o_ptr))
+        attribute_flags.set(AttributeType::FIRE);
+
+    MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear, attribute_flags);
     if (mdp.mon_take_hit(extract_note_dies(real_r_idx(this->m_ptr)))) {
         return;
     }

@@ -20,7 +20,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 持ち替えを行いたい装備部位ID
  */
-void verify_equip_slot(player_type *player_ptr, INVENTORY_IDX item)
+void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr, *new_o_ptr;
     GAME_TEXT o_name[MAX_NLEN];

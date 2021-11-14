@@ -47,7 +47,7 @@
  *
  * Beware of "sliding index errors".
  */
-bool recharge(player_type *player_ptr, int power)
+bool recharge(PlayerType *player_ptr, int power)
 {
     concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");

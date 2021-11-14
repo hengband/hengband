@@ -85,7 +85,7 @@ static amuse_type amuse_info[]
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool known)
+void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
     int t = 0;
     for (int n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
@@ -116,14 +116,14 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
             continue;
 
         /* Search an artifact index if need */
-        insta_art = k_info[k_idx].gen_flags.has(TRG::INSTA_ART);
+        insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
 
         if (insta_art || fixed_art) {
             for (const auto &a_ref : a_info) {
                 if (a_ref.idx == 0)
                     continue;
-                if (insta_art && !a_ref.gen_flags.has(TRG::INSTA_ART))
+                if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART))
                     continue;
                 if (a_ref.tval != k_info[k_idx].tval)
                     continue;
@@ -131,6 +131,8 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
                     continue;
                 if (a_ref.cur_num > 0)
                     continue;
+
+                a_idx = a_ref.idx;
                 break;
             }
 
@@ -180,7 +182,7 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
  * @param special TRUEならば必ず特別品を落とす
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
+void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
     object_type *i_ptr;
     object_type object_type_body;
@@ -210,7 +212,7 @@ void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, boo
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_armor(player_type *player_ptr)
+bool curse_armor(PlayerType *player_ptr)
 {
     /* Curse the body armor */
     object_type *o_ptr;
@@ -250,7 +252,7 @@ bool curse_armor(player_type *player_ptr)
     o_ptr->art_flags.clear();
 
     /* Curse it */
-    o_ptr->curse_flags.set(TRC::CURSED);
+    o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -268,7 +270,7 @@ bool curse_armor(player_type *player_ptr)
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr)
+bool curse_weapon_object(PlayerType *player_ptr, bool force, object_type *o_ptr)
 {
     if (!o_ptr->k_idx)
         return false;
@@ -304,7 +306,7 @@ bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr
     o_ptr->art_flags.clear();
 
     /* Curse it */
-    o_ptr->curse_flags.set(TRC::CURSED);
+    o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -318,7 +320,7 @@ bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr
  * Enchant some bolts
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void brand_bolts(player_type *player_ptr)
+void brand_bolts(PlayerType *player_ptr)
 {
     /* Use the first acceptable bolts */
     for (int i = 0; i < INVEN_PACK; i++) {
@@ -361,7 +363,7 @@ void brand_bolts(player_type *player_ptr)
 static void break_curse(object_type *o_ptr)
 {
     BIT_FLAGS is_curse_broken
-        = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
+        = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(CurseTraitType::PERMA_CURSE) && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE) && (randint0(100) < 25);
     if (!is_curse_broken) {
         return;
     }
@@ -396,7 +398,7 @@ static void break_curse(object_type *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant_equipment(player_type *player_ptr, object_type *o_ptr, int n, int eflag)
+bool enchant_equipment(PlayerType *player_ptr, object_type *o_ptr, int n, int eflag)
 {
     /* Large piles resist enchantment */
     int prob = o_ptr->number * 100;
@@ -498,7 +500,7 @@ bool enchant_equipment(player_type *player_ptr, object_type *o_ptr, int n, int e
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
-bool enchant_spell(player_type *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
+bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
     FuncItemTester item_tester(&object_type::allow_enchant_weapon);
@@ -554,7 +556,7 @@ bool enchant_spell(player_type *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
  */
-void brand_weapon(player_type *player_ptr, int brand_type)
+void brand_weapon(PlayerType *player_ptr, int brand_type)
 {
     concptr q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");

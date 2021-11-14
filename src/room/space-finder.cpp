@@ -32,7 +32,7 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
  * @param x 地形を変えたいマスのX座標
  * @param y 地形を変えたいマスのY座標
  */
-static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
+static void set_floor(PlayerType *player_ptr, POSITION x, POSITION y)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
@@ -56,7 +56,7 @@ static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
  * @param x2 範囲の右端
  * @param y2 範囲の下端
  */
-static void check_room_boundary(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
+static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
     bool old_is_floor;
     bool new_is_floor;
@@ -173,7 +173,7 @@ static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION
  * Return TRUE and values for the center of the room if all went well.\n
  * Otherwise, return FALSE.\n
  */
-bool find_space(player_type *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
+bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
 {
     int pick;
     POSITION block_y = 0;
@@ -196,7 +196,7 @@ bool find_space(player_type *player_ptr, dun_data_type *dd_ptr, POSITION *y, POS
     if (!candidates)
         return false;
 
-    if (d_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DF::NO_CAVE))
+    if (d_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_CAVE))
         pick = randint1(candidates);
     else
         pick = candidates / 2 + 1;

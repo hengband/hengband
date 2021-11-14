@@ -33,7 +33,7 @@
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
  */
-int find_autopick_list(player_type *player_ptr, object_type *o_ptr)
+int find_autopick_list(PlayerType *player_ptr, object_type *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->tval == ItemKindType::GOLD)
@@ -53,7 +53,7 @@ int find_autopick_list(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief Choose an item for search
  */
-bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
+bool get_object_for_search(PlayerType *player_ptr, object_type **o_handle, concptr *search_strp)
 {
     concptr q = _("どのアイテムを検索しますか? ", "Enter which item? ");
     concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
@@ -73,7 +73,7 @@ bool get_object_for_search(player_type *player_ptr, object_type **o_handle, conc
 /*!
  * @brief Prepare for search by destroyed object
  */
-bool get_destroyed_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
+bool get_destroyed_object_for_search(PlayerType *player_ptr, object_type **o_handle, concptr *search_strp)
 {
     if (!autopick_last_destroyed_object.k_idx)
         return false;
@@ -93,7 +93,7 @@ bool get_destroyed_object_for_search(player_type *player_ptr, object_type **o_ha
  * TERM_YELLOW : Overwrite mode
  * TERM_WHITE : Insert mode
  */
-byte get_string_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
+byte get_string_for_search(PlayerType *player_ptr, object_type **o_handle, concptr *search_strp)
 {
     byte color = TERM_YELLOW;
     char buf[MAX_NLEN + 20];
@@ -288,7 +288,7 @@ byte get_string_for_search(player_type *player_ptr, object_type **o_handle, conc
 /*!
  * @brief Search next line matches for o_ptr
  */
-void search_for_object(player_type *player_ptr, text_body_type *tb, object_type *o_ptr, bool forward)
+void search_for_object(PlayerType *player_ptr, text_body_type *tb, object_type *o_ptr, bool forward)
 {
     autopick_type an_entry, *entry = &an_entry;
     GAME_TEXT o_name[MAX_NLEN];

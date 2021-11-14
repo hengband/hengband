@@ -52,7 +52,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
  */
-static errr load_town_quest(player_type *player_ptr)
+static errr load_town_quest(PlayerType *player_ptr)
 {
     if (h_older_than(2, 1, 3))
         return 0;
@@ -102,7 +102,7 @@ static void rd_winner_class()
     rd_FlagGroup(w_ptr->sf_retired, rd_byte);
 }
 
-static void load_player_world(player_type *player_ptr)
+static void load_player_world(PlayerType *player_ptr)
 {
     rd_total_play_time();
     rd_winner_class();
@@ -120,7 +120,7 @@ static void load_player_world(player_type *player_ptr)
     load_note(_("特別情報をロードしました", "Loaded extra information"));
 }
 
-static errr load_hp(player_type *player_ptr)
+static errr load_hp(PlayerType *player_ptr)
 {
     auto tmp16u = rd_u16b();
     if (tmp16u > PY_MAX_LEVEL) {
@@ -135,7 +135,7 @@ static errr load_hp(player_type *player_ptr)
     return 0;
 }
 
-static void load_spells(player_type *player_ptr)
+static void load_spells(PlayerType *player_ptr)
 {
     player_ptr->spell_learned1 = rd_u32b();
     player_ptr->spell_learned2 = rd_u32b();
@@ -179,7 +179,7 @@ static errr verify_encoded_checksum()
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
  */
-static errr exe_reading_savefile(player_type *player_ptr)
+static errr exe_reading_savefile(PlayerType *player_ptr)
 {
     rd_version_info();
     rd_dummy3();
@@ -248,7 +248,7 @@ static errr exe_reading_savefile(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
  */
-static errr rd_savefile(player_type *player_ptr)
+static errr rd_savefile(PlayerType *player_ptr)
 {
     safe_setuid_grab(player_ptr);
     loading_savefile = angband_fopen(savefile, "rb");
@@ -270,7 +270,7 @@ static errr rd_savefile(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 引き継ぎ可能ならtrue、そうでなければfalseを返す
  */
-static bool can_takeover_savefile(const player_type *player_ptr)
+static bool can_takeover_savefile(const PlayerType *player_ptr)
 {
     if (loading_savefile_version_is_older_than(8) && player_ptr->pclass == PlayerClassType::SMITH) {
         return false;
@@ -286,7 +286,7 @@ static bool can_takeover_savefile(const player_type *player_ptr)
  * @param new_game セーブデータの新規作成が必要か否か
  * @return セーブデータが読み込めればtrue
  */
-bool load_savedata(player_type *player_ptr, bool *new_game)
+bool load_savedata(PlayerType *player_ptr, bool *new_game)
 {
     concptr what = "generic";
     w_ptr->game_turn = 0;

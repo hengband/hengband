@@ -40,7 +40,7 @@ static void k_info_reset(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 少し長いが、これ1つで処理が完結しているので分割は見送る
  */
-void player_wipe_without_name(player_type *player_ptr)
+void player_wipe_without_name(PlayerType *player_ptr)
 {
 #ifdef SET_UID
     int uid = player_ptr->player_uid;
@@ -170,7 +170,7 @@ void player_wipe_without_name(player_type *player_ptr)
  * @brief ダンジョン内部のクエストを初期化する / Initialize random quests and final quests
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void init_dungeon_quests(player_type *player_ptr)
+void init_dungeon_quests(PlayerType *player_ptr)
 {
     int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
     init_flags = INIT_ASSIGN;
@@ -205,9 +205,9 @@ void init_dungeon_quests(player_type *player_ptr)
  * @details アンデッド系種族は開始時刻を夜からにする / Undead start just sunset
  * @details
  */
-void init_turn(player_type *player_ptr)
+void init_turn(PlayerType *player_ptr)
 {
-    if (PlayerRace(player_ptr).life() == PlayerRaceLife::UNDEAD) {
+    if (PlayerRace(player_ptr).life() == PlayerRaceLifeType::UNDEAD) {
         w_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
         w_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     } else {

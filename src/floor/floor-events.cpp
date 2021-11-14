@@ -43,7 +43,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-void day_break(player_type *player_ptr)
+void day_break(PlayerType *player_ptr)
 {
     msg_print(_("夜が明けた。", "The sun has risen."));
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -67,7 +67,7 @@ void day_break(player_type *player_ptr)
         set_superstealth(player_ptr, false);
 }
 
-void night_falls(player_type *player_ptr)
+void night_falls(PlayerType *player_ptr)
 {
     msg_print(_("日が沈んだ。", "The sun has fallen."));
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -76,11 +76,11 @@ void night_falls(player_type *player_ptr)
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr = &floor_ptr->grid_array[y][x];
                 feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
-                if (g_ptr->is_mirror() || f_ptr->flags.has(FF::QUEST_ENTER) || f_ptr->flags.has(FF::ENTRANCE))
+                if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE))
                     continue;
 
                 g_ptr->info &= ~(CAVE_GLOW);
-                if (f_ptr->flags.has_not(FF::REMEMBER)) {
+                if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
                     g_ptr->info &= ~(CAVE_MARK);
                     note_spot(player_ptr, y, x);
                 }
@@ -108,7 +108,7 @@ static int rating_boost(int delta) { return delta * delta + 50 * delta; }
  * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
  * @return 算出されたダンジョンの雰囲気ランク
  */
-static byte get_dungeon_feeling(player_type *player_ptr)
+static byte get_dungeon_feeling(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
@@ -228,7 +228,7 @@ static byte get_dungeon_feeling(player_type *player_ptr)
  * @brief ダンジョンの雰囲気を更新し、変化があった場合メッセージを表示する
  * / Update dungeon feeling, and announce it if changed
  */
-void update_dungeon_feeling(player_type *player_ptr)
+void update_dungeon_feeling(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
@@ -262,9 +262,9 @@ void update_dungeon_feeling(player_type *player_ptr)
 /*
  * Glow deep lava and building entrances in the floor
  */
-void glow_deep_lava_and_bldg(player_type *player_ptr)
+void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         return;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -272,7 +272,7 @@ void glow_deep_lava_and_bldg(player_type *player_ptr)
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FF::GLOW))
+            if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW))
                 continue;
 
             for (DIRECTION i = 0; i < 9; i++) {

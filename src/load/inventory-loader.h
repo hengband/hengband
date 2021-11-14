@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-errr load_inventory(player_type *player_ptr);
+class PlayerType;
+errr load_inventory(PlayerType *player_ptr);

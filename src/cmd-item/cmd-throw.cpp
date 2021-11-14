@@ -18,7 +18,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-ThrowCommand::ThrowCommand(player_type *player_ptr)
+ThrowCommand::ThrowCommand(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -46,7 +46,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
         return false;
     }
 
-    PlayerClass(this->player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(this->player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     object_type tmp_object;
     ObjectThrowEntity ote(this->player_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);

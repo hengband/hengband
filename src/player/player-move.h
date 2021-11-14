@@ -28,7 +28,7 @@ extern int flow_tail;
 extern POSITION temp2_x[MAX_SHORT];
 extern POSITION temp2_y[MAX_SHORT];
 
-struct player_type;
-bool move_player_effect(player_type *player_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
-bool trap_can_be_ignored(player_type *player_ptr, FEAT_IDX feat);
-void search(player_type *player_ptr);
+class PlayerType;
+bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
+bool trap_can_be_ignored(PlayerType *player_ptr, FEAT_IDX feat);
+void search(PlayerType *player_ptr);

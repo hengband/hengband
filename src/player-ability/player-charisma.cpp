@@ -13,7 +13,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerCharisma::PlayerCharisma(player_type *player_ptr)
+PlayerCharisma::PlayerCharisma(PlayerType *player_ptr)
     : PlayerBasicStatistics(player_ptr)
 {
 }
@@ -34,11 +34,11 @@ void PlayerCharisma::set_locals()
  * * 型による魅力修正値
  * * 降鬼陣で加算(+5)
  */
-int16_t PlayerCharisma::battleform_value()
+int16_t PlayerCharisma::stance_value()
 {
     int16_t result = 0;
 
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::KOUKIJIN)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         result += 5;
     }
 
@@ -61,19 +61,19 @@ int16_t PlayerCharisma::mutation_value()
     int16_t result = 0;
 
     if (this->player_ptr->muta.any()) {
-        if (this->player_ptr->muta.has(MUTA::FLESH_ROT)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::FLESH_ROT)) {
             result -= 1;
         }
-        if (this->player_ptr->muta.has(MUTA::SILLY_VOI)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::SILLY_VOI)) {
             result -= 4;
         }
-        if (this->player_ptr->muta.has(MUTA::BLANK_FAC)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::BLANK_FAC)) {
             result -= 1;
         }
-        if (this->player_ptr->muta.has(MUTA::WART_SKIN)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::WART_SKIN)) {
             result -= 2;
         }
-        if (this->player_ptr->muta.has(MUTA::SCALES)) {
+        if (this->player_ptr->muta.has(PlayerMutationType::SCALES)) {
             result -= 1;
         }
     }
@@ -85,7 +85,7 @@ int16_t PlayerCharisma::set_exception_value(int16_t value)
 {
     int16_t result = value;
 
-    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::ILL_NORM)) {
         result = 0;
     }
 
@@ -96,7 +96,7 @@ BIT_FLAGS PlayerCharisma::get_all_flags()
 {
     BIT_FLAGS flags = PlayerStatusBase::get_all_flags();
 
-    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
@@ -107,7 +107,7 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
 {
     BIT_FLAGS flags = PlayerStatusBase::get_bad_flags();
 
-    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
@@ -124,7 +124,7 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
  */
 int16_t PlayerCharisma::set_exception_use_status(int16_t value)
 {
-    if (this->player_ptr->muta.has(MUTA::ILL_NORM)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::ILL_NORM)) {
         /* 10 to 18/90 charisma, guaranteed, based on level */
         if (value < 8 + 2 * this->player_ptr->lev) {
             value = 8 + 2 * this->player_ptr->lev;

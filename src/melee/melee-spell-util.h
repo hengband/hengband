@@ -13,9 +13,9 @@ typedef struct melee_spell_type {
     POSITION y;
     POSITION x;
     MONSTER_IDX target_idx;
-    RF_ABILITY thrown_spell;
+    MonsterAbilityType thrown_spell;
     HIT_POINT dam;
-    std::vector<RF_ABILITY> spells;
+    std::vector<MonsterAbilityType> spells;
     GAME_TEXT m_name[160];
 #ifdef JP
 #else
@@ -30,8 +30,8 @@ typedef struct melee_spell_type {
     bool pet;
     bool in_no_magic_dungeon;
     bool can_remember;
-    EnumClassFlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<MonsterAbilityType> ability_flags;
 } melee_spell_type;
 
-struct player_type;
-melee_spell_type *initialize_melee_spell_type(player_type *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx);
+class PlayerType;
+melee_spell_type *initialize_melee_spell_type(PlayerType *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx);

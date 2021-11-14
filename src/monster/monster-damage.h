@@ -2,24 +2,28 @@
 
 #include "monster-race/race-indice-types.h"
 #include "system/angband.h"
+#include "effect/attribute-types.h"
+#include "util/flag-group.h"
 #include <tuple>
 #include <vector>
 
 struct monster_race;
 struct monster_type;
-struct player_type;
+class PlayerType;
 typedef std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> combined_uniques;
 class MonsterDamageProcessor {
 public:
-    MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear);
+    MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeType type);
+    MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeFlags attribute_flags);
     virtual ~MonsterDamageProcessor() = default;
     bool mon_take_hit(concptr note);
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
     MONSTER_IDX m_idx;
     HIT_POINT dam;
     bool *fear;
+    AttributeFlags attribute_flags{};
     void get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp_dam);
     bool genocide_chaos_patron();
     bool process_dead_exp_virtue(concptr note, monster_type *exp_mon);

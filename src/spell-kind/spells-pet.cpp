@@ -11,7 +11,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -21,7 +21,7 @@
 /*!
  * @brief ペット爆破処理 /
  */
-void discharge_minion(player_type *player_ptr)
+void discharge_minion(PlayerType *player_ptr)
 {
     bool okay = true;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
@@ -59,7 +59,7 @@ void discharge_minion(player_type *player_ptr)
             dam = (dam - 400) / 2 + 400;
         if (dam > 800)
             dam = 800;
-        project(player_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        project(player_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, AttributeType::PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
         if (record_named_pet && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];

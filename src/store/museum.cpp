@@ -13,7 +13,7 @@
  * Remove an item from museum (Originally from TOband)
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void museum_remove_object(player_type *player_ptr)
+void museum_remove_object(PlayerType *player_ptr)
 {
     if (st_ptr->stock_num <= 0) {
         msg_print(_("博物館には何も置いてありません。", "The Museum is empty."));

@@ -53,6 +53,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
+#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"
@@ -105,9 +106,9 @@ enum class ElementSpells {
  */
 struct element_type {
     std::string_view title; //!< 領域名
-    std::array<spells_type, 3> type; //!< 属性タイプリスト
+    std::array<AttributeType, 3> type; //!< 属性タイプリスト
     std::array<std::string_view, 3> name; //!< 属性名リスト
-    std::unordered_map<spells_type, spells_type> extra; //!< 追加属性タイプ
+    std::unordered_map<AttributeType, AttributeType> extra; //!< 追加属性タイプ
 };
 
 /*!
@@ -118,10 +119,10 @@ struct element_power {
     mind_type info; //!< 難易度構造体
 };
 
-using element_type_list = const std::unordered_map<ElementRealm, element_type>;
+using element_type_list = const std::unordered_map<ElementRealmType, element_type>;
 using element_power_list = const std::unordered_map<ElementSpells, element_power>;
 using element_tip_list = const std::unordered_map<ElementSpells, std::string_view>;
-using element_text_list = const std::unordered_map<ElementRealm, std::string_view>;
+using element_text_list = const std::unordered_map<ElementRealmType, std::string_view>;
 
 // clang-format off
 /*!
@@ -129,65 +130,65 @@ using element_text_list = const std::unordered_map<ElementRealm, std::string_vie
  */
 static element_type_list element_types = {
     {
-        ElementRealm::FIRE, {
+        ElementRealmType::FIRE, {
             _("炎", "Fire"),
-            { GF_FIRE, GF_HELL_FIRE, GF_PLASMA },
+            { AttributeType::FIRE, AttributeType::HELL_FIRE, AttributeType::PLASMA },
             { _("火炎", "Fire"), _("業火", "Hell Fire"), _("プラズマ", "Plasma") },
             { },
         }
     },
     {
-        ElementRealm::ICE, {
+        ElementRealmType::ICE, {
             _("氷", "Ice"),
-            { GF_COLD, GF_INERTIAL, GF_TIME },
+            { AttributeType::COLD, AttributeType::INERTIAL, AttributeType::TIME },
             { _("冷気", "Ice"), _("遅鈍", "Inertia"), _("時間逆転", "Time Stream") },
-            { { GF_COLD, GF_ICE} },
+            { { AttributeType::COLD, AttributeType::ICE} },
         }
     },
     {
-        ElementRealm::SKY, {
+        ElementRealmType::SKY, {
             _("空", "Sky"),
-            { GF_ELEC, GF_LITE, GF_MANA },
+            { AttributeType::ELEC, AttributeType::LITE, AttributeType::MANA },
             { _("電撃", "Lightning"), _("光", "Light"), _("魔力", "Mana") },
             { },
         }
     },
     {
-        ElementRealm::SEA, {
+        ElementRealmType::SEA, {
             _("海", "Sea"),
-            { GF_ACID, GF_WATER, GF_DISINTEGRATE },
+            { AttributeType::ACID, AttributeType::WATER, AttributeType::DISINTEGRATE },
             { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegration") },
             { },
         }
     },
     {
-        ElementRealm::DARKNESS, {
+        ElementRealmType::DARKNESS, {
             _("闇", "Darkness"),
-            { GF_DARK, GF_NETHER, GF_VOID },
+            { AttributeType::DARK, AttributeType::NETHER, AttributeType::VOID_MAGIC },
             { _("暗黒", "Darkness"), _("地獄", "Nether"), _("虚無", "void") },
-            { { GF_DARK, GF_ABYSS } },
+            { { AttributeType::DARK, AttributeType::ABYSS } },
         }
     },
     {
-        ElementRealm::CHAOS, {
+        ElementRealmType::CHAOS, {
             _("混沌", "Chaos"),
-            { GF_CONFUSION, GF_CHAOS, GF_NEXUS },
+            { AttributeType::CONFUSION, AttributeType::CHAOS, AttributeType::NEXUS },
             { _("混乱", "Confusion"), _("カオス", "Chaos"), _("因果混乱", "Nexus") },
             { },
         }
     },
     {
-        ElementRealm::EARTH, {
+        ElementRealmType::EARTH, {
             _("地", "Earth"),
-            { GF_SHARDS, GF_FORCE, GF_METEOR },
+            { AttributeType::SHARDS, AttributeType::FORCE, AttributeType::METEOR },
             { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteor") },
             { },
         }
     },
     {
-        ElementRealm::DEATH, {
+        ElementRealmType::DEATH, {
             _("瘴気", "Death"),
-            { GF_POIS, GF_HYPODYNAMIA, GF_DISENCHANT },
+            { AttributeType::POIS, AttributeType::HYPODYNAMIA, AttributeType::DISENCHANT },
             { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchantment") },
             { },
         }
@@ -261,28 +262,28 @@ static element_tip_list element_tips = {
  * @brief 元素魔法選択時説明文定義
  */
 static element_text_list element_texts = {
-    { ElementRealm::FIRE,
+    { ElementRealmType::FIRE,
     _("炎系統は巨大なエネルギーで灼熱を生み出し、全ての敵を燃やし尽くそうとします。",
         "Great energy of Fire system will be able to burn out all of your enemies.")},
-    { ElementRealm::ICE,
+    { ElementRealmType::ICE,
     _("氷系統の魔法はその冷たさで敵の動きを奪い尽くし、魂すらも止めてしまうでしょう。",
         "Ice system will freeze your enemies, even their souls.")},
-    { ElementRealm::SKY,
+    { ElementRealmType::SKY,
     _("空系統は大いなる天空のエネルギーを駆使して敵の全てを撃滅できます。",
         "Sky system can terminate all of your enemies powerfully with the energy of the great sky.")},
-    { ElementRealm::SEA,
+    { ElementRealmType::SEA,
     _("海系統はその敵の全てを溶かし、大いなる海へと返してしまいます。",
         "Sea system melts all of your enemies and returns them to the great ocean.")},
-    { ElementRealm::DARKNESS,
+    { ElementRealmType::DARKNESS,
     _("闇系統は恐るべき力を常闇から引き出し、敵を地獄へと叩き落とすでしょう。",
         "Dark system draws terrifying power from the darkness and knocks your enemies into hell.")},
-    { ElementRealm::CHAOS,
+    { ElementRealmType::CHAOS,
     _("混沌系統は敵の意識も条理も捻じ曲げ、その存在をあの世に送ってしまいます。",
         "Chaos system twists and wraps your enemies, even their souls, and scatters them as dust in the wind.")},
-    { ElementRealm::EARTH,
+    { ElementRealmType::EARTH,
     _("地系統は偉大なる大地の力を呼び出して、数多の敵のことごとくを粉砕しようとします。",
         "Earth system smashes all of your enemies massively using its huge powers.")},
-    { ElementRealm::DEATH,
+    { ElementRealmType::DEATH,
     _("瘴気系統は全ての生ける者にとって途轍もない毒です。",
         "Death system is a tremendous poison for all living enemies.")},
 };
@@ -296,7 +297,7 @@ static element_text_list element_texts = {
  */
 concptr get_element_title(int realm_idx)
 {
-    auto realm = i2enum<ElementRealm>(realm_idx);
+    auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).title.data();
 }
 
@@ -305,9 +306,9 @@ concptr get_element_title(int realm_idx)
  * @param realm_idx 領域番号
  * @return 領域で使用できる属性リスト
  */
-static std::array<spells_type, 3> get_element_types(int realm_idx)
+static std::array<AttributeType, 3> get_element_types(int realm_idx)
 {
-    auto realm = i2enum<ElementRealm>(realm_idx);
+    auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).type;
 }
 
@@ -317,7 +318,7 @@ static std::array<spells_type, 3> get_element_types(int realm_idx)
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
-spells_type get_element_type(int realm_idx, int n)
+AttributeType get_element_type(int realm_idx, int n)
 {
     return get_element_types(realm_idx)[n];
 }
@@ -328,9 +329,9 @@ spells_type get_element_type(int realm_idx, int n)
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
-static spells_type get_element_spells_type(player_type *player_ptr, int n)
+static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
 {
-    auto realm = element_types.at(i2enum<ElementRealm>(player_ptr->element));
+    auto realm = element_types.at(i2enum<ElementRealmType>(player_ptr->element));
     auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
         if (randint0(100) < player_ptr->lev * 2)
@@ -346,7 +347,7 @@ static spells_type get_element_spells_type(player_type *player_ptr, int n)
  */
 static std::array<std::string_view, 3> get_element_names(int realm_idx)
 {
-    auto realm = i2enum<ElementRealm>(realm_idx);
+    auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).name;
 }
 
@@ -367,9 +368,9 @@ concptr get_element_name(int realm_idx, int n)
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static concptr get_element_tip(player_type *player_ptr, int spell_idx)
+static concptr get_element_tip(PlayerType *player_ptr, int spell_idx)
 {
-    auto realm = i2enum<ElementRealm>(player_ptr->element);
+    auto realm = i2enum<ElementRealmType>(player_ptr->element);
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto elem = element_powers.at(spell).elem;
     return format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
@@ -381,7 +382,7 @@ static concptr get_element_tip(player_type *player_ptr, int spell_idx)
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static int get_elemental_elem(player_type *player_ptr, int spell_idx)
+static int get_elemental_elem(PlayerType *player_ptr, int spell_idx)
 {
     (void)player_ptr;
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -394,7 +395,7 @@ static int get_elemental_elem(player_type *player_ptr, int spell_idx)
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static mind_type get_elemental_info(player_type *player_ptr, int spell_idx)
+static mind_type get_elemental_info(PlayerType *player_ptr, int spell_idx)
 {
     (void)player_ptr;
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -408,7 +409,7 @@ static mind_type get_elemental_info(player_type *player_ptr, int spell_idx)
  * @param p バッファ
  * @return なし(pを更新)
  */
-void get_element_effect_info(player_type *player_ptr, int spell_idx, char *p)
+void get_element_effect_info(PlayerType *player_ptr, int spell_idx, char *p)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -470,11 +471,11 @@ void get_element_effect_info(player_type *player_ptr, int spell_idx, char *p)
  * @param spell_idx 呪文番号
  * @return 実行したらTRUE、キャンセルならFALSE
  */
-static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
+static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 {
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto power = element_powers.at(spell);
-    spells_type typ;
+    AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
     HIT_POINT dam;
@@ -505,7 +506,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = damroll(8 + ((plev - 5) / 4), 8);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_bolt_or_beam(player_ptr, plev, typ, dir, dam)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -535,7 +536,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = std::min(150, player_ptr->chp / 2);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_breath(player_ptr, typ, dir, dam, 3)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -543,7 +544,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
     case ElementSpells::ANNIHILATE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_E_GENOCIDE, dir, plev + 50, 0);
+        fire_ball_hide(player_ptr, AttributeType::E_GENOCIDE, dir, plev + 50, 0);
         break;
     case ElementSpells::BOLT_3RD:
         if (!get_aim_dir(player_ptr, &dir))
@@ -563,7 +564,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = 75 + plev * 3 / 2;
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 3)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -577,7 +578,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT))
+                if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))
                     continue;
                 if (!player_bold(player_ptr, y, x))
                     break;
@@ -591,7 +592,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
         dam = 115 + plev * 5 / 2;
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 4)) {
-            if (typ == GF_HYPODYNAMIA) {
+            if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
@@ -623,7 +624,7 @@ static bool cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx)
  * @param spell_idx 呪文番号
  * @return 失敗率
  */
-static PERCENTAGE decide_element_chance(player_type *player_ptr, mind_type spell)
+static PERCENTAGE decide_element_chance(PlayerType *player_ptr, mind_type spell)
 {
     PERCENTAGE chance = spell.fail;
 
@@ -658,7 +659,7 @@ static PERCENTAGE decide_element_chance(player_type *player_ptr, mind_type spell
  * @param spell_idx 呪文番号
  * @return 消費MP
  */
-static MANA_POINT decide_element_mana_cost(player_type *player_ptr, mind_type spell)
+static MANA_POINT decide_element_mana_cost(PlayerType *player_ptr, mind_type spell)
 {
     (void)player_ptr;
     return spell.mana_cost;
@@ -671,7 +672,7 @@ static MANA_POINT decide_element_mana_cost(player_type *player_ptr, mind_type sp
  * @param only_browse 閲覧モードかどうか
  * @return 選んだらTRUE、選ばなかったらFALSE
  */
-bool get_element_power(player_type *player_ptr, SPELL_IDX *sn, bool only_browse)
+bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
 {
     SPELL_IDX i;
     int num = 0;
@@ -842,7 +843,7 @@ bool get_element_power(player_type *player_ptr, SPELL_IDX *sn, bool only_browse)
  * @param mana_cost 消費MP
  * @return 詠唱するならTRUE、しないならFALSE
  */
-static bool check_element_mp_sufficiency(player_type *player_ptr, int mana_cost)
+static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
 {
     if (mana_cost <= player_ptr->csp)
         return true;
@@ -861,7 +862,7 @@ static bool check_element_mp_sufficiency(player_type *player_ptr, int mana_cost)
  * @param chance 失敗率
  * @return 詠唱して実行したらTRUE、されなかったらFALSE
  */
-static bool try_cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
+static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
 {
     if (randint0(100) >= chance) {
         sound(SOUND_ZAP);
@@ -895,7 +896,7 @@ static bool try_cast_element_spell(player_type *player_ptr, SPELL_IDX spell_idx,
  * @brief 元素魔法コマンドのメインルーチン
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-void do_cmd_element(player_type *player_ptr)
+void do_cmd_element(PlayerType *player_ptr)
 {
     SPELL_IDX i;
     if (cmd_limit_confused(player_ptr) || !get_element_power(player_ptr, &i, false))
@@ -936,7 +937,7 @@ void do_cmd_element(player_type *player_ptr)
  * @brief 現在プレイヤーが使用可能な元素魔法の一覧表示
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-void do_cmd_element_browse(player_type *player_ptr)
+void do_cmd_element_browse(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
     char temp[62 * 5];
@@ -971,38 +972,38 @@ void do_cmd_element_browse(player_type *player_ptr)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
+bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
 {
     switch (type) {
-    case GF_FIRE:
+    case AttributeType::FIRE:
         if (any_bits(r_ptr->flagsr, RFR_IM_FIRE))
             return false;
         break;
-    case GF_COLD:
+    case AttributeType::COLD:
         if (any_bits(r_ptr->flagsr, RFR_IM_COLD))
             return false;
         break;
-    case GF_ELEC:
+    case AttributeType::ELEC:
         if (any_bits(r_ptr->flagsr, RFR_IM_ELEC))
             return false;
         break;
-    case GF_ACID:
+    case AttributeType::ACID:
         if (any_bits(r_ptr->flagsr, RFR_IM_ACID))
             return false;
         break;
-    case GF_DARK:
+    case AttributeType::DARK:
         if (any_bits(r_ptr->flagsr, RFR_RES_DARK) || any_bits(r_ptr->r_flags3, RF3_HURT_LITE))
             return false;
         break;
-    case GF_CONFUSION:
+    case AttributeType::CONFUSION:
         if (any_bits(r_ptr->flags3, RF3_NO_CONF))
             return false;
         break;
-    case GF_SHARDS:
+    case AttributeType::SHARDS:
         if (any_bits(r_ptr->flagsr, RFR_RES_SHAR))
             return false;
         break;
-    case GF_POIS:
+    case AttributeType::POIS:
         if (any_bits(r_ptr->flagsr, RFR_IM_POIS))
             return false;
         break;
@@ -1019,7 +1020,7 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
  * @param em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
  */
-process_result effect_monster_elemental_genocide(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     auto type = get_element_type(player_ptr->element, 0);
     auto name = get_element_name(player_ptr->element, 0);
@@ -1059,12 +1060,12 @@ process_result effect_monster_elemental_genocide(player_type *player_ptr, effect
  * @details
  * レベルに応じて取得する耐性などの判定に使用する
  */
-bool has_element_resist(player_type *player_ptr, ElementRealm realm, PLAYER_LEVEL lev)
+bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_LEVEL lev)
 {
     if (player_ptr->pclass != PlayerClassType::ELEMENTALIST)
         return false;
 
-    auto prealm = i2enum<ElementRealm>(player_ptr->element);
+    auto prealm = i2enum<ElementRealmType>(player_ptr->element);
     return (prealm == realm && player_ptr->lev >= lev);
 }
 
@@ -1084,7 +1085,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
         name = _("ランダム", "Random");
     } else {
         sym = I2A(i);
-        name = element_types.at(i2enum<ElementRealm>(i + 1)).title.data();
+        name = element_types.at(i2enum<ElementRealmType>(i + 1)).title.data();
     }
     sprintf(cur, "%c) %s", sym, name);
 
@@ -1128,7 +1129,7 @@ static int interpret_realm_select_key(int cs, int n, char c)
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static int get_element_realm(player_type *player_ptr, int is, int n)
+static int get_element_realm(PlayerType *player_ptr, int is, int n)
 {
     int cs = std::max(0, is);
     int os = cs;
@@ -1194,11 +1195,11 @@ static int get_element_realm(player_type *player_ptr, int is, int n)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 領域番号
  */
-byte select_element_realm(player_type *player_ptr)
+byte select_element_realm(PlayerType *player_ptr)
 {
     clear_from(10);
 
-    int realm_max = enum2i(ElementRealm::MAX);
+    int realm_max = enum2i(ElementRealmType::MAX);
     int realm_idx = 1;
     int row = 16;
     while (1) {
@@ -1214,7 +1215,7 @@ byte select_element_realm(player_type *player_ptr)
         if (realm_idx == 255)
             break;
 
-        auto realm = i2enum<ElementRealm>(realm_idx);
+        auto realm = i2enum<ElementRealmType>(realm_idx);
         char temp[80 * 5];
         shape_buffer(element_texts.at(realm).data(), 74, temp, sizeof(temp));
         concptr t = temp;
@@ -1240,13 +1241,13 @@ byte select_element_realm(player_type *player_ptr)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  */
-void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
+void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto plev = player_ptr->lev;
-    auto realm = i2enum<ElementRealm>(player_ptr->element);
+    auto realm = i2enum<ElementRealmType>(player_ptr->element);
     rpi_type rpi;
     switch (realm) {
-    case ElementRealm::FIRE:
+    case ElementRealmType::FIRE:
         rpi = rpi_type(_("ライト・エリア", "Light area"));
         rpi.text = _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
         rpi.min_level = 3;
@@ -1255,7 +1256,7 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 10;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
-    case ElementRealm::ICE:
+    case ElementRealmType::ICE:
         rpi = rpi_type(_("周辺フリーズ", "Sleep monsters"));
         rpi.info = format("%s%d", KWD_POWER, 20 + plev * 3 / 2);
         rpi.text = _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put all monsters in sight to sleep.");
@@ -1265,7 +1266,7 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 25;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
-    case ElementRealm::SKY:
+    case ElementRealmType::SKY:
         rpi = rpi_type(_("魔力充填", "Recharging"));
         rpi.info = format("%s%d", KWD_POWER, 120);
         rpi.text = _("杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。", "Recharges staffs, wands or rods.");
@@ -1275,7 +1276,7 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 25;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
-    case ElementRealm::SEA:
+    case ElementRealmType::SEA:
         rpi = rpi_type(_("岩石溶解", "Stone to mud"));
         rpi.text = _("壁を溶かして床にする。", "Turns one rock square to mud.");
         rpi.min_level = 5;
@@ -1284,7 +1285,7 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 10;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
-    case ElementRealm::DARKNESS:
+    case ElementRealmType::DARKNESS:
         rpi = rpi_type(format(_("闇の扉", "Door to darkness"), 15 + plev / 2));
         rpi.info = format("%s%d", KWD_SPHERE, 15 + plev / 2);
         rpi.min_level = 5;
@@ -1293,7 +1294,7 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 20;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
-    case ElementRealm::CHAOS:
+    case ElementRealmType::CHAOS:
         rpi = rpi_type(_("現実変容", "Alter reality"));
         rpi.text = _("現在の階を再構成する。", "Recreates current dungeon level.");
         rpi.min_level = 35;
@@ -1302,18 +1303,17 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
         rpi.fail = 40;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
-    case ElementRealm::EARTH:
+    case ElementRealmType::EARTH:
         rpi = rpi_type(_("地震", "Earthquake"));
         rpi.info = format("%s%d", KWD_SPHERE, 10);
-        rpi.text
-            = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
+        rpi.text = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
         rpi.min_level = 25;
         rpi.cost = 15;
         rpi.stat = A_WIS;
         rpi.fail = 20;
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
-    case ElementRealm::DEATH:
+    case ElementRealmType::DEATH:
         rpi = rpi_type(_("増殖阻止", "Sterilization"));
         rpi.text = _("この階の増殖するモンスターが増殖できなくなる。", "Prevents any breeders on current level from breeding.");
         rpi.min_level = 5;
@@ -1330,45 +1330,45 @@ void switch_element_racial(player_type *player_ptr, rc_type *rc_ptr)
 /*!
  * @todo 宣言だけ。後日適切な場所に移動
  */
-static bool door_to_darkness(player_type *player_ptr, POSITION dist);
+static bool door_to_darkness(PlayerType *player_ptr, POSITION dist);
 
 /*!
  * @brief クラスパワーを実行
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 実行したらTRUE、しなかったらFALSE
  */
-bool switch_element_execution(player_type *player_ptr)
+bool switch_element_execution(PlayerType *player_ptr)
 {
-    auto realm = i2enum<ElementRealm>(player_ptr->element);
+    auto realm = i2enum<ElementRealmType>(player_ptr->element);
     PLAYER_LEVEL plev = player_ptr->lev;
     DIRECTION dir;
 
     switch (realm) {
-    case ElementRealm::FIRE:
+    case ElementRealmType::FIRE:
         (void)lite_area(player_ptr, damroll(2, plev / 2), plev / 10);
         break;
-    case ElementRealm::ICE:
-        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, GF_COLD, PROJECT_ITEM);
-        (void)project_all_los(player_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
+    case ElementRealmType::ICE:
+        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, AttributeType::COLD, PROJECT_ITEM);
+        (void)project_all_los(player_ptr, AttributeType::OLD_SLEEP, 20 + plev * 3 / 2);
         break;
-    case ElementRealm::SKY:
+    case ElementRealmType::SKY:
         (void)recharge(player_ptr, 120);
         break;
-    case ElementRealm::SEA:
+    case ElementRealmType::SEA:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
         break;
-    case ElementRealm::DARKNESS:
+    case ElementRealmType::DARKNESS:
         return door_to_darkness(player_ptr, 15 + plev / 2);
         break;
-    case ElementRealm::CHAOS:
+    case ElementRealmType::CHAOS:
         reserve_alter_reality(player_ptr, randint0(21) + 15);
         break;
-    case ElementRealm::EARTH:
+    case ElementRealmType::EARTH:
         (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
         break;
-    case ElementRealm::DEATH:
+    case ElementRealmType::DEATH:
         if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRO)
             player_ptr->current_floor_ptr->num_repro += MAX_REPRO;
         break;
@@ -1424,7 +1424,7 @@ static bool is_target_grid_dark(floor_type *f_ptr, POSITION y, POSITION x)
  * @breif 暗いところ限定での次元の扉
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-static bool door_to_darkness(player_type *player_ptr, POSITION dist)
+static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
 {
     POSITION y = player_ptr->y;
     POSITION x = player_ptr->x;

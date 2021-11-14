@@ -41,7 +41,7 @@
 /*!
  * @brief コンソールのリサイズに合わせてマップを再描画する /
  * Map resizing whenever the main term changes size
- * @todo ここにplayer_type を追加するとz-termに影響が行くので保留
+ * @todo ここにPlayerType を追加するとz-termに影響が行くので保留
  */
 void resize_map()
 {

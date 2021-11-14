@@ -7,9 +7,9 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-mam_type *initialize_mam_type(player_type *player_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
+mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
 {
-    mam_ptr->effect_type = 0;
+    mam_ptr->attribute = 0;
     mam_ptr->m_idx = m_idx;
     mam_ptr->t_idx = t_idx;
     mam_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];

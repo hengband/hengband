@@ -17,7 +17,7 @@
 #include "grid/feature-flag-types.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -34,7 +34,7 @@
  * @param rad 効力の半径
  * @return ターゲットを指定し、実行したならばTRUEを返す。
  */
-bool cast_wrath_of_the_god(player_type *player_ptr, HIT_POINT dam, POSITION rad)
+bool cast_wrath_of_the_god(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -59,7 +59,7 @@ bool cast_wrath_of_the_god(player_type *player_ptr, HIT_POINT dam, POSITION rad)
         mmove2(&ny, &nx, player_ptr->y, player_ptr->x, ty, tx);
         if (get_max_range(player_ptr) <= distance(player_ptr->y, player_ptr->x, ny, nx))
             break;
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT))
             break;
         if ((dir != 5) && player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0)
             break;
@@ -96,7 +96,7 @@ bool cast_wrath_of_the_god(player_type *player_ptr, HIT_POINT dam, POSITION rad)
             || !in_disintegration_range(player_ptr->current_floor_ptr, ty, tx, y, x))
             continue;
 
-        project(player_ptr, 0, rad, y, x, dam, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        project(player_ptr, 0, rad, y, x, dam, AttributeType::DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
     }
 
     return true;
@@ -108,7 +108,7 @@ bool cast_wrath_of_the_god(player_type *player_ptr, HIT_POINT dam, POSITION rad)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_holy(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_sh_holy(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -151,7 +151,7 @@ bool set_tim_sh_holy(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す
  * @details 呪術領域でも使えるが、汎用性と行数の兼ね合いを考えて破邪側に入れた
  */
-bool set_tim_eyeeye(player_type *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_tim_eyeeye(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;

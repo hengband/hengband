@@ -3,7 +3,7 @@
 
 class PlayerInfravision : public PlayerStatusBase {
 public:
-    PlayerInfravision(player_type *player_ptr);
+    PlayerInfravision(PlayerType *player_ptr);
 
 protected:
     void set_locals() override;

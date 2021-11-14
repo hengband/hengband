@@ -75,7 +75,7 @@ static void print_visuals_menu(concptr choice_msg)
 /*
  * Interact with "visuals"
  */
-void do_cmd_visuals(player_type *player_ptr)
+void do_cmd_visuals(PlayerType *player_ptr)
 {
     FILE *auto_dump_stream;
     char tmp[160];

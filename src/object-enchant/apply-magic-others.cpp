@@ -38,7 +38,7 @@
  * @details
  * Hack -- note the special code for various items
  */
-void apply_magic_others(player_type *player_ptr, object_type *o_ptr, int power)
+void apply_magic_others(PlayerType *player_ptr, object_type *o_ptr, int power)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -148,7 +148,7 @@ void apply_magic_others(player_type *player_ptr, object_type *o_ptr, int power)
 
         o_ptr->pval = i;
         if (one_in_(6))
-            o_ptr->curse_flags.set(TRC::CURSED);
+            o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
         break;
     }

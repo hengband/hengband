@@ -26,7 +26,7 @@ concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides);
 concptr info_radius(POSITION rad);
 concptr info_weight(WEIGHT weight);
 
-struct player_type;
-void do_cmd_browse(player_type *player_ptr);
-void do_cmd_study(player_type *player_ptr);
-bool do_cmd_cast(player_type *player_ptr);
+class PlayerType;
+void do_cmd_browse(PlayerType *player_ptr);
+void do_cmd_study(PlayerType *player_ptr);
+bool do_cmd_cast(PlayerType *player_ptr);

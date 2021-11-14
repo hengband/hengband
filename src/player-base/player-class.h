@@ -9,36 +9,36 @@
 #include <memory>
 #include <variant>
 
-enum class SamuraiStance : uint8_t;
-enum class MonkStance : uint8_t;
+enum class SamuraiStanceType : uint8_t;
+enum class MonkStanceType : uint8_t;
 
 class PlayerClass {
 public:
-    PlayerClass(player_type *player_ptr);
+    PlayerClass(PlayerType *player_ptr);
     virtual ~PlayerClass() = default;
 
     TrFlags tr_flags() const;
-    TrFlags form_tr_flags() const;
+    TrFlags stance_tr_flags() const;
 
     bool has_stun_immunity() const;
     bool is_wizard() const;
 
     bool lose_balance();
-    void break_samurai_stance(std::initializer_list<SamuraiStance> stance_list);
-    SamuraiStance get_samurai_stance() const;
-    bool samurai_stance_is(SamuraiStance stance) const;
-    void set_samurai_stance(SamuraiStance stance) const;
+    void break_samurai_stance(std::initializer_list<SamuraiStanceType> stance_list);
+    SamuraiStanceType get_samurai_stance() const;
+    bool samurai_stance_is(SamuraiStanceType stance) const;
+    void set_samurai_stance(SamuraiStanceType stance) const;
 
-    MonkStance get_monk_stance() const;
-    bool monk_stance_is(MonkStance stance) const;
-    void set_monk_stance(MonkStance stance) const;
+    MonkStanceType get_monk_stance() const;
+    bool monk_stance_is(MonkStanceType stance) const;
+    void set_monk_stance(MonkStanceType stance) const;
 
     void init_specific_data();
     template <typename T>
     std::shared_ptr<T> get_specific_data() const;
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
 };
 
 /**

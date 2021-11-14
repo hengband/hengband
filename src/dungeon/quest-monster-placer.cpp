@@ -19,7 +19,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 成功したならばTRUEを返す
  */
-bool place_quest_monsters(player_type *player_ptr)
+bool place_quest_monsters(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < max_q_idx; i++) {
@@ -51,7 +51,7 @@ bool place_quest_monsters(player_type *player_ptr)
                     x = randint0(floor_ptr->width);
                     g_ptr = &floor_ptr->grid_array[y][x];
                     f_ptr = &f_info[g_ptr->feat];
-                    if (f_ptr->flags.has_none_of({FF::MOVE, FF::CAN_FLY}))
+                    if (f_ptr->flags.has_none_of({FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY}))
                         continue;
 
                     if (!monster_can_enter(player_ptr, y, x, r_ptr, 0))

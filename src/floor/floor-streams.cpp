@@ -123,7 +123,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                             continue;
 
                         /* Do not convert permanent features */
-                        if (g_ptr->cave_has_flag(FF::PERMANENT))
+                        if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT))
                             continue;
 
                         /*
@@ -139,8 +139,8 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
-                        if (f_info[feat1].flags.has(FF::LAVA)) {
-                            if (d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
+                        if (f_info[feat1].flags.has(FloorFeatureType::LAVA)) {
+                            if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
                                 g_ptr->info |= CAVE_GLOW;
                         }
 
@@ -172,7 +172,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
     dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
 
     /* Choose water mainly */
-    if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon_ptr->flags.has(DF::WATER_RIVER)) {
+    if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon_ptr->flags.has(DungeonFeatureType::WATER_RIVER)) {
         feat1 = feat_deep_water;
         feat2 = feat_shallow_water;
     } else /* others */
@@ -181,17 +181,17 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
         FEAT_IDX select_shallow_feat[10];
         int select_id_max = 0, selected;
 
-        if (dungeon_ptr->flags.has(DF::LAVA_RIVER)) {
+        if (dungeon_ptr->flags.has(DungeonFeatureType::LAVA_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_lava;
             select_shallow_feat[select_id_max] = feat_shallow_lava;
             select_id_max++;
         }
-        if (dungeon_ptr->flags.has(DF::POISONOUS_RIVER)) {
+        if (dungeon_ptr->flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_poisonous_puddle;
             select_shallow_feat[select_id_max] = feat_shallow_poisonous_puddle;
             select_id_max++;
         }
-        if (dungeon_ptr->flags.has(DF::ACID_RIVER)) {
+        if (dungeon_ptr->flags.has(DungeonFeatureType::ACID_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_acid_puddle;
             select_shallow_feat[select_id_max] = feat_shallow_acid_puddle;
             select_id_max++;
@@ -210,7 +210,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FF::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FF::WATER))
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FloorFeatureType::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FloorFeatureType::WATER))
                 || !dd_ptr->laketype)) {
             return;
         }
@@ -273,7 +273,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
  * hidden gold types are currently unused.
  * </pre>
  */
-void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
+void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 {
     int i;
     POSITION y, x, tx, ty;
@@ -284,8 +284,8 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
     feature_type *f_ptr;
 
     feature_type *streamer_ptr = &f_info[feat];
-    bool streamer_is_wall = streamer_ptr->flags.has(FF::WALL) && streamer_ptr->flags.has_not(FF::PERMANENT);
-    bool streamer_may_have_gold = streamer_ptr->flags.has(FF::MAY_HAVE_GOLD);
+    bool streamer_is_wall = streamer_ptr->flags.has(FloorFeatureType::WALL) && streamer_ptr->flags.has_not(FloorFeatureType::PERMANENT);
+    bool streamer_may_have_gold = streamer_ptr->flags.has(FloorFeatureType::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -314,11 +314,11 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             g_ptr = &floor_ptr->grid_array[ty][tx];
             f_ptr = &f_info[g_ptr->feat];
 
-            if (f_ptr->flags.has(FF::MOVE) && f_ptr->flags.has_any_of({FF::WATER, FF::LAVA}))
+            if (f_ptr->flags.has(FloorFeatureType::MOVE) && f_ptr->flags.has_any_of({FloorFeatureType::WATER, FloorFeatureType::LAVA}))
                 continue;
 
             /* Do not convert permanent features */
-            if (f_ptr->flags.has(FF::PERMANENT))
+            if (f_ptr->flags.has(FloorFeatureType::PERMANENT))
                 continue;
 
             /* Only convert "granite" walls */
@@ -330,13 +330,13 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             }
 
             if (g_ptr->m_idx
-                && !(streamer_ptr->flags.has(FF::PLACE)
+                && !(streamer_ptr->flags.has(FloorFeatureType::PLACE)
                     && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }
 
-            if (!g_ptr->o_idx_list.empty() && streamer_ptr->flags.has_not(FF::DROP)) {
+            if (!g_ptr->o_idx_list.empty() && streamer_ptr->flags.has_not(FloorFeatureType::DROP)) {
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
@@ -369,13 +369,13 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             if (streamer_may_have_gold) {
                 /* Hack -- Add some known treasure */
                 if (one_in_(chance)) {
-                    cave_alter_feat(player_ptr, ty, tx, FF::MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, ty, tx, FloorFeatureType::MAY_HAVE_GOLD);
                 }
 
                 /* Hack -- Add some hidden treasure */
                 else if (one_in_(chance / 4)) {
-                    cave_alter_feat(player_ptr, ty, tx, FF::MAY_HAVE_GOLD);
-                    cave_alter_feat(player_ptr, ty, tx, FF::ENSECRET);
+                    cave_alter_feat(player_ptr, ty, tx, FloorFeatureType::MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, ty, tx, FloorFeatureType::ENSECRET);
                 }
             }
         }
@@ -413,7 +413,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
  * This happens in real world lava tubes.
  * </pre>
  */
-void place_trees(player_type *player_ptr, POSITION x, POSITION y)
+void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
 {
     int i, j;
     grid_type *g_ptr;
@@ -432,7 +432,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
                 continue;
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(FF::PERMANENT)) {
+            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble
@@ -448,7 +448,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
                 g_ptr->mimic = 0;
 
                 /* Light area since is open above */
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
+                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
                     floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
             }
         }
@@ -465,7 +465,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
  * @brief ダンジョンに＊破壊＊済み地形ランダムに施す /
  * Build a destroyed level
  */
-void destroy_level(player_type *player_ptr)
+void destroy_level(PlayerType *player_ptr)
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("階に*破壊*の痕跡を生成しました。", "Destroyed Level."));
 

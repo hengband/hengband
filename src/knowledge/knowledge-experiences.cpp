@@ -24,7 +24,7 @@
 /*
  * Display weapon-exp
  */
-void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
+void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -69,7 +69,7 @@ void do_cmd_knowledge_weapon_exp(player_type *player_ptr)
  * @brief 魔法の経験値を表示するコマンドのメインルーチン
  * Display spell-exp
  */
-void do_cmd_knowledge_spell_exp(player_type *player_ptr)
+void do_cmd_knowledge_spell_exp(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
@@ -90,7 +90,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
                 continue;
             SUB_EXP spell_exp = player_ptr->spell_exp[i];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
-            fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm1, i, SPELL_NAME));
+            fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm1, i, SpellProcessType::NAME));
             if (player_ptr->realm1 == REALM_HISSATSU) {
                 if (show_actual_value)
                     fprintf(fff, "----/---- ");
@@ -126,7 +126,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
 
             SUB_EXP spell_exp = player_ptr->spell_exp[i + 32];
             auto skill_rank = PlayerSkill::spell_skill_rank(spell_exp);
-            fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm2, i, SPELL_NAME));
+            fprintf(fff, "%-25s ", exe_spell(player_ptr, player_ptr->realm2, i, SpellProcessType::NAME));
             if (show_actual_value)
                 fprintf(fff, "%4d/%4d ", spell_exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER));
             if (skill_rank >= PlayerSkillRank::EXPERT)
@@ -149,7 +149,7 @@ void do_cmd_knowledge_spell_exp(player_type *player_ptr)
  * @brief スキル情報を表示するコマンドのメインルーチン /
  * Display skill-exp
  */
-void do_cmd_knowledge_skill_exp(player_type *player_ptr)
+void do_cmd_knowledge_skill_exp(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     char file_name[FILE_NAME_SIZE];

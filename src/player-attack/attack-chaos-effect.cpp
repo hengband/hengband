@@ -47,7 +47,7 @@
  * @details
  * カオス属性や混乱の手
  */
-static void attack_confuse(player_type *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
+static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
 {
     if (player_ptr->special_attack & ATTACK_CONFUSE) {
         player_ptr->special_attack &= ~(ATTACK_CONFUSE);
@@ -77,7 +77,7 @@ static void attack_confuse(player_type *player_ptr, player_attack_type *pa_ptr, 
  * @details
  * 魔術属性
  */
-static void attack_stun(player_type *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
+static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
 {
     monster_race *r_ptr = pa_ptr->r_ptr;
     if (any_bits(r_ptr->flags3, RF3_NO_STUN)) {
@@ -100,7 +100,7 @@ static void attack_stun(player_type *player_ptr, player_attack_type *pa_ptr, boo
  * @details
  * 魔術属性
  */
-static void attack_scare(player_type *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
+static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
 {
     monster_race *r_ptr = pa_ptr->r_ptr;
     if (any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
@@ -122,7 +122,7 @@ static void attack_scare(player_type *player_ptr, player_attack_type *pa_ptr, bo
  * @details
  * 魔術属性
  */
-static void attack_dispel(player_type *player_ptr, player_attack_type *pa_ptr)
+static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     if (pa_ptr->r_ptr->ability_flags.has_none_of(RF_ABILITY_ATTACK_MASK) && pa_ptr->r_ptr->ability_flags.has_none_of(RF_ABILITY_INDIRECT_MASK))
         return;
@@ -150,7 +150,7 @@ static void attack_dispel(player_type *player_ptr, player_attack_type *pa_ptr)
  * @details
  * 魔術属性
  */
-static void attack_probe(player_type *player_ptr, player_attack_type *pa_ptr)
+static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     msg_print(_("刃が敵を調査した...", "The blade probed your enemy..."));
     msg_print(nullptr);
@@ -167,7 +167,7 @@ static void attack_probe(player_type *player_ptr, player_attack_type *pa_ptr)
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return 抵抗されたらTRUE、アウェイされるならFALSE
  */
-static bool judge_tereprt_resistance(player_type *player_ptr, player_attack_type *pa_ptr)
+static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = pa_ptr->r_ptr;
     if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
@@ -198,7 +198,7 @@ static bool judge_tereprt_resistance(player_type *player_ptr, player_attack_type
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param num 現在の攻撃回数 (テレポートしてしまったら追加攻撃できないのでその補正)
  */
-static void attack_teleport_away(player_type *player_ptr, player_attack_type *pa_ptr, int *num)
+static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_ptr, int *num)
 {
     if (judge_tereprt_resistance(player_ptr, pa_ptr))
         return;
@@ -216,7 +216,7 @@ static void attack_teleport_away(player_type *player_ptr, player_attack_type *pa
  * @param y モンスターのY座標
  * @param x モンスターのX座標
  */
-static void attack_polymorph(player_type *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
+static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
     monster_race *r_ptr = pa_ptr->r_ptr;
     if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) != 0) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
@@ -238,7 +238,7 @@ static void attack_polymorph(player_type *player_ptr, player_attack_type *pa_ptr
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-static void attack_golden_hammer(player_type *player_ptr, player_attack_type *pa_ptr)
+static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[pa_ptr->m_idx];
@@ -263,7 +263,7 @@ static void attack_golden_hammer(player_type *player_ptr, player_attack_type *pa
  * @param x モンスターのX座標
  * @param num 現在の攻撃回数
  */
-void change_monster_stat(player_type *player_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
+void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
@@ -272,16 +272,16 @@ void change_monster_stat(player_type *player_ptr, player_attack_type *pa_ptr, co
         || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION))
         attack_confuse(player_ptr, pa_ptr);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::STUN)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::STUN)
         attack_stun(player_ptr, pa_ptr, false);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::SCARE)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::SCARE)
         attack_scare(player_ptr, pa_ptr, false);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::DISPELL)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::DISPELL)
         attack_dispel(player_ptr, pa_ptr);
 
-    if (pa_ptr->magical_effect == MagicalBrandEffect::PROBE)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::PROBE)
         attack_probe(player_ptr, pa_ptr);
 
     if (pa_ptr->chaos_effect == CE_TELE_AWAY)

@@ -15,7 +15,7 @@
 #include "spell-kind/spells-equipment.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
@@ -30,7 +30,7 @@
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
 #define SV_CHEST_MIN_LARGE 4
 
-Chest::Chest(player_type *player_ptr)
+Chest::Chest(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -223,7 +223,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
         msg_print(_("鳥の群れがあなたを取り巻いた！", "A storm of birds swirls around you!"));
 
         for (i = 0; i < randint1(3) + 3; i++)
-            (void)fire_meteor(this->player_ptr, -1, GF_FORCE, y, x, o_ptr->pval / 5, 7);
+            (void)fire_meteor(this->player_ptr, -1, AttributeType::FORCE, y, x, o_ptr->pval / 5, 7);
 
         for (i = 0; i < randint1(5) + o_ptr->pval / 5; i++) {
             (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -236,7 +236,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
         if (one_in_(4)) {
             msg_print(_("炎と硫黄の雲の中に悪魔が姿を現した！", "Demons materialize in clouds of fire and brimstone!"));
             for (i = 0; i < randint1(3) + 2; i++) {
-                (void)fire_meteor(this->player_ptr, -1, GF_FIRE, y, x, 10, 5);
+                (void)fire_meteor(this->player_ptr, -1, AttributeType::FIRE, y, x, 10, 5);
                 (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
         }
@@ -310,7 +310,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
                 continue;
             }
 
-            (void)fire_meteor(this->player_ptr, -1, GF_NETHER, y, x, 150, 1);
+            (void)fire_meteor(this->player_ptr, -1, AttributeType::NETHER, y, x, 150, 1);
         }
     }
 

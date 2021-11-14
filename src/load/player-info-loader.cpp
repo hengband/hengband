@@ -30,7 +30,7 @@
  * @brief セーブデータから領域情報を読み込む / Read player realms
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void rd_realms(player_type *player_ptr)
+static void rd_realms(PlayerType *player_ptr)
 {
     if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
         player_ptr->element = rd_byte();
@@ -46,7 +46,7 @@ static void rd_realms(player_type *player_ptr)
  * @brief セーブデータからプレイヤー基本情報を読み込む / Read player's basic info
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void rd_base_info(player_type *player_ptr)
+void rd_base_info(PlayerType *player_ptr)
 {
     rd_string(player_ptr->name, sizeof(player_ptr->name));
     rd_string(player_ptr->died_from, sizeof(player_ptr->died_from));
@@ -81,7 +81,7 @@ void rd_base_info(player_type *player_ptr)
     player_ptr->wt = rd_s16b();
 }
 
-void rd_experience(player_type *player_ptr)
+void rd_experience(PlayerType *player_ptr)
 {
     player_ptr->max_exp = rd_s32b();
     if (h_older_than(1, 5, 4, 1))
@@ -115,7 +115,7 @@ void rd_experience(player_type *player_ptr)
     strip_bytes(sizeof(int16_t) * (MAX_SKILLS - PLAYER_SKILL_KIND_TYPE_RANGE.size()));
 }
 
-void rd_skills(player_type *player_ptr)
+void rd_skills(PlayerType *player_ptr)
 {
     if (h_older_than(0, 4, 1))
         set_zangband_skill(player_ptr);
@@ -127,7 +127,7 @@ void rd_skills(player_type *player_ptr)
         player_ptr->action = ACTION_SING;
 }
 
-static void set_race(player_type *player_ptr)
+static void set_race(PlayerType *player_ptr)
 {
     player_ptr->start_race = i2enum<PlayerRaceType>(rd_byte());
     player_ptr->old_race1 = rd_u32b();
@@ -135,7 +135,7 @@ static void set_race(player_type *player_ptr)
     player_ptr->old_realm = rd_s16b();
 }
 
-void rd_race(player_type *player_ptr)
+void rd_race(PlayerType *player_ptr)
 {
     if (h_older_than(1, 0, 7)) {
         set_zangband_race(player_ptr);
@@ -145,7 +145,7 @@ void rd_race(player_type *player_ptr)
     set_race(player_ptr);
 }
 
-void rd_bounty_uniques(player_type *player_ptr)
+void rd_bounty_uniques(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 3)) {
         set_zangband_bounty_uniques(player_ptr);
@@ -160,7 +160,7 @@ void rd_bounty_uniques(player_type *player_ptr)
  * @brief 腕力などの基本ステータス情報を読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void rd_base_status(player_type *player_ptr)
+static void rd_base_status(PlayerType *player_ptr)
 {
     for (int i = 0; i < A_MAX; i++)
         player_ptr->stat_max[i] = rd_s16b();
@@ -172,7 +172,7 @@ static void rd_base_status(player_type *player_ptr)
         player_ptr->stat_cur[i] = rd_s16b();
 }
 
-static void set_imitation(player_type *player_ptr)
+static void set_imitation(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 1)) {
         return;
@@ -199,14 +199,14 @@ static void set_imitation(player_type *player_ptr)
         for (int i = 0; i < MAX_MANE; ++i) {
             auto spell = rd_s16b();
             auto damage = rd_s16b();
-            mane_data->mane_list.push_back({ i2enum<RF_ABILITY>(spell), damage });
+            mane_data->mane_list.push_back({ i2enum<MonsterAbilityType>(spell), damage });
         }
         auto count = rd_s16b();
         mane_data->mane_list.resize(count);
     }
 }
 
-static void rd_phase_out(player_type *player_ptr)
+static void rd_phase_out(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->inside_arena = rd_s16b() != 0;
     player_ptr->current_floor_ptr->inside_quest = rd_s16b();
@@ -217,7 +217,7 @@ static void rd_phase_out(player_type *player_ptr)
     }
 }
 
-static void rd_arena(player_type *player_ptr)
+static void rd_arena(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 3))
         update_gambling_monsters(player_ptr);
@@ -246,7 +246,7 @@ static void rd_arena(player_type *player_ptr)
  * @brief プレイヤーの最大HP/現在HPを読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void rd_hp(player_type *player_ptr)
+static void rd_hp(PlayerType *player_ptr)
 {
     if (h_older_than(1, 7, 0, 3)) {
         set_hp_old(player_ptr);
@@ -262,7 +262,7 @@ static void rd_hp(player_type *player_ptr)
  * @brief プレイヤーの最大MP/現在MPを読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void rd_mana(player_type *player_ptr)
+static void rd_mana(PlayerType *player_ptr)
 {
     if (h_older_than(1, 7, 0, 3)) {
         set_mana_old(player_ptr);
@@ -278,7 +278,7 @@ static void rd_mana(player_type *player_ptr)
  * @brief プレイヤーのバッドステータス (と空腹)を読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void rd_bad_status(player_type *player_ptr)
+static void rd_bad_status(PlayerType *player_ptr)
 {
     strip_bytes(2); /* Old "rest" */
     player_ptr->blind = rd_s16b();
@@ -288,7 +288,7 @@ static void rd_bad_status(player_type *player_ptr)
     strip_bytes(4); /* Old "food_digested" / "protection" */
 }
 
-static void rd_energy(player_type *player_ptr)
+static void rd_energy(PlayerType *player_ptr)
 {
     player_ptr->energy_need = rd_s16b();
     if (h_older_than(1, 0, 13))
@@ -305,7 +305,7 @@ static void rd_energy(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @todo 明らかに関数名がビッグワードだが他に思いつかなかった
  */
-static void rd_status(player_type *player_ptr)
+static void rd_status(PlayerType *player_ptr)
 {
     player_ptr->fast = rd_s16b();
     player_ptr->slow = rd_s16b();
@@ -322,7 +322,7 @@ static void rd_status(player_type *player_ptr)
         player_ptr->ult_res = rd_s16b();
 }
 
-static void rd_tsuyoshi(player_type *player_ptr)
+static void rd_tsuyoshi(PlayerType *player_ptr)
 {
     if (h_older_than(0, 0, 2))
         player_ptr->tsuyoshi = 0;
@@ -330,7 +330,7 @@ static void rd_tsuyoshi(player_type *player_ptr)
         player_ptr->tsuyoshi = rd_s16b();
 }
 
-static void set_timed_effects(player_type *player_ptr)
+static void set_timed_effects(PlayerType *player_ptr)
 {
     player_ptr->tim_esp = rd_s16b();
     player_ptr->wraith_form = rd_s16b();
@@ -374,7 +374,7 @@ static void set_timed_effects(player_type *player_ptr)
     }
 }
 
-static void set_mutations(player_type *player_ptr)
+static void set_mutations(PlayerType *player_ptr)
 {
     if (loading_savefile_version_is_older_than(2)) {
         for (int i = 0; i < 3; i++) {
@@ -386,7 +386,7 @@ static void set_mutations(player_type *player_ptr)
     }
 }
 
-static void set_virtues(player_type *player_ptr)
+static void set_virtues(PlayerType *player_ptr)
 {
     for (int i = 0; i < 8; i++)
         player_ptr->virtues[i] = rd_s16b();
@@ -399,7 +399,7 @@ static void set_virtues(player_type *player_ptr)
  * @brief 各種時限効果を読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void rd_timed_effects(player_type *player_ptr)
+static void rd_timed_effects(PlayerType *player_ptr)
 {
     set_timed_effects(player_ptr);
     player_ptr->chaos_patron = rd_s16b();
@@ -407,7 +407,7 @@ static void rd_timed_effects(player_type *player_ptr)
     set_virtues(player_ptr);
 }
 
-static void rd_player_status(player_type *player_ptr)
+static void rd_player_status(PlayerType *player_ptr)
 {
     rd_base_status(player_ptr);
     strip_bytes(24);
@@ -456,7 +456,7 @@ static void rd_player_status(player_type *player_ptr)
     player_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(player_ptr);
 }
 
-void rd_player_info(player_type *player_ptr)
+void rd_player_info(PlayerType *player_ptr)
 {
     rd_player_status(player_ptr);
     rd_special_attack(player_ptr);

@@ -111,7 +111,7 @@ bool know_damage(MONRACE_IDX r_idx, int i)
  * @param SPELL_NUM 呪文番号
  * @param msg 表示する文字列
  */
-void set_damage(player_type *player_ptr, lore_type *lore_ptr, RF_ABILITY ms_type, concptr msg)
+void set_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, concptr msg)
 {
     MONRACE_IDX r_idx = lore_ptr->r_idx;
     int base_damage = monspell_race_damage(player_ptr, ms_type, r_idx, BASE_DAM);

@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-struct player_type;
-void do_cmd_knowledge_mutations(player_type *player_ptr);
+class PlayerType;
+void do_cmd_knowledge_mutations(PlayerType *player_ptr);

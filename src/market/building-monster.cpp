@@ -22,7 +22,7 @@
  * @return 常にTRUEを返す。
  * @todo 返り値が意味不明なので直した方が良いかもしれない。
  */
-bool research_mon(player_type *player_ptr)
+bool research_mon(PlayerType *player_ptr)
 {
     char buf[256];
     bool notpicked;

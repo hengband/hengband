@@ -25,7 +25,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 
-BadStatusSetter::BadStatusSetter(player_type *player_ptr)
+BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }
@@ -120,7 +120,7 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
             }
             if (this->player_ptr->action == ACTION_MONK_STANCE) {
                 msg_print(_("構えがとけた。", "You lose your stance."));
-                PlayerClass(player_ptr).set_monk_stance(MonkStance::NONE);
+                PlayerClass(player_ptr).set_monk_stance(MonkStanceType::NONE);
                 this->player_ptr->update |= PU_BONUS;
                 this->player_ptr->redraw |= PR_STATE;
                 this->player_ptr->action = ACTION_NONE;

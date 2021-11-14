@@ -17,7 +17,7 @@
 #include "mspell/mspell.h"
 #include "mspell/specified-summon.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
@@ -56,7 +56,7 @@ static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
  * @param m_idx 呪文を唱えるモンスターID
  * @return 召喚したモンスターの数を返す。
  */
-static MONSTER_NUMBER summon_Kin(player_type *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+static MONSTER_NUMBER summon_Kin(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
     int count = 0;
     for (int k = 0; k < 4; k++) {
@@ -67,7 +67,7 @@ static MONSTER_NUMBER summon_Kin(player_type *player_ptr, POSITION y, POSITION x
 }
 
 static void decide_summon_kin_caster(
-    player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, concptr m_poss, const bool known)
+    PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, concptr m_poss, const bool known)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -114,7 +114,7 @@ static void decide_summon_kin_caster(
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_KIN(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -211,7 +211,7 @@ MonsterSpellResult spell_RF6_S_KIN(player_type *player_ptr, POSITION y, POSITION
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_CYBER(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     int count = 0;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -254,7 +254,7 @@ MonsterSpellResult spell_RF6_S_CYBER(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_MONSTER(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_MONSTER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"),
         _("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"));
@@ -297,7 +297,7 @@ MonsterSpellResult spell_RF6_S_MONSTER(player_type *player_ptr, POSITION y, POSI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_MONSTERS(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_MONSTERS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"), _("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"));
@@ -340,7 +340,7 @@ MonsterSpellResult spell_RF6_S_MONSTERS(player_type *player_ptr, POSITION y, POS
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_ANT(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_ANT(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法でアリを召喚した。", "%^s magically summons ants."),
         _("%^sが魔法でアリを召喚した。", "%^s magically summons ants."));
@@ -379,7 +379,7 @@ MonsterSpellResult spell_RF6_S_ANT(player_type *player_ptr, POSITION y, POSITION
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_SPIDER(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_SPIDER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."),
         _("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."));
@@ -418,7 +418,7 @@ MonsterSpellResult spell_RF6_S_SPIDER(player_type *player_ptr, POSITION y, POSIT
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HOUND(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HOUND(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."), _("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."));
@@ -457,7 +457,7 @@ MonsterSpellResult spell_RF6_S_HOUND(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HYDRA(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HYDRA(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."), _("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."));
@@ -496,7 +496,7 @@ MonsterSpellResult spell_RF6_S_HYDRA(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_ANGEL(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"), _("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"));
@@ -546,7 +546,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_DEMON(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sは魔法で混沌の宮廷から悪魔を召喚した！", "%^s magically summons a demon from the Courts of Chaos!"),
@@ -585,7 +585,7 @@ MonsterSpellResult spell_RF6_S_DEMON(player_type *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_UNDEAD(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でアンデッドの強敵を召喚した！", "%^s magically summons an undead adversary!"),
@@ -624,7 +624,7 @@ MonsterSpellResult spell_RF6_S_UNDEAD(player_type *player_ptr, POSITION y, POSIT
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_DRAGON(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"), _("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"));
@@ -665,7 +665,7 @@ MonsterSpellResult spell_RF6_S_DRAGON(player_type *player_ptr, POSITION y, POSIT
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HI_UNDEAD(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
@@ -720,7 +720,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(player_type *player_ptr, POSITION y, PO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HI_DRAGON(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HI_DRAGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"),
@@ -765,7 +765,7 @@ MonsterSpellResult spell_RF6_S_HI_DRAGON(player_type *player_ptr, POSITION y, PO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_AMBERITES(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"),
@@ -806,7 +806,7 @@ MonsterSpellResult spell_RF6_S_AMBERITES(player_type *player_ptr, POSITION y, PO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_UNIQUE(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"),

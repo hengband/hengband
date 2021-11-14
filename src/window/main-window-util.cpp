@@ -63,7 +63,7 @@ void print_field(concptr info, TERM_LEN row, TERM_LEN col)
  * of both "lite_spot()" and "print_rel()", and that we use the
  * "lite_spot()" function to display the player grid, if needed.
  */
-void print_map(player_type *player_ptr)
+void print_map(PlayerType *player_ptr)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -114,7 +114,7 @@ void print_map(player_type *player_ptr)
     (void)term_set_cursor(v);
 }
 
-static void display_shortened_item_name(player_type *player_ptr, object_type *o_ptr, int y)
+static void display_shortened_item_name(PlayerType *player_ptr, object_type *o_ptr, int y)
 {
     char buf[MAX_NLEN];
     describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -184,7 +184,7 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
  * メインウィンドウ('M'コマンド)、サブウィンドウ兼(縮小図)用。
  * use_bigtile時に横の描画列数は1/2になる。
  */
-void display_map(player_type *player_ptr, int *cy, int *cx)
+void display_map(PlayerType *player_ptr, int *cy, int *cx)
 {
     int i, j, x, y;
 
@@ -323,7 +323,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
     view_granite_lite = old_view_granite_lite;
 }
 
-void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp)
+void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
     if (!player_bold(player_ptr, y, x))
         return;

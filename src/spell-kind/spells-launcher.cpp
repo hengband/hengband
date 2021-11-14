@@ -2,7 +2,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/geometry.h"
-#include "spell/spell-types.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 
@@ -21,10 +20,10 @@
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    if (typ == GF_CHARM_LIVING)
+    if (typ == AttributeType::CHARM_LIVING)
         flg |= PROJECT_HIDE;
 
     POSITION tx = player_ptr->x + 99 * ddx[dir];
@@ -54,7 +53,7 @@ bool fire_ball(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_breath(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
     return fire_ball(player_ptr, typ, dir, dam, -rad);
 }
@@ -74,7 +73,7 @@ bool fire_breath(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
     POSITION tx = player_ptr->x + 99 * ddx[dir];
     POSITION ty = player_ptr->y + 99 * ddy[dir];
@@ -102,7 +101,7 @@ bool fire_rocket(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
     POSITION tx = player_ptr->x + 99 * ddx[dir];
     POSITION ty = player_ptr->y + 99 * ddy[dir];
@@ -135,7 +134,7 @@ bool fire_ball_hide(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(player_type *player_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
+bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX who, AttributeType typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     return project(player_ptr, who, rad, y, x, dam, typ, flg).notice;
@@ -152,7 +151,7 @@ bool fire_meteor(player_type *player_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITI
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
+bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
 {
     POSITION ty, tx, y, x;
     POSITION ly, lx;
@@ -202,10 +201,10 @@ bool fire_blast(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
-    if (typ != GF_ARROW)
+    if (typ != AttributeType::ARROW)
         flg |= PROJECT_REFLECTABLE;
     return (project_hook(player_ptr, typ, dir, dam, flg));
 }
@@ -223,7 +222,7 @@ bool fire_bolt(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_beam(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
     return (project_hook(player_ptr, typ, dir, dam, flg));
@@ -243,7 +242,7 @@ bool fire_beam(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(player_type *player_ptr, PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, DIRECTION dir, HIT_POINT dam)
 {
     if (randint0(100) < prob) {
         return (fire_beam(player_ptr, typ, dir, dam));
@@ -261,7 +260,7 @@ bool fire_bolt_or_beam(player_type *player_ptr, PERCENTAGE prob, EFFECT_ID typ, 
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(player_type *player_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
+bool project_hook(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 {
     flg |= (PROJECT_THRU);
     POSITION tx = player_ptr->x + ddx[dir];

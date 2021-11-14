@@ -51,7 +51,7 @@
  * @param down_stair TRUEならば階段を降りる処理、FALSEなら階段を昇る処理による内容
  * @return フロア移動を実際に行うならTRUE、キャンセルする場合はFALSE
  */
-static bool confirm_leave_level(player_type *player_ptr, bool down_stair)
+static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
     quest_type *q_ptr = &quest[player_ptr->current_floor_ptr->inside_quest];
     if (confirm_quest && player_ptr->current_floor_ptr->inside_quest
@@ -68,20 +68,20 @@ static bool confirm_leave_level(player_type *player_ptr, bool down_stair)
 /*!
  * @brief 階段を使って階層を昇る処理 / Go up one level
  */
-void do_cmd_go_up(player_type *player_ptr)
+void do_cmd_go_up(PlayerType *player_ptr)
 {
     bool go_up = false;
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int up_num = 0;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (f_ptr->flags.has_not(FF::LESS)) {
+    if (f_ptr->flags.has_not(FloorFeatureType::LESS)) {
         msg_print(_("ここには上り階段が見当たらない。", "I see no up staircase here."));
         return;
     }
 
-    if (f_ptr->flags.has(FF::QUEST)) {
+    if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
         if (!confirm_leave_level(player_ptr, false))
             return;
 
@@ -139,7 +139,7 @@ void do_cmd_go_up(player_type *player_ptr)
         player_ptr->current_floor_ptr->dun_level = 0;
         up_num = 0;
     } else {
-        if (f_ptr->flags.has(FF::SHAFT)) {
+        if (f_ptr->flags.has(FloorFeatureType::SHAFT)) {
             prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
             up_num = 2;
         } else {
@@ -176,28 +176,28 @@ void do_cmd_go_up(player_type *player_ptr)
  * @brief 階段を使って階層を降りる処理 / Go down one level
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_go_down(player_type *player_ptr)
+void do_cmd_go_down(PlayerType *player_ptr)
 {
     bool fall_trap = false;
     int down_num = 0;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    if (f_ptr->flags.has_not(FF::MORE)) {
+    if (f_ptr->flags.has_not(FloorFeatureType::MORE)) {
         msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
         return;
     }
 
-    if (f_ptr->flags.has(FF::TRAP))
+    if (f_ptr->flags.has(FloorFeatureType::TRAP))
         fall_trap = true;
 
-    if (f_ptr->flags.has(FF::QUEST_ENTER)) {
+    if (f_ptr->flags.has(FloorFeatureType::QUEST_ENTER)) {
         do_cmd_quest(player_ptr);
         return;
     }
 
-    if (f_ptr->flags.has(FF::QUEST)) {
+    if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
         if (!confirm_leave_level(player_ptr, true))
             return;
 
@@ -234,7 +234,7 @@ void do_cmd_go_down(player_type *player_ptr)
 
     DUNGEON_IDX target_dungeon = 0;
     if (!is_in_dungeon(player_ptr)) {
-        target_dungeon = f_ptr->flags.has(FF::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
+        target_dungeon = f_ptr->flags.has(FloorFeatureType::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
             return;
@@ -257,7 +257,7 @@ void do_cmd_go_down(player_type *player_ptr)
     if (autosave_l)
         do_cmd_save_game(player_ptr, true);
 
-    if (f_ptr->flags.has(FF::SHAFT))
+    if (f_ptr->flags.has(FloorFeatureType::SHAFT))
         down_num += 2;
     else
         down_num += 1;
@@ -296,7 +296,7 @@ void do_cmd_go_down(player_type *player_ptr)
         return;
     }
 
-    if (f_ptr->flags.has(FF::SHAFT))
+    if (f_ptr->flags.has(FloorFeatureType::SHAFT))
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
     else
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN);
@@ -308,7 +308,7 @@ void do_cmd_go_down(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  */
-void do_cmd_walk(player_type *player_ptr, bool pickup)
+void do_cmd_walk(PlayerType *player_ptr, bool pickup)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
@@ -322,7 +322,7 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
         PlayerEnergy energy(player_ptr);
         energy.set_player_turn_energy(100);
         if (dir != 5) {
-            PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+            PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
         }
 
         if (player_ptr->wild_mode) {
@@ -338,7 +338,7 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
         more = true;
     }
 
-    if (player_ptr->wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF::TOWN)) {
+    if (player_ptr->wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::TOWN)) {
         int tmp = 120 + player_ptr->lev * 10 - wilderness[player_ptr->y][player_ptr->x].level + 5;
         if (tmp < 1)
             tmp = 1;
@@ -361,13 +361,13 @@ void do_cmd_walk(player_type *player_ptr, bool pickup)
  * Start running.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_run(player_type *player_ptr)
+void do_cmd_run(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (cmd_limit_confused(player_ptr))
         return;
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (get_rep_dir(player_ptr, &dir, false)) {
         player_ptr->running = (command_arg ? command_arg : 1000);
@@ -382,7 +382,7 @@ void do_cmd_run(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  */
-void do_cmd_stay(player_type *player_ptr, bool pickup)
+void do_cmd_stay(PlayerType *player_ptr, bool pickup)
 {
     uint32_t mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
     if (command_arg) {
@@ -403,7 +403,7 @@ void do_cmd_stay(player_type *player_ptr, bool pickup)
  * Resting allows a player to safely restore his hp	-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_rest(player_type *player_ptr)
+void do_cmd_rest(PlayerType *player_ptr)
 {
     set_action(player_ptr, ACTION_NONE);
     if ((player_ptr->pclass == PlayerClassType::BARD) && ((get_singing_song_effect(player_ptr) != 0) || (get_interrupting_song_effect(player_ptr) != 0)))

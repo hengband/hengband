@@ -86,7 +86,7 @@ MONSTER_IDX m_pop(floor_type *floor_ptr)
  * @param max_level 最大生成階
  * @return 選択されたモンスター生成種族
  */
-MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
+MONRACE_IDX get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
 {
     int r_idx;
     monster_race *r_ptr;
@@ -110,7 +110,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
     /* starts from 0, reaches +25lv after 75days from a max_level dependent base date */
     pls_max_level = std::min(NASTY_MON_PLUS_MAX, over_days / 3);
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::MAZE)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::MAZE)) {
         pls_kakuritu = std::min(pls_kakuritu / 2, pls_kakuritu - 10);
         if (pls_kakuritu < 2)
             pls_kakuritu = 2;
@@ -119,7 +119,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
     }
 
     /* Boost the max_level */
-    if ((option & GMN_ARENA) || d_info[player_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
+    if ((option & GMN_ARENA) || d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         /* Nightmare mode allows more out-of depth monsters */
         if (ironman_nightmare && !randint0(pls_kakuritu)) {
             /* What a bizarre calculation */
@@ -195,7 +195,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
@@ -234,7 +234,7 @@ static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_i
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
@@ -277,7 +277,7 @@ static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param born 生成時の初変身先指定ならばtrue
  * @param r_idx 旧モンスター種族のID
  */
-void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
+void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -309,7 +309,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
         else
             level = floor_ptr->dun_level;
 
-        if (d_info[player_ptr->dungeon_idx].flags.has(DF::CHAMELEON))
+        if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON))
             level += 2 + randint1(3);
 
         r_idx = get_mon_num(player_ptr, 0, level, 0);

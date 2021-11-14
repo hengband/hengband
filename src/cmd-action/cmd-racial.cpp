@@ -55,7 +55,7 @@ static void racial_power_erase_cursor(rc_type *rc_ptr)
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @return キャンセルしたらRC_CANCEL、それ以外ならRC_CONTINUE
  */
-static void racial_power_display_list(player_type *player_ptr, rc_type *rc_ptr)
+static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     TERM_LEN x = 11;
     char dummy[256];
@@ -118,7 +118,7 @@ static void racial_power_make_prompt(rc_type *rc_ptr)
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @param i カーソル増分
  */
-static void racial_power_add_index(player_type *player_ptr, rc_type *rc_ptr, int i)
+static void racial_power_add_index(PlayerType *player_ptr, rc_type *rc_ptr, int i)
 {
     auto n = rc_ptr->menu_line + i;
     if (i < -1 || i > 1) {
@@ -147,7 +147,7 @@ static void racial_power_add_index(player_type *player_ptr, rc_type *rc_ptr, int
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @return キャンセルならRC_CANCEL、そうでないならRC_CONTINUE
  */
-static bool racial_power_interpret_menu_keys(player_type *player_ptr, rc_type *rc_ptr)
+static bool racial_power_interpret_menu_keys(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     switch (rc_ptr->choice) {
     case '0':
@@ -194,7 +194,7 @@ static bool racial_power_interpret_menu_keys(player_type *player_ptr, rc_type *r
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @return キャンセルしたらRC_CANCEL、それ以外ならRC_CONTINUE
  */
-static bool racial_power_select_by_menu(player_type *player_ptr, rc_type *rc_ptr)
+static bool racial_power_select_by_menu(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     if (!use_menu || rc_ptr->choice == ' ')
         return RC_CONTINUE;
@@ -214,7 +214,7 @@ static bool racial_power_select_by_menu(player_type *player_ptr, rc_type *rc_ptr
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @return コマンド選択していたらtrue、していなかったらfalse
  */
-static bool racial_power_interpret_choise(player_type *player_ptr, rc_type *rc_ptr)
+static bool racial_power_interpret_choise(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     if (use_menu)
         return false;
@@ -277,7 +277,7 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
     return get_check(tmp_val);
 }
 
-static void racial_power_display_explanation(player_type *player_ptr, rc_type *rc_ptr)
+static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto &rpi = rc_ptr->power_desc[rc_ptr->command_code];
     char temp[62 * 5];
@@ -309,7 +309,7 @@ static void racial_power_display_explanation(player_type *player_ptr, rc_type *r
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @return コマンド選択したらRC_CONTINUE、キャンセルしたらRC_CANCEL
  */
-static bool racial_power_process_input(player_type *player_ptr, rc_type *rc_ptr)
+static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     rc_ptr->choice = (always_show_list || use_menu) ? ESCAPE : 1;
 
@@ -345,7 +345,7 @@ static bool racial_power_process_input(player_type *player_ptr, rc_type *rc_ptr)
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @return コマンド選択したらRC_CONTINUE、キャンセルしたらRC_CANCEL
  */
-static bool racial_power_select_power(player_type *player_ptr, rc_type *rc_ptr)
+static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     if (repeat_pull(&rc_ptr->command_code) && rc_ptr->command_code >= 0 && rc_ptr->command_code < rc_ptr->power_count())
         return RC_CONTINUE;
@@ -373,7 +373,7 @@ static bool racial_power_select_power(player_type *player_ptr, rc_type *rc_ptr)
  * @details
  * 戻り値の代わりにrc_ptr->castに使用の有無を入れる。
  */
-static void racial_power_cast_power(player_type *player_ptr, rc_type *rc_ptr)
+static void racial_power_cast_power(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto *rpi_ptr = &rc_ptr->power_desc[rc_ptr->command_code];
 
@@ -382,7 +382,7 @@ static void racial_power_cast_power(player_type *player_ptr, rc_type *rc_ptr)
         if (rpi_ptr->number < 0)
             rc_ptr->cast = exe_racial_power(player_ptr, rpi_ptr->number);
         else
-            rc_ptr->cast = exe_mutation_power(player_ptr, i2enum<MUTA>(rpi_ptr->number));
+            rc_ptr->cast = exe_mutation_power(player_ptr, i2enum<PlayerMutationType>(rpi_ptr->number));
         break;
     case RACIAL_FAILURE:
         rc_ptr->cast = true;
@@ -402,7 +402,7 @@ static void racial_power_cast_power(player_type *player_ptr, rc_type *rc_ptr)
  * MPが足りない場合はHPを減らす。
  * 戻り値はHP/MPの再描画が必要か判定するのに使用。
  */
-static bool racial_power_reduce_mana(player_type *player_ptr, rc_type *rc_ptr)
+static bool racial_power_reduce_mana(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     int racial_cost = rc_ptr->power_desc[rc_ptr->command_code].racial_cost;
     if (racial_cost == 0)
@@ -425,7 +425,7 @@ static bool racial_power_reduce_mana(player_type *player_ptr, rc_type *rc_ptr)
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_racial_power(player_type *player_ptr)
+void do_cmd_racial_power(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;
@@ -437,7 +437,7 @@ void do_cmd_racial_power(player_type *player_ptr)
         return;
     }
 
-   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
+   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     auto tmp_r = rc_type(player_ptr);
     auto *rc_ptr = &tmp_r;

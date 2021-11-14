@@ -27,7 +27,7 @@
  *
  * This function now returns "TRUE" if vision is "blocked" by grid (y,x).
  */
-static bool update_view_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+static bool update_view_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g1_c_ptr;
@@ -96,7 +96,7 @@ static bool update_view_aux(player_type *player_ptr, POSITION y, POSITION x, POS
  *  4c1: Each side aborts as soon as possible
  *  4c2: Each side tells the next strip how far it has to check
  */
-void update_view(player_type *player_ptr)
+void update_view(PlayerType *player_ptr)
 {
     // 前回プレイヤーから見えていた座標たちを格納する配列。
     std::vector<Pos2D> points;

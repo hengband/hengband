@@ -42,7 +42,7 @@
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/body-improvement.h"
@@ -68,7 +68,7 @@
  * @param success 判定成功上の処理ならばTRUE
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool kawarimi(player_type *player_ptr, bool success)
+bool kawarimi(PlayerType *player_ptr, bool success)
 {
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     if (!ninja_data || !ninja_data->kawarimi) {
@@ -124,7 +124,7 @@ bool kawarimi(player_type *player_ptr, bool success)
  * @param mdeath 目標モンスターが死亡したかを返す
  * @return 作用が実際にあった場合TRUEを返す /  Return value is for checking "done"
  */
-bool rush_attack(player_type *player_ptr, bool *mdeath)
+bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 {
     if (mdeath)
         *mdeath = false;
@@ -217,7 +217,7 @@ bool rush_attack(player_type *player_ptr, bool *mdeath)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-void process_surprise_attack(player_type *player_ptr, player_attack_type *pa_ptr)
+void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand])
@@ -260,7 +260,7 @@ void print_surprise_attack(player_attack_type *pa_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-void calc_surprise_attack_damage(player_type *player_ptr, player_attack_type *pa_ptr)
+void calc_surprise_attack_damage(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     if (pa_ptr->backstab) {
         pa_ptr->attack_damage *= (3 + (player_ptr->lev / 20));
@@ -281,7 +281,7 @@ void calc_surprise_attack_damage(player_type *player_ptr, player_attack_type *pa
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
  */
-bool hayagake(player_type *player_ptr)
+bool hayagake(PlayerType *player_ptr)
 {
     PlayerEnergy energy(player_ptr);
     if (player_ptr->action == ACTION_HAYAGAKE) {
@@ -293,7 +293,7 @@ bool hayagake(player_type *player_ptr)
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
-    if (f_ptr->flags.has_not(FF::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FF::DEEP))) {
+    if (f_ptr->flags.has_not(FloorFeatureType::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FloorFeatureType::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
     } else {
         set_action(player_ptr, ACTION_HAYAGAKE);
@@ -308,7 +308,7 @@ bool hayagake(player_type *player_ptr)
  * @param set TRUEならば超隠密状態になる。
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_superstealth(player_type *player_ptr, bool set)
+bool set_superstealth(PlayerType *player_ptr, bool set)
 {
     bool notice = false;
 
@@ -353,7 +353,7 @@ bool set_superstealth(player_type *player_ptr, bool set)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
+bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
 {
     POSITION x = 0, y = 0;
     DIRECTION dir;
@@ -409,7 +409,7 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
         set_tim_levitation(player_ptr, randint1(20) + 20, false);
         break;
     case HIDE_FLAMES:
-        fire_ball(player_ptr, GF_FIRE, 0, 50 + plev, plev / 10 + 2);
+        fire_ball(player_ptr, AttributeType::FIRE, 0, 50 + plev, plev / 10 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         set_oppose_fire(player_ptr, (TIME_EFFECT)plev, false);
         break;
@@ -446,7 +446,7 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(player_ptr, GF_OLD_CONF, dir, plev * 3, 3);
+        fire_ball(player_ptr, AttributeType::OLD_CONF, dir, plev * 3, 3);
         break;
     case SWAP_POSITION:
         project_length = -1;
@@ -466,15 +466,15 @@ bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
         set_oppose_acid(player_ptr, (TIME_EFFECT)plev, false);
         break;
     case HIDE_MIST:
-        fire_ball(player_ptr, GF_POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(player_ptr, GF_HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(player_ptr, GF_CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
     case PURGATORY_FLAME: {
         int num = damroll(3, 9);
         for (int k = 0; k < num; k++) {
-            EFFECT_ID typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
+            AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER : AttributeType::PLASMA;
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);

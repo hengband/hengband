@@ -23,18 +23,18 @@
  * @param x 該当地点のX座標
  * @return コスト値
  */
-static int travel_flow_cost(player_type *player_ptr, POSITION y, POSITION x)
+static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int cost = 1;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    if (f_ptr->flags.has(FF::AVOID_RUN))
+    if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN))
         cost += 1;
 
-    if (f_ptr->flags.has_all_of({FF::WATER, FF::DEEP}) && !player_ptr->levitation)
+    if (f_ptr->flags.has_all_of({FloorFeatureType::WATER, FloorFeatureType::DEEP}) && !player_ptr->levitation)
         cost += 5;
 
-    if (f_ptr->flags.has(FF::LAVA)) {
+    if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
         int lava = 2;
         if (!has_resist_fire(player_ptr))
             lava *= 2;
@@ -42,17 +42,17 @@ static int travel_flow_cost(player_type *player_ptr, POSITION y, POSITION x)
         if (!player_ptr->levitation)
             lava *= 2;
 
-        if (f_ptr->flags.has(FF::DEEP))
+        if (f_ptr->flags.has(FloorFeatureType::DEEP))
             lava *= 2;
 
         cost += lava;
     }
 
     if (g_ptr->is_mark()) {
-        if (f_ptr->flags.has(FF::DOOR))
+        if (f_ptr->flags.has(FloorFeatureType::DOOR))
             cost += 1;
 
-        if (f_ptr->flags.has(FF::TRAP))
+        if (f_ptr->flags.has(FloorFeatureType::TRAP))
             cost += 10;
     }
 
@@ -67,7 +67,7 @@ static int travel_flow_cost(player_type *player_ptr, POSITION y, POSITION x)
  * @param n 現在のコスト
  * @param wall プレイヤーが壁の中にいるならばTRUE
  */
-static void travel_flow_aux(player_type *player_ptr, POSITION y, POSITION x, int n, bool wall)
+static void travel_flow_aux(PlayerType *player_ptr, POSITION y, POSITION x, int n, bool wall)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -80,8 +80,8 @@ static void travel_flow_aux(player_type *player_ptr, POSITION y, POSITION x, int
 
     int add_cost = 1;
     int from_wall = (n / TRAVEL_UNABLE);
-    if (f_ptr->flags.has(FF::WALL) || f_ptr->flags.has(FF::CAN_DIG) || (f_ptr->flags.has(FF::DOOR) && floor_ptr->grid_array[y][x].mimic)
-        || (f_ptr->flags.has_not(FF::MOVE) && f_ptr->flags.has(FF::CAN_FLY) && !player_ptr->levitation)) {
+    if (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic)
+        || (f_ptr->flags.has_not(FloorFeatureType::MOVE) && f_ptr->flags.has(FloorFeatureType::CAN_FLY) && !player_ptr->levitation)) {
         if (!wall || !from_wall)
             return;
 
@@ -111,12 +111,12 @@ static void travel_flow_aux(player_type *player_ptr, POSITION y, POSITION x, int
  * @param ty 目標地点のY座標
  * @param tx 目標地点のX座標
  */
-static void travel_flow(player_type *player_ptr, POSITION ty, POSITION tx)
+static void travel_flow(PlayerType *player_ptr, POSITION ty, POSITION tx)
 {
     flow_head = flow_tail = 0;
     bool wall = false;
     feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat];
-    if (f_ptr->flags.has_not(FF::MOVE))
+    if (f_ptr->flags.has_not(FloorFeatureType::MOVE))
         wall = true;
 
     travel_flow_aux(player_ptr, ty, tx, 0, wall);
@@ -137,7 +137,7 @@ static void travel_flow(player_type *player_ptr, POSITION ty, POSITION tx)
 /*!
  * @brief トラベル処理のメインルーチン
  */
-void do_cmd_travel(player_type *player_ptr)
+void do_cmd_travel(PlayerType *player_ptr)
 {
     POSITION x, y;
     if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y)
@@ -156,7 +156,7 @@ void do_cmd_travel(player_type *player_ptr)
     feature_type *f_ptr;
     f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
     if ((floor_ptr->grid_array[y][x].info & CAVE_MARK)
-        && (f_ptr->flags.has(FF::WALL) || f_ptr->flags.has(FF::CAN_DIG) || (f_ptr->flags.has(FF::DOOR) && floor_ptr->grid_array[y][x].mimic))) {
+        && (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic))) {
         msg_print(_("そこには行くことができません！", "You cannot travel there!"));
         return;
     }

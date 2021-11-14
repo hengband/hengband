@@ -20,6 +20,16 @@
 #include <vector>
 
 /*!
+ * @brief 該当オブジェクトが残量アリの松明か否かを判定。
+ * @param o_ptr オブジェクトの構造体参照ポインタ
+ * @return 残量アリの松明ならtrue
+ */
+bool is_active_torch(object_type *o_ptr)
+{
+    return (o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH) && (o_ptr->xtra4 > 0);
+}
+
+/*!
  * @brief 投擲時たいまつに投げやすい/焼棄/アンデッドスレイの特別効果を返す。
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
@@ -27,7 +37,7 @@
  */
 void torch_flags(object_type *o_ptr, TrFlags &flgs)
 {
-    if ((o_ptr->tval != ItemKindType::LITE) || (o_ptr->sval != SV_LITE_TORCH) || (o_ptr->xtra4 <= 0))
+    if (!is_active_torch(o_ptr))
         return;
 
     flgs.set(TR_BRAND_FIRE);
@@ -44,7 +54,7 @@ void torch_flags(object_type *o_ptr, TrFlags &flgs)
  */
 void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
 {
-    if ((o_ptr->tval != ItemKindType::LITE) || (o_ptr->sval != SV_LITE_TORCH) || (o_ptr->xtra4 <= 0))
+    if (!is_active_torch(o_ptr))
         return;
 
     *dd = 1;
@@ -58,7 +68,7 @@ void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
  */
 void torch_lost_fuel(object_type *o_ptr)
 {
-    if ((o_ptr->tval != ItemKindType::LITE) || (o_ptr->sval != SV_LITE_TORCH))
+    if (!is_active_torch(o_ptr))
         return;
 
     o_ptr->xtra4 -= (FUEL_TORCH / 25);
@@ -71,7 +81,7 @@ void torch_lost_fuel(object_type *o_ptr)
  * @details
  * SWD: Experimental modification: multiple light sources have additive effect.
  */
-void update_lite_radius(player_type *player_ptr)
+void update_lite_radius(PlayerType *player_ptr)
 {
     player_ptr->cur_lite = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
@@ -117,7 +127,7 @@ void update_lite_radius(player_type *player_ptr)
         player_ptr->cur_lite += rad;
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS) && player_ptr->cur_lite > 1)
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1)
         player_ptr->cur_lite = 1;
 
     if (player_ptr->cur_lite <= 0 && player_ptr->lite)
@@ -164,7 +174,7 @@ void update_lite_radius(player_type *player_ptr)
  *                 ***         *****
  *                              ***
  */
-void update_lite(player_type *player_ptr)
+void update_lite(PlayerType *player_ptr)
 {
     // 前回照らされていた座標たちを格納する配列。
     std::vector<Pos2D> points;

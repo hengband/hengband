@@ -55,13 +55,34 @@
  * @param m_idx ダメージを与えたモンスターのID
  * @param dam 与えたダメージ量
  * @param fear ダメージによってモンスターが恐慌状態に陥ったならばtrue
+ * @param attribute 与えたダメージの種類 (単一属性)
  * @param note モンスターが倒された際の特別なメッセージ述語
  */
-MonsterDamageProcessor::MonsterDamageProcessor(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear)
+MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeType attribute)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , dam(dam)
     , fear(fear)
+{
+    this->attribute_flags.clear();
+    this->attribute_flags.set((AttributeType)attribute);
+}
+
+/*
+ * @brief コンストラクタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param m_idx ダメージを与えたモンスターのID
+ * @param dam 与えたダメージ量
+ * @param fear ダメージによってモンスターが恐慌状態に陥ったならばtrue
+ * @param attribute_flags 与えたダメージの種類 (複数属性)
+ * @param note モンスターが倒された際の特別なメッセージ述語
+ */
+MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeFlags attribute_flags)
+    : player_ptr(player_ptr)
+    , m_idx(m_idx)
+    , dam(dam)
+    , fear(fear)
+    , attribute_flags(attribute_flags)
 {
 }
 
@@ -135,14 +156,14 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
     ac.change_virtue();
     if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
         char note_buf[160];
-        sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
+        sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
         exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, note_buf);
     }
 
     sound(SOUND_KILL);
     this->show_kill_message(note, m_name);
     this->show_bounty_message(m_name);
-    monster_death(this->player_ptr, this->m_idx, true);
+    monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);
     this->summon_special_unique();
     this->get_exp_from_mon(exp_mon, exp_mon->max_maxhp * 2);
     *this->fear = false;
@@ -166,7 +187,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
         }
     }
 
-    if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         r_ptr = real_r_ptr(m_ptr);
         r_idx = real_r_idx(m_ptr);
         if (r_ptr->r_sights < MAX_SHORT) {
@@ -174,7 +195,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
         }
     }
 
-    if (m_ptr->mflag2.has(MFLAG2::CLONED)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CLONED)) {
         return;
     }
 
@@ -284,13 +305,13 @@ void MonsterDamageProcessor::increase_kill_numbers()
         return;
     }
 
-    if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) {
         r_info[MON_KAGE].r_pkills++;
     } else if (r_ptr->r_pkills < MAX_SHORT) {
         r_ptr->r_pkills++;
     }
 
-    if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) {
         r_info[MON_KAGE].r_tkills++;
     } else if (r_ptr->r_tkills < MAX_SHORT) {
         r_ptr->r_tkills++;
@@ -383,12 +404,12 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     auto *r_ptr = real_r_ptr(m_ptr);
-    if (none_bits(r_ptr->flags1, RF1_UNIQUE) || m_ptr->mflag2.has(MFLAG2::CLONED) || vanilla_town) {
+    if (none_bits(r_ptr->flags1, RF1_UNIQUE) || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
         return;
     }
 
     for (auto i = 0; i < MAX_BOUNTY; i++) {
-        if ((w_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
+        if ((w_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
             msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
             break;
         }

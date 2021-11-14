@@ -31,7 +31,7 @@
  * @return 基礎値
  * @details 最大が18になるのはD&D由来
  */
-static int calc_basic_stat(player_type *player_ptr, int stat_num)
+static int calc_basic_stat(PlayerType *player_ptr, int stat_num)
 {
     int e_adj = 0;
     if ((player_ptr->stat_max[stat_num] > 18) && (player_ptr->stat_top[stat_num] > 18))
@@ -55,7 +55,7 @@ static int calc_basic_stat(player_type *player_ptr, int stat_num)
  * @param stat_num 能力値番号
  * @return 補正後の基礎パラメータ
  */
-static int compensate_special_race(player_type *player_ptr, int stat_num)
+static int compensate_special_race(PlayerType *player_ptr, int stat_num)
 {
     if (!PlayerRace(player_ptr).equals(PlayerRaceType::ENT))
         return 0;
@@ -91,7 +91,7 @@ static int compensate_special_race(player_type *player_ptr, int stat_num)
  * @param row 行数
  * @param stat_col 列数
  */
-static void display_basic_stat_name(player_type *player_ptr, int stat_num, int row, int stat_col)
+static void display_basic_stat_name(PlayerType *player_ptr, int stat_num, int row, int stat_col)
 {
     if (player_ptr->stat_cur[stat_num] < player_ptr->stat_max[stat_num])
         c_put_str(TERM_WHITE, stat_names_reduced[stat_num], row + stat_num + 1, stat_col + 1);
@@ -109,7 +109,7 @@ static void display_basic_stat_name(player_type *player_ptr, int stat_num, int r
  * @param stat_col 列数
  * @param buf 能力値の数値
  */
-static void display_basic_stat_value(player_type *player_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col, char *buf)
+static void display_basic_stat_value(PlayerType *player_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col, char *buf)
 {
     (void)sprintf(buf, "%3d", r_adj);
     c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 13);
@@ -138,7 +138,7 @@ static void display_basic_stat_value(player_type *player_ptr, int stat_num, int 
  * @param row 行数
  * @param stat_col 列数
  */
-static void process_stats(player_type *player_ptr, int row, int stat_col)
+static void process_stats(PlayerType *player_ptr, int row, int stat_col)
 {
     char buf[80];
     for (int i = 0; i < A_MAX; i++) {
@@ -196,7 +196,7 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
  * @param row 行数
  * @param col 列数
  */
-static void display_equipments_compensation(player_type *player_ptr, int row, int *col)
+static void display_equipments_compensation(PlayerType *player_ptr, int row, int *col)
 {
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -224,13 +224,13 @@ static void display_equipments_compensation(player_type *player_ptr, int row, in
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param stat 能力値番号
  */
-static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
+static int compensation_stat_by_mutation(PlayerType *player_ptr, int stat)
 {
     int compensation = 0;
     if (stat == A_STR) {
-        if (player_ptr->muta.has(MUTA::HYPER_STR))
+        if (player_ptr->muta.has(PlayerMutationType::HYPER_STR))
             compensation += 4;
-        if (player_ptr->muta.has(MUTA::PUNY))
+        if (player_ptr->muta.has(PlayerMutationType::PUNY))
             compensation -= 4;
         if (player_ptr->tsuyoshi)
             compensation += 4;
@@ -238,31 +238,31 @@ static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
     }
 
     if (stat == A_WIS || stat == A_INT) {
-        if (player_ptr->muta.has(MUTA::HYPER_INT))
+        if (player_ptr->muta.has(PlayerMutationType::HYPER_INT))
             compensation += 4;
-        if (player_ptr->muta.has(MUTA::MORONIC))
+        if (player_ptr->muta.has(PlayerMutationType::MORONIC))
             compensation -= 4;
         return compensation;
     }
 
     if (stat == A_DEX) {
-        if (player_ptr->muta.has(MUTA::IRON_SKIN))
+        if (player_ptr->muta.has(PlayerMutationType::IRON_SKIN))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::LIMBER))
+        if (player_ptr->muta.has(PlayerMutationType::LIMBER))
             compensation += 3;
-        if (player_ptr->muta.has(MUTA::ARTHRITIS))
+        if (player_ptr->muta.has(PlayerMutationType::ARTHRITIS))
             compensation -= 3;
         return compensation;
     }
 
     if (stat == A_CON) {
-        if (player_ptr->muta.has(MUTA::RESILIENT))
+        if (player_ptr->muta.has(PlayerMutationType::RESILIENT))
             compensation += 4;
-        if (player_ptr->muta.has(MUTA::XTRA_FAT))
+        if (player_ptr->muta.has(PlayerMutationType::XTRA_FAT))
             compensation += 2;
-        if (player_ptr->muta.has(MUTA::ALBINO))
+        if (player_ptr->muta.has(PlayerMutationType::ALBINO))
             compensation -= 4;
-        if (player_ptr->muta.has(MUTA::FLESH_ROT))
+        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
             compensation -= 2;
         if (player_ptr->tsuyoshi)
             compensation += 4;
@@ -270,17 +270,17 @@ static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
     }
 
     if (stat == A_CHR) {
-        if (player_ptr->muta.has(MUTA::SILLY_VOI))
+        if (player_ptr->muta.has(PlayerMutationType::SILLY_VOI))
             compensation -= 4;
-        if (player_ptr->muta.has(MUTA::BLANK_FAC))
+        if (player_ptr->muta.has(PlayerMutationType::BLANK_FAC))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::FLESH_ROT))
+        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::SCALES))
+        if (player_ptr->muta.has(PlayerMutationType::SCALES))
             compensation -= 1;
-        if (player_ptr->muta.has(MUTA::WART_SKIN))
+        if (player_ptr->muta.has(PlayerMutationType::WART_SKIN))
             compensation -= 2;
-        if (player_ptr->muta.has(MUTA::ILL_NORM))
+        if (player_ptr->muta.has(PlayerMutationType::ILL_NORM))
             compensation = 0;
         return compensation;
     }
@@ -295,7 +295,7 @@ static int compensation_stat_by_mutation(player_type *player_ptr, int stat)
  * @param c 補正後の表示記号
  * @param a 表示色
  */
-static void change_display_by_mutation(player_type *player_ptr, int stat, char *c, TERM_COLOR *a)
+static void change_display_by_mutation(PlayerType *player_ptr, int stat, char *c, TERM_COLOR *a)
 {
     int compensation = compensation_stat_by_mutation(player_ptr, stat);
     if (compensation == 0)
@@ -321,7 +321,7 @@ static void change_display_by_mutation(player_type *player_ptr, int stat, char *
  * @param col 列数
  * @param row 行数
  */
-static void display_mutation_compensation(player_type *player_ptr, int row, int col)
+static void display_mutation_compensation(PlayerType *player_ptr, int row, int col)
 {
     TrFlags flags;
     player_flags(player_ptr, flags);
@@ -355,7 +355,7 @@ static void display_mutation_compensation(player_type *player_ptr, int row, int 
  * No mod, no sustain, will be a slate '.'
  * </pre>
  */
-void display_player_stat_info(player_type *player_ptr)
+void display_player_stat_info(PlayerType *player_ptr)
 {
     int stat_col = 22;
     int row = 3;

@@ -89,17 +89,17 @@ static concptr pit_subtype_string(int type, bool nest)
         sprintf(inner_buf, "(%c)", vault_aux_char);
         break;
     case PIT_TYPE_DRAGON:
-        if (vault_aux_dragon_mask4.has_all_of({ RF_ABILITY::BR_ACID, RF_ABILITY::BR_ELEC, RF_ABILITY::BR_FIRE, RF_ABILITY::BR_COLD, RF_ABILITY::BR_POIS })) {
+        if (vault_aux_dragon_mask4.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
             strcpy(inner_buf, _("(万色)", "(multi-hued)"));
-        } else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_ACID)) {
+        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
             strcpy(inner_buf, _("(酸)", "(acid)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_ELEC)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
             strcpy(inner_buf, _("(稲妻)", "(lightning)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_FIRE)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
             strcpy(inner_buf, _("(火炎)", "(fire)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_COLD)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
             strcpy(inner_buf, _("(冷気)", "(frost)"));
-        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_POIS)) {
+        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
             strcpy(inner_buf, _("(毒)", "(poison)"));
         } else {
             strcpy(inner_buf, _("(未定義)", "(undefined)"));
@@ -119,7 +119,7 @@ static concptr pit_subtype_string(int type, bool nest)
  *  @param b 比較対象参照ID2
  *  TODO: to sort.c
  */
-static bool ang_sort_comp_nest_mon_info(player_type *player_ptr, vptr u, vptr v, int a, int b)
+static bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
 {
     /* Unused */
     (void)player_ptr;
@@ -160,7 +160,7 @@ static bool ang_sort_comp_nest_mon_info(player_type *player_ptr, vptr u, vptr v,
  * @param b スワップ対象参照ID2
  * TODO: to sort.c
  */
-static void ang_sort_swap_nest_mon_info(player_type *player_ptr, vptr u, vptr v, int a, int b)
+static void ang_sort_swap_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
 {
     /* Unused */
     (void)player_ptr;
@@ -216,7 +216,7 @@ static void add_cave_info(grid_type *g_ptr, int cave_mask)
  *\n
  * Note that "monster nests" will never contain "unique" monsters.\n
  */
-bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y1, x1, y2, x2, xval, yval;
     int i;
@@ -442,7 +442,7 @@ std::vector<nest_pit_type> pit_types = {
  *\n
  * Note that "monster pits" will never contain "unique" monsters.\n
  */
-bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y1, x1, y2, x2, xval, yval;
     int i, j;
@@ -682,7 +682,7 @@ const int place_table_trapped_pit[TRAPPED_PIT_MONSTER_PLACE_MAX][3] = {
  * @detai;
  * 穴を掘るモンスター、壁を抜けるモンスターは却下
  */
-static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool vault_aux_trapped_pit(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     /* Unused */
     (void)player_ptr;
@@ -743,7 +743,7 @@ static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
  *\n
  * Note that "monster pits" will never contain "unique" monsters.\n
  */
-bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y1, x1, y2, x2, xval, yval;
     int i, j;

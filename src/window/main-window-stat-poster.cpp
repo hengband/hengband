@@ -46,7 +46,7 @@
  * @brief プレイヤー能力値を描画する / Print character stat in given row, column
  * @param stat 描画するステータスのID
  */
-void print_stat(player_type *player_ptr, int stat)
+void print_stat(PlayerType *player_ptr, int stat)
 {
     GAME_TEXT tmp[32];
     if (player_ptr->stat_cur[stat] < player_ptr->stat_max[stat]) {
@@ -73,7 +73,7 @@ void print_stat(player_type *player_ptr, int stat)
 /*!
  * @brief プレイヤーの負傷状態を表示する
  */
-void print_cut(player_type *player_ptr)
+void print_cut(PlayerType *player_ptr)
 {
     auto player_cut = player_ptr->effects()->cut();
     if (!player_cut->is_cut()) {
@@ -89,7 +89,7 @@ void print_cut(player_type *player_ptr)
  * @brief プレイヤーの朦朧状態を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_stun(player_type *player_ptr)
+void print_stun(PlayerType *player_ptr)
 {
     auto player_stun = player_ptr->effects()->stun();
     if (!player_stun->is_stunned()) {
@@ -105,7 +105,7 @@ void print_stun(player_type *player_ptr)
  * @brief プレイヤーの空腹状態を表示する / Prints status of hunger
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_hunger(player_type *player_ptr)
+void print_hunger(PlayerType *player_ptr)
 {
     if (allow_debug_options && player_ptr->current_floor_ptr->inside_arena)
         return;
@@ -146,7 +146,7 @@ void print_hunger(player_type *player_ptr)
  * This function was a major bottleneck when resting, so a lot of
  * the text formatting code was optimized in place below.
  */
-void print_state(player_type *player_ptr)
+void print_state(PlayerType *player_ptr)
 {
     TERM_COLOR attr = TERM_WHITE;
     GAME_TEXT text[16];
@@ -191,18 +191,18 @@ void print_state(player_type *player_ptr)
     }
     case ACTION_MONK_STANCE: {
         if (auto stance = PlayerClass(player_ptr).get_monk_stance();
-            stance != MonkStance::NONE) {
+            stance != MonkStanceType::NONE) {
             switch (stance) {
-            case MonkStance::GENBU:
+            case MonkStanceType::GENBU:
                 attr = TERM_GREEN;
                 break;
-            case MonkStance::BYAKKO:
+            case MonkStanceType::BYAKKO:
                 attr = TERM_WHITE;
                 break;
-            case MonkStance::SEIRYU:
+            case MonkStanceType::SEIRYU:
                 attr = TERM_L_BLUE;
                 break;
-            case MonkStance::SUZAKU:
+            case MonkStanceType::SUZAKU:
                 attr = TERM_L_RED;
                 break;
             default:
@@ -214,7 +214,7 @@ void print_state(player_type *player_ptr)
     }
     case ACTION_SAMURAI_STANCE: {
         if (auto stance = PlayerClass(player_ptr).get_samurai_stance();
-            stance != SamuraiStance::NONE) {
+            stance != SamuraiStanceType::NONE) {
             strcpy(text, samurai_stances[enum2i(stance) - 1].desc);
         }
         break;
@@ -244,7 +244,7 @@ void print_state(player_type *player_ptr)
  * @brief プレイヤーの行動速度を表示する / Prints the speed_value of a character.			-CJS-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_speed(player_type *player_ptr)
+void print_speed(PlayerType *player_ptr)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -301,7 +301,7 @@ void print_speed(player_type *player_ptr)
  * @brief プレイヤーの呪文学習可能状態を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_study(player_type *player_ptr)
+void print_study(PlayerType *player_ptr)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -319,7 +319,7 @@ void print_study(player_type *player_ptr)
  * @brief プレイヤーのものまね可能状態を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_imitation(player_type *player_ptr)
+void print_imitation(PlayerType *player_ptr)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -345,7 +345,7 @@ void print_imitation(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @bar_flags 表示可否を決めるためのフラグ群
  */
-static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
+static void add_hex_status_flags(PlayerType *player_ptr, BIT_FLAGS *bar_flags)
 {
     if (player_ptr->realm1 != REALM_HEX) {
         return;
@@ -433,7 +433,7 @@ static void add_hex_status_flags(player_type *player_ptr, BIT_FLAGS *bar_flags)
 /*!
  * @brief 下部に状態表示を行う / Show status bar
  */
-void print_status(player_type *player_ptr)
+void print_status(PlayerType *player_ptr)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -652,7 +652,7 @@ void print_status(player_type *player_ptr)
  * @brief プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void print_frame_extra(player_type *player_ptr)
+void print_frame_extra(PlayerType *player_ptr)
 {
     print_cut(player_ptr);
     print_stun(player_ptr);

@@ -26,7 +26,7 @@
  * モンスターを削除するとそのモンスターが拾っていたアイテムも同時に削除される。 /
  * When a monster is deleted, all of its objects are deleted.
  */
-void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
+void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[i];
@@ -97,7 +97,7 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
  * This is an efficient method of simulating multiple calls to the
  * "delete_monster()" function, with no visual effects.
  */
-void wipe_monsters_list(player_type *player_ptr)
+void wipe_monsters_list(PlayerType *player_ptr)
 {
     if (!r_info[MON_BANORLUPART].max_num) {
         if (r_info[MON_BANOR].max_num) {
@@ -153,7 +153,7 @@ void wipe_monsters_list(player_type *player_ptr)
  * @param x 削除位置x座標
  * @param y 削除位置y座標
  */
-void delete_monster(player_type *player_ptr, POSITION y, POSITION x)
+void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;

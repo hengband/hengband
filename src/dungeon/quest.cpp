@@ -67,7 +67,7 @@ bool quest_type::is_fixed(short quest_idx)
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param q_ptr クエスト構造体の参照ポインタ
  */
-void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
+void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
 {
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
 
@@ -111,7 +111,7 @@ void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
 
 /*!
  * @brief クエストの最終状態を記録する(成功or失敗、時間)
- * @param player_type プレイヤー情報への参照ポインタ
+ * @param PlayerType プレイヤー情報への参照ポインタ
  * @param q_ptr クエスト情報への参照ポインタ
  * @param stat ステータス(成功or失敗)
  */
@@ -128,7 +128,7 @@ void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusT
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param quest_num 達成状態にしたいクエストのID
  */
-void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
+void complete_quest(PlayerType *player_ptr, QUEST_IDX quest_num)
 {
     quest_type *const q_ptr = &quest[quest_num];
 
@@ -159,7 +159,7 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
  */
-void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr)
+void check_find_art_quest_completion(PlayerType *player_ptr, object_type *o_ptr)
 {
     /* Check if completed a quest */
     for (QUEST_IDX i = 0; i < max_q_idx; i++) {
@@ -215,7 +215,7 @@ void quest_discovery(QUEST_IDX q_idx)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
+QUEST_IDX quest_number(PlayerType *player_ptr, DEPTH level)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_quest)
@@ -239,7 +239,7 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
+QUEST_IDX random_quest_number(PlayerType *player_ptr, DEPTH level)
 {
     if (player_ptr->dungeon_idx != DUNGEON_ANGBAND)
         return 0;
@@ -258,7 +258,7 @@ QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
  * @brief クエスト階層から離脱する際の処理
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void leave_quest_check(player_type *player_ptr)
+void leave_quest_check(PlayerType *player_ptr)
 {
     leaving_quest = player_ptr->current_floor_ptr->inside_quest;
     if (!leaving_quest)
@@ -278,7 +278,7 @@ void leave_quest_check(player_type *player_ptr)
         quest[QUEST_TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        a_info[q_ptr->k_idx].gen_flags.reset(TRG::QUESTITEM);
+        a_info[q_ptr->k_idx].gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
         r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
@@ -302,7 +302,7 @@ void leave_quest_check(player_type *player_ptr)
 /*!
  * @brief 「塔」クエストの各階層から離脱する際の処理
  */
-void leave_tower_check(player_type *player_ptr)
+void leave_tower_check(PlayerType *player_ptr)
 {
     leaving_quest = player_ptr->current_floor_ptr->inside_quest;
     bool is_leaving_from_tower = leaving_quest != 0;
@@ -322,7 +322,7 @@ void leave_tower_check(player_type *player_ptr)
 /*! 
  * @brief Player enters a new quest
  */
-void exe_enter_quest(player_type *player_ptr, QUEST_IDX quest_idx)
+void exe_enter_quest(PlayerType *player_ptr, QUEST_IDX quest_idx)
 {
     if (quest[quest_idx].type != QuestKindType::RANDOM)
         player_ptr->current_floor_ptr->dun_level = 1;
@@ -335,14 +335,14 @@ void exe_enter_quest(player_type *player_ptr, QUEST_IDX quest_idx)
  * @brief クエスト入り口にプレイヤーが乗った際の処理 / Do building commands
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_quest(player_type *player_ptr)
+void do_cmd_quest(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF::QUEST_ENTER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }

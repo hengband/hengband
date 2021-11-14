@@ -29,7 +29,7 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/experience.h"
@@ -51,7 +51,7 @@
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
+bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
 {
     bool ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
@@ -175,19 +175,19 @@ bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     }
 
     case SV_WAND_STINKING_CLOUD: {
-        fire_ball(player_ptr, GF_POIS, dir, 12 + lev / 4, rad);
+        fire_ball(player_ptr, AttributeType::POIS, dir, 12 + lev / 4, rad);
         ident = true;
         break;
     }
 
     case SV_WAND_MAGIC_MISSILE: {
-        fire_bolt_or_beam(player_ptr, 20, GF_MISSILE, dir, damroll(2 + lev / 10, 6));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::MISSILE, dir, damroll(2 + lev / 10, 6));
         ident = true;
         break;
     }
 
     case SV_WAND_ACID_BOLT: {
-        fire_bolt_or_beam(player_ptr, 20, GF_ACID, dir, damroll(6 + lev / 7, 8));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::ACID, dir, damroll(6 + lev / 7, 8));
         ident = true;
         break;
     }
@@ -199,37 +199,37 @@ bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     }
 
     case SV_WAND_FIRE_BOLT: {
-        fire_bolt_or_beam(player_ptr, 20, GF_FIRE, dir, damroll(7 + lev / 6, 8));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::FIRE, dir, damroll(7 + lev / 6, 8));
         ident = true;
         break;
     }
 
     case SV_WAND_COLD_BOLT: {
-        fire_bolt_or_beam(player_ptr, 20, GF_COLD, dir, damroll(5 + lev / 8, 8));
+        fire_bolt_or_beam(player_ptr, 20, AttributeType::COLD, dir, damroll(5 + lev / 8, 8));
         ident = true;
         break;
     }
 
     case SV_WAND_ACID_BALL: {
-        fire_ball(player_ptr, GF_ACID, dir, 60 + 3 * lev / 4, rad);
+        fire_ball(player_ptr, AttributeType::ACID, dir, 60 + 3 * lev / 4, rad);
         ident = true;
         break;
     }
 
     case SV_WAND_ELEC_BALL: {
-        fire_ball(player_ptr, GF_ELEC, dir, 40 + 3 * lev / 4, rad);
+        fire_ball(player_ptr, AttributeType::ELEC, dir, 40 + 3 * lev / 4, rad);
         ident = true;
         break;
     }
 
     case SV_WAND_FIRE_BALL: {
-        fire_ball(player_ptr, GF_FIRE, dir, 70 + 3 * lev / 4, rad);
+        fire_ball(player_ptr, AttributeType::FIRE, dir, 70 + 3 * lev / 4, rad);
         ident = true;
         break;
     }
 
     case SV_WAND_COLD_BALL: {
-        fire_ball(player_ptr, GF_COLD, dir, 50 + 3 * lev / 4, rad);
+        fire_ball(player_ptr, AttributeType::COLD, dir, 50 + 3 * lev / 4, rad);
         ident = true;
         break;
     }
@@ -240,41 +240,41 @@ bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     }
 
     case SV_WAND_DRAGON_FIRE: {
-        fire_breath(player_ptr, GF_FIRE, dir, (powerful ? 300 : 200), 3);
+        fire_breath(player_ptr, AttributeType::FIRE, dir, (powerful ? 300 : 200), 3);
         ident = true;
         break;
     }
 
     case SV_WAND_DRAGON_COLD: {
-        fire_breath(player_ptr, GF_COLD, dir, (powerful ? 270 : 180), 3);
+        fire_breath(player_ptr, AttributeType::COLD, dir, (powerful ? 270 : 180), 3);
         ident = true;
         break;
     }
 
     case SV_WAND_DRAGON_BREATH: {
         HIT_POINT dam;
-        EFFECT_ID typ;
+        AttributeType typ;
 
         switch (randint1(5)) {
         case 1:
             dam = 240;
-            typ = GF_ACID;
+            typ = AttributeType::ACID;
             break;
         case 2:
             dam = 210;
-            typ = GF_ELEC;
+            typ = AttributeType::ELEC;
             break;
         case 3:
             dam = 240;
-            typ = GF_FIRE;
+            typ = AttributeType::FIRE;
             break;
         case 4:
             dam = 210;
-            typ = GF_COLD;
+            typ = AttributeType::COLD;
             break;
         default:
             dam = 180;
-            typ = GF_POIS;
+            typ = AttributeType::POIS;
             break;
         }
 
@@ -288,26 +288,26 @@ bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     }
 
     case SV_WAND_DISINTEGRATE: {
-        fire_ball(player_ptr, GF_DISINTEGRATE, dir, 200 + randint1(lev * 2), rad);
+        fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, 200 + randint1(lev * 2), rad);
         ident = true;
         break;
     }
 
     case SV_WAND_ROCKETS: {
         msg_print(_("ロケットを発射した！", "You launch a rocket!"));
-        fire_rocket(player_ptr, GF_ROCKET, dir, 250 + lev * 3, rad);
+        fire_rocket(player_ptr, AttributeType::ROCKET, dir, 250 + lev * 3, rad);
         ident = true;
         break;
     }
 
     case SV_WAND_STRIKING: {
-        fire_bolt(player_ptr, GF_METEOR, dir, damroll(15 + lev / 3, 13));
+        fire_bolt(player_ptr, AttributeType::METEOR, dir, damroll(15 + lev / 3, 13));
         ident = true;
         break;
     }
 
     case SV_WAND_GENOCIDE: {
-        fire_ball_hide(player_ptr, GF_GENOCIDE, dir, magic ? lev + 50 : 250, 0);
+        fire_ball_hide(player_ptr, AttributeType::GENOCIDE, dir, magic ? lev + 50 : 250, 0);
         ident = true;
         break;
     }
@@ -318,7 +318,7 @@ bool wand_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 /*!
  * @brief 魔法棒を使うコマンドのメインルーチン /
  */
-void do_cmd_aim_wand(player_type *player_ptr)
+void do_cmd_aim_wand(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     concptr q, s;
@@ -327,7 +327,7 @@ void do_cmd_aim_wand(player_type *player_ptr)
         return;
     if (cmd_limit_arena(player_ptr))
         return;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
     s = _("使える魔法棒がない。", "You have no wand to aim.");

@@ -17,7 +17,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-PlayerStealth::PlayerStealth(player_type* player_ptr)
+PlayerStealth::PlayerStealth(PlayerType* player_ptr)
     : PlayerStatusBase(player_ptr)
 {
 }
@@ -91,10 +91,10 @@ int16_t PlayerStealth::mutation_value()
 {
     int16_t result = 0;
     const auto &muta = this->player_ptr->muta;
-    if (muta.has(MUTA::XTRA_NOIS)) {
+    if (muta.has(PlayerMutationType::XTRA_NOIS)) {
         result -= 3;
     }
-    if (muta.has(MUTA::MOTION)) {
+    if (muta.has(PlayerMutationType::MOTION)) {
         result += 1;
     }
     return result;

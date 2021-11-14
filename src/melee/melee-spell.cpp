@@ -29,7 +29,7 @@
 #define RF5_SPELL_SIZE 32
 #define RF6_SPELL_SIZE 32
 
-static bool try_melee_spell(player_type *player_ptr, melee_spell_type *ms_ptr)
+static bool try_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (spell_is_inate(ms_ptr->thrown_spell) || (!ms_ptr->in_no_magic_dungeon && (!monster_stunned_remaining(ms_ptr->m_ptr) || one_in_(2))))
         return false;
@@ -41,7 +41,7 @@ static bool try_melee_spell(player_type *player_ptr, melee_spell_type *ms_ptr)
     return true;
 }
 
-static bool disturb_melee_spell(player_type *player_ptr, melee_spell_type *ms_ptr)
+static bool disturb_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     if (spell_is_inate(ms_ptr->thrown_spell) || !SpellHex(player_ptr).check_hex_barrier(ms_ptr->m_idx, HEX_ANTI_MAGIC))
         return false;
@@ -52,14 +52,14 @@ static bool disturb_melee_spell(player_type *player_ptr, melee_spell_type *ms_pt
     return true;
 }
 
-static void process_special_melee_spell(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void process_special_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     bool is_special_magic = ms_ptr->m_ptr->ml;
     is_special_magic &= ms_ptr->maneable;
     is_special_magic &= w_ptr->timewalk_m_idx == 0;
     is_special_magic &= !player_ptr->blind;
     is_special_magic &= player_ptr->pclass == PlayerClassType::IMITATOR;
-    is_special_magic &= ms_ptr->thrown_spell != RF_ABILITY::SPECIAL;
+    is_special_magic &= ms_ptr->thrown_spell != MonsterAbilityType::SPECIAL;
     if (!is_special_magic)
         return;
 
@@ -86,7 +86,7 @@ static void process_rememberance(melee_spell_type *ms_ptr)
         ms_ptr->r_ptr->r_cast_spell++;
 }
 
-static void describe_melee_spell(player_type *player_ptr, melee_spell_type *ms_ptr)
+static void describe_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     /* Get the monster name (or "it") */
     monster_desc(player_ptr, ms_ptr->m_name, ms_ptr->m_ptr, 0x00);
@@ -110,7 +110,7 @@ static void describe_melee_spell(player_type *player_ptr, melee_spell_type *ms_p
  * @details
  * The player is only disturbed if able to be affected by the spell.
  */
-bool monst_spell_monst(player_type *player_ptr, MONSTER_IDX m_idx)
+bool monst_spell_monst(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     melee_spell_type tmp_ms;
     melee_spell_type *ms_ptr = initialize_melee_spell_type(player_ptr, &tmp_ms, m_idx);

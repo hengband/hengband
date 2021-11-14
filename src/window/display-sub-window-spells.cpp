@@ -26,7 +26,7 @@
  * Need to analyze size of the window.
  * Need more color coding.
  */
-static void display_spell_list(player_type *player_ptr)
+static void display_spell_list(PlayerType *player_ptr)
 {
     TERM_LEN y, x;
     int m[9];
@@ -53,7 +53,7 @@ static void display_spell_list(player_type *player_ptr)
         mind_type spell;
         char comment[80];
         char psi_desc[160];
-        mind_kind_type use_mind;
+        MindKindType use_mind;
         bool use_hp = false;
 
         y = 1;
@@ -65,27 +65,27 @@ static void display_spell_list(player_type *player_ptr)
 
         switch (player_ptr->pclass) {
         case PlayerClassType::MINDCRAFTER:
-            use_mind = mind_kind_type::MINDCRAFTER;
+            use_mind = MindKindType::MINDCRAFTER;
             break;
         case PlayerClassType::FORCETRAINER:
-            use_mind = mind_kind_type::KI;
+            use_mind = MindKindType::KI;
             break;
         case PlayerClassType::BERSERKER:
-            use_mind = mind_kind_type::BERSERKER;
+            use_mind = MindKindType::BERSERKER;
             use_hp = true;
             break;
         case PlayerClassType::MIRROR_MASTER:
-            use_mind = mind_kind_type::MIRROR_MASTER;
+            use_mind = MindKindType::MIRROR_MASTER;
             break;
         case PlayerClassType::NINJA:
-            use_mind = mind_kind_type::NINJUTSU;
+            use_mind = MindKindType::NINJUTSU;
             use_hp = true;
             break;
         case PlayerClassType::ELEMENTALIST:
-            use_mind = mind_kind_type::ELEMENTAL;
+            use_mind = MindKindType::ELEMENTAL;
             break;
         default:
-            use_mind = mind_kind_type::MINDCRAFTER;
+            use_mind = MindKindType::MINDCRAFTER;
             break;
         }
 
@@ -146,7 +146,7 @@ static void display_spell_list(player_type *player_ptr)
                 s_ptr = &mp_ptr->info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - 1][i % 32];
             }
 
-            strcpy(name, exe_spell(player_ptr, (j < 1) ? player_ptr->realm1 : player_ptr->realm2, i % 32, SPELL_NAME));
+            strcpy(name, exe_spell(player_ptr, (j < 1) ? player_ptr->realm1 : player_ptr->realm2, i % 32, SpellProcessType::NAME));
 
             if (s_ptr->slevel >= 99) {
                 strcpy(name, _("(判読不能)", "(illegible)"));
@@ -173,7 +173,7 @@ static void display_spell_list(player_type *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * Hack -- display spells in sub-windows
  */
-void fix_spell(player_type *player_ptr)
+void fix_spell(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;

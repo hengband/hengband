@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-struct player_type;
-bool cave_gen(player_type *player_ptr, concptr *why);
+class PlayerType;
+bool cave_gen(PlayerType *player_ptr, concptr *why);

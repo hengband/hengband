@@ -4,7 +4,7 @@
 #include "racial/racial-util.h"
 #include "system/player-type-definition.h"
 
-void set_mimic_racial_command(player_type *player_ptr, rc_type *rc_ptr)
+void set_mimic_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
     switch (player_ptr->mimic_form) {
@@ -33,7 +33,7 @@ void set_mimic_racial_command(player_type *player_ptr, rc_type *rc_ptr)
     }
 }
 
-void set_race_racial_command(player_type *player_ptr, rc_type *rc_ptr)
+void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
     switch (player_ptr->prace) {

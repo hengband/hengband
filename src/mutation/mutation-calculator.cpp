@@ -19,7 +19,7 @@
  * @brief 現在プレイヤー得ている突然変異の数を返す。
  * @return 現在得ている突然変異の数
  */
-static int count_mutations(player_type *player_ptr)
+static int count_mutations(PlayerType *player_ptr)
 {
     return player_ptr->muta.count();
 }
@@ -32,7 +32,7 @@ static int count_mutations(player_type *player_ptr)
  * Beastman get 10 "free" mutations and only 5% decrease per additional mutation.
  * Max 90% decrease in regeneration speed.
  */
-int calc_mutant_regenerate_mod(player_type *player_ptr)
+int calc_mutant_regenerate_mod(PlayerType *player_ptr)
 {
     int regen;
     int mod = 10;

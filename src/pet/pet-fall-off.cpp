@@ -33,7 +33,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void check_fall_off_horse(player_type *player_ptr, monap_type *monap_ptr)
+void check_fall_off_horse(PlayerType *player_ptr, monap_type *monap_ptr)
 {
     if ((player_ptr->riding == 0) || (monap_ptr->damage == 0))
         return;
@@ -53,7 +53,7 @@ void check_fall_off_horse(player_type *player_ptr, monap_type *monap_ptr)
  * @return FALSEなら落馬しないことで確定、TRUEなら処理続行
  * @details レベルの低い乗馬からは落馬しにくい
  */
-static bool calc_fall_off_possibility(player_type *player_ptr, const HIT_POINT dam, const bool force, monster_race *r_ptr)
+static bool calc_fall_off_possibility(PlayerType *player_ptr, const HIT_POINT dam, const bool force, monster_race *r_ptr)
 {
     if (force)
         return true;
@@ -83,7 +83,7 @@ static bool calc_fall_off_possibility(player_type *player_ptr, const HIT_POINT d
  * @param force TRUEならば強制的に落馬する
  * @return 実際に落馬したらTRUEを返す
  */
-bool process_fall_off_horse(player_type *player_ptr, HIT_POINT dam, bool force)
+bool process_fall_off_horse(PlayerType *player_ptr, HIT_POINT dam, bool force)
 {
     POSITION sy = 0;
     POSITION sx = 0;
@@ -111,12 +111,12 @@ bool process_fall_off_horse(player_type *player_ptr, HIT_POINT dam, bool force)
                 continue;
 
             /* Skip non-empty grids */
-            if (!g_ptr->cave_has_flag(FF::MOVE) && !g_ptr->cave_has_flag(FF::CAN_FLY)) {
+            if (!g_ptr->cave_has_flag(FloorFeatureType::MOVE) && !g_ptr->cave_has_flag(FloorFeatureType::CAN_FLY)) {
                 if (!can_player_ride_pet(player_ptr, g_ptr, false))
                     continue;
             }
 
-            if (g_ptr->cave_has_flag(FF::PATTERN))
+            if (g_ptr->cave_has_flag(FloorFeatureType::PATTERN))
                 continue;
 
             /* Count "safe" grids */

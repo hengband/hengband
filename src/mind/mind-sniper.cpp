@@ -130,7 +130,7 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
  * @brief スナイパーの集中度加算
  * @return 集中度を加算した場合は true、そうでなければ false
  */
-static bool snipe_concentrate(player_type *player_ptr)
+static bool snipe_concentrate(PlayerType *player_ptr)
 {
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
     if (!sniper_data) {
@@ -153,7 +153,7 @@ static bool snipe_concentrate(player_type *player_ptr)
  * スナイパーではない、もしくは集中度がすでに0であればなにもしない。
  * @param msg TRUEならばメッセージを表示する
  */
-void reset_concentration(player_type *player_ptr, bool msg)
+void reset_concentration(PlayerType *player_ptr, bool msg)
 {
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
     if (!sniper_data) {
@@ -176,7 +176,7 @@ void reset_concentration(player_type *player_ptr, bool msg)
  * @param tdam 算出中のダメージ
  * @return 集中度修正を加えたダメージ
  */
-int boost_concentration_damage(player_type *player_ptr, int tdam)
+int boost_concentration_damage(PlayerType *player_ptr, int tdam)
 {
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
     const auto sniper_concent = sniper_data ? sniper_data->concent : 0;
@@ -189,7 +189,7 @@ int boost_concentration_damage(player_type *player_ptr, int tdam)
 /*!
  * @brief スナイパーの技能リストを表示する
  */
-void display_snipe_list(player_type *player_ptr)
+void display_snipe_list(PlayerType *player_ptr)
 {
     int i;
     TERM_LEN y = 1;
@@ -238,7 +238,7 @@ void display_snipe_list(player_type *player_ptr)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_snipe_power(player_type *player_ptr, COMMAND_CODE *sn, bool only_browse)
+static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_browse)
 {
     COMMAND_CODE i;
     int num = 0;
@@ -410,7 +410,7 @@ static int get_snipe_power(player_type *player_ptr, COMMAND_CODE *sn, bool only_
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
+MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool seen = is_seen(player_ptr, m_ptr);
@@ -523,7 +523,7 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *player_ptr, MULTIPLY mult, mon
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_sniper_spell(player_type *player_ptr, int spell)
+static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
 {
     object_type *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     SPELL_IDX snipe_type = SP_NONE;
@@ -599,7 +599,7 @@ static bool cast_sniper_spell(player_type *player_ptr, int spell)
 /*!
  * @brief スナイパー技能コマンドのメインルーチン /
  */
-void do_cmd_snipe(player_type *player_ptr)
+void do_cmd_snipe(PlayerType *player_ptr)
 {
     COMMAND_CODE n = 0;
     bool cast;
@@ -626,7 +626,7 @@ void do_cmd_snipe(player_type *player_ptr)
 /*!
  * @brief スナイパー技能コマンドの表示 /
  */
-void do_cmd_snipe_browse(player_type *player_ptr)
+void do_cmd_snipe_browse(PlayerType *player_ptr)
 {
     COMMAND_CODE n = 0;
     int j, line;

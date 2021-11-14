@@ -38,7 +38,7 @@ void safe_setuid_drop(void)
 /*!
  * @brief ファイルのグラブパーミッションチェック / Hack -- grab permissions
  */
-void safe_setuid_grab(player_type *player_ptr)
+void safe_setuid_grab(PlayerType *player_ptr)
 {
 #ifdef SET_UID
 #ifdef SAFE_SETUID

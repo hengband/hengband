@@ -22,7 +22,7 @@ typedef struct msa_type {
     monster_type *m_ptr;
     monster_race *r_ptr;
     bool no_inate;
-    EnumClassFlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     POSITION x;
     POSITION y;
     POSITION x_br_lite;
@@ -30,13 +30,13 @@ typedef struct msa_type {
     mspell_lite_type do_spell;
     bool in_no_magic_dungeon;
     bool success;
-    std::vector<RF_ABILITY> mspells;
-    RF_ABILITY thrown_spell;
+    std::vector<MonsterAbilityType> mspells;
+    MonsterAbilityType thrown_spell;
     GAME_TEXT m_name[MAX_NLEN];
     bool can_remember;
     int dam;
     DEPTH rlev;
 } msa_type;
 
-struct player_type;
-msa_type *initialize_msa_type(player_type *player_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx);
+class PlayerType;
+msa_type *initialize_msa_type(PlayerType *player_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx);

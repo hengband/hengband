@@ -21,7 +21,7 @@
  * @param questnum クエストのID
  * @param do_init クエストの開始処理か(true)、結果処理か(FALSE)
  */
-static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
+static void get_questinfo(PlayerType *player_ptr, IDX questnum, bool do_init)
 {
     for (int i = 0; i < 10; i++) {
         quest_text[i][0] = '\0';
@@ -47,7 +47,7 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
  * @param questnum クエストのID
  * @param do_init クエストの開始処理か(true)、結果処理か(FALSE)
  */
-void print_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
+void print_questinfo(PlayerType *player_ptr, IDX questnum, bool do_init)
 {
     get_questinfo(player_ptr, questnum, do_init);
 
@@ -65,7 +65,7 @@ void print_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
  * @brief クエスト処理のメインルーチン / Request a quest from the Lord.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void castle_quest(player_type *player_ptr)
+void castle_quest(PlayerType *player_ptr)
 {
     clear_bldg(4, 18);
     QUEST_IDX q_index = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;

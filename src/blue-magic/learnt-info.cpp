@@ -15,7 +15,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param 換算レベル
  */
-PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr)
+PLAYER_LEVEL get_pseudo_monstetr_level(PlayerType *player_ptr)
 {
     PLAYER_LEVEL monster_level = player_ptr->lev + 40;
     return (monster_level * monster_level - 1550) / 130;
@@ -28,7 +28,7 @@ PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr)
  * @param msg 表示する文字列
  * @param tmp 返すメッセージを格納する配列
  */
-static void set_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
+static void set_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
 {
     int base_damage = monspell_bluemage_damage(player_ptr, ms_type, plev, BASE_DAM);
     int dice_num = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_NUM);
@@ -46,132 +46,132 @@ static void set_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLA
  * @param p 情報を返す文字列参照ポインタ
  * @param power モンスター魔法のID
  */
-void learnt_info(player_type *player_ptr, char *p, RF_ABILITY power)
+void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power)
 {
     PLAYER_LEVEL plev = get_pseudo_monstetr_level(player_ptr);
 
     strcpy(p, "");
 
     switch (power) {
-    case RF_ABILITY::SHRIEK:
-    case RF_ABILITY::XXX1:
-    case RF_ABILITY::XXX2:
-    case RF_ABILITY::XXX3:
-    case RF_ABILITY::XXX4:
-    case RF_ABILITY::SCARE:
-    case RF_ABILITY::BLIND:
-    case RF_ABILITY::CONF:
-    case RF_ABILITY::SLOW:
-    case RF_ABILITY::HOLD:
-    case RF_ABILITY::HAND_DOOM:
-    case RF_ABILITY::WORLD:
-    case RF_ABILITY::SPECIAL:
-    case RF_ABILITY::TELE_TO:
-    case RF_ABILITY::TELE_AWAY:
-    case RF_ABILITY::TELE_LEVEL:
-    case RF_ABILITY::DARKNESS:
-    case RF_ABILITY::TRAPS:
-    case RF_ABILITY::FORGET:
-    case RF_ABILITY::S_KIN:
-    case RF_ABILITY::S_CYBER:
-    case RF_ABILITY::S_MONSTER:
-    case RF_ABILITY::S_MONSTERS:
-    case RF_ABILITY::S_ANT:
-    case RF_ABILITY::S_SPIDER:
-    case RF_ABILITY::S_HOUND:
-    case RF_ABILITY::S_HYDRA:
-    case RF_ABILITY::S_ANGEL:
-    case RF_ABILITY::S_DEMON:
-    case RF_ABILITY::S_UNDEAD:
-    case RF_ABILITY::S_DRAGON:
-    case RF_ABILITY::S_HI_UNDEAD:
-    case RF_ABILITY::S_HI_DRAGON:
-    case RF_ABILITY::S_AMBERITES:
-    case RF_ABILITY::S_UNIQUE:
+    case MonsterAbilityType::SHRIEK:
+    case MonsterAbilityType::XXX1:
+    case MonsterAbilityType::XXX2:
+    case MonsterAbilityType::XXX3:
+    case MonsterAbilityType::XXX4:
+    case MonsterAbilityType::SCARE:
+    case MonsterAbilityType::BLIND:
+    case MonsterAbilityType::CONF:
+    case MonsterAbilityType::SLOW:
+    case MonsterAbilityType::HOLD:
+    case MonsterAbilityType::HAND_DOOM:
+    case MonsterAbilityType::WORLD:
+    case MonsterAbilityType::SPECIAL:
+    case MonsterAbilityType::TELE_TO:
+    case MonsterAbilityType::TELE_AWAY:
+    case MonsterAbilityType::TELE_LEVEL:
+    case MonsterAbilityType::DARKNESS:
+    case MonsterAbilityType::TRAPS:
+    case MonsterAbilityType::FORGET:
+    case MonsterAbilityType::S_KIN:
+    case MonsterAbilityType::S_CYBER:
+    case MonsterAbilityType::S_MONSTER:
+    case MonsterAbilityType::S_MONSTERS:
+    case MonsterAbilityType::S_ANT:
+    case MonsterAbilityType::S_SPIDER:
+    case MonsterAbilityType::S_HOUND:
+    case MonsterAbilityType::S_HYDRA:
+    case MonsterAbilityType::S_ANGEL:
+    case MonsterAbilityType::S_DEMON:
+    case MonsterAbilityType::S_UNDEAD:
+    case MonsterAbilityType::S_DRAGON:
+    case MonsterAbilityType::S_HI_UNDEAD:
+    case MonsterAbilityType::S_HI_DRAGON:
+    case MonsterAbilityType::S_AMBERITES:
+    case MonsterAbilityType::S_UNIQUE:
         break;
-    case RF_ABILITY::BA_MANA:
-    case RF_ABILITY::BA_DARK:
-    case RF_ABILITY::BA_LITE:
+    case MonsterAbilityType::BA_MANA:
+    case MonsterAbilityType::BA_DARK:
+    case MonsterAbilityType::BA_LITE:
         set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
-    case RF_ABILITY::DISPEL:
+    case MonsterAbilityType::DISPEL:
         break;
-    case RF_ABILITY::ROCKET:
-    case RF_ABILITY::SHOOT:
-    case RF_ABILITY::BR_ACID:
-    case RF_ABILITY::BR_ELEC:
-    case RF_ABILITY::BR_FIRE:
-    case RF_ABILITY::BR_COLD:
-    case RF_ABILITY::BR_POIS:
-    case RF_ABILITY::BR_NUKE:
-    case RF_ABILITY::BR_NEXU:
-    case RF_ABILITY::BR_TIME:
-    case RF_ABILITY::BR_GRAV:
-    case RF_ABILITY::BR_MANA:
-    case RF_ABILITY::BR_NETH:
-    case RF_ABILITY::BR_LITE:
-    case RF_ABILITY::BR_DARK:
-    case RF_ABILITY::BR_CONF:
-    case RF_ABILITY::BR_SOUN:
-    case RF_ABILITY::BR_CHAO:
-    case RF_ABILITY::BR_DISE:
-    case RF_ABILITY::BR_SHAR:
-    case RF_ABILITY::BR_PLAS:
-    case RF_ABILITY::BR_INER:
-    case RF_ABILITY::BR_FORC:
-    case RF_ABILITY::BR_DISI:
-    case RF_ABILITY::BA_NUKE:
-    case RF_ABILITY::BA_CHAO:
-    case RF_ABILITY::BA_ACID:
-    case RF_ABILITY::BA_ELEC:
-    case RF_ABILITY::BA_FIRE:
-    case RF_ABILITY::BA_COLD:
-    case RF_ABILITY::BA_POIS:
-    case RF_ABILITY::BA_NETH:
-    case RF_ABILITY::BA_WATE:
+    case MonsterAbilityType::ROCKET:
+    case MonsterAbilityType::SHOOT:
+    case MonsterAbilityType::BR_ACID:
+    case MonsterAbilityType::BR_ELEC:
+    case MonsterAbilityType::BR_FIRE:
+    case MonsterAbilityType::BR_COLD:
+    case MonsterAbilityType::BR_POIS:
+    case MonsterAbilityType::BR_NUKE:
+    case MonsterAbilityType::BR_NEXU:
+    case MonsterAbilityType::BR_TIME:
+    case MonsterAbilityType::BR_GRAV:
+    case MonsterAbilityType::BR_MANA:
+    case MonsterAbilityType::BR_NETH:
+    case MonsterAbilityType::BR_LITE:
+    case MonsterAbilityType::BR_DARK:
+    case MonsterAbilityType::BR_CONF:
+    case MonsterAbilityType::BR_SOUN:
+    case MonsterAbilityType::BR_CHAO:
+    case MonsterAbilityType::BR_DISE:
+    case MonsterAbilityType::BR_SHAR:
+    case MonsterAbilityType::BR_PLAS:
+    case MonsterAbilityType::BR_INER:
+    case MonsterAbilityType::BR_FORC:
+    case MonsterAbilityType::BR_DISI:
+    case MonsterAbilityType::BA_NUKE:
+    case MonsterAbilityType::BA_CHAO:
+    case MonsterAbilityType::BA_ACID:
+    case MonsterAbilityType::BA_ELEC:
+    case MonsterAbilityType::BA_FIRE:
+    case MonsterAbilityType::BA_COLD:
+    case MonsterAbilityType::BA_POIS:
+    case MonsterAbilityType::BA_NETH:
+    case MonsterAbilityType::BA_WATE:
         set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
-    case RF_ABILITY::DRAIN_MANA:
+    case MonsterAbilityType::DRAIN_MANA:
         set_bluemage_damage(player_ptr, power, plev, KWD_HEAL, p);
         break;
-    case RF_ABILITY::MIND_BLAST:
-    case RF_ABILITY::BRAIN_SMASH:
-    case RF_ABILITY::CAUSE_1:
-    case RF_ABILITY::CAUSE_2:
-    case RF_ABILITY::CAUSE_3:
-    case RF_ABILITY::CAUSE_4:
-    case RF_ABILITY::BO_ACID:
-    case RF_ABILITY::BO_ELEC:
-    case RF_ABILITY::BO_FIRE:
-    case RF_ABILITY::BO_COLD:
-    case RF_ABILITY::BO_NETH:
-    case RF_ABILITY::BO_WATE:
-    case RF_ABILITY::BO_MANA:
-    case RF_ABILITY::BO_PLAS:
-    case RF_ABILITY::BO_ICEE:
-    case RF_ABILITY::MISSILE:
+    case MonsterAbilityType::MIND_BLAST:
+    case MonsterAbilityType::BRAIN_SMASH:
+    case MonsterAbilityType::CAUSE_1:
+    case MonsterAbilityType::CAUSE_2:
+    case MonsterAbilityType::CAUSE_3:
+    case MonsterAbilityType::CAUSE_4:
+    case MonsterAbilityType::BO_ACID:
+    case MonsterAbilityType::BO_ELEC:
+    case MonsterAbilityType::BO_FIRE:
+    case MonsterAbilityType::BO_COLD:
+    case MonsterAbilityType::BO_NETH:
+    case MonsterAbilityType::BO_WATE:
+    case MonsterAbilityType::BO_MANA:
+    case MonsterAbilityType::BO_PLAS:
+    case MonsterAbilityType::BO_ICEE:
+    case MonsterAbilityType::MISSILE:
         set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
-    case RF_ABILITY::HASTE:
+    case MonsterAbilityType::HASTE:
         sprintf(p, " %sd%d+%d", KWD_DURATION, 20 + plev, plev);
         break;
-    case RF_ABILITY::HEAL:
+    case MonsterAbilityType::HEAL:
         set_bluemage_damage(player_ptr, power, plev, KWD_HEAL, p);
         break;
-    case RF_ABILITY::INVULNER:
+    case MonsterAbilityType::INVULNER:
         sprintf(p, " %sd7+7", KWD_DURATION);
         break;
-    case RF_ABILITY::BLINK:
+    case MonsterAbilityType::BLINK:
         sprintf(p, " %s10", KWD_SPHERE);
         break;
-    case RF_ABILITY::TPORT:
+    case MonsterAbilityType::TPORT:
         sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
         break;
-    case RF_ABILITY::PSY_SPEAR:
+    case MonsterAbilityType::PSY_SPEAR:
         set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
         break;
-    case RF_ABILITY::RAISE_DEAD:
+    case MonsterAbilityType::RAISE_DEAD:
         sprintf(p, " %s5", KWD_SPHERE);
         break;
     default:

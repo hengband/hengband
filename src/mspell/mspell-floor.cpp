@@ -34,7 +34,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -50,7 +50,7 @@
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *player_ptr, MONSTER_IDX t_idx, int target_type)
+MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int target_type)
 {
     mspell_cast_msg_simple msg(_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
         _("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."));
@@ -80,7 +80,7 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *player_ptr, 
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_WORLD(player_type *player_ptr, MONSTER_IDX m_idx)
+MonsterSpellResult spell_RF6_WORLD(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     GAME_TEXT m_name[MAX_NLEN];
@@ -100,7 +100,7 @@ MonsterSpellResult spell_RF6_WORLD(player_type *player_ptr, MONSTER_IDX m_idx)
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_BLINK(player_type *player_ptr, MONSTER_IDX m_idx, int TARGET_TYPE, bool is_quantum_effect)
+MonsterSpellResult spell_RF6_BLINK(PlayerType *player_ptr, MONSTER_IDX m_idx, int TARGET_TYPE, bool is_quantum_effect)
 {
     const auto res = MonsterSpellResult::make_valid();
 
@@ -135,7 +135,7 @@ MonsterSpellResult spell_RF6_BLINK(player_type *player_ptr, MONSTER_IDX m_idx, i
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_TPORT(player_type *player_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_TPORT(PlayerType *player_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
 {
     const auto res = MonsterSpellResult::make_valid();
 
@@ -167,7 +167,7 @@ MonsterSpellResult spell_RF6_TPORT(player_type *player_ptr, MONSTER_IDX m_idx, i
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_TELE_TO(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -235,7 +235,7 @@ MonsterSpellResult spell_RF6_TELE_TO(player_type *player_ptr, MONSTER_IDX m_idx,
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_TELE_AWAY(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -311,7 +311,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *player_ptr, MONSTER_IDX m_id
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_TELE_LEVEL(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     const auto res = MonsterSpellResult::make_valid();
 
@@ -368,7 +368,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(player_type *player_ptr, MONSTER_IDX m_i
  *
  * プレイヤーが対象かつ暗闇ならラーニング可。
  */
-MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg;
     concptr msg_done;
@@ -419,10 +419,10 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSIT
         }
     } else if (monster_to_monster) {
         if (can_use_lite_area) {
-            (void)project(player_ptr, m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL);
+            (void)project(player_ptr, m_idx, 3, y, x, 0, AttributeType::LITE_WEAK, PROJECT_GRID | PROJECT_KILL);
             lite_room(player_ptr, y, x);
         } else {
-            (void)project(player_ptr, m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL);
+            (void)project(player_ptr, m_idx, 3, y, x, 0, AttributeType::DARK_WEAK, PROJECT_GRID | PROJECT_KILL);
             unlite_room(player_ptr, y, x);
         }
     }
@@ -439,7 +439,7 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *player_ptr, POSITION y, POSIT
  *
  * ラーニング可。
  */
-MonsterSpellResult spell_RF6_TRAPS(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+MonsterSpellResult spell_RF6_TRAPS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
@@ -467,7 +467,7 @@ MonsterSpellResult spell_RF6_TRAPS(player_type *player_ptr, POSITION y, POSITION
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_RAISE_DEAD(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_RAISE_DEAD(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),

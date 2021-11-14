@@ -33,7 +33,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 使うオブジェクトの所持品ID
  */
-ObjectUseEntity::ObjectUseEntity(player_type* player_ptr, INVENTORY_IDX item)
+ObjectUseEntity::ObjectUseEntity(PlayerType* player_ptr, INVENTORY_IDX item)
     : player_ptr(player_ptr)
     , item(item)
 {

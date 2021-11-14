@@ -87,7 +87,7 @@ static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
     pp_ptr->k++;
 }
 
-static void calc_projection_to_target(player_type *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
+static void calc_projection_to_target(PlayerType *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
@@ -107,7 +107,7 @@ static void calc_projection_to_target(player_type *player_ptr, projection_path_t
             if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF::PROJECT))
+            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT))
                 break;
         }
 
@@ -127,7 +127,7 @@ static void calc_projection_to_target(player_type *player_ptr, projection_path_t
     }
 }
 
-static bool calc_vertical_projection(player_type *player_ptr, projection_path_type *pp_ptr)
+static bool calc_vertical_projection(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
     if (pp_ptr->ay <= pp_ptr->ax)
         return false;
@@ -146,7 +146,7 @@ static bool calc_vertical_projection(player_type *player_ptr, projection_path_ty
     return true;
 }
 
-static bool calc_horizontal_projection(player_type *player_ptr, projection_path_type *pp_ptr)
+static bool calc_horizontal_projection(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
     if (pp_ptr->ax <= pp_ptr->ay)
         return false;
@@ -165,7 +165,7 @@ static bool calc_horizontal_projection(player_type *player_ptr, projection_path_
     return true;
 }
 
-static void calc_projection_others(player_type *player_ptr, projection_path_type *pp_ptr)
+static void calc_projection_others(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
@@ -183,7 +183,7 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
             if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF::PROJECT))
+            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT))
                 break;
         }
 
@@ -212,7 +212,7 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
  * @param flag フラグID
  * @return リストの長さ
  */
-int projection_path(player_type *player_ptr, uint16_t *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
+int projection_path(PlayerType *player_ptr, uint16_t *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
 {
     if ((x1 == x2) && (y1 == y2))
         return 0;
@@ -243,7 +243,7 @@ int projection_path(player_type *player_ptr, uint16_t *gp, POSITION range, POSIT
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     uint16_t grid_g[512];
     int grid_n = projection_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
@@ -263,7 +263,7 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 射程
  */
-int get_max_range(player_type *player_ptr) { return player_ptr->phase_out ? 36 : 18; }
+int get_max_range(PlayerType *player_ptr) { return player_ptr->phase_out ? 36 : 18; }
 
 /*
  * Convert a "grid" (G) into a "location" (Y)

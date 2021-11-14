@@ -41,14 +41,14 @@
  * @brief コマンド反復チェック
  * @return 反復可能な青魔法があればそれを返す。なければ std::nullopt を返す。
  */
-static std::optional<RF_ABILITY> check_blue_magic_repeat()
+static std::optional<MonsterAbilityType> check_blue_magic_repeat()
 {
     COMMAND_CODE code;
     if (!repeat_pull(&code)) {
         return std::nullopt;
     }
 
-    if (auto spell = static_cast<RF_ABILITY>(code);
+    if (auto spell = static_cast<MonsterAbilityType>(code);
         monster_powers.find(spell) != monster_powers.end()) {
         return spell;
     }
@@ -160,9 +160,9 @@ static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
  * @return 指定したタイプの青魔法のリストを(覚えていないものも含め)返す
  * 但し、そのタイプの魔法を1つも覚えていない場合は std::nullopt を返す
  */
-static std::optional<std::vector<RF_ABILITY>> sweep_learnt_spells(const bluemage_data_type &bluemage_data, BlueMagicType type)
+static std::optional<std::vector<MonsterAbilityType>> sweep_learnt_spells(const bluemage_data_type &bluemage_data, BlueMagicType type)
 {
-    EnumClassFlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     set_rf_masks(ability_flags, type);
 
     if (bluemage_data.learnt_blue_magics.has_none_of(ability_flags)) {
@@ -170,8 +170,8 @@ static std::optional<std::vector<RF_ABILITY>> sweep_learnt_spells(const bluemage
         return std::nullopt;
     }
 
-    std::vector<RF_ABILITY> blue_magics;
-    EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(blue_magics));
+    std::vector<MonsterAbilityType> blue_magics;
+    EnumClassFlagGroup<MonsterAbilityType>::get_flags(ability_flags, std::back_inserter(blue_magics));
 
     return blue_magics;
 }
@@ -185,7 +185,7 @@ static std::optional<std::vector<RF_ABILITY>> sweep_learnt_spells(const bluemage
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、カーソル移動時に選択をスキップする)
  * @return 選択確定キーが入力された場合は true、そうでなければ false
  */
-static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_data_type &bluemage_data, const std::vector<RF_ABILITY> blue_magics)
+static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_data_type &bluemage_data, const std::vector<MonsterAbilityType> blue_magics)
 {
     const auto &learnt_blue_magics = bluemage_data.learnt_blue_magics;
     const int blue_magics_count = blue_magics.size();
@@ -250,7 +250,7 @@ static bool switch_blue_magic_choice(char key, int &menu_line, const bluemage_da
  * @param need_mana 青魔法を使うのに必要なMP
  * @return int 失敗率(%)を返す
  */
-int calculate_blue_magic_failure_probability(player_type *player_ptr, const monster_power &mp, int need_mana)
+int calculate_blue_magic_failure_probability(PlayerType *player_ptr, const monster_power &mp, int need_mana)
 {
     auto chance = mp.fail;
     if (player_ptr->lev > mp.level) {
@@ -312,7 +312,7 @@ static void close_blue_magic_name(char *buf, size_t buf_size, int index, int men
  * @param bluemage_data 青魔道士の固有データへの参照
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていないものは表示をスキップする)
  */
-static void describe_blue_magic_name(player_type *player_ptr, int menu_line, const bluemage_data_type &bluemage_data, const std::vector<RF_ABILITY> &blue_magics)
+static void describe_blue_magic_name(PlayerType *player_ptr, int menu_line, const bluemage_data_type &bluemage_data, const std::vector<MonsterAbilityType> &blue_magics)
 {
     constexpr TERM_LEN y_base = 1;
     constexpr TERM_LEN x_base = 18;
@@ -346,7 +346,7 @@ static void describe_blue_magic_name(player_type *player_ptr, int menu_line, con
  * @param spell 唱える青魔法
  * @return 唱えるなら ture、キャンセルするなら false を返す
  */
-static bool confirm_cast_blue_magic(RF_ABILITY spell)
+static bool confirm_cast_blue_magic(MonsterAbilityType spell)
 {
     char tmp_val[160];
     (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers.at(spell).name);
@@ -360,7 +360,7 @@ static bool confirm_cast_blue_magic(RF_ABILITY spell)
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていない物は候補に出ず選択できない)
  * @return 選択した青魔法。選択をキャンセルした場合は std::nullopt
  */
-static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
+static std::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerType *player_ptr, const bluemage_data_type &bluemage_data, std::vector<MonsterAbilityType> spells)
 {
     char out_val[80];
     (void)strnfmt(out_val, sizeof(out_val), _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
@@ -368,7 +368,7 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *pla
 
     bool first_show_list = always_show_list;
     auto show_list = false;
-    std::optional<RF_ABILITY> selected_spell;
+    std::optional<MonsterAbilityType> selected_spell;
 
     while (!selected_spell.has_value()) {
         char choice = 0;
@@ -417,14 +417,14 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_symbol(player_type *pla
  * @param blue_magics 青魔法のリスト(覚えていないものも含まれているが、覚えていない物は候補に出ず選択できない)
  * @return 選択した青魔法。選択をキャンセルした場合は std::nullopt
  */
-static std::optional<RF_ABILITY> select_learnt_spells_by_menu(player_type *player_ptr, const bluemage_data_type &bluemage_data, std::vector<RF_ABILITY> spells)
+static std::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType *player_ptr, const bluemage_data_type &bluemage_data, std::vector<MonsterAbilityType> spells)
 {
     char out_val[80];
     angband_strcpy(out_val, _("(ESC=中断) どの魔法を唱えますか？", "(ESC=exit) Use which magic? "), sizeof(out_val));
 
     auto it = std::find_if(spells.begin(), spells.end(), [&bluemage_data](const auto &spell) { return bluemage_data.learnt_blue_magics.has(spell); });
     int menu_line = std::distance(spells.begin(), it) + 1;
-    std::optional<RF_ABILITY> selected_spell;
+    std::optional<MonsterAbilityType> selected_spell;
 
     screen_save();
 
@@ -472,7 +472,7 @@ static std::optional<RF_ABILITY> select_learnt_spells_by_menu(player_type *playe
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-std::optional<RF_ABILITY> get_learned_power(player_type *player_ptr)
+std::optional<MonsterAbilityType> get_learned_power(PlayerType *player_ptr)
 {
     auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
     if (!bluemage_data) {

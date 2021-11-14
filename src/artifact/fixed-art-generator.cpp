@@ -39,7 +39,7 @@
  * 純戦士系職業は追加能力/耐性がもらえる。
  * それ以外では、反感、太古の怨念、呪いが付き追加能力/耐性はもらえない。
  */
-static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
+static bool invest_terror_mask(PlayerType *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_TERROR)
         return false;
@@ -53,7 +53,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
     default:
         o_ptr->art_flags.set(TR_AGGRAVATE);
         o_ptr->art_flags.set(TR_TY_CURSE);
-        o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
+        o_ptr->curse_flags.set({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE });
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
         return false;
     }
@@ -64,7 +64,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  */
-static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
+static void milim_swimsuit(PlayerType *player_ptr, object_type *o_ptr)
 {
     if ((o_ptr->name1 != ART_MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY))
         return;
@@ -88,13 +88,13 @@ static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
  * @details
  * 対象は村正、ロビントンのハープ、龍争虎鬪、ブラッディムーン、羽衣、天女の羽衣、ミリム
  */
-static void invest_special_artifact_abilities(player_type *player_ptr, object_type *o_ptr)
+static void invest_special_artifact_abilities(PlayerType *player_ptr, object_type *o_ptr)
 {
     switch (o_ptr->name1) {
     case ART_MURAMASA:
         if (player_ptr->pclass != PlayerClassType::SAMURAI) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
-            o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+            o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
@@ -126,7 +126,7 @@ static void invest_special_artifact_abilities(player_type *player_ptr, object_ty
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void fixed_artifact_random_abilities(player_type *player_ptr, artifact_type *a_ptr, object_type *o_ptr)
+static void fixed_artifact_random_abilities(PlayerType *player_ptr, artifact_type *a_ptr, object_type *o_ptr)
 {
     auto give_power = false;
     auto give_resistance = false;
@@ -138,13 +138,13 @@ static void fixed_artifact_random_abilities(player_type *player_ptr, artifact_ty
 
     invest_special_artifact_abilities(player_ptr, o_ptr);
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_POWER))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_POWER))
         give_power = true;
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_H_RES))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_H_RES))
         give_resistance = true;
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_RES_OR_POWER)) {
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
         if (one_in_(2))
             give_resistance = true;
         else
@@ -157,7 +157,7 @@ static void fixed_artifact_random_abilities(player_type *player_ptr, artifact_ty
     if (give_resistance)
         one_high_resistance(o_ptr);
 
-    if (a_ptr->gen_flags.has(TRG::XTRA_DICE)) {
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
         do {
             o_ptr->dd++;
         } while (one_in_(o_ptr->dd));
@@ -178,22 +178,22 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_
     if (!a_ptr->cost)
         set_bits(o_ptr->ident, IDENT_BROKEN);
 
-    if (a_ptr->gen_flags.has(TRG::CURSED))
-        o_ptr->curse_flags.set(TRC::CURSED);
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::CURSED))
+        o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
-    if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
 
-    if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-        o_ptr->curse_flags.set(TRC::PERMA_CURSE);
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+        o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
 
-    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0))
         o_ptr->curse_flags.set(get_curse(0, o_ptr));
 
-    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1))
         o_ptr->curse_flags.set(get_curse(1, o_ptr));
 
-    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2))
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
 }
 
@@ -203,7 +203,7 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
-artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr)
+artifact_type *apply_artifact(PlayerType *player_ptr, object_type *o_ptr)
 {
     auto a_ptr = &a_info[o_ptr->name1];
     o_ptr->pval = a_ptr->pval;
@@ -234,7 +234,7 @@ artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr)
  * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
  * drop_near()関数の返り値は信用できなくなる.
  */
-bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x)
+bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 {
     auto a_ptr = &a_info[a_idx];
     if (a_ptr->name.empty())
@@ -265,7 +265,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
  * This routine should only be called by "apply_magic()"\n
  * Note -- see "make_artifact_special()" and "apply_magic()"\n
  */
-bool make_artifact(player_type *player_ptr, object_type *o_ptr)
+bool make_artifact(PlayerType *player_ptr, object_type *o_ptr)
 {
     auto floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 0)
@@ -281,10 +281,10 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
         if (a_ref.cur_num)
             continue;
 
-        if (a_ref.gen_flags.has(TRG::QUESTITEM))
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::QUESTITEM))
             continue;
 
-        if (a_ref.gen_flags.has(TRG::INSTA_ART))
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART))
             continue;
 
         if (a_ref.tval != o_ptr->tval)
@@ -321,7 +321,7 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
  *\n
  * Note -- see "make_artifact()" and "apply_magic()"\n
  */
-bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
+bool make_artifact_special(PlayerType *player_ptr, object_type *o_ptr)
 {
     KIND_OBJECT_IDX k_idx = 0;
 
@@ -343,9 +343,9 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
         if (a_ref.cur_num)
             continue;
-        if (a_ref.gen_flags.has(TRG::QUESTITEM))
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::QUESTITEM))
             continue;
-        if (!(a_ref.gen_flags.has(TRG::INSTA_ART)))
+        if (!(a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)))
             continue;
 
         /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /

@@ -37,7 +37,7 @@ byte get_random_ego(byte slot, bool good)
         if (e_ref.idx == 0 || e_ref.slot != slot || e_ref.rarity <= 0)
             continue;
 
-        bool worthless = e_ref.rating == 0 || e_ref.gen_flags.has_any_of({ TRG::CURSED, TRG::HEAVY_CURSE, TRG::PERMA_CURSE });
+        bool worthless = e_ref.rating == 0 || e_ref.gen_flags.has_any_of({ ItemGenerationTraitType::CURSED, ItemGenerationTraitType::HEAVY_CURSE, ItemGenerationTraitType::PERMA_CURSE });
 
         if (good != worthless) {
             prob_table.entry_item(e_ref.idx, (255 / e_ref.rarity));
@@ -57,19 +57,19 @@ byte get_random_ego(byte slot, bool good)
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
  */
-static void ego_invest_curse(object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
+static void ego_invest_curse(object_type *o_ptr, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
 {
-    if (gen_flags.has(TRG::CURSED))
-        o_ptr->curse_flags.set(TRC::CURSED);
-    if (gen_flags.has(TRG::HEAVY_CURSE))
-        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
-    if (gen_flags.has(TRG::PERMA_CURSE))
-        o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-    if (gen_flags.has(TRG::RANDOM_CURSE0))
+    if (gen_flags.has(ItemGenerationTraitType::CURSED))
+        o_ptr->curse_flags.set(CurseTraitType::CURSED);
+    if (gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+    if (gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+        o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
+    if (gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0))
         o_ptr->curse_flags.set(get_curse(0, o_ptr));
-    if (gen_flags.has(TRG::RANDOM_CURSE1))
+    if (gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1))
         o_ptr->curse_flags.set(get_curse(1, o_ptr));
-    if (gen_flags.has(TRG::RANDOM_CURSE2))
+    if (gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2))
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
 }
 
@@ -78,45 +78,45 @@ static void ego_invest_curse(object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_fl
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
  */
-static void ego_invest_extra_abilities(object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
+static void ego_invest_extra_abilities(object_type *o_ptr, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
 {
-    if (gen_flags.has(TRG::ONE_SUSTAIN))
+    if (gen_flags.has(ItemGenerationTraitType::ONE_SUSTAIN))
         one_sustain(o_ptr);
-    if (gen_flags.has(TRG::XTRA_POWER))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_POWER))
         one_ability(o_ptr);
-    if (gen_flags.has(TRG::XTRA_H_RES))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_H_RES))
         one_high_resistance(o_ptr);
-    if (gen_flags.has(TRG::XTRA_E_RES))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_E_RES))
         one_ele_resistance(o_ptr);
-    if (gen_flags.has(TRG::XTRA_D_RES))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_D_RES))
         one_dragon_ele_resistance(o_ptr);
-    if (gen_flags.has(TRG::XTRA_L_RES))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_L_RES))
         one_lordly_high_resistance(o_ptr);
-    if (gen_flags.has(TRG::XTRA_RES))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_RES))
         one_resistance(o_ptr);
-    if (gen_flags.has(TRG::LIGHT_WEIGHT))
+    if (gen_flags.has(ItemGenerationTraitType::LIGHT_WEIGHT))
         make_weight_ligten(o_ptr);
-    if (gen_flags.has(TRG::HEAVY_WEIGHT))
+    if (gen_flags.has(ItemGenerationTraitType::HEAVY_WEIGHT))
         make_weight_heavy(o_ptr);
-    if (gen_flags.has(TRG::XTRA_AC))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_AC))
         add_xtra_ac(o_ptr);
-    if (gen_flags.has(TRG::HIGH_TELEPATHY))
+    if (gen_flags.has(ItemGenerationTraitType::HIGH_TELEPATHY))
         add_high_telepathy(o_ptr);
-    if (gen_flags.has(TRG::LOW_TELEPATHY))
+    if (gen_flags.has(ItemGenerationTraitType::LOW_TELEPATHY))
         add_low_telepathy(o_ptr);
-    if (gen_flags.has(TRG::XTRA_L_ESP))
+    if (gen_flags.has(ItemGenerationTraitType::XTRA_L_ESP))
         one_low_esp(o_ptr);
-    if (gen_flags.has(TRG::ADD_DICE))
+    if (gen_flags.has(ItemGenerationTraitType::ADD_DICE))
         o_ptr->dd++;
-    if (gen_flags.has(TRG::DOUBLED_DICE))
+    if (gen_flags.has(ItemGenerationTraitType::DOUBLED_DICE))
         o_ptr->dd *= 2;
     else {
-        if (gen_flags.has(TRG::XTRA_DICE)) {
+        if (gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
             do {
                 o_ptr->dd++;
             } while (one_in_(o_ptr->dd));
         }
-        if (gen_flags.has(TRG::XTRA_DICE_SIDE)) {
+        if (gen_flags.has(ItemGenerationTraitType::XTRA_DICE_SIDE)) {
             do {
                 o_ptr->ds++;
             } while (one_in_(o_ptr->ds));
@@ -134,7 +134,7 @@ static void ego_invest_extra_abilities(object_type *o_ptr, EnumClassFlagGroup<TR
  * @param e_ptr エゴアイテム情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
  */
-static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_ptr, EnumClassFlagGroup<TRG> &gen_flags)
+static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_ptr, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
 {
     for (auto& xtra : e_ptr->xtra_flags) {
         if (xtra.mul == 0 || xtra.dev == 0)
@@ -252,7 +252,7 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
     o_ptr->to_d += (HIT_POINT)e_ptr->base_to_d;
     o_ptr->to_a += (ARMOUR_CLASS)e_ptr->base_to_a;
 
-    auto is_powerful = e_ptr->gen_flags.has(TRG::POWERFUL);
+    auto is_powerful = e_ptr->gen_flags.has(ItemGenerationTraitType::POWERFUL);
     auto is_cursed = (o_ptr->is_cursed() || o_ptr->is_broken()) && !is_powerful;
     if (is_cursed) {
         if (e_ptr->max_to_h)
@@ -277,7 +277,7 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
         o_ptr->to_d += (HIT_POINT)randint1_signed(e_ptr->max_to_d);
         o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
 
-        if (gen_flags.has(TRG::MOD_ACCURACY)) {
+        if (gen_flags.has(ItemGenerationTraitType::MOD_ACCURACY)) {
             while (o_ptr->to_h < o_ptr->to_d + 10) {
                 o_ptr->to_h += 5;
                 o_ptr->to_d -= 5;
@@ -285,7 +285,7 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
             o_ptr->to_h = std::max<short>(o_ptr->to_h, 15);
         }
 
-        if (gen_flags.has(TRG::MOD_VELOCITY)) {
+        if (gen_flags.has(ItemGenerationTraitType::MOD_VELOCITY)) {
             while (o_ptr->to_d < o_ptr->to_h + 10) {
                 o_ptr->to_d += 5;
                 o_ptr->to_h -= 5;

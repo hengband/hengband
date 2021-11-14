@@ -53,7 +53,7 @@
 /*!
  * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
  */
-void do_cmd_equip(player_type *player_ptr)
+void do_cmd_equip(PlayerType *player_ptr)
 {
     char out_val[160];
     command_wrk = true;
@@ -89,7 +89,7 @@ void do_cmd_equip(player_type *player_ptr)
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_wield(player_type *player_ptr)
+void do_cmd_wield(PlayerType *player_ptr)
 {
     OBJECT_IDX item, slot;
     object_type forge;
@@ -98,7 +98,7 @@ void do_cmd_wield(player_type *player_ptr)
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     OBJECT_IDX need_switch_wielding = 0;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     concptr q = _("どれを装備しますか? ", "Wear/Wield which item? ");
     concptr s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
@@ -297,11 +297,11 @@ void do_cmd_wield(player_type *player_ptr)
 /*!
  * @brief 装備を外すコマンドのメインルーチン / Take off an item
  */
-void do_cmd_takeoff(player_type *player_ptr)
+void do_cmd_takeoff(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     concptr q = _("どれを装備からはずしますか? ", "Take off which item? ");
     concptr s = _("はずせる装備がない。", "You are not wearing anything to take off.");
@@ -311,12 +311,12 @@ void do_cmd_takeoff(player_type *player_ptr)
 
     PlayerEnergy energy(player_ptr);
     if (o_ptr->is_cursed()) {
-        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (player_ptr->pclass != PlayerClassType::BERSERKER)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE) || (player_ptr->pclass != PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;
         }
 
-        if ((o_ptr->curse_flags.has(TRC::HEAVY_CURSE) && one_in_(7)) || one_in_(4)) {
+        if ((o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && one_in_(7)) || one_in_(4)) {
             msg_print(_("呪われた装備を力づくで剥がした！", "You tore off a piece of cursed equipment by sheer strength!"));
             o_ptr->ident |= (IDENT_SENSE);
             o_ptr->curse_flags.clear();

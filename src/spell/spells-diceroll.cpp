@@ -21,7 +21,7 @@
  * @param m_ptr 対象モンスター
  * @return 魅了に抵抗したらTRUE
  */
-bool common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool common_saving_throw_charm(PlayerType *player_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -41,7 +41,7 @@ bool common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, monster_t
         return true;
     }
 
-    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET))
+    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET))
         return true;
 
     pow += (adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1);
@@ -56,7 +56,7 @@ bool common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, monster_t
  * @param m_ptr 対象モンスター
  * @return 服従に抵抗したらTRUE
  */
-bool common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool common_saving_throw_control(PlayerType *player_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -70,7 +70,7 @@ bool common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster
         return true;
     }
 
-    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET))
+    if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET))
         return true;
 
     pow += adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1;
@@ -86,7 +86,7 @@ bool common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster
  * ハードコーティングによる実装が行われている。
  * メイジは(レベル)%、ハイメイジ、スペルマスターは(レベル)%、それ以外の職業は(レベル/2)%
  */
-PERCENTAGE beam_chance(player_type *player_ptr)
+PERCENTAGE beam_chance(PlayerType *player_ptr)
 {
     if (player_ptr->pclass == PlayerClassType::MAGE)
         return (PERCENTAGE)(player_ptr->lev);

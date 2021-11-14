@@ -118,7 +118,7 @@ static void set_race_flags(lore_type *lore_ptr)
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
+void process_monster_lore(PlayerType *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
 {
     lore_type tmp_lore;
     lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);
@@ -163,13 +163,13 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lo
 
     display_monster_collective(lore_ptr);
     lore_ptr->vn = 0;
-    if (lore_ptr->ability_flags.has(RF_ABILITY::SHRIEK)) {
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::SHRIEK)) {
         lore_ptr->vp[lore_ptr->vn] = _("悲鳴で助けを求める", "shriek for help");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
 
     display_monster_launching(player_ptr, lore_ptr);
-    if (lore_ptr->ability_flags.has(RF_ABILITY::SPECIAL)) {
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::SPECIAL)) {
         lore_ptr->vp[lore_ptr->vn] = _("特別な行動をする", "do something");
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
     }

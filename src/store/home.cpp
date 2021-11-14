@@ -23,7 +23,7 @@
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int home_carry(player_type *player_ptr, object_type *o_ptr)
+int home_carry(PlayerType *player_ptr, object_type *o_ptr)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
@@ -129,7 +129,7 @@ static void sweep_reorder_store_item(object_type *o_ptr, const int i, bool *comb
     }
 }
 
-static void exe_reorder_store_item(player_type *player_ptr, bool *flag)
+static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
 {
     for (int i = 0; i < st_ptr->stock_num; i++) {
         object_type *o_ptr;
@@ -164,7 +164,7 @@ static void exe_reorder_store_item(player_type *player_ptr, bool *flag)
  * @param store_num 店舗ID
  * @return 実際に整理が行われたならばTRUEを返す。
  */
-bool combine_and_reorder_home(player_type *player_ptr, const StoreSaleType store_num)
+bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_num)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;

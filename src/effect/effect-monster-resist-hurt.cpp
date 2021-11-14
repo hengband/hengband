@@ -29,7 +29,7 @@ process_result effect_monster_nothing(effect_monster_type *em_ptr)
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_acid(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_acid(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -45,7 +45,7 @@ process_result effect_monster_acid(player_type *player_ptr, effect_monster_type 
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_elec(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_elec(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -61,7 +61,7 @@ process_result effect_monster_elec(player_type *player_ptr, effect_monster_type 
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_fire(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_fire(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -86,7 +86,7 @@ process_result effect_monster_fire(player_type *player_ptr, effect_monster_type 
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_cold(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_cold(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -111,7 +111,7 @@ process_result effect_monster_cold(player_type *player_ptr, effect_monster_type 
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_pois(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_pois(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -127,7 +127,7 @@ process_result effect_monster_pois(player_type *player_ptr, effect_monster_type 
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_nuke(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_nuke(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -148,7 +148,7 @@ process_result effect_monster_nuke(player_type *player_ptr, effect_monster_type 
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_hell_fire(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_hell_fire(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -164,7 +164,7 @@ process_result effect_monster_hell_fire(player_type *player_ptr, effect_monster_
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_holy_fire(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_holy_fire(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -192,7 +192,7 @@ process_result effect_monster_holy_fire(player_type *player_ptr, effect_monster_
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_plasma(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_plasma(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -209,7 +209,7 @@ process_result effect_monster_plasma(player_type *player_ptr, effect_monster_typ
     return PROCESS_CONTINUE;
 }
 
-static bool effect_monster_nether_resist(player_type *player_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_nether_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->r_ptr->flagsr & RFR_RES_NETH) == 0)
         return false;
@@ -231,7 +231,7 @@ static bool effect_monster_nether_resist(player_type *player_ptr, effect_monster
     return true;
 }
 
-process_result effect_monster_nether(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_nether(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -247,7 +247,7 @@ process_result effect_monster_nether(player_type *player_ptr, effect_monster_typ
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_water(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_water(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -270,7 +270,7 @@ process_result effect_monster_water(player_type *player_ptr, effect_monster_type
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_chaos(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_chaos(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -295,7 +295,7 @@ process_result effect_monster_chaos(player_type *player_ptr, effect_monster_type
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_shards(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_shards(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -312,7 +312,7 @@ process_result effect_monster_shards(player_type *player_ptr, effect_monster_typ
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_rocket(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_rocket(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -328,7 +328,7 @@ process_result effect_monster_rocket(player_type *player_ptr, effect_monster_typ
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_sound(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_sound(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -347,7 +347,7 @@ process_result effect_monster_sound(player_type *player_ptr, effect_monster_type
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_confusion(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_confusion(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -366,7 +366,7 @@ process_result effect_monster_confusion(player_type *player_ptr, effect_monster_
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disenchant(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_disenchant(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -383,7 +383,7 @@ process_result effect_monster_disenchant(player_type *player_ptr, effect_monster
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_nexus(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_nexus(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -400,7 +400,7 @@ process_result effect_monster_nexus(player_type *player_ptr, effect_monster_type
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_force(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_force(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -420,7 +420,7 @@ process_result effect_monster_force(player_type *player_ptr, effect_monster_type
 }
 
 // Powerful monsters can resists and normal monsters slow down.
-process_result effect_monster_inertial(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_inertial(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -446,7 +446,7 @@ process_result effect_monster_inertial(player_type *player_ptr, effect_monster_t
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_time(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_time(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -465,7 +465,7 @@ process_result effect_monster_time(player_type *player_ptr, effect_monster_type 
     return PROCESS_CONTINUE;
 }
 
-static bool effect_monster_gravity_resist_teleport(player_type *player_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -491,7 +491,7 @@ static bool effect_monster_gravity_resist_teleport(player_type *player_ptr, effe
     return true;
 }
 
-static void effect_monster_gravity_slow(player_type *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
         em_ptr->obvious = false;
@@ -514,7 +514,7 @@ static void effect_monster_gravity_stun(effect_monster_type *em_ptr)
  * Powerful monsters can resist and normal monsters slow down
  * Furthermore, this magic can make non-unique monsters slow/stun.
  */
-process_result effect_monster_gravity(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_gravity(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     em_ptr->do_dist = effect_monster_gravity_resist_teleport(player_ptr, em_ptr) ? 0 : 10;
     if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding))
@@ -536,7 +536,7 @@ process_result effect_monster_gravity(player_type *player_ptr, effect_monster_ty
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disintegration(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_disintegration(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -553,7 +553,7 @@ process_result effect_monster_disintegration(player_type *player_ptr, effect_mon
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_icee_bolt(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_icee_bolt(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -582,7 +582,7 @@ process_result effect_monster_icee_bolt(player_type *player_ptr, effect_monster_
  * @details
  * 量子生物に倍打、壁抜けに1.5倍打、テレポート耐性が耐性
  */
-process_result effect_monster_void(player_type* player_ptr, effect_monster_type* em_ptr)
+process_result effect_monster_void(PlayerType* player_ptr, effect_monster_type* em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -627,7 +627,7 @@ process_result effect_monster_void(player_type* player_ptr, effect_monster_type*
  * 飛ばないテレポート耐性に1.25倍打、暗黒耐性が耐性
  * 1/3で追加に混乱か恐怖
  */
-process_result effect_monster_abyss(player_type *player_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_abyss(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;

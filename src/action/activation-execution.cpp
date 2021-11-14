@@ -32,7 +32,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/artifact-type-definition.h"
@@ -67,7 +67,7 @@ static void decide_activation_level(ae_type *ae_ptr)
         ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
 }
 
-static void decide_chance_fail(player_type *player_ptr, ae_type *ae_ptr)
+static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     ae_ptr->chance = player_ptr->skill_dev;
     if (player_ptr->confused)
@@ -86,7 +86,7 @@ static void decide_chance_fail(player_type *player_ptr, ae_type *ae_ptr)
         ae_ptr->chance = USE_DEVICE;
 }
 
-static void decide_activation_success(player_type *player_ptr, ae_type *ae_ptr)
+static void decide_activation_success(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     if (player_ptr->pclass == PlayerClassType::BERSERKER) {
         ae_ptr->success = false;
@@ -114,7 +114,7 @@ static bool check_activation_success(ae_type *ae_ptr)
     return false;
 }
 
-static bool check_activation_conditions(player_type *player_ptr, ae_type *ae_ptr)
+static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     if (!check_activation_success(ae_ptr))
         return false;
@@ -139,7 +139,7 @@ static bool check_activation_conditions(player_type *player_ptr, ae_type *ae_ptr
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
-static bool activate_artifact(player_type *player_ptr, object_type *o_ptr)
+static bool activate_artifact(PlayerType *player_ptr, object_type *o_ptr)
 {
     concptr name = k_info[o_ptr->k_idx].name.c_str();
     auto tmp_act_ptr = find_activation_info(o_ptr);
@@ -179,7 +179,7 @@ static bool activate_artifact(player_type *player_ptr, object_type *o_ptr)
     }
 }
 
-static bool activate_whistle(player_type *player_ptr, ae_type *ae_ptr)
+static bool activate_whistle(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->tval != ItemKindType::WHISTLE)
         return false;
@@ -219,7 +219,7 @@ static bool activate_whistle(player_type *player_ptr, ae_type *ae_ptr)
  * the user hits "escape" at the "direction" prompt.
  * </pre>
  */
-void exe_activate(player_type *player_ptr, INVENTORY_IDX item)
+void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     ae_type tmp_ae;

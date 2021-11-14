@@ -117,7 +117,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
     if (flavor_ptr->tr_flags.has(TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (flavor_ptr->o_ptr->is_smith() && (Smith::object_effect(flavor_ptr->o_ptr) == SmithEffect::SLAY_GLOVE))
+    if (flavor_ptr->o_ptr->is_smith() && (Smith::object_effect(flavor_ptr->o_ptr) == SmithEffectType::SLAY_GLOVE))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
@@ -127,7 +127,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
         flavor_ptr->show_armour = true;
 }
 
-static void describe_weapon_dice(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
     if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, flavor_ptr->o_ptr))
         return;
@@ -142,7 +142,7 @@ static void describe_weapon_dice(player_type *player_ptr, flavor_type *flavor_pt
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
-static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_bow(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->power = bow_tmul(flavor_ptr->o_ptr->sval);
     if (flavor_ptr->tr_flags.has(TR_XTRA_MIGHT))
@@ -175,7 +175,7 @@ static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
-static void describe_tval(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_tval(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
     switch (flavor_ptr->o_ptr->tval) {
     case ItemKindType::SHOT:
@@ -227,7 +227,7 @@ static void describe_named_item_tval(flavor_type *flavor_ptr)
     }
 }
 
-static void describe_fire_energy(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_fire_energy(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
     ENERGY energy_fire = bow_energy(flavor_ptr->bow_ptr->sval);
     if (player_ptr->num_fire == 0) {
@@ -253,7 +253,7 @@ static void describe_fire_energy(player_type *player_ptr, flavor_type *flavor_pt
     flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "% crit" : "%");
 }
 
-static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_bow_power(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
     int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
@@ -289,7 +289,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
-static void describe_spike_power(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_spike_power(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
     int avgdam = player_ptr->mighty_throw ? (1 + 3) : 1;
     int16_t energy_fire = 100 - player_ptr->lev;
@@ -502,7 +502,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
  * @param mode 表記に関するオプション指定
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す
  */
-void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+void describe_flavor(PlayerType *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
 {
     flavor_type tmp_flavor;
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);

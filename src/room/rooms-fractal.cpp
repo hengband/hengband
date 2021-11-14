@@ -13,7 +13,7 @@
 * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid
 * @return なし
 */
-bool build_type9(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type9(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
 	int grd, roug, cutoff;
 	POSITION xsize, ysize, y0, x0;
@@ -46,7 +46,7 @@ bool build_type9(player_type *player_ptr, dun_data_type *dd_ptr)
 	light = done = false;
 	room = true;
 
-	if ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS)) light = true;
+	if ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) light = true;
 
 	while (!done)
 	{

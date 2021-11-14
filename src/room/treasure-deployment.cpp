@@ -20,7 +20,7 @@
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.
  */
-void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
+void fill_treasure(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
 {
     POSITION cx = (x1 + x2) / 2;
     POSITION cy = (y1 + y2) / 2;
@@ -32,7 +32,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
             if ((randint1(100) - difficulty * 3) > 50)
                 value = 20;
 
-            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, FF::PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FF::DROP)))
+            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::DROP)))
                 continue;
 
             if (value < 0) {

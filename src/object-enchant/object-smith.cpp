@@ -28,7 +28,7 @@ namespace {
  * @param consumption 1種あたりに使用する消費量
  * @return 所持しているエッセンスで付与可能な回数を返す
  */
-int addable_count(smith_data_type *smith_data, std::vector<SmithEssence> essence_list, int consumption)
+int addable_count(smith_data_type *smith_data, std::vector<SmithEssenceType> essence_list, int consumption)
 {
     if (consumption <= 0) {
         return 0;
@@ -47,7 +47,7 @@ int addable_count(smith_data_type *smith_data, std::vector<SmithEssence> essence
 /*!
  * @brief 鍛冶クラスコンストラクタ
  */
-Smith::Smith(player_type *player_ptr)
+Smith::Smith(PlayerType *player_ptr)
     : player_ptr(player_ptr)
     , smith_data(PlayerClass(player_ptr).get_specific_data<smith_data_type>())
 {
@@ -59,10 +59,10 @@ Smith::Smith(player_type *player_ptr)
  * @param effect 情報を得る鍛冶効果
  * @return 鍛冶情報構造体へのポインタを保持する std::optional オブジェクトを返す
  */
-std::optional<const ISmithInfo *> Smith::find_smith_info(SmithEffect effect)
+std::optional<const ISmithInfo *> Smith::find_smith_info(SmithEffectType effect)
 {
     // 何度も呼ぶので線形探索を避けるため鍛冶効果から鍛冶情報のテーブルを引けるmapを作成しておく。
-    static std::unordered_map<SmithEffect, const ISmithInfo *> search_map;
+    static std::unordered_map<SmithEffectType, const ISmithInfo *> search_map;
     if (search_map.empty()) {
         for (const auto &info : smith_info_table) {
             search_map.emplace(info->effect, info.get());
@@ -83,7 +83,7 @@ std::optional<const ISmithInfo *> Smith::find_smith_info(SmithEffect effect)
  * @param essence 表記名を取得するエッセンス
  * @return 表記名を表す文字列へのポインタ
  */
-concptr Smith::get_essence_name(SmithEssence essence)
+concptr Smith::get_essence_name(SmithEssenceType essence)
 {
     auto it = essence_to_name.find(essence);
     auto essence_name = it != essence_to_name.end() ? it->second : _("不明", "Unknown");
@@ -96,7 +96,7 @@ concptr Smith::get_essence_name(SmithEssence essence)
  * @param effect 表記名を取得する鍛冶効果
  * @return 表記名を表す文字列へのポインタ
  */
-concptr Smith::get_effect_name(SmithEffect effect)
+concptr Smith::get_effect_name(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -112,7 +112,7 @@ concptr Smith::get_effect_name(SmithEffect effect)
  * @param effect 鍛冶効果
  * @return 鍛冶効果の付与に必要なエッセンスを表記する std::string オブジェクト
  */
-std::string Smith::get_need_essences_desc(SmithEffect effect)
+std::string Smith::get_need_essences_desc(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value() || info.value()->need_essences.empty()) {
@@ -137,7 +137,7 @@ std::string Smith::get_need_essences_desc(SmithEffect effect)
  * @param effect 鍛冶効果
  * @return 鍛冶効果を付与するのに必要なエッセンスのリスト
  */
-std::vector<SmithEssence> Smith::get_need_essences(SmithEffect effect)
+std::vector<SmithEssenceType> Smith::get_need_essences(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -156,7 +156,7 @@ std::vector<SmithEssence> Smith::get_need_essences(SmithEffect effect)
  * @param o_ptr 鍛冶効果を付与するアイテムへのポインタ。nullptrの場合はデフォルトの消費量が返される。
  * @return 鍛冶効果を付与する時のエッセンス消費量
  */
-int Smith::get_essence_consumption(SmithEffect effect, const object_type *o_ptr)
+int Smith::get_essence_consumption(SmithEffectType effect, const object_type *o_ptr)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -183,7 +183,7 @@ int Smith::get_essence_consumption(SmithEffect effect, const object_type *o_ptr)
  * @param effect 鍛冶効果
  * @return ItemTesterクラスのオブジェクトをstd::unique_ptrに格納したものを返す
  */
-std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffect effect)
+std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -202,7 +202,7 @@ std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffect effect)
  * @param effect 鍛冶効果
  * @return 鍛冶効果により得られる特性フラグがONになったTrFlagsオブジェクト
  */
-TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
+TrFlags Smith::get_effect_tr_flags(SmithEffectType effect)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -231,7 +231,7 @@ std::optional<RandomArtActType> Smith::object_activation(const object_type *o_pt
  * @return アイテムに付与されている鍛冶効果を保持する std::optional オブジェクト返す。
  * 鍛冶効果が付与できないアイテムか、何も付与されていなければ std::nullopt を返す。
  */
-std::optional<SmithEffect> Smith::object_effect(const object_type *o_ptr)
+std::optional<SmithEffectType> Smith::object_effect(const object_type *o_ptr)
 {
     return o_ptr->smith_effect;
 }
@@ -242,9 +242,9 @@ std::optional<SmithEffect> Smith::object_effect(const object_type *o_ptr)
  * @param category 鍛冶カテゴリ
  * @return 指定した鍛冶カテゴリの鍛冶効果のリスト
  */
-std::vector<SmithEffect> Smith::get_effect_list(SmithCategory category)
+std::vector<SmithEffectType> Smith::get_effect_list(SmithCategoryType category)
 {
-    std::vector<SmithEffect> result;
+    std::vector<SmithEffectType> result;
 
     for (const auto &info : smith_info_table) {
         if (info->category == category) {
@@ -262,7 +262,7 @@ std::vector<SmithEffect> Smith::get_effect_list(SmithCategory category)
  * @param o_ptr 鍛冶効果を付与するアイテムへのポインタ。nullptrの場合はデフォルトの消費量での回数が返される。
  * @return エッセンスを付与できる回数を返す
  */
-int Smith::get_addable_count(SmithEffect effect, const object_type *o_ptr) const
+int Smith::get_addable_count(SmithEffectType effect, const object_type *o_ptr) const
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -279,7 +279,7 @@ int Smith::get_addable_count(SmithEffect effect, const object_type *o_ptr) const
  *
  * @return 鍛冶エッセンスの全リスト
  */
-const std::vector<SmithEssence> &Smith::get_essence_list()
+const std::vector<SmithEssenceType> &Smith::get_essence_list()
 {
     return essence_list_order;
 }
@@ -290,7 +290,7 @@ const std::vector<SmithEssence> &Smith::get_essence_list()
  * @param essence 所持量を取得するエッセンス
  * @return エッセンスの所持量
  */
-int Smith::get_essence_num_of_posessions(SmithEssence essence) const
+int Smith::get_essence_num_of_posessions(SmithEssenceType essence) const
 {
     return this->smith_data->essences[essence];
 }
@@ -328,7 +328,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
 
     // マイナス効果のあるアイテムから抽出する時のペナルティを計算
     int dec = 4;
-    if (o_ptr->curse_flags.has_any_of({ TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE }))
+    if (o_ptr->curse_flags.has_any_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE }))
         dec--;
 
     for (auto &&info : essence_drain_info_table) {
@@ -357,7 +357,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
 
     auto new_flgs = object_flags(o_ptr);
 
-    std::unordered_map<SmithEssence, int> drain_values;
+    std::unordered_map<SmithEssenceType, int> drain_values;
 
     // 特性フラグからのエッセンス抽出
     for (auto &&info : essence_drain_info_table) {
@@ -374,21 +374,21 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
     }
 
     if (is_artifact) {
-        drain_values[SmithEssence::UNIQUE] += 10;
+        drain_values[SmithEssenceType::UNIQUE] += 10;
     }
 
     // ダイス/命中/ダメージ/ACからの抽出
     auto diff = [](int o, int n) { return std::max(o - n, 0); };
 
     if (o_ptr->is_weapon_ammo()) {
-        drain_values[SmithEssence::ATTACK] += diff(old_o.ds, o_ptr->ds) * 10;
-        drain_values[SmithEssence::ATTACK] += diff(old_o.dd, o_ptr->dd) * 10;
+        drain_values[SmithEssenceType::ATTACK] += diff(old_o.ds, o_ptr->ds) * 10;
+        drain_values[SmithEssenceType::ATTACK] += diff(old_o.dd, o_ptr->dd) * 10;
     }
 
-    drain_values[SmithEssence::ATTACK] += diff(old_o.to_h, o_ptr->to_h) * 10;
-    drain_values[SmithEssence::ATTACK] += diff(old_o.to_d, o_ptr->to_d) * 10;
-    drain_values[SmithEssence::AC] += diff(old_o.ac, o_ptr->ac) * 10;
-    drain_values[SmithEssence::AC] += diff(old_o.to_a, o_ptr->to_a) * 10;
+    drain_values[SmithEssenceType::ATTACK] += diff(old_o.to_h, o_ptr->to_h) * 10;
+    drain_values[SmithEssenceType::ATTACK] += diff(old_o.to_d, o_ptr->to_d) * 10;
+    drain_values[SmithEssenceType::AC] += diff(old_o.ac, o_ptr->ac) * 10;
+    drain_values[SmithEssenceType::AC] += diff(old_o.to_a, o_ptr->to_a) * 10;
 
     // 個数/矢弾/マイナス効果のペナルティによる抽出量の調整
     for (auto &&[unuse, val] : drain_values) {
@@ -401,7 +401,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
     }
 
     // 所持エッセンスに追加
-    std::vector<std::tuple<SmithEssence, int>> result;
+    std::vector<std::tuple<SmithEssenceType, int>> result;
 
     for (auto essence : essence_list_order) {
         auto drain_value = drain_values[essence];
@@ -424,7 +424,7 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
  * @param number エッセンス付与数
  * @return 鍛冶効果の付与に成功したら ture、失敗したら false を返す
  */
-bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
+bool Smith::add_essence(SmithEffectType effect, object_type *o_ptr, int number)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {

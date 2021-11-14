@@ -43,7 +43,7 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -59,7 +59,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param ninja 忍者かどうか
  */
-void wiz_lite(player_type *player_ptr, bool ninja)
+void wiz_lite(PlayerType *player_ptr, bool ninja)
 {
     /* Memorize objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
@@ -95,12 +95,12 @@ void wiz_lite(player_type *player_ptr, bool ninja)
                 f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
                 /* Perma-lite the grid */
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DF::DARKNESS) && !ninja) {
+                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
                     g_ptr->info |= (CAVE_GLOW);
                 }
 
                 /* Memorize normal features */
-                if (f_ptr->flags.has(FF::REMEMBER)) {
+                if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
                     /* Memorize the grid */
                     g_ptr->info |= (CAVE_MARK);
                 }
@@ -129,7 +129,7 @@ void wiz_lite(player_type *player_ptr, bool ninja)
 /*
  * Forget the dungeon map (ala "Thinking of Maud...").
  */
-void wiz_dark(player_type *player_ptr)
+void wiz_dark(PlayerType *player_ptr)
 {
     /* Forget every grid */
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
@@ -180,9 +180,9 @@ void wiz_dark(player_type *player_ptr)
 /*
  * Hack -- map the current panel (plus some) ala "magic mapping"
  */
-void map_area(player_type *player_ptr, POSITION range)
+void map_area(PlayerType *player_ptr, POSITION range)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         range /= 3;
 
     /* Scan that area */
@@ -203,7 +203,7 @@ void map_area(player_type *player_ptr, POSITION range)
             f_ptr = &f_info[feat];
 
             /* Memorize normal features */
-            if (f_ptr->flags.has(FF::REMEMBER)) {
+            if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
                 /* Memorize the object */
                 g_ptr->info |= (CAVE_MARK);
             }
@@ -217,7 +217,7 @@ void map_area(player_type *player_ptr, POSITION range)
                 f_ptr = &f_info[feat];
 
                 /* Memorize walls (etc) */
-                if (f_ptr->flags.has(FF::REMEMBER)) {
+                if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
                     /* Memorize the walls */
                     g_ptr->info |= (CAVE_MARK);
                 }
@@ -244,7 +244,7 @@ void map_area(player_type *player_ptr, POSITION range)
  * "earthquake" by using the "full" to select "destruction".
  * </pre>
  */
-bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
+bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
     /* Prevent destruction of quest levels and town */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -352,7 +352,7 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
             delete_all_items_from_floor(player_ptr, y, x);
 
             /* Destroy "non-permanent" grids */
-            if (g_ptr->cave_has_flag(FF::PERMANENT))
+            if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT))
                 continue;
 
             /* Wall (or floor) type */
@@ -419,7 +419,7 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
                 continue;
             }
 
-            if (d_info[floor_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+            if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
                 continue;
 
             DIRECTION i;
@@ -432,7 +432,7 @@ bool destroy_area(player_type *player_ptr, POSITION y1, POSITION x1, POSITION r,
                 if (!in_bounds2(floor_ptr, yy, xx))
                     continue;
                 cc_ptr = &floor_ptr->grid_array[yy][xx];
-                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FF::GLOW)) {
+                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

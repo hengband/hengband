@@ -16,6 +16,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -46,7 +47,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/range-calc.h"
-#include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -66,7 +66,7 @@
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
  */
-bool summon_possible(player_type *player_ptr, POSITION y1, POSITION x1)
+bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = y1 - 2; y <= y1 + 2; y++) {
@@ -95,7 +95,7 @@ bool summon_possible(player_type *player_ptr, POSITION y1, POSITION x1)
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
-bool raise_possible(player_type *player_ptr, monster_type *m_ptr)
+bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
@@ -144,7 +144,7 @@ bool raise_possible(player_type *player_ptr, monster_type *m_ptr)
  * no equally friendly monster is\n
  * between the attacker and target.\n
  */
-bool clean_shot(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
+bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
@@ -187,7 +187,7 @@ bool clean_shot(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult bolt(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
+ProjectResult bolt(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, AttributeType typ, int dam_hp, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -199,7 +199,7 @@ ProjectResult bolt(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
         break;
     }
 
-    if (typ != GF_ARROW)
+    if (typ != AttributeType::ARROW)
         flg |= PROJECT_REFLECTABLE;
 
     return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
@@ -216,7 +216,7 @@ ProjectResult bolt(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult beam(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int target_type)
+ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, AttributeType typ, int dam_hp, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -245,7 +245,7 @@ ProjectResult beam(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult breath(player_type *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int target_type)
+ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, bool breath, int target_type)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -266,18 +266,20 @@ ProjectResult breath(player_type *player_ptr, POSITION y, POSITION x, MONSTER_ID
         rad = 0 - rad;
 
     switch (typ) {
-    case GF_ROCKET:
+    case AttributeType::ROCKET:
         flg |= PROJECT_STOP;
         break;
-    case GF_DRAIN_MANA:
-    case GF_MIND_BLAST:
-    case GF_BRAIN_SMASH:
-    case GF_CAUSE_1:
-    case GF_CAUSE_2:
-    case GF_CAUSE_3:
-    case GF_CAUSE_4:
-    case GF_HAND_DOOM:
+    case AttributeType::DRAIN_MANA:
+    case AttributeType::MIND_BLAST:
+    case AttributeType::BRAIN_SMASH:
+    case AttributeType::CAUSE_1:
+    case AttributeType::CAUSE_2:
+    case AttributeType::CAUSE_3:
+    case AttributeType::CAUSE_4:
+    case AttributeType::HAND_DOOM:
         flg |= (PROJECT_HIDE | PROJECT_AIMED);
+        break;
+    default:
         break;
     }
 
@@ -290,7 +292,7 @@ ProjectResult breath(player_type *player_ptr, POSITION y, POSITION x, MONSTER_ID
  * @param spell 判定対象のID
  * @return 非魔術的な特殊技能ならばTRUEを返す。
  */
-bool spell_is_inate(RF_ABILITY spell)
+bool spell_is_inate(MonsterAbilityType spell)
 {
     return RF_ABILITY_NOMAGIC_MASK.has(spell);
 }

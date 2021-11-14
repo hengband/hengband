@@ -15,8 +15,8 @@ struct scene_type {
 
 using scene_type_list = std::vector<scene_type>;
 
-struct player_type;
+class PlayerType;
 void interrupt_scene(int type, int val);
-void refresh_scene_table(player_type *player_ptr);
-void refresh_scene_table(player_type *player_ptr, const std::vector<MONSTER_IDX> &monster_list);
+void refresh_scene_table(PlayerType *player_ptr);
+void refresh_scene_table(PlayerType *player_ptr, const std::vector<MONSTER_IDX> &monster_list);
 scene_type_list &get_scene_type_list(int val);

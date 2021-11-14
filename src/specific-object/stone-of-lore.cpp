@@ -13,7 +13,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-StoneOfLore::StoneOfLore(player_type *player_ptr)
+StoneOfLore::StoneOfLore(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

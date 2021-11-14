@@ -27,7 +27,7 @@
  * is the randint0(3) below; it governs the relative density of
  * twists and turns in the labyrinth: smaller number, more twists.
  */
-void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
+void r_visit(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
 {
     int adj[4];
     int m = (x2 - x1) / 2 + 1;
@@ -95,11 +95,11 @@ void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POS
     }
 }
 
-void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
+void build_maze_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
+    bool light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS));
     POSITION dy = ysize / 2 - 1;
     POSITION dx = xsize / 2 - 1;
     POSITION y1 = y0 - dy;

@@ -172,6 +172,7 @@ hengband_SOURCES = \
 	dungeon/quest-completion-checker.cpp dungeon/quest-completion-checker.h \
 	dungeon/quest-monster-placer.cpp dungeon/quest-monster-placer.h \
 	\
+	effect/attribute-types.h \
 	effect/effect-feature.cpp effect/effect-feature.h \
 	effect/effect-item.cpp effect/effect-item.h \
 	effect/spells-effect-util.cpp effect/spells-effect-util.h \
@@ -788,7 +789,7 @@ hengband_SOURCES = \
 	spell/spells-staff-only.cpp spell/spells-staff-only.h \
 	spell/spells-summon.cpp spell/spells-summon.h \
 	spell/spells-status.cpp spell/spells-status.h \
-	spell/spell-types.h spell/spells-util.h \
+	spell/spells-util.h \
 	spell/summon-types.h \
 	spell/technic-info-table.cpp spell/technic-info-table.h \
 	\

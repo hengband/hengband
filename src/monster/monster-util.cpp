@@ -51,40 +51,40 @@ summon_type summon_specific_type = SUMMON_NONE;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
     dungeon_type *d_ptr = &d_info[d_idx];
     monster_race *r_ptr = &r_info[r_idx];
 
-    if (d_ptr->flags.has(DF::CHAMELEON)) {
+    if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx)
             return true;
     }
 
-    if (d_ptr->flags.has(DF::NO_MAGIC)) {
+    if (d_ptr->flags.has(DungeonFeatureType::NO_MAGIC)) {
         if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK))
             return false;
     }
 
-    if (d_ptr->flags.has(DF::NO_MELEE)) {
+    if (d_ptr->flags.has(DungeonFeatureType::NO_MELEE)) {
         if (r_idx == MON_CHAMELEON)
             return true;
         if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK)
             && r_ptr->ability_flags.has_none_of(
-                { RF_ABILITY::CAUSE_1, RF_ABILITY::CAUSE_2, RF_ABILITY::CAUSE_3, RF_ABILITY::CAUSE_4, RF_ABILITY::MIND_BLAST, RF_ABILITY::BRAIN_SMASH }))
+                { MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4, MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH }))
             return false;
     }
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (d_ptr->flags.has(DF::BEGINNER)) {
+    if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
         if (r_ptr->level > floor_ptr->dun_level)
             return false;
     }
 
     if (d_ptr->special_div >= 64)
         return true;
-    if (summon_specific_type && d_ptr->flags.has_not(DF::CHAMELEON))
+    if (summon_specific_type && d_ptr->flags.has_not(DungeonFeatureType::CHAMELEON))
         return true;
 
     byte a;
@@ -239,7 +239,7 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 地勢にあったモンスターの生成条件関数
  */
-monsterrace_hook_type get_monster_hook(player_type *player_ptr)
+monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 {
     if ((player_ptr->current_floor_ptr->dun_level > 0) || (player_ptr->current_floor_ptr->inside_quest > 0))
         return (monsterrace_hook_type)mon_hook_dungeon;
@@ -273,13 +273,13 @@ monsterrace_hook_type get_monster_hook(player_type *player_ptr)
  * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x)
+monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
-    if (f_ptr->flags.has(FF::WATER))
-        return f_ptr->flags.has(FF::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
+    if (f_ptr->flags.has(FloorFeatureType::WATER))
+        return f_ptr->flags.has(FloorFeatureType::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
 
-    if (f_ptr->flags.has(FF::LAVA))
+    if (f_ptr->flags.has(FloorFeatureType::LAVA))
         return (monsterrace_hook_type)mon_hook_lava;
 
     return (monsterrace_hook_type)mon_hook_floor;
@@ -296,7 +296,7 @@ monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POS
  * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
  * に従って変更し、結果を prob2 に書き込む。
  */
-static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2, const bool restrict_to_dungeon)
+static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2, const bool restrict_to_dungeon)
 {
     const floor_type *const floor_ptr = player_ptr->current_floor_ptr;
 
@@ -392,7 +392,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2)
+errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2)
 {
     return do_get_mon_num_prep(player_ptr, hook1, hook2, true);
 }
@@ -403,7 +403,7 @@ errr get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep_bounty(player_type *player_ptr)
+errr get_mon_num_prep_bounty(PlayerType *player_ptr)
 {
     return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false);
 }

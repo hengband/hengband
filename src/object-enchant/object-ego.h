@@ -226,7 +226,7 @@ struct ego_generate_type {
     int mul{}; //<! 確率分子
     int dev{}; //<! 確率分母
     std::vector<tr_type> tr_flags{};
-    std::vector<TRG> trg_flags{};
+    std::vector<ItemGenerationTraitType> trg_flags{};
 };
 
 /*
@@ -258,7 +258,7 @@ struct ego_item_type {
     PRICE cost{}; //!< コスト
 
     TrFlags flags{}; //!< 能力/耐性フラグ
-    EnumClassFlagGroup<TRG> gen_flags; //!< 生成時適用フラグ
+    EnumClassFlagGroup<ItemGenerationTraitType> gen_flags; //!< 生成時適用フラグ
     std::vector<ego_generate_type> xtra_flags{}; //!< 追加能力/耐性フラグ
 
     RandomArtActType act_idx{}; //!< 発動番号 / Activative ability index
@@ -267,6 +267,6 @@ struct ego_item_type {
 extern std::vector<ego_item_type> e_info;
 
 struct object_type;
-struct player_type;
+class PlayerType;
 byte get_random_ego(byte slot, bool good);
 void apply_ego(object_type *o_ptr, DEPTH lev);

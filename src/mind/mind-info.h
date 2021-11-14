@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct player_type;
-enum class mind_kind_type;
+class PlayerType;
+enum class MindKindType;
 
-void mindcraft_info(player_type *player_ptr, char *p, mind_kind_type use_mind, int power);
+void mindcraft_info(PlayerType *player_ptr, char *p, MindKindType use_mind, int power);

@@ -2,10 +2,10 @@
 
 #include "system/angband.h"
 
-enum class MUTA;
+enum class PlayerMutationType;
 
 typedef struct glm_type {
-    MUTA muta_which;
+    PlayerMutationType muta_which;
     concptr muta_desc;
     bool muta_chosen;
     MUTATION_IDX choose_mut;

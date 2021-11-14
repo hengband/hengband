@@ -39,7 +39,7 @@
  * @param spell_name 抹殺効果を起こした魔法の名前
  * @return 効力があった場合TRUEを返す
  */
-bool genocide_aux(player_type *player_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
+bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -58,7 +58,7 @@ bool genocide_aux(player_type *player_ptr, MONSTER_IDX m_idx, int power, bool pl
         resist = true;
     else if (player_cast && (r_ptr->level > randint0(power)))
         resist = true;
-    else if (player_cast && m_ptr->mflag2.has(MFLAG2::NOGENO))
+    else if (player_cast && m_ptr->mflag2.has(MonsterConstantFlagType::NOGENO))
         resist = true;
     else {
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
@@ -94,7 +94,7 @@ bool genocide_aux(player_type *player_ptr, MONSTER_IDX m_idx, int power, bool pl
         }
 
         if (one_in_(13))
-            m_ptr->mflag2.set(MFLAG2::NOGENO);
+            m_ptr->mflag2.set(MonsterConstantFlagType::NOGENO);
     }
 
     if (player_cast) {
@@ -118,7 +118,7 @@ bool genocide_aux(player_type *player_ptr, MONSTER_IDX m_idx, int power, bool pl
  * @param player_cast プレイヤーの魔法によるものならば TRUE
  * @return 効力があった場合TRUEを返す
  */
-bool symbol_genocide(player_type *player_ptr, int power, bool player_cast)
+bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(player_ptr, floor_ptr->dun_level);
@@ -158,7 +158,7 @@ bool symbol_genocide(player_type *player_ptr, int power, bool player_cast)
  * @param player_cast プレイヤーの魔法によるものならば TRUE
  * @return 効力があった場合TRUEを返す
  */
-bool mass_genocide(player_type *player_ptr, int power, bool player_cast)
+bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(player_ptr, floor_ptr->dun_level);
@@ -193,7 +193,7 @@ bool mass_genocide(player_type *player_ptr, int power, bool player_cast)
  * @param player_cast プレイヤーの魔法によるものならば TRUE
  * @return 効力があった場合TRUEを返す
  */
-bool mass_genocide_undead(player_type *player_ptr, int power, bool player_cast)
+bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(player_ptr, floor_ptr->dun_level);

@@ -73,7 +73,7 @@ static bool weakening_artifact(object_type *o_ptr)
     return false;
 }
 
-static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
+static void set_artifact_bias(PlayerType *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
 {
     switch (player_ptr->pclass) {
     case PlayerClassType::WARRIOR:
@@ -153,7 +153,7 @@ static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *
     }
 }
 
-static void decide_warrior_bias(player_type *player_ptr, object_type *o_ptr, const bool a_scroll)
+static void decide_warrior_bias(PlayerType *player_ptr, object_type *o_ptr, const bool a_scroll)
 {
     int warrior_artifact_bias = 0;
     if (a_scroll && one_in_(4))
@@ -189,7 +189,7 @@ static int decide_random_art_power(const bool a_cursed)
     return powers;
 }
 
-static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powers, bool *has_pval, const bool a_cursed)
+static void invest_powers(PlayerType *player_ptr, object_type *o_ptr, int *powers, bool *has_pval, const bool a_cursed)
 {
     int max_type = o_ptr->is_weapon_ammo() ? 7 : 5;
     while ((*powers)--) {
@@ -349,7 +349,7 @@ static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed
     return 3;
 }
 
-static void name_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
+static void name_unnatural_random_artifact(PlayerType *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
 {
     if (!a_scroll) {
         get_random_name(o_ptr, new_name, o_ptr->is_armour(), power_level);
@@ -377,7 +377,7 @@ static void name_unnatural_random_artifact(player_type *player_ptr, object_type 
 }
 
 static void generate_unnatural_random_artifact(
-    player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
+    PlayerType *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
 {
     GAME_TEXT new_name[1024];
     strcpy(new_name, "");
@@ -397,7 +397,7 @@ static void generate_unnatural_random_artifact(
  * @param a_scroll アーティファクト生成の巻物上の処理。呪いのアーティファクトが生成対象外となる。
  * @return 常にTRUE(1)を返す
  */
-bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_scroll)
+bool become_random_artifact(PlayerType *player_ptr, object_type *o_ptr, bool a_scroll)
 {
     o_ptr->artifact_bias = 0;
     o_ptr->name1 = 0;

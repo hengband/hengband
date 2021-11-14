@@ -8,33 +8,33 @@
 #include "system/angband.h"
 
 struct object_type;
-struct player_type;
+class PlayerType;
 
-WEIGHT calc_weapon_weight_limit(player_type *player_ptr);
-WEIGHT calc_bow_weight_limit(player_type *player_ptr);
-WEIGHT calc_inventory_weight(player_type *player_ptr);
+WEIGHT calc_weapon_weight_limit(PlayerType *player_ptr);
+WEIGHT calc_bow_weight_limit(PlayerType *player_ptr);
+WEIGHT calc_inventory_weight(PlayerType *player_ptr);
 
-int16_t calc_num_fire(player_type *player_ptr, object_type *o_ptr);
-WEIGHT calc_weight_limit(player_type *player_ptr);
-void update_creature(player_type *player_ptr);
-bool player_has_no_spellbooks(player_type *player_ptr);
+int16_t calc_num_fire(PlayerType *player_ptr, object_type *o_ptr);
+WEIGHT calc_weight_limit(PlayerType *player_ptr);
+void update_creature(PlayerType *player_ptr);
+bool player_has_no_spellbooks(PlayerType *player_ptr);
 
-bool player_place(player_type *player_ptr, POSITION y, POSITION x);
+bool player_place(PlayerType *player_ptr, POSITION y, POSITION x);
 
-void check_experience(player_type *player_ptr);
-void wreck_the_pattern(player_type *player_ptr);
+void check_experience(PlayerType *player_ptr);
+void wreck_the_pattern(PlayerType *player_ptr);
 void cnv_stat(int val, char *out_val);
 int16_t modify_stat_value(int value, int amount);
-long calc_score(player_type *player_ptr);
+long calc_score(PlayerType *player_ptr);
 
-bool is_blessed(player_type *player_ptr);
-bool is_time_limit_esp(player_type *player_ptr);
-bool is_time_limit_stealth(player_type *player_ptr);
-bool is_fast(player_type *player_ptr);
-bool is_invuln(player_type *player_ptr);
-bool is_hero(player_type *player_ptr);
-bool is_shero(player_type *player_ptr);
-bool is_echizen(player_type *player_ptr);
-bool is_chargeman(player_type *player_ptr);
+bool is_blessed(PlayerType *player_ptr);
+bool is_time_limit_esp(PlayerType *player_ptr);
+bool is_time_limit_stealth(PlayerType *player_ptr);
+bool is_fast(PlayerType *player_ptr);
+bool is_invuln(PlayerType *player_ptr);
+bool is_hero(PlayerType *player_ptr);
+bool is_shero(PlayerType *player_ptr);
+bool is_echizen(PlayerType *player_ptr);
+bool is_chargeman(PlayerType *player_ptr);
 
-void stop_mouth(player_type *player_ptr);
+void stop_mouth(PlayerType *player_ptr);

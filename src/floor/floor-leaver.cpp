@@ -42,7 +42,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-static void check_riding_preservation(player_type *player_ptr)
+static void check_riding_preservation(PlayerType *player_ptr)
 {
     if (!player_ptr->riding)
         return;
@@ -58,7 +58,7 @@ static void check_riding_preservation(player_type *player_ptr)
     }
 }
 
-static bool check_pet_preservation_conditions(player_type *player_ptr, monster_type *m_ptr)
+static bool check_pet_preservation_conditions(PlayerType *player_ptr, monster_type *m_ptr)
 {
     if (reinit_wilderness)
         return false;
@@ -79,7 +79,7 @@ static bool check_pet_preservation_conditions(player_type *player_ptr, monster_t
     return false;
 }
 
-static void sweep_preserving_pet(player_type *player_ptr)
+static void sweep_preserving_pet(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
         return;
@@ -95,7 +95,7 @@ static void sweep_preserving_pet(player_type *player_ptr)
     }
 }
 
-static void record_pet_diary(player_type *player_ptr)
+static void record_pet_diary(PlayerType *player_ptr)
 {
     if (!record_named_pet)
         return;
@@ -115,7 +115,7 @@ static void record_pet_diary(player_type *player_ptr)
  * @brief フロア移動時のペット保存処理 / Preserve_pets
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void preserve_pet(player_type *player_ptr)
+static void preserve_pet(PlayerType *player_ptr)
 {
     for (MONSTER_IDX party_monster_num = 0; party_monster_num < MAX_PARTY_MON; party_monster_num++)
         party_mon[party_monster_num].r_idx = 0;
@@ -142,7 +142,7 @@ static void preserve_pet(player_type *player_ptr)
  * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  */
-static void locate_connected_stairs(player_type *player_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
+static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
 {
     POSITION sx = 0;
     POSITION sy = 0;
@@ -155,7 +155,7 @@ static void locate_connected_stairs(player_type *player_ptr, floor_type *floor_p
             feature_type *f_ptr = &f_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
-                if (f_ptr->flags.has_all_of({FF::LESS, FF::STAIRS}) && f_ptr->flags.has_not(FF::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({FloorFeatureType::LESS, FloorFeatureType::STAIRS}) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->upper_floor_id) {
                         sx = x;
@@ -163,7 +163,7 @@ static void locate_connected_stairs(player_type *player_ptr, floor_type *floor_p
                     }
                 }
             } else if (floor_mode & CFM_DOWN) {
-                if (f_ptr->flags.has_all_of({FF::MORE, FF::STAIRS}) && f_ptr->flags.has_not(FF::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({FloorFeatureType::MORE, FloorFeatureType::STAIRS}) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->lower_floor_id) {
                         sx = x;
@@ -171,7 +171,7 @@ static void locate_connected_stairs(player_type *player_ptr, floor_type *floor_p
                     }
                 }
             } else {
-                if (f_ptr->flags.has(FF::BLDG)) {
+                if (f_ptr->flags.has(FloorFeatureType::BLDG)) {
                     ok = true;
                 }
             }
@@ -206,7 +206,7 @@ static void locate_connected_stairs(player_type *player_ptr, floor_type *floor_p
 /*!
  * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
  */
-static void get_out_monster(player_type *player_ptr)
+static void get_out_monster(PlayerType *player_ptr)
 {
     int tries = 0;
     POSITION dis = 1;
@@ -245,7 +245,7 @@ static void get_out_monster(player_type *player_ptr)
  * @brief クエスト・フロア内のモンスター・インベントリ情報を保存する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void preserve_info(player_type *player_ptr)
+static void preserve_info(PlayerType *player_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
     for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
@@ -279,21 +279,21 @@ static void preserve_info(player_type *player_ptr)
     }
 }
 
-static void set_grid_by_leaving_floor(player_type *player_ptr, grid_type **g_ptr)
+static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
 {
     if ((player_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0)
         return;
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr =  &f_info[(*g_ptr)->feat];
-    if ((*g_ptr)->special && f_ptr->flags.has_not(FF::SPECIAL) && get_sf_ptr((*g_ptr)->special))
+    if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special))
         new_floor_id = (*g_ptr)->special;
 
-    if (f_ptr->flags.has_all_of({FF::STAIRS, FF::SHAFT}))
+    if (f_ptr->flags.has_all_of({FloorFeatureType::STAIRS, FloorFeatureType::SHAFT}))
         prepare_change_floor_mode(player_ptr, CFM_SHAFT);
 }
 
-static void jump_floors(player_type *player_ptr)
+static void jump_floors(PlayerType *player_ptr)
 {
     if (none_bits(player_ptr->change_floor_mode, CFM_DOWN | CFM_UP)) {
         return;
@@ -323,7 +323,7 @@ static void jump_floors(player_type *player_ptr)
     player_ptr->current_floor_ptr->dun_level += move_num;
 }
 
-static void exit_to_wilderness(player_type *player_ptr)
+static void exit_to_wilderness(PlayerType *player_ptr)
 {
     if (is_in_dungeon(player_ptr) || (player_ptr->dungeon_idx == 0))
         return;
@@ -340,7 +340,7 @@ static void exit_to_wilderness(player_type *player_ptr)
     player_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
 }
 
-static void kill_saved_floors(player_type *player_ptr, saved_floor_type *sf_ptr)
+static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     if (!(player_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
         for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++)
@@ -354,7 +354,7 @@ static void kill_saved_floors(player_type *player_ptr, saved_floor_type *sf_ptr)
         kill_saved_floor(player_ptr, sf_ptr);
 }
 
-static void refresh_new_floor_id(player_type *player_ptr, grid_type *g_ptr)
+static void refresh_new_floor_id(PlayerType *player_ptr, grid_type *g_ptr)
 {
     if (new_floor_id != 0)
         return;
@@ -364,7 +364,7 @@ static void refresh_new_floor_id(player_type *player_ptr, grid_type *g_ptr)
         g_ptr->special = new_floor_id;
 }
 
-static void update_upper_lower_or_floor_id(player_type *player_ptr, saved_floor_type *sf_ptr)
+static void update_upper_lower_or_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     if ((player_ptr->change_floor_mode & CFM_RAND_CONNECT) == 0)
         return;
@@ -375,7 +375,7 @@ static void update_upper_lower_or_floor_id(player_type *player_ptr, saved_floor_
         sf_ptr->lower_floor_id = new_floor_id;
 }
 
-static void exe_leave_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
+static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     grid_type *g_ptr = nullptr;
     set_grid_by_leaving_floor(player_ptr, &g_ptr);
@@ -407,7 +407,7 @@ static void exe_leave_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void leave_floor(player_type *player_ptr)
+void leave_floor(PlayerType *player_ptr)
 {
     preserve_pet(player_ptr);
     remove_all_mirrors(player_ptr, false);
@@ -427,7 +427,7 @@ void leave_floor(player_type *player_ptr)
  * @brief 任意のダンジョン及び階層に飛ぶ
  * Go to any level
  */
-void jump_floor(player_type *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
+void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
     player_ptr->dungeon_idx = dun_idx;
     player_ptr->current_floor_ptr->dun_level = depth;

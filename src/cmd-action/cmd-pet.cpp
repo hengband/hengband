@@ -70,7 +70,7 @@
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
  */
-void do_cmd_pet_dismiss(player_type *player_ptr)
+void do_cmd_pet_dismiss(PlayerType *player_ptr)
 {
     monster_type *m_ptr;
     bool all_pets = false;
@@ -192,7 +192,7 @@ void do_cmd_pet_dismiss(player_type *player_ptr)
  * @param force 強制的に騎乗/下馬するならばTRUE
  * @return 騎乗/下馬できたらTRUE
  */
-bool do_cmd_riding(player_type *player_ptr, bool force)
+bool do_cmd_riding(PlayerType *player_ptr, bool force)
 {
     POSITION x, y;
     DIRECTION dir = 0;
@@ -205,7 +205,7 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
     x = player_ptr->x + ddx[dir];
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (player_ptr->riding) {
         /* Skip non-empty grids */
@@ -256,10 +256,10 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
             feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
-                (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY }) || f_ptr->flags.has_none_of({ FF::LOS, FF::TREE })) ? "中" : "上");
+                (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "中" : "上");
 #else
             msg_format("This monster is %s the %s.",
-                (f_ptr->flags.has_none_of({ FF::MOVE, FF::CAN_FLY }) || f_ptr->flags.has_none_of({ FF::LOS, FF::TREE })) ? "in" : "on", f_ptr->name.c_str());
+                (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "in" : "on", f_ptr->name.c_str());
 #endif
 
             return false;
@@ -303,7 +303,7 @@ bool do_cmd_riding(player_type *player_ptr, bool force)
 /*!
  * @brief ペットに名前をつけるコマンドのメインルーチン
  */
-static void do_name_pet(player_type *player_ptr)
+static void do_name_pet(PlayerType *player_ptr)
 {
     monster_type *m_ptr;
     char out_val[20];
@@ -369,7 +369,7 @@ static void do_name_pet(player_type *player_ptr)
  * @brief ペットに関するコマンドリストのメインルーチン /
  * Issue a pet command
  */
-void do_cmd_pet(player_type *player_ptr)
+void do_cmd_pet(PlayerType *player_ptr)
 {
     COMMAND_CODE i = 0;
     int num;

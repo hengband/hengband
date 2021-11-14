@@ -36,7 +36,7 @@
  * Done by a potion of "self knowledge".
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void identify_pack(player_type *player_ptr)
+void identify_pack(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &player_ptr->inventory_list[i];
@@ -55,7 +55,7 @@ void identify_pack(player_type *player_ptr)
  * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
  * @return 実際に鑑定できたらTRUEを返す
  */
-bool identify_item(player_type *player_ptr, object_type *o_ptr)
+bool identify_item(PlayerType *player_ptr, object_type *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
@@ -99,7 +99,7 @@ bool identify_item(player_type *player_ptr, object_type *o_ptr)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was identified, else FALSE.
  */
-bool ident_spell(player_type *player_ptr, bool only_equip)
+bool ident_spell(PlayerType *player_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester = std::make_unique<FuncItemTester>(only_equip ? object_is_not_identified_weapon_armor : object_is_not_identified);
 
@@ -148,7 +148,7 @@ bool ident_spell(player_type *player_ptr, bool only_equip)
  * Fully "identify" an object in the inventory -BEN-
  * This routine returns TRUE if an item was identified.
  */
-bool identify_fully(player_type *player_ptr, bool only_equip)
+bool identify_fully(PlayerType *player_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester
         = std::make_unique<FuncItemTester>(only_equip ? object_is_not_fully_identified_weapon_armour : object_is_not_fully_identified);

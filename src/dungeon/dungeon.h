@@ -63,7 +63,7 @@ typedef struct dungeon_type {
 	int min_m_alloc_level{};	/* Minimal number of monsters per level */
 	int max_m_alloc_chance{};	/* There is a 1/max_m_alloc_chance chance per round of creating a new monster */
 
-	EnumClassFlagGroup<DF> flags{};	/* Dungeon Flags */
+	EnumClassFlagGroup<DungeonFeatureType> flags{};	/* Dungeon Flags */
 
 	BIT_FLAGS mflags1{};		/* The monster flags that are allowed */
 	BIT_FLAGS mflags2{};
@@ -73,7 +73,7 @@ typedef struct dungeon_type {
 	BIT_FLAGS mflags9{};
 	BIT_FLAGS mflagsr{};
 
-	EnumClassFlagGroup<RF_ABILITY> m_ability_flags;
+	EnumClassFlagGroup<MonsterAbilityType> m_ability_flags;
 
 	char r_char[5]{};		/* Monster race allowed */
 	KIND_OBJECT_IDX final_object{};	/* The object you'll find at the bottom */
@@ -89,6 +89,6 @@ typedef struct dungeon_type {
 extern std::vector<DEPTH> max_dlv;
 extern std::vector<dungeon_type> d_info;
 
-struct player_type;
+class PlayerType;
 DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);
-bool is_in_dungeon(player_type *player_ptr);
+bool is_in_dungeon(PlayerType *player_ptr);

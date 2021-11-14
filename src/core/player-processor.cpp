@@ -67,7 +67,7 @@
 bool load = true;
 bool can_save = false;
 
-static void process_fishing(player_type *player_ptr)
+static void process_fishing(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
@@ -99,7 +99,7 @@ static void process_fishing(player_type *player_ptr)
     }
 }
 
-bool continuous_action_running(player_type *player_ptr)
+bool continuous_action_running(PlayerType *player_ptr)
 {
     return player_ptr->running || travel.run || command_rep || (player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH);
 }
@@ -111,7 +111,7 @@ bool continuous_action_running(player_type *player_ptr)
  * must come first just in case somebody manages to corrupt\n
  * the savefiles by clever use of menu commands or something.\n
  */
-void process_player(player_type *player_ptr)
+void process_player(PlayerType *player_ptr)
 {
     if (player_ptr->hack_mutation) {
         msg_print(_("何か変わった気がする！", "You feel different!"));
@@ -131,7 +131,7 @@ void process_player(player_type *player_ptr)
             if (!monster_is_valid(m_ptr))
                 continue;
 
-            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
+            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
             update_monster(player_ptr, m_idx, false);
         }
 
@@ -248,7 +248,7 @@ void process_player(player_type *player_ptr)
         player_ptr->redraw |= PR_MANA;
     }
 
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStance::MUSOU)) {
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         if (player_ptr->csp < 3) {
             set_action(player_ptr, ACTION_NONE);
         } else {
@@ -344,22 +344,22 @@ void process_player(player_type *player_ptr)
                 }
 
                 // 出現して即魔法を使わないようにするフラグを落とす処理
-                if (m_ptr->mflag.has(MFLAG::PREVENT_MAGIC)) {
-                    m_ptr->mflag.reset(MFLAG::PREVENT_MAGIC);
+                if (m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC)) {
+                    m_ptr->mflag.reset(MonsterTemporaryFlagType::PREVENT_MAGIC);
                 }
 
-                if (m_ptr->mflag.has(MFLAG::SANITY_BLAST)) {
-                    m_ptr->mflag.reset(MFLAG::SANITY_BLAST);
+                if (m_ptr->mflag.has(MonsterTemporaryFlagType::SANITY_BLAST)) {
+                    m_ptr->mflag.reset(MonsterTemporaryFlagType::SANITY_BLAST);
                     sanity_blast(player_ptr, m_ptr, false);
                 }
 
                 // 感知中のモンスターのフラグを落とす処理
                 // 感知したターンはMFLAG2_SHOWを落とし、次のターンに感知中フラグのMFLAG2_MARKを落とす
-                if (m_ptr->mflag2.has(MFLAG2::MARK)) {
-                    if (m_ptr->mflag2.has(MFLAG2::SHOW)) {
-                        m_ptr->mflag2.reset(MFLAG2::SHOW);
+                if (m_ptr->mflag2.has(MonsterConstantFlagType::MARK)) {
+                    if (m_ptr->mflag2.has(MonsterConstantFlagType::SHOW)) {
+                        m_ptr->mflag2.reset(MonsterConstantFlagType::SHOW);
                     } else {
-                        m_ptr->mflag2.reset(MFLAG2::MARK);
+                        m_ptr->mflag2.reset(MonsterConstantFlagType::MARK);
                         m_ptr->ml = false;
                         update_monster(player_ptr, m_idx, false);
                         if (player_ptr->health_who == m_idx)
@@ -421,7 +421,7 @@ void process_player(player_type *player_ptr)
 /*!
  * @brief プレイヤーの行動エネルギーが充填される（＝プレイヤーのターンが回る）毎に行われる処理  / process the effects per 100 energy at player speed.
  */
-void process_upkeep_with_speed(player_type *player_ptr)
+void process_upkeep_with_speed(PlayerType *player_ptr)
 {
     if (!load && player_ptr->enchant_energy_need > 0 && !player_ptr->leaving) {
         player_ptr->enchant_energy_need -= SPEED_TO_ENERGY(player_ptr->pspeed);

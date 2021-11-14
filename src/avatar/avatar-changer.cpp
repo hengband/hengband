@@ -23,7 +23,7 @@
 /*!
  * @brief AvaterChangerコンストラクタ
  */
-AvatarChanger::AvatarChanger(player_type *player_ptr, monster_type *m_ptr)
+AvatarChanger::AvatarChanger(PlayerType *player_ptr, monster_type *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
 {
@@ -62,7 +62,7 @@ void AvatarChanger::change_virtue_non_beginner()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (d_info[this->player_ptr->dungeon_idx].flags.has(DF::BEGINNER)) {
+    if (d_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::BEGINNER)) {
         return;
     }
 

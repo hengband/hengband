@@ -48,7 +48,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(floor_type *floor_ptr, player_type *player_ptr)
+void update_smell(floor_type *floor_ptr, PlayerType *player_ptr)
 {
     /* Create a table that controls the spread of scent */
     const int scent_adjust[5][5] = {
@@ -79,7 +79,7 @@ void update_smell(floor_type *floor_ptr, player_type *player_ptr)
                 continue;
 
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!g_ptr->cave_has_flag(FF::MOVE) && !is_closed_door(player_ptr, g_ptr->feat))
+            if (!g_ptr->cave_has_flag(FloorFeatureType::MOVE) && !is_closed_door(player_ptr, g_ptr->feat))
                 continue;
             if (!player_has_los_bold(player_ptr, y, x))
                 continue;
@@ -149,7 +149,7 @@ void wipe_o_list(floor_type *floor_ptr)
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     POSITION nx, ny;
@@ -180,7 +180,7 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return マップ名の文字列参照ポインタ
  */
-concptr map_name(player_type *player_ptr)
+concptr map_name(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest) && (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))

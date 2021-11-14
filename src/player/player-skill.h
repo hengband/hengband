@@ -43,11 +43,11 @@ extern std::vector<skill_table> s_info;
 
 struct monster_race;
 struct object_type;
-struct player_type;
+class PlayerType;
 
 class PlayerSkill {
 public:
-    PlayerSkill(player_type *player_ptr);
+    PlayerSkill(PlayerType *player_ptr);
 
     static SUB_EXP weapon_exp_at(PlayerSkillRank rank);
     static SUB_EXP spell_exp_at(PlayerSkillRank rank);
@@ -72,5 +72,5 @@ public:
     EXP exp_of_spell(int realm, int spell_idx) const;
 
 private:
-    player_type *player_ptr;
+    PlayerType *player_ptr;
 };

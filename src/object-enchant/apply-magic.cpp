@@ -49,7 +49,7 @@
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */
-void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         lev += randint0(player_ptr->lev / 2 + 10);
@@ -67,7 +67,7 @@ void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH le
     if (has_good_luck(player_ptr)) {
         f1 += 5;
         f2 += 2;
-    } else if (player_ptr->muta.has(MUTA::BAD_LUCK)) {
+    } else if (player_ptr->muta.has(PlayerMutationType::BAD_LUCK)) {
         f1 -= 5;
         f2 -= 2;
     }
@@ -197,17 +197,17 @@ void apply_magic_to_object(player_type *player_ptr, object_type *o_ptr, DEPTH le
         if (!k_info[o_ptr->k_idx].cost)
             o_ptr->ident |= (IDENT_BROKEN);
 
-        if (k_ptr->gen_flags.has(TRG::CURSED))
-            o_ptr->curse_flags.set(TRC::CURSED);
-        if (k_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-            o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
-        if (k_ptr->gen_flags.has(TRG::PERMA_CURSE))
-            o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-        if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED))
+            o_ptr->curse_flags.set(CurseTraitType::CURSED);
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+            o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+            o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0))
             o_ptr->curse_flags.set(get_curse(0, o_ptr));
-        if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1))
             o_ptr->curse_flags.set(get_curse(1, o_ptr));
-        if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2))
             o_ptr->curse_flags.set(get_curse(2, o_ptr));
     }
 }

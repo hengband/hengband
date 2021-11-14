@@ -5,7 +5,7 @@
  */
 
 struct object_type;
-struct player_type;
-void curse_artifact(player_type *player_ptr, object_type *o_ptr);
+class PlayerType;
+void curse_artifact(PlayerType *player_ptr, object_type *o_ptr);
 void get_random_name(object_type *o_ptr, char *return_name, bool armour, int power);
-bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr);
+bool has_extreme_damage_rate(PlayerType *player_ptr, object_type *o_ptr);

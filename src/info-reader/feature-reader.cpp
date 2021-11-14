@@ -25,7 +25,7 @@ static bool feat_tag_is_not_found = false;
  */
 static bool grab_one_feat_flag(feature_type *f_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<FF>::grab_one_flag(f_ptr->flags, f_info_flags, what))
+    if (EnumClassFlagGroup<FloorFeatureType>::grab_one_flag(f_ptr->flags, f_info_flags, what))
         return true;
 
     msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what.data());
@@ -86,7 +86,7 @@ errr parse_f_info(std::string_view buf, angband_header *)
         f_ptr->mimic = (FEAT_IDX)i;
         f_ptr->destroyed = (FEAT_IDX)i;
         for (i = 0; i < MAX_FEAT_STATES; i++)
-            f_ptr->state[i].action = FF::MAX;
+            f_ptr->state[i].action = FloorFeatureType::MAX;
 
     } else if (!f_ptr)
         return PARSE_ERROR_MISSING_RECORD_HEADER;
@@ -196,7 +196,7 @@ errr parse_f_info(std::string_view buf, angband_header *)
 
         int i = 0;
         for (; i < MAX_FEAT_STATES; i++) {
-            if (f_ptr->state[i].action == FF::MAX)
+            if (f_ptr->state[i].action == FloorFeatureType::MAX)
                 break;
         }
 

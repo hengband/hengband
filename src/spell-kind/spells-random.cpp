@@ -23,7 +23,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
@@ -40,13 +40,16 @@
  * @brief 混沌招来処理
  * @return 作用が実際にあった場合TRUEを返す
  */
-void call_chaos(player_type *player_ptr)
+void call_chaos(PlayerType *player_ptr)
 {
-    int hurt_types[31] = { GF_ELEC, GF_POIS, GF_ACID, GF_COLD, GF_FIRE, GF_MISSILE, GF_ARROW, GF_PLASMA, GF_HOLY_FIRE, GF_WATER, GF_LITE, GF_DARK, GF_FORCE,
-        GF_INERTIAL, GF_MANA, GF_METEOR, GF_ICE, GF_CHAOS, GF_NETHER, GF_DISENCHANT, GF_SHARDS, GF_SOUND, GF_NEXUS, GF_CONFUSION, GF_TIME, GF_GRAVITY,
-        GF_ROCKET, GF_NUKE, GF_HELL_FIRE, GF_DISINTEGRATE, GF_PSY_SPEAR };
+    AttributeType hurt_types[31] = { AttributeType::ELEC, AttributeType::POIS, AttributeType::ACID, AttributeType::COLD, AttributeType::FIRE, 
+        AttributeType::MISSILE, AttributeType::ARROW, AttributeType::PLASMA, AttributeType::HOLY_FIRE, AttributeType::WATER, AttributeType::LITE, 
+        AttributeType::DARK, AttributeType::FORCE, AttributeType::INERTIAL, AttributeType::MANA, AttributeType::METEOR, AttributeType::ICE,
+        AttributeType::CHAOS, AttributeType::NETHER, AttributeType::DISENCHANT, AttributeType::SHARDS, AttributeType::SOUND, AttributeType::NEXUS,
+        AttributeType::CONFUSION, AttributeType::TIME, AttributeType::GRAVITY, AttributeType::ROCKET, AttributeType::NUKE, AttributeType::HELL_FIRE,
+        AttributeType::DISINTEGRATE, AttributeType::PSY_SPEAR };
 
-    int chaos_type = hurt_types[randint0(31)];
+    AttributeType chaos_type = hurt_types[randint0(31)];
     bool line_chaos = false;
     if (one_in_(4))
         line_chaos = true;
@@ -90,7 +93,7 @@ void call_chaos(player_type *player_ptr)
  * or the player gets paralyzed.
  * </pre>
  */
-bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
+bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
 {
     BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     bool is_first_curse = true;
@@ -112,7 +115,7 @@ bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
             if (!(*count)) {
                 HIT_POINT dam = damroll(10, 10);
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
-                project(player_ptr, 0, 8, player_ptr->y, player_ptr->x, dam, GF_MANA, flg);
+                project(player_ptr, 0, 8, player_ptr->y, player_ptr->x, dam, AttributeType::MANA, flg);
                 take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"));
                 if (!one_in_(6))
                     break;
@@ -133,7 +136,7 @@ bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
             msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
             wall_breaker(player_ptr);
             if (!randint0(7)) {
-                project(player_ptr, 0, 7, player_ptr->y, player_ptr->x, 50, GF_KILL_WALL, flg);
+                project(player_ptr, 0, 7, player_ptr->y, player_ptr->x, 50, AttributeType::KILL_WALL, flg);
                 take_hit(player_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"));
             }
 
@@ -233,7 +236,7 @@ bool activate_ty_curse(player_type *player_ptr, bool stop_ty, int *count)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell ランダムな効果を選択するための基準ID
  */
-void wild_magic(player_type *player_ptr, int spell)
+void wild_magic(PlayerType *player_ptr, int spell)
 {
     int type = SUMMON_MOLD + randint0(6);
     if (type < SUMMON_MOLD)
@@ -305,7 +308,7 @@ void wild_magic(player_type *player_ptr, int spell)
         lose_all_info(player_ptr);
         break;
     case 32:
-        fire_ball(player_ptr, GF_CHAOS, 0, spell + 5, 1 + (spell / 10));
+        fire_ball(player_ptr, AttributeType::CHAOS, 0, spell + 5, 1 + (spell / 10));
         break;
     case 33:
         wall_stone(player_ptr);
@@ -344,7 +347,7 @@ void wild_magic(player_type *player_ptr, int spell)
  * while keeping the results quite random.  It also allows some potent\n
  * effects only at high level.
  */
-void cast_wonder(player_type *player_ptr, DIRECTION dir)
+void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;
@@ -388,7 +391,7 @@ void cast_wonder(player_type *player_ptr, DIRECTION dir)
     }
 
     if (die < 36) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
         return;
     }
 
@@ -398,7 +401,7 @@ void cast_wonder(player_type *player_ptr, DIRECTION dir)
     }
 
     if (die < 46) {
-        fire_ball(player_ptr, GF_POIS, dir, 20 + (plev / 2), 3);
+        fire_ball(player_ptr, AttributeType::POIS, dir, 20 + (plev / 2), 3);
         return;
     }
 
@@ -408,22 +411,22 @@ void cast_wonder(player_type *player_ptr, DIRECTION dir)
     }
 
     if (die < 56) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_ELEC, dir, damroll(3 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(3 + ((plev - 5) / 4), 8));
         return;
     }
 
     if (die < 61) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_COLD, dir, damroll(5 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::COLD, dir, damroll(5 + ((plev - 5) / 4), 8));
         return;
     }
 
     if (die < 66) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_ACID, dir, damroll(6 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::ACID, dir, damroll(6 + ((plev - 5) / 4), 8));
         return;
     }
 
     if (die < 71) {
-        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), GF_FIRE, dir, damroll(8 + ((plev - 5) / 4), 8));
+        fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, damroll(8 + ((plev - 5) / 4), 8));
         return;
     }
 
@@ -433,22 +436,22 @@ void cast_wonder(player_type *player_ptr, DIRECTION dir)
     }
 
     if (die < 81) {
-        fire_ball(player_ptr, GF_ELEC, dir, 30 + plev / 2, 2);
+        fire_ball(player_ptr, AttributeType::ELEC, dir, 30 + plev / 2, 2);
         return;
     }
 
     if (die < 86) {
-        fire_ball(player_ptr, GF_ACID, dir, 40 + plev, 2);
+        fire_ball(player_ptr, AttributeType::ACID, dir, 40 + plev, 2);
         return;
     }
 
     if (die < 91) {
-        fire_ball(player_ptr, GF_ICE, dir, 70 + plev, 3);
+        fire_ball(player_ptr, AttributeType::ICE, dir, 70 + plev, 3);
         return;
     }
 
     if (die < 96) {
-        fire_ball(player_ptr, GF_FIRE, dir, 80 + plev, 3);
+        fire_ball(player_ptr, AttributeType::FIRE, dir, 80 + plev, 3);
         return;
     }
 

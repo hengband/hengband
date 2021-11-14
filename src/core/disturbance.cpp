@@ -17,7 +17,7 @@
  * The second arg is currently unused, but could induce output flush.
  * All disturbance cancels repeated commands, resting, and running.
  */
-void disturb(player_type *player_ptr, bool stop_search, bool stop_travel)
+void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
 {
     if (command_rep) {
         command_rep = 0;

@@ -47,7 +47,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
@@ -82,7 +82,7 @@ static int damage;
  * @param power ものまねの効力の種類
  * @param dam ものまねの威力
  */
-static void mane_info(player_type *player_ptr, char *p, RF_ABILITY power, HIT_POINT dam)
+static void mane_info(PlayerType *player_ptr, char *p, MonsterAbilityType power, HIT_POINT dam)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
 
@@ -90,29 +90,29 @@ static void mane_info(player_type *player_ptr, char *p, RF_ABILITY power, HIT_PO
 
     const auto power_int = enum2i(power);
 
-    if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == RF_ABILITY::PSY_SPEAR))
+    if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == MonsterAbilityType::PSY_SPEAR))
         sprintf(p, " %s%d", KWD_DAM, (int)dam);
     else {
         switch (power) {
-        case RF_ABILITY::DRAIN_MANA:
+        case MonsterAbilityType::DRAIN_MANA:
             sprintf(p, " %sd%d+%d", KWD_HEAL, plev * 3, plev);
             break;
-        case RF_ABILITY::HASTE:
+        case MonsterAbilityType::HASTE:
             sprintf(p, " %sd%d+%d", KWD_DURATION, 20 + plev, plev);
             break;
-        case RF_ABILITY::HEAL:
+        case MonsterAbilityType::HEAL:
             sprintf(p, " %s%d", KWD_HEAL, plev * 6);
             break;
-        case RF_ABILITY::INVULNER:
+        case MonsterAbilityType::INVULNER:
             sprintf(p, " %sd7+7", KWD_DURATION);
             break;
-        case RF_ABILITY::BLINK:
+        case MonsterAbilityType::BLINK:
             sprintf(p, " %s10", KWD_SPHERE);
             break;
-        case RF_ABILITY::TPORT:
+        case MonsterAbilityType::TPORT:
             sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
             break;
-        case RF_ABILITY::RAISE_DEAD:
+        case MonsterAbilityType::RAISE_DEAD:
             sprintf(p, " %s5", KWD_SPHERE);
             break;
         default:
@@ -139,7 +139,7 @@ static void mane_info(player_type *player_ptr, char *p, RF_ABILITY power, HIT_PO
  * when you run it. It's probably easy to fix but I haven't tried,
  * sorry.
  */
-static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
+static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
 {
     int i = 0;
     int num = 0;
@@ -310,7 +310,7 @@ static int get_mane_power(player_type *player_ptr, int *sn, bool baigaesi)
  * @param spell 発動するモンスター攻撃のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
+static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -322,15 +322,15 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
 
     /* spell code */
     switch (spell) {
-    case RF_ABILITY::SHRIEK:
+    case MonsterAbilityType::SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(player_ptr, 0);
         break;
 
-    case RF_ABILITY::XXX1:
+    case MonsterAbilityType::XXX1:
         break;
 
-    case RF_ABILITY::DISPEL: {
+    case MonsterAbilityType::DISPEL: {
         MONSTER_IDX m_idx;
 
         if (!target_set(player_ptr, TARGET_KILL))
@@ -346,424 +346,424 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         break;
     }
 
-    case RF_ABILITY::ROCKET:
+    case MonsterAbilityType::ROCKET:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("ロケットを発射した。", "You fire a rocket."));
-        fire_rocket(player_ptr, GF_ROCKET, dir, damage, 2);
+        fire_rocket(player_ptr, AttributeType::ROCKET, dir, damage, 2);
         break;
 
-    case RF_ABILITY::SHOOT:
+    case MonsterAbilityType::SHOOT:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("矢を放った。", "You fire an arrow."));
-        fire_bolt(player_ptr, GF_ARROW, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ARROW, dir, damage);
         break;
 
-    case RF_ABILITY::XXX2:
+    case MonsterAbilityType::XXX2:
         break;
 
-    case RF_ABILITY::XXX3:
+    case MonsterAbilityType::XXX3:
         break;
 
-    case RF_ABILITY::XXX4:
+    case MonsterAbilityType::XXX4:
         break;
 
-    case RF_ABILITY::BR_ACID:
+    case MonsterAbilityType::BR_ACID:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
-        fire_breath(player_ptr, GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::ACID, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_ELEC:
+    case MonsterAbilityType::BR_ELEC:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
-        fire_breath(player_ptr, GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::ELEC, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_FIRE:
+    case MonsterAbilityType::BR_FIRE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
-        fire_breath(player_ptr, GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::FIRE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_COLD:
+    case MonsterAbilityType::BR_COLD:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
-        fire_breath(player_ptr, GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::COLD, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_POIS:
+    case MonsterAbilityType::BR_POIS:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
-        fire_breath(player_ptr, GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::POIS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_NETH:
+    case MonsterAbilityType::BR_NETH:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
-        fire_breath(player_ptr, GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::NETHER, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_LITE:
+    case MonsterAbilityType::BR_LITE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
-        fire_breath(player_ptr, GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::LITE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_DARK:
+    case MonsterAbilityType::BR_DARK:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
-        fire_breath(player_ptr, GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::DARK, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_CONF:
+    case MonsterAbilityType::BR_CONF:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
-        fire_breath(player_ptr, GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_SOUN:
+    case MonsterAbilityType::BR_SOUN:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
-        fire_breath(player_ptr, GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::SOUND, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_CHAO:
+    case MonsterAbilityType::BR_CHAO:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
-        fire_breath(player_ptr, GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::CHAOS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_DISE:
+    case MonsterAbilityType::BR_DISE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
-        fire_breath(player_ptr, GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_NEXU:
+    case MonsterAbilityType::BR_NEXU:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
-        fire_breath(player_ptr, GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::NEXUS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_TIME:
+    case MonsterAbilityType::BR_TIME:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
-        fire_breath(player_ptr, GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::TIME, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_INER:
+    case MonsterAbilityType::BR_INER:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
-        fire_breath(player_ptr, GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_GRAV:
+    case MonsterAbilityType::BR_GRAV:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
-        fire_breath(player_ptr, GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_SHAR:
+    case MonsterAbilityType::BR_SHAR:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
-        fire_breath(player_ptr, GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::SHARDS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_PLAS:
+    case MonsterAbilityType::BR_PLAS:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
 
-        fire_breath(player_ptr, GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::PLASMA, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_FORC:
+    case MonsterAbilityType::BR_FORC:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
 
-        fire_breath(player_ptr, GF_FORCE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::FORCE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_MANA:
+    case MonsterAbilityType::BR_MANA:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
 
-        fire_breath(player_ptr, GF_MANA, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::MANA, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BA_NUKE:
+    case MonsterAbilityType::BA_NUKE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
 
-        fire_ball(player_ptr, GF_NUKE, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::NUKE, dir, damage, 2);
         break;
 
-    case RF_ABILITY::BR_NUKE:
+    case MonsterAbilityType::BR_NUKE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
 
-        fire_breath(player_ptr, GF_NUKE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::NUKE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BA_CHAO:
+    case MonsterAbilityType::BA_CHAO:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
 
-        fire_ball(player_ptr, GF_CHAOS, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::CHAOS, dir, damage, 4);
         break;
-    case RF_ABILITY::BR_DISI:
+    case MonsterAbilityType::BR_DISI:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
 
-        fire_breath(player_ptr, GF_DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
+        fire_breath(player_ptr, AttributeType::DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
         break;
-    case RF_ABILITY::BA_ACID:
+    case MonsterAbilityType::BA_ACID:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
 
-        fire_ball(player_ptr, GF_ACID, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::ACID, dir, damage, 2);
         break;
-    case RF_ABILITY::BA_ELEC:
+    case MonsterAbilityType::BA_ELEC:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
 
-        fire_ball(player_ptr, GF_ELEC, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::ELEC, dir, damage, 2);
         break;
-    case RF_ABILITY::BA_FIRE:
+    case MonsterAbilityType::BA_FIRE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
 
-        fire_ball(player_ptr, GF_FIRE, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::FIRE, dir, damage, 2);
         break;
-    case RF_ABILITY::BA_COLD:
+    case MonsterAbilityType::BA_COLD:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
 
-        fire_ball(player_ptr, GF_COLD, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::COLD, dir, damage, 2);
         break;
-    case RF_ABILITY::BA_POIS:
+    case MonsterAbilityType::BA_POIS:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
 
-        fire_ball(player_ptr, GF_POIS, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::POIS, dir, damage, 2);
         break;
-    case RF_ABILITY::BA_NETH:
+    case MonsterAbilityType::BA_NETH:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
 
-        fire_ball(player_ptr, GF_NETHER, dir, damage, 2);
+        fire_ball(player_ptr, AttributeType::NETHER, dir, damage, 2);
         break;
-    case RF_ABILITY::BA_WATE:
+    case MonsterAbilityType::BA_WATE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
 
-        fire_ball(player_ptr, GF_WATER, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::WATER, dir, damage, 4);
         break;
-    case RF_ABILITY::BA_MANA:
+    case MonsterAbilityType::BA_MANA:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
 
-        fire_ball(player_ptr, GF_MANA, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::MANA, dir, damage, 4);
         break;
-    case RF_ABILITY::BA_DARK:
+    case MonsterAbilityType::BA_DARK:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
 
-        fire_ball(player_ptr, GF_DARK, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::DARK, dir, damage, 4);
         break;
-    case RF_ABILITY::DRAIN_MANA:
+    case MonsterAbilityType::DRAIN_MANA:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_DRAIN_MANA, dir, randint1(plev * 3) + plev, 0);
+        fire_ball_hide(player_ptr, AttributeType::DRAIN_MANA, dir, randint1(plev * 3) + plev, 0);
         break;
-    case RF_ABILITY::MIND_BLAST:
+    case MonsterAbilityType::MIND_BLAST:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_MIND_BLAST, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::MIND_BLAST, dir, damage, 0);
         break;
-    case RF_ABILITY::BRAIN_SMASH:
+    case MonsterAbilityType::BRAIN_SMASH:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_BRAIN_SMASH, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::BRAIN_SMASH, dir, damage, 0);
         break;
-    case RF_ABILITY::CAUSE_1:
+    case MonsterAbilityType::CAUSE_1:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_1, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_1, dir, damage, 0);
         break;
-    case RF_ABILITY::CAUSE_2:
+    case MonsterAbilityType::CAUSE_2:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_2, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_2, dir, damage, 0);
         break;
-    case RF_ABILITY::CAUSE_3:
+    case MonsterAbilityType::CAUSE_3:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_3, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_3, dir, damage, 0);
         break;
-    case RF_ABILITY::CAUSE_4:
+    case MonsterAbilityType::CAUSE_4:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
-        fire_ball_hide(player_ptr, GF_CAUSE_4, dir, damage, 0);
+        fire_ball_hide(player_ptr, AttributeType::CAUSE_4, dir, damage, 0);
         break;
-    case RF_ABILITY::BO_ACID:
+    case MonsterAbilityType::BO_ACID:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
 
-        fire_bolt(player_ptr, GF_ACID, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ACID, dir, damage);
         break;
-    case RF_ABILITY::BO_ELEC:
+    case MonsterAbilityType::BO_ELEC:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
 
-        fire_bolt(player_ptr, GF_ELEC, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ELEC, dir, damage);
         break;
-    case RF_ABILITY::BO_FIRE:
+    case MonsterAbilityType::BO_FIRE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
 
-        fire_bolt(player_ptr, GF_FIRE, dir, damage);
+        fire_bolt(player_ptr, AttributeType::FIRE, dir, damage);
         break;
-    case RF_ABILITY::BO_COLD:
+    case MonsterAbilityType::BO_COLD:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
 
-        fire_bolt(player_ptr, GF_COLD, dir, damage);
+        fire_bolt(player_ptr, AttributeType::COLD, dir, damage);
         break;
-    case RF_ABILITY::BA_LITE:
+    case MonsterAbilityType::BA_LITE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
 
-        fire_ball(player_ptr, GF_LITE, dir, damage, 4);
+        fire_ball(player_ptr, AttributeType::LITE, dir, damage, 4);
         break;
-    case RF_ABILITY::BO_NETH:
+    case MonsterAbilityType::BO_NETH:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
 
-        fire_bolt(player_ptr, GF_NETHER, dir, damage);
+        fire_bolt(player_ptr, AttributeType::NETHER, dir, damage);
         break;
-    case RF_ABILITY::BO_WATE:
+    case MonsterAbilityType::BO_WATE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
 
-        fire_bolt(player_ptr, GF_WATER, dir, damage);
+        fire_bolt(player_ptr, AttributeType::WATER, dir, damage);
         break;
-    case RF_ABILITY::BO_MANA:
+    case MonsterAbilityType::BO_MANA:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
 
-        fire_bolt(player_ptr, GF_MANA, dir, damage);
+        fire_bolt(player_ptr, AttributeType::MANA, dir, damage);
         break;
-    case RF_ABILITY::BO_PLAS:
+    case MonsterAbilityType::BO_PLAS:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
 
-        fire_bolt(player_ptr, GF_PLASMA, dir, damage);
+        fire_bolt(player_ptr, AttributeType::PLASMA, dir, damage);
         break;
-    case RF_ABILITY::BO_ICEE:
+    case MonsterAbilityType::BO_ICEE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
 
-        fire_bolt(player_ptr, GF_ICE, dir, damage);
+        fire_bolt(player_ptr, AttributeType::ICE, dir, damage);
         break;
-    case RF_ABILITY::MISSILE:
+    case MonsterAbilityType::MISSILE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
 
-        fire_bolt(player_ptr, GF_MISSILE, dir, damage);
+        fire_bolt(player_ptr, AttributeType::MISSILE, dir, damage);
         break;
-    case RF_ABILITY::SCARE:
+    case MonsterAbilityType::SCARE:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
@@ -771,12 +771,12 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
 
         fear_monster(player_ptr, dir, plev + 10);
         break;
-    case RF_ABILITY::BLIND:
+    case MonsterAbilityType::BLIND:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         confuse_monster(player_ptr, dir, plev * 2);
         break;
-    case RF_ABILITY::CONF:
+    case MonsterAbilityType::CONF:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
@@ -784,29 +784,29 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
 
         confuse_monster(player_ptr, dir, plev * 2);
         break;
-    case RF_ABILITY::SLOW:
+    case MonsterAbilityType::SLOW:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         slow_monster(player_ptr, dir, plev);
         break;
-    case RF_ABILITY::HOLD:
+    case MonsterAbilityType::HOLD:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         sleep_monster(player_ptr, dir, plev);
         break;
-    case RF_ABILITY::HASTE:
+    case MonsterAbilityType::HASTE:
         (void)set_fast(player_ptr, randint1(20 + plev) + plev, false);
         break;
-    case RF_ABILITY::HAND_DOOM: {
+    case MonsterAbilityType::HAND_DOOM: {
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
-        fire_ball_hide(player_ptr, GF_HAND_DOOM, dir, 200, 0);
+        fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, dir, 200, 0);
         break;
     }
-    case RF_ABILITY::HEAL: {
+    case MonsterAbilityType::HEAL: {
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(player_ptr, plev * 6);
         BadStatusSetter bss(player_ptr);
@@ -814,22 +814,22 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         (void)bss.cut(0);
         break;
     }
-    case RF_ABILITY::INVULNER:
+    case MonsterAbilityType::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
         (void)set_invuln(player_ptr, randint1(7) + 7, false);
         break;
-    case RF_ABILITY::BLINK:
+    case MonsterAbilityType::BLINK:
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case RF_ABILITY::TPORT:
+    case MonsterAbilityType::TPORT:
         teleport_player(player_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case RF_ABILITY::WORLD:
+    case MonsterAbilityType::WORLD:
         (void)time_walk(player_ptr);
         break;
-    case RF_ABILITY::SPECIAL:
+    case MonsterAbilityType::SPECIAL:
         break;
-    case RF_ABILITY::TELE_TO: {
+    case MonsterAbilityType::TELE_TO: {
         monster_type *m_ptr;
         monster_race *r_ptr;
         GAME_TEXT m_name[MAX_NLEN];
@@ -866,44 +866,44 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             player_ptr, player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
         break;
     }
-    case RF_ABILITY::TELE_AWAY:
+    case MonsterAbilityType::TELE_AWAY:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        (void)fire_beam(player_ptr, GF_AWAY_ALL, dir, plev);
+        (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, plev);
         break;
 
-    case RF_ABILITY::TELE_LEVEL:
+    case MonsterAbilityType::TELE_LEVEL:
         return teleport_level_other(player_ptr);
         break;
 
-    case RF_ABILITY::PSY_SPEAR:
+    case MonsterAbilityType::PSY_SPEAR:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
             msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
-        (void)fire_beam(player_ptr, GF_PSY_SPEAR, dir, damage);
+        (void)fire_beam(player_ptr, AttributeType::PSY_SPEAR, dir, damage);
         break;
 
-    case RF_ABILITY::DARKNESS:
+    case MonsterAbilityType::DARKNESS:
         msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
         (void)unlite_area(player_ptr, 10, 3);
         break;
 
-    case RF_ABILITY::TRAPS:
+    case MonsterAbilityType::TRAPS:
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
         msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
         trap_creation(player_ptr, target_row, target_col);
         break;
-    case RF_ABILITY::FORGET:
+    case MonsterAbilityType::FORGET:
         msg_print(_("しかし何も起きなかった。", "Nothing happens."));
         break;
-    case RF_ABILITY::RAISE_DEAD:
+    case MonsterAbilityType::RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
         (void)animate_dead(player_ptr, 0, player_ptr->y, player_ptr->x);
         break;
-    case RF_ABILITY::S_KIN: {
+    case MonsterAbilityType::S_KIN: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -914,7 +914,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
         }
         break;
     }
-    case RF_ABILITY::S_CYBER: {
+    case MonsterAbilityType::S_CYBER: {
         int k;
         int max_cyber = (player_ptr->current_floor_ptr->dun_level / 50) + randint1(3);
         if (!target_set(player_ptr, TARGET_KILL))
@@ -926,7 +926,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_CYBER, mode);
         break;
     }
-    case RF_ABILITY::S_MONSTER: {
+    case MonsterAbilityType::S_MONSTER: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -935,7 +935,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
         break;
     }
-    case RF_ABILITY::S_MONSTERS: {
+    case MonsterAbilityType::S_MONSTERS: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -944,7 +944,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
         break;
     }
-    case RF_ABILITY::S_ANT: {
+    case MonsterAbilityType::S_ANT: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -953,7 +953,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_ANT, mode);
         break;
     }
-    case RF_ABILITY::S_SPIDER: {
+    case MonsterAbilityType::S_SPIDER: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -962,7 +962,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_SPIDER, mode);
         break;
     }
-    case RF_ABILITY::S_HOUND: {
+    case MonsterAbilityType::S_HOUND: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -971,7 +971,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_HOUND, mode);
         break;
     }
-    case RF_ABILITY::S_HYDRA: {
+    case MonsterAbilityType::S_HYDRA: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -980,7 +980,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_HYDRA, mode);
         break;
     }
-    case RF_ABILITY::S_ANGEL: {
+    case MonsterAbilityType::S_ANGEL: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -989,7 +989,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_ANGEL, mode);
         break;
     }
-    case RF_ABILITY::S_DEMON: {
+    case MonsterAbilityType::S_DEMON: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -998,7 +998,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_DEMON, (mode | u_mode));
         break;
     }
-    case RF_ABILITY::S_UNDEAD: {
+    case MonsterAbilityType::S_UNDEAD: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -1007,7 +1007,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_UNDEAD, (mode | u_mode));
         break;
     }
-    case RF_ABILITY::S_DRAGON: {
+    case MonsterAbilityType::S_DRAGON: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -1016,7 +1016,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_DRAGON, (mode | u_mode));
         break;
     }
-    case RF_ABILITY::S_HI_UNDEAD: {
+    case MonsterAbilityType::S_HI_UNDEAD: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -1025,7 +1025,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
         break;
     }
-    case RF_ABILITY::S_HI_DRAGON: {
+    case MonsterAbilityType::S_HI_DRAGON: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -1034,7 +1034,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_HI_DRAGON, (mode | u_mode));
         break;
     }
-    case RF_ABILITY::S_AMBERITES: {
+    case MonsterAbilityType::S_AMBERITES: {
         int k;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -1043,7 +1043,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
             summon_specific(player_ptr, -1, target_row, target_col, plev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
         break;
     }
-    case RF_ABILITY::S_UNIQUE: {
+    case MonsterAbilityType::S_UNIQUE: {
         int k, count = 0;
         if (!target_set(player_ptr, TARGET_KILL))
             return false;
@@ -1079,7 +1079,7 @@ static bool use_mane(player_type *player_ptr, RF_ABILITY spell)
  * when you run it. It's probably easy to fix but I haven't tried,
  * sorry.
  */
-bool do_cmd_mane(player_type *player_ptr, bool baigaesi)
+bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
 {
     int n = 0;
     PERCENTAGE chance;

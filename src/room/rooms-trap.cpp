@@ -18,7 +18,7 @@
  * @details
  * A special trap is placed at center of the room
  */
-bool build_type14(player_type *player_ptr, dun_data_type *dd_ptr)
+bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y2, x2, yval, xval;
     POSITION y1, x1, xsize, ysize;
@@ -43,7 +43,7 @@ bool build_type14(player_type *player_ptr, dun_data_type *dd_ptr)
 
     /* Choose lite or dark */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
+    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */
     y1 = yval - ysize / 2;

@@ -89,7 +89,7 @@ static int16_t toggle_frequency(int16_t current)
  * @brief 自動セーブオプションを変更するコマンドのメインルーチン
  * @param info 表示メッセージ
  */
-static void do_cmd_options_autosave(player_type *player_ptr, concptr info)
+static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
 {
     char ch;
     int i, k = 0, n = 2;
@@ -213,7 +213,7 @@ static void clear_window_flag(int x, int y)
  * @brief ウィンドウオプションを変更するコマンドのメインルーチン /
  * Modify the "window" options
  */
-static void do_cmd_options_win(player_type *player_ptr)
+static void do_cmd_options_win(PlayerType *player_ptr)
 {
     int i, j, d;
     TERM_LEN y = 0;
@@ -318,7 +318,7 @@ static void do_cmd_options_win(player_type *player_ptr)
  * Interact with some options for cheating
  * @param info 表示メッセージ
  */
-static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
+static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
 {
     term_clear();
     auto k = 0U;
@@ -422,7 +422,7 @@ void extract_option_vars(void)
  * in any options which control "visual" aspects of the game.
  * </pre>
  */
-void do_cmd_options(player_type *player_ptr)
+void do_cmd_options(PlayerType *player_ptr)
 {
     char k;
     int d, skey;
@@ -617,7 +617,7 @@ void do_cmd_options(player_type *player_ptr)
  * @param page オプションページ番号
  * @param info 表示メッセージ
  */
-void do_cmd_options_aux(player_type *player_ptr, game_option_types page, concptr info)
+void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr info)
 {
     char ch;
     int i, k = 0, n = 0, l;

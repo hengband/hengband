@@ -30,7 +30,7 @@
  * @brief 青魔法のラーニング判定と成功した場合のラーニング処理
  * @param monspell ラーニングを試みるモンスター攻撃のID
  */
-void learn_spell(player_type *player_ptr, RF_ABILITY monspell)
+void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
 {
     if (player_ptr->action != ACTION_LEARN)
         return;
@@ -59,13 +59,13 @@ void learn_spell(player_type *player_ptr, RF_ABILITY monspell)
  * @param ability_flags モンスター特殊能力のフラグ集合
  * @param type 抜き出したいタイプ
  */
-void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, BlueMagicType type)
+void set_rf_masks(EnumClassFlagGroup<MonsterAbilityType> &ability_flags, BlueMagicType type)
 {
     ability_flags.clear();
 
     switch (type) {
     case BlueMagicType::BOLT:
-        ability_flags.set(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK).reset(RF_ABILITY::ROCKET);
+        ability_flags.set(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK).reset(MonsterAbilityType::ROCKET);
         break;
 
     case BlueMagicType::BALL:

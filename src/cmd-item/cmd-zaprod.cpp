@@ -22,7 +22,7 @@
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/buff-setter.h"
@@ -42,7 +42,7 @@
  * @param powerful 強力発動上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int rod_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful)
+int rod_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful)
 {
     int ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
@@ -190,49 +190,49 @@ int rod_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir
     }
 
     case SV_ROD_ACID_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, GF_ACID, dir, damroll(6 + lev / 7, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::ACID, dir, damroll(6 + lev / 7, 8));
         ident = true;
         break;
     }
 
     case SV_ROD_ELEC_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, GF_ELEC, dir, damroll(4 + lev / 9, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::ELEC, dir, damroll(4 + lev / 9, 8));
         ident = true;
         break;
     }
 
     case SV_ROD_FIRE_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, GF_FIRE, dir, damroll(7 + lev / 6, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::FIRE, dir, damroll(7 + lev / 6, 8));
         ident = true;
         break;
     }
 
     case SV_ROD_COLD_BOLT: {
-        fire_bolt_or_beam(player_ptr, 10, GF_COLD, dir, damroll(5 + lev / 8, 8));
+        fire_bolt_or_beam(player_ptr, 10, AttributeType::COLD, dir, damroll(5 + lev / 8, 8));
         ident = true;
         break;
     }
 
     case SV_ROD_ACID_BALL: {
-        fire_ball(player_ptr, GF_ACID, dir, 60 + lev, rad);
+        fire_ball(player_ptr, AttributeType::ACID, dir, 60 + lev, rad);
         ident = true;
         break;
     }
 
     case SV_ROD_ELEC_BALL: {
-        fire_ball(player_ptr, GF_ELEC, dir, 40 + lev, rad);
+        fire_ball(player_ptr, AttributeType::ELEC, dir, 40 + lev, rad);
         ident = true;
         break;
     }
 
     case SV_ROD_FIRE_BALL: {
-        fire_ball(player_ptr, GF_FIRE, dir, 70 + lev, rad);
+        fire_ball(player_ptr, AttributeType::FIRE, dir, 70 + lev, rad);
         ident = true;
         break;
     }
 
     case SV_ROD_COLD_BALL: {
-        fire_ball(player_ptr, GF_COLD, dir, 50 + lev, rad);
+        fire_ball(player_ptr, AttributeType::COLD, dir, 50 + lev, rad);
         ident = true;
         break;
     }
@@ -263,7 +263,7 @@ int rod_effect(player_type *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir
  * @brief ロッドを使うコマンドのメインルーチン /
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_zap_rod(player_type *player_ptr)
+void do_cmd_zap_rod(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode) {
         return;
@@ -273,7 +273,7 @@ void do_cmd_zap_rod(player_type *player_ptr)
         return;
     }
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU, SamuraiStance::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     auto q = _("どのロッドを振りますか? ", "Zap which rod? ");
     auto s = _("使えるロッドがない。", "You have no rod to zap.");

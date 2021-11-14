@@ -24,7 +24,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param snipe_type スナイパーの射撃術の種類
  */
-void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
+void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
 {
     OBJECT_IDX item;
     object_type *j_ptr, *ammo_ptr;
@@ -51,7 +51,7 @@ void do_cmd_fire(player_type *player_ptr, SPELL_IDX snipe_type)
         return;
     }
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStance::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     concptr q = _("どれを撃ちますか? ", "Fire which item? ");
     concptr s = _("発射されるアイテムがありません。", "You have nothing to fire.");

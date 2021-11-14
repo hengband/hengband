@@ -18,7 +18,7 @@
  * @param is_autosave オートセーブ中の処理ならばTRUE
  * @details
  */
-void do_cmd_save_game(player_type *player_ptr, int is_autosave)
+void do_cmd_save_game(PlayerType *player_ptr, int is_autosave)
 {
     if (is_autosave)
         msg_print(_("自動セーブ中", "Autosaving the game..."));
@@ -46,7 +46,7 @@ void do_cmd_save_game(player_type *player_ptr, int is_autosave)
  * Save the game and exit
  * @details
  */
-void do_cmd_save_and_exit(player_type *player_ptr)
+void do_cmd_save_and_exit(PlayerType *player_ptr)
 {
     player_ptr->playing = false;
     player_ptr->leaving = true;

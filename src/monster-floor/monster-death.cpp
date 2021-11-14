@@ -49,7 +49,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-static void write_pet_death(player_type *player_ptr, monster_death_type *md_ptr)
+static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     md_ptr->md_y = md_ptr->m_ptr->fy;
     md_ptr->md_x = md_ptr->m_ptr->fx;
@@ -60,14 +60,14 @@ static void write_pet_death(player_type *player_ptr, monster_death_type *md_ptr)
     }
 }
 
-static void on_dead_explosion(player_type *player_ptr, monster_death_type *md_ptr)
+static void on_dead_explosion(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     for (int i = 0; i < 4; i++) {
         if (md_ptr->r_ptr->blow[i].method != RBM_EXPLODE)
             continue;
 
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        EFFECT_ID typ = mbe_info[enum2i(md_ptr->r_ptr->blow[i].effect)].explode_type;
+        AttributeType typ = mbe_info[enum2i(md_ptr->r_ptr->blow[i].effect)].explode_type;
         DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
         DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
         HIT_POINT damage = damroll(d_dice, d_side);
@@ -76,7 +76,7 @@ static void on_dead_explosion(player_type *player_ptr, monster_death_type *md_pt
     }
 }
 
-static void on_defeat_arena_monster(player_type *player_ptr, monster_death_type *md_ptr)
+static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_arena || is_pet(md_ptr->m_ptr))
@@ -108,7 +108,7 @@ static void on_defeat_arena_monster(player_type *player_ptr, monster_death_type 
     exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
 }
 
-static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
+static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_drop_corpse = one_in_(md_ptr->r_ptr->flags1 & RF1_UNIQUE ? 1 : 4);
@@ -147,7 +147,7 @@ static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
  * @param md_ptr モンスター死亡構造体への参照ポインタ
  * @return 何かドロップするなら1以上、何もドロップしないなら0
  */
-static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_type *md_ptr)
+static ARTIFACT_IDX drop_artifact_index(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     ARTIFACT_IDX a_idx = 0;
     PERCENTAGE chance = 0;
@@ -165,28 +165,43 @@ static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_t
             continue;
         }
 
-        artifact_type *a_ptr = &a_info[a_idx];
-        if (a_ptr->cur_num == 1)
-            continue;
-
-        if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-            a_ptr->cur_num = 1;
-            if (w_ptr->character_dungeon)
-                a_ptr->floor_id = player_ptr->floor_id;
-
+        if (drop_single_artifact(player_ptr, md_ptr, a_idx))
             break;
-        }
-
-        if (!preserve_mode) {
-            a_ptr->cur_num = 1;
-            break;
-        }
     }
 
     return a_idx;
 }
 
-static KIND_OBJECT_IDX drop_dungeon_final_artifact(player_type *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
+/*!
+ * @brief 特定アーティファクトのドロップ処理
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param md_ptr モンスター死亡構造体への参照ポインタ
+ * @param a_ix ドロップを試みるアーティファクトID
+ * @return ドロップするならtrue
+ */
+bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
+{
+    artifact_type *a_ptr = &a_info[a_idx];
+    if (a_ptr->cur_num == 1)
+        return false;
+
+    if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
+        a_ptr->cur_num = 1;
+        
+        if (w_ptr->character_dungeon) {
+            a_ptr->floor_id = player_ptr->floor_id;
+        }
+        
+        if (!preserve_mode) {
+            a_ptr->cur_num = 1;
+        }
+
+        return true;
+    }
+    return false;
+}
+
+static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
 {
     auto k_idx = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
     if (d_info[player_ptr->dungeon_idx].final_artifact == 0)
@@ -207,7 +222,7 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(player_type *player_ptr, mons
     return d_info[player_ptr->dungeon_idx].final_object ? k_idx : 0;
 }
 
-static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
+static void drop_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     if (!md_ptr->drop_chosen_item)
         return;
@@ -238,7 +253,7 @@ static void decide_drop_quality(monster_death_type *md_ptr)
         md_ptr->mo_mode |= (AM_GOOD | AM_GREAT);
 }
 
-static int decide_drop_numbers(player_type *player_ptr, monster_death_type *md_ptr, const bool drop_item)
+static int decide_drop_numbers(PlayerType *player_ptr, monster_death_type *md_ptr, const bool drop_item)
 {
     int drop_numbers = 0;
     if ((md_ptr->r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60))
@@ -274,7 +289,7 @@ static int decide_drop_numbers(player_type *player_ptr, monster_death_type *md_p
     return drop_numbers;
 }
 
-static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr, int drop_numbers)
+static void drop_items_golds(PlayerType *player_ptr, monster_death_type *md_ptr, int drop_numbers)
 {
     int dump_item = 0;
     int dump_gold = 0;
@@ -309,7 +324,7 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
  * @brief 最終ボス(混沌のサーペント)を倒したときの処理
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-static void on_defeat_last_boss(player_type *player_ptr)
+static void on_defeat_last_boss(PlayerType *player_ptr)
 {
     w_ptr->total_winner = true;
     add_winner_class(player_ptr->pclass);
@@ -322,12 +337,28 @@ static void on_defeat_last_boss(player_type *player_ptr)
     msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
 }
 
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
  * @param m_idx 死亡したモンスターのID
  * @param drop_item TRUEならばモンスターのドロップ処理を行う
- * @return 撃破されたモンスターの述語
+ * @param type ラストアタックの属性 (単一属性)
+ */
+void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeType type)
+{
+    AttributeFlags flags;
+    flags.clear();
+    flags.set(type);
+    monster_death(player_ptr, m_idx, drop_item, flags);
+}
+
+/*!
+ * @brief モンスターが死亡した時の処理 /
+ * Handle the "death" of a monster.
+ * @param m_idx 死亡したモンスターのID
+ * @param drop_item TRUEならばモンスターのドロップ処理を行う
+ * @param attribute_flags ラストアタックの属性 (複数属性)
  * @details
  * <pre>
  * Disperse treasures centered at the monster location based on the
@@ -339,7 +370,7 @@ static void on_defeat_last_boss(player_type *player_ptr)
  * it drops all of its objects, which may disappear in crowded rooms.
  * </pre>
  */
-void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
+void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeFlags attribute_flags)
 {
     monster_death_type tmp_md;
     monster_death_type *md_ptr = initialize_monster_death_type(player_ptr, &tmp_md, m_idx, drop_item);
@@ -347,7 +378,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         w_ptr->timewalk_m_idx = 0;
 
     // プレイヤーしかユニークを倒せないのでここで時間を記録
-    if (any_bits(md_ptr->r_ptr->flags1, RF1_UNIQUE) && md_ptr->m_ptr->mflag2.has_not(MFLAG2::CLONED)) {
+    if (any_bits(md_ptr->r_ptr->flags1, RF1_UNIQUE) && md_ptr->m_ptr->mflag2.has_not(MonsterConstantFlagType::CLONED)) {
         update_playtime();
         md_ptr->r_ptr->defeat_time = w_ptr->play_time;
         md_ptr->r_ptr->defeat_level = player_ptr->lev;
@@ -358,7 +389,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
     write_pet_death(player_ptr, md_ptr);
     on_dead_explosion(player_ptr, md_ptr);
-    if (md_ptr->m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
+    if (md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         choose_new_monster(player_ptr, m_idx, true, MON_CHAMELEON);
         md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
     }
@@ -371,7 +402,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
     decide_drop_quality(md_ptr);
-    switch_special_death(player_ptr, md_ptr);
+    switch_special_death(player_ptr, md_ptr, attribute_flags);
     drop_artifact(player_ptr, md_ptr);
     int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
     coin_type = md_ptr->force_coin;

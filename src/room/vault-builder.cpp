@@ -16,14 +16,14 @@
 /*
  * Grid based version of "creature_bold()"
  */
-static bool player_grid(player_type *player_ptr, grid_type *g_ptr) { return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x]; }
+static bool player_grid(PlayerType *player_ptr, grid_type *g_ptr) { return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x]; }
 
 /*
  * Grid based version of "cave_empty_bold()"
  */
-static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
+static bool is_cave_empty_grid(PlayerType *player_ptr, grid_type *g_ptr)
 {
-    bool is_empty_grid = g_ptr->cave_has_flag(FF::PLACE);
+    bool is_empty_grid = g_ptr->cave_has_flag(FloorFeatureType::PLACE);
     is_empty_grid &= g_ptr->m_idx == 0;
     is_empty_grid &= !player_grid(player_ptr, g_ptr);
     return is_empty_grid;
@@ -38,7 +38,7 @@ static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
+void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int k = 0; k < num; k++) {
@@ -67,7 +67,7 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
+void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (; num > 0; --num) {
@@ -112,7 +112,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  * @details
  * Only really called by some of the "vault" routines.
  */
-static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -153,7 +153,7 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
  * Only really called by some of the "vault" routines.
  * @todo rooms-normal からしか呼ばれていない、要調整
  */
-void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+void vault_traps(PlayerType *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
     for (int i = 0; i < num; i++)
         vault_trap_aux(player_ptr, y, x, yd, xd);

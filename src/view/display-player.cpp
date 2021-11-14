@@ -48,7 +48,7 @@
  * @param mode ステータス表示モード
  * @return どれかの処理をこなしたらTRUE、何もしなかったらFALSE
  */
-static bool display_player_info(player_type *player_ptr, int mode)
+static bool display_player_info(PlayerType *player_ptr, int mode)
 {
     if (mode == 2) {
         display_player_misc_info(player_ptr);
@@ -79,7 +79,7 @@ static bool display_player_info(player_type *player_ptr, int mode)
  * @brief 名前、性別、種族、職業を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void display_player_basic_info(player_type *player_ptr)
+static void display_player_basic_info(PlayerType *player_ptr)
 {
     char tmp[64];
 #ifdef JP
@@ -98,7 +98,7 @@ static void display_player_basic_info(player_type *player_ptr)
  * @brief 魔法領域を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void display_magic_realms(player_type *player_ptr)
+static void display_magic_realms(PlayerType *player_ptr)
 {
     if (player_ptr->realm1 == REALM_NONE && player_ptr->element == REALM_NONE)
         return;
@@ -120,7 +120,7 @@ static void display_magic_realms(player_type *player_ptr)
  * @details
  * 日本語版では、身長はcmに、体重はkgに変更してある
  */
-static void display_phisique(player_type *player_ptr)
+static void display_phisique(PlayerType *player_ptr)
 {
 #ifdef JP
     display_player_one_line(ENTRY_AGE, format("%d才", (int)player_ptr->age), TERM_L_BLUE);
@@ -141,7 +141,7 @@ static void display_phisique(player_type *player_ptr)
  * @brief 能力値を (減少していたら色を変えて)表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void display_player_stats(player_type *player_ptr)
+static void display_player_stats(PlayerType *player_ptr)
 {
     char buf[80];
     for (int i = 0; i < A_MAX; i++) {
@@ -170,7 +170,7 @@ static void display_player_stats(player_type *player_ptr)
  * @param statmsg メッセージバッファ
  * @return 生きていたらFALSE、死んでいたらTRUE
  */
-static bool search_death_cause(player_type *player_ptr, char *statmsg)
+static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->is_dead)
@@ -220,7 +220,7 @@ static bool search_death_cause(player_type *player_ptr, char *statmsg)
  * @param statmsg メッセージバッファ
  * @return クエスト内であればTRUE、いなければFALSE
  */
-static bool decide_death_in_quest(player_type *player_ptr, char *statmsg)
+static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_quest || !quest_type::is_fixed(floor_ptr->inside_quest))
@@ -241,7 +241,7 @@ static bool decide_death_in_quest(player_type *player_ptr, char *statmsg)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
  */
-static void decide_current_floor(player_type *player_ptr, char *statmsg)
+static void decide_current_floor(PlayerType *player_ptr, char *statmsg)
 {
     if (search_death_cause(player_ptr, statmsg))
         return;
@@ -298,7 +298,7 @@ static void display_current_floor(char *statmsg)
  * Mode 4 = mutations
  * </pre>
  */
-void display_player(player_type *player_ptr, int mode)
+void display_player(PlayerType *player_ptr, int mode)
 {
     if ((player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations)
         mode = (mode % 6);
@@ -312,7 +312,7 @@ void display_player(player_type *player_ptr, int mode)
     display_player_basic_info(player_ptr);
     display_magic_realms(player_ptr);
 
-    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(MUTA::CHAOS_GIFT)))
+    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)))
         display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.c_str(), TERM_L_BLUE);
 
     display_phisique(player_ptr);
@@ -346,7 +346,7 @@ void display_player(player_type *player_ptr, int mode)
  * @param mode オプション
  * @todo y = 6、x = 0、mode = 0で固定。何とかする
  */
-void display_player_equippy(player_type *player_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
+void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {

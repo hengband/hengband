@@ -3698,13 +3698,12 @@ D:モリアの入口に向かって突進していった。」
 
 N:212:バルログの長ゴスモグの
 E:of Gothmog
-I:21:2:-2
-W:60:35:90:66666
-P:0:3d6:13:15:0
-F:INT | WIS | DEX | STEALTH | HIDE_TYPE | SLAY_HUMAN |
+I:21:2:3
+W:80:100:300:66666
+P:0:6d12:15:25:0
+F:STR | DEX | CON | HIDE_TYPE | 
 F:HEAVY_CURSE | CURSED | AGGRAVATE | 
-F:BRAND_FIRE | IM_FIRE | RES_ELEC | RES_DARK | LITE
-F:SLAY_ANIMAL | SLAY_ORC | SLAY_TROLL | SLAY_GIANT | 
+F:BRAND_FIRE | RES_FIRE | RES_ELEC | SH_FIRE | SELF_FIRE | RES_DARK | LITE_3 | 
 F:ACTIVATE | SHOW_MODS
 U:BA_FIRE_2
 D:$With this unbearably bright whip of flame, the Balrog Gothmog has become
@@ -4494,3 +4493,12 @@ D:$ blends easily into any shadows and never finds his or her movements
 D:$ hindered.
 D:遥か東の国の盗賊が身につける仕事着だ。
 D:その漆黒の装いは闇に溶け込み、いかなる体の動きをも邪魔しない。
+
+N:269:『レイトウメカジキ』
+E:Frozen Swordfish
+I:23:24:2
+W:30:5:200:48000
+P:0:3d11:10:10:0
+F:STR | CHR | HIDE_TYPE | BRAND_COLD | RES_COLD | SHOW_MODS |
+D:$A frozen Swordfish wielded as a great sword. Proof of the owner's angling mastery.
+D:メカジキを凍らせたもの。最強釣り師の証でもある。分類は大剣。

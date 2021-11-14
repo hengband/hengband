@@ -35,7 +35,7 @@
  * @param m_idx 逃走するモンスターの参照ID
  * @param mm 移動方向を返す方向IDの参照ポインタ
  */
-MonsterSweepGrid::MonsterSweepGrid(player_type *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
+MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , mm(mm)
@@ -58,7 +58,7 @@ bool MonsterSweepGrid::get_movable_grid()
     auto y2 = this->player_ptr->y;
     auto x2 = this->player_ptr->x;
     this->will_run = this->mon_will_run();
-    auto no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_cost(r_ptr) > 2;
+    auto no_flow = m_ptr->mflag2.has(MonsterConstantFlagType::NOFLOW) && floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_cost(r_ptr) > 2;
     this->can_pass_wall = any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr));
     if (!this->will_run && m_ptr->target_y) {
         int t_m_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;

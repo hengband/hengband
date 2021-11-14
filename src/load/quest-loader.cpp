@@ -66,7 +66,7 @@ static void load_quest_completion(quest_type *q_ptr)
         q_ptr->comptime = rd_u32b();
 }
 
-static void load_quest_details(player_type *player_ptr, quest_type *q_ptr, int loading_quest_index)
+static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, int loading_quest_index)
 {
     q_ptr->cur_num = rd_s16b();
     q_ptr->max_num = rd_s16b();
@@ -78,12 +78,12 @@ static void load_quest_details(player_type *player_ptr, quest_type *q_ptr, int l
 
     q_ptr->k_idx = rd_s16b();
     if (q_ptr->k_idx)
-        a_info[q_ptr->k_idx].gen_flags.set(TRG::QUESTITEM);
+        a_info[q_ptr->k_idx].gen_flags.set(ItemGenerationTraitType::QUESTITEM);
 
     q_ptr->flags = rd_byte();
 }
 
-void analyze_quests(player_type *player_ptr, const uint16_t max_quests_load, const byte max_rquests_load)
+void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, const byte max_rquests_load)
 {
     QUEST_IDX old_inside_quest = player_ptr->current_floor_ptr->inside_quest;
     for (int i = 0; i < max_quests_load; i++) {

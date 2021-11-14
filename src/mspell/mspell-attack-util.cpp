@@ -5,7 +5,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-msa_type *initialize_msa_type(player_type *player_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
+msa_type *initialize_msa_type(PlayerType *player_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
 {
     msa_ptr->m_idx = m_idx;
     msa_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -18,6 +18,6 @@ msa_type *initialize_msa_type(player_type *player_ptr, msa_type *msa_ptr, MONSTE
     msa_ptr->y_br_lite = 0;
     msa_ptr->do_spell = DO_SPELL_NONE;
     msa_ptr->dam = 0;
-    msa_ptr->thrown_spell = RF_ABILITY::MAX;
+    msa_ptr->thrown_spell = MonsterAbilityType::MAX;
     return msa_ptr;
 }

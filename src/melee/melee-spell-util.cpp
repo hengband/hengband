@@ -11,13 +11,13 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
-melee_spell_type *initialize_melee_spell_type(player_type *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
+melee_spell_type *initialize_melee_spell_type(PlayerType *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
 {
     ms_ptr->m_idx = m_idx;
     ms_ptr->y = 0;
     ms_ptr->x = 0;
     ms_ptr->target_idx = 0;
-    ms_ptr->thrown_spell = RF_ABILITY::MAX;
+    ms_ptr->thrown_spell = MonsterAbilityType::MAX;
     ms_ptr->dam = 0;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     ms_ptr->m_ptr = &floor_ptr->m_list[m_idx];
@@ -26,7 +26,7 @@ melee_spell_type *initialize_melee_spell_type(player_type *player_ptr, melee_spe
     ms_ptr->see_m = is_seen(player_ptr, ms_ptr->m_ptr);
     ms_ptr->maneable = player_has_los_bold(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx);
     ms_ptr->pet = is_pet(ms_ptr->m_ptr);
-    ms_ptr->in_no_magic_dungeon = d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && floor_ptr->dun_level
+    ms_ptr->in_no_magic_dungeon = d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level
         && (!floor_ptr->inside_quest || quest_type::is_fixed(floor_ptr->inside_quest));
     return ms_ptr;
 }

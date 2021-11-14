@@ -16,7 +16,7 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -31,15 +31,15 @@
  * @details
  * Sorry, it becomes not (void)...
  */
-void call_the_void(player_type *player_ptr)
+void call_the_void(PlayerType *player_ptr)
 {
     bool do_call = true;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < 9; i++) {
         auto *g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
 
-        if (!g_ptr->cave_has_flag(FF::PROJECT)) {
-            if (!g_ptr->mimic || f_info[g_ptr->mimic].flags.has_not(FF::PROJECT) || !permanent_wall(&f_info[g_ptr->feat])) {
+        if (!g_ptr->cave_has_flag(FloorFeatureType::PROJECT)) {
+            if (!g_ptr->mimic || f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::PROJECT) || !permanent_wall(&f_info[g_ptr->feat])) {
                 do_call = false;
                 break;
             }
@@ -49,17 +49,17 @@ void call_the_void(player_type *player_ptr)
     if (do_call) {
         for (int i = 1; i < 10; i++) {
             if (i - 5)
-                fire_ball(player_ptr, GF_ROCKET, i, 175, 2);
+                fire_ball(player_ptr, AttributeType::ROCKET, i, 175, 2);
         }
 
         for (int i = 1; i < 10; i++) {
             if (i - 5)
-                fire_ball(player_ptr, GF_MANA, i, 175, 3);
+                fire_ball(player_ptr, AttributeType::MANA, i, 175, 3);
         }
 
         for (int i = 1; i < 10; i++) {
             if (i - 5)
-                fire_ball(player_ptr, GF_NUKE, i, 175, 4);
+                fire_ball(player_ptr, AttributeType::NUKE, i, 175, 4);
         }
 
         return;
@@ -101,7 +101,7 @@ void call_the_void(player_type *player_ptr)
  * @param player_ptr 術者の参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
-bool vanish_dungeon(player_type *player_ptr)
+bool vanish_dungeon(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest);
@@ -125,8 +125,8 @@ bool vanish_dungeon(player_type *player_ptr)
                 }
             }
 
-            if (f_ptr->flags.has(FF::HURT_DISI))
-                cave_alter_feat(player_ptr, y, x, FF::HURT_DISI);
+            if (f_ptr->flags.has(FloorFeatureType::HURT_DISI))
+                cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_DISI);
         }
     }
 
@@ -135,9 +135,9 @@ bool vanish_dungeon(player_type *player_ptr)
         auto *f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
+        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
 
@@ -145,9 +145,9 @@ bool vanish_dungeon(player_type *player_ptr)
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
+        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
     }
@@ -158,9 +158,9 @@ bool vanish_dungeon(player_type *player_ptr)
         auto *f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
+        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
 
@@ -168,9 +168,9 @@ bool vanish_dungeon(player_type *player_ptr)
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FF::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FF::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FF::REMEMBER))
+        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
     }
@@ -189,7 +189,7 @@ bool vanish_dungeon(player_type *player_ptr)
  * @param rad 効力の半径
  * @details このファイルにいるのは、spells-trump.c と比べて行数が少なかったため。それ以上の意図はない
  */
-void cast_meteor(player_type *player_ptr, HIT_POINT dam, POSITION rad)
+void cast_meteor(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
 {
     int b = 10 + randint1(10);
     for (int i = 0; i < b; i++) {
@@ -210,7 +210,7 @@ void cast_meteor(player_type *player_ptr, HIT_POINT dam, POSITION rad)
 
             floor_type *floor_ptr = player_ptr->current_floor_ptr;
             if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)
-                || !cave_has_flag_bold(floor_ptr, y, x, FF::PROJECT))
+                || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT))
                 continue;
 
             break;
@@ -219,6 +219,6 @@ void cast_meteor(player_type *player_ptr, HIT_POINT dam, POSITION rad)
         if (count > 20)
             continue;
 
-        project(player_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
+        project(player_ptr, 0, rad, y, x, dam, AttributeType::METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
     }
 }

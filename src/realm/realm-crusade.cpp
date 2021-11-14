@@ -17,7 +17,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
@@ -35,15 +35,15 @@
  * @brief 破邪領域魔法の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
  */
-concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESCRIPTION;
-    bool info = mode == SPELL_INFO;
-    bool cast = mode == SPELL_CAST;
+    bool name = mode == SpellProcessType::NAME;
+    bool desc = mode == SpellProcessType::DESCRIPTION;
+    bool info = mode == SpellProcessType::INFO;
+    bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -62,7 +62,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
             }
         }
         break;
@@ -157,7 +157,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_blast(player_ptr, GF_LITE, dir, dice, sides, 10, 3);
+                fire_blast(player_ptr, AttributeType::LITE, dir, dice, sides, 10, 3);
             }
         }
         break;
@@ -193,7 +193,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_ball(player_ptr, GF_AWAY_EVIL, dir, power, 0);
+                fire_ball(player_ptr, AttributeType::AWAY_EVIL, dir, power, 0);
             }
         }
         break;
@@ -222,7 +222,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
+                fire_ball(player_ptr, AttributeType::HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
             }
         }
         break;
@@ -309,7 +309,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
-                fire_bolt(player_ptr, GF_ELEC, dir, dam);
+                fire_bolt(player_ptr, AttributeType::ELEC, dir, dam);
             }
         }
         break;
@@ -464,7 +464,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_ball(player_ptr, GF_LITE, dir, dam, rad);
+                fire_ball(player_ptr, AttributeType::LITE, dir, dam, rad);
             }
         }
         break;
@@ -620,7 +620,7 @@ concptr do_crusade_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mo
             if (info)
                 return format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
             if (cast) {
-                project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL);
+                project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, b_dam, AttributeType::HOLY_FIRE, PROJECT_KILL);
                 dispel_monsters(player_ptr, d_dam);
                 slow_monsters(player_ptr, plev);
                 stun_monsters(player_ptr, power);

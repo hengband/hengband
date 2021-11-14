@@ -9,7 +9,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-void effect_player_old_heal(player_type *player_ptr, effect_player_type *ep_ptr)
+void effect_player_old_heal(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     if (player_ptr->blind)
         msg_print(_("何らかの攻撃によって気分がよくなった。", "You are hit by something invigorating!"));
@@ -18,7 +18,7 @@ void effect_player_old_heal(player_type *player_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = 0;
 }
 
-void effect_player_old_speed(player_type *player_ptr, effect_player_type *ep_ptr)
+void effect_player_old_speed(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     if (player_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
@@ -27,7 +27,7 @@ void effect_player_old_speed(player_type *player_ptr, effect_player_type *ep_ptr
     ep_ptr->dam = 0;
 }
 
-void effect_player_old_slow(player_type *player_ptr)
+void effect_player_old_slow(PlayerType *player_ptr)
 {
     if (player_ptr->blind) {
         msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
@@ -36,7 +36,7 @@ void effect_player_old_slow(player_type *player_ptr)
     (void)BadStatusSetter(player_ptr).mod_slowness(randint0(4) + 4, false);
 }
 
-void effect_player_old_sleep(player_type *player_ptr, effect_player_type *ep_ptr)
+void effect_player_old_sleep(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     if (player_ptr->free_act)
         return;

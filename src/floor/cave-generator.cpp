@@ -48,7 +48,7 @@ static dun_data_type *initialize_dun_data_type(dun_data_type *dd_ptr, concptr *w
     return dd_ptr;
 }
 
-static void check_arena_floor(player_type *player_ptr, dun_data_type *dd_ptr)
+static void check_arena_floor(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!dd_ptr->empty_level) {
@@ -74,7 +74,7 @@ static void check_arena_floor(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 }
 
-static void place_cave_contents(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static void place_cave_contents(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 1)
@@ -99,7 +99,7 @@ static void place_cave_contents(player_type *player_ptr, dun_data_type *dd_ptr, 
     }
 }
 
-static bool decide_tunnel_planned_site(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr, int i)
+static bool decide_tunnel_planned_site(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr, int i)
 {
     dd_ptr->tunn_n = 0;
     dd_ptr->wall_n = 0;
@@ -116,7 +116,7 @@ static bool decide_tunnel_planned_site(player_type *player_ptr, dun_data_type *d
     return true;
 }
 
-static void make_tunnels(player_type *player_ptr, dun_data_type *dd_ptr)
+static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     for (int j = 0; j < dd_ptr->tunn_n; j++) {
         grid_type *g_ptr;
@@ -125,14 +125,14 @@ static void make_tunnels(player_type *player_ptr, dun_data_type *dd_ptr)
         dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
         f_ptr = &f_info[g_ptr->feat];
-        if (f_ptr->flags.has_not(FF::MOVE) || f_ptr->flags.has_none_of({FF::WATER, FF::LAVA})) {
+        if (f_ptr->flags.has_not(FloorFeatureType::MOVE) || f_ptr->flags.has_none_of({FloorFeatureType::WATER, FloorFeatureType::LAVA})) {
             g_ptr->mimic = 0;
             place_grid(player_ptr, g_ptr, GB_FLOOR);
         }
     }
 }
 
-static void make_walls(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+static void make_walls(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
 {
     for (int j = 0; j < dd_ptr->wall_n; j++) {
         grid_type *g_ptr;
@@ -141,12 +141,12 @@ static void make_walls(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_t
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
         g_ptr->mimic = 0;
         place_grid(player_ptr, g_ptr, GB_FLOOR);
-        if ((randint0(100) < dt_ptr->dun_tun_pen) && d_ptr->flags.has_not(DF::NO_DOORS))
+        if ((randint0(100) < dt_ptr->dun_tun_pen) && d_ptr->flags.has_not(DungeonFeatureType::NO_DOORS))
             place_random_door(player_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x, true);
     }
 }
 
-static bool make_centers(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+static bool make_centers(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
 {
     dd_ptr->tunnel_fail_count = 0;
     dd_ptr->door_n = 0;
@@ -165,7 +165,7 @@ static bool make_centers(player_type *player_ptr, dun_data_type *dd_ptr, dungeon
     return true;
 }
 
-static void make_doors(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr)
+static void make_doors(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr)
 {
     for (int i = 0; i < dd_ptr->door_n; i++) {
         dd_ptr->tunnel_y = dd_ptr->door[i].y;
@@ -187,11 +187,11 @@ static void make_only_tunnel_points(floor_type *floor_ptr, dun_data_type *dd_ptr
     }
 }
 
-static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static bool make_one_floor(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
-    if (d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_ROOM)) {
+    if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_ROOM)) {
         make_only_tunnel_points(floor_ptr, dd_ptr);
     } else {
         if (!generate_rooms(player_ptr, dd_ptr)) {
@@ -220,9 +220,9 @@ static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dunge
     return true;
 }
 
-static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static bool switch_making_floor(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
-    if (d_ptr->flags.has(DF::MAZE)) {
+    if (d_ptr->flags.has(DungeonFeatureType::MAZE)) {
         floor_type *floor_ptr = player_ptr->current_floor_ptr;
         build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, false);
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
@@ -244,7 +244,7 @@ static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, 
     return true;
 }
 
-static void make_aqua_streams(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static void make_aqua_streams(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     if (dd_ptr->laketype != 0)
         return;
@@ -262,7 +262,7 @@ static void make_aqua_streams(player_type *player_ptr, dun_data_type *dd_ptr, du
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
  * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
  */
-static void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
+static void place_bound_perm_wall(PlayerType *player_ptr, grid_type *g_ptr)
 {
     if (bound_walls_perm) {
         g_ptr->mimic = 0;
@@ -271,15 +271,15 @@ static void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
     }
 
     auto *f_ptr = &f_info[g_ptr->feat];
-    if (f_ptr->flags.has_any_of({FF::HAS_GOLD, FF::HAS_ITEM}) && f_ptr->flags.has_not(FF::SECRET)) {
-        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FF::ENSECRET);
+    if (f_ptr->flags.has_any_of({FloorFeatureType::HAS_GOLD, FloorFeatureType::HAS_ITEM}) && f_ptr->flags.has_not(FloorFeatureType::SECRET)) {
+        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FloorFeatureType::ENSECRET);
     }
 
     g_ptr->mimic = g_ptr->feat;
     place_grid(player_ptr, g_ptr, GB_SOLID_PERM);
 }
 
-static void make_perm_walls(player_type *player_ptr)
+static void make_perm_walls(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -293,7 +293,7 @@ static void make_perm_walls(player_type *player_ptr)
     }
 }
 
-static bool check_place_necessary_objects(player_type *player_ptr, dun_data_type *dd_ptr)
+static bool check_place_necessary_objects(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     if (!new_player_spot(player_ptr)) {
         *dd_ptr->why = _("プレイヤー配置に失敗", "Failed to place a player");
@@ -308,7 +308,7 @@ static bool check_place_necessary_objects(player_type *player_ptr, dun_data_type
     return true;
 }
 
-static void decide_dungeon_data_allocation(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static void decide_dungeon_data_allocation(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     dd_ptr->alloc_object_num = floor_ptr->dun_level / 3;
@@ -333,14 +333,14 @@ static void decide_dungeon_data_allocation(player_type *player_ptr, dun_data_typ
             dd_ptr->alloc_monster_num);
 }
 
-static bool allocate_dungeon_data(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static bool allocate_dungeon_data(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     dd_ptr->alloc_monster_num += randint1(8);
     for (dd_ptr->alloc_monster_num = dd_ptr->alloc_monster_num + dd_ptr->alloc_object_num; dd_ptr->alloc_monster_num > 0; dd_ptr->alloc_monster_num--)
         (void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
 
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(dd_ptr->alloc_object_num));
-    if (d_ptr->flags.has_not(DF::NO_CAVE))
+    if (d_ptr->flags.has_not(DungeonFeatureType::NO_CAVE))
         alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(dd_ptr->alloc_object_num));
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -362,7 +362,7 @@ static void decide_grid_glowing(floor_type *floor_ptr, dun_data_type *dd_ptr, du
 {
     bool is_empty_or_dark = dd_ptr->empty_level;
     is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
-    is_empty_or_dark &= d_ptr->flags.has_not(DF::DARKNESS);
+    is_empty_or_dark &= d_ptr->flags.has_not(DungeonFeatureType::DARKNESS);
     if (!is_empty_or_dark)
         return;
 
@@ -378,7 +378,7 @@ static void decide_grid_glowing(floor_type *floor_ptr, dun_data_type *dd_ptr, du
  * @param why エラー原因メッセージを返す
  * @return ダンジョン生成が全て無事に成功したらTRUEを返す。
  */
-bool cave_gen(player_type *player_ptr, concptr *why)
+bool cave_gen(PlayerType *player_ptr, concptr *why)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     reset_lite_area(floor_ptr);
@@ -395,7 +395,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
 
     dd_ptr->cent_n = 0;
     dungeon_type *d_ptr = &d_info[floor_ptr->dungeon_idx];
-    if (ironman_empty_levels || (d_ptr->flags.has(DF::ARENA) && (empty_levels && one_in_(EMPTY_LEVEL)))) {
+    if (ironman_empty_levels || (d_ptr->flags.has(DungeonFeatureType::ARENA) && (empty_levels && one_in_(EMPTY_LEVEL)))) {
         dd_ptr->empty_level = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
     }

@@ -4,32 +4,32 @@
 #include "spell/spells-util.h"
 
 struct object_type;
-struct player_type;
+class PlayerType;
 struct monster_type;
-bool heal_monster(player_type *player_ptr, DIRECTION dir, HIT_POINT dam);
-bool speed_monster(player_type *player_ptr, DIRECTION dir, int power);
-bool slow_monster(player_type *player_ptr, DIRECTION dir, int power);
-bool sleep_monster(player_type *player_ptr, DIRECTION dir, int power);
-bool stasis_monster(player_type *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
-bool stasis_evil(player_type *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
-bool confuse_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool stun_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool fear_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool poly_monster(player_type *player_ptr, DIRECTION dir, int power);
-bool clone_monster(player_type *player_ptr, DIRECTION dir);
-bool time_walk(player_type *player_ptr);
-void roll_hitdice(player_type *player_ptr, spell_operation options);
-bool life_stream(player_type *player_ptr, bool message, bool virtue_change);
-bool heroism(player_type *player_ptr, int base);
-bool berserk(player_type *player_ptr, int base);
-bool cure_light_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides);
-bool cure_serious_wounds(player_type *player_ptr, DICE_NUMBER dice, DICE_SID sides);
-bool cure_critical_wounds(player_type *player_ptr, HIT_POINT pow);
-bool true_healing(player_type *player_ptr, HIT_POINT pow);
-bool restore_mana(player_type *player_ptr, bool magic_eater);
-bool restore_all_status(player_type *player_ptr);
+bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam);
+bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power);
+bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power);
+bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power);
+bool stasis_monster(PlayerType *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
+bool stasis_evil(PlayerType *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
+bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool stun_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool fear_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power);
+bool clone_monster(PlayerType *player_ptr, DIRECTION dir);
+bool time_walk(PlayerType *player_ptr);
+void roll_hitdice(PlayerType *player_ptr, spell_operation options);
+bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change);
+bool heroism(PlayerType *player_ptr, int base);
+bool berserk(PlayerType *player_ptr, int base);
+bool cure_light_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides);
+bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides);
+bool cure_critical_wounds(PlayerType *player_ptr, HIT_POINT pow);
+bool true_healing(PlayerType *player_ptr, HIT_POINT pow);
+bool restore_mana(PlayerType *player_ptr, bool magic_eater);
+bool restore_all_status(PlayerType *player_ptr);
 
-bool fishing(player_type *player_ptr);
-bool cosmic_cast_off(player_type *player_ptr, object_type **o_ptr_ptr);
-void apply_nexus(monster_type *m_ptr, player_type *player_ptr);
-void status_shuffle(player_type *player_ptr);
+bool fishing(PlayerType *player_ptr);
+bool cosmic_cast_off(PlayerType *player_ptr, object_type **o_ptr_ptr);
+void apply_nexus(monster_type *m_ptr, PlayerType *player_ptr);
+void status_shuffle(PlayerType *player_ptr);

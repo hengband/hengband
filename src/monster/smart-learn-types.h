@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class SM {
+enum class MonsterSmartLearnType {
     RES_ACID = 0, /*!< モンスターの学習フラグ: プレイヤーに酸耐性あり */
     RES_ELEC = 1, /*!< モンスターの学習フラグ: プレイヤーに電撃耐性あり */
     RES_FIRE = 2, /*!< モンスターの学習フラグ: プレイヤーに火炎耐性あり */

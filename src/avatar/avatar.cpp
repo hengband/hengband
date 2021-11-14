@@ -53,7 +53,7 @@ concptr virtue[MAX_VIRTUE] = {
  * @return 比較の真偽値を返す
  * @todo 引数名を直しておく
  */
-bool compare_virtue(player_type *player_ptr, int type, int num, int tekitou)
+bool compare_virtue(PlayerType *player_ptr, int type, int num, int tekitou)
 {
     int vir = virtue_number(player_ptr, type) ? player_ptr->virtues[virtue_number(player_ptr, type) - 1] : 0;
     switch (tekitou) {
@@ -77,7 +77,7 @@ bool compare_virtue(player_type *player_ptr, int type, int num, int tekitou)
  * @param type 確認したい徳のID
  * @return スロットがあるならばスロットのID(0～7)+1、ない場合は0を返す。
  */
-int virtue_number(player_type *player_ptr, int type)
+int virtue_number(PlayerType *player_ptr, int type)
 {
     for (int i = 0; i < 8; i++)
         if (player_ptr->vir_types[i] == type)
@@ -90,7 +90,7 @@ int virtue_number(player_type *player_ptr, int type)
  * @brief プレイヤーの職業や種族に依存しないランダムな徳を取得する / Aux function
  * @param which 確認したい徳のID
  */
-static void get_random_virtue(player_type *player_ptr, int which)
+static void get_random_virtue(PlayerType *player_ptr, int which)
 {
     int type = 0;
     while (!(type) || virtue_number(player_ptr, type)) {
@@ -153,7 +153,7 @@ static void get_random_virtue(player_type *player_ptr, int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static enum virtue_idx get_realm_virtues(player_type *player_ptr, int16_t realm)
+static enum virtue_idx get_realm_virtues(PlayerType *player_ptr, int16_t realm)
 {
     switch (realm) {
     case REALM_LIFE:
@@ -211,7 +211,7 @@ static enum virtue_idx get_realm_virtues(player_type *player_ptr, int16_t realm)
  * @brief 作成中のプレイヤーキャラクターに徳8種類を与える。 / Select virtues & reset values for a new character
  * @details 職業に応じて1～4種が固定、種族に応じて1種類が与えられ、後は重複なくランダムに選択される。
  */
-void initialize_virtues(player_type *player_ptr)
+void initialize_virtues(PlayerType *player_ptr)
 {
     int i = 0, j = 0;
     int16_t tmp_vir;
@@ -441,7 +441,7 @@ void initialize_virtues(player_type *player_ptr)
  * @param virtue 徳のID
  * @param amount 加減量
  */
-void chg_virtue(player_type *player_ptr, int virtue_id, int amount)
+void chg_virtue(PlayerType *player_ptr, int virtue_id, int amount)
 {
     for (int i = 0; i < 8; i++) {
         if (player_ptr->vir_types[i] != virtue_id)
@@ -499,7 +499,7 @@ void chg_virtue(player_type *player_ptr, int virtue_id, int amount)
  * @param virtue 徳のID
  * @param amount セットしたい値
  */
-void set_virtue(player_type *player_ptr, int virtue_id, int amount)
+void set_virtue(PlayerType *player_ptr, int virtue_id, int amount)
 {
     for (int i = 0; i < 8; i++)
         if (player_ptr->vir_types[i] == virtue_id) {
@@ -512,7 +512,7 @@ void set_virtue(player_type *player_ptr, int virtue_id, int amount)
  * @brief 徳のダンプ表示を行う
  * @param out_file ファイルポインタ
  */
-void dump_virtues(player_type *player_ptr, FILE *out_file)
+void dump_virtues(PlayerType *player_ptr, FILE *out_file)
 {
     if (!out_file)
         return;

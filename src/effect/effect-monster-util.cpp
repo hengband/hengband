@@ -24,18 +24,18 @@
  * @param y 目標y座標 / Target y location (or location to travel "towards")
  * @param x 目標x座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
- * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param attribute 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
  */
-static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
+static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
 {
 	em_ptr->who = who;
 	em_ptr->r = r;
 	em_ptr->y = y;
 	em_ptr->x = x;
 	em_ptr->dam = dam;
-	em_ptr->effect_type = effect_type;
+	em_ptr->attribute = attribute;
 	em_ptr->flag = flag;
 	em_ptr->see_s_msg = see_s_msg;
 }
@@ -50,13 +50,13 @@ static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX w
  * @param y 目標y座標 / Target y location (or location to travel "towards")
  * @param x 目標x座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
- * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param attribute 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
  */
-effect_monster_type *initialize_effect_monster(player_type *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
+effect_monster_type *initialize_effect_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
 {
-	substitute_effect_monster(em_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
+	substitute_effect_monster(em_ptr, who, r, y, x, dam, attribute, flag, see_s_msg);
 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	em_ptr->g_ptr = &floor_ptr->grid_array[em_ptr->y][em_ptr->x];

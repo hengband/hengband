@@ -116,7 +116,7 @@ void ItemLoader10::rd_item(object_type *o_ptr)
     o_ptr->stack_idx = any_bits(flags, SaveDataItemFlagType::STACK_IDX) ? rd_s16b() : 0;
     if (any_bits(flags, SaveDataItemFlagType::SMITH) && !loading_savefile_version_is_older_than(7)) {
         if (auto tmp16s = rd_s16b(); tmp16s > 0) {
-            o_ptr->smith_effect = static_cast<SmithEffect>(tmp16s);
+            o_ptr->smith_effect = static_cast<SmithEffectType>(tmp16s);
         }
 
         if (auto tmp16s = rd_s16b(); tmp16s > 0) {

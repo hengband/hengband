@@ -12,9 +12,9 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool vampirism(player_type *player_ptr)
+bool vampirism(PlayerType *player_ptr)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;
     }

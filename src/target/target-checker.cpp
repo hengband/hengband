@@ -40,7 +40,7 @@ POSITION target_row;
  * The map is reprinted if necessary, and "TRUE" is returned.
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-void verify_panel(player_type *player_ptr)
+void verify_panel(PlayerType *player_ptr)
 {
     POSITION y = player_ptr->y;
     POSITION x = player_ptr->x;
@@ -117,7 +117,7 @@ void verify_panel(player_type *player_ptr)
  * Update (if necessary) and verify (if possible) the target.
  * We return TRUE if the target is "okay" and FALSE otherwise.
  */
-bool target_okay(player_type *player_ptr)
+bool target_okay(PlayerType *player_ptr)
 {
     if (target_who < 0)
         return true;

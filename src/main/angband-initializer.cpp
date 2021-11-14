@@ -208,7 +208,7 @@ static void put_title(void)
  * @param no_term TRUEならゲーム画面無しの状態で初期化を行う。
  *                コマンドラインからスポイラーの出力のみを行う時の使用を想定する。
  */
-void init_angband(player_type *player_ptr, bool no_term)
+void init_angband(PlayerType *player_ptr, bool no_term)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class DF {
+enum class DungeonFeatureType {
     WINNER,
     MAZE,
     SMALLEST,

@@ -29,7 +29,7 @@
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n
  */
-void apply_magic_weapon(player_type *player_ptr, object_type *o_ptr, DEPTH level, int power)
+void apply_magic_weapon(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
 {
     HIT_PROB tohit1 = randint1(5) + (HIT_PROB)m_bonus(5, level);
     HIT_POINT todam1 = randint1(5) + (HIT_POINT)m_bonus(5, level);
@@ -58,7 +58,7 @@ void apply_magic_weapon(player_type *player_ptr, object_type *o_ptr, DEPTH level
         }
 
         if (o_ptr->to_h + o_ptr->to_d < 0)
-            o_ptr->curse_flags.set(TRC::CURSED);
+            o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
 
     if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))

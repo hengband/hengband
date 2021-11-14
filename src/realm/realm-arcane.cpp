@@ -14,7 +14,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-arcane.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
@@ -29,15 +29,15 @@
  * @brief 秘術領域魔法の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
- * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
+ * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
  */
-concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mode)
+concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
-    bool name = mode == SPELL_NAME;
-    bool desc = mode == SPELL_DESCRIPTION;
-    bool info = mode == SPELL_INFO;
-    bool cast = mode == SPELL_CAST;
+    bool name = mode == SpellProcessType::NAME;
+    bool desc = mode == SpellProcessType::DESCRIPTION;
+    bool info = mode == SpellProcessType::INFO;
+    bool cast = mode == SpellProcessType::CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -60,7 +60,7 @@ concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
+                fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
             }
         }
         break;
@@ -538,7 +538,7 @@ concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
-                fire_beam(player_ptr, GF_AWAY_ALL, dir, power);
+                fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
             }
         }
         break;
@@ -557,23 +557,23 @@ concptr do_arcane_spell(player_type *player_ptr, SPELL_IDX spell, spell_type mod
                 return info_damage(0, 0, dam);
 
             if (cast) {
-                int type;
+                AttributeType type;
 
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
 
                 switch (randint1(4)) {
                 case 1:
-                    type = GF_FIRE;
+                    type = AttributeType::FIRE;
                     break;
                 case 2:
-                    type = GF_ELEC;
+                    type = AttributeType::ELEC;
                     break;
                 case 3:
-                    type = GF_COLD;
+                    type = AttributeType::COLD;
                     break;
                 default:
-                    type = GF_ACID;
+                    type = AttributeType::ACID;
                     break;
                 }
 

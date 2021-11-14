@@ -177,7 +177,7 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
     }
 }
 
-static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int c1, int c2, int c3, FEAT_IDX feat1, FEAT_IDX feat2, FEAT_IDX feat3,
+static bool hack_isnt_wall(PlayerType *player_ptr, POSITION y, POSITION x, int c1, int c2, int c3, FEAT_IDX feat1, FEAT_IDX feat2, FEAT_IDX feat3,
     BIT_FLAGS info1, BIT_FLAGS info2, BIT_FLAGS info3)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -228,7 +228,7 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
  * Quick and nasty fill routine used to find the connected region
  * of floor in the middle of the grids
  */
-static void cave_fill(player_type *player_ptr, const POSITION y, const POSITION x)
+static void cave_fill(PlayerType *player_ptr, const POSITION y, const POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
@@ -264,7 +264,7 @@ static void cave_fill(player_type *player_ptr, const POSITION y, const POSITION 
     }
 }
 
-bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int cutoff, bool light, bool room)
+bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int cutoff, bool light, bool room)
 {
     POSITION xhsize = xsize / 2;
     POSITION yhsize = ysize / 2;
@@ -387,7 +387,7 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
     return true;
 }
 
-bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
+bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
 {
     FEAT_IDX feat1, feat2, feat3;
     POSITION xhsize = xsize / 2;
@@ -477,8 +477,8 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
                 place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
 
             floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
-            if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FF::LAVA)) {
-                if (d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
+            if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FloorFeatureType::LAVA)) {
+                if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
                     floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
             }
         }

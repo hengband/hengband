@@ -7,7 +7,7 @@
 #define DP_CURSE 1<<1L
 #define DP_LITE 1<<2L
 
-struct player_type;
-void display_player_flag_info_1(player_type *player_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16));
-void display_player_flag_info_2(player_type *player_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16));
-void display_player_flag_info_3(player_type *player_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16));
+class PlayerType;
+void display_player_flag_info_1(PlayerType *player_ptr, void (*display_player_equippy)(PlayerType *, TERM_LEN, TERM_LEN, BIT_FLAGS16));
+void display_player_flag_info_2(PlayerType *player_ptr, void (*display_player_equippy)(PlayerType *, TERM_LEN, TERM_LEN, BIT_FLAGS16));
+void display_player_flag_info_3(PlayerType *player_ptr, void (*display_player_equippy)(PlayerType *, TERM_LEN, TERM_LEN, BIT_FLAGS16));

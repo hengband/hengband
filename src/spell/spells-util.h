@@ -4,14 +4,14 @@
 #define DETECT_RAD_MAP 30
 #define DETECT_RAD_ALL 255
 
-enum spell_type {
-    SPELL_NAME = 0,
-    SPELL_DESCRIPTION = 1,
-    SPELL_INFO = 2,
-    SPELL_CAST = 3,
-    SPELL_FAIL = 4,
-    SPELL_STOP = 5,
-    SPELL_CONTNUATION = 6
+enum class SpellProcessType {
+    NAME = 0,
+    DESCRIPTION = 1,
+    INFO = 2,
+    CAST = 3,
+    FAIL = 4,
+    STOP = 5,
+    CONTNUATION = 6
 };
 
 enum spell_operation {

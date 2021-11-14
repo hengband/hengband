@@ -29,7 +29,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -48,7 +48,7 @@
  * @param m_ptr 使用するモンスターの構造体参照ポインタ
  * @return ビームが到達可能ならばTRUEを返す
  */
-bool direct_beam(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
+bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
@@ -90,15 +90,15 @@ bool direct_beam(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
  * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
  * @return ブレスを直接当てられるならばTRUEを返す
  */
-bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
+bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, AttributeType typ, bool is_friend)
 {
     BIT_FLAGS flg;
     switch (typ) {
-    case GF_LITE:
-    case GF_LITE_WEAK:
+    case AttributeType::LITE:
+    case AttributeType::LITE_WEAK:
         flg = PROJECT_LOS;
         break;
-    case GF_DISINTEGRATE:
+    case AttributeType::DISINTEGRATE:
         flg = PROJECT_DISI;
         break;
     default:
@@ -122,7 +122,7 @@ bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y
             if (!cave_los_bold(player_ptr->current_floor_ptr, ny, nx))
                 break;
         } else {
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT))
                 break;
         }
 
@@ -185,7 +185,7 @@ bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y
  * @param tx 目標X座標を返す参照ポインタ
  * @param flg 判定のフラグ配列
  */
-void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
+void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
     uint16_t path_g[128];
     int path_n = projection_path(player_ptr, path_g, get_max_range(player_ptr), sy, sx, *ty, *tx, flg);
@@ -194,7 +194,7 @@ void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITI
     for (int i = 0; i < path_n; i++) {
         sy = get_grid_y(path_g[i]);
         sx = get_grid_x(path_g[i]);
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, sy, sx, FF::PROJECT))
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, sy, sx, FloorFeatureType::PROJECT))
             break;
 
         *ty = sy;
@@ -210,7 +210,7 @@ void get_project_point(player_type *player_ptr, POSITION sy, POSITION sx, POSITI
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。
  */
-bool dispel_check_monster(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+bool dispel_check_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
     monster_type *t_ptr = &player_ptr->current_floor_ptr->m_list[t_idx];
     if (monster_invulner_remaining(t_ptr))
@@ -231,7 +231,7 @@ bool dispel_check_monster(player_type *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
  * @param m_idx モンスターの構造体配列ID
  * @return 魔力消去をかけるべきならTRUEを返す。
  */
-bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
+bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     if (is_invuln(player_ptr))
         return true;
@@ -259,7 +259,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
 
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_ACID)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
@@ -267,7 +267,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_FIRE)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_FIRE)) {
         if (!((player_ptr->prace == PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
             if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)))
                 return true;
@@ -277,7 +277,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_ELEC)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ELEC)) {
         if (!has_immune_elec(player_ptr) && (player_ptr->oppose_elec || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
@@ -285,7 +285,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has(RF_ABILITY::BR_COLD)) {
+    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_COLD)) {
         if (!has_immune_cold(player_ptr) && (player_ptr->oppose_cold || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
 
@@ -293,7 +293,7 @@ bool dispel_check(player_type *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has_any_of({ RF_ABILITY::BR_POIS, RF_ABILITY::BR_NUKE }) && !((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
+    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
         if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST))
             return true;
 

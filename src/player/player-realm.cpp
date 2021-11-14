@@ -72,12 +72,12 @@ const std::vector<BIT_FLAGS> realm_choices2 = {
     (CH_NONE), /* Elementalist */
 };
 
-ItemKindType get_realm1_book(player_type *player_ptr)
+ItemKindType get_realm1_book(PlayerType *player_ptr)
 {
     return ItemKindType::LIFE_BOOK + player_ptr->realm1 - 1;
 }
 
-ItemKindType get_realm2_book(player_type *player_ptr)
+ItemKindType get_realm2_book(PlayerType *player_ptr)
 {
     return ItemKindType::LIFE_BOOK + player_ptr->realm2 - 1;
 }

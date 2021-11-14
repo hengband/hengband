@@ -7,7 +7,7 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
-PlayerInfravision::PlayerInfravision(player_type *player_ptr)
+PlayerInfravision::PlayerInfravision(PlayerType *player_ptr)
     : PlayerStatusBase(player_ptr)
 {
 }
@@ -44,7 +44,7 @@ int16_t PlayerInfravision::race_value()
 int16_t PlayerInfravision::mutation_value()
 {
     int16_t result = 0;
-    if (this->player_ptr->muta.has(MUTA::INFRAVIS)) {
+    if (this->player_ptr->muta.has(PlayerMutationType::INFRAVIS)) {
         result += 3;
     }
 

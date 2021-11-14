@@ -6,5 +6,5 @@ enum save_type {
 	SAVE_TYPE_DEBUG = 2
 };
 
-struct player_type;
-bool save_player(player_type *player_ptr, save_type type);
+class PlayerType;
+bool save_player(PlayerType *player_ptr, save_type type);

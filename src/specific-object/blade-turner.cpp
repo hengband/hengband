@@ -1,7 +1,7 @@
 ﻿#include "specific-object/blade-turner.h"
 #include "hpmp/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spell-types.h"
+#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
@@ -9,14 +9,14 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
-bool activate_bladeturner(player_type *player_ptr)
+bool activate_bladeturner(PlayerType *player_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
         return false;
 
     msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
-    fire_breath(player_ptr, GF_MISSILE, dir, 300, 4);
+    fire_breath(player_ptr, AttributeType::MISSILE, dir, 300, 4);
     msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
     (void)BadStatusSetter(player_ptr).afraidness(0);
     (void)set_hero(player_ptr, randint1(50) + 50, false);

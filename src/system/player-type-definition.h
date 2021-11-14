@@ -17,14 +17,14 @@
 
 enum class ItemKindType : short;
 enum class PlayerSkillKindType;
-enum class RF_ABILITY;
+enum class MonsterAbilityType;
 
 struct floor_type;
 struct object_type;
 class TimedEffects;
-struct player_type {
+class PlayerType {
 public:
-    player_type();
+    PlayerType();
     int player_uid{};
     int player_euid{};
     int player_egid{};
@@ -151,7 +151,7 @@ public:
 
     int16_t chaos_patron{};
 
-    EnumClassFlagGroup<MUTA> muta{}; /*!< 突然変異 / mutations */
+    EnumClassFlagGroup<PlayerMutationType> muta{}; /*!< 突然変異 / mutations */
 
     int16_t virtues[8]{};
     int16_t vir_types[8]{};
@@ -317,8 +317,8 @@ public:
     BIT_FLAGS anti_magic{}; /* Anti-magic */
     BIT_FLAGS anti_tele{}; /* Prevent teleportation */
 
-    EnumClassFlagGroup<TRC> cursed{}; /* Player is cursed */
-    EnumClassFlagGroup<TRCS> cursed_special{}; /* Player is special type cursed */
+    EnumClassFlagGroup<CurseTraitType> cursed{}; /* Player is cursed */
+    EnumClassFlagGroup<CurseSpecialTraitType> cursed_special{}; /* Player is special type cursed */
 
     bool can_swim{}; /* No damage falling */
     BIT_FLAGS levitation{}; /* No damage falling */
@@ -418,4 +418,4 @@ private:
     std::shared_ptr<TimedEffects> timed_effects;
 };
 
-extern player_type *p_ptr;
+extern PlayerType *p_ptr;

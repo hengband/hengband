@@ -66,98 +66,98 @@ static HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
 static HIT_POINT monspell_damage_base(
-    player_type *player_ptr, RF_ABILITY ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
+    PlayerType *player_ptr, MonsterAbilityType ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
     HIT_POINT dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
     switch (ms_type) {
-    case RF_ABILITY::SHRIEK:
+    case MonsterAbilityType::SHRIEK:
         return -1;
-    case RF_ABILITY::XXX1:
+    case MonsterAbilityType::XXX1:
         return -1;
-    case RF_ABILITY::DISPEL:
+    case MonsterAbilityType::DISPEL:
         return -1;
-    case RF_ABILITY::ROCKET:
+    case MonsterAbilityType::ROCKET:
         dam = (hp / 4) > 800 ? 800 : (hp / 4);
         break;
-    case RF_ABILITY::SHOOT:
+    case MonsterAbilityType::SHOOT:
         dice_num = shoot_dd;
         dice_side = shoot_ds;
         dam = shoot_base;
         break;
-    case RF_ABILITY::XXX2:
+    case MonsterAbilityType::XXX2:
         return -1;
-    case RF_ABILITY::XXX3:
+    case MonsterAbilityType::XXX3:
         return -1;
-    case RF_ABILITY::XXX4:
+    case MonsterAbilityType::XXX4:
         return -1;
 
-    case RF_ABILITY::BR_ACID:
-    case RF_ABILITY::BR_ELEC:
-    case RF_ABILITY::BR_FIRE:
-    case RF_ABILITY::BR_COLD:
+    case MonsterAbilityType::BR_ACID:
+    case MonsterAbilityType::BR_ELEC:
+    case MonsterAbilityType::BR_FIRE:
+    case MonsterAbilityType::BR_COLD:
         dam = ((hp / 3) > 1600 ? 1600 : (hp / 3));
         break;
-    case RF_ABILITY::BR_POIS:
+    case MonsterAbilityType::BR_POIS:
         dam = ((hp / 3) > 800 ? 800 : (hp / 3));
         break;
-    case RF_ABILITY::BR_NETH:
+    case MonsterAbilityType::BR_NETH:
         dam = ((hp / 6) > 550 ? 550 : (hp / 6));
         break;
-    case RF_ABILITY::BR_LITE:
-    case RF_ABILITY::BR_DARK:
+    case MonsterAbilityType::BR_LITE:
+    case MonsterAbilityType::BR_DARK:
         dam = ((hp / 6) > 400 ? 400 : (hp / 6));
         break;
-    case RF_ABILITY::BR_CONF:
-    case RF_ABILITY::BR_SOUN:
+    case MonsterAbilityType::BR_CONF:
+    case MonsterAbilityType::BR_SOUN:
         dam = ((hp / 6) > 450 ? 450 : (hp / 6));
         break;
-    case RF_ABILITY::BR_CHAO:
+    case MonsterAbilityType::BR_CHAO:
         dam = ((hp / 6) > 600 ? 600 : (hp / 6));
         break;
-    case RF_ABILITY::BR_DISE:
+    case MonsterAbilityType::BR_DISE:
         dam = ((hp / 6) > 500 ? 500 : (hp / 6));
         break;
-    case RF_ABILITY::BR_NEXU:
+    case MonsterAbilityType::BR_NEXU:
         dam = ((hp / 3) > 250 ? 250 : (hp / 3));
         break;
-    case RF_ABILITY::BR_TIME:
+    case MonsterAbilityType::BR_TIME:
         dam = ((hp / 3) > 150 ? 150 : (hp / 3));
         break;
-    case RF_ABILITY::BR_INER:
-    case RF_ABILITY::BR_GRAV:
+    case MonsterAbilityType::BR_INER:
+    case MonsterAbilityType::BR_GRAV:
         dam = ((hp / 6) > 200 ? 200 : (hp / 6));
         break;
-    case RF_ABILITY::BR_SHAR:
+    case MonsterAbilityType::BR_SHAR:
         dam = ((hp / 6) > 500 ? 500 : (hp / 6));
         break;
-    case RF_ABILITY::BR_PLAS:
+    case MonsterAbilityType::BR_PLAS:
         dam = ((hp / 6) > 150 ? 150 : (hp / 6));
         break;
-    case RF_ABILITY::BR_FORC:
+    case MonsterAbilityType::BR_FORC:
         dam = ((hp / 6) > 200 ? 200 : (hp / 6));
         break;
-    case RF_ABILITY::BR_MANA:
+    case MonsterAbilityType::BR_MANA:
         dam = ((hp / 3) > 250 ? 250 : (hp / 3));
         break;
-    case RF_ABILITY::BA_NUKE:
+    case MonsterAbilityType::BA_NUKE:
         mult = powerful ? 2 : 1;
         dam = rlev * (mult / div);
         dice_num = 10;
         dice_side = 6;
         break;
-    case RF_ABILITY::BR_NUKE:
+    case MonsterAbilityType::BR_NUKE:
         dam = ((hp / 3) > 800 ? 800 : (hp / 3));
         break;
-    case RF_ABILITY::BA_CHAO:
+    case MonsterAbilityType::BA_CHAO:
         dam = (powerful ? (rlev * 3) : (rlev * 2));
         dice_num = 10;
         dice_side = 10;
         break;
-    case RF_ABILITY::BR_DISI:
+    case MonsterAbilityType::BR_DISI:
         dam = ((hp / 6) > 150 ? 150 : (hp / 6));
         break;
-    case RF_ABILITY::BA_ACID:
+    case MonsterAbilityType::BA_ACID:
         if (powerful) {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -169,7 +169,7 @@ static HIT_POINT monspell_damage_base(
         }
 
         break;
-    case RF_ABILITY::BA_ELEC:
+    case MonsterAbilityType::BA_ELEC:
         if (powerful) {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -181,7 +181,7 @@ static HIT_POINT monspell_damage_base(
         }
 
         break;
-    case RF_ABILITY::BA_FIRE:
+    case MonsterAbilityType::BA_FIRE:
         if (powerful) {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -193,7 +193,7 @@ static HIT_POINT monspell_damage_base(
         }
 
         break;
-    case RF_ABILITY::BA_COLD:
+    case MonsterAbilityType::BA_COLD:
         if (powerful) {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -205,130 +205,130 @@ static HIT_POINT monspell_damage_base(
         }
 
         break;
-    case RF_ABILITY::BA_POIS:
+    case MonsterAbilityType::BA_POIS:
         mult = powerful ? 2 : 1;
         dice_num = 12;
         dice_side = 2;
         break;
-    case RF_ABILITY::BA_NETH:
+    case MonsterAbilityType::BA_NETH:
         dam = 50 + rlev * (powerful ? 2 : 1);
         dice_num = 10;
         dice_side = 10;
         break;
-    case RF_ABILITY::BA_WATE:
+    case MonsterAbilityType::BA_WATE:
         dam = 50;
         dice_num = 1;
         dice_side = powerful ? (rlev * 3) : (rlev * 2);
         break;
-    case RF_ABILITY::BA_MANA:
-    case RF_ABILITY::BA_DARK:
+    case MonsterAbilityType::BA_MANA:
+    case MonsterAbilityType::BA_DARK:
         dam = (rlev * 4) + 50;
         dice_num = 10;
         dice_side = 10;
         break;
-    case RF_ABILITY::DRAIN_MANA:
+    case MonsterAbilityType::DRAIN_MANA:
         dam = rlev;
         div = 1;
         dice_num = 1;
         dice_side = rlev;
         break;
-    case RF_ABILITY::MIND_BLAST:
+    case MonsterAbilityType::MIND_BLAST:
         dice_num = 7;
         dice_side = 7;
         break;
-    case RF_ABILITY::BRAIN_SMASH:
+    case MonsterAbilityType::BRAIN_SMASH:
         dice_num = 12;
         dice_side = 12;
         break;
-    case RF_ABILITY::CAUSE_1:
+    case MonsterAbilityType::CAUSE_1:
         dice_num = 3;
         dice_side = 8;
         break;
-    case RF_ABILITY::CAUSE_2:
+    case MonsterAbilityType::CAUSE_2:
         dice_num = 8;
         dice_side = 8;
         break;
-    case RF_ABILITY::CAUSE_3:
+    case MonsterAbilityType::CAUSE_3:
         dice_num = 10;
         dice_side = 15;
         break;
-    case RF_ABILITY::CAUSE_4:
+    case MonsterAbilityType::CAUSE_4:
         dice_num = 15;
         dice_side = 15;
         break;
-    case RF_ABILITY::BO_ACID:
+    case MonsterAbilityType::BO_ACID:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 7;
         dice_side = 8;
         break;
-    case RF_ABILITY::BO_ELEC:
+    case MonsterAbilityType::BO_ELEC:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 4;
         dice_side = 8;
         break;
-    case RF_ABILITY::BO_FIRE:
+    case MonsterAbilityType::BO_FIRE:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 9;
         dice_side = 8;
         break;
-    case RF_ABILITY::BO_COLD:
+    case MonsterAbilityType::BO_COLD:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 6;
         dice_side = 8;
         break;
-    case RF_ABILITY::BA_LITE:
+    case MonsterAbilityType::BA_LITE:
         dam = (rlev * 4) + 50;
         dice_num = 10;
         dice_side = 10;
         break;
-    case RF_ABILITY::BO_NETH:
+    case MonsterAbilityType::BO_NETH:
         dam = 30 + (rlev * 4) / (powerful ? 2 : 3);
         dice_num = 5;
         dice_side = 5;
         break;
-    case RF_ABILITY::BO_WATE:
+    case MonsterAbilityType::BO_WATE:
         dam = (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 10;
         dice_side = 10;
         break;
-    case RF_ABILITY::BO_MANA:
+    case MonsterAbilityType::BO_MANA:
         dam = 50;
         dice_num = 1;
         dice_side = rlev * 7 / 2;
         break;
-    case RF_ABILITY::BO_PLAS:
+    case MonsterAbilityType::BO_PLAS:
         dam = 10 + (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 8;
         dice_side = 7;
         break;
-    case RF_ABILITY::BO_ICEE:
+    case MonsterAbilityType::BO_ICEE:
         dam = (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 6;
         dice_side = 6;
         break;
-    case RF_ABILITY::MISSILE:
+    case MonsterAbilityType::MISSILE:
         dam = (rlev / 3);
         dice_num = 2;
         dice_side = 6;
         break;
-    case RF_ABILITY::SCARE:
+    case MonsterAbilityType::SCARE:
         return -1;
-    case RF_ABILITY::BLIND:
+    case MonsterAbilityType::BLIND:
         return -1;
-    case RF_ABILITY::CONF:
+    case MonsterAbilityType::CONF:
         return -1;
-    case RF_ABILITY::SLOW:
+    case MonsterAbilityType::SLOW:
         return -1;
-    case RF_ABILITY::HOLD:
+    case MonsterAbilityType::HOLD:
         return -1;
-    case RF_ABILITY::HASTE:
+    case MonsterAbilityType::HASTE:
         return -1;
 
-    case RF_ABILITY::HAND_DOOM:
+    case MonsterAbilityType::HAND_DOOM:
         mult = player_ptr->chp;
         div = 100;
         dam = 40 * (mult / div);
@@ -336,72 +336,72 @@ static HIT_POINT monspell_damage_base(
         dice_side = 20;
         break;
 
-    case RF_ABILITY::HEAL:
+    case MonsterAbilityType::HEAL:
         return -1;
-    case RF_ABILITY::INVULNER:
+    case MonsterAbilityType::INVULNER:
         return -1;
-    case RF_ABILITY::BLINK:
+    case MonsterAbilityType::BLINK:
         return -1;
-    case RF_ABILITY::TPORT:
+    case MonsterAbilityType::TPORT:
         return -1;
-    case RF_ABILITY::WORLD:
+    case MonsterAbilityType::WORLD:
         return -1;
-    case RF_ABILITY::SPECIAL:
+    case MonsterAbilityType::SPECIAL:
         return -1;
-    case RF_ABILITY::TELE_TO:
+    case MonsterAbilityType::TELE_TO:
         return -1;
-    case RF_ABILITY::TELE_AWAY:
+    case MonsterAbilityType::TELE_AWAY:
         return -1;
-    case RF_ABILITY::TELE_LEVEL:
+    case MonsterAbilityType::TELE_LEVEL:
         return -1;
 
-    case RF_ABILITY::PSY_SPEAR:
+    case MonsterAbilityType::PSY_SPEAR:
         dam = powerful ? 150 : 100;
         dice_num = 1;
         dice_side = powerful ? (rlev * 2) : (rlev * 3 / 2);
         break;
 
-    case RF_ABILITY::DARKNESS:
+    case MonsterAbilityType::DARKNESS:
         return -1;
-    case RF_ABILITY::TRAPS:
+    case MonsterAbilityType::TRAPS:
         return -1;
-    case RF_ABILITY::FORGET:
+    case MonsterAbilityType::FORGET:
         return -1;
-    case RF_ABILITY::RAISE_DEAD:
+    case MonsterAbilityType::RAISE_DEAD:
         return -1;
-    case RF_ABILITY::S_KIN:
+    case MonsterAbilityType::S_KIN:
         return -1;
-    case RF_ABILITY::S_CYBER:
+    case MonsterAbilityType::S_CYBER:
         return -1;
-    case RF_ABILITY::S_MONSTER:
+    case MonsterAbilityType::S_MONSTER:
         return -1;
-    case RF_ABILITY::S_MONSTERS:
+    case MonsterAbilityType::S_MONSTERS:
         return -1;
-    case RF_ABILITY::S_ANT:
+    case MonsterAbilityType::S_ANT:
         return -1;
-    case RF_ABILITY::S_SPIDER:
+    case MonsterAbilityType::S_SPIDER:
         return -1;
-    case RF_ABILITY::S_HOUND:
+    case MonsterAbilityType::S_HOUND:
         return -1;
-    case RF_ABILITY::S_HYDRA:
+    case MonsterAbilityType::S_HYDRA:
         return -1;
-    case RF_ABILITY::S_ANGEL:
+    case MonsterAbilityType::S_ANGEL:
         return -1;
-    case RF_ABILITY::S_DEMON:
+    case MonsterAbilityType::S_DEMON:
         return -1;
-    case RF_ABILITY::S_UNDEAD:
+    case MonsterAbilityType::S_UNDEAD:
         return -1;
-    case RF_ABILITY::S_DRAGON:
+    case MonsterAbilityType::S_DRAGON:
         return -1;
-    case RF_ABILITY::S_HI_UNDEAD:
+    case MonsterAbilityType::S_HI_UNDEAD:
         return -1;
-    case RF_ABILITY::S_HI_DRAGON:
+    case MonsterAbilityType::S_HI_DRAGON:
         return -1;
-    case RF_ABILITY::S_AMBERITES:
+    case MonsterAbilityType::S_AMBERITES:
         return -1;
-    case RF_ABILITY::S_UNIQUE:
+    case MonsterAbilityType::S_UNIQUE:
         return -1;
-    case RF_ABILITY::MAX:
+    case MonsterAbilityType::MAX:
         return -1;
     }
 
@@ -450,7 +450,7 @@ void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_damage(player_type *player_ptr, RF_ABILITY ms_type, MONSTER_IDX m_idx, int TYPE)
+HIT_POINT monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_IDX m_idx, int TYPE)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -471,7 +471,7 @@ HIT_POINT monspell_damage(player_type *player_ptr, RF_ABILITY ms_type, MONSTER_I
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONRACE_IDX r_idx, int TYPE)
+HIT_POINT monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONRACE_IDX r_idx, int TYPE)
 {
     monster_race *r_ptr = &r_info[r_idx];
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -491,7 +491,7 @@ HIT_POINT monspell_race_damage(player_type *player_ptr, RF_ABILITY ms_type, MONR
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-HIT_POINT monspell_bluemage_damage(player_type *player_ptr, RF_ABILITY ms_type, PLAYER_LEVEL plev, int TYPE)
+HIT_POINT monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, int TYPE)
 {
     int hp = player_ptr->chp;
     int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
