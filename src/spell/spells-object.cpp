@@ -131,6 +131,8 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
                     continue;
                 if (a_ref.cur_num > 0)
                     continue;
+
+                a_idx = a_ref.idx;
                 break;
             }
 
