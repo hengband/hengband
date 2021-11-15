@@ -277,6 +277,17 @@ void do_cmd_wield(PlayerType *player_ptr)
         break;
     }
 
+    /* アヌビス二刀流ポルナレフ：[瞬を失う代わりに永遠の呪いを付与 */
+    if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ANUBIS) && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_SILVER_CHARIOT)) {
+        player_ptr->inventory_list[INVEN_MAIN_HAND].art_flags.reset(tr_type::TR_NO_TELE);
+        player_ptr->inventory_list[INVEN_MAIN_HAND].curse_flags.set(CurseTraitType::PERMA_CURSE);
+        player_ptr->inventory_list[INVEN_SUB_HAND].curse_flags.set(CurseTraitType::PERMA_CURSE);
+    } else if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_SILVER_CHARIOT) && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_ANUBIS)) {
+        player_ptr->inventory_list[INVEN_MAIN_HAND].curse_flags.set(CurseTraitType::PERMA_CURSE);
+        player_ptr->inventory_list[INVEN_SUB_HAND].art_flags.reset(tr_type::TR_NO_TELE);
+        player_ptr->inventory_list[INVEN_SUB_HAND].curse_flags.set(CurseTraitType::PERMA_CURSE);
+    }
+
     describe_flavor(player_ptr, o_name, o_ptr, 0);
     msg_format(act, o_name, index_to_label(slot));
     if (o_ptr->is_cursed()) {
