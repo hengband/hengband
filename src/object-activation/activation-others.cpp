@@ -14,6 +14,7 @@
 #include "effect/effect-processor.h"
 #include "game-option/special-options.h"
 #include "hpmp/hp-mp-processor.h"
+#include "mind/mind-archer.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-indice-types.h"
@@ -396,4 +397,10 @@ bool activate_detect_treasure(PlayerType *player_ptr)
 {
     msg_print(_("金と銀に彩られている...", "It shines with gold and silver..."));
     return detect_treasure(player_ptr, DETECT_RAD_DEFAULT);
+}
+
+bool activate_create_ammo(PlayerType *player_ptr)
+{
+    msg_print(_("ダイアナの祝福を感じた...", "You feel Diana's breath..."));
+    return create_ammo(player_ptr);
 }

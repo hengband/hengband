@@ -137,6 +137,7 @@ enum class RandomArtActType : short {
     ULTIMATE_RESIST = 138,
     ELBERETH = 139,
     DETECT_TREASURE = 140,
+    CREATE_AMMO = 141,
     /* 141 - 245 unused */
     FALLING_STAR = 246,
     STRAIN_HASTE = 247,
