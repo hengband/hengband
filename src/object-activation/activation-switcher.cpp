@@ -244,6 +244,10 @@ bool switch_activation(PlayerType *player_ptr, object_type **o_ptr_ptr, const ac
         msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
         (void)set_fast(player_ptr, randint1(20) + 20, false);
         return true;
+    case RandomArtActType::MID_SPEED:
+        msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
+        (void)set_fast(player_ptr, randint1(50) + 50, false);
+        return true;
     case RandomArtActType::XTRA_SPEED:
         msg_print(_("明るく輝いている...", "It glows brightly..."));
         (void)set_fast(player_ptr, randint1(75) + 75, false);

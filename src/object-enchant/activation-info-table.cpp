@@ -89,6 +89,7 @@ const std::vector<activation_type> activation_info = {
     { "PROT_EVIL", RandomArtActType::PROT_EVIL, 30, 5000, { 100, 0 }, _("対邪悪結界(期間 3*レベル+d25)", "protect evil (dur level*3 + d25)") },
     { "RESIST_ALL", RandomArtActType::RESIST_ALL, 30, 5000, { 111, 0 }, _("全耐性(期間 20+d20)", "resist elements (dur 20+d20)") },
     { "SPEED", RandomArtActType::SPEED, 40, 15000, { 250, 0 }, _("加速(期間 20+d20)", "speed (dur 20+d20)") },
+    { "MID_SPEED", RandomArtActType::MID_SPEED, 40, 20000, { 250, 0 }, _("加速(期間 50+d50)", "speed (dur 50+d50)") },
     { "XTRA_SPEED", RandomArtActType::XTRA_SPEED, 40, 25000, { 200, 200 }, _("加速(期間 75+d75)", "speed (dur 75+d75)") },
     { "WRAITH", RandomArtActType::WRAITH, 90, 25000, { 1000, 0 }, _("幽体化(期間 (レベル/2)+d(レベル/2))", "wraith form (dur level/2 + d(level/2))") },
     { "INVULN", RandomArtActType::INVULN, 90, 25000, { 1000, 0 }, _("無敵化(期間 8+d8)", "invulnerability (dur 8+d8)") },
