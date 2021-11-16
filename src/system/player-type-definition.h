@@ -25,6 +25,8 @@ class TimedEffects;
 class PlayerType {
 public:
     PlayerType();
+    bool is_true_winner() const;
+
     int player_uid{};
     int player_euid{};
     int player_egid{};

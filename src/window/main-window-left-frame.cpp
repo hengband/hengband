@@ -27,7 +27,7 @@ void print_title(PlayerType *player_ptr)
     GAME_TEXT str[14];
     concptr p = "";
     if (w_ptr->total_winner) {
-        if (player_ptr->arena_number > MAX_ARENA_MONS + 2) {
+        if (player_ptr->is_true_winner()) {
             p = _("*真・勝利者*", "*TRUEWINNER*");
         } else {
             p = _("***勝利者***", "***WINNER***");
