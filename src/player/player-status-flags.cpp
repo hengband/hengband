@@ -453,6 +453,7 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
     case TR_SELF_FIRE:
     case TR_SELF_COLD:
     case TR_SELF_ELEC:
+    case TR_PERSITENT_CURSE:
         return check_equipment_flags(player_ptr, tr_flag);
 
     case TR_FLAG_MAX:
@@ -1069,6 +1070,8 @@ void update_curses(PlayerType *player_ptr)
             player_ptr->cursed.set(CurseTraitType::SLOW_REGEN);
         if (flgs.has(TR_BERS_RAGE))
             player_ptr->cursed.set(CurseTraitType::BERS_RAGE);
+        if (flgs.has(TR_PERSITENT_CURSE))
+            player_ptr->cursed.set(CurseTraitType::PERSISTENT_CURSE);
 
         auto obj_curse_flags = o_ptr->curse_flags;
         obj_curse_flags.reset({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE });
