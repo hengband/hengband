@@ -135,7 +135,7 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
     if (pa_ptr->m_ptr->mtimed[MTIMED_INVULNER])
         dd += 3;
 
-    msg_print(_("武器が敵の魔力を吸い取った！", "The weapon drains mana of your enemy!"));
+    msg_print(_("武器が敵の魔力を吸い取った！", "The weapon drains mana from your enemy!"));
     dispel_monster_status(player_ptr, pa_ptr->m_idx);
 
     auto sp = damroll(dd, 8);
