@@ -149,5 +149,6 @@ const std::vector<activation_type> activation_info = {
     { "TREE_CREATION", RandomArtActType::TREE_CREATION, 50, 25000, { 1000, 0 }, _("森林生成", "tree creation") },
     { "ELBERETH", RandomArtActType::ELBERETH, 10, 30000, { 75, 0 }, _("エルベレスの結界", "Rune of Elbereth") },
     { "DETECT_TREASURE", RandomArtActType::DETECT_TREASURE, 10, 3000, {35, 0}, _("財宝感知", "detect treasure") },
+    { "HERO_BLESS", RandomArtActType::HERO_BLESS, 10, 500, { 30, 30 }, _("士気高揚、祝福", "hero, bless") },
     { nullptr, RandomArtActType::NONE, 0, 0, { 0, 0 }, "" },
 };

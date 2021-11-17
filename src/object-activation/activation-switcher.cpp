@@ -375,6 +375,10 @@ bool switch_activation(PlayerType *player_ptr, object_type **o_ptr_ptr, const ac
         return activate_bloody_moon(player_ptr, o_ptr);
     case RandomArtActType::CRIMSON:
         return activate_crimson(player_ptr, o_ptr);
+    case RandomArtActType::HERO_BLESS:
+        (void)set_hero(player_ptr, randint1(25) + 25, false);
+        (void)set_blessed(player_ptr, randint1(25) + 25, true);
+        return true;
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
         return false;
