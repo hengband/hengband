@@ -575,7 +575,7 @@ bool ObjectQuaffEntity::check_can_quaff()
         return false;
     }
 
-    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて瓶の蓋を開けられなかった！", "You were not able to quaff it by the stun!"));
+    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて瓶の蓋を開けられなかった！", "You are too stunned to quaff it!"));
 }
 
 /*!
