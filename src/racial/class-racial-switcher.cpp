@@ -126,7 +126,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi = rpi_type(_("幻惑の光", "Confusing Light"));
         rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
         rpi.text = _("周辺のモンスターを減速・朦朧・混乱・朦朧・恐怖・睡眠させようとする。抵抗されると無効。",
-            "Tries to make all monsters in your sight slowed, stuned, confused, scared, sleeped.");
+            "Tries to make all monsters in your sight slowed, stunned, confused, scared, sleeped.");
         rpi.min_level = 40;
         rpi.cost = 50;
         rpi.stat = A_INT;
