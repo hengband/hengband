@@ -589,7 +589,7 @@ process_result effect_monster_void(PlayerType* player_ptr, effect_monster_type* 
 
     if (any_bits(em_ptr->r_ptr->flags2, RF2_QUANTUM)) {
         em_ptr->note = _("の存在確率が減少した。", "'s wave function is reduced.");
-        em_ptr->note_dies = _("は観測されなくなった。", "'s wave function is collapsed.");
+        em_ptr->note_dies = _("は観測されなくなった。", "'s wave function collapses.");
         em_ptr->dam *= 2;
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
             set_bits(em_ptr->r_ptr->r_flags2, RF2_QUANTUM);
