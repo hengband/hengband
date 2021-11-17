@@ -150,5 +150,6 @@ const std::vector<activation_type> activation_info = {
     { "ELBERETH", RandomArtActType::ELBERETH, 10, 30000, { 75, 0 }, _("エルベレスの結界", "Rune of Elbereth") },
     { "DETECT_TREASURE", RandomArtActType::DETECT_TREASURE, 10, 3000, {35, 0}, _("財宝感知", "detect treasure") },
     { "HERO_BLESS", RandomArtActType::HERO_BLESS, 10, 500, { 30, 30 }, _("士気高揚、祝福", "hero, bless") },
+    { "CREATE_AMMO", RandomArtActType::CREATE_AMMO, 10, 30000, { 200, 0 }, _("弾/矢の製造", "Create Ammo") },
     { nullptr, RandomArtActType::NONE, 0, 0, { 0, 0 }, "" },
 };
