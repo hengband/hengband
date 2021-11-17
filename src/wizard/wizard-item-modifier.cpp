@@ -881,7 +881,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 str_tolower(o_name);
 #endif
                 if (cheat_xtra)
-                    msg_format("mathcing ego no.%d %s...", e_ref.idx, o_name);
+                    msg_format("matching ego no.%d %s...", e_ref.idx, o_name);
 
                 if (_(!strncmp(str, o_name, strlen(o_name)), !strrncmp(str, o_name, strlen(o_name)))) {
                     if (is_slot_able_to_be_ego(player_ptr, o_ptr) != e_ref.slot)
