@@ -503,6 +503,7 @@ void one_activation(object_type *o_ptr)
         case RandomArtActType::SUMMON_ELEMENTAL:
         case RandomArtActType::CURE_700:
         case RandomArtActType::SPEED:
+        case RandomArtActType::MID_SPEED:
         case RandomArtActType::ID_FULL:
         case RandomArtActType::RUNE_PROT:
             chance = 25;
