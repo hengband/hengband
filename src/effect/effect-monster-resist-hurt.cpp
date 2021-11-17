@@ -652,8 +652,8 @@ process_result effect_monster_abyss(PlayerType *player_ptr, effect_monster_type 
                 set_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_TELE);
         }
 
-        em_ptr->note = _("は深淵に囚われていく。", " has be captured by abyss.");
-        em_ptr->note_dies = _("は深淵に堕ちてしまった。", " has fall in abyss.");
+        em_ptr->note = _("は深淵に囚われていく。", " is trapped in the abyss.");
+        em_ptr->note_dies = _("は深淵に堕ちてしまった。", " has fallen into the abyss.");
 
         if (one_in_(3) && set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50))
             em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
