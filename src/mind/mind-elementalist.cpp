@@ -1437,7 +1437,7 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
         f_ptr = player_ptr->current_floor_ptr;
 
         if (distance(y, x, player_ptr->y, player_ptr->x) > dist) {
-            msg_print(_("遠すぎる！", "There is too far!"));
+            msg_print(_("遠すぎる！", "That is too far!"));
             continue;
         }
 
@@ -1453,7 +1453,7 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
     if (flag) {
         teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
     } else {
-        msg_print(_("闇の扉は開かなかった！", "Door to darkness does not open!"));
+        msg_print(_("闇の扉は開かなかった！", "The door to darkness does not open!"));
     }
     return true;
 }
