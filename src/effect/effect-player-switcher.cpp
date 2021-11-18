@@ -3,7 +3,7 @@
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
-#include "effect/effect-player-util.h"
+#include "effect/effect-player.h"
 #include "player/player-damage.h"
 #include "effect/attribute-types.h"
 #include "system/player-type-definition.h"

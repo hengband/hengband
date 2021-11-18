@@ -2,7 +2,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
-#include "effect/effect-player-util.h"
+#include "effect/effect-player.h"
 #include "mind/mind-mirror-master.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"

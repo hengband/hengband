@@ -8,7 +8,7 @@
 #include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-player-switcher.h"
-#include "effect/effect-player-util.h"
+#include "effect/effect-player.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"

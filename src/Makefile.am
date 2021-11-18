@@ -188,7 +188,6 @@ hengband_SOURCES = \
 	effect/effect-monster-evil.cpp effect/effect-monster-evil.h \
 	effect/effect-monster-spirit.cpp effect/effect-monster-spirit.h \
 	effect/effect-monster-switcher.cpp effect/effect-monster-switcher.h \
-	effect/effect-player-util.h \
 	effect/effect-player-resist-hurt.cpp effect/effect-player-resist-hurt.h \
 	effect/effect-player-oldies.cpp effect/effect-player-oldies.h \
 	effect/effect-player-curse.cpp effect/effect-player-curse.h \

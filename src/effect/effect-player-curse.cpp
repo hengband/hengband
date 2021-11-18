@@ -1,6 +1,6 @@
 ﻿#include "effect/effect-player-curse.h"
 #include "blue-magic/blue-magic-checker.h"
-#include "effect/effect-player-util.h"
+#include "effect/effect-player.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/object-curse.h"

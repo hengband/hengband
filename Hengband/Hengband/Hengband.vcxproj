@@ -1579,7 +1579,6 @@
     <ClInclude Include="..\..\src\effect\effect-player-resist-hurt.h" />
     <ClInclude Include="..\..\src\effect\effect-player-spirit.h" />
     <ClInclude Include="..\..\src\effect\effect-player-switcher.h" />
-    <ClInclude Include="..\..\src\effect\effect-player-util.h" />
     <ClInclude Include="..\..\src\effect\effect-player.h" />
     <ClInclude Include="..\..\src\effect\spells-effect-util.h" />
     <ClInclude Include="..\..\src\floor\pattern-walk.h" />
