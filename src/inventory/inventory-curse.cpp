@@ -36,7 +36,7 @@
 
 namespace {
 const EnumClassFlagGroup<CurseTraitType> TRC_P_FLAG_MASK({ CurseTraitType::TY_CURSE, CurseTraitType::DRAIN_EXP, CurseTraitType::ADD_L_CURSE, CurseTraitType::ADD_H_CURSE, CurseTraitType::CALL_ANIMAL, CurseTraitType::CALL_DEMON,
-    CurseTraitType::CALL_DRAGON, CurseTraitType::COWARDICE, CurseTraitType::TELEPORT, CurseTraitType::DRAIN_HP, CurseTraitType::DRAIN_MANA, CurseTraitType::CALL_UNDEAD, CurseTraitType::BERS_RAGE });
+    CurseTraitType::CALL_DRAGON, CurseTraitType::COWARDICE, CurseTraitType::TELEPORT, CurseTraitType::DRAIN_HP, CurseTraitType::DRAIN_MANA, CurseTraitType::CALL_UNDEAD, CurseTraitType::BERS_RAGE, CurseTraitType::PERSISTENT_CURSE });
 const EnumClassFlagGroup<CurseSpecialTraitType> TRCS_P_FLAG_MASK({ CurseSpecialTraitType::TELEPORT_SELF, CurseSpecialTraitType::CHAINSWORD });
 }
 
@@ -58,6 +58,7 @@ static bool is_specific_curse(CurseTraitType flag)
     case CurseTraitType::FAST_DIGEST:
     case CurseTraitType::SLOW_REGEN:
     case CurseTraitType::BERS_RAGE:
+    case CurseTraitType::PERSISTENT_CURSE:
         return true;
     default:
         return false;
@@ -116,6 +117,9 @@ static void choise_cursed_item(CurseTraitType flag, object_type *o_ptr, int *cho
         break;
     case CurseTraitType::BERS_RAGE:
         cf = TR_BERS_RAGE;
+        break;
+    case CurseTraitType::PERSISTENT_CURSE:
+        cf = TR_PERSITENT_CURSE;
         break;
     default:
         break;
@@ -265,6 +269,24 @@ static void multiply_high_curse(PlayerType *player_ptr)
     player_ptr->update |= (PU_BONUS);
 }
 
+static void persist_curse(PlayerType *player_ptr)
+{
+    if ((player_ptr->cursed.has_not(CurseTraitType::PERSISTENT_CURSE)) || !one_in_(500))
+        return;
+
+    object_type *o_ptr;
+    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::PERSISTENT_CURSE);
+    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+        return;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+    msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
+    o_ptr->feeling = FEEL_NONE;
+    player_ptr->update |= (PU_BONUS);
+}
+
 static void curse_call_monster(PlayerType *player_ptr)
 {
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
@@ -406,6 +428,7 @@ static void occur_curse_effects(PlayerType *player_ptr)
     curse_drain_exp(player_ptr);
     multiply_low_curse(player_ptr);
     multiply_high_curse(player_ptr);
+    persist_curse(player_ptr);
     curse_call_monster(player_ptr);
     curse_cowardice(player_ptr);
     curse_berserk_rage(player_ptr);

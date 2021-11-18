@@ -28,6 +28,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
@@ -283,6 +284,15 @@ void do_cmd_wield(PlayerType *player_ptr)
         msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
         chg_virtue(player_ptr, V_HARMONY, -1);
         o_ptr->ident |= (IDENT_SENSE);
+    }
+
+    if (object_flags(o_ptr).has(TR_PERSITENT_CURSE) && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
+        GAME_TEXT o_name[MAX_NLEN];
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+        msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
+        o_ptr->feeling = FEEL_NONE;
+        player_ptr->update |= (PU_BONUS);
     }
 
     if ((o_ptr->name1 == ART_STONEMASK) && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID))
