@@ -202,7 +202,7 @@ bool cast_summon_octopus(PlayerType *player_ptr)
 bool cast_summon_greater_demon(PlayerType *player_ptr)
 {
     concptr q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
-    concptr s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
+    concptr s = _("捧げられる死体を持っていない。", "You have nothing to sacrifice.");
     OBJECT_IDX item;
     object_type *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_offerable));
