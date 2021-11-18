@@ -219,33 +219,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
 
         for (i = 0; i < 4; i++) {
             monster_race *r_ptr = &r_info[battle_mon[i]];
-            int num_taisei = count_bits(r_ptr->flagsr & (RFR_IM_ACID | RFR_IM_ELEC | RFR_IM_FIRE | RFR_IM_COLD | RFR_IM_POIS));
-
-            if (r_ptr->flags1 & RF1_FORCE_MAXHP)
-                power[i] = r_ptr->hdice * r_ptr->hside * 2;
-            else
-                power[i] = r_ptr->hdice * (r_ptr->hside + 1);
-            power[i] = power[i] * (100 + r_ptr->level) / 100;
-            if (r_ptr->speed > 110)
-                power[i] = power[i] * (r_ptr->speed * 2 - 110) / 100;
-            if (r_ptr->speed < 110)
-                power[i] = power[i] * (r_ptr->speed - 20) / 100;
-            if (num_taisei > 2)
-                power[i] = power[i] * (num_taisei * 2 + 5) / 10;
-            else if (r_ptr->ability_flags.has(MonsterAbilityType::INVULNER))
-                power[i] = power[i] * 4 / 3;
-            else if (r_ptr->ability_flags.has(MonsterAbilityType::HEAL))
-                power[i] = power[i] * 4 / 3;
-            else if (r_ptr->ability_flags.has(MonsterAbilityType::DRAIN_MANA))
-                power[i] = power[i] * 11 / 10;
-            if (r_ptr->flags1 & RF1_RAND_25)
-                power[i] = power[i] * 9 / 10;
-            if (r_ptr->flags1 & RF1_RAND_50)
-                power[i] = power[i] * 9 / 10;
-            if (r_ptr->flagsr & RFR_RES_ALL)
-                power[i] *= 100000;
-            if (r_ptr->arena_ratio)
-                power[i] = power[i] * r_ptr->arena_ratio / 100;
+            power[i] = calc_monrace_power(r_ptr);
             total += power[i];
         }
 
