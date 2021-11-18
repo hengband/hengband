@@ -26637,7 +26637,7 @@ F:UNIQUE | DROP_90 | DROP_GREAT | DROP_CORPSE | ANIMAL | EVIL
 F:FORCE_MAXHP | NO_STUN | NO_FEAR | NO_CONF | NO_SLEEP | RES_NETH
 F:RES_CHAO | RES_NEXU | CAN_FLY | KILL_BODY
 D:$At first glance, it appears to be just an adorable white rabbit.
-D:$  However, the very rabbit is the guardian of the Cave of Caerbannog,
+D:$  However, this very rabbit is the guardian of the Cave of Caerbannog,
 D:$ where the clue to the Holy Grail lies.
 D:$  This legendary black beast is the origin of all vorpal bunnies and killer rabbits.
 D:$  Its incisors have slaughtered many knights and fools who have approached it recklessly.
