@@ -532,5 +532,5 @@ bool ObjectReadEntity::check_can_read()
         return false;
     }
 
-    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて読めなかった！", "You were not able to read it by the stun!"));
+    return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて読めなかった！", "You too stunned to read it!"));
 }

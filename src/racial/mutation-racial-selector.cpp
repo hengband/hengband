@@ -82,7 +82,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
     if (player_ptr->muta.has(PlayerMutationType::RADIATION)) {
         rpi = rpi_type(_("放射能", "Emit Radiation"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
-        rpi.text = _("自分を中心とする放射性廃棄物のボールを放つ。", "Bursst nuke ball.");
+        rpi.text = _("自分を中心とする放射性廃棄物のボールを放つ。", "Burst nuke ball.");
         rpi.min_level = 15;
         rpi.cost = 15;
         rpi.stat = A_CON;
@@ -293,7 +293,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi = rpi_type(_("眩惑", "Dazzle"));
         rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
         rpi.text = _("周辺のモンスターを混乱・朦朧・恐怖させようとする。抵抗されると無効。",
-            "Tries to make all monsters in your sight confused, stuned, scared.");
+            "Tries to make all monsters in your sight confused, stunned, scared.");
         rpi.min_level = 7;
         rpi.cost = 15;
         rpi.stat = A_CHR;

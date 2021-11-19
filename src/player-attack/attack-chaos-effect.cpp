@@ -87,7 +87,7 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
     } else if (can_resist && randint0(100) < r_ptr->level) {
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
     } else {
-        msg_format(_("%^sは朦朧としたようだ。", "%^s appears stuned."), pa_ptr->m_name);
+        msg_format(_("%^sは朦朧としたようだ。", "%^s appears stunned."), pa_ptr->m_name);
         (void)set_monster_stunned(player_ptr, pa_ptr->m_idx, monster_stunned_remaining(pa_ptr->m_ptr) + 10 + randint0(player_ptr->lev) / 5);
     }
 }
@@ -135,7 +135,7 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
     if (pa_ptr->m_ptr->mtimed[MTIMED_INVULNER])
         dd += 3;
 
-    msg_print(_("武器が敵の魔力を吸い取った！", "The weapon drains mana of your enemy!"));
+    msg_print(_("武器が敵の魔力を吸い取った！", "The weapon drains mana from your enemy!"));
     dispel_monster_status(player_ptr, pa_ptr->m_idx);
 
     auto sp = damroll(dd, 8);

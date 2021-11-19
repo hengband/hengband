@@ -663,7 +663,7 @@ void effect_player_void(PlayerType *player_ptr, effect_player_type *ep_ptr)
 void effect_player_abyss(PlayerType *player_ptr, effect_player_type *ep_ptr)
 {
     auto effect_mes = player_ptr->blind ? _("身体が沈み込む気がする！", "You feel you are sinking into something!")
-                                        : _("深淵があなたを誘い込んでいる！", "You are falling in abyss!");
+                                        : _("深淵があなたを誘い込んでいる！", "You are falling into the abyss!");
     msg_print(effect_mes);
     ep_ptr->dam = ep_ptr->dam * calc_abyss_damage_rate(player_ptr, CALC_RAND) / 100;
     BadStatusSetter bss(player_ptr);
@@ -679,7 +679,7 @@ void effect_player_abyss(PlayerType *player_ptr, effect_player_type *ep_ptr)
         return;
     }
 
-    msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes you from abyss!"));
+    msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes at you from the abyss!"));
     if (!has_resist_chaos(player_ptr)) {
         (void)bss.mod_hallucination(randint1(10));
     }

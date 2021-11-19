@@ -435,7 +435,7 @@ N:1345:GREAT THING, the Huge Battle Ship
 is shimmering.
 
 N:1346:Caim, the disputant of hell
-says, 'Xaphan! Put that fucking bastard in the flames of the hell caldron!' 
+says, 'Xaphan! Put that fucking bastard in the flames of the hell cauldron!'
 says, 'It's time for discussion! You barbarian!'
 
 N:*:Default lines
