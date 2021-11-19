@@ -215,8 +215,7 @@ void print_tomb(PlayerType *player_ptr)
     term_clear();
     char buf[1024];
     read_dead_file(buf, sizeof(buf));
-    concptr p = (w_ptr->total_winner || (player_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificent")
-                                                                          : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
+    concptr p = w_ptr->total_winner ? _("偉大なる者", "Magnificent") : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
 
     center_string(buf, player_ptr->name);
     put_str(buf, 6, 11);
