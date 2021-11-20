@@ -121,6 +121,9 @@ static void choise_cursed_item(CurseTraitType flag, object_type *o_ptr, int *cho
     case CurseTraitType::PERSISTENT_CURSE:
         cf = TR_PERSITENT_CURSE;
         break;
+    case CurseTraitType::VUL_CURSE:
+        cf = TR_VUL_CURSE;
+        break;
     default:
         break;
     }

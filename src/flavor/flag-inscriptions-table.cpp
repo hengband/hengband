@@ -39,7 +39,7 @@ std::vector<flag_insc_table> flag_insc_immune = {
 /*! オブジェクトの特性表示記号テーブルの定義(弱点) */
 std::vector<flag_insc_table> flag_insc_vuln = {
     { N("酸", "Ac"), TR_VUL_ACID, TR_IM_ACID }, { N("電", "El"), TR_VUL_ELEC, TR_IM_ELEC }, { N("火", "Fi"), TR_VUL_FIRE, TR_IM_FIRE }, { N("冷", "Co"), TR_VUL_COLD, TR_IM_COLD },
-    { N("閃", "Li"), TR_VUL_LITE, -1 }
+    { N("閃", "Li"), TR_VUL_LITE, -1 }, { N("呪", "Cu"), TR_VUL_CURSE, -1 }
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(耐性) */

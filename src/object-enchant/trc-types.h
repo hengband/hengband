@@ -26,6 +26,7 @@ enum class CurseTraitType {
     CALL_UNDEAD = 21,
     BERS_RAGE = 22,
     PERSISTENT_CURSE = 23,
+    VUL_CURSE = 24,
     MAX,
 };
 
