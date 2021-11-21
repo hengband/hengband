@@ -134,6 +134,19 @@ static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 }
 
 /*!
+ * @brief アーティファクトの弱点付与を構造体に収める /
+ * Note the immunities granted by an object
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param immune_list 弱点構造体の参照ポインタ
+ */
+static void analyze_vulnerable(object_type *o_ptr, concptr *vulnerable_list)
+{
+    auto flgs = object_flags(o_ptr);
+    vulnerable_list = spoiler_flag_aux(flgs, vulnerable_flags_desc, vulnerable_list, N_ELEMENTS(vulnerable_flags_desc));
+    *vulnerable_list = nullptr;
+}
+
+/*!
  * @brief アーティファクトの維持特性を構造体に収める /
  * Note which stats an object sustains
  * @param o_ptr オブジェクト構造体の参照ポインタ
@@ -281,6 +294,7 @@ void object_analyze(PlayerType *player_ptr, object_type *o_ptr, obj_desc_list *d
     analyze_slay(o_ptr, desc_ptr->slays);
     analyze_immune(o_ptr, desc_ptr->immunities);
     analyze_resist(o_ptr, desc_ptr->resistances);
+    analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
     analyze_sustains(o_ptr, desc_ptr->sustains);
     analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
     analyze_addition(o_ptr, desc_ptr->addition);
@@ -303,6 +317,7 @@ void random_artifact_analyze(PlayerType *player_ptr, object_type *o_ptr, obj_des
     analyze_slay(o_ptr, desc_ptr->slays);
     analyze_immune(o_ptr, desc_ptr->immunities);
     analyze_resist(o_ptr, desc_ptr->resistances);
+    analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
     analyze_sustains(o_ptr, desc_ptr->sustains);
     analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
     desc_ptr->activation = activation_explanation(o_ptr);

@@ -11,6 +11,7 @@
 #define MAX_SLAY_FLAGS_DESCRIPTION 20
 #define MAX_BRAND_FLAGS_DESCRIPTION 12
 #define MAX_RESISTANCE_FLAGS_DESCRIPTION 19
+#define MAX_VULNERABLE_FLAGS_DESCRIPTION 6
 #define MAX_IMMUNITY_FLAGS_DESCRIPTION 4
 #define MAX_SUSTAINER_FLAGS_DESCRIPTION 6
 #define MAX_MISC2_FLAGS_DESCRIPTION 4
@@ -40,6 +41,7 @@ extern flag_desc pval_flags1_desc[MAX_PVAL_FLAGS_DESCRIPTION];
 extern flag_desc slay_flags_desc[MAX_SLAY_FLAGS_DESCRIPTION];
 extern flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION];
 extern const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION];
+extern const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION];
 extern const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION];
 extern const flag_desc sustain_flags_desc[MAX_SUSTAINER_FLAGS_DESCRIPTION];
 extern const flag_desc misc_flags2_desc[MAX_MISC2_FLAGS_DESCRIPTION];
