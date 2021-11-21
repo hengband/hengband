@@ -4504,11 +4504,11 @@ D:$A frozen Swordfish wielded as a great sword. Proof of the owner's angling mas
 D:メカジキを凍らせたもの。最強釣り師の証でもある。分類は大剣。
 
 N:270:『ダイアナの長弓』
-E:The Longbow of Diana
+E:of Diana
 I:19:13:0
-W:35:97:30:4000
+W:35:97:30:60000
 P:0:1d2:15:0:0
-F:REFLECT | ACTIVATE
+F:TELEPATHY | REFLECT | ACTIVATE
 U:CREATE_AMMO
 D:「よくやった！ 私は無理ではないかと恐れていたのだ！
 D:「ダイアナの長弓を持って戻ってきたな！
