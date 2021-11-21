@@ -79,6 +79,7 @@ static std::unordered_map<tr_type, tr_type> flag_to_lesser_flag = {
     { TR_RES_ELEC, TR_VUL_ELEC },
     { TR_RES_FIRE, TR_VUL_FIRE },
     { TR_RES_LITE, TR_VUL_LITE },
+    { TR_RES_CURSE, TR_VUL_CURSE },
 };
 
 /*!

@@ -1078,6 +1078,8 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
  * * 呪力耐性の装備による加算(30)
  * * 祝福された装備による加算(5 + レベル / 10)
  * * 賢さによるadj_wis_savテーブル加算
+ * * 呪力弱点の装備による減算(-10)
+ * * 呪力弱点の装備が強力に呪われているときさらに減算(-20)
  * * 狂戦士化による減算(-30)
  * * 反魔法持ちで大なり上書き(90+レベル未満ならその値に上書き)
  * * クターのつぶれ状態なら(10に上書き)
@@ -1109,6 +1111,12 @@ static ACTION_SKILL_POWER calc_saving_throw(PlayerType *player_ptr)
         pow += 6 + (player_ptr->lev - 1) / 10;
 
     pow += adj_wis_sav[player_ptr->stat_index[A_WIS]];
+
+    if (has_vuln_curse(player_ptr))
+        pow -= 10;
+
+    if (has_heavy_vuln_curse(player_ptr))
+        pow -= 20;
 
     if (is_shero(player_ptr))
         pow -= 30;

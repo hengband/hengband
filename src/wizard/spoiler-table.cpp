@@ -136,6 +136,15 @@ const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
     { TR_RES_CURSE, _("呪力", "Curse") },
 };
 
+const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION] = {
+    { TR_VUL_ACID, _("酸", "Acid") },
+    { TR_VUL_ELEC, _("電撃", "Lightning") },
+    { TR_VUL_FIRE, _("火炎", "Fire") },
+    { TR_VUL_COLD, _("冷気", "Cold") },
+    { TR_VUL_LITE, _("閃光", "Light") },
+    { TR_VUL_CURSE, _("呪力", "Curse") },
+};
+
 /* Elemental immunities (along with poison) */
 const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION] = {
     { TR_IM_ACID, _("酸", "Acid") },
