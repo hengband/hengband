@@ -582,7 +582,7 @@ static void display_curse_info(PlayerType *player_ptr, void (*display_player_equ
     process_one_characteristic(player_ptr, row++, col, _("反感        :", "Aggravate   :"), TR_AGGRAVATE, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("弱い呪い増殖:", "Add Curse   :"), TR_ADD_L_CURSE, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("強い呪い増殖:", "AddHeavyCur.:"), TR_ADD_H_CURSE, f, 0);
-    process_one_characteristic(player_ptr, row++, col, _("執拗呪詛    :", "PersistCurse:"), TR_PERSITENT_CURSE, f, 0);
+    process_one_characteristic(player_ptr, row++, col, _("執拗呪詛    :", "PersistCurse:"), TR_PERSISTENT_CURSE, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("経験値減少  :", "Drain Exp   :"), TR_DRAIN_EXP, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("体力吸収    :", "Drain HP    :"), TR_DRAIN_HP, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("魔力吸収    :", "Drain Mana  :"), TR_DRAIN_MANA, f, 0);

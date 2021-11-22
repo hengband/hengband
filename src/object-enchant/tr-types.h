@@ -175,7 +175,7 @@ enum tr_type : int32_t {
     TR_SELF_ELEC = 159, //!< マイナスフラグ - 持続電撃ダメージ
     TR_SELF_COLD = 160, //!< マイナスフラグ - 持続冷気ダメージ
 
-    TR_PERSITENT_CURSE = 161, //!< 頻繁に自身を呪いなおすフラグ
+    TR_PERSISTENT_CURSE = 161, //!< 頻繁に自身を呪いなおすフラグ
     TR_VUL_CURSE = 162, //!< 呪力弱点
 
     TR_FLAG_MAX = 163,

@@ -640,7 +640,7 @@ bool screen_object(PlayerType *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは強力な呪いを増やす。", "It adds heavy curses.");
     }
 
-    if (o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || flgs.has(TR_PERSITENT_CURSE)) {
+    if (o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || flgs.has(TR_PERSISTENT_CURSE)) {
         info[i++] = _("それは頻繁に呪いをかけなおす。", "It curses itself persistently.");
     }
 
