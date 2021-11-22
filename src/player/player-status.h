@@ -38,3 +38,8 @@ bool is_echizen(PlayerType *player_ptr);
 bool is_chargeman(PlayerType *player_ptr);
 
 void stop_mouth(PlayerType *player_ptr);
+
+bool set_quick_and_tiny(PlayerType *player_ptr);
+bool set_musasi(PlayerType *player_ptr);
+bool set_icing_and_twinkle(PlayerType *player_ptr);
+bool set_anubis_and_chariot(PlayerType *player_ptr);
