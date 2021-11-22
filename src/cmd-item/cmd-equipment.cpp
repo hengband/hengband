@@ -52,6 +52,41 @@
 #include "view/display-messages.h"
 
 /*!
+ * @brief 装備時にアイテムを呪う処理
+ */
+static void do_curse_on_equip(OBJECT_IDX slot, object_type *o_ptr, PlayerType *player_ptr)
+{
+    if (set_anubis_and_chariot(player_ptr) && ((slot == INVEN_MAIN_HAND) || (slot == INVEN_SUB_HAND))) {
+
+        object_type *anubis = &(player_ptr->inventory_list[INVEN_MAIN_HAND]);
+        object_type *chariot = &(player_ptr->inventory_list[INVEN_SUB_HAND]);
+
+        anubis->curse_flags.set(CurseTraitType::PERSISTENT_CURSE);
+        anubis->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+        chariot->curse_flags.set(CurseTraitType::PERSISTENT_CURSE);
+        chariot->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+        chariot->curse_flags.set(CurseTraitType::BERS_RAGE);
+        chariot->curse_flags.set(CurseTraitType::LOW_AC);
+        chariot->curse_flags.set(CurseTraitType::VUL_CURSE);
+        
+        msg_format(_("『銀の戦車』プラス『アヌビス神』二刀流ッ！", "*Silver Chariot* plus *Anubis God* Two Swords!"));
+        player_ptr->update |= (PU_BONUS);
+        return;
+    }
+
+    if ((object_flags(o_ptr).has(TR_PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE)) 
+        && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
+
+        GAME_TEXT o_name[MAX_NLEN];
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+        msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
+        o_ptr->feeling = FEEL_NONE;
+        player_ptr->update |= (PU_BONUS);
+    }
+}
+
+/*!
  * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
  */
 void do_cmd_equip(PlayerType *player_ptr)
@@ -286,14 +321,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         o_ptr->ident |= (IDENT_SENSE);
     }
 
-    if (object_flags(o_ptr).has(TR_PERSITENT_CURSE) && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-        msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
-        o_ptr->feeling = FEEL_NONE;
-        player_ptr->update |= (PU_BONUS);
-    }
+    do_curse_on_equip(slot, o_ptr, player_ptr);
 
     if ((o_ptr->name1 == ART_STONEMASK) && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID))
         change_race(player_ptr, PlayerRaceType::VAMPIRE, "");

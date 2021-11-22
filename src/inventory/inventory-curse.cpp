@@ -119,7 +119,7 @@ static void choise_cursed_item(CurseTraitType flag, object_type *o_ptr, int *cho
         cf = TR_BERS_RAGE;
         break;
     case CurseTraitType::PERSISTENT_CURSE:
-        cf = TR_PERSITENT_CURSE;
+        cf = TR_PERSISTENT_CURSE;
         break;
     case CurseTraitType::VUL_CURSE:
         cf = TR_VUL_CURSE;

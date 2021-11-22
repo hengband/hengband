@@ -1606,7 +1606,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         if (is_real_value || o_ptr->is_known())
             ac += o_ptr->to_a;
 
-        if (o_ptr->curse_flags.has(CurseTraitType::LOW_AC)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::LOW_AC) || object_flags(o_ptr).has(TR_LOW_AC)) {
             if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                 if (is_real_value || o_ptr->is_fully_known())
                     ac -= 30;
@@ -1625,12 +1625,11 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         ac += 10 + (player_ptr->lev * 2 / 5);
     }
 
-    if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN)) {
+    if (set_quick_and_tiny(player_ptr)) {
         ac += 10;
     }
 
-    if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA)
-        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI)) {
+    if (set_musasi(player_ptr)) {
         ac += 10;
     }
 
@@ -1749,9 +1748,7 @@ int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
         auto flags = object_flags(&player_ptr->inventory_list[INVEN_SUB_HAND]);
 
         penalty = ((100 - player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] / 160) - (130 - player_ptr->inventory_list[slot].weight) / 8);
-        if (((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN))
-            || ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
-                && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE))) {
+        if (set_quick_and_tiny(player_ptr) || set_icing_and_twinkle(player_ptr) || set_anubis_and_chariot(player_ptr)) {
             penalty = penalty / 2 - 5;
         }
 
@@ -1762,8 +1759,7 @@ int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
         if (flags.has(TR_SUPPORTIVE))
             penalty = std::max(0, penalty - 10);
 
-        if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA)
-            && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI)) {
+        if (set_musasi(player_ptr)) {
             penalty = std::min(0, penalty);
         }
 
@@ -2983,4 +2979,28 @@ static player_hand main_attack_hand(PlayerType *player_ptr)
         return PLAYER_HAND_MAIN;
     }
     return PLAYER_HAND_MAIN;
+}
+
+bool set_quick_and_tiny(PlayerType *player_ptr)
+{
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) 
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN);
+}
+
+bool set_musasi(PlayerType *player_ptr)
+{
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA) 
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI);
+}
+
+bool set_icing_and_twinkle(PlayerType *player_ptr)
+{
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE);
+}
+
+bool set_anubis_and_chariot(PlayerType *player_ptr)
+{
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ANUBIS) 
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_SILVER_CHARIOT);
 }
