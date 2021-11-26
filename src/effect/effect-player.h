@@ -16,6 +16,8 @@ public:
     HIT_POINT dam;
     AttributeType attribute;
     BIT_FLAGS flag;
+    EffectPlayerType(MONSTER_IDX who, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag);
+
 };
 
 

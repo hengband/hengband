@@ -46,16 +46,9 @@
  * @param monspell 効果元のモンスター魔法ID
  * @return 初期化後の構造体ポインタ
  */
-static EffectPlayerType *initialize_effect_player(EffectPlayerType *ep_ptr, MONSTER_IDX who, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag)
+EffectPlayerType::EffectPlayerType(MONSTER_IDX who, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag)
+    : rlev(0), m_ptr(nullptr), killer(""), m_name(""), get_damage(0), who(who), dam(dam), attribute(attribute), flag(flag)
 {
-    ep_ptr->rlev = 0;
-    ep_ptr->m_ptr = nullptr;
-    ep_ptr->get_damage = 0;
-    ep_ptr->who = who;
-    ep_ptr->dam = dam;
-    ep_ptr->attribute = attribute;
-    ep_ptr->flag = flag;
-    return ep_ptr;
 }
 
 /*!
@@ -191,8 +184,8 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
 bool affect_player(MONSTER_IDX who, PlayerType *player_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute,
     BIT_FLAGS flag, project_func project)
 {
-    EffectPlayerType tmp_effect;
-    auto *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, attribute, flag);
+    EffectPlayerType tmp_effect(who, dam, attribute, flag);
+    auto *ep_ptr = &tmp_effect;
     auto check_result = check_continue_player_effect(player_ptr, ep_ptr, y, x, project);
     if (check_result != PROCESS_CONTINUE) {
         return check_result == PROCESS_TRUE;
