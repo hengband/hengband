@@ -274,10 +274,10 @@ void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
         mam_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
 
-        if (!monster_is_valid(mam_ptr->m_ptr) || (mam_ptr->t_ptr->fx != mam_ptr->x_saver) || (mam_ptr->t_ptr->fy != mam_ptr->y_saver) || !mam_ptr->method)
+        if (!monster_is_valid(mam_ptr->m_ptr) || (mam_ptr->t_ptr->fx != mam_ptr->x_saver) || (mam_ptr->t_ptr->fy != mam_ptr->y_saver) || mam_ptr->method == RaceBlowMethodType::NONE)
             break;
 
-        if (mam_ptr->method == RBM_SHOOT)
+        if (mam_ptr->method == RaceBlowMethodType::SHOOT)
             continue;
 
         mam_ptr->power = mbe_info[enum2i(mam_ptr->effect)].power;

@@ -185,7 +185,7 @@ errr parse_r_info(std::string_view buf, angband_header *)
         // B:blow_type:blow_effect:dice
         size_t i = 0;
         for (; i < 4; i++) {
-            if (!r_ptr->blow[i].method)
+            if (r_ptr->blow[i].method == RaceBlowMethodType::NONE)
                 break;
         }
 

@@ -63,7 +63,7 @@ static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
 static void on_dead_explosion(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     for (int i = 0; i < 4; i++) {
-        if (md_ptr->r_ptr->blow[i].method != RBM_EXPLODE)
+        if (md_ptr->r_ptr->blow[i].method != RaceBlowMethodType::EXPLODE)
             continue;
 
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
@@ -428,7 +428,7 @@ concptr extract_note_dies(MONRACE_IDX r_idx)
         return _("は死んだ。", " dies.");
 
     for (int i = 0; i < 4; i++)
-        if (r_ptr->blow[i].method == RBM_EXPLODE)
+        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE)
             return _("は爆発して粉々になった。", " explodes into tiny shreds.");
 
     return _("を倒した。", " is destroyed.");

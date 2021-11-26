@@ -12,7 +12,7 @@
 constexpr int MAX_NUM_BLOWS = 4;
 
 struct monster_blow {
-    rbm_type method{};
+    RaceBlowMethodType method{};
     RaceBlowEffectType effect{};
     DICE_NUMBER d_dice{};
     DICE_SID d_side{};
