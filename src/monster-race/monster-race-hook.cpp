@@ -836,7 +836,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return false;
 
     for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RBM_EXPLODE)
+        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE)
             return false;
 
         if (r_ptr->blow[i].effect != RaceBlowEffectType::DR_MANA)

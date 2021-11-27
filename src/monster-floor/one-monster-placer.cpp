@@ -68,7 +68,7 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return false;
 
     for (int i = 0; i < 4; i++)
-        if (r_ptr->blow[i].method == RBM_EXPLODE)
+        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE)
             return false;
 
     return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);

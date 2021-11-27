@@ -17,7 +17,7 @@ typedef struct monap_type {
     int do_cut;
     int do_stun;
     bool touched;
-    rbm_type method;
+    RaceBlowMethodType method;
     bool explode;
     DEPTH rlev;
     GAME_TEXT m_name[MAX_NLEN];

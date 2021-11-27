@@ -17,81 +17,81 @@
 void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
-    case RBM_HIT: {
+    case RaceBlowMethodType::HIT: {
         mam_ptr->act = _("%sを殴った。", "hits %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_TOUCH: {
+    case RaceBlowMethodType::TOUCH: {
         mam_ptr->act = _("%sを触った。", "touches %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_PUNCH: {
+    case RaceBlowMethodType::PUNCH: {
         mam_ptr->act = _("%sをパンチした。", "punches %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_KICK: {
+    case RaceBlowMethodType::KICK: {
         mam_ptr->act = _("%sを蹴った。", "kicks %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_CLAW: {
+    case RaceBlowMethodType::CLAW: {
         mam_ptr->act = _("%sをひっかいた。", "claws %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_BITE: {
+    case RaceBlowMethodType::BITE: {
         mam_ptr->act = _("%sを噛んだ。", "bites %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_STING: {
+    case RaceBlowMethodType::STING: {
         mam_ptr->act = _("%sを刺した。", "stings %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_SLASH: {
+    case RaceBlowMethodType::SLASH: {
         mam_ptr->act = _("%sを斬った。", "slashes %s.");
         break;
     }
-    case RBM_BUTT: {
+    case RaceBlowMethodType::BUTT: {
         mam_ptr->act = _("%sを角で突いた。", "butts %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_CRUSH: {
+    case RaceBlowMethodType::CRUSH: {
         mam_ptr->act = _("%sに体当りした。", "crushes %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_ENGULF: {
+    case RaceBlowMethodType::ENGULF: {
         mam_ptr->act = _("%sを飲み込んだ。", "engulfs %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_CHARGE: {
+    case RaceBlowMethodType::CHARGE: {
         mam_ptr->act = _("%sに請求書をよこした。", "charges %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_CRAWL: {
+    case RaceBlowMethodType::CRAWL: {
         mam_ptr->act = _("%sの体の上を這い回った。", "crawls on %s.");
         mam_ptr->touched = true;
         break;
     }
-    case RBM_DROOL: {
+    case RaceBlowMethodType::DROOL: {
         mam_ptr->act = _("%sによだれをたらした。", "drools on %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_SPIT: {
+    case RaceBlowMethodType::SPIT: {
         mam_ptr->act = _("%sに唾を吐いた。", "spits on %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_EXPLODE: {
+    case RaceBlowMethodType::EXPLODE: {
         if (mam_ptr->see_either)
             disturb(player_ptr, true, true);
 
@@ -100,50 +100,50 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->touched = false;
         break;
     }
-    case RBM_GAZE: {
+    case RaceBlowMethodType::GAZE: {
         mam_ptr->act = _("%sをにらんだ。", "gazes at %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_WAIL: {
+    case RaceBlowMethodType::WAIL: {
         mam_ptr->act = _("%sに泣きついた。", "wails at %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_SPORE: {
+    case RaceBlowMethodType::SPORE: {
         mam_ptr->act = _("%sに胞子を飛ばした。", "releases spores at %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_XXX4: {
+    case RaceBlowMethodType::XXX4: {
         mam_ptr->act = _("%sにXXX4を飛ばした。", "projects XXX4's at %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_BEG: {
+    case RaceBlowMethodType::BEG: {
         mam_ptr->act = _("%sに金をせがんだ。", "begs %s for money.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_INSULT: {
+    case RaceBlowMethodType::INSULT: {
         mam_ptr->act = _("%sを侮辱した。", "insults %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_MOAN: {
+    case RaceBlowMethodType::MOAN: {
         mam_ptr->act = _("%sにむかってうめいた。", "moans at %s.");
         mam_ptr->touched = false;
         break;
     }
-    case RBM_SHOW: {
+    case RaceBlowMethodType::SHOW: {
         mam_ptr->act = _("%sにむかって歌った。", "sings to %s.");
         mam_ptr->touched = false;
         break;
     }
 
-    case RBM_NONE:
-    case RBM_SHOOT:
-    case NB_RBM_TYPE:
+    case RaceBlowMethodType::NONE:
+    case RaceBlowMethodType::SHOOT:
+    case RaceBlowMethodType::MAX:
         break;
     }
 }
@@ -254,18 +254,18 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 void describe_monster_missed_monster(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
-    case RBM_HIT:
-    case RBM_TOUCH:
-    case RBM_PUNCH:
-    case RBM_KICK:
-    case RBM_CLAW:
-    case RBM_BITE:
-    case RBM_STING:
-    case RBM_SLASH:
-    case RBM_BUTT:
-    case RBM_CRUSH:
-    case RBM_ENGULF:
-    case RBM_CHARGE: {
+    case RaceBlowMethodType::HIT:
+    case RaceBlowMethodType::TOUCH:
+    case RaceBlowMethodType::PUNCH:
+    case RaceBlowMethodType::KICK:
+    case RaceBlowMethodType::CLAW:
+    case RaceBlowMethodType::BITE:
+    case RaceBlowMethodType::STING:
+    case RaceBlowMethodType::SLASH:
+    case RaceBlowMethodType::BUTT:
+    case RaceBlowMethodType::CRUSH:
+    case RaceBlowMethodType::ENGULF:
+    case RaceBlowMethodType::CHARGE: {
         (void)set_monster_csleep(player_ptr, mam_ptr->t_idx, 0);
         if (mam_ptr->see_m) {
 #ifdef JP

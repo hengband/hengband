@@ -384,7 +384,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
 
     auto explode = false;
     for (auto i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RBM_EXPLODE) {
+        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
             explode = true;
         }
     }

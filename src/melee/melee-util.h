@@ -21,7 +21,7 @@ typedef struct mam_type {
     bool see_either;
     POSITION y_saver;
     POSITION x_saver;
-    rbm_type method;
+    RaceBlowMethodType method;
     bool explode;
     bool touched;
     concptr act;

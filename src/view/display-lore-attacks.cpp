@@ -113,7 +113,7 @@ void display_monster_blows(lore_type *lore_ptr)
 {
     const int max_attack_numbers = 4;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (!lore_ptr->r_ptr->blow[m].method || (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT))
+        if (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::SHOOT))
             continue;
 
         if (lore_ptr->r_ptr->r_blows[m] || lore_ptr->know_everything)
@@ -122,7 +122,7 @@ void display_monster_blows(lore_type *lore_ptr)
 
     int attack_numbers = 0;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (!lore_ptr->r_ptr->blow[m].method || (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT) || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything)))
+        if (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::SHOOT) || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything)))
             continue;
 
         set_monster_blow_method(lore_ptr, m);
