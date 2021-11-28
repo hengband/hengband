@@ -73,7 +73,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
         {
             if (cast || fail) {
-                msg_print(_("あなたは蜘蛛のカードに集中する...", "You concentrate on the trump of an spider..."));
+                msg_print(_("あなたは蜘蛛のカードに集中する...", "You concentrate on the trump of a spider..."));
                 if (trump_summoning(player_ptr, 1, !fail, player_ptr->y, player_ptr->x, 0, SUMMON_SPIDER, PM_ALLOW_GROUP)) {
                     if (fail) {
                         msg_print(_("召喚された蜘蛛は怒っている！", "The summoned spiders get angry!"));

@@ -126,6 +126,8 @@ BIT_FLAGS has_resist_neth(PlayerType *player_ptr);
 BIT_FLAGS has_resist_time(PlayerType *player_ptr);
 BIT_FLAGS has_resist_water(PlayerType *player_ptr);
 BIT_FLAGS has_resist_curse(PlayerType *player_ptr);
+BIT_FLAGS has_vuln_curse(PlayerType *player_ptr);
+BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr);
 BIT_FLAGS has_resist_fear(PlayerType *player_ptr);
 BIT_FLAGS has_immune_acid(PlayerType *player_ptr);
 BIT_FLAGS has_immune_elec(PlayerType *player_ptr);

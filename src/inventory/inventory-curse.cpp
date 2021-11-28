@@ -36,7 +36,7 @@
 
 namespace {
 const EnumClassFlagGroup<CurseTraitType> TRC_P_FLAG_MASK({ CurseTraitType::TY_CURSE, CurseTraitType::DRAIN_EXP, CurseTraitType::ADD_L_CURSE, CurseTraitType::ADD_H_CURSE, CurseTraitType::CALL_ANIMAL, CurseTraitType::CALL_DEMON,
-    CurseTraitType::CALL_DRAGON, CurseTraitType::COWARDICE, CurseTraitType::TELEPORT, CurseTraitType::DRAIN_HP, CurseTraitType::DRAIN_MANA, CurseTraitType::CALL_UNDEAD, CurseTraitType::BERS_RAGE });
+    CurseTraitType::CALL_DRAGON, CurseTraitType::COWARDICE, CurseTraitType::TELEPORT, CurseTraitType::DRAIN_HP, CurseTraitType::DRAIN_MANA, CurseTraitType::CALL_UNDEAD, CurseTraitType::BERS_RAGE, CurseTraitType::PERSISTENT_CURSE });
 const EnumClassFlagGroup<CurseSpecialTraitType> TRCS_P_FLAG_MASK({ CurseSpecialTraitType::TELEPORT_SELF, CurseSpecialTraitType::CHAINSWORD });
 }
 
@@ -58,6 +58,7 @@ static bool is_specific_curse(CurseTraitType flag)
     case CurseTraitType::FAST_DIGEST:
     case CurseTraitType::SLOW_REGEN:
     case CurseTraitType::BERS_RAGE:
+    case CurseTraitType::PERSISTENT_CURSE:
         return true;
     default:
         return false;
@@ -116,6 +117,12 @@ static void choise_cursed_item(CurseTraitType flag, object_type *o_ptr, int *cho
         break;
     case CurseTraitType::BERS_RAGE:
         cf = TR_BERS_RAGE;
+        break;
+    case CurseTraitType::PERSISTENT_CURSE:
+        cf = TR_PERSISTENT_CURSE;
+        break;
+    case CurseTraitType::VUL_CURSE:
+        cf = TR_VUL_CURSE;
         break;
     default:
         break;
@@ -265,6 +272,24 @@ static void multiply_high_curse(PlayerType *player_ptr)
     player_ptr->update |= (PU_BONUS);
 }
 
+static void persist_curse(PlayerType *player_ptr)
+{
+    if ((player_ptr->cursed.has_not(CurseTraitType::PERSISTENT_CURSE)) || !one_in_(500))
+        return;
+
+    object_type *o_ptr;
+    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::PERSISTENT_CURSE);
+    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+        return;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+    msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
+    o_ptr->feeling = FEEL_NONE;
+    player_ptr->update |= (PU_BONUS);
+}
+
 static void curse_call_monster(PlayerType *player_ptr)
 {
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
@@ -309,7 +334,20 @@ static void curse_call_monster(PlayerType *player_ptr)
 
 static void curse_cowardice(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_not(CurseTraitType::COWARDICE)) || !one_in_(1500))
+    if (player_ptr->cursed.has_not(CurseTraitType::COWARDICE))
+        return;
+
+    object_type *o_ptr;
+    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::COWARDICE);
+    int chance = 1500;
+    int duration = 13 + randint1(26);
+
+    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
+        chance = 150;
+        duration *= 2;
+    }
+    
+    if (!one_in_(chance))
         return;
 
     if (has_resist_fear(player_ptr))
@@ -317,7 +355,7 @@ static void curse_cowardice(PlayerType *player_ptr)
 
     disturb(player_ptr, false, true);
     msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-    (void)BadStatusSetter(player_ptr).mod_afraidness(13 + randint1(26));
+    (void)BadStatusSetter(player_ptr).mod_afraidness(duration);
 }
 
 /*!
@@ -326,13 +364,26 @@ static void curse_cowardice(PlayerType *player_ptr)
  */
 static void curse_berserk_rage(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_not(CurseTraitType::BERS_RAGE)) || !one_in_(1500))
+    if (player_ptr->cursed.has_not(CurseTraitType::BERS_RAGE))
+        return;
+
+    object_type *o_ptr;
+    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::BERS_RAGE);
+    int chance = 1500;
+    int duration = 10 + randint1(player_ptr->lev);
+
+    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
+        chance = 150;
+        duration *= 2;
+    }
+    
+    if (!one_in_(chance))
         return;
 
     disturb(player_ptr, false, true);
     msg_print(_("ウガァァア！", "RAAAAGHH!"));
     msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
-    (void)set_shero(player_ptr, 10 + randint1(player_ptr->lev), false);
+    (void)set_shero(player_ptr, duration, false);
     (void)BadStatusSetter(player_ptr).afraidness(0);
 }
 
@@ -380,6 +431,7 @@ static void occur_curse_effects(PlayerType *player_ptr)
     curse_drain_exp(player_ptr);
     multiply_low_curse(player_ptr);
     multiply_high_curse(player_ptr);
+    persist_curse(player_ptr);
     curse_call_monster(player_ptr);
     curse_cowardice(player_ptr);
     curse_berserk_rage(player_ptr);

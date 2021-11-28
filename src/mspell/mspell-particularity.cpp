@@ -94,8 +94,8 @@ MonsterSpellResult spell_RF6_HAND_DOOM(PlayerType *player_ptr, POSITION y, POSIT
  */
 MonsterSpellResult spell_RF6_PSY_SPEAR(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが光の剣を放った。", "%^s throw a Psycho-Spear."),
-        _("%^sが%sに向かって光の剣を放った。", "%^s throw a Psycho-spear at %s."));
+    mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが光の剣を放った。", "%^s throws a Psycho-Spear."),
+        _("%^sが%sに向かって光の剣を放った。", "%^s throws a Psycho-spear at %s."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 

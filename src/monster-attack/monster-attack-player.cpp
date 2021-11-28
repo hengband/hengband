@@ -79,13 +79,13 @@ static bool check_no_blow(PlayerType *player_ptr, monap_type *monap_ptr)
  */
 static bool check_monster_continuous_attack(PlayerType *player_ptr, monap_type *monap_ptr)
 {
-    if (!monster_is_valid(monap_ptr->m_ptr) || (monap_ptr->method == RBM_NONE)) {
+    if (!monster_is_valid(monap_ptr->m_ptr) || (monap_ptr->method == RaceBlowMethodType::NONE)) {
         return false;
     }
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (is_pet(monap_ptr->m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (monap_ptr->method == RBM_EXPLODE)) {
-        monap_ptr->method = RBM_HIT;
+    if (is_pet(monap_ptr->m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (monap_ptr->method == RaceBlowMethodType::EXPLODE)) {
+        monap_ptr->method = RaceBlowMethodType::HIT;
         monap_ptr->d_dice /= 10;
     }
 
@@ -338,18 +338,18 @@ static bool process_monster_attack_hit(PlayerType *player_ptr, monap_type *monap
 static void process_monster_attack_evasion(PlayerType *player_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->method) {
-    case RBM_HIT:
-    case RBM_TOUCH:
-    case RBM_PUNCH:
-    case RBM_KICK:
-    case RBM_CLAW:
-    case RBM_BITE:
-    case RBM_STING:
-    case RBM_SLASH:
-    case RBM_BUTT:
-    case RBM_CRUSH:
-    case RBM_ENGULF:
-    case RBM_CHARGE:
+    case RaceBlowMethodType::HIT:
+    case RaceBlowMethodType::TOUCH:
+    case RaceBlowMethodType::PUNCH:
+    case RaceBlowMethodType::KICK:
+    case RaceBlowMethodType::CLAW:
+    case RaceBlowMethodType::BITE:
+    case RaceBlowMethodType::STING:
+    case RaceBlowMethodType::SLASH:
+    case RaceBlowMethodType::BUTT:
+    case RaceBlowMethodType::CRUSH:
+    case RaceBlowMethodType::ENGULF:
+    case RaceBlowMethodType::CHARGE:
         describe_attack_evasion(player_ptr, monap_ptr);
         gain_armor_exp(player_ptr, monap_ptr);
         monap_ptr->damage = 0;
@@ -412,7 +412,7 @@ static bool process_monster_blows(PlayerType *player_ptr, monap_type *monap_ptr)
             break;
         }
 
-        if (monap_ptr->method == RBM_SHOOT) {
+        if (monap_ptr->method == RaceBlowMethodType::SHOOT) {
             continue;
         }
 

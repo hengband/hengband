@@ -7,103 +7,103 @@
 
 void set_monster_blow_method(lore_type *lore_ptr, int m)
 {
-    rbm_type method = lore_ptr->r_ptr->blow[m].method;
+    RaceBlowMethodType method = lore_ptr->r_ptr->blow[m].method;
     lore_ptr->p = nullptr;
     lore_ptr->pc = TERM_WHITE;
     switch (method) {
-    case RBM_HIT:
+    case RaceBlowMethodType::HIT:
         lore_ptr->p = _("殴る", "hit");
         lore_ptr->pc = TERM_L_WHITE;
         break;
-    case RBM_TOUCH:
+    case RaceBlowMethodType::TOUCH:
         lore_ptr->p = _("触る", "touch");
         break;
-    case RBM_PUNCH:
+    case RaceBlowMethodType::PUNCH:
         lore_ptr->p = _("パンチする", "punch");
         lore_ptr->pc = TERM_L_WHITE;
         break;
-    case RBM_KICK:
+    case RaceBlowMethodType::KICK:
         lore_ptr->p = _("蹴る", "kick");
         lore_ptr->pc = TERM_L_WHITE;
         break;
-    case RBM_CLAW:
+    case RaceBlowMethodType::CLAW:
         lore_ptr->p = _("ひっかく", "claw");
         lore_ptr->pc = TERM_L_UMBER;
         break;
-    case RBM_BITE:
+    case RaceBlowMethodType::BITE:
         lore_ptr->p = _("噛む", "bite");
         lore_ptr->pc = TERM_L_UMBER;
         break;
-    case RBM_STING:
+    case RaceBlowMethodType::STING:
         lore_ptr->p = _("刺す", "sting");
         break;
-    case RBM_SLASH:
+    case RaceBlowMethodType::SLASH:
         lore_ptr->p = _("斬る", "slash");
         lore_ptr->pc = TERM_L_UMBER;
         break;
-    case RBM_BUTT:
+    case RaceBlowMethodType::BUTT:
         lore_ptr->p = _("角で突く", "butt");
         lore_ptr->pc = TERM_L_WHITE;
         break;
-    case RBM_CRUSH:
+    case RaceBlowMethodType::CRUSH:
         lore_ptr->p = _("体当たりする", "crush");
         lore_ptr->pc = TERM_L_WHITE;
         break;
-    case RBM_ENGULF:
+    case RaceBlowMethodType::ENGULF:
         lore_ptr->p = _("飲み込む", "engulf");
         break;
-    case RBM_CHARGE:
+    case RaceBlowMethodType::CHARGE:
         lore_ptr->p = _("請求書をよこす", "charge");
         break;
-    case RBM_CRAWL:
+    case RaceBlowMethodType::CRAWL:
         lore_ptr->p = _("体の上を這い回る", "crawl on you");
         break;
-    case RBM_DROOL:
+    case RaceBlowMethodType::DROOL:
         lore_ptr->p = _("よだれをたらす", "drool on you");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_SPIT:
+    case RaceBlowMethodType::SPIT:
         lore_ptr->p = _("つばを吐く", "spit");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_EXPLODE:
+    case RaceBlowMethodType::EXPLODE:
         lore_ptr->p = _("爆発する", "explode");
         lore_ptr->pc = TERM_L_BLUE;
         break;
-    case RBM_GAZE:
+    case RaceBlowMethodType::GAZE:
         lore_ptr->p = _("にらむ", "gaze");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_WAIL:
+    case RaceBlowMethodType::WAIL:
         lore_ptr->p = _("泣き叫ぶ", "wail");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_SPORE:
+    case RaceBlowMethodType::SPORE:
         lore_ptr->p = _("胞子を飛ばす", "release spores");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_XXX4:
+    case RaceBlowMethodType::XXX4:
         break;
-    case RBM_BEG:
+    case RaceBlowMethodType::BEG:
         lore_ptr->p = _("金をせがむ", "beg");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_INSULT:
+    case RaceBlowMethodType::INSULT:
         lore_ptr->p = _("侮辱する", "insult");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_MOAN:
+    case RaceBlowMethodType::MOAN:
         lore_ptr->p = _("うめく", "moan");
         lore_ptr->pc = TERM_SLATE;
         break;
-    case RBM_SHOW:
+    case RaceBlowMethodType::SHOW:
         lore_ptr->p = _("歌う", "sing");
         lore_ptr->pc = TERM_SLATE;
         break;
 
-    case RBM_NONE:
-    case RBM_SHOOT:
-    case NB_RBM_TYPE:
+    case RaceBlowMethodType::NONE:
+    case RaceBlowMethodType::SHOOT:
+    case RaceBlowMethodType::MAX:
         break;
     }
 }

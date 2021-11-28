@@ -122,17 +122,22 @@ int16_t PlayerSpeed::personality_value()
  * @return 速度値の増減分
  * @details
  * ** 棘セット装備中ならば加算(+7)
- * ** アイシングデス-トゥインクル装備中ならば加算(+7)
+ * ** アイシングデス-トゥインクル装備中ならば加算(+5)
+ * ** アヌビス-チャリオッツ装備中ならば加算(+5)
  */
 int16_t PlayerSpeed::special_weapon_set_value()
 {
     int16_t result = 0;
     if (has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
-        if ((this->player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) && (this->player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN)) {
+        if (set_quick_and_tiny(this->player_ptr)) {
             result += 7;
         }
 
-        if ((this->player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH) && (this->player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE)) {
+        if (set_icing_and_twinkle(this->player_ptr)) {
+            result += 5;
+        }
+
+        if (set_anubis_and_chariot(this->player_ptr)) {
             result += 5;
         }
     }

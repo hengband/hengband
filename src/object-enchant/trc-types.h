@@ -25,6 +25,8 @@ enum class CurseTraitType {
     DRAIN_MANA = 20,
     CALL_UNDEAD = 21,
     BERS_RAGE = 22,
+    PERSISTENT_CURSE = 23,
+    VUL_CURSE = 24,
     MAX,
 };
 

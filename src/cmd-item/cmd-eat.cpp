@@ -118,7 +118,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, object_type *o_ptr)
     case SV_FOOD_RESTORING:
         return restore_all_status(player_ptr);
     case SV_FOOD_BISCUIT:
-        msg_print(_("甘くてサクサクしてとてもおいしい。", "That is sweetly and shortly delicious."));
+        msg_print(_("甘くてサクサクしてとてもおいしい。", "That is sweet, crispy, and very delicious."));
         return true;
     case SV_FOOD_JERKY:
         msg_print(_("歯ごたえがあっておいしい。", "That is chewy and delicious."));
@@ -136,7 +136,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, object_type *o_ptr)
         return true;
     case SV_FOOD_PINT_OF_ALE:
     case SV_FOOD_PINT_OF_WINE:
-        msg_print(_("のどごし爽やかだ。", "That is refreshing through the throat."));
+        msg_print(_("のどごし爽やかだ。", "That is refreshing and warms the innards."));
         return true;
     default:
         return false;

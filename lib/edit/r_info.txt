@@ -26590,11 +26590,12 @@ F:RES_TELE | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 F:CAN_FLY | CAN_SPEAK | POWERFUL | BASH_DOOR
 S:1_IN_2 | BO_MANA | BO_PLAS | BO_ELEC | ROCKET | PSY_SPEAR | BA_FIRE | MISSILE
 D:$A large flagship similar in shape to a sperm whale.
-D:$  It is a flagship stationed on the enemy mother planet
-D:$ and commanding the entire fleet.
-D:$  It literally functions as the center of the enemy,
-D:$ and has become a representative of Berser
+D:$  It is stationed on the enemy mother planet
+D:$ and commands the entire fleet.
+D:$  It literally functions as the center of the enemy
+D:$ and has become a representative of Belser
 D:$ because of its overwhelming firepower and durability.
+D:$  (Dariusburst Taito)
 D:マッコウクジラに形状の似た大型旗艦。
 D:敵母星に駐留しており、全艦隊を指揮する旗艦である。
 D:文字通り敵の中枢として機能し、その圧倒的な火力、
@@ -26637,7 +26638,7 @@ F:UNIQUE | DROP_90 | DROP_GREAT | DROP_CORPSE | ANIMAL | EVIL
 F:FORCE_MAXHP | NO_STUN | NO_FEAR | NO_CONF | NO_SLEEP | RES_NETH
 F:RES_CHAO | RES_NEXU | CAN_FLY | KILL_BODY
 D:$At first glance, it appears to be just an adorable white rabbit.
-D:$  However, the very rabbit is the guardian of the Cave of Caerbannog,
+D:$  However, this very rabbit is the guardian of the Cave of Caerbannog,
 D:$ where the clue to the Holy Grail lies.
 D:$  This legendary black beast is the origin of all vorpal bunnies and killer rabbits.
 D:$  Its incisors have slaughtered many knights and fools who have approached it recklessly.

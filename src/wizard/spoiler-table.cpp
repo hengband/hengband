@@ -136,6 +136,15 @@ const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
     { TR_RES_CURSE, _("呪力", "Curse") },
 };
 
+const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION] = {
+    { TR_VUL_ACID, _("酸", "Acid") },
+    { TR_VUL_ELEC, _("電撃", "Lightning") },
+    { TR_VUL_FIRE, _("火炎", "Fire") },
+    { TR_VUL_COLD, _("冷気", "Cold") },
+    { TR_VUL_LITE, _("閃光", "Light") },
+    { TR_VUL_CURSE, _("呪力", "Curse") },
+};
+
 /* Elemental immunities (along with poison) */
 const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION] = {
     { TR_IM_ACID, _("酸", "Acid") },
@@ -167,8 +176,12 @@ const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION] = {
     { TR_SH_FIRE, _("火炎オーラ", "Fiery Aura") },
     { TR_SH_ELEC, _("電撃オーラ", "Electric Aura") },
     { TR_SH_COLD, _("冷気オーラ", "Coldly Aura") },
+    { TR_SELF_FIRE, _("自傷火炎", "Self Fire") },
+    { TR_SELF_ELEC, _("自傷電撃", "Self Elect") },
+    { TR_SELF_COLD, _("自傷冷気", "Self Cold") },
     { TR_NO_TELE, _("反テレポート", "Prevent Teleportation") },
     { TR_NO_MAGIC, _("反魔法", "Anti-Magic") },
+    { TR_PERSISTENT_CURSE, _("執拗呪詛", "Persistent Curse") },
     { TR_LEVITATION, _("浮遊", "Levitation") },
     { TR_SEE_INVIS, _("可視透明", "See Invisible") },
     { TR_TELEPATHY, _("テレパシー", "ESP") },

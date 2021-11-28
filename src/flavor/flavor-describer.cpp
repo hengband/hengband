@@ -65,7 +65,7 @@ static void describe_chest_trap(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
         break;
     case ChestTrapType::EXPLODE:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(爆発装置)", " (Explosion Device)"));
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(爆発装置)", " (Explosive Device)"));
         break;
     case ChestTrapType::SUMMON:
     case ChestTrapType::BIRD_STORM:

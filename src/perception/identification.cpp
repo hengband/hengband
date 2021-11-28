@@ -101,10 +101,6 @@ bool screen_object(PlayerType *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
     }
 
-    if (flgs.has(TR_DOWN_SAVING)) {
-        info[i++] = _("それは魔法抵抗力を下げる。", "It decreases your magic resistance.");
-    }
-
     if (o_ptr->tval == ItemKindType::STATUE) {
         monster_race *r_ptr = &r_info[o_ptr->pval];
         if (o_ptr->pval == MON_BULLGATES)
@@ -644,6 +640,10 @@ bool screen_object(PlayerType *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは強力な呪いを増やす。", "It adds heavy curses.");
     }
 
+    if (o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || flgs.has(TR_PERSISTENT_CURSE)) {
+        info[i++] = _("それは頻繁に呪いをかけなおす。", "It curses itself persistently.");
+    }
+
     if ((flgs.has(TR_CALL_ANIMAL)) || o_ptr->curse_flags.has(CurseTraitType::CALL_ANIMAL)) {
         info[i++] = _("それは動物を呼び寄せる。", "It attracts animals.");
     }
@@ -677,6 +677,14 @@ bool screen_object(PlayerType *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     if ((flgs.has(TR_LOW_AC)) || o_ptr->curse_flags.has(CurseTraitType::LOW_AC)) {
         info[i++] = _("それは攻撃を受けやすい。", "It helps your enemies' blows.");
+    }
+
+    if (o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE) || flgs.has(TR_VUL_CURSE)) {
+        info[i++] = _("それは呪いへの抵抗力を下げる。", "It decreases your resistance to curses.");
+    }
+
+    if (flgs.has(TR_DOWN_SAVING)) {
+        info[i++] = _("それは魔法抵抗力を半減させる。", "It halves your magic resistance.");
     }
 
     if ((flgs.has(TR_HARD_SPELL)) || o_ptr->curse_flags.has(CurseTraitType::HARD_SPELL)) {

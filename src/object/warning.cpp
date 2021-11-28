@@ -269,7 +269,7 @@ static int blow_damcalc(monster_type *m_ptr, PlayerType *player_ptr, monster_blo
     int dam = blow_ptr->d_dice * blow_ptr->d_side;
     int dummy_max = 0;
 
-    if (blow_ptr->method == RBM_EXPLODE) {
+    if (blow_ptr->method == RaceBlowMethodType::EXPLODE) {
         dam = (dam + 1) / 2;
         spell_damcalc(player_ptr, m_ptr, mbe_info[enum2i(blow_ptr->effect)].explode_type, dam, &dummy_max);
         dam = dummy_max;
@@ -453,12 +453,12 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             int dam_melee = 0;
             for (int m = 0; m < 4; m++) {
                 /* Skip non-attacks */
-                if (!r_ptr->blow[m].method || (r_ptr->blow[m].method == RBM_SHOOT))
+                if (r_ptr->blow[m].method == RaceBlowMethodType::NONE || (r_ptr->blow[m].method == RaceBlowMethodType::SHOOT))
                     continue;
 
                 /* Extract the attack info */
                 dam_melee += blow_damcalc(m_ptr, player_ptr, &r_ptr->blow[m]);
-                if (r_ptr->blow[m].method == RBM_EXPLODE)
+                if (r_ptr->blow[m].method == RaceBlowMethodType::EXPLODE)
                     break;
             }
 

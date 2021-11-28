@@ -52,7 +52,7 @@ typedef struct lore_type {
     byte pc;
     concptr q;
     byte qc;
-    rbm_type method;
+    RaceBlowMethodType method;
     int count;
     bool shoot = false;
     bool rocket = false;

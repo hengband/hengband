@@ -60,7 +60,7 @@ N:1291:Diavolo
 says, 'Don't get close to me Ahhhhhhh!!!!!!'
 
 N:1292:Cioccolata
-shouts, "Yadder Baaaaaaaaaaaa!!!" and was thrown into a garbage truck.
+shouts, "Yadder Baaaaaaaaaaaa!!!" and is thrown into a garbage truck.
 
 N:1299:The Colonel Lostringil
 shouts, 'Ringil! My Ringil!!'

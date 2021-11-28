@@ -424,6 +424,8 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
         else
             total += 250;
     }
+    if (flgs.has(TR_VUL_CURSE))
+        total -= 7500;
 
     if (flgs.has(TR_AGGRAVATE))
         total -= 10000;
@@ -436,6 +438,8 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
     if (o_ptr->curse_flags.has(CurseTraitType::CURSED))
         total -= 5000;
     if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+        total -= 12500;
+    if (o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE))
         total -= 12500;
     if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE))
         total -= 15000;

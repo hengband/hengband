@@ -453,7 +453,10 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
     case TR_SELF_FIRE:
     case TR_SELF_COLD:
     case TR_SELF_ELEC:
+    case TR_PERSISTENT_CURSE:
         return check_equipment_flags(player_ptr, tr_flag);
+    case TR_VUL_CURSE:
+        return has_vuln_curse(player_ptr);
 
     case TR_FLAG_MAX:
         break;
@@ -1069,6 +1072,10 @@ void update_curses(PlayerType *player_ptr)
             player_ptr->cursed.set(CurseTraitType::SLOW_REGEN);
         if (flgs.has(TR_BERS_RAGE))
             player_ptr->cursed.set(CurseTraitType::BERS_RAGE);
+        if (flgs.has(TR_PERSISTENT_CURSE))
+            player_ptr->cursed.set(CurseTraitType::PERSISTENT_CURSE);
+        if (flgs.has(TR_VUL_CURSE))
+            player_ptr->cursed.set(CurseTraitType::VUL_CURSE);
 
         auto obj_curse_flags = o_ptr->curse_flags;
         obj_curse_flags.reset({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE });
@@ -1402,6 +1409,52 @@ BIT_FLAGS has_resist_curse(PlayerType *player_ptr)
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 呪力弱点を所持しているかどうか
+ * @param プレイヤー情報への参照ポインタ
+ * @return 呪力弱点を所持していればTRUE、なければFALSE
+ */
+BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS result = 0L;
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+        o_ptr = &player_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        auto flgs = object_flags(o_ptr);
+
+        if (flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE))
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 呪力弱点かつ重く呪われている装備の有無
+ * @param プレイヤー情報への参照ポインタ
+ * @return 呪力弱点かつ重く呪われている装備があればTRUE、なければFALSE
+ */
+BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS result = 0L;
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+        o_ptr = &player_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        auto flgs = object_flags(o_ptr);
+
+        if ((flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
     }
 
     return result;

@@ -124,6 +124,7 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
     spoiler_outlist(_("武器属性:", ""), art_ptr->brands, list_separator);
     spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, item_separator);
     spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, item_separator);
+    spoiler_outlist(_("弱点:", "Vulnerable"), art_ptr->vulnerables, item_separator);
     spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, item_separator);
     spoiler_outlist("", art_ptr->misc_magic, list_separator);
 

@@ -244,6 +244,10 @@ bool switch_activation(PlayerType *player_ptr, object_type **o_ptr_ptr, const ac
         msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
         (void)set_fast(player_ptr, randint1(20) + 20, false);
         return true;
+    case RandomArtActType::MID_SPEED:
+        msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
+        (void)set_fast(player_ptr, randint1(50) + 50, false);
+        return true;
     case RandomArtActType::XTRA_SPEED:
         msg_print(_("明るく輝いている...", "It glows brightly..."));
         (void)set_fast(player_ptr, randint1(75) + 75, false);
@@ -371,6 +375,12 @@ bool switch_activation(PlayerType *player_ptr, object_type **o_ptr_ptr, const ac
         return activate_bloody_moon(player_ptr, o_ptr);
     case RandomArtActType::CRIMSON:
         return activate_crimson(player_ptr, o_ptr);
+    case RandomArtActType::HERO_BLESS:
+        (void)set_hero(player_ptr, randint1(25) + 25, false);
+        (void)set_blessed(player_ptr, randint1(25) + 25, true);
+        return true;
+    case RandomArtActType::CREATE_AMMO:
+        return activate_create_ammo(player_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
         return false;
