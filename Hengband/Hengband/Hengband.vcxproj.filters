@@ -2642,9 +2642,6 @@
     <ClInclude Include="..\..\src\effect\effect-monster-switcher.h">
       <Filter>effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\effect\effect-player-util.h">
-      <Filter>effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-player-switcher.h">
       <Filter>effect</Filter>
     </ClInclude>

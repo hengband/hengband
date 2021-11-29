@@ -3,7 +3,7 @@
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
-#include "effect/effect-player-util.h"
+#include "effect/effect-player.h"
 #include "player/player-damage.h"
 #include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
@@ -14,7 +14,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param em_ptr プレイヤー効果構造体への参照ポインタ
  */
-void switch_effects_player(PlayerType *player_ptr, effect_player_type *ep_ptr)
+void switch_effects_player(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 {
     switch (ep_ptr->attribute) {
     case AttributeType::ACID:
