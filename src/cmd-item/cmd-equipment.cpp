@@ -66,7 +66,6 @@ static void do_curse_on_equip(OBJECT_IDX slot, object_type *o_ptr, PlayerType *p
         chariot->curse_flags.set(CurseTraitType::PERSISTENT_CURSE);
         chariot->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         chariot->curse_flags.set(CurseTraitType::BERS_RAGE);
-        chariot->curse_flags.set(CurseTraitType::LOW_AC);
         chariot->curse_flags.set(CurseTraitType::VUL_CURSE);
         
         msg_format(_("『銀の戦車』プラス『アヌビス神』二刀流ッ！", "*Silver Chariot* plus *Anubis God* Two Swords!"));
