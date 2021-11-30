@@ -44,3 +44,4 @@ bool activate_tree_creation(PlayerType *player_ptr, object_type *o_ptr, concptr 
 bool activate_animate_dead(PlayerType *player_ptr, object_type *o_ptr);
 bool activate_detect_treasure(PlayerType *player_ptr);
 bool activate_create_ammo(PlayerType *player_ptr);
+bool activate_dispel_magic(PlayerType* player_ptr);
