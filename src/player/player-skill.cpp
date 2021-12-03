@@ -336,8 +336,11 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam)
 
 void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
 {
+    if ((realm < 1) || ((static_cast<int>(std::size(mp_ptr->info)) < realm) && (realm != REALM_MUSIC) && (realm != REALM_HEX))) {
+        return;
+    }
+
     if (((spell_idx < 0) || (32 <= spell_idx)) ||
-        ((realm < 1) || (static_cast<int>(std::size(mp_ptr->info)) < realm)) ||
         ((realm != this->player_ptr->realm1) && (realm != this->player_ptr->realm2))) {
         return;
     }
