@@ -345,14 +345,15 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, object_type *j_ptr, PERCENTAGE chan
     bool plural = (j_ptr->number != 1);
 #endif
     describe_flavor(player_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-    // 破損.
     if (!j_ptr->is_artifact() && (randint0(100) < chance)) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
+        if (w_ptr->wizard)
+            msg_print(_("(破損)", "(breakage)"));
+
         return 0;
     }
 
@@ -413,13 +414,15 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, object_type *j_ptr, PERCENTAGE chan
         }
     }
 
-    // ドロップグリッド確保不能.
     if (!flag && !j_ptr->is_artifact()) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
+        if (w_ptr->wizard)
+            msg_print(_("(床スペースがない)", "(no floor space)"));
+
         return 0;
     }
 
@@ -448,13 +451,16 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, object_type *j_ptr, PERCENTAGE chan
             }
         }
 
-        // ドロップグリッド確保不能.
         if (!candidates) {
 #ifdef JP
             msg_format("%sは消えた。", o_name);
 #else
             msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
+
+            if (w_ptr->wizard)
+                msg_print(_("(床スペースがない)", "(no floor space)"));
+
             if (preserve_mode) {
                 if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
                     a_info[j_ptr->name1].cur_num = 0;
@@ -496,13 +502,15 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, object_type *j_ptr, PERCENTAGE chan
     if (!done)
         o_idx = o_pop(floor_ptr);
 
-    // アイテム多過.
     if (!done && !o_idx) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
         msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
+        if (w_ptr->wizard)
+            msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
+
         if (j_ptr->is_fixed_artifact()) {
             a_info[j_ptr->name1].cur_num = 0;
         }

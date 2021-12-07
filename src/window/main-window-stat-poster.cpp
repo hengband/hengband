@@ -1,5 +1,4 @@
 ﻿#include "window/main-window-stat-poster.h"
-#include "game-option/game-play-options.h"
 #include "io/input-key-requester.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
@@ -28,6 +27,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
 #include "window/main-window-row-column.h"
+#include "world/world.h"
 
 /*!
  * @brief 32ビット変数配列の指定位置のビットフラグを1にする。
@@ -107,7 +107,7 @@ void print_stun(PlayerType *player_ptr)
  */
 void print_hunger(PlayerType *player_ptr)
 {
-    if (allow_debug_options && player_ptr->current_floor_ptr->inside_arena)
+    if (w_ptr->wizard && player_ptr->current_floor_ptr->inside_arena)
         return;
 
     if (player_ptr->food < PY_FOOD_FAINT) {

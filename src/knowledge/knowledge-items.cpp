@@ -10,7 +10,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "flavor/object-flavor.h"
-#include "game-option/game-play-options.h"
 #include "game-option/special-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
@@ -31,6 +30,7 @@
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 #include <numeric>
 
@@ -134,7 +134,7 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
             continue;
 
         if (!(mode & 0x02)) {
-            if (!allow_debug_options) {
+            if (!w_ptr->wizard) {
                 if (!k_ref.flavor)
                     continue;
                 if (!k_ref.aware)
@@ -194,10 +194,10 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 
         c_prt(attr, o_name, row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (allow_debug_options || visual_only) ? 64 : 68);
+            c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }
 
-        if (allow_debug_options || visual_only) {
+        if (w_ptr->wizard || visual_only) {
             c_prt(attr, format("%d", k_idx), row + i, 70);
         }
 
@@ -308,7 +308,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             if (direct_k_idx < 0)
                 prt("グループ", 4, 0);
             prt("名前", 4, max + 3);
-            if (allow_debug_options || visual_only)
+            if (w_ptr->wizard || visual_only)
                 prt("Idx", 4, 70);
             prt("文字", 4, 74);
 #else
@@ -316,7 +316,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             if (direct_k_idx < 0)
                 prt("Group", 4, 0);
             prt("Name", 4, max + 3);
-            if (allow_debug_options || visual_only)
+            if (w_ptr->wizard || visual_only)
                 prt("Idx", 4, 70);
             prt("Sym", 4, 75);
 #endif

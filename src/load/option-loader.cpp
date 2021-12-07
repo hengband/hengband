@@ -43,6 +43,9 @@ void rd_options(void)
 
     auto c = rd_u16b();
 
+    if (c & 0x0002)
+        w_ptr->wizard = true;
+
     cheat_peek = any_bits(c, 0x0100);
     cheat_hear = any_bits(c, 0x0200);
     cheat_room = any_bits(c, 0x0400);

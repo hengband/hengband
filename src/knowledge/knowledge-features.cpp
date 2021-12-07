@@ -7,7 +7,6 @@
 #include "knowledge/knowledge-features.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon.h"
-#include "game-option/game-play-options.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
@@ -67,9 +66,9 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         if (per_page == 1) {
             c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
             c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], (unsigned char)f_ptr->x_char[lighting_level]), row_i,
-                f_idx_col - ((allow_debug_options || visual_only) ? 6 : 2));
+                f_idx_col - ((w_ptr->wizard || visual_only) ? 6 : 2));
         }
-        if (allow_debug_options || visual_only) {
+        if (w_ptr->wizard || visual_only) {
             c_prt(attr, format("%d", f_idx), row_i, f_idx_col);
         }
 
@@ -165,11 +164,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 prt(_("グループ", "Group"), 4, 0);
             prt(_("名前", "Name"), 4, max + 3);
             if (use_bigtile) {
-                if (allow_debug_options || visual_only)
+                if (w_ptr->wizard || visual_only)
                     prt("Idx", 4, 62);
                 prt(_("文字 ( l/ d)", "Sym ( l/ d)"), 4, 66);
             } else {
-                if (allow_debug_options || visual_only)
+                if (w_ptr->wizard || visual_only)
                     prt("Idx", 4, 64);
                 prt(_("文字 (l/d)", "Sym (l/d)"), 4, 68);
             }
