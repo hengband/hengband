@@ -271,7 +271,7 @@
 
   オプション追加/削除
   - disturb_high 追加：レベルの高いモンスターが動いたら行動中止する
-  - allow_debug_options 追加：デバッグ/詐欺オプションの使用を許可/禁止する 
+  - allow_debug_opts 追加：デバッグ/詐欺オプションの使用を許可/禁止する 
   - 初期オプション munchkin_death は詐欺オプションに cheat_save に変更。
   - 初期オプション terrain_streamsとstupid_monsters 廃止。
 

@@ -212,7 +212,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
             } else {
                 // マクロの作成時に参照するためmacro_bufにコピーする
-                strcpy(macro_buf, macro__act[k].c_str());
+                strncpy(macro_buf, macro__act[k].c_str(), sizeof(macro_buf) -1);
                 // too long macro must die
                 strncpy(tmp, macro_buf, 80);
                 tmp[80] = '\0';
@@ -262,7 +262,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 msg_print(_("キー配置は定義されていません。", "Found no keymap."));
             } else {
                 // マクロの作成時に参照するためmacro_bufにコピーする
-                strcpy(macro_buf, act);
+                strncpy(macro_buf, act, sizeof(macro_buf) - 1);
                 // too long macro must die
                 strncpy(tmp, macro_buf, 80);
                 tmp[80] = '\0';

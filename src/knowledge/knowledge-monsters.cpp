@@ -10,7 +10,6 @@
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "game-option/cheat-options.h"
-#include "game-option/game-play-options.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
@@ -258,9 +257,9 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, (r_ptr->name.c_str()), row + i, col);
         if (per_page == 1)
-            c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (allow_debug_options || visual_only) ? 56 : 61);
+            c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
 
-        if (allow_debug_options || visual_only)
+        if (w_ptr->wizard || visual_only)
             c_prt(attr, format("%d", r_idx), row + i, 62);
 
         term_erase(69, row + i, 255);
@@ -341,7 +340,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             if (direct_r_idx < 0)
                 prt(_("グループ", "Group"), 4, 0);
             prt(_("名前", "Name"), 4, max + 3);
-            if (allow_debug_options || visual_only)
+            if (w_ptr->wizard || visual_only)
                 prt("Idx", 4, 62);
             prt(_("文字", "Sym"), 4, 67);
             if (!visual_only)

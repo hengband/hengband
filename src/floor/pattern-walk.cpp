@@ -29,6 +29,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-movement-processor.h"
+#include "world/world.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
@@ -239,8 +240,8 @@ bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_
         ok_move = PATTERN_TILE_1;
         break;
     default:
-        msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
-        msg_print(_("不具合の可能性があります。開発者に連絡して下さい。", "There may be some problem. Please contact developers."));
+        if (w_ptr->wizard)
+            msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
         return true;
     }
 
