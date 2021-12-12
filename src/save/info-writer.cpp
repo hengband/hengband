@@ -61,6 +61,9 @@ void wr_options(save_type type)
 
     /*** Cheating options ***/
     uint16_t c = 0;
+    if (w_ptr->wizard)
+        c |= 0x0002;
+
     if (cheat_sight)
         c |= 0x0040;
 

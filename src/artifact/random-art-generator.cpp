@@ -19,7 +19,6 @@
 #include "core/window-redrawer.h"
 #include "flavor/object-flavor.h"
 #include "game-option/cheat-types.h"
-#include "game-option/game-play-options.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
@@ -38,6 +37,7 @@
 #include "view/display-messages.h"
 #include "wizard/artifact-bias-table.h"
 #include "wizard/wizard-messages.h"
+#include "world/world.h"
 
 static bool weakening_artifact(object_type *o_ptr)
 {
@@ -223,7 +223,7 @@ static void invest_powers(PlayerType *player_ptr, object_type *o_ptr, int *power
             random_slay(o_ptr);
             break;
         default:
-            if (allow_debug_options)
+            if (w_ptr->wizard)
                 msg_print("Switch error in become_random_artifact!");
 
             (*powers)++;

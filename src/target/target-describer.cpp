@@ -9,7 +9,6 @@
 #include "floor/floor-town.h"
 #include "floor/geometry.h"
 #include "floor/object-scanner.h"
-#include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -42,6 +41,7 @@
 #include "view/display-messages.h"
 #include "view/display-monster-status.h"
 #include "window/display-sub-windows.h"
+#include "world/world.h"
 
 static const int16_t CONTINUOUS_DESCRIPTION = 256;
 
@@ -103,7 +103,7 @@ static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type
     }
 
     if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
-        if (!allow_debug_options) {
+        if (!w_ptr->wizard) {
             sprintf(buf, "??");
             return;
         }
@@ -464,7 +464,7 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static void describe_grid_monster_all(eg_type *eg_ptr)
 {
-    if (!allow_debug_options) {
+    if (!w_ptr->wizard) {
 #ifdef JP
         sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else

@@ -26,7 +26,9 @@ void print_title(PlayerType *player_ptr)
 {
     GAME_TEXT str[14];
     concptr p = "";
-    if (w_ptr->total_winner) {
+    if (w_ptr->wizard) {
+        p = _("[ウィザード]", "[=-WIZARD-=]");
+    } else if (w_ptr->total_winner) {
         if (player_ptr->is_true_winner()) {
             p = _("*真・勝利者*", "*TRUEWINNER*");
         } else {
@@ -304,7 +306,7 @@ void health_redraw(PlayerType *player_ptr, bool riding)
     monster_type *m_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[health_who];
 
-    if (player_ptr->phase_out) {
+    if (w_ptr->wizard && player_ptr->phase_out) {
         row = ROW_INFO - 1;
         col = COL_INFO + 2;
 
