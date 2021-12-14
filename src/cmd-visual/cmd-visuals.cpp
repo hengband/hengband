@@ -123,7 +123,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     continue;
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", r_ref.name.c_str());
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", i, (byte)(r_ref.x_attr), (byte)(r_ref.x_char));
+                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", r_ref.idx, (byte)(r_ref.x_attr), (byte)(r_ref.x_char));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
