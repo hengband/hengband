@@ -41,11 +41,11 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
                     continue;
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[tval][num];
-                SUB_EXP weapon_max = s_info[enum2i(player_ptr->pclass)].w_max[tval][num];
+                SUB_EXP weapon_max = player_ptr->weapon_exp_max[tval][num];
                 strip_name(tmp, k_ref.idx);
                 fprintf(fff, "%-25s ", tmp);
                 if (show_actual_value)
-                    fprintf(fff, "%4d/%4d ", std::min(weapon_exp, weapon_max), weapon_max);
+                    fprintf(fff, "%4d/%4d ", weapon_exp, weapon_max);
                 if (weapon_exp >= weapon_max)
                     fprintf(fff, "!");
                 else

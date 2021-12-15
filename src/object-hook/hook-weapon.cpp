@@ -21,7 +21,6 @@ bool object_is_favorite(PlayerType *player_ptr, const object_type *o_ptr)
     }
 
     /* Favorite weapons are varied depend on the class */
-    auto short_pclass = enum2i(player_ptr->pclass);
     switch (player_ptr->pclass) {
     case PlayerClassType::PRIEST: {
         auto flgs = object_flags_known(o_ptr);
@@ -34,7 +33,7 @@ bool object_is_favorite(PlayerType *player_ptr, const object_type *o_ptr)
     case PlayerClassType::MONK:
     case PlayerClassType::FORCETRAINER:
         /* Icky to wield? */
-        if (!(s_info[short_pclass].w_max[o_ptr->tval][o_ptr->sval]))
+        if (player_ptr->weapon_exp_max[o_ptr->tval][o_ptr->sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED))
             return false;
         break;
 
@@ -50,13 +49,13 @@ bool object_is_favorite(PlayerType *player_ptr, const object_type *o_ptr)
     }
 
     case PlayerClassType::SORCERER:
-        if (s_info[short_pclass].w_max[o_ptr->tval][o_ptr->sval] < PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER))
+        if (player_ptr->weapon_exp_max[o_ptr->tval][o_ptr->sval] < PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER))
             return false;
         break;
 
     case PlayerClassType::NINJA:
         /* Icky to wield? */
-        if (s_info[short_pclass].w_max[o_ptr->tval][o_ptr->sval] <= PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER))
+        if (player_ptr->weapon_exp_max[o_ptr->tval][o_ptr->sval] <= PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER))
             return false;
         break;
 

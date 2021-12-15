@@ -1695,7 +1695,7 @@ bool has_not_ninja_weapon(PlayerType *player_ptr, int i)
     auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
     auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return player_ptr->pclass == PlayerClassType::NINJA &&
-           !((s_info[enum2i(PlayerClassType::NINJA)].w_max[tval][sval] > PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) &&
+           !((player_ptr->weapon_exp_max[tval][sval] > PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) &&
                (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != ItemKindType::SHIELD));
 }
 
@@ -1707,7 +1707,7 @@ bool has_not_monk_weapon(PlayerType *player_ptr, int i)
     
     auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
     auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
-    return ((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && !(s_info[enum2i(player_ptr->pclass)].w_max[tval][sval]);
+    return ((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && (player_ptr->weapon_exp_max[tval][sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED));
 }
 
 bool has_good_luck(PlayerType *player_ptr)
