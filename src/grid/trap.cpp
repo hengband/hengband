@@ -46,7 +46,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-static int16_t normal_traps[MAX_NORMAL_TRAPS];
+static std::vector<int16_t> normal_traps;
 
 /*!
  * @brief 箱のトラップテーブル
@@ -131,26 +131,24 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
  */
 void init_normal_traps(void)
 {
-    int cur_trap = 0;
-
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TRAPDOOR");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_PIT");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_SPIKED_PIT");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_POISON_PIT");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TY_CURSE");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TELEPORT");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_FIRE");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_ACID");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_SLOW");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_LOSE_STR");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_LOSE_DEX");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_LOSE_CON");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_BLIND");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_CONFUSE");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_POISON");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_SLEEP");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TRAPS");
-    normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_ALARM");
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TRAPDOOR"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_PIT"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_SPIKED_PIT"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_POISON_PIT"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TY_CURSE"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TELEPORT"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_FIRE"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_ACID"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_SLOW"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_LOSE_STR"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_LOSE_DEX"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_LOSE_CON"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_BLIND"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_CONFUSE"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_POISON"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_SLEEP"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_TRAPS"));
+    normal_traps.push_back(f_tag_to_index_in_init("TRAP_ALARM"));
 }
 
 /*!
@@ -170,8 +168,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
     /* Pick a trap */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
-        /* Hack -- pick a trap */
-        feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
+        feat = normal_traps[randint0(normal_traps.size())];
 
         /* Accept non-trapdoors */
         if (f_info[feat].flags.has_not(FloorFeatureType::MORE))
