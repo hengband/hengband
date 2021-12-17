@@ -45,6 +45,7 @@
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 
 int flow_head = 0;
@@ -277,41 +278,43 @@ bool trap_can_be_ignored(PlayerType *player_ptr, FEAT_IDX feat)
     if (f_ptr->flags.has_not(FloorFeatureType::TRAP))
         return true;
 
-    switch (f_ptr->subtype) {
-    case TRAP_TRAPDOOR:
-    case TRAP_PIT:
-    case TRAP_SPIKED_PIT:
-    case TRAP_POISON_PIT:
+    switch (i2enum<TrapType>(f_ptr->subtype)) {
+    case TrapType::TRAPDOOR:
+    case TrapType::PIT:
+    case TrapType::SPIKED_PIT:
+    case TrapType::POISON_PIT:
         if (player_ptr->levitation)
             return true;
         break;
-    case TRAP_TELEPORT:
+    case TrapType::TELEPORT:
         if (player_ptr->anti_tele)
             return true;
         break;
-    case TRAP_FIRE:
+    case TrapType::FIRE:
         if (has_immune_fire(player_ptr))
             return true;
         break;
-    case TRAP_ACID:
+    case TrapType::ACID:
         if (has_immune_acid(player_ptr))
             return true;
         break;
-    case TRAP_BLIND:
+    case TrapType::BLIND:
         if (has_resist_blind(player_ptr))
             return true;
         break;
-    case TRAP_CONFUSE:
+    case TrapType::CONFUSE:
         if (has_resist_conf(player_ptr))
             return true;
         break;
-    case TRAP_POISON:
+    case TrapType::POISON:
         if (has_resist_pois(player_ptr))
             return true;
         break;
-    case TRAP_SLEEP:
+    case TrapType::SLEEP:
         if (player_ptr->free_act)
             return true;
+        break;
+    default:
         break;
     }
 
