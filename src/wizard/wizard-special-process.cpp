@@ -420,9 +420,10 @@ void wiz_change_status(PlayerType *player_ptr)
 
     for (auto tval : TV_WEAPON_RANGE) {
         for (int i = 0; i < 64; i++) {
-            player_ptr->weapon_exp[tval][i] = std::min(tmp_s16b, s_info[enum2i(player_ptr->pclass)].w_max[tval][i]);
+            player_ptr->weapon_exp[tval][i] = tmp_s16b;
         }
     }
+    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
 
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[j] = tmp_s16b;

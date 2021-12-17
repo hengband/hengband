@@ -3,6 +3,7 @@
 #include "monster-race/monster-race.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -238,7 +239,7 @@ void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
 
     for (auto sval = 0U; sval < this->player_ptr->weapon_exp[o_ptr->tval].size(); ++sval) {
         auto &now_exp = this->player_ptr->weapon_exp[o_ptr->tval][sval];
-        if (now_exp < s_info[enum2i(this->player_ptr->pclass)].w_max[o_ptr->tval][sval]) {
+        if (now_exp < this->player_ptr->weapon_exp_max[o_ptr->tval][sval]) {
             gain_attack_skill_exp(this->player_ptr, now_exp,
                 (static_cast<int>(sval) == o_ptr->sval) ? gain_amount_list : others_gain_amount_list);
         }
@@ -252,7 +253,7 @@ void PlayerSkill::gain_range_weapon_exp(const object_type *o_ptr)
 
     for (auto sval = 0U; sval < this->player_ptr->weapon_exp[o_ptr->tval].size(); ++sval) {
         auto &now_exp = this->player_ptr->weapon_exp[o_ptr->tval][sval];
-        if (now_exp < s_info[enum2i(this->player_ptr->pclass)].w_max[o_ptr->tval][sval]) {
+        if (now_exp < this->player_ptr->weapon_exp_max[o_ptr->tval][sval]) {
             gain_attack_skill_exp(this->player_ptr, now_exp,
                 (static_cast<int>(sval) == o_ptr->sval) ? gain_amount_list : others_gain_amount_list);
         }
@@ -415,4 +416,42 @@ EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
         return this->player_ptr->spell_exp[spell_idx + 32];
     else
         return 0;
+}
+
+/*!
+ * @brief 特別な武器スキル最大値の適用を行う
+ * 性格セクシーギャルの場合ムチスキルの最大値が達人になる
+ * 種族マーフォークの場合三叉槍とトライデントのスキルが達人になる
+ * （但し、いずれも職業がスペルマスターではない場合に限る）
+ */
+void PlayerSkill::apply_special_weapon_skill_max_values()
+{
+    this->player_ptr->weapon_exp_max = s_info[enum2i(this->player_ptr->pclass)].w_max;
+
+    if (this->player_ptr->pclass != PlayerClassType::SORCERER) {
+        auto &w_exp_max = this->player_ptr->weapon_exp_max;
+
+        if (this->player_ptr->ppersonality == PERSONALITY_SEXY) {
+            w_exp_max[ItemKindType::HAFTED][SV_WHIP] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+        }
+
+        if (this->player_ptr->prace == PlayerRaceType::MERFOLK) {
+            w_exp_max[ItemKindType::POLEARM][SV_TRIDENT] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+            w_exp_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+        }
+    }
+}
+
+/*!
+ * @brief 武器スキル経験値を最大値で制限する
+ */
+void PlayerSkill::limit_weapon_skills_by_max_value()
+{
+    for (auto tval : TV_WEAPON_RANGE) {
+        auto &exp_table = this->player_ptr->weapon_exp[tval];
+        const auto &max_exp_table = this->player_ptr->weapon_exp_max[tval];
+        for (auto i = 0U; i < exp_table.size(); ++i) {
+            exp_table[i] = std::min(exp_table[i], max_exp_table[i]);
+        }
+    }
 }
