@@ -182,6 +182,8 @@ const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION] = {
     { TR_NO_TELE, _("反テレポート", "Prevent Teleportation") },
     { TR_NO_MAGIC, _("反魔法", "Anti-Magic") },
     { TR_PERSISTENT_CURSE, _("執拗呪詛", "Persistent Curse") },
+    { TR_LOW_AC, _("AC低下", "Low AC") },
+    { TR_BERS_RAGE, _("狂戦士化", "Berserk Rage") },
     { TR_LEVITATION, _("浮遊", "Levitation") },
     { TR_SEE_INVIS, _("可視透明", "See Invisible") },
     { TR_TELEPATHY, _("テレパシー", "ESP") },
