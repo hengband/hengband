@@ -210,7 +210,7 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
         }
 
         strcat(buff, "で、名前が「");
-        strncat(buff, describer->str, 80);
+        angband_strcat(buff, describer->str, (MAX_NLEN - MAX_INSCRIPTION));
         if (describer->top)
             strcat(buff, "」で始まるもの");
         else
@@ -218,7 +218,9 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
     }
 
     if (describer->insc) {
-        strncat(buff, format("に「%s」", describer->insc), 80);
+        char tmp[MAX_INSCRIPTION + 1] = "";
+        angband_strcat(tmp, describer->insc, MAX_INSCRIPTION);
+        angband_strcat(buff, format("に「%s」", tmp), MAX_INSCRIPTION + 6);
 
         if (angband_strstr(describer->insc, "%%all"))
             strcat(buff, "(%%allは全能力を表す英字の記号で置換)");
