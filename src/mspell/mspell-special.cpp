@@ -51,6 +51,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
     POSITION dummy_x = m_ptr->fx;
     BIT_FLAGS mode = 0L;
 
+    if (see_monster(player_ptr, m_idx) && monster_near_player(floor_ptr, m_idx, 0))
+        disturb(player_ptr, true, true);
+
     switch (m_ptr->r_idx) {
     case MON_BANORLUPART:
         dummy_hp = (m_ptr->hp + 1) / 2;
@@ -114,10 +117,18 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
     int count = 0, k;
     int num = 1 + randint1(3);
     BIT_FLAGS mode = 0L;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
+    bool mon_to_mon = TARGET_TYPE == MONSTER_TO_MONSTER;
+    bool mon_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
+    bool known = monster_near_player(floor_ptr, m_idx, t_idx);
+
     mspell_cast_msg_blind msg(_("%^sが何か大量に投げた。", "%^s spreads something."),
         _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+    if (mon_to_player || (mon_to_mon && known && see_either))
+        disturb(player_ptr, true, true);
 
     for (k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_GRENADE, mode);
@@ -228,7 +239,6 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    disturb(player_ptr, true, true);
     switch (m_ptr->r_idx) {
     case MON_OHMU:
         return MonsterSpellResult::make_invalid();
