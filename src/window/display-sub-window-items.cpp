@@ -21,7 +21,7 @@ void display_short_flavors(flavor_type *flavor_ptr)
     if (flavor_ptr->o_ptr->inscription == 0)
         return;
 
-    char buff[1024];
+    char buff[1024] = "";
     if (flavor_ptr->tmp_val2[0])
         strcat(flavor_ptr->tmp_val2, ", ");
 

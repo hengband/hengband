@@ -66,6 +66,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 
@@ -201,7 +202,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     OBJECT_IDX item;
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
-    char out_val[80];
+    char out_val[MAX_INSCRIPTION + 1] = "";
     concptr q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
     concptr s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
@@ -213,9 +214,9 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     msg_print(nullptr);
     strcpy(out_val, "");
     if (o_ptr->inscription)
-        strcpy(out_val, quark_str(o_ptr->inscription));
+        angband_strcpy(out_val, quark_str(o_ptr->inscription), MAX_INSCRIPTION);
 
-    if (get_string(_("銘: ", "Inscription: "), out_val, 80)) {
+    if (get_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {
         o_ptr->inscription = quark_add(out_val);
         set_bits(player_ptr->update, PU_COMBINE);
         set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_FLOOR_ITEM_LIST);
