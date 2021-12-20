@@ -7,6 +7,7 @@
 #include "object/object-stack.h"
 #include "game-option/game-play-options.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/object-smith.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-kind.h"
@@ -176,6 +177,10 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
         if (o_ptr->dd != j_ptr->dd)
             return 0;
         if (o_ptr->ds != j_ptr->ds)
+            return 0;
+        if (Smith::object_effect(o_ptr) != Smith::object_effect(j_ptr))
+            return 0;
+        if (Smith::object_activation(o_ptr) != Smith::object_activation(j_ptr))
             return 0;
         break;
     }
