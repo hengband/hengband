@@ -137,7 +137,7 @@ static bool select_class(PlayerType *player_ptr, char *cur, char *sym, int *k)
             return false;
 
         if (c == ' ' || c == '\r' || c == '\n') {
-            if (cs == PlayerClassType::MAX) {
+            if (int_cs == enum2i(PlayerClassType::MAX)) {
                 *k = randint0(PLAYER_CLASS_TYPE_MAX);
                 cs = i2enum<PlayerClassType>(*k);
                 continue;
