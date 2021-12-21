@@ -5,7 +5,8 @@
 struct MonsterSpellResult {
 private:
     explicit MonsterSpellResult(const bool valid, const HIT_POINT dam = 0)
-        : valid(valid), dam(dam)
+        : valid(valid)
+        , dam(dam)
     {
     }
 
