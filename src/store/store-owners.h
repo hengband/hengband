@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "player-info/race-types.h"
+#include "store/store-util.h"
 #include "system/angband.h"
 #include <array>
 
-#define MAX_STORES 10 /*!< 店舗の種類最大数 / Total number of stores (see "store.c", etc) */
 #define MAX_OWNERS 32 /*!< 各店舗毎の店主定義最大数 / Total number of owners per store (see "store.c", etc) */
 
 /*!
