@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+#include "util/enum-converter.h"
 #include "util/enum-range.h"
 
 #include <memory>
@@ -20,8 +21,9 @@ enum class StoreSaleType {
     HOME      = 7, //!< 店舗の種類: 我が家
     BOOK      = 8, //!< 店舗の種類: 書店
     MUSEUM    = 9, //!< 店舗の種類: 博物館
-    MAX       = 10
+    MAX
 };
+constexpr int MAX_STORES = enum2i(StoreSaleType::MAX); /*!< 店舗の種類最大数 / Total number of stores (see "store.c", etc) */
 
 constexpr auto STORE_SALE_TYPE_LIST = EnumRange(StoreSaleType::GENERAL, StoreSaleType::MUSEUM);
 
