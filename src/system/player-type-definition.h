@@ -189,6 +189,7 @@ public:
 
     SUB_EXP spell_exp[64]{}; /* Proficiency of spells */
     std::map<ItemKindType, std::array<SUB_EXP, 64>> weapon_exp{}; /* Proficiency of weapons */
+    std::map<ItemKindType, std::array<SUB_EXP, 64>> weapon_exp_max{}; /* Maximum proficiency of weapons */
     std::map<PlayerSkillKindType, SUB_EXP> skill_exp{}; /* Proficiency of misc. skill */
 
     ClassSpecificData class_specific_data;

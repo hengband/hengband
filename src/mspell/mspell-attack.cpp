@@ -21,9 +21,9 @@
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/mspell-lite.h"
+#include "mspell/mspell-result.h"
 #include "mspell/mspell-selector.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell.h"
 #include "player-base/player-class.h"
 #include "player-info/mane-data-type.h"
 #include "player/attack-defense-types.h"
@@ -54,8 +54,7 @@ static void set_no_magic_mask(msa_type *msa_ptr)
 static void check_mspell_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    msa_ptr->in_no_magic_dungeon = d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level
-        && (!floor_ptr->inside_quest || quest_type::is_fixed(floor_ptr->inside_quest));
+    msa_ptr->in_no_magic_dungeon = d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level && (!floor_ptr->inside_quest || quest_type::is_fixed(floor_ptr->inside_quest));
     if (!msa_ptr->in_no_magic_dungeon || ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0))
         return;
 
@@ -95,13 +94,11 @@ static bool check_mspell_non_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
     if (!player_ptr->csp)
         msa_ptr->ability_flags.reset(MonsterAbilityType::DRAIN_MANA);
 
-    if (msa_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK)
-        && !clean_shot(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, player_ptr->y, player_ptr->x, false)) {
+    if (msa_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK) && !clean_shot(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, player_ptr->y, player_ptr->x, false)) {
         msa_ptr->ability_flags.reset(RF_ABILITY_BOLT_MASK);
     }
 
-    if (msa_ptr->ability_flags.has_any_of(RF_ABILITY_SUMMON_MASK)
-        && !(summon_possible(player_ptr, msa_ptr->y, msa_ptr->x))) {
+    if (msa_ptr->ability_flags.has_any_of(RF_ABILITY_SUMMON_MASK) && !(summon_possible(player_ptr, msa_ptr->y, msa_ptr->x))) {
         msa_ptr->ability_flags.reset(RF_ABILITY_SUMMON_MASK);
     }
 
@@ -185,8 +182,7 @@ static bool check_mspell_unexploded(PlayerType *player_ptr, msa_type *msa_ptr)
     if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
         fail_rate = 0;
 
-    if (!spell_is_inate(msa_ptr->thrown_spell)
-        && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
+    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
         disturb(player_ptr, true, true);
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), msa_ptr->m_name);
         return true;
@@ -304,8 +300,7 @@ bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    if (msa_ptr->m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC) || !is_hostile(msa_ptr->m_ptr)
-        || ((msa_ptr->m_ptr->cdis > get_max_range(player_ptr)) && !msa_ptr->m_ptr->target_y))
+    if (msa_ptr->m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC) || !is_hostile(msa_ptr->m_ptr) || ((msa_ptr->m_ptr->cdis > get_max_range(player_ptr)) && !msa_ptr->m_ptr->target_y))
         return false;
 
     decide_lite_range(player_ptr, msa_ptr);

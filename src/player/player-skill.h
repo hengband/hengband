@@ -71,6 +71,9 @@ public:
 
     EXP exp_of_spell(int realm, int spell_idx) const;
 
+    void apply_special_weapon_skill_max_values();
+    void limit_weapon_skills_by_max_value();
+
 private:
     PlayerType *player_ptr;
 };

@@ -12,6 +12,7 @@
 #include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
+#include "floor/cave.h"
 #include "game-option/special-options.h"
 #include "hpmp/hp-mp-processor.h"
 #include "mind/mind-archer.h"
@@ -46,11 +47,16 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
+#include "target/target-setter.h"
+#include "target/target-types.h"
+#include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
@@ -403,4 +409,18 @@ bool activate_create_ammo(PlayerType *player_ptr)
 {
     msg_print(_("ダイアナの祝福を感じた...", "You feel Diana's breath..."));
     return create_ammo(player_ptr);
+}
+
+bool activate_dispel_magic(PlayerType *player_ptr)
+{
+    msg_print(_("鈍い色に光った...", "It glowed in a dull color..."));
+    if (!target_set(player_ptr, TARGET_KILL))
+        return false;
+
+    auto m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+    if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
+        return true;
+
+    dispel_monster_status(player_ptr, m_idx);
+    return true;
 }

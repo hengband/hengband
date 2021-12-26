@@ -10,8 +10,9 @@
 #include "monster/monster-update.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell.h"
+#include "mspell/mspell-result.h"
 #include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -34,7 +35,7 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, AttributeType GF
         msg_format(_("%^s「ボ帝ビルカッター！！！」", "%^s shouts, 'Boty-Build cutter!!!'"), m_name);
         return true;
     }
-    if (r_idx == MON_RAOU && GF_TYPE == AttributeType::FORCE) {
+    if (r_idx == MON_RAOU && (GF_TYPE == AttributeType::FORCE)) {
         if (one_in_(2))
             msg_format(_("%^s「北斗剛掌波！！」", "%^s says, 'Hokuto Goh-Sho-Ha!!'"), m_name);
         else

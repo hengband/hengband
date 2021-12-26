@@ -5106,7 +5106,7 @@
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h">
       <Filter>monster-race</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspell.h">
+    <ClInclude Include="..\..\src\mspell\mspell-result.h">
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\old\load-v1-5-0.h">

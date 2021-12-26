@@ -381,6 +381,8 @@ bool switch_activation(PlayerType *player_ptr, object_type **o_ptr_ptr, const ac
         return true;
     case RandomArtActType::CREATE_AMMO:
         return activate_create_ammo(player_ptr);
+    case RandomArtActType::DISPEL_MAGIC:
+        return activate_dispel_magic(player_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
         return false;

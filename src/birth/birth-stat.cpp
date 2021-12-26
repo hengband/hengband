@@ -125,6 +125,7 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
 
     auto pclass = enum2i(player_ptr->pclass);
     player_ptr->weapon_exp = s_info[pclass].w_start;
+    player_ptr->weapon_exp_max = s_info[pclass].w_max;
 
     if (player_ptr->ppersonality == PERSONALITY_SEXY) {
         auto &whip_exp = player_ptr->weapon_exp[ItemKindType::HAFTED][SV_WHIP];

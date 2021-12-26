@@ -2457,6 +2457,9 @@ void update_creature(PlayerType *player_ptr)
     if (any_bits(player_ptr->update, (PU_BONUS))) {
         reset_bits(player_ptr->update, PU_BONUS);
         PlayerAlignment(player_ptr).update_alignment();
+        PlayerSkill ps(player_ptr);
+        ps.apply_special_weapon_skill_max_values();
+        ps.limit_weapon_skills_by_max_value();
         update_bonuses(player_ptr);
     }
 

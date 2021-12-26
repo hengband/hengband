@@ -10,7 +10,7 @@
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
-#include "mspell/mspell.h"
+#include "mspell/mspell-result.h"
 #include "effect/attribute-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
