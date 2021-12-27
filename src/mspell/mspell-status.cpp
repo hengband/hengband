@@ -589,8 +589,6 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     char m_poss[10];
     monster_desc(player_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-    disturb(player_ptr, true, true);
-
     msg.to_player_true = _("%^sが何かをつぶやいた。", "%^s mumbles.");
     msg.to_mons_true = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss));
     msg.to_player_false = _("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss));
