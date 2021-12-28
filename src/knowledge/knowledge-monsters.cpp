@@ -290,10 +290,9 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
     std::vector<MONRACE_IDX> mon_idx(r_info.size());
+    std::vector<IDX> grp_idx;
 
     int max = 0;
-    IDX grp_cnt = 0;
-    IDX grp_idx[100];
     IDX mon_cnt;
     bool visual_list = false;
     TERM_COLOR attr_top = 0;
@@ -309,7 +308,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
                 max = len;
 
             if ((monster_group_char[i] == ((char *)-1L)) || collect_monsters(player_ptr, i, mon_idx.data(), mode)) {
-                grp_idx[grp_cnt++] = i;
+                grp_idx.push_back(i);
             }
         }
 
@@ -323,7 +322,6 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             &r_info[direct_r_idx].x_char, need_redraw);
     }
 
-    grp_idx[grp_cnt] = -1;
     mode = visual_only ? MONSTER_LORE_RESEARCH : MONSTER_LORE_NONE;
     IDX old_grp_cur = -1;
     IDX grp_cur = 0;
@@ -365,7 +363,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             if (grp_cur >= grp_top + browser_rows)
                 grp_top = grp_cur - browser_rows + 1;
 
-            display_group_list(0, 6, max, browser_rows, grp_idx, monster_group_text, grp_cur, grp_top);
+            display_group_list(0, 6, max, browser_rows, grp_idx.data(), monster_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
                 mon_cnt = collect_monsters(player_ptr, grp_idx[grp_cur], mon_idx.data(), mode);
@@ -386,6 +384,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
+        prt(format(_("%d 種", "%d Races"), mon_cnt), 3, 26);
         prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
@@ -450,7 +449,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         }
 
         default: {
-            browser_cursor(ch, &column, &grp_cur, grp_cnt, &mon_cur, mon_cnt);
+            browser_cursor(ch, &column, &grp_cur, grp_idx.size(), &mon_cur, mon_cnt);
 
             break;
         }
