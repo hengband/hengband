@@ -123,7 +123,6 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
 
     bool do_kill_body = any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW);
     do_kill_body &= (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level);
-    do_kill_body &= can_cross;
     do_kill_body &= (g_ptr->m_idx != player_ptr->riding);
 
     if (do_kill_body || are_enemies(player_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr)) 
