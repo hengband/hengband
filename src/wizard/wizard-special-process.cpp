@@ -647,20 +647,12 @@ void wiz_learn_items_all(PlayerType *player_ptr)
  */
 void wiz_reset_race(PlayerType *player_ptr)
 {
-    char ppp[80];
-    sprintf(ppp, "Race (0-%d): ", MAX_RACES - 1);
-
-    char tmp_val[160];
-    sprintf(tmp_val, "%d", enum2i(player_ptr->prace));
-
-    if (!get_string(ppp, tmp_val, 2))
+    int val = enum2i<PlayerRaceType>(player_ptr->prace);
+    if (!get_value("RaceID", 0, MAX_RACES - 1, &val)) {
         return;
+    }
 
-    int tmp_int = atoi(tmp_val);
-    if (tmp_int < 0 || tmp_int >= MAX_RACES)
-        return;
-
-    player_ptr->prace = i2enum<PlayerRaceType>(tmp_int);
+    player_ptr->prace = i2enum<PlayerRaceType>(val);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
     player_ptr->window_flags |= PW_PLAYER;
@@ -675,23 +667,14 @@ void wiz_reset_race(PlayerType *player_ptr)
  */
 void wiz_reset_class(PlayerType *player_ptr)
 {
-    char ppp[80];
-    sprintf(ppp, "Class (0-%d): ", PLAYER_CLASS_TYPE_MAX - 1);
-
-    char tmp_val[160];
-    auto short_pclass = enum2i(player_ptr->pclass);
-    sprintf(tmp_val, "%d", short_pclass);
-
-    if (!get_string(ppp, tmp_val, 2))
+    int val = enum2i<PlayerClassType>(player_ptr->pclass);
+    if (!get_value("ClassID", 0, PLAYER_CLASS_TYPE_MAX - 1, &val)) {
         return;
+    }
 
-    int tmp_int = atoi(tmp_val);
-    if (tmp_int < 0 || tmp_int >= PLAYER_CLASS_TYPE_MAX)
-        return;
-
-    player_ptr->pclass = i2enum<PlayerClassType>(tmp_int);
-    cp_ptr = &class_info[short_pclass];
-    mp_ptr = &m_info[short_pclass];
+    player_ptr->pclass = i2enum<PlayerClassType>(val);
+    cp_ptr = &class_info[val];
+    mp_ptr = &m_info[val];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
@@ -705,24 +688,18 @@ void wiz_reset_class(PlayerType *player_ptr)
  */
 void wiz_reset_realms(PlayerType *player_ptr)
 {
-    char ppp[80];
-    char tmp_val[160];
-
-    sprintf(ppp, "1st Realm (None=0, 1-%d): ", MAX_REALM - 1);
-    sprintf(tmp_val, "%d", player_ptr->realm1);
-    if (!get_string(ppp, tmp_val, 2))
+    int val1 = player_ptr->realm1;
+    if (!get_value("1st Realm (None=0)", 0, MAX_REALM - 1, &val1)) {
         return;
+    }
 
-    player_ptr->realm1 = static_cast<int16_t>(atoi(tmp_val));
-
-    PlayerClass(player_ptr).init_specific_data();
-
-    sprintf(ppp, "2st Realm (None=0, 1-%d): ", MAX_REALM - 1);
-    sprintf(tmp_val, "%d", player_ptr->realm2);
-    if (!get_string(ppp, tmp_val, 2))
+    int val2 = player_ptr->realm2;
+    if (!get_value("2nd Realm (None=0)", 0, MAX_REALM - 1, &val2)) {
         return;
+    }
 
-    player_ptr->realm2 = static_cast<int16_t>(atoi(tmp_val));
+    player_ptr->realm1 = static_cast<int16_t>(val1);
+    player_ptr->realm2 = static_cast<int16_t>(val2);
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     player_ptr->redraw |= PR_BASIC;
