@@ -11,6 +11,7 @@
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-visual-flags.h"
+#include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 
@@ -86,6 +87,7 @@ struct dungeon_type {
     EnumClassFlagGroup<MonsterKindType> mon_kind_flags;
     EnumClassFlagGroup<MonsterResistanceType> mon_resistance_flags;
     EnumClassFlagGroup<MonsterDropType> mon_drop_flags;
+    EnumClassFlagGroup<MonsterWildernessType> mon_wilderness_flags;
 
     char r_char[5]{}; /* Monster race allowed */
     KIND_OBJECT_IDX final_object{}; /* The object you'll find at the bottom */
