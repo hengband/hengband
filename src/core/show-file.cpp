@@ -301,7 +301,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             continue;
         }
 
-        prt(format(_("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]"), FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, caption,
+        prt(format(_("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, caption,
                 line, size),
             0, 0);
 

@@ -57,23 +57,27 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
     w_ptr->sf_system = 0L;
     w_ptr->sf_when = now;
     w_ptr->sf_saves++;
+
+    std::string tmp_variant(VERSION_NAME);
     save_xor_byte = 0;
-    wr_byte(FAKE_VER_MAJOR);
+    wr_byte(static_cast<byte>(tmp_variant.length()));
+    for (auto i = 0; i < 8; i++) {
+        auto variant_name = tmp_variant.c_str();
+        save_xor_byte = 0;
+        wr_byte(variant_name[i]);
+    }
+
     save_xor_byte = 0;
-    wr_byte(FAKE_VER_MINOR);
-    save_xor_byte = 0;
-    wr_byte(FAKE_VER_PATCH);
-    save_xor_byte = 0;
+    wr_byte(H_VER_MAJOR);
+    wr_byte(H_VER_MINOR);
+    wr_byte(H_VER_PATCH);
+    wr_byte(H_VER_EXTRA);
 
     byte tmp8u = (byte)Rand_external(256);
     wr_byte(tmp8u);
     v_stamp = 0L;
     x_stamp = 0L;
-
-    wr_byte(H_VER_EXTRA);
-    wr_byte(H_VER_PATCH);
-    wr_byte(H_VER_MINOR);
-    wr_byte(H_VER_MAJOR);
+ 
     wr_u32b(w_ptr->sf_system);
     wr_u32b(w_ptr->sf_when);
     wr_u16b(w_ptr->sf_lives);

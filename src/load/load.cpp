@@ -305,7 +305,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 
     bool err = false;
     int fd = -1;
-    byte fake_ver[4];
+    char tmp_ver[13]{};
     if (!err) {
         fd = fd_open(savefile, O_RDONLY);
         if (fd < 0)
@@ -316,19 +316,37 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (!err) {
-        if (fd_read(fd, (char *)(fake_ver), 4))
+        if (fd_read(fd, (char *)(tmp_ver), 13)) {
             err = true;
+        }
 
-        if (err)
+        if (err) {
             what = _("セーブファイルを読めません", "Cannot read savefile");
-
-        (void)fd_close(fd);
+        }
     }
 
     if (!err) {
-        if (fake_ver[0] < FAKE_VER_PLUS) {
-            what = _("セーブデータが古すぎます", "Savefile version is too old");
-            err = true;
+        auto tmp_major = tmp_ver[0];
+        auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
+        if (tmp_major == 8) {
+            std::string variant_name(VERSION_NAME);
+            std::stringstream current_variant;
+            for (auto i = 1; i < 9; i++) {
+                current_variant << tmp_ver[i];
+            }
+
+            if (current_variant.str() != variant_name) {
+                throw(_("セーブデータのバリアントは変愚蛮怒以外です", "The variant of save data is other than Hengband!"));
+            }
+
+            w_ptr->sf_extra = tmp_ver[13];
+            (void)fd_close(fd);
+        } else if (is_old_ver) {
+            w_ptr->sf_extra = tmp_ver[3];
+            (void)fd_close(fd);
+        } else {
+            (void)fd_close(fd);
+            throw("Invalid version is detected!");
         }
     }
 
@@ -337,8 +355,6 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
         msg_print(nullptr);
         return false;
     }
-
-    w_ptr->sf_extra = fake_ver[3];
 
     if (!err) {
         term_clear();
