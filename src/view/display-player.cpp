@@ -41,6 +41,7 @@
 #include "view/display-util.h"
 #include "world/world.h"
 #include <string>
+#include <tuple>
 
 /*!
  * @brief
@@ -170,17 +171,19 @@ static void display_player_stats(PlayerType *player_ptr)
  * @param statmsg メッセージバッファ
  * @return 生きていたらFALSE、死んでいたらTRUE
  */
-static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
+static std::tuple<bool, std::string> search_death_cause(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!player_ptr->is_dead)
-        return false;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (!player_ptr->is_dead) {
+        return std::make_tuple(false, "");
+    }
 
+    char statmsg[1000];
     if (w_ptr->total_winner) {
         sprintf(statmsg, _("…あなたは勝利の後%sした。", "...You %s after winning."),
             streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
 
-        return true;
+        return std::make_tuple(true, std::string(statmsg));
     }
 
     if (!floor_ptr->dun_level) {
@@ -189,7 +192,7 @@ static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
 #else
         sprintf(statmsg, "...You were killed by %s in %s.", player_ptr->died_from, map_name(player_ptr));
 #endif
-        return true;
+        return std::make_tuple(true, std::string(statmsg));
     }
 
     if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) {
@@ -202,7 +205,7 @@ static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
 #else
         sprintf(statmsg, "...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->inside_quest].name);
 #endif
-        return true;
+        return std::make_tuple(true, std::string(statmsg));
     }
 
 #ifdef JP
@@ -211,7 +214,7 @@ static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
     sprintf(statmsg, "...You were killed by %s on level %d of %s.", player_ptr->died_from, floor_ptr->dun_level, map_name(player_ptr));
 #endif
 
-    return true;
+    return std::make_tuple(true, std::string(statmsg));
 }
 
 /*!
@@ -241,42 +244,49 @@ static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
  */
-static void decide_current_floor(PlayerType *player_ptr, char *statmsg)
+static std::string decide_current_floor(PlayerType *player_ptr)
 {
-    if (search_death_cause(player_ptr, statmsg))
-        return;
-    if (!w_ptr->character_dungeon)
-        return;
-
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level == 0) {
-        sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr));
-        return;
+    auto [result, str_statmsg] = search_death_cause(player_ptr);
+    if (result || !w_ptr->character_dungeon) {
+        return str_statmsg;
     }
 
-    if (decide_death_in_quest(player_ptr, statmsg))
-        return;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto statmsg = const_cast<char*>(str_statmsg.c_str());
+    if (floor_ptr->dun_level == 0) {
+        sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr));
+        return str_statmsg;
+    }
+
+    if (decide_death_in_quest(player_ptr, statmsg)) {
+        return str_statmsg;
+    }
 
 #ifdef JP
     sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(player_ptr), (int)floor_ptr->dun_level);
 #else
     sprintf(statmsg, "...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(player_ptr));
 #endif
+    return str_statmsg;
 }
 
 /*!
  * @brief 今いる、または死亡した場所を表示する
  * @param statmsg メッセージバッファ
  */
-static void display_current_floor(char *statmsg)
+static void display_current_floor(std::string statmsg)
 {
     char temp[128];
-    shape_buffer(statmsg, 60, temp, sizeof(temp));
-    char *t;
-    t = temp;
-    for (int i = 0; i < 2; i++) {
-        if (t[0] == 0)
+    constexpr auto chars_per_line = 60;
+    shape_buffer(statmsg.c_str(), chars_per_line, temp, sizeof(temp));
+    auto t = temp;
+    auto fraction = statmsg.size() % chars_per_line;
+    auto num_lines = statmsg.size() / chars_per_line;
+    num_lines += fraction > 0 ? 1 : 0;
+    for (auto i = 0U; i < num_lines; i++) {
+        if (t[0] == 0) {
             return;
+        }
 
         put_str(t, i + 5 + 12, 10);
         t += strlen(t) + 1;
@@ -324,15 +334,15 @@ void display_player(PlayerType *player_ptr, int mode)
         return;
     }
 
-    char statmsg[1000];
     put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
-    for (int i = 0; i < 4; i++)
+    for (auto i = 0; i < 4; i++) {
         put_str(player_ptr->history[i], i + 12, 10);
+    }
 
-    *statmsg = '\0';
-    decide_current_floor(player_ptr, statmsg);
-    if (!*statmsg)
+    auto statmsg = decide_current_floor(player_ptr);
+    if (statmsg == "") {
         return;
+    }
 
     display_current_floor(statmsg);
 }
