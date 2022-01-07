@@ -40,8 +40,8 @@
 #include "view/display-player-stat-info.h"
 #include "view/display-util.h"
 #include "world/world.h"
+#include <optional>
 #include <string>
-#include <tuple>
 
 /*!
  * @brief
@@ -171,11 +171,11 @@ static void display_player_stats(PlayerType *player_ptr)
  * @param statmsg メッセージバッファ
  * @return 生きていたらFALSE、死んでいたらTRUE
  */
-static std::tuple<bool, std::string> search_death_cause(PlayerType *player_ptr)
+static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->is_dead) {
-        return std::make_tuple(false, "");
+        return std::nullopt;
     }
 
     char statmsg[1000];
@@ -183,7 +183,7 @@ static std::tuple<bool, std::string> search_death_cause(PlayerType *player_ptr)
         sprintf(statmsg, _("…あなたは勝利の後%sした。", "...You %s after winning."),
             streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
 
-        return std::make_tuple(true, std::string(statmsg));
+        return std::string(statmsg);
     }
 
     if (!floor_ptr->dun_level) {
@@ -192,7 +192,7 @@ static std::tuple<bool, std::string> search_death_cause(PlayerType *player_ptr)
 #else
         sprintf(statmsg, "...You were killed by %s in %s.", player_ptr->died_from, map_name(player_ptr));
 #endif
-        return std::make_tuple(true, std::string(statmsg));
+        return std::string(statmsg);
     }
 
     if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) {
@@ -205,7 +205,7 @@ static std::tuple<bool, std::string> search_death_cause(PlayerType *player_ptr)
 #else
         sprintf(statmsg, "...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->inside_quest].name);
 #endif
-        return std::make_tuple(true, std::string(statmsg));
+        return std::string(statmsg);
     }
 
 #ifdef JP
@@ -214,7 +214,7 @@ static std::tuple<bool, std::string> search_death_cause(PlayerType *player_ptr)
     sprintf(statmsg, "...You were killed by %s on level %d of %s.", player_ptr->died_from, floor_ptr->dun_level, map_name(player_ptr));
 #endif
 
-    return std::make_tuple(true, std::string(statmsg));
+    return std::string(statmsg);
 }
 
 /*!
@@ -223,11 +223,11 @@ static std::tuple<bool, std::string> search_death_cause(PlayerType *player_ptr)
  * @param statmsg メッセージバッファ
  * @return クエスト内であればTRUE、いなければFALSE
  */
-static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
+static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_quest || !quest_type::is_fixed(floor_ptr->inside_quest))
-        return false;
+        return std::nullopt;
 
     for (int i = 0; i < 10; i++)
         quest_text[i][0] = '\0';
@@ -235,8 +235,9 @@ static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    char statmsg[1000];
     sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
-    return true;
+    return std::string(statmsg);
 }
 
 /*!
@@ -246,37 +247,38 @@ static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
  */
 static std::string decide_current_floor(PlayerType *player_ptr)
 {
-    auto [result, str_statmsg] = search_death_cause(player_ptr);
-    if (result || !w_ptr->character_dungeon) {
-        return str_statmsg;
+    auto death_cause = search_death_cause(player_ptr);
+    if (death_cause.has_value() || !w_ptr->character_dungeon) {
+        return death_cause.value();
     }
 
+    char statmsg[1000];
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto statmsg = const_cast<char*>(str_statmsg.c_str());
     if (floor_ptr->dun_level == 0) {
         sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr));
-        return str_statmsg;
+        return std::string(statmsg);
     }
 
-    if (decide_death_in_quest(player_ptr, statmsg)) {
-        return str_statmsg;
+    auto decision = decide_death_in_quest(player_ptr);
+    if (decision.has_value()) {
+        return decision.value();
     }
 
 #ifdef JP
     sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(player_ptr), (int)floor_ptr->dun_level);
 #else
-    sprintf(statmsg, "...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(player_ptr));
+    sprintf(chars_statmsg, "...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(player_ptr));
 #endif
-    return str_statmsg;
+    return std::string(statmsg);
 }
 
 /*!
  * @brief 今いる、または死亡した場所を表示する
  * @param statmsg メッセージバッファ
  */
-static void display_current_floor(std::string statmsg)
+static void display_current_floor(std::string &statmsg)
 {
-    char temp[128];
+    char temp[1000];
     constexpr auto chars_per_line = 60;
     shape_buffer(statmsg.c_str(), chars_per_line, temp, sizeof(temp));
     auto t = temp;
