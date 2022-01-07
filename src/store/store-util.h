@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-#define STORE_OBJ_LEVEL 5 //!< 通常店舗の階層レベル / Magic Level for normal stores
+constexpr DEPTH STORE_OBJ_STD_LEVEL = 5; //!< 通常店舗の標準階層レベル / Magic Level for normal stores
 
 enum class StoreSaleType {
     GENERAL   = 0, //!< 店舗の種類: 雑貨屋
