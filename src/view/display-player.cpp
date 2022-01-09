@@ -287,37 +287,33 @@ static void display_current_floor(std::string &statmsg)
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param mode 表示モードID
+ * @param tmp_mode 暫定表示モード (突然変異の有無で実際のモードに切り替える)
  * @details
- * <pre>
- * The top one and bottom two lines are left blank.
- * Mode 0 = standard display with skills
- * Mode 1 = standard display with history
- * Mode 2 = summary of various things
- * Mode 3 = summary of various things (part 2)
- * Mode 4 = mutations
- * </pre>
+ * 最初の1行と最後の2行は空行. / The top one and bottom two lines are left blank.
+ * Mode 0 = standard display with skills.
+ * Mode 1 = standard display with history.
+ * Mode 2 = summary of various things.
+ * Mode 3 = summary of various things (part 2).
+ * Mode 4 = mutations.
+ * Mode 5 = ??? (コード上の定義より6で割った余りは5になりうるが元のコメントに記載なし).
  */
-void display_player(PlayerType *player_ptr, int mode)
+void display_player(PlayerType *player_ptr, const int tmp_mode)
 {
-    if ((player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations)
-        mode = (mode % 6);
-    else
-        mode = (mode % 5);
-
+    auto has_any_mutation = (player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations;
+    auto mode = has_any_mutation ? tmp_mode % 6 : tmp_mode % 5;
     clear_from(0);
-    if (display_player_info(player_ptr, mode))
+    if (display_player_info(player_ptr, mode)) {
         return;
+    }
 
     display_player_basic_info(player_ptr);
     display_magic_realms(player_ptr);
-
-    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)))
+    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT))) {
         display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.c_str(), TERM_L_BLUE);
+    }
 
     display_phisique(player_ptr);
     display_player_stats(player_ptr);
-
     if (mode == 0) {
         display_player_middle(player_ptr);
         display_player_various(player_ptr);
