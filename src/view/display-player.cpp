@@ -178,21 +178,17 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    char statmsg[1000];
     if (w_ptr->total_winner) {
-        sprintf(statmsg, _("…あなたは勝利の後%sした。", "...You %s after winning."),
-            streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
-
-        return std::string(statmsg);
+        return std::string(format( _("…あなたは勝利の後%sした。", "...You %s after winning."),
+            streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure")));
     }
 
     if (!floor_ptr->dun_level) {
 #ifdef JP
-        sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(player_ptr), player_ptr->died_from);
+        return std::string(format("…あなたは%sで%sに殺された。", map_name(player_ptr), player_ptr->died_from));
 #else
-        sprintf(statmsg, "...You were killed by %s in %s.", player_ptr->died_from, map_name(player_ptr));
+        return std::string(format("...You were killed by %s in %s.", player_ptr->died_from, map_name(player_ptr)));
 #endif
-        return std::string(statmsg);
     }
 
     if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) {
@@ -201,20 +197,17 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
 #ifdef JP
-        sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, player_ptr->died_from);
+        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, player_ptr->died_from));
 #else
-        sprintf(statmsg, "...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->inside_quest].name);
+        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->inside_quest].name));
 #endif
-        return std::string(statmsg);
     }
 
 #ifdef JP
-    sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(player_ptr), (int)floor_ptr->dun_level, player_ptr->died_from);
+    return std::string(format("…あなたは、%sの%d階で%sに殺された。", map_name(player_ptr), (int)floor_ptr->dun_level, player_ptr->died_from));
 #else
-    sprintf(statmsg, "...You were killed by %s on level %d of %s.", player_ptr->died_from, floor_ptr->dun_level, map_name(player_ptr));
+    return std::string(format("...You were killed by %s on level %d of %s.", player_ptr->died_from, floor_ptr->dun_level, map_name(player_ptr)));
 #endif
-
-    return std::string(statmsg);
 }
 
 /*!
@@ -235,9 +228,7 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    char statmsg[1000];
-    sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
-    return std::string(statmsg);
+    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name));
 }
 
 /*!
@@ -249,14 +240,12 @@ static std::string decide_current_floor(PlayerType *player_ptr)
 {
     auto death_cause = search_death_cause(player_ptr);
     if (death_cause.has_value() || !w_ptr->character_dungeon) {
-        return death_cause.value();
+        return death_cause.value_or("");
     }
 
-    char statmsg[1000];
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 0) {
-        sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr));
-        return std::string(statmsg);
+        return std::string(format(_("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr)));
     }
 
     auto decision = decide_death_in_quest(player_ptr);
@@ -265,11 +254,10 @@ static std::string decide_current_floor(PlayerType *player_ptr)
     }
 
 #ifdef JP
-    sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(player_ptr), (int)floor_ptr->dun_level);
+    return std::string(format("…あなたは現在、 %s の %d 階で探索している。", map_name(player_ptr), (int)floor_ptr->dun_level));
 #else
-    sprintf(chars_statmsg, "...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(player_ptr));
+    return std::string(format("...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(player_ptr)));
 #endif
-    return std::string(statmsg);
 }
 
 /*!
