@@ -42,6 +42,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
+#include "io/files-util.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
@@ -127,7 +128,7 @@ static void send_waiting_record(PlayerType *player_ptr)
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
-    bool success = send_world_score(player_ptr, true, display_player);
+    bool success = send_world_score(player_ptr, true);
     if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
         prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
         (void)inkey();

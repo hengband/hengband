@@ -17,7 +17,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include "view/display-player.h" // 暫定。後で消す.
+#include "view/display-player.h"
 #include "world/world.h"
 
 /*!
@@ -99,7 +99,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
             if (get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
                 if (tmp[0] && (tmp[0] != ' ')) {
                     update_playtime();
-                    file_character(player_ptr, tmp, display_player);
+                    file_character(player_ptr, tmp);
                 }
             }
         } else if (c == 'h') {

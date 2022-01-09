@@ -235,7 +235,7 @@ static bool http_post(concptr url, BUF *buf)
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf, display_player_pf display_player)
+static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf)
 {
     char buf[1024];
     FILE *fff;
@@ -254,7 +254,7 @@ static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf, display_player_pf di
     }
 
     /* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
-    make_character_dump(player_ptr, fff, display_player);
+    make_character_dump(player_ptr, fff);
     angband_fclose(fff);
 
     /* Open for read */
@@ -403,7 +403,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 正常にスコアを送信できたらtrue、失敗時に送信を中止したらfalse
  */
-bool report_score(PlayerType *player_ptr, display_player_pf display_player)
+bool report_score(PlayerType *player_ptr)
 {
     auto *score = buf_new();
     char personality_desc[128];
@@ -434,7 +434,7 @@ bool report_score(PlayerType *player_ptr, display_player_pf display_player)
     buf_sprintf(score, "killer: %s\n", player_ptr->died_from);
     buf_sprintf(score, "-----charcter dump-----\n");
 
-    make_dump(player_ptr, score, display_player);
+    make_dump(player_ptr, score);
     if (screen_dump) {
         buf_sprintf(score, "-----screen shot-----\n");
         buf_append(score, screen_dump, strlen(screen_dump));

@@ -552,13 +552,13 @@ static concptr get_check_sum(void)
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-void make_character_dump(PlayerType *player_ptr, FILE *fff, display_player_pf display_player)
+void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
     char title[127];
     put_version(title);
     fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), title);
 
-    dump_aux_player_status(player_ptr, fff, display_player);
+    dump_aux_player_status(player_ptr, fff);
     dump_aux_last_message(player_ptr, fff);
     dump_aux_options(fff);
     dump_aux_recall(fff);

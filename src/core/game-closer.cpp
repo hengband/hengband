@@ -13,6 +13,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-save.h"
 #include "game-option/cheat-options.h"
+#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
@@ -42,7 +43,7 @@ static void clear_floor(PlayerType *player_ptr)
 
 static void send_world_score_on_closing(PlayerType *player_ptr, bool do_send)
 {
-    if (send_world_score(player_ptr, do_send, display_player))
+    if (send_world_score(player_ptr, do_send))
         return;
 
     if (!get_check_strict(
@@ -171,7 +172,7 @@ void close_game(PlayerType *player_ptr)
 
     print_tomb(player_ptr);
     flush();
-    show_death_info(player_ptr, display_player);
+    show_death_info(player_ptr);
     term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);
