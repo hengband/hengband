@@ -16159,7 +16159,7 @@ B:HIT:HURT:1d50
 B:HIT:HURT:1d50
 B:HIT:HURT:1d50
 F:RAND_25 | EVIL | DEMON |
-F:DROP_2D2 | DROP_GOOD | ONLY_ITEM | RES_TELE |
+F:DROP_3D2 | DROP_GOOD | ONLY_ITEM | RES_TELE |
 F:IM_POIS | IM_FIRE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | NONLIVING
 S:1_IN_4 |
 S:ROCKET
@@ -26648,3 +26648,48 @@ D:この兎こそが聖杯の手がかりが眠る「カルバノグの洞窟」
 D:全てのヴォーパルバニー、殺人兎の始祖である。
 D:その前歯は無謀にも近づく多くの騎士と愚か者を屠ってきた。　その前歯を恐れよ！
 D:（モンティ・パイソン・アンド・ホーリー・グレイル,1975）
+
+N:1348:カコデーモン
+E:Cacodemon
+G:u:R
+I:110:27d19:25:70:15
+W:30:1:0:250:0:0
+B:BITE:HURT:6d4
+B:BITE:HURT:6d4
+B:BITE:HURT:6d4
+F:DROP_60 | ONLY_ITEM | DROP_CORPSE | EVIL | DEMON | POWERFUL
+F:RIDING | IM_FIRE | RES_PLAS | BASH_DOOR | CAN_FLY | WILD_OCEAN
+F:WILD_VOLCANO | WILD_MOUNTAIN | WILD_TOWN | WILD_ALL
+S:1_IN_8
+S:BO_FIRE
+D:$It is floating and one-eyed demon.
+D:$It is very round, and has six spines on upper body and two on lower.
+D:$It breathes a plasma ball from its wide mouth.
+D:それはとても丸っこくて体の上部に6本、下部に2本のトゲがあり、浮遊する一つ目の悪魔だ。
+D:その裂けたような口からプラズマの弾を発射してくる。
+
+N:1349:マンキュバス
+E:Mancubus
+G:U:U
+I:110:45d50:15:90:10
+W:39:2:0:2000:0:0
+F:DROP_1D2 | ONLY_ITEM | DROP_CORPSE | EVIL | DEMON | NEVER_BLOW | FORCE_MAXHP
+F:POWERFUL | IM_FIRE | RES_TELE | BASH_DOOR | WILD_VOLCANO | WILD_TOWN
+F:WILD_ALL
+S:1_IN_2
+S:BA_FIRE
+D:$This is fatso has twin gun-arms.
+D:$Its fire balls are just nightmare.
+D:この両腕に砲がある太っちょが出す火の弾は悪夢そのものだ。
+
+N:1350:アラクノトロン
+E:Arachnotron
+G:S:U
+I:115:40d30:10:100:0
+W:45:3:0:10000:0:0
+F:DROP_1D2 | DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD | DROP_CORPSE | EVIL | DEMON | NEVER_BLOW
+F:FORCE_MAXHP | NO_FEAR | RES_PLAS | BASH_DOOR | KILL_BODY
+S:1_IN_1
+S:BO_PLAS
+D:$It has spider-like machine legs and carries a monster that looks brain-like.
+D:蜘蛛のような機械の脚を持っている敵で、脳みそのような生き物を載せている。

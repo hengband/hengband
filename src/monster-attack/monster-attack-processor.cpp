@@ -22,6 +22,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief モンスターが移動した結果、そこにプレイヤーがいたら直接攻撃を行う
@@ -119,15 +120,24 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
 
     monster_race *z_ptr = &r_info[y_ptr->r_idx];
     turn_flags_ptr->do_move = false;
-    if ((((r_ptr->flags2 & RF2_KILL_BODY) != 0) && ((r_ptr->flags1 & RF1_NEVER_BLOW) == 0) && (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level)
-            && can_cross && (g_ptr->m_idx != player_ptr->riding))
-        || are_enemies(player_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr)) {
+
+    bool do_kill_body = any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW);
+    do_kill_body &= (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level);
+    do_kill_body &= (g_ptr->m_idx != player_ptr->riding);
+
+    if (do_kill_body || are_enemies(player_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr)) 
+    {
         return exe_monster_attack_to_monster(player_ptr, m_idx, g_ptr);
     }
 
-    if (((r_ptr->flags2 & RF2_MOVE_BODY) != 0) && ((r_ptr->flags1 & RF1_NEVER_MOVE) == 0) && (r_ptr->mexp > z_ptr->mexp) && can_cross
-        && (g_ptr->m_idx != player_ptr->riding)
-        && monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0)) {
+    bool do_move_body = any_bits(r_ptr->flags2, RF2_MOVE_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_MOVE);
+    do_move_body &= (r_ptr->mexp > z_ptr->mexp);
+    do_move_body &= can_cross;
+    do_move_body &= (g_ptr->m_idx != player_ptr->riding);
+    do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0);
+
+    if (do_move_body)
+    {
         turn_flags_ptr->do_move = true;
         turn_flags_ptr->did_move_body = true;
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
