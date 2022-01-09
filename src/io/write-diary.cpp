@@ -180,11 +180,11 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         type == DIARY_RAND_QUEST_C ||
         type == DIARY_RAND_QUEST_F ||
         type == DIARY_TO_QUEST) {
-        QUEST_IDX old_quest = player_ptr->current_floor_ptr->inside_quest;
-        player_ptr->current_floor_ptr->inside_quest = (quest[num].type == QuestKindType::RANDOM) ? 0 : num;
+        QUEST_IDX old_quest = player_ptr->current_floor_ptr->quest_number;
+        player_ptr->current_floor_ptr->quest_number = (quest[num].type == QuestKindType::RANDOM) ? 0 : num;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->inside_quest = old_quest;
+        player_ptr->current_floor_ptr->quest_number = old_quest;
     }
 
     FILE *fff = nullptr;

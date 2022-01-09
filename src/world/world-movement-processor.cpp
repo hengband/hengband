@@ -1,4 +1,4 @@
-﻿#include "world/world-movement-processor.h"
+#include "world/world-movement-processor.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
@@ -64,7 +64,7 @@ void execute_recall(PlayerType *player_ptr)
 
     disturb(player_ptr, false, true);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level || player_ptr->current_floor_ptr->inside_quest || player_ptr->enter_dungeon) {
+    if (floor_ptr->dun_level || player_ptr->current_floor_ptr->quest_number || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
         if (player_ptr->dungeon_idx)
             player_ptr->recall_dungeon = player_ptr->dungeon_idx;
@@ -75,7 +75,7 @@ void execute_recall(PlayerType *player_ptr)
         player_ptr->dungeon_idx = 0;
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
-        player_ptr->current_floor_ptr->inside_quest = 0;
+        player_ptr->current_floor_ptr->quest_number = 0;
         player_ptr->leaving = true;
         sound(SOUND_TPLEVEL);
         return;

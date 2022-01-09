@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 武器/防具/アクセサリアイテムにおける、耐性やスレイ等の表記
  * @date 2020/07/06
  * @author Hourier
@@ -130,7 +130,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
 
 static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, flavor_ptr->o_ptr))
+    if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, flavor_ptr->o_ptr))
         return;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');

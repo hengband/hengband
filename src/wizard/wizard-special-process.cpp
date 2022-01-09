@@ -828,7 +828,7 @@ void cheat_death(PlayerType *player_ptr)
     floor_ptr->inside_arena = false;
     player_ptr->phase_out = false;
     leaving_quest = 0;
-    floor_ptr->inside_quest = 0;
+    floor_ptr->quest_number = 0;
     if (player_ptr->dungeon_idx)
         player_ptr->recall_dungeon = player_ptr->dungeon_idx;
     player_ptr->dungeon_idx = 0;

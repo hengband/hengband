@@ -85,7 +85,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !floor_ptr->inside_quest) {
+    if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !floor_ptr->quest_number) {
         max_dlv[player_ptr->dungeon_idx] = floor_ptr->dun_level;
         if (record_maxdepth)
             exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor_ptr->dun_level, nullptr);
@@ -128,9 +128,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     if (!player_ptr->playing || player_ptr->is_dead)
         return;
 
-    if (!floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
+    if (!floor_ptr->quest_number && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
         quest_discovery(random_quest_number(player_ptr, floor_ptr->dun_level));
-        floor_ptr->inside_quest = random_quest_number(player_ptr, floor_ptr->dun_level);
+        floor_ptr->quest_number = random_quest_number(player_ptr, floor_ptr->dun_level);
     }
     if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian) {
         if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief キー入力に応じてゲーム内コマンドを実行する
  * @date 2020/05/10
  * @author Hourier
@@ -300,7 +300,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case '<': {
-        if (!player_ptr->wild_mode && !floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->inside_quest) {
+        if (!player_ptr->wild_mode && !floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->quest_number) {
             if (vanilla_town)
                 break;
 

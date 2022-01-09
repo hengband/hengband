@@ -56,7 +56,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
         if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds))
             return false;
 
-        if (!o_ptr->is_known() && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, o_ptr)) {
+        if (!o_ptr->is_known() && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, o_ptr)) {
             return false;
         }
     }

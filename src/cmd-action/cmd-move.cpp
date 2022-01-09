@@ -1,4 +1,4 @@
-﻿#include "cmd-action/cmd-move.h"
+#include "cmd-action/cmd-move.h"
 #include "action/action-limited.h"
 #include "action/movement-execution.h"
 #include "action/run-execution.h"
@@ -53,11 +53,8 @@
  */
 static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
-    quest_type *q_ptr = &quest[player_ptr->current_floor_ptr->inside_quest];
-    if (confirm_quest && player_ptr->current_floor_ptr->inside_quest
-        && (q_ptr->type == QuestKindType::RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED)
-            || (q_ptr->flags & QUEST_FLAG_TOWER
-                && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[QUEST_TOWER1].status != QuestStatusType::COMPLETED)))))) {
+    quest_type *q_ptr = &quest[player_ptr->current_floor_ptr->quest_number];
+    if (confirm_quest && player_ptr->current_floor_ptr->quest_number && (q_ptr->type == QuestKindType::RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED) || (q_ptr->flags & QUEST_FLAG_TOWER && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[QUEST_TOWER1].status != QuestStatusType::COMPLETED)))))) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
         return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
@@ -93,17 +90,17 @@ void do_cmd_go_up(PlayerType *player_ptr)
         sound(SOUND_STAIRWAY);
 
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (quest[player_ptr->current_floor_ptr->inside_quest].status == QuestStatusType::UNTAKEN) {
-            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
+        player_ptr->current_floor_ptr->quest_number = g_ptr->special;
+        if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
+            if (quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[player_ptr->current_floor_ptr->inside_quest].status = QuestStatusType::TAKEN;
+            quest[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
         }
 
-        if (!player_ptr->current_floor_ptr->inside_quest) {
+        if (!player_ptr->current_floor_ptr->quest_number) {
             player_ptr->current_floor_ptr->dun_level = 0;
             player_ptr->word_recall = 0;
         }
@@ -128,14 +125,14 @@ void do_cmd_go_up(PlayerType *player_ptr)
     if (autosave_l)
         do_cmd_save_game(player_ptr, true);
 
-    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type == QuestKindType::RANDOM) {
+    if (player_ptr->current_floor_ptr->quest_number && quest[player_ptr->current_floor_ptr->quest_number].type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->inside_quest = 0;
+        player_ptr->current_floor_ptr->quest_number = 0;
     }
 
-    if (player_ptr->current_floor_ptr->inside_quest && quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
+    if (player_ptr->current_floor_ptr->quest_number && quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
+        player_ptr->current_floor_ptr->quest_number = g_ptr->special;
         player_ptr->current_floor_ptr->dun_level = 0;
         up_num = 0;
     } else {
@@ -210,17 +207,17 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
-        player_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-        if (quest[player_ptr->current_floor_ptr->inside_quest].status == QuestStatusType::UNTAKEN) {
-            if (quest[player_ptr->current_floor_ptr->inside_quest].type != QuestKindType::RANDOM) {
+        player_ptr->current_floor_ptr->quest_number = g_ptr->special;
+        if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
+            if (quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[player_ptr->current_floor_ptr->inside_quest].status = QuestStatusType::TAKEN;
+            quest[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
         }
 
-        if (!player_ptr->current_floor_ptr->inside_quest) {
+        if (!player_ptr->current_floor_ptr->quest_number) {
             player_ptr->current_floor_ptr->dun_level = 0;
             player_ptr->word_recall = 0;
         }

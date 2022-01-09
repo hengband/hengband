@@ -61,15 +61,15 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         if (!is_print)
             continue;
 
-        QUEST_IDX old_quest = player_ptr->current_floor_ptr->inside_quest;
+        QUEST_IDX old_quest = player_ptr->current_floor_ptr->quest_number;
         for (int j = 0; j < 10; j++)
             quest_text[j][0] = '\0';
 
         quest_text_line = 0;
-        player_ptr->current_floor_ptr->inside_quest = i;
+        player_ptr->current_floor_ptr->quest_number = i;
         init_flags = INIT_SHOW_TEXT;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->inside_quest = old_quest;
+        player_ptr->current_floor_ptr->quest_number = old_quest;
         if (quest[i].flags & QUEST_FLAG_SILENT)
             continue;
 
@@ -186,11 +186,11 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, IDX q
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     auto is_fixed_quest = quest_type::is_fixed(q_idx);
     if (is_fixed_quest) {
-        IDX old_quest = floor_ptr->inside_quest;
-        floor_ptr->inside_quest = q_idx;
+        IDX old_quest = floor_ptr->quest_number;
+        floor_ptr->quest_number = q_idx;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        floor_ptr->inside_quest = old_quest;
+        floor_ptr->quest_number = old_quest;
         if (q_ptr->flags & QUEST_FLAG_SILENT)
             return false;
     }

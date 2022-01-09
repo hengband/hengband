@@ -30,15 +30,15 @@ static void get_questinfo(PlayerType *player_ptr, IDX questnum, bool do_init)
     quest_text_line = 0;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    QUEST_IDX old_quest = floor_ptr->inside_quest;
-    floor_ptr->inside_quest = questnum;
+    QUEST_IDX old_quest = floor_ptr->quest_number;
+    floor_ptr->quest_number = questnum;
 
     init_flags = INIT_SHOW_TEXT;
     if (do_init)
         init_flags = i2enum<init_flags_type>(init_flags | INIT_ASSIGN);
 
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    floor_ptr->inside_quest = old_quest;
+    floor_ptr->quest_number = old_quest;
 }
 
 /*!

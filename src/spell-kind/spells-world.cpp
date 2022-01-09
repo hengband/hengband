@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-world.h"
+#include "spell-kind/spells-world.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
@@ -49,8 +49,7 @@
 bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor
-        = floor_ptr->inside_arena || player_ptr->phase_out || (floor_ptr->inside_quest && !random_quest_number(player_ptr, floor_ptr->dun_level));
+    bool is_special_floor = floor_ptr->inside_arena || player_ptr->phase_out || (floor_ptr->quest_number && !random_quest_number(player_ptr, floor_ptr->dun_level));
     bool is_invalid_floor = idx <= 0;
     is_invalid_floor &= quest_number(player_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth);
     is_invalid_floor &= player_ptr->current_floor_ptr->dun_level >= 1;
@@ -151,7 +150,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
             prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
             leave_quest_check(player_ptr);
-            player_ptr->current_floor_ptr->inside_quest = 0;
+            player_ptr->current_floor_ptr->quest_number = 0;
             player_ptr->leaving = true;
         }
     } else if (go_up) {
@@ -358,7 +357,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
 
     bool is_special_floor = is_in_dungeon(player_ptr);
     is_special_floor &= max_dlv[player_ptr->dungeon_idx] > player_ptr->current_floor_ptr->dun_level;
-    is_special_floor &= !player_ptr->current_floor_ptr->inside_quest;
+    is_special_floor &= !player_ptr->current_floor_ptr->quest_number;
     is_special_floor &= !player_ptr->word_recall;
     if (is_special_floor) {
         if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {

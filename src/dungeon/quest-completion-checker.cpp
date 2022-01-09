@@ -56,7 +56,7 @@ void QuestCompletionChecker::complete()
 void QuestCompletionChecker::set_quest_idx()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    this->quest_idx = floor_ptr->inside_quest;
+    this->quest_idx = floor_ptr->quest_number;
     if (this->quest_idx > 0) {
         return;
     }
@@ -156,7 +156,7 @@ std::tuple<bool, bool> QuestCompletionChecker::complete_random()
     auto create_stairs = false;
     if (none_bits(this->q_ptr->flags, QUEST_FLAG_PRESET)) {
         create_stairs = true;
-        this->player_ptr->current_floor_ptr->inside_quest = 0;
+        this->player_ptr->current_floor_ptr->quest_number = 0;
     }
 
     if ((this->quest_idx == QUEST_OBERON) || (this->quest_idx == QUEST_SERPENT)) {

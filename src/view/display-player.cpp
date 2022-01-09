@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief プレイヤーのステータス表示メインルーチン群
  * @date 2020/02/25
  * @author Hourier
@@ -191,15 +191,15 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 #endif
     }
 
-    if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) {
+    if (floor_ptr->quest_number && quest_type::is_fixed(floor_ptr->quest_number)) {
         /* Get the quest text */
         /* Bewere that INIT_ASSIGN resets the cur_num. */
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
 #ifdef JP
-        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, player_ptr->died_from));
+        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->quest_number].name, player_ptr->died_from));
 #else
-        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->inside_quest].name));
+        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->quest_number].name));
 #endif
     }
 
@@ -219,7 +219,7 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->inside_quest || !quest_type::is_fixed(floor_ptr->inside_quest))
+    if (!floor_ptr->quest_number || !quest_type::is_fixed(floor_ptr->quest_number))
         return std::nullopt;
 
     for (int i = 0; i < 10; i++)
@@ -228,7 +228,7 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name));
+    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->quest_number].name));
 }
 
 /*!

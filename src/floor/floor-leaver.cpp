@@ -441,7 +441,7 @@ void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
     if (record_stair)
         exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
 
-    player_ptr->current_floor_ptr->inside_quest = 0;
+    player_ptr->current_floor_ptr->quest_number = 0;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
     prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);

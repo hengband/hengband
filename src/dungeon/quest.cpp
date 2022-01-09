@@ -218,8 +218,8 @@ void quest_discovery(QUEST_IDX q_idx)
 QUEST_IDX quest_number(PlayerType *player_ptr, DEPTH level)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_quest)
-        return (floor_ptr->inside_quest);
+    if (floor_ptr->quest_number)
+        return (floor_ptr->quest_number);
 
     for (QUEST_IDX i = 0; i < max_q_idx; i++) {
         if (quest[i].status != QuestStatusType::TAKEN)
@@ -258,7 +258,7 @@ QUEST_IDX random_quest_number(PlayerType *player_ptr, DEPTH level)
  */
 void leave_quest_check(PlayerType *player_ptr)
 {
-    leaving_quest = player_ptr->current_floor_ptr->inside_quest;
+    leaving_quest = player_ptr->current_floor_ptr->quest_number;
     if (!leaving_quest)
         return;
 
@@ -302,7 +302,7 @@ void leave_quest_check(PlayerType *player_ptr)
  */
 void leave_tower_check(PlayerType *player_ptr)
 {
-    leaving_quest = player_ptr->current_floor_ptr->inside_quest;
+    leaving_quest = player_ptr->current_floor_ptr->quest_number;
     bool is_leaving_from_tower = leaving_quest != 0;
     is_leaving_from_tower &= quest[leaving_quest].type == QuestKindType::TOWER;
     is_leaving_from_tower &= quest[QUEST_TOWER1].status != QuestStatusType::COMPLETED;
@@ -324,7 +324,7 @@ void exe_enter_quest(PlayerType *player_ptr, QUEST_IDX quest_idx)
 {
     if (quest[quest_idx].type != QuestKindType::RANDOM)
         player_ptr->current_floor_ptr->dun_level = 1;
-    player_ptr->current_floor_ptr->inside_quest = quest_idx;
+    player_ptr->current_floor_ptr->quest_number = quest_idx;
 
     player_ptr->leaving = true;
 }

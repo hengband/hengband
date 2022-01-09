@@ -187,9 +187,9 @@ void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loa
     }
 
     init_flags = INIT_ASSIGN;
-    player_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)loading_quest_index;
+    player_ptr->current_floor_ptr->quest_number = (QUEST_IDX)loading_quest_index;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    player_ptr->current_floor_ptr->inside_quest = old_inside_quest;
+    player_ptr->current_floor_ptr->quest_number = old_inside_quest;
 }
 
 void set_zangband_class(PlayerType *player_ptr)
