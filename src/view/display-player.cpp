@@ -40,7 +40,6 @@
 #include "view/display-player-stat-info.h"
 #include "view/display-util.h"
 #include "world/world.h"
-#include <optional>
 #include <string>
 
 /*!
@@ -263,24 +262,26 @@ static std::string decide_current_floor(PlayerType *player_ptr)
 /*!
  * @brief 今いる、または死亡した場所を表示する
  * @param statmsg メッセージバッファ
+ * @return ダンプ表示行数の補正項
+ * @details v2.2までは状況に関係なく必ず2行であり、v3.0では1～4行になり得、num_linesはその行数.
+ * ギリギリ見切れる場合があるので行数は僅かに多めに取る.
  */
-static void display_current_floor(std::string &statmsg)
+static int display_current_floor(std::string &statmsg)
 {
     char temp[1000];
     constexpr auto chars_per_line = 60;
     shape_buffer(statmsg.c_str(), chars_per_line, temp, sizeof(temp));
     auto t = temp;
-    auto fraction = statmsg.size() % chars_per_line;
-    auto num_lines = statmsg.size() / chars_per_line;
+    auto statmsg_size = statmsg.size();
+    auto fraction = statmsg_size % (chars_per_line - 1);
+    auto num_lines = statmsg_size / (chars_per_line - 1);
     num_lines += fraction > 0 ? 1 : 0;
     for (auto i = 0U; i < num_lines; i++) {
-        if (t[0] == 0) {
-            return;
-        }
-
         put_str(t, i + 5 + 12, 10);
         t += strlen(t) + 1;
     }
+
+    return num_lines;
 }
 
 /*!
@@ -297,13 +298,13 @@ static void display_current_floor(std::string &statmsg)
  * Mode 4 = mutations.
  * Mode 5 = ??? (コード上の定義より6で割った余りは5になりうるが元のコメントに記載なし).
  */
-void display_player(PlayerType *player_ptr, const int tmp_mode)
+std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
 {
     auto has_any_mutation = (player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations;
     auto mode = has_any_mutation ? tmp_mode % 6 : tmp_mode % 5;
     clear_from(0);
     if (display_player_info(player_ptr, mode)) {
-        return;
+        return std::nullopt;
     }
 
     display_player_basic_info(player_ptr);
@@ -317,7 +318,7 @@ void display_player(PlayerType *player_ptr, const int tmp_mode)
     if (mode == 0) {
         display_player_middle(player_ptr);
         display_player_various(player_ptr);
-        return;
+        return std::nullopt;
     }
 
     put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
@@ -327,10 +328,10 @@ void display_player(PlayerType *player_ptr, const int tmp_mode)
 
     auto statmsg = decide_current_floor(player_ptr);
     if (statmsg == "") {
-        return;
+        return std::nullopt;
     }
 
-    display_current_floor(statmsg);
+    return display_current_floor(statmsg);
 }
 
 /*!

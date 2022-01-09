@@ -404,7 +404,7 @@ void show_death_info(PlayerType *player_ptr)
         file_character_auto(player_ptr);
 
     export_player_info(player_ptr);
-    display_player(player_ptr, 0);
+    (void)display_player(player_ptr, 0);
     prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
     if (inkey() == ESCAPE)
         return;

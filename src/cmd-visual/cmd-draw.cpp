@@ -78,11 +78,11 @@ void do_cmd_player_status(PlayerType *player_ptr)
     screen_save();
     while (true) {
         update_playtime();
-        display_player(player_ptr, mode);
+        (void)display_player(player_ptr, mode);
 
         if (mode == 5) {
             mode = 0;
-            display_player(player_ptr, mode);
+            (void)display_player(player_ptr, mode);
         }
 
         term_putstr(2, 23, -1, TERM_WHITE,
