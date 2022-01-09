@@ -13,36 +13,30 @@
  */
 static void dump_player_status_with_screen_num(PlayerType *player_ptr, FILE *fff, int mode, TERM_LEN start_y, TERM_LEN end_y, bool change_color)
 {
-	TERM_COLOR a;
-	char c;
-	char buf[1024];
-	display_player(player_ptr, mode);
-	for (TERM_LEN y = start_y; y < end_y; y++)
-	{
-		TERM_LEN x;
-		for (x = 0; x < 79; x++)
-		{
-			(void)(term_what(x, y, &a, &c));
-			if (!change_color)
-			{
-				buf[x] = c;
-				continue;
-			}
+    char buf[1024]{};
+    display_player(player_ptr, mode);
+    for (auto y = start_y; y < end_y; y++) {
+        TERM_LEN x;
+        for (x = 0; x < 79; x++) {
+            TERM_COLOR a;
+            char c;
+            (void)(term_what(x, y, &a, &c));
+            if (!change_color) {
+                buf[x] = c;
+                continue;
+            }
 
-			if (a < 128)
-				buf[x] = c;
-			else
-				buf[x] = ' ';
-		}
+            buf[x] = a < 128 ? c : ' ';
+        }
 
-		buf[x] = '\0';
-		while ((x > 0) && (buf[x - 1] == ' '))
-			buf[--x] = '\0';
+        buf[x] = '\0';
+        while ((x > 0) && (buf[x - 1] == ' ')) {
+            buf[--x] = '\0';
+        }
 
-		fprintf(fff, "%s\n", buf);
-	}
+        fprintf(fff, "%s\n", buf);
+    }
 }
-
 
 /*!
  * @brief プレイヤーのステータス表示をファイルにダンプする
@@ -51,13 +45,13 @@ static void dump_player_status_with_screen_num(PlayerType *player_ptr, FILE *fff
  */
 void dump_aux_player_status(PlayerType *player_ptr, FILE *fff)
 {
-	dump_player_status_with_screen_num(player_ptr, fff, 0, 1, 22, false);
-	dump_player_status_with_screen_num(player_ptr, fff, 1, 10, 19, false);
-	fprintf(fff, "\n");
-	dump_player_status_with_screen_num(player_ptr, fff, 2, 2, 22, true);
-	fprintf(fff, "\n");
-	dump_player_status_with_screen_num(player_ptr, fff, 3, 1, 18, true);
-	fprintf(fff, "\n");
+    dump_player_status_with_screen_num(player_ptr, fff, 0, 1, 22, false);
+    dump_player_status_with_screen_num(player_ptr, fff, 1, 10, 19, false);
+    fprintf(fff, "\n");
+    dump_player_status_with_screen_num(player_ptr, fff, 2, 2, 22, true);
+    fprintf(fff, "\n");
+    dump_player_status_with_screen_num(player_ptr, fff, 3, 1, 18, true);
+    fprintf(fff, "\n");
     dump_player_status_with_screen_num(player_ptr, fff, 4, 1, 19, true);
     fprintf(fff, "\n");
 }
