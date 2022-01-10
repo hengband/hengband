@@ -1,10 +1,9 @@
 ﻿#pragma once
 
-#include "io/files-util.h"
 #include "system/angband.h"
 
 class PlayerType;
-bool send_world_score(PlayerType *current_player_ptr, bool do_send, display_player_pf display_player);
+bool send_world_score(PlayerType *current_player_ptr, bool do_send);
 errr top_twenty(PlayerType *current_player_ptr);
 errr predict_score(PlayerType *current_player_ptr);
 void race_legends(PlayerType *current_player_ptr);

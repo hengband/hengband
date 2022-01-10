@@ -18,6 +18,7 @@
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
+#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/signal-handlers.h"
@@ -133,7 +134,7 @@ static int highscore_add(high_score *score)
  * @param do_send 実際に転送ア処置を行うか否か
  * @return 転送が成功したらTRUEを返す
  */
-bool send_world_score(PlayerType *current_player_ptr, bool do_send, display_player_pf display_player)
+bool send_world_score(PlayerType *current_player_ptr, bool do_send)
 {
 #ifdef WORLD_SCORE
     if (!send_score || !do_send) {
@@ -150,7 +151,7 @@ bool send_world_score(PlayerType *current_player_ptr, bool do_send, display_play
     prt(_("送信中．．", "Sending..."), 0, 0);
     term_fresh();
     screen_save();
-    auto successful_send = report_score(current_player_ptr, display_player);
+    auto successful_send = report_score(current_player_ptr);
     screen_load();
     if (!successful_send) {
         return false;

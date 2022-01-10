@@ -430,7 +430,7 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
         update_creature(player_ptr);
         player_ptr->chp = player_ptr->mhp;
         player_ptr->csp = player_ptr->msp;
-        display_player(player_ptr, mode);
+        (void)display_player(player_ptr, mode);
         term_gotoxy(2, 23);
         const char b1 = '[';
         term_addch(TERM_WHITE, b1);

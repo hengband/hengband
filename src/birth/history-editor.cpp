@@ -30,7 +30,7 @@ void edit_history(PlayerType *player_ptr)
         player_ptr->history[i][59] = '\0';
     }
 
-    display_player(player_ptr, 1);
+    (void)display_player(player_ptr, 1);
     c_put_str(TERM_L_GREEN, _("(キャラクターの生い立ち - 編集モード)", "(Character Background - Edit Mode)"), 11, 20);
     put_str(_("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]"), 17, 10);
     TERM_LEN y = 0;
