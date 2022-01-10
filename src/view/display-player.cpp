@@ -237,8 +237,8 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
  */
 static std::string decide_current_floor(PlayerType *player_ptr)
 {
-    auto death_cause = search_death_cause(player_ptr);
-    if (death_cause.has_value() || !w_ptr->character_dungeon) {
+    if (auto death_cause = search_death_cause(player_ptr);
+        death_cause.has_value() || !w_ptr->character_dungeon) {
         return death_cause.value_or("");
     }
 
@@ -247,8 +247,7 @@ static std::string decide_current_floor(PlayerType *player_ptr)
         return std::string(format(_("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr)));
     }
 
-    auto decision = decide_death_in_quest(player_ptr);
-    if (decision.has_value()) {
+    if (auto decision = decide_death_in_quest(player_ptr); decision.has_value()) {
         return decision.value();
     }
 
@@ -266,7 +265,7 @@ static std::string decide_current_floor(PlayerType *player_ptr)
  * @details v2.2までは状況に関係なく必ず2行であり、v3.0では1～4行になり得、num_linesはその行数.
  * ギリギリ見切れる場合があるので行数は僅かに多めに取る.
  */
-static int display_current_floor(std::string &statmsg)
+static int display_current_floor(const std::string &statmsg)
 {
     char temp[1000];
     constexpr auto chars_per_line = 60;
@@ -289,6 +288,7 @@ static int display_current_floor(std::string &statmsg)
  * Display the character on the screen (various modes)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param tmp_mode 暫定表示モード (突然変異の有無で実際のモードに切り替える)
+ * @return 死亡原因となったモンスター名が複数行に亘る場合、表示に必要な行数. それ以外を表示する場合はnullopt
  * @details
  * 最初の1行と最後の2行は空行. / The top one and bottom two lines are left blank.
  * Mode 0 = standard display with skills.

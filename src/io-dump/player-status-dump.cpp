@@ -12,11 +12,12 @@
  * @param change_color バッファへ詰める文字の変更有無
  * @details モンスター名の長さによっては固定長だとはみ出す可能性があるので、適切に終了行数を調整する.
  */
-static void dump_player_status_with_screen_num(PlayerType *player_ptr, FILE *fff, int mode, TERM_LEN start_y, TERM_LEN tmp_end_y, bool change_color)
+static void dump_player_status_with_screen_num(PlayerType *player_ptr, FILE *fff,
+    const int mode, const TERM_LEN start_y, const TERM_LEN tmp_end_y, const bool change_color)
 {
     char buf[1024]{};
     auto num_lines = display_player(player_ptr, mode);
-    auto end_y = num_lines.has_value() ? tmp_end_y + num_lines.value() : tmp_end_y;
+    auto end_y = tmp_end_y + num_lines.value_or(0);
     for (auto y = start_y; y < end_y; y++) {
         TERM_LEN x;
         for (x = 0; x < 79; x++) {
