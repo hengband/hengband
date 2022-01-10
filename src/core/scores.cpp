@@ -162,7 +162,6 @@ bool send_world_score(PlayerType *current_player_ptr, bool do_send)
 #else
     (void)current_player_ptr;
     (void)do_send;
-    (void)display_player;
 #endif
     return true;
 }
