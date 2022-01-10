@@ -5,6 +5,7 @@
  */
 
 #include "store/store-util.h"
+#include "store/store-owners.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
@@ -132,6 +133,8 @@ void store_create(
     if (st_ptr->stock_num >= st_ptr->stock_size)
         return;
 
+    const owner_type *ow_ptr = &owners[enum2i(cur_store_num)][st_ptr->owner];
+
     for (int tries = 0; tries < 4; tries++) {
         KIND_OBJECT_IDX k_idx;
         DEPTH level;
@@ -142,10 +145,10 @@ void store_create(
                 continue;
         } else if (fix_k_idx > 0) {
             k_idx = fix_k_idx;
-            level = rand_range(1, STORE_OBJ_LEVEL);
+            level = rand_range(1, ow_ptr->level);
         } else {
             k_idx = st_ptr->table[randint0(st_ptr->table.size())];
-            level = rand_range(1, STORE_OBJ_LEVEL);
+            level = rand_range(1, ow_ptr->level);
         }
 
         object_type forge;
