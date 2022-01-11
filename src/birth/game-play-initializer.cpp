@@ -42,9 +42,6 @@ static void k_info_reset(void)
  */
 void player_wipe_without_name(PlayerType *player_ptr)
 {
-#ifdef SET_UID
-    int uid = player_ptr->player_uid;
-#endif
     auto tmp = *player_ptr;
     if (player_ptr->last_message)
         string_free(player_ptr->last_message);
@@ -163,7 +160,13 @@ void player_wipe_without_name(PlayerType *player_ptr)
     memcpy(player_ptr->name, tmp.name, sizeof(tmp.name));
 
 #ifdef SET_UID
-    player_ptr->player_uid = uid;
+    player_ptr->player_uid = tmp.player_uid;
+#ifdef SAFE_SETUID
+#ifdef SAFE_SETUID_POSIX
+    player_ptr->player_euid = tmp.player_euid;
+    player_ptr->player_egid = tmp.player_egid;
+#endif
+#endif
 #endif
 }
 
