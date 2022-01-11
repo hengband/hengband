@@ -26662,9 +26662,9 @@ F:RIDING | IM_FIRE | RES_PLAS | BASH_DOOR | CAN_FLY | WILD_OCEAN
 F:WILD_VOLCANO | WILD_MOUNTAIN | WILD_TOWN | WILD_ALL
 S:1_IN_8
 S:BO_FIRE
-D:$It is floating and one-eyed demon.
-D:$It is very round, and has six spines on upper body and two on lower.
-D:$It breathes a plasma ball from its wide mouth.
+D:$It is a floating and one-eyed demon.
+D:$  It is very round, with six spines on the top and two on the bottom.
+D:$  It breathes a plasma ball from its wide mouth.
 D:それはとても丸っこくて体の上部に6本、下部に2本のトゲがあり、浮遊する一つ目の悪魔だ。
 D:その裂けたような口からプラズマの弾を発射してくる。
 
@@ -26678,8 +26678,8 @@ F:POWERFUL | IM_FIRE | RES_TELE | BASH_DOOR | WILD_VOLCANO | WILD_TOWN
 F:WILD_ALL
 S:1_IN_2
 S:BA_FIRE
-D:$This is fatso has twin gun-arms.
-D:$Its fire balls are just nightmare.
+D:$This fatso has twin gun-arms.
+D:$  Its fire balls are nightmares.
 D:この両腕に砲がある太っちょが出す火の弾は悪夢そのものだ。
 
 N:1350:アラクノトロン
