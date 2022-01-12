@@ -359,7 +359,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
             return false;
         else
             msg_print(_("矢を放った。", "You fire an arrow."));
-        fire_bolt(player_ptr, AttributeType::ARROW, dir, damage);
+        fire_bolt(player_ptr, AttributeType::MONSTER_SHOOT, dir, damage);
         break;
 
     case MonsterAbilityType::XXX2:

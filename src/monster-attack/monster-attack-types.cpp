@@ -14,7 +14,7 @@ const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
 
     {
         60,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* HURT      */
 
     {
@@ -29,28 +29,28 @@ const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
 
     {
         15,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     },
     /* UN_POWER  */ /* ToDo: Apply the correct effects */
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EAT_GOLD  */
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EAT_ITEM  */
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EAT_FOOD  */
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EAT_LITE  */
 
     {
@@ -75,7 +75,7 @@ const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
 
     {
         2,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* BLIND     */
 
     {
@@ -85,47 +85,47 @@ const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
 
     {
         10,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* TERRIFY   */
 
     {
         2,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* PARALYZE  */
 
     {
         0,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* LOSE_STR  */
 
     {
         0,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* LOSE_INT  */
 
     {
         0,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* LOSE_WIS  */
 
     {
         0,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* LOSE_DEX  */
 
     {
         0,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* LOSE_CON  */
 
     {
         0,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* LOSE_CHR  */
 
     {
         2,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* LOSE_ALL  */
 
     {
@@ -135,22 +135,22 @@ const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EXP_10    */
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EXP_20    */
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EXP_40    */
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EXP_80    */
 
     {
@@ -165,7 +165,7 @@ const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
 
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* EXP_VAMP  */
 
     {
@@ -175,19 +175,19 @@ const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)] = {
 
     {
         60,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* SUPERHURT */
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* INERTIA */
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* STUN */
     {
         5,
-        AttributeType::MISSILE,
+        AttributeType::MONSTER_MELEE,
     }, /* HUNGRY */
     {
         0,

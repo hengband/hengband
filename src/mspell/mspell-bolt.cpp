@@ -39,7 +39,7 @@ MonsterSpellResult spell_RF4_SHOOT(PlayerType *player_ptr, POSITION y, POSITION 
     }
 
     const auto dam = monspell_damage(player_ptr, MonsterAbilityType::SHOOT, m_idx, DAM_ROLL);
-    const auto proj_res = bolt(player_ptr, m_idx, y, x, AttributeType::ARROW, dam, TARGET_TYPE);
+    const auto proj_res = bolt(player_ptr, m_idx, y, x, AttributeType::MONSTER_SHOOT, dam, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;

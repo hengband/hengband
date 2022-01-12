@@ -299,12 +299,14 @@ process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_typ
     switch (em_ptr->attribute) {
     case AttributeType::PSY_SPEAR:
     case AttributeType::MISSILE:
-    case AttributeType::ARROW:
+    case AttributeType::DEBUG:
     case AttributeType::MANA:
     case AttributeType::METEOR:
     case AttributeType::BLOOD_CURSE:
     case AttributeType::SEEKER:
     case AttributeType::SUPER_RAY:
+    case AttributeType::MONSTER_MELEE:
+    case AttributeType::MONSTER_SHOOT:
         return effect_monster_nothing(em_ptr);
     case AttributeType::ACID:
         return effect_monster_acid(player_ptr, em_ptr);

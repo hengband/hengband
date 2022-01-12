@@ -76,7 +76,7 @@ static bool cast_blue_shoot(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
     msg_print(_("矢を放った。", "You fire an arrow."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::SHOOT, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::ARROW, bmc_ptr->dir, bmc_ptr->damage);
+    fire_bolt(player_ptr, AttributeType::MONSTER_SHOOT, bmc_ptr->dir, bmc_ptr->damage);
     return true;
 }
 

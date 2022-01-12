@@ -11,7 +11,7 @@ enum class AttributeType : EFFECT_ID
 	FIRE = 5,					/*!< 魔法効果: 火炎*/
 	PSY_SPEAR = 9,				/*!< 魔法効果: 光の剣*/
 	MISSILE = 10,				/*!< 魔法効果: 弱魔力*/
-	ARROW = 11,					/*!< 魔法効果: 射撃*/
+	ARROW = 11,					/*!< 魔法効果: 射撃 (デバッグ用必中属性)*/
 	PLASMA = 12,				/*!< 魔法効果: プラズマ*/
 	WATER = 14,					/*!< 魔法効果: 水流*/
 	LITE = 15,					/*!< 魔法効果: 閃光*/
@@ -108,7 +108,9 @@ enum class AttributeType : EFFECT_ID
 	ABYSS = 119,				/*!< 魔法効果: 深淵 */
     HUNGRY = 120,				/*!< 魔法効果: 空腹>*/
 	PLAYER_SHOOT = 121,			/*!< 属性取得用: プレイヤーの射撃/投擲>*/
-	PLAYER_MELEE = 122,			/*!< 属性取得用: プレイヤーの近接攻撃>*/
+    PLAYER_MELEE = 122,			/*!< 属性取得用: プレイヤーの近接攻撃>*/
+    MONSTER_SHOOT = 123,		/*!< 属性取得用: モンスターの射撃/投擲>*/
+    MONSTER_MELEE = 124,		/*!< 属性取得用: モンスターの近接攻撃>*/
 	MAX							/*!< 欠番を無視した最大サイズ (直上の値+1) */
 };
 

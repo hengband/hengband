@@ -47,5 +47,5 @@ void wiz_fillup_all_smith_essences(PlayerType *player_ptr);
 void wiz_summon_random_enemy(PlayerType *player_ptr, int num);
 void wiz_summon_specific_enemy(PlayerType *player_ptr, MONRACE_IDX r_idx);
 void wiz_summon_pet(PlayerType *player_ptr, MONRACE_IDX r_idx);
-void wiz_kill_enemy(PlayerType *player_ptr, HIT_POINT dam = 1000000, AttributeType effect_idx = AttributeType::ARROW);
+void wiz_kill_enemy(PlayerType *player_ptr, HIT_POINT dam = 1000000, AttributeType effect_idx = AttributeType::DEBUG);
 void wiz_kill_me(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx);
