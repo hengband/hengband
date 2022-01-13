@@ -19,7 +19,6 @@
 #include "mspell/mspell-util.h"
 #include "pet/pet-util.h"
 #include "spell-kind/spells-world.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

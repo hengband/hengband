@@ -22,7 +22,6 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"

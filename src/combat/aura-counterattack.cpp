@@ -207,16 +207,23 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, monap_type *mo
         monap_ptr->alive = false;
         return;
     }
+    
+    struct attribute_table {
+        inventory_slot_type slot;
+        AttributeType type;
+    };
+
+    const int TABLE_SIZE = 4;
+    attribute_table table[TABLE_SIZE] = { { INVEN_HEAD, AttributeType::OLD_CONF }, { INVEN_SUB_HAND, AttributeType::OLD_SLEEP }, 
+                            { INVEN_ARMS, AttributeType::TURN_ALL }, { INVEN_FEET, AttributeType::OLD_SLOW } };
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    EFFECT_ID typ[4][2] = { { INVEN_HEAD, (EFFECT_ID)AttributeType::OLD_CONF }, { INVEN_SUB_HAND, (EFFECT_ID)AttributeType::OLD_SLEEP }, 
-                            { INVEN_ARMS, (EFFECT_ID)AttributeType::TURN_ALL }, { INVEN_FEET, (EFFECT_ID)AttributeType::OLD_SLOW } };
 
     /* Some cursed armours gives an extra effect */
-    for (int j = 0; j < 4; j++) {
-        o_armed_ptr = &player_ptr->inventory_list[typ[j][0]];
+    for (int j = 0; j < TABLE_SIZE; j++) {
+        o_armed_ptr = &player_ptr->inventory_list[table[j].slot];
         if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed() && o_armed_ptr->is_armour())
-            project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), (AttributeType)typ[j][1], flg);
+            project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), table[j].type, flg);
     }
 }
 

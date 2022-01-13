@@ -11,7 +11,6 @@
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"

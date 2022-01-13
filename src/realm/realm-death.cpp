@@ -16,7 +16,6 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-specific-bolt.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"

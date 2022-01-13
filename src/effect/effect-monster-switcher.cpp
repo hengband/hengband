@@ -30,7 +30,6 @@
 #include "monster/monster-status.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-genocide.h"
-#include "effect/attribute-types.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"

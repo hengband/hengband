@@ -182,8 +182,6 @@ typedef byte FEAT_POWER; /*!< 地形強度の型定義 */
 
 typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 
-typedef int EFFECT_ID; /*!< 効果属性ID */
-
 typedef int16_t ACTION_SKILL_POWER; /*!< 行動技能値 */
 
 enum process_result {

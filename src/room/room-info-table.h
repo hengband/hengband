@@ -10,4 +10,4 @@ typedef struct room_info_type {
 } room_info_type;
 
 extern room_info_type room_info_normal[ROOM_T_MAX];
-extern byte room_build_order[ROOM_T_MAX];
+extern room_type room_build_order[ROOM_T_MAX];

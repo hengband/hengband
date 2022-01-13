@@ -47,7 +47,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "util/flag-group.h"
 
-enum class AttributeType : EFFECT_ID {
+enum class AttributeType : int {
     NONE = 0,
     ELEC = 1,                   /*!< 魔法効果: 電撃*/
     POIS = 2,                   /*!< 魔法効果: 毒*/

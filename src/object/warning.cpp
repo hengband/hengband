@@ -4,7 +4,6 @@
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "effect/attribute-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"

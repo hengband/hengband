@@ -27,7 +27,7 @@
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
  * @return 部屋の生成に成功した場合 TRUE を返す。
  */
-static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, EFFECT_ID typ)
+static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, room_type typ)
 {
     switch (typ) {
     case ROOM_T_NORMAL:
@@ -184,7 +184,7 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
     while (true) {
         remain = false;
         for (int i = 0; i < ROOM_T_MAX; i++) {
-            int room_type = room_build_order[i];
+            room_type room_type = room_build_order[i];
             if (!room_num[room_type])
                 continue;
 
@@ -207,6 +207,8 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
                 break;
             case ROOM_T_ARCADE:
                 room_num[ROOM_T_ARCADE] = 0;
+                break;
+            default:
                 break;
             }
         }
