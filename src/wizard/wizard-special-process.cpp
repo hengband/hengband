@@ -472,39 +472,27 @@ void wiz_change_status(PlayerType *player_ptr)
  */
 void wiz_create_feature(PlayerType *player_ptr)
 {
+    int f_val1, f_val2;
     POSITION y, x;
     if (!tgt_pt(player_ptr, &x, &y))
         return;
 
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    static int prev_feat = 0;
-    char tmp_val[160];
-    sprintf(tmp_val, "%d", prev_feat);
 
-    if (!get_string(_("地形: ", "Feature: "), tmp_val, 3))
+    f_val1 = g_ptr->feat;
+    if (!get_value(_("実地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val1)) {
         return;
+    }
 
-    FEAT_IDX tmp_feat = (FEAT_IDX)atoi(tmp_val);
-    if (tmp_feat < 0)
-        tmp_feat = 0;
-    else if (tmp_feat >= static_cast<FEAT_IDX>(f_info.size()))
-        tmp_feat = static_cast<FEAT_IDX>(f_info.size()) - 1;
-
-    static int prev_mimic = 0;
-    sprintf(tmp_val, "%d", prev_mimic);
-
-    if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3))
+    f_val2 = f_val1;
+    if (!get_value(_("偽装地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val2)) {
         return;
+    }
 
-    FEAT_IDX tmp_mimic = (FEAT_IDX)atoi(tmp_val);
-    if (tmp_mimic < 0)
-        tmp_mimic = 0;
-    else if (tmp_mimic >= static_cast<FEAT_IDX>(f_info.size()))
-        tmp_mimic = static_cast<FEAT_IDX>(f_info.size()) - 1;
 
-    cave_set_feat(player_ptr, y, x, tmp_feat);
-    g_ptr->mimic = (int16_t)tmp_mimic;
+    cave_set_feat(player_ptr, y, x, f_val1);
+    g_ptr->mimic = (int16_t)f_val2;
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
@@ -516,8 +504,7 @@ void wiz_create_feature(PlayerType *player_ptr)
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     player_ptr->update |= PU_FLOW;
-    prev_feat = tmp_feat;
-    prev_mimic = tmp_mimic;
+
 }
 
 /*
