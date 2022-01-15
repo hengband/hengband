@@ -14,7 +14,7 @@ const named_num gf_desc[MAX_NAMED_NUM] = {
     { "GF_FIRE",            AttributeType::FIRE },
     { "GF_PSY_SPEAR",       AttributeType::PSY_SPEAR },
     { "GF_MISSILE",         AttributeType::MISSILE },
-    { "GF_ARROW",           AttributeType::ARROW },
+    { "GF_DEBUG",           AttributeType::DEBUG },
     { "GF_PLASMA",          AttributeType::PLASMA },
     { "GF_WATER",           AttributeType::WATER },
     { "GF_LITE",            AttributeType::LITE },
@@ -110,4 +110,6 @@ const named_num gf_desc[MAX_NAMED_NUM] = {
     { "GF_VOID",            AttributeType::VOID_MAGIC },
     { "GF_ABYSS",           AttributeType::ABYSS },
     { "GF_HUNGRY",          AttributeType::HUNGRY },
+    { "GF_MONSTER_MELEE",   AttributeType::MONSTER_MELEE },
+    { "GF_MONSTER_SHOOT",   AttributeType::MONSTER_SHOOT },
 };

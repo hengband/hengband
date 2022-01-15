@@ -199,7 +199,7 @@ ProjectResult bolt(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
         break;
     }
 
-    if (typ != AttributeType::ARROW)
+    if (typ != AttributeType::MONSTER_SHOOT)
         flg |= PROJECT_REFLECTABLE;
 
     return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);

@@ -30,7 +30,7 @@ bool activate_missile_2(PlayerType *player_ptr)
     if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    (void)fire_bolt(player_ptr, AttributeType::ARROW, dir, 150);
+    (void)fire_bolt(player_ptr, AttributeType::MISSILE, dir, 150);
     return true;
 }
 
@@ -144,7 +144,7 @@ bool activate_bolt_mana(PlayerType *player_ptr, concptr name)
     if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    (void)fire_bolt(player_ptr, AttributeType::ARROW, dir, 150);
+    (void)fire_bolt(player_ptr, AttributeType::MISSILE, dir, 150);
     return true;
 }
 

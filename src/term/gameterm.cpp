@@ -452,7 +452,7 @@ static TERM_COLOR spell_color(AttributeType type)
         case AttributeType::SUPER_RAY:
             return (0x0E);
 
-        case AttributeType::ARROW:
+        case AttributeType::DEBUG:
             return (0x0F);
         case AttributeType::WATER:
             return (0x04);

@@ -72,7 +72,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"

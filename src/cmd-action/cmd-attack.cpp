@@ -44,7 +44,6 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
-#include "effect/attribute-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

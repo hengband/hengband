@@ -48,7 +48,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
