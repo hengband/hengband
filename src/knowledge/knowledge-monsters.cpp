@@ -322,6 +322,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             &r_info[direct_r_idx].x_char, need_redraw);
     }
 
+    grp_idx.push_back(-1); // Sentinel
     mode = visual_only ? MONSTER_LORE_RESEARCH : MONSTER_LORE_NONE;
     IDX old_grp_cur = -1;
     IDX grp_cur = 0;
@@ -449,7 +450,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         }
 
         default: {
-            browser_cursor(ch, &column, &grp_cur, grp_idx.size(), &mon_cur, mon_cnt);
+            browser_cursor(ch, &column, &grp_cur, grp_idx.size() - 1, &mon_cur, mon_cnt);
 
             break;
         }
