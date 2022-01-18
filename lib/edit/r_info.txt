@@ -16874,21 +16874,20 @@ D:発する熱で焦げてしまっている。
 N:840:巨狼の帝王『ドラウグルイン』
 E:Draugluin, Sire of All Werewolves
 G:C:u
-I:130:70d100:80:90:90
+I:130:90d100:80:90:90
 W:87:2:0:60000:0:0
-B:CLAW:HURT:9d9
-B:CLAW:HURT:9d9
-B:BITE:POISON:12d6
-B:BITE:POISON:12d6
+B:CLAW:HURT:29d9
+B:CLAW:HURT:29d9
+B:BITE:POISON:24d6
+B:BITE:POISON:24d6
 F:UNIQUE | MALE | CAN_SPEAK |
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | 
 F:ESCORT | ESCORTS | DROP_CORPSE 
-F:RAND_25 | 
 F:ONLY_ITEM | DROP_4D2 | DROP_2D2 | DROP_GREAT | 
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |
 F:ANIMAL | EVIL | IM_POIS
 S:1_IN_3 | 
-S:SCARE | 
 S:S_MONSTERS | S_HOUND
 D:$Draugluin provides Sauron with a fearsome personal guard.  He is an 
 D:$enormous wolf inhabited with a human spirit.  He is chief of all his kind.
@@ -17048,16 +17047,15 @@ D:（ラヴクラフト「ダニッチの怪」他）
 N:846:狼『フェンリル』
 E:Fenris Wolf
 G:C:D
-I:134:70d100:80:90:40
+I:134:120d100:80:90:40
 W:90:2:0:70000:0:0
-B:BITE:HURT:20d6
-B:CLAW:HURT:8d3
-B:CLAW:HURT:8d3
-B:BITE:HURT:20d6
+B:BITE:HURT:30d10
+B:CLAW:HURT:12d8
+B:CLAW:HURT:12d8
+B:BITE:HURT:30d10
 F:UNIQUE | CAN_SPEAK | DROP_CORPSE
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | 
-F:RAND_25 | 
-F:ONLY_ITEM | DROP_4D2 | DROP_GREAT | 
+F:ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_GREAT | 
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | KILL_BODY | 
 F:ANIMAL | EVIL | IM_POIS | IM_FIRE | IM_COLD | RES_DARK |
 S:1_IN_8 | 
@@ -17168,21 +17166,17 @@ D:（ラヴクラフト 「霧の中の不思議の館」、「幻夢境カダ�
 N:850:赤顎狼『カルハロス』
 E:Carcharoth, the Jaws of Thirst
 G:C:D
-I:130:75d100:80:110:10
-W:92:2:0:60000:0:0
-B:CLAW:HURT:10d10
-B:CLAW:HURT:10d10
-B:BITE:POISON:18d5
-B:BITE:POISON:18d5
-F:UNIQUE | MALE | CAN_SPEAK | DROP_CORPSE
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | RAND_25 | 
-F:ONLY_ITEM | DROP_4D2 | DROP_GREAT | AURA_FIRE |
-F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:ANIMAL | EVIL | IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_4 | 
-S:HEAL | SCARE | BRAIN_SMASH | 
-S:BR_FIRE | 
-S:S_HOUND
+I:135:75d200:80:110:10
+W:92:2:0:80000:0:0
+B:CLAW:HURT:30d10
+B:CLAW:HURT:30d10
+B:BITE:POISON:28d12
+B:BITE:POISON:28d12
+F:UNIQUE | MALE | CAN_SPEAK | DROP_CORPSE | FORCE_MAXHP | RAND_25 | 
+F:ONLY_ITEM | DROP_4D2 | DROP_2D2 | DROP_GREAT | AURA_FIRE |
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | KILL_BODY | 
+F:ANIMAL | EVIL | IM_FIRE | IM_POIS | 
+F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | 
 D:$The first guard of Angband, Carcharoth, also known as 'The Red Maw', is 
 D:$the largest wolf to ever walk the earth.  He is highly intelligent and a 
 D:$deadly opponent in combat.
@@ -17353,22 +17347,21 @@ D:「ラグナロク」の日は近いと言われている。
 N:856:バルログの長『ゴスモグ』
 E:Gothmog, the High Captain of Balrogs
 G:U:R
-I:130:80d100:100:140:0
+I:130:120d100:100:140:0
 W:95:1:0:86000:0:0
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-B:CRUSH:SUPERHURT:8d12
-B:TOUCH:UN_POWER
+B:HIT:FIRE:30d12
+B:HIT:SUPERHURT:30d10
+B:HIT:FIRE:30d12
+B:HIT:SUPERHURT:30d10
 F:UNIQUE | MALE | CAN_SPEAK | CAN_FLY | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP
 F:ESCORT | ESCORTS | KILL_WALL | AURA_FIRE | NONLIVING
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GREAT
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY
-F:EVIL | DEMON | IM_FIRE | IM_ELEC | NO_CONF | NO_SLEEP
+F:EVIL | DEMON | IM_FIRE | IM_ELEC | IM_POIS | RES_DARK |
+F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 S:1_IN_3 | 
-S:BLIND | CONF | SCARE | 
-S:BR_FIRE | S_KIN |
-S:S_DEMON | S_HI_UNDEAD | S_CYBER
-A:212:1:33
+S:BR_FIRE | BR_NETH | S_KIN | S_DEMON | 
+A:212:1:50
 D:$Gothmog is the Chief Balrog in Morgoth's personal guard.  He is renowned 
 D:$for slaying Ecthelion the Warder of the Gates and he has never been 
 D:$defeated in combat.  With his whip of flame and awesome fiery breath he 
