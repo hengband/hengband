@@ -54,25 +54,25 @@ F:<:QUEST_UP:8:0:0:0:0:NONE:6
 # Quest down
 F:>:QUEST_DOWN:8
 
-# Random Monsters
-F:1:FLOOR:8:*
-
 # Nexious fume
-F:2:FLOOR:8:884
+F:#:FLOOR:8:884
 
-# Young green dragon
-F:d:FLOOR:8:461
+# Young green dragon with Object 10 levels out of depth
+F:d:FLOOR:8:461:*10
+
+# Shrieker
+F:@:FLOOR:8:40
 
 # Dungeon
 D:XXXXXXXXXXX
-D:X>.....1..X
-D:XXXXXXXXX.X
+D:X>.....d..X
+D:XXXXXXXXX@X
 D:X.....d.X.X
 D:X.XXXXX.X.X
-D:X1X<XXX.X2X
+D:XdX<XXX.X#X
 D:X.X.....X.X
 D:X.XXXXXXX.X
-D:X.....1...X
+D:X..#....@.X
 D:XXXXXXXXXXX
 
 # Starting position when coming from town

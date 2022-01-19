@@ -12,13 +12,13 @@ Q:7:Q:8:0:0:0:40:0:0:0:11
 F:@:FLOOR:8:40
 
 # Nexious fume
-F:2:FLOOR:8:884
+F:#:FLOOR:8:884
 
-# Mature green dragon
-F:d:FLOOR:8:561
+# Mature green dragon with Object 10 levels out of depth
+F:d:FLOOR:8:561:*10
 
-# Ancient green dragon
-F:D:FLOOR:8:618
+# Ancient green dragon with Object 10 levels out of depth
+F:D:FLOOR:8:618:*10
 
 
 # Quest stairs down to Town
@@ -26,9 +26,9 @@ F:>:QUEST_DOWN:8
 
 # Dungeon
 D:XXXXXXXXX
-D:XD.2...@X
+D:XD.#...@X
 D:X.......X
-D:X.2...d.X
+D:X.#...d.X
 D:X@...d.@X
 D:X...d...X
 D:X..d....X
