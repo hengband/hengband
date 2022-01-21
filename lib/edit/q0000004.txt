@@ -60,11 +60,11 @@ Q:$4:T:Too bad, we can not get back the vault forever......?
 Q:$4:T:なんてことだ…もう蔵を取り戻す術はないのか…？
 ?:1
 
-# No-teleport Floor with rewarding artifact e.g."Sting" and Death sword 
-F:a:FLOOR:12:107:0:0:!
+# No-teleport Floor with rewarding artifact e.g."Sting"
+F:a:FLOOR:12:0:0:0:!
 
-# No-teleport with base object of artifact e.g."Small sword" and Death sword
-F:b:FLOOR:12:107:!
+# No-teleport with base object of artifact e.g."Small sword" 
+F:b:FLOOR:12:0:!
 
 # Random monster 7 levels out of depth and on no Teleportation grid
 F:*:FLOOR:12:*8
@@ -78,15 +78,10 @@ F:m:FLOOR:8:239
 F:1:TRAP_ALARM:8:423
 
 # Mithril golems
-F:2:FLOOR:8:464
+F:g:FLOOR:8:464
 
-
-# Chest mimic
-F:&:FLOOR:8:353
-# Ring mimic
-F:=:FLOOR:8:457
-# Scroll mimic
-F:?:FLOOR:12:352
+# Shrieker
+F:@:FLOOR:8:40
 # Floor with Raal's!
 F:!:FLOOR:12:557
 
@@ -94,10 +89,6 @@ F:!:FLOOR:12:557
 F:3:FLOOR:8:589:*5
 # fire vortex
 F:f:FLOOR:8:354
-# Fire trolls
-F:F:FLOOR:8:899
-# Fire Elemental
-F:7:FLOOR:8:510
 
 
 
@@ -107,40 +98,20 @@ F:4:FLOOR:8:549:*5
 F:I:FLOOR:8:454
 # cold vortex
 F:c:FLOOR:8:358
-# White wraith
-F:W:FLOOR:8:416
-# Ice Elemental
-F:8:FLOOR:8:570
 
 
 # Black dragon with Object 5 levels out of depth
 F:5:FLOOR:8:592:*5
 # water vortex
 F:w:FLOOR:8:355
-# Pukelman
-F:P:FLOOR:8:398
-# Black Orc
-F:o:FLOOR:8:244
-# Stone Troll
-F:S:FLOOR:8:401
-# Earth Elemental
-F:9:FLOOR:8:525
 
 
 # Blue dragon with Object 5 levels out of depth
 F:6:FLOOR:8:560:*5
-# young blUe dragon
+# young blue dragon
 F:d:FLOOR:8:459
 # energy vortex
 F:e:FLOOR:8:359
-# Colbran
-F:C:FLOOR:8:435
-# Grave wight 
-F:G:FLOOR:8:470
-# sTorm giant
-F:T:FLOOR:8:487
-# Air Elemental
-F:0:FLOOR:8:526
 
 # Alarm Traps
 F:^:TRAP_ALARM:12
@@ -154,44 +125,44 @@ D:XXXXXXXXXXXXXXXXXXXXX.+b+a+b+..XXXXXXXXXXXXXXXXXXXXX
 ?:[NOT [EQU $RANDOM4 0]]
 D:XXXXXXXXXXXXXXXXXXXXX.+b+b+b+..XXXXXXXXXXXXXXXXXXXXX
 ?:1
-D:XXXXXXXXXXXXXXXXXX$.*....5..S...S.XXXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXXX..w.9...S....m..XXXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX........=....S....XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX.o%.%.%^%^%.%.%.%.XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX...o.m^...^.......XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX.....^o...P^...w..XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXXX.o.^.......^....XXXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXXX..^o.2....2.^9..XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX$......5........XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX..w..........m..XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX........@.........XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX..%.%.%^%^%.%.%.%.XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX.....m^...^.......XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX..5..^.....^...w..XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX...^.......^....XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX..^..g....g.^...XXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXXXXX...++++...XXXXXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXXXXXXXXXDDXXXXXXXXXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXXXXXXX
-D:XXXXX....8m..^.XXXXXXXXXX..XXXXXXXXXX^.T.......XXXXX
-D:XX...%.I...I^%....XXXXXXX..XXXXXXX.e..^..d...%..m.XX
-D:XX.8.W%....^%...2.XXXXXXX..XXXXXXX.2...^....%...d.XX
-D:X+.....%.I^%...W..+XXXXX++++XXXXX+..G...^..%......+X
+D:XXXXX.....m..^.XXXXXXXXXX..XXXXXXXXXX^..6......XXXXX
+D:XX...%..4...^%....XXXXXXX..XXXXXXX.e..^......%..m.XX
+D:XX....%....^%...g.XXXXXXX..XXXXXXX.g...^....%.....XX
+D:X+.....%..^%.c....+XXXXX++++XXXXX+......^..%......+X
 ?:[EQU $RANDOM4 1]
-D:Xb.W....%^%.W..c..+D....+<.+....D+.......^%..0...6aX
+D:Xb......%^%.......+D....+<.+....D+.......^%......6aX
 ?:[NOT [EQU $RANDOM4 1]]
-D:Xb.W....%^%.W..c..+D....+<.+....D+.......^%..0...6bX
+D:Xb......%^%.......+D....+<.+....D+.......^%......6bX
 ?:[EQU $RANDOM4 2]
-D:Xa4.....?%........+D....+..+....D+..0....%=.......bX
+D:Xa4.....@%........+D....+..+....D+.......%@.e.....bX
 ?:[NOT [EQU $RANDOM4 2]]
-D:Xb4.....?%........+D....+..+....D+..0....%=.......bX
+D:Xb4.....@%........+D....+..+....D+.......%@.e.....bX
 ?:1
-D:X+....W.%^%.......+XXXXX++++XXXXX+...G..%^.G..d.e.+X
-D:XX.c...%.I^%.W..2.XXXXXXX..XXXXXXX.2.m.%^........$XX
-D:XX....%....^%.m...XXXXXXX..XXXXXXX....%^.d....C...XX
-D:XXXXX$.I..I.^..XXXXXXXXXX..XXXXXXXXXX.^........XXXXX
+D:X+......%^%.......+XXXXX++++XXXXX+......%^........+X
+D:XX.c...%..^%....g.XXXXXXX..XXXXXXX.g...%^........$XX
+D:XX....%....^%.m...XXXXXXX..XXXXXXX....%^...m......XX
+D:XXXXX$......^..XXXXXXXXXX..XXXXXXXXXX.^........XXXXX
 D:XXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXXXXXXXXXDDXXXXXXXXXXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXXXXXX^..++++...XXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX^..+++^^^@XXXXXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXX^1^^......f^^.m.XXXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXXX^^%^.2...^^2....XXXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX^^!%.F..^^....%...XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX^%%%%%^^...F..%...XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX^^.%?^F.....%%%%%.XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXX...%.....F....%...XXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXXX7.*..F.......%7.XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX^^%^.g...^^g....XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX^^!%....^^....%...XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX^%%%%%^^......%...XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX^^.%@^......%%%%%.XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX.3.%..........%...XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX.............%..XXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXX...f...3...m....XXXXXXXXXXXXXXXXXX
 ?:[EQU $RANDOM4 3]
 D:XXXXXXXXXXXXXXXXXXXXX.+b+b+a+..XXXXXXXXXXXXXXXXXXXXX
