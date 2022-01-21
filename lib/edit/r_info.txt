@@ -20120,10 +20120,14 @@ F:OPEN_DOOR | BASH_DOOR |
 F:IM_FIRE | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:HEAL | BLIND | CONF | CAUSE_2 | MIND_BLAST
-D:$This dwarf became so obsessed by gold that Morgoth tricked him into 
-D:$betraying his friends.
-D:このドワーフはお金に対する欲望が非常に強い。モルゴスはそこにつけ込んで
-D:彼の友人達を誘拐させた。
+D:$He was a pathetic old squire because his master Thror, the Dwarf King was slaughtered by orcs,
+D:$ and Orcish King Azog gave him a few coins and dared him to live.
+D:$  Later, the dwarves' retribution itself was carried out, but why he's so alone right now?
+D:$  Was he forced to leave his clan?  Did he leave in shame?
+D:主であったドワーフ王スロールがオークに惨殺された後、
+D:その王アゾグに小銭を渡され敢えて生かされた哀れな老従者だ。
+D:後にドワーフ達の報復そのものは成されたようだが、
+D:今の孤独な彼は、一族を追われたのだろうか？自ら恥じて去ったのだろうか？
 
 # 根性がないと開発はできない
 # 根性がないとプレイもできない
