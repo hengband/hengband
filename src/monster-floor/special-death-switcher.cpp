@@ -44,7 +44,23 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-/*!
+ /*!
+ * @brief 死亡召喚に使用するモード選択
+ * @param md_ptr モンスター撃破構造体への参照ポインタ
+ * @return 撃破モンスターがPETであればPM_FORCE_PETを、CLONEであればPM_CLONEを立てる
+ */
+ static BIT_FLAGS dead_mode(monster_death_type *md_ptr)
+{
+     bool pet = is_pet(md_ptr->m_ptr);
+     bool clone = md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
+     BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+     if (clone)
+         mode = mode | PM_CLONE;
+
+     return mode;
+ }
+ 
+ /*!
  * @brief 死亡時召喚処理 (今のところ自分自身のみ)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
@@ -70,7 +86,7 @@ static void summon_self(PlayerType *player_ptr, monster_death_type *md_ptr, summ
     if (attempts <= 0)
         return;
 
-    BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+    BIT_FLAGS mode = dead_mode(md_ptr);
     if (summon_specific(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, 100, type, mode) && player_can_see_bold(player_ptr, wy, wx))
         msg_print(message);
 }
@@ -86,7 +102,7 @@ static void on_dead_pink_horror(PlayerType *player_ptr, monster_death_type *md_p
         POSITION wy = md_ptr->md_y;
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
-        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+        BIT_FLAGS mode = dead_mode(md_ptr);
         if (summon_specific(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode) && player_can_see_bold(player_ptr, wy, wx))
             notice = true;
     }
@@ -250,7 +266,7 @@ static void on_dead_aqua_illusion(PlayerType *player_ptr, monster_death_type *md
         POSITION wy = md_ptr->md_y;
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
-        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+        BIT_FLAGS mode = dead_mode(md_ptr);
         MONSTER_IDX smaller_bubble = md_ptr->m_ptr->r_idx - 1;
         if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode) && player_can_see_bold(player_ptr, wy, wx))
             notice = true;
@@ -303,7 +319,8 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, monster_death_type 
         POSITION wy = md_ptr->md_y;
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
-        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+        BIT_FLAGS mode = dead_mode(md_ptr);
+
         MONSTER_IDX smaller_centipede = md_ptr->m_ptr->r_idx - 1;
         if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode) && player_can_see_bold(player_ptr, wy, wx))
             notice = true;
@@ -473,7 +490,7 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_p
         auto wy = md_ptr->md_y;
         auto wx = md_ptr->md_x;
         auto pet = is_pet(md_ptr->m_ptr);
-        auto mode = pet ? PM_FORCE_PET : PM_NONE;
+        BIT_FLAGS mode = dead_mode(md_ptr);
         if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, (MONSTER_IDX)mimic_inside, (BIT_FLAGS)mode)
             && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;

@@ -317,6 +317,9 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
     }
 
+    if (any_bits(mode, PM_CLONE))
+        m_ptr->mflag2.set(MonsterConstantFlagType::CLONED);
+
     if (any_bits(mode, PM_NO_PET))
         m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
 
