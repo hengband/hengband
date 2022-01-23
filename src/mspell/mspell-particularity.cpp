@@ -18,7 +18,6 @@
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell-result.h"
-#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 
 /*!

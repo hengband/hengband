@@ -224,7 +224,7 @@ static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     mam_ptr->obvious = true;
     mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
     mam_ptr->attribute = BLOW_EFFECT_TYPE_NONE;
-    mam_ptr->pt = AttributeType::MISSILE;
+    mam_ptr->pt = AttributeType::MONSTER_MELEE;
     decide_monster_attack_effect(player_ptr, mam_ptr);
     process_monster_attack_effect(player_ptr, mam_ptr);
 }

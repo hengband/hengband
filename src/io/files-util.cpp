@@ -57,7 +57,7 @@ char debug_savefile[1024];
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(PlayerType *player_ptr, concptr name, display_player_pf display_player)
+errr file_character(PlayerType *player_ptr, concptr name)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
@@ -80,7 +80,7 @@ errr file_character(PlayerType *player_ptr, concptr name, display_player_pf disp
         return -1;
     }
 
-    make_character_dump(player_ptr, fff, display_player);
+    make_character_dump(player_ptr, fff);
     angband_fclose(fff);
     msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
     msg_print(nullptr);

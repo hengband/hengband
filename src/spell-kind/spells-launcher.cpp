@@ -204,7 +204,7 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, DICE_N
 bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
-    if (typ != AttributeType::ARROW)
+    if (typ != AttributeType::MONSTER_SHOOT)
         flg |= PROJECT_REFLECTABLE;
     return (project_hook(player_ptr, typ, dir, dam, flg));
 }

@@ -337,7 +337,7 @@ void fix_player(PlayerType *player_ptr)
 
         term_activate(angband_term[j]);
         update_playtime();
-        display_player(player_ptr, 0);
+        (void)display_player(player_ptr, 0);
         term_fresh();
         term_activate(old);
     }

@@ -21,7 +21,6 @@
 #include "mspell/mspell-summon.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell-result.h"
-#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 

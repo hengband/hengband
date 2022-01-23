@@ -44,7 +44,7 @@ void switch_effects_player(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     case AttributeType::HELL_FIRE:
         effect_player_hell_fire(player_ptr, ep_ptr);
         return;
-    case AttributeType::ARROW:
+    case AttributeType::MONSTER_SHOOT:
         effect_player_arrow(player_ptr, ep_ptr);
         return;
     case AttributeType::PLASMA:

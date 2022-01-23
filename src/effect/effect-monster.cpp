@@ -111,7 +111,7 @@ static void make_description_of_affecred_monster(PlayerType *player_ptr, effect_
  * @return 完全な耐性が発動したらCONTINUE、そうでないなら効果処理の結果
  * @details
  * 完全な耐性を持っていたら、一部属性を除いて影響は及ぼさない
- * 射撃属性 (デバッグ用)であれば貫通する
+ * デバッグ属性、モンスター打撃、モンスター射撃であれば貫通する
  */
 static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
@@ -129,7 +129,11 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
         || em_ptr->attribute == AttributeType::CAPTURE || em_ptr->attribute == AttributeType::PHOTO)
         return switch_effects_monster(player_ptr, em_ptr);
 
-    if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) && (em_ptr->attribute == AttributeType::ARROW))
+    bool ignore_res_all = (em_ptr->attribute == AttributeType::DEBUG);
+    ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_MELEE);
+    ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_SHOOT);
+
+    if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) && ignore_res_all)
         return switch_effects_monster(player_ptr, em_ptr);
 
     em_ptr->note = _("には完全な耐性がある！", " is immune.");

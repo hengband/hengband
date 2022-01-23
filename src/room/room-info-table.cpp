@@ -39,7 +39,7 @@ room_info_type room_info_normal[ROOM_T_MAX] = {
 };
 
 /*! 部屋の生成処理順 / Build rooms in descending order of difficulty. */
-byte room_build_order[ROOM_T_MAX] = {
+room_type room_build_order[ROOM_T_MAX] = {
     ROOM_T_GREATER_VAULT,
     ROOM_T_ARCADE,
     ROOM_T_RANDOM_VAULT,

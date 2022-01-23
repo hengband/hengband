@@ -170,26 +170,24 @@ static void display_player_stats(PlayerType *player_ptr)
  * @param statmsg メッセージバッファ
  * @return 生きていたらFALSE、死んでいたらTRUE
  */
-static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
+static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!player_ptr->is_dead)
-        return false;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (!player_ptr->is_dead) {
+        return std::nullopt;
+    }
 
     if (w_ptr->total_winner) {
-        sprintf(statmsg, _("…あなたは勝利の後%sした。", "...You %s after winning."),
-            streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
-
-        return true;
+        return std::string(format( _("…あなたは勝利の後%sした。", "...You %s after winning."),
+            streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure")));
     }
 
     if (!floor_ptr->dun_level) {
 #ifdef JP
-        sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(player_ptr), player_ptr->died_from);
+        return std::string(format("…あなたは%sで%sに殺された。", map_name(player_ptr), player_ptr->died_from));
 #else
-        sprintf(statmsg, "...You were killed by %s in %s.", player_ptr->died_from, map_name(player_ptr));
+        return std::string(format("...You were killed by %s in %s.", player_ptr->died_from, map_name(player_ptr)));
 #endif
-        return true;
     }
 
     if (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) {
@@ -198,20 +196,17 @@ static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
 #ifdef JP
-        sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, player_ptr->died_from);
+        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, player_ptr->died_from));
 #else
-        sprintf(statmsg, "...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->inside_quest].name);
+        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from, quest[floor_ptr->inside_quest].name));
 #endif
-        return true;
     }
 
 #ifdef JP
-    sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(player_ptr), (int)floor_ptr->dun_level, player_ptr->died_from);
+    return std::string(format("…あなたは、%sの%d階で%sに殺された。", map_name(player_ptr), (int)floor_ptr->dun_level, player_ptr->died_from));
 #else
-    sprintf(statmsg, "...You were killed by %s on level %d of %s.", player_ptr->died_from, floor_ptr->dun_level, map_name(player_ptr));
+    return std::string(format("...You were killed by %s on level %d of %s.", player_ptr->died_from, floor_ptr->dun_level, map_name(player_ptr)));
 #endif
-
-    return true;
 }
 
 /*!
@@ -220,11 +215,11 @@ static bool search_death_cause(PlayerType *player_ptr, char *statmsg)
  * @param statmsg メッセージバッファ
  * @return クエスト内であればTRUE、いなければFALSE
  */
-static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
+static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_quest || !quest_type::is_fixed(floor_ptr->inside_quest))
-        return false;
+        return std::nullopt;
 
     for (int i = 0; i < 10; i++)
         quest_text[i][0] = '\0';
@@ -232,8 +227,7 @@ static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
-    return true;
+    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name));
 }
 
 /*!
@@ -241,100 +235,103 @@ static bool decide_death_in_quest(PlayerType *player_ptr, char *statmsg)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
  */
-static void decide_current_floor(PlayerType *player_ptr, char *statmsg)
+static std::string decide_current_floor(PlayerType *player_ptr)
 {
-    if (search_death_cause(player_ptr, statmsg))
-        return;
-    if (!w_ptr->character_dungeon)
-        return;
-
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level == 0) {
-        sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr));
-        return;
+    if (auto death_cause = search_death_cause(player_ptr);
+        death_cause.has_value() || !w_ptr->character_dungeon) {
+        return death_cause.value_or("");
     }
 
-    if (decide_death_in_quest(player_ptr, statmsg))
-        return;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->dun_level == 0) {
+        return std::string(format(_("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(player_ptr)));
+    }
+
+    if (auto decision = decide_death_in_quest(player_ptr); decision.has_value()) {
+        return decision.value();
+    }
 
 #ifdef JP
-    sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(player_ptr), (int)floor_ptr->dun_level);
+    return std::string(format("…あなたは現在、 %s の %d 階で探索している。", map_name(player_ptr), (int)floor_ptr->dun_level));
 #else
-    sprintf(statmsg, "...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(player_ptr));
+    return std::string(format("...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(player_ptr)));
 #endif
 }
 
 /*!
  * @brief 今いる、または死亡した場所を表示する
  * @param statmsg メッセージバッファ
+ * @return ダンプ表示行数の補正項
+ * @details v2.2までは状況に関係なく必ず2行であり、v3.0では1～4行になり得、num_linesはその行数.
+ * ギリギリ見切れる場合があるので行数は僅かに多めに取る.
  */
-static void display_current_floor(char *statmsg)
+static int display_current_floor(const std::string &statmsg)
 {
-    char temp[128];
-    shape_buffer(statmsg, 60, temp, sizeof(temp));
-    char *t;
-    t = temp;
-    for (int i = 0; i < 2; i++) {
-        if (t[0] == 0)
-            return;
-
+    char temp[1000];
+    constexpr auto chars_per_line = 60;
+    shape_buffer(statmsg.c_str(), chars_per_line, temp, sizeof(temp));
+    auto t = temp;
+    auto statmsg_size = statmsg.size();
+    auto fraction = statmsg_size % (chars_per_line - 1);
+    auto num_lines = statmsg_size / (chars_per_line - 1);
+    num_lines += fraction > 0 ? 1 : 0;
+    for (auto i = 0U; i < num_lines; i++) {
         put_str(t, i + 5 + 12, 10);
         t += strlen(t) + 1;
     }
+
+    return num_lines;
 }
 
 /*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param mode 表示モードID
+ * @param tmp_mode 暫定表示モード (突然変異の有無で実際のモードに切り替える)
+ * @return 死亡原因となったモンスター名が複数行に亘る場合、表示に必要な行数. それ以外を表示する場合はnullopt
  * @details
- * <pre>
- * The top one and bottom two lines are left blank.
- * Mode 0 = standard display with skills
- * Mode 1 = standard display with history
- * Mode 2 = summary of various things
- * Mode 3 = summary of various things (part 2)
- * Mode 4 = mutations
- * </pre>
+ * 最初の1行と最後の2行は空行. / The top one and bottom two lines are left blank.
+ * Mode 0 = standard display with skills.
+ * Mode 1 = standard display with history.
+ * Mode 2 = summary of various things.
+ * Mode 3 = summary of various things (part 2).
+ * Mode 4 = mutations.
+ * Mode 5 = ??? (コード上の定義より6で割った余りは5になりうるが元のコメントに記載なし).
  */
-void display_player(PlayerType *player_ptr, int mode)
+std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
 {
-    if ((player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations)
-        mode = (mode % 6);
-    else
-        mode = (mode % 5);
-
+    auto has_any_mutation = (player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations;
+    auto mode = has_any_mutation ? tmp_mode % 6 : tmp_mode % 5;
     clear_from(0);
-    if (display_player_info(player_ptr, mode))
-        return;
+    if (display_player_info(player_ptr, mode)) {
+        return std::nullopt;
+    }
 
     display_player_basic_info(player_ptr);
     display_magic_realms(player_ptr);
-
-    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)))
+    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT))) {
         display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.c_str(), TERM_L_BLUE);
+    }
 
     display_phisique(player_ptr);
     display_player_stats(player_ptr);
-
     if (mode == 0) {
         display_player_middle(player_ptr);
         display_player_various(player_ptr);
-        return;
+        return std::nullopt;
     }
 
-    char statmsg[1000];
     put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
-    for (int i = 0; i < 4; i++)
+    for (auto i = 0; i < 4; i++) {
         put_str(player_ptr->history[i], i + 12, 10);
+    }
 
-    *statmsg = '\0';
-    decide_current_floor(player_ptr, statmsg);
-    if (!*statmsg)
-        return;
+    auto statmsg = decide_current_floor(player_ptr);
+    if (statmsg == "") {
+        return std::nullopt;
+    }
 
-    display_current_floor(statmsg);
+    return display_current_floor(statmsg);
 }
 
 /*!

@@ -6,7 +6,7 @@
  * core、files、view-mainwindowの参照禁止。コールバックで対応すること
  */
 
-#include "process-death.h"
+#include "player/process-death.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -14,6 +14,7 @@
 #include "floor/floor-town.h"
 #include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -31,6 +32,7 @@
 #include "util/string-processor.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
+#include "view/display-player.h"
 #include "world/world.h"
 
 #define GRAVE_LINE_WIDTH 31
@@ -345,7 +347,7 @@ static void show_dead_home_items(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param file_character ステータスダンプへのコールバック
  */
-static void export_player_info(PlayerType *player_ptr, display_player_pf display_player)
+static void export_player_info(PlayerType *player_ptr)
 {
     prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
     prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
@@ -359,7 +361,7 @@ static void export_player_info(PlayerType *player_ptr, display_player_pf display
             break;
 
         screen_save();
-        (void)file_character(player_ptr, out_val, display_player);
+        (void)file_character(player_ptr, out_val);
         screen_load();
     }
 }
@@ -367,7 +369,7 @@ static void export_player_info(PlayerType *player_ptr, display_player_pf display
 /*!
  * @brief 自動的にプレイヤーステータスをファイルダンプ出力する
  */
-static void file_character_auto(PlayerType *player_ptr, display_player_pf display_player)
+static void file_character_auto(PlayerType *player_ptr)
 {
     time_t now_t = time(nullptr);
     struct tm *now_tm = localtime(&now_t);
@@ -379,7 +381,7 @@ static void file_character_auto(PlayerType *player_ptr, display_player_pf displa
     strnfmt(filename, sizeof(filename), "%s_Autodump_%s.txt", p_ptr->name, datetime);
 
     screen_save();
-    (void)file_character(player_ptr, filename, display_player);
+    (void)file_character(player_ptr, filename);
     screen_load();
 }
 
@@ -388,7 +390,7 @@ static void file_character_auto(PlayerType *player_ptr, display_player_pf displa
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param display_player ステータス表示へのコールバック
  */
-void show_death_info(PlayerType *player_ptr, display_player_pf display_player)
+void show_death_info(PlayerType *player_ptr)
 {
     inventory_aware(player_ptr);
     home_aware(player_ptr);
@@ -399,10 +401,10 @@ void show_death_info(PlayerType *player_ptr, display_player_pf display_player)
     msg_erase();
 
     if (auto_dump)
-        file_character_auto(player_ptr, display_player);
+        file_character_auto(player_ptr);
 
-    export_player_info(player_ptr, display_player);
-    (*display_player)(player_ptr, 0);
+    export_player_info(player_ptr);
+    (void)display_player(player_ptr, 0);
     prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
     if (inkey() == ESCAPE)
         return;

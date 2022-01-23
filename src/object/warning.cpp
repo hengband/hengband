@@ -4,7 +4,6 @@
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "effect/attribute-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
@@ -122,7 +121,7 @@ static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, Attribute
         ignore_wraith_form = true;
         break;
 
-    case AttributeType::ARROW:
+    case AttributeType::MONSTER_SHOOT:
         if (!player_ptr->blind && (has_invuln_arrow(player_ptr))) {
             dam = 0;
             ignore_wraith_form = true;
