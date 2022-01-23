@@ -1,12 +1,5 @@
 ﻿#include "io/uid-checker.h"
 #include "system/player-type-definition.h"
-#ifdef SET_UID
-#ifdef SAFE_SETUID
-#ifdef SAFE_SETUID_POSIX
-#include "util.h"
-#endif
-#endif
-#endif
 
 /*!
  * @brief ファイルのドロップパーミッションチェック / Hack -- drop permissions
@@ -44,7 +37,7 @@ void safe_setuid_grab(PlayerType *player_ptr)
 #ifdef SAFE_SETUID
 #ifdef SAFE_SETUID_POSIX
 
-    if (setuid(player_ptr->player_egid) != 0) {
+    if (setuid(player_ptr->player_euid) != 0) {
         quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
     }
     if (setgid(player_ptr->player_egid) != 0) {

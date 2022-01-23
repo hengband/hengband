@@ -48,6 +48,8 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
   #endif
   
   #define SAFE_SETUID
+  /* Pick up system's definition of _POSIX_SAVED_IDS. */
+  #include <unistd.h>
   #ifdef _POSIX_SAVED_IDS
     #define SAFE_SETUID_POSIX
   #endif
