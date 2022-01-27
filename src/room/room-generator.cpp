@@ -27,42 +27,42 @@
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
  * @return 部屋の生成に成功した場合 TRUE を返す。
  */
-static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, room_type typ)
+static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, RoomType typ)
 {
     switch (typ) {
-    case ROOM_T_NORMAL:
+    case RoomType::NORMAL:
         return build_type1(player_ptr, dd_ptr);
-    case ROOM_T_OVERLAP:
+    case RoomType::OVERLAP:
         return build_type2(player_ptr, dd_ptr);
-    case ROOM_T_CROSS:
+    case RoomType::CROSS:
         return build_type3(player_ptr, dd_ptr);
-    case ROOM_T_INNER_FEAT:
+    case RoomType::INNER_FEAT:
         return build_type4(player_ptr, dd_ptr);
-    case ROOM_T_NEST:
+    case RoomType::NEST:
         return build_type5(player_ptr, dd_ptr);
-    case ROOM_T_PIT:
+    case RoomType::PIT:
         return build_type6(player_ptr, dd_ptr);
-    case ROOM_T_LESSER_VAULT:
+    case RoomType::LESSER_VAULT:
         return build_type7(player_ptr, dd_ptr);
-    case ROOM_T_GREATER_VAULT:
+    case RoomType::GREATER_VAULT:
         return build_type8(player_ptr, dd_ptr);
-    case ROOM_T_FRACAVE:
+    case RoomType::FRACAVE:
         return build_type9(player_ptr, dd_ptr);
-    case ROOM_T_RANDOM_VAULT:
+    case RoomType::RANDOM_VAULT:
         return build_type10(player_ptr, dd_ptr);
-    case ROOM_T_OVAL:
+    case RoomType::OVAL:
         return build_type11(player_ptr, dd_ptr);
-    case ROOM_T_CRYPT:
+    case RoomType::CRYPT:
         return build_type12(player_ptr, dd_ptr);
-    case ROOM_T_TRAP_PIT:
+    case RoomType::TRAP_PIT:
         return build_type13(player_ptr, dd_ptr);
-    case ROOM_T_TRAP:
+    case RoomType::TRAP:
         return build_type14(player_ptr, dd_ptr);
-    case ROOM_T_GLASS:
+    case RoomType::GLASS:
         return build_type15(player_ptr, dd_ptr);
-    case ROOM_T_ARCADE:
+    case RoomType::ARCADE:
         return build_type16(player_ptr, dd_ptr);
-    case ROOM_T_FIXED:
+    case RoomType::FIXED:
         return build_type17(player_ptr, dd_ptr);
     default:
         return false;
@@ -74,7 +74,7 @@ static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, room_type 
  * @param dst 確率を移す先の部屋種ID
  * @param src 確率を与える元の部屋種ID
  */
-static void move_prob_list(room_type dst, room_type src, int *prob_list)
+static void move_prob_list(RoomType dst, RoomType src, std::map<RoomType, int> &prob_list)
 {
     prob_list[dst] += prob_list[src];
     prob_list[src] = 0;
@@ -90,18 +90,18 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int crowded = 0;
-    int prob_list[ROOM_T_MAX];
+    std::map<RoomType, int> prob_list;
     int rooms_built = 0;
     int area_size = 100 * (floor_ptr->height * floor_ptr->width) / (MAX_HGT * MAX_WID);
     int level_index = std::min(10, div_round(floor_ptr->dun_level, 10));
-    int16_t room_num[ROOM_T_MAX];
+    std::map<RoomType, int> room_num;
     int dun_rooms = DUN_ROOMS_MAX * area_size / 100;
     room_info_type *room_info_ptr = room_info_normal;
-    for (int i = 0; i < ROOM_T_MAX; i++) {
-        if (floor_ptr->dun_level < room_info_ptr[i].min_level)
-            prob_list[i] = 0;
+    for (auto r : ROOM_TYPE_LIST) {
+        if (floor_ptr->dun_level < room_info_ptr[enum2i(r)].min_level)
+            prob_list[r] = 0;
         else
-            prob_list[i] = room_info_ptr[i].prob[level_index];
+            prob_list[r] = room_info_ptr[enum2i(r)].prob[level_index];
     }
 
     /*!
@@ -110,72 +110,70 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
      * GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults
      */
     if (ironman_rooms && d_info[floor_ptr->dungeon_idx].flags.has_none_of( {DungeonFeatureType::BEGINNER, DungeonFeatureType::CHAMELEON, DungeonFeatureType::SMALLEST })) {
-        for (int i = 0; i < ROOM_T_MAX; i++) {
-            if (i == ROOM_T_GREATER_VAULT)
-                prob_list[i] = 1;
+        for (auto r : ROOM_TYPE_LIST) {
+            if (r == RoomType::GREATER_VAULT)
+                prob_list[r] = 1;
             else
-                prob_list[i] = 0;
+                prob_list[r] = 0;
         }
     } else if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_VAULT)) {
         /*! @details ダンジョンにNO_VAULTフラグがあるならば、LESSER_VAULT / GREATER_VAULT/ RANDOM_VAULTを除外 / Forbidden vaults */
-        prob_list[ROOM_T_LESSER_VAULT] = 0;
-        prob_list[ROOM_T_GREATER_VAULT] = 0;
-        prob_list[ROOM_T_RANDOM_VAULT] = 0;
+        prob_list[RoomType::LESSER_VAULT] = 0;
+        prob_list[RoomType::GREATER_VAULT] = 0;
+        prob_list[RoomType::RANDOM_VAULT] = 0;
     }
 
     /*! @details ダンジョンにBEGINNERフラグがあるならば、FIXED_ROOMを除外 / Forbidden vaults */
     if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::BEGINNER))
-        prob_list[ROOM_T_FIXED] = 0;
+        prob_list[RoomType::FIXED] = 0;
 
     /*! @details ダンジョンにNO_CAVEフラグがある場合、FRACAVEの生成枠がNORMALに与えられる。CRIPT、OVALの生成枠がINNER_Fに与えられる。/ NO_CAVE dungeon */
     if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE)) {
-        move_prob_list(ROOM_T_NORMAL, ROOM_T_FRACAVE, prob_list);
-        move_prob_list(ROOM_T_INNER_FEAT, ROOM_T_CRYPT, prob_list);
-        move_prob_list(ROOM_T_INNER_FEAT, ROOM_T_OVAL, prob_list);
+        move_prob_list(RoomType::NORMAL, RoomType::FRACAVE, prob_list);
+        move_prob_list(RoomType::INNER_FEAT, RoomType::CRYPT, prob_list);
+        move_prob_list(RoomType::INNER_FEAT, RoomType::OVAL, prob_list);
     } else if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CAVE)) {
         /*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor_ptr->grid_array etc.) */
-        move_prob_list(ROOM_T_FRACAVE, ROOM_T_NORMAL, prob_list);
+        move_prob_list(RoomType::FRACAVE, RoomType::NORMAL, prob_list);
     } else if (dd_ptr->cavern || dd_ptr->empty_level) {
         /*! @details ダンジョンの基本地形が最初から渓谷かアリーナ型の場合 FRACAVE は生成から除外。 /  No caves when a (random) cavern exists: they look bad */
-        prob_list[ROOM_T_FRACAVE] = 0;
+        prob_list[RoomType::FRACAVE] = 0;
     }
 
     /*! @details ダンジョンに最初からGLASS_ROOMフラグがある場合、GLASS を生成から除外。/ Forbidden glass rooms */
     if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::GLASS_ROOM))
-        prob_list[ROOM_T_GLASS] = 0;
+        prob_list[RoomType::GLASS] = 0;
 
     /*! @details ARCADEは同フラグがダンジョンにないと生成されない。 / Forbidden glass rooms */
     if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::ARCADE))
-        prob_list[ROOM_T_ARCADE] = 0;
+        prob_list[RoomType::ARCADE] = 0;
 
-    ProbabilityTable<int> prob_table;
-    for (int i = 0; i < ROOM_T_MAX; i++) {
+    ProbabilityTable<RoomType> prob_table;
+    for (auto i : ROOM_TYPE_LIST) {
         room_num[i] = 0;
         prob_table.entry_item(i, prob_list[i]);
     }
 
     for (int i = dun_rooms; i > 0; i--) {
-        int room_type;
-        if (prob_table.empty())
-            room_type = ROOM_T_NORMAL;
-        else
-            room_type = prob_table.pick_one_at_random();
+        auto r = prob_table.empty() ? RoomType::NORMAL : prob_table.pick_one_at_random();
 
-        room_num[room_type]++;
-        switch (room_type) {
-        case ROOM_T_NEST:
-        case ROOM_T_PIT:
-        case ROOM_T_LESSER_VAULT:
-        case ROOM_T_TRAP_PIT:
-        case ROOM_T_GLASS:
-        case ROOM_T_ARCADE:
+        room_num[r]++;
+        switch (r) {
+        case RoomType::NEST:
+        case RoomType::PIT:
+        case RoomType::LESSER_VAULT:
+        case RoomType::TRAP_PIT:
+        case RoomType::GLASS:
+        case RoomType::ARCADE:
             /* Large room */
             i -= 2;
             break;
-        case ROOM_T_GREATER_VAULT:
-        case ROOM_T_RANDOM_VAULT:
+        case RoomType::GREATER_VAULT:
+        case RoomType::RANDOM_VAULT:
             /* Largest room */
             i -= 3;
+            break;
+        default:
             break;
         }
     }
@@ -183,8 +181,8 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
     bool remain;
     while (true) {
         remain = false;
-        for (int i = 0; i < ROOM_T_MAX; i++) {
-            room_type room_type = room_build_order[i];
+        for (auto i = 0; i < ROOM_TYPE_MAX; i++) {
+            auto room_type = room_build_order[i];
             if (!room_num[room_type])
                 continue;
 
@@ -195,18 +193,18 @@ bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
             rooms_built++;
             remain = true;
             switch (room_type) {
-            case ROOM_T_PIT:
-            case ROOM_T_NEST:
-            case ROOM_T_TRAP_PIT:
+            case RoomType::PIT:
+            case RoomType::NEST:
+            case RoomType::TRAP_PIT:
                 if (++crowded >= 2) {
-                    room_num[ROOM_T_PIT] = 0;
-                    room_num[ROOM_T_NEST] = 0;
-                    room_num[ROOM_T_TRAP_PIT] = 0;
+                    room_num[RoomType::PIT] = 0;
+                    room_num[RoomType::NEST] = 0;
+                    room_num[RoomType::TRAP_PIT] = 0;
                 }
 
                 break;
-            case ROOM_T_ARCADE:
-                room_num[ROOM_T_ARCADE] = 0;
+            case RoomType::ARCADE:
+                room_num[RoomType::ARCADE] = 0;
                 break;
             default:
                 break;
