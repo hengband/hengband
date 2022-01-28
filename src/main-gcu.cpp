@@ -887,9 +887,8 @@ static errr Term_xtra_gcu_react(void)
         * Both also have the basic 16 ANSI colors, plus some extra grayscale
         * colors which we do not use.
         */
-        int i;
         int scale = COLORS == 256 ? 6 : 4;
-        for (i = 0; i < 16; i++)
+        for (int i = 0; i < 16; i++)
         {
             int fg = create_color(i, scale);
             init_pair(i + 1, fg, bg_color);
