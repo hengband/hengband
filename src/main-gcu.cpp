@@ -338,6 +338,12 @@ static int can_fix_color = false;
  * Simple Angband to Curses color conversion table
  */
 static int colortable[16];
+
+/**
+ * Background color we should draw with; either BLACK or DEFAULT
+ */
+static int bg_color = COLOR_BLACK;
+
 #endif
 
 /*
@@ -841,6 +847,26 @@ static errr Term_xtra_gcu_sound(int v)
     return (0);
 }
 
+static int scale_color(int i, int j, int scale)
+{
+    return (angband_color_table[i][j] * (scale - 1) + 127) / 255;
+}
+
+static int create_color(int i, int scale)
+{
+    int r = scale_color(i, 1, scale);
+    int g = scale_color(i, 2, scale);
+    int b = scale_color(i, 3, scale);
+    int rgb = 16 + scale * scale * r + scale * g + b;
+    /* In the case of white and black we need to use the ANSI colors */
+    if (r == g && g == b)
+    {
+        if (b == 0) rgb = 0;
+        if (b == scale) rgb = 15;
+    }
+    return rgb;
+}
+
 /*
  * React to changes
  */
@@ -849,16 +875,26 @@ static errr Term_xtra_gcu_react(void)
 
 #ifdef A_COLOR
 
-    int i;
-
-    /* Cannot handle color redefinition */
-    if (!can_fix_color)
-        return (0);
-
-    /* Set the colors */
-    for (i = 0; i < 16; i++) {
-        /* Set one color (note scaling) */
-        init_color(i, angband_color_table[i][1] * 1000 / 255, angband_color_table[i][2] * 1000 / 255, angband_color_table[i][3] * 1000 / 255);
+    if (COLORS == 256 || COLORS == 88)
+    {
+        /* If we have more than 16 colors, find the best matches. These numbers
+        * correspond to xterm/rxvt's builtin color numbers--they do not
+        * correspond to curses' constants OR with curses' color pairs.
+        *
+        * XTerm has 216 (6*6*6) RGB colors, with each RGB setting 0-5.
+        * RXVT has 64 (4*4*4) RGB colors, with each RGB setting 0-3.
+        *
+        * Both also have the basic 16 ANSI colors, plus some extra grayscale
+        * colors which we do not use.
+        */
+        int i;
+        int scale = COLORS == 256 ? 6 : 4;
+        for (i = 0; i < 16; i++)
+        {
+            int fg = create_color(i, scale);
+            init_pair(i + 1, fg, bg_color);
+            colortable[i] = COLOR_PAIR(i + 1) | A_NORMAL;
+        }
     }
 
 #endif
