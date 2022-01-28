@@ -16450,8 +16450,8 @@ D:$The Chief of the Ringwraiths.  A fell being of devastating power.  His
 D:$spells are lethal and his combat blows crushingly hard.  He moves at 
 D:$speed, and commands legions of evil to do his bidding.  It is said that he 
 D:$is fated never to die by the hand of mortal man.
-D:指輪の幽鬼の隊長であり、破壊的な力を持った恐るべき存在だ。その呪文は信じ難
-D:たい威力を持ち、戦闘に際しては全てのものを打ち砕くかのような攻撃力を誇る。
+D:指輪の幽鬼の隊長であり、破壊的な力を持った恐るべき存在だ。その呪文は信じ難い
+D:威力を持ち、戦闘に際しては全てのものを打ち砕くかのような攻撃力を誇る。
 D:彼は素早く行動し、邪悪の者どもに命令を発して思い通りに操る。彼は死すべき人
 D:間の男の手では決して葬り去ることができないといわれている。
 
