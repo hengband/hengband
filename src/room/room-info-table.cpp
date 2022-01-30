@@ -16,7 +16,7 @@
  * appear above their minimum depth.  Tiny levels will not have space\n
  * for all the rooms you ask for.\n
  */
-room_info_type room_info_normal[ROOM_T_MAX] = {
+room_info_type room_info_normal[ROOM_TYPE_MAX] = {
     /* Depth */
     /*  0  10  20  30  40  50  60  70  80  90 100  min limit */
     { { 999, 900, 800, 700, 600, 500, 400, 300, 200, 100, 0 }, 0 }, /*NORMAL   */
@@ -39,22 +39,22 @@ room_info_type room_info_normal[ROOM_T_MAX] = {
 };
 
 /*! 部屋の生成処理順 / Build rooms in descending order of difficulty. */
-room_type room_build_order[ROOM_T_MAX] = {
-    ROOM_T_GREATER_VAULT,
-    ROOM_T_ARCADE,
-    ROOM_T_RANDOM_VAULT,
-    ROOM_T_LESSER_VAULT,
-    ROOM_T_TRAP_PIT,
-    ROOM_T_PIT,
-    ROOM_T_NEST,
-    ROOM_T_TRAP,
-    ROOM_T_GLASS,
-    ROOM_T_INNER_FEAT,
-    ROOM_T_FIXED,
-    ROOM_T_OVAL,
-    ROOM_T_CRYPT,
-    ROOM_T_OVERLAP,
-    ROOM_T_CROSS,
-    ROOM_T_FRACAVE,
-    ROOM_T_NORMAL,
+RoomType room_build_order[ROOM_TYPE_MAX] = {
+    RoomType::GREATER_VAULT,
+    RoomType::ARCADE,
+    RoomType::RANDOM_VAULT,
+    RoomType::LESSER_VAULT,
+    RoomType::TRAP_PIT,
+    RoomType::PIT,
+    RoomType::NEST,
+    RoomType::TRAP,
+    RoomType::GLASS,
+    RoomType::INNER_FEAT,
+    RoomType::FIXED,
+    RoomType::OVAL,
+    RoomType::CRYPT,
+    RoomType::OVERLAP,
+    RoomType::CROSS,
+    RoomType::FRACAVE,
+    RoomType::NORMAL,
 };
