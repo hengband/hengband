@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "object-enchant/apply-magic-ring.h"
+#include "object-enchant/others/apply-magic-ring.h"
 #include "artifact/random-art-generator.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"

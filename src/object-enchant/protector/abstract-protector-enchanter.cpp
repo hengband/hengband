@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "object-enchant/abstract-protector-enchanter.h"
+#include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "object-enchant/object-boost.h"
 #include "system/object-type-definition.h"
 

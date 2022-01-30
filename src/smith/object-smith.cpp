@@ -1,7 +1,4 @@
-﻿#include "object-enchant/object-smith.h"
-#include "object-enchant/smith-info.h"
-#include "object-enchant/smith-tables.h"
-#include "object-enchant/smith-types.h"
+﻿#include "smith/object-smith.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
@@ -10,6 +7,9 @@
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-info/smith-data-type.h"
+#include "smith/smith-info.h"
+#include "smith/smith-tables.h"
+#include "smith/smith-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 

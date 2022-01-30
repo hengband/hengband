@@ -1,4 +1,4 @@
-﻿#include "object-enchant/abstract-weapon-enchanter.h"
+﻿#include "object-enchant/weapon/abstract-weapon-enchanter.h"
 #include "object-enchant/object-boost.h"
 #include "system/object-type-definition.h"
 

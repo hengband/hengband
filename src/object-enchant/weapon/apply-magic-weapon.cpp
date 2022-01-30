@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "object-enchant/apply-magic-weapon.h"
+#include "object-enchant/weapon/apply-magic-weapon.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"

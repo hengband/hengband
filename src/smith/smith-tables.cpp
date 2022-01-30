@@ -1,10 +1,10 @@
-﻿#include "object-enchant/smith-tables.h"
+﻿#include "smith/smith-tables.h"
 #include "artifact/random-art-effects.h"
-#include "object-enchant/object-smith.h"
-#include "object-enchant/smith-info.h"
-#include "object-enchant/smith-types.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
+#include "smith/object-smith.h"
+#include "smith/smith-info.h"
+#include "smith/smith-types.h"
 
 #include <memory>
 #include <unordered_map>

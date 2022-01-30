@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "object-enchant/abstract-weapon-enchanter.h"
+#include "object-enchant/weapon/abstract-weapon-enchanter.h"
 #include "system/angband.h"
 
 struct object_type;

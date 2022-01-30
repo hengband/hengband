@@ -1,11 +1,11 @@
 ﻿/*
- * @brief 靴に耐性等の追加効果を付与する処理
+ * @brief 籠手に耐性等の追加効果を付与する処理
  * @date 2021/08/01
  * @author Hourier
- * @details ドラゴンブーツは必ず付与する. それ以外は確率的に付与する.
+ * @details ドラゴングローヴは必ず付与する. それ以外は確率的に付与する.
  */
 
-#include "object-enchant/apply-magic-boots.h"
+#include "object-enchant/protector/apply-magic-gloves.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
@@ -20,18 +20,18 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-BootsEnchanter::BootsEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+GlovesEnchanter::GlovesEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
     , player_ptr(player_ptr)
 {
 }
 
 /*
- * power > 2はデバッグ専用.
+ * @details power > 2はデバッグ専用.
  */
-void BootsEnchanter::apply_magic()
+void GlovesEnchanter::apply_magic()
 {
-    if (this->o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) {
+    if (this->o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) {
         dragon_resist(this->o_ptr);
         if (!one_in_(3)) {
             return;
@@ -44,11 +44,11 @@ void BootsEnchanter::apply_magic()
             return;
         }
 
-        this->o_ptr->name2 = get_random_ego(INVEN_FEET, true);
+        this->o_ptr->name2 = get_random_ego(INVEN_ARMS, true);
         return;
     }
-
+    
     if (this->power < -1) {
-        this->o_ptr->name2 = get_random_ego(INVEN_FEET, false);
+        this->o_ptr->name2 = get_random_ego(INVEN_ARMS, false);
     }
 }

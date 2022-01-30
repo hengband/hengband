@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "object-enchant/apply-magic-armor.h"
+#include "object-enchant/protector/apply-magic-armor.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"

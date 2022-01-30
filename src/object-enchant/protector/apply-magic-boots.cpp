@@ -1,12 +1,14 @@
 ﻿/*
- * @brief クロークに耐性等の追加効果を付与する処理
+ * @brief 靴に耐性等の追加効果を付与する処理
  * @date 2021/08/01
  * @author Hourier
+ * @details ドラゴンブーツは必ず付与する. それ以外は確率的に付与する.
  */
 
-#include "object-enchant/apply-magic-cloak.h"
+#include "object-enchant/protector/apply-magic-boots.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
+#include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "sv-definition/sv-protector-types.h"
 #include "system/object-type-definition.h"
@@ -18,19 +20,22 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-CloakEnchanter::CloakEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+BootsEnchanter::BootsEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
     , player_ptr(player_ptr)
 {
 }
 
 /*
- * @details power > 2はデバッグ専用.
+ * power > 2はデバッグ専用.
  */
-void CloakEnchanter::apply_magic()
+void BootsEnchanter::apply_magic()
 {
-    if (this->o_ptr->sval == SV_ELVEN_CLOAK) {
-        this->o_ptr->pval = randint1(4);
+    if (this->o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) {
+        dragon_resist(this->o_ptr);
+        if (!one_in_(3)) {
+            return;
+        }
     }
 
     if (this->power > 1) {
@@ -39,11 +44,11 @@ void CloakEnchanter::apply_magic()
             return;
         }
 
-        this->o_ptr->name2 = get_random_ego(INVEN_OUTER, true);
+        this->o_ptr->name2 = get_random_ego(INVEN_FEET, true);
         return;
     }
 
     if (this->power < -1) {
-        this->o_ptr->name2 = get_random_ego(INVEN_OUTER, false);
+        this->o_ptr->name2 = get_random_ego(INVEN_FEET, false);
     }
 }
