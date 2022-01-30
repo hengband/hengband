@@ -46,6 +46,8 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <sstream>
+#include <string>
 
 /*!
  * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
@@ -305,7 +307,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 
     bool err = false;
     int fd = -1;
-    char tmp_ver[13]{};
+    char tmp_ver[14]{};
     if (!err) {
         fd = fd_open(savefile, O_RDONLY);
         if (fd < 0)
@@ -316,7 +318,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (!err) {
-        if (fd_read(fd, (char *)(tmp_ver), 13)) {
+        if (fd_read(fd, (char *)(tmp_ver), 14)) {
             err = true;
         }
 
