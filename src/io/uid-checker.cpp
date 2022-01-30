@@ -2,57 +2,63 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief ファイルのドロップパーミッションチェック / Hack -- drop permissions
+ * @brief ファイルのドロップパーミッションチェック / Check drop permissions
  */
 void safe_setuid_drop(void)
 {
-#ifdef SET_UID
-#ifdef SAFE_SETUID
+#if defined(SET_UID) && defined(SAFE_SETUID)
 #ifdef SAFE_SETUID_POSIX
-
-    if (setuid(getuid()) != 0) {
-        quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
+    if (auto ret = setuid(getuid()); ret != 0) {
+        auto msg = _("setuid(): 正しく許可が取れません！ エラーコード：%d", "setuid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
     }
-    if (setgid(getgid()) != 0) {
-        quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
+
+    if (auto ret = setgid(getgid()); ret != 0) {
+        auto msg = _("setgid(): 正しく許可が取れません！ エラーコード：%d", "setgid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
     }
 #else
-    if (setreuid(geteuid(), getuid()) != 0) {
-        quit(_("setreuid(): 正しく許可が取れません！", "setreuid(): cannot set permissions correctly!"));
+    if (auto ret = setreuid(geteuid(), getuid()); ret != 0) {
+        auto msg = _("setreuid(): 正しく許可が取れません！ エラーコード：%d", "setreuid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
     }
-    if (setregid(getegid(), getgid()) != 0) {
-        quit(_("setregid(): 正しく許可が取れません！", "setregid(): cannot set permissions correctly!"));
+
+    if (auto ret = setregid(getegid(), getgid()); ret != 0) {
+        auto msg = _("setregid(): 正しく許可が取れません！ エラーコード：%d", "setregid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
     }
-#endif
 #endif
 #endif
 }
 
 /*!
- * @brief ファイルのグラブパーミッションチェック / Hack -- grab permissions
+ * @brief ファイルのグラブパーミッションチェック / Check grab permissions
+ * @param プレイヤーへの参照ポインタ
  */
 void safe_setuid_grab(PlayerType *player_ptr)
 {
-#ifdef SET_UID
-#ifdef SAFE_SETUID
+#if defined(SET_UID) && defined(SAFE_SETUID)
 #ifdef SAFE_SETUID_POSIX
-
-    if (setuid(player_ptr->player_euid) != 0) {
-        quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
+    if (auto ret = setuid(player_ptr->player_euid); ret != 0) {
+        auto msg = _("setuid(): 正しく許可が取れません！ エラーコード：%d", "setuid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
     }
-    if (setgid(player_ptr->player_egid) != 0) {
-        quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
+
+    if (auto ret = setgid(player_ptr->player_egid); ret != 0) {
+        auto msg = _("setgid(): 正しく許可が取れません！ エラーコード：%d", "setgid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
     }
 #else
     (void)player_ptr;
+    if (auto ret = setreuid(geteuid(), getuid()); ret != 0) {
+        auto msg = _("setreuid(): 正しく許可が取れません！ エラーコード：%d", "setreuid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
+    }
 
-    if (setreuid(geteuid(), getuid()) != 0) {
-        quit(_("setreuid(): 正しく許可が取れません！", "setreuid(): cannot set permissions correctly!"));
+    if (auto ret = setregid(getegid(), getgid()); ret != 0) {
+        auto msg = _("setregid(): 正しく許可が取れません！ エラーコード：%d", "setregid(): cannot set permissions correctly! Error code: %d");
+        quit(format(msg, ret));
     }
-    if (setregid(getegid(), getgid()) != 0) {
-        quit(_("setregid(): 正しく許可が取れません！", "setregid(): cannot set permissions correctly!"));
-    }
-#endif
 #endif
 #else
     (void)player_ptr;
