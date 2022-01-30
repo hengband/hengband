@@ -273,6 +273,7 @@
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\abstract-weapon-enchanter.cpp" />
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-info.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
@@ -937,6 +938,7 @@
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h" />
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
+    <ClInclude Include="..\..\src\object-enchant\abstract-weapon-enchanter.h" />
     <ClInclude Include="..\..\src\object-enchant\object-smith.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-info.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-tables.h" />

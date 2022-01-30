@@ -2373,6 +2373,9 @@
     <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp">
       <Filter>load\monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\abstract-weapon-enchanter.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5150,6 +5153,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\abstract-weapon-enchanter.h">
+      <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

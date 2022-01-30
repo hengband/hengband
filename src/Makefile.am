@@ -583,6 +583,7 @@ hengband_SOURCES = \
 	object-activation/activation-util.cpp object-activation/activation-util.h \
 	\
 	object-enchant/abstract-protector-enchanter.cpp object-enchant/abstract-protector-enchanter.h \
+	object-enchant/abstract-weapon-enchanter.cpp object-enchant/abstract-weapon-enchanter.h
 	object-enchant/activation-info-table.cpp object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.cpp object-enchant/apply-magic.h \
 	object-enchant/apply-magic-amulet.cpp object-enchant/apply-magic-amulet.h \
