@@ -185,14 +185,44 @@
  */
 #include <curses.h>
 
+/**
+ * Simple rectangle type
+ */
+struct rect_s
+{
+    int  x,  y;
+    int cx, cy;
+};
+typedef struct rect_s rect_t, *rect_ptr;
+
+/* Trivial rectangle utility to make code a bit more readable */
+static rect_t rect(int x, int y, int cx, int cy)
+{
+    rect_t r;
+    r.x = x;
+    r.y = y;
+    r.cx = cx;
+    r.cy = cy;
+    return r;
+}
+
+/**
+ * Information about a term
+ */
 struct term_data {
     term_type t;
-
+	rect_t r;
     WINDOW *win;
 };
 
+/* Max number of windows on screen */
 #define MAX_TERM_DATA 4
 
+/* Minimum main term size */
+#define MIN_TERM0_LINES 24
+#define MIN_TERM0_COLS 80
+
+/* Information about our windows */
 static term_data data[MAX_TERM_DATA];
 
 /*
@@ -1073,9 +1103,14 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
     return (0);
 }
 
-static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
+/**
+ * Create a window for the given "term_data" argument.
+ *
+ * Assumes legal arguments.
+ */
+static errr term_data_init_gcu(term_data *td, int rows, int cols, int y, int x)
 {
-    term_type *t = &td->t;
+   term_type *t = &td->t;
 
     /* Make sure the window has a positive size */
     if (rows <= 0 || cols <= 0)
@@ -1120,6 +1155,48 @@ static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
     return (0);
 }
 
+/**
+ * Simple helper
+ */ 
+static errr term_data_init(term_data *td)
+{
+	return term_data_init_gcu(td, td->r.cy, td->r.cx, td->r.y, td->r.x);
+}
+
+/* Parse 27,15,*x30 up to the 'x'. * gets converted to a big number
+   Parse 32,* until the end. Return count of numbers parsed */
+static int _parse_size_list(const char *arg, int sizes[], int max)
+{
+    int i = 0;
+    const char *start = arg;
+    const char *stop = arg;
+
+    for (;;)
+    {
+        if (!*stop || !isdigit(*stop))
+        {
+            if (i >= max) break;
+            if (*start == '*')
+                sizes[i] = 255;
+            else
+            {
+                /* rely on atoi("23,34,*") -> 23
+                   otherwise, copy [start, stop) into a new buffer first.*/
+                sizes[i] = atoi(start);
+            }
+            i++;
+            if (!*stop || *stop != ',') break;
+
+            stop++;
+            start = stop;
+        }
+        else
+            stop++;
+    }
+    return i;
+}
+
+
 static void hook_quit(concptr str)
 {
     /* Unused */
@@ -1158,6 +1235,19 @@ errr init_gcu(int argc, char *argv[])
 
     /* Extract the normal keymap */
     keymap_norm_prepare();
+
+	bool nobigscreen = FALSE;	
+	
+	/* Parse args */
+	for (i = 1; i < argc; i++)
+	{
+		if (prefix(argv[i], "-o"))
+		{
+			nobigscreen = TRUE;
+		}
+
+		plog_fmt("Ignoring option: %s", argv[i]);
+	}
 
     /* Initialize for others systems */
     if (initscr() == (WINDOW *)ERR)
@@ -1273,56 +1363,231 @@ errr init_gcu(int argc, char *argv[])
     keymap_game_prepare();
 
     /*** Now prepare the term(s) ***/
-    for (i = 0; i < num_term; i++) {
-        int rows, cols;
-        int y, x;
+	if (nobigscreen) 
+	{	
+		/* Create several terms */
+		for (i = 0; i < num_term; i++)
+		{
+			int rows, cols, y, x;
 
-        switch (i) {
-        /* Upper left */
-        case 0:
-            rows = 24;
-            cols = 80;
-            y = x = 0;
-            break;
-        /* Lower left */
-        case 1:
-            rows = LINES - 25;
-            cols = 80;
-            y = 24;
-            x = 0;
-            break;
-        /* Upper right */
-        case 2:
-            rows = 24;
-            cols = COLS - 81;
-            y = 0;
-            x = 81;
-            break;
-        /* Lower right */
-        case 3:
-            rows = LINES - 25;
-            cols = COLS - 81;
-            y = 24;
-            x = 81;
-            break;
-        /* XXX */
-        default:
-            rows = cols = 0;
-            y = x = 0;
-            break;
+			/* Decide on size and position */
+			switch (i)
+			{
+				/* Upper left */
+				case 0:
+				{
+					rows = 24;
+					cols = 80;
+					y = x = 0;
+					break;
+				}
+
+				/* Lower left */
+				case 1:
+				{
+					rows = LINES - 25;
+					cols = 80;
+					y = 25;
+					x = 0;
+					break;
+				}
+
+				/* Upper right */
+				case 2:
+				{
+					rows = 24;
+					cols = COLS - 81;
+					y = 0;
+					x = 81;
+					break;
+				}
+
+				/* Lower right */
+				case 3:
+				{
+					rows = LINES - 25;
+					cols = COLS - 81;
+					y = 25;
+					x = 81;
+					break;
+				}
+
+				/* XXX */
+				default:
+				{
+					rows = cols = y = x = 0;
+					break;
+				}
+			}
+
+			/* Skip non-existant windows */
+			if (rows <= 0 || cols <= 0) continue;
+
+			/* Create a term */
+			term_data_init_gcu(&data[next_win], rows, cols, y, x);
+
+			/* Remember the term */
+			angband_term[next_win] = &data[next_win].t;
+
+			/* One more window */
+			next_win++;
+		}
+	}
+	else
+/* Parse Args and Prepare the Terminals. Rectangles are specified
+      as Width x Height, right? The game will allow you to have two
+      strips of extra terminals, one on the right and one on the bottom.
+      The map terminal will than fit in as big as possible in the remaining
+      space.
+      Examples:
+        angband -mgcu -- -right 30x27,* -bottom *x7 will layout as
+        Term-0: Map (COLS-30)x(LINES-7) | Term-1: 30x27
+        --------------------------------|----------------------
+        <----Term-3: (COLS-30)x7------->| Term-2: 30x(LINES-27)
+        composband -mgcu -- -bottom *x7 -right 30x27,* will layout as
+        Term-0: Map (COLS-30)x(LINES-7) | Term-2: 30x27
+                                        |------------------------------
+                                        | Term-3: 30x(LINES-27)
+        ---------------------------------------------------------------
+        <----------Term-1: (COLS)x7----------------------------------->
+        Notice the effect on the bottom terminal by specifying its argument
+        second or first. Notice the sequence numbers for the various terminals
+        as you will have to blindly configure them in the window setup screen.
+        EDIT: Added support for -left and -top.
+    */
+    {
+        rect_t remaining = rect(0, 0, COLS-1, LINES-1);
+        int    spacer_cx = 1;
+        int    spacer_cy = 1;
+        int    next_term = 1;
+        int    term_ct = 1;
+
+        for (i = 1; i < argc; i++)
+        {
+            if (streq(argv[i], "-spacer"))
+            {
+                i++;
+                if (i >= argc)
+                    quit("Missing size specifier for -spacer");
+                sscanf(argv[i], "%dx%d", &spacer_cx, &spacer_cy);
+            }
+            else if (streq(argv[i], "-right") || streq(argv[i], "-left"))
+            {
+                const char *arg, *tmp;
+                bool left = streq(argv[i], "-left");
+                int  cx, cys[MAX_TERM_DATA] = {0}, ct, j, x, y;
+
+                i++;
+                if (i >= argc)
+                    quit(format("Missing size specifier for -%s", left ? "left" : "right"));
+
+                arg = argv[i];
+                tmp = strchr(arg, 'x');
+                if (!tmp)
+                    quit(format("Expected something like -%s 60x27,* for two %s hand terminals of 60 columns, the first 27 lines and the second whatever is left.", left ? "left" : "right", left ? "left" : "right"));
+                cx = atoi(arg);
+                remaining.cx -= cx;
+                if (left)
+                {
+                    x = remaining.x;
+                    y = remaining.y;
+                    remaining.x += cx;
+                }
+                else
+                {
+                    x = remaining.x + remaining.cx;
+                    y = remaining.y;
+                }
+                remaining.cx -= spacer_cx;
+                if (left)
+                    remaining.x += spacer_cx;
+                
+                tmp++;
+                ct = _parse_size_list(tmp, cys, MAX_TERM_DATA);
+                for (j = 0; j < ct; j++)
+                {
+                    int cy = cys[j];
+                    if (y + cy > remaining.y + remaining.cy)
+                        cy = remaining.y + remaining.cy - y;
+                    if (next_term >= MAX_TERM_DATA)
+                        quit(format("Too many terminals. Only %d are allowed.", MAX_TERM_DATA));
+                    if (cy <= 0)
+                    {
+                        quit(format("Out of bounds in -%s: %d is too large (%d rows max for this strip)", 
+                            left ? "left" : "right", cys[j], remaining.cy));
+                    }
+                    data[next_term++].r = rect(x, y, cx, cy);
+                    y += cy + spacer_cy;
+                    term_ct++;
+                }
+            }
+            else if (streq(argv[i], "-top") || streq(argv[i], "-bottom"))
+            {
+                const char *arg, *tmp;
+                bool top = streq(argv[i], "-top");
+                int  cy, cxs[MAX_TERM_DATA] = {0}, ct, j, x, y;
+
+                i++;
+                if (i >= argc)
+                    quit(format("Missing size specifier for -%s", top ? "top" : "bottom"));
+
+                arg = argv[i];
+                tmp = strchr(arg, 'x');
+                if (!tmp)
+                    quit(format("Expected something like -%s *x7 for a single %s terminal of 7 lines using as many columns as are available.", top ? "top" : "bottom", top ? "top" : "bottom"));
+                tmp++;
+                cy = atoi(tmp);
+                ct = _parse_size_list(arg, cxs, MAX_TERM_DATA);
+
+                remaining.cy -= cy;
+                if (top)
+                {
+                    x = remaining.x;
+                    y = remaining.y;
+                    remaining.y += cy;
+                }
+                else
+                {
+                    x = remaining.x;
+                    y = remaining.y + remaining.cy;
+                }
+                remaining.cy -= spacer_cy;
+                if (top)
+                    remaining.y += spacer_cy;
+                
+                tmp++;
+                for (j = 0; j < ct; j++)
+                {
+                    int cx = cxs[j];
+                    if (x + cx > remaining.x + remaining.cx)
+                        cx = remaining.x + remaining.cx - x;
+                    if (next_term >= MAX_TERM_DATA)
+                        quit(format("Too many terminals. Only %d are allowed.", MAX_TERM_DATA));
+                    if (cx <= 0)
+                    {
+                        quit(format("Out of bounds in -%s: %d is too large (%d cols max for this strip)", 
+                            top ? "top" : "bottom", cxs[j], remaining.cx));
+                    }
+                    data[next_term++].r = rect(x, y, cx, cy);
+                    x += cx + spacer_cx;
+                    term_ct++;
+                }
+            }
         }
 
-        /* No non-windows */
-        if (rows <= 0 || cols <= 0)
-            continue;
+        /* Map Terminal */
+        if (remaining.cx < MIN_TERM0_COLS || remaining.cy < MIN_TERM0_LINES)
+            quit(format("Failed: angband needs an %dx%d map screen, not %dx%d", MIN_TERM0_COLS, MIN_TERM0_LINES, remaining.cx, remaining.cy));
+        data[0].r = remaining;
+        term_data_init(&data[0]);
+        angband_term[0] = Term;
 
-        /* Initialize */
-        term_data_init(&data[next_win], rows, cols, y, x);
-
-        /* Store */
-        angband_term[next_win] = Term;
-
-        next_win++;
+        /* Child Terminals */
+        for (next_term = 1; next_term < term_ct; next_term++)
+        {
+            term_data_init(&data[next_term]);
+            angband_term[next_term] = Term;
+        }
     }
 
     /* Activate the "Angband" window screen */
