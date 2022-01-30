@@ -61,7 +61,7 @@ AC_ARG_ENABLE(fontset,
 AC_ARG_ENABLE([xft],
 	AS_HELP_STRING([--enable-xft], [Enable xft support]))
 AC_ARG_ENABLE(worldscore,
-[  --disable-worldscore    disable worldscore support], worldscore=no, AC_DEFINE(WORLD_SCORE, 1, [Allow the game to send scores to the score server]))
+[  --disable-worldscore    disable worldscore support], worldscore=no)
 AC_ARG_ENABLE(chuukei,
 [  --enable-chuukei        enable internet chuukei support], AC_DEFINE(CHUUKEI, 1, [Chuukei mode]))
 AC_ARG_ENABLE([pch],
@@ -84,8 +84,13 @@ fi
 
 AC_CHECK_LIB(iconv, iconv_open)
 
+dnl The world score server is currently only available in Japanese.
+if test "$use_japanese" = no; then
+  worldscore=no
+fi
 if test "$worldscore" != no; then
   PKG_CHECK_MODULES(libcurl, [libcurl])
+  AC_DEFINE(WORLD_SCORE, 1, [Allow the game to send scores to the score server])
 fi
 
 dnl Checks for header files.
