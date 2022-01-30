@@ -1,8 +1,7 @@
 ﻿/*!
- * @brief 武器系のアイテムを強化して(恐らく床に)生成する処理
- * @date 2020/06/02
+ * @brief 武器系のアイテムを強化する処理
+ * @date 2022/01/30
  * @author Hourier
- * @todo ちょっと長い。要分割
  */
 
 #include "object-enchant/apply-magic-weapon.h"
@@ -18,6 +17,13 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
+/*!
+ * @brief 武器強化クラスのコンストラクタ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ */
 WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
     : AbstractWeaponEnchanter(o_ptr, level, power)
     , player_ptr(player_ptr)
@@ -27,13 +33,6 @@ WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEP
 /*!
  * @brief 武器系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be a "weapon"
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
- * @param level 生成基準階
- * @param power 生成ランク
- * @details
- * Hack -- note special base damage dice boosting\n
- * Hack -- note special processing for weapon/digger\n
  */
 void WeaponEnchanter::apply_magic()
 {
@@ -45,7 +44,7 @@ void WeaponEnchanter::apply_magic()
         if (this->power > 1) {
             /* this->power > 2はデバッグ専用. */
             if (one_in_(30) || (this->power > 2))
-                become_random_artifact(player_ptr, this->o_ptr, false);
+                become_random_artifact(this->player_ptr, this->o_ptr, false);
             else
                 this->o_ptr->name2 = EGO_DIGGING;
         } else if (this->power < -1) {
@@ -60,9 +59,9 @@ void WeaponEnchanter::apply_magic()
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD: {
         if (this->power > 1) {
-            /* this->power > 2はデバッグ専用. */
+            /* power > 2はデバッグ専用. */
             if (one_in_(40) || (this->power > 2)) {
-                become_random_artifact(player_ptr, this->o_ptr, false);
+                become_random_artifact(this->player_ptr, this->o_ptr, false);
                 break;
             }
             while (true) {
@@ -123,7 +122,7 @@ void WeaponEnchanter::apply_magic()
         if (this->power > 1) {
             /* this->power > 2はデバッグ専用. */
             if (one_in_(20) || (this->power > 2)) {
-                become_random_artifact(player_ptr, this->o_ptr, false);
+                become_random_artifact(this->player_ptr, this->o_ptr, false);
                 break;
             }
 
@@ -138,7 +137,7 @@ void WeaponEnchanter::apply_magic()
         if (this->power > 1) {
             /* this->power > 2はデバッグ専用. */
             if (this->power > 2) {
-                become_random_artifact(player_ptr, this->o_ptr, false);
+                become_random_artifact(this->player_ptr, this->o_ptr, false);
                 break;
             }
 

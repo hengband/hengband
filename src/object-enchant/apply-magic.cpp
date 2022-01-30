@@ -119,6 +119,7 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
         return;
     }
 
+    // @todo ファクトリパターンで抽象化する.
     WeaponEnchanter weapon_enchanter(player_ptr, o_ptr, lev, power);
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
