@@ -19,17 +19,13 @@ void rd_version_info(void)
     auto tmp_major = rd_byte();
     auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
     if (tmp_major == 8) {
-        // strip_byte() だと自動ローテーションされるので手動スキップ.
-        for (auto i = 0; i < 8; i++) {
-            load_xor_byte = 0;
-            (void)rd_byte();
-        }
-
+        strip_bytes(8);
         load_xor_byte = 0;
         w_ptr->h_ver_major = rd_byte();
         w_ptr->h_ver_minor = rd_byte();
         w_ptr->h_ver_patch = rd_byte();
         w_ptr->h_ver_extra = rd_byte();
+        strip_bytes(1);
     } else if (is_old_ver) {
         strip_bytes(3);
     } else {
