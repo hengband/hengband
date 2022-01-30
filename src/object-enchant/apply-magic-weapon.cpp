@@ -18,6 +18,12 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
+WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+    : AbstractWeaponEnchanter(o_ptr, level, power)
+    , player_ptr(player_ptr)
+{
+}
+
 /*!
  * @brief 武器系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be a "weapon"
@@ -29,53 +35,23 @@
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n
  */
-void apply_magic_weapon(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+void WeaponEnchanter::apply_magic()
 {
-    HIT_PROB tohit1 = randint1(5) + (HIT_PROB)m_bonus(5, level);
-    HIT_POINT todam1 = randint1(5) + (HIT_POINT)m_bonus(5, level);
-
-    HIT_PROB tohit2 = (HIT_PROB)m_bonus(10, level);
-    HIT_POINT todam2 = (HIT_POINT)m_bonus(10, level);
-
-    if ((o_ptr->tval == ItemKindType::BOLT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::SHOT)) {
-        tohit2 = (tohit2 + 1) / 2;
-        todam2 = (todam2 + 1) / 2;
-    }
-
-    if (power > 0) {
-        o_ptr->to_h += tohit1;
-        o_ptr->to_d += todam1;
-        if (power > 1) {
-            o_ptr->to_h += tohit2;
-            o_ptr->to_d += todam2;
-        }
-    } else if (power < 0) {
-        o_ptr->to_h -= tohit1;
-        o_ptr->to_d -= todam1;
-        if (power < -1) {
-            o_ptr->to_h -= tohit2;
-            o_ptr->to_d -= todam2;
-        }
-
-        if (o_ptr->to_h + o_ptr->to_d < 0)
-            o_ptr->curse_flags.set(CurseTraitType::CURSED);
-    }
-
-    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))
+    if ((this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_DIAMOND_EDGE))
         return;
 
-    switch (o_ptr->tval) {
+    switch (this->o_ptr->tval) {
     case ItemKindType::DIGGING: {
-        if (power > 1) {
-            /* power > 2はデバッグ専用. */
-            if (one_in_(30) || (power > 2))
-                become_random_artifact(player_ptr, o_ptr, false);
+        if (this->power > 1) {
+            /* this->power > 2はデバッグ専用. */
+            if (one_in_(30) || (this->power > 2))
+                become_random_artifact(player_ptr, this->o_ptr, false);
             else
-                o_ptr->name2 = EGO_DIGGING;
-        } else if (power < -1) {
-            o_ptr->pval = 0 - (5 + randint1(5));
-        } else if (power < 0) {
-            o_ptr->pval = 0 - (o_ptr->pval);
+                this->o_ptr->name2 = EGO_DIGGING;
+        } else if (this->power < -1) {
+            this->o_ptr->pval = 0 - (5 + randint1(5));
+        } else if (this->power < 0) {
+            this->o_ptr->pval = 0 - (this->o_ptr->pval);
         }
 
         break;
@@ -83,53 +59,53 @@ void apply_magic_weapon(PlayerType *player_ptr, object_type *o_ptr, DEPTH level,
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD: {
-        if (power > 1) {
-            /* power > 2はデバッグ専用. */
-            if (one_in_(40) || (power > 2)) {
-                become_random_artifact(player_ptr, o_ptr, false);
+        if (this->power > 1) {
+            /* this->power > 2はデバッグ専用. */
+            if (one_in_(40) || (this->power > 2)) {
+                become_random_artifact(player_ptr, this->o_ptr, false);
                 break;
             }
             while (true) {
-                o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, true);
-                if (o_ptr->name2 == EGO_SHARPNESS && o_ptr->tval != ItemKindType::SWORD)
+                this->o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, true);
+                if (this->o_ptr->name2 == EGO_SHARPNESS && this->o_ptr->tval != ItemKindType::SWORD)
                     continue;
-                if (o_ptr->name2 == EGO_EARTHQUAKES && o_ptr->tval != ItemKindType::HAFTED)
+                if (this->o_ptr->name2 == EGO_EARTHQUAKES && this->o_ptr->tval != ItemKindType::HAFTED)
                     continue;
                 break;
             }
 
-            switch (o_ptr->name2) {
+            switch (this->o_ptr->name2) {
             case EGO_SHARPNESS:
-                o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, level) + 1;
+                this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, this->level) + 1;
                 break;
             case EGO_EARTHQUAKES:
-                if (one_in_(3) && (level > 60))
-                    o_ptr->art_flags.set(TR_BLOWS);
+                if (one_in_(3) && (this->level > 60))
+                    this->o_ptr->art_flags.set(TR_BLOWS);
                 else
-                    o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, level);
+                    this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, this->level);
                 break;
             default:
                 break;
             }
 
-            if (!o_ptr->art_name) {
-                while (one_in_(10L * o_ptr->dd * o_ptr->ds))
-                    o_ptr->dd++;
+            if (!this->o_ptr->art_name) {
+                while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds))
+                    this->o_ptr->dd++;
 
-                if (o_ptr->dd > 9)
-                    o_ptr->dd = 9;
+                if (this->o_ptr->dd > 9)
+                    this->o_ptr->dd = 9;
             }
-        } else if (power < -1) {
-            if (randint0(MAX_DEPTH) < level) {
+        } else if (this->power < -1) {
+            if (randint0(MAX_DEPTH) < this->level) {
                 int n = 0;
                 while (true) {
-                    o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, false);
-                    if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != ItemKindType::SWORD) {
+                    this->o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, false);
+                    if (this->o_ptr->name2 == EGO_WEIRD && this->o_ptr->tval != ItemKindType::SWORD) {
                         continue;
                     }
 
-                    ego_item_type *e_ptr = &e_info[o_ptr->name2];
-                    if (o_ptr->tval == ItemKindType::SWORD && o_ptr->sval == SV_HAYABUSA && e_ptr->max_pval < 0) {
+                    ego_item_type *e_ptr = &e_info[this->o_ptr->name2];
+                    if (this->o_ptr->tval == ItemKindType::SWORD && this->o_ptr->sval == SV_HAYABUSA && e_ptr->max_pval < 0) {
                         if (++n > 1000) {
                             msg_print(_("エラー:隼の剣に割り当てるエゴ無し", "Error: Cannot find for Hayabusa."));
                             return;
@@ -144,14 +120,14 @@ void apply_magic_weapon(PlayerType *player_ptr, object_type *o_ptr, DEPTH level,
         break;
     }
     case ItemKindType::BOW: {
-        if (power > 1) {
-            /* power > 2はデバッグ専用. */
-            if (one_in_(20) || (power > 2)) {
-                become_random_artifact(player_ptr, o_ptr, false);
+        if (this->power > 1) {
+            /* this->power > 2はデバッグ専用. */
+            if (one_in_(20) || (this->power > 2)) {
+                become_random_artifact(player_ptr, this->o_ptr, false);
                 break;
             }
 
-            o_ptr->name2 = get_random_ego(INVEN_BOW, true);
+            this->o_ptr->name2 = get_random_ego(INVEN_BOW, true);
         }
 
         break;
@@ -159,23 +135,23 @@ void apply_magic_weapon(PlayerType *player_ptr, object_type *o_ptr, DEPTH level,
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
     case ItemKindType::SHOT: {
-        if (power > 1) {
-            /* power > 2はデバッグ専用. */
-            if (power > 2) {
-                become_random_artifact(player_ptr, o_ptr, false);
+        if (this->power > 1) {
+            /* this->power > 2はデバッグ専用. */
+            if (this->power > 2) {
+                become_random_artifact(player_ptr, this->o_ptr, false);
                 break;
             }
 
-            o_ptr->name2 = get_random_ego(INVEN_AMMO, true);
+            this->o_ptr->name2 = get_random_ego(INVEN_AMMO, true);
 
-            while (one_in_(10L * o_ptr->dd * o_ptr->ds))
-                o_ptr->dd++;
+            while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds))
+                this->o_ptr->dd++;
 
-            if (o_ptr->dd > 9)
-                o_ptr->dd = 9;
-        } else if (power < -1) {
-            if (randint0(MAX_DEPTH) < level) {
-                o_ptr->name2 = get_random_ego(INVEN_AMMO, false);
+            if (this->o_ptr->dd > 9)
+                this->o_ptr->dd = 9;
+        } else if (this->power < -1) {
+            if (randint0(MAX_DEPTH) < this->level) {
+                this->o_ptr->name2 = get_random_ego(INVEN_AMMO, false);
             }
         }
 
