@@ -58,13 +58,12 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
     w_ptr->sf_when = now;
     w_ptr->sf_saves++;
 
-    std::string tmp_variant(VERSION_NAME);
     save_xor_byte = 0;
-    wr_byte(static_cast<byte>(tmp_variant.length()));
-    for (auto i = 0; i < 8; i++) {
-        auto variant_name = tmp_variant.c_str();
+    auto variant_length = VARIANT_NAME.length();
+    wr_byte(static_cast<byte>(variant_length));
+    for (auto i = 0U; i < variant_length; i++) {
         save_xor_byte = 0;
-        wr_byte(variant_name[i]);
+        wr_byte(VARIANT_NAME[i]);
     }
 
     save_xor_byte = 0;

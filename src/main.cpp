@@ -89,7 +89,7 @@ static void create_user_dir(void)
     mkdir(dirpath, 0700);
 
     /* Build the path to the variant-specific sub-directory */
-    path_build(subdirpath, sizeof(subdirpath), dirpath, VERSION_NAME.data());
+    path_build(subdirpath, sizeof(subdirpath), dirpath, VARIANT_NAME.data());
 
     /* Create the directory */
     mkdir(subdirpath, 0700);

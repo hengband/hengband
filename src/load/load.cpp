@@ -341,7 +341,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (!err) {
-        if (fd_read(fd, (char *)(tmp_ver), 14)) {
+        if (fd_read(fd, tmp_ver, 14)) {
             err = true;
         }
 
@@ -354,13 +354,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
         auto tmp_major = tmp_ver[0];
         auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
         if (tmp_major == 8) {
-            std::string variant_name(VERSION_NAME);
-            std::stringstream current_variant;
-            for (auto i = 1; i < 9; i++) {
-                current_variant << tmp_ver[i];
-            }
-
-            if (current_variant.str() != variant_name) {
+            if (std::string_view(&tmp_ver[1], 8) != VARIANT_NAME) {
                 throw(_("セーブデータのバリアントは変愚蛮怒以外です", "The variant of save data is other than Hengband!"));
             }
 

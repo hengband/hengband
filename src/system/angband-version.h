@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <string>
 
-constexpr std::string_view VERSION_NAME("Hengband"); /*!< バリアント名称 / Name of the version/variant */
+constexpr std::string_view VARIANT_NAME("Hengband");
 
 /*!
  * @brief セーブファイル上のバージョン定義 / "Savefile Version Number" for Hengband
