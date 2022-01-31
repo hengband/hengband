@@ -1206,13 +1206,13 @@ errr term_fresh(void)
 
     /* Actually flush the output */
     term_xtra(TERM_XTRA_FRESH, 0);
-    return 0;
-        
+
     if (!Term->soft_cursor && !scr->cu && scr->cv) {
         /* The cursor is visible, display it correctly */
         term_xtra(TERM_XTRA_SHAPE, 1);
     }
 
+    return 0;
 }
 
 /*
