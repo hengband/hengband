@@ -1240,12 +1240,12 @@ errr init_gcu(int argc, char *argv[])
     /* Extract the normal keymap */
     keymap_norm_prepare();
 
-    bool nobigscreen = FALSE;
+    bool nobigscreen = false;
 
     /* Parse args */
     for (i = 1; i < argc; i++) {
         if (prefix(argv[i], "-o")) {
-            nobigscreen = TRUE;
+            nobigscreen = true;
         }
     }
 
