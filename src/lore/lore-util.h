@@ -4,8 +4,9 @@
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
-#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
+#include "util/flag-group.h"
 #include <string>
 #include <unordered_map>
 
@@ -33,6 +34,7 @@ struct lore_type {
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     EnumClassFlagGroup<MonsterAuraType> aura_flags;
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags;
+    EnumClassFlagGroup<MonsterVisualType> visual_flags;
 
     BIT_FLAGS flags7;
     BIT_FLAGS flagsr;

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <string>
 #include <vector>
@@ -6,6 +6,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 
@@ -76,6 +77,7 @@ struct dungeon_type {
 
     EnumClassFlagGroup<MonsterAbilityType> mon_ability_flags;
     EnumClassFlagGroup<MonsterBehaviorType> mon_behavior_flags;
+    EnumClassFlagGroup<MonsterVisualType> mon_visual_flags;
 
 	char r_char[5]{};		/* Monster race allowed */
 	KIND_OBJECT_IDX final_object{};	/* The object you'll find at the bottom */

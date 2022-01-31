@@ -5,8 +5,9 @@
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
-#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
+#include "util/flag-group.h"
 #include <string>
 
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
@@ -66,6 +67,7 @@ struct monster_race {
     EnumClassFlagGroup<MonsterAbilityType> ability_flags; //!< 能力フラグ(魔法/ブレス) / Ability Flags
     EnumClassFlagGroup<MonsterAuraType> aura_flags; //!< オーラフラグ / Aura Flags
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags; //!< 能力フラグ（習性）
+    EnumClassFlagGroup<MonsterVisualType> visual_flags; //!< 能力フラグ（シンボル） / Symbol Flags
     monster_blow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
     MONRACE_IDX reinforce_id[6]{}; //!< 指定護衛モンスター種族ID(6種まで)
     DICE_NUMBER reinforce_dd[6]{}; //!< 指定護衛数ダイス数
