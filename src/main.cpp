@@ -274,6 +274,7 @@ static void display_usage(const char *program)
     puts("  -mgcu    To use GCU (GNU Curses)");
     puts("  --       Sub options");
     puts("  -- -o    old subwindow layout (no bigscreen)");
+    puts("  -- -K    Keep terminal's color table when changing colors");
 #endif /* USE_GCU */
 
 #ifdef USE_CAP
