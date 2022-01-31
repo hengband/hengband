@@ -510,6 +510,7 @@ hengband_SOURCES = \
 	monster-race/monster-race-hook.cpp monster-race/monster-race-hook.h \
 	monster-race/race-ability-flags.h \
 	monster-race/race-ability-mask.cpp monster-race/race-ability-mask.h \
+	monster-race/race-behavior-flags.h \
 	monster-race/race-flags-resistance.h \
 	monster-race/race-flags1.h monster-race/race-flags2.h \
 	monster-race/race-flags3.h \

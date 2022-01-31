@@ -5148,6 +5148,9 @@
     <ClInclude Include="..\..\src\effect\attribute-types.h">
       <Filter>effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

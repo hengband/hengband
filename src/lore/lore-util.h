@@ -1,10 +1,11 @@
-﻿#pragma once
+#pragma once
 
-#include "system/angband.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
-#include "util/flag-group.h"
+#include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-flags-resistance.h"
+#include "system/angband.h"
 #include <string>
 #include <unordered_map>
 
@@ -31,6 +32,7 @@ typedef struct lore_type {
     BIT_FLAGS flags3;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     EnumClassFlagGroup<MonsterAuraType> aura_flags;
+    EnumClassFlagGroup<MonsterBehaviorType> behavior_flags;
 
     BIT_FLAGS flags7;
     BIT_FLAGS flagsr;
