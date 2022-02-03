@@ -36,6 +36,9 @@
 #include <dirent.h>
 #include "util/string-processor.h"
 #endif
+#ifdef PRIVATE_USER_PATH
+#include <string>
+#endif
 
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する
@@ -87,7 +90,7 @@ void init_file_paths(char *libpath, char *varpath)
     path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, "log");
     ANGBAND_DIR_DEBUG_SAVE = string_make(buf);
 #ifdef PRIVATE_USER_PATH
-    path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VERSION_NAME);
+    path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VARIANT_NAME.data());
     ANGBAND_DIR_USER = string_make(buf);
 #else
     strcpy(vartail, "user");
