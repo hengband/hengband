@@ -328,7 +328,11 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 
     auto err = false;
     auto fd = -1;
-    char tmp_ver[14]{};
+
+    // バリアント名長1バイト+バージョン番号4バイト+セーブファイルエンコードキー1バイト == 6バイト.
+    constexpr auto variant_length = static_cast<char>(VARIANT_NAME.length());
+    constexpr auto version_length = variant_length + 6;
+    char tmp_ver[version_length]{};
     if (!err) {
         fd = fd_open(savefile, O_RDONLY);
         if (fd < 0) {
@@ -341,7 +345,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (!err) {
-        if (fd_read(fd, tmp_ver, 14)) {
+        if (fd_read(fd, tmp_ver, version_length)) {
             err = true;
         }
 
@@ -351,14 +355,17 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (!err) {
+        // v0.0.X～v3.0.0 Alpha51までは、セーブデータの第1バイトがFAKE_MAJOR_VERというZangbandと互換性を取ったバージョン番号フィールドだった.
+        // v3.0.0 Alpha52以降は、バリアント名の長さフィールドとして再定義した.
+        // 10～13はその名残。変愚蛮怒から更にバリアントを切ったらこの評価は不要.
         auto tmp_major = tmp_ver[0];
         auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
-        if (tmp_major == 8) {
-            if (std::string_view(&tmp_ver[1], 8) != VARIANT_NAME) {
+        if (tmp_major == variant_length) {
+            if (std::string_view(&tmp_ver[1], variant_length) != VARIANT_NAME) {
                 throw(_("セーブデータのバリアントは変愚蛮怒以外です", "The variant of save data is other than Hengband!"));
             }
 
-            w_ptr->sf_extra = tmp_ver[13];
+            w_ptr->sf_extra = tmp_ver[version_length - 1];
             (void)fd_close(fd);
         } else if (is_old_ver) {
             w_ptr->sf_extra = tmp_ver[3];
