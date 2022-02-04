@@ -200,6 +200,14 @@ static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, Attribute
         dam = dam * calc_hell_fire_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
+    case AttributeType::ABYSS:
+        dam = dam * calc_abyss_damage_rate(player_ptr, CALC_MAX) / 100;
+        break;
+
+    case AttributeType::VOID_MAGIC:
+        dam = dam * calc_void_damage_rate(player_ptr, CALC_MAX) / 100;
+        break;
+
     case AttributeType::MIND_BLAST:
     case AttributeType::BRAIN_SMASH:
         if (100 + rlev / 2 <= std::max<short>(5, player_ptr->skill_sav)) {
