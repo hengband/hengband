@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * todo 後で再分割する
  * @brief モンスター生成処理
  * @date 2020/06/10
@@ -241,7 +241,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, z_ptr))
         return false;
 
-    if (r_ptr->flags7 & RF7_FRIENDLY) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
         if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, z_ptr))
             return false;
     }

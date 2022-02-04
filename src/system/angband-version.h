@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <stdint.h>
 #include <string>
@@ -17,7 +17,7 @@ constexpr std::string_view VARIANT_NAME("Hengband");
 /*!
  * @brief セーブファイルのバージョン(3.0.0から導入)
  */
-constexpr uint32_t SAVEFILE_VERSION = 10;
+constexpr uint32_t SAVEFILE_VERSION = 11;
 
 /*!
  * @brief バージョンが開発版が安定版かを返す(廃止予定)

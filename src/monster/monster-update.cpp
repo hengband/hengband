@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター情報のアップデート処理
  * @date 2020/03/08
  * @author Hourier
@@ -124,19 +124,19 @@ void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_pt
         return;
 
     if (turn_flags_ptr->did_open_door)
-        r_ptr->r_flags2 |= RF2_OPEN_DOOR;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::OPEN_DOOR);
 
     if (turn_flags_ptr->did_bash_door)
-        r_ptr->r_flags2 |= RF2_BASH_DOOR;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
 
     if (turn_flags_ptr->did_take_item)
-        r_ptr->r_flags2 |= RF2_TAKE_ITEM;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::TAKE_ITEM);
 
     if (turn_flags_ptr->did_kill_item)
-        r_ptr->r_flags2 |= RF2_KILL_ITEM;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::KILL_ITEM);
 
     if (turn_flags_ptr->did_move_body)
-        r_ptr->r_flags2 |= RF2_MOVE_BODY;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::MOVE_BODY);
 
     if (turn_flags_ptr->did_pass_wall)
         r_ptr->r_flags2 |= RF2_PASS_WALL;
@@ -197,11 +197,11 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
 
 static void update_smart_stupid_flags(monster_race *r_ptr)
 {
-    if (r_ptr->flags2 & RF2_SMART)
-        r_ptr->r_flags2 |= RF2_SMART;
+    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::SMART))
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::SMART);
 
-    if (r_ptr->flags2 & RF2_STUPID)
-        r_ptr->r_flags2 |= RF2_STUPID;
+    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::STUPID))
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
 }
 
 /*!
@@ -556,7 +556,7 @@ void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!smart_learn || ((r_ptr->flags2 & RF2_STUPID) != 0) || (((r_ptr->flags2 & RF2_SMART) == 0) && (randint0(100) < 50)))
+    if (!smart_learn || (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) || ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) && (randint0(100) < 50)))
         return;
 
     switch (what) {

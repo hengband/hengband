@@ -1,4 +1,4 @@
-﻿#include "dungeon/quest.h"
+#include "dungeon/quest.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
@@ -89,7 +89,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
             continue;
         if (r_ptr->rarity > 100)
             continue;
-        if (r_ptr->flags7 & RF7_FRIENDLY)
+        if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY))
             continue;
         if (r_ptr->flags7 & RF7_AQUATIC)
             continue;

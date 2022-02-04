@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター処理 / misc code for monsters
  * @date 2014/07/08
  * @author
@@ -204,7 +204,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MONRACE_IDX r_id
 
     if (!(r_ptr->flags1 & (RF1_UNIQUE)))
         return false;
-    if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->flags7 & RF7_CHAMELEON))
         return false;
 
     if (std::abs(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5)
@@ -245,7 +245,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return false;
     if (r_ptr->flags2 & RF2_MULTIPLY)
         return false;
-    if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) && (r_ptr->flags7 & RF7_CHAMELEON))
         return false;
 
     if ((r_ptr->blow[0].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[1].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[2].method == RaceBlowMethodType::EXPLODE)

@@ -1,4 +1,4 @@
-﻿#include "melee/melee-spell-flags-checker.h"
+#include "melee/melee-spell-flags-checker.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
@@ -100,7 +100,7 @@ static void check_darkness(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
     bool vs_ninja = (player_ptr->pclass == PlayerClassType::NINJA) && !is_hostile(ms_ptr->t_ptr);
     bool can_use_lite_area = vs_ninja && !(ms_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
-    if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+    if (ms_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
@@ -114,7 +114,7 @@ static void check_darkness(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
 static void check_stupid(melee_spell_type *ms_ptr)
 {
-    if (!ms_ptr->in_no_magic_dungeon || ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0))
+    if (!ms_ptr->in_no_magic_dungeon || ms_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 
     ms_ptr->ability_flags &= RF_ABILITY_NOMAGIC_MASK;
@@ -262,7 +262,7 @@ static void check_pet(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
 static void check_non_stupid(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+    if (ms_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 
     if (ms_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK)
@@ -287,7 +287,7 @@ static void check_non_stupid(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
 static void check_smart(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if ((ms_ptr->r_ptr->flags2 & RF2_SMART) == 0)
+    if (ms_ptr->r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART))
         return;
 
     if ((ms_ptr->m_ptr->hp < ms_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター情報の記述 / describe monsters (using monster memory)
  * @date 2013/12/11
  * @author
@@ -264,7 +264,7 @@ bool is_mimicry(monster_type *m_ptr)
     if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr)
         return false;
 
-    if (none_bits(r_ptr->flags1, RF1_NEVER_MOVE) && !monster_csleep_remaining(m_ptr)) {
+    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE) && !monster_csleep_remaining(m_ptr)) {
         return false;
     }
 

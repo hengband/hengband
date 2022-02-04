@@ -190,7 +190,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     monster_race *riding_r_ptr = &r_info[player_ptr->riding ? riding_m_ptr->r_idx : 0];
     PlayerEnergy energy(player_ptr);
     if (can_move && player_ptr->riding) {
-        if (riding_r_ptr->flags1 & RF1_NEVER_MOVE) {
+        if (riding_r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
             msg_print(_("動けない！", "Can't move!"));
             energy.reset_player_turn();
             can_move = false;

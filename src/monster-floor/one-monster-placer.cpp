@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターをフロアに1体配置する処理
  * @date 2020/06/13
  * @author Hourier
@@ -62,8 +62,8 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MONRACE_IDX r_idx)
     monster_race *r_ptr = &r_info[r_idx];
     bool unselectable = any_bits(r_ptr->flags1, RF1_UNIQUE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
-    unselectable |= any_bits(r_ptr->flags7, RF7_FRIENDLY | RF7_CHAMELEON);
-    unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC);
+    unselectable |= r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY);
+    unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC | RF7_CHAMELEON);
     if (unselectable)
         return false;
 
@@ -326,7 +326,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     m_ptr->ml = false;
     if (any_bits(mode, PM_FORCE_PET)) {
         set_pet(player_ptr, m_ptr);
-    } else if (((who == 0) && any_bits(r_ptr->flags7, RF7_FRIENDLY)) || is_friendly_idx(player_ptr, who) || any_bits(mode, PM_FORCE_FRIENDLY)) {
+    } else if (((who == 0) && r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) || is_friendly_idx(player_ptr, who) || any_bits(mode, PM_FORCE_FRIENDLY)) {
         if (!monster_has_hostile_align(player_ptr, nullptr, 0, -1, r_ptr) && !player_ptr->current_floor_ptr->inside_arena)
             set_friendly(m_ptr);
     }
@@ -368,7 +368,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->energy_need = ENERGY_NEED() - (int16_t)randint0(100) * 2;
     }
 
-    if (any_bits(r_ptr->flags1, RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 

@@ -1,4 +1,4 @@
-﻿#include "target/target-getter.h"
+#include "target/target-getter.h"
 #include "core/asking-player.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
@@ -143,9 +143,9 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
         if (monster_confused_remaining(m_ptr)) {
             if (randint0(100) < 75)
                 dir = ddd[randint0(8)];
-        } else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
+        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 50))
             dir = ddd[randint0(8)];
-        else if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
+        else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25))
             dir = ddd[randint0(8)];
     }
 
@@ -227,9 +227,9 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
         if (monster_confused_remaining(m_ptr)) {
             if (randint0(100) < 75)
                 dir = ddd[randint0(8)];
-        } else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
+        } else if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 50))
             dir = ddd[randint0(8)];
-        else if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
+        else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25))
             dir = ddd[randint0(8)];
     }
 

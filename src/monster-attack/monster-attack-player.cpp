@@ -60,7 +60,7 @@
 static bool check_no_blow(PlayerType *player_ptr, monap_type *monap_ptr)
 {
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (any_bits(r_ptr->flags1, RF1_NEVER_BLOW)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 

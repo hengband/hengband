@@ -327,7 +327,7 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
         now_cost = 999;
     }
 
-    if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
+    if (r_ptr->behavior_flags.has_any_of({ MonsterBehaviorType::BASH_DOOR, MonsterBehaviorType::OPEN_DOOR })) {
         this->can_open_door = true;
     }
 
@@ -462,7 +462,7 @@ void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION 
             this->best = when;
         } else {
             auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
-            this->cost = any_bits(r_ptr->flags2, RF2_BASH_DOOR | RF2_OPEN_DOOR) ? g_ptr->get_distance(r_ptr) : g_ptr->get_cost(r_ptr);
+            this->cost = r_ptr->behavior_flags.has_any_of({ MonsterBehaviorType::BASH_DOOR, MonsterBehaviorType::OPEN_DOOR }) ? g_ptr->get_distance(r_ptr) : g_ptr->get_cost(r_ptr);
             if ((this->cost == 0) || (this->best < this->cost)) {
                 continue;
             }

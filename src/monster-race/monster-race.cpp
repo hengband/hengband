@@ -28,9 +28,9 @@ int calc_monrace_power(monster_race *r_ptr)
         ret = ret * 4 / 3;
     else if (r_ptr->ability_flags.has(MonsterAbilityType::DRAIN_MANA))
         ret = ret * 11 / 10;
-    if (r_ptr->flags1 & RF1_RAND_25)
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25))
         ret = ret * 9 / 10;
-    if (r_ptr->flags1 & RF1_RAND_50)
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50))
         ret = ret * 9 / 10;
     if (r_ptr->flagsr & RFR_RES_ALL)
         ret *= 100000;

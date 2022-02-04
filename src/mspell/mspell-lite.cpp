@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターの魔法によってフロアを明るくする処理及びその判定
  * @date 2020/07/23
  * @author Hourier
@@ -184,7 +184,7 @@ void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
     bool can_use_lite_area = (player_ptr->pclass == PlayerClassType::NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
         && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
 
-    if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+    if (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {

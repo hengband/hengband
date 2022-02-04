@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター同士が乱闘する処理
  * @date 2020/05/23
  * @author Hourier
@@ -148,7 +148,7 @@ static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
         return false;
 
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    if (r_ptr->flags1 & RF1_NEVER_BLOW)
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE))

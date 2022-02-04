@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターが移動した結果、床のアイテムに重なった時の処理と、モンスターがアイテムを落とす処理
  * @date 2020/03/07
  * @author Hourier
@@ -106,7 +106,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (is_special_object) {
-        if (turn_flags_ptr->do_take && (r_ptr->flags2 & RF2_STUPID)) {
+        if (turn_flags_ptr->do_take && r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->did_take_item = true;
             if (m_ptr->ml && player_can_see_bold(player_ptr, ny, nx)) {
                 msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
@@ -156,7 +156,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
-    turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
+    turn_flags_ptr->do_take = r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         BIT_FLAGS flg2 = 0L, flg3 = 0L, flgr = 0L;
         GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];

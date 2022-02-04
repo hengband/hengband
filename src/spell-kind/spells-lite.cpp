@@ -1,4 +1,4 @@
-﻿#include "dungeon/dungeon-flag-types.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -65,9 +65,9 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
             monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
             update_monster(player_ptr, g_ptr->m_idx, false);
-            if (r_ptr->flags2 & (RF2_STUPID))
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
                 chance = 10;
-            if (r_ptr->flags2 & (RF2_SMART))
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART))
                 chance = 100;
 
             if (monster_csleep_remaining(m_ptr) && (randint0(100) < chance)) {

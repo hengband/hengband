@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターが詠唱する魔法を選択する処理
  * @date 2020/07/23
  * @author Hourier
@@ -278,7 +278,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
 
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->flags2 & RF2_STUPID)
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return (msa_ptr->mspells[randint0(msa_ptr->mspells.size())]);
 
     for (size_t i = 0; i < msa_ptr->mspells.size(); i++) {

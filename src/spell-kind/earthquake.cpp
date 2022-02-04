@@ -205,7 +205,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
 
             GAME_TEXT m_name[MAX_NLEN];
             sn = 0;
-            if (none_bits(r_ptr->flags1, RF1_NEVER_MOVE)) {
+            if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE)) {
                 for (DIRECTION i = 0; i < 8; i++) {
                     POSITION y = yy + ddy_ddd[i];
                     POSITION x = xx + ddx_ddd[i];

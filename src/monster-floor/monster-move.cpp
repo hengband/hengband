@@ -45,7 +45,7 @@
 
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {
-    return f_ptr->flags.has_not(FloorFeatureType::GLASS) || (r_info[m_ptr->r_idx].flags2 & RF2_STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
+    return f_ptr->flags.has_not(FloorFeatureType::GLASS) || r_info[m_ptr->r_idx].behavior_flags.has(MonsterBehaviorType::STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
 }
 
 /*!
@@ -112,7 +112,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->feat];
     turn_flags_ptr->do_move = false;
-    if (((r_ptr->flags2 & RF2_OPEN_DOOR) == 0) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0)))
+    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0)))
         return true;
 
     if (f_ptr->power == 0) {
@@ -141,8 +141,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
 static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!may_bash || ((r_ptr->flags2 & RF2_BASH_DOOR) == 0) || f_ptr->flags.has_not(FloorFeatureType::BASH)
-        || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0)))
+    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0)))
         return;
 
     if (!check_hp_for_feat_destruction(f_ptr, m_ptr) || (randint0(m_ptr->hp / 10) <= f_ptr->power))
@@ -193,7 +192,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
             player_ptr->update |= (PU_FLOW);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             if (is_original_ap_and_seen(player_ptr, m_ptr))
-                r_ptr->r_flags2 |= (RF2_BASH_DOOR);
+                r_ptr->r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
 
             return false;
         }
@@ -220,7 +219,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_protection() || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(player_ptr, ny, nx)))
+    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_protection() || ((r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) && player_bold(player_ptr, ny, nx)))
         return false;
 
     turn_flags_ptr->do_move = false;
@@ -253,7 +252,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_explosion() || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(player_ptr, ny, nx)))
+    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_explosion() || ((r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) && player_bold(player_ptr, ny, nx)))
         return true;
 
     turn_flags_ptr->do_move = false;
@@ -387,9 +386,9 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         if (turn_flags_ptr->do_move && !can_cross && !turn_flags_ptr->did_kill_wall && !turn_flags_ptr->did_bash_door)
             turn_flags_ptr->do_move = false;
 
-        if (turn_flags_ptr->do_move && (r_ptr->flags1 & RF1_NEVER_MOVE)) {
+        if (turn_flags_ptr->do_move && r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
             if (is_original_ap_and_seen(player_ptr, m_ptr))
-                r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
+                r_ptr->r_behavior_flags.set(MonsterBehaviorType::NEVER_MOVE);
 
             turn_flags_ptr->do_move = false;
         }
@@ -419,10 +418,10 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         bool is_takable_or_killable = !g_ptr->o_idx_list.empty();
-        is_takable_or_killable &= (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) != 0;
+        is_takable_or_killable &= r_ptr->behavior_flags.has_any_of({ MonsterBehaviorType::TAKE_ITEM, MonsterBehaviorType::KILL_ITEM });
 
         bool is_pickup_items = (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
-        is_pickup_items &= (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
+        is_pickup_items &= r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
 
         is_takable_or_killable &= !is_pet(m_ptr) || is_pickup_items;
         if (!is_takable_or_killable) {
