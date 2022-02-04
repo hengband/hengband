@@ -44,6 +44,10 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
         return true;
     }
 
+    if (EnumClassFlagGroup<MonsterBehaviorType>::grab_one_flag(r_ptr->behavior_flags, r_info_behavior_flags, what)) {
+        return true;
+    }
+
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
     return false;
 }

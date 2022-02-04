@@ -1,4 +1,4 @@
-﻿#include "monster/monster-util.h"
+#include "monster/monster-util.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -105,8 +105,13 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
                 return false;
         }
 
-        if (d_ptr->m_ability_flags.any()) {
-            if (!r_ptr->ability_flags.has_all_of(d_ptr->m_ability_flags))
+        if (d_ptr->mon_ability_flags.any()) {
+            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags))
+                return false;
+        }
+
+        if (d_ptr->mon_behavior_flags.any()) {
+            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags))
                 return false;
         }
 
@@ -152,8 +157,13 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
                 return true;
         }
 
-        if (d_ptr->m_ability_flags.any()) {
-            if (!r_ptr->ability_flags.has_all_of(d_ptr->m_ability_flags))
+        if (d_ptr->mon_ability_flags.any()) {
+            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags))
+                return true;
+        }
+
+        if (d_ptr->mon_behavior_flags.any()) {
+            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags))
                 return true;
         }
 
@@ -190,7 +200,9 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return true;
         if (r_ptr->flags3 & d_ptr->mflags3)
             return true;
-        if (r_ptr->ability_flags.has_any_of(d_ptr->m_ability_flags))
+        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags))
+            return true;
+        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags))
             return true;
         if (r_ptr->flags7 & d_ptr->mflags7)
             return true;
@@ -213,7 +225,9 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return false;
         if (r_ptr->flags3 & d_ptr->mflags3)
             return false;
-        if (r_ptr->ability_flags.has_any_of(d_ptr->m_ability_flags))
+        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags))
+            return false;
+        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags))
             return false;
         if (r_ptr->flags7 & d_ptr->mflags7)
             return false;
