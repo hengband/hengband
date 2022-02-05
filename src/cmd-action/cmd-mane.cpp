@@ -90,8 +90,7 @@ static void mane_info(PlayerType *player_ptr, char *p, MonsterAbilityType power,
     const auto power_int = enum2i(power);
 
     if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == MonsterAbilityType::PSY_SPEAR)
-        || (power == MonsterAbilityType::BO_VOID) || (power == MonsterAbilityType::BO_ABYSS)
-        || (power == MonsterAbilityType::BR_VOID) || (power == MonsterAbilityType::BR_ABYSS))
+        || (power == MonsterAbilityType::BO_VOID) || (power == MonsterAbilityType::BO_ABYSS) || (power == MonsterAbilityType::BA_VOID) || (power == MonsterAbilityType::BA_ABYSS) || (power == MonsterAbilityType::BR_VOID) || (power == MonsterAbilityType::BR_ABYSS))
         sprintf(p, " %s%d", KWD_DAM, (int)dam);
     else {
         switch (power) {

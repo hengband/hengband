@@ -54,6 +54,8 @@ static bool spell_attack(MonsterAbilityType spell)
     /* Various "ball" spells */
     if (spell_in_between(spell, MonsterAbilityType::BA_ACID, MonsterAbilityType::BA_DARK))
         return true;
+    if (spell_in_between(spell, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS))
+        return true;
 
     /* "Cause wounds" and "bolt" spells */
     if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE))
