@@ -6,49 +6,51 @@
 
 #pragma once
 
-#include "system/angband.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-behavior-flags.h"
+#include "system/angband.h"
 #include "util/flag-group.h"
 
-typedef struct turn_flags {
-	bool see_m;
-	bool aware;
-	bool is_riding_mon;
-	bool do_turn;
-	bool do_move;
-	bool do_view;
-	bool do_take;
-	bool must_alter_to_move;
+struct turn_flags {
+    bool see_m;
+    bool aware;
+    bool is_riding_mon;
+    bool do_turn;
+    bool do_move;
+    bool do_view;
+    bool do_take;
+    bool must_alter_to_move;
 
-	bool did_open_door;
-	bool did_bash_door;
-	bool did_take_item;
-	bool did_kill_item;
-	bool did_move_body;
-	bool did_pass_wall;
-	bool did_kill_wall;
-} turn_flags;
+    bool did_open_door;
+    bool did_bash_door;
+    bool did_take_item;
+    bool did_kill_item;
+    bool did_move_body;
+    bool did_pass_wall;
+    bool did_kill_wall;
+};
 
-typedef struct old_race_flags {
-	BIT_FLAGS old_r_flags1;
-	BIT_FLAGS old_r_flags2;
-	BIT_FLAGS old_r_flags3;
-	BIT_FLAGS old_r_flagsr;
-	EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
+struct old_race_flags {
+    BIT_FLAGS old_r_flags1;
+    BIT_FLAGS old_r_flags2;
+    BIT_FLAGS old_r_flags3;
+    BIT_FLAGS old_r_flagsr;
+    EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
+    EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags;
 
-	byte old_r_blows0;
-	byte old_r_blows1;
-	byte old_r_blows2;
-	byte old_r_blows3;
+    byte old_r_blows0;
+    byte old_r_blows1;
+    byte old_r_blows2;
+    byte old_r_blows3;
 
-	byte old_r_cast_spell;
-} old_race_flags;
+    byte old_r_cast_spell;
+};
 
-typedef struct coordinate_candidate {
-	POSITION gy;
-	POSITION gx;
-	POSITION gdis;
-} coordinate_candidate;
+struct coordinate_candidate {
+    POSITION gy;
+    POSITION gx;
+    POSITION gdis;
+};
 
 struct monster_type;
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);

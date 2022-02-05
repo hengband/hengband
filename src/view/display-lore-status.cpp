@@ -39,12 +39,12 @@ void display_monster_concrete_abilities(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 
-    if (lore_ptr->flags2 & RF2_OPEN_DOOR) {
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::OPEN_DOOR)) {
         lore_ptr->vp[lore_ptr->vn] = _("ドアを開ける", "open doors");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->flags2 & RF2_BASH_DOOR) {
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::BASH_DOOR)) {
         lore_ptr->vp[lore_ptr->vn] = _("ドアを打ち破る", "bash down doors");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
@@ -69,22 +69,22 @@ void display_monster_concrete_abilities(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->flags2 & RF2_MOVE_BODY) {
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::MOVE_BODY)) {
         lore_ptr->vp[lore_ptr->vn] = _("弱いモンスターを押しのける", "push past weaker monsters");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->flags2 & RF2_KILL_BODY) {
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY)) {
         lore_ptr->vp[lore_ptr->vn] = _("弱いモンスターを倒す", "destroy weaker monsters");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->flags2 & RF2_TAKE_ITEM) {
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM)) {
         lore_ptr->vp[lore_ptr->vn] = _("アイテムを拾う", "pick up objects");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->flags2 & RF2_KILL_ITEM) {
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::KILL_ITEM)) {
         lore_ptr->vp[lore_ptr->vn] = _("アイテムを壊す", "destroy objects");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }

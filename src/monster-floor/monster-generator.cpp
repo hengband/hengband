@@ -12,6 +12,7 @@
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
 #include "game-option/cheat-options.h"
+#include "game-option/cheat-types.h"
 #include "monster-floor/one-monster-placer.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
@@ -36,7 +37,6 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
-#include "game-option/cheat-types.h"
 
 #define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */
 
@@ -146,7 +146,7 @@ bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT
         return false;
 
     if (clone || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED)) {
-        floor_ptr->m_list[hack_m_idx_ii].mflag2.set({MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET});
+        floor_ptr->m_list[hack_m_idx_ii].mflag2.set({ MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET });
     }
 
     return true;
@@ -241,7 +241,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, z_ptr))
         return false;
 
-    if (r_ptr->flags7 & RF7_FRIENDLY) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
         if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, z_ptr))
             return false;
     }
@@ -345,8 +345,7 @@ bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
     if (r_idx == 0)
         return false;
 
-    if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && !(r_info[r_idx].flags1 & RF1_UNIQUE)
-        && angband_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
+    if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && !(r_info[r_idx].flags1 & RF1_UNIQUE) && angband_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
         mode |= PM_JURAL;
     }
 

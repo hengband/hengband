@@ -1,10 +1,12 @@
-﻿#include "dungeon/dungeon-flag-types.h"
+﻿#include "spell-kind/spells-lite.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/floor-util.h"
+#include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -17,8 +19,6 @@
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell-kind/spells-lite.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -65,9 +65,9 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
             monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
             update_monster(player_ptr, g_ptr->m_idx, false);
-            if (r_ptr->flags2 & (RF2_STUPID))
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
                 chance = 10;
-            if (r_ptr->flags2 & (RF2_SMART))
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART))
                 chance = 100;
 
             if (monster_csleep_remaining(m_ptr) && (randint0(100) < chance)) {
@@ -235,8 +235,7 @@ static void cave_temp_room_aux(
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) && (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6)
-            && (next_to_open(floor_ptr, y, x, pass_bold) <= 1))
+        if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) && (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1))
             return;
     }
 
@@ -264,7 +263,10 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT); }
+static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+    return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT);
+}
 
 /*!
  * @brief (y,x) が暗くすべきマスなら points に加える

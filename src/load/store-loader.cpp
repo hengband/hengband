@@ -4,7 +4,7 @@
 #include "load/angband-version-comparer.h"
 #include "load/item/item-loader-factory.h"
 #include "load/load-util.h"
-#include "load/old/item-loader-savefile10.h"
+#include "load/old/item-loader-savefile50.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "store/store.h"

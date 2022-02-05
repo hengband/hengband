@@ -55,7 +55,7 @@ static void check_mspell_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     msa_ptr->in_no_magic_dungeon = d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level && (!floor_ptr->inside_quest || quest_type::is_fixed(floor_ptr->inside_quest));
-    if (!msa_ptr->in_no_magic_dungeon || ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0))
+    if (!msa_ptr->in_no_magic_dungeon || ((msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))))
         return;
 
     msa_ptr->ability_flags &= RF_ABILITY_NOMAGIC_MASK;
@@ -63,7 +63,7 @@ static void check_mspell_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
 
 static void check_mspell_smart(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    if ((msa_ptr->r_ptr->flags2 & RF2_SMART) == 0)
+    if (msa_ptr->r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART))
         return;
 
     if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
@@ -88,7 +88,7 @@ static void check_mspell_arena(PlayerType *player_ptr, msa_type *msa_ptr)
 
 static bool check_mspell_non_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+    if (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return true;
 
     if (!player_ptr->csp)
@@ -179,7 +179,7 @@ static bool check_mspell_continuation(PlayerType *player_ptr, msa_type *msa_ptr)
 static bool check_mspell_unexploded(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     PERCENTAGE fail_rate = 25 - (msa_ptr->rlev + 3) / 4;
-    if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
+    if (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         fail_rate = 0;
 
     if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
