@@ -38,7 +38,7 @@ typedef struct feat_prob {
 } feat_prob;
 
 /* A structure for the != dungeon types */
-typedef struct dungeon_type {
+struct dungeon_type {
     DUNGEON_IDX idx{};
 
     std::string name; /* Name */
@@ -86,7 +86,7 @@ typedef struct dungeon_type {
 	int tunnel_percent{};
 	int obj_great{};
 	int obj_good{};
-} dungeon_type;
+};
 
 extern std::vector<DEPTH> max_dlv;
 extern std::vector<dungeon_type> d_info;

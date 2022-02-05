@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief monster-processのための構造体群
  * @date 2020/03/07
  * @author Hourier
@@ -10,15 +10,15 @@
 #include "monster-race/race-ability-flags.h"
 #include "util/flag-group.h"
 
-typedef struct turn_flags {
-	bool see_m;
-	bool aware;
-	bool is_riding_mon;
-	bool do_turn;
-	bool do_move;
-	bool do_view;
-	bool do_take;
-	bool must_alter_to_move;
+struct turn_flags {
+    bool see_m;
+    bool aware;
+    bool is_riding_mon;
+    bool do_turn;
+    bool do_move;
+    bool do_view;
+    bool do_take;
+    bool must_alter_to_move;
 
 	bool did_open_door;
 	bool did_bash_door;
@@ -27,14 +27,14 @@ typedef struct turn_flags {
 	bool did_move_body;
 	bool did_pass_wall;
 	bool did_kill_wall;
-} turn_flags;
+};
 
-typedef struct old_race_flags {
-	BIT_FLAGS old_r_flags1;
-	BIT_FLAGS old_r_flags2;
-	BIT_FLAGS old_r_flags3;
-	BIT_FLAGS old_r_flagsr;
-	EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
+struct old_race_flags {
+    BIT_FLAGS old_r_flags1;
+    BIT_FLAGS old_r_flags2;
+    BIT_FLAGS old_r_flags3;
+    BIT_FLAGS old_r_flagsr;
+    EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
 
 	byte old_r_blows0;
 	byte old_r_blows1;
@@ -42,13 +42,13 @@ typedef struct old_race_flags {
 	byte old_r_blows3;
 
 	byte old_r_cast_spell;
-} old_race_flags;
+};
 
-typedef struct coordinate_candidate {
-	POSITION gy;
-	POSITION gx;
-	POSITION gdis;
-} coordinate_candidate;
+struct coordinate_candidate {
+    POSITION gy;
+    POSITION gx;
+    POSITION gdis;
+};
 
 struct monster_type;
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);

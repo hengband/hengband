@@ -16,7 +16,7 @@ enum monster_sex {
 };
 
 struct monster_race;
-typedef struct lore_type {
+struct lore_type {
 #ifdef JP
     char jverb_buf[64];
 #else
@@ -58,7 +58,7 @@ typedef struct lore_type {
     int count;
     bool shoot = false;
     bool rocket = false;
-} lore_type;
+};
 
 enum monster_lore_mode {
     MONSTER_LORE_NONE,
