@@ -47,6 +47,7 @@
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
+#include "system/angband.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -477,14 +478,13 @@ static void postprocess_monster_blows(PlayerType *player_ptr, monap_type *monap_
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
- * @return 実際に攻撃処理を行った場合TRUEを返す
  */
-bool make_attack_normal(PlayerType *player_ptr, MONSTER_IDX m_idx)
+void make_attack_normal(PlayerType *player_ptr, short m_idx)
 {
     monap_type tmp_monap;
     monap_type *monap_ptr = initialize_monap_type(player_ptr, &tmp_monap, m_idx);
     if (!check_no_blow(player_ptr, monap_ptr)) {
-        return false;
+        return;
     }
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
@@ -494,20 +494,19 @@ bool make_attack_normal(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
         msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), monap_ptr->m_name);
         if (do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_IAI)) {
-            return true;
+            return;
         }
     }
 
     auto can_activate_kawarimi = randint0(55) < (player_ptr->lev * 3 / 5 + 20);
     if (can_activate_kawarimi && kawarimi(player_ptr, true)) {
-        return true;
+        return;
     }
 
     monap_ptr->blinked = false;
     if (process_monster_blows(player_ptr, monap_ptr)) {
-        return true;
+        return;
     }
 
     postprocess_monster_blows(player_ptr, monap_ptr);
-    return true;
 }
