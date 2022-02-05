@@ -1,4 +1,5 @@
-﻿#include "load/angband-version-comparer.h"
+#include "load/angband-version-comparer.h"
+#include "system/angband-version.h"
 #include "world/world.h"
 
 /*!
@@ -12,6 +13,9 @@
  */
 bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
+    if (VARIANT_NAME != ROOT_VARIANT_NAME)
+        return false;
+
     if (w_ptr->h_ver_major < major)
         return true;
     if (w_ptr->h_ver_major > major)
@@ -46,6 +50,9 @@ bool h_older_than(byte major, byte minor, byte patch, byte extra)
  */
 bool h_older_than(byte major, byte minor, byte patch)
 {
+    if (VARIANT_NAME != ROOT_VARIANT_NAME)
+        return false;
+
     if (w_ptr->h_ver_major < major)
         return true;
     if (w_ptr->h_ver_major > major)
