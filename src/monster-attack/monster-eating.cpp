@@ -14,7 +14,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster/monster-status.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"

@@ -7,7 +7,7 @@
 #include "monster-attack/monster-attack-status.h"
 #include "core/player-update-types.h"
 #include "mind/mind-mirror-master.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "player/player-status-flags.h"

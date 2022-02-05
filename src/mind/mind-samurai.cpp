@@ -13,7 +13,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"

@@ -1,7 +1,7 @@
 ﻿#include "monster-attack/monster-attack-lose.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-attack/monster-attack-status.h"
-#include "monster-attack/monster-attack-util.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
