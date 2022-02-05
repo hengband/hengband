@@ -396,6 +396,10 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::HAND_DOOM, AttributeType::HAND_DOOM, g_ptr->m_idx, &dam_max0);
                     if (flags.has(MonsterAbilityType::PSY_SPEAR))
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::PSY_SPEAR, AttributeType::PSY_SPEAR, g_ptr->m_idx, &dam_max0);
+                    if (flags.has(MonsterAbilityType::BA_VOID))
+                        spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_VOID, AttributeType::VOID_MAGIC, g_ptr->m_idx, &dam_max0);
+                    if (flags.has(MonsterAbilityType::BA_ABYSS))
+                        spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_ABYSS, AttributeType::ABYSS, g_ptr->m_idx, &dam_max0);
                 }
 
                 if (flags.has(MonsterAbilityType::ROCKET))
@@ -444,6 +448,10 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_NUKE, AttributeType::NUKE, g_ptr->m_idx, &dam_max0);
                 if (flags.has(MonsterAbilityType::BR_DISI))
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_DISI, AttributeType::DISINTEGRATE, g_ptr->m_idx, &dam_max0);
+                if (flags.has(MonsterAbilityType::BR_VOID))
+                    spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_VOID, AttributeType::VOID_MAGIC, g_ptr->m_idx, &dam_max0);
+                if (flags.has(MonsterAbilityType::BR_ABYSS))
+                    spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_ABYSS, AttributeType::ABYSS, g_ptr->m_idx, &dam_max0);
             }
 
             /* Monster melee attacks */

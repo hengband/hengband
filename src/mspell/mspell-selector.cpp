@@ -48,6 +48,8 @@ static bool spell_attack(MonsterAbilityType spell)
     /* All RF4 spells hurt (except for shriek and dispel) */
     if (spell_in_between(spell, MonsterAbilityType::ROCKET, MonsterAbilityType::BR_DISI))
         return true;
+    if (spell_in_between(spell, MonsterAbilityType::BR_VOID, MonsterAbilityType::BR_ABYSS))
+        return true;
 
     /* Various "ball" spells */
     if (spell_in_between(spell, MonsterAbilityType::BA_ACID, MonsterAbilityType::BA_DARK))
@@ -55,6 +57,8 @@ static bool spell_attack(MonsterAbilityType spell)
 
     /* "Cause wounds" and "bolt" spells */
     if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE))
+        return true;
+    if (spell_in_between(spell, MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_ABYSS))
         return true;
 
     /* Hand of Doom */

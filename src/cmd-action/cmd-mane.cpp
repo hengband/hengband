@@ -89,7 +89,9 @@ static void mane_info(PlayerType *player_ptr, char *p, MonsterAbilityType power,
 
     const auto power_int = enum2i(power);
 
-    if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == MonsterAbilityType::PSY_SPEAR))
+    if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == MonsterAbilityType::PSY_SPEAR)
+        || (power == MonsterAbilityType::BO_VOID) || (power == MonsterAbilityType::BO_ABYSS)
+        || (power == MonsterAbilityType::BR_VOID) || (power == MonsterAbilityType::BR_ABYSS))
         sprintf(p, " %s%d", KWD_DAM, (int)dam);
     else {
         switch (power) {
@@ -567,6 +569,24 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
 
         fire_breath(player_ptr, AttributeType::DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
         break;
+    case MonsterAbilityType::BR_VOID:
+        if (!get_aim_dir(player_ptr, &dir))
+            return false;
+        else
+            msg_print(_("虚空のブレスを吐いた。", "You breathe void."));
+
+        fire_breath(player_ptr, AttributeType::VOID_MAGIC, dir, damage, (plev > 35 ? 3 : 2));
+        break;
+
+    case MonsterAbilityType::BR_ABYSS:
+        if (!get_aim_dir(player_ptr, &dir))
+            return false;
+        else
+            msg_print(_("深淵のブレスを吐いた。", "You breathe abyss."));
+
+        fire_breath(player_ptr, AttributeType::ABYSS, dir, damage, (plev > 35 ? 3 : 2));
+        break;
+
     case MonsterAbilityType::BA_ACID:
         if (!get_aim_dir(player_ptr, &dir))
             return false;
@@ -638,6 +658,22 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
             msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
 
         fire_ball(player_ptr, AttributeType::DARK, dir, damage, 4);
+        break;
+    case MonsterAbilityType::BA_VOID:
+        if (!get_aim_dir(player_ptr, &dir))
+            return false;
+        else
+            msg_print(_("虚空の嵐の呪文を念じた。", "You cast a void ball."));
+
+        fire_ball(player_ptr, AttributeType::VOID_MAGIC, dir, damage, 4);
+        break;
+    case MonsterAbilityType::BA_ABYSS:
+        if (!get_aim_dir(player_ptr, &dir))
+            return false;
+        else
+            msg_print(_("深淵の嵐の呪文を念じた。", "You cast a abyss ball."));
+
+        fire_ball(player_ptr, AttributeType::ABYSS, dir, damage, 4);
         break;
     case MonsterAbilityType::DRAIN_MANA:
         if (!get_aim_dir(player_ptr, &dir))
@@ -753,6 +789,22 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
             msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
 
         fire_bolt(player_ptr, AttributeType::ICE, dir, damage);
+        break;
+    case MonsterAbilityType::BO_VOID:
+        if (!get_aim_dir(player_ptr, &dir))
+            return false;
+        else
+            msg_print(_("虚空の矢の呪文を唱えた。", "You cast a void bolt."));
+
+        fire_bolt(player_ptr, AttributeType::VOID_MAGIC, dir, damage);
+        break;
+    case MonsterAbilityType::BO_ABYSS:
+        if (!get_aim_dir(player_ptr, &dir))
+            return false;
+        else
+            msg_print(_("深淵の矢の呪文を唱えた。", "You cast a abyss bolt."));
+
+        fire_bolt(player_ptr, AttributeType::ABYSS, dir, damage);
         break;
     case MonsterAbilityType::MISSILE:
         if (!get_aim_dir(player_ptr, &dir))

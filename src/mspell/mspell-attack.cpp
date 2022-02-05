@@ -233,6 +233,8 @@ static bool check_thrown_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     case MonsterAbilityType::BO_MANA:
     case MonsterAbilityType::BO_PLAS:
     case MonsterAbilityType::BO_ICEE:
+    case MonsterAbilityType::BO_VOID:
+    case MonsterAbilityType::BO_ABYSS:
     case MonsterAbilityType::MISSILE:
     case MonsterAbilityType::SCARE:
     case MonsterAbilityType::BLIND:
