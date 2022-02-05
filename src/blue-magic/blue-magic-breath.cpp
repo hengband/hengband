@@ -288,7 +288,7 @@ bool cast_blue_breath_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
 
-    msg_print(_("分解のブレスを吐いた。", "You breathe abyss."));
+    msg_print(_("深淵のブレスを吐いた。", "You breathe abyss."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_ABYSS, bmc_ptr->plev, DAM_ROLL);
     fire_breath(player_ptr, AttributeType::ABYSS, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
     return true;
