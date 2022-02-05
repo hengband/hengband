@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスターが移動した結果、床のアイテムに重なった時の処理と、モンスターがアイテムを落とす処理
  * @date 2020/03/07
  * @author Hourier
@@ -6,8 +6,8 @@
 
 #include "monster-floor/monster-object.h"
 #include "flavor/flavor-describer.h"
-#include "floor/floor-object.h"
 #include "floor/cave.h"
+#include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
@@ -174,8 +174,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flgs, &flg2, &flg3, &flgr);
 
-        bool is_special_object = o_ptr->is_artifact() || ((r_ptr->flags3 & flg3) != 0) || ((r_ptr->flags2 & flg2) != 0)
-            || (((~(r_ptr->flagsr) & flgr) != 0) && !(r_ptr->flagsr & RFR_RES_ALL));
+        bool is_special_object = o_ptr->is_artifact() || ((r_ptr->flags3 & flg3) != 0) || ((r_ptr->flags2 & flg2) != 0) || (((~(r_ptr->flagsr) & flgr) != 0) && !(r_ptr->flagsr & RFR_RES_ALL));
         monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_special_object, ny, nx, m_name, o_name, this_o_idx);
     }
 }

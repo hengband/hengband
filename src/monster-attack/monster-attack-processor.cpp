@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスターの攻撃に関する処理
  * @date 2020/03/08
  * @author Hourier
@@ -125,8 +125,7 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
     do_kill_body &= (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level);
     do_kill_body &= (g_ptr->m_idx != player_ptr->riding);
 
-    if (do_kill_body || are_enemies(player_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr)) 
-    {
+    if (do_kill_body || are_enemies(player_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr)) {
         return exe_monster_attack_to_monster(player_ptr, m_idx, g_ptr);
     }
 
@@ -136,8 +135,7 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
     do_move_body &= (g_ptr->m_idx != player_ptr->riding);
     do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0);
 
-    if (do_move_body)
-    {
+    if (do_move_body) {
         turn_flags_ptr->do_move = true;
         turn_flags_ptr->did_move_body = true;
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);

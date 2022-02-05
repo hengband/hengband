@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスター情報の記述 / describe monsters (using monster memory)
  * @date 2013/12/11
  * @author
@@ -38,7 +38,10 @@
  * @brief モンスターを友好的にする
  * @param m_ptr モンスター情報構造体の参照ポインタ
  */
-void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MonsterConstantFlagType::FRIENDLY); }
+void set_friendly(monster_type *m_ptr)
+{
+    m_ptr->mflag2.set(MonsterConstantFlagType::FRIENDLY);
+}
 
 /*!
  * @brief モンスターが地形を踏破できるかどうかを返す
@@ -229,16 +232,31 @@ bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int 
     return false;
 }
 
-bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr) { return m_ptr->ml && !player_ptr->hallucinated && (m_ptr->ap_r_idx == m_ptr->r_idx); }
+bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr)
+{
+    return m_ptr->ml && !player_ptr->hallucinated && (m_ptr->ap_r_idx == m_ptr->r_idx);
+}
 
 /*  Determine monster race appearance index is same as race index */
-bool is_original_ap(monster_type *m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }
+bool is_original_ap(monster_type *m_ptr)
+{
+    return m_ptr->ap_r_idx == m_ptr->r_idx;
+}
 
-bool is_friendly(monster_type *m_ptr) { return m_ptr->mflag2.has(MonsterConstantFlagType::FRIENDLY); }
+bool is_friendly(monster_type *m_ptr)
+{
+    return m_ptr->mflag2.has(MonsterConstantFlagType::FRIENDLY);
+}
 
-bool is_pet(monster_type *m_ptr) { return m_ptr->mflag2.has(MonsterConstantFlagType::PET); }
+bool is_pet(monster_type *m_ptr)
+{
+    return m_ptr->mflag2.has(MonsterConstantFlagType::PET);
+}
 
-bool is_hostile(monster_type *m_ptr) { return !is_friendly(m_ptr) && !is_pet(m_ptr); }
+bool is_hostile(monster_type *m_ptr)
+{
+    return !is_friendly(m_ptr) && !is_pet(m_ptr);
+}
 
 /*!
  * @brief モンスターがアイテム類に擬態しているかどうかを返す
@@ -276,7 +294,10 @@ bool is_mimicry(monster_type *m_ptr)
  * @param m_ptr モンスターの参照ポインタ
  * @return 本当のモンスター種族参照ポインタ
  */
-monster_race *real_r_ptr(monster_type *m_ptr) { return &r_info[real_r_idx(m_ptr)]; }
+monster_race *real_r_ptr(monster_type *m_ptr)
+{
+    return &r_info[real_r_idx(m_ptr)];
+}
 
 MONRACE_IDX real_r_idx(monster_type *m_ptr)
 {

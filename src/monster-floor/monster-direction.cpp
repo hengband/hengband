@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスターの移動方向を決定する処理
  * @date 2020/03/08
  * @author Hourier
@@ -78,8 +78,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         if (!are_enemies(player_ptr, m_ptr, t_ptr))
             continue;
 
-        if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr)))
-            || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != player_ptr->riding))) {
+        if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr))) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != player_ptr->riding))) {
             if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
                 continue;
         } else {
@@ -188,7 +187,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
     if (!is_pet(m_ptr)) {
         return false;
     }
-    
+
     bool avoid = ((msd->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - msd->player_ptr->pet_follow_distance)));
     bool lonely = (!avoid && (m_ptr->cdis > msd->player_ptr->pet_follow_distance));
     bool distant = (m_ptr->cdis > PET_SEEK_DIST);
@@ -200,7 +199,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
     if (!avoid && !lonely && !distant) {
         return true;
     }
-    
+
     POSITION dis = msd->player_ptr->pet_follow_distance;
     if (msd->player_ptr->pet_follow_distance > PET_SEEK_DIST) {
         msd->player_ptr->pet_follow_distance = PET_SEEK_DIST;
@@ -232,7 +231,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
     if (random_walk(player_ptr, mm, m_ptr)) {
         return true;
     }
-    
+
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) && (m_ptr->cdis > 1)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
@@ -242,7 +241,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
     if (decide_pet_movement_direction(&msd)) {
         return true;
     }
-    
+
     if (!is_hostile(m_ptr)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         get_enemy_dir(player_ptr, m_idx, mm);

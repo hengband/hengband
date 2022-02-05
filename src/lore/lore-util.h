@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-aura-types.h"
@@ -73,7 +73,9 @@ extern hook_c_roff_pf hook_c_roff;
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode);
 void hooked_roff(concptr str);
 
-enum WHO_WORD_TYPE { WHO = 0, WHOSE = 1, WHOM = 2 };
+enum WHO_WORD_TYPE { WHO = 0,
+    WHOSE = 1,
+    WHOM = 2 };
 using who_word_definition = std::unordered_map<WHO_WORD_TYPE, const std::unordered_map<bool, const std::unordered_map<monster_sex, std::string>>>;
 
 class Who {

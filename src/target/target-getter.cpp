@@ -1,4 +1,4 @@
-#include "target/target-getter.h"
+﻿#include "target/target-getter.h"
 #include "core/asking-player.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
@@ -194,8 +194,7 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
         dir = (DIRECTION)code;
 
     *dp = (DIRECTION)code;
-    concptr prompt
-        = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    concptr prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (!dir) {
         char ch;
         if (!get_com(prompt, &ch, true))

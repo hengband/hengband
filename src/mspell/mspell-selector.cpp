@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスターが詠唱する魔法を選択する処理
  * @date 2020/07/23
  * @author Hourier
@@ -14,9 +14,9 @@
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "player/player-status.h"
-#include "system/monster-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
@@ -375,8 +375,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
             return (special[randint0(special.size())]);
     }
 
-    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75)
-        && !w_ptr->timewalk_m_idx) {
+    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75) && !w_ptr->timewalk_m_idx) {
         if (!tactic.empty())
             return (tactic[randint0(tactic.size())]);
     }

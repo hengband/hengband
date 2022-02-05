@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスター同士が乱闘する処理
  * @date 2020/05/23
  * @author Hourier
@@ -11,6 +11,7 @@
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "main/sound-definitions-table.h"
@@ -31,7 +32,6 @@
 #include "monster/monster-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -67,7 +67,7 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
             AttributeType::TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BLOW_EFFECT_TYPE_SLEEP:
-        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, 
+        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level,
             AttributeType::OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BLOW_EFFECT_TYPE_HEAL:

@@ -1,4 +1,4 @@
-#include "monster-race/monster-race-hook.h"
+﻿#include "monster-race/monster-race-hook.h"
 #include "dungeon/dungeon.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
@@ -135,9 +135,7 @@ bool mon_hook_dungeon(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN));
 
     bool land = none_bits(r_ptr->flags7, RF7_AQUATIC);
-    return none_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN | RF8_WILD_VOLCANO)
-        || (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && (land || any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN)))
-        || (any_bits(d_ptr->mflags8, RF8_WILD_VOLCANO) && (land || any_bits(r_ptr->flags8, RF8_WILD_VOLCANO)));
+    return none_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN | RF8_WILD_VOLCANO) || (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && (land || any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN))) || (any_bits(d_ptr->mflags8, RF8_WILD_VOLCANO) && (land || any_bits(r_ptr->flags8, RF8_WILD_VOLCANO)));
 }
 
 /*!
@@ -892,6 +890,5 @@ bool item_monster_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 bool vault_monster_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    return (mon_hook_dungeon(player_ptr, r_idx) && none_bits(r_info[r_idx].flags1, RF1_UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2)
-        && none_bits(r_info[r_idx].flagsr, RFR_RES_ALL) && none_bits(r_info[r_idx].flags7, RF7_AQUATIC));
+    return (mon_hook_dungeon(player_ptr, r_idx) && none_bits(r_info[r_idx].flags1, RF1_UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2) && none_bits(r_info[r_idx].flagsr, RFR_RES_ALL) && none_bits(r_info[r_idx].flags7, RF7_AQUATIC));
 }

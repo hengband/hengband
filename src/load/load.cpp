@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief セーブファイル読み込み処理 / Purpose: support for loading savefiles -BEN-
  * @date 2014/07/07
  * @author
@@ -64,7 +64,7 @@ static errr load_town_quest(PlayerType *player_ptr)
     if (load_town_result != 0) {
         return load_town_result;
     }
-    
+
     uint16_t max_quests_load;
     byte max_rquests_load;
     auto load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
@@ -92,7 +92,7 @@ static void rd_total_play_time()
     if (loading_savefile_version_is_older_than(4)) {
         return;
     }
-    
+
     w_ptr->sf_play_time = rd_u32b();
 }
 

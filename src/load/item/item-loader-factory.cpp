@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief アイテム情報をセーブデータから読み込むクラスを選択するファクトリクラス
  * @date 2021/10/16
  * @author Hourier
@@ -33,7 +33,7 @@ std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
  * @brief ItemLoaderのバージョン切り替え.
  * @return セーブファイルバージョン群の中で互換性のある最古のバージョン.
  * @details (備忘録)例えばバージョン15で更に変更された場合、以下のように書き換えること.
- * 
+ *
  * if (loading_savefile_version_is_older_than(15)) {
  *   return ItemLoaderVersionType::LOAD11;
  * } else if (loading_savefile_version_is_older_than(11)) {

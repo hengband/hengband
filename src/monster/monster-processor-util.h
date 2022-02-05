@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief monster-processのための構造体群
  * @date 2020/03/07
  * @author Hourier
@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include "system/angband.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-behavior-flags.h"
+#include "system/angband.h"
 #include "util/flag-group.h"
 
 struct turn_flags {
@@ -20,13 +21,13 @@ struct turn_flags {
     bool do_take;
     bool must_alter_to_move;
 
-	bool did_open_door;
-	bool did_bash_door;
-	bool did_take_item;
-	bool did_kill_item;
-	bool did_move_body;
-	bool did_pass_wall;
-	bool did_kill_wall;
+    bool did_open_door;
+    bool did_bash_door;
+    bool did_take_item;
+    bool did_kill_item;
+    bool did_move_body;
+    bool did_pass_wall;
+    bool did_kill_wall;
 };
 
 struct old_race_flags {
@@ -37,12 +38,12 @@ struct old_race_flags {
     EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags;
 
-	byte old_r_blows0;
-	byte old_r_blows1;
-	byte old_r_blows2;
-	byte old_r_blows3;
+    byte old_r_blows0;
+    byte old_r_blows1;
+    byte old_r_blows2;
+    byte old_r_blows3;
 
-	byte old_r_cast_spell;
+    byte old_r_cast_spell;
 };
 
 struct coordinate_candidate {

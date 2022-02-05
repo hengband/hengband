@@ -139,8 +139,8 @@ static void describe_silly_attacks(monap_type *monap_ptr)
     } else if (monap_ptr->abbreviate == 1) {
         msg_format("%s", monap_ptr->act);
     } else {
-       /* if (monap_ptr->abbreviate == -1) */
-       msg_format("%^s%s", monap_ptr->m_name, monap_ptr->act);
+        /* if (monap_ptr->abbreviate == -1) */
+        msg_format("%^s%s", monap_ptr->m_name, monap_ptr->act);
     }
 
     monap_ptr->abbreviate = 1; /*2回目以降は省略 */

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスターをフロアに1体配置する処理
  * @date 2020/06/13
  * @author Hourier
@@ -8,6 +8,7 @@
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "flavor/flavor-describer.h"
@@ -36,7 +37,6 @@
 #include "monster/monster-util.h"
 #include "object/warning.h"
 #include "player/player-status.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -128,8 +128,7 @@ static bool check_unique_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
             return false;
     }
 
-    if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level)
-        && (!ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR))) {
+    if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level) && (!ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR))) {
         return false;
     }
 

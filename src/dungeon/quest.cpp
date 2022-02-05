@@ -1,4 +1,4 @@
-#include "dungeon/quest.h"
+﻿#include "dungeon/quest.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
@@ -225,8 +225,7 @@ QUEST_IDX quest_number(PlayerType *player_ptr, DEPTH level)
         if (quest[i].status != QuestStatusType::TAKEN)
             continue;
 
-        if ((quest[i].type == QuestKindType::KILL_LEVEL) && !(quest[i].flags & QUEST_FLAG_PRESET) && (quest[i].level == level)
-            && (quest[i].dungeon == player_ptr->dungeon_idx))
+        if ((quest[i].type == QuestKindType::KILL_LEVEL) && !(quest[i].flags & QUEST_FLAG_PRESET) && (quest[i].level == level) && (quest[i].dungeon == player_ptr->dungeon_idx))
             return i;
     }
 
@@ -245,8 +244,7 @@ QUEST_IDX random_quest_number(PlayerType *player_ptr, DEPTH level)
         return 0;
 
     for (QUEST_IDX i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
-        if ((quest[i].type == QuestKindType::RANDOM) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].level == level)
-            && (quest[i].dungeon == DUNGEON_ANGBAND)) {
+        if ((quest[i].type == QuestKindType::RANDOM) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].level == level) && (quest[i].dungeon == DUNGEON_ANGBAND)) {
             return i;
         }
     }
@@ -319,7 +317,7 @@ void leave_tower_check(PlayerType *player_ptr)
     quest[QUEST_TOWER1].comptime = w_ptr->play_time;
 }
 
-/*! 
+/*!
  * @brief Player enters a new quest
  */
 void exe_enter_quest(PlayerType *player_ptr, QUEST_IDX quest_idx)

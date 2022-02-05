@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief モンスターの思い出を記憶する処理
  * @date 2020/06/09
  * @author Hourier
@@ -6,8 +6,8 @@
 
 #include "lore/lore-store.h"
 #include "core/window-redrawer.h"
-#include "monster-race/race-flags1.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags1.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -40,8 +40,7 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
         }
     }
 
-    byte tmp_byte = (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0)
-        + ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
+    byte tmp_byte = (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
     if (!(r_ptr->flags1 & RF1_ONLY_GOLD)) {
         if (r_ptr->r_drop_item != tmp_byte)

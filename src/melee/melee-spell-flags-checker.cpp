@@ -1,9 +1,9 @@
-#include "melee/melee-spell-flags-checker.h"
+﻿#include "melee/melee-spell-flags-checker.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
-#include "floor/line-of-sight.h"
 #include "floor/geometry.h"
+#include "floor/line-of-sight.h"
 #include "melee/melee-spell-util.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
@@ -83,8 +83,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
         ms_ptr->target_idx = dummy;
         ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-        if (!monster_is_valid(ms_ptr->t_ptr) || (ms_ptr->m_idx == ms_ptr->target_idx) || !are_enemies(player_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr)
-            || !projectable(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
+        if (!monster_is_valid(ms_ptr->t_ptr) || (ms_ptr->m_idx == ms_ptr->target_idx) || !are_enemies(player_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr) || !projectable(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
             continue;
 
         return true;
@@ -140,8 +139,7 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
     POSITION real_y = ms_ptr->y;
     POSITION real_x = ms_ptr->x;
     get_project_point(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, &real_y, &real_x, 0L);
-    if (!projectable(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x) && ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE)
-        && (distance(real_y, real_x, player_ptr->y, player_ptr->x) <= 4) && los(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x)) {
+    if (!projectable(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x) && ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE) && (distance(real_y, real_x, player_ptr->y, player_ptr->x) <= 4) && los(player_ptr, real_y, real_x, player_ptr->y, player_ptr->x)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BA_LITE);
 
         return;
@@ -173,8 +171,7 @@ static void check_melee_spell_rocket(PlayerType *player_ptr, melee_spell_type *m
 
 static void check_melee_spell_beam(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BEAM_MASK)
-        || direct_beam(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->m_ptr))
+    if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BEAM_MASK) || direct_beam(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->m_ptr))
         return;
 
     ms_ptr->ability_flags.reset(RF_ABILITY_BEAM_MASK);
@@ -191,14 +188,14 @@ static void check_melee_spell_breath(PlayerType *player_ptr, melee_spell_type *m
         return;
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && !breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, 
-        ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::LITE, true)) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && !breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx,
+                                                                      ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::LITE, true)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         return;
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && !breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, 
-        ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::DISINTEGRATE, true)) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && !breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx,
+                                                                      ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::DISINTEGRATE, true)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BR_DISI);
     }
 }
@@ -265,8 +262,7 @@ static void check_non_stupid(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     if (ms_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 
-    if (ms_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK)
-        && !clean_shot(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->pet)) {
+    if (ms_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK) && !clean_shot(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->pet)) {
         ms_ptr->ability_flags.reset(RF_ABILITY_BOLT_MASK);
     }
 
@@ -280,8 +276,7 @@ static void check_non_stupid(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     if (ms_ptr->ability_flags.has(MonsterAbilityType::RAISE_DEAD) && !raise_possible(player_ptr, ms_ptr->m_ptr))
         ms_ptr->ability_flags.reset(MonsterAbilityType::RAISE_DEAD);
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (ms_ptr->m_ptr->r_idx == MON_ROLENTO)
-        && !summon_possible(player_ptr, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (ms_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(player_ptr, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
         ms_ptr->ability_flags.reset(MonsterAbilityType::SPECIAL);
 }
 
@@ -294,8 +289,7 @@ static void check_smart(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags &= RF_ABILITY_INT_MASK;
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL)
-        && is_teleport_level_ineffective(player_ptr, (ms_ptr->target_idx == player_ptr->riding) ? 0 : ms_ptr->target_idx))
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::TELE_LEVEL) && is_teleport_level_ineffective(player_ptr, (ms_ptr->target_idx == player_ptr->riding) ? 0 : ms_ptr->target_idx))
         ms_ptr->ability_flags.reset(MonsterAbilityType::TELE_LEVEL);
 }
 
