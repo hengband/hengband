@@ -1,4 +1,4 @@
-﻿#include "core/player-processor.h"
+#include "core/player-processor.h"
 #include "action/run-execution.h"
 #include "action/travel-execution.h"
 #include "core/disturbance.h"
@@ -339,7 +339,7 @@ void process_player(PlayerType *player_ptr)
                 r_ptr = &r_info[m_ptr->ap_r_idx];
 
                 // モンスターのシンボル/カラーの更新
-                if (m_ptr->ml && any_bits(r_ptr->flags1, (RF1_ATTR_MULTI | RF1_SHAPECHANGER))) {
+                if (m_ptr->ml && r_ptr->visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
                     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
                 }
 

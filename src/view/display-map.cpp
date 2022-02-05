@@ -1,4 +1,4 @@
-﻿#include "view/display-map.h"
+#include "view/display-map.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
@@ -291,7 +291,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
     monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
     feat_priority = 30;
     if (player_ptr->hallucinated) {
-        if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) {
+        if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
             /* Do nothing */
         } else {
             image_monster(ap, cp);
@@ -303,22 +303,22 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
 
     a = r_ptr->x_attr;
     c = r_ptr->x_char;
-    if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_SHAPECHANGER | RF1_ATTR_CLEAR | RF1_ATTR_MULTI | RF1_ATTR_SEMIRAND))) {
+    if (r_ptr->visual_flags.has_none_of({ MonsterVisualType::CLEAR, MonsterVisualType::SHAPECHANGER, MonsterVisualType::CLEAR_COLOR, MonsterVisualType::MULTI_COLOR, MonsterVisualType::RANDOM_COLOR })) {
         *ap = a;
         *cp = c;
         set_term_color(player_ptr, y, x, ap, cp);
         return;
     }
 
-    if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) {
+    if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
         set_term_color(player_ptr, y, x, ap, cp);
         return;
     }
 
-    if ((r_ptr->flags1 & RF1_ATTR_CLEAR) && (*ap != TERM_DARK) && !use_graphics) {
+    if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (*ap != TERM_DARK) && !use_graphics) {
         /* Do nothing */
-    } else if ((r_ptr->flags1 & RF1_ATTR_MULTI) && !use_graphics) {
-        if (r_ptr->flags2 & RF2_ATTR_ANY)
+    } else if (r_ptr->visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
+        if (r_ptr->visual_flags.has(MonsterVisualType::ANY_COLOR))
             *ap = randint1(15);
         else
             switch (randint1(7)) {
@@ -344,18 +344,18 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
                 *ap = TERM_GREEN;
                 break;
             }
-    } else if ((r_ptr->flags1 & RF1_ATTR_SEMIRAND) && !use_graphics) {
+    } else if (r_ptr->visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
         *ap = g_ptr->m_idx % 15 + 1;
     } else {
         *ap = a;
     }
 
-    if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && (*cp != ' ') && !use_graphics) {
+    if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR) && (*cp != ' ') && !use_graphics) {
         set_term_color(player_ptr, y, x, ap, cp);
         return;
     }
 
-    if (r_ptr->flags1 & RF1_SHAPECHANGER) {
+    if (r_ptr->visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
             monster_race *tmp_r_ptr = &r_info[randint1(r_info.size() - 1)];
             *cp = tmp_r_ptr->x_char;
