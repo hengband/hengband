@@ -4,9 +4,9 @@
 
 struct monster_type;
 class PlayerType;
-class MonsterLoader10 : public MonsterLoaderBase {
+class MonsterLoader50 : public MonsterLoaderBase {
 public:
-    MonsterLoader10(PlayerType *player_ptr);
+    MonsterLoader50(PlayerType *player_ptr);
     void rd_monster(monster_type *m_ptr) override;
 
 private:

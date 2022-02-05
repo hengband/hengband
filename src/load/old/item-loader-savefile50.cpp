@@ -1,10 +1,10 @@
-﻿#include "load/old/item-loader-savefile10.h"
+﻿#include "load/old/item-loader-savefile50.h"
 #include "artifact/fixed-art-types.h"
 #include "game-option/runtime-arguments.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
+#include "load/old/item-flag-types-savefile50.h"
 #include "load/old/load-v1-5-0.h"
-#include "load/old/item-flag-types-savefile10.h"
 #include "load/savedata-old-flag-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
@@ -19,10 +19,10 @@
 #include "util/quarks.h"
 
 /*!
- * @brief アイテムオブジェクトを読み込む(v3.0.0 Savefile ver10まで)
+ * @brief アイテムオブジェクトを読み込む(v3.0.0 Savefile ver50まで)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
  */
-void ItemLoader10::rd_item(object_type *o_ptr)
+void ItemLoader50::rd_item(object_type *o_ptr)
 {
     if (h_older_than(1, 5, 0, 0)) {
         rd_item_old(o_ptr);

@@ -365,12 +365,12 @@ hengband_SOURCES = \
 	load/monster/monster-loader-factory.cpp load/monster/monster-loader-factory.h \
 	load/monster/monster-loader-version-types.h \
 	\
-	load/old/item-flag-types-savefile10.h \
-	load/old/item-loader-savefile10.cpp load/old/item-loader-savefile10.h \
+	load/old/item-flag-types-savefile50.h \
+	load/old/item-loader-savefile50.cpp load/old/item-loader-savefile50.h \
 	load/old/load-v1-5-0.cpp load/old/load-v1-5-0.h \
 	load/old/load-v1-7-0.cpp load/old/load-v1-7-0.h \
-	load/old/monster-flag-types-savefile10.h \
-	load/old/monster-loader-savefile10.cpp load/old/monster-loader-savefile10.h \
+	load/old/monster-flag-types-savefile50.h \
+	load/old/monster-loader-savefile50.cpp load/old/monster-loader-savefile50.h \
 	\
 	locale/english.cpp locale/english.h \
 	locale/japanese.cpp locale/japanese.h \

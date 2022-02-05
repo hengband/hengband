@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief セーブファイル読み込み処理 / Purpose: support for loading savefiles -BEN-
  * @date 2014/07/07
  * @author
@@ -26,7 +26,7 @@
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "load/lore-loader.h"
-#include "load/old/item-loader-savefile10.h"
+#include "load/old/item-loader-savefile50.h"
 #include "load/old/load-v1-5-0.h"
 #include "load/old/load-v1-7-0.h"
 #include "load/option-loader.h"
