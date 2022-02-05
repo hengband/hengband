@@ -483,7 +483,6 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-status.cpp monster-attack/monster-attack-status.h \
 	monster-attack/monster-attack-switcher.cpp monster-attack/monster-attack-switcher.h \
 	monster-attack/monster-attack-types.cpp monster-attack/monster-attack-types.h \
-	monster-attack/monster-attack-util.cpp monster-attack/monster-attack-util.h \
 	monster-attack/monster-eating.cpp monster-attack/monster-eating.h \
 	\
 	monster-floor/monster-death.cpp monster-floor/monster-death.h \
