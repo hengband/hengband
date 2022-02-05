@@ -4,10 +4,10 @@
 #include "monster-attack/monster-attack-types.h"
 #include "system/angband.h"
 
-/* MONster-Attack-Player、地図のMAPと紛らわしいのでmonapとした */
 struct monster_type;
 struct object_type;
-typedef struct monap_type {
+class MonsterAttackPlayer {
+public:
 #ifdef JP
     int abbreviate; // 2回目以降の省略表現フラグ.
 #endif
@@ -35,7 +35,7 @@ typedef struct monap_type {
     ARMOUR_CLASS ac;
     bool alive;
     bool fear;
-} monap_type;
+};
 
 class PlayerType;
-monap_type *initialize_monap_type(PlayerType *player_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);
+MonsterAttackPlayer *initialize_MonsterAttackPlayer(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr, MONSTER_IDX m_idx);

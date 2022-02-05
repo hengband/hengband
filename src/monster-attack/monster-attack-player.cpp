@@ -58,7 +58,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static bool check_no_blow(PlayerType *player_ptr, monap_type *monap_ptr)
+static bool check_no_blow(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
@@ -78,7 +78,7 @@ static bool check_no_blow(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @return 攻撃続行ならばTRUE、打ち切りになったらFALSE
  */
-static bool check_monster_continuous_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static bool check_monster_continuous_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!monster_is_valid(monap_ptr->m_ptr) || (monap_ptr->method == RaceBlowMethodType::NONE)) {
         return false;
@@ -100,7 +100,7 @@ static bool check_monster_continuous_attack(PlayerType *player_ptr, monap_type *
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @return briefに書いた条件＋確率が満たされたらTRUE、それ以外はFALSE
  */
-static bool effect_protecion_from_evil(PlayerType *player_ptr, monap_type *monap_ptr)
+static bool effect_protecion_from_evil(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((player_ptr->protevil <= 0) || none_bits(r_ptr->flags3, RF3_EVIL) || (player_ptr->lev < monap_ptr->rlev) || ((randint0(100) + player_ptr->lev) <= 50)) {
@@ -121,7 +121,7 @@ static bool effect_protecion_from_evil(PlayerType *player_ptr, monap_type *monap
     return true;
 }
 
-static void describe_silly_attacks(monap_type *monap_ptr)
+static void describe_silly_attacks(MonsterAttackPlayer *monap_ptr)
 {
     if (monap_ptr->act == nullptr) {
         return;
@@ -154,7 +154,7 @@ static void describe_silly_attacks(monap_type *monap_ptr)
  * @brief 切り傷と朦朧が同時に発生した時、片方を無効にする
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-static void select_cut_stun(monap_type *monap_ptr)
+static void select_cut_stun(MonsterAttackPlayer *monap_ptr)
 {
     if ((monap_ptr->do_cut == 0) || (monap_ptr->do_stun == 0)) {
         return;
@@ -167,7 +167,7 @@ static void select_cut_stun(monap_type *monap_ptr)
     }
 }
 
-static void calc_player_cut(PlayerType *player_ptr, monap_type *monap_ptr)
+static void calc_player_cut(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (monap_ptr->do_cut == 0) {
         return;
@@ -203,7 +203,7 @@ static int stat_value(const int raw)
  * 2%の確率で朦朧蓄積ランクを1上げる.
  * 肉体のパラメータが合計80を超える水準に強化されていたら朦朧蓄積ランクを1下げる.
  */
-static void process_player_stun(PlayerType *player_ptr, monap_type *monap_ptr)
+static void process_player_stun(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (monap_ptr->do_stun == 0) {
         return;
@@ -237,7 +237,7 @@ static void process_player_stun(PlayerType *player_ptr, monap_type *monap_ptr)
     }
 }
 
-static void monster_explode(PlayerType *player_ptr, monap_type *monap_ptr)
+static void monster_explode(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!monap_ptr->explode) {
         return;
@@ -251,7 +251,7 @@ static void monster_explode(PlayerType *player_ptr, monap_type *monap_ptr)
     }
 }
 
-static void describe_attack_evasion(PlayerType *player_ptr, monap_type *monap_ptr)
+static void describe_attack_evasion(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!monap_ptr->m_ptr->ml) {
         return;
@@ -272,7 +272,7 @@ static void describe_attack_evasion(PlayerType *player_ptr, monap_type *monap_pt
 #endif
 }
 
-static void gain_armor_exp(PlayerType *player_ptr, monap_type *monap_ptr)
+static void gain_armor_exp(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     const auto o_ptr_mh = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
@@ -305,7 +305,7 @@ static void gain_armor_exp(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @details 最大4 回/モンスター/ターン、このルーチンを通る
  */
-static bool process_monster_attack_hit(PlayerType *player_ptr, monap_type *monap_ptr)
+static bool process_monster_attack_hit(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     disturb(player_ptr, true, true);
     if (effect_protecion_from_evil(player_ptr, monap_ptr)) {
@@ -336,7 +336,7 @@ static bool process_monster_attack_hit(PlayerType *player_ptr, monap_type *monap
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-static void process_monster_attack_evasion(PlayerType *player_ptr, monap_type *monap_ptr)
+static void process_monster_attack_evasion(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     switch (monap_ptr->method) {
     case RaceBlowMethodType::HIT:
@@ -369,7 +369,7 @@ static void process_monster_attack_evasion(PlayerType *player_ptr, monap_type *m
  * 非自明な類の打撃については、そのダメージが 0 ならば基本的に知識が増えない.
  * 但し、既に一定以上の知識があれば常に知識が増える(何をされたのか察知できる).
  */
-static void increase_blow_type_seen(PlayerType *player_ptr, monap_type *monap_ptr, const int ap_cnt)
+static void increase_blow_type_seen(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr, const int ap_cnt)
 {
     if (!is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr) || monap_ptr->do_silly_attack) {
         return;
@@ -389,7 +389,7 @@ static void increase_blow_type_seen(PlayerType *player_ptr, monap_type *monap_pt
  * @brief モンスターからプレイヤーへの打撃処理本体
  * @return 打撃に反応してプレイヤーがその場から離脱したかどうか
  */
-static bool process_monster_blows(PlayerType *player_ptr, monap_type *monap_ptr)
+static bool process_monster_blows(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     for (auto ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
@@ -455,7 +455,7 @@ static bool process_monster_blows(PlayerType *player_ptr, monap_type *monap_ptr)
     return false;
 }
 
-static void postprocess_monster_blows(PlayerType *player_ptr, monap_type *monap_ptr)
+static void postprocess_monster_blows(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     SpellHex spell_hex(player_ptr, monap_ptr);
     spell_hex.store_vengeful_damage(monap_ptr->get_damage);
@@ -481,8 +481,8 @@ static void postprocess_monster_blows(PlayerType *player_ptr, monap_type *monap_
  */
 void make_attack_normal(PlayerType *player_ptr, short m_idx)
 {
-    monap_type tmp_monap;
-    monap_type *monap_ptr = initialize_monap_type(player_ptr, &tmp_monap, m_idx);
+    MonsterAttackPlayer tmp_monap;
+    MonsterAttackPlayer *monap_ptr = initialize_MonsterAttackPlayer(player_ptr, &tmp_monap, m_idx);
     if (!check_no_blow(player_ptr, monap_ptr)) {
         return;
     }

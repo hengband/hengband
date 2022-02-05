@@ -54,7 +54,7 @@ SpellHex::SpellHex(PlayerType *player_ptr)
     }
 }
 
-SpellHex::SpellHex(PlayerType *player_ptr, monap_type *monap_ptr)
+SpellHex::SpellHex(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     : player_ptr(player_ptr)
     , monap_ptr(monap_ptr)
 {
