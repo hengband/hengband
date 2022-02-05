@@ -572,7 +572,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
-            msg_print(_("虚空のブレスを吐いた。", "You breathe void."));
+            msg_print(_("虚無のブレスを吐いた。", "You breathe void."));
 
         fire_breath(player_ptr, AttributeType::VOID_MAGIC, dir, damage, (plev > 35 ? 3 : 2));
         break;
@@ -662,7 +662,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
-            msg_print(_("虚空の嵐の呪文を念じた。", "You cast a void ball."));
+            msg_print(_("虚無の嵐の呪文を念じた。", "You cast a void ball."));
 
         fire_ball(player_ptr, AttributeType::VOID_MAGIC, dir, damage, 4);
         break;
@@ -793,7 +793,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         if (!get_aim_dir(player_ptr, &dir))
             return false;
         else
-            msg_print(_("虚空の矢の呪文を唱えた。", "You cast a void bolt."));
+            msg_print(_("虚無の矢の呪文を唱えた。", "You cast a void bolt."));
 
         fire_bolt(player_ptr, AttributeType::VOID_MAGIC, dir, damage);
         break;

@@ -395,7 +395,7 @@ MonsterSpellResult spell_RF5_BA_LITE(PlayerType *player_ptr, POSITION y, POSITIO
 }
 
 /*!
- * @brief RF5_BA_VOIDの処理。虚空の嵐。 /
+ * @brief RF5_BA_VOIDの処理。虚無の嵐。 /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
@@ -408,8 +408,8 @@ MonsterSpellResult spell_RF5_BA_LITE(PlayerType *player_ptr, POSITION y, POSITIO
 MonsterSpellResult spell_RF5_BA_VOID(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
-        _("%^sが虚空の嵐の呪文を念じた。", "%^s invokes a void storm."),
-        _("%^sが%sに対して虚空の嵐の呪文を念じた。", "%^s invokes a void storm upon %s."));
+        _("%^sが虚無の嵐の呪文を念じた。", "%^s invokes a void storm."),
+        _("%^sが%sに対して虚無の嵐の呪文を念じた。", "%^s invokes a void storm upon %s."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 

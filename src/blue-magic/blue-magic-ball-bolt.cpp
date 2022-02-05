@@ -157,7 +157,7 @@ bool cast_blue_ball_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
         return false;
 
-    msg_print(_("虚空の嵐の呪文を念じた。", "You invoke a void storm."));
+    msg_print(_("虚無の嵐の呪文を念じた。", "You invoke a void storm."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_VOID, bmc_ptr->plev, DAM_ROLL);
     fire_ball(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage, 4);
     return true;

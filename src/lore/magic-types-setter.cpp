@@ -143,7 +143,7 @@ void set_breath_types(PlayerType *player_ptr, lore_type *lore_ptr)
     }
 
     if (lore_ptr->ability_flags.has(MonsterAbilityType::BR_VOID)) {
-        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BR_VOID, _("虚空%s", "void%s"));
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BR_VOID, _("虚無%s", "void%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
@@ -230,7 +230,7 @@ void set_ball_types(PlayerType *player_ptr, lore_type *lore_ptr)
     }
 
     if (lore_ptr->ability_flags.has(MonsterAbilityType::BA_VOID)) {
-        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BA_VOID, _("虚空の嵐%s", "invoke void storms%s"));
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BA_VOID, _("虚無の嵐%s", "invoke void storms%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
