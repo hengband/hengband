@@ -68,9 +68,57 @@ MonsterAttackPlayer::MonsterAttackPlayer(PlayerType *player_ptr, short m_idx)
     , m_ptr(&player_ptr->current_floor_ptr->m_list[m_idx])
     , method(RaceBlowMethodType::NONE)
     , effect(RaceBlowEffectType::NONE)
-    , do_silly_attack (one_in_(2) && player_ptr->hallucinated)
+    , do_silly_attack(one_in_(2) && player_ptr->hallucinated)
     , player_ptr(player_ptr)
 {
+}
+
+/*!
+ * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
+ */
+void MonsterAttackPlayer::make_attack_normal()
+{
+    if (!this->check_no_blow()) {
+        return;
+    }
+
+    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    this->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    monster_desc(this->player_ptr, this->m_name, this->m_ptr, 0);
+    monster_desc(this->player_ptr, this->ddesc, this->m_ptr, MD_WRONGDOER_NAME);
+    if (PlayerClass(this->player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
+        msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), this->m_name);
+        if (do_cmd_attack(this->player_ptr, this->m_ptr->fy, this->m_ptr->fx, HISSATSU_IAI)) {
+            return;
+        }
+    }
+
+    auto can_activate_kawarimi = randint0(55) < (this->player_ptr->lev * 3 / 5 + 20);
+    if (can_activate_kawarimi && kawarimi(this->player_ptr, true)) {
+        return;
+    }
+
+    this->blinked = false;
+    if (this->process_monster_blows()) {
+        return;
+    }
+
+    this->postprocess_monster_blows();
+}
+
+/*!
+ * @brief 能力値の実値を求める
+ * @param raw PlayerTypeに格納されている生値
+ * @return 実値
+ * @details AD&Dの記法に則り、19以上の値を取らなくしているので、格納方法が面倒
+ */
+int MonsterAttackPlayer::stat_value(const int raw)
+{
+    if (raw <= 18) {
+        return raw;
+    }
+
+    return (raw - 18) / 10 + 18;
 }
 
 bool MonsterAttackPlayer::check_no_blow()
@@ -85,6 +133,76 @@ bool MonsterAttackPlayer::check_no_blow()
     }
 
     return is_hostile(this->m_ptr);
+}
+
+/*!
+ * @brief モンスターからプレイヤーへの打撃処理本体
+ * @return 打撃に反応してプレイヤーがその場から離脱したかどうか
+ */
+bool MonsterAttackPlayer::process_monster_blows()
+{
+    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    for (auto ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
+        this->obvious = false;
+        this->damage = 0;
+        this->act = nullptr;
+        this->effect = r_ptr->blow[ap_cnt].effect;
+        this->method = r_ptr->blow[ap_cnt].method;
+        this->d_dice = r_ptr->blow[ap_cnt].d_dice;
+        this->d_side = r_ptr->blow[ap_cnt].d_side;
+
+        if (!this->check_monster_continuous_attack()) {
+            break;
+        }
+
+        // effect が RaceBlowEffectType::NONE (無効値)になることはあり得ないはずだが、万一そう
+        // なっていたら単に攻撃を打ち切る。
+        // r_info.txt の "B:" トークンに effect 以降を書き忘れた場合が該当する。
+        if (this->effect == RaceBlowEffectType::NONE) {
+            plog("unexpected: MonsterAttackPlayer::effect == RaceBlowEffectType::NONE");
+            break;
+        }
+
+        if (this->method == RaceBlowMethodType::SHOOT) {
+            continue;
+        }
+
+        // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
+        this->ac = this->player_ptr->ac + this->player_ptr->to_a;
+        bool hit;
+        if (this->effect == RaceBlowEffectType::FLAVOR) {
+            hit = true;
+        } else {
+            const int power = mbe_info[enum2i(this->effect)].power;
+            hit = check_hit_from_monster_to_player(this->player_ptr, power, this->rlev, monster_stunned_remaining(this->m_ptr));
+        }
+
+        if (hit) {
+            // 命中した。命中処理と思い出処理を行う。
+            // 打撃そのものは対邪悪結界で撃退した可能性がある。
+            const bool protect = !this->process_monster_attack_hit();
+            this->increase_blow_type_seen(ap_cnt);
+
+            // 撃退成功時はそのまま次の打撃へ移行。
+            if (protect)
+                continue;
+
+            // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
+            check_fall_off_horse(this->player_ptr, this);
+
+            // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
+            if (kawarimi(this->player_ptr, false)) {
+                return true;
+            }
+        } else {
+            // 命中しなかった。回避時の処理、思い出処理を行う。
+            this->process_monster_attack_evasion();
+            this->increase_blow_type_seen(ap_cnt);
+        }
+    }
+
+    // 通常はプレイヤーはその場にとどまる。
+    return false;
 }
 
 /*!
@@ -105,6 +223,39 @@ bool MonsterAttackPlayer::check_monster_continuous_attack()
 
     auto is_neighbor = distance(this->player_ptr->y, this->player_ptr->x, this->m_ptr->fy, this->m_ptr->fx) <= 1;
     return this->player_ptr->playing && !this->player_ptr->is_dead && is_neighbor && !this->player_ptr->leaving;
+}
+
+/*!
+ * @brief モンスターから直接攻撃を1回受けた時の処理
+ * @return 対邪悪結界により攻撃が当たらなかったらFALSE、それ以外はTRUE
+ * @param this->player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
+ * @details 最大4 回/モンスター/ターン、このルーチンを通る
+ */
+bool MonsterAttackPlayer::process_monster_attack_hit()
+{
+    disturb(this->player_ptr, true, true);
+    if (this->effect_protecion_from_evil()) {
+        return false;
+    }
+
+    this->do_cut = 0;
+    this->do_stun = 0;
+    describe_monster_attack_method(this);
+    this->describe_silly_attacks();
+    this->obvious = true;
+    this->damage = damroll(this->d_dice, this->d_side);
+    if (this->explode) {
+        this->damage = 0;
+    }
+
+    switch_monster_blow_to_player(this->player_ptr, this);
+    this->select_cut_stun();
+    this->calc_player_cut();
+    this->process_player_stun();
+    this->monster_explode();
+    process_aura_counterattack(this->player_ptr, this);
+    return true;
 }
 
 /*!
@@ -190,21 +341,6 @@ void MonsterAttackPlayer::calc_player_cut()
 }
 
 /*!
- * @brief 能力値の実値を求める
- * @param raw PlayerTypeに格納されている生値
- * @return 実値
- * @details AD&Dの記法に則り、19以上の値を取らなくしているので、格納方法が面倒
- */
-int MonsterAttackPlayer::stat_value(const int raw)
-{
-    if (raw <= 18) {
-        return raw;
-    }
-
-    return (raw - 18) / 10 + 18;
-}
-
-/*!
  * @brief 朦朧を蓄積させる
  * @param this->player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスター打撃への参照ポインタ
@@ -261,6 +397,35 @@ void MonsterAttackPlayer::monster_explode()
     }
 }
 
+/*!
+ * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
+ * @param this->player_ptr プレイヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
+ */
+void MonsterAttackPlayer::process_monster_attack_evasion()
+{
+    switch (this->method) {
+    case RaceBlowMethodType::HIT:
+    case RaceBlowMethodType::TOUCH:
+    case RaceBlowMethodType::PUNCH:
+    case RaceBlowMethodType::KICK:
+    case RaceBlowMethodType::CLAW:
+    case RaceBlowMethodType::BITE:
+    case RaceBlowMethodType::STING:
+    case RaceBlowMethodType::SLASH:
+    case RaceBlowMethodType::BUTT:
+    case RaceBlowMethodType::CRUSH:
+    case RaceBlowMethodType::ENGULF:
+    case RaceBlowMethodType::CHARGE:
+        this->describe_attack_evasion();
+        this->gain_armor_exp();
+        this->damage = 0;
+        return;
+    default:
+        return;
+    }
+}
+
 void MonsterAttackPlayer::describe_attack_evasion()
 {
     if (!this->m_ptr->ml) {
@@ -309,68 +474,6 @@ void MonsterAttackPlayer::gain_armor_exp()
 }
 
 /*!
- * @brief モンスターから直接攻撃を1回受けた時の処理
- * @return 対邪悪結界により攻撃が当たらなかったらFALSE、それ以外はTRUE
- * @param this->player_ptr プレイヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
- * @details 最大4 回/モンスター/ターン、このルーチンを通る
- */
-bool MonsterAttackPlayer::process_monster_attack_hit()
-{
-    disturb(this->player_ptr, true, true);
-    if (this->effect_protecion_from_evil()) {
-        return false;
-    }
-
-    this->do_cut = 0;
-    this->do_stun = 0;
-    describe_monster_attack_method(this);
-    this->describe_silly_attacks();
-    this->obvious = true;
-    this->damage = damroll(this->d_dice, this->d_side);
-    if (this->explode) {
-        this->damage = 0;
-    }
-
-    switch_monster_blow_to_player(this->player_ptr, this);
-    this->select_cut_stun();
-    this->calc_player_cut();
-    this->process_player_stun();
-    this->monster_explode();
-    process_aura_counterattack(this->player_ptr, this);
-    return true;
-}
-
-/*!
- * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
- * @param this->player_ptr プレイヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
- */
-void MonsterAttackPlayer::process_monster_attack_evasion()
-{
-    switch (this->method) {
-    case RaceBlowMethodType::HIT:
-    case RaceBlowMethodType::TOUCH:
-    case RaceBlowMethodType::PUNCH:
-    case RaceBlowMethodType::KICK:
-    case RaceBlowMethodType::CLAW:
-    case RaceBlowMethodType::BITE:
-    case RaceBlowMethodType::STING:
-    case RaceBlowMethodType::SLASH:
-    case RaceBlowMethodType::BUTT:
-    case RaceBlowMethodType::CRUSH:
-    case RaceBlowMethodType::ENGULF:
-    case RaceBlowMethodType::CHARGE:
-        this->describe_attack_evasion();
-        this->gain_armor_exp();
-        this->damage = 0;
-        return;
-    default:
-        return;
-    }
-}
-
-/*!
  * @brief モンスターの打撃情報を蓄積させる
  * @param ap_cnt モンスターの打撃 N回目
  * @details どの敵が何をしてきたか正しく認識できていなければ情報を蓄積しない.
@@ -393,76 +496,6 @@ void MonsterAttackPlayer::increase_blow_type_seen(const int ap_cnt)
     }
 }
 
-/*!
- * @brief モンスターからプレイヤーへの打撃処理本体
- * @return 打撃に反応してプレイヤーがその場から離脱したかどうか
- */
-bool MonsterAttackPlayer::process_monster_blows()
-{
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
-    for (auto ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
-        this->obvious = false;
-        this->damage = 0;
-        this->act = nullptr;
-        this->effect = r_ptr->blow[ap_cnt].effect;
-        this->method = r_ptr->blow[ap_cnt].method;
-        this->d_dice = r_ptr->blow[ap_cnt].d_dice;
-        this->d_side = r_ptr->blow[ap_cnt].d_side;
-
-        if (!this->check_monster_continuous_attack()) {
-            break;
-        }
-
-        // effect が RaceBlowEffectType::NONE (無効値)になることはあり得ないはずだが、万一そう
-        // なっていたら単に攻撃を打ち切る。
-        // r_info.txt の "B:" トークンに effect 以降を書き忘れた場合が該当する。
-        if (this->effect == RaceBlowEffectType::NONE) {
-            plog("unexpected: MonsterAttackPlayer::effect == RaceBlowEffectType::NONE");
-            break;
-        }
-
-        if (this->method == RaceBlowMethodType::SHOOT) {
-            continue;
-        }
-
-        // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
-        this->ac = this->player_ptr->ac + this->player_ptr->to_a;
-        bool hit;
-        if (this->effect == RaceBlowEffectType::FLAVOR) {
-            hit = true;
-        } else {
-            const int power = mbe_info[enum2i(this->effect)].power;
-            hit = check_hit_from_monster_to_player(this->player_ptr, power, this->rlev, monster_stunned_remaining(this->m_ptr));
-        }
-
-        if (hit) {
-            // 命中した。命中処理と思い出処理を行う。
-            // 打撃そのものは対邪悪結界で撃退した可能性がある。
-            const bool protect = !this->process_monster_attack_hit();
-            this->increase_blow_type_seen(ap_cnt);
-
-            // 撃退成功時はそのまま次の打撃へ移行。
-            if (protect)
-                continue;
-
-            // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
-            check_fall_off_horse(this->player_ptr, this);
-
-            // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
-            if (kawarimi(this->player_ptr, false)) {
-                return true;
-            }
-        } else {
-            // 命中しなかった。回避時の処理、思い出処理を行う。
-            this->process_monster_attack_evasion();
-            this->increase_blow_type_seen(ap_cnt);
-        }
-    }
-
-    // 通常はプレイヤーはその場にとどまる。
-    return false;
-}
-
 void MonsterAttackPlayer::postprocess_monster_blows()
 {
     SpellHex spell_hex(this->player_ptr, this);
@@ -481,37 +514,4 @@ void MonsterAttackPlayer::postprocess_monster_blows()
     }
 
     PlayerClass(this->player_ptr).break_samurai_stance({ SamuraiStanceType::IAI });
-}
-
-/*!
- * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
- */
-void MonsterAttackPlayer::make_attack_normal()
-{
-    if (!this->check_no_blow()) {
-        return;
-    }
-
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
-    this->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    monster_desc(this->player_ptr, this->m_name, this->m_ptr, 0);
-    monster_desc(this->player_ptr, this->ddesc, this->m_ptr, MD_WRONGDOER_NAME);
-    if (PlayerClass(this->player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
-        msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), this->m_name);
-        if (do_cmd_attack(this->player_ptr, this->m_ptr->fy, this->m_ptr->fx, HISSATSU_IAI)) {
-            return;
-        }
-    }
-
-    auto can_activate_kawarimi = randint0(55) < (this->player_ptr->lev * 3 / 5 + 20);
-    if (can_activate_kawarimi && kawarimi(this->player_ptr, true)) {
-        return;
-    }
-
-    this->blinked = false;
-    if (this->process_monster_blows()) {
-        return;
-    }
-
-    this->postprocess_monster_blows();
 }

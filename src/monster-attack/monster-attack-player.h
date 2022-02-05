@@ -46,7 +46,6 @@ private:
     static int stat_value(const int raw);
     bool check_no_blow();
     bool process_monster_blows();
-    void postprocess_monster_blows();
     bool check_monster_continuous_attack();
     bool process_monster_attack_hit();
     bool effect_protecion_from_evil();
@@ -55,8 +54,9 @@ private:
     void calc_player_cut();
     void process_player_stun();
     void monster_explode();
+    void process_monster_attack_evasion();
     void describe_attack_evasion();
     void gain_armor_exp();
-    void process_monster_attack_evasion();
     void increase_blow_type_seen(const int ap_cnt);
+    void postprocess_monster_blows();
 };
