@@ -658,6 +658,7 @@ void effect_player_void(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     if (!player_ptr->levitation || one_in_(13)) {
         inventory_damage(player_ptr, BreakerCold(), 2);
     }
+    ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
 
 void effect_player_abyss(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
@@ -691,4 +692,5 @@ void effect_player_abyss(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     if (!has_resist_fear(player_ptr)) {
         (void)bss.mod_afraidness(randint1(10));
     }
+    ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
