@@ -1106,13 +1106,10 @@ errr term_fresh(void)
         }
     }
 
-    /* Cursor Update -- Erase old Cursor */
+    /* Hide the hardware cursor while drawing */
     else {
         /* Cursor will be invisible */
-        if (scr->cu || !scr->cv) {
-            /* Make the cursor invisible */
-            term_xtra(TERM_XTRA_SHAPE, 0);
-        }
+        term_xtra(TERM_XTRA_SHAPE, 0);
     }
 
     /* Something to update */
@@ -1192,31 +1189,12 @@ errr term_fresh(void)
 
     /* Cursor Update -- Show new Cursor */
     else {
-        /* The cursor is useless, hide it */
         if (scr->cu) {
             /* Paranoia -- Put the cursor NEAR where it belongs */
             (void)((*Term->curs_hook)(w - 1, scr->cy));
-
-            /* Make the cursor invisible */
-            /* term_xtra(TERM_XTRA_SHAPE, 0); */
-        }
-
-        /* The cursor is invisible, hide it */
-        else if (!scr->cv) {
-            /* Paranoia -- Put the cursor where it belongs */
-            (void)((*Term->curs_hook)(scr->cx, scr->cy));
-
-            /* Make the cursor invisible */
-            /* term_xtra(TERM_XTRA_SHAPE, 0); */
-        }
-
-        /* The cursor is visible, display it correctly */
-        else {
+        } else {
             /* Put the cursor where it belongs */
             (void)((*Term->curs_hook)(scr->cx, scr->cy));
-
-            /* Make the cursor visible */
-            term_xtra(TERM_XTRA_SHAPE, 1);
         }
     }
 
@@ -1228,6 +1206,12 @@ errr term_fresh(void)
 
     /* Actually flush the output */
     term_xtra(TERM_XTRA_FRESH, 0);
+
+    if (!Term->soft_cursor && !scr->cu && scr->cv) {
+        /* The cursor is visible, display it correctly */
+        term_xtra(TERM_XTRA_SHAPE, 1);
+    }
+
     return 0;
 }
 

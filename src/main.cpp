@@ -273,6 +273,8 @@ static void display_usage(const char *program)
 
 #ifdef USE_GCU
     puts("  -mgcu    To use GCU (GNU Curses)");
+    puts("  --       Sub options");
+    puts("  -- -o    old subwindow layout (no bigscreen)");
 #endif /* USE_GCU */
 
 #ifdef USE_CAP
