@@ -120,7 +120,6 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
     }
 
     // @todo ファクトリパターンで抽象化する.
-    WeaponEnchanter weapon_enchanter(player_ptr, o_ptr, lev, power);
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
     case ItemKindType::HAFTED:
@@ -129,19 +128,19 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
         if (power != 0) {
-            weapon_enchanter.apply_magic();
+            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         }
 
         break;
     case ItemKindType::POLEARM:
         if ((power != 0) && (o_ptr->sval != SV_DEATH_SCYTHE)) {
-            weapon_enchanter.apply_magic();
+            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         }
 
         break;
     case ItemKindType::SWORD:
         if ((power != 0) && (o_ptr->sval != SV_POISON_NEEDLE)) {
-            weapon_enchanter.apply_magic();
+            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         }
 
         break;
