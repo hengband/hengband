@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "dungeon/quest.h"
 #include "system/angband.h"
 #include "util/point-2d.h"
 #include <tuple>
@@ -18,7 +19,7 @@ public:
 private:
     PlayerType *player_ptr;
     monster_type *m_ptr;
-    short quest_idx;
+    QuestId quest_idx;
     quest_type *q_ptr = nullptr;
 
     void set_quest_idx();

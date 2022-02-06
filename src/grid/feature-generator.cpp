@@ -93,7 +93,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
         build_cavern(player_ptr);
     }
 
-    if (quest_number(player_ptr, floor_ptr->dun_level))
+    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)))
         dd_ptr->destroyed = false;
 }
 

@@ -27,9 +27,9 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "pet/pet-util.h"
+#include "player-status/player-energy.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
-#include "player-status/player-energy.h"
 #include "save/floor-writer.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -155,7 +155,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
             feature_type *f_ptr = &f_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
-                if (f_ptr->flags.has_all_of({FloorFeatureType::LESS, FloorFeatureType::STAIRS}) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ FloorFeatureType::LESS, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->upper_floor_id) {
                         sx = x;
@@ -163,7 +163,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
                     }
                 }
             } else if (floor_mode & CFM_DOWN) {
-                if (f_ptr->flags.has_all_of({FloorFeatureType::MORE, FloorFeatureType::STAIRS}) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ FloorFeatureType::MORE, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->lower_floor_id) {
                         sx = x;
@@ -228,8 +228,8 @@ static void get_out_monster(PlayerType *player_ptr)
         if (tries > 20 * dis * dis)
             dis++;
 
-        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(player_ptr, ny, nx) || floor_ptr->grid_array[ny][nx].is_rune_protection()
-            || floor_ptr->grid_array[ny][nx].is_rune_explosion() || pattern_tile(floor_ptr, ny, nx))
+        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(player_ptr, ny, nx)
+            || floor_ptr->grid_array[ny][nx].is_rune_protection() || floor_ptr->grid_array[ny][nx].is_rune_explosion() || pattern_tile(floor_ptr, ny, nx))
             continue;
 
         m_ptr = &floor_ptr->m_list[m_idx];
@@ -285,11 +285,11 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
         return;
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    feature_type *f_ptr =  &f_info[(*g_ptr)->feat];
+    feature_type *f_ptr = &f_info[(*g_ptr)->feat];
     if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special))
         new_floor_id = (*g_ptr)->special;
 
-    if (f_ptr->flags.has_all_of({FloorFeatureType::STAIRS, FloorFeatureType::SHAFT}))
+    if (f_ptr->flags.has_all_of({ FloorFeatureType::STAIRS, FloorFeatureType::SHAFT }))
         prepare_change_floor_mode(player_ptr, CFM_SHAFT);
 }
 
@@ -349,7 +349,6 @@ static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         latest_visit_mark = 1;
         return;
     }
-    
     if (player_ptr->change_floor_mode & CFM_NO_RETURN)
         kill_saved_floor(player_ptr, sf_ptr);
 }
@@ -441,7 +440,7 @@ void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
     if (record_stair)
         exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
 
-    player_ptr->current_floor_ptr->quest_number = 0;
+    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
     prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);

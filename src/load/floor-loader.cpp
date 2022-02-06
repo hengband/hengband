@@ -145,7 +145,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
                     } else if (g_ptr->feat == OLD_FEAT_BLDG_1) {
                         g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
                     }
-                } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor_ptr->quest_number == OLD_QUEST_WATER_CAVE)) {
+                } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor_ptr->quest_number == i2enum<QuestId>(OLD_QUEST_WATER_CAVE))) {
                     g_ptr->feat = feat_up_stair;
                     g_ptr->special = 0;
                 }

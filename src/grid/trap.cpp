@@ -175,7 +175,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
             break;
 
         /* Hack -- no trap doors on special levels */
-        if (floor_ptr->inside_arena || quest_number(player_ptr, floor_ptr->dun_level))
+        if (floor_ptr->inside_arena || inside_quest(quest_number(player_ptr, floor_ptr->dun_level)))
             continue;
 
         /* Hack -- no trap doors on the deepest level */

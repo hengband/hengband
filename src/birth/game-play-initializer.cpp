@@ -141,7 +141,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->max_plv = player_ptr->lev = 1;
     player_ptr->arena_number = 0;
     player_ptr->current_floor_ptr->inside_arena = false;
-    player_ptr->current_floor_ptr->quest_number = 0;
+    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
 
     player_ptr->exit_bldg = true;
     player_ptr->today_mon = 0;
@@ -180,9 +180,9 @@ void init_dungeon_quests(PlayerType *player_ptr)
     int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
     init_flags = INIT_ASSIGN;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->quest_number = MIN_RANDOM_QUEST;
+    floor_ptr->quest_number = i2enum<QuestId>(MIN_RANDOM_QUEST);
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    floor_ptr->quest_number = 0;
+    floor_ptr->quest_number = QuestId::NONE;
     for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
         quest_type *q_ptr = &quest[i];
         monster_race *quest_r_ptr;
@@ -194,14 +194,14 @@ void init_dungeon_quests(PlayerType *player_ptr)
     }
 
     init_flags = INIT_ASSIGN;
-    floor_ptr->quest_number = QUEST_OBERON;
+    floor_ptr->quest_number = QuestId::OBERON;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_OBERON].status = QuestStatusType::TAKEN;
+    quest[enum2i(QuestId::OBERON)].status = QuestStatusType::TAKEN;
 
-    floor_ptr->quest_number = QUEST_SERPENT;
+    floor_ptr->quest_number = QuestId::SERPENT;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_SERPENT].status = QuestStatusType::TAKEN;
-    floor_ptr->quest_number = 0;
+    quest[enum2i(QuestId::SERPENT)].status = QuestStatusType::TAKEN;
+    floor_ptr->quest_number = QuestId::NONE;
 }
 
 /*!

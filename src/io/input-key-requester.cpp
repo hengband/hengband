@@ -95,7 +95,7 @@ static char inkey_from_menu(PlayerType *player_ptr)
                         menu_name = special_menu_info[hoge].name;
                     break;
                 case MENU_WILD:
-                    if (!floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->quest_number) {
+                    if (!floor_ptr->dun_level && !floor_ptr->inside_arena && !inside_quest(floor_ptr->quest_number)) {
                         auto can_do_in_wilderness = enum2i(special_menu_info[hoge].jouken_naiyou) > 0;
                         if (player_ptr->wild_mode == can_do_in_wilderness) {
                             menu_name = special_menu_info[hoge].name;

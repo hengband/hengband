@@ -5,10 +5,10 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
+#include "system//monster-race-definition.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system//monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -311,9 +311,9 @@ bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)player_ptr;
     (void)v;
 
-    QUEST_IDX *q_num = (QUEST_IDX *)u;
-    quest_type *qa = &quest[q_num[a]];
-    quest_type *qb = &quest[q_num[b]];
+    QuestId *q_num = (QuestId *)u;
+    quest_type *qa = &quest[enum2i(q_num[a])];
+    quest_type *qb = &quest[enum2i(q_num[b])];
     return (qa->comptime != qb->comptime) ? (qa->comptime < qb->comptime) : (qa->level <= qb->level);
 }
 
@@ -323,8 +323,8 @@ void ang_sort_swap_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)player_ptr;
     (void)v;
 
-    QUEST_IDX *q_num = (QUEST_IDX *)u;
-    QUEST_IDX tmp = q_num[a];
+    QuestId *q_num = (QuestId *)u;
+    QuestId tmp = q_num[a];
     q_num[a] = q_num[b];
     q_num[b] = tmp;
 }

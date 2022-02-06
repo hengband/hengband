@@ -434,12 +434,12 @@ static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
 static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     if (eg_ptr->f_ptr->flags.has(FloorFeatureType::QUEST_ENTER)) {
-        QUEST_IDX old_quest = player_ptr->current_floor_ptr->quest_number;
+        QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
         for (int j = 0; j < 10; j++)
             quest_text[j][0] = '\0';
 
         quest_text_line = 0;
-        player_ptr->current_floor_ptr->quest_number = eg_ptr->g_ptr->special;
+        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(eg_ptr->g_ptr->special);
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;

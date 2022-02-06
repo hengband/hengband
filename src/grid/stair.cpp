@@ -35,7 +35,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
     if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)
         down_stairs = false;
 
-    if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1))
+    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && (floor_ptr->dun_level > 1))
         down_stairs = false;
 
     if (down_stairs && up_stairs) {

@@ -1,4 +1,4 @@
-﻿#include "object-hook/hook-quest.h"
+#include "object-hook/hook-quest.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
@@ -47,12 +47,12 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
  */
-bool object_is_quest_target(QUEST_IDX quest_idx, ObjectType *o_ptr)
+bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
 {
-    if (quest_idx == 0)
+    if (!inside_quest(quest_idx))
         return false;
 
-    ARTIFACT_IDX a_idx = quest[quest_idx].k_idx;
+    ARTIFACT_IDX a_idx = quest[enum2i(quest_idx)].k_idx;
     if (a_idx == 0)
         return false;
 

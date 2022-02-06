@@ -242,8 +242,8 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
 
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
-    if ((quest_num > 0)
-        && (quest_type::is_fixed(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
+    if (inside_quest(quest_num)
+        && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[enum2i(quest_num)].flags & QUEST_FLAG_PRESET))))
         return;
 
     byte new_feeling = get_dungeon_feeling(player_ptr);

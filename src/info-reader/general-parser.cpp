@@ -109,8 +109,8 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
             if (zz[6][1])
                 letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6] + 1);
         } else if (zz[6][0] == '!') {
-            if (floor_ptr->quest_number) {
-                letter[index].artifact = quest[floor_ptr->quest_number].k_idx;
+            if (inside_quest(floor_ptr->quest_number)) {
+                letter[index].artifact = quest[enum2i(floor_ptr->quest_number)].k_idx;
             }
         } else {
             letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6]);
@@ -131,8 +131,8 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
             if (zz[4][1])
                 letter[index].object = (OBJECT_IDX)atoi(zz[4] + 1);
         } else if (zz[4][0] == '!') {
-            if (floor_ptr->quest_number) {
-                ARTIFACT_IDX a_idx = quest[floor_ptr->quest_number].k_idx;
+            if (inside_quest(floor_ptr->quest_number)) {
+                ARTIFACT_IDX a_idx = quest[enum2i(floor_ptr->quest_number)].k_idx;
                 if (a_idx) {
                     artifact_type *a_ptr = &a_info[a_idx];
                     if (a_ptr->gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
