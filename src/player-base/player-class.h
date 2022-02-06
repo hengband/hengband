@@ -22,6 +22,7 @@ public:
     TrFlags stance_tr_flags() const;
 
     bool has_stun_immunity() const;
+    bool is_soldier() const;
     bool is_wizard() const;
 
     bool lose_balance();

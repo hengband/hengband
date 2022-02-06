@@ -231,14 +231,24 @@ bool PlayerClass::has_stun_immunity() const
     return (this->player_ptr->pclass == PlayerClassType::BERSERKER) && (this->player_ptr->lev > 34);
 }
 
+bool PlayerClass::is_soldier() const
+{
+    auto is_soldier = this->equals(PlayerClassType::WARRIOR);
+    is_soldier |= this->equals(PlayerClassType::ARCHER);
+    is_soldier |= this->equals(PlayerClassType::CAVALRY);
+    is_soldier |= this->equals(PlayerClassType::BERSERKER);
+    is_soldier |= this->equals(PlayerClassType::SMITH);
+    return is_soldier;
+}
+
 bool PlayerClass::is_wizard() const
 {
-    auto is_wizard = this->player_ptr->pclass == PlayerClassType::MAGE;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::HIGH_MAGE;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::SORCERER;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::MAGIC_EATER;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::BLUE_MAGE;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::ELEMENTALIST;
+    auto is_wizard = this->equals(PlayerClassType::MAGE);
+    is_wizard |= this->equals(PlayerClassType::HIGH_MAGE);
+    is_wizard |= this->equals(PlayerClassType::SORCERER);
+    is_wizard |= this->equals(PlayerClassType::MAGIC_EATER);
+    is_wizard |= this->equals(PlayerClassType::BLUE_MAGE);
+    is_wizard |= this->equals(PlayerClassType::ELEMENTALIST);
     return is_wizard;
 }
 
