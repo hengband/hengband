@@ -5,6 +5,7 @@
 
 #include "dungeon/dungeon-flag-types.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-behavior-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 
@@ -37,7 +38,7 @@ typedef struct feat_prob {
 } feat_prob;
 
 /* A structure for the != dungeon types */
-typedef struct dungeon_type {
+struct dungeon_type {
     DUNGEON_IDX idx{};
 
     std::string name; /* Name */
@@ -73,7 +74,8 @@ typedef struct dungeon_type {
 	BIT_FLAGS mflags9{};
 	BIT_FLAGS mflagsr{};
 
-	EnumClassFlagGroup<MonsterAbilityType> m_ability_flags;
+    EnumClassFlagGroup<MonsterAbilityType> mon_ability_flags;
+    EnumClassFlagGroup<MonsterBehaviorType> mon_behavior_flags;
 
 	char r_char[5]{};		/* Monster race allowed */
 	KIND_OBJECT_IDX final_object{};	/* The object you'll find at the bottom */
@@ -84,7 +86,7 @@ typedef struct dungeon_type {
 	int tunnel_percent{};
 	int obj_great{};
 	int obj_good{};
-} dungeon_type;
+};
 
 extern std::vector<DEPTH> max_dlv;
 extern std::vector<dungeon_type> d_info;

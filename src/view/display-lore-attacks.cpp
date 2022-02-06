@@ -133,7 +133,7 @@ void display_monster_blows(lore_type *lore_ptr)
 
     if (attack_numbers > 0) {
         hooked_roff(_("。", ".  "));
-    } else if (lore_ptr->flags1 & RF1_NEVER_BLOW) {
+    } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         hooked_roff(format(_("%^sは物理的な攻撃方法を持たない。", "%^s has no physical attacks.  "), Who::who(lore_ptr->msex)));
     } else {
         hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), Who::whose(lore_ptr->msex)));

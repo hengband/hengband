@@ -17,17 +17,14 @@
  * 特定の名前のミューテックスオブジェクトの所有権取得を試みる。
  * 取得できない場合は他に変愚蛮怒のプロセスが起動しているとみなす。
  * 取得したミューテックスのハンドルは明示的な解放は行わず、プロセス終了時にOSが解放する。
- * @retval true 他に変愚蛮怒のプロセスが起動している
- * @retval false 他に変愚蛮怒のプロセスは起動していない
+ * @return 起動済の変愚蛮怒プロセス有無
  */
 bool is_already_running(void)
 {
-    [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, L"" VERSION_NAME);
-    if (GetLastError() == ERROR_ALREADY_EXISTS) {
-        return true;
-    }
-
-    return false;
+    wchar_t wtext[32];
+    mbstowcs(wtext, VARIANT_NAME.data(), VARIANT_NAME.length());
+    [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, wtext);
+    return GetLastError() == ERROR_ALREADY_EXISTS;
 }
 
 /*!

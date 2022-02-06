@@ -1,6 +1,6 @@
 ﻿#pragma once
 
 enum class MonsterLoaderVersionType {
-    LOAD10,
-    LOAD11,
+    LOAD50,
+    LOAD51,
 };

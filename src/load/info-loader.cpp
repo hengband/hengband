@@ -16,18 +16,34 @@
  */
 void rd_version_info(void)
 {
-    byte fake_major = rd_byte();
+    auto tmp_major = rd_byte();
+    auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
+    auto variant_length = VARIANT_NAME.length();
+    if (tmp_major == variant_length) {
+        strip_bytes(variant_length);
+        load_xor_byte = 0;
+        w_ptr->h_ver_major = rd_byte();
+        w_ptr->h_ver_minor = rd_byte();
+        w_ptr->h_ver_patch = rd_byte();
+        w_ptr->h_ver_extra = rd_byte();
+        strip_bytes(1);
+    } else if (is_old_ver) {
+        strip_bytes(3);
+    } else {
+        throw("Invalid version is detected!");
+    }
 
-    strip_bytes(3);
     load_xor_byte = w_ptr->sf_extra;
     v_check = 0L;
     x_check = 0L;
 
-    /* Old savefile will be version 0.0.0.3 */
-    w_ptr->h_ver_extra = rd_byte();
-    w_ptr->h_ver_patch = rd_byte();
-    w_ptr->h_ver_minor = rd_byte();
-    w_ptr->h_ver_major = rd_byte();
+    if (is_old_ver) {
+        /* Old savefile will be version 0.0.0.3 */
+        w_ptr->h_ver_extra = rd_byte();
+        w_ptr->h_ver_patch = rd_byte();
+        w_ptr->h_ver_minor = rd_byte();
+        w_ptr->h_ver_major = rd_byte();
+    }
 
     w_ptr->sf_system = rd_u32b();
     w_ptr->sf_when = rd_u32b();
@@ -37,8 +53,12 @@ void rd_version_info(void)
     loading_savefile_version = rd_u32b();
 
     /* h_ver_majorがfake_ver_majorと同じだったころへの対策 */
-    if (fake_major - w_ptr->h_ver_major < FAKE_VER_PLUS)
-        w_ptr->h_ver_major -= FAKE_VER_PLUS;
+    if (loading_savefile_version_is_older_than(10)) {
+        constexpr auto fake_ver_plus = 10;
+        if (tmp_major - w_ptr->h_ver_major < fake_ver_plus) {
+            w_ptr->h_ver_major -= fake_ver_plus;
+        }
+    }
 
     load_note(format(_("バージョン %d.%d.%d のセーブデータ(SAVE%lu形式)をロード中...", "Loading a Verison %d.%d.%d savefile (SAVE%lu format)..."),
         w_ptr->h_ver_major, w_ptr->h_ver_minor, w_ptr->h_ver_patch,

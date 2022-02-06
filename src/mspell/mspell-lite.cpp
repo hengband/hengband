@@ -108,16 +108,13 @@ static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
 
 static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
-        && in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
-        && (one_in_(10) || (projectable(player_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2) && in_disintegration_range(player_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && (one_in_(10) || (projectable(player_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         msa_ptr->success = true;
         return;
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2)
-        && los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(player_ptr) / 2) && los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
         msa_ptr->success = true;
         return;
@@ -181,10 +178,9 @@ void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
     if (msa_ptr->ability_flags.has_not(MonsterAbilityType::DARKNESS))
         return;
 
-    bool can_use_lite_area = (player_ptr->pclass == PlayerClassType::NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
-        && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
+    bool can_use_lite_area = (player_ptr->pclass == PlayerClassType::NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0) && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
 
-    if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+    if (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {

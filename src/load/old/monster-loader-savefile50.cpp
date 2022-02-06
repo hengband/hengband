@@ -1,23 +1,23 @@
-﻿#include "load/old/monster-loader-savefile10.h"
+﻿#include "load/old/monster-loader-savefile50.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
-#include "load/old/monster-flag-types-savefile10.h"
+#include "load/old/monster-flag-types-savefile50.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/quarks.h"
 
-MonsterLoader10::MonsterLoader10(PlayerType *player_ptr)
+MonsterLoader50::MonsterLoader50(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }
 
 /*!
- * @brief モンスターを読み込む(v3.0.0 Savefile ver10まで)
+ * @brief モンスターを読み込む(v3.0.0 Savefile ver50まで)
  */
-void MonsterLoader10::rd_monster(monster_type *m_ptr_)
+void MonsterLoader50::rd_monster(monster_type *m_ptr_)
 {
     this->m_ptr = m_ptr_;
     if (h_older_than(1, 5, 0, 0)) {

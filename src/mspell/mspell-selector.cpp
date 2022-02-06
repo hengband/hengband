@@ -14,9 +14,9 @@
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "player/player-status.h"
-#include "system/monster-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
@@ -278,7 +278,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
 
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->flags2 & RF2_STUPID)
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return (msa_ptr->mspells[randint0(msa_ptr->mspells.size())]);
 
     for (size_t i = 0; i < msa_ptr->mspells.size(); i++) {
@@ -375,8 +375,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
             return (special[randint0(special.size())]);
     }
 
-    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75)
-        && !w_ptr->timewalk_m_idx) {
+    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75) && !w_ptr->timewalk_m_idx) {
         if (!tactic.empty())
             return (tactic[randint0(tactic.size())]);
     }

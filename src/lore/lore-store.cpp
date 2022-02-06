@@ -6,8 +6,8 @@
 
 #include "lore/lore-store.h"
 #include "core/window-redrawer.h"
-#include "monster-race/race-flags1.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags1.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -40,8 +40,7 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
         }
     }
 
-    byte tmp_byte = (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0)
-        + ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
+    byte tmp_byte = (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
     if (!(r_ptr->flags1 & RF1_ONLY_GOLD)) {
         if (r_ptr->r_drop_item != tmp_byte)
@@ -72,11 +71,15 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
     auto ability_flags = r_ptr->ability_flags;
     n += ability_flags.reset(r_ptr->r_ability_flags).count();
 
+    auto behavior_flags = r_ptr->behavior_flags;
+    n += behavior_flags.reset(r_ptr->r_behavior_flags).count();
+
     r_ptr->r_flags1 = r_ptr->flags1;
     r_ptr->r_flags2 = r_ptr->flags2;
     r_ptr->r_flags3 = r_ptr->flags3;
     r_ptr->r_flagsr = r_ptr->flagsr;
     r_ptr->r_ability_flags = r_ptr->ability_flags;
+    r_ptr->r_behavior_flags = r_ptr->behavior_flags;
 
     if (!r_ptr->r_can_evolve)
         n++;

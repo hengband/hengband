@@ -2358,10 +2358,10 @@
     <ClCompile Include="..\..\src\load\old\load-v1-7-0.cpp">
       <Filter>load\old</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\old\item-loader-savefile10.cpp">
+    <ClCompile Include="..\..\src\load\old\item-loader-savefile50.cpp">
       <Filter>load\old</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\old\monster-loader-savefile10.cpp">
+    <ClCompile Include="..\..\src\load\old\monster-loader-savefile50.cpp">
       <Filter>load\old</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\load\item\item-loader-base.cpp">
@@ -5115,16 +5115,16 @@
     <ClInclude Include="..\..\src\load\old\load-v1-7-0.h">
       <Filter>load\old</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\load\old\item-loader-savefile10.h">
+    <ClInclude Include="..\..\src\load\old\item-loader-savefile50.h">
       <Filter>load\old</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\load\old\monster-loader-savefile10.h">
+    <ClInclude Include="..\..\src\load\old\monster-loader-savefile50.h">
       <Filter>load\old</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\load\old\item-flag-types-savefile10.h">
+    <ClInclude Include="..\..\src\load\old\item-flag-types-savefile50.h">
       <Filter>load\old</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\load\old\monster-flag-types-savefile10.h">
+    <ClInclude Include="..\..\src\load\old\monster-flag-types-savefile50.h">
       <Filter>load\old</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\item\item-loader-base.h">
@@ -5147,6 +5147,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\effect\attribute-types.h">
       <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h">
+      <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

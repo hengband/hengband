@@ -1394,7 +1394,6 @@ BIT_FLAGS has_resist_water(PlayerType *player_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-
     return result;
 }
 
@@ -1593,11 +1592,9 @@ bool can_attack_with_sub_hand(PlayerType *player_ptr)
 bool has_two_handed_weapons(PlayerType *player_ptr)
 {
     if (can_two_hands_wielding(player_ptr)) {
-        if (can_attack_with_main_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB)
-            && player_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding()) {
+        if (can_attack_with_main_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB) && player_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding()) {
             return true;
-        } else if (can_attack_with_sub_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN)
-            && player_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding()) {
+        } else if (can_attack_with_sub_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN) && player_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding()) {
             return true;
         }
     }
@@ -1704,7 +1701,7 @@ bool has_not_monk_weapon(PlayerType *player_ptr, int i)
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         return false;
     }
-    
+
     auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
     auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return ((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && (player_ptr->weapon_exp_max[tval][sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED));

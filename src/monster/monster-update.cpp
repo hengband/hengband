@@ -104,9 +104,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mons
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
-    if (turn_flags_ptr->do_move
-        && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
-            || ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !player_ptr->phase_out))) {
+    if (turn_flags_ptr->do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) || ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !player_ptr->phase_out))) {
         player_ptr->update |= PU_MON_LITE;
     }
 }
@@ -124,19 +122,19 @@ void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_pt
         return;
 
     if (turn_flags_ptr->did_open_door)
-        r_ptr->r_flags2 |= RF2_OPEN_DOOR;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::OPEN_DOOR);
 
     if (turn_flags_ptr->did_bash_door)
-        r_ptr->r_flags2 |= RF2_BASH_DOOR;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
 
     if (turn_flags_ptr->did_take_item)
-        r_ptr->r_flags2 |= RF2_TAKE_ITEM;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::TAKE_ITEM);
 
     if (turn_flags_ptr->did_kill_item)
-        r_ptr->r_flags2 |= RF2_KILL_ITEM;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::KILL_ITEM);
 
     if (turn_flags_ptr->did_move_body)
-        r_ptr->r_flags2 |= RF2_MOVE_BODY;
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::MOVE_BODY);
 
     if (turn_flags_ptr->did_pass_wall)
         r_ptr->r_flags2 |= RF2_PASS_WALL;
@@ -155,11 +153,11 @@ void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags
 {
     monster_race *r_ptr;
     r_ptr = &r_info[player_ptr->monster_race_idx];
-    if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) || (old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2)
-        || (old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) || (old_race_flags_ptr->old_r_ability_flags != r_ptr->r_ability_flags)
-        || (old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) || (old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0])
-        || (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2])
-        || (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell)) {
+    if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) || (old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2) ||
+        (old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) || (old_race_flags_ptr->old_r_ability_flags != r_ptr->r_ability_flags) ||
+        (old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) || (old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0]) ||
+        (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2]) ||
+        (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell)) {
         player_ptr->window_flags |= PW_MONSTER;
     }
 }
@@ -197,11 +195,11 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
 
 static void update_smart_stupid_flags(monster_race *r_ptr)
 {
-    if (r_ptr->flags2 & RF2_SMART)
-        r_ptr->r_flags2 |= RF2_SMART;
+    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::SMART))
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::SMART);
 
-    if (r_ptr->flags2 & RF2_STUPID)
-        r_ptr->r_flags2 |= RF2_STUPID;
+    if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::STUPID))
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
 }
 
 /*!
@@ -453,13 +451,10 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
             r_ptr->r_sights++;
     }
 
-    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !player_ptr->phase_out
-        && r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
+    if (w_ptr->is_loading_now && w_ptr->character_dungeon && !player_ptr->phase_out && r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
 
-    if (disturb_near
-        && (projectable(player_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, player_ptr->y, player_ptr->x)
-            && projectable(player_ptr, player_ptr->y, player_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
+    if (disturb_near && (projectable(player_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, player_ptr->y, player_ptr->x) && projectable(player_ptr, player_ptr->y, player_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
         if (disturb_pets || is_hostile(um_ptr->m_ptr))
             disturb(player_ptr, true, true);
     }
@@ -556,7 +551,7 @@ void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!smart_learn || ((r_ptr->flags2 & RF2_STUPID) != 0) || (((r_ptr->flags2 & RF2_SMART) == 0) && (randint0(100) < 50)))
+    if (!smart_learn || (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) || ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) && (randint0(100) < 50)))
         return;
 
     switch (what) {

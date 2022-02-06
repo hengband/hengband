@@ -4,7 +4,8 @@
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
-#include "util/flag-group.h"
+#include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-flags-resistance.h"
 #include "system/angband.h"
 #include <string>
 
@@ -64,6 +65,7 @@ struct monster_race {
     BIT_FLAGS flagsr{}; //!< 耐性フラグ / Flags R (resistances info)
     EnumClassFlagGroup<MonsterAbilityType> ability_flags; //!< 能力フラグ(魔法/ブレス) / Ability Flags
     EnumClassFlagGroup<MonsterAuraType> aura_flags; //!< オーラフラグ / Aura Flags
+    EnumClassFlagGroup<MonsterBehaviorType> behavior_flags; //!< 能力フラグ（習性）
     monster_blow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
     MONRACE_IDX reinforce_id[6]{}; //!< 指定護衛モンスター種族ID(6種まで)
     DICE_NUMBER reinforce_dd[6]{}; //!< 指定護衛数ダイス数
@@ -102,6 +104,7 @@ struct monster_race {
     uint32_t r_flagsr{}; //!< 見た耐性フラグ / Observed racial resistance flags
     EnumClassFlagGroup<MonsterAbilityType> r_ability_flags; //!< 見た能力フラグ(魔法/ブレス) / Observed racial ability flags
     EnumClassFlagGroup<MonsterAuraType> r_aura_flags; //!< 見た能力フラグ(オーラ) / Observed aura flags
+    EnumClassFlagGroup<MonsterBehaviorType> r_behavior_flags; //!< 見た能力フラグ（習性） / Observed racial attr flags
     PLAYER_LEVEL defeat_level{}; //!< 倒したレベル(ユニーク用) / player level at which defeated this race
     REAL_TIME defeat_time{}; //!< 倒した時間(ユニーク用) / time at which defeated this race
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)

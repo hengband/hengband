@@ -2,7 +2,7 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/monster/monster-loader-factory.h"
-#include "load/old/monster-loader-savefile10.h"
+#include "load/old/monster-loader-savefile50.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"

@@ -37,7 +37,7 @@
  * @param allow_flag_mask 生成が許されるpit/nestのビット配列
  * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
  */
-static int pick_vault_type(floor_type *floor_ptr, std::vector<nest_pit_type>& l_ptr, BIT_FLAGS16 allow_flag_mask)
+static int pick_vault_type(floor_type *floor_ptr, std::vector<nest_pit_type> &l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
     ProbabilityTable<int> table;
     for (size_t i = 0; i < l_ptr.size(); i++) {
@@ -93,13 +93,13 @@ static concptr pit_subtype_string(int type, bool nest)
             strcpy(inner_buf, _("(万色)", "(multi-hued)"));
         } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
             strcpy(inner_buf, _("(酸)", "(acid)"));
-        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
+        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
             strcpy(inner_buf, _("(稲妻)", "(lightning)"));
-        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
+        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
             strcpy(inner_buf, _("(火炎)", "(fire)"));
-        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
+        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
             strcpy(inner_buf, _("(冷気)", "(frost)"));
-        }else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
+        } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
             strcpy(inner_buf, _("(毒)", "(poison)"));
         } else {
             strcpy(inner_buf, _("(未定義)", "(undefined)"));

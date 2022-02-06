@@ -1,10 +1,11 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
-#include "util/flag-group.h"
+#include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-flags-resistance.h"
+#include "system/angband.h"
 #include <string>
 #include <unordered_map>
 
@@ -15,7 +16,7 @@ enum monster_sex {
 };
 
 struct monster_race;
-typedef struct lore_type {
+struct lore_type {
 #ifdef JP
     char jverb_buf[64];
 #else
@@ -31,6 +32,7 @@ typedef struct lore_type {
     BIT_FLAGS flags3;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     EnumClassFlagGroup<MonsterAuraType> aura_flags;
+    EnumClassFlagGroup<MonsterBehaviorType> behavior_flags;
 
     BIT_FLAGS flags7;
     BIT_FLAGS flagsr;
@@ -56,7 +58,7 @@ typedef struct lore_type {
     int count;
     bool shoot = false;
     bool rocket = false;
-} lore_type;
+};
 
 enum monster_lore_mode {
     MONSTER_LORE_NONE,
@@ -71,7 +73,9 @@ extern hook_c_roff_pf hook_c_roff;
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode);
 void hooked_roff(concptr str);
 
-enum WHO_WORD_TYPE { WHO = 0, WHOSE = 1, WHOM = 2 };
+enum WHO_WORD_TYPE { WHO = 0,
+    WHOSE = 1,
+    WHOM = 2 };
 using who_word_definition = std::unordered_map<WHO_WORD_TYPE, const std::unordered_map<bool, const std::unordered_map<monster_sex, std::string>>>;
 
 class Who {

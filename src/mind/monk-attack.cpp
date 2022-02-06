@@ -138,7 +138,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
     }
 
     else if (pa_ptr->ma_ptr->effect == MA_SLOW) {
-        if (!((r_ptr->flags1 & RF1_NEVER_MOVE) || angband_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
+        if (!(r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || angband_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
             msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
             special_effect = MA_SLOW;
         } else

@@ -41,18 +41,18 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
     if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx))
         return;
 
-    if (r_ptr->flags1 & RF1_NEVER_BLOW) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
+            r_ptr->r_behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
 
         turn_flags_ptr->do_move = false;
     }
 
     if (turn_flags_ptr->do_move && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE) && !monster_confused_remaining(m_ptr)) {
-        if (!(r_ptr->flags2 & RF2_STUPID))
+        if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID))
             turn_flags_ptr->do_move = false;
         else if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flags2 |= (RF2_STUPID);
+            r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
     }
 
     if (!turn_flags_ptr->do_move)
@@ -77,11 +77,11 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_type *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    if ((r_ptr->flags1 & RF1_NEVER_BLOW) != 0)
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
-    if (((r_ptr->flags2 & RF2_KILL_BODY) == 0) && is_original_ap_and_seen(player_ptr, m_ptr))
-        r_ptr->r_flags2 |= (RF2_KILL_BODY);
+    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, m_ptr))
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::KILL_BODY);
 
     if ((y_ptr->r_idx == 0) || (y_ptr->hp < 0))
         return false;
@@ -91,11 +91,11 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
         return false;
     if (monster_confused_remaining(m_ptr))
         return true;
-    if ((r_ptr->flags2 & RF2_STUPID) == 0)
+    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID))
         return false;
 
     if (is_original_ap_and_seen(player_ptr, m_ptr))
-        r_ptr->r_flags2 |= (RF2_STUPID);
+        r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
 
     return true;
 }
@@ -121,23 +121,21 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
     monster_race *z_ptr = &r_info[y_ptr->r_idx];
     turn_flags_ptr->do_move = false;
 
-    bool do_kill_body = any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW);
+    bool do_kill_body = r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW);
     do_kill_body &= (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level);
     do_kill_body &= (g_ptr->m_idx != player_ptr->riding);
 
-    if (do_kill_body || are_enemies(player_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr)) 
-    {
+    if (do_kill_body || are_enemies(player_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr)) {
         return exe_monster_attack_to_monster(player_ptr, m_idx, g_ptr);
     }
 
-    bool do_move_body = any_bits(r_ptr->flags2, RF2_MOVE_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_MOVE);
+    bool do_move_body = r_ptr->behavior_flags.has(MonsterBehaviorType::MOVE_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE);
     do_move_body &= (r_ptr->mexp > z_ptr->mexp);
     do_move_body &= can_cross;
     do_move_body &= (g_ptr->m_idx != player_ptr->riding);
     do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0);
 
-    if (do_move_body)
-    {
+    if (do_move_body) {
         turn_flags_ptr->do_move = true;
         turn_flags_ptr->did_move_body = true;
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);

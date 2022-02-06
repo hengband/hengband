@@ -135,9 +135,7 @@ void set_drop_flags(lore_type *lore_ptr)
     if (!lore_ptr->know_everything)
         return;
 
-    lore_ptr->drop_gold = lore_ptr->drop_item = (((lore_ptr->r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0)
-        + ((lore_ptr->r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0)
-        + ((lore_ptr->r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
+    lore_ptr->drop_gold = lore_ptr->drop_item = (((lore_ptr->r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
     if (lore_ptr->r_ptr->flags1 & RF1_ONLY_GOLD)
         lore_ptr->drop_item = 0;
@@ -150,5 +148,6 @@ void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->flags3 = lore_ptr->r_ptr->flags3;
     lore_ptr->ability_flags = lore_ptr->r_ptr->ability_flags;
     lore_ptr->aura_flags = lore_ptr->r_ptr->aura_flags;
+    lore_ptr->behavior_flags = lore_ptr->r_ptr->behavior_flags;
     lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
 }

@@ -582,7 +582,7 @@ process_result effect_monster_icee_bolt(PlayerType *player_ptr, effect_monster_t
  * @details
  * 量子生物に倍打、壁抜けに1.5倍打、テレポート耐性が耐性
  */
-process_result effect_monster_void(PlayerType* player_ptr, effect_monster_type* em_ptr)
+process_result effect_monster_void(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
