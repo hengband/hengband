@@ -27,6 +27,7 @@
 #include "util/string-processor.h"
 #include "view/display-scores.h"
 #include "wizard/wizard-spoiler.h"
+#include <string>
 
 /*
  * Available graphic modes
@@ -88,7 +89,7 @@ static void create_user_dir(void)
     mkdir(dirpath, 0700);
 
     /* Build the path to the variant-specific sub-directory */
-    path_build(subdirpath, sizeof(subdirpath), dirpath, VERSION_NAME);
+    path_build(subdirpath, sizeof(subdirpath), dirpath, VARIANT_NAME.data());
 
     /* Create the directory */
     mkdir(subdirpath, 0700);
@@ -272,6 +273,8 @@ static void display_usage(const char *program)
 
 #ifdef USE_GCU
     puts("  -mgcu    To use GCU (GNU Curses)");
+    puts("  --       Sub options");
+    puts("  -- -o    old subwindow layout (no bigscreen)");
 #endif /* USE_GCU */
 
 #ifdef USE_CAP

@@ -190,7 +190,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     monster_race *riding_r_ptr = &r_info[player_ptr->riding ? riding_m_ptr->r_idx : 0];
     PlayerEnergy energy(player_ptr);
     if (can_move && player_ptr->riding) {
-        if (riding_r_ptr->flags1 & RF1_NEVER_MOVE) {
+        if (riding_r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
             msg_print(_("動けない！", "Can't move!"));
             energy.reset_player_turn();
             can_move = false;
@@ -208,8 +208,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             /* Allow moving */
         } else if (f_ptr->flags.has(FloorFeatureType::CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
             /* Allow moving */
-        } else if (f_ptr->flags.has(FloorFeatureType::WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
-            && (f_ptr->flags.has(FloorFeatureType::DEEP) || riding_r_ptr->aura_flags.has(MonsterAuraType::FIRE))) {
+        } else if (f_ptr->flags.has(FloorFeatureType::WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC) && (f_ptr->flags.has(FloorFeatureType::DEEP) || riding_r_ptr->aura_flags.has(MonsterAuraType::FIRE))) {
             msg_format(_("%sの上に行けない。", "Can't swim."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;

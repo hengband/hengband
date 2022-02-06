@@ -1,4 +1,5 @@
 ﻿#include "load/angband-version-comparer.h"
+#include "system/angband-version.h"
 #include "world/world.h"
 
 /*!
@@ -12,25 +13,37 @@
  */
 bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
-    if (w_ptr->h_ver_major < major)
-        return true;
-    if (w_ptr->h_ver_major > major)
+    if (VARIANT_NAME != ROOT_VARIANT_NAME) {
         return false;
+    }
 
-    if (w_ptr->h_ver_minor < minor)
+    if (w_ptr->h_ver_major < major) {
         return true;
-    if (w_ptr->h_ver_minor > minor)
+    }
+    if (w_ptr->h_ver_major > major) {
         return false;
+    }
 
-    if (w_ptr->h_ver_patch < patch)
+    if (w_ptr->h_ver_minor < minor) {
         return true;
-    if (w_ptr->h_ver_patch > patch)
+    }
+    if (w_ptr->h_ver_minor > minor) {
         return false;
+    }
 
-    if (w_ptr->h_ver_extra < extra)
+    if (w_ptr->h_ver_patch < patch) {
         return true;
-    if (w_ptr->h_ver_extra > extra)
+    }
+    if (w_ptr->h_ver_patch > patch) {
         return false;
+    }
+
+    if (w_ptr->h_ver_extra < extra) {
+        return true;
+    }
+    if (w_ptr->h_ver_extra > extra) {
+        return false;
+    }
 
     return false;
 }
@@ -46,20 +59,30 @@ bool h_older_than(byte major, byte minor, byte patch, byte extra)
  */
 bool h_older_than(byte major, byte minor, byte patch)
 {
-    if (w_ptr->h_ver_major < major)
-        return true;
-    if (w_ptr->h_ver_major > major)
+    if (VARIANT_NAME != ROOT_VARIANT_NAME) {
         return false;
+    }
 
-    if (w_ptr->h_ver_minor < minor)
+    if (w_ptr->h_ver_major < major) {
         return true;
-    if (w_ptr->h_ver_minor > minor)
+    }
+    if (w_ptr->h_ver_major > major) {
         return false;
+    }
 
-    if (w_ptr->h_ver_patch < patch)
+    if (w_ptr->h_ver_minor < minor) {
         return true;
-    if (w_ptr->h_ver_patch > patch)
+    }
+    if (w_ptr->h_ver_minor > minor) {
         return false;
+    }
+
+    if (w_ptr->h_ver_patch < patch) {
+        return true;
+    }
+    if (w_ptr->h_ver_patch > patch) {
+        return false;
+    }
 
     return false;
 }

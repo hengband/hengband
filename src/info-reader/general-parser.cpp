@@ -232,8 +232,8 @@ parse_error_type parse_line_building(char *buf)
     case 'C': {
         auto pct_max = PLAYER_CLASS_TYPE_MAX;
         auto n = tokenize(s + 2, pct_max, zz, 0);
-        for (int i = 0; i < pct_max; i++) {
-            building[index].member_class.push_back((i < n) ? atoi(zz[i]) : 1);
+        for (auto i = 0; i < pct_max; i++) {
+            building[index].member_class[i] = (i < n) ? atoi(zz[i]) : 1;
         }
 
         break;

@@ -14,9 +14,9 @@
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "player/player-status.h"
-#include "system/monster-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
@@ -46,24 +46,38 @@ static bool spell_in_between(MonsterAbilityType spell, MonsterAbilityType start,
 static bool spell_attack(MonsterAbilityType spell)
 {
     /* All RF4 spells hurt (except for shriek and dispel) */
-    if (spell_in_between(spell, MonsterAbilityType::ROCKET, MonsterAbilityType::BR_DISI))
+    if (spell_in_between(spell, MonsterAbilityType::ROCKET, MonsterAbilityType::BR_DISI)) {
         return true;
+    }
+    if (spell_in_between(spell, MonsterAbilityType::BR_VOID, MonsterAbilityType::BR_ABYSS)) {
+        return true;
+    }
 
     /* Various "ball" spells */
-    if (spell_in_between(spell, MonsterAbilityType::BA_ACID, MonsterAbilityType::BA_DARK))
+    if (spell_in_between(spell, MonsterAbilityType::BA_ACID, MonsterAbilityType::BA_DARK)) {
         return true;
+    }
+    if (spell_in_between(spell, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS)) {
+        return true;
+    }
 
     /* "Cause wounds" and "bolt" spells */
-    if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE))
+    if (spell_in_between(spell, MonsterAbilityType::CAUSE_1, MonsterAbilityType::MISSILE)) {
         return true;
+    }
+    if (spell_in_between(spell, MonsterAbilityType::BO_VOID, MonsterAbilityType::BO_ABYSS)) {
+        return true;
+    }
 
     /* Hand of Doom */
-    if (spell == MonsterAbilityType::HAND_DOOM)
+    if (spell == MonsterAbilityType::HAND_DOOM) {
         return true;
+    }
 
     /* Psycho-Spear */
-    if (spell == MonsterAbilityType::PSY_SPEAR)
+    if (spell == MonsterAbilityType::PSY_SPEAR) {
         return true;
+    }
 
     /* Doesn't hurt */
     return false;
@@ -78,12 +92,14 @@ static bool spell_attack(MonsterAbilityType spell)
 static bool spell_escape(MonsterAbilityType spell)
 {
     /* Blink or Teleport */
-    if (spell == MonsterAbilityType::BLINK || spell == MonsterAbilityType::TPORT)
+    if (spell == MonsterAbilityType::BLINK || spell == MonsterAbilityType::TPORT) {
         return true;
+    }
 
     /* Teleport the player away */
-    if (spell == MonsterAbilityType::TELE_AWAY || spell == MonsterAbilityType::TELE_LEVEL)
+    if (spell == MonsterAbilityType::TELE_AWAY || spell == MonsterAbilityType::TELE_LEVEL) {
         return true;
+    }
 
     /* Isn't good for escaping */
     return false;
@@ -98,28 +114,34 @@ static bool spell_escape(MonsterAbilityType spell)
 static bool spell_annoy(MonsterAbilityType spell)
 {
     /* Shriek */
-    if (spell == MonsterAbilityType::SHRIEK)
+    if (spell == MonsterAbilityType::SHRIEK) {
         return true;
+    }
 
     /* Brain smash, et al (added curses) */
-    if (spell_in_between(spell, MonsterAbilityType::DRAIN_MANA, MonsterAbilityType::CAUSE_4))
+    if (spell_in_between(spell, MonsterAbilityType::DRAIN_MANA, MonsterAbilityType::CAUSE_4)) {
         return true;
+    }
 
     /* Scare, confuse, blind, slow, paralyze */
-    if (spell_in_between(spell, MonsterAbilityType::SCARE, MonsterAbilityType::HOLD))
+    if (spell_in_between(spell, MonsterAbilityType::SCARE, MonsterAbilityType::HOLD)) {
         return true;
+    }
 
     /* Teleport to */
-    if (spell == MonsterAbilityType::TELE_TO)
+    if (spell == MonsterAbilityType::TELE_TO) {
         return true;
+    }
 
     /* Teleport level */
-    if (spell == MonsterAbilityType::TELE_LEVEL)
+    if (spell == MonsterAbilityType::TELE_LEVEL) {
         return true;
+    }
 
     /* Darkness, make traps, cause amnesia */
-    if (spell_in_between(spell, MonsterAbilityType::TRAPS, MonsterAbilityType::RAISE_DEAD))
+    if (spell_in_between(spell, MonsterAbilityType::TRAPS, MonsterAbilityType::RAISE_DEAD)) {
         return true;
+    }
 
     /* Doesn't annoy */
     return false;
@@ -200,8 +222,9 @@ static bool spell_world(MonsterAbilityType spell)
  */
 static bool spell_special(PlayerType *player_ptr, MonsterAbilityType spell)
 {
-    if (player_ptr->phase_out)
+    if (player_ptr->phase_out) {
         return false;
+    }
 
     return spell == MonsterAbilityType::SPECIAL;
 }
@@ -278,77 +301,96 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
 
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->flags2 & RF2_STUPID)
+    if (r_ptr->flags2 & RF2_STUPID) {
         return (msa_ptr->mspells[randint0(msa_ptr->mspells.size())]);
-
-    for (size_t i = 0; i < msa_ptr->mspells.size(); i++) {
-        if (spell_escape(msa_ptr->mspells[i]))
-            escape.push_back(msa_ptr->mspells[i]);
-
-        if (spell_attack(msa_ptr->mspells[i]))
-            attack.push_back(msa_ptr->mspells[i]);
-
-        if (spell_summon(msa_ptr->mspells[i]))
-            summon.push_back(msa_ptr->mspells[i]);
-
-        if (spell_tactic(msa_ptr->mspells[i]))
-            tactic.push_back(msa_ptr->mspells[i]);
-
-        if (spell_annoy(msa_ptr->mspells[i]))
-            annoy.push_back(msa_ptr->mspells[i]);
-
-        if (spell_invulner(msa_ptr->mspells[i]))
-            invul.push_back(msa_ptr->mspells[i]);
-
-        if (spell_haste(msa_ptr->mspells[i]))
-            haste.push_back(msa_ptr->mspells[i]);
-
-        if (spell_world(msa_ptr->mspells[i]))
-            world.push_back(msa_ptr->mspells[i]);
-
-        if (spell_special(player_ptr, msa_ptr->mspells[i]))
-            special.push_back(msa_ptr->mspells[i]);
-
-        if (spell_psy_spe(msa_ptr->mspells[i]))
-            psy_spe.push_back(msa_ptr->mspells[i]);
-
-        if (spell_raise(msa_ptr->mspells[i]))
-            raise.push_back(msa_ptr->mspells[i]);
-
-        if (spell_heal(msa_ptr->mspells[i]))
-            heal.push_back(msa_ptr->mspells[i]);
-
-        if (spell_dispel(msa_ptr->mspells[i]))
-            dispel.push_back(msa_ptr->mspells[i]);
     }
 
-    if (!world.empty() && (randint0(100) < 15) && !w_ptr->timewalk_m_idx)
+    for (size_t i = 0; i < msa_ptr->mspells.size(); i++) {
+        if (spell_escape(msa_ptr->mspells[i])) {
+            escape.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_attack(msa_ptr->mspells[i])) {
+            attack.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_summon(msa_ptr->mspells[i])) {
+            summon.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_tactic(msa_ptr->mspells[i])) {
+            tactic.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_annoy(msa_ptr->mspells[i])) {
+            annoy.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_invulner(msa_ptr->mspells[i])) {
+            invul.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_haste(msa_ptr->mspells[i])) {
+            haste.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_world(msa_ptr->mspells[i])) {
+            world.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_special(player_ptr, msa_ptr->mspells[i])) {
+            special.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_psy_spe(msa_ptr->mspells[i])) {
+            psy_spe.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_raise(msa_ptr->mspells[i])) {
+            raise.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_heal(msa_ptr->mspells[i])) {
+            heal.push_back(msa_ptr->mspells[i]);
+        }
+
+        if (spell_dispel(msa_ptr->mspells[i])) {
+            dispel.push_back(msa_ptr->mspells[i]);
+        }
+    }
+
+    if (!world.empty() && (randint0(100) < 15) && !w_ptr->timewalk_m_idx) {
         return (world[randint0(world.size())]);
+    }
 
     if (!special.empty()) {
         bool success = false;
         switch (m_ptr->r_idx) {
         case MON_BANOR:
         case MON_LUPART:
-            if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MON_BANOR].max_num && r_info[MON_LUPART].max_num)
+            if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MON_BANOR].max_num && r_info[MON_LUPART].max_num) {
                 success = true;
+            }
             break;
         default:
             break;
         }
 
-        if (success)
+        if (success) {
             return (special[randint0(special.size())]);
+        }
     }
 
     if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2)) {
-        if (!heal.empty())
+        if (!heal.empty()) {
             return (heal[randint0(heal.size())]);
+        }
     }
 
     if (((m_ptr->hp < m_ptr->maxhp / 3) || monster_fear_remaining(m_ptr)) && one_in_(2)) {
-        if (!escape.empty())
+        if (!escape.empty()) {
             return (escape[randint0(escape.size())]);
+        }
     }
 
     if (!special.empty()) {
@@ -359,30 +401,35 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         case MON_LUPART:
             break;
         case MON_BANORLUPART:
-            if (randint0(100) < 70)
+            if (randint0(100) < 70) {
                 success = true;
+            }
             break;
         case MON_ROLENTO:
-            if (randint0(100) < 40)
+            if (randint0(100) < 40) {
                 success = true;
+            }
             break;
         default:
-            if (randint0(100) < 50)
+            if (randint0(100) < 50) {
                 success = true;
+            }
             break;
         }
-        if (success)
+        if (success) {
             return (special[randint0(special.size())]);
+        }
     }
 
-    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75)
-        && !w_ptr->timewalk_m_idx) {
-        if (!tactic.empty())
+    if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75) && !w_ptr->timewalk_m_idx) {
+        if (!tactic.empty()) {
             return (tactic[randint0(tactic.size())]);
+        }
     }
 
-    if (!summon.empty() && (randint0(100) < 40))
+    if (!summon.empty() && (randint0(100) < 40)) {
         return (summon[randint0(summon.size())]);
+    }
 
     if (!dispel.empty() && one_in_(2)) {
         if (dispel_check(player_ptr, msa_ptr->m_idx)) {
@@ -390,8 +437,9 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    if (!raise.empty() && (randint0(100) < 40))
+    if (!raise.empty() && (randint0(100) < 40)) {
         return (raise[randint0(raise.size())]);
+    }
 
     if (is_invuln(player_ptr)) {
         if (!psy_spe.empty() && (randint0(100) < 50)) {
@@ -403,22 +451,27 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return (attack[randint0(attack.size())]);
     }
 
-    if (!tactic.empty() && (randint0(100) < 50) && !w_ptr->timewalk_m_idx)
+    if (!tactic.empty() && (randint0(100) < 50) && !w_ptr->timewalk_m_idx) {
         return (tactic[randint0(tactic.size())]);
-
-    if (!invul.empty() && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50))
-        return (invul[randint0(invul.size())]);
-
-    if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && (randint0(100) < 25)) {
-        if (!heal.empty())
-            return (heal[randint0(heal.size())]);
     }
 
-    if (!haste.empty() && (randint0(100) < 20) && !monster_fast_remaining(m_ptr))
-        return (haste[randint0(haste.size())]);
+    if (!invul.empty() && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50)) {
+        return (invul[randint0(invul.size())]);
+    }
 
-    if (!annoy.empty() && (randint0(100) < 80))
+    if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && (randint0(100) < 25)) {
+        if (!heal.empty()) {
+            return (heal[randint0(heal.size())]);
+        }
+    }
+
+    if (!haste.empty() && (randint0(100) < 20) && !monster_fast_remaining(m_ptr)) {
+        return (haste[randint0(haste.size())]);
+    }
+
+    if (!annoy.empty() && (randint0(100) < 80)) {
         return (annoy[randint0(annoy.size())]);
+    }
 
     return MonsterAbilityType::MAX;
 }

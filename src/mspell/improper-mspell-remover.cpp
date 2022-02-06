@@ -32,7 +32,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, PlayerType *player_ptr, EnumClassFlagG
 {
     msr_type tmp_msr;
     msr_type *msr_ptr = initialize_msr_type(player_ptr, &tmp_msr, m_idx, ability_flags);
-    if (msr_ptr->r_ptr->flags2 & RF2_STUPID)
+    if (msr_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 
     if (!smart_cheat && !smart_learn)

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
 enum class ItemLoaderVersionType {
-	LOAD10,
-	LOAD11,
+    LOAD50,
+    LOAD51,
 };

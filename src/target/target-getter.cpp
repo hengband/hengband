@@ -143,9 +143,9 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
         if (monster_confused_remaining(m_ptr)) {
             if (randint0(100) < 75)
                 dir = ddd[randint0(8)];
-        } else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
+        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 50))
             dir = ddd[randint0(8)];
-        else if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
+        else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25))
             dir = ddd[randint0(8)];
     }
 
@@ -194,8 +194,7 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
         dir = (DIRECTION)code;
 
     *dp = (DIRECTION)code;
-    concptr prompt
-        = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+    concptr prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (!dir) {
         char ch;
         if (!get_com(prompt, &ch, true))
@@ -227,9 +226,9 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
         if (monster_confused_remaining(m_ptr)) {
             if (randint0(100) < 75)
                 dir = ddd[randint0(8)];
-        } else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
+        } else if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 50))
             dir = ddd[randint0(8)];
-        else if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
+        else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25))
             dir = ddd[randint0(8)];
     }
 

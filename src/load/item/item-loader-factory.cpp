@@ -8,7 +8,7 @@
 #include "load/item/item-loader-base.h"
 #include "load/item/item-loader-version-types.h"
 #include "load/load-util.h"
-#include "load/old/item-loader-savefile10.h"
+#include "load/old/item-loader-savefile50.h"
 
 /*!
  * @brief アイテム読み込みクラスを返却する.
@@ -20,9 +20,9 @@ std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
 {
     auto version = get_version();
     switch (version) {
-    case ItemLoaderVersionType::LOAD10:
-        return std::make_shared<ItemLoader10>();
-    case ItemLoaderVersionType::LOAD11:
+    case ItemLoaderVersionType::LOAD50:
+        return std::make_shared<ItemLoader50>();
+    case ItemLoaderVersionType::LOAD51:
         // dummy yet.
     default:
         throw("Invalid loader version was specified!");
@@ -33,7 +33,7 @@ std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
  * @brief ItemLoaderのバージョン切り替え.
  * @return セーブファイルバージョン群の中で互換性のある最古のバージョン.
  * @details (備忘録)例えばバージョン15で更に変更された場合、以下のように書き換えること.
- * 
+ *
  * if (loading_savefile_version_is_older_than(15)) {
  *   return ItemLoaderVersionType::LOAD11;
  * } else if (loading_savefile_version_is_older_than(11)) {
@@ -44,9 +44,9 @@ std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
  */
 ItemLoaderVersionType ItemLoaderFactory::get_version()
 {
-    if (loading_savefile_version_is_older_than(11)) {
-        return ItemLoaderVersionType::LOAD10;
+    if (loading_savefile_version_is_older_than(51)) {
+        return ItemLoaderVersionType::LOAD50;
     } else {
-        return ItemLoaderVersionType::LOAD11;
+        return ItemLoaderVersionType::LOAD51;
     }
 }

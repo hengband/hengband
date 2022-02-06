@@ -104,7 +104,7 @@ bool mon_hook_quest(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (any_bits(r_ptr->flags2, RF2_MULTIPLY))
         return false;
 
-    if (any_bits(r_ptr->flags7, RF7_FRIENDLY))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY))
         return false;
 
     return true;
@@ -135,9 +135,7 @@ bool mon_hook_dungeon(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN));
 
     bool land = none_bits(r_ptr->flags7, RF7_AQUATIC);
-    return none_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN | RF8_WILD_VOLCANO)
-        || (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && (land || any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN)))
-        || (any_bits(d_ptr->mflags8, RF8_WILD_VOLCANO) && (land || any_bits(r_ptr->flags8, RF8_WILD_VOLCANO)));
+    return none_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN | RF8_WILD_VOLCANO) || (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && (land || any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN))) || (any_bits(d_ptr->mflags8, RF8_WILD_VOLCANO) && (land || any_bits(r_ptr->flags8, RF8_WILD_VOLCANO)));
 }
 
 /*!
@@ -376,7 +374,7 @@ bool vault_aux_jelly(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
     if (any_bits(r_ptr->flags3, RF3_EVIL))
@@ -517,7 +515,7 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
     if (any_bits(r_ptr->flags3, RF3_GOOD))
@@ -541,7 +539,7 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
     if (any_bits(r_ptr->flags3, RF3_EVIL))
@@ -658,7 +656,7 @@ bool vault_aux_demon(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
     if (none_bits(r_ptr->flags3, RF3_DEMON))
@@ -679,7 +677,7 @@ bool vault_aux_cthulhu(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
     if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR)))
@@ -827,7 +825,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MONRACE_IDX r_idx)
 
     HIT_POINT dam = 0;
     monster_race *r_ptr = &r_info[r_idx];
-    bool unselectable = any_bits(r_ptr->flags1, RF1_NEVER_MOVE);
+    bool unselectable = r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
     unselectable |= any_bits(r_ptr->flags2, RF2_QUANTUM) && none_bits(r_ptr->flags1, RF1_UNIQUE);
     unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC);
@@ -892,6 +890,5 @@ bool item_monster_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 bool vault_monster_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    return (mon_hook_dungeon(player_ptr, r_idx) && none_bits(r_info[r_idx].flags1, RF1_UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2)
-        && none_bits(r_info[r_idx].flagsr, RFR_RES_ALL) && none_bits(r_info[r_idx].flags7, RF7_AQUATIC));
+    return (mon_hook_dungeon(player_ptr, r_idx) && none_bits(r_info[r_idx].flags1, RF1_UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2) && none_bits(r_info[r_idx].flagsr, RFR_RES_ALL) && none_bits(r_info[r_idx].flags7, RF7_AQUATIC));
 }

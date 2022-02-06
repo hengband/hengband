@@ -46,6 +46,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_
     lore_ptr->flags3 = (lore_ptr->r_ptr->flags3 & lore_ptr->r_ptr->r_flags3);
     lore_ptr->ability_flags = (lore_ptr->r_ptr->ability_flags & lore_ptr->r_ptr->r_ability_flags);
     lore_ptr->aura_flags = (lore_ptr->r_ptr->aura_flags & lore_ptr->r_ptr->r_aura_flags);
+    lore_ptr->behavior_flags = (lore_ptr->r_ptr->behavior_flags & lore_ptr->r_ptr->r_behavior_flags);
     lore_ptr->flags7 = (lore_ptr->r_ptr->flags7 & lore_ptr->r_ptr->flags7);
     lore_ptr->flagsr = (lore_ptr->r_ptr->flagsr & lore_ptr->r_ptr->r_flagsr);
     lore_ptr->reinforce = false;
@@ -60,4 +61,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
  * @param str 出力文字列
  */
-void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }
+void hooked_roff(concptr str)
+{
+    hook_c_roff(TERM_WHITE, str);
+}

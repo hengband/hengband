@@ -330,6 +330,68 @@ MonsterSpellResult spell_RF5_BO_ICEE(PlayerType *player_ptr, POSITION y, POSITIO
 }
 
 /*!
+ * @brief RF5_BO_VOIDの処理。ヴォイド・ボルト。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーに当たったらラーニング可。
+ */
+MonsterSpellResult spell_RF5_BO_VOID(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+{
+    mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがヴォイド・ボルトの呪文を唱えた。", "%^s casts a void bolt."),
+        _("%^sが%sに向かってヴォイド・ボルトの呪文を唱えた。", "%^s casts a void bolt at %s."));
+
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BO_VOID, m_idx, DAM_ROLL);
+    const auto proj_res = bolt(player_ptr, m_idx, y, x, AttributeType::VOID_MAGIC, dam, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER) {
+        update_smart_learn(player_ptr, m_idx, DRS_REFLECT);
+    }
+
+    auto res = MonsterSpellResult::make_valid(dam);
+    res.learnable = proj_res.affected_player;
+
+    return res;
+}
+
+/*!
+ * @brief RF5_BO_ABYSSの処理。アビス・ボルト。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーに当たったらラーニング可。
+ */
+MonsterSpellResult spell_RF5_BO_ABYSS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+{
+    mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがアビス・ボルトの呪文を唱えた。", "%^s casts a abyss bolt."),
+        _("%^sが%sに向かってアビス・ボルトの呪文を唱えた。", "%^s casts a abyss bolt at %s."));
+
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BO_ABYSS, m_idx, DAM_ROLL);
+    const auto proj_res = bolt(player_ptr, m_idx, y, x, AttributeType::ABYSS, dam, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER) {
+        update_smart_learn(player_ptr, m_idx, DRS_REFLECT);
+    }
+
+    auto res = MonsterSpellResult::make_valid(dam);
+    res.learnable = proj_res.affected_player;
+
+    return res;
+}
+
+/*!
  * @brief RF5_MISSILEの処理。マジック・ミサイル。 /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 対象の地点のy座標

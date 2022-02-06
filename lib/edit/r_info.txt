@@ -14275,7 +14275,7 @@ N:751:カオス・ボルテックス
 E:Chaos vortex
 G:v:v
 I:140:32d20:100:80:0
-W:55:1:0:4000:0:0
+W:55:2:0:4000:0:0
 F:ATTR_MULTI | ATTR_ANY |
 F:PREVENT_SUDDEN_MAGIC | NEVER_BLOW | 
 F:RAND_50 | RAND_25 | CAN_FLY |
@@ -15747,7 +15747,7 @@ F:ELDRITCH_HORROR | IM_COLD | RES_NETH | RES_DARK
 F:NO_CONF | NO_SLEEP | NO_STUN | QUANTUM | RAND_25
 F:REGENERATE | SELF_DARK_1 | SELF_DARK_2
 S:1_IN_5 | BR_NETH | BRAIN_SMASH | SCARE | S_UNDEAD | S_HI_UNDEAD
-S:DRAIN_MANA | HEAL | ANIM_DEAD
+S:DRAIN_MANA | HEAL | ANIM_DEAD | BO_ABYSS | BO_VOID | BR_ABYSS | BR_VOID | BA_VOID | BA_ABYSS
 D:$A black hole in the fabric of reality.
 D:$  It simply is not there.
 D:現実という生地に空いた黒い穴。これは「無」だ。
@@ -16450,8 +16450,8 @@ D:$The Chief of the Ringwraiths.  A fell being of devastating power.  His
 D:$spells are lethal and his combat blows crushingly hard.  He moves at 
 D:$speed, and commands legions of evil to do his bidding.  It is said that he 
 D:$is fated never to die by the hand of mortal man.
-D:指輪の幽鬼の隊長であり、破壊的な力を持った恐るべき存在だ。その呪文は信じ難
-D:たい威力を持ち、戦闘に際しては全てのものを打ち砕くかのような攻撃力を誇る。
+D:指輪の幽鬼の隊長であり、破壊的な力を持った恐るべき存在だ。その呪文は信じ難い
+D:威力を持ち、戦闘に際しては全てのものを打ち砕くかのような攻撃力を誇る。
 D:彼は素早く行動し、邪悪の者どもに命令を発して思い通りに操る。彼は死すべき人
 D:間の男の手では決して葬り去ることができないといわれている。
 
@@ -25680,13 +25680,17 @@ B:BITE:HURT:3d4
 B:BITE:HURT:3d4
 F:BASH_DOOR | WILD_GRASS | ANIMAL | PASS_WALL
 D:$This terrifying tiger used to escape nightly from the folding screen
-D:$ in a lord's mansion and eat people.  So the lord asked a child priest
-D:$ to get rid of the tiger.  The priest exorcised the tiger from the
-D:$ screen but did not catch it afterwards.  Now it roams as it wills.
+D:$ in a lord's mansion and eat people.
+D:$  So the lord asked a child priest to get rid of the tiger.
+D:$  The priest exorcised the tiger from the
+D:$ screen but did not catch it afterwards.
+D:$  Now it roams as it wills.
+D:$  Now it is settled in the Angband and breeding.
 D:この恐るべき虎は、さる殿様の屋敷に飾ってある屏風から毎晩抜け出しては
-D:人を食い殺している。
-D:そこで殿様は坊主に退治を依頼して屏風からこの虎を出したが、
-D:坊主は捕まえ損ねてそのまま逃げ出してしまった。
+D:人を食い殺していた。
+D:そこで殿様は坊主に退治を依頼して屏風からこの虎を出した。
+D:しかし坊主は捕まえ損ね、虎はそのまま逃げ出してしまった。
+D:それから幾星霜、この虎は鉄獄に居着いて繁殖している。
 
 # In Japan, also, taxi in Edo era and bird cage have pronunciation, 'kago'
 # Driver and painter have same pronunciation, 'kaki'
@@ -26690,3 +26694,34 @@ S:1_IN_1
 S:BO_PLAS
 D:$It is a brain-like monster on a machine with four spider-like legs.
 D:それは脳みそのような生き物で、蜘蛛のような脚を4つ持つ機械に乗っている。
+
+N:1351:ヴォイド・ボルテックス
+E:Void vortex
+G:v:v
+I:140:32d20:100:80:0
+W:55:2:0:4000:0:0
+F:ATTR_MULTI | ATTR_ANY |
+F:PREVENT_SUDDEN_MAGIC | NEVER_BLOW | 
+F:RAND_50 | RAND_25 | CAN_FLY |
+F:EMPTY_MIND | BASH_DOOR | POWERFUL | 
+F:RES_GRAV | RES_TELE | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
+S:1_IN_6 | BR_VOID
+V:150
+D:$It's a void whirlpool.
+D:空虚な渦巻きだ。
+
+N:1352:アビス・ボルテックス
+E:Abyss vortex
+G:v:v
+I:140:32d20:100:80:0
+W:55:2:0:4000:0:0
+F:ATTR_MULTI | ATTR_ANY |
+F:PREVENT_SUDDEN_MAGIC | NEVER_BLOW | 
+F:RAND_50 | RAND_25 | CAN_FLY |
+F:EMPTY_MIND | BASH_DOOR | POWERFUL | 
+F:HAS_DARK_1 | HAS_DARK_2 | RES_DARK | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
+S:1_IN_6 | BR_ABYSS
+V:150
+D:$It's a abyssal whirlpool.
+D:深淵の渦巻きだ。
+

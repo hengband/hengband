@@ -334,24 +334,21 @@ static void curse_call_monster(PlayerType *player_ptr)
 
 static void curse_cowardice(PlayerType *player_ptr)
 {
-    if (player_ptr->cursed.has_not(CurseTraitType::COWARDICE))
+    if (player_ptr->cursed.has_not(CurseTraitType::COWARDICE)) {
         return;
+    }
 
-    object_type *o_ptr;
-    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::COWARDICE);
-    int chance = 1500;
-    int duration = 13 + randint1(26);
-
+    auto *o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::COWARDICE);
+    auto chance = 1500;
+    short duration = 13 + randint1(26);
     if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         chance = 150;
         duration *= 2;
     }
     
-    if (!one_in_(chance))
+    if (!one_in_(chance) || (has_resist_fear(player_ptr) != 0)) {
         return;
-
-    if (has_resist_fear(player_ptr))
-        return;
+    }
 
     disturb(player_ptr, false, true);
     msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
@@ -364,21 +361,22 @@ static void curse_cowardice(PlayerType *player_ptr)
  */
 static void curse_berserk_rage(PlayerType *player_ptr)
 {
-    if (player_ptr->cursed.has_not(CurseTraitType::BERS_RAGE))
+    if (player_ptr->cursed.has_not(CurseTraitType::BERS_RAGE)) {
         return;
+    }
 
-    object_type *o_ptr;
-    o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::BERS_RAGE);
-    int chance = 1500;
-    int duration = 10 + randint1(player_ptr->lev);
+    auto *o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::BERS_RAGE);
+    auto chance = 1500;
+    short duration = 10 + randint1(player_ptr->lev);
 
     if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         chance = 150;
         duration *= 2;
     }
     
-    if (!one_in_(chance))
+    if (!one_in_(chance)) {
         return;
+    }
 
     disturb(player_ptr, false, true);
     msg_print(_("ウガァァア！", "RAAAAGHH!"));

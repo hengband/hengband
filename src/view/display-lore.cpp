@@ -311,14 +311,14 @@ void display_monster_move(lore_type *lore_ptr)
 
 void display_random_move(lore_type *lore_ptr)
 {
-    if (((lore_ptr->flags1 & RF1_RAND_50) == 0) && ((lore_ptr->flags1 & RF1_RAND_25) == 0))
+    if (lore_ptr->behavior_flags.has_none_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }))
         return;
 
-    if ((lore_ptr->flags1 & RF1_RAND_50) && (lore_ptr->flags1 & RF1_RAND_25)) {
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
         hooked_roff(_("かなり", " extremely"));
-    } else if (lore_ptr->flags1 & RF1_RAND_50) {
+    } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
         hooked_roff(_("幾分", " somewhat"));
-    } else if (lore_ptr->flags1 & RF1_RAND_25) {
+    } else if (lore_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
         hooked_roff(_("少々", " a bit"));
     }
 
@@ -329,7 +329,7 @@ void display_random_move(lore_type *lore_ptr)
 
 void display_monster_never_move(lore_type *lore_ptr)
 {
-    if ((lore_ptr->flags1 & RF1_NEVER_MOVE) == 0)
+    if (lore_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE))
         return;
 
     if (lore_ptr->old) {

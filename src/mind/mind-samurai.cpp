@@ -13,7 +13,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
@@ -471,7 +471,7 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-void musou_counterattack(PlayerType *player_ptr, monap_type *monap_ptr)
+void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
         || (player_ptr->csp <= 7))

@@ -10,24 +10,24 @@
 #include "artifact/fixed-art-types.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation-flag-types.h"
-#include "object-enchant/apply-magic-amulet.h"
-#include "object-enchant/apply-magic-armor.h"
-#include "object-enchant/apply-magic-boots.h"
-#include "object-enchant/apply-magic-cloak.h"
-#include "object-enchant/apply-magic-crown.h"
-#include "object-enchant/apply-magic-gloves.h"
-#include "object-enchant/apply-magic-helm.h"
-#include "object-enchant/apply-magic-others.h"
-#include "object-enchant/apply-magic-ring.h"
-#include "object-enchant/apply-magic-shield.h"
-#include "object-enchant/apply-magic-weapon.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/others/apply-magic-amulet.h"
+#include "object-enchant/others/apply-magic-others.h"
+#include "object-enchant/others/apply-magic-ring.h"
+#include "object-enchant/protector/apply-magic-armor.h"
+#include "object-enchant/protector/apply-magic-boots.h"
+#include "object-enchant/protector/apply-magic-cloak.h"
+#include "object-enchant/protector/apply-magic-crown.h"
+#include "object-enchant/protector/apply-magic-gloves.h"
+#include "object-enchant/protector/apply-magic-helm.h"
+#include "object-enchant/protector/apply-magic-shield.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
+#include "object-enchant/weapon/apply-magic-weapon.h"
 #include "object/object-kind.h"
 #include "player/player-status-flags.h"
 #include "sv-definition/sv-armor-types.h"
@@ -119,6 +119,7 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
         return;
     }
 
+    // @todo ファクトリパターンで抽象化する.
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
     case ItemKindType::HAFTED:
@@ -127,19 +128,19 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
         if (power != 0) {
-            apply_magic_weapon(player_ptr, o_ptr, lev, power);
+            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         }
 
         break;
     case ItemKindType::POLEARM:
         if ((power != 0) && (o_ptr->sval != SV_DEATH_SCYTHE)) {
-            apply_magic_weapon(player_ptr, o_ptr, lev, power);
+            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         }
 
         break;
     case ItemKindType::SWORD:
         if ((power != 0) && (o_ptr->sval != SV_POISON_NEEDLE)) {
-            apply_magic_weapon(player_ptr, o_ptr, lev, power);
+            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         }
 
         break;

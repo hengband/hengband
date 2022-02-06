@@ -7,12 +7,12 @@
 #include "object/object-stack.h"
 #include "game-option/game-play-options.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/object-smith.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "smith/object-smith.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/object-type-definition.h"
 

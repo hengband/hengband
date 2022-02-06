@@ -8,17 +8,15 @@
  * @details 純粋仮想関数につき、必要なメンバ変数は派生クラスで設定すること
  */
 
-#include "system/angband.h"
-
 struct object_type;
 class PlayerType;
 class EnchanterBase {
 public:
     virtual void apply_magic() = 0;
+    virtual ~EnchanterBase() = default;
 
 protected:
     EnchanterBase() = default;
-    virtual ~EnchanterBase() = default;
     virtual void enchant() = 0;
     virtual void give_ego_index() = 0;
     virtual void give_high_ego_index() = 0;

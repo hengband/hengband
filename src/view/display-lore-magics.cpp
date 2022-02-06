@@ -46,13 +46,13 @@ void display_monster_magic_types(lore_type *lore_ptr)
     }
 
 #ifdef JP
-    if (lore_ptr->flags2 & (RF2_SMART))
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::SMART))
         hook_c_roff(TERM_YELLOW, "的確に");
 
     hooked_roff("魔法を使うことができ、");
 #else
     hooked_roff(" magical, casting spells");
-    if (lore_ptr->flags2 & RF2_SMART)
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::SMART))
         hook_c_roff(TERM_YELLOW, " intelligently");
 #endif
 

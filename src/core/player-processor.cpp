@@ -13,9 +13,9 @@
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
+#include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
-#include "game-option/cheat-options.h"
 #include "grid/grid.h"
 #include "inventory/pack-overflow.h"
 #include "io/cursor.h"
@@ -76,7 +76,7 @@ static void process_fishing(PlayerType *player_ptr)
         get_mon_num_prep(player_ptr, monster_is_fishing_target, nullptr);
         r_idx = get_mon_num(player_ptr, 0,
             is_in_dungeon(player_ptr) ? player_ptr->current_floor_ptr->dun_level
-                                                       : wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level,
+                                      : wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level,
             0);
         msg_print(nullptr);
         if (r_idx && one_in_(2)) {
@@ -131,11 +131,11 @@ void process_player(PlayerType *player_ptr)
             if (!monster_is_valid(m_ptr))
                 continue;
 
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
+            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, m_idx, false);
         }
 
-        WorldTurnProcessor(player_ptr).print_time();        
+        WorldTurnProcessor(player_ptr).print_time();
     } else if (!(load && player_ptr->energy_need <= 0)) {
         player_ptr->energy_need -= SPEED_TO_ENERGY(player_ptr->pspeed);
     }
@@ -159,9 +159,7 @@ void process_player(PlayerType *player_ptr)
             auto effects = player_ptr->effects();
             auto is_stunned = effects->stun()->is_stunned();
             auto is_cut = effects->cut()->is_cut();
-            if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp >= player_ptr->msp) && !player_ptr->blind && !player_ptr->confused
-                && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow
-                && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality) {
+            if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp >= player_ptr->msp) && !player_ptr->blind && !player_ptr->confused && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality) {
                 set_action(player_ptr, ACTION_NONE);
             }
         }
@@ -339,7 +337,7 @@ void process_player(PlayerType *player_ptr)
                 r_ptr = &r_info[m_ptr->ap_r_idx];
 
                 // モンスターのシンボル/カラーの更新
-                if (m_ptr->ml && any_bits(r_ptr->flags1, (RF1_ATTR_MULTI | RF1_SHAPECHANGER))) {
+                if (m_ptr->ml && r_ptr->visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
                     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
                 }
 
@@ -374,7 +372,8 @@ void process_player(PlayerType *player_ptr)
 
             if (player_ptr->pclass == PlayerClassType::IMITATOR) {
                 auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
-                if (static_cast<int>(mane_data->mane_list.size()) > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2 : 1)) {
+                if (static_cast<int>(mane_data->mane_list.size()) > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2
+                                                                                                                     : 1)) {
                     mane_data->mane_list.pop_front();
                 }
 

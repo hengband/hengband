@@ -22,15 +22,15 @@
  */
 static concptr attr_to_text(monster_race *r_ptr)
 {
-    if (any_bits(r_ptr->flags1, RF1_ATTR_CLEAR)) {
+    if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR_COLOR)) {
         return _("透明な", "Clear");
     }
 
-    if (any_bits(r_ptr->flags1, RF1_ATTR_MULTI)) {
+    if (r_ptr->visual_flags.has(MonsterVisualType::MULTI_COLOR)) {
         return _("万色の", "Multi");
     }
 
-    if (any_bits(r_ptr->flags1, RF1_ATTR_SEMIRAND)) {
+    if (r_ptr->visual_flags.has(MonsterVisualType::RANDOM_COLOR)) {
         return _("準ランダムな", "S.Rand");
     }
 

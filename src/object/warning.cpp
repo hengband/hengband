@@ -49,8 +49,9 @@ object_type *choose_warning_item(PlayerType *player_ptr)
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
 
     /* Paranoia -- Player has no warning ability */
-    if (!player_ptr->warning)
+    if (!player_ptr->warning) {
         return nullptr;
+    }
 
     /* Search Inventory */
     int number = 0;
@@ -134,8 +135,9 @@ static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, Attribute
 
     case AttributeType::DARK:
         dam = dam * calc_dark_damage_rate(player_ptr, CALC_MAX) / 100;
-        if (has_immune_dark(player_ptr) || player_ptr->wraith_form)
+        if (has_immune_dark(player_ptr) || player_ptr->wraith_form) {
             ignore_wraith_form = true;
+        }
         break;
 
     case AttributeType::SHARDS:
@@ -188,8 +190,9 @@ static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, Attribute
 
     case AttributeType::DEATH_RAY:
         dam = dam * calc_deathray_damage_rate(player_ptr, CALC_MAX) / 100;
-        if (dam == 0)
+        if (dam == 0) {
             ignore_wraith_form = true;
+        }
         break;
 
     case AttributeType::HOLY_FIRE:
@@ -198,6 +201,14 @@ static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, Attribute
 
     case AttributeType::HELL_FIRE:
         dam = dam * calc_hell_fire_damage_rate(player_ptr, CALC_MAX) / 100;
+        break;
+
+    case AttributeType::ABYSS:
+        dam = dam * calc_abyss_damage_rate(player_ptr, CALC_MAX) / 100;
+        break;
+
+    case AttributeType::VOID_MAGIC:
+        dam = dam * calc_void_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
     case AttributeType::MIND_BLAST:
@@ -233,12 +244,14 @@ static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, Attribute
 
     if (player_ptr->wraith_form && !ignore_wraith_form) {
         dam /= 2;
-        if (!dam)
+        if (!dam) {
             dam = 1;
+        }
     }
 
-    if (dam > *max)
+    if (dam > *max) {
         *max = dam;
+    }
 }
 
 /*!
@@ -324,8 +337,9 @@ static int blow_damcalc(monster_type *m_ptr, PlayerType *player_ptr, monster_blo
 
     if (check_wraith_form && player_ptr->wraith_form) {
         dam /= 2;
-        if (!dam)
+        if (!dam) {
             dam = 1;
+        }
     }
 
     return dam;
@@ -354,20 +368,24 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             monster_type *m_ptr;
             monster_race *r_ptr;
 
-            if (!in_bounds(player_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE))
+            if (!in_bounds(player_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) {
                 continue;
+            }
 
             g_ptr = &player_ptr->current_floor_ptr->grid_array[my][mx];
 
-            if (!g_ptr->m_idx)
+            if (!g_ptr->m_idx) {
                 continue;
+            }
 
             m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
-            if (monster_csleep_remaining(m_ptr))
+            if (monster_csleep_remaining(m_ptr)) {
                 continue;
-            if (!is_hostile(m_ptr))
+            }
+            if (!is_hostile(m_ptr)) {
                 continue;
+            }
 
             r_ptr = &r_info[m_ptr->r_idx];
 
@@ -376,70 +394,110 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 const auto flags = r_ptr->ability_flags;
 
                 if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MAGIC)) {
-                    if (flags.has(MonsterAbilityType::BA_CHAO))
+                    if (flags.has(MonsterAbilityType::BA_CHAO)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_CHAO, AttributeType::CHAOS, g_ptr->m_idx, &dam_max0);
-                    if (flags.has(MonsterAbilityType::BA_MANA))
+                    }
+                    if (flags.has(MonsterAbilityType::BA_MANA)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_MANA, AttributeType::MANA, g_ptr->m_idx, &dam_max0);
-                    if (flags.has(MonsterAbilityType::BA_DARK))
+                    }
+                    if (flags.has(MonsterAbilityType::BA_DARK)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_DARK, AttributeType::DARK, g_ptr->m_idx, &dam_max0);
-                    if (flags.has(MonsterAbilityType::BA_LITE))
+                    }
+                    if (flags.has(MonsterAbilityType::BA_LITE)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_LITE, AttributeType::LITE, g_ptr->m_idx, &dam_max0);
-                    if (flags.has(MonsterAbilityType::HAND_DOOM))
+                    }
+                    if (flags.has(MonsterAbilityType::HAND_DOOM)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::HAND_DOOM, AttributeType::HAND_DOOM, g_ptr->m_idx, &dam_max0);
-                    if (flags.has(MonsterAbilityType::PSY_SPEAR))
+                    }
+                    if (flags.has(MonsterAbilityType::PSY_SPEAR)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::PSY_SPEAR, AttributeType::PSY_SPEAR, g_ptr->m_idx, &dam_max0);
+                    }
+                    if (flags.has(MonsterAbilityType::BA_VOID)) {
+                        spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_VOID, AttributeType::VOID_MAGIC, g_ptr->m_idx, &dam_max0);
+                    }
+                    if (flags.has(MonsterAbilityType::BA_ABYSS)) {
+                        spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_ABYSS, AttributeType::ABYSS, g_ptr->m_idx, &dam_max0);
+                    }
                 }
 
-                if (flags.has(MonsterAbilityType::ROCKET))
+                if (flags.has(MonsterAbilityType::ROCKET)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::ROCKET, AttributeType::ROCKET, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_ACID))
+                }
+                if (flags.has(MonsterAbilityType::BR_ACID)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_ACID, AttributeType::ACID, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_ELEC))
+                }
+                if (flags.has(MonsterAbilityType::BR_ELEC)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_ELEC, AttributeType::ELEC, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_FIRE))
+                }
+                if (flags.has(MonsterAbilityType::BR_FIRE)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_FIRE, AttributeType::FIRE, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_COLD))
+                }
+                if (flags.has(MonsterAbilityType::BR_COLD)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_COLD, AttributeType::COLD, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_POIS))
+                }
+                if (flags.has(MonsterAbilityType::BR_POIS)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_POIS, AttributeType::POIS, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_NETH))
+                }
+                if (flags.has(MonsterAbilityType::BR_NETH)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_NETH, AttributeType::NETHER, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_LITE))
+                }
+                if (flags.has(MonsterAbilityType::BR_LITE)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_LITE, AttributeType::LITE, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_DARK))
+                }
+                if (flags.has(MonsterAbilityType::BR_DARK)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_DARK, AttributeType::DARK, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_CONF))
+                }
+                if (flags.has(MonsterAbilityType::BR_CONF)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_CONF, AttributeType::CONFUSION, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_SOUN))
+                }
+                if (flags.has(MonsterAbilityType::BR_SOUN)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_SOUN, AttributeType::SOUND, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_CHAO))
+                }
+                if (flags.has(MonsterAbilityType::BR_CHAO)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_CHAO, AttributeType::CHAOS, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_DISE))
+                }
+                if (flags.has(MonsterAbilityType::BR_DISE)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_DISE, AttributeType::DISENCHANT, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_NEXU))
+                }
+                if (flags.has(MonsterAbilityType::BR_NEXU)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_NEXU, AttributeType::NEXUS, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_TIME))
+                }
+                if (flags.has(MonsterAbilityType::BR_TIME)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_TIME, AttributeType::TIME, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_INER))
+                }
+                if (flags.has(MonsterAbilityType::BR_INER)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_INER, AttributeType::INERTIAL, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_GRAV))
+                }
+                if (flags.has(MonsterAbilityType::BR_GRAV)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_GRAV, AttributeType::GRAVITY, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_SHAR))
+                }
+                if (flags.has(MonsterAbilityType::BR_SHAR)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_SHAR, AttributeType::SHARDS, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_PLAS))
+                }
+                if (flags.has(MonsterAbilityType::BR_PLAS)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_PLAS, AttributeType::PLASMA, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_FORC))
+                }
+                if (flags.has(MonsterAbilityType::BR_FORC)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_FORC, AttributeType::FORCE, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_MANA))
+                }
+                if (flags.has(MonsterAbilityType::BR_MANA)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_MANA, AttributeType::MANA, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_NUKE))
+                }
+                if (flags.has(MonsterAbilityType::BR_NUKE)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_NUKE, AttributeType::NUKE, g_ptr->m_idx, &dam_max0);
-                if (flags.has(MonsterAbilityType::BR_DISI))
+                }
+                if (flags.has(MonsterAbilityType::BR_DISI)) {
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_DISI, AttributeType::DISINTEGRATE, g_ptr->m_idx, &dam_max0);
+                }
+                if (flags.has(MonsterAbilityType::BR_VOID)) {
+                    spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_VOID, AttributeType::VOID_MAGIC, g_ptr->m_idx, &dam_max0);
+                }
+                if (flags.has(MonsterAbilityType::BR_ABYSS)) {
+                    spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_ABYSS, AttributeType::ABYSS, g_ptr->m_idx, &dam_max0);
+                }
             }
-
             /* Monster melee attacks */
-            if ((r_ptr->flags1 & RF1_NEVER_BLOW) || d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                 dam_max += dam_max0;
                 continue;
             }
@@ -452,17 +510,20 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             int dam_melee = 0;
             for (int m = 0; m < 4; m++) {
                 /* Skip non-attacks */
-                if (r_ptr->blow[m].method == RaceBlowMethodType::NONE || (r_ptr->blow[m].method == RaceBlowMethodType::SHOOT))
+                if (r_ptr->blow[m].method == RaceBlowMethodType::NONE || (r_ptr->blow[m].method == RaceBlowMethodType::SHOOT)) {
                     continue;
+                }
 
                 /* Extract the attack info */
                 dam_melee += blow_damcalc(m_ptr, player_ptr, &r_ptr->blow[m]);
-                if (r_ptr->blow[m].method == RaceBlowMethodType::EXPLODE)
+                if (r_ptr->blow[m].method == RaceBlowMethodType::EXPLODE) {
                     break;
+                }
             }
 
-            if (dam_melee > dam_max0)
+            if (dam_melee > dam_max0) {
                 dam_max0 = dam_melee;
+            }
             dam_max += dam_max0;
         }
     }
@@ -474,29 +535,33 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         if (dam_max > player_ptr->chp / 2) {
             object_type *o_ptr = choose_warning_item(player_ptr);
 
-            if (o_ptr)
+            if (o_ptr) {
                 describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-            else
+            } else {
                 strcpy(o_name, _("体", "body")); /* Warning ability without item */
+            }
             msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
 
             disturb(player_ptr, false, true);
             return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
         }
-    } else
+    } else {
         old_damage = old_damage / 2;
+    }
 
     g_ptr = &player_ptr->current_floor_ptr->grid_array[yy][xx];
     bool is_warning = (!easy_disarm && is_trap(player_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat));
     is_warning &= !one_in_(13);
-    if (!is_warning)
+    if (!is_warning) {
         return true;
+    }
 
     object_type *o_ptr = choose_warning_item(player_ptr);
-    if (o_ptr != nullptr)
+    if (o_ptr != nullptr) {
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    else
+    } else {
         strcpy(o_name, _("体", "body")); /* Warning ability without item */
+    }
     msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
     disturb(player_ptr, false, true);
     return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));

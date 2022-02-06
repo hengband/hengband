@@ -78,8 +78,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         if (!are_enemies(player_ptr, m_ptr, t_ptr))
             continue;
 
-        if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr)))
-            || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != player_ptr->riding))) {
+        if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr))) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != player_ptr->riding))) {
             if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
                 continue;
         } else {
@@ -148,25 +147,25 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
 static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) && (randint0(100) < 75)) {
+    if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 75)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
+            r_ptr->r_behavior_flags.set({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 });
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
-    if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 50)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 50)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flags1 |= RF1_RAND_50;
+            r_ptr->r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_50);
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
-    if ((r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 25)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 25)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flags1 |= RF1_RAND_25;
+            r_ptr->r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_25);
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
@@ -188,7 +187,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
     if (!is_pet(m_ptr)) {
         return false;
     }
-    
+
     bool avoid = ((msd->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - msd->player_ptr->pet_follow_distance)));
     bool lonely = (!avoid && (m_ptr->cdis > msd->player_ptr->pet_follow_distance));
     bool distant = (m_ptr->cdis > PET_SEEK_DIST);
@@ -200,7 +199,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
     if (!avoid && !lonely && !distant) {
         return true;
     }
-    
+
     POSITION dis = msd->player_ptr->pet_follow_distance;
     if (msd->player_ptr->pet_follow_distance > PET_SEEK_DIST) {
         msd->player_ptr->pet_follow_distance = PET_SEEK_DIST;
@@ -232,8 +231,8 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
     if (random_walk(player_ptr, mm, m_ptr)) {
         return true;
     }
-    
-    if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1)) {
+
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) && (m_ptr->cdis > 1)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
@@ -242,7 +241,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
     if (decide_pet_movement_direction(&msd)) {
         return true;
     }
-    
+
     if (!is_hostile(m_ptr)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         get_enemy_dir(player_ptr, m_idx, mm);

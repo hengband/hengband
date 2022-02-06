@@ -9,7 +9,7 @@
 #include "effect/effect-processor.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
@@ -30,7 +30,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-static void aura_fire_by_monster_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static void aura_fire_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!has_sh_fire(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
@@ -53,7 +53,7 @@ static void aura_fire_by_monster_attack(PlayerType *player_ptr, monap_type *mona
     }
 }
 
-static void aura_elec_by_monster_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static void aura_elec_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!has_sh_elec(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
@@ -76,7 +76,7 @@ static void aura_elec_by_monster_attack(PlayerType *player_ptr, monap_type *mona
     }
 }
 
-static void aura_cold_by_monster_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static void aura_cold_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!has_sh_cold(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
@@ -99,7 +99,7 @@ static void aura_cold_by_monster_attack(PlayerType *player_ptr, monap_type *mona
     }
 }
 
-static void aura_shards_by_monster_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static void aura_shards_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!player_ptr->dustrobe || !monap_ptr->alive || player_ptr->is_dead)
         return;
@@ -123,7 +123,7 @@ static void aura_shards_by_monster_attack(PlayerType *player_ptr, monap_type *mo
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
 }
 
-static void aura_holy_by_monster_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!player_ptr->tim_sh_holy || !monap_ptr->alive || player_ptr->is_dead)
         return;
@@ -152,7 +152,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, monap_type *mona
         r_ptr->r_flags3 |= RF3_EVIL;
 }
 
-static void aura_force_by_monster_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static void aura_force_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!player_ptr->tim_sh_touki || !monap_ptr->alive || player_ptr->is_dead)
         return;
@@ -175,7 +175,7 @@ static void aura_force_by_monster_attack(PlayerType *player_ptr, monap_type *mon
     }
 }
 
-static void aura_shadow_by_monster_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!SpellHex(player_ptr).is_spelling_specific(HEX_SHADOW_CLOAK) || !monap_ptr->alive || player_ptr->is_dead)
         return;
@@ -227,7 +227,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, monap_type *mo
     }
 }
 
-void process_aura_counterattack(PlayerType *player_ptr, monap_type *monap_ptr)
+void process_aura_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (!monap_ptr->touched)
         return;

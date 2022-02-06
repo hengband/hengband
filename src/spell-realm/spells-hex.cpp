@@ -5,7 +5,7 @@
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
 #include "player-base/player-class.h"
 #include "player-info/spell-hex-data-type.h"
@@ -54,7 +54,7 @@ SpellHex::SpellHex(PlayerType *player_ptr)
     }
 }
 
-SpellHex::SpellHex(PlayerType *player_ptr, monap_type *monap_ptr)
+SpellHex::SpellHex(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     : player_ptr(player_ptr)
     , monap_ptr(monap_ptr)
 {

@@ -52,8 +52,7 @@ static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, effect_monst
  */
 static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_ptr)
 {
-    bool has_resistance = any_bits(em_ptr->r_ptr->flags2, RF2_STUPID | RF2_WEIRD_MIND) || any_bits(em_ptr->r_ptr->flags3, RF3_ANIMAL)
-        || (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
+    bool has_resistance = em_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID) || any_bits(em_ptr->r_ptr->flags2, RF2_WEIRD_MIND) || any_bits(em_ptr->r_ptr->flags3, RF3_ANIMAL) || (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
     if (!has_resistance)
         return false;
 
