@@ -340,7 +340,7 @@ static void curse_cowardice(PlayerType *player_ptr)
 
     auto *o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::COWARDICE);
     auto chance = 1500;
-    int duration = 13 + randint1(26);
+    short duration = 13 + randint1(26);
     if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         chance = 150;
         duration *= 2;
@@ -367,7 +367,7 @@ static void curse_berserk_rage(PlayerType *player_ptr)
 
     auto *o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::BERS_RAGE);
     auto chance = 1500;
-    int duration = 10 + randint1(player_ptr->lev);
+    short duration = 10 + randint1(player_ptr->lev);
 
     if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         chance = 150;
