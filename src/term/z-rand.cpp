@@ -83,6 +83,9 @@ int rand_range(int a, int b)
  */
 int16_t randnor(int mean, int stand)
 {
+    if (stand <= 0) {
+        return static_cast<int16_t>(mean);
+    }
     std::normal_distribution<> d(mean, stand);
     auto result = std::round(d(w_ptr->rng));
     return static_cast<int16_t>(result);
