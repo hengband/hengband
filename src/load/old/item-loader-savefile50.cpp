@@ -98,7 +98,10 @@ void ItemLoader50::rd_item(object_type *o_ptr)
     }
 
     o_ptr->held_m_idx = any_bits(flags, SaveDataItemFlagType::HELD_M_IDX) ? rd_s16b() : 0;
-    o_ptr->xtra1 = any_bits(flags, SaveDataItemFlagType::XTRA1) ? rd_byte() : 0;
+    if (any_bits(flags, SaveDataItemFlagType::XTRA1)) {
+        strip_bytes(1);
+    }
+
     if (any_bits(flags, SaveDataItemFlagType::ACTIVATION_ID)) {
         if (h_older_than(3, 0, 0, 2)) {
             o_ptr->activation_id = i2enum<RandomArtActType>(rd_byte());

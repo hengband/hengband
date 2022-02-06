@@ -344,7 +344,7 @@ static void wiz_display_item(PlayerType *player_ptr, object_type *o_ptr)
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
     prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
-    prt(format("ident = %04x  xtra1 = %-4d  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->xtra1, o_ptr->activation_id, o_ptr->timeout), 8, j);
+    prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), 8, j);
     prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
     prt("+------------FLAGS1------------+", 10, j);

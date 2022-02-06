@@ -232,9 +232,6 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
     if (o_ptr->art_flags != j_ptr->art_flags)
         return false;
 
-    if (o_ptr->xtra1 || j_ptr->xtra1)
-        return false;
-
     if (o_ptr->timeout || j_ptr->timeout)
         return false;
 

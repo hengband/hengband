@@ -61,9 +61,6 @@ static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->held_m_idx)
         set_bits(*flags, SaveDataItemFlagType::HELD_M_IDX);
 
-    if (o_ptr->xtra1)
-        set_bits(*flags, SaveDataItemFlagType::XTRA1);
-
     if (o_ptr->activation_id > RandomArtActType::NONE)
         set_bits(*flags, SaveDataItemFlagType::ACTIVATION_ID);
 
@@ -139,9 +136,6 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
 
     if (any_bits(flags, SaveDataItemFlagType::HELD_M_IDX))
         wr_s16b(o_ptr->held_m_idx);
-
-    if (any_bits(flags, SaveDataItemFlagType::XTRA1))
-        wr_byte(o_ptr->xtra1);
 
     if (any_bits(flags, SaveDataItemFlagType::ACTIVATION_ID))
         wr_s16b(enum2i(o_ptr->activation_id));

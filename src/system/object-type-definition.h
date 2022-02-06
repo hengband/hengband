@@ -36,7 +36,6 @@ typedef struct object_type {
     ARTIFACT_IDX name1{}; /*!< Artifact type, if any */
     EGO_IDX name2{}; /*!< Ego-Item type, if any */
 
-    XTRA8 xtra1{}; /*!< Extra info type (now unused) */
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     XTRA8 xtra3{}; /*!< 複数の使用用途 捕らえたモンスターの速度 / Extra info */
     XTRA16 xtra4{}; /*!< 複数の使用用途 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
