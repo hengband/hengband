@@ -12,6 +12,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-flags9.h"
+#include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
 
 #include <string_view>
@@ -31,3 +32,4 @@ extern const std::unordered_map<std::string_view, race_flags9> r_info_flags9;
 extern const std::unordered_map<std::string_view, race_flags_resistance> r_info_flagsr;
 extern const std::unordered_map<std::string_view, MonsterAuraType> r_info_aura_flags;
 extern const std::unordered_map<std::string_view, MonsterBehaviorType> r_info_behavior_flags;
+extern const std::unordered_map<std::string_view, MonsterVisualType> r_info_visual_flags;

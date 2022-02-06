@@ -36,29 +36,41 @@ static bool grab_one_dungeon_flag(dungeon_type *d_ptr, std::string_view what)
  */
 static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view what)
 {
-    if (info_grab_one_flag(d_ptr->mflags1, r_info_flags1, what))
+    if (info_grab_one_flag(d_ptr->mflags1, r_info_flags1, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(d_ptr->mflags2, r_info_flags2, what))
+    if (info_grab_one_flag(d_ptr->mflags2, r_info_flags2, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(d_ptr->mflags3, r_info_flags3, what))
+    if (info_grab_one_flag(d_ptr->mflags3, r_info_flags3, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(d_ptr->mflags7, r_info_flags7, what))
+    if (info_grab_one_flag(d_ptr->mflags7, r_info_flags7, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(d_ptr->mflags8, r_info_flags8, what))
+    if (info_grab_one_flag(d_ptr->mflags8, r_info_flags8, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(d_ptr->mflags9, r_info_flags9, what))
+    if (info_grab_one_flag(d_ptr->mflags9, r_info_flags9, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(d_ptr->mflagsr, r_info_flagsr, what))
+    if (info_grab_one_flag(d_ptr->mflagsr, r_info_flagsr, what)) {
         return true;
+    }
 
-    if (EnumClassFlagGroup<MonsterBehaviorType>::grab_one_flag(d_ptr->mon_behavior_flags, r_info_behavior_flags, what))
+    if (EnumClassFlagGroup<MonsterBehaviorType>::grab_one_flag(d_ptr->mon_behavior_flags, r_info_behavior_flags, what)) {
         return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterVisualType>::grab_one_flag(d_ptr->mon_visual_flags, r_info_visual_flags, what)) {
+        return true;
+    }
 
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
     return false;

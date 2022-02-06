@@ -19,32 +19,43 @@
  */
 static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
 {
-    if (info_grab_one_flag(r_ptr->flags1, r_info_flags1, what))
+    if (info_grab_one_flag(r_ptr->flags1, r_info_flags1, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(r_ptr->flags2, r_info_flags2, what))
+    if (info_grab_one_flag(r_ptr->flags2, r_info_flags2, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(r_ptr->flags3, r_info_flags3, what))
+    if (info_grab_one_flag(r_ptr->flags3, r_info_flags3, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(r_ptr->flags7, r_info_flags7, what))
+    if (info_grab_one_flag(r_ptr->flags7, r_info_flags7, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(r_ptr->flags8, r_info_flags8, what))
+    if (info_grab_one_flag(r_ptr->flags8, r_info_flags8, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(r_ptr->flags9, r_info_flags9, what))
+    if (info_grab_one_flag(r_ptr->flags9, r_info_flags9, what)) {
         return true;
+    }
 
-    if (info_grab_one_flag(r_ptr->flagsr, r_info_flagsr, what))
+    if (info_grab_one_flag(r_ptr->flagsr, r_info_flagsr, what)) {
         return true;
+    }
 
     if (EnumClassFlagGroup<MonsterAuraType>::grab_one_flag(r_ptr->aura_flags, r_info_aura_flags, what)) {
         return true;
     }
 
     if (EnumClassFlagGroup<MonsterBehaviorType>::grab_one_flag(r_ptr->behavior_flags, r_info_behavior_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterVisualType>::grab_one_flag(r_ptr->visual_flags, r_info_visual_flags, what)) {
         return true;
     }
 

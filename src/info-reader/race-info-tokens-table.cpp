@@ -2,6 +2,7 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-visual-flags.h"
 
 /*!
  * モンスターの打撃手段トークンの定義 /
@@ -88,14 +89,9 @@ const std::unordered_map<std::string_view, race_flags1> r_info_flags1 = {
     { "QUESTOR", RF1_QUESTOR },
     { "MALE", RF1_MALE },
     { "FEMALE", RF1_FEMALE },
-    { "CHAR_CLEAR", RF1_CHAR_CLEAR },
-    { "SHAPECHANGER", RF1_SHAPECHANGER },
-    { "ATTR_CLEAR", RF1_ATTR_CLEAR },
-    { "ATTR_MULTI", RF1_ATTR_MULTI },
     { "FORCE_DEPTH", RF1_FORCE_DEPTH },
     { "FORCE_MAXHP", RF1_FORCE_MAXHP },
     { "FORCE_EXTRA", RF1_FORCE_EXTRA },
-    { "ATTR_SEMIRAND", RF1_ATTR_SEMIRAND },
     { "FRIENDS", RF1_FRIENDS },
     { "ESCORT", RF1_ESCORT },
     { "ESCORTS", RF1_ESCORTS },
@@ -125,7 +121,6 @@ const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
     { "MULTIPLY", RF2_MULTIPLY },
     { "REGENERATE", RF2_REGENERATE },
     { "CHAR_MULTI", RF2_CHAR_MULTI },
-    { "ATTR_ANY", RF2_ATTR_ANY },
     { "POWERFUL", RF2_POWERFUL },
     { "ELDRITCH_HORROR", RF2_ELDRITCH_HORROR },
     { "FLAGS2_XX14", RF2_XX14 },
@@ -431,4 +426,13 @@ const std::unordered_map<std::string_view, MonsterBehaviorType> r_info_behavior_
     { "SMART", MonsterBehaviorType::SMART },
     { "FRIENDLY", MonsterBehaviorType::FRIENDLY },
     { "PREVENT_SUDDEN_MAGIC", MonsterBehaviorType::PREVENT_SUDDEN_MAGIC },
+};
+
+const std::unordered_map<std::string_view, MonsterVisualType> r_info_visual_flags = {
+    { "CHAR_CLEAR", MonsterVisualType::CLEAR },
+    { "SHAPECHANGER", MonsterVisualType::SHAPECHANGER },
+    { "ATTR_CLEAR", MonsterVisualType::CLEAR_COLOR },
+    { "ATTR_MULTI", MonsterVisualType::MULTI_COLOR },
+    { "ATTR_SEMIRAND", MonsterVisualType::RANDOM_COLOR },
+    { "ATTR_ANY", MonsterVisualType::ANY_COLOR },
 };

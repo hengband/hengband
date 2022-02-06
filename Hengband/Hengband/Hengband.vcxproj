@@ -936,6 +936,7 @@
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h" />
+    <ClInclude Include="..\..\src\monster-race\race-visual-flags.h" />
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.h" />
     <ClInclude Include="..\..\src\smith\object-smith.h" />
