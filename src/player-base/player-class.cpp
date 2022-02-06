@@ -34,6 +34,11 @@ PlayerClass::PlayerClass(PlayerType *player_ptr)
 {
 }
 
+bool PlayerClass::equals(PlayerClassType type) const
+{
+    return this->player_ptr->pclass == type;
+}
+
 /*!
  * @brief プレイヤーの職業により得られる特性フラグを返す
  */

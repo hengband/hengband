@@ -11,12 +11,13 @@
 
 enum class SamuraiStanceType : uint8_t;
 enum class MonkStanceType : uint8_t;
-
+enum class PlayerClassType : short;
 class PlayerClass {
 public:
     PlayerClass(PlayerType *player_ptr);
     virtual ~PlayerClass() = default;
 
+    bool equals(PlayerClassType type) const;
     TrFlags tr_flags() const;
     TrFlags stance_tr_flags() const;
 
