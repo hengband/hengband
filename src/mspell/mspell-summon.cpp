@@ -855,7 +855,7 @@ MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POS
     }
 
     if (player_ptr->blind && count && mon_to_player) {
-        msg_print(_("不死の者が近くに現れるのが聞こえた。", "You hear immortal beings appear nearby."));
+        msg_print(_("何者かが次元を超えて現れた気配がした。", "You feel shadow shifting by immortal beings."));
     }
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
