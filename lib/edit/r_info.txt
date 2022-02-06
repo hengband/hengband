@@ -25680,13 +25680,17 @@ B:BITE:HURT:3d4
 B:BITE:HURT:3d4
 F:BASH_DOOR | WILD_GRASS | ANIMAL | PASS_WALL
 D:$This terrifying tiger used to escape nightly from the folding screen
-D:$ in a lord's mansion and eat people.  So the lord asked a child priest
-D:$ to get rid of the tiger.  The priest exorcised the tiger from the
-D:$ screen but did not catch it afterwards.  Now it roams as it wills.
+D:$ in a lord's mansion and eat people.
+D:$  So the lord asked a child priest to get rid of the tiger.
+D:$  The priest exorcised the tiger from the
+D:$ screen but did not catch it afterwards.
+D:$  Now it roams as it wills.
+D:$  Now it is settled in the Angband and breeding.
 D:この恐るべき虎は、さる殿様の屋敷に飾ってある屏風から毎晩抜け出しては
-D:人を食い殺している。
-D:そこで殿様は坊主に退治を依頼して屏風からこの虎を出したが、
-D:坊主は捕まえ損ねてそのまま逃げ出してしまった。
+D:人を食い殺していた。
+D:そこで殿様は坊主に退治を依頼して屏風からこの虎を出した。
+D:しかし坊主は捕まえ損ね、虎はそのまま逃げ出してしまった。
+D:それから幾星霜、この虎は鉄獄に居着いて繁殖している。
 
 # In Japan, also, taxi in Edo era and bird cage have pronunciation, 'kago'
 # Driver and painter have same pronunciation, 'kaki'
