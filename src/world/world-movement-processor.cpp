@@ -1,4 +1,4 @@
-#include "world/world-movement-processor.h"
+﻿#include "world/world-movement-processor.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
@@ -18,7 +18,6 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 
 /*!
  * @brief プレイヤーの現在ダンジョンIDと階層に応じて、ダンジョン内ランクエの自動放棄を行う

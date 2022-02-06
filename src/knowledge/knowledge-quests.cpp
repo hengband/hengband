@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief 既知のクエストを表示する
  * @date 2020/04/23
  * @author Hourier
@@ -236,7 +236,7 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, int16_
         }
     }
 
-    if (!total)
+    if (total == 0)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
@@ -259,7 +259,7 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, int16_t q
         }
     }
 
-    if (!total)
+    if (total == 0)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
@@ -282,7 +282,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
         }
     }
 
-    if (!total)
+    if (total == 0)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 

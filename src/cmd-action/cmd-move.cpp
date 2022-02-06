@@ -1,4 +1,4 @@
-#include "cmd-action/cmd-move.h"
+﻿#include "cmd-action/cmd-move.h"
 #include "action/action-limited.h"
 #include "action/movement-execution.h"
 #include "action/run-execution.h"
@@ -23,9 +23,9 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
-#include "mind/mind-ninja.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-ninja.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
@@ -441,9 +441,7 @@ void do_cmd_rest(PlayerType *player_ptr)
     auto effects = player_ptr->effects();
     auto is_stunned = effects->stun()->is_stunned();
     auto is_cut = effects->cut()->is_cut();
-    if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp == player_ptr->msp) && !player_ptr->blind && !player_ptr->confused
-        && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed
-        && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality)
+    if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp == player_ptr->msp) && !player_ptr->blind && !player_ptr->confused && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality)
         chg_virtue(player_ptr, V_DILIGENCE, -1);
 
     player_ptr->resting = command_arg;

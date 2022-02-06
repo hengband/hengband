@@ -1,4 +1,4 @@
-#include "effect/effect-monster-charm.h"
+﻿#include "effect/effect-monster-charm.h"
 #include "avatar/avatar.h"
 #include "dungeon/quest.h"
 #include "effect/effect-monster-util.h"
@@ -276,8 +276,7 @@ process_result effect_monster_domination(PlayerType *player_ptr, effect_monster_
     if (em_ptr->seen)
         em_ptr->obvious = true;
 
-    if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
-        || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
+    if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         if (((em_ptr->r_ptr->flags3 & RF3_NO_CONF) != 0) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
             em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
 
@@ -315,8 +314,7 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
         return true;
     }
 
-    if ((em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (em_ptr->r_ptr->flags1 & RF1_UNIQUE) || em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::NOPET) || has_aggravate(player_ptr)
-        || ((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam))) {
+    if ((em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (em_ptr->r_ptr->flags1 & RF1_UNIQUE) || em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::NOPET) || has_aggravate(player_ptr) || ((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam))) {
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
 

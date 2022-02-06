@@ -1,8 +1,9 @@
-#include "spell-realm/spells-chaos.h"
+﻿#include "spell-realm/spells-chaos.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -16,7 +17,6 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -209,8 +209,7 @@ void cast_meteor(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
                 continue;
 
             floor_type *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)
-                || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT))
+            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT))
                 continue;
 
             break;

@@ -146,7 +146,8 @@ static bool acid_minus_ac(PlayerType *player_ptr)
  */
 HIT_POINT acid_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_acid(player_ptr);
     dam = dam * calc_acid_damage_rate(player_ptr) / 100;
     if (dam <= 0)
@@ -179,7 +180,8 @@ HIT_POINT acid_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool a
  */
 HIT_POINT elec_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_elec(player_ptr);
 
     dam = dam * calc_elec_damage_rate(player_ptr) / 100;
@@ -211,7 +213,8 @@ HIT_POINT elec_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool a
  */
 HIT_POINT fire_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_fire(player_ptr);
 
     /* Totally immune */
@@ -243,7 +246,8 @@ HIT_POINT fire_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool a
  */
 HIT_POINT cold_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_cold(player_ptr);
     if (has_immune_cold(player_ptr) || (dam <= 0))
         return 0;

@@ -8,7 +8,8 @@
 
 #include <vector>
 
-struct grid_type;;
+struct grid_type;
+;
 class ObjectType;
 struct monster_type;
 struct floor_type {

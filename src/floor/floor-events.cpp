@@ -101,7 +101,10 @@ void night_falls(PlayerType *player_ptr)
 /*!
  * ダンジョンの雰囲気を計算するための非線形基準値 / Dungeon rating is no longer linear
  */
-static int rating_boost(int delta) { return delta * delta + 50 * delta; }
+static int rating_boost(int delta)
+{
+    return delta * delta + 50 * delta;
+}
 
 /*!
  * @brief ダンジョンの雰囲気を算出する。
@@ -242,8 +245,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
 
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
-    if (inside_quest(quest_num)
-        && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[enum2i(quest_num)].flags & QUEST_FLAG_PRESET))))
+    if (inside_quest(quest_num) && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[enum2i(quest_num)].flags & QUEST_FLAG_PRESET))))
         return;
 
     byte new_feeling = get_dungeon_feeling(player_ptr);

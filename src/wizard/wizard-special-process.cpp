@@ -490,7 +490,6 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-
     cave_set_feat(player_ptr, y, x, f_val1);
     g_ptr->mimic = (int16_t)f_val2;
     feature_type *f_ptr;
@@ -504,7 +503,6 @@ void wiz_create_feature(PlayerType *player_ptr)
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     player_ptr->update |= PU_FLOW;
-
 }
 
 /*

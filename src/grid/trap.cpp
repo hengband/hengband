@@ -60,13 +60,13 @@ static std::vector<int16_t> normal_traps;
  * </pre>
  */
 const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
-    { }, /* empty */
+    {}, /* empty */
     { ChestTrapType::POISON },
     { ChestTrapType::LOSE_STR },
     { ChestTrapType::LOSE_CON },
     { ChestTrapType::LOSE_STR },
     { ChestTrapType::LOSE_CON }, /* 5 == best small wooden */
-    { },
+    {},
     { ChestTrapType::ALARM },
     { ChestTrapType::ALARM },
     { ChestTrapType::LOSE_STR },
@@ -76,7 +76,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
     { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
     { ChestTrapType::SUMMON }, /* 15 == best large wooden */
-    { },
+    {},
     { ChestTrapType::ALARM },
     { ChestTrapType::SCATTER },
     { ChestTrapType::PARALYZE },
@@ -86,7 +86,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::LOSE_STR },
     { ChestTrapType::LOSE_CON },
     { ChestTrapType::EXPLODE }, /* 25 == best small iron */
-    { },
+    {},
     { ChestTrapType::E_SUMMON },
     { ChestTrapType::POISON, ChestTrapType::LOSE_CON },
     { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
@@ -96,7 +96,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::E_SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::EXPLODE },
     { ChestTrapType::EXPLODE, ChestTrapType::SUMMON }, /* 35 == best large iron */
-    { },
+    {},
     { ChestTrapType::SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::EXPLODE },
     { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
@@ -106,7 +106,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::BIRD_STORM },
     { ChestTrapType::EXPLODE, ChestTrapType::E_SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::H_SUMMON }, /* 45 == best small steel */
-    { },
+    {},
     { ChestTrapType::EXPLODE, ChestTrapType::SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::BIRD_STORM },
     { ChestTrapType::RUNES_OF_EVIL },

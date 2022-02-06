@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @file mutation-execution.cpp
  * @brief プレイヤーの変異能力実行定義
  */
@@ -6,6 +6,7 @@
 #include "action/mutation-execution.h"
 #include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
+#include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
 #include "game-option/play-record-options.h"
@@ -41,7 +42,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "status/element-resistance.h"
