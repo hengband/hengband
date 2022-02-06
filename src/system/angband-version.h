@@ -3,8 +3,17 @@
 #include <stdint.h>
 #include <string>
 
+/*!
+ * @brief 現在のバリアント名
+ */
 constexpr std::string_view VARIANT_NAME("Hengband");
 
+/*!
+ * @brief 基底バリアント名
+ * @details
+ * 変愚蛮怒から更にバリアントを派生させても、ここは変更しないこと.
+ * 変更ではなく削除はOKだが、h_older_than() 及びそれを呼んでいる箇所全てを削除すること.
+ */
 constexpr std::string_view ROOT_VARIANT_NAME("Hengband");
 
 /*!
