@@ -5,7 +5,7 @@
  * @todo ちょっと長い。要分割
  */
 
-#include "object-enchant/apply-magic-others.h"
+#include "object-enchant/others/apply-magic-others.h"
 #include "artifact/random-art-generator.h"
 #include "game-option/cheat-options.h"
 #include "inventory/inventory-slot-types.h"

@@ -1,7 +1,7 @@
-﻿#include "object-enchant/smith-info.h"
-#include "object-enchant/smith-types.h"
+﻿#include "smith/smith-info.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "smith/smith-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -101,8 +101,7 @@ void ActivationSmithInfo::erase_essence(object_type *o_ptr) const
 
 bool ActivationSmithInfo::can_give_smith_effect(const object_type *o_ptr) const
 {
-    if (o_ptr->is_artifact() || o_ptr->smith_act_idx.has_value())
-    {
+    if (o_ptr->is_artifact() || o_ptr->smith_act_idx.has_value()) {
         return false;
     }
 

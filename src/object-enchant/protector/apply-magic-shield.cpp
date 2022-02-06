@@ -5,7 +5,7 @@
  * @details ドラゴンシールドは必ず付与する. それ以外は確率的に付与する.
  */
 
-#include "object-enchant/apply-magic-shield.h"
+#include "object-enchant/protector/apply-magic-shield.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"

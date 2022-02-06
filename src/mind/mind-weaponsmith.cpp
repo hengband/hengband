@@ -13,12 +13,12 @@
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-weaponsmith.h"
-#include "object-enchant/object-smith.h"
-#include "object-enchant/smith-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-status/player-energy.h"
+#include "smith/object-smith.h"
+#include "smith/smith-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -27,7 +27,6 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-
 #include <algorithm>
 #include <sstream>
 
