@@ -89,27 +89,29 @@ void curse_artifact(PlayerType *player_ptr, object_type *o_ptr)
  * @param armour 防具かどうか
  * @param power 生成パワー
  * @return ファイル名
+ * @detail ss << tmp_grade; と直接呼ぶとC4866警告が出るので、別変数で受けて抑制中.
  */
 static std::string get_random_art_filename(const bool armour, const int power)
 {
     const std::string_view prefix(armour ? "a_" : "w_");
     constexpr std::string_view suffix(_("_j.txt", ".txt"));
-    std::string_view grade;
+    std::string_view tmp_grade;
     switch (power) {
     case 0:
-        grade = "cursed";
+        tmp_grade = "cursed";
         break;
     case 1:
-        grade = "low";
+        tmp_grade = "low";
         break;
     case 2:
-        grade = "med";
+        tmp_grade = "med";
         break;
     default:
-        grade = "high";
+        tmp_grade = "high";
     }
 
     std::stringstream ss;
+    const auto &grade = tmp_grade;
     ss << prefix << grade << suffix;
     return ss.str();
 }
