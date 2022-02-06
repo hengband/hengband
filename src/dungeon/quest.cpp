@@ -359,3 +359,8 @@ void do_cmd_quest(PlayerType *player_ptr)
 
     exe_enter_quest(player_ptr, player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special);
 }
+
+bool inside_quest(QuestId id)
+{
+    return id != QuestId::NONE;
+}

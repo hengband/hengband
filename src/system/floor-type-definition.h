@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "floor/floor-base-definitions.h"
 #include "floor/sight-definitions.h"
@@ -10,7 +10,7 @@
 struct grid_type;;
 class ObjectType;
 struct monster_type;
-typedef struct floor_type {
+struct floor_type {
     DUNGEON_IDX dungeon_idx;
     std::vector<std::vector<grid_type>> grid_array;
     DEPTH dun_level; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
@@ -53,5 +53,4 @@ typedef struct floor_type {
     bool monster_noise;
     QUEST_IDX quest_number; /* Inside quest level */
     bool inside_arena; /* Is character inside on_defeat_arena_monster? */
-
-} floor_type;
+};

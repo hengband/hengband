@@ -96,3 +96,4 @@ void leave_quest_check(PlayerType *player_ptr);
 void leave_tower_check(PlayerType *player_ptr);
 void exe_enter_quest(PlayerType *player_ptr, QUEST_IDX quest_idx);
 void do_cmd_quest(PlayerType *player_ptr);
+bool inside_quest(QuestId id);
