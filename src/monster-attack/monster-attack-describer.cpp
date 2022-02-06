@@ -8,12 +8,13 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-attack/insults-moans.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
+#include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-indice-types.h"
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
 
-static void show_jaian_song(monap_type *monap_ptr)
+static void show_jaian_song(MonsterAttackPlayer *monap_ptr)
 {
 #ifdef JP
     switch (randint1(15)) {
@@ -64,7 +65,7 @@ static void show_jaian_song(monap_type *monap_ptr)
 #endif
 }
 
-static void monster_attack_show(monap_type *monap_ptr)
+static void monster_attack_show(MonsterAttackPlayer *monap_ptr)
 {
 #ifdef JP
     monap_ptr->abbreviate = -1;
@@ -81,7 +82,7 @@ static void monster_attack_show(monap_type *monap_ptr)
     sound(SOUND_SHOW);
 }
 
-void describe_monster_attack_method(monap_type *monap_ptr)
+void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
 {
     switch (monap_ptr->method) {
     case RaceBlowMethodType::HIT: {

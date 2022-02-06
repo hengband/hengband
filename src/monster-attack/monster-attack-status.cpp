@@ -7,7 +7,7 @@
 #include "monster-attack/monster-attack-status.h"
 #include "core/player-update-types.h"
 #include "mind/mind-mirror-master.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "player/player-status-flags.h"
@@ -20,7 +20,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-void process_blind_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+void process_blind_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_resist_blind(player_ptr) || check_multishadow(player_ptr)) {
         return;
@@ -45,7 +45,7 @@ void process_blind_attack(PlayerType *player_ptr, monap_type *monap_ptr)
     monap_ptr->obvious = true;
 }
 
-void process_terrify_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+void process_terrify_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (check_multishadow(player_ptr)) {
         return;
@@ -69,7 +69,7 @@ void process_terrify_attack(PlayerType *player_ptr, monap_type *monap_ptr)
     }
 }
 
-void process_paralyze_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+void process_paralyze_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (check_multishadow(player_ptr)) {
         return;
@@ -93,7 +93,7 @@ void process_paralyze_attack(PlayerType *player_ptr, monap_type *monap_ptr)
     }
 }
 
-void process_lose_all_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+void process_lose_all_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (do_dec_stat(player_ptr, A_STR)) {
         monap_ptr->obvious = true;
@@ -120,7 +120,7 @@ void process_lose_all_attack(PlayerType *player_ptr, monap_type *monap_ptr)
     }
 }
 
-void process_stun_attack(PlayerType *player_ptr, monap_type *monap_ptr)
+void process_stun_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_resist_sound(player_ptr) || check_multishadow(player_ptr)) {
         return;
@@ -137,7 +137,7 @@ void process_stun_attack(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  */
-static void describe_disability(PlayerType *player_ptr, monap_type *monap_ptr)
+static void describe_disability(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     int stat = randint0(6);
     switch (stat) {
@@ -168,7 +168,7 @@ static void describe_disability(PlayerType *player_ptr, monap_type *monap_ptr)
     }
 }
 
-void process_monster_attack_time(PlayerType *player_ptr, monap_type *monap_ptr)
+void process_monster_attack_time(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_resist_time(player_ptr) || check_multishadow(player_ptr)) {
         return;

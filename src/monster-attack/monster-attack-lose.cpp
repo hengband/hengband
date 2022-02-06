@@ -1,7 +1,7 @@
 ﻿#include "monster-attack/monster-attack-lose.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-attack/monster-attack-status.h"
-#include "monster-attack/monster-attack-util.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
@@ -17,7 +17,7 @@
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  * @details 10% (毒の一次耐性があれば4%、二重耐性ならば1.6%)の確率で耐久が低下し、更に1/10の確率で永久低下する
  */
-void calc_blow_disease(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_disease(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_resist_pois(player_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
@@ -48,7 +48,7 @@ void calc_blow_disease(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void calc_blow_lose_strength(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_lose_strength(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_sustain_str(player_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
@@ -66,7 +66,7 @@ void calc_blow_lose_strength(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void calc_blow_lose_intelligence(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_lose_intelligence(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_sustain_int(player_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
@@ -84,7 +84,7 @@ void calc_blow_lose_intelligence(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void calc_blow_lose_wisdom(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_lose_wisdom(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_sustain_wis(player_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
@@ -102,7 +102,7 @@ void calc_blow_lose_wisdom(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void calc_blow_lose_dexterity(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_lose_dexterity(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_sustain_dex(player_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
@@ -120,7 +120,7 @@ void calc_blow_lose_dexterity(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void calc_blow_lose_constitution(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_lose_constitution(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_sustain_con(player_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
@@ -138,7 +138,7 @@ void calc_blow_lose_constitution(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void calc_blow_lose_charisma(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_lose_charisma(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if (has_sustain_chr(player_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
@@ -156,7 +156,7 @@ void calc_blow_lose_charisma(PlayerType *player_ptr, monap_type *monap_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void calc_blow_lose_all(PlayerType *player_ptr, monap_type *monap_ptr)
+void calc_blow_lose_all(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     int damage_ratio = 100;
     if (has_sustain_str(player_ptr))

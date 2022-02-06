@@ -631,7 +631,6 @@
     <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.cpp" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-types.cpp" />
     <ClCompile Include="..\..\src\combat\attack-accuracy.cpp" />
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-util.cpp" />
     <ClCompile Include="..\..\src\monster-attack\monster-eating.cpp" />
     <ClCompile Include="..\..\src\player-attack\player-attack.cpp" />
     <ClCompile Include="..\..\src\combat\slaying.cpp" />
@@ -1403,7 +1402,6 @@
     <ClInclude Include="..\..\src\monster-attack\monster-attack-switcher.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-types.h" />
     <ClInclude Include="..\..\src\combat\attack-accuracy.h" />
-    <ClInclude Include="..\..\src\monster-attack\monster-attack-util.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-eating.h" />
     <ClInclude Include="..\..\src\player-attack\player-attack-util.h" />
     <ClInclude Include="..\..\src\player-attack\player-attack.h" />

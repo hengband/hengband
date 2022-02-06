@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-typedef struct monap_type monap_type;
+class MonsterAttackPlayer;
 class PlayerType;
-void process_aura_counterattack(PlayerType *player_ptr, monap_type *monap_ptr);
+void process_aura_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr);

@@ -13,7 +13,7 @@
 #include "floor/geometry.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster-attack/monster-attack-util.h"
+#include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "pet/pet-util.h"
@@ -33,7 +33,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレイヤーへの直接攻撃構造体への参照ポインタ
  */
-void check_fall_off_horse(PlayerType *player_ptr, monap_type *monap_ptr)
+void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     if ((player_ptr->riding == 0) || (monap_ptr->damage == 0))
         return;

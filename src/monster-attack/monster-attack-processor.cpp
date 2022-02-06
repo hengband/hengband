@@ -59,7 +59,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
         return;
 
     if (!player_ptr->riding || one_in_(2)) {
-        (void)make_attack_normal(player_ptr, m_idx);
+        MonsterAttackPlayer(player_ptr, m_idx).make_attack_normal();
         turn_flags_ptr->do_move = false;
         turn_flags_ptr->do_turn = true;
     }
