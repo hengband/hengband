@@ -475,7 +475,7 @@ PERCENTAGE calc_void_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mod
 {
     (void)mode; // unused
     PERCENTAGE per = 100;
-    if (has_pass_wall(player_ptr) != 0) {
+    if (has_pass_wall(player_ptr)) {
         per = per * 3 / 2;
     } else if (has_anti_tele(player_ptr) != 0) {
         per *= 400;
