@@ -200,6 +200,14 @@ static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, Attribute
         dam = dam * calc_hell_fire_damage_rate(player_ptr, CALC_MAX) / 100;
         break;
 
+    case AttributeType::ABYSS:
+        dam = dam * calc_abyss_damage_rate(player_ptr, CALC_MAX) / 100;
+        break;
+
+    case AttributeType::VOID_MAGIC:
+        dam = dam * calc_void_damage_rate(player_ptr, CALC_MAX) / 100;
+        break;
+
     case AttributeType::MIND_BLAST:
     case AttributeType::BRAIN_SMASH:
         if (100 + rlev / 2 <= std::max<short>(5, player_ptr->skill_sav)) {
@@ -388,6 +396,10 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::HAND_DOOM, AttributeType::HAND_DOOM, g_ptr->m_idx, &dam_max0);
                     if (flags.has(MonsterAbilityType::PSY_SPEAR))
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::PSY_SPEAR, AttributeType::PSY_SPEAR, g_ptr->m_idx, &dam_max0);
+                    if (flags.has(MonsterAbilityType::BA_VOID))
+                        spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_VOID, AttributeType::VOID_MAGIC, g_ptr->m_idx, &dam_max0);
+                    if (flags.has(MonsterAbilityType::BA_ABYSS))
+                        spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_ABYSS, AttributeType::ABYSS, g_ptr->m_idx, &dam_max0);
                 }
 
                 if (flags.has(MonsterAbilityType::ROCKET))
@@ -436,6 +448,10 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_NUKE, AttributeType::NUKE, g_ptr->m_idx, &dam_max0);
                 if (flags.has(MonsterAbilityType::BR_DISI))
                     spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_DISI, AttributeType::DISINTEGRATE, g_ptr->m_idx, &dam_max0);
+                if (flags.has(MonsterAbilityType::BR_VOID))
+                    spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_VOID, AttributeType::VOID_MAGIC, g_ptr->m_idx, &dam_max0);
+                if (flags.has(MonsterAbilityType::BR_ABYSS))
+                    spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BR_ABYSS, AttributeType::ABYSS, g_ptr->m_idx, &dam_max0);
             }
 
             /* Monster melee attacks */

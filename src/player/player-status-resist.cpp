@@ -462,7 +462,7 @@ PERCENTAGE calc_gravity_damage_rate(PlayerType *player_ptr, rate_calc_type_mode 
 {
     (void)mode; // unused
     PERCENTAGE per = 100;
-    if (player_ptr->levitation) {
+    if (has_levitation(player_ptr)) {
         per = (per * 2) / 3;
     }
     return per;
@@ -475,12 +475,12 @@ PERCENTAGE calc_void_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mod
 {
     (void)mode; // unused
     PERCENTAGE per = 100;
-    if (player_ptr->tim_pass_wall) {
+    if (has_pass_wall(player_ptr)) {
         per = per * 3 / 2;
-    } else if (player_ptr->anti_tele) {
+    } else if (has_anti_tele(player_ptr) != 0) {
         per *= 400;
         per /= randrate(4, 7, mode);
-    } else if (player_ptr->levitation) {
+    } else if (has_levitation(player_ptr) != 0) {
         per = (per * 2) / 3;
     }
     return per;
@@ -494,10 +494,10 @@ PERCENTAGE calc_abyss_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mo
     (void)mode; // unused
     PERCENTAGE per = 100;
 
-    if (has_resist_dark(player_ptr)) {
+    if (has_resist_dark(player_ptr) != 0) {
         per *= 400;
         per /= randrate(4, 7, mode);
-    } else if (!player_ptr->levitation && player_ptr->anti_tele) {
+    } else if ((has_levitation(player_ptr) == 0) && (has_anti_tele(player_ptr) != 0)) {
         per = (per * 5) / 4;
     }
     return per;

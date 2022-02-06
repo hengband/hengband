@@ -183,6 +183,16 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
         type_s = _("分解", "disintegration");
         smart_learn_aux = false;
         break;
+    case AttributeType::VOID_MAGIC:
+        dam = monspell_damage(player_ptr, MonsterAbilityType::BR_VOID, m_idx, DAM_ROLL);
+        type_s = _("虚無", "void");
+        smart_learn_aux = false;
+        break;
+    case AttributeType::ABYSS:
+        dam = monspell_damage(player_ptr, MonsterAbilityType::BR_ABYSS, m_idx, DAM_ROLL);
+        type_s = _("深淵", "disintegration");
+        smart_learn_aux = false;
+        break;
     default:
         /* Do not reach here */
         dam = 0;

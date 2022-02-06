@@ -151,6 +151,12 @@ void switch_effects_player(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     case AttributeType::HAND_DOOM:
         effect_player_hand_doom(player_ptr, ep_ptr);
         return;
+    case AttributeType::VOID_MAGIC:
+        effect_player_void(player_ptr, ep_ptr);
+        return;
+    case AttributeType::ABYSS:
+        effect_player_abyss(player_ptr, ep_ptr);
+        return;
     default: {
         ep_ptr->dam = 0;
         return;

@@ -120,6 +120,8 @@ void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power)
     case MonsterAbilityType::BR_INER:
     case MonsterAbilityType::BR_FORC:
     case MonsterAbilityType::BR_DISI:
+    case MonsterAbilityType::BR_VOID:
+    case MonsterAbilityType::BR_ABYSS:
     case MonsterAbilityType::BA_NUKE:
     case MonsterAbilityType::BA_CHAO:
     case MonsterAbilityType::BA_ACID:
@@ -129,6 +131,8 @@ void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power)
     case MonsterAbilityType::BA_POIS:
     case MonsterAbilityType::BA_NETH:
     case MonsterAbilityType::BA_WATE:
+    case MonsterAbilityType::BA_VOID:
+    case MonsterAbilityType::BA_ABYSS:
         set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
         break;
     case MonsterAbilityType::DRAIN_MANA:
@@ -148,6 +152,8 @@ void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power)
     case MonsterAbilityType::BO_WATE:
     case MonsterAbilityType::BO_MANA:
     case MonsterAbilityType::BO_PLAS:
+    case MonsterAbilityType::BO_ABYSS:
+    case MonsterAbilityType::BO_VOID:
     case MonsterAbilityType::BO_ICEE:
     case MonsterAbilityType::MISSILE:
         set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);

@@ -152,6 +152,28 @@ bool cast_blue_ball_mana_storm(PlayerType *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
+bool cast_blue_ball_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+        return false;
+
+    msg_print(_("虚無の嵐の呪文を念じた。", "You invoke a void storm."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_VOID, bmc_ptr->plev, DAM_ROLL);
+    fire_ball(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage, 4);
+    return true;
+}
+
+bool cast_blue_ball_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+        return false;
+
+    msg_print(_("深淵の嵐の呪文を念じた。", "You invoke a abyss storm."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_ABYSS, bmc_ptr->plev, DAM_ROLL);
+    fire_ball(player_ptr, AttributeType::ABYSS, bmc_ptr->dir, bmc_ptr->damage, 4);
+    return true;
+}
+
 bool cast_blue_bolt_acid(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
@@ -259,5 +281,27 @@ bool cast_blue_bolt_missile(PlayerType *player_ptr, bmc_type *bmc_ptr)
     msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::MISSILE, bmc_ptr->plev, DAM_ROLL);
     fire_bolt(player_ptr, AttributeType::MISSILE, bmc_ptr->dir, bmc_ptr->damage);
+    return true;
+}
+
+bool cast_blue_bolt_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+        return false;
+
+    msg_print(_("アビス・ボルトの呪文を唱えた。", "You cast a abyss bolt."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_ABYSS, bmc_ptr->plev, DAM_ROLL);
+    fire_bolt(player_ptr, AttributeType::ABYSS, bmc_ptr->dir, bmc_ptr->damage);
+    return true;
+}
+
+bool cast_blue_bolt_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+        return false;
+
+    msg_print(_("ヴォイド・ボルトの呪文を唱えた。", "You cast a void bolt."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_VOID, bmc_ptr->plev, DAM_ROLL);
+    fire_bolt(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage);
     return true;
 }

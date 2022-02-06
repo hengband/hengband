@@ -157,6 +157,12 @@ static HIT_POINT monspell_damage_base(
     case MonsterAbilityType::BR_DISI:
         dam = ((hp / 6) > 150 ? 150 : (hp / 6));
         break;
+    case MonsterAbilityType::BR_VOID:
+        dam = ((hp / 3) > 250 ? 250 : (hp / 6));
+        break;
+    case MonsterAbilityType::BR_ABYSS:
+        dam = ((hp / 3) > 250 ? 250 : (hp / 6));
+        break;
     case MonsterAbilityType::BA_ACID:
         if (powerful) {
             dam = (rlev * 4) + 50;
@@ -223,6 +229,16 @@ static HIT_POINT monspell_damage_base(
     case MonsterAbilityType::BA_MANA:
     case MonsterAbilityType::BA_DARK:
         dam = (rlev * 4) + 50;
+        dice_num = 10;
+        dice_side = 10;
+        break;
+    case MonsterAbilityType::BA_VOID:
+        dam = (powerful ? (rlev * 3) : (rlev * 2));
+        dice_num = 10;
+        dice_side = 10;
+        break;
+    case MonsterAbilityType::BA_ABYSS:
+        dam = (powerful ? (rlev * 3) : (rlev * 2));
         dice_num = 10;
         dice_side = 10;
         break;
@@ -309,6 +325,16 @@ static HIT_POINT monspell_damage_base(
         dam = (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 6;
         dice_side = 6;
+        break;
+    case MonsterAbilityType::BO_VOID:
+        dam = 10 + (rlev * 3 / (powerful ? 2 : 3));
+        dice_num = 13;
+        dice_side = 14;
+        break;
+    case MonsterAbilityType::BO_ABYSS:
+        dam = 10 + (rlev * 3 / (powerful ? 2 : 3));
+        dice_num = 13;
+        dice_side = 14;
         break;
     case MonsterAbilityType::MISSILE:
         dam = (rlev / 3);

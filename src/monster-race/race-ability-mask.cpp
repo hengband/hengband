@@ -31,7 +31,8 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_RIDING_MASK = {
 const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BOLT_MASK = {
     MonsterAbilityType::ROCKET, MonsterAbilityType::SHOOT, MonsterAbilityType::BO_ACID, MonsterAbilityType::BO_ELEC,
     MonsterAbilityType::BO_FIRE, MonsterAbilityType::BO_COLD, MonsterAbilityType::BO_NETH, MonsterAbilityType::BO_WATE,
-    MonsterAbilityType::BO_MANA, MonsterAbilityType::BO_PLAS, MonsterAbilityType::BO_ICEE, MonsterAbilityType::MISSILE,
+    MonsterAbilityType::BO_MANA, MonsterAbilityType::BO_PLAS, MonsterAbilityType::BO_ICEE, MonsterAbilityType::BO_VOID,
+    MonsterAbilityType::BO_ABYSS, MonsterAbilityType::MISSILE,
 };
 
 /*
@@ -48,7 +49,7 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BEAM_MASK = {
  */
 const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BIG_BALL_MASK = {
     MonsterAbilityType::BA_CHAO, MonsterAbilityType::BA_LITE, MonsterAbilityType::BA_DARK, MonsterAbilityType::BA_WATE,
-    MonsterAbilityType::BA_MANA,
+    MonsterAbilityType::BA_MANA, MonsterAbilityType::BA_VOID, MonsterAbilityType::BA_ABYSS,
 };
 
 /*
@@ -61,7 +62,7 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BREATH_MASK = {
     MonsterAbilityType::BR_CONF, MonsterAbilityType::BR_SOUN, MonsterAbilityType::BR_CHAO, MonsterAbilityType::BR_DISE,
     MonsterAbilityType::BR_NEXU, MonsterAbilityType::BR_SHAR, MonsterAbilityType::BR_TIME, MonsterAbilityType::BR_INER,
     MonsterAbilityType::BR_GRAV, MonsterAbilityType::BR_PLAS, MonsterAbilityType::BR_FORC, MonsterAbilityType::BR_MANA,
-    MonsterAbilityType::BR_NUKE, MonsterAbilityType::BR_DISI,
+    MonsterAbilityType::BR_NUKE, MonsterAbilityType::BR_DISI, MonsterAbilityType::BR_VOID, MonsterAbilityType::BR_ABYSS,
 };
 
 /*

@@ -141,6 +141,18 @@ void set_breath_types(PlayerType *player_ptr, lore_type *lore_ptr)
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
     }
+
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::BR_VOID)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BR_VOID, _("虚無%s", "void%s"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::BR_ABYSS)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BR_ABYSS, _("深淵%s", "abyss%s"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
 }
 
 void set_ball_types(PlayerType *player_ptr, lore_type *lore_ptr)
@@ -215,6 +227,18 @@ void set_ball_types(PlayerType *player_ptr, lore_type *lore_ptr)
         set_damage(player_ptr, lore_ptr, MonsterAbilityType::BA_CHAO, _("純ログルス%s", "invoke raw Logrus%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
+    }
+
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::BA_VOID)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BA_VOID, _("虚無の嵐%s", "invoke void storms%s"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::BA_ABYSS)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BA_ABYSS, _("深淵の嵐%s", "invoke abyss storms%s"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 }
 
@@ -328,6 +352,18 @@ void set_bolt_types(PlayerType *player_ptr, lore_type *lore_ptr)
         set_damage(player_ptr, lore_ptr, MonsterAbilityType::BO_ICEE, _("極寒の矢%s", "produce ice bolts%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
+    }
+
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::BO_VOID)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BO_VOID, _("ヴォイド・ボルト%s", "produce void bolts%s"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+     if (lore_ptr->ability_flags.has(MonsterAbilityType::BO_ABYSS)) {
+        set_damage(player_ptr, lore_ptr, MonsterAbilityType::BO_ABYSS, _("アビス・ボルト%s", "produce abyss bolts%s"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 
     if (lore_ptr->ability_flags.has(MonsterAbilityType::MISSILE)) {

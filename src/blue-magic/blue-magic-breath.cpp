@@ -261,3 +261,35 @@ bool cast_blue_breath_disintegration(PlayerType *player_ptr, bmc_type *bmc_ptr)
     fire_breath(player_ptr, AttributeType::DISINTEGRATE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
     return true;
 }
+
+/*!
+ * @brief 虚無のブレスの青魔法
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param bmc_ptr 青魔法詠唱への参照ポインタ
+ */
+bool cast_blue_breath_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+        return false;
+
+    msg_print(_("虚無のブレスを吐いた。", "You breathe void."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_VOID, bmc_ptr->plev, DAM_ROLL);
+    fire_breath(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
+    return true;
+}
+
+/*!
+ * @brief 深淵のブレスの青魔法
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param bmc_ptr 青魔法詠唱への参照ポインタ
+ */
+bool cast_blue_breath_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+        return false;
+
+    msg_print(_("深淵のブレスを吐いた。", "You breathe abyss."));
+    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_ABYSS, bmc_ptr->plev, DAM_ROLL);
+    fire_breath(player_ptr, AttributeType::ABYSS, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
+    return true;
+}

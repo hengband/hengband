@@ -393,3 +393,61 @@ MonsterSpellResult spell_RF5_BA_LITE(PlayerType *player_ptr, POSITION y, POSITIO
 
     return res;
 }
+
+/*!
+ * @brief RF5_BA_VOIDの処理。虚無の嵐。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーに当たったらラーニング可。
+ */
+MonsterSpellResult spell_RF5_BA_VOID(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+{
+    mspell_cast_msg_blind msg(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sが虚無の嵐の呪文を念じた。", "%^s invokes a void storm."),
+        _("%^sが%sに対して虚無の嵐の呪文を念じた。", "%^s invokes a void storm upon %s."));
+
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BA_VOID, m_idx, DAM_ROLL);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::VOID_MAGIC, dam, 4, false, TARGET_TYPE);
+
+    auto res = MonsterSpellResult::make_valid(dam);
+    res.learnable = proj_res.affected_player;
+
+    return res;
+}
+
+/*!
+ * @brief RF5_BA_ABYSSの処理。アビス・ボール。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーに当たったらラーニング可。
+ */
+MonsterSpellResult spell_RF5_BA_ABYSS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+{
+    mspell_cast_msg_blind msg(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sが深淵の嵐の呪文を念じた。", "%^s invokes a abyss storm."),
+        _("%^sが%sに対して深淵の嵐の呪文を念じた。", "%^s invokes a void abyss upon %s."));
+
+    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+
+    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BA_ABYSS, m_idx, DAM_ROLL);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::ABYSS, dam, 4, false, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(player_ptr, m_idx, DRS_DARK);
+
+    auto res = MonsterSpellResult::make_valid(dam);
+    res.learnable = proj_res.affected_player;
+
+    return res;
+}

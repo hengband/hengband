@@ -28,3 +28,5 @@ bool cast_blue_breath_force(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_mana(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_nuke(PlayerType *player_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_disintegration(PlayerType *player_ptr, bmc_type *bmc_ptr);
+bool cast_blue_breath_void(PlayerType *player_ptr, bmc_type *bmc_ptr);
+bool cast_blue_breath_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr);

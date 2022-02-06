@@ -170,6 +170,12 @@ static void check_reflection(msr_type *msr_ptr)
         msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ICEE);
 
     if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_VOID);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ABYSS);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
         msr_ptr->ability_flags.reset(MonsterAbilityType::MISSILE);
 }
 
