@@ -17,8 +17,6 @@
  * @brief プレイヤーの職業/種族による免疫フラグを返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags フラグを保管する配列
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
  */
 void player_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
@@ -45,8 +43,6 @@ void player_immunity(PlayerType *player_ptr, TrFlags &flags)
  * @brief プレイヤーの一時的魔法効果による免疫フラグを返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags フラグを保管する配列
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
  */
 void tim_player_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
@@ -68,8 +64,6 @@ void tim_player_immunity(PlayerType *player_ptr, TrFlags &flags)
  * @brief プレイヤーの装備による免疫フラグを返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags フラグを保管する配列
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
  */
 void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
@@ -97,8 +91,6 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
  * @brief プレイヤーの種族による弱点フラグを返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags フラグを保管する配列
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
  */
 void player_vulnerability_flags(PlayerType *player_ptr, TrFlags &flags)
 {

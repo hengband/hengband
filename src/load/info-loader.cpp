@@ -18,7 +18,7 @@ void rd_version_info(void)
 {
     auto tmp_major = rd_byte();
     auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
-    auto variant_length = VARIANT_NAME.length();
+    constexpr auto variant_length = VARIANT_NAME.length();
     if (tmp_major == variant_length) {
         strip_bytes(variant_length);
         load_xor_byte = 0;
