@@ -267,6 +267,13 @@ bool PlayerClass::is_wizard() const
     return is_wizard;
 }
 
+bool PlayerClass::is_every_magic() const
+{
+    auto is_every_magic = this->equals(PlayerClassType::SORCERER);
+    is_every_magic |= this->equals(PlayerClassType::RED_MAGE);
+    return is_every_magic;
+}
+
 bool PlayerClass::lose_balance()
 {
     if (this->player_ptr->pclass != PlayerClassType::SAMURAI) {

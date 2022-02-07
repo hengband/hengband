@@ -25,6 +25,7 @@ public:
     bool has_additional_speed() const;
     bool is_soldier() const;
     bool is_wizard() const;
+    bool is_every_magic() const;
 
     bool lose_balance();
     void break_samurai_stance(std::initializer_list<SamuraiStanceType> stance_list);
