@@ -10,6 +10,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "specific-object/torch.h"
@@ -184,11 +185,12 @@ HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, object_type *o_pt
 
         mult = mult_brand(player_ptr, mult, flgs, m_ptr);
 
-        if (player_ptr->pclass == PlayerClassType::SAMURAI) {
+        PlayerClass pc(player_ptr);
+        if (pc.equals(PlayerClassType::SAMURAI)) {
             mult = mult_hissatsu(player_ptr, mult, flgs, m_ptr, mode);
         }
 
-        if ((player_ptr->pclass != PlayerClassType::SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+        if (!pc.equals(PlayerClassType::SAMURAI) && (flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
             player_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
             player_ptr->redraw |= (PR_MANA);
             mult = mult * 3 / 2 + 20;
@@ -213,7 +215,7 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, object_type *o_ptr, comba
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_MELEE);
 
-    if (player_ptr->pclass == PlayerClassType::SAMURAI) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI)) {
         static const struct samurai_convert_table_t {
             combat_options hissatsu_type;
             AttributeType attribute;

@@ -117,10 +117,13 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
     player_ptr->old_race2 = 0L;
     player_ptr->old_realm = 0;
 
-    for (int i = 0; i < 64; i++) {
-        if (player_ptr->pclass == PlayerClassType::SORCERER)
+    PlayerClass pc(player_ptr);
+    auto is_sorcerer = pc.equals(PlayerClassType::SORCERER);
+    for (int i = 0; i < 64; i++)
+    {
+        if (is_sorcerer)
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
-        else if (player_ptr->pclass == PlayerClassType::RED_MAGE)
+        else if (pc.equals(PlayerClassType::RED_MAGE))
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::SKILLED);
         else
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::UNSKILLED);
@@ -138,11 +141,8 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
     for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE)
         player_ptr->skill_exp[i] = s_info[pclass].s_start[i];
 
-    if (player_ptr->pclass == PlayerClassType::SORCERER)
-        player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-    else
-        player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-
+    player_ptr->hitdie = cp_ptr->c_mhp + ap_ptr->a_mhp;
+    player_ptr->hitdie += is_sorcerer ? rp_ptr->r_mhp / 2 : rp_ptr->r_mhp;
     if (roll_hitdie)
         roll_hitdice(player_ptr, SPOP_NO_UPDATE);
 

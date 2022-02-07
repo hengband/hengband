@@ -333,13 +333,15 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
+    PlayerClass pc(player_ptr);
     if (pattern_effect(player_ptr)) {
         cave_no_regen = true;
     } else {
         if (player_ptr->regenerate) {
             regen_amount = regen_amount * 2;
         }
-        if (!PlayerClass(player_ptr).monk_stance_is(MonkStanceType::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::NONE)) {
+
+        if (!pc.monk_stance_is(MonkStanceType::NONE) || !pc.samurai_stance_is(SamuraiStanceType::NONE)) {
             regen_amount /= 2;
         }
         if (player_ptr->cursed.has(CurseTraitType::SLOW_REGEN)) {
@@ -352,12 +354,12 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     upkeep_factor = calculate_upkeep(player_ptr);
-    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
+    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || pc.samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         upkeep_factor += 100;
     }
 
     regenmana(player_ptr, upkeep_factor, regen_amount);
-    if (player_ptr->pclass == PlayerClassType::MAGIC_EATER) {
+    if (pc.equals(PlayerClassType::MAGIC_EATER)) {
         regenmagic(player_ptr, regen_amount);
     }
 

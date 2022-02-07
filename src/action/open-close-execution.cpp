@@ -16,6 +16,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-table.h"
 #include "specific-object/chest.h"
@@ -305,7 +306,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));
-    if (player_ptr->pclass == PlayerClassType::BERSERKER)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER))
         temp *= 2;
 
     if (temp < 1)

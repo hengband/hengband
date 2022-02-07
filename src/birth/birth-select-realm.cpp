@@ -5,6 +5,7 @@
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
 #include "realm/realm-names-table.h"
+#include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -109,12 +110,12 @@ static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_rea
     return birth_realm_ptr;
 }
 
-static void impose_first_realm(const PlayerType *player_ptr, uint32_t *choices)
+static void impose_first_realm(PlayerType *player_ptr, uint32_t *choices)
 {
     if (player_ptr->realm2 == REALM_SELECT_CANCEL)
         return;
 
-    if (player_ptr->pclass != PlayerClassType::PRIEST)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::PRIEST))
         return;
 
     if (is_good_realm(player_ptr->realm1)) {
@@ -318,7 +319,7 @@ bool get_player_realms(PlayerType *player_ptr)
     player_ptr->realm1 = REALM_NONE;
     player_ptr->realm2 = REALM_SELECT_CANCEL;
 
-    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = select_element_realm(player_ptr);
         if (player_ptr->element == REALM_SELECT_CANCEL)
             return false;

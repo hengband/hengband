@@ -6,6 +6,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/monster-race-definition.h"
@@ -54,7 +55,7 @@ HIT_POINT critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_POI
     int i = (weight + (meichuu * 3 + plus * 5) + player_ptr->skill_thn);
 
     /* Chance */
-    auto pow = (player_ptr->pclass == PlayerClassType::NINJA) ? 4444 : 5000;
+    auto pow = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? 4444 : 5000;
     if (impact)
         pow /= 2;
 
@@ -129,7 +130,7 @@ void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
         return;
     }
 
-    bool is_ninja_hit = (player_ptr->pclass == PlayerClassType::NINJA) && has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand)
+    bool is_ninja_hit = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand)
         && !player_ptr->is_icky_wield[pa_ptr->hand] && ((player_ptr->cur_lite <= 0) || one_in_(7));
     if (is_ninja_hit)
         ninja_critical(player_ptr, pa_ptr);

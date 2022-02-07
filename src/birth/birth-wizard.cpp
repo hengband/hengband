@@ -291,7 +291,7 @@ static void display_initial_options(PlayerType *player_ptr)
     c_put_str(TERM_L_BLUE, buf, 6, 43);
 
     put_str(_("隠密", "Stealth"), 6, 47);
-    if (player_ptr->pclass == PlayerClassType::BERSERKER)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER))
         strcpy(buf, "xx");
     else
         sprintf(buf, "%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);

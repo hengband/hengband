@@ -11,6 +11,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "player-base/player-class.h"
 #include "player/player-damage.h"
 #include "status/bad-status-setter.h"
 #include "system/grid-type-definition.h"
@@ -259,7 +260,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, effect_monst
 static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     int b = damroll(5, em_ptr->dam) / 4;
-    concptr str = (player_ptr->pclass == PlayerClassType::MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
+    concptr str = PlayerClass(player_ptr).equals(PlayerClassType::MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
     concptr msg = _("あなたは%sの苦痛を%sに変換した！", (em_ptr->seen ? "You convert %s's pain into %s!" : "You convert %ss pain into %s!"));
     msg_format(msg, em_ptr->m_name, str);
 

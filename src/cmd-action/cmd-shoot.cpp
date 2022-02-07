@@ -62,7 +62,7 @@ void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
     }
 
     exe_fire(player_ptr, item, j_ptr, snipe_type);
-    if (!player_ptr->is_fired || player_ptr->pclass != PlayerClassType::SNIPER)
+    if (!player_ptr->is_fired || !PlayerClass(player_ptr).equals(PlayerClassType::SNIPER))
         return;
 
     if (snipe_type == SP_AWAY) {

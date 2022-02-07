@@ -23,6 +23,7 @@
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "smith/object-smith.h"
@@ -518,7 +519,7 @@ void describe_flavor(PlayerType *player_ptr, char *buf, object_type *o_ptr, BIT_
         flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
         if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr)))
             describe_bow_power(player_ptr, flavor_ptr);
-        else if ((player_ptr->pclass == PlayerClassType::NINJA) && (flavor_ptr->o_ptr->tval == ItemKindType::SPIKE))
+        else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (flavor_ptr->o_ptr->tval == ItemKindType::SPIKE))
             describe_spike_power(player_ptr, flavor_ptr);
     }
 

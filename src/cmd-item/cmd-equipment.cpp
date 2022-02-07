@@ -338,7 +338,8 @@ void do_cmd_takeoff(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     object_type *o_ptr;
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
+    PlayerClass pc(player_ptr);
+    pc.break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     concptr q = _("どれを装備からはずしますか? ", "Take off which item? ");
     concptr s = _("はずせる装備がない。", "You are not wearing anything to take off.");
@@ -348,7 +349,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
 
     PlayerEnergy energy(player_ptr);
     if (o_ptr->is_cursed()) {
-        if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE) || (player_ptr->pclass != PlayerClassType::BERSERKER)) {
+        if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE) || !pc.equals(PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;
         }

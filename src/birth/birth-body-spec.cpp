@@ -1,4 +1,5 @@
 ﻿#include "birth/birth-body-spec.h"
+#include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -43,7 +44,7 @@ void get_ahw(PlayerType *player_ptr)
 void get_money(PlayerType *player_ptr)
 {
     int gold = (player_ptr->sc * 6) + randint1(100) + 300;
-    if (player_ptr->pclass == PlayerClassType::TOURIST)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::TOURIST))
         gold += 2000;
 
     for (int i = 0; i < A_MAX; i++) {

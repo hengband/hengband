@@ -223,7 +223,7 @@ void process_player(PlayerType *player_ptr)
     if (player_ptr->lightspeed)
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
 
-    if ((player_ptr->pclass == PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
         if (get_current_ki(player_ptr) < 40)
             set_current_ki(player_ptr, true, 0);
         else
@@ -370,7 +370,7 @@ void process_player(PlayerType *player_ptr)
                 }
             }
 
-            if (player_ptr->pclass == PlayerClassType::IMITATOR) {
+            if (PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
                 auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
                 if (static_cast<int>(mane_data->mane_list.size()) > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2
                                                                                                                      : 1)) {

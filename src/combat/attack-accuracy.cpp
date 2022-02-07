@@ -6,6 +6,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "specific-object/death-scythe.h"
@@ -124,7 +125,7 @@ static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr
             n *= 2;
 
         success_hit = one_in_(n);
-    } else if ((player_ptr->pclass == PlayerClassType::NINJA) && ((pa_ptr->backstab || pa_ptr->surprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
+    } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && ((pa_ptr->backstab || pa_ptr->surprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
         success_hit = true;
     else
         success_hit = test_hit_norm(player_ptr, chance, r_ptr->ac, pa_ptr->m_ptr->ml);

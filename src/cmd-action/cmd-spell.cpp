@@ -641,7 +641,7 @@ void do_cmd_browse(PlayerType *player_ptr)
     q = _("どの本を読みますか? ", "Browse which book? ");
     s = _("読める本がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0, item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
 
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
@@ -1030,7 +1030,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
 
     auto item_tester = get_castable_spellbook_tester(player_ptr);
 
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0, item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
         {

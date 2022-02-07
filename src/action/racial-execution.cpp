@@ -9,6 +9,7 @@
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "racial/racial-switcher.h"
 #include "racial/racial-util.h"
@@ -61,7 +62,7 @@ PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
         difficulty -= lev_adj;
     }
 
-    auto special_easy = player_ptr->pclass == PlayerClassType::IMITATOR;
+    auto special_easy = PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR);
     special_easy &= player_ptr->inventory_list[INVEN_NECK].name1 == ART_GOGO_PENDANT;
     special_easy &= rpi_ptr->racial_name.compare("倍返し") == 0;
     if (special_easy) {

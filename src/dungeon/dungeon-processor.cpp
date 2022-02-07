@@ -30,6 +30,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
@@ -121,7 +122,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
     }
 
-    if ((player_ptr->pclass == PlayerClassType::BARD) && (get_singing_song_effect(player_ptr) > MUSIC_DETECT))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BARD) && (get_singing_song_effect(player_ptr) > MUSIC_DETECT))
         set_singing_song_effect(player_ptr, MUSIC_DETECT);
 
     if (!player_ptr->playing || player_ptr->is_dead)
