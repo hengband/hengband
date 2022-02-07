@@ -18,6 +18,7 @@
 #include "mspell/mspell-judgement.h"
 #include "mspell/mspell-util.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "spell-kind/spells-world.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -97,7 +98,7 @@ static void check_darkness(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     if (ms_ptr->ability_flags.has_not(MonsterAbilityType::DARKNESS))
         return;
 
-    bool vs_ninja = (player_ptr->pclass == PlayerClassType::NINJA) && !is_hostile(ms_ptr->t_ptr);
+    bool vs_ninja = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && !is_hostile(ms_ptr->t_ptr);
     bool can_use_lite_area = vs_ninja && !(ms_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
     if (ms_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;

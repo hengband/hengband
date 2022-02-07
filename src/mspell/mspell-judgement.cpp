@@ -11,6 +11,7 @@
 
 #include "mspell/mspell-judgement.h"
 #include "dungeon/dungeon.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
@@ -21,6 +22,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
@@ -29,7 +31,6 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -137,8 +138,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         if (flg & PROJECT_DISI) {
             if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
                 hit2 = true;
-            if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, player_ptr->y, player_ptr->x)
-                && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad))
+            if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, player_ptr->y, player_ptr->x) && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad))
                 hityou = true;
         } else if (flg & PROJECT_LOS) {
             if (los(player_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
@@ -251,7 +251,8 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->dustrobe)
         return true;
 
-    if (player_ptr->shero && (player_ptr->pclass != PlayerClassType::BERSERKER))
+    PlayerClass pc(player_ptr);
+    if (player_ptr->shero && !pc.equals(PlayerClassType::BERSERKER))
         return true;
 
     if (player_ptr->mimic_form == MIMIC_DEMON_LORD)
@@ -293,7 +294,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
+    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !(pc.equals(PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
         if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST))
             return true;
 
@@ -328,8 +329,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->lightspeed && (m_ptr->mspeed < 136))
         return true;
 
-    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135)
-        && monster_fast_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding]))
+    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135) && monster_fast_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding]))
         return true;
 
     return false;

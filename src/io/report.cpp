@@ -17,6 +17,7 @@
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-personality.h"
@@ -415,7 +416,7 @@ bool report_score(PlayerType *player_ptr)
     sprintf(personality_desc, "%s ", ap_ptr->title);
 #endif
 
-    auto realm1_name = player_ptr->pclass == PlayerClassType::ELEMENTALIST ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
+    auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
     buf_sprintf(score, "name: %s\n", player_ptr->name);
     buf_sprintf(score, "version: %s\n", title);
     buf_sprintf(score, "score: %d\n", calc_score(player_ptr));

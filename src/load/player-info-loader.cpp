@@ -32,7 +32,7 @@
  */
 static void rd_realms(PlayerType *player_ptr)
 {
-    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
         player_ptr->element = rd_byte();
     else
         player_ptr->realm1 = rd_byte();
@@ -99,7 +99,7 @@ void rd_experience(PlayerType *player_ptr)
     for (int i = 0; i < 64; i++)
         player_ptr->spell_exp[i] = rd_s16b();
 
-    if ((player_ptr->pclass == PlayerClassType::SORCERER) && h_older_than(0, 4, 2))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::SORCERER) && h_older_than(0, 4, 2))
         for (int i = 0; i < 64; i++)
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
 

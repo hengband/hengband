@@ -18,6 +18,7 @@
 #include "monster-race/race-flags7.h"
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
+#include "player-base/player-class.h"
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -178,7 +179,8 @@ void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
     if (msa_ptr->ability_flags.has_not(MonsterAbilityType::DARKNESS))
         return;
 
-    bool can_use_lite_area = (player_ptr->pclass == PlayerClassType::NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0) && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
+    PlayerClass pc(player_ptr);
+    bool can_use_lite_area = pc.equals(PlayerClassType::NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0) && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
 
     if (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
@@ -188,6 +190,6 @@ void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
         return;
     }
 
-    if ((player_ptr->pclass == PlayerClassType::NINJA) && !can_use_lite_area)
+    if (pc.equals(PlayerClassType::NINJA) && !can_use_lite_area)
         msa_ptr->ability_flags.reset(MonsterAbilityType::DARKNESS);
 }

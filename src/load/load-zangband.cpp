@@ -10,6 +10,7 @@
 #include "market/bounty.h"
 #include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
@@ -89,7 +90,7 @@ void set_zangband_realm(PlayerType *player_ptr)
 
 void set_zangband_skill(PlayerType *player_ptr)
 {
-    if (player_ptr->pclass != PlayerClassType::BEASTMASTER)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
         player_ptr->skill_exp[PlayerSkillKindType::RIDING] /= 2;
 
     player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min(player_ptr->skill_exp[PlayerSkillKindType::RIDING], s_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING]);
@@ -193,22 +194,23 @@ void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loa
 
 void set_zangband_class(PlayerType *player_ptr)
 {
-    if (h_older_than(0, 2, 2) && (player_ptr->pclass == PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
+    PlayerClass pc(player_ptr);
+    if (h_older_than(0, 2, 2) && pc.equals(PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 3, 2) && (player_ptr->pclass == PlayerClassType::ARCHER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 3, 2) && pc.equals(PlayerClassType::ARCHER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 2, 6) && (player_ptr->pclass == PlayerClassType::SORCERER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 2, 6) && pc.equals(PlayerClassType::SORCERER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 4, 7) && (player_ptr->pclass == PlayerClassType::BLUE_MAGE) && !player_ptr->is_dead) {
+    if (h_older_than(0, 4, 7) && pc.equals(PlayerClassType::BLUE_MAGE) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }

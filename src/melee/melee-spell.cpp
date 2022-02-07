@@ -54,16 +54,17 @@ static bool disturb_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr
 
 static void process_special_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
+    PlayerClass pc(player_ptr);
     bool is_special_magic = ms_ptr->m_ptr->ml;
     is_special_magic &= ms_ptr->maneable;
     is_special_magic &= w_ptr->timewalk_m_idx == 0;
     is_special_magic &= !player_ptr->blind;
-    is_special_magic &= player_ptr->pclass == PlayerClassType::IMITATOR;
+    is_special_magic &= pc.equals(PlayerClassType::IMITATOR);
     is_special_magic &= ms_ptr->thrown_spell != MonsterAbilityType::SPECIAL;
     if (!is_special_magic)
         return;
 
-    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+    auto mane_data = pc.get_specific_data<mane_data_type>();
 
     if (mane_data->mane_list.size() == MAX_MANE) {
         mane_data->mane_list.pop_front();

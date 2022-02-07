@@ -47,6 +47,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-table.h"
@@ -169,14 +170,15 @@ void ObjectThrowEntity::set_class_specific_throw_params()
 {
     PlayerEnergy energy(this->player_ptr);
     energy.set_player_turn_energy(100);
-    if ((this->player_ptr->pclass == PlayerClassType::ROGUE) || (this->player_ptr->pclass == PlayerClassType::NINJA)) {
+    PlayerClass pc(this->player_ptr);
+    if (pc.equals(PlayerClassType::ROGUE) || pc.equals(PlayerClassType::NINJA)) {
         energy.sub_player_turn_energy(this->player_ptr->lev);
     }
 
     this->y = this->player_ptr->y;
     this->x = this->player_ptr->x;
     handle_stuff(this->player_ptr);
-    this->shuriken = (this->player_ptr->pclass == PlayerClassType::NINJA)
+    this->shuriken = pc.equals(PlayerClassType::NINJA)
         && ((this->q_ptr->tval == ItemKindType::SPIKE) || ((this->obj_flags.has(TR_THROW)) && (this->q_ptr->tval == ItemKindType::SWORD)));
 }
 

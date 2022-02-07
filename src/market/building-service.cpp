@@ -1,5 +1,6 @@
 ﻿#include "market/building-service.h"
 #include "cmd-building/cmd-building.h"
+#include "player-base/player-class.h"
 #include "realm/realm-names-table.h"
 #include "system/building-type-definition.h"
 #include "system/player-type-definition.h"
@@ -60,7 +61,7 @@ bool is_member(PlayerType *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (player_ptr->pclass != PlayerClassType::SORCERER)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::SORCERER))
         return false;
 
     for (int i = 0; i < MAX_MAGIC; i++) {

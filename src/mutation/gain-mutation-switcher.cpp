@@ -1,11 +1,13 @@
 ﻿#include "mutation/gain-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
+#include "player-base/player-class.h"
 #include "system/player-type-definition.h"
 
 void switch_gain_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
 {
-    switch (glm_ptr->choose_mut ? glm_ptr->choose_mut : (player_ptr->pclass == PlayerClassType::BERSERKER ? 74 + randint1(119) : randint1(193))) {
+    PlayerClass pc(player_ptr);
+    switch (glm_ptr->choose_mut ? glm_ptr->choose_mut : pc.equals(PlayerClassType::BERSERKER) ? 74 + randint1(119) : randint1(193)) {
     case 1:
     case 2:
     case 3:
@@ -288,7 +290,7 @@ void switch_gain_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
         break;
     case 110:
     case 111:
-        if (player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR)
+        if (pc.equals(PlayerClassType::CHAOS_WARRIOR))
             break;
 
         glm_ptr->muta_which = PlayerMutationType::CHAOS_GIFT;
