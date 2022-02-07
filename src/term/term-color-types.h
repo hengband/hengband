@@ -7,13 +7,13 @@
  * and should "gamma corrected" on most (non-Macintosh) machines.
  */
 enum term_color_type : unsigned char {
-	TERM_DARK = 0, /*!< 'd' - 黒 0,0,0 */
+    TERM_DARK = 0, /*!< 'd' - 黒 0,0,0 */
     TERM_WHITE = 1, /*!< 'w' - 白 4,4,4 */
     TERM_SLATE = 2, /*!< 's' - 灰 2,2,2 */
     TERM_ORANGE = 3, /*!< 'o' - 橙 4,2,0 */
     TERM_RED = 4, /*!< 'r' - 赤 3,0,0 */
     TERM_GREEN = 5, /*!< 'g' - 緑 0,2,1 */
-    TERM_BLUE = 6, /*!< 'b' - 青 0,0,4 */
+    TERM_BLUE = 6, /*!< 'b' - 青 0,2,4 */
     TERM_UMBER = 7, /*!< 'u' - 琥珀 2,1,0 */
     TERM_L_DARK = 8, /*!< 'D' - 暗い灰 1,1,1 */
     TERM_L_WHITE = 9, /*!< 'W' - 明るい灰 3,3,3 */
