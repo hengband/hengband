@@ -25,6 +25,7 @@ public:
     bool has_additional_speed() const;
     bool is_soldier() const;
     bool is_wizard() const;
+    bool is_tamer() const;
     bool is_every_magic() const;
     bool has_number_of_spells_learned() const;
 

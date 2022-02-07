@@ -52,7 +52,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
     } else if (pc.equals(PlayerClassType::NINJA)) {
         if (o_ptr->tval == ItemKindType::LITE && o_ptr->name2 == EGO_LITE_DARKNESS && o_ptr->is_known())
             return false;
-    } else if (pc.equals(PlayerClassType::BEASTMASTER) || pc.equals(PlayerClassType::CAVALRY)) {
+    } else if (pc.is_tamer()) {
         if (o_ptr->tval == ItemKindType::WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())
              return false;
     }

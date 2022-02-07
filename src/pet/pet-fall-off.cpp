@@ -17,6 +17,7 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
@@ -69,7 +70,7 @@ static bool calc_fall_off_possibility(PlayerType *player_ptr, const HIT_POINT da
     if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10)
         return true;
 
-    if ((((player_ptr->pclass == PlayerClassType::BEASTMASTER) || (player_ptr->pclass == PlayerClassType::CAVALRY)) && !player_ptr->riding_ryoute)
+    if ((PlayerClass(player_ptr).is_tamer() && !player_ptr->riding_ryoute)
         || !one_in_(player_ptr->lev * (player_ptr->riding_ryoute ? 2 : 3) + 30)) {
         return false;
     }

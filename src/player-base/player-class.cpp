@@ -267,6 +267,13 @@ bool PlayerClass::is_wizard() const
     return is_wizard;
 }
 
+bool PlayerClass::is_tamer() const
+{
+    auto is_tamer = this->equals(PlayerClassType::BEASTMASTER);
+    is_tamer |= this->equals(PlayerClassType::CAVALRY);
+    return is_tamer;
+}
+
 bool PlayerClass::is_every_magic() const
 {
     auto is_every_magic = this->equals(PlayerClassType::SORCERER);

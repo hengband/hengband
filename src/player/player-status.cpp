@@ -2135,7 +2135,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
                 hit += 15;
             } else if (flgs.has_not(TR_RIDING)) {
                 short penalty;
-                if ((player_ptr->pclass == PlayerClassType::BEASTMASTER) || (player_ptr->pclass == PlayerClassType::CAVALRY)) {
+                if (PlayerClass(player_ptr).is_tamer()) {
                     penalty = 5;
                 } else {
                     penalty = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;

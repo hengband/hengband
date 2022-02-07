@@ -99,8 +99,7 @@ static void go_to_arena(PlayerType *player_ptr)
     if (battle_metal_babble(player_ptr))
         return;
 
-    PlayerClass pc(player_ptr);
-    if (player_ptr->riding && !pc.equals(PlayerClassType::BEASTMASTER) && !pc.equals(PlayerClassType::CAVALRY)) {
+    if (player_ptr->riding && !PlayerClass(player_ptr).is_tamer()) {
         msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
         msg_print(nullptr);
         return;

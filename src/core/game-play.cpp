@@ -290,11 +290,10 @@ static void init_io(PlayerType *player_ptr)
 static void init_riding_pet(PlayerType *player_ptr, bool new_game)
 {
     PlayerClass pc(player_ptr);
-    auto is_cavalry = pc.equals(PlayerClassType::CAVALRY);
-    if (!new_game || (!is_cavalry && !pc.equals(PlayerClassType::BEASTMASTER)))
+    if (!new_game || !pc.is_tamer())
         return;
 
-    MONRACE_IDX pet_r_idx = is_cavalry ? MON_HORSE : MON_YASE_HORSE;
+    MONRACE_IDX pet_r_idx = pc.equals(PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE;
     monster_race *r_ptr = &r_info[pet_r_idx];
     place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
