@@ -274,6 +274,28 @@ bool PlayerClass::is_every_magic() const
     return is_every_magic;
 }
 
+/*!
+ * @brief 「覚えた呪文の数」という概念を持つクラスかをチェックする.
+ * @return 呪文の数を持つか否か
+ */
+bool PlayerClass::has_number_of_spells_learned() const
+{
+    auto has_number_of_spells_learned = this->equals(PlayerClassType::MAGE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::PRIEST);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::ROGUE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::RANGER);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::PALADIN);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::WARRIOR_MAGE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::CHAOS_WARRIOR);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::MONK);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::HIGH_MAGE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::TOURIST);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::BEASTMASTER);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::BARD);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::FORCETRAINER);
+    return has_number_of_spells_learned;
+}
+
 bool PlayerClass::lose_balance()
 {
     if (this->player_ptr->pclass != PlayerClassType::SAMURAI) {

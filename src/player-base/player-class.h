@@ -26,6 +26,7 @@ public:
     bool is_soldier() const;
     bool is_wizard() const;
     bool is_every_magic() const;
+    bool has_number_of_spells_learned() const;
 
     bool lose_balance();
     void break_samurai_stance(std::initializer_list<SamuraiStanceType> stance_list);
