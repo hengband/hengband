@@ -231,6 +231,21 @@ bool PlayerClass::has_stun_immunity() const
     return (this->player_ptr->pclass == PlayerClassType::BERSERKER) && (this->player_ptr->lev > 34);
 }
 
+/*!
+ * @brief 加速ボーナスのある種族かを返す
+ * @return 加速ボーナスのある種族か否か
+ * @details 
+ * 種族と職業の両方で特性による加速が得られる場合、重複して加速することはない.
+ * 代りに経験値補正が軽くなる.
+ */
+bool PlayerClass::has_additional_speed() const
+{
+    auto has_additional_speed = this->equals(PlayerClassType::MONK);
+    has_additional_speed |= this->equals(PlayerClassType::FORCETRAINER);
+    has_additional_speed |= this->equals(PlayerClassType::NINJA);
+    return has_additional_speed;
+}
+
 bool PlayerClass::is_soldier() const
 {
     auto is_soldier = this->equals(PlayerClassType::WARRIOR);

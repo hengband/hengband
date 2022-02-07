@@ -1,6 +1,7 @@
 ﻿#include "birth/birth-stat.h"
 #include "birth/auto-roller.h"
 #include "core/player-redraw-types.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -94,8 +95,10 @@ uint16_t get_expfact(PlayerType *player_ptr)
 
     if (player_ptr->prace != PlayerRaceType::ANDROID)
         expfact += cp_ptr->c_exp;
-    if (((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER) || (player_ptr->pclass == PlayerClassType::NINJA))
-        && ((player_ptr->prace == PlayerRaceType::KLACKON) || (player_ptr->prace == PlayerRaceType::SPRITE)))
+
+    auto is_specific_race = (player_ptr->prace == PlayerRaceType::KLACKON) || (player_ptr->prace == PlayerRaceType::SPRITE);
+    auto is_specific_class = PlayerClass(player_ptr).has_additional_speed();
+    if (is_specific_race && is_specific_class)
         expfact -= 15;
 
     return expfact;
