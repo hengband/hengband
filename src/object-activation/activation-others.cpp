@@ -169,11 +169,17 @@ bool activate_unique_detection(PlayerType *player_ptr)
             continue;
 
         r_ptr = &r_info[m_ptr->r_idx];
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->flags1 & RF1_UNIQUE) {
             msg_format(_("%s． ", "%s. "), r_ptr->name.c_str());
+        }
 
-        if (m_ptr->r_idx == MON_DIO)
+        if (m_ptr->r_idx == MON_DIO) {
             msg_print(_("きさま！　見ているなッ！", "You bastard! You're watching me, well watch this!"));
+        }
+
+        if (m_ptr->r_idx == MON_SAURON) {
+            msg_print(_("あなたは一瞬、瞼なき御目に凝視される感覚に襲われた！", "For a moment, you had the horrible sensation of being stared at by the lidless eye!"));
+        }
     }
 
     return true;
