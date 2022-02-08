@@ -459,7 +459,7 @@ bool true_healing(PlayerType *player_ptr, HIT_POINT pow)
 
 bool restore_mana(PlayerType *player_ptr, bool magic_eater)
 {
-    if (player_ptr->pclass == PlayerClassType::MAGIC_EATER && magic_eater) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::MAGIC_EATER) && magic_eater) {
         // 魔力復活による、魔道具術師の取り込んだ魔法の回復量
         // 取り込み数が10回未満: 3 回分回復
         // 取り込み数が10回以上: 取り込み回数/3 回分回復
@@ -587,7 +587,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, object_type **o_ptr_ptr)
     (void)set_blessed(player_ptr, player_ptr->blessed + t, false);
     (void)set_fast(player_ptr, player_ptr->fast + t, false);
     (void)set_shero(player_ptr, player_ptr->shero + t, false);
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER)) {
         set_current_ki(player_ptr, true, player_ptr->lev * 5 + 190);
         msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));
     }

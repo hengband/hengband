@@ -6,12 +6,14 @@
 
 #include "spell-kind/spells-random.h"
 #include "avatar/avatar.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-investor-remover.h"
+#include "player-base/player-class.h"
 #include "player/player-damage.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-equipment.h"
@@ -23,7 +25,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
@@ -42,8 +43,8 @@
  */
 void call_chaos(PlayerType *player_ptr)
 {
-    AttributeType hurt_types[32] = { AttributeType::ELEC, AttributeType::POIS, AttributeType::ACID, AttributeType::COLD, AttributeType::FIRE, 
-        AttributeType::MISSILE,  AttributeType::PLASMA, AttributeType::HOLY_FIRE, AttributeType::WATER, AttributeType::LITE, 
+    AttributeType hurt_types[32] = { AttributeType::ELEC, AttributeType::POIS, AttributeType::ACID, AttributeType::COLD, AttributeType::FIRE,
+        AttributeType::MISSILE, AttributeType::PLASMA, AttributeType::HOLY_FIRE, AttributeType::WATER, AttributeType::LITE,
         AttributeType::DARK, AttributeType::FORCE, AttributeType::INERTIAL, AttributeType::MANA, AttributeType::METEOR, AttributeType::ICE,
         AttributeType::CHAOS, AttributeType::NETHER, AttributeType::DISENCHANT, AttributeType::SHARDS, AttributeType::SOUND, AttributeType::NEXUS,
         AttributeType::CONFUSION, AttributeType::TIME, AttributeType::GRAVITY, AttributeType::ROCKET, AttributeType::NUKE, AttributeType::HELL_FIRE,
@@ -183,7 +184,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 20: {
             auto is_statue = stop_ty;
             is_statue |= player_ptr->free_act && (randint1(125) < player_ptr->skill_sav);
-            is_statue |= player_ptr->pclass == PlayerClassType::BERSERKER;
+            is_statue |= PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER);
             if (!is_statue) {
                 msg_print(_("彫像になった気分だ！", "You feel like a statue!"));
                 TIME_EFFECT turns = player_ptr->free_act ? randint1(3) : randint1(13);
@@ -223,7 +224,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             for (int i = 0; i < A_MAX; i++) {
                 do {
                     (void)do_dec_stat(player_ptr, i);
-                } while(one_in_(2));
+                } while (one_in_(2));
             }
         }
     }

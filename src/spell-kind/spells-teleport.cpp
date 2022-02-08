@@ -28,6 +28,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
@@ -511,7 +512,7 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
 
     bool follow = false;
-    if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || (player_ptr->pclass == PlayerClassType::IMITATOR))
+    if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR))
         follow = true;
     else {
         object_type *o_ptr;

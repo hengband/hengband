@@ -7,6 +7,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-status-table.h"
 #include "room/rooms-builder.h"
@@ -88,9 +89,10 @@ bool common_saving_throw_control(PlayerType *player_ptr, HIT_POINT pow, monster_
  */
 PERCENTAGE beam_chance(PlayerType *player_ptr)
 {
-    if (player_ptr->pclass == PlayerClassType::MAGE)
+    PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::MAGE))
         return (PERCENTAGE)(player_ptr->lev);
-    if (player_ptr->pclass == PlayerClassType::HIGH_MAGE || player_ptr->pclass == PlayerClassType::SORCERER)
+    if (pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::SORCERER))
         return (PERCENTAGE)(player_ptr->lev + 10);
 
     return (PERCENTAGE)(player_ptr->lev / 2);

@@ -15,6 +15,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
@@ -104,7 +105,7 @@ static void compensate_death_scythe_reflection_magnification(PlayerType *player_
     if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) && (*magnification < 25))
         *magnification = 25;
 
-    if ((player_ptr->pclass != PlayerClassType::SAMURAI) && (death_scythe_flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI) && (death_scythe_flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
         player_ptr->csp -= (1 + (player_ptr->msp / 30));
         player_ptr->redraw |= (PR_MANA);
         *magnification = *magnification * 3 / 2 + 20;

@@ -25,7 +25,7 @@
  */
 void check_music(PlayerType *player_ptr)
 {
-    if (player_ptr->pclass != PlayerClassType::BARD)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::BARD))
         return;
 
     auto interupting_song_effect = get_interrupting_song_effect(player_ptr);
@@ -115,7 +115,7 @@ bool set_tim_stealth(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
  */
 void stop_singing(PlayerType *player_ptr)
 {
-    if (player_ptr->pclass != PlayerClassType::BARD)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::BARD))
         return;
 
     if (get_interrupting_song_effect(player_ptr) != 0) {

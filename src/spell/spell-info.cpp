@@ -1,6 +1,7 @@
 ﻿#include "spell/spell-info.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
@@ -136,7 +137,8 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell, int16_t use_rea
         chance += 5 * (need_mana - player_ptr->csp);
     }
 
-    if ((use_realm != player_ptr->realm1) && ((player_ptr->pclass == PlayerClassType::MAGE) || (player_ptr->pclass == PlayerClassType::PRIEST)))
+    PlayerClass pc(player_ptr);
+    if ((use_realm != player_ptr->realm1) && (pc.equals(PlayerClassType::MAGE) || pc.equals(PlayerClassType::PRIEST)))
         chance += 5;
 
     PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]];
@@ -145,10 +147,15 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell, int16_t use_rea
             minfail = 5;
     }
 
-    if (((player_ptr->pclass == PlayerClassType::PRIEST) || (player_ptr->pclass == PlayerClassType::SORCERER)) && player_ptr->is_icky_wield[0])
-        chance += 25;
-    if (((player_ptr->pclass == PlayerClassType::PRIEST) || (player_ptr->pclass == PlayerClassType::SORCERER)) && player_ptr->is_icky_wield[1])
-        chance += 25;
+    if ((pc.equals(PlayerClassType::PRIEST) || pc.equals(PlayerClassType::SORCERER))) {
+        if (player_ptr->is_icky_wield[0]) {
+            chance += 25;
+        }
+
+        if (player_ptr->is_icky_wield[1]) {
+            chance += 25;
+        }
+    }
 
     chance = mod_spell_chance_1(player_ptr, chance);
     PERCENTAGE penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
@@ -179,8 +186,7 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell, int16_t use_rea
         chance = 95;
     }
 
-    if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || (player_ptr->pclass == PlayerClassType::SORCERER)
-        || (player_ptr->pclass == PlayerClassType::RED_MAGE)) {
+    if ((use_realm == player_ptr->realm1) || (use_realm == player_ptr->realm2) || pc.is_every_magic()) {
         auto exp = PlayerSkill(player_ptr).exp_of_spell(use_realm, spell);
         if (exp >= PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT))
             chance--;
@@ -218,7 +224,8 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
     put_str(buf, y, x + 29);
 
     int increment = 64;
-    if ((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE))
+    PlayerClass pc(player_ptr);
+    if (pc.is_every_magic())
         increment = 0;
     else if (use_realm == player_ptr->realm1)
         increment = 0;
@@ -259,7 +266,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
                 max = true;
             else if (s_ptr->slevel >= 99)
                 max = true;
-            else if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && (skill_rank >= PlayerSkillRank::SKILLED))
+            else if (pc.equals(PlayerClassType::RED_MAGE) && (skill_rank >= PlayerSkillRank::SKILLED))
                 max = true;
 
             strncpy(ryakuji, PlayerSkill::skill_rank_str(skill_rank), 4);
@@ -284,7 +291,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
         strcpy(info, exe_spell(player_ptr, use_realm, spell, SpellProcessType::INFO));
         concptr comment = info;
         byte line_attr = TERM_WHITE;
-        if ((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE)) {
+        if (pc.is_every_magic()) {
             if (s_ptr->slevel > player_ptr->max_plv) {
                 comment = _("未知", "unknown");
                 line_attr = TERM_L_BLUE;

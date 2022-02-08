@@ -3,6 +3,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-investor-remover.h"
+#include "player-base/player-class.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-floor.h"
@@ -34,7 +35,11 @@ void cast_shuffle(PlayerType *player_ptr)
     int vir = virtue_number(player_ptr, V_CHANCE);
     int i;
 
-    if ((player_ptr->pclass == PlayerClassType::ROGUE) || (player_ptr->pclass == PlayerClassType::HIGH_MAGE) || (player_ptr->pclass == PlayerClassType::SORCERER))
+    PlayerClass pc(player_ptr);
+    auto is_good_shuffle = PlayerClass(player_ptr).equals(PlayerClassType::ROGUE);
+    is_good_shuffle |= PlayerClass(player_ptr).equals(PlayerClassType::HIGH_MAGE);
+    is_good_shuffle |= PlayerClass(player_ptr).equals(PlayerClassType::SORCERER);
+    if (is_good_shuffle)
         die = (randint1(110)) + plev / 5;
     else
         die = randint1(120);
