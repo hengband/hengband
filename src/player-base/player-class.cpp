@@ -229,7 +229,12 @@ TrFlags PlayerClass::stance_tr_flags() const
 
 bool PlayerClass::has_stun_immunity() const
 {
-    return (this->player_ptr->pclass == PlayerClassType::BERSERKER) && (this->player_ptr->lev > 34);
+    return this->equals(PlayerClassType::BERSERKER) && (this->player_ptr->lev > 34);
+}
+
+bool PlayerClass::has_poison_resistance() const
+{
+    return this->equals(PlayerClassType::NINJA) && (this->player_ptr->lev > 44);
 }
 
 /*!
