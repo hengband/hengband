@@ -17,6 +17,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
 #include "player-info/alignment.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
@@ -104,7 +105,7 @@ static void display_magic_realms(PlayerType *player_ptr)
         return;
 
     char tmp[64];
-    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
         sprintf(tmp, "%s", get_element_title(player_ptr->element));
     else if (player_ptr->realm2)
         sprintf(tmp, "%s, %s", realm_names[player_ptr->realm1], realm_names[player_ptr->realm2]);
@@ -178,7 +179,7 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
     }
 
     if (w_ptr->total_winner) {
-        return std::string(format( _("…あなたは勝利の後%sした。", "...You %s after winning."),
+        return std::string(format(_("…あなたは勝利の後%sした。", "...You %s after winning."),
             streq(player_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure")));
     }
 
@@ -309,7 +310,7 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
 
     display_player_basic_info(player_ptr);
     display_magic_realms(player_ptr);
-    if ((player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT))) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT))) {
         display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.c_str(), TERM_L_BLUE);
     }
 

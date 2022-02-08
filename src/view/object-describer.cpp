@@ -4,6 +4,7 @@
 #include "flavor/object-flavor-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "realm/realm-names-table.h"
 #include "spell/spell-info.h"
 #include "system/object-type-definition.h"
@@ -98,11 +99,12 @@ void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
         if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2))
             return;
     } else {
-        if ((player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE))
+        PlayerClass pc(player_ptr);
+        if (!pc.is_every_magic())
             return;
         if (!is_magic(use_realm))
             return;
-        if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1))
+        if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1))
             return;
     }
 
