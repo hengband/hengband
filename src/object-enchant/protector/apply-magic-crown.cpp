@@ -41,7 +41,7 @@ void CrownEnchanter::apply_magic()
  */
 void CrownEnchanter::give_ego_index()
 {
-    if (one_in_(20) || (this->power > 2)) {
+    if ((this->power > 2) || one_in_(20)) {
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;
     }
