@@ -310,6 +310,13 @@ bool PlayerClass::is_tough() const
     return is_tough;
 }
 
+bool PlayerClass::is_martial_arts_pro() const
+{
+    auto is_martial_arts_pro = this->equals(PlayerClassType::MONK);
+    is_martial_arts_pro |= this->equals(PlayerClassType::FORCETRAINER);
+    return is_martial_arts_pro;
+}
+
 bool PlayerClass::is_every_magic() const
 {
     auto is_every_magic = this->equals(PlayerClassType::SORCERER);

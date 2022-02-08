@@ -254,7 +254,7 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         int basedam;
         damage[i] = player_ptr->dis_to_d[i] * 100;
         PlayerClass pc(player_ptr);
-        if ((pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER)) && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
+        if (pc.is_martial_arts_pro() && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
             if (!calc_weapon_damage_limit(player_ptr, i, damage, &basedam, o_ptr))
                 break;
 

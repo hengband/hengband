@@ -1660,7 +1660,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         ac += 25;
     }
 
-    if ((pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER)) && !heavy_armor(player_ptr)) {
+    if (pc.is_martial_arts_pro() && !heavy_armor(player_ptr)) {
         if (!(player_ptr->inventory_list[INVEN_BODY].k_idx)) {
             ac += (player_ptr->lev * 3) / 2;
         }
@@ -1905,8 +1905,7 @@ void put_equipment_warning(PlayerType *player_ptr)
     }
 
     PlayerClass pc(player_ptr);
-    if ((pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER) || pc.equals(PlayerClassType::NINJA))
-        && (heavy_armor(player_ptr) != player_ptr->monk_notify_aux)) {
+    if ((pc.is_martial_arts_pro() || pc.equals(PlayerClassType::NINJA)) && (heavy_armor(player_ptr) != player_ptr->monk_notify_aux)) {
         if (heavy_armor(player_ptr)) {
             msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
             if (w_ptr->is_loading_now) {

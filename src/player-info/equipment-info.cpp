@@ -54,14 +54,19 @@ bool can_two_hands_wielding(PlayerType *player_ptr)
 bool heavy_armor(PlayerType *player_ptr)
 {
     PlayerClass pc(player_ptr);
-    if (!pc.equals(PlayerClassType::MONK) && !pc.equals(PlayerClassType::FORCETRAINER) && !pc.equals(PlayerClassType::NINJA))
+    if (!pc.is_martial_arts_pro() && !pc.equals(PlayerClassType::NINJA)) {
         return false;
+    }
 
     WEIGHT monk_arm_wgt = 0;
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > ItemKindType::SWORD)
+    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > ItemKindType::SWORD) {
         monk_arm_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight;
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > ItemKindType::SWORD)
+    }
+
+    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > ItemKindType::SWORD) {
         monk_arm_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight;
+    }
+
     monk_arm_wgt += player_ptr->inventory_list[INVEN_BODY].weight;
     monk_arm_wgt += player_ptr->inventory_list[INVEN_HEAD].weight;
     monk_arm_wgt += player_ptr->inventory_list[INVEN_OUTER].weight;

@@ -1707,7 +1707,7 @@ bool has_not_monk_weapon(PlayerType *player_ptr, int i)
     auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
     auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     PlayerClass pc(player_ptr);
-    return (pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER)) && (player_ptr->weapon_exp_max[tval][sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED));
+    return pc.is_martial_arts_pro() && (player_ptr->weapon_exp_max[tval][sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED));
 }
 
 bool has_good_luck(PlayerType *player_ptr)
