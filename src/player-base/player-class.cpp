@@ -280,6 +280,23 @@ bool PlayerClass::is_tamer() const
     return is_tamer;
 }
 
+bool PlayerClass::can_browse() const
+{
+    auto can_browse = this->equals(PlayerClassType::MINDCRAFTER);
+    can_browse |= this->equals(PlayerClassType::BERSERKER);
+    can_browse |= this->equals(PlayerClassType::NINJA);
+    can_browse |= this->equals(PlayerClassType::MIRROR_MASTER);
+    return can_browse;
+}
+
+bool PlayerClass::has_listed_magics() const
+{
+    auto has_listed_magics = this->can_browse();
+    has_listed_magics |= this->equals(PlayerClassType::FORCETRAINER);
+    has_listed_magics |= this->equals(PlayerClassType::ELEMENTALIST);
+    return has_listed_magics;
+}
+
 bool PlayerClass::is_every_magic() const
 {
     auto is_every_magic = this->equals(PlayerClassType::SORCERER);

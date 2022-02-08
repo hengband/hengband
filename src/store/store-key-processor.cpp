@@ -150,7 +150,7 @@ void store_process_command(PlayerType *player_ptr)
     }
     case 'b': {
         PlayerClass pc(player_ptr);
-        if (pc.equals(PlayerClassType::MINDCRAFTER) || pc.equals(PlayerClassType::BERSERKER) || pc.equals(PlayerClassType::NINJA) || pc.equals(PlayerClassType::MIRROR_MASTER))
+        if (pc.can_browse())
             do_cmd_mind_browse(player_ptr);
         else if (pc.equals(PlayerClassType::ELEMENTALIST))
             do_cmd_element_browse(player_ptr);
