@@ -29,6 +29,7 @@ public:
     bool is_tamer() const;
     bool can_browse() const;
     bool has_listed_magics() const;
+    bool is_tough() const;
     bool is_every_magic() const;
     bool has_number_of_spells_learned() const;
 

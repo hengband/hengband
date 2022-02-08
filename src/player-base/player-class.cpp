@@ -297,6 +297,19 @@ bool PlayerClass::has_listed_magics() const
     return has_listed_magics;
 }
 
+/*!
+ * @brief プレイ日記のタイトルが「最高の肉体を求めて」になり得るクラスを判定する
+ * @return 該当のクラスか否か
+ */
+bool PlayerClass::is_tough() const
+{
+    auto is_tough = this->equals(PlayerClassType::WARRIOR);
+    is_tough |= this->equals(PlayerClassType::MONK);
+    is_tough |= this->equals(PlayerClassType::SAMURAI);
+    is_tough |= this->equals(PlayerClassType::BERSERKER);
+    return is_tough;
+}
+
 bool PlayerClass::is_every_magic() const
 {
     auto is_every_magic = this->equals(PlayerClassType::SORCERER);

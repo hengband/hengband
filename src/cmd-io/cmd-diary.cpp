@@ -30,10 +30,10 @@ static void display_diary(PlayerType *player_ptr)
     sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
-    if (player_ptr->pclass == PlayerClassType::WARRIOR || player_ptr->pclass == PlayerClassType::MONK || player_ptr->pclass == PlayerClassType::SAMURAI
-        || player_ptr->pclass == PlayerClassType::BERSERKER)
+    PlayerClass pc(player_ptr);
+    if (pc.is_tough())
         strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1)]);
-    else if (PlayerClass(player_ptr).is_wizard())
+    else if (pc.is_wizard())
         strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1) + 1]);
     else
         strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 2) + 1]);
