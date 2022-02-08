@@ -38,11 +38,13 @@
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "view/display-messages.h"
+#include "object-activation/activation-others.h"
 
 #include <vector>
 
 debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
     { 2, "vanish dungeon", { .spell2 = { vanish_dungeon } } },
+    { 2, "unique detection", { .spell2 = { activate_unique_detection } } },
     { 3, "true healing", { .spell3 = { true_healing } } },
     { 2, "drop weapons", { .spell2 = { drop_weapons } } },
     { 4, "ty curse", { .spell4 = { activate_ty_curse } } },

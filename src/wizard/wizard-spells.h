@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "effect/attribute-types.h"
 
-#define SPELL_MAX 5
+constexpr int SPELL_MAX = 6;
 
 struct floor_type;
 class PlayerType;
