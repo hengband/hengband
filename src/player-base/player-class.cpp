@@ -2,6 +2,7 @@
  * @brief プレイヤーの職業クラスに基づく耐性・能力の判定処理等を行うクラス
  * @date 2021/09/08
  * @author Hourier
+ * @details PlayerRaceからPlayerClassへの依存はあるが、逆は依存させないこと.
  */
 #include "player-base/player-class.h"
 #include "core/player-redraw-types.h"

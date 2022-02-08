@@ -13,6 +13,7 @@
 #include "mutation/mutation-investor-remover.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-kind-hook.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/race-types.h"
@@ -563,7 +564,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 void Patron::admire(PlayerType *player_ptr_)
 {
     this->player_ptr = player_ptr_;
-    if ((this->player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || this->player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)) {
+    if (PlayerClass(this->player_ptr).equals(PlayerClassType::CHAOS_WARRIOR) || this->player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)) {
         msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), this->name.c_str());
         msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));
     }

@@ -2,6 +2,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-status/player-hand-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -52,7 +53,8 @@ bool can_two_hands_wielding(PlayerType *player_ptr)
  */
 bool heavy_armor(PlayerType *player_ptr)
 {
-    if ((player_ptr->pclass != PlayerClassType::MONK) && (player_ptr->pclass != PlayerClassType::FORCETRAINER) && (player_ptr->pclass != PlayerClassType::NINJA))
+    PlayerClass pc(player_ptr);
+    if (!pc.equals(PlayerClassType::MONK) && !pc.equals(PlayerClassType::FORCETRAINER) && !pc.equals(PlayerClassType::NINJA))
         return false;
 
     WEIGHT monk_arm_wgt = 0;

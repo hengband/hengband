@@ -38,6 +38,7 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -419,7 +420,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
         return false;
 
     *(pa_ptr->mdeath) = true;
-    if ((player_ptr->pclass == PlayerClassType::BERSERKER) && player_ptr->energy_use) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER) && player_ptr->energy_use) {
         PlayerEnergy energy(player_ptr);
         if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
             ENERGY energy_use;
@@ -473,7 +474,7 @@ static void apply_actual_attack(
     mineuchi(player_ptr, pa_ptr);
 
     pa_ptr->attack_damage = mon_damage_mod(player_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
-        ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((player_ptr->pclass == PlayerClassType::BERSERKER) && one_in_(2)));
+        ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER) && one_in_(2)));
     critical_attack(player_ptr, pa_ptr);
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
         pa_ptr->attack_damage, pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
