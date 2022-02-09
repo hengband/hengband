@@ -9,6 +9,7 @@
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-weapon.h"
+#include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -125,8 +126,7 @@ static bool switch_random_art_bias(ObjectType *o_ptr)
 
 static bool random_art_bias_decrease_mana(ObjectType *o_ptr)
 {
-    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != ItemKindType::SOFT_ARMOR) || (o_ptr->sval != SV_ROBE)
-        || o_ptr->art_flags.has(TR_DEC_MANA) || !one_in_(3))
+    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != ItemKindType::SOFT_ARMOR) || (o_ptr->sval != SV_ROBE) || o_ptr->art_flags.has(TR_DEC_MANA) || !one_in_(3))
         return false;
 
     o_ptr->art_flags.set(TR_DEC_MANA);

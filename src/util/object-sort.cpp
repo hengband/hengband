@@ -7,6 +7,7 @@
 #include "util/object-sort.h"
 #include "monster-race/monster-race.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player/player-realm.h"
 #include "system/monster-race-definition.h"

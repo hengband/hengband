@@ -1,6 +1,7 @@
 ﻿#include "player-info/equipment-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-weapon.h"
+#include "object/tval-types.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-status/player-hand-types.h"

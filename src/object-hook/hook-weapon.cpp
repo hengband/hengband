@@ -2,6 +2,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "player/player-skill.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"

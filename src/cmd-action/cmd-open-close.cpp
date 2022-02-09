@@ -12,6 +12,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
@@ -294,7 +295,6 @@ void do_cmd_bash(PlayerType *player_ptr)
     if (!more)
         disturb(player_ptr, false, false);
 }
-
 
 /*!
  * @brief 「くさびを打つ」ために必要なオブジェクトを所持しているかどうかの判定を返す /

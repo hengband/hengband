@@ -5,6 +5,7 @@
 #include "game-option/game-play-options.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

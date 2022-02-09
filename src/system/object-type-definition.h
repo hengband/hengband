@@ -9,7 +9,6 @@
 
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object/tval-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"

@@ -6,6 +6,7 @@
 #include "artifact/random-art-slay.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
+#include "object/tval-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -165,8 +166,7 @@ static bool switch_random_art_slay(ObjectType *o_ptr)
     case BIAS_RANGER:
         return random_art_slay_animal(o_ptr);
     case BIAS_ROGUE:
-        if ((((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_SPEAR)))
-            && o_ptr->art_flags.has_not(TR_THROW)) {
+        if ((((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_SPEAR))) && o_ptr->art_flags.has_not(TR_THROW)) {
             o_ptr->art_flags.set(TR_THROW);
         }
 
@@ -222,7 +222,7 @@ void random_slay(ObjectType *o_ptr)
             o_ptr->artifact_bias = BIAS_LAW;
             break;
         }
-        
+
         if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_PRIESTLY;
 
@@ -330,12 +330,12 @@ void random_slay(ObjectType *o_ptr)
             o_ptr->artifact_bias = BIAS_POIS;
             break;
         }
-        
+
         if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(6)) {
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
             break;
         }
-        
+
         if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_ROGUE;
 

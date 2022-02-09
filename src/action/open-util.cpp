@@ -6,6 +6,7 @@
 #include "action/open-util.h"
 #include "floor/geometry.h"
 #include "grid/trap.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -25,9 +26,8 @@ OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapp
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if ((o_ptr->tval == ItemKindType::CHEST)
-            && (((!trapped) && (o_ptr->pval)) || /* non empty */
-                ((trapped) && (o_ptr->pval > 0)))) /* trapped only */
+        if ((o_ptr->tval == ItemKindType::CHEST) && (((!trapped) && (o_ptr->pval)) || /* non empty */
+                                                        ((trapped) && (o_ptr->pval > 0)))) /* trapped only */
             return this_o_idx;
     }
 

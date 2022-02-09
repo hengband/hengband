@@ -4,6 +4,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "store/store-util.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-rod-types.h"
@@ -384,16 +385,16 @@ static byte decide_discount_rate(const PRICE cost)
 {
     if (cost < 5)
         return 0;
-    
+
     if (one_in_(25))
         return 25;
-    
+
     if (one_in_(150))
         return 50;
-    
+
     if (one_in_(300))
         return 75;
-    
+
     if (one_in_(500))
         return 90;
 
