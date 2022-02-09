@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "spell/spells-util.h"
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 struct monster_type;
 bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam);
@@ -30,6 +30,6 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater);
 bool restore_all_status(PlayerType *player_ptr);
 
 bool fishing(PlayerType *player_ptr);
-bool cosmic_cast_off(PlayerType *player_ptr, object_type **o_ptr_ptr);
+bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr);
 void apply_nexus(monster_type *m_ptr, PlayerType *player_ptr);
 void status_shuffle(PlayerType *player_ptr);

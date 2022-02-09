@@ -20,7 +20,7 @@ enum class PlayerSkillKindType;
 enum class MonsterAbilityType;
 
 struct floor_type;
-struct object_type;
+class ObjectType;
 class TimedEffects;
 class PlayerType {
 public:
@@ -232,7 +232,7 @@ public:
     byte feeling{}; /* Most recent dungeon feeling */
     int32_t feeling_turn{}; /* The turn of the last dungeon feeling */
 
-    std::shared_ptr<object_type[]> inventory_list{}; /* The player's inventory */
+    std::shared_ptr<ObjectType[]> inventory_list{}; /* The player's inventory */
     int16_t inven_cnt{}; /* Number of items in inventory */
     int16_t equip_cnt{}; /* Number of items in equipment */
 

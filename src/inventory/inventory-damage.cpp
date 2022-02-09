@@ -29,7 +29,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker& breaker, int 
 {
     INVENTORY_IDX i;
     int j, amt;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena)

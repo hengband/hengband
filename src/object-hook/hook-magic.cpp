@@ -18,7 +18,7 @@
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 利用可能ならばTRUEを返す
  */
-bool item_tester_hook_use(PlayerType *player_ptr, const object_type *o_ptr)
+bool item_tester_hook_use(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     if (o_ptr->tval == player_ptr->tval_ammo)
         return true;
@@ -54,7 +54,7 @@ bool item_tester_hook_use(PlayerType *player_ptr, const object_type *o_ptr)
  * @param o_ptr 判定したいオブ会ジェクトの構造体参照ポインタ
  * @return 学習できる魔道書ならばTRUEを返す
  */
-bool item_tester_learn_spell(PlayerType *player_ptr, const object_type *o_ptr)
+bool item_tester_learn_spell(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     int32_t choices = realm_choices2[enum2i(player_ptr->pclass)];
     PlayerClass pc(player_ptr);
@@ -83,7 +83,7 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトが高位の魔法書ならばTRUEを返す
  */
-bool item_tester_high_level_book(const object_type *o_ptr)
+bool item_tester_high_level_book(const ObjectType *o_ptr)
 {
     if ((o_ptr->tval == ItemKindType::LIFE_BOOK) || (o_ptr->tval == ItemKindType::SORCERY_BOOK) || (o_ptr->tval == ItemKindType::NATURE_BOOK) || (o_ptr->tval == ItemKindType::CHAOS_BOOK)
         || (o_ptr->tval == ItemKindType::DEATH_BOOK) || (o_ptr->tval == ItemKindType::TRUMP_BOOK) || (o_ptr->tval == ItemKindType::CRAFT_BOOK) || (o_ptr->tval == ItemKindType::DEMON_BOOK)

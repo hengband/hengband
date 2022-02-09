@@ -270,7 +270,7 @@ static void preserve_info(PlayerType *player_ptr)
     }
 
     for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid())
             continue;
 

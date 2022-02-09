@@ -28,7 +28,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
 {
     COMMAND_CODE i;
     int j, k, l;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
     COMMAND_CODE out_index[23];

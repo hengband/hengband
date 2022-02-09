@@ -63,5 +63,5 @@ struct object_kind {
 
 extern std::vector<object_kind> k_info;
 
-struct object_type;
-SYMBOL_CODE object_char(object_type *o_ptr);
+class ObjectType;
+SYMBOL_CODE object_char(ObjectType *o_ptr);

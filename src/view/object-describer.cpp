@@ -20,7 +20,7 @@
  */
 void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[item];
+    ObjectType *o_ptr = &player_ptr->inventory_list[item];
     if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
         return;
     if (!o_ptr->is_known())
@@ -51,7 +51,7 @@ void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[item];
+    ObjectType *o_ptr = &player_ptr->inventory_list[item];
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -75,8 +75,8 @@ void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     int sval;
     int16_t use_realm;
     GAME_TEXT o_name[MAX_NLEN];

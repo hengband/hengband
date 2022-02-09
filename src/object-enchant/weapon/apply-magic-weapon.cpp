@@ -24,7 +24,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : AbstractWeaponEnchanter(o_ptr, level, power)
     , player_ptr(player_ptr)
 {

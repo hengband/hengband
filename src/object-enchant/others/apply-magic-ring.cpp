@@ -23,7 +23,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-RingEnchanter::RingEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+RingEnchanter::RingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , level(level)

@@ -159,7 +159,7 @@ void complete_quest(PlayerType *player_ptr, QUEST_IDX quest_num)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
  */
-void check_find_art_quest_completion(PlayerType *player_ptr, object_type *o_ptr)
+void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     /* Check if completed a quest */
     for (QUEST_IDX i = 0; i < max_q_idx; i++) {

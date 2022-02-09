@@ -32,7 +32,7 @@ void museum_remove_object(PlayerType *player_ptr)
         return;
 
     item = item + store_top;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &st_ptr->stock[item];
 
     GAME_TEXT o_name[MAX_NLEN];

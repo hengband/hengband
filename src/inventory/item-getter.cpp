@@ -56,7 +56,7 @@ static bool check_item_tag_aux(PlayerType *player_ptr, item_selection_type *item
     if (!item_selection_ptr->floor || (*item_selection_ptr->cp >= 0))
         return false;
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     item_selection_ptr->k = 0 - (*item_selection_ptr->cp);
     o_ptr = &player_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
     if (!item_tester.okay(o_ptr) && ((item_selection_ptr->mode & USE_FULL) == 0))
@@ -230,7 +230,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     if (item_selection_ptr->floor) {
         for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-            object_type *o_ptr;
+            ObjectType *o_ptr;
             o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
             if ((item_tester.okay(o_ptr) || (item_selection_ptr->mode & USE_FULL)) && (o_ptr->marked & OM_FOUND))
                 item_selection_ptr->allow_floor = true;
@@ -459,7 +459,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         case '-': {
             if (item_selection_ptr->allow_floor) {
                 for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-                    object_type *o_ptr;
+                    ObjectType *o_ptr;
                     o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
                     if (!item_tester.okay(o_ptr) && !(item_selection_ptr->mode & USE_FULL))
                         continue;

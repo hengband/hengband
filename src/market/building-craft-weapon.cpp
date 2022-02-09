@@ -117,7 +117,7 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
  * Only accurate for the current weapon, because it includes\n
  * the current number of blows for the player.\n
  */
-static void compare_weapon_aux(PlayerType *player_ptr, object_type *o_ptr, int col, int r)
+static void compare_weapon_aux(PlayerType *player_ptr, ObjectType *o_ptr, int col, int r)
 {
     int blow = player_ptr->num_blow[0];
     bool force = false;
@@ -307,7 +307,7 @@ static void compare_weapon_aux(PlayerType *player_ptr, object_type *o_ptr, int c
  * Only accurate for the current weapon, because it includes
  * various info about the player's +to_dam and number of blows.
  */
-static void list_weapon(PlayerType *player_ptr, object_type *o_ptr, TERM_LEN row, TERM_LEN col)
+static void list_weapon(PlayerType *player_ptr, ObjectType *o_ptr, TERM_LEN row, TERM_LEN col)
 {
     GAME_TEXT o_name[MAX_NLEN];
     GAME_TEXT tmp_str[80];
@@ -348,9 +348,9 @@ static void list_weapon(PlayerType *player_ptr, object_type *o_ptr, TERM_LEN row
  */
 PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 {
-    object_type *o_ptr[2];
-    object_type orig_weapon;
-    object_type *i_ptr;
+    ObjectType *o_ptr[2];
+    ObjectType orig_weapon;
+    ObjectType *i_ptr;
     TERM_LEN row = 2;
     TERM_LEN wid = 38, mgn = 2;
     bool old_character_xtra = w_ptr->character_xtra;
@@ -367,7 +367,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
     concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
     OBJECT_IDX item;
-    o_ptr[0] = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_orthodox_melee_weapons));
+    o_ptr[0] = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ObjectType::is_orthodox_melee_weapons));
     if (!o_ptr[0]) {
         screen_load();
         return 0;
@@ -420,7 +420,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
         q = _("第二の武器は？", "What is your second weapon? ");
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;
-        object_type *i2_ptr = choose_object(player_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_orthodox_melee_weapons));
+        ObjectType *i2_ptr = choose_object(player_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ObjectType::is_orthodox_melee_weapons));
         if (!i2_ptr)
             continue;
 

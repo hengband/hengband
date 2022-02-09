@@ -2,7 +2,7 @@
 #include "object-enchant/object-boost.h"
 #include "system/object-type-definition.h"
 
-AbstractWeaponEnchanter::AbstractWeaponEnchanter(object_type* o_ptr, DEPTH level, int power)
+AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType* o_ptr, DEPTH level, int power)
     : o_ptr(o_ptr)
     , level(level)
     , power(power)

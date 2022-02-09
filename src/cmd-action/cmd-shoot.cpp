@@ -27,7 +27,7 @@
 void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
 {
     OBJECT_IDX item;
-    object_type *j_ptr, *ammo_ptr;
+    ObjectType *j_ptr, *ammo_ptr;
     if (player_ptr->wild_mode)
         return;
 

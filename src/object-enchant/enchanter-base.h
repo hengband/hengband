@@ -8,7 +8,7 @@
  * @details 純粋仮想関数につき、必要なメンバ変数は派生クラスで設定すること
  */
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 class EnchanterBase {
 public:

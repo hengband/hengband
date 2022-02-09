@@ -63,7 +63,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 {
     /* Memorize objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
         if (o_ptr->is_held_by_monster())
@@ -156,7 +156,7 @@ void wiz_dark(PlayerType *player_ptr)
 
     /* Forget all objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
 
         if (!o_ptr->is_valid())
             continue;
@@ -329,7 +329,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             if (preserve_mode || in_generate) {
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
-                    object_type *o_ptr;
+                    ObjectType *o_ptr;
                     o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */

@@ -44,7 +44,7 @@ typedef struct chain_str {
 /*
  * Data struct for text editor
  */
-struct object_type;
+class ObjectType;
 ;
 typedef struct text_body_type {
     int wid, hgt;
@@ -56,7 +56,7 @@ typedef struct text_body_type {
     int mx, my;
     byte mark;
 
-    object_type *search_o_ptr;
+    ObjectType *search_o_ptr;
     concptr search_str;
     concptr last_destroyed;
 
@@ -78,12 +78,12 @@ typedef struct text_body_type {
  *  List for auto-picker/destroyer entries
  */
 extern std::vector<autopick_type> autopick_list;
-extern object_type autopick_last_destroyed_object;
+extern ObjectType autopick_last_destroyed_object;
 
 class PlayerType;
 void free_text_lines(std::vector<concptr> &lines_list);
 int get_com_id(char key);
-void auto_inscribe_item(PlayerType *player_ptr, object_type *o_ptr, int idx);
+void auto_inscribe_item(PlayerType *player_ptr, ObjectType *o_ptr, int idx);
 int count_line(text_body_type *tb);
 
 /*!

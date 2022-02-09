@@ -22,7 +22,7 @@
  * @brief アイテムオブジェクトを読み込む(v3.0.0 Savefile ver50まで)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
  */
-void ItemLoader50::rd_item(object_type *o_ptr)
+void ItemLoader50::rd_item(ObjectType *o_ptr)
 {
     if (h_older_than(1, 5, 0, 0)) {
         rd_item_old(o_ptr);

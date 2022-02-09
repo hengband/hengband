@@ -4,11 +4,11 @@
 #include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 class CrownEnchanter : AbstractProtectorEnchanter {
 public:
-    CrownEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power);
+    CrownEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     virtual ~CrownEnchanter() = default;
     void apply_magic() override;
 

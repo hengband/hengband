@@ -104,7 +104,7 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
     if (o_idx == 0)
         return;
 
-    object_type *j_ptr;
+    ObjectType *j_ptr;
     j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;

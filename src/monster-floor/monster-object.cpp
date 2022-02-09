@@ -100,7 +100,7 @@ static void update_object_flags(const TrFlags &flgs, BIT_FLAGS *flg2, BIT_FLAGS 
  * @param o_name アイテム名
  * @param this_o_idx モンスターが乗ったオブジェクトID
  */
-static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, object_type *o_ptr, bool is_special_object,
+static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, ObjectType *o_ptr, bool is_special_object,
     POSITION ny, POSITION nx, GAME_TEXT *m_name, GAME_TEXT *o_name, OBJECT_IDX this_o_idx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -161,7 +161,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         BIT_FLAGS flg2 = 0L, flg3 = 0L, flgr = 0L;
         GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
         OBJECT_IDX this_o_idx = *it++;
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         if (turn_flags_ptr->do_take) {
             /* Skip gold, corpse and statue */
@@ -187,9 +187,9 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
 void monster_drop_carried_objects(PlayerType *player_ptr, monster_type *m_ptr)
 {
     for (auto it = m_ptr->hold_o_idx_list.begin(); it != m_ptr->hold_o_idx_list.end();) {
-        object_type forge;
-        object_type *o_ptr;
-        object_type *q_ptr;
+        ObjectType forge;
+        ObjectType *o_ptr;
+        ObjectType *q_ptr;
         const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         q_ptr = &forge;

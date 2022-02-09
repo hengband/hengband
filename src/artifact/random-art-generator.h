@@ -4,6 +4,6 @@
  * @brief ランダムアーティファクトの生成メインヘッダ / Artifact code
  */
 
-struct object_type;
+class ObjectType;
 class PlayerType;
-bool become_random_artifact(PlayerType *player_ptr, object_type *o_ptr, bool a_scroll);
+bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_scroll);

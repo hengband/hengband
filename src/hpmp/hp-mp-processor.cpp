@@ -137,7 +137,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
             }
         }
 
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_LITE];
         auto flgs = object_flags(o_ptr);
 

@@ -55,7 +55,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 
         processed_list.insert(this_o_idx);
 
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         bool ignore = false;
         bool do_kill = false;
         concptr note_kill = nullptr;

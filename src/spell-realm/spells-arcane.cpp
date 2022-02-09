@@ -13,7 +13,7 @@
 void phlogiston(PlayerType *player_ptr)
 {
     GAME_TURN max_flog = 0;
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if ((o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_LANTERN))
         max_flog = FUEL_LAMP;
     else if ((o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH))

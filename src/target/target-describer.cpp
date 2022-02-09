@@ -239,7 +239,7 @@ static uint16_t describe_monster_item(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->m_ptr->hold_o_idx_list) {
         GAME_TEXT o_name[MAX_NLEN];
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -303,7 +303,7 @@ static int16_t describe_footing(PlayerType *player_ptr, eg_type *eg_ptr)
         return CONTINUOUS_DESCRIPTION;
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -383,7 +383,7 @@ static int16_t loop_describing_grid(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 }
 
-static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, object_type *o_ptr)
+static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, ObjectType *o_ptr)
 {
     if ((o_ptr->marked & OM_FOUND) == 0)
         return CONTINUOUS_DESCRIPTION;
@@ -421,7 +421,7 @@ static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, o
 static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->g_ptr->o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         int16_t ret = describe_footing_sight(player_ptr, eg_ptr, o_ptr);
         if (within_char_util(ret))

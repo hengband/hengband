@@ -34,7 +34,7 @@ store_type *st_ptr = nullptr;
  */
 void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &st_ptr->stock[item];
     int cnt = o_ptr->number + num;
     if (cnt > 255)
@@ -53,7 +53,7 @@ void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
  */
 void store_item_optimize(INVENTORY_IDX item)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &st_ptr->stock[item];
     if ((o_ptr->k_idx == 0) || (o_ptr->number != 0))
         return;
@@ -97,11 +97,11 @@ void store_delete(void)
  * @details
  * 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
  */
-static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(object_type *j_ptr)
+static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_ptr)
 {
     auto list = std::vector<PARAMETER_VALUE>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
-        object_type *o_ptr = &st_ptr->stock[i];
+        ObjectType *o_ptr = &st_ptr->stock[i];
         if (o_ptr == j_ptr)
             continue;
         if (o_ptr->k_idx != j_ptr->k_idx)
@@ -151,8 +151,8 @@ void store_create(
             level = rand_range(1, ow_ptr->level);
         }
 
-        object_type forge;
-        object_type *q_ptr;
+        ObjectType forge;
+        ObjectType *q_ptr;
         q_ptr = &forge;
         q_ptr->prep(k_idx);
         apply_magic_to_object(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
@@ -203,7 +203,7 @@ void store_create(
  * See "object_similar()" for the same function for the "player"
  * </pre>
  */
-bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
+bool store_object_similar(ObjectType *o_ptr, ObjectType *j_ptr)
 {
     if (o_ptr == j_ptr)
         return false;
@@ -270,7 +270,7 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
  * See "object_similar()" for the same function for the "player"
  * </pre>
  */
-static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
+static void store_object_absorb(ObjectType *o_ptr, ObjectType *j_ptr)
 {
     int max_num = (o_ptr->tval == ItemKindType::ROD) ? std::min(99, MAX_SHORT / k_info[o_ptr->k_idx].pval) : 99;
     int total = o_ptr->number + j_ptr->number;
@@ -293,7 +293,7 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int store_carry(object_type *o_ptr)
+int store_carry(ObjectType *o_ptr)
 {
     PRICE value = object_value(o_ptr);
     if (value <= 0)
@@ -304,7 +304,7 @@ int store_carry(object_type *o_ptr)
     o_ptr->feeling = FEEL_NONE;
     int slot;
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        object_type *j_ptr;
+        ObjectType *j_ptr;
         j_ptr = &st_ptr->stock[slot];
         if (store_object_similar(j_ptr, o_ptr)) {
             store_object_absorb(j_ptr, o_ptr);
@@ -316,7 +316,7 @@ int store_carry(object_type *o_ptr)
         return -1;
 
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        object_type *j_ptr;
+        ObjectType *j_ptr;
         j_ptr = &st_ptr->stock[slot];
         if (o_ptr->tval > j_ptr->tval)
             break;

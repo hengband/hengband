@@ -329,7 +329,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 
     /* Hack -- memorize objects */
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         /* Memorize objects */
         o_ptr->marked |= OM_FOUND;

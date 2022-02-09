@@ -243,8 +243,8 @@ void wiz_create_item(PlayerType *player_ptr)
         }
     }
 
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->prep(k_idx);
     apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
@@ -261,7 +261,7 @@ void wiz_create_item(PlayerType *player_ptr)
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, ARTIFACT_IDX a_idx)
 {
     const auto &a_ref = a_info[a_idx];
-    object_type obj;
+    ObjectType obj;
     obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
     obj.name1 = a_idx;
     object_known(&obj);
@@ -618,8 +618,8 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     for (const auto &k_ref : k_info) {
         if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;

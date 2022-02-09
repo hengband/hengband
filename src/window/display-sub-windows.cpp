@@ -582,7 +582,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
     for (const auto o_idx : g_ptr->o_idx_list) {
-        object_type *const o_ptr = &floor_ptr->o_list[o_idx];
+        ObjectType *const o_ptr = &floor_ptr->o_list[o_idx];
 
         // 未発見アイテムおよび金は対象外。
         if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == ItemKindType::GOLD) {

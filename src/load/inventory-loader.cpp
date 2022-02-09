@@ -25,7 +25,7 @@ static errr rd_inventory(PlayerType *player_ptr)
     player_ptr->equip_cnt = 0;
 
     //! @todo std::make_shared の配列対応版は C++20 から
-    player_ptr->inventory_list = std::shared_ptr<object_type[]>{ new object_type[INVEN_TOTAL] };
+    player_ptr->inventory_list = std::shared_ptr<ObjectType[]>{ new ObjectType[INVEN_TOTAL] };
 
     int slot = 0;
     auto item_loader = ItemLoaderFactory::create_loader();
@@ -36,7 +36,7 @@ static errr rd_inventory(PlayerType *player_ptr)
             break;
         }
 
-        object_type item;
+        ObjectType item;
         item_loader->rd_item(&item);
         if (!item.k_idx)
             return (53);

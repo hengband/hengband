@@ -40,13 +40,13 @@ typedef struct destroy_type {
     QUANTITY amt;
     QUANTITY old_number;
     bool force;
-    object_type *o_ptr;
-    object_type *q_ptr;
+    ObjectType *o_ptr;
+    ObjectType *q_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     char out_val[MAX_NLEN + 40];
 } destroy_type;
 
-static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, object_type *o_ptr)
+static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, ObjectType *o_ptr)
 {
     destroy_ptr->amt = 1;
     destroy_ptr->force = false;
@@ -199,7 +199,7 @@ void do_cmd_destroy(PlayerType *player_ptr)
 {
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    object_type forge;
+    ObjectType forge;
     destroy_type tmp_destroy;
     destroy_type *destroy_ptr = initialize_destroy_type(&tmp_destroy, &forge);
     if (command_arg > 0)

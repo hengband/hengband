@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-struct object_type;
-void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt);
-void reduce_charges(object_type *o_ptr, int amt);
-int object_similar_part(const object_type *o_ptr, const object_type *j_ptr);
-bool object_similar(const object_type *o_ptr, const object_type *j_ptr);
-void object_absorb(object_type *o_ptr, object_type *j_ptr);
+class ObjectType;
+void distribute_charges(ObjectType *o_ptr, ObjectType *q_ptr, int amt);
+void reduce_charges(ObjectType *o_ptr, int amt);
+int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr);
+bool object_similar(const ObjectType *o_ptr, const ObjectType *j_ptr);
+void object_absorb(ObjectType *o_ptr, ObjectType *j_ptr);

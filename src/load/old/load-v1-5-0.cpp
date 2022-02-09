@@ -61,7 +61,7 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
  * @brief アイテムオブジェクト1件を読み込む / Read an object
  * @param o_ptr アイテムオブジェクト読み取り先ポインタ
  */
-void rd_item_old(object_type *o_ptr)
+void rd_item_old(ObjectType *o_ptr)
 {
     o_ptr->k_idx = rd_s16b();
 

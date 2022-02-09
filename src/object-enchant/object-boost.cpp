@@ -97,7 +97,7 @@ int m_bonus(int max, DEPTH level)
  * @details 重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_sustain(object_type *o_ptr)
+void one_sustain(ObjectType *o_ptr)
 {
     switch (randint0(A_MAX)) {
     case 0:
@@ -126,7 +126,7 @@ void one_sustain(object_type *o_ptr)
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @return TR_ESP_NONLIVINGがついたならばTRUE
  */
-bool add_esp_strong(object_type *o_ptr)
+bool add_esp_strong(ObjectType *o_ptr)
 {
     bool nonliv = false;
 
@@ -151,7 +151,7 @@ bool add_esp_strong(object_type *o_ptr)
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param extra TRUEならばESPの最大付与数が増える(TRUE -> 3+1d6 / FALSE -> 1d3)
  */
-void add_esp_weak(object_type *o_ptr, bool extra)
+void add_esp_weak(ObjectType *o_ptr, bool extra)
 {
     int i;
     tr_type weak_esp_list[] = {
@@ -186,7 +186,7 @@ void add_esp_weak(object_type *o_ptr, bool extra)
  * ESPまたは邪ESPは1d3の種族ESPを得る。
  * 無ESPは3+1d6の種族ESPを得る。
  */
-void add_high_telepathy(object_type* o_ptr)
+void add_high_telepathy(ObjectType* o_ptr)
 {
     if (add_esp_strong(o_ptr))
         add_esp_weak(o_ptr, true);
@@ -201,7 +201,7 @@ void add_high_telepathy(object_type* o_ptr)
  * 鋭敏の帽子など。
  * ESP、邪ESP、無ESPまたは1d3の種族ESP。
  */
-void add_low_telepathy(object_type *o_ptr)
+void add_low_telepathy(ObjectType *o_ptr)
 {
     if (one_in_(2))
         add_esp_strong(o_ptr);
@@ -214,7 +214,7 @@ void add_low_telepathy(object_type *o_ptr)
  * @details 候補は火炎、冷気、電撃、酸のいずれかであり、重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_ele_resistance(object_type *o_ptr)
+void one_ele_resistance(ObjectType *o_ptr)
 {
     switch (randint0(4)) {
     case 0:
@@ -237,7 +237,7 @@ void one_ele_resistance(object_type *o_ptr)
  * @details 候補は1/7の確率で毒、6/7の確率で火炎、冷気、電撃、酸のいずれか(one_ele_resistance()のコール)であり、重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_dragon_ele_resistance(object_type *o_ptr)
+void one_dragon_ele_resistance(ObjectType *o_ptr)
 {
     if (one_in_(7)) {
         o_ptr->art_flags.set(TR_RES_POIS);
@@ -251,7 +251,7 @@ void one_dragon_ele_resistance(object_type *o_ptr)
  * @details 重複の抑止はない。候補は毒、閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、劣化、恐怖、時間逆転、水、呪力のいずれか。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_high_resistance(object_type *o_ptr)
+void one_high_resistance(ObjectType *o_ptr)
 {
     switch (randint0(15)) {
     case 0:
@@ -306,7 +306,7 @@ void one_high_resistance(object_type *o_ptr)
  * @brief ドラゴン装備にランダムな耐性を与える
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  */
-void dragon_resist(object_type *o_ptr)
+void dragon_resist(ObjectType *o_ptr)
 {
     do {
         if (one_in_(4))
@@ -322,7 +322,7 @@ void dragon_resist(object_type *o_ptr)
  * をコールする。重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_resistance(object_type *o_ptr)
+void one_resistance(ObjectType *o_ptr)
 {
     if (one_in_(3)) {
         one_ele_resistance(o_ptr);
@@ -337,7 +337,7 @@ void one_resistance(object_type *o_ptr)
  * 重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_ability(object_type *o_ptr)
+void one_ability(ObjectType *o_ptr)
 {
     switch (randint0(10)) {
     case 0:
@@ -377,7 +377,7 @@ void one_ability(object_type *o_ptr)
  * ドラゴン、人間、善良、ユニークESPのいずれかであり、重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_low_esp(object_type *o_ptr)
+void one_low_esp(ObjectType *o_ptr)
 {
     switch (randint1(10)) {
     case 1:
@@ -419,7 +419,7 @@ void one_low_esp(object_type *o_ptr)
  * whileループによる構造で能力的に強力なものほど確率を落としている。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_activation(object_type *o_ptr)
+void one_activation(ObjectType *o_ptr)
 {
     RandomArtActType type =RandomArtActType::NONE;
     PERCENTAGE chance = 0;
@@ -539,7 +539,7 @@ void one_activation(object_type *o_ptr)
  * ランダム付加そのものに重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void one_lordly_high_resistance(object_type *o_ptr)
+void one_lordly_high_resistance(ObjectType *o_ptr)
 {
     switch (randint0(13)) {
     case 0:
@@ -588,7 +588,7 @@ void one_lordly_high_resistance(object_type *o_ptr)
  * @brief オブジェクトの重量を軽くする
  * @param o_ptr オブジェクト情報への参照ポインタ
  */
-void make_weight_ligten(object_type* o_ptr)
+void make_weight_ligten(ObjectType* o_ptr)
 {
     o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
 }
@@ -597,7 +597,7 @@ void make_weight_ligten(object_type* o_ptr)
  * @brief オブジェクトの重量を重くする
  * @param o_ptr オブジェクト情報への参照ポインタ
  */
-void make_weight_heavy(object_type *o_ptr)
+void make_weight_heavy(ObjectType *o_ptr)
 {
     o_ptr->weight = (4 * k_info[o_ptr->k_idx].weight / 3);
 }
@@ -608,7 +608,7 @@ void make_weight_heavy(object_type *o_ptr)
  * @details
  * 1/4を加算。最低+5を保証。
  */
-void add_xtra_ac(object_type *o_ptr)
+void add_xtra_ac(ObjectType *o_ptr)
 {
     o_ptr->ac += std::max<short>(5, o_ptr->ac / 4);
 }

@@ -204,7 +204,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return;
 
     concptr color;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     if (r_ptr->level > player_ptr->lev + 30)
         color = _("黒く", "black");

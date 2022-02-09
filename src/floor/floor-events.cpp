@@ -140,7 +140,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
     }
 
     for (MONSTER_IDX i = 1; i < floor_ptr->o_max; i++) {
-        object_type *o_ptr = &floor_ptr->o_list[i];
+        ObjectType *o_ptr = &floor_ptr->o_list[i];
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
         int delta = 0;
         if (!o_ptr->is_valid() || (o_ptr->is_known() && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0))

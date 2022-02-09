@@ -44,7 +44,7 @@
  * Calculate spell damages
  * @return 警告を行う
  */
-object_type *choose_warning_item(PlayerType *player_ptr)
+ObjectType *choose_warning_item(PlayerType *player_ptr)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
 
@@ -56,7 +56,7 @@ object_type *choose_warning_item(PlayerType *player_ptr)
     /* Search Inventory */
     int number = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType *o_ptr = &player_ptr->inventory_list[i];
 
         auto flgs = object_flags(o_ptr);
         if (flgs.has(TR_WARNING)) {
@@ -533,7 +533,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         old_damage = dam_max * 3 / 2;
 
         if (dam_max > player_ptr->chp / 2) {
-            object_type *o_ptr = choose_warning_item(player_ptr);
+            ObjectType *o_ptr = choose_warning_item(player_ptr);
 
             if (o_ptr) {
                 describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -556,7 +556,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         return true;
     }
 
-    object_type *o_ptr = choose_warning_item(player_ptr);
+    ObjectType *o_ptr = choose_warning_item(player_ptr);
     if (o_ptr != nullptr) {
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     } else {

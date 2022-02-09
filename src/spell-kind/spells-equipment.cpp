@@ -50,7 +50,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
         break;
     }
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->inventory_list[t];
     if (!o_ptr->k_idx)
         return false;

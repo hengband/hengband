@@ -51,7 +51,7 @@ static bool fire_crimson(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_crimson(PlayerType *player_ptr, object_type *o_ptr)
+bool activate_crimson(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (o_ptr->name1 != ART_CRIMSON)
         return false;

@@ -3,11 +3,11 @@
 #include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 class RingEnchanter : EnchanterBase {
 public:
-    RingEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power);
+    RingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     virtual ~RingEnchanter() = default;
     void apply_magic() override;
 
@@ -19,7 +19,7 @@ protected:
 
 private:
     PlayerType *player_ptr;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     DEPTH level;
     int power;
 };

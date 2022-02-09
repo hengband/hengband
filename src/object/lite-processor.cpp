@@ -17,7 +17,7 @@
  */
 void reduce_lite_life(PlayerType* player_ptr)
 {
-    object_type* o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    ObjectType* o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if (o_ptr->tval != ItemKindType::LITE)
         return;
 
@@ -38,7 +38,7 @@ void reduce_lite_life(PlayerType* player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 現在光源として使っているオブジェクトの構造体参照ポインタ
  */
-void notice_lite_change(PlayerType* player_ptr, object_type* o_ptr)
+void notice_lite_change(PlayerType* player_ptr, ObjectType* o_ptr)
 {
     if ((o_ptr->xtra4 < 100) || (!(o_ptr->xtra4 % 100))) {
         player_ptr->window_flags |= (PW_EQUIP);

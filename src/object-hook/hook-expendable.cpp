@@ -22,7 +22,7 @@
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 食べることが可能ならばTRUEを返す
  */
-bool item_tester_hook_eatable(PlayerType *player_ptr, const object_type *o_ptr)
+bool item_tester_hook_eatable(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     if (o_ptr->tval == ItemKindType::FOOD)
         return true;
@@ -45,7 +45,7 @@ bool item_tester_hook_eatable(PlayerType *player_ptr, const object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 飲むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_quaff(PlayerType *player_ptr, const object_type *o_ptr)
+bool item_tester_hook_quaff(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     if (o_ptr->tval == ItemKindType::POTION)
         return true;
@@ -62,7 +62,7 @@ bool item_tester_hook_quaff(PlayerType *player_ptr, const object_type *o_ptr)
  * @param o_ptr 破壊可能かを確認したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトが破壊可能ならばTRUEを返す
  */
-bool can_player_destroy_object(PlayerType *player_ptr, object_type *o_ptr)
+bool can_player_destroy_object(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     /* Artifacts cannot be destroyed */
     if (!o_ptr->is_artifact())

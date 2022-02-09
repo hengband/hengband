@@ -39,7 +39,7 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_dragon_breath(object_type *o_ptr)
+static concptr item_activation_dragon_breath(ObjectType *o_ptr)
 {
     static char desc[256];
     int n = 0;
@@ -66,7 +66,7 @@ static concptr item_activation_dragon_breath(object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(object_type *o_ptr)
+static concptr item_activation_aux(ObjectType *o_ptr)
 {
     static char activation_detail[512];
     char timeout[64];
@@ -172,7 +172,7 @@ static concptr item_activation_aux(object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr activation_explanation(object_type *o_ptr)
+concptr activation_explanation(ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has_not(TR_ACTIVATE))
@@ -208,7 +208,7 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-int16_t wield_slot(PlayerType *player_ptr, const object_type *o_ptr)
+int16_t wield_slot(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
@@ -295,7 +295,7 @@ bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, cons
     return (get_realm1_book(player_ptr) == book_tval) || (get_realm2_book(player_ptr) == book_tval);
 }
 
-object_type *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
+ObjectType *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     return item >= 0 ? &player_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
@@ -306,7 +306,7 @@ object_type *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
  * Use "flavor" if available.
  * Default to user definitions.
  */
-TERM_COLOR object_attr(object_type *o_ptr)
+TERM_COLOR object_attr(ObjectType *o_ptr)
 {
     return ((k_info[o_ptr->k_idx].flavor)
             ? (k_info[k_info[o_ptr->k_idx].flavor].x_attr)

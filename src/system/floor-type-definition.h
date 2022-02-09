@@ -8,7 +8,7 @@
 #include <vector>
 
 struct grid_type;;
-struct object_type;
+class ObjectType;
 struct monster_type;
 typedef struct floor_type {
     DUNGEON_IDX dungeon_idx;
@@ -23,7 +23,7 @@ typedef struct floor_type {
 
     GAME_TURN generated_turn; /* Turn when level began */
 
-    std::vector<object_type> o_list; /*!< The array of dungeon items [max_o_idx] */
+    std::vector<ObjectType> o_list; /*!< The array of dungeon items [max_o_idx] */
     OBJECT_IDX o_max; /* Number of allocated objects */
     OBJECT_IDX o_cnt; /* Number of live objects */
 

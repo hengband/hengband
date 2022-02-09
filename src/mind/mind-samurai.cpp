@@ -417,7 +417,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
  */
 int calc_attack_quality(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int bonus = player_ptr->to_h[pa_ptr->hand] + o_ptr->to_h;
     int chance = (player_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
     if (pa_ptr->mode == HISSATSU_IAI)

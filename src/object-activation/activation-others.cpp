@@ -105,7 +105,7 @@ bool activate_scare(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_aggravation(PlayerType *player_ptr, object_type *o_ptr, concptr name)
+bool activate_aggravation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
 {
     if (o_ptr->name1 == ART_HYOUSIGI)
         msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
@@ -390,13 +390,13 @@ bool activate_recall(PlayerType *player_ptr)
     return recall_player(player_ptr, randint0(21) + 15);
 }
 
-bool activate_tree_creation(PlayerType *player_ptr, object_type *o_ptr, concptr name)
+bool activate_tree_creation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
 {
     msg_format(_("%s%sから明るい緑の光があふれ出た...", "The %s%s wells with clear light..."), name, quark_str(o_ptr->art_name));
     return tree_creation(player_ptr, player_ptr->y, player_ptr->x);
 }
 
-bool activate_animate_dead(PlayerType *player_ptr, object_type *o_ptr)
+bool activate_animate_dead(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     msg_print(_("黄金色の光が溢れ出た...", "It emitted a golden light..."));
     if (o_ptr->name1 > 0)

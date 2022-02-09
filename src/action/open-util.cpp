@@ -23,7 +23,7 @@ OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapp
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if ((o_ptr->tval == ItemKindType::CHEST)
             && (((!trapped) && (o_ptr->pval)) || /* non empty */
@@ -54,7 +54,7 @@ int count_chests(PlayerType *player_ptr, POSITION *y, POSITION *x, bool trapped)
         if (!o_idx)
             continue;
 
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
         if (o_ptr->pval == 0)
             continue;

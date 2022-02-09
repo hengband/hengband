@@ -70,7 +70,7 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
     flags.clear();
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;

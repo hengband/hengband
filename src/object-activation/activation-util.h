@@ -3,11 +3,11 @@
 #include "system/angband.h"
 
 // Activation Execution.
-struct object_type;
+class ObjectType;
 typedef struct ae_type {
     DIRECTION dir;
     bool success;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     DEPTH lev;
     int chance;
     int fail;

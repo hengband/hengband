@@ -190,7 +190,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
     bool more = false;
-    object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
+    ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     int i = player_ptr->skill_dis;
     if (player_ptr->blind || no_lite(player_ptr))

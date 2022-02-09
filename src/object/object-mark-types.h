@@ -1,5 +1,5 @@
 ﻿/*
- * @brief How object is marked (flags in object_type.mark)
+ * @brief How object is marked (flags in ObjectType.mark)
  * @date 2020/05/28
  * @author Hourier
  * @details

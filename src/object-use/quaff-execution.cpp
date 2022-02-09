@@ -84,7 +84,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     }
 
     auto *o_ptr = ref_item(this->player_ptr, item);
-    object_type forge;
+    ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;

@@ -150,7 +150,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs, 
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
+HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, ObjectType *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
 {
     auto flgs = object_flags(o_ptr);
     torch_flags(o_ptr, flgs); /* torches has secret flags */
@@ -210,7 +210,7 @@ HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, object_type *o_pt
     return (tdam * mult / 10);
 }
 
-AttributeFlags melee_attribute(PlayerType *player_ptr, object_type *o_ptr, combat_options mode)
+AttributeFlags melee_attribute(PlayerType *player_ptr, ObjectType *o_ptr, combat_options mode)
 {
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_MELEE);
