@@ -1400,7 +1400,7 @@ static void init_windows(void)
     my_td = NULL;
 
     if (!td->w)
-        quit(_("メインウィンドウの作成に失敗しました", "Failed to create Angband window"));
+        quit(_("メインウィンドウの作成に失敗しました", "Failed to create main window"));
 
     /* Resize */
     td->size_hack = true;
