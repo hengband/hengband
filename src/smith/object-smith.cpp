@@ -368,7 +368,8 @@ Smith::DrainEssenceResult Smith::drain_essence(object_type *o_ptr)
 
         if ((new_flgs.has_not(info.tr_flag) || pval) && old_flgs.has(info.tr_flag)) {
             for (auto &&essence : info.essences) {
-                drain_values[essence] += info.amount * std::max(pval, 1);
+                auto mult = TR_PVAL_FLAG_MASK.has(info.tr_flag) ? pval : 1;
+                drain_values[essence] += info.amount * mult;
             }
         }
     }
