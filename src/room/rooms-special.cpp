@@ -40,7 +40,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
     ysize = rand_range(9, 13);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2))
         return false;
 

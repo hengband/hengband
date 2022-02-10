@@ -167,7 +167,7 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
 static void init_world_floor_info(PlayerType *player_ptr)
 {
     w_ptr->character_dungeon = false;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->quest_number = QuestId::NONE;
     floor_ptr->inside_arena = false;
@@ -197,7 +197,7 @@ static void restore_world_floor_info(PlayerType *player_ptr)
 
     if (player_ptr->riding == -1) {
         player_ptr->riding = 0;
-        floor_type *floor_ptr = player_ptr->current_floor_ptr;
+        auto *floor_ptr = player_ptr->current_floor_ptr;
         for (MONSTER_IDX i = floor_ptr->m_max; i > 0; i--) {
             if (player_bold(player_ptr, floor_ptr->m_list[i].fy, floor_ptr->m_list[i].fx)) {
                 player_ptr->riding = i;
@@ -221,7 +221,7 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->dun_level == 0) && inside_quest(floor_ptr->quest_number))
         return;
 
@@ -255,7 +255,7 @@ static void change_floor_if_error(PlayerType *player_ptr)
 static void generate_world(PlayerType *player_ptr, bool new_game)
 {
     reset_world_info(player_ptr);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
 
@@ -310,7 +310,7 @@ static void decide_arena_death(PlayerType *player_ptr)
     if (!player_ptr->playing || !player_ptr->is_dead)
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_arena) {
         if ((w_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
             cheat_death(player_ptr);
@@ -336,7 +336,7 @@ static void decide_arena_death(PlayerType *player_ptr)
 static void process_game_turn(PlayerType *player_ptr)
 {
     bool load_game = true;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         process_dungeon(player_ptr, load_game);
         w_ptr->character_xtra = true;

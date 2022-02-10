@@ -183,7 +183,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
     char playtime_str[16];
     quest_type *const q_ptr = &quest[enum2i(q_idx)];
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     auto is_fixed_quest = quest_type::is_fixed(q_idx);
     if (is_fixed_quest) {
         QuestId old_quest = floor_ptr->quest_number;

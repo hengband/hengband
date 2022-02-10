@@ -251,7 +251,7 @@ int summon_cyber(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x
 {
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (who > 0) {
         monster_type *m_ptr = &floor_ptr->m_list[who];
         if (is_pet(m_ptr))

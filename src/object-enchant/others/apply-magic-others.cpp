@@ -41,7 +41,7 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr, int power)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     switch (o_ptr->tval) {
     case ItemKindType::WHISTLE: {
         break;

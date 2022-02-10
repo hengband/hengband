@@ -541,7 +541,7 @@ void process_monsters(PlayerType *player_ptr)
  */
 void sweep_monster_process(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
         monster_type *m_ptr;
         m_ptr = &floor_ptr->m_list[i];

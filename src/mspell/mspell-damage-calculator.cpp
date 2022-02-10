@@ -478,7 +478,7 @@ void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
  */
 HIT_POINT monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_IDX m_idx, int TYPE)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);

@@ -71,7 +71,7 @@
  */
 static void summon_self(PlayerType *player_ptr, monster_death_type *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(probability))
         return;
 
@@ -127,7 +127,7 @@ static void on_dead_bloodletter(PlayerType *player_ptr, monster_death_type *md_p
 
 static void on_dead_raal(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!md_ptr->drop_chosen_item || (floor_ptr->dun_level <= 9))
         return;
 

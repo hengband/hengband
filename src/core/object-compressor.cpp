@@ -60,7 +60,7 @@ void compact_objects(PlayerType *player_ptr, int size)
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);

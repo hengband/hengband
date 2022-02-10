@@ -77,7 +77,7 @@ static void on_dead_explosion(PlayerType *player_ptr, monster_death_type *md_ptr
 
 static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_arena || is_pet(md_ptr->m_ptr))
         return;
 
@@ -109,7 +109,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
 
 static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_drop_corpse = one_in_(md_ptr->r_ptr->flags1 & RF1_UNIQUE ? 1 : 4);
     is_drop_corpse &= (md_ptr->r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != 0;
     is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned
@@ -306,7 +306,7 @@ static void drop_items_golds(PlayerType *player_ptr, monster_death_type *md_ptr,
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = floor_ptr->base_level;
     coin_type = 0;
     bool visible = (md_ptr->m_ptr->ml && !player_ptr->hallucinated) || ((md_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0);
@@ -400,7 +400,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     drop_artifact(player_ptr, md_ptr);
     int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
     coin_type = md_ptr->force_coin;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = (floor_ptr->dun_level + md_ptr->r_ptr->level) / 2;
     drop_items_golds(player_ptr, md_ptr, drop_numbers);
     if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || player_ptr->phase_out || (md_ptr->m_ptr->r_idx != MON_SERPENT) || md_ptr->cloned)

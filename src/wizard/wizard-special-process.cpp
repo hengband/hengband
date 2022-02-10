@@ -821,7 +821,7 @@ void cheat_death(PlayerType *player_ptr)
     (void)strcpy(player_ptr->died_from, _("死の欺き", "Cheating death"));
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->inside_arena = false;
     player_ptr->phase_out = false;

@@ -143,7 +143,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     }
 
     int tm_idx = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (in_bounds(floor_ptr, ty, tx))
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
 

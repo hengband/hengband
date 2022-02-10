@@ -532,7 +532,7 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
  */
 void update_monsters(PlayerType *player_ptr, bool full)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         monster_type *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))

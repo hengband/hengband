@@ -211,7 +211,7 @@ static int next_to_walls_adj(floor_type *floor_ptr, const POSITION cy, const POS
 static void cave_temp_room_aux(
     PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const bool only_room, const PassBoldFunc pass_bold)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
     // 既に points に追加済みなら何もしない。
@@ -292,7 +292,7 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
     // 明るくするマスを記録する配列。
     std::vector<Pos2D> points;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
 
     // (y1,x1) を起点として明るくするマスを記録していく。
     // 実質幅優先探索。
@@ -336,7 +336,7 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
     // 暗くするマスを記録する配列。
     std::vector<Pos2D> points;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
 
     // (y1,x1) を起点として暗くするマスを記録していく。
     // 実質幅優先探索。

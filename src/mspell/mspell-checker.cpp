@@ -68,7 +68,7 @@
  */
 bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = y1 - 2; y <= y1 + 2; y++) {
         for (POSITION x = x1 - 2; x <= x1 + 2; x++) {
             if (!in_bounds(floor_ptr, y, x))
@@ -99,7 +99,7 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION xx = x - 5; xx <= x + 5; xx++) {
         grid_type *g_ptr;
         for (POSITION yy = y - 5; yy <= y + 5; yy++) {
@@ -146,7 +146,7 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
  */
 bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
     int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, 0);
     if (!grid_n)

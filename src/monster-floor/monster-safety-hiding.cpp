@@ -33,7 +33,7 @@
 static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d)
 {
     coordinate_candidate candidate = init_coordinate_candidate();
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
         POSITION y = m_ptr->fy + dy;

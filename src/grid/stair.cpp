@@ -21,7 +21,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
     bool up_stairs = true;
     bool down_stairs = true;
     grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty())
         return;

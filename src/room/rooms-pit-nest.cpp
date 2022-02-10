@@ -226,7 +226,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     grid_type *g_ptr;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int cur_nest_type = pick_vault_type(floor_ptr, nest_types, d_info[floor_ptr->dungeon_idx].nest);
     nest_pit_type *n_ptr;
 
@@ -453,7 +453,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     grid_type *g_ptr;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
     nest_pit_type *n_ptr;
 
@@ -754,7 +754,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     grid_type *g_ptr;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
     nest_pit_type *n_ptr;
 

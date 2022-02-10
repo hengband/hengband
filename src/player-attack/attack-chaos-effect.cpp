@@ -240,7 +240,7 @@ static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr,
  */
 static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[pa_ptr->m_idx];
     if (m_ptr->hold_o_idx_list.empty())
         return;

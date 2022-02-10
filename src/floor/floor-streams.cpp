@@ -288,7 +288,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     bool streamer_may_have_gold = streamer_ptr->flags.has(FloorFeatureType::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     y = rand_spread(floor_ptr->height / 2, floor_ptr->height / 6);
     x = rand_spread(floor_ptr->width / 2, floor_ptr->width / 6);
 
@@ -419,7 +419,7 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
     grid_type *g_ptr;
 
     /* place trees/ rubble in ovalish distribution */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (i = x - 3; i < x + 4; i++) {
         for (j = y - 3; j < y + 4; j++) {
             if (!in_bounds(floor_ptr, j, i))
@@ -471,7 +471,7 @@ void destroy_level(PlayerType *player_ptr)
 
     /* Drop a few epi-centers (usually about two) */
     POSITION y1, x1;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int n = 0; n < randint1(5); n++) {
         /* Pick an epi-center */
         x1 = rand_range(5, floor_ptr->width - 1 - 5);

@@ -119,7 +119,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
  */
 bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
     is_special_floor |= player_ptr->current_floor_ptr->inside_arena;
     is_special_floor |= player_ptr->phase_out;
@@ -159,7 +159,7 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
  */
 bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
     is_special_floor |= player_ptr->current_floor_ptr->inside_arena;
     is_special_floor |= player_ptr->phase_out;
@@ -194,7 +194,7 @@ bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
  */
 bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
     is_special_floor |= player_ptr->current_floor_ptr->inside_arena;
     is_special_floor |= player_ptr->phase_out;

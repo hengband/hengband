@@ -37,7 +37,7 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
         return 0;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_IN_DETECT)) {
         player_ptr->dtrap = false;
         if (!(floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_UNSAFE)) {

@@ -151,7 +151,7 @@ void wipe_o_list(floor_type *floor_ptr)
  */
 void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     POSITION nx, ny;
     while (true) {
         ny = rand_spread(y, d);
@@ -182,7 +182,7 @@ void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POS
  */
 concptr map_name(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number) && (quest[enum2i(floor_ptr->quest_number)].flags & QUEST_FLAG_PRESET))
         return _("クエスト", "Quest");
     else if (player_ptr->wild_mode)

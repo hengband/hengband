@@ -99,7 +99,7 @@ static bool is_dead_summoning(summon_type type)
  */
 DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level > 0)
         return floor_ptr->dun_level;
 
@@ -119,7 +119,7 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
  */
 bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena)
         return false;
 

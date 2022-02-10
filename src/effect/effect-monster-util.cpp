@@ -58,7 +58,7 @@ effect_monster_type *initialize_effect_monster(PlayerType *player_ptr, effect_mo
 {
 	substitute_effect_monster(em_ptr, who, r, y, x, dam, attribute, flag, see_s_msg);
 
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	auto *floor_ptr = player_ptr->current_floor_ptr;
 	em_ptr->g_ptr = &floor_ptr->grid_array[em_ptr->y][em_ptr->x];
 	em_ptr->m_ptr = &floor_ptr->m_list[em_ptr->g_ptr->m_idx];
 	em_ptr->m_caster_ptr = (em_ptr->who > 0) ? &floor_ptr->m_list[em_ptr->who] : nullptr;

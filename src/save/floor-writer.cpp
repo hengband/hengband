@@ -25,7 +25,7 @@
  */
 void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!sf_ptr) {
         wr_s16b((int16_t)floor_ptr->dun_level);
     } else {

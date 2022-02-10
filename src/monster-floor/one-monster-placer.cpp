@@ -82,7 +82,7 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 static MONRACE_IDX initial_r_appearance(PlayerType *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (is_chargeman(player_ptr) && any_bits(generate_mode, PM_JURAL) && none_bits(generate_mode, PM_MULTIPLY | PM_KAGE))
         return MON_ALIEN_JURAL;
 
@@ -143,7 +143,7 @@ static bool check_unique_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 static bool check_quest_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!inside_quest(quest_number(player_ptr, floor_ptr->dun_level)))
         return true;
 
@@ -240,7 +240,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     monster_race *r_ptr = &r_info[r_idx];
     concptr name = r_ptr->name.c_str();

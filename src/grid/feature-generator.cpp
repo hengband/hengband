@@ -24,7 +24,7 @@
  */
 void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
         dd_ptr->destroyed = true;
         build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
@@ -158,7 +158,7 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::WALL) || floor_ptr->grid_array[y][x].is_room())
         return;
 

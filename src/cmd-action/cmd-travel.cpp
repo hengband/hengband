@@ -69,7 +69,7 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 static void travel_flow_aux(PlayerType *player_ptr, POSITION y, POSITION x, int n, bool wall)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     if (!in_bounds(floor_ptr, y, x))
@@ -152,7 +152,7 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     feature_type *f_ptr;
     f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
     if ((floor_ptr->grid_array[y][x].info & CAVE_MARK)

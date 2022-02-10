@@ -209,7 +209,7 @@ static void get_out_monster(PlayerType *player_ptr)
     POSITION dis = 1;
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
     if (m_idx == 0)
         return;

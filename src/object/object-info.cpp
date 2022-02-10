@@ -297,7 +297,7 @@ bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, cons
 
 ObjectType *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     return item >= 0 ? &player_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
 }
 

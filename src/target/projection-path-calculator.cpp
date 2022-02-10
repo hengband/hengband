@@ -89,7 +89,7 @@ static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
 
 static void calc_projection_to_target(PlayerType *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
         if ((pp_ptr->n + (pp_ptr->k >> 1)) >= pp_ptr->range)
@@ -167,7 +167,7 @@ static bool calc_horizontal_projection(PlayerType *player_ptr, projection_path_t
 
 static void calc_projection_others(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
         if ((pp_ptr->n + (pp_ptr->n >> 1)) >= pp_ptr->range)

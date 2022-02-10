@@ -56,7 +56,7 @@ static int next_to_walls(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int walls)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     if (!g_ptr->is_floor() || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || (g_ptr->m_idx != 0) || next_to_walls(floor_ptr, y, x) < walls)
         return false;
@@ -76,7 +76,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
     feature_type *f_ptr = &f_info[feat];
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (f_ptr->flags.has(FloorFeatureType::LESS)) {
         if (ironman_downward || !floor_ptr->dun_level)
             return true;
@@ -167,7 +167,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
     POSITION x = 0;
     int dummy = 0;
     grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     num = num * floor_ptr->height * floor_ptr->width / (MAX_HGT * MAX_WID) + 1;
     for (int k = 0; k < num; k++) {
         while (dummy < SAFE_MAX_ATTEMPTS) {

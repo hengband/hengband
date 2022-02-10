@@ -64,7 +64,7 @@ static char inkey_from_menu(PlayerType *player_ptr)
     prt("", 0, 0);
     screen_save();
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         int i;
         char sub_cmd;

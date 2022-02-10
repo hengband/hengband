@@ -165,7 +165,7 @@ bool make_object(PlayerType *player_ptr, ObjectType *j_ptr, BIT_FLAGS mode, std:
  */
 bool make_gold(PlayerType *player_ptr, ObjectType *j_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
     if (one_in_(GREAT_OBJ)) {
         i += randint1(floor_ptr->object_level + 1);
@@ -193,7 +193,7 @@ bool make_gold(PlayerType *player_ptr, ObjectType *j_ptr)
 void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return;
 
@@ -218,7 +218,7 @@ void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
 
     ObjectType *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;
@@ -263,7 +263,7 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     ObjectType *j_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     excise_object_idx(floor_ptr, o_idx);
     j_ptr = &floor_ptr->o_list[o_idx];
     if (!j_ptr->is_held_by_monster()) {
@@ -362,7 +362,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
 
     POSITION by = y;
     POSITION bx = x;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (dy = -3; dy <= 3; dy++) {
         for (dx = -3; dx <= 3; dx++) {
             bool comb = false;

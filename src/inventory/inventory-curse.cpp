@@ -294,7 +294,7 @@ static void curse_call_monster(PlayerType *player_ptr)
 {
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
     const int obj_desc_type = OD_OMIT_PREFIX | OD_NAME_ONLY;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->cursed.has(CurseTraitType::CALL_ANIMAL) && one_in_(2500)) {
         if (summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_ANIMAL, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];

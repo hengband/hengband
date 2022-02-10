@@ -58,7 +58,7 @@ static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m
  */
 static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
@@ -102,7 +102,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
  */
 bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 
     POSITION x = 0, y = 0;

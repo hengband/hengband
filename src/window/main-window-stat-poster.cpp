@@ -253,7 +253,7 @@ void print_speed(PlayerType *player_ptr)
 
     int speed_value = player_ptr->pspeed - 110;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_player_fast = is_fast(player_ptr);
     char buf[32] = "";
     TERM_COLOR attr = TERM_WHITE;

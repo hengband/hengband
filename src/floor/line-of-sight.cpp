@@ -56,7 +56,7 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
         return true;
 
     /* Directly South/North */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     POSITION tx, ty;
     if (!dx) {
         /* South -- check for walls */

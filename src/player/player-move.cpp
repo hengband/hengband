@@ -64,7 +64,7 @@ POSITION temp2_y[MAX_SHORT];
 static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat)) {
         disclose_grid(player_ptr, y, x);
@@ -123,7 +123,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 {
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
     grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
     feature_type *f_ptr = &f_info[g_ptr->feat];

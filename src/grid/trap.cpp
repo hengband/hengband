@@ -166,7 +166,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
     FEAT_IDX feat;
 
     /* Pick a trap */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         feat = normal_traps[randint0(normal_traps.size())];
 
@@ -223,7 +223,7 @@ void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_trap(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
     /* Paranoia -- verify location */

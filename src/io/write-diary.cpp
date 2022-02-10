@@ -74,7 +74,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
  */
 static QuestId write_floor(PlayerType *player_ptr, concptr *note_level, char *note_level_buf)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     QuestId q_idx = quest_number(player_ptr, floor_ptr->dun_level);
     if (!write_level)
         return q_idx;

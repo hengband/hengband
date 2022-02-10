@@ -40,7 +40,7 @@
  */
 bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     if (!monster_is_valid(m_ptr))
         return false;
@@ -65,7 +65,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
         return false;
 

@@ -50,7 +50,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     bool pron = (m_ptr && ((seen && (mode & MD_PRON_VISIBLE)) || (!seen && (mode & MD_PRON_HIDDEN))));
 
     /* First, try using pronouns, or describing hidden monsters */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!seen || pron) {
         int kind = 0x00;
         if (r_ptr->flags1 & (RF1_FEMALE))

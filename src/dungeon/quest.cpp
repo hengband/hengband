@@ -216,7 +216,7 @@ void quest_discovery(QuestId q_idx)
  */
 QuestId quest_number(PlayerType *player_ptr, DEPTH level)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (inside_quest(floor_ptr->quest_number))
         return (floor_ptr->quest_number);
 

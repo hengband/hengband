@@ -84,7 +84,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
     eg_ptr->query = '\001';
     eg_ptr->floor_num = 0;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     eg_ptr->g_ptr = &floor_ptr->grid_array[y][x];
     eg_ptr->m_ptr = &floor_ptr->m_list[eg_ptr->g_ptr->m_idx];
     eg_ptr->next_o_idx = 0;

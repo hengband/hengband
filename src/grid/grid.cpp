@@ -756,7 +756,7 @@ FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FloorFeatureType actio
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatureType action)
 {
     /* Set old feature */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
 
     /* Get the new feat */

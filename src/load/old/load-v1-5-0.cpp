@@ -508,7 +508,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
  */
 errr rd_dungeon_old(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = rd_s16b();
     if (h_older_than(0, 3, 8))
         player_ptr->dungeon_idx = DUNGEON_ANGBAND;

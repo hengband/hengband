@@ -46,7 +46,7 @@
 void day_break(PlayerType *player_ptr)
 {
     msg_print(_("夜が明けた。", "The sun has risen."));
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->wild_mode) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -70,7 +70,7 @@ void day_break(PlayerType *player_ptr)
 void night_falls(PlayerType *player_ptr)
 {
     msg_print(_("日が沈んだ。", "The sun has fallen."));
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->wild_mode) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -113,7 +113,7 @@ static int rating_boost(int delta)
  */
 static byte get_dungeon_feeling(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
         return 0;
 
@@ -233,7 +233,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
  */
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
         return;
 
@@ -269,7 +269,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;

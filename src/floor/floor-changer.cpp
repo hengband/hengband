@@ -69,7 +69,7 @@ static void build_dead_end(PlayerType *player_ptr)
 
 static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (current_monster == 0) {
         MONSTER_IDX m_idx = m_pop(floor_ptr);
         player_ptr->riding = m_idx;
@@ -231,7 +231,7 @@ static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
 static void reset_unique_by_floor_change(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         monster_race *r_ptr;
         monster_type *m_ptr = &floor_ptr->m_list[i];

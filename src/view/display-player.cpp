@@ -218,7 +218,7 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
  */
 static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!inside_quest(floor_ptr->quest_number) || !quest_type::is_fixed(floor_ptr->quest_number))
         return std::nullopt;
 

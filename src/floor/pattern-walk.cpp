@@ -104,7 +104,7 @@ void pattern_teleport(PlayerType *player_ptr)
  */
 bool pattern_effect(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!pattern_tile(floor_ptr, player_ptr->y, player_ptr->x))
         return false;
 

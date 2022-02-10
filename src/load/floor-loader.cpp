@@ -46,7 +46,7 @@
  */
 errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
 

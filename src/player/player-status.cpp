@@ -157,7 +157,7 @@ static player_hand main_attack_hand(PlayerType *player_ptr);
  */
 static void delayed_visual_update(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < floor_ptr->redraw_n; i++) {
         POSITION y = floor_ptr->redraw_y[i];
         POSITION x = floor_ptr->redraw_x[i];
@@ -1806,7 +1806,7 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
 
 static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->riding)
         return 0;
 
@@ -2450,7 +2450,7 @@ void update_creature(PlayerType *player_ptr)
     if (!player_ptr->update)
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (any_bits(player_ptr->update, (PU_AUTODESTROY))) {
         reset_bits(player_ptr->update, PU_AUTODESTROY);
         autopick_delayed_alter(player_ptr);
@@ -2559,7 +2559,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
             return false;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (const auto this_o_idx : floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (o_ptr->k_idx && any_bits(o_ptr->marked, OM_FOUND) && check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval))
@@ -2591,7 +2591,7 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void wreck_the_pattern(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int pattern_type = f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
     if (pattern_type == PATTERN_TILE_WRECKED)
         return;

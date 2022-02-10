@@ -88,7 +88,7 @@ static void move_prob_list(RoomType dst, RoomType src, std::map<RoomType, int> &
  */
 bool generate_rooms(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int crowded = 0;
     std::map<RoomType, int> prob_list;
     int rooms_built = 0;

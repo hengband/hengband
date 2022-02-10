@@ -29,7 +29,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     if (i1 == i2)
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr;
     m_ptr = &floor_ptr->m_list[i1];
 
@@ -98,7 +98,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
         msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
 
     /* Compact at least 'size' objects */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);

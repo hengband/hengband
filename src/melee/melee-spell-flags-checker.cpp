@@ -45,7 +45,7 @@ static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_t
     if ((ms_ptr->target_idx != 0) || (ms_ptr->m_ptr->target_y == 0))
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     ms_ptr->target_idx = floor_ptr->grid_array[ms_ptr->m_ptr->target_y][ms_ptr->m_ptr->target_x].m_idx;
     if (ms_ptr->target_idx == 0)
         return;
@@ -69,7 +69,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
     int start;
     int plus = 1;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->phase_out) {
         start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
         if (randint0(2))

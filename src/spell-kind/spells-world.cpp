@@ -48,7 +48,7 @@
  */
 bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = floor_ptr->inside_arena || player_ptr->phase_out || (inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level)));
     bool is_invalid_floor = idx <= 0;
     is_invalid_floor &= inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth);

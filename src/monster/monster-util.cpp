@@ -75,7 +75,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return false;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
         if (r_ptr->level > floor_ptr->dun_level)
             return false;

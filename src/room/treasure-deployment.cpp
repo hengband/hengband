@@ -25,7 +25,7 @@ void fill_treasure(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1
     POSITION cx = (x1 + x2) / 2;
     POSITION cy = (y1 + y2) / 2;
     POSITION size = abs(x2 - x1) + abs(y2 - y1);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION x = x1; x <= x2; x++) {
         for (POSITION y = y1; y <= y2; y++) {
             int32_t value = ((((int32_t)(distance(cx, cy, x, y))) * 100) / size) + randint1(10) - difficulty;
