@@ -149,7 +149,7 @@ ObjectType *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
         return nullptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (o_ptr->curse_flags.has(flag)) {
             choices[number] = i;
             number++;
@@ -453,7 +453,7 @@ void execute_cursed_items_effect(PlayerType *player_ptr)
     if (!one_in_(999) || player_ptr->anti_magic || (one_in_(2) && has_resist_curse(player_ptr)))
         return;
 
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if (o_ptr->name1 != ART_JUDGE)
         return;
 

@@ -40,7 +40,7 @@ void vary_item(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
  */
 void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     num += o_ptr->number;
     if (num > 255)
         num = 255;
@@ -75,7 +75,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
  */
 void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if (!o_ptr->k_idx)
         return;
     if (o_ptr->number)

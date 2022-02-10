@@ -42,7 +42,7 @@
 
 bool switch_activation(PlayerType *player_ptr, ObjectType **o_ptr_ptr, const activation_type *const act_ptr, concptr name)
 {
-    ObjectType *o_ptr = (*o_ptr_ptr);
+    auto *o_ptr = (*o_ptr_ptr);
 
     switch (act_ptr->index) {
     case RandomArtActType::SUNLIGHT:

@@ -204,7 +204,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         monster_race *r_ptr;
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (o_ptr->tval != ItemKindType::CAPTURE)

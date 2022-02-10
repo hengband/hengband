@@ -228,7 +228,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
         (void)spell_hex.stop_all_spells();
     }
 
-    ObjectType *o_ptr = ref_item(player_ptr, item);
+    auto *o_ptr = ref_item(player_ptr, item);
 
     sound(SOUND_EAT);
 

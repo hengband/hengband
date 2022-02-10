@@ -223,7 +223,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
 void wiz_identify_full_inventory(PlayerType *player_ptr)
 {
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -759,7 +759,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     char buf[MAX_NLEN] = "\0";
     char *str = buf;
     ObjectType forge;
-    ObjectType *o_ptr = &forge;
+    auto *o_ptr = &forge;
     char o_name[MAX_NLEN];
 
     bool wish_art = false;

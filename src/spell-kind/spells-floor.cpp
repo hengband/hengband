@@ -63,7 +63,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 {
     /* Memorize objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
         if (o_ptr->is_held_by_monster())
@@ -156,7 +156,7 @@ void wiz_dark(PlayerType *player_ptr)
 
     /* Forget all objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
 
         if (!o_ptr->is_valid())
             continue;

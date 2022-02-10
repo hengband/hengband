@@ -161,7 +161,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         BIT_FLAGS flg2 = 0L, flg3 = 0L, flgr = 0L;
         GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
         OBJECT_IDX this_o_idx = *it++;
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         if (turn_flags_ptr->do_take) {
             /* Skip gold, corpse and statue */

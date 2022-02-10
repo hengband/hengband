@@ -132,7 +132,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     /*** Dump objects ***/
     wr_u16b(floor_ptr->o_max);
     for (int i = 1; i < floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &floor_ptr->o_list[i];
+        auto *o_ptr = &floor_ptr->o_list[i];
         wr_item(o_ptr);
     }
 

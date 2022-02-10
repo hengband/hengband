@@ -76,7 +76,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     }
 
     for (ARTIFACT_IDX i = 0; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (!o_ptr->is_fixed_artifact())

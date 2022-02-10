@@ -220,7 +220,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
 
-    ObjectType *o_ptr = &floor_ptr->o_list[item];
+    auto *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;
     if (num > 255)
         num = 255;
@@ -241,7 +241,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
  */
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
     if (!o_ptr->k_idx)
         return;
     if (o_ptr->number)
@@ -298,7 +298,7 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
  */
 ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
-    ObjectType *o_ptr = &floor_ptr->o_list[o_idx];
+    auto *o_ptr = &floor_ptr->o_list[o_idx];
 
     if (o_ptr->is_held_by_monster()) {
         return floor_ptr->m_list[o_ptr->held_m_idx].hold_o_idx_list;
@@ -550,7 +550,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
  */
 void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr = &floor_ptr->o_list[item];
+    auto *o_ptr = &floor_ptr->o_list[item];
     if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
         return;
     if (!o_ptr->is_known())
@@ -579,7 +579,7 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
  */
 void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP

@@ -174,7 +174,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
         } else if (object_index) {
             ObjectType tmp_object;
-            ObjectType *o_ptr = &tmp_object;
+            auto *o_ptr = &tmp_object;
             o_ptr->prep(object_index);
             if (o_ptr->tval == ItemKindType::GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;

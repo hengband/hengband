@@ -45,7 +45,7 @@ bool is_ring_slot(int i) { return (i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING
 bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        ObjectType *o_ptr = &floor_ptr->o_list[floor_list[i]];
+        auto *o_ptr = &floor_ptr->o_list[floor_list[i]];
         if (!o_ptr->inscription)
             continue;
 
@@ -65,7 +65,7 @@ bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX 
     }
 
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        ObjectType *o_ptr = &floor_ptr->o_list[floor_list[i]];
+        auto *o_ptr = &floor_ptr->o_list[floor_list[i]];
         if (!o_ptr->inscription)
             continue;
 
@@ -118,7 +118,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
     }
 
     for (COMMAND_CODE i = start; i <= end; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0))
             continue;
 
@@ -140,7 +140,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         return false;
 
     for (COMMAND_CODE i = start; i <= end; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0))
             continue;
 

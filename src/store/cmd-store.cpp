@@ -153,7 +153,7 @@ void do_cmd_store(PlayerType *player_ptr)
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
             INVENTORY_IDX item = INVEN_PACK;
-            ObjectType *o_ptr = &player_ptr->inventory_list[item];
+            auto *o_ptr = &player_ptr->inventory_list[item];
             if (cur_store_num != StoreSaleType::HOME) {
                 if (cur_store_num == StoreSaleType::MUSEUM)
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));

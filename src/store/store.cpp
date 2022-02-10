@@ -298,7 +298,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
-            ObjectType *o_ptr = &st_ptr->stock[j];
+            auto *o_ptr = &st_ptr->stock[j];
             if (black_market_crap(player_ptr, o_ptr)) {
                 store_item_increase(j, 0 - o_ptr->number);
                 store_item_optimize(j);

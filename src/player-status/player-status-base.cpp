@@ -234,7 +234,7 @@ int16_t PlayerStatusBase::equipments_value()
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     int16_t result = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         auto flgs = object_flags(o_ptr);
 
         if (!o_ptr->k_idx)

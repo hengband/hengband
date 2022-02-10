@@ -78,7 +78,7 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     if (!vorpal_cut)
         return;
 
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int vorpal_magnification = 2;
     print_chainsword_noise(o_ptr);
     if (o_ptr->name1 == ART_VORPAL_BLADE)

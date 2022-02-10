@@ -112,7 +112,7 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
 
             g_ptr = &floor_ptr->grid_array[yy][xx];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                ObjectType *o_ptr = &floor_ptr->o_list[this_o_idx];
+                auto *o_ptr = &floor_ptr->o_list[this_o_idx];
                 if (o_ptr->tval == ItemKindType::CORPSE) {
                     if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval]))
                         return true;

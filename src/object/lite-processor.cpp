@@ -18,7 +18,7 @@
  */
 void reduce_lite_life(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if (o_ptr->tval != ItemKindType::LITE)
         return;
 

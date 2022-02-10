@@ -24,7 +24,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
     if (i1 == i2)
         return;
 
-    ObjectType *o_ptr = &floor_ptr->o_list[i1];
+    auto *o_ptr = &floor_ptr->o_list[i1];
 
     // モンスター所為アイテムリストもしくは床上アイテムリストの要素番号i1をi2に書き換える
     auto &list = get_o_idx_list_contains(floor_ptr, i1);

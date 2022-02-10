@@ -1633,7 +1633,7 @@ BIT_FLAGS has_lite(PlayerType *player_ptr)
 bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
 {
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i) && has_two_handed_weapons(player_ptr)) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
+        auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
         int limit = calc_weapon_weight_limit(player_ptr);
 
         /* Enable when two hand wields an enough light weapon */
