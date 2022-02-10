@@ -57,7 +57,7 @@ static int next_to_walls(floor_type *floor_ptr, POSITION y, POSITION x)
 static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int walls)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (!g_ptr->is_floor() || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || (g_ptr->m_idx != 0) || next_to_walls(floor_ptr, y, x) < walls)
         return false;
 

@@ -139,7 +139,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
     for (; this->n < size(this->ys); ++this->n) {
         const POSITION y_cur = this->ys[this->n];
         const POSITION x_cur = this->xs[this->n];
-        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y_cur][x_cur];
+        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y_cur][x_cur];
         if (this->callback(g_ptr))
             break;
     }

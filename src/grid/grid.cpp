@@ -307,7 +307,7 @@ void print_rel(PlayerType *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, 
  */
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Blind players see nothing */
     if (player_ptr->blind)
@@ -688,7 +688,7 @@ void update_flow(PlayerType *player_ptr)
                 if (player_bold(player_ptr, y, x))
                     continue;
 
-                grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+                auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
                 if (is_closed_door(player_ptr, g_ptr->feat))
                     m += 3;
@@ -806,7 +806,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatur
 /* Remove a mirror */
 void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Remove the mirror */
     g_ptr->info &= ~(CAVE_OBJECT);
@@ -839,7 +839,7 @@ void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x)
 bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */
@@ -875,7 +875,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
  */
 bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */

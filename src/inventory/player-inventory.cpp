@@ -242,7 +242,7 @@ void carry(PlayerType *player_ptr, bool pickup)
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(player_ptr);
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, g_ptr);
     if (easy_floor) {
         py_pickup_floor(player_ptr, pickup);

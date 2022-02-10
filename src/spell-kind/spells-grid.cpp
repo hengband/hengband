@@ -109,7 +109,7 @@ void stair_creation(PlayerType *player_ptr)
     if (dest_floor_id) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+                auto *g_ptr = &floor_ptr->grid_array[y][x];
                 if (!g_ptr->special)
                     continue;
                 if (feat_uses_special(g_ptr->feat))

@@ -28,7 +28,7 @@
  */
 static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (!g_ptr->is_mark()) {
         msg_print(_("そこには何も見当たらない。", "You see nothing there."));
         return false;

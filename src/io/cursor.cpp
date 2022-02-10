@@ -51,7 +51,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     for (int i = 0; i < path_n; i++) {
         POSITION ny = get_grid_y(path_g[i]);
         POSITION nx = get_grid_x(path_g[i]);
-        grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
+        auto *g_ptr = &floor_ptr->grid_array[ny][nx];
         if (panel_contains(ny, nx)) {
             TERM_COLOR a = default_color;
             SYMBOL_CODE c;

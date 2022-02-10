@@ -70,7 +70,7 @@ static void drop_here(floor_type *floor_ptr, ObjectType *j_ptr, POSITION y, POSI
     o_ptr->iy = y;
     o_ptr->ix = x;
     o_ptr->held_m_idx = 0;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
 
@@ -97,7 +97,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int len = strlen(s);
     for (int i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
-        grid_type *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
+        auto *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
         int idx = s[0];
         OBJECT_IDX object_index = letter[idx].object;
         MONSTER_IDX monster_index = letter[idx].monster;

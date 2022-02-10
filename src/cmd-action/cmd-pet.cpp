@@ -698,7 +698,7 @@ void do_cmd_pet(PlayerType *player_ptr)
         if (!target_set(player_ptr, TARGET_KILL))
             player_ptr->pet_t_m_idx = 0;
         else {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[target_row][target_col];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[target_row][target_col];
             if (g_ptr->m_idx && (player_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)) {
                 player_ptr->pet_t_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
                 player_ptr->pet_follow_distance = PET_DESTROY_DIST;

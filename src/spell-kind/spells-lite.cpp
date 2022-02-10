@@ -57,7 +57,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
         const POSITION y = point.y;
         const POSITION x = point.x;
 
-        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         g_ptr->info &= ~(CAVE_TEMP);
         g_ptr->info |= (CAVE_GLOW);
         if (g_ptr->m_idx) {
@@ -106,7 +106,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         const POSITION y = point.y;
         const POSITION x = point.x;
 
-        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         bool do_dark = !g_ptr->is_mirror();
         g_ptr->info &= ~(CAVE_TEMP);
         if (!do_dark)
@@ -212,7 +212,7 @@ static void cave_temp_room_aux(
     PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const bool only_room, const PassBoldFunc pass_bold)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
 
     // 既に points に追加済みなら何もしない。
     if (g_ptr->info & (CAVE_TEMP))

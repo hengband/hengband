@@ -109,7 +109,7 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
  */
 void process_player_hp_mp(PlayerType *player_ptr)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     bool cave_no_regen = false;
     int upkeep_factor = 0;

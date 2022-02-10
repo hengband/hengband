@@ -985,7 +985,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
 
     for (y = y1 - 1; y <= y2 + 1; y++) {
         for (x = x1 - 1; x <= x2 + 1; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
 
             g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 

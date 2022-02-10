@@ -22,7 +22,7 @@
  */
 OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapped)
 {
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];

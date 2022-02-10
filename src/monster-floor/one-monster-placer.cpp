@@ -176,7 +176,7 @@ static bool check_quest_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 static bool check_procection_rune(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if (!g_ptr->is_rune_protection())
         return true;
 
@@ -241,7 +241,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MONRACE_IDX r_idx)
 bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     monster_race *r_ptr = &r_info[r_idx];
     concptr name = r_ptr->name.c_str();
 

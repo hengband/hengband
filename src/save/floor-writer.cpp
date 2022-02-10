@@ -60,7 +60,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     std::vector<grid_template_type> templates;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             uint i;
             for (i = 0; i < templates.size(); i++) {
                 if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic
@@ -93,7 +93,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     uint16_t prev_u16b = 0;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             uint i;
             for (i = 0; i < templates.size(); i++) {
                 if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic

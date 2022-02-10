@@ -70,7 +70,7 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
 static void travel_flow_aux(PlayerType *player_ptr, POSITION y, POSITION x, int n, bool wall)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     if (!in_bounds(floor_ptr, y, x))
         return;

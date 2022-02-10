@@ -143,7 +143,7 @@ bool fetch_monster(PlayerType *player_ptr)
     for (i = 1; i < path_n; i++) {
         POSITION ny = get_grid_y(path_g[i]);
         POSITION nx = get_grid_x(path_g[i]);
-        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
         if (in_bounds(player_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object()
             && !pattern_tile(player_ptr->current_floor_ptr, ny, nx)) {

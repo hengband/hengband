@@ -290,7 +290,7 @@ bool hayagake(PlayerType *player_ptr)
         return true;
     }
 
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     if (f_ptr->flags.has_not(FloorFeatureType::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FloorFeatureType::DEEP))) {

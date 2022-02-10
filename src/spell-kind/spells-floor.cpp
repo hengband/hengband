@@ -75,7 +75,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
         /* Scan all normal grids */
         for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
             /* Memorize terrain of the grid */
             g_ptr->info |= (CAVE_KNOWN);
@@ -134,7 +134,7 @@ void wiz_dark(PlayerType *player_ptr)
     /* Forget every grid */
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
         for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
             /* Process the grid */
             g_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);

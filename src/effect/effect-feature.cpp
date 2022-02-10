@@ -65,7 +65,7 @@ static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType typ)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     bool obvious = false;

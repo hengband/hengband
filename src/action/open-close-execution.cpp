@@ -39,7 +39,7 @@
  */
 bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (f_ptr->flags.has_not(FloorFeatureType::OPEN)) {
@@ -94,7 +94,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX old_feat = g_ptr->feat;
     bool more = false;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -134,7 +134,7 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int i, j;
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     if (!is_closed_door(player_ptr, g_ptr->feat))
         return false;
@@ -245,7 +245,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
 
 bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     concptr name = f_ptr->name.c_str();
     int power = f_ptr->power;
@@ -297,7 +297,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
  */
 bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int bash = adj_str_blow[player_ptr->stat_index[A_STR]];
     int temp = f_ptr->power;

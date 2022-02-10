@@ -161,7 +161,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
 static bool set_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
+    auto *g_ptr = &floor_ptr->grid_array[*y][*x];
     if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner())
         return true;
 

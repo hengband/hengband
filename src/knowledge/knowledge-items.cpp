@@ -61,7 +61,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 
     for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
         for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
                 ObjectType *o_ptr;
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];

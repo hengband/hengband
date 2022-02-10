@@ -124,7 +124,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
+    auto *g_ptr = &floor_ptr->grid_array[ny][nx];
     grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     feature_type *of_ptr = &f_info[oc_ptr->feat];

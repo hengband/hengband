@@ -345,7 +345,7 @@ void clear_cave(PlayerType *player_ptr)
     precalc_cur_num_of_pet(player_ptr);
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info = 0;
             g_ptr->feat = 0;
             g_ptr->o_idx_list.clear();

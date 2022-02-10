@@ -50,7 +50,7 @@ void day_break(PlayerType *player_ptr)
     if (!player_ptr->wild_mode) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+                auto *g_ptr = &floor_ptr->grid_array[y][x];
                 g_ptr->info |= CAVE_GLOW;
                 if (view_perma_grids)
                     g_ptr->info |= CAVE_MARK;
@@ -74,7 +74,7 @@ void night_falls(PlayerType *player_ptr)
     if (!player_ptr->wild_mode) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+                auto *g_ptr = &floor_ptr->grid_array[y][x];
                 feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
                 if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE))
                     continue;

@@ -70,7 +70,7 @@ typedef struct um_type {
 bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_type *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (turn_flags_ptr->is_riding_mon)
         return move_player_effect(player_ptr, ny, nx, MPE_DONT_PICKUP);
