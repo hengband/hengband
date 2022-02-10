@@ -249,7 +249,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
  */
 void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     GAME_TEXT m_name[MAX_NLEN];

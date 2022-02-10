@@ -139,7 +139,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     /*** Dump the monsters ***/
     wr_u16b(floor_ptr->m_max);
     for (int i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         wr_monster(m_ptr);
     }
 }

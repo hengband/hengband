@@ -282,7 +282,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
         return;
     }
 
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (!m_ptr->ml) {
         set_term_color(player_ptr, y, x, ap, cp);
         return;

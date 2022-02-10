@@ -47,7 +47,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
     if (!player_ptr->riding)
         return;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     if (m_ptr->parent_m_idx) {
         player_ptr->riding = 0;
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
@@ -82,7 +82,7 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
         return;
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr))
             continue;
 
@@ -98,7 +98,7 @@ static void record_pet_diary(PlayerType *player_ptr)
         return;
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         GAME_TEXT m_name[MAX_NLEN];
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (player_ptr->riding == i))
             continue;
@@ -121,7 +121,7 @@ static void preserve_pet(PlayerType *player_ptr)
     sweep_preserving_pet(player_ptr);
     record_pet_diary(player_ptr);
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if ((m_ptr->parent_m_idx == 0) || (player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx != 0))
             continue;
 
@@ -252,7 +252,7 @@ static void preserve_info(PlayerType *player_ptr)
 
     for (DUNGEON_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         monster_race *r_ptr;
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (quest_r_idx != m_ptr->r_idx))
             continue;
 

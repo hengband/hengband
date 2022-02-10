@@ -103,7 +103,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);
         for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-            monster_type *m_ptr = &floor_ptr->m_list[i];
+            auto *m_ptr = &floor_ptr->m_list[i];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
             if (!monster_is_valid(m_ptr))
                 continue;
@@ -137,7 +137,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
 
     /* Excise dead monsters (backwards!) */
     for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (m_ptr->r_idx)
             continue;
         compact_monsters_aux(player_ptr, floor_ptr->m_max - 1, i);

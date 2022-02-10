@@ -689,7 +689,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                 sound(SOUND_SHOOT_HIT);
                 grid_type *c_mon_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
                 monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
                 /* Check the visibility */
@@ -894,7 +894,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
 
         if (stick_to) {
             MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
             OBJECT_IDX o_idx = o_pop(player_ptr->current_floor_ptr);
 
             if (!o_idx) {

@@ -127,7 +127,7 @@ void process_player(PlayerType *player_ptr)
 
     if (player_ptr->phase_out) {
         for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
             if (!monster_is_valid(m_ptr))
                 continue;
 
@@ -180,7 +180,7 @@ void process_player(PlayerType *player_ptr)
     }
 
     if (player_ptr->riding && !player_ptr->confused && !player_ptr->blind) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_csleep_remaining(m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];

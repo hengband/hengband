@@ -162,7 +162,7 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
         x = get_grid_x(grid_g[i]);
 
         if ((floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2))) {
-            monster_type *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
+            auto *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
             if (is_friend == is_pet(m_ptr)) {
                 return false;
             }
@@ -247,7 +247,7 @@ ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
  */
 ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, bool breath, int target_type)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     BIT_FLAGS flg = 0x00;
     switch (target_type) {

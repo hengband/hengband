@@ -46,7 +46,7 @@ bool eat_rock(PlayerType *player_ptr)
     } else if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
         msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), mimic_f_ptr->name.c_str());
     } else if (g_ptr->m_idx) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
         msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
         if (!m_ptr->ml || !is_pet(m_ptr))

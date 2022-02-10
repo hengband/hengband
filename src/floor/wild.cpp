@@ -856,7 +856,7 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
     bool has_pet = false;
     PlayerEnergy energy(player_ptr);
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 

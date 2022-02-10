@@ -19,7 +19,7 @@
 
 void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
     BIT_FLAGS curse_flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     int count = 0;

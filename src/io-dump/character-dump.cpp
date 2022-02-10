@@ -59,7 +59,7 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
     bool pet = false;
     bool pet_settings = false;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
 
         if (!monster_is_valid(m_ptr))
             continue;

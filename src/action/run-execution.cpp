@@ -221,7 +221,7 @@ static bool run_test(PlayerType *player_ptr)
         feature_type *f_ptr;
         f_ptr = &f_info[feat];
         if (g_ptr->m_idx) {
-            monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
             if (m_ptr->ml)
                 return true;
         }

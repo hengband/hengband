@@ -199,7 +199,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MONRACE_IDX r_id
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
+    auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
     if (!(r_ptr->flags1 & (RF1_UNIQUE)))
@@ -237,7 +237,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
+    auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
     if (r_ptr->flags1 & (RF1_UNIQUE))
@@ -278,7 +278,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
 void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr;
 
     bool old_unique = false;
@@ -399,7 +399,7 @@ SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
  */
 int get_monster_crowd_number(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION my = m_ptr->fy;
     POSITION mx = m_ptr->fx;
     int count = 0;

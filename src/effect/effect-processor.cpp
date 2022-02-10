@@ -246,7 +246,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 if (affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER, flag, true))
                     res.notice = true;
                 if (!who && (project_m_n == 1) && !jump && (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
-                    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+                    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
                     if (m_ptr->ml) {
                         if (!player_ptr->hallucinated)
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
@@ -268,7 +268,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 res.notice = true;
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
-                    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+                    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
                     if (m_ptr->ml) {
                         if (!player_ptr->hallucinated)
@@ -368,7 +368,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             (void)affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY, flag, true);
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
-                    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+                    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
                     if (m_ptr->ml) {
                         if (!player_ptr->hallucinated)
@@ -608,7 +608,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             y = gy[i];
             x = gx[i];
             if (grids <= 1) {
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
                 monster_race *ref_ptr = &r_info[m_ptr->r_idx];
                 if ((flag & PROJECT_REFLECTABLE) && player_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((player_ptr->current_floor_ptr->grid_array[y][x].m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || dist_hack > 1) && !one_in_(10)) {
                     POSITION t_y, t_x;
@@ -720,7 +720,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             x = project_m_x;
             y = project_m_y;
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) {
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 
                 if (m_ptr->ml) {
                     if (!player_ptr->hallucinated)

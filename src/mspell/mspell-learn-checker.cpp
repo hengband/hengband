@@ -16,7 +16,7 @@
  */
 bool spell_learnable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->blind && m_ptr->ml);
 
     bool maneable = player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);

@@ -67,7 +67,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     MONRACE_IDX new_r_idx;
     MONRACE_IDX old_r_idx = m_ptr->r_idx;
     bool targeted = target_who == g_ptr->m_idx;

@@ -350,7 +350,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
 
         grid_type *g_ptr;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         bool can_cross = monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
 
@@ -450,7 +450,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     if (player_ptr->phase_out)
         return;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
     if (m_ptr->ap_r_idx == MON_CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
         if (disturb_minor)

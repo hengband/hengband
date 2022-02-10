@@ -57,7 +57,7 @@ static void summon_disturb(PlayerType *player_ptr, int target_type, bool known, 
 static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
     BIT_FLAGS u_mode = 0L;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool pet = is_pet(m_ptr);
     if (!pet)
         u_mode |= PM_ALLOW_UNIQUE;
@@ -87,7 +87,7 @@ static void decide_summon_kin_caster(
     PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, concptr m_poss, const bool known)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = target_type == MONSTER_TO_MONSTER;
     bool mon_to_player = target_type == MONSTER_TO_PLAYER;
@@ -133,7 +133,7 @@ static void decide_summon_kin_caster(
 MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN], m_poss[80];
     monster_name(player_ptr, m_idx, m_name);
@@ -233,7 +233,7 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
 MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -556,7 +556,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
     summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
 
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     int num = 1;
     if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
@@ -730,7 +730,7 @@ MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITI
 MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -894,7 +894,7 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
     monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
     summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
 
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool uniques_are_summoned = false;
     int count = 0;
     for (auto k = 0; k < S_NUM_4; k++) {

@@ -134,7 +134,7 @@ bool mon_scatter(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITI
 bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION y, x;
     if (!mon_scatter(player_ptr, m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
         return false;
@@ -220,7 +220,7 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITIO
 static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[place_monster_idx];
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
     monster_race *z_ptr = &r_info[r_idx];
 
     if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx))

@@ -59,7 +59,7 @@ static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m
 static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
         MONSTER_IDX dummy = (i % floor_ptr->m_max);
@@ -103,7 +103,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
 bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
 
     POSITION x = 0, y = 0;
     if (player_ptr->riding_t_m_idx && player_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
@@ -183,7 +183,7 @@ static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, monster_type *m_p
  */
 static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 {
-    monster_type *m_ptr = &msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
+    auto *m_ptr = &msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
     if (!is_pet(m_ptr)) {
         return false;
     }
@@ -220,7 +220,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
  */
 bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     if (monster_confused_remaining(m_ptr) || !aware) {

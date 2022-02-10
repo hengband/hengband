@@ -69,7 +69,7 @@ typedef struct um_type {
  */
 bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_type *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (turn_flags_ptr->is_riding_mon)
@@ -534,7 +534,7 @@ void update_monsters(PlayerType *player_ptr, bool full)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -549,7 +549,7 @@ void update_monsters(PlayerType *player_ptr, bool full)
  */
 void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (!smart_learn || (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) || ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) && (randint0(100) < 50)))
         return;

@@ -62,7 +62,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
         g_ptr->info |= (CAVE_GLOW);
         if (g_ptr->m_idx) {
             PERCENTAGE chance = 25;
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
             update_monster(player_ptr, g_ptr->m_idx, false);
             if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))

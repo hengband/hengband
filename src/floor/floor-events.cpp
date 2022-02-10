@@ -120,7 +120,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
     const int base = 10;
     int rating = 0;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         monster_race *r_ptr;
         int delta = 0;
         if (!monster_is_valid(m_ptr) || is_pet(m_ptr))

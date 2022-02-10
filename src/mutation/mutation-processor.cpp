@@ -407,7 +407,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     if (player_ptr->muta.has(PlayerMutationType::WARNING) && one_in_(1000)) {
         int danger_amount = 0;
         for (MONSTER_IDX monster = 0; monster < player_ptr->current_floor_ptr->m_max; monster++) {
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[monster];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[monster];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
             if (!monster_is_valid(m_ptr))
                 continue;

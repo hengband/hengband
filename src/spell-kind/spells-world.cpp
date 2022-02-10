@@ -71,7 +71,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (m_idx <= 0) {
         strcpy(m_name, _("あなた", "you"));
     } else {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
         monster_desc(player_ptr, m_name, m_ptr, 0);
         see_m = is_seen(player_ptr, m_ptr);
     }
@@ -196,7 +196,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
     }
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
         char m2_name[MAX_NLEN];

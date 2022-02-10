@@ -57,7 +57,7 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
         POSITION col = player_ptr->x + ddx[dir];
         g_ptr = &floor_ptr->grid_array[row][col];
         if (g_ptr->m_idx) {
-            monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
             if (m_ptr->ml)
                 return 0;
         }
