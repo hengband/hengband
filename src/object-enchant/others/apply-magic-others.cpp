@@ -35,8 +35,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param power 生成ランク
- * @details
- * Hack -- note the special code for various items
+ * @details power > 2はデバッグ専用.
  */
 void apply_magic_others(PlayerType *player_ptr, object_type *o_ptr, int power)
 {
@@ -65,7 +64,6 @@ void apply_magic_others(PlayerType *player_ptr, object_type *o_ptr, int power)
             o_ptr->pval = 0;
         }
 
-        /* power > 2はデバッグ専用. */
         if (power > 2) {
             become_random_artifact(player_ptr, o_ptr, false);
         } else if ((power == 2) || ((power == 1) && one_in_(3))) {
