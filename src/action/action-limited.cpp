@@ -10,6 +10,7 @@
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "player-base/player-class.h"
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
@@ -35,7 +36,7 @@ bool cmd_limit_cast(PlayerType *player_ptr)
         return true;
     }
 
-    if (is_shero(player_ptr) && (player_ptr->pclass != PlayerClassType::BERSERKER)) {
+    if (is_shero(player_ptr) && !PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
         msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
         return true;
     }

@@ -13,6 +13,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "mutation/mutation-investor-remover.h"
+#include "player-base/player-class.h"
 #include "player/patron.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -228,7 +229,7 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         wiz_lite(player_ptr, false);
         break;
     case 'w':
-        wiz_lite(player_ptr, (bool)(player_ptr->pclass == PlayerClassType::NINJA));
+        wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
         break;
     case 'x':
         gain_exp(player_ptr, command_arg ? command_arg : (player_ptr->exp + 1));

@@ -63,6 +63,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -288,10 +289,11 @@ static void init_io(PlayerType *player_ptr)
 
 static void init_riding_pet(PlayerType *player_ptr, bool new_game)
 {
-    if (!new_game || ((player_ptr->pclass != PlayerClassType::CAVALRY) && (player_ptr->pclass != PlayerClassType::BEASTMASTER)))
+    PlayerClass pc(player_ptr);
+    if (!new_game || !pc.is_tamer())
         return;
 
-    MONRACE_IDX pet_r_idx = ((player_ptr->pclass == PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
+    MONRACE_IDX pet_r_idx = pc.equals(PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE;
     monster_race *r_ptr = &r_info[pet_r_idx];
     place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];

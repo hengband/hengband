@@ -33,6 +33,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "player-base/player-class.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -384,7 +385,7 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->floor_id = new_floor_id;
     w_ptr->character_dungeon = true;
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
-        wiz_lite(player_ptr, (bool)(player_ptr->pclass == PlayerClassType::NINJA));
+        wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
 
     player_ptr->current_floor_ptr->generated_turn = w_ptr->game_turn;
     player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;

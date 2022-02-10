@@ -72,8 +72,8 @@ int16_t PlayerSpeed::race_value()
 int16_t PlayerSpeed::class_value()
 {
     SPEED result = 0;
-
-    if (this->player_ptr->pclass == PlayerClassType::NINJA) {
+    PlayerClass pc(this->player_ptr);
+    if (pc.equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
             result -= (this->player_ptr->lev) / 10;
         } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
@@ -83,12 +83,12 @@ int16_t PlayerSpeed::class_value()
         }
     }
 
-    if ((this->player_ptr->pclass == PlayerClassType::MONK || this->player_ptr->pclass == PlayerClassType::FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
+    if ((pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER)) && !heavy_armor(this->player_ptr)) {
         if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
             result += (this->player_ptr->lev) / 10;
     }
 
-    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
+    if (pc.equals(PlayerClassType::BERSERKER)) {
         result += 2;
         if (this->player_ptr->lev > 29)
             result++;

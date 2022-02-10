@@ -890,7 +890,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, object_type *j_ptr, SP
         }
 
         /* Chance of breakage (during attacks) */
-        j = (hit_body ? breakage_chance(player_ptr, q_ptr, player_ptr->pclass == PlayerClassType::ARCHER, snipe_type) : 0);
+        j = (hit_body ? breakage_chance(player_ptr, q_ptr, PlayerClass(player_ptr).equals(PlayerClassType::ARCHER), snipe_type) : 0);
 
         if (stick_to) {
             MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
@@ -1019,12 +1019,13 @@ HIT_POINT critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, in
     else
         i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
 
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    PlayerClass pc(player_ptr);
+    auto sniper_data = pc.get_specific_data<sniper_data_type>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
 
     /* Snipers can shot more critically with crossbows */
     i += ((i * sniper_concent) / 5);
-    if ((player_ptr->pclass == PlayerClassType::SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT))
+    if (pc.equals(PlayerClassType::SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT))
         i *= 2;
 
     /* Good bow makes more critical */
@@ -1170,12 +1171,13 @@ HIT_POINT calc_crit_ratio_shot(PlayerType *player_ptr, HIT_POINT plus_ammo, HIT_
     else
         i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
 
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    PlayerClass pc(player_ptr);
+    auto sniper_data = pc.get_specific_data<sniper_data_type>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
 
     /* Snipers can shot more critically with crossbows */
     i += ((i * sniper_concent) / 5);
-    if ((player_ptr->pclass == PlayerClassType::SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT))
+    if (pc.equals(PlayerClassType::SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT))
         i *= 2;
 
     /* Good bow makes more critical */
@@ -1268,7 +1270,7 @@ HIT_POINT calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_
         num += calc_weight_expect_dam(dam, weight);
     }
 
-    int pow = (player_ptr->pclass == PlayerClassType::NINJA) ? 4444 : 5000;
+    int pow = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? 4444 : 5000;
     if (impact)
         pow /= 2;
 

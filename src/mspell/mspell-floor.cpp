@@ -25,6 +25,7 @@
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-util.h"
+#include "player-base/player-class.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -382,7 +383,7 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
-    if ((player_ptr->pclass == PlayerClassType::NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
         can_use_lite_area = true;
 
     if (monster_to_monster && !is_hostile(t_ptr))

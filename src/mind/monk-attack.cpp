@@ -98,7 +98,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
     for (int times = 0; times < max_blow_selection_times; times++) {
         do {
             pa_ptr->ma_ptr = &ma_blows[randint0(MAX_MA)];
-            if ((player_ptr->pclass == PlayerClassType::FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1))
+            if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1))
                 min_level = pa_ptr->ma_ptr->min_level + 3;
             else
                 min_level = pa_ptr->ma_ptr->min_level;
@@ -116,7 +116,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
             msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
     }
 
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER))
         min_level = std::max(1, pa_ptr->ma_ptr->min_level - 3);
     else
         min_level = pa_ptr->ma_ptr->min_level;
@@ -162,10 +162,11 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
 static WEIGHT calc_monk_attack_weight(PlayerType *player_ptr)
 {
     WEIGHT weight = 8;
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU))
+    PlayerClass pc(player_ptr);
+    if (pc.monk_stance_is(MonkStanceType::SUZAKU))
         weight = 4;
 
-    if ((player_ptr->pclass == PlayerClassType::FORCETRAINER) && (get_current_ki(player_ptr) != 0)) {
+    if (pc.equals(PlayerClassType::FORCETRAINER) && (get_current_ki(player_ptr) != 0)) {
         weight += (get_current_ki(player_ptr) / 30);
         if (weight > 20)
             weight = 20;

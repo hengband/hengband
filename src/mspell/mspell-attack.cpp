@@ -258,14 +258,15 @@ static void check_mspell_imitation(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     bool seen = (!player_ptr->blind && msa_ptr->m_ptr->ml);
     bool can_imitate = player_has_los_bold(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
-    if (!seen || !can_imitate || (w_ptr->timewalk_m_idx != 0) || (player_ptr->pclass != PlayerClassType::IMITATOR))
+    PlayerClass pc(player_ptr);
+    if (!seen || !can_imitate || (w_ptr->timewalk_m_idx != 0) || !pc.equals(PlayerClassType::IMITATOR))
         return;
 
     /* Not RF_ABILITY::SPECIAL */
     if (msa_ptr->thrown_spell == MonsterAbilityType::SPECIAL)
         return;
 
-    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+    auto mane_data = pc.get_specific_data<mane_data_type>();
 
     if (mane_data->mane_list.size() == MAX_MANE) {
         mane_data->mane_list.pop_front();

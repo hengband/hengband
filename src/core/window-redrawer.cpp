@@ -9,6 +9,7 @@
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
 #include "object/item-tester-hooker.h"
+#include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -202,7 +203,7 @@ void redraw_stuff(PlayerType *player_ptr)
         print_speed(player_ptr);
     }
 
-    if (player_ptr->pclass == PlayerClassType::IMITATOR) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
         if (player_ptr->redraw & (PR_IMITATION)) {
             player_ptr->redraw &= ~(PR_IMITATION);
             print_imitation(player_ptr);

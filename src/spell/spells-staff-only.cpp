@@ -1,10 +1,11 @@
 ﻿#include "spell/spells-staff-only.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "hpmp/hp-mp-processor.h"
+#include "player-base/player-class.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-sight.h"
-#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "system/player-type-definition.h"
@@ -63,13 +64,7 @@ bool unleash_mana_storm(PlayerType *player_ptr, bool powerful)
     project(player_ptr, 0, (powerful ? 7 : 5), player_ptr->y, player_ptr->x, (randint1(200) + (powerful ? 500 : 300)) * 2, AttributeType::MANA,
         PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
 
-    bool is_special_class = player_ptr->pclass != PlayerClassType::MAGE;
-    is_special_class &= player_ptr->pclass != PlayerClassType::HIGH_MAGE;
-    is_special_class &= player_ptr->pclass != PlayerClassType::SORCERER;
-    is_special_class &= player_ptr->pclass != PlayerClassType::MAGIC_EATER;
-    is_special_class &= player_ptr->pclass != PlayerClassType::BLUE_MAGE;
-    is_special_class &= player_ptr->pclass != PlayerClassType::ELEMENTALIST;
-    if (is_special_class)
+    if (!PlayerClass(player_ptr).is_wizard())
         (void)take_hit(player_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"));
 
     return true;

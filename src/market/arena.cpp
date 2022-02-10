@@ -18,6 +18,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "player-base/player-class.h"
 #include "status/buff-setter.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -98,7 +99,7 @@ static void go_to_arena(PlayerType *player_ptr)
     if (battle_metal_babble(player_ptr))
         return;
 
-    if (player_ptr->riding && (player_ptr->pclass != PlayerClassType::BEASTMASTER) && (player_ptr->pclass != PlayerClassType::CAVALRY)) {
+    if (player_ptr->riding && !PlayerClass(player_ptr).is_tamer()) {
         msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
         msg_print(nullptr);
         return;

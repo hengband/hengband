@@ -11,17 +11,28 @@
 
 enum class SamuraiStanceType : uint8_t;
 enum class MonkStanceType : uint8_t;
-
+enum class PlayerClassType : short;
 class PlayerClass {
 public:
     PlayerClass(PlayerType *player_ptr);
     virtual ~PlayerClass() = default;
 
+    bool equals(PlayerClassType type) const;
     TrFlags tr_flags() const;
     TrFlags stance_tr_flags() const;
 
     bool has_stun_immunity() const;
+    bool has_poison_resistance() const;
+    bool has_additional_speed() const;
+    bool is_soldier() const;
     bool is_wizard() const;
+    bool is_tamer() const;
+    bool can_browse() const;
+    bool has_listed_magics() const;
+    bool is_tough() const;
+    bool is_martial_arts_pro() const;
+    bool is_every_magic() const;
+    bool has_number_of_spells_learned() const;
 
     bool lose_balance();
     void break_samurai_stance(std::initializer_list<SamuraiStanceType> stance_list);

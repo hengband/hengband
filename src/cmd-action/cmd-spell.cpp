@@ -267,10 +267,9 @@ static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool stu
         return false;
     }
 
-    if (player_ptr->pclass == PlayerClassType::SORCERER)
+    if (PlayerClass(player_ptr).is_every_magic()) {
         return true;
-    if (player_ptr->pclass == PlayerClassType::RED_MAGE)
-        return true;
+    }
 
     /* Spell is learned */
     if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_learned2 & (1UL << spell)) : (player_ptr->spell_learned1 & (1UL << spell))) {
@@ -355,11 +354,14 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
     /* No "okay" spells */
     if (!okay)
         return false;
-    if (((use_realm) != player_ptr->realm1) && ((use_realm) != player_ptr->realm2) && (player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE))
+
+    PlayerClass pc(player_ptr);
+    auto is_every_magic = pc.is_every_magic();
+    if (((use_realm) != player_ptr->realm1) && ((use_realm) != player_ptr->realm2) && !is_every_magic)
         return false;
-    if (((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE)) && !is_magic(use_realm))
+    if (is_every_magic && !is_magic(use_realm))
         return false;
-    if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1))
+    if (pc.equals(PlayerClassType::RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1))
         return false;
 
     /* Assume cancelled */
@@ -618,14 +620,15 @@ void do_cmd_browse(PlayerType *player_ptr)
     concptr q, s;
 
     /* Warriors are illiterate */
-    if (!(player_ptr->realm1 || player_ptr->realm2) && (player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE)) {
+    PlayerClass pc(player_ptr);
+    if (!(player_ptr->realm1 || player_ptr->realm2) && !pc.is_every_magic()) {
         msg_print(_("本を読むことができない！", "You cannot read books!"));
         return;
     }
 
-    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
+    pc.break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER) {
+    if (pc.equals(PlayerClassType::FORCETRAINER)) {
         if (player_has_no_spellbooks(player_ptr)) {
             confirm_use_force(player_ptr, true);
             return;
@@ -638,7 +641,7 @@ void do_cmd_browse(PlayerType *player_ptr)
     q = _("どの本を読みますか? ", "Browse which book? ");
     s = _("読める本がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (player_ptr->pclass == PlayerClassType::FORCETRAINER ? USE_FORCE : 0)), item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
 
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
@@ -978,13 +981,15 @@ bool do_cmd_cast(PlayerType *player_ptr)
     bool over_exerted = false;
 
     /* Require spell ability */
-    if (!player_ptr->realm1 && (player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE)) {
+    PlayerClass pc(player_ptr);
+    auto is_every_magic = pc.is_every_magic();
+    if (!player_ptr->realm1 && !is_every_magic) {
         msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
         return false;
     }
 
     if (player_ptr->blind || no_lite(player_ptr)) {
-        if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
+        if (pc.equals(PlayerClassType::FORCETRAINER))
             confirm_use_force(player_ptr, false);
         else {
             msg_print(_("目が見えない！", "You cannot see!"));
@@ -1011,7 +1016,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER) {
+    if (pc.equals(PlayerClassType::FORCETRAINER)) {
         if (player_has_no_spellbooks(player_ptr)) {
             confirm_use_force(player_ptr, false);
             return true; //!< 錬気キャンセル時の処理がない
@@ -1025,7 +1030,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
 
     auto item_tester = get_castable_spellbook_tester(player_ptr);
 
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (player_ptr->pclass == PlayerClassType::FORCETRAINER ? USE_FORCE : 0)), item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
         {
@@ -1038,14 +1043,14 @@ bool do_cmd_cast(PlayerType *player_ptr)
     /* Access the item's sval */
     sval = o_ptr->sval;
 
-    if ((player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE) && (o_ptr->tval == get_realm2_book(player_ptr)))
+    if (!is_every_magic && (o_ptr->tval == get_realm2_book(player_ptr)))
         increment = 32;
 
     /* Track the object kind */
     object_kind_track(player_ptr, o_ptr->k_idx);
     handle_stuff(player_ptr);
 
-    if ((player_ptr->pclass == PlayerClassType::SORCERER) || (player_ptr->pclass == PlayerClassType::RED_MAGE))
+    if (is_every_magic)
         realm = tval2realm(o_ptr->tval);
     else if (increment)
         realm = player_ptr->realm2;
@@ -1187,7 +1192,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             chg_virtue(player_ptr, V_CHANCE, 1);
 
         /* A spell was cast */
-        if (!(increment ? (player_ptr->spell_worked2 & (1UL << spell)) : (player_ptr->spell_worked1 & (1UL << spell))) && (player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE)) {
+        if (!(increment ? (player_ptr->spell_worked2 & (1UL << spell)) : (player_ptr->spell_worked1 & (1UL << spell))) && !is_every_magic) {
             int e = s_ptr->sexp;
 
             /* The spell worked */

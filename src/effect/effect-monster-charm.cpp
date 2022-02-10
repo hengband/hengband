@@ -18,6 +18,7 @@
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player/player-status-flags.h"
 #include "spell/spells-diceroll.h"
 #include "status/bad-status-setter.h"
@@ -362,7 +363,7 @@ static HIT_POINT calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m
     if (is_pet(m_ptr))
         return hp * 4L;
 
-    if ((player_ptr->pclass == PlayerClassType::BEASTMASTER) && monster_living(m_ptr->r_idx))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER) && monster_living(m_ptr->r_idx))
         return hp * 3 / 10;
 
     return hp * 3 / 20;

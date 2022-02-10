@@ -10,6 +10,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -79,8 +80,7 @@ void curse_artifact(PlayerType *player_ptr, object_type *o_ptr)
     o_ptr->curse_flags.set({ CurseTraitType::HEAVY_CURSE, CurseTraitType::CURSED });
     o_ptr->art_flags.reset(TR_BLESSED);
     add_negative_flags(o_ptr);
-    if ((player_ptr->pclass != PlayerClassType::WARRIOR) && (player_ptr->pclass != PlayerClassType::ARCHER) && (player_ptr->pclass != PlayerClassType::CAVALRY)
-        && (player_ptr->pclass != PlayerClassType::BERSERKER) && (player_ptr->pclass != PlayerClassType::SMITH) && one_in_(3))
+    if (!PlayerClass(player_ptr).is_soldier() && one_in_(3))
         o_ptr->art_flags.set(TR_NO_MAGIC);
 }
 

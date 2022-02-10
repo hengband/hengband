@@ -37,6 +37,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-status-base.h"
@@ -1061,7 +1062,7 @@ process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_
  */
 bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_LEVEL lev)
 {
-    if (player_ptr->pclass != PlayerClassType::ELEMENTALIST)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
         return false;
 
     auto prealm = i2enum<ElementRealmType>(player_ptr->element);

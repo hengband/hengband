@@ -23,6 +23,7 @@
 #include "mind/mind-elementalist.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-weaponsmith.h"
+#include "player-base/player-class.h"
 #include "store/home.h"
 #include "store/museum.h"
 #include "store/purchase-order.h"
@@ -148,16 +149,16 @@ void store_process_command(PlayerType *player_ptr)
         break;
     }
     case 'b': {
-        if ((player_ptr->pclass == PlayerClassType::MINDCRAFTER) || (player_ptr->pclass == PlayerClassType::BERSERKER) || (player_ptr->pclass == PlayerClassType::NINJA)
-            || (player_ptr->pclass == PlayerClassType::MIRROR_MASTER))
+        PlayerClass pc(player_ptr);
+        if (pc.can_browse())
             do_cmd_mind_browse(player_ptr);
-        else if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
+        else if (pc.equals(PlayerClassType::ELEMENTALIST))
             do_cmd_element_browse(player_ptr);
-        else if (player_ptr->pclass == PlayerClassType::SMITH)
+        else if (pc.equals(PlayerClassType::SMITH))
             do_cmd_kaji(player_ptr, true);
-        else if (player_ptr->pclass == PlayerClassType::MAGIC_EATER)
+        else if (pc.equals(PlayerClassType::MAGIC_EATER))
             do_cmd_magic_eater(player_ptr, true, false);
-        else if (player_ptr->pclass == PlayerClassType::SNIPER)
+        else if (pc.equals(PlayerClassType::SNIPER))
             do_cmd_snipe_browse(player_ptr);
         else
             do_cmd_browse(player_ptr);

@@ -725,13 +725,14 @@ void check_no_flowed(PlayerType *player_ptr)
             has_kabe = true;
     }
 
-    if (has_sw && ((player_ptr->realm1 == REALM_NATURE) || (player_ptr->realm2 == REALM_NATURE) || (player_ptr->pclass == PlayerClassType::SORCERER))) {
+    PlayerClass pc(player_ptr);
+    if (has_sw && ((player_ptr->realm1 == REALM_NATURE) || (player_ptr->realm2 == REALM_NATURE) || pc.equals(PlayerClassType::SORCERER))) {
         const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
         if (player_ptr->lev >= s_ptr->slevel)
             player_ptr->no_flowed = true;
     }
 
-    if (has_kabe && ((player_ptr->realm1 == REALM_CRAFT) || (player_ptr->realm2 == REALM_CRAFT) || (player_ptr->pclass == PlayerClassType::SORCERER))) {
+    if (has_kabe && ((player_ptr->realm1 == REALM_CRAFT) || (player_ptr->realm2 == REALM_CRAFT) || pc.equals(PlayerClassType::SORCERER))) {
         const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_WALL];
         if (player_ptr->lev >= s_ptr->slevel)
             player_ptr->no_flowed = true;
@@ -761,7 +762,7 @@ BIT_FLAGS has_reflect(PlayerType *player_ptr)
 
 BIT_FLAGS has_see_nocto(PlayerType *player_ptr)
 {
-    return (player_ptr->pclass == PlayerClassType::NINJA) ? FLAG_CAUSE_CLASS : FLAG_CAUSE_NONE;
+    return PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? FLAG_CAUSE_CLASS : FLAG_CAUSE_NONE;
 }
 
 BIT_FLAGS has_warning(PlayerType *player_ptr)
@@ -1604,7 +1605,7 @@ bool has_two_handed_weapons(PlayerType *player_ptr)
 BIT_FLAGS has_lite(PlayerType *player_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (player_ptr->pclass == PlayerClassType::NINJA)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA))
         return 0L;
 
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
@@ -1654,13 +1655,14 @@ bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
     auto flgs = object_flags(o_ptr);
 
     auto has_no_weapon = (o_ptr->tval == ItemKindType::NONE) || (o_ptr->tval == ItemKindType::SHIELD);
-    if (player_ptr->pclass == PlayerClassType::PRIEST) {
+    PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::PRIEST)) {
         auto is_suitable_weapon = flgs.has(TR_BLESSED);
         is_suitable_weapon |= (o_ptr->tval != ItemKindType::SWORD) && (o_ptr->tval != ItemKindType::POLEARM);
         return !has_no_weapon && !is_suitable_weapon;
     }
 
-    if (player_ptr->pclass == PlayerClassType::SORCERER) {
+    if (pc.equals(PlayerClassType::SORCERER)) {
         auto is_suitable_weapon = o_ptr->tval == ItemKindType::HAFTED;
         is_suitable_weapon &= (o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER);
         return !has_no_weapon && !is_suitable_weapon;
@@ -1691,7 +1693,7 @@ bool has_not_ninja_weapon(PlayerType *player_ptr, int i)
 
     auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
     auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
-    return player_ptr->pclass == PlayerClassType::NINJA &&
+    return PlayerClass(player_ptr).equals(PlayerClassType::NINJA) &&
            !((player_ptr->weapon_exp_max[tval][sval] > PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) &&
                (player_ptr->inventory_list[INVEN_SUB_HAND - i].tval != ItemKindType::SHIELD));
 }
@@ -1704,7 +1706,8 @@ bool has_not_monk_weapon(PlayerType *player_ptr, int i)
 
     auto tval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].tval;
     auto sval = player_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
-    return ((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && (player_ptr->weapon_exp_max[tval][sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED));
+    PlayerClass pc(player_ptr);
+    return pc.is_martial_arts_pro() && (player_ptr->weapon_exp_max[tval][sval] == PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED));
 }
 
 bool has_good_luck(PlayerType *player_ptr)

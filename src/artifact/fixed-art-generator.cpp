@@ -22,6 +22,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
 #include "player/player-sex.h"
 #include "specific-object/bloody-moon.h"
 #include "system/artifact-type-definition.h"
@@ -90,19 +91,20 @@ static void milim_swimsuit(PlayerType *player_ptr, object_type *o_ptr)
  */
 static void invest_special_artifact_abilities(PlayerType *player_ptr, object_type *o_ptr)
 {
+    const auto pc = PlayerClass(player_ptr);
     switch (o_ptr->name1) {
     case ART_MURAMASA:
-        if (player_ptr->pclass != PlayerClassType::SAMURAI) {
+        if (!pc.equals(PlayerClassType::SAMURAI)) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
             o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
-        if (player_ptr->pclass == PlayerClassType::BARD)
+        if (pc.equals(PlayerClassType::BARD))
             o_ptr->art_flags.set(TR_DEC_MANA);
         return;
     case ART_XIAOLONG:
-        if (player_ptr->pclass == PlayerClassType::MONK)
+        if (pc.equals(PlayerClassType::MONK))
             o_ptr->art_flags.set(TR_BLOWS);
         return;
     case ART_BLOOD:

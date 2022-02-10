@@ -2,11 +2,12 @@
  * @brief プレイヤーの種族に基づく耐性・能力の判定処理等を行うクラス
  * @date 2021/09/08
  * @author Hourier
- * @details 本クラス作成時点で責務に対する余裕はかなりあるので、適宜ここへ移してくること.
+ * @details PlayerRaceからPlayerClassへの依存はあるが、逆は依存させないこと.
  */
 #include "player-base/player-race.h"
 #include "grid/feature-flag-types.h"
 #include "grid/feature.h"
+#include "player-base/player-class.h"
 #include "player-info/mimic-info-table.h"
 #include "player/race-info-table.h"
 #include "system/floor-type-definition.h"
@@ -41,10 +42,11 @@ TrFlags PlayerRace::tr_flags() const
     for (auto &cond : race_ptr->extra_flags) {
         if (player_ptr->lev < cond.level)
             continue;
-        if (cond.pclass != std::nullopt) {
-            if (cond.not_class && player_ptr->pclass == cond.pclass)
+        if (cond.pclass.has_value()) {
+            auto is_class_equal = PlayerClass(player_ptr).equals(cond.pclass.value());
+            if (cond.not_class && is_class_equal)
                 continue;
-            if (!cond.not_class && player_ptr->pclass != cond.pclass)
+            if (!cond.not_class && !is_class_equal)
                 continue;
         }
 

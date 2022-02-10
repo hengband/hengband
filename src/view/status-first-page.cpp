@@ -52,7 +52,7 @@ static void calc_shot_params(PlayerType *player_ptr, object_type *o_ptr, int *sh
 
     *shots = 1;
     *shot_frac = 0;
-    if (player_ptr->pclass != PlayerClassType::ARCHER)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::ARCHER))
         return;
 
     if (player_ptr->lev >= 10)
@@ -80,9 +80,10 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
         return false;
     }
 
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
-        level = std::max<short>(1, level - 3);
     PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::FORCETRAINER))
+        level = std::max<short>(1, level - 3);
+
     if (pc.monk_stance_is(MonkStanceType::BYAKKO))
         *basedam = monk_ave_damage[level][1];
     else if (pc.monk_stance_is(MonkStanceType::GENBU) || pc.monk_stance_is(MonkStanceType::SUZAKU))
@@ -144,7 +145,7 @@ static int strengthen_basedam(PlayerType *player_ptr, object_type *o_ptr, int ba
     }
 
     // 理力
-    bool is_force = player_ptr->pclass != PlayerClassType::SAMURAI;
+    bool is_force = !PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI);
     is_force &= flgs.has(TR_FORCE_WEAPON);
     is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
     if (is_force)
@@ -252,7 +253,8 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
     for (int i = 0; i < 2; i++) {
         int basedam;
         damage[i] = player_ptr->dis_to_d[i] * 100;
-        if (((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
+        PlayerClass pc(player_ptr);
+        if (pc.is_martial_arts_pro() && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
             if (!calc_weapon_damage_limit(player_ptr, i, damage, &basedam, o_ptr))
                 break;
 

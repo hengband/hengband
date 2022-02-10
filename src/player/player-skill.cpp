@@ -1,6 +1,7 @@
 ﻿#include "player/player-skill.h"
 #include "core/player-update-types.h"
 #include "monster-race/monster-race.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -406,9 +407,10 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
  */
 EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
 {
-    if (this->player_ptr->pclass == PlayerClassType::SORCERER)
+    PlayerClass pc(this->player_ptr);
+    if (pc.equals(PlayerClassType::SORCERER))
         return SPELL_EXP_MASTER;
-    else if (this->player_ptr->pclass == PlayerClassType::RED_MAGE)
+    else if (pc.equals(PlayerClassType::RED_MAGE))
         return SPELL_EXP_SKILLED;
     else if (realm == this->player_ptr->realm1)
         return this->player_ptr->spell_exp[spell_idx];
@@ -427,18 +429,18 @@ EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
 void PlayerSkill::apply_special_weapon_skill_max_values()
 {
     this->player_ptr->weapon_exp_max = s_info[enum2i(this->player_ptr->pclass)].w_max;
+    if (PlayerClass(this->player_ptr).equals(PlayerClassType::SORCERER)) {
+        return;
+    }
 
-    if (this->player_ptr->pclass != PlayerClassType::SORCERER) {
-        auto &w_exp_max = this->player_ptr->weapon_exp_max;
+    auto &w_exp_max = this->player_ptr->weapon_exp_max;
+    if (this->player_ptr->ppersonality == PERSONALITY_SEXY) {
+        w_exp_max[ItemKindType::HAFTED][SV_WHIP] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+    }
 
-        if (this->player_ptr->ppersonality == PERSONALITY_SEXY) {
-            w_exp_max[ItemKindType::HAFTED][SV_WHIP] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-        }
-
-        if (this->player_ptr->prace == PlayerRaceType::MERFOLK) {
-            w_exp_max[ItemKindType::POLEARM][SV_TRIDENT] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-            w_exp_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-        }
+    if (this->player_ptr->prace == PlayerRaceType::MERFOLK) {
+        w_exp_max[ItemKindType::POLEARM][SV_TRIDENT] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+        w_exp_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
     }
 }
 

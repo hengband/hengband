@@ -2,6 +2,7 @@
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
+#include "player-base/player-class.h"
 #include "player/player-skill.h"
 #include "save/info-writer.h"
 #include "save/player-class-specific-data-writer.h"
@@ -22,7 +23,7 @@
  */
 static void wr_relams(PlayerType *player_ptr)
 {
-    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
         wr_byte((byte)player_ptr->element);
     else
         wr_byte((byte)player_ptr->realm1);

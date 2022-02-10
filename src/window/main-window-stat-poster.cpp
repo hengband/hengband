@@ -326,10 +326,11 @@ void print_imitation(PlayerType *player_ptr)
     TERM_LEN col_study = wid + COL_STUDY;
     TERM_LEN row_study = hgt + ROW_STUDY;
 
-    if (player_ptr->pclass != PlayerClassType::IMITATOR)
+    PlayerClass pc(player_ptr);
+    if (!pc.equals(PlayerClassType::IMITATOR))
         return;
 
-    auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
+    auto mane_data = pc.get_specific_data<mane_data_type>();
 
     if (mane_data->mane_list.size() == 0) {
         put_str("    ", row_study, col_study);

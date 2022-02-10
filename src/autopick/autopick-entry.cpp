@@ -19,6 +19,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -396,7 +397,8 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, ob
             name = false;
     }
 
-    bool realm_except_class = player_ptr->pclass == PlayerClassType::SORCERER || player_ptr->pclass == PlayerClassType::RED_MAGE;
+    PlayerClass pc(player_ptr);
+    auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
     if ((get_realm1_book(player_ptr) == o_ptr->tval) && !realm_except_class) {
         ADD_FLG(FLG_REALM1);

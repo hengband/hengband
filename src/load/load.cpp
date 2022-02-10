@@ -34,6 +34,7 @@
 #include "load/quest-loader.h"
 #include "load/store-loader.h"
 #include "load/world-loader.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-personality.h"
@@ -221,7 +222,7 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
     mp_ptr = &m_info[short_pclass];
 
     load_spells(player_ptr);
-    if (player_ptr->pclass == PlayerClassType::MINDCRAFTER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::MINDCRAFTER)) {
         player_ptr->add_spells = 0;
     }
 
@@ -292,9 +293,9 @@ static errr rd_savefile(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 引き継ぎ可能ならtrue、そうでなければfalseを返す
  */
-static bool can_takeover_savefile(const PlayerType *player_ptr)
+static bool can_takeover_savefile(PlayerType *player_ptr)
 {
-    if (loading_savefile_version_is_older_than(8) && player_ptr->pclass == PlayerClassType::SMITH) {
+    if (loading_savefile_version_is_older_than(8) && PlayerClass(player_ptr).equals(PlayerClassType::SMITH)) {
         return false;
     }
 

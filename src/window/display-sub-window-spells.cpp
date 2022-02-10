@@ -5,6 +5,7 @@
 #include "mind/mind-info.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player/player-status-table.h"
 #include "realm/realm-names-table.h"
@@ -36,17 +37,17 @@ static void display_spell_list(PlayerType *player_ptr)
 
     clear_from(0);
 
-    if (player_ptr->pclass == PlayerClassType::SORCERER)
+    PlayerClass pc(player_ptr);
+    if (pc.is_every_magic()) {
         return;
-    if (player_ptr->pclass == PlayerClassType::RED_MAGE)
-        return;
-    if (player_ptr->pclass == PlayerClassType::SNIPER) {
+    }
+
+    if (pc.equals(PlayerClassType::SNIPER)) {
         display_snipe_list(player_ptr);
         return;
     }
 
-    if ((player_ptr->pclass == PlayerClassType::MINDCRAFTER) || (player_ptr->pclass == PlayerClassType::BERSERKER) || (player_ptr->pclass == PlayerClassType::NINJA)
-        || (player_ptr->pclass == PlayerClassType::MIRROR_MASTER) || (player_ptr->pclass == PlayerClassType::FORCETRAINER) || player_ptr->pclass == PlayerClassType::ELEMENTALIST) {
+    if (pc.has_listed_magics()) {
         PERCENTAGE minfail = 0;
         PLAYER_LEVEL plev = player_ptr->lev;
         PERCENTAGE chance = 0;

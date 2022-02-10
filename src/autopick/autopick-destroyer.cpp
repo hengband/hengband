@@ -21,6 +21,7 @@
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
@@ -41,16 +42,17 @@ static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
     if (!leave_special)
         return true;
 
+    PlayerClass pc(player_ptr);
     if (player_ptr->prace == PlayerRaceType::BALROG) {
         if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return false;
-    } else if (player_ptr->pclass == PlayerClassType::ARCHER) {
+    } else if (pc.equals(PlayerClassType::ARCHER)) {
         if (o_ptr->tval == ItemKindType::SKELETON || (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_SKELETON))
             return false;
-    } else if (player_ptr->pclass == PlayerClassType::NINJA) {
+    } else if (pc.equals(PlayerClassType::NINJA)) {
         if (o_ptr->tval == ItemKindType::LITE && o_ptr->name2 == EGO_LITE_DARKNESS && o_ptr->is_known())
             return false;
-    } else if (player_ptr->pclass == PlayerClassType::BEASTMASTER || player_ptr->pclass == PlayerClassType::CAVALRY) {
+    } else if (pc.is_tamer()) {
         if (o_ptr->tval == ItemKindType::WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())
              return false;
     }

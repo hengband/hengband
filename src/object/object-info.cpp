@@ -21,6 +21,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "realm/realm-names-table.h"
 #include "sv-definition/sv-other-types.h"
@@ -282,9 +283,11 @@ bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, cons
 {
     if (book_tval < ItemKindType::LIFE_BOOK)
         return false;
-    if (player_ptr->pclass == PlayerClassType::SORCERER) {
+
+    PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::SORCERER)) {
         return is_magic(tval2realm(book_tval));
-    } else if (player_ptr->pclass == PlayerClassType::RED_MAGE) {
+    } else if (pc.equals(PlayerClassType::RED_MAGE)) {
         if (is_magic(tval2realm(book_tval)))
             return ((book_tval == ItemKindType::ARCANE_BOOK) || (book_sval < 2));
     }

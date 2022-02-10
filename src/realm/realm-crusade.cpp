@@ -7,6 +7,7 @@
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-curse-removal.h"
@@ -210,7 +211,8 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             DICE_SID sides = 6;
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
-            if (player_ptr->pclass == PlayerClassType::PRIEST || player_ptr->pclass == PlayerClassType::HIGH_MAGE || player_ptr->pclass == PlayerClassType::SORCERER)
+            PlayerClass pc(player_ptr);
+            if (pc.equals(PlayerClassType::PRIEST) || pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::SORCERER))
                 base = plev + plev / 2;
             else
                 base = plev + plev / 4;

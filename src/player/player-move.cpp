@@ -29,6 +29,7 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
@@ -171,7 +172,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         if (mpe_mode & MPE_HANDLE_STUFF)
             handle_stuff(player_ptr);
 
-        if (player_ptr->pclass == PlayerClassType::NINJA) {
+        if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
             if (g_ptr->info & (CAVE_GLOW))
                 set_superstealth(player_ptr, false);
             else if (player_ptr->cur_lite <= 0)

@@ -8,6 +8,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "monster/monster-status-setter.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
@@ -98,7 +99,7 @@ void reset_tim_flags(PlayerType *player_ptr)
         (void)set_monster_invulner(player_ptr, player_ptr->riding, 0, false);
     }
 
-    if (player_ptr->pclass == PlayerClassType::BARD) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BARD)) {
         set_singing_song_effect(player_ptr, MUSIC_NONE);
         set_singing_song_id(player_ptr, 0);
     }
@@ -380,7 +381,7 @@ bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (player_ptr->is_dead)
         return false;
 
-    if (player_ptr->pclass == PlayerClassType::BERSERKER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
         v = 1;
         return false;
     }

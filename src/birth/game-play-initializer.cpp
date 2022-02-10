@@ -12,6 +12,7 @@
 #include "monster-race/race-flags7.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -93,7 +94,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     player_ptr->food = PY_FOOD_FULL - 1;
-    if (player_ptr->pclass == PlayerClassType::SORCERER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::SORCERER)) {
         player_ptr->spell_learned1 = player_ptr->spell_learned2 = 0xffffffffL;
         player_ptr->spell_worked1 = player_ptr->spell_worked2 = 0xffffffffL;
     } else {

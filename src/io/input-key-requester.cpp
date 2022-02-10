@@ -12,6 +12,7 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "player-base/player-class.h"
 #include "save/save.h"
 #include "system/floor-type-definition.h" //!< @todo 違和感、後で調査する.
 #include "system/object-type-definition.h"
@@ -90,7 +91,7 @@ static char inkey_from_menu(PlayerType *player_ptr)
                     continue;
                 switch (special_menu_info[hoge].jouken) {
                 case MENU_CLASS:
-                    if (player_ptr->pclass == special_menu_info[hoge].jouken_naiyou)
+                    if (PlayerClass(player_ptr).equals(special_menu_info[hoge].jouken_naiyou))
                         menu_name = special_menu_info[hoge].name;
                     break;
                 case MENU_WILD:

@@ -1,6 +1,7 @@
 ﻿#include "player-status/player-stealth.h"
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
@@ -68,7 +69,7 @@ int16_t PlayerStealth::class_value()
 {
     ACTION_SKILL_POWER result = 0;
 
-    if (this->player_ptr->pclass == PlayerClassType::NINJA) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
             result -= (this->player_ptr->lev) / 10;
         } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr))

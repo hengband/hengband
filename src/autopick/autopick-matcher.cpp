@@ -22,6 +22,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -180,7 +181,8 @@ bool is_autopick_match(PlayerType *player_ptr, object_type *o_ptr, autopick_type
     if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < ItemKindType::LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)))
         return false;
 
-    bool realm_except_class = player_ptr->pclass == PlayerClassType::SORCERER || player_ptr->pclass == PlayerClassType::RED_MAGE;
+    PlayerClass pc(player_ptr);
+    auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
     if (IS_FLG(FLG_REALM1) && ((get_realm1_book(player_ptr) != o_ptr->tval) || realm_except_class))
         return false;

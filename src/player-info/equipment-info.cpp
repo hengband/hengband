@@ -2,6 +2,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-status/player-hand-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -52,14 +53,20 @@ bool can_two_hands_wielding(PlayerType *player_ptr)
  */
 bool heavy_armor(PlayerType *player_ptr)
 {
-    if ((player_ptr->pclass != PlayerClassType::MONK) && (player_ptr->pclass != PlayerClassType::FORCETRAINER) && (player_ptr->pclass != PlayerClassType::NINJA))
+    PlayerClass pc(player_ptr);
+    if (!pc.is_martial_arts_pro() && !pc.equals(PlayerClassType::NINJA)) {
         return false;
+    }
 
     WEIGHT monk_arm_wgt = 0;
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > ItemKindType::SWORD)
+    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > ItemKindType::SWORD) {
         monk_arm_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight;
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > ItemKindType::SWORD)
+    }
+
+    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > ItemKindType::SWORD) {
         monk_arm_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight;
+    }
+
     monk_arm_wgt += player_ptr->inventory_list[INVEN_BODY].weight;
     monk_arm_wgt += player_ptr->inventory_list[INVEN_HEAD].weight;
     monk_arm_wgt += player_ptr->inventory_list[INVEN_OUTER].weight;
