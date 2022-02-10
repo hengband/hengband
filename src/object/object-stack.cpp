@@ -168,8 +168,6 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
             return 0;
         if (o_ptr->xtra4 != j_ptr->xtra4)
             return 0;
-        if (o_ptr->xtra1 || j_ptr->xtra1)
-            return 0;
         if (o_ptr->timeout || j_ptr->timeout)
             return 0;
         if (o_ptr->ac != j_ptr->ac)

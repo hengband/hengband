@@ -144,11 +144,11 @@ void rd_item_old(object_type *o_ptr)
     }
 
     o_ptr->held_m_idx = rd_s16b();
-    o_ptr->xtra1 = rd_byte();
+    auto xtra1 = rd_byte(); // かつてエゴアイテムの情報を格納していた名残.
     o_ptr->activation_id = i2enum<RandomArtActType>(rd_byte());
 
     if (h_older_than(1, 0, 10)) {
-        if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN) {
+        if (xtra1 == EGO_XTRA_SUSTAIN) {
             switch (enum2i(o_ptr->activation_id) % 6) {
             case 0:
                 o_ptr->art_flags.set(TR_SUST_STR);
@@ -170,7 +170,7 @@ void rd_item_old(object_type *o_ptr)
                 break;
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
-        } else if (o_ptr->xtra1 == EGO_XTRA_POWER) {
+        } else if (xtra1 == EGO_XTRA_POWER) {
             switch (enum2i(o_ptr->activation_id) % 11) {
             case 0:
                 o_ptr->art_flags.set(TR_RES_BLIND);
@@ -207,7 +207,7 @@ void rd_item_old(object_type *o_ptr)
                 break;
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
-        } else if (o_ptr->xtra1 == EGO_XTRA_ABILITY) {
+        } else if (xtra1 == EGO_XTRA_ABILITY) {
             switch (enum2i(o_ptr->activation_id) % 8) {
             case 0:
                 o_ptr->art_flags.set(TR_LEVITATION);
@@ -236,7 +236,8 @@ void rd_item_old(object_type *o_ptr)
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
         }
-        o_ptr->xtra1 = 0;
+        
+        xtra1 = 0;
     }
 
     if (h_older_than(0, 2, 3)) {
@@ -244,9 +245,10 @@ void rd_item_old(object_type *o_ptr)
         o_ptr->xtra4 = 0;
         o_ptr->xtra5 = 0;
         if ((o_ptr->tval == ItemKindType::CHEST) || (o_ptr->tval == ItemKindType::CAPTURE)) {
-            o_ptr->xtra3 = o_ptr->xtra1;
-            o_ptr->xtra1 = 0;
+            o_ptr->xtra3 = xtra1;
+            xtra1 = 0;
         }
+
         if (o_ptr->tval == ItemKindType::CAPTURE) {
             if (r_info[o_ptr->pval].flags1 & RF1_FORCE_MAXHP)
                 o_ptr->xtra5 = maxroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
