@@ -96,9 +96,9 @@ uint16_t get_expfact(PlayerType *player_ptr)
     if (player_ptr->prace != PlayerRaceType::ANDROID)
         expfact += cp_ptr->c_exp;
 
-    auto is_specific_race = (player_ptr->prace == PlayerRaceType::KLACKON) || (player_ptr->prace == PlayerRaceType::SPRITE);
-    auto is_specific_class = PlayerClass(player_ptr).has_additional_speed();
-    if (is_specific_race && is_specific_class)
+    auto is_race_gaining_additional_speed = (player_ptr->prace == PlayerRaceType::KLACKON) || (player_ptr->prace == PlayerRaceType::SPRITE);
+    auto is_class_gaining_additional_speed = PlayerClass(player_ptr).has_additional_speed();
+    if (is_race_gaining_additional_speed && is_class_gaining_additional_speed)
         expfact -= 15;
 
     return expfact;
