@@ -79,7 +79,7 @@ ObjectType *choose_warning_item(PlayerType *player_ptr)
  */
 static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, AttributeType typ, HIT_POINT dam, int *max)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = r_ptr->level;
     bool ignore_wraith_form = false;
 

@@ -335,7 +335,7 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
         m_ptr->ap_r_idx = rd_s16b();
 
     if (h_older_than(1, 0, 14)) {
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         if (r_ptr->flags3 & RF3_EVIL)

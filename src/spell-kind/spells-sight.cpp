@@ -433,7 +433,7 @@ bool probing(PlayerType *player_ptr)
     char buf[256];
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
         if (!player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx))

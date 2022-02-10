@@ -299,7 +299,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 
             if (g_ptr->m_idx) {
                 auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-                monster_race *r_ptr = &r_info[m_ptr->r_idx];
+                auto *r_ptr = &r_info[m_ptr->r_idx];
 
                 if (in_generate) /* In generation */
                 {

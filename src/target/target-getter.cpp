@@ -139,7 +139,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
         }
     } else if (player_ptr->riding && with_steed) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_confused_remaining(m_ptr)) {
             if (randint0(100) < 75)
                 dir = ddd[randint0(8)];
@@ -222,7 +222,7 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
             dir = ddd[randint0(8)];
     } else if (player_ptr->riding) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_confused_remaining(m_ptr)) {
             if (randint0(100) < 75)
                 dir = ddd[randint0(8)];

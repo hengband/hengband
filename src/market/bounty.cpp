@@ -200,7 +200,7 @@ bool exchange_cash(PlayerType *player_ptr)
 void today_target(PlayerType *player_ptr)
 {
     char buf[160];
-    monster_race *r_ptr = &r_info[w_ptr->today_mon];
+    auto *r_ptr = &r_info[w_ptr->today_mon];
 
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);

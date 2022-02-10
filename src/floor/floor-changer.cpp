@@ -139,7 +139,7 @@ static void place_pet(PlayerType *player_ptr)
                 player_ptr->current_floor_ptr->num_repro++;
         } else {
             auto *m_ptr = &party_mon[current_monster];
-            monster_race *r_ptr = real_r_ptr(m_ptr);
+            auto *r_ptr = real_r_ptr(m_ptr);
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, 0);
             msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);

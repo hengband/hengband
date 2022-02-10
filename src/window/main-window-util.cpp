@@ -328,7 +328,7 @@ void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *
     if (!player_bold(player_ptr, y, x))
         return;
 
-    monster_race *r_ptr = &r_info[0];
+    auto *r_ptr = &r_info[0];
     *ap = r_ptr->x_attr;
     *cp = r_ptr->x_char;
     feat_priority = 31;

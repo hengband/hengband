@@ -198,7 +198,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static MONRACE_IDX r = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                monster_race *r_ptr = &r_info[r];
+                auto *r_ptr = &r_info[r];
                 int c;
                 IDX t;
 

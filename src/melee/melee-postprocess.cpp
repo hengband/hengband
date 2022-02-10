@@ -108,7 +108,7 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
  */
 static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_RES_ALL) == 0)
         return false;
 
@@ -171,7 +171,7 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
  */
 static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
     if (mam_pp_ptr->m_ptr->hp < 0)
         return false;
 
@@ -210,7 +210,7 @@ static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
     if (monster_fear_remaining(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0))
         return;
 

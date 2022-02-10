@@ -91,7 +91,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, HIT_POINT dam, bool force)
     int sn = 0;
     GAME_TEXT m_name[MAX_NLEN];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     if (!player_ptr->riding || player_ptr->wild_mode)
         return false;

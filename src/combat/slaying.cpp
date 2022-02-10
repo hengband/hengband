@@ -64,7 +64,7 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs
 #undef OFFSET
     };
 
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
@@ -103,7 +103,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs, 
         { TR_BRAND_POIS, RFR_EFF_IM_POIS_MASK, 0U },
     };
 
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     for (size_t i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i) {
         const struct brand_table_t *p = &brand_table[i];
 

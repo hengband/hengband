@@ -42,7 +42,7 @@ bool summon_unique_okay = false;
  */
 static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return false;
 

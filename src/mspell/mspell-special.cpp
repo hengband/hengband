@@ -237,7 +237,7 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     switch (m_ptr->r_idx) {
     case MON_OHMU:

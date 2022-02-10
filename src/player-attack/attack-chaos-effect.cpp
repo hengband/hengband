@@ -55,7 +55,7 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
         player_ptr->redraw |= (PR_STATUS);
     }
 
-    monster_race *r_ptr = pa_ptr->r_ptr;
+    auto *r_ptr = pa_ptr->r_ptr;
     if (r_ptr->flags3 & RF3_NO_CONF) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
             r_ptr->r_flags3 |= RF3_NO_CONF;
@@ -79,7 +79,7 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
  */
 static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
 {
-    monster_race *r_ptr = pa_ptr->r_ptr;
+    auto *r_ptr = pa_ptr->r_ptr;
     if (any_bits(r_ptr->flags3, RF3_NO_STUN)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
             set_bits(r_ptr->flags3, RF3_NO_STUN);
@@ -102,7 +102,7 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
  */
 static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, bool can_resist = true)
 {
-    monster_race *r_ptr = pa_ptr->r_ptr;
+    auto *r_ptr = pa_ptr->r_ptr;
     if (any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
             set_bits(r_ptr->flags3, RF3_NO_FEAR);
@@ -169,7 +169,7 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = pa_ptr->r_ptr;
+    auto *r_ptr = pa_ptr->r_ptr;
     if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
         return false;
 
@@ -218,7 +218,7 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
  */
 static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
-    monster_race *r_ptr = pa_ptr->r_ptr;
+    auto *r_ptr = pa_ptr->r_ptr;
     if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) != 0) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
         return;
 
@@ -265,7 +265,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
  */
 void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
 
     if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF

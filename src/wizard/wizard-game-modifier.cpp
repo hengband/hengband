@@ -156,7 +156,7 @@ void wiz_restore_monster_max_num()
             return;
     }
 
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     if (r_ptr->name.empty()) {
         msg_print("そのモンスターは存在しません。");
         msg_print(nullptr);

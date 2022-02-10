@@ -37,7 +37,7 @@
 void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx))
         return;
 
@@ -74,7 +74,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
 static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     monster_type *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW))
@@ -112,7 +112,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
 bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     monster_type *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0))

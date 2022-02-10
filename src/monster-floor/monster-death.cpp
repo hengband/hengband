@@ -417,7 +417,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
  */
 concptr extract_note_dies(MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     if (monster_living(r_idx))
         return _("は死んだ。", " dies.");
 

@@ -60,7 +60,7 @@ static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
     if (use_graphics) {
-        monster_race *r_ptr = &r_info[randint1(r_info.size() - 1)];
+        auto *r_ptr = &r_info[randint1(r_info.size() - 1)];
         *cp = r_ptr->x_char;
         *ap = r_ptr->x_attr;
         return;
@@ -288,7 +288,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
         return;
     }
 
-    monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
     feat_priority = 30;
     if (player_ptr->hallucinated) {
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {

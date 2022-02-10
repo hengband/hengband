@@ -87,7 +87,7 @@ bool mon_scatter(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITI
             if (!projectable(player_ptr, y, x, ny, nx))
                 continue;
             if (r_idx > 0) {
-                monster_race *r_ptr = &r_info[r_idx];
+                auto *r_ptr = &r_info[r_idx];
                 if (!monster_can_enter(player_ptr, ny, nx, r_ptr, 0))
                     continue;
             } else {
@@ -163,7 +163,7 @@ bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT
  */
 static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     int total = randint1(10);
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -219,7 +219,7 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITIO
  */
 static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[place_monster_idx];
+    auto *r_ptr = &r_info[place_monster_idx];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
     monster_race *z_ptr = &r_info[r_idx];
 
@@ -264,7 +264,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     if (!(mode & PM_NO_KAGE) && one_in_(333))
         mode |= PM_KAGE;

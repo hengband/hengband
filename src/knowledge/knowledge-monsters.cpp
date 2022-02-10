@@ -191,7 +191,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     char buf[80];
     ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        monster_race *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &r_info[r_idx];
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
@@ -253,7 +253,7 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
     for (i = 0; i < per_page && (mon_idx[mon_top + i] >= 0); i++) {
         TERM_COLOR attr;
         MONRACE_IDX r_idx = mon_idx[mon_top + i];
-        monster_race *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &r_info[r_idx];
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, (r_ptr->name.c_str()), row + i, col);
         if (per_page == 1)

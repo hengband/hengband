@@ -300,7 +300,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     std::vector<MonsterAbilityType> dispel;
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_STUPID) {
         return (msa_ptr->mspells[randint0(msa_ptr->mspells.size())]);
     }

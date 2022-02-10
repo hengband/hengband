@@ -205,7 +205,7 @@ bool shock_power(PlayerType *player_ptr)
     POSITION oy = y, ox = x;
     MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, m_ptr, 0);
 

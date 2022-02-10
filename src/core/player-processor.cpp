@@ -181,7 +181,7 @@ void process_player(PlayerType *player_ptr)
 
     if (player_ptr->riding && !player_ptr->confused && !player_ptr->blind) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_csleep_remaining(m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);

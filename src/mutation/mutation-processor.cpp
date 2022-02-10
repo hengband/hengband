@@ -408,7 +408,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         int danger_amount = 0;
         for (MONSTER_IDX monster = 0; monster < player_ptr->current_floor_ptr->m_max; monster++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[monster];
-            monster_race *r_ptr = &r_info[m_ptr->r_idx];
+            auto *r_ptr = &r_info[m_ptr->r_idx];
             if (!monster_is_valid(m_ptr))
                 continue;
 

@@ -1406,7 +1406,7 @@ static bool is_target_grid_dark(floor_type *f_ptr, POSITION y, POSITION x)
                 continue;
 
             POSITION d = distance(dy, dx, y, x);
-            monster_race *r_ptr = &r_info[f_ptr->m_list[m_idx].r_idx];
+            auto *r_ptr = &r_info[f_ptr->m_list[m_idx].r_idx];
             if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_LITE_1 | RF7_SELF_LITE_1))
                 return false;
             if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_LITE_2 | RF7_SELF_LITE_2))

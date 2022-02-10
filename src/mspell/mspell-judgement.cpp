@@ -259,7 +259,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST)))
             return true;

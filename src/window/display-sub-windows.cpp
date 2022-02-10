@@ -102,7 +102,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 {
     char buf[256];
     MONRACE_IDX r_idx = m_ptr->ap_r_idx;
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     term_erase(0, y, 255);
     term_gotoxy(x, y);

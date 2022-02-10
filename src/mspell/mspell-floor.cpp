@@ -376,7 +376,7 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     bool can_use_lite_area = false;
     bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
     bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;

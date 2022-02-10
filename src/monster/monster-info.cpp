@@ -166,7 +166,7 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  */
 bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *s_ptr = &r_info[n_ptr->r_idx];
 
     if (player_ptr->phase_out) {
@@ -277,7 +277,7 @@ bool is_mimicry(monster_type *m_ptr)
     if (m_ptr->ap_r_idx == MON_IT || m_ptr->ap_r_idx == MON_NULL || m_ptr->ap_r_idx == MON_BEHINDER)
         return true;
 
-    monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
 
     if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr)
         return false;
@@ -301,7 +301,7 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 
 MONRACE_IDX real_r_idx(monster_type *m_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         if (r_ptr->flags1 & RF1_UNIQUE)
             return MON_CHAMELEON_K;

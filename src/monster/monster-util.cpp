@@ -55,7 +55,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
 {
     DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
     dungeon_type *d_ptr = &d_info[d_idx];
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx)

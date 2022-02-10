@@ -690,7 +690,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                 grid_type *c_mon_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
-                monster_race *r_ptr = &r_info[m_ptr->r_idx];
+                auto *r_ptr = &r_info[m_ptr->r_idx];
 
                 /* Check the visibility */
                 visible = m_ptr->ml;
@@ -948,7 +948,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
 {
     int k;
     ARMOUR_CLASS ac;
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     /* Percentile dice */
     k = randint1(100);

@@ -90,7 +90,7 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
     int power = 100;
     if (!necro && m_ptr) {
         GAME_TEXT m_name[MAX_NLEN];
-        monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+        auto *r_ptr = &r_info[m_ptr->ap_r_idx];
         power = r_ptr->level / 2;
         monster_desc(player_ptr, m_name, m_ptr, 0);
         if (!(r_ptr->flags1 & RF1_UNIQUE)) {

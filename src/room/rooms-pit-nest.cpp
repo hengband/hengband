@@ -687,7 +687,7 @@ static bool vault_aux_trapped_pit(PlayerType *player_ptr, MONRACE_IDX r_idx)
     /* Unused */
     (void)player_ptr;
 
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
