@@ -161,7 +161,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
     tmp16u = static_cast<uint16_t>(a_info.size());
     wr_u16b(tmp16u);
     for (int i = 0; i < tmp16u; i++) {
-        artifact_type *a_ptr = &a_info[i];
+        auto *a_ptr = &a_info[i];
         wr_byte(a_ptr->cur_num);
         wr_s16b(a_ptr->floor_id);
     }

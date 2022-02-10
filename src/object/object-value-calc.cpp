@@ -31,7 +31,7 @@ PRICE flag_cost(const ObjectType *o_ptr, int plusses)
     flgs.reset(k_ptr->flags);
 
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = &a_info[o_ptr->name1];
+        auto *a_ptr = &a_info[o_ptr->name1];
         flgs.reset(a_ptr->flags);
     } else if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];

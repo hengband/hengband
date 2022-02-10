@@ -124,7 +124,7 @@ void rd_item_old(ObjectType *o_ptr)
             if (o_ptr->art_flags.has(i2enum<tr_type>(95)))
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
-                artifact_type *a_ptr = &a_info[o_ptr->name1];
+                auto *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))

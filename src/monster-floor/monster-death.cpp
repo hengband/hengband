@@ -175,7 +175,7 @@ static ARTIFACT_IDX drop_artifact_index(PlayerType *player_ptr, monster_death_ty
  */
 bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
 {
-    artifact_type *a_ptr = &a_info[a_idx];
+    auto *a_ptr = &a_info[a_idx];
     if (a_ptr->cur_num == 1)
         return false;
 
@@ -202,7 +202,7 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
         return k_idx;
 
     a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
-    artifact_type *a_ptr = &a_info[a_idx];
+    auto *a_ptr = &a_info[a_idx];
     if (a_ptr->cur_num == 1)
         return k_idx;
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {

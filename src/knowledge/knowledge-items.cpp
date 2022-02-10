@@ -96,7 +96,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     uint16_t why = 3;
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
     for (auto a_idx : whats) {
-        artifact_type *a_ptr = &a_info[a_idx];
+        auto *a_ptr = &a_info[a_idx];
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
         ARTIFACT_IDX z = lookup_kind(a_ptr->tval, a_ptr->sval);

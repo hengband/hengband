@@ -134,7 +134,7 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
             if (inside_quest(floor_ptr->quest_number)) {
                 ARTIFACT_IDX a_idx = quest[enum2i(floor_ptr->quest_number)].k_idx;
                 if (a_idx) {
-                    artifact_type *a_ptr = &a_info[a_idx];
+                    auto *a_ptr = &a_info[a_idx];
                     if (a_ptr->gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                         letter[index].object = lookup_kind(a_ptr->tval, a_ptr->sval);
                     }
