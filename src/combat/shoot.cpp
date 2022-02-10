@@ -1009,7 +1009,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
 HIT_POINT critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     int i, k;
-    ObjectType *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     /* Extract "shot" power */
     i = player_ptr->to_h_b + plus_ammo;
@@ -1161,7 +1161,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
 HIT_POINT calc_crit_ratio_shot(PlayerType *player_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
     HIT_POINT i;
-    ObjectType *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     /* Extract "shot" power */
     i = player_ptr->to_h_b + plus_ammo;

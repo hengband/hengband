@@ -354,7 +354,7 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ObjectType *o_p
         return true;
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        ObjectType *j_ptr = &player_ptr->inventory_list[j];
+        auto *j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx)
             continue;
 

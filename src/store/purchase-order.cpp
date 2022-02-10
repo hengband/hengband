@@ -204,7 +204,7 @@ void store_purchase(PlayerType *player_ptr)
 
     ITEM_NUMBER amt = 1;
     ObjectType forge;
-    ObjectType *j_ptr = &forge;
+    auto *j_ptr = &forge;
     j_ptr->copy_from(o_ptr);
 
     /*
