@@ -89,7 +89,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
 
     if (arena_info[player_ptr->arena_number].tval > ItemKindType::NONE) {
         ObjectType forge;
-        ObjectType *q_ptr = &forge;
+        auto *q_ptr = &forge;
         q_ptr->prep(lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
         apply_magic_to_object(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -133,7 +133,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
     }
 
     ObjectType forge;
-    ObjectType *q_ptr = &forge;
+    auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
     apply_magic_to_object(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
     q_ptr->pval = md_ptr->m_ptr->r_idx;
@@ -228,7 +228,7 @@ static void drop_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
     KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr, a_idx);
     if (k_idx != 0) {
         ObjectType forge;
-        ObjectType *q_ptr = &forge;
+        auto *q_ptr = &forge;
         q_ptr->prep(k_idx);
         apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -289,7 +289,7 @@ static void drop_items_golds(PlayerType *player_ptr, monster_death_type *md_ptr,
     int dump_gold = 0;
     for (int i = 0; i < drop_numbers; i++) {
         ObjectType forge;
-        ObjectType *q_ptr = &forge;
+        auto *q_ptr = &forge;
         q_ptr->wipe();
         if (md_ptr->do_gold && (!md_ptr->do_item || (randint0(100) < 50))) {
             if (!make_gold(player_ptr, q_ptr))

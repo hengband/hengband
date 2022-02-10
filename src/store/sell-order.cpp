@@ -109,7 +109,7 @@ void store_sell(PlayerType *player_ptr)
     }
 
     ObjectType forge;
-    ObjectType *q_ptr = &forge;
+    auto *q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
 

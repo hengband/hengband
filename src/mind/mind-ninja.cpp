@@ -76,7 +76,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     }
 
     ObjectType forge;
-    ObjectType *q_ptr = &forge;
+    auto *q_ptr = &forge;
     if (player_ptr->is_dead) {
         return false;
     }

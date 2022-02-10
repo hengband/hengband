@@ -291,7 +291,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     if (PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {
         if (!((o_ptr->sval == SV_FOOD_WAYBREAD) || (o_ptr->sval < SV_FOOD_BISCUIT))) {
             ObjectType forge;
-            ObjectType *q_ptr = &forge;
+            auto *q_ptr = &forge;
 
             msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
             q_ptr->prep(lookup_kind(o_ptr->tval, o_ptr->sval));

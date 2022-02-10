@@ -245,7 +245,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
     if (m_ptr->hold_o_idx_list.empty())
         return;
 
-    ObjectType *q_ptr = &floor_ptr->o_list[m_ptr->hold_o_idx_list.front()];
+    auto *q_ptr = &floor_ptr->o_list[m_ptr->hold_o_idx_list.front()];
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, q_ptr, OD_NAME_ONLY);
     q_ptr->held_m_idx = 0;
