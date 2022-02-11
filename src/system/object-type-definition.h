@@ -36,7 +36,8 @@ public:
     EGO_IDX name2{}; /*!< Ego-Item type, if any */
 
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
-    XTRA8 xtra3{}; /*!< 複数の使用用途 捕らえたモンスターの速度 / Extra info */
+    byte chest_level = 0; /*!< 箱の中身レベル */
+    int8_t captured_monster_speed = 0; /*!< 捕らえたモンスターの速度 */
     XTRA16 xtra4{}; /*!< 複数の使用用途 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
     XTRA16 xtra5{}; /*!< 複数の使用用途 捕らえたモンスターの最大HP / Extra info captured monster's max HP */
 

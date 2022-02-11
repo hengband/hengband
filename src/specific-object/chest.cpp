@@ -77,7 +77,7 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
         number = 5;
         small = false;
         mode |= AM_GREAT;
-        floor_ptr->object_level = o_ptr->xtra3;
+        floor_ptr->object_level = o_ptr->chest_level;
     } else {
         /* Determine the "value" of the items */
         floor_ptr->object_level = std::abs(o_ptr->pval) + 10;
@@ -159,7 +159,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 
     auto *o_ptr = &this->player_ptr->current_floor_ptr->o_list[o_idx];
 
-    int mon_level = o_ptr->xtra3;
+    int mon_level = o_ptr->chest_level;
 
     /* Ignore disarmed chests */
     if (o_ptr->pval <= 0)

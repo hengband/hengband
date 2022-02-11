@@ -160,7 +160,7 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
         if (o_ptr->sval == SV_CHEST_KANDUME)
             o_ptr->pval = 6;
 
-        o_ptr->xtra3 = floor_ptr->dun_level + 5;
+        o_ptr->chest_level = floor_ptr->dun_level + 5;
         if (o_ptr->pval > 55)
             o_ptr->pval = 55 + (byte)randint0(5);
 

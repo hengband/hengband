@@ -112,7 +112,19 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         o_ptr->activation_id = i2enum<RandomArtActType>(0);
     }
 
-    o_ptr->xtra3 = any_bits(flags, SaveDataItemFlagType::XTRA3) ? rd_byte() : 0;
+    // xtra3フィールドが複数目的に共用されていた頃の名残.
+    if (loading_savefile_version_is_older_than(12)) {
+        int8_t tmp8s = any_bits(flags, SaveDataItemFlagType::XTRA3) ? rd_byte() : 0;
+        if (o_ptr->tval == ItemKindType::CHEST) {
+            o_ptr->chest_level = static_cast<uint8_t>(tmp8s);
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_speed = tmp8s;
+        }
+    } else {
+        o_ptr->chest_level = any_bits(flags, SaveDataItemFlagType::CHEST_LEVEL) ? rd_byte() : 0;
+        o_ptr->captured_monster_speed = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED) ? rd_byte() : 0;
+    }
+
     o_ptr->xtra4 = any_bits(flags, SaveDataItemFlagType::XTRA4) ? rd_s16b() : 0;
     o_ptr->xtra5 = any_bits(flags, SaveDataItemFlagType::XTRA5) ? rd_s16b() : 0;
     o_ptr->feeling = any_bits(flags, SaveDataItemFlagType::FEELING) ? rd_byte() : 0;
