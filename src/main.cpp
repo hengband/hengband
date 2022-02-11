@@ -579,7 +579,7 @@ int main(int argc, char *argv[])
     quit(nullptr);
 
     /* Exit */
-    return (0);
+    return 0;
 }
 
 #endif
