@@ -594,8 +594,8 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, effect_monster_t
     if (em_ptr->photo == 0)
         return;
 
-    object_type *q_ptr;
-    object_type forge;
+    ObjectType *q_ptr;
+    ObjectType forge;
     q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::STATUE, SV_PHOTO));
     q_ptr->pval = em_ptr->photo;

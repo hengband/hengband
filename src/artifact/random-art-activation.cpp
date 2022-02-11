@@ -181,7 +181,7 @@ static RandomArtActType invest_activation_ranger(void)
  * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void give_activation_power(object_type *o_ptr)
+void give_activation_power(ObjectType *o_ptr)
 {
     RandomArtActType type =RandomArtActType::NONE;
     int chance = 0;

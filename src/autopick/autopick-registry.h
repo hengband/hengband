@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct object_type;
+class ObjectType;
 class PlayerType;
-bool autopick_autoregister(PlayerType *player_ptr, object_type *o_ptr);
+bool autopick_autoregister(PlayerType *player_ptr, ObjectType *o_ptr);

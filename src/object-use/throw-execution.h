@@ -12,16 +12,16 @@
 
 struct grid_type;
 struct monster_type;
-struct object_type;
+class ObjectType;
 class PlayerType;
 class ObjectThrowEntity {
 public:
     ObjectThrowEntity() = default;
     ObjectThrowEntity(
-        PlayerType *player_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
+        PlayerType *player_ptr, ObjectType *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
     virtual ~ObjectThrowEntity() = default;
 
-    object_type *q_ptr;
+    ObjectType *q_ptr;
     OBJECT_IDX item{};
     POSITION y{};
     POSITION x{};
@@ -59,7 +59,7 @@ private:
     int tdis{};
     int cur_dis{};
     int visible{};
-    object_type *o_ptr{};
+    ObjectType *o_ptr{};
     bool hit_wall = false;
     bool return_when_thrown = false;
     GAME_TEXT o_name[MAX_NLEN]{};

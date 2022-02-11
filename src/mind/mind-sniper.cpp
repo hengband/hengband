@@ -25,6 +25,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
@@ -525,7 +526,7 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
  */
 static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     SPELL_IDX snipe_type = SP_NONE;
 
     if (o_ptr->tval != ItemKindType::BOW) {

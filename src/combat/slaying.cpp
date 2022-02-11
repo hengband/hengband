@@ -1,6 +1,7 @@
 ﻿#include "combat/slaying.h"
 #include "artifact/fixed-art-types.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "mind/mind-samurai.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
@@ -10,12 +11,12 @@
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -150,7 +151,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs, 
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
+HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, ObjectType *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
 {
     auto flgs = object_flags(o_ptr);
     torch_flags(o_ptr, flgs); /* torches has secret flags */
@@ -210,7 +211,7 @@ HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, object_type *o_pt
     return (tdam * mult / 10);
 }
 
-AttributeFlags melee_attribute(PlayerType *player_ptr, object_type *o_ptr, combat_options mode)
+AttributeFlags melee_attribute(PlayerType *player_ptr, ObjectType *o_ptr, combat_options mode)
 {
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_MELEE);
@@ -250,7 +251,7 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, object_type *o_ptr, comba
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD))
         flgs.set(TR_SLAY_GOOD);
-    
+
     static const struct brand_convert_table_t {
         tr_type brand_type;
         AttributeType attribute;
@@ -273,7 +274,6 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, object_type *o_ptr, comba
             attribute_flags.set(p->attribute);
     }
 
-    
     if ((flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
         attribute_flags.set(AttributeType::MANA);
     }

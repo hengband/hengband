@@ -9,7 +9,7 @@ struct floor_type;
 /**
  * @brief アイテムリスト(床上スタック/モンスター所持)を管理するクラス
  *
- * @details object_type 自体を保持するのではなく、フロア全体の object_type 配列上のアイテムの要素番号を保持する
+ * @details ObjectType 自体を保持するのではなく、フロア全体の ObjectType 配列上のアイテムの要素番号を保持する
  */
 class ObjectIndexList {
 public:

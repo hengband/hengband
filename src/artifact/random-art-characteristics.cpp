@@ -18,7 +18,7 @@
 #include <sstream>
 #include <string_view>
 
-static void pval_subtraction(object_type *o_ptr)
+static void pval_subtraction(ObjectType *o_ptr)
 {
     if (o_ptr->pval > 0)
         o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
@@ -33,7 +33,7 @@ static void pval_subtraction(object_type *o_ptr)
         o_ptr->to_d = 0 - (o_ptr->to_d + randint1(4));
 }
 
-static void add_negative_flags(object_type *o_ptr)
+static void add_negative_flags(ObjectType *o_ptr)
 {
     if (one_in_(4))
         o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
@@ -74,7 +74,7 @@ static void add_negative_flags(object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void curse_artifact(PlayerType *player_ptr, object_type *o_ptr)
+void curse_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     pval_subtraction(o_ptr);
     o_ptr->curse_flags.set({ CurseTraitType::HEAVY_CURSE, CurseTraitType::CURSED });
@@ -124,7 +124,7 @@ static std::string get_random_art_filename(const bool armour, const int power)
  * @param armour 対象のオブジェクトが防具が否か
  * @param power 銘の基準となるオブジェクトの価値レベル(0=呪い、1=低位、2=中位、3以上=高位)
  */
-void get_random_name(object_type *o_ptr, char *return_name, bool armour, int power)
+void get_random_name(ObjectType *o_ptr, char *return_name, bool armour, int power)
 {
     PERCENTAGE prob = randint1(100);
     if (prob <= SINDARIN_NAME) {
@@ -146,7 +146,7 @@ void get_random_name(object_type *o_ptr, char *return_name, bool armour, int pow
 }
 
 /*対邪平均ダメージの計算処理*/
-static HIT_POINT calc_arm_avgdamage(PlayerType *player_ptr, object_type *o_ptr)
+static HIT_POINT calc_arm_avgdamage(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     HIT_POINT base, forced, vorpal;
@@ -174,7 +174,7 @@ static HIT_POINT calc_arm_avgdamage(PlayerType *player_ptr, object_type *o_ptr)
     return dam;
 }
 
-bool has_extreme_damage_rate(PlayerType *player_ptr, object_type *o_ptr)
+bool has_extreme_damage_rate(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has(TR_VAMPIRIC)) {

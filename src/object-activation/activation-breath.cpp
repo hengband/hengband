@@ -1,11 +1,12 @@
 ﻿#include "object-activation/activation-breath.h"
+#include "effect/attribute-types.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "status/element-resistance.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/object-type-definition.h"
@@ -21,7 +22,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
-bool activate_dragon_breath(PlayerType *player_ptr, object_type *o_ptr)
+bool activate_dragon_breath(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -56,7 +57,7 @@ bool activate_dragon_breath(PlayerType *player_ptr, object_type *o_ptr)
     return true;
 }
 
-bool activate_breath_fire(PlayerType *player_ptr, object_type *o_ptr)
+bool activate_breath_fire(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))
@@ -69,7 +70,7 @@ bool activate_breath_fire(PlayerType *player_ptr, object_type *o_ptr)
     return true;
 }
 
-bool activate_breath_cold(PlayerType *player_ptr, object_type *o_ptr)
+bool activate_breath_cold(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))

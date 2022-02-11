@@ -368,7 +368,7 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
     OBJECT_IDX item;
     int i, j;
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     concptr q, s;
 
     bool gain = false;

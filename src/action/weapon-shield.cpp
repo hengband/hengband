@@ -22,7 +22,7 @@
  */
 void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr, *new_o_ptr;
+    ObjectType *o_ptr, *new_o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     if (item == INVEN_MAIN_HAND) {

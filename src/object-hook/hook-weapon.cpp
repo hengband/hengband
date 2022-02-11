@@ -2,6 +2,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "player/player-skill.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
@@ -13,7 +14,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが適正武器ならばTRUEを返す
  */
-bool object_is_favorite(PlayerType *player_ptr, const object_type *o_ptr)
+bool object_is_favorite(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     /* Only melee weapons match */
     if (!(o_ptr->tval == ItemKindType::POLEARM || o_ptr->tval == ItemKindType::SWORD || o_ptr->tval == ItemKindType::DIGGING || o_ptr->tval == ItemKindType::HAFTED)) {

@@ -245,7 +245,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
     if (m_ptr->hold_o_idx_list.empty())
         return;
 
-    object_type *q_ptr = &floor_ptr->o_list[m_ptr->hold_o_idx_list.front()];
+    ObjectType *q_ptr = &floor_ptr->o_list[m_ptr->hold_o_idx_list.front()];
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, q_ptr, OD_NAME_ONLY);
     q_ptr->held_m_idx = 0;
@@ -266,7 +266,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
 void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
 
     if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF
         || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION))

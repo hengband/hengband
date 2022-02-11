@@ -111,7 +111,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 
     if (preserve_hold_objects) {
         for (const auto this_o_idx : back_m.hold_o_idx_list) {
-            object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
+            ObjectType *o_ptr = &floor_ptr->o_list[this_o_idx];
             o_ptr->held_m_idx = hack_m_idx_ii;
         }
     } else {

@@ -63,7 +63,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
             grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                object_type *o_ptr;
+                ObjectType *o_ptr;
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
                 if (!o_ptr->is_fixed_artifact())
                     continue;
@@ -76,7 +76,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     }
 
     for (ARTIFACT_IDX i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (!o_ptr->is_fixed_artifact())
@@ -101,8 +101,8 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
         ARTIFACT_IDX z = lookup_kind(a_ptr->tval, a_ptr->sval);
         if (z) {
-            object_type forge;
-            object_type *q_ptr;
+            ObjectType forge;
+            ObjectType *q_ptr;
             q_ptr = &forge;
             q_ptr->prep(z);
             q_ptr->name1 = a_idx;
@@ -217,9 +217,9 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
  */
 static void desc_obj_fake(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-    object_type *o_ptr;
-    object_type object_type_body;
-    o_ptr = &object_type_body;
+    ObjectType *o_ptr;
+    ObjectType ObjectType_body;
+    o_ptr = &ObjectType_body;
     o_ptr->wipe();
     o_ptr->prep(k_idx);
 

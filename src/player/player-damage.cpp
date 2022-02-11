@@ -84,7 +84,7 @@ using dam_func = HIT_POINT (*)(PlayerType *player_ptr, HIT_POINT dam, concptr kb
  */
 static bool acid_minus_ac(PlayerType *player_ptr)
 {
-    object_type *o_ptr = nullptr;
+    ObjectType *o_ptr = nullptr;
     switch (randint1(7)) {
     case 1:
         o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];

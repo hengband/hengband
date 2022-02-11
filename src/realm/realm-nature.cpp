@@ -130,7 +130,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
         {
             if (cast) {
-                object_type forge, *q_ptr = &forge;
+                ObjectType forge, *q_ptr = &forge;
                 msg_print(_("食料を生成した。", "A food ration is produced."));
 
                 /* Create the food ration */

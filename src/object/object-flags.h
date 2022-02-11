@@ -5,6 +5,6 @@
 
 #include "object-enchant/tr-flags.h"
 
-struct object_type;
-TrFlags object_flags(const object_type *o_ptr);
-TrFlags object_flags_known(const object_type *o_ptr);
+class ObjectType;
+TrFlags object_flags(const ObjectType *o_ptr);
+TrFlags object_flags_known(const ObjectType *o_ptr);

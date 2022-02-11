@@ -67,7 +67,7 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
         return false;
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (o_ptr->is_artifact())
             return false;

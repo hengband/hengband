@@ -223,7 +223,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
 void wiz_identify_full_inventory(PlayerType *player_ptr)
 {
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -320,7 +320,7 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
  */
-static void wiz_display_item(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     auto get_seq_32bits = [](const TrFlags &flgs, uint start) {
@@ -391,7 +391,7 @@ static void wiz_display_item(PlayerType *player_ptr, object_type *o_ptr)
  * counter flags to prevent weirdness.  We use the items to collect
  * statistics on item creation relative to the initial item.
  */
-static void wiz_statistics(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
     concptr p = "Enter number of items to roll: ";
@@ -444,8 +444,8 @@ static void wiz_statistics(PlayerType *player_ptr, object_type *o_ptr)
                 term_fresh();
             }
 
-            object_type forge;
-            object_type *q_ptr = &forge;
+            ObjectType forge;
+            ObjectType *q_ptr = &forge;
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact())
@@ -480,13 +480,13 @@ static void wiz_statistics(PlayerType *player_ptr, object_type *o_ptr)
  * Apply magic to an item or turn it into an artifact. -Bernd-
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
  */
-static void wiz_reroll_item(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact())
         return;
 
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
 
@@ -570,7 +570,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 調整するアイテムの参照ポインタ
  */
-static void wiz_tweak_item(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_tweak_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact())
         return;
@@ -612,7 +612,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
  */
-static void wiz_quantity_item(object_type *o_ptr)
+static void wiz_quantity_item(ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact())
         return;
@@ -649,15 +649,15 @@ void wiz_modify_item(PlayerType *player_ptr)
     concptr q = "Play with which object? ";
     concptr s = "You have nothing to play with.";
     OBJECT_IDX item;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr)
         return;
 
     screen_save();
 
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     char ch;
@@ -706,7 +706,7 @@ void wiz_modify_item(PlayerType *player_ptr)
 /*!
  * @brief オブジェクトの装備スロットがエゴが有効なスロットかどうか判定
  */
-static int is_slot_able_to_be_ego(PlayerType *player_ptr, object_type *o_ptr)
+static int is_slot_able_to_be_ego(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     int slot = wield_slot(player_ptr, o_ptr);
 
@@ -758,8 +758,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     char buf[MAX_NLEN] = "\0";
     char *str = buf;
-    object_type forge;
-    object_type *o_ptr = &forge;
+    ObjectType forge;
+    ObjectType *o_ptr = &forge;
     char o_name[MAX_NLEN];
 
     bool wish_art = false;

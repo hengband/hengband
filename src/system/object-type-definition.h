@@ -9,19 +9,18 @@
 
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object/tval-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
-
 #include <optional>
 
 enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
-class PlayerType;
-typedef struct object_type {
+class ObjectType {
+public:
+    ObjectType() = default;
     KIND_OBJECT_IDX k_idx{}; /*!< Kind index (zero if "dead") */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
@@ -64,7 +63,7 @@ typedef struct object_type {
     int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(object_type *j_ptr);
+    void copy_from(ObjectType *j_ptr);
     void prep(KIND_OBJECT_IDX ko_idx);
     bool is_weapon() const;
     bool is_weapon_ammo() const;
@@ -107,4 +106,4 @@ typedef struct object_type {
     bool is_rechargeable() const;
     bool is_offerable() const;
     bool is_activatable() const;
-} object_type;
+};

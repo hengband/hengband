@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct object_type;
+class ObjectType;
 class PlayerType;
-bool activate_muramasa(PlayerType *player_ptr, object_type *o_ptr);
+bool activate_muramasa(PlayerType *player_ptr, ObjectType *o_ptr);

@@ -168,7 +168,7 @@ static void process_stats(PlayerType *player_ptr, int row, int stat_col)
  * @param stat 能力値番号
  * @param flags 装備品に立っているフラグ
  */
-static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, tr_type tr_flag, const TrFlags &flags)
+static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, ObjectType *o_ptr, tr_type tr_flag, const TrFlags &flags)
 {
     *c = '*';
 
@@ -199,7 +199,7 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
 static void display_equipments_compensation(PlayerType *player_ptr, int row, int *col)
 {
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         auto flags = object_flags_known(o_ptr);
         for (int stat = 0; stat < A_MAX; stat++) {

@@ -9,11 +9,12 @@
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-weapon.h"
+#include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-static bool random_art_bias_strength(object_type *o_ptr)
+static bool random_art_bias_strength(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_STR))
         return false;
@@ -22,7 +23,7 @@ static bool random_art_bias_strength(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_intelligence(object_type *o_ptr)
+static bool random_art_bias_intelligence(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_INT))
         return false;
@@ -31,7 +32,7 @@ static bool random_art_bias_intelligence(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_wisdom(object_type *o_ptr)
+static bool random_art_bias_wisdom(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_WIS))
         return false;
@@ -40,7 +41,7 @@ static bool random_art_bias_wisdom(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_dexterity(object_type *o_ptr)
+static bool random_art_bias_dexterity(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_DEX))
         return false;
@@ -49,7 +50,7 @@ static bool random_art_bias_dexterity(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_constitution(object_type *o_ptr)
+static bool random_art_bias_constitution(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_CON))
         return false;
@@ -58,7 +59,7 @@ static bool random_art_bias_constitution(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_charisma(object_type *o_ptr)
+static bool random_art_bias_charisma(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_CHR))
         return false;
@@ -67,7 +68,7 @@ static bool random_art_bias_charisma(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_magic_mastery(object_type *o_ptr)
+static bool random_art_bias_magic_mastery(ObjectType *o_ptr)
 {
     if ((o_ptr->tval != ItemKindType::GLOVES) || o_ptr->art_flags.has(TR_MAGIC_MASTERY))
         return false;
@@ -76,7 +77,7 @@ static bool random_art_bias_magic_mastery(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_stealth(object_type *o_ptr)
+static bool random_art_bias_stealth(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_STEALTH))
         return false;
@@ -85,7 +86,7 @@ static bool random_art_bias_stealth(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_bias_search(object_type *o_ptr)
+static bool random_art_bias_search(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SEARCH))
         return false;
@@ -94,7 +95,7 @@ static bool random_art_bias_search(object_type *o_ptr)
     return one_in_(2);
 }
 
-static bool switch_random_art_bias(object_type *o_ptr)
+static bool switch_random_art_bias(ObjectType *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
     case BIAS_WARRIOR:
@@ -123,10 +124,9 @@ static bool switch_random_art_bias(object_type *o_ptr)
     }
 }
 
-static bool random_art_bias_decrease_mana(object_type *o_ptr)
+static bool random_art_bias_decrease_mana(ObjectType *o_ptr)
 {
-    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != ItemKindType::SOFT_ARMOR) || (o_ptr->sval != SV_ROBE)
-        || o_ptr->art_flags.has(TR_DEC_MANA) || !one_in_(3))
+    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != ItemKindType::SOFT_ARMOR) || (o_ptr->sval != SV_ROBE) || o_ptr->art_flags.has(TR_DEC_MANA) || !one_in_(3))
         return false;
 
     o_ptr->art_flags.set(TR_DEC_MANA);
@@ -140,7 +140,7 @@ static bool random_art_bias_decrease_mana(object_type *o_ptr)
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void random_plus(object_type *o_ptr)
+void random_plus(ObjectType *o_ptr)
 {
     if (switch_random_art_bias(o_ptr) || random_art_bias_decrease_mana(o_ptr))
         return;

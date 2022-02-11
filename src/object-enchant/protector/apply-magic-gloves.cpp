@@ -20,7 +20,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-GlovesEnchanter::GlovesEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+GlovesEnchanter::GlovesEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
     , player_ptr(player_ptr)
 {

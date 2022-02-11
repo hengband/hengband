@@ -1,8 +1,9 @@
 ﻿#include "object-enchant/weapon/abstract-weapon-enchanter.h"
 #include "object-enchant/object-boost.h"
+#include "object/tval-types.h"
 #include "system/object-type-definition.h"
 
-AbstractWeaponEnchanter::AbstractWeaponEnchanter(object_type* o_ptr, DEPTH level, int power)
+AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level, int power)
     : o_ptr(o_ptr)
     , level(level)
     , power(power)
@@ -27,7 +28,7 @@ AbstractWeaponEnchanter::AbstractWeaponEnchanter(object_type* o_ptr, DEPTH level
 
         return;
     }
-    
+
     if (this->power < 0) {
         this->o_ptr->to_h -= tohit1;
         this->o_ptr->to_d -= todam1;

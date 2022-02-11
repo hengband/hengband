@@ -83,12 +83,12 @@ extern char quest_text[10][80];
 extern int quest_text_line;
 extern int leaving_quest;
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr);
 void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat);
 void complete_quest(PlayerType *player_ptr, QUEST_IDX quest_num);
-void check_find_art_quest_completion(PlayerType *player_ptr, object_type *o_ptr);
+void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr);
 void quest_discovery(QUEST_IDX q_idx);
 QUEST_IDX quest_number(PlayerType *player_ptr, DEPTH level);
 QUEST_IDX random_quest_number(PlayerType *player_ptr, DEPTH level);

@@ -65,7 +65,7 @@ static bool is_specific_curse(CurseTraitType flag)
     }
 }
 
-static void choise_cursed_item(CurseTraitType flag, object_type *o_ptr, int *choices, int *number, int item_num)
+static void choise_cursed_item(CurseTraitType flag, ObjectType *o_ptr, int *choices, int *number, int item_num)
 {
     if (!is_specific_curse(flag))
         return;
@@ -141,7 +141,7 @@ static void choise_cursed_item(CurseTraitType flag, object_type *o_ptr, int *cho
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
  * 呪いがない場合nullptrを返す。
  */
-object_type *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
+ObjectType *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
     int number = 0;
@@ -149,7 +149,7 @@ object_type *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
         return nullptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType *o_ptr = &player_ptr->inventory_list[i];
         if (o_ptr->curse_flags.has(flag)) {
             choices[number] = i;
             number++;
@@ -172,7 +172,7 @@ static void curse_teleport(PlayerType *player_ptr)
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     int i_keep = 0, count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -239,7 +239,7 @@ static void multiply_low_curse(PlayerType *player_ptr)
     if ((player_ptr->cursed.has_not(CurseTraitType::ADD_L_CURSE)) || !one_in_(2000))
         return;
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::ADD_L_CURSE);
     auto new_curse = get_curse(0, o_ptr);
     if (o_ptr->curse_flags.has(new_curse))
@@ -258,7 +258,7 @@ static void multiply_high_curse(PlayerType *player_ptr)
     if ((player_ptr->cursed.has_not(CurseTraitType::ADD_H_CURSE)) || !one_in_(2000))
         return;
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::ADD_H_CURSE);
     auto new_curse = get_curse(1, o_ptr);
     if (o_ptr->curse_flags.has(new_curse))
@@ -277,7 +277,7 @@ static void persist_curse(PlayerType *player_ptr)
     if ((player_ptr->cursed.has_not(CurseTraitType::PERSISTENT_CURSE)) || !one_in_(500))
         return;
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::PERSISTENT_CURSE);
     if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
         return;
@@ -453,7 +453,7 @@ void execute_cursed_items_effect(PlayerType *player_ptr)
     if (!one_in_(999) || player_ptr->anti_magic || (one_in_(2) && has_resist_curse(player_ptr)))
         return;
 
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if (o_ptr->name1 != ART_JUDGE)
         return;
 

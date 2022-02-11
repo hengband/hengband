@@ -20,6 +20,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-info/race-types.h"
@@ -37,7 +38,7 @@
  * @param o_ptr アイテムへの参照ポインタ
  * @return 特別なクラス、かつそのクラス特有のアイテムであればFALSE、それ以外はTRUE
  */
-static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
+static bool is_leave_special_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (!leave_special)
         return true;
@@ -54,7 +55,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
             return false;
     } else if (pc.is_tamer()) {
         if (o_ptr->tval == ItemKindType::WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())
-             return false;
+            return false;
     }
 
     return true;
@@ -63,7 +64,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
 /*!
  * @brief Automatically destroy items in this grid.
  */
-static bool is_opt_confirm_destroy(PlayerType *player_ptr, object_type *o_ptr)
+static bool is_opt_confirm_destroy(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (!destroy_items)
         return false;
@@ -101,7 +102,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, object_type *o_ptr)
     return true;
 }
 
-void auto_destroy_item(PlayerType *player_ptr, object_type *o_ptr, int autopick_idx)
+void auto_destroy_item(PlayerType *player_ptr, ObjectType *o_ptr, int autopick_idx)
 {
     bool destroy = false;
     if (is_opt_confirm_destroy(player_ptr, o_ptr))

@@ -93,8 +93,8 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
     }
 
     /* Acquirement */
-    object_type *i_ptr;
-    object_type object_type_body;
+    ObjectType *i_ptr;
+    ObjectType ObjectType_body;
     while (num) {
         int i;
         KIND_OBJECT_IDX k_idx;
@@ -107,7 +107,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
             if (r <= 0)
                 break;
         }
-        i_ptr = &object_type_body;
+        i_ptr = &ObjectType_body;
         i_ptr->wipe();
         k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
 
@@ -184,13 +184,13 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
  */
 void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
-    object_type *i_ptr;
-    object_type object_type_body;
+    ObjectType *i_ptr;
+    ObjectType ObjectType_body;
     BIT_FLAGS mode = AM_GOOD | (great || special ? AM_GREAT : AM_NONE) | (special ? AM_SPECIAL : AM_NONE);
 
     /* Acquirement */
     while (num--) {
-        i_ptr = &object_type_body;
+        i_ptr = &ObjectType_body;
         i_ptr->wipe();
 
         /* Make a good (or great) object (if possible) */
@@ -215,7 +215,7 @@ void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool
 bool curse_armor(PlayerType *player_ptr)
 {
     /* Curse the body armor */
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_BODY];
 
     if (!o_ptr->k_idx)
@@ -270,7 +270,7 @@ bool curse_armor(PlayerType *player_ptr)
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_weapon_object(PlayerType *player_ptr, bool force, object_type *o_ptr)
+bool curse_weapon_object(PlayerType *player_ptr, bool force, ObjectType *o_ptr)
 {
     if (!o_ptr->k_idx)
         return false;
@@ -324,7 +324,7 @@ void brand_bolts(PlayerType *player_ptr)
 {
     /* Use the first acceptable bolts */
     for (int i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType *o_ptr = &player_ptr->inventory_list[i];
 
         /* Skip non-bolts */
         if (o_ptr->tval != ItemKindType::BOLT)
@@ -360,7 +360,7 @@ void brand_bolts(PlayerType *player_ptr)
  * Break the curse of an item
  * @param o_ptr 呪い装備情報の参照ポインタ
  */
-static void break_curse(object_type *o_ptr)
+static void break_curse(ObjectType *o_ptr)
 {
     BIT_FLAGS is_curse_broken
         = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(CurseTraitType::PERMA_CURSE) && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE) && (randint0(100) < 25);
@@ -398,7 +398,7 @@ static void break_curse(object_type *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant_equipment(PlayerType *player_ptr, object_type *o_ptr, int n, int eflag)
+bool enchant_equipment(PlayerType *player_ptr, ObjectType *o_ptr, int n, int eflag)
 {
     /* Large piles resist enchantment */
     int prob = o_ptr->number * 100;
@@ -503,17 +503,17 @@ bool enchant_equipment(PlayerType *player_ptr, object_type *o_ptr, int n, int ef
 bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
-    FuncItemTester item_tester(&object_type::allow_enchant_weapon);
+    FuncItemTester item_tester(&ObjectType::allow_enchant_weapon);
 
     /* Enchant armor if requested */
     if (num_ac)
-        item_tester = FuncItemTester(&object_type::is_armour);
+        item_tester = FuncItemTester(&ObjectType::is_armour);
 
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), item_tester);
     if (!o_ptr)
         return false;
@@ -562,8 +562,8 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::allow_enchant_melee_weapon));
+    ObjectType *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ObjectType::allow_enchant_melee_weapon));
     if (!o_ptr)
         return;
 

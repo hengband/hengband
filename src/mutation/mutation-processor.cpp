@@ -3,6 +3,7 @@
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
+#include "effect/attribute-types.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
@@ -17,6 +18,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-investor-remover.h"
 #include "object/lite-processor.h"
+#include "object/tval-types.h"
 #include "player-info/equipment-info.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
@@ -29,7 +31,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -59,8 +60,8 @@ static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
     DIRECTION dir = 0;
     while (!dir) {
         concptr p = target_okay(player_ptr)
-            ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
-            : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
+                        ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
+                        : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
         if (!get_com(p, &command, true))
             break;
 
@@ -256,7 +257,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     }
 
     if (player_ptr->muta.has(PlayerMutationType::EAT_LIGHT) && one_in_(3000)) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
 
         msg_print(_("影につつまれた。", "A shadow passes over you."));
         msg_print(nullptr);
@@ -474,7 +475,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
 bool drop_weapons(PlayerType *player_ptr)
 {
     INVENTORY_IDX slot = 0;
-    object_type *o_ptr = nullptr;
+    ObjectType *o_ptr = nullptr;
 
     if (player_ptr->wild_mode)
         return false;

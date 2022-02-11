@@ -38,9 +38,9 @@
  */
 void wield_all(PlayerType *player_ptr)
 {
-    object_type object_type_body;
+    ObjectType ObjectType_body;
     for (INVENTORY_IDX item = INVEN_PACK - 1; item >= 0; item--) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[item];
         if (!o_ptr->k_idx)
             continue;
@@ -53,8 +53,8 @@ void wield_all(PlayerType *player_ptr)
         if (player_ptr->inventory_list[slot].k_idx)
             continue;
 
-        object_type *i_ptr;
-        i_ptr = &object_type_body;
+        ObjectType *i_ptr;
+        i_ptr = &ObjectType_body;
         i_ptr->copy_from(o_ptr);
         i_ptr->number = 1;
 
@@ -77,7 +77,7 @@ void wield_all(PlayerType *player_ptr)
  * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
  */
-void add_outfit(PlayerType *player_ptr, object_type *o_ptr)
+void add_outfit(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
@@ -86,7 +86,7 @@ void add_outfit(PlayerType *player_ptr, object_type *o_ptr)
     wield_all(player_ptr);
 }
 
-static void decide_initial_items(PlayerType *player_ptr, object_type *q_ptr)
+static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
 {
     switch (player_ptr->prace) {
     case PlayerRaceType::VAMPIRE:
@@ -142,8 +142,8 @@ static void decide_initial_items(PlayerType *player_ptr, object_type *q_ptr)
  */
 void player_outfit(PlayerType *player_ptr)
 {
-    object_type *q_ptr;
-    object_type forge;
+    ObjectType *q_ptr;
+    ObjectType forge;
     q_ptr = &forge;
 
     decide_initial_items(player_ptr, q_ptr);

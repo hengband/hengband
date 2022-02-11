@@ -3,11 +3,11 @@
 #include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
-struct object_type;
+class ObjectType;
 class AbstractWeaponEnchanter : EnchanterBase {
 protected:
-    AbstractWeaponEnchanter(object_type *o_ptr, DEPTH level, int power);
-    object_type *o_ptr;
+    AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level, int power);
+    ObjectType *o_ptr;
     DEPTH level;
     int power;
 };

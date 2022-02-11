@@ -615,7 +615,7 @@ void do_cmd_browse(PlayerType *player_ptr)
     SPELL_IDX spells[64];
     char temp[62 * 4];
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
 
     concptr q, s;
 
@@ -765,7 +765,7 @@ void do_cmd_study(PlayerType *player_ptr)
     /* Spells of realm2 will have an increment of +32 */
     SPELL_IDX spell = -1;
     concptr p = spell_category_name(mp_ptr->spell_book);
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     concptr q, s;
 
     if (!player_ptr->realm1) {
@@ -974,7 +974,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     MANA_POINT need_mana;
 
     concptr prayer;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     const magic_type *s_ptr;
     concptr q, s;
 

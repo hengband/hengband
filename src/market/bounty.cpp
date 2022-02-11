@@ -46,7 +46,7 @@ bool exchange_cash(PlayerType *player_ptr)
 {
     bool change = false;
     GAME_TEXT o_name[MAX_NLEN];
-    object_type *o_ptr;
+    ObjectType *o_ptr;
 
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -146,7 +146,7 @@ bool exchange_cash(PlayerType *player_ptr)
             char buf[MAX_NLEN + 20];
             int num, k;
             INVENTORY_IDX item_new;
-            object_type forge;
+            ObjectType forge;
 
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);

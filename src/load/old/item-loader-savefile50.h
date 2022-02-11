@@ -2,9 +2,9 @@
 
 #include "load/item/item-loader-base.h"
 
-struct object_type;
+class ObjectType;
 class ItemLoader50 : public ItemLoaderBase {
 public:
     ItemLoader50() = default;
-    void rd_item(object_type *o_ptr) override;
+    void rd_item(ObjectType *o_ptr) override;
 };

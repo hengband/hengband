@@ -5,6 +5,7 @@
 #include "game-option/game-play-options.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -23,7 +24,7 @@
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int home_carry(PlayerType *player_ptr, object_type *o_ptr)
+int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
@@ -33,7 +34,7 @@ int home_carry(PlayerType *player_ptr, object_type *o_ptr)
     }
 
     for (int slot = 0; slot < st_ptr->stock_num; slot++) {
-        object_type *j_ptr;
+        ObjectType *j_ptr;
         j_ptr = &st_ptr->stock[slot];
         if (object_similar(j_ptr, o_ptr)) {
             object_absorb(j_ptr, o_ptr);
@@ -82,7 +83,7 @@ int home_carry(PlayerType *player_ptr, object_type *o_ptr)
     return slot;
 }
 
-static bool exe_combine_store_items(object_type *o_ptr, object_type *j_ptr, const int max_num, const int i, bool *combined)
+static bool exe_combine_store_items(ObjectType *o_ptr, ObjectType *j_ptr, const int max_num, const int i, bool *combined)
 {
     if (o_ptr->number + j_ptr->number > max_num)
         return false;
@@ -98,10 +99,10 @@ static bool exe_combine_store_items(object_type *o_ptr, object_type *j_ptr, cons
     return true;
 }
 
-static void sweep_reorder_store_item(object_type *o_ptr, const int i, bool *combined)
+static void sweep_reorder_store_item(ObjectType *o_ptr, const int i, bool *combined)
 {
     for (int j = 0; j < i; j++) {
-        object_type *j_ptr;
+        ObjectType *j_ptr;
         j_ptr = &st_ptr->stock[j];
         if (!j_ptr->k_idx)
             continue;
@@ -132,7 +133,7 @@ static void sweep_reorder_store_item(object_type *o_ptr, const int i, bool *comb
 static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
 {
     for (int i = 0; i < st_ptr->stock_num; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &st_ptr->stock[i];
         if (!o_ptr->k_idx)
             continue;
@@ -147,8 +148,8 @@ static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
             continue;
 
         *flag = true;
-        object_type *j_ptr;
-        object_type forge;
+        ObjectType *j_ptr;
+        ObjectType forge;
         j_ptr = &forge;
         j_ptr->copy_from(&st_ptr->stock[i]);
         for (int k = i; k > j; k--)
@@ -180,7 +181,7 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
     while (combined) {
         combined = false;
         for (int i = st_ptr->stock_num - 1; i > 0; i--) {
-            object_type *o_ptr;
+            ObjectType *o_ptr;
             o_ptr = &st_ptr->stock[i];
             if (!o_ptr->k_idx)
                 continue;

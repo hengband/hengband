@@ -188,7 +188,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
         wr_byte((byte)player_ptr->spell_order[i]);
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 

@@ -233,7 +233,7 @@ concptr PlayerSkill::skill_rank_str(PlayerSkillRank rank)
     return _("[不明]", "[Unknown]");
 }
 
-void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
+void PlayerSkill::gain_melee_weapon_exp(const ObjectType *o_ptr)
 {
     const GainAmountList gain_amount_list{ 80, 10, 1, (one_in_(2) ? 1 : 0) };
     constexpr GainAmountList others_gain_amount_list{ 8, 1, 0, 0 };
@@ -247,7 +247,7 @@ void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
     }
 }
 
-void PlayerSkill::gain_range_weapon_exp(const object_type *o_ptr)
+void PlayerSkill::gain_range_weapon_exp(const ObjectType *o_ptr)
 {
     constexpr GainAmountList gain_amount_list{ 80, 25, 10, 2 };
     constexpr GainAmountList others_gain_amount_list{ 8, 2, 0, 0 };

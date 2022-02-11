@@ -4,11 +4,11 @@
 #include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 class BootsEnchanter : AbstractProtectorEnchanter {
 public:
-    BootsEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power);
+    BootsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     virtual ~BootsEnchanter() = default;
     void apply_magic() override;
 

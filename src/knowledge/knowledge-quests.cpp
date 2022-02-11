@@ -97,8 +97,8 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                 case QuestKindType::FIND_ARTIFACT:
                     if (quest[i].k_idx) {
                         artifact_type *a_ptr = &a_info[quest[i].k_idx];
-                        object_type forge;
-                        object_type *q_ptr = &forge;
+                        ObjectType forge;
+                        ObjectType *q_ptr = &forge;
                         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
                         q_ptr->prep(k_idx);
                         q_ptr->name1 = quest[i].k_idx;

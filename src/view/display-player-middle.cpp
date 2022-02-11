@@ -37,7 +37,7 @@ static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int han
 {
     HIT_PROB show_tohit = player_ptr->dis_to_h[hand];
     HIT_POINT show_todam = player_ptr->dis_to_d[hand];
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + hand];
+    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + hand];
 
     if (o_ptr->is_known())
         show_tohit += o_ptr->to_h;
@@ -90,7 +90,7 @@ static void display_sub_hand(PlayerType *player_ptr)
  */
 static void display_hit_damage(PlayerType *player_ptr)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     HIT_PROB show_tohit = player_ptr->dis_to_h_b;
     HIT_POINT show_todam = 0;
     if (o_ptr->is_known())

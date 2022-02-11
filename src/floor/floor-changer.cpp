@@ -178,7 +178,7 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
     }
 
     for (int i = 1; i < floor_ptr->o_max; i++) {
-        object_type *o_ptr = &floor_ptr->o_list[i];
+        ObjectType *o_ptr = &floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
 
@@ -267,7 +267,7 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
     GAME_TURN absence_ticks = (w_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
     reset_unique_by_floor_change(player_ptr);
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid() || !o_ptr->is_fixed_artifact())
             continue;
 

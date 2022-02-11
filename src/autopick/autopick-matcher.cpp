@@ -33,7 +33,7 @@
 /*!
  * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
-bool is_autopick_match(PlayerType *player_ptr, object_type *o_ptr, autopick_type *entry, concptr o_name)
+bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type *entry, concptr o_name)
 {
     concptr ptr = entry->name.c_str();
     if (IS_FLG(FLG_UNAWARE) && o_ptr->is_aware())

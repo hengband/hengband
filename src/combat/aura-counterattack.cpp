@@ -181,7 +181,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
         return;
 
     HIT_POINT dam = 1;
-    object_type *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    ObjectType *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (((r_ptr->flagsr & RFR_RES_ALL) != 0) || ((r_ptr->flagsr & RFR_RES_DARK) != 0)) {
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
