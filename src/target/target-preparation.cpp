@@ -198,7 +198,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
 
         /* Unknown monsters first */
         if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0))
-            return (ap_r_ptr1->r_tkills == 0);
+            return ap_r_ptr1->r_tkills == 0;
 
         /* Higher level monsters first (if known) */
         if (ap_r_ptr1->r_tkills && ap_r_ptr2->r_tkills && ap_r_ptr1->level != ap_r_ptr2->level)

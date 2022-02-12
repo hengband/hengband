@@ -62,5 +62,5 @@ concptr quark_str(STR_OFFSET i)
     q = quark__str[i].data();
 
     /* Return the quark */
-    return (q);
+    return q;
 }

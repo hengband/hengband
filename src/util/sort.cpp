@@ -103,7 +103,7 @@ bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b
     POSITION db = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
 
     /* Compare the distances */
-    return (da <= db);
+    return da <= db;
 }
 
 /*
@@ -284,7 +284,7 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     }
 
     /* Compare indexes */
-    return (w1 <= w2);
+    return w1 <= w2;
 }
 
 /*
@@ -456,7 +456,7 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     }
 
     /* Compare indexes */
-    return (w1 <= w2);
+    return w1 <= w2;
 }
 
 /*!
