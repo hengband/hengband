@@ -58,7 +58,7 @@ static concptr item_activation_dragon_breath(ObjectType *o_ptr)
     }
 
     strcat(desc, _("のブレス(250)", " (250)"));
-    return (desc);
+    return desc;
 }
 
 /*!
@@ -176,7 +176,7 @@ concptr activation_explanation(ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has_not(TR_ACTIVATE))
-        return (_("なし", "nothing"));
+        return _("なし", "nothing");
 
     if (activation_index(o_ptr) > RandomArtActType::NONE) {
         return item_activation_aux(o_ptr);
@@ -200,7 +200,7 @@ concptr activation_explanation(ObjectType *o_ptr)
  * @return 対応するアルファベット
  * @details Note that the label does NOT distinguish inven/equip.
  */
-char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - INVEN_MAIN_HAND)); }
+char index_to_label(int i) { return i < INVEN_MAIN_HAND ? I2A(i) : I2A(i - INVEN_MAIN_HAND); }
 
 /*!
  * @brief オブジェクトの該当装備部位IDを返す /
@@ -216,53 +216,53 @@ int16_t wield_slot(PlayerType *player_ptr, const ObjectType *o_ptr)
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD: {
         if (!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
-            return (INVEN_MAIN_HAND);
+            return INVEN_MAIN_HAND;
         if (player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
-            return (INVEN_MAIN_HAND);
-        return (INVEN_SUB_HAND);
+            return INVEN_MAIN_HAND;
+        return INVEN_SUB_HAND;
     }
     case ItemKindType::CAPTURE:
     case ItemKindType::CARD:
     case ItemKindType::SHIELD: {
         if (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
-            return (INVEN_SUB_HAND);
+            return INVEN_SUB_HAND;
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
-            return (INVEN_SUB_HAND);
-        return (INVEN_MAIN_HAND);
+            return INVEN_SUB_HAND;
+        return INVEN_MAIN_HAND;
     }
     case ItemKindType::BOW: {
-        return (INVEN_BOW);
+        return INVEN_BOW;
     }
     case ItemKindType::RING: {
         if (!player_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
-            return (INVEN_MAIN_RING);
+            return INVEN_MAIN_RING;
 
-        return (INVEN_SUB_RING);
+        return INVEN_SUB_RING;
     }
     case ItemKindType::AMULET:
     case ItemKindType::WHISTLE: {
-        return (INVEN_NECK);
+        return INVEN_NECK;
     }
     case ItemKindType::LITE: {
-        return (INVEN_LITE);
+        return INVEN_LITE;
     }
     case ItemKindType::DRAG_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::SOFT_ARMOR: {
-        return (INVEN_BODY);
+        return INVEN_BODY;
     }
     case ItemKindType::CLOAK: {
-        return (INVEN_OUTER);
+        return INVEN_OUTER;
     }
     case ItemKindType::CROWN:
     case ItemKindType::HELM: {
-        return (INVEN_HEAD);
+        return INVEN_HEAD;
     }
     case ItemKindType::GLOVES: {
-        return (INVEN_ARMS);
+        return INVEN_ARMS;
     }
     case ItemKindType::BOOTS: {
-        return (INVEN_FEET);
+        return INVEN_FEET;
     }
 
     default:
