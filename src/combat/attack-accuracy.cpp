@@ -71,7 +71,7 @@ bool check_hit_from_monster_to_player(PlayerType *player_ptr, int power, DEPTH l
     if (stun && one_in_(2))
         return false;
     if (k < 10)
-        return (k < 5);
+        return k < 5;
     int i = (power + (level * 3));
 
     int ac = player_ptr->ac + player_ptr->to_a;
@@ -97,7 +97,7 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
     if (stun && one_in_(2))
         return false;
     if (k < 10)
-        return (k < 5);
+        return k < 5;
     int i = (power + (level * 3));
 
     if ((i > 0) && (randint1(i) > ((ac * 3) / 4)))

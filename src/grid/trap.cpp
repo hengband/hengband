@@ -258,7 +258,7 @@ static int check_hit_from_monster_to_player(PlayerType *player_ptr, int power)
 
     /* Hack -- 5% hit, 5% miss */
     if (k < 10)
-        return (k < 5);
+        return k < 5;
 
     if (player_ptr->ppersonality == PERSONALITY_LAZY)
         if (one_in_(20))

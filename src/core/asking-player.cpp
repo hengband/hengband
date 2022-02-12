@@ -222,7 +222,7 @@ bool get_string(concptr prompt, char *buf, int len)
     prt(prompt, 0, 0);
     res = askfor(buf, len);
     prt("", 0, 0);
-    return (res);
+    return res;
 }
 
 /*
@@ -361,7 +361,7 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
         if (amt > max)
             amt = max;
 
-        return (amt);
+        return amt;
     }
 
     COMMAND_CODE code;
@@ -373,7 +373,7 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
         if (amt < 0)
             amt = 0;
 
-        return (amt);
+        return amt;
     }
 
     if (!prompt) {
@@ -404,7 +404,7 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
    if (amt)
         repeat_push((COMMAND_CODE)amt);
 
-    return (amt);
+    return amt;
 }
 
 /*

@@ -120,7 +120,7 @@ int32_t div_round(int32_t n, int32_t d)
 
     /* Refuse to divide by zero */
     if (!d)
-        return (n);
+        return n;
 
     /* Division */
     tmp = n / d;

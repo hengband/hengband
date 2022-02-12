@@ -640,7 +640,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
     buf[n] = '\0';
 
     /* Return length */
-    return (n);
+    return n;
 }
 
 /*

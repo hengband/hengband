@@ -240,7 +240,7 @@ void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool no_lite(PlayerType *player_ptr)
 {
-    return (!player_can_see_bold(player_ptr, player_ptr->y, player_ptr->x));
+    return !player_can_see_bold(player_ptr, player_ptr->y, player_ptr->x);
 }
 
 /*

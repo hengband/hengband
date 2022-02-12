@@ -13,7 +13,7 @@ int highscore_fd = -1;
  */
 int highscore_seek(int i)
 {
-    return (fd_seek(highscore_fd, (ulong)(i) * sizeof(high_score)));
+    return fd_seek(highscore_fd, (ulong)(i) * sizeof(high_score));
 }
 
 /*!
@@ -23,5 +23,5 @@ int highscore_seek(int i)
  */
 errr highscore_read(high_score *score)
 {
-    return (fd_read(highscore_fd, (char *)(score), sizeof(high_score)));
+    return fd_read(highscore_fd, (char *)(score), sizeof(high_score));
 }

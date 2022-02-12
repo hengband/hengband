@@ -274,11 +274,11 @@ static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool stu
     /* Spell is learned */
     if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_learned2 & (1UL << spell)) : (player_ptr->spell_learned1 & (1UL << spell))) {
         /* Always true */
-        return (!study_pray);
+        return !study_pray;
     }
 
     /* Okay to study, not to cast */
-    return (!learned);
+    return !learned;
 }
 
 /*!

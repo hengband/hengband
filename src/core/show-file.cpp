@@ -494,7 +494,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     }
 
     angband_fclose(fff);
-    return (skey != 'q');
+    return skey != 'q';
 }
 
 /*

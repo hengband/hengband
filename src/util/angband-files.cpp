@@ -195,7 +195,7 @@ FILE *angband_fopen(concptr file, concptr mode)
     if (path_parse(buf, 1024, file))
         return nullptr;
 
-    return (fopen(buf, mode));
+    return fopen(buf, mode);
 }
 
 /*
@@ -218,7 +218,7 @@ FILE *angband_fopen_temp(char *buf, int max)
     if (fd < 0)
         return nullptr;
 
-    return (fdopen(fd, "w"));
+    return fdopen(fd, "w");
 }
 #else /* HAVE_MKSTEMP */
 FILE *angband_fopen_temp(char *buf, int max)

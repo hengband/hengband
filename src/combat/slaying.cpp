@@ -208,7 +208,7 @@ HIT_POINT calc_attack_damage_with_slay(PlayerType *player_ptr, ObjectType *o_ptr
 
     if (mult > 150)
         mult = 150;
-    return (tdam * mult / 10);
+    return tdam * mult / 10;
 }
 
 AttributeFlags melee_attribute(PlayerType *player_ptr, ObjectType *o_ptr, combat_options mode)

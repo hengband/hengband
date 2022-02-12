@@ -218,7 +218,7 @@ QuestId quest_number(PlayerType *player_ptr, DEPTH level)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (inside_quest(floor_ptr->quest_number))
-        return (floor_ptr->quest_number);
+        return floor_ptr->quest_number;
 
     for (int16_t i = 0; i < max_q_idx; i++) {
         if (quest[i].status != QuestStatusType::TAKEN)
