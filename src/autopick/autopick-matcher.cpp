@@ -49,7 +49,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
         return false;
 
     if (IS_FLG(FLG_BOOSTED)) {
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
         if (!o_ptr->is_melee_weapon())
             return false;
 

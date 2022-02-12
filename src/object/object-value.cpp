@@ -137,7 +137,7 @@ PRICE object_value(const ObjectType *o_ptr)
  */
 PRICE object_value_real(const ObjectType *o_ptr)
 {
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &k_info[o_ptr->k_idx];
 
     if (!k_info[o_ptr->k_idx].cost)
         return (0L);

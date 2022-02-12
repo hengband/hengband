@@ -206,7 +206,7 @@ void wr_item(ObjectType *o_ptr)
 void wr_perception(KIND_OBJECT_IDX k_idx)
 {
     byte tmp8u = 0;
-    object_kind *k_ptr = &k_info[k_idx];
+    auto *k_ptr = &k_info[k_idx];
     if (k_ptr->aware)
         tmp8u |= 0x01;
 

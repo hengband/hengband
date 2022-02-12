@@ -42,7 +42,7 @@ bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_sword(KIND_OBJECT_IDX k_idx)
 {
-    object_kind *k_ptr = &k_info[k_idx];
+    auto *k_ptr = &k_info[k_idx];
     return (k_ptr->tval == ItemKindType::SWORD) && (k_ptr->sval > 2);
 }
 
@@ -53,7 +53,7 @@ bool kind_is_sword(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_book(KIND_OBJECT_IDX k_idx)
 {
-    object_kind *k_ptr = &k_info[k_idx];
+    auto *k_ptr = &k_info[k_idx];
     return (k_ptr->tval >= ItemKindType::LIFE_BOOK) && (k_ptr->tval <= ItemKindType::CRUSADE_BOOK);
 }
 
@@ -64,7 +64,7 @@ bool kind_is_book(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
 {
-    object_kind *k_ptr = &k_info[k_idx];
+    auto *k_ptr = &k_info[k_idx];
     return (k_ptr->tval >= ItemKindType::LIFE_BOOK) && (k_ptr->tval <= ItemKindType::CRUSADE_BOOK) && (k_ptr->tval != ItemKindType::ARCANE_BOOK) && (k_ptr->sval > 1);
 }
 
@@ -126,7 +126,7 @@ bool kind_is_amulet(KIND_OBJECT_IDX k_idx)
  */
 bool kind_is_good(KIND_OBJECT_IDX k_idx)
 {
-    object_kind *k_ptr = &k_info[k_idx];
+    auto *k_ptr = &k_info[k_idx];
     switch (k_ptr->tval) {
         /* Armor -- Good unless damaged */
     case ItemKindType::HARD_ARMOR:

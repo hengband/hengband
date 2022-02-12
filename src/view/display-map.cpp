@@ -41,7 +41,7 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
 static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
     if (use_graphics) {
-        object_kind *k_ptr = &k_info[randint1(k_info.size() - 1)];
+        auto *k_ptr = &k_info[randint1(k_info.size() - 1)];
         *cp = k_ptr->x_char;
         *ap = k_ptr->x_attr;
         return;

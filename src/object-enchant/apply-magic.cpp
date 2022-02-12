@@ -194,7 +194,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     }
 
     if (o_ptr->k_idx) {
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
         if (!k_info[o_ptr->k_idx].cost)
             o_ptr->ident |= (IDENT_BROKEN);
 

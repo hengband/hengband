@@ -991,7 +991,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     
     if (k_ids.size() == 1) {
         KIND_OBJECT_IDX k_idx = k_ids.back();
-        object_kind *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &k_info[k_idx];
 
         artifact_type *a_ptr;
         ARTIFACT_IDX a_idx = 0;

@@ -265,7 +265,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static IDX k = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                object_kind *k_ptr = &k_info[k];
+                auto *k_ptr = &k_info[k];
                 int c;
                 IDX t;
 

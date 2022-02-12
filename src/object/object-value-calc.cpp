@@ -21,7 +21,7 @@
 PRICE flag_cost(const ObjectType *o_ptr, int plusses)
 {
     PRICE total = 0;
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &k_info[o_ptr->k_idx];
     auto flgs = object_flags(o_ptr);
 
     /*
