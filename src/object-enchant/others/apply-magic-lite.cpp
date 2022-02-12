@@ -45,10 +45,6 @@ void LiteEnchanter::apply_magic()
     }
 }
 
-void LiteEnchanter::enchant()
-{
-}
-
 void LiteEnchanter::give_ego_index()
 {
     while (true) {
@@ -71,30 +67,32 @@ void LiteEnchanter::give_ego_index()
     }
 }
 
-void LiteEnchanter::give_high_ego_index()
-{
-}
-
 void LiteEnchanter::give_cursed()
 {
     this->o_ptr->name2 = get_random_ego(INVEN_LITE, false);
     switch (this->o_ptr->name2) {
     case EGO_LITE_DARKNESS:
         this->o_ptr->xtra4 = 0;
-        switch (this->o_ptr->sval) {
-            case SV_LITE_TORCH:
-                this->o_ptr->art_flags.set(TR_LITE_M1);
-                return;
-            case SV_LITE_LANTERN:
-                this->o_ptr->art_flags.set(TR_LITE_M2);
-                return;
-            case SV_LITE_FEANOR:
-                this->o_ptr->art_flags.set(TR_LITE_M3);
-                return;
-            default:
-                return;
-        }
+        this->add_dark_flag();
+        return;
+    default:
+        return;
+    }
+}
 
+void LiteEnchanter::add_dark_flag()
+{
+    switch (this->o_ptr->sval) {
+    case SV_LITE_TORCH:
+        this->o_ptr->art_flags.set(TR_LITE_M1);
+        return;
+    case SV_LITE_LANTERN:
+        this->o_ptr->art_flags.set(TR_LITE_M2);
+        return;
+    case SV_LITE_FEANOR:
+        this->o_ptr->art_flags.set(TR_LITE_M3);
+        return;
+    default:
         return;
     }
 }

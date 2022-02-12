@@ -11,9 +11,9 @@ public:
     void apply_magic() override;
 
 protected:
-    void enchant() override;
+    void enchant() override{};
     void give_ego_index() override;
-    void give_high_ego_index() override;
+    void give_high_ego_index() override{};
     void give_cursed() override;
 
 private:
@@ -21,4 +21,6 @@ private:
     ObjectType *o_ptr;
     DEPTH level;
     int power;
+
+    void add_dark_flag();
 };
