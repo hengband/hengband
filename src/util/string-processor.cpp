@@ -534,7 +534,7 @@ int strrncmp(const char *s1, const char *s2, int len)
             if (p1 < 0)
                 return -1;
             if (p2 < 0)
-                return (1);
+                return 1;
         } else {
             if (p1 < 0)
                 return 0;
