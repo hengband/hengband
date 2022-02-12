@@ -6,10 +6,9 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
-    , level(level)
     , power(power)
 {
     switch (o_ptr->sval) {

@@ -175,7 +175,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         AmuletEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::LITE:
-        LiteEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        LiteEnchanter(player_ptr, o_ptr, power).apply_magic();
         break;
     default:
         apply_magic_others(player_ptr, o_ptr, power);

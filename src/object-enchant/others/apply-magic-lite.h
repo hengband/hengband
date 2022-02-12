@@ -7,7 +7,7 @@ class ObjectType;
 class PlayerType;
 class LiteEnchanter : EnchanterBase {
 public:
-    LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
+    LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, int power);
     void apply_magic() override;
 
 protected:
@@ -19,7 +19,6 @@ protected:
 private:
     PlayerType *player_ptr;
     ObjectType *o_ptr;
-    DEPTH level;
     int power;
 
     void add_dark_flag();
