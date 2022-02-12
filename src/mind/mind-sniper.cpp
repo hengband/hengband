@@ -413,7 +413,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
  */
 MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     bool seen = is_seen(player_ptr, m_ptr);
 
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
@@ -526,7 +526,7 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
  */
 static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     SPELL_IDX snipe_type = SP_NONE;
 
     if (o_ptr->tval != ItemKindType::BOW) {

@@ -179,12 +179,12 @@ void init_dungeon_quests(PlayerType *player_ptr)
 {
     int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
     init_flags = INIT_ASSIGN;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->quest_number = i2enum<QuestId>(MIN_RANDOM_QUEST);
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->quest_number = QuestId::NONE;
     for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
-        quest_type *q_ptr = &quest[i];
+        auto *q_ptr = &quest[i];
         monster_race *quest_r_ptr;
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);

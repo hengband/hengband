@@ -166,7 +166,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
     FEAT_IDX feat;
 
     /* Pick a trap */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         feat = normal_traps[randint0(normal_traps.size())];
 
@@ -197,7 +197,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
  */
 void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     if (g_ptr->cave_has_flag(FloorFeatureType::SECRET)) {
         /* No longer hidden */
@@ -223,8 +223,8 @@ void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_trap(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
 
     /* Paranoia -- verify location */
     if (!in_bounds(floor_ptr, y, x))
@@ -388,8 +388,8 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 {
     int i, num, dam;
     POSITION x = player_ptr->x, y = player_ptr->y;
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     TrapType trap_feat_type = f_ptr->flags.has(FloorFeatureType::TRAP) ? i2enum<TrapType>(f_ptr->subtype) : TrapType::NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 

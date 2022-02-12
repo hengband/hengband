@@ -136,7 +136,7 @@ bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat)
 {
 	/* 関数ポインタの都合 */
 	(void)player_ptr;
-	feature_type *f_ptr = &f_info[feat];
+	auto *f_ptr = &f_info[feat];
 
 	return (f_ptr->flags.has(FloorFeatureType::OPEN) || f_ptr->flags.has(FloorFeatureType::BASH)) &&
 		f_ptr->flags.has_not(FloorFeatureType::MOVE);
@@ -273,7 +273,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
 
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
 {
-    feature_type *f_ptr = &f_info[newfeat];
+    auto *f_ptr = &f_info[newfeat];
     if (f_ptr->flags.has_not(FloorFeatureType::CONVERT))
         return newfeat;
 

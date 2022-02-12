@@ -21,8 +21,8 @@
  */
 void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (!in_bounds(floor_ptr, y, x))
         return;
     if (!cave_drop_bold(floor_ptr, y, x))
@@ -68,8 +68,8 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     ObjectType forge;
     ObjectType *q_ptr;
     if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || !g_ptr->o_idx_list.empty())

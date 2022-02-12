@@ -42,12 +42,12 @@ bool summon_unique_okay = false;
  */
 static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return false;
 
     if (summon_specific_who > 0) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return false;
     } else if (summon_specific_who < 0) {
@@ -69,7 +69,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return true;
 
     if (summon_specific_who > 0) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
         return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
     } else {
         return check_summon_specific(player_ptr, 0, r_idx);
@@ -99,7 +99,7 @@ static bool is_dead_summoning(summon_type type)
  */
 DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level > 0)
         return floor_ptr->dun_level;
 
@@ -119,7 +119,7 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
  */
 bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena)
         return false;
 
@@ -153,7 +153,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
     if (who <= 0) {
         notice = true;
     } else {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[who];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[who];
         if (is_pet(m_ptr)) {
             notice = true;
         } else if (is_seen(player_ptr, m_ptr)) {

@@ -21,7 +21,7 @@
  */
 void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
         return;
     if (!o_ptr->is_known())
@@ -52,7 +52,7 @@ void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP

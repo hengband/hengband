@@ -61,7 +61,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 
     for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
         for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
                 ObjectType *o_ptr;
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
@@ -76,7 +76,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     }
 
     for (ARTIFACT_IDX i = 0; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (!o_ptr->is_fixed_artifact())
@@ -96,7 +96,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     uint16_t why = 3;
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
     for (auto a_idx : whats) {
-        artifact_type *a_ptr = &a_info[a_idx];
+        auto *a_ptr = &a_info[a_idx];
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
         ARTIFACT_IDX z = lookup_kind(a_ptr->tval, a_ptr->sval);
@@ -176,7 +176,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         SYMBOL_CODE c;
         object_kind *flavor_k_ptr;
         KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
-        object_kind *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &k_info[k_idx];
         TERM_COLOR attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
         byte cursor = ((k_ptr->aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
         if (!visual_only && k_ptr->flavor) {
@@ -271,7 +271,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = -1;
         object_cnt = 0;
     } else {
-        object_kind *k_ptr = &k_info[direct_k_idx];
+        auto *k_ptr = &k_info[direct_k_idx];
         object_kind *flavor_k_ptr;
 
         if (!visual_only && k_ptr->flavor) {

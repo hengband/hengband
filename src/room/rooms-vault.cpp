@@ -96,7 +96,7 @@ static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     }
 
     /* Top and bottom boundaries */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (i = 0; i < xsize; i++) {
         int side_x = x0 - xhsize + i;
 
@@ -181,7 +181,7 @@ static void build_room_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, P
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
 
     /* fill area so don't get problems with on_defeat_arena_monster levels */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (x1 = 0; x1 < xsize; x1++) {
         POSITION x = x0 - xhsize + x1;
 
@@ -231,7 +231,7 @@ static void build_cave_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, P
     light = done = false;
     room = true;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (!done) {
         /* testing values for these parameters feel free to adjust */
         grd = 1 << randint0(4);
@@ -319,7 +319,7 @@ static void build_vault(
     grid_type *g_ptr;
 
     /* Place dungeon features and objects */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (t = data, dy = 0; dy < ymax; dy++) {
         for (dx = 0; dx < xmax; dx++, t++) {
             /* prevent loop counter from being overwritten */
@@ -634,7 +634,7 @@ bool build_type7(PlayerType *player_ptr, dun_data_type *dd_ptr)
     y = v_ptr->hgt;
 
     /* Some huge vault cannot be ratated to fit in the dungeon */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (x + 2 > floor_ptr->height - 2) {
         /* Forbid 90 or 270 degree ratation */
         transno &= ~1;
@@ -702,7 +702,7 @@ bool build_type8(PlayerType *player_ptr, dun_data_type *dd_ptr)
     y = v_ptr->hgt;
 
     /* Some huge vault cannot be ratated to fit in the dungeon */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (x + 2 > floor_ptr->height - 2) {
         /* Forbid 90 or 270 degree ratation */
         transno &= ~1;
@@ -766,7 +766,7 @@ static void build_target_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     }
 
     /* Make floor */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (x = x0 - rad; x <= x0 + rad; x++) {
         for (y = y0 - rad; y <= y0 + rad; y++) {
             /* clear room flag */
@@ -866,7 +866,7 @@ static void build_elemental_vault(PlayerType *player_ptr, POSITION x0, POSITION 
     xsize = xhsize * 2;
     ysize = yhsize * 2;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level < 25) {
         /* Earth vault  (Rubble) */
         type = LAKE_T_EARTH_VAULT;
@@ -946,7 +946,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     x2 = x0 + dx;
 
     /* generate the room */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (x = x1 - 2; x <= x2 + 2; x++) {
         if (!in_bounds(floor_ptr, y1 - 2, x))
             break;
@@ -985,7 +985,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
 
     for (y = y1 - 1; y <= y2 + 1; y++) {
         for (x = x1 - 1; x <= x2 + 1; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
 
             g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -1057,7 +1057,7 @@ static void build_castle_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("城型ランダムVaultを生成しました。", "Castle Vault"));
 
     /* generate the room */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (y = y1 - 1; y <= y2 + 1; y++) {
         for (x = x1 - 1; x <= x2 + 1; x++) {
             floor_ptr->grid_array[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
@@ -1086,7 +1086,7 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
     ysize = randint1(11) + 11;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1))
         return false;
 
@@ -1172,7 +1172,7 @@ bool build_type17(PlayerType *player_ptr, dun_data_type *dd_ptr)
     y = v_ptr->hgt;
 
     /* Some huge vault cannot be ratated to fit in the dungeon */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (x + 2 > floor_ptr->height - 2) {
         /* Forbid 90 or 270 degree ratation */
         transno &= ~1;

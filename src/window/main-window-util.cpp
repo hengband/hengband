@@ -76,7 +76,7 @@ void print_map(PlayerType *player_ptr)
 
     (void)term_set_cursor(0);
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     POSITION xmin = (0 < panel_col_min) ? panel_col_min : 0;
     POSITION xmax = (floor_ptr->width - 1 > panel_col_max) ? panel_col_max : floor_ptr->width - 1;
     POSITION ymin = (0 < panel_row_min) ? panel_row_min : 0;
@@ -204,7 +204,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     if (use_bigtile)
         wid = wid / 2 - 1;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     yrat = (floor_ptr->height + hgt - 1) / hgt;
     xrat = (floor_ptr->width + wid - 1) / wid;
     view_special_lite = false;
@@ -328,7 +328,7 @@ void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *
     if (!player_bold(player_ptr, y, x))
         return;
 
-    monster_race *r_ptr = &r_info[0];
+    auto *r_ptr = &r_info[0];
     *ap = r_ptr->x_attr;
     *cp = r_ptr->x_char;
     feat_priority = 31;

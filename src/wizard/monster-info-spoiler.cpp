@@ -110,7 +110,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        monster_race *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &r_info[r_idx];
         concptr name = r_ptr->name.c_str();
         if (filter_monster && !filter_monster(r_ptr)) {
             continue;
@@ -205,7 +205,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     uint16_t why = 2;
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        monster_race *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &r_info[r_idx];
         BIT_FLAGS flags1 = r_ptr->flags1;
         if (any_bits(flags1, RF1_UNIQUE)) {
             spoil_out("[U] ");

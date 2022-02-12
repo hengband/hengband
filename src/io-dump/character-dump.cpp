@@ -59,7 +59,7 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
     bool pet = false;
     bool pet_settings = false;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
 
         if (!monster_is_valid(m_ptr))
             continue;
@@ -344,7 +344,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
 
     char buf[80];
     for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
-        monster_race *r_ptr = &r_info[*it];
+        auto *r_ptr = &r_info[*it];
         if (r_ptr->defeat_level && r_ptr->defeat_time)
             sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);

@@ -68,8 +68,8 @@
 static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMutationType attack, bool *fear, bool *mdeath)
 {
     WEIGHT n_weight = 0;
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     int dice_num, dice_side;
     concptr atk_desc;
@@ -168,9 +168,9 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
  */
 bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_options mode)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
 
     const std::initializer_list<PlayerMutationType> mutation_attack_methods = { PlayerMutationType::HORNS, PlayerMutationType::BEAK, PlayerMutationType::SCOR_TAIL, PlayerMutationType::TRUNK, PlayerMutationType::TENTACLES };

@@ -45,7 +45,7 @@ void prevent_turn_overflow(PlayerType *player_ptr)
         w_ptr->game_turn -= rollback_turns;
     else
         w_ptr->game_turn = 1;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->generated_turn > rollback_turns)
         floor_ptr->generated_turn -= rollback_turns;
     else

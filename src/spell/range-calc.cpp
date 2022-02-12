@@ -197,7 +197,7 @@ void breath_shape(PlayerType *player_ptr, uint16_t *path_g, int dist, int *pgrid
     int path_n = 0;
     int mdis = distance(y1, x1, y2, x2) + rad;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (bdis <= mdis) {
         if ((0 < dist) && (path_n < dist)) {
             POSITION ny = get_grid_y(path_g[path_n]);

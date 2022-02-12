@@ -253,7 +253,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
         if (!can_player_ride_pet(player_ptr, g_ptr, true)) {
             /* Feature code (applying "mimic" field) */
-            feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
+            auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
                 (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "中" : "上");
@@ -698,7 +698,7 @@ void do_cmd_pet(PlayerType *player_ptr)
         if (!target_set(player_ptr, TARGET_KILL))
             player_ptr->pet_t_m_idx = 0;
         else {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[target_row][target_col];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[target_row][target_col];
             if (g_ptr->m_idx && (player_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)) {
                 player_ptr->pet_t_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
                 player_ptr->pet_follow_distance = PET_DESTROY_DIST;

@@ -174,8 +174,8 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 void quest_discovery(QuestId q_idx)
 {
-    quest_type *q_ptr = &quest[enum2i(q_idx)];
-    monster_race *r_ptr = &r_info[q_ptr->r_idx];
+    auto *q_ptr = &quest[enum2i(q_idx)];
+    auto *r_ptr = &r_info[q_ptr->r_idx];
     MONSTER_NUMBER q_num = q_ptr->max_num;
 
     if (!inside_quest(q_idx))
@@ -216,7 +216,7 @@ void quest_discovery(QuestId q_idx)
  */
 QuestId quest_number(PlayerType *player_ptr, DEPTH level)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (inside_quest(floor_ptr->quest_number))
         return (floor_ptr->quest_number);
 

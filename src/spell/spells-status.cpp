@@ -550,7 +550,7 @@ bool fishing(PlayerType *player_ptr)
  */
 bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
 {
-    ObjectType *o_ptr = (*o_ptr_ptr);
+    auto *o_ptr = (*o_ptr_ptr);
 
     /* Cast off activated item */
     INVENTORY_IDX slot;

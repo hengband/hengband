@@ -142,8 +142,8 @@ int16_t PlayerRace::speed() const
         result += (this->player_ptr->lev) / 10;
 
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::MERFOLK)) {
-        floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
-        feature_type *f_ptr = &f_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
+        auto *floor_ptr = this->player_ptr->current_floor_ptr;
+        auto *f_ptr = &f_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
         if (f_ptr->flags.has(FloorFeatureType::WATER)) {
             result += (2 + this->player_ptr->lev / 10);
         } else if (!this->player_ptr->levitation) {

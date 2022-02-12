@@ -52,7 +52,7 @@
  */
 static bool object_easy_know(int i)
 {
-    object_kind *k_ptr = &k_info[i];
+    auto *k_ptr = &k_info[i];
     switch (k_ptr->tval) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:

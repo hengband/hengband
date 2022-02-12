@@ -64,7 +64,7 @@ POSITION temp2_y[MAX_SHORT];
 static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat)) {
         disclose_grid(player_ptr, y, x);
@@ -123,10 +123,10 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 {
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[ny][nx];
     grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &f_info[g_ptr->feat];
     feature_type *of_ptr = &f_info[oc_ptr->feat];
 
     if (!(mpe_mode & MPE_STAYING)) {
@@ -274,7 +274,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
  */
 bool trap_can_be_ignored(PlayerType *player_ptr, FEAT_IDX feat)
 {
-    feature_type *f_ptr = &f_info[feat];
+    auto *f_ptr = &f_info[feat];
     if (f_ptr->flags.has_not(FloorFeatureType::TRAP))
         return true;
 

@@ -69,8 +69,8 @@ typedef struct um_type {
  */
 bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_type *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (turn_flags_ptr->is_riding_mon)
         return move_player_effect(player_ptr, ny, nx, MPE_DONT_PICKUP);
@@ -117,7 +117,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mons
  */
 void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!is_original_ap_and_seen(player_ptr, m_ptr))
         return;
 
@@ -211,7 +211,7 @@ static void update_smart_stupid_flags(monster_race *r_ptr)
  */
 static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0)
         return false;
 
@@ -230,7 +230,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
 
 static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
@@ -261,7 +261,7 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
 
 static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_ptr)
 {
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((player_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
@@ -352,7 +352,7 @@ static bool check_cold_blood(PlayerType *player_ptr, um_type *um_ptr, const POSI
     if (distance > player_ptr->see_infra)
         return false;
 
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (any_bits(r_ptr->flags2, RF2_COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE))
         return false;
 
@@ -366,7 +366,7 @@ static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
     if (!player_can_see_bold(player_ptr, um_ptr->fy, um_ptr->fx))
         return false;
 
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_INVISIBLE) {
         if (player_ptr->see_inv) {
             um_ptr->easy = true;
@@ -388,7 +388,7 @@ static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
 static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     POSITION distance = decide_updated_distance(player_ptr, um_ptr);
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
 
     um_ptr->m_ptr->mflag.reset(MonsterTemporaryFlagType::ESP);
 
@@ -444,7 +444,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         player_ptr->redraw |= PR_UHEALTH;
 
     if (!player_ptr->hallucinated) {
-        monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+        auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
         if ((um_ptr->m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
             r_info[MON_KAGE].r_sights++;
         else if (is_original_ap(um_ptr->m_ptr) && (r_ptr->r_sights < MAX_SHORT))
@@ -532,9 +532,9 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
  */
 void update_monsters(PlayerType *player_ptr, bool full)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -549,8 +549,8 @@ void update_monsters(PlayerType *player_ptr, bool full)
  */
 void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!smart_learn || (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) || ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) && (randint0(100) < 50)))
         return;
 

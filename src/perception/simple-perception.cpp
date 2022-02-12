@@ -34,7 +34,7 @@
  */
 static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[slot];
+    auto *o_ptr = &player_ptr->inventory_list[slot];
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE))
         return;

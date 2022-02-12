@@ -112,7 +112,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = apply_artifact(player_ptr, o_ptr);
+        auto *a_ptr = apply_artifact(player_ptr, o_ptr);
         a_ptr->cur_num = 1;
         if (w_ptr->character_dungeon)
             a_ptr->floor_id = player_ptr->floor_id;
@@ -194,7 +194,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     }
 
     if (o_ptr->k_idx) {
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
         if (!k_info[o_ptr->k_idx].cost)
             o_ptr->ident |= (IDENT_BROKEN);
 

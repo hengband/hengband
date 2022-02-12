@@ -370,7 +370,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, HIT_POINT damage, concptr 
             if (record_arena)
                 exe_write_diary(player_ptr, DIARY_ARENA, -1 - player_ptr->arena_number, m_name);
         } else {
-            QuestId q_idx = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+            auto q_idx = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
             bool seppuku = streq(hit_from, "Seppuku");
             bool winning_seppuku = w_ptr->total_winner && seppuku;
 

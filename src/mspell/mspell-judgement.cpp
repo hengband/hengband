@@ -51,7 +51,7 @@
  */
 bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
     int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, PROJECT_THRU);
     if (!grid_n)
@@ -258,8 +258,8 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->mimic_form == MIMIC_DEMON_LORD)
         return true;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST)))
             return true;

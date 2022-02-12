@@ -79,7 +79,7 @@ bool mon_scatter(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITI
     for (i = 0; i < MON_SCAT_MAXD; i++)
         num[i] = 0;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION nx = x - max_dist; nx <= x + max_dist; nx++) {
         for (POSITION ny = y - max_dist; ny <= y + max_dist; ny++) {
             if (!in_bounds(floor_ptr, ny, nx))
@@ -87,7 +87,7 @@ bool mon_scatter(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITI
             if (!projectable(player_ptr, y, x, ny, nx))
                 continue;
             if (r_idx > 0) {
-                monster_race *r_ptr = &r_info[r_idx];
+                auto *r_ptr = &r_info[r_idx];
                 if (!monster_can_enter(player_ptr, ny, nx, r_ptr, 0))
                     continue;
             } else {
@@ -133,8 +133,8 @@ bool mon_scatter(PlayerType *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITI
  */
 bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION y, x;
     if (!mon_scatter(player_ptr, m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
         return false;
@@ -163,10 +163,10 @@ bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT
  */
 static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     int total = randint1(10);
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int extra = 0;
     if (r_ptr->level > floor_ptr->dun_level) {
         extra = r_ptr->level - floor_ptr->dun_level;
@@ -219,8 +219,8 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITIO
  */
 static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[place_monster_idx];
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
+    auto *r_ptr = &r_info[place_monster_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
     monster_race *z_ptr = &r_info[r_idx];
 
     if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx))
@@ -264,7 +264,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     if (!(mode & PM_NO_KAGE) && one_in_(333))
         mode |= PM_KAGE;
@@ -363,7 +363,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     MONRACE_IDX r_idx = 0;
     int attempts = 1000;
     monster_race *r_ptr = nullptr;
@@ -421,7 +421,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
     MONRACE_IDX guardian = d_info[player_ptr->dungeon_idx].final_guardian;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_guardian_applicable = guardian > 0;
     is_guardian_applicable &= d_info[player_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level;
     is_guardian_applicable &= r_info[guardian].cur_num < r_info[guardian].max_num;
@@ -466,7 +466,7 @@ bool alloc_monster(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode, summon_
     if (alloc_guardian(player_ptr, false))
         return true;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     POSITION y = 0, x = 0;
     int attempts_left = 10000;
     while (attempts_left--) {

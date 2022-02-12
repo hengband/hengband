@@ -102,7 +102,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 {
     char buf[256];
     MONRACE_IDX r_idx = m_ptr->ap_r_idx;
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     term_erase(0, y, 255);
     term_gotoxy(x, y);
@@ -418,7 +418,7 @@ static void display_dungeon(PlayerType *player_ptr)
             TERM_COLOR a;
             SYMBOL_CODE c;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                feature_type *f_ptr = &f_info[feat_none];
+                auto *f_ptr = &f_info[feat_none];
                 a = f_ptr->x_attr[F_LIT_STANDARD];
                 c = f_ptr->x_char[F_LIT_STANDARD];
                 term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);

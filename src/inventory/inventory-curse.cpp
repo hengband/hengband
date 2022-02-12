@@ -149,7 +149,7 @@ ObjectType *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
         return nullptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (o_ptr->curse_flags.has(flag)) {
             choices[number] = i;
             number++;
@@ -294,7 +294,7 @@ static void curse_call_monster(PlayerType *player_ptr)
 {
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
     const int obj_desc_type = OD_OMIT_PREFIX | OD_NAME_ONLY;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->cursed.has(CurseTraitType::CALL_ANIMAL) && one_in_(2500)) {
         if (summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_ANIMAL, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
@@ -453,7 +453,7 @@ void execute_cursed_items_effect(PlayerType *player_ptr)
     if (!one_in_(999) || player_ptr->anti_magic || (one_in_(2) && has_resist_curse(player_ptr)))
         return;
 
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if (o_ptr->name1 != ART_JUDGE)
         return;
 

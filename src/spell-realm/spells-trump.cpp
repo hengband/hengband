@@ -60,7 +60,7 @@ void cast_shuffle(PlayerType *player_ptr)
         chg_virtue(player_ptr, V_CHANCE, 1);
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (die < 7) {
         msg_print(_("なんてこった！《死》だ！", "Oh no! It's Death!"));
 

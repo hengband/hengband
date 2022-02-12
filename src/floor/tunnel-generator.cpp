@@ -60,7 +60,7 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
     start_row = row1;
     start_col = col1;
     correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while ((row1 != row2) || (col1 != col2)) {
         if (main_loop_count++ > 2000)
             return false;
@@ -160,8 +160,8 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
  */
 static bool set_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[*y][*x];
     if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner())
         return true;
 
@@ -349,7 +349,7 @@ bool build_tunnel2(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION x1, P
     grid_type *g_ptr;
 
     int length = distance(x1, y1, x2, y2);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (length <= cutoff) {
         retval = true;
         short_seg_hack(player_ptr, dd_ptr, x1, y1, x2, y2, type, 0, &retval);

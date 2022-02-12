@@ -47,7 +47,7 @@
 bool project_all_los(PlayerType *player_ptr, AttributeType typ, HIT_POINT dam)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -62,7 +62,7 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, HIT_POINT dam)
     BIT_FLAGS flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
     bool obvious = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (m_ptr->mflag.has_not(MonsterTemporaryFlagType::LOS))
             continue;
 
@@ -212,7 +212,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
     bool sleep = false;
     bool speed = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
         if (i == who)
@@ -432,8 +432,8 @@ bool probing(PlayerType *player_ptr)
     bool probe = false;
     char buf[256];
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
         if (!player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx))

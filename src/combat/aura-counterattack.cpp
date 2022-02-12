@@ -35,7 +35,7 @@ static void aura_fire_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     if (!has_sh_fire(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) != 0) {
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
@@ -58,7 +58,7 @@ static void aura_elec_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     if (!has_sh_elec(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) != 0) {
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
@@ -81,7 +81,7 @@ static void aura_cold_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     if (!has_sh_cold(player_ptr) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) != 0) {
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
@@ -104,7 +104,7 @@ static void aura_shards_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     if (!player_ptr->dustrobe || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK) != 0) {
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
@@ -128,7 +128,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     if (!player_ptr->tim_sh_holy || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flags3 & RF3_EVIL) == 0)
         return;
 
@@ -157,7 +157,7 @@ static void aura_force_by_monster_attack(PlayerType *player_ptr, MonsterAttackPl
     if (!player_ptr->tim_sh_touki || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_RES_ALL) != 0) {
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= RFR_RES_ALL;
@@ -182,7 +182,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
 
     HIT_POINT dam = 1;
     ObjectType *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
-    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (((r_ptr->flagsr & RFR_RES_ALL) != 0) || ((r_ptr->flagsr & RFR_RES_DARK) != 0)) {
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (RFR_RES_ALL | RFR_RES_DARK);

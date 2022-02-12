@@ -42,7 +42,7 @@ concptr PlayerAlignment::get_alignment_description(bool with_value)
 void PlayerAlignment::update_alignment()
 {
     this->reset_alignment();
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX m_idx = floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
         auto *m_ptr = &floor_ptr->m_list[m_idx];
         if (!monster_is_valid(m_ptr))

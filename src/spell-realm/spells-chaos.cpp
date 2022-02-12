@@ -208,7 +208,7 @@ void cast_meteor(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
             if (d >= 9)
                 continue;
 
-            floor_type *floor_ptr = player_ptr->current_floor_ptr;
+            auto *floor_ptr = player_ptr->current_floor_ptr;
             if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT))
                 continue;
 

@@ -84,7 +84,7 @@ static void print_header(void)
  */
 static bool make_fake_artifact(ObjectType *o_ptr, ARTIFACT_IDX name1)
 {
-    artifact_type *a_ptr = &a_info[name1];
+    auto *a_ptr = &a_info[name1];
     if (a_ptr->name.empty())
         return false;
 

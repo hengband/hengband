@@ -60,7 +60,7 @@
  */
 void process_dungeon(PlayerType *player_ptr, bool load_game)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->base_level = floor_ptr->dun_level;
     w_ptr->is_loading_now = false;
     player_ptr->leaving = false;

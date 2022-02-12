@@ -28,9 +28,9 @@
  */
 void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[i];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[i];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
@@ -117,9 +117,9 @@ void wipe_monsters_list(PlayerType *player_ptr)
         }
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -156,7 +156,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
 void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return;
 

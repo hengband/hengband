@@ -19,7 +19,7 @@ melee_spell_type *initialize_melee_spell_type(PlayerType *player_ptr, melee_spel
     ms_ptr->target_idx = 0;
     ms_ptr->thrown_spell = MonsterAbilityType::MAX;
     ms_ptr->dam = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     ms_ptr->m_ptr = &floor_ptr->m_list[m_idx];
     ms_ptr->t_ptr = nullptr;
     ms_ptr->r_ptr = &r_info[ms_ptr->m_ptr->r_idx];

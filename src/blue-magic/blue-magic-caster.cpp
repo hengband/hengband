@@ -93,7 +93,7 @@ static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
 {
     monster_type *m_ptr;
     monster_race *r_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col)
         || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
         return true;

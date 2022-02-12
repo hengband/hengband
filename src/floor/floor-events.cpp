@@ -46,11 +46,11 @@
 void day_break(PlayerType *player_ptr)
 {
     msg_print(_("夜が明けた。", "The sun has risen."));
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->wild_mode) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+                auto *g_ptr = &floor_ptr->grid_array[y][x];
                 g_ptr->info |= CAVE_GLOW;
                 if (view_perma_grids)
                     g_ptr->info |= CAVE_MARK;
@@ -70,12 +70,12 @@ void day_break(PlayerType *player_ptr)
 void night_falls(PlayerType *player_ptr)
 {
     msg_print(_("日が沈んだ。", "The sun has fallen."));
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->wild_mode) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-                feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
+                auto *g_ptr = &floor_ptr->grid_array[y][x];
+                auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
                 if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE))
                     continue;
 
@@ -113,14 +113,14 @@ static int rating_boost(int delta)
  */
 static byte get_dungeon_feeling(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
         return 0;
 
     const int base = 10;
     int rating = 0;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         monster_race *r_ptr;
         int delta = 0;
         if (!monster_is_valid(m_ptr) || is_pet(m_ptr))
@@ -143,8 +143,8 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
     }
 
     for (MONSTER_IDX i = 1; i < floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &floor_ptr->o_list[i];
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *o_ptr = &floor_ptr->o_list[i];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
         int delta = 0;
         if (!o_ptr->is_valid() || (o_ptr->is_known() && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0))
             continue;
@@ -233,7 +233,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
  */
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level)
         return;
 
@@ -269,7 +269,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;

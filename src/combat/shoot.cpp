@@ -689,8 +689,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                 sound(SOUND_SHOOT_HIT);
                 grid_type *c_mon_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
-                monster_race *r_ptr = &r_info[m_ptr->r_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
+                auto *r_ptr = &r_info[m_ptr->r_idx];
 
                 /* Check the visibility */
                 visible = m_ptr->ml;
@@ -894,7 +894,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
 
         if (stick_to) {
             MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
             OBJECT_IDX o_idx = o_pop(player_ptr->current_floor_ptr);
 
             if (!o_idx) {
@@ -948,7 +948,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
 {
     int k;
     ARMOUR_CLASS ac;
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     /* Percentile dice */
     k = randint1(100);
@@ -1009,7 +1009,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
 HIT_POINT critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     int i, k;
-    ObjectType *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     /* Extract "shot" power */
     i = player_ptr->to_h_b + plus_ammo;
@@ -1161,7 +1161,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
 HIT_POINT calc_crit_ratio_shot(PlayerType *player_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
     HIT_POINT i;
-    ObjectType *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     /* Extract "shot" power */
     i = player_ptr->to_h_b + plus_ammo;

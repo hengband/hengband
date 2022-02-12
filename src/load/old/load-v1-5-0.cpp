@@ -124,7 +124,7 @@ void rd_item_old(ObjectType *o_ptr)
             if (o_ptr->art_flags.has(i2enum<tr_type>(95)))
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
-                artifact_type *a_ptr = &a_info[o_ptr->name1];
+                auto *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
@@ -335,7 +335,7 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
         m_ptr->ap_r_idx = rd_s16b();
 
     if (h_older_than(1, 0, 14)) {
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         if (r_ptr->flags3 & RF3_EVIL)
@@ -508,7 +508,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
  */
 errr rd_dungeon_old(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = rd_s16b();
     if (h_older_than(0, 3, 8))
         player_ptr->dungeon_idx = DUNGEON_ANGBAND;

@@ -21,7 +21,7 @@
  */
 bool place_quest_monsters(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < max_q_idx; i++) {
         monster_race *r_ptr;
         BIT_FLAGS mode;

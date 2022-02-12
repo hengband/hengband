@@ -138,7 +138,7 @@ void update_mon_lite(PlayerType *player_ptr)
 
     void (*add_mon_lite)(PlayerType *, std::vector<Pos2D> &, const POSITION, const POSITION, const monster_lite_type *);
     int dis_lim = (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[floor_ptr->mon_lite_y[i]][floor_ptr->mon_lite_x[i]];

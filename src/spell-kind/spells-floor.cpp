@@ -63,7 +63,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 {
     /* Memorize objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
         if (o_ptr->is_held_by_monster())
@@ -75,7 +75,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
         /* Scan all normal grids */
         for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
             /* Memorize terrain of the grid */
             g_ptr->info |= (CAVE_KNOWN);
@@ -134,7 +134,7 @@ void wiz_dark(PlayerType *player_ptr)
     /* Forget every grid */
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
         for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
             /* Process the grid */
             g_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
@@ -156,7 +156,7 @@ void wiz_dark(PlayerType *player_ptr)
 
     /* Forget all objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
 
         if (!o_ptr->is_valid())
             continue;
@@ -247,7 +247,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
 bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
     /* Prevent destruction of quest levels and town */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
         return false;
     }
@@ -298,8 +298,8 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                 continue;
 
             if (g_ptr->m_idx) {
-                monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-                monster_race *r_ptr = &r_info[m_ptr->r_idx];
+                auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+                auto *r_ptr = &r_info[m_ptr->r_idx];
 
                 if (in_generate) /* In generation */
                 {

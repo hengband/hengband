@@ -114,8 +114,8 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
 static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
     bool success_hit = false;
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         int n = 1;
 
@@ -146,7 +146,7 @@ static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr
  */
 bool process_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if (decide_attack_hit(player_ptr, pa_ptr, chance))
         return true;
 

@@ -766,7 +766,7 @@ void set_gametime(void)
 void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT))
             continue;
 
@@ -788,7 +788,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 void wiz_zap_floor_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (i == player_ptr->riding))
             continue;
 
@@ -821,7 +821,7 @@ void cheat_death(PlayerType *player_ptr)
     (void)strcpy(player_ptr->died_from, _("死の欺き", "Cheating death"));
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->inside_arena = false;
     player_ptr->phase_out = false;

@@ -432,7 +432,7 @@ static FEAT_IDX search_real_feat(std::string feat)
 void retouch_f_info(angband_header *head)
 {
     for (int i = 0; i < head->info_num; i++) {
-        feature_type *f_ptr = &f_info[i];
+        auto *f_ptr = &f_info[i];
         FEAT_IDX k = search_real_feat(f_ptr->mimic_tag);
         f_ptr->mimic = k < 0 ? f_ptr->mimic : k;
         k = search_real_feat(f_ptr->destroyed_tag);

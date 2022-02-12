@@ -559,7 +559,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
         if (description)
             return _("影のオーラを身にまとい、敵に影のダメージを与える。", "Gives aura of shadow.");
         if (cast) {
-            ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
+            auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if (!o_ptr->k_idx) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
@@ -572,7 +572,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
             }
         }
         if (continuation) {
-            ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
+            auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SpellProcessType::STOP);

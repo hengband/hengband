@@ -125,7 +125,7 @@ bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance)
  */
 bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (!monster_is_valid(m_ptr))
         return false;
 
@@ -202,7 +202,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
  */
 void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (!m_ptr->r_idx)
         return;
     if (randint1(100) > power)
@@ -386,8 +386,8 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
         for (POSITION yy = -1; yy < 2; yy++) {
             MONSTER_IDX tmp_m_idx = player_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
             if (tmp_m_idx && (player_ptr->riding != tmp_m_idx)) {
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-                monster_race *r_ptr = &r_info[m_ptr->r_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
+                auto *r_ptr = &r_info[m_ptr->r_idx];
 
                 bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
                 can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
@@ -429,8 +429,8 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
                 continue;
             }
 
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-            monster_race *r_ptr = &r_info[m_ptr->r_idx];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
+            auto *r_ptr = &r_info[m_ptr->r_idx];
 
             bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
             can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
@@ -494,7 +494,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
 
 void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     POSITION oldfy = m_ptr->fy;
     POSITION oldfx = m_ptr->fx;
     bool old_ml = m_ptr->ml;

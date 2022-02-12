@@ -128,7 +128,7 @@ bool target_okay(PlayerType *player_ptr)
     if (!target_able(player_ptr, target_who))
         return false;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[target_who];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[target_who];
     target_row = m_ptr->fy;
     target_col = m_ptr->fx;
     return true;

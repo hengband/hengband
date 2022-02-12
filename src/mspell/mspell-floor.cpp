@@ -83,7 +83,7 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, PlayerType *player_ptr, M
  */
 MonsterSpellResult spell_RF6_WORLD(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     disturb(player_ptr, true, true);
@@ -173,8 +173,8 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
@@ -241,7 +241,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
@@ -316,7 +316,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
 {
     const auto res = MonsterSpellResult::make_valid();
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
@@ -373,10 +373,10 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
 {
     mspell_cast_msg_blind msg;
     concptr msg_done;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     bool can_use_lite_area = false;
     bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
     bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -470,7 +470,7 @@ MonsterSpellResult spell_RF6_TRAPS(PlayerType *player_ptr, POSITION y, POSITION 
  */
 MonsterSpellResult spell_RF6_RAISE_DEAD(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."), _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."));
 

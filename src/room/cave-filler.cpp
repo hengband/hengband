@@ -180,7 +180,7 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 static bool hack_isnt_wall(PlayerType *player_ptr, POSITION y, POSITION x, int c1, int c2, int c3, FEAT_IDX feat1, FEAT_IDX feat2, FEAT_IDX feat3,
     BIT_FLAGS info1, BIT_FLAGS info2, BIT_FLAGS info3)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->grid_array[y][x].info & CAVE_ICKY)
         return false;
 
@@ -230,7 +230,7 @@ static bool hack_isnt_wall(PlayerType *player_ptr, POSITION y, POSITION x, int c
  */
 static void cave_fill(PlayerType *player_ptr, const POSITION y, const POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
 
     // 幅優先探索用のキュー。
     std::queue<Pos2D> que;
@@ -278,7 +278,7 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
     fill_data.info2 = CAVE_FLOOR;
     fill_data.info3 = CAVE_FLOOR;
     fill_data.amount = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     cave_fill(player_ptr, (byte)y0, (byte)x0);
     if (fill_data.amount < 10) {
         for (POSITION x = 0; x <= xsize; ++x) {
@@ -443,7 +443,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     fill_data.info3 = 0;
     fill_data.amount = 0;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     cave_fill(player_ptr, (byte)y0, (byte)x0);
     if (fill_data.amount < 10) {
         for (POSITION x = 0; x <= xsize; ++x) {

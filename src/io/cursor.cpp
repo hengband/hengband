@@ -43,7 +43,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     if (!display_path || (project_length == -1))
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int path_n = projection_path(
         player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
     player_ptr->redraw |= (PR_MAP);
@@ -51,7 +51,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     for (int i = 0; i < path_n; i++) {
         POSITION ny = get_grid_y(path_g[i]);
         POSITION nx = get_grid_x(path_g[i]);
-        grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
+        auto *g_ptr = &floor_ptr->grid_array[ny][nx];
         if (panel_contains(ny, nx)) {
             TERM_COLOR a = default_color;
             SYMBOL_CODE c;
@@ -109,7 +109,7 @@ bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
     POSITION y = panel_row_min + dy * hgt / 2;
     POSITION x = panel_col_min + dx * wid / 2;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (y > floor_ptr->height - hgt)
         y = floor_ptr->height - hgt;
     if (y < 0)

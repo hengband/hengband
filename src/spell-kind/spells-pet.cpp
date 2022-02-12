@@ -25,7 +25,7 @@ void discharge_minion(PlayerType *player_ptr)
 {
     bool okay = true;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!m_ptr->r_idx || !is_pet(m_ptr))
             continue;
         if (m_ptr->nickname)
@@ -38,7 +38,7 @@ void discharge_minion(PlayerType *player_ptr)
     }
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!m_ptr->r_idx || !is_pet(m_ptr))
             continue;
 

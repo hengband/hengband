@@ -40,7 +40,7 @@
  */
 bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType typ)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     bool is_item_affected = false;
     bool known = player_has_los_bold(player_ptr, y, x);
@@ -55,7 +55,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 
         processed_list.insert(this_o_idx);
 
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         bool ignore = false;
         bool do_kill = false;
         concptr note_kill = nullptr;

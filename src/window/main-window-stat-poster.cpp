@@ -253,13 +253,13 @@ void print_speed(PlayerType *player_ptr)
 
     int speed_value = player_ptr->pspeed - 110;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_player_fast = is_fast(player_ptr);
     char buf[32] = "";
     TERM_COLOR attr = TERM_WHITE;
     if (speed_value > 0) {
         if (player_ptr->riding) {
-            monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
+            auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr))
                 attr = TERM_L_BLUE;
             else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr))
@@ -275,7 +275,7 @@ void print_speed(PlayerType *player_ptr)
         sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed_value);
     } else if (speed_value < 0) {
         if (player_ptr->riding) {
-            monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
+            auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr))
                 attr = TERM_L_BLUE;
             else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr))

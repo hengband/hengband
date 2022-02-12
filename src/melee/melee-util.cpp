@@ -23,7 +23,7 @@ mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONRACE
     mam_ptr->explode = false;
     mam_ptr->touched = false;
 
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
     mam_ptr->ac = tr_ptr->ac;
     mam_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);

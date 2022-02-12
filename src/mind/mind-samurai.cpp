@@ -288,7 +288,7 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
  */
 MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     samurai_slaying_type tmp_slaying;
     samurai_slaying_type *samurai_slaying_ptr = initialize_samurai_slaying_type(&tmp_slaying, mult, flags, m_ptr, mode, r_ptr);
     hissatsu_burning_strike(player_ptr, samurai_slaying_ptr);
@@ -417,7 +417,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
  */
 int calc_attack_quality(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int bonus = player_ptr->to_h[pa_ptr->hand] + o_ptr->to_h;
     int chance = (player_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
     if (pa_ptr->mode == HISSATSU_IAI)
@@ -450,7 +450,7 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
     pa_ptr->attack_damage = 0;
     anger_monster(player_ptr, pa_ptr->m_ptr);
 
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if ((r_ptr->flags3 & (RF3_NO_STUN))) {
         msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
         return;

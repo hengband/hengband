@@ -110,7 +110,7 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
 
     char buf[80];
     for (auto r_idx : unique_list_ptr->who) {
-        monster_race *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &r_info[r_idx];
 
         if (r_ptr->defeat_level && r_ptr->defeat_time)
             sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),

@@ -38,7 +38,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, PlayerType *player_ptr, EnumClassFlagG
     if (!smart_cheat && !smart_learn)
         return;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (smart_learn) {
         /* 時々学習情報を忘れる */
         if (randint0(100) < 1)

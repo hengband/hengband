@@ -54,7 +54,7 @@ void set_friendly(monster_type *m_ptr)
  */
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-    feature_type *f_ptr = &f_info[feat];
+    auto *f_ptr = &f_info[feat];
 
     if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
@@ -131,7 +131,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
  */
 bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if (player_bold(player_ptr, y, x))
         return false;
     if (g_ptr->m_idx)
@@ -166,7 +166,7 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  */
 bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *s_ptr = &r_info[n_ptr->r_idx];
 
     if (player_ptr->phase_out) {
@@ -277,7 +277,7 @@ bool is_mimicry(monster_type *m_ptr)
     if (m_ptr->ap_r_idx == MON_IT || m_ptr->ap_r_idx == MON_NULL || m_ptr->ap_r_idx == MON_BEHINDER)
         return true;
 
-    monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
 
     if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr)
         return false;
@@ -301,7 +301,7 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 
 MONRACE_IDX real_r_idx(monster_type *m_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         if (r_ptr->flags1 & RF1_UNIQUE)
             return MON_CHAMELEON_K;
@@ -320,6 +320,6 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
  */
 void monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx, char *m_name)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0x00);
 }

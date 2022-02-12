@@ -40,7 +40,7 @@ static bool is_cave_empty_grid(PlayerType *player_ptr, grid_type *g_ptr)
  */
 void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int k = 0; k < num; k++) {
         for (int i = 0; i < 9; i++) {
             int d = 1;
@@ -69,7 +69,7 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
  */
 void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (; num > 0; --num) {
         int j = y, k = x;
         int dummy = 0;
@@ -115,7 +115,7 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
 static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
     grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int y1 = y, x1 = x;
     int dummy = 0;
     for (int count = 0; count <= 5; count++) {

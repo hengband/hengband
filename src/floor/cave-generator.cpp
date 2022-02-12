@@ -50,7 +50,7 @@ static dun_data_type *initialize_dun_data_type(dun_data_type *dd_ptr, concptr *w
 
 static void check_arena_floor(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!dd_ptr->empty_level) {
         for (POSITION y = 0; y < floor_ptr->height; y++)
             for (POSITION x = 0; x < floor_ptr->width; x++)
@@ -76,7 +76,7 @@ static void check_arena_floor(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
 static void place_cave_contents(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 1)
         while (one_in_(DUN_MOS_DEN))
             place_trees(player_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
@@ -189,7 +189,7 @@ static void make_only_tunnel_points(floor_type *floor_ptr, dun_data_type *dd_ptr
 
 static bool make_one_floor(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
 
     if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_ROOM)) {
         make_only_tunnel_points(floor_ptr, dd_ptr);
@@ -223,7 +223,7 @@ static bool make_one_floor(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeo
 static bool switch_making_floor(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     if (d_ptr->flags.has(DungeonFeatureType::MAZE)) {
-        floor_type *floor_ptr = player_ptr->current_floor_ptr;
+        auto *floor_ptr = player_ptr->current_floor_ptr;
         build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, false);
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
             *dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
@@ -281,7 +281,7 @@ static void place_bound_perm_wall(PlayerType *player_ptr, grid_type *g_ptr)
 
 static void make_perm_walls(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION x = 0; x < floor_ptr->width; x++) {
         place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[0][x]);
         place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[floor_ptr->height - 1][x]);
@@ -310,7 +310,7 @@ static bool check_place_necessary_objects(PlayerType *player_ptr, dun_data_type 
 
 static void decide_dungeon_data_allocation(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     dd_ptr->alloc_object_num = floor_ptr->dun_level / 3;
     if (dd_ptr->alloc_object_num > 10)
         dd_ptr->alloc_object_num = 10;
@@ -343,7 +343,7 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, dun_data_type *dd_ptr,
     if (d_ptr->flags.has_not(DungeonFeatureType::NO_CAVE))
         alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(dd_ptr->alloc_object_num));
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->enter_dungeon && floor_ptr->dun_level > 1)
         floor_ptr->object_level = 1;
 
@@ -380,7 +380,7 @@ static void decide_grid_glowing(floor_type *floor_ptr, dun_data_type *dd_ptr, du
  */
 bool cave_gen(PlayerType *player_ptr, concptr *why)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     reset_lite_area(floor_ptr);
     set_floor_and_wall(floor_ptr->dungeon_idx);
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);

@@ -37,7 +37,7 @@ bool black_market_crap(PlayerType *player_ptr, ObjectType *o_ptr)
         }
 
         for (int j = 0; j < town_info[player_ptr->town_num].store[enum2i(sst)].stock_num; j++) {
-            ObjectType *j_ptr = &town_info[player_ptr->town_num].store[enum2i(sst)].stock[j];
+            auto *j_ptr = &town_info[player_ptr->town_num].store[enum2i(sst)].stock[j];
             if (o_ptr->k_idx == j_ptr->k_idx)
                 return true;
         }

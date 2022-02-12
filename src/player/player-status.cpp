@@ -157,7 +157,7 @@ static player_hand main_attack_hand(PlayerType *player_ptr);
  */
 static void delayed_visual_update(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < floor_ptr->redraw_n; i++) {
         POSITION y = floor_ptr->redraw_y[i];
         POSITION x = floor_ptr->redraw_x[i];
@@ -1384,7 +1384,7 @@ static bool is_martial_arts_mode(PlayerType *player_ptr)
 
 static bool is_heavy_wield(PlayerType *player_ptr, int i)
 {
-    const ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
+    const auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
 
     return has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i) && (calc_weapon_weight_limit(player_ptr) < o_ptr->weight / 10);
 }
@@ -1687,7 +1687,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         }
 
         for (int i = INVEN_MAIN_HAND; i <= INVEN_FEET; i++) {
-            ObjectType *o_ptr = &player_ptr->inventory_list[i];
+            auto *o_ptr = &player_ptr->inventory_list[i];
             if (!o_ptr->k_idx)
                 continue;
             if (!o_ptr->is_armour())
@@ -1806,7 +1806,7 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
 
 static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!player_ptr->riding)
         return 0;
 
@@ -1921,7 +1921,7 @@ void put_equipment_warning(PlayerType *player_ptr)
 
 static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
-    ObjectType *o_ptr = &player_ptr->inventory_list[slot];
+    auto *o_ptr = &player_ptr->inventory_list[slot];
     auto flgs = object_flags(o_ptr);
 
     player_hand calc_hand = PLAYER_HAND_OTHER;
@@ -2121,7 +2121,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
     /* Bonuses and penalties by weapon */
     PlayerClass pc(player_ptr);
     if (has_melee_weapon(player_ptr, slot)) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[slot];
+        auto *o_ptr = &player_ptr->inventory_list[slot];
         auto flgs = object_flags(o_ptr);
 
         /* Traind bonuses */
@@ -2200,7 +2200,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
 
     /* Bonuses from inventory */
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
 
         /* Ignore empty hands, handed weapons, bows and capture balls */
         if (!o_ptr->k_idx || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i))
@@ -2316,7 +2316,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
         pow -= 12;
     }
 
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     if (is_heavy_shoot(player_ptr, o_ptr)) {
         pow += 2 * (calc_bow_weight_limit(player_ptr) - o_ptr->weight / 10);
@@ -2450,7 +2450,7 @@ void update_creature(PlayerType *player_ptr)
     if (!player_ptr->update)
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (any_bits(player_ptr->update, (PU_AUTODESTROY))) {
         reset_bits(player_ptr->update, PU_AUTODESTROY);
         autopick_delayed_alter(player_ptr);
@@ -2559,7 +2559,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
             return false;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (const auto this_o_idx : floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (o_ptr->k_idx && any_bits(o_ptr->marked, OM_FOUND) && check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval))
@@ -2591,7 +2591,7 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void wreck_the_pattern(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int pattern_type = f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
     if (pattern_type == PATTERN_TILE_WRECKED)
         return;

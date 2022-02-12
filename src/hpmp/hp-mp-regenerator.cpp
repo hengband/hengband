@@ -167,8 +167,8 @@ void regenmagic(PlayerType *player_ptr, int regen_amount)
 void regenerate_monsters(PlayerType *player_ptr)
 {
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
 
         if (!monster_is_valid(m_ptr))
             continue;
@@ -204,7 +204,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         monster_race *r_ptr;
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (o_ptr->tval != ItemKindType::CAPTURE)

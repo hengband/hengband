@@ -219,7 +219,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
         }
 
         for (i = 0; i < 4; i++) {
-            monster_race *r_ptr = &r_info[battle_mon[i]];
+            auto *r_ptr = &r_info[battle_mon[i]];
             power[i] = calc_monrace_power(r_ptr);
             total += power[i];
         }
@@ -274,7 +274,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
     for (int i = 0; i < 4; i++) {
         char buf[MAX_MONSTER_NAME];
-        monster_race *r_ptr = &r_info[battle_mon[i]];
+        auto *r_ptr = &r_info[battle_mon[i]];
 
         sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,
             _(format("%s%s", r_ptr->name.c_str(), (r_ptr->flags1 & RF1_UNIQUE) ? "もどき" : "      "),

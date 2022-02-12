@@ -310,7 +310,7 @@ static bool check_panel_changed(PlayerType *player_ptr, ts_type *ts_ptr)
  */
 static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
         // カーソル移動に伴い、必要なだけ描画範囲を更新。
         // "interesting" 座標リストおよび現在のターゲットも更新。
@@ -487,7 +487,7 @@ static void decide_change_panel(PlayerType *player_ptr, ts_type *ts_ptr)
             target_set_prepare(player_ptr, ys_interest, xs_interest, ts_ptr->mode);
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (ts_ptr->x >= floor_ptr->width - 1)
         ts_ptr->x = floor_ptr->width - 2;
     else if (ts_ptr->x <= 0)

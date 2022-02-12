@@ -40,8 +40,8 @@
  */
 bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     if (!monster_is_valid(m_ptr))
         return false;
 
@@ -65,7 +65,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
         return false;
 
@@ -78,7 +78,7 @@ static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->m_idx) {
-        monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+        auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
         if (m_ptr->ml)
             return true;
     }
@@ -171,7 +171,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
         return;
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
             continue;
 

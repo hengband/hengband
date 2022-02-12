@@ -40,7 +40,7 @@
  */
 void roff_top(MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     char c1 = r_ptr->d_char;
     char c2 = r_ptr->x_char;
 

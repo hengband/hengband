@@ -64,7 +64,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     if (randint1(100) > chance)
         return;
 
-    ObjectType *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
     if (!o_ptr->k_idx)
         return;
     auto oflgs = object_flags(o_ptr);

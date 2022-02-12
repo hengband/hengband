@@ -169,7 +169,7 @@ void process_command(PlayerType *player_ptr)
         sniper_data->reset_concent = true;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     switch (command_cmd) {
     case ESCAPE:
     case ' ':

@@ -28,7 +28,7 @@ bool build_type1(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     grid_type *g_ptr;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool curtain = (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CURTAIN)) && one_in_(d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE) ? 48 : 512);
 
     /* Pick a room size */
@@ -201,7 +201,7 @@ bool build_type2(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid_type *g_ptr;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
         return false;
 
@@ -312,7 +312,7 @@ bool build_type3(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid_type *g_ptr;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
         return false;
 
@@ -547,7 +547,7 @@ bool build_type4(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid_type *g_ptr;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
         return false;
 
@@ -877,7 +877,7 @@ bool build_type11(PlayerType *player_ptr, dun_data_type *dd_ptr)
     int light = false;
 
     /* Occasional light */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((randint1(floor_ptr->dun_level) <= 15) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
         light = true;
 
@@ -929,7 +929,7 @@ bool build_type12(PlayerType *player_ptr, dun_data_type *dd_ptr)
     h4 = randint1(32) - 16;
 
     /* Occasional light */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((randint1(floor_ptr->dun_level) <= 5) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
         light = true;
 

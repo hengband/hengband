@@ -57,7 +57,7 @@ void ObjectType::copy_from(ObjectType *j_ptr)
  */
 void ObjectType::prep(KIND_OBJECT_IDX ko_idx)
 {
-    object_kind *k_ptr = &k_info[ko_idx];
+    auto *k_ptr = &k_info[ko_idx];
     auto old_stack_idx = this->stack_idx;
     wipe();
     this->stack_idx = old_stack_idx;

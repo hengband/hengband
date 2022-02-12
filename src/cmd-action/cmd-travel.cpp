@@ -27,7 +27,7 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int cost = 1;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &f_info[g_ptr->feat];
     if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN))
         cost += 1;
 
@@ -69,9 +69,9 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 static void travel_flow_aux(PlayerType *player_ptr, POSITION y, POSITION x, int n, bool wall)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     if (!in_bounds(floor_ptr, y, x))
         return;
 
@@ -115,7 +115,7 @@ static void travel_flow(PlayerType *player_ptr, POSITION ty, POSITION tx)
 {
     flow_head = flow_tail = 0;
     bool wall = false;
-    feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat];
+    auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat];
     if (f_ptr->flags.has_not(FloorFeatureType::MOVE))
         wall = true;
 
@@ -152,7 +152,7 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     feature_type *f_ptr;
     f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
     if ((floor_ptr->grid_array[y][x].info & CAVE_MARK)

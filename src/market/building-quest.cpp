@@ -29,7 +29,7 @@ static void get_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_init
 
     quest_text_line = 0;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     QuestId old_quest = floor_ptr->quest_number;
     floor_ptr->quest_number = questnum;
 

@@ -70,7 +70,7 @@ static void drop_here(floor_type *floor_ptr, ObjectType *j_ptr, POSITION y, POSI
     o_ptr->iy = y;
     o_ptr->ix = x;
     o_ptr->held_m_idx = 0;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
 
@@ -86,7 +86,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
 
     KIND_OBJECT_IDX k_idx = lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
     ObjectType forge;
-    ObjectType *q_ptr = &forge;
+    auto *q_ptr = &forge;
     q_ptr->prep(k_idx);
     drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
 }
@@ -94,10 +94,10 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 {
     *qtwg_ptr->x = qtwg_ptr->xmin;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int len = strlen(s);
     for (int i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
-        grid_type *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
+        auto *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
         int idx = s[0];
         OBJECT_IDX object_index = letter[idx].object;
         MONSTER_IDX monster_index = letter[idx].monster;
@@ -174,7 +174,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
         } else if (object_index) {
             ObjectType tmp_object;
-            ObjectType *o_ptr = &tmp_object;
+            auto *o_ptr = &tmp_object;
             o_ptr->prep(object_index);
             if (o_ptr->tval == ItemKindType::GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
@@ -326,7 +326,7 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     if (*qtwg_ptr->y % SCREEN_HGT)
         panels_y++;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->height = panels_y * SCREEN_HGT;
     int panels_x = (*qtwg_ptr->x / SCREEN_WID);
     if (*qtwg_ptr->x % SCREEN_WID)

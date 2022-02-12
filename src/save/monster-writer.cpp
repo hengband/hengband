@@ -154,7 +154,7 @@ void wr_monster(monster_type *m_ptr)
  */
 void wr_lore(MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     wr_s16b((int16_t)r_ptr->r_sights);
     wr_s16b((int16_t)r_ptr->r_deaths);
     wr_s16b((int16_t)r_ptr->r_pkills);

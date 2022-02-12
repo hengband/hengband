@@ -32,7 +32,7 @@
  */
 static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     return cave_clean_bold(floor_ptr, y, x) && (floor_ptr->grid_array[y][x].m_idx == 0) && !player_bold(player_ptr, y, x);
 }
 
@@ -64,9 +64,9 @@ static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType typ)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
 
     bool obvious = false;
     bool known = player_has_los_bold(player_ptr, y, x);

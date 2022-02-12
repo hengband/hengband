@@ -155,7 +155,7 @@ MonsterSpellResult spell_RF5_BA_ELEC(PlayerType *player_ptr, POSITION y, POSITIO
 MonsterSpellResult spell_RF5_BA_FIRE(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_blind msg;
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 
     if (m_ptr->r_idx == MON_ROLENTO) {
         msg.blind = _("%sが何かを投げた。", "%^s throws something.");

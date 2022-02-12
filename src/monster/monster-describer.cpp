@@ -50,7 +50,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     bool pron = (m_ptr && ((seen && (mode & MD_PRON_VISIBLE)) || (!seen && (mode & MD_PRON_HIDDEN))));
 
     /* First, try using pronouns, or describing hidden monsters */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!seen || pron) {
         int kind = 0x00;
         if (r_ptr->flags1 & (RF1_FEMALE))
@@ -249,8 +249,8 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
  */
 void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     GAME_TEXT m_name[MAX_NLEN];
 

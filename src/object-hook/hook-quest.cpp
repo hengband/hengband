@@ -56,7 +56,7 @@ bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
     if (a_idx == 0)
         return false;
 
-    artifact_type *a_ptr = &a_info[a_idx];
+    auto *a_ptr = &a_info[a_idx];
     if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))
         return false;
 

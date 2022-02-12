@@ -84,8 +84,8 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 {
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     bool p_can_enter = player_can_enter(player_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
     bool stormbringer = false;
     if (!floor_ptr->dun_level && !player_ptr->wild_mode && ((x == 0) || (x == MAX_WID - 1) || (y == 0) || (y == MAX_HGT - 1))) {
@@ -152,13 +152,13 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     if (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
         stormbringer = true;
 
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &f_info[g_ptr->feat];
     bool p_can_kill_walls = has_kill_wall(player_ptr) && f_ptr->flags.has(FloorFeatureType::HURT_DISI) && (!p_can_enter || f_ptr->flags.has_not(FloorFeatureType::LOS)) && f_ptr->flags.has_not(FloorFeatureType::PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = true;
     bool do_past = false;
     if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
         if (!is_hostile(m_ptr) && !(player_ptr->confused || player_ptr->hallucinated || !m_ptr->ml || is_stunned || (player_ptr->muta.has(PlayerMutationType::BERS_RAGE) && is_shero(player_ptr))) && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {

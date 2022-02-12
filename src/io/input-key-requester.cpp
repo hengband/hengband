@@ -64,7 +64,7 @@ static char inkey_from_menu(PlayerType *player_ptr)
     prt("", 0, 0);
     screen_save();
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         int i;
         char sub_cmd;
@@ -338,7 +338,7 @@ void request_command(PlayerType *player_ptr, int shopping)
 #endif
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 

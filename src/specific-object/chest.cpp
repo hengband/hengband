@@ -64,8 +64,8 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     ObjectType forge;
     ObjectType *q_ptr;
 
-    floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
-    ObjectType *o_ptr = &floor_ptr->o_list[o_idx];
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto *o_ptr = &floor_ptr->o_list[o_idx];
 
     /* Small chests often hold "gold" */
     small = (o_ptr->sval < SV_CHEST_MIN_LARGE);
@@ -157,7 +157,7 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
     int i;
 
-    ObjectType *o_ptr = &this->player_ptr->current_floor_ptr->o_list[o_idx];
+    auto *o_ptr = &this->player_ptr->current_floor_ptr->o_list[o_idx];
 
     int mon_level = o_ptr->xtra3;
 

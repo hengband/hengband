@@ -24,7 +24,7 @@
  */
 bool common_saving_throw_charm(PlayerType *player_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     if (player_ptr->current_floor_ptr->inside_arena)
         return true;
@@ -59,7 +59,7 @@ bool common_saving_throw_charm(PlayerType *player_ptr, HIT_POINT pow, monster_ty
  */
 bool common_saving_throw_control(PlayerType *player_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     if (player_ptr->current_floor_ptr->inside_arena)
         return true;

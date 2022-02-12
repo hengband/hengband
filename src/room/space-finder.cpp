@@ -34,7 +34,7 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
  */
 static void set_floor(PlayerType *player_ptr, POSITION x, POSITION y)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return;
 
@@ -62,7 +62,7 @@ static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1
     bool new_is_floor;
     int count = 0;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     old_is_floor = get_is_floor(floor_ptr, x1 - 1, y1);
 
     for (POSITION x = x1; x <= x2; x++) {

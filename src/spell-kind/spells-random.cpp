@@ -98,7 +98,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
 {
     BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     bool is_first_curse = true;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (is_first_curse || (one_in_(3) && !stop_ty)) {
         is_first_curse = false;
         switch (randint1(34)) {
@@ -245,7 +245,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
     else if (type > SUMMON_MIMIC)
         type = SUMMON_MIMIC;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     switch (randint1(spell) + randint1(8) + 1) {
     case 1:
     case 2:

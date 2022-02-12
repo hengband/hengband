@@ -29,7 +29,7 @@
  */
 static bool update_view_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g1_c_ptr;
     grid_type *g2_c_ptr;
     g1_c_ptr = &floor_ptr->grid_array[y1][x1];
@@ -108,7 +108,7 @@ void update_view(PlayerType *player_ptr)
 
     int full, over;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     POSITION y_max = floor_ptr->height - 1;
     POSITION x_max = floor_ptr->width - 1;
 

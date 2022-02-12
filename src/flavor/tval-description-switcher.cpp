@@ -20,7 +20,7 @@
 
 static void describe_monster_ball(flavor_type *flavor_ptr)
 {
-    monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    auto *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
     if (!flavor_ptr->known)
         return;
 
@@ -46,7 +46,7 @@ static void describe_monster_ball(flavor_type *flavor_ptr)
 
 static void describe_statue(flavor_type *flavor_ptr)
 {
-    monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    auto *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
 #ifdef JP
     flavor_ptr->modstr = r_ptr->name.c_str();
 #else
@@ -61,7 +61,7 @@ static void describe_statue(flavor_type *flavor_ptr)
 
 static void describe_corpse(flavor_type *flavor_ptr)
 {
-    monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    auto *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
     flavor_ptr->modstr = r_ptr->name.c_str();
 #ifdef JP
     flavor_ptr->basenm = "#%";

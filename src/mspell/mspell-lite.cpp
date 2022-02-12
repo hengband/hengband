@@ -79,7 +79,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->y_br_lite = msa_ptr->y;
     msa_ptr->x_br_lite = msa_ptr->x;
     if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
-        feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
+        auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
         if (f_ptr->flags.has_not(FloorFeatureType::LOS) && f_ptr->flags.has(FloorFeatureType::PROJECT) && one_in_(2))
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FloorFeatureType::LOS, los))
@@ -94,7 +94,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
 
 static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
 {
-    feature_type *f_ptr = &f_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
+    auto *f_ptr = &f_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
     if (f_ptr->flags.has(FloorFeatureType::PROJECT))
         return;
 

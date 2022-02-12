@@ -137,7 +137,7 @@ PRICE object_value(const ObjectType *o_ptr)
  */
 PRICE object_value_real(const ObjectType *o_ptr)
 {
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &k_info[o_ptr->k_idx];
 
     if (!k_info[o_ptr->k_idx].cost)
         return (0L);
@@ -145,7 +145,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
     PRICE value = k_info[o_ptr->k_idx].cost;
     auto flgs = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = &a_info[o_ptr->name1];
+        auto *a_ptr = &a_info[o_ptr->name1];
         if (!a_ptr->cost)
             return (0L);
 

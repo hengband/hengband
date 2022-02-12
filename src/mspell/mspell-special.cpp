@@ -44,8 +44,8 @@
  */
 static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     HIT_POINT dummy_hp, dummy_maxhp;
     POSITION dummy_y = m_ptr->fy;
     POSITION dummy_x = m_ptr->fx;
@@ -117,7 +117,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
     int count = 0, k;
     int num = 1 + randint1(3);
     BIT_FLAGS mode = 0L;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = TARGET_TYPE == MONSTER_TO_MONSTER;
     bool mon_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -152,8 +152,8 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
 static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     mspell_cast_msg_simple msg;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     bool monster_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -235,9 +235,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
  */
 MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
 
     switch (m_ptr->r_idx) {
     case MON_OHMU:

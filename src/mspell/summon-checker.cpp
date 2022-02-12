@@ -23,7 +23,7 @@
  */
 bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     bool is_match = false;
     switch (summon_specific_type) {
     case SUMMON_ANT:

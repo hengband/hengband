@@ -111,7 +111,7 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->name1 && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
-        artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        auto *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         if (a_ptr->name.find("『", 0, 2) != 0)
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
@@ -196,7 +196,7 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
         return;
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        auto *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
         if (a_ptr->name.find("『", 0, 2) == 0)
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
 
@@ -291,7 +291,7 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        auto *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
         return;

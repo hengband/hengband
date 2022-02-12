@@ -101,7 +101,7 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_
 {
     auto list = std::vector<PARAMETER_VALUE>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
-        ObjectType *o_ptr = &st_ptr->stock[i];
+        auto *o_ptr = &st_ptr->stock[i];
         if (o_ptr == j_ptr)
             continue;
         if (o_ptr->k_idx != j_ptr->k_idx)

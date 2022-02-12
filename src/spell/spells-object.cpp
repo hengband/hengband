@@ -324,7 +324,7 @@ void brand_bolts(PlayerType *player_ptr)
 {
     /* Use the first acceptable bolts */
     for (int i = 0; i < INVEN_PACK; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
 
         /* Skip non-bolts */
         if (o_ptr->tval != ItemKindType::BOLT)

@@ -103,7 +103,7 @@ static bool check_store_temple(const ObjectType *o_ptr)
         return true;
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE: {
-        monster_race *r_ptr = &r_info[o_ptr->pval];
+        auto *r_ptr = &r_info[o_ptr->pval];
         if (!(r_ptr->flags3 & RF3_EVIL))
             if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != nullptr))
                 return true;

@@ -216,7 +216,7 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
     char where[32];
     strcpy(where, _("装", "E "));
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 
@@ -237,7 +237,7 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
     char where[32];
     strcpy(where, _("持", "I "));
     for (int i = 0; i < INVEN_PACK; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 
@@ -260,7 +260,7 @@ static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType
     char where[32];
     strcpy(where, _("家", "H "));
     for (int i = 0; i < store_ptr->stock_num; i++) {
-        ObjectType *o_ptr = &store_ptr->stock[i];
+        auto *o_ptr = &store_ptr->stock[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 

@@ -76,7 +76,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     }
 
     ObjectType forge;
-    ObjectType *q_ptr = &forge;
+    auto *q_ptr = &forge;
     if (player_ptr->is_dead) {
         return false;
     }
@@ -143,7 +143,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     }
 
     int tm_idx = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (in_bounds(floor_ptr, ty, tx))
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
 
@@ -219,7 +219,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
  */
 void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand])
         return;
 
@@ -290,8 +290,8 @@ bool hayagake(PlayerType *player_ptr)
         return true;
     }
 
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *f_ptr = &f_info[g_ptr->feat];
 
     if (f_ptr->flags.has_not(FloorFeatureType::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FloorFeatureType::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));

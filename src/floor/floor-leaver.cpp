@@ -47,7 +47,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
     if (!player_ptr->riding)
         return;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     if (m_ptr->parent_m_idx) {
         player_ptr->riding = 0;
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
@@ -82,7 +82,7 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
         return;
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr))
             continue;
 
@@ -98,7 +98,7 @@ static void record_pet_diary(PlayerType *player_ptr)
         return;
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         GAME_TEXT m_name[MAX_NLEN];
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (player_ptr->riding == i))
             continue;
@@ -121,7 +121,7 @@ static void preserve_pet(PlayerType *player_ptr)
     sweep_preserving_pet(player_ptr);
     record_pet_diary(player_ptr);
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if ((m_ptr->parent_m_idx == 0) || (player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx != 0))
             continue;
 
@@ -148,8 +148,8 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
     int num = 0;
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-            feature_type *f_ptr = &f_info[g_ptr->feat];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *f_ptr = &f_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
                 if (f_ptr->flags.has_all_of({ FloorFeatureType::LESS, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
@@ -209,7 +209,7 @@ static void get_out_monster(PlayerType *player_ptr)
     POSITION dis = 1;
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
     if (m_idx == 0)
         return;
@@ -252,7 +252,7 @@ static void preserve_info(PlayerType *player_ptr)
 
     for (DUNGEON_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         monster_race *r_ptr;
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (quest_r_idx != m_ptr->r_idx))
             continue;
 
@@ -264,7 +264,7 @@ static void preserve_info(PlayerType *player_ptr)
     }
 
     for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
-        ObjectType *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid())
             continue;
 
@@ -279,7 +279,7 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
         return;
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    feature_type *f_ptr = &f_info[(*g_ptr)->feat];
+    auto *f_ptr = &f_info[(*g_ptr)->feat];
     if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special))
         new_floor_id = (*g_ptr)->special;
 

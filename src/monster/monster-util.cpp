@@ -55,7 +55,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
 {
     DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
     dungeon_type *d_ptr = &d_info[d_idx];
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx)
@@ -75,7 +75,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return false;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
         if (r_ptr->level > floor_ptr->dun_level)
             return false;
@@ -288,7 +288,7 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
  */
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
+    auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
     if (f_ptr->flags.has(FloorFeatureType::WATER))
         return f_ptr->flags.has(FloorFeatureType::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
 

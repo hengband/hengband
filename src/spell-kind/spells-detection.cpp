@@ -173,7 +173,7 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
     bool detect = false;
     POSITION y, x;
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
 
         if (!o_ptr->is_valid())
             continue;
@@ -219,7 +219,7 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
 
     bool detect = false;
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
 
         if (!o_ptr->is_valid())
             continue;
@@ -274,7 +274,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
     ItemKindType tv;
     bool detect = false;
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        ObjectType *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
 
         if (!o_ptr->is_valid())
             continue;
@@ -319,8 +319,8 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -358,8 +358,8 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
 
         if (!monster_is_valid(m_ptr))
             continue;
@@ -403,8 +403,8 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -448,7 +448,7 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -488,8 +488,8 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -531,8 +531,8 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -576,8 +576,8 @@ bool detect_monsters_xxx(PlayerType *player_ptr, POSITION range, uint32_t match_
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
 

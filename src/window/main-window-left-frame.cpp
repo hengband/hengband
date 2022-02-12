@@ -183,7 +183,7 @@ void print_depth(PlayerType *player_ptr)
     TERM_LEN col_depth = wid + COL_DEPTH;
     TERM_LEN row_depth = hgt + ROW_DEPTH;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level) {
         strcpy(depths, _("地上", "Surf."));
         c_prt(attr, format("%7s", depths), row_depth, col_depth);

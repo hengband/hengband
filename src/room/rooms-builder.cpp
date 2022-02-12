@@ -100,7 +100,7 @@ void build_cavern(PlayerType *player_ptr)
 {
     bool light = false;
     bool done = false;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
         light = true;
 
@@ -130,7 +130,7 @@ void build_lake(PlayerType *player_ptr, int type)
         return;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int xsize = floor_ptr->width - 1;
     int ysize = floor_ptr->height - 1;
     int x0 = xsize / 2;
@@ -175,7 +175,7 @@ void build_room(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, P
 
     POSITION xsize = x2 - x1;
     POSITION ysize = y2 - y1;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i <= xsize; i++) {
         place_bold(player_ptr, y1, x1 + i, GB_OUTER_NOPERM);
         floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
@@ -351,7 +351,7 @@ void build_recursive_room(PlayerType *player_ptr, POSITION x1, POSITION y1, POSI
  */
 void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return;
 
