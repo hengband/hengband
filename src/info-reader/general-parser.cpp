@@ -41,7 +41,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, std::function<errr
             continue;
 
         if (buf[1] != ':')
-            return (PARSE_ERROR_GENERIC);
+            return PARSE_ERROR_GENERIC;
 
         if (buf[0] == 'V') {
             continue;
@@ -56,7 +56,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, std::function<errr
         }
 
         if ((err = parse_info_txt_line(buf, head)) != 0)
-            return (err);
+            return err;
     }
 
     return 0;
@@ -213,7 +213,7 @@ parse_error_type parse_line_building(char *buf)
             break;
         }
 
-        return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     case 'A': {
         if (tokenize(s + 2, 8, zz, 0) >= 7) {
@@ -227,7 +227,7 @@ parse_error_type parse_line_building(char *buf)
             break;
         }
 
-        return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     case 'C': {
         auto pct_max = PLAYER_CLASS_TYPE_MAX;
@@ -259,7 +259,7 @@ parse_error_type parse_line_building(char *buf)
         break;
     }
     default: {
-        return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
     }
 

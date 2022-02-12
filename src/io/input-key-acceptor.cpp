@@ -115,17 +115,17 @@ static char inkey_aux(void)
         parse_macro = false;
 
     if (ch == 30)
-        return (ch);
+        return ch;
     if (parse_macro)
-        return (ch);
+        return ch;
     if (parse_under)
-        return (ch);
+        return ch;
 
     buf[p++] = ch;
     buf[p] = '\0';
     k = macro_find_check(buf);
     if (k < 0)
-        return (ch);
+        return ch;
 
     while (true) {
         k = macro_find_maybe(buf);
@@ -154,7 +154,7 @@ static char inkey_aux(void)
         }
 
         (void)term_inkey(&ch, true, true);
-        return (ch);
+        return ch;
     }
 
     concptr pat = macro__pat[k].c_str();
@@ -193,7 +193,7 @@ char inkey(bool do_all_term_refresh)
     if (inkey_next && *inkey_next && !inkey_xtra) {
         ch = *inkey_next++;
         inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
-        return (ch);
+        return ch;
     }
 
     inkey_next = nullptr;
@@ -281,7 +281,7 @@ char inkey(bool do_all_term_refresh)
     term_activate(old);
     term_set_cursor(v);
     inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
-    return (ch);
+    return ch;
 }
 
 /*

@@ -168,7 +168,7 @@ static char inkey_from_menu(PlayerType *player_ptr)
     if (!inkey_next)
         inkey_next = "";
 
-    return (cmd);
+    return cmd;
 }
 
 /*

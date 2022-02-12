@@ -179,7 +179,7 @@ errr analyze_wilderness(void)
 
     if ((wild_x_size > w_ptr->max_wild_x) || (wild_y_size > w_ptr->max_wild_y)) {
         load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
-        return (23);
+        return 23;
     }
 
     for (int i = 0; i < wild_x_size; i++)

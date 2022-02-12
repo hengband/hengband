@@ -299,7 +299,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
 
             player_ptr->update |= (PU_BONUS);
             player_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
-            return (j);
+            return j;
         }
     }
 
