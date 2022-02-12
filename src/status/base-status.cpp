@@ -153,7 +153,7 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
         player_ptr->update |= (PU_BONUS);
     }
 
-    return (res);
+    return res;
 }
 
 /*!

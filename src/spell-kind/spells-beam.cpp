@@ -14,7 +14,7 @@
 bool wall_to_mud(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    return (project_hook(player_ptr, AttributeType::KILL_WALL, dir, dam, flg));
+    return project_hook(player_ptr, AttributeType::KILL_WALL, dir, dam, flg);
 }
 
 /*!
@@ -26,7 +26,7 @@ bool wall_to_mud(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 bool wizard_lock(PlayerType *player_ptr, DIRECTION dir)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    return (project_hook(player_ptr, AttributeType::JAM_DOOR, dir, 20 + randint1(30), flg));
+    return project_hook(player_ptr, AttributeType::JAM_DOOR, dir, 20 + randint1(30), flg);
 }
 
 /*!
@@ -38,7 +38,7 @@ bool wizard_lock(PlayerType *player_ptr, DIRECTION dir)
 bool destroy_door(PlayerType *player_ptr, DIRECTION dir)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
-    return (project_hook(player_ptr, AttributeType::KILL_DOOR, dir, 0, flg));
+    return project_hook(player_ptr, AttributeType::KILL_DOOR, dir, 0, flg);
 }
 
 /*!
@@ -50,5 +50,5 @@ bool destroy_door(PlayerType *player_ptr, DIRECTION dir)
 bool disarm_trap(PlayerType *player_ptr, DIRECTION dir)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
-    return (project_hook(player_ptr, AttributeType::KILL_TRAP, dir, 0, flg));
+    return project_hook(player_ptr, AttributeType::KILL_TRAP, dir, 0, flg);
 }

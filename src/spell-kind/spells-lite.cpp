@@ -454,5 +454,5 @@ bool unlite_area(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
 bool lite_line(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
-    return (project_hook(player_ptr, AttributeType::LITE_WEAK, dir, dam, flg));
+    return project_hook(player_ptr, AttributeType::LITE_WEAK, dir, dam, flg);
 }

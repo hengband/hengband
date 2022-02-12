@@ -43,7 +43,7 @@ int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
                 stack_force_costs = old_stack_force_costs;
             }
 
-            return (slot);
+            return slot;
         }
     }
 

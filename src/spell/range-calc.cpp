@@ -32,7 +32,7 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
         return distance(y, x, y2, x2);
 
     nd = ((nd) ? ((py * ny + px * nx) / nd) : 0);
-    return ((nd >= 0) ? nd : 0 - nd);
+    return nd >= 0 ? nd : 0 - nd;
 }
 
 /*

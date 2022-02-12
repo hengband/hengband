@@ -32,7 +32,7 @@ static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags1 & RF1_QUESTOR))
-        return (r_idx);
+        return r_idx;
 
     DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);

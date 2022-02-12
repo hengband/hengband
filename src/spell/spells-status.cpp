@@ -66,7 +66,7 @@
 bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_HEAL, dir, dam, flg));
+    return project_hook(player_ptr, AttributeType::OLD_HEAL, dir, dam, flg);
 }
 
 /*!
@@ -79,7 +79,7 @@ bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_SPEED, dir, power, flg));
+    return project_hook(player_ptr, AttributeType::OLD_SPEED, dir, power, flg);
 }
 
 /*!
@@ -92,7 +92,7 @@ bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_SLOW, dir, power, flg));
+    return project_hook(player_ptr, AttributeType::OLD_SLOW, dir, power, flg);
 }
 
 /*!
@@ -105,7 +105,7 @@ bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_SLEEP, dir, power, flg));
+    return project_hook(player_ptr, AttributeType::OLD_SLEEP, dir, power, flg);
 }
 
 /*!
@@ -117,7 +117,7 @@ bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power)
  */
 bool stasis_monster(PlayerType *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(player_ptr, AttributeType::STASIS, dir, player_ptr->lev * 2, 0));
+    return fire_ball_hide(player_ptr, AttributeType::STASIS, dir, player_ptr->lev * 2, 0);
 }
 
 /*!
@@ -129,7 +129,7 @@ bool stasis_monster(PlayerType *player_ptr, DIRECTION dir)
  */
 bool stasis_evil(PlayerType *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(player_ptr, AttributeType::STASIS_EVIL, dir, player_ptr->lev * 2, 0));
+    return fire_ball_hide(player_ptr, AttributeType::STASIS_EVIL, dir, player_ptr->lev * 2, 0);
 }
 
 /*!
@@ -142,7 +142,7 @@ bool stasis_evil(PlayerType *player_ptr, DIRECTION dir)
 bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_CONF, dir, plev, flg));
+    return project_hook(player_ptr, AttributeType::OLD_CONF, dir, plev, flg);
 }
 
 /*!
@@ -155,7 +155,7 @@ bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 bool stun_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::STUN, dir, plev, flg));
+    return project_hook(player_ptr, AttributeType::STUN, dir, plev, flg);
 }
 
 /*!
@@ -171,7 +171,7 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
     bool tester = (project_hook(player_ptr, AttributeType::OLD_POLY, dir, power, flg));
     if (tester)
         chg_virtue(player_ptr, V_CHANCE, 1);
-    return (tester);
+    return tester;
 }
 
 /*!
@@ -183,7 +183,7 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 bool clone_monster(PlayerType *player_ptr, DIRECTION dir)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_CLONE, dir, 0, flg));
+    return project_hook(player_ptr, AttributeType::OLD_CLONE, dir, 0, flg);
 }
 
 /*!
@@ -196,7 +196,7 @@ bool clone_monster(PlayerType *player_ptr, DIRECTION dir)
 bool fear_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::TURN_ALL, dir, plev, flg));
+    return project_hook(player_ptr, AttributeType::TURN_ALL, dir, plev, flg);
 }
 
 bool time_walk(PlayerType *player_ptr)
