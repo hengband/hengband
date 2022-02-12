@@ -1285,7 +1285,7 @@ errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 
     /* Paranoia -- illegal char */
     if (!c)
-        return (-2);
+        return -2;
 
     /* Queue it for later */
     term_queue_char(x, y, a, c, 0, 0);
@@ -1318,7 +1318,7 @@ errr term_addch(TERM_COLOR a, char c)
 
     /* Paranoia -- no illegal chars */
     if (!c)
-        return (-2);
+        return -2;
 
     /* Queue the given character for display */
     term_queue_char(Term->scr->cx, Term->scr->cy, a, c, 0, 0);
@@ -1356,7 +1356,7 @@ errr term_add_bigch(TERM_COLOR a, char c)
 
     /* Paranoia -- no illegal chars */
     if (!c)
-        return (-2);
+        return -2;
 
     /* Queue the given character for display */
     term_queue_bigchar(Term->scr->cx, Term->scr->cy, a, c, 0, 0);
