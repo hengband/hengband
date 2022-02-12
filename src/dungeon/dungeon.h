@@ -6,7 +6,9 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
@@ -74,12 +76,12 @@ struct dungeon_type {
     BIT_FLAGS mflags7{};
     BIT_FLAGS mflags8{};
     BIT_FLAGS mflags9{};
-    BIT_FLAGS mflagsr{};
 
     EnumClassFlagGroup<MonsterAbilityType> mon_ability_flags;
     EnumClassFlagGroup<MonsterBehaviorType> mon_behavior_flags;
     EnumClassFlagGroup<MonsterVisualType> mon_visual_flags;
     EnumClassFlagGroup<MonsterKindType> mon_kind_flags;
+    EnumClassFlagGroup<MonsterResistanceType> mon_resistance_flags;
 
     char r_char[5]{}; /* Monster race allowed */
     KIND_OBJECT_IDX final_object{}; /* The object you'll find at the bottom */
