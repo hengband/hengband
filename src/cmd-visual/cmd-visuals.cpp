@@ -336,7 +336,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static IDX lighting_level = F_LIT_STANDARD;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                feature_type *f_ptr = &f_info[f];
+                auto *f_ptr = &f_info[f];
                 int c;
                 IDX t;
 

@@ -418,7 +418,7 @@ static void display_dungeon(PlayerType *player_ptr)
             TERM_COLOR a;
             SYMBOL_CODE c;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                feature_type *f_ptr = &f_info[feat_none];
+                auto *f_ptr = &f_info[feat_none];
                 a = f_ptr->x_attr[F_LIT_STANDARD];
                 c = f_ptr->x_char[F_LIT_STANDARD];
                 term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);

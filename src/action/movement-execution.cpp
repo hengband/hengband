@@ -152,7 +152,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     if (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
         stormbringer = true;
 
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &f_info[g_ptr->feat];
     bool p_can_kill_walls = has_kill_wall(player_ptr) && f_ptr->flags.has(FloorFeatureType::HURT_DISI) && (!p_can_enter || f_ptr->flags.has_not(FloorFeatureType::LOS)) && f_ptr->flags.has_not(FloorFeatureType::PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = true;

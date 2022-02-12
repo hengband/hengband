@@ -69,7 +69,7 @@ static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION
         return false;
 
     int16_t feat = g_ptr->get_feat_mimic();
-    feature_type *f_ptr = &f_info[feat];
+    auto *f_ptr = &f_info[feat];
     if (!player_can_enter(player_ptr, feat, 0))
         return f_ptr->flags.has_not(FloorFeatureType::DOOR);
 

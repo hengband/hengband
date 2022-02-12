@@ -126,7 +126,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[ny][nx];
     grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &f_info[g_ptr->feat];
     feature_type *of_ptr = &f_info[oc_ptr->feat];
 
     if (!(mpe_mode & MPE_STAYING)) {
@@ -274,7 +274,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
  */
 bool trap_can_be_ignored(PlayerType *player_ptr, FEAT_IDX feat)
 {
-    feature_type *f_ptr = &f_info[feat];
+    auto *f_ptr = &f_info[feat];
     if (f_ptr->flags.has_not(FloorFeatureType::TRAP))
         return true;
 

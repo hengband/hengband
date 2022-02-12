@@ -149,7 +149,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
-            feature_type *f_ptr = &f_info[g_ptr->feat];
+            auto *f_ptr = &f_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
                 if (f_ptr->flags.has_all_of({ FloorFeatureType::LESS, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
@@ -279,7 +279,7 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
         return;
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    feature_type *f_ptr = &f_info[(*g_ptr)->feat];
+    auto *f_ptr = &f_info[(*g_ptr)->feat];
     if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special))
         new_floor_id = (*g_ptr)->special;
 

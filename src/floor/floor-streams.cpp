@@ -207,7 +207,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
     }
 
     if (feat1) {
-        feature_type *f_ptr = &f_info[feat1];
+        auto *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
         if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FloorFeatureType::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FloorFeatureType::WATER))

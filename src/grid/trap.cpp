@@ -389,7 +389,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
     int i, num, dam;
     POSITION x = player_ptr->x, y = player_ptr->y;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &f_info[g_ptr->feat];
     TrapType trap_feat_type = f_ptr->flags.has(FloorFeatureType::TRAP) ? i2enum<TrapType>(f_ptr->subtype) : TrapType::NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
