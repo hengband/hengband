@@ -174,7 +174,7 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 void quest_discovery(QuestId q_idx)
 {
-    quest_type *q_ptr = &quest[enum2i(q_idx)];
+    auto *q_ptr = &quest[enum2i(q_idx)];
     auto *r_ptr = &r_info[q_ptr->r_idx];
     MONSTER_NUMBER q_num = q_ptr->max_num;
 
