@@ -39,6 +39,7 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
@@ -77,15 +78,15 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     disturb(player_ptr, true, true);
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
-    if (quest_num > 0) {
-        r_info[quest[quest_num].r_idx].flags1 |= RF1_QUESTOR;
+    if (inside_quest(quest_num)) {
+        r_info[quest[enum2i(quest_num)].r_idx].flags1 |= RF1_QUESTOR;
     }
 
     if (player_ptr->max_plv < player_ptr->lev) {
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !floor_ptr->inside_quest) {
+    if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !inside_quest(floor_ptr->quest_number)) {
         max_dlv[player_ptr->dungeon_idx] = floor_ptr->dun_level;
         if (record_maxdepth)
             exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor_ptr->dun_level, nullptr);
@@ -108,8 +109,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     handle_stuff(player_ptr);
     term_fresh();
 
-    if ((quest_num > 0)
-        && (quest_type::is_fixed(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
+    if (inside_quest(quest_num) && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[enum2i(quest_num)].flags & QUEST_FLAG_PRESET))))
         do_cmd_feeling(player_ptr);
 
     if (player_ptr->phase_out) {
@@ -128,9 +128,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     if (!player_ptr->playing || player_ptr->is_dead)
         return;
 
-    if (!floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
+    if (!inside_quest(floor_ptr->quest_number) && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
         quest_discovery(random_quest_number(player_ptr, floor_ptr->dun_level));
-        floor_ptr->inside_quest = random_quest_number(player_ptr, floor_ptr->dun_level);
+        floor_ptr->quest_number = random_quest_number(player_ptr, floor_ptr->dun_level);
     }
     if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian) {
         if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
@@ -217,8 +217,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
             wild_regen--;
     }
 
-    if ((quest_num > 0) && !(r_info[quest[quest_num].r_idx].flags1 & RF1_UNIQUE)) {
-        r_info[quest[quest_num].r_idx].flags1 &= ~RF1_QUESTOR;
+    if ((inside_quest(quest_num)) && none_bits(r_info[quest[enum2i(quest_num)].r_idx].flags1, RF1_UNIQUE)) {
+        r_info[quest[enum2i(quest_num)].r_idx].flags1 &= ~RF1_QUESTOR;
     }
 
     if (player_ptr->playing && !player_ptr->is_dead) {

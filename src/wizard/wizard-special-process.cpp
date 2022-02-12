@@ -490,7 +490,6 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-
     cave_set_feat(player_ptr, y, x, f_val1);
     g_ptr->mimic = (int16_t)f_val2;
     feature_type *f_ptr;
@@ -504,7 +503,6 @@ void wiz_create_feature(PlayerType *player_ptr)
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     player_ptr->update |= PU_FLOW;
-
 }
 
 /*
@@ -827,8 +825,8 @@ void cheat_death(PlayerType *player_ptr)
     floor_ptr->dun_level = 0;
     floor_ptr->inside_arena = false;
     player_ptr->phase_out = false;
-    leaving_quest = 0;
-    floor_ptr->inside_quest = 0;
+    leaving_quest = QuestId::NONE;
+    floor_ptr->quest_number = QuestId::NONE;
     if (player_ptr->dungeon_idx)
         player_ptr->recall_dungeon = player_ptr->dungeon_idx;
     player_ptr->dungeon_idx = 0;

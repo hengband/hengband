@@ -112,9 +112,9 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_quest(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
-    std::vector<QUEST_IDX> quest_num(max_q_idx);
+    std::vector<int16_t> quest_num(max_q_idx);
 
-    std::iota(quest_num.begin(), quest_num.end(), static_cast<QUEST_IDX>(0));
+    std::iota(quest_num.begin(), quest_num.end(), enum2i(QuestId::NONE));
     int dummy;
     ang_sort(player_ptr, quest_num.data(), &dummy, quest_num.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 

@@ -1,8 +1,8 @@
 ﻿#include "grid/stair.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "game-option/birth-options.h"
 #include "floor/cave.h"
+#include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
@@ -35,7 +35,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
     if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)
         down_stairs = false;
 
-    if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1))
+    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && (floor_ptr->dun_level > 1))
         down_stairs = false;
 
     if (down_stairs && up_stairs) {

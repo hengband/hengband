@@ -335,7 +335,7 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     floor_ptr->width = panels_x * SCREEN_WID;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
-    if (floor_ptr->inside_quest) {
+    if (inside_quest(floor_ptr->quest_number)) {
         POSITION py = atoi(zz[0]);
         POSITION px = atoi(zz[1]);
         player_ptr->y = py;
@@ -363,7 +363,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
     if (zz[0][0] == 'T') {
         max_towns = static_cast<int16_t>(atoi(zz[1]));
     } else if (zz[0][0] == 'Q') {
-        max_q_idx = (QUEST_IDX)atoi(zz[1]);
+        max_q_idx = (int16_t)atoi(zz[1]);
     } else if (zz[0][0] == 'O') {
         w_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'M') {

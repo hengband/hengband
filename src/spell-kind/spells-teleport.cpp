@@ -9,6 +9,7 @@
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
@@ -32,7 +33,6 @@
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -157,7 +157,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
                 continue;
             if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode))
                 continue;
-            if (!(player_ptr->current_floor_ptr->inside_quest || player_ptr->current_floor_ptr->inside_arena))
+            if (!(inside_quest(player_ptr->current_floor_ptr->quest_number) || player_ptr->current_floor_ptr->inside_arena))
                 if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_icky())
                     continue;
 
@@ -475,8 +475,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
 
         bool is_anywhere = w_ptr->wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
-        is_anywhere
-            &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
+        is_anywhere &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
         if (is_anywhere)
             break;
 
@@ -559,8 +558,7 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
 
     player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
 
-    if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > plev / 2 + 10)
-        || (!randint0(plev / 10 + 10))) {
+    if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > plev / 2 + 10) || (!randint0(plev / 10 + 10))) {
         player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
         teleport_player(player_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
         return false;

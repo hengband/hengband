@@ -15,11 +15,12 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/floor-util.h"
+#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -37,7 +38,6 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -179,8 +179,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
                 set_superstealth(player_ptr, true);
         }
 
-        if ((player_ptr->action == ACTION_HAYAGAKE)
-            && (f_ptr->flags.has_not(FloorFeatureType::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FloorFeatureType::DEEP)))) {
+        if ((player_ptr->action == ACTION_HAYAGAKE) && (f_ptr->flags.has_not(FloorFeatureType::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FloorFeatureType::DEEP)))) {
             msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
             set_action(player_ptr, ACTION_NONE);
         }
@@ -230,13 +229,13 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (f_ptr->flags.has(FloorFeatureType::QUEST_EXIT)) {
-        if (quest[floor_ptr->inside_quest].type == QuestKindType::FIND_EXIT)
-            complete_quest(player_ptr, floor_ptr->inside_quest);
+        if (quest[enum2i(floor_ptr->quest_number)].type == QuestKindType::FIND_EXIT)
+            complete_quest(player_ptr, floor_ptr->quest_number);
 
         leave_quest_check(player_ptr);
-        floor_ptr->inside_quest = g_ptr->special;
+        floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         floor_ptr->dun_level = 0;
-        if (!floor_ptr->inside_quest)
+        if (!inside_quest(floor_ptr->quest_number))
             player_ptr->word_recall = 0;
         player_ptr->oldpx = 0;
         player_ptr->oldpy = 0;

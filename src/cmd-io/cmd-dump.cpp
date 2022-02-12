@@ -208,7 +208,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    if (player_ptr->current_floor_ptr->inside_quest && !random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level)) {
+    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) {
         msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
         return;
     }

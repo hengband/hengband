@@ -254,7 +254,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
  */
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 {
-    if ((player_ptr->current_floor_ptr->dun_level > 0) || (player_ptr->current_floor_ptr->inside_quest > 0))
+    if ((player_ptr->current_floor_ptr->dun_level > 0) || (inside_quest(player_ptr->current_floor_ptr->quest_number)))
         return (monsterrace_hook_type)mon_hook_dungeon;
 
     switch (wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].terrain) {
@@ -351,7 +351,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
                 continue;
 
             // クエスト内でRES_ALLの生成を禁止する (殲滅系クエストの詰み防止)
-            if (player_ptr->current_floor_ptr->inside_quest && any_bits(r_ptr->flagsr, RFR_RES_ALL))
+            if (inside_quest(player_ptr->current_floor_ptr->quest_number) && any_bits(r_ptr->flagsr, RFR_RES_ALL))
                 continue;
         }
 
@@ -365,7 +365,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = floor_ptr->inside_quest && !quest_type::is_fixed(floor_ptr->inside_quest);
+            const bool in_random_quest = inside_quest(floor_ptr->quest_number) && !quest_type::is_fixed(floor_ptr->quest_number);
             const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
 
             if (cond && !restrict_monster_to_dungeon(player_ptr, entry->index)) {

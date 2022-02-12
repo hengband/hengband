@@ -169,7 +169,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
     w_ptr->character_dungeon = false;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
-    floor_ptr->inside_quest = 0;
+    floor_ptr->quest_number = QuestId::NONE;
     floor_ptr->inside_arena = false;
     player_ptr->phase_out = false;
     write_level = true;
@@ -222,7 +222,7 @@ static void reset_world_info(PlayerType *player_ptr)
 static void generate_wilderness(PlayerType *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && floor_ptr->inside_quest)
+    if ((floor_ptr->dun_level == 0) && inside_quest(floor_ptr->quest_number))
         return;
 
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);

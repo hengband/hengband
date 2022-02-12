@@ -111,7 +111,7 @@ void wr_player(PlayerType *player_ptr)
 
     wr_s16b(player_ptr->arena_number);
     wr_s16b(player_ptr->current_floor_ptr->inside_arena);
-    wr_s16b(player_ptr->current_floor_ptr->inside_quest);
+    wr_s16b(enum2i(player_ptr->current_floor_ptr->quest_number));
     wr_s16b(player_ptr->phase_out);
     wr_byte(player_ptr->exit_bldg);
     wr_byte(0); /* Unused */

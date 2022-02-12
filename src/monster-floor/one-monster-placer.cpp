@@ -144,23 +144,23 @@ static bool check_unique_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
 static bool check_quest_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (quest_number(player_ptr, floor_ptr->dun_level) == 0)
+    if (!inside_quest(quest_number(player_ptr, floor_ptr->dun_level)))
         return true;
 
-    int hoge = quest_number(player_ptr, floor_ptr->dun_level);
-    if ((quest[hoge].type != QuestKindType::KILL_LEVEL) && (quest[hoge].type != QuestKindType::RANDOM))
+    QuestId hoge = quest_number(player_ptr, floor_ptr->dun_level);
+    if ((quest[enum2i(hoge)].type != QuestKindType::KILL_LEVEL) && (quest[enum2i(hoge)].type != QuestKindType::RANDOM))
         return true;
 
-    if (r_idx != quest[hoge].r_idx)
+    if (r_idx != quest[enum2i(hoge)].r_idx)
         return true;
 
     int number_mon = 0;
     for (int i2 = 0; i2 < floor_ptr->width; ++i2)
         for (int j2 = 0; j2 < floor_ptr->height; j2++)
-            if ((floor_ptr->grid_array[j2][i2].m_idx > 0) && (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx))
+            if ((floor_ptr->grid_array[j2][i2].m_idx > 0) && (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[enum2i(hoge)].r_idx))
                 number_mon++;
 
-    if (number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
+    if (number_mon + quest[enum2i(hoge)].cur_num >= quest[enum2i(hoge)].max_num)
         return false;
 
     return true;

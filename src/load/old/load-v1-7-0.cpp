@@ -29,10 +29,10 @@ void set_exp_frac_old(PlayerType *player_ptr)
 
 void remove_water_cave(PlayerType *player_ptr)
 {
-    if (player_ptr->current_floor_ptr->inside_quest != OLD_QUEST_WATER_CAVE)
+    if (player_ptr->current_floor_ptr->quest_number != i2enum<QuestId>(OLD_QUEST_WATER_CAVE))
         return;
 
     player_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
     player_ptr->current_floor_ptr->dun_level = 1;
-    player_ptr->current_floor_ptr->inside_quest = 0;
+    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
 }

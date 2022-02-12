@@ -76,7 +76,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
     wr_byte(tmp8u);
     v_stamp = 0L;
     x_stamp = 0L;
- 
+
     wr_u32b(w_ptr->sf_system);
     wr_u32b(w_ptr->sf_when);
     wr_u16b(w_ptr->sf_lives);
@@ -135,7 +135,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
 
         bool is_quest_running = q_ptr->status == QuestStatusType::TAKEN;
         is_quest_running |= q_ptr->status == QuestStatusType::COMPLETED;
-        is_quest_running |= !quest_type::is_fixed(i);
+        is_quest_running |= !quest_type::is_fixed(i2enum<QuestId>(i));
         if (!is_quest_running)
             continue;
 

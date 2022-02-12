@@ -13,6 +13,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
@@ -43,7 +44,6 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -248,7 +248,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 {
     /* Prevent destruction of quest levels and town */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {
+    if ((inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
         return false;
     }
 

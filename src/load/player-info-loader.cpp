@@ -209,7 +209,7 @@ static void set_imitation(PlayerType *player_ptr)
 static void rd_phase_out(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->inside_arena = rd_s16b() != 0;
-    player_ptr->current_floor_ptr->inside_quest = rd_s16b();
+    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(rd_s16b());
     if (h_older_than(0, 3, 5))
         player_ptr->phase_out = false;
     else {

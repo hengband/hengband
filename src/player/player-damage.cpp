@@ -146,7 +146,8 @@ static bool acid_minus_ac(PlayerType *player_ptr)
  */
 HIT_POINT acid_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_acid(player_ptr);
     dam = dam * calc_acid_damage_rate(player_ptr) / 100;
     if (dam <= 0)
@@ -179,7 +180,8 @@ HIT_POINT acid_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool a
  */
 HIT_POINT elec_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_elec(player_ptr);
 
     dam = dam * calc_elec_damage_rate(player_ptr) / 100;
@@ -211,7 +213,8 @@ HIT_POINT elec_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool a
  */
 HIT_POINT fire_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_fire(player_ptr);
 
     /* Totally immune */
@@ -243,7 +246,8 @@ HIT_POINT fire_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool a
  */
 HIT_POINT cold_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura)
 {
-    int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
+    int inv = (dam < 30) ? 1 : (dam < 60) ? 2
+                                          : 3;
     bool double_resist = is_oppose_cold(player_ptr);
     if (has_immune_cold(player_ptr) || (dam <= 0))
         return 0;
@@ -366,7 +370,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, HIT_POINT damage, concptr 
             if (record_arena)
                 exe_write_diary(player_ptr, DIARY_ARENA, -1 - player_ptr->arena_number, m_name);
         } else {
-            QUEST_IDX q_idx = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+            QuestId q_idx = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
             bool seppuku = streq(hit_from, "Seppuku");
             bool winning_seppuku = w_ptr->total_winner && seppuku;
 
@@ -385,9 +389,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, HIT_POINT damage, concptr 
                 char dummy[1024];
 #ifdef JP
                 sprintf(dummy, "%s%s%s",
-                    !player_ptr->paralyzed     ? ""
-                        : player_ptr->free_act ? "彫像状態で"
-                                                 : "麻痺状態で",
+                    !player_ptr->paralyzed ? ""
+                    : player_ptr->free_act ? "彫像状態で"
+                                           : "麻痺状態で",
                     player_ptr->hallucinated ? "幻覚に歪んだ" : "", hit_from);
 #else
                 sprintf(dummy, "%s%s", hit_from, !player_ptr->paralyzed ? "" : " while helpless");
@@ -406,7 +410,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, HIT_POINT damage, concptr 
                     strcpy(buf, _("アリーナ", "in the Arena"));
                 else if (!is_in_dungeon(player_ptr))
                     strcpy(buf, _("地上", "on the surface"));
-                else if (q_idx && (quest_type::is_fixed(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
+                else if (inside_quest(q_idx) && (quest_type::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT))))
                     strcpy(buf, _("クエスト", "in a quest"));
                 else
                     sprintf(buf, _("%d階", "level %d"), (int)player_ptr->current_floor_ptr->dun_level);
