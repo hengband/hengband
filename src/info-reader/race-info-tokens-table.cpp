@@ -2,6 +2,7 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-kind-flags.h"
 #include "monster-race/race-visual-flags.h"
 
 /*!
@@ -85,7 +86,6 @@ const std::unordered_map<std::string_view, RaceBlowEffectType> r_info_blow_effec
  * Monster race flags
  */
 const std::unordered_map<std::string_view, race_flags1> r_info_flags1 = {
-    { "UNIQUE", RF1_UNIQUE },
     { "QUESTOR", RF1_QUESTOR },
     { "MALE", RF1_MALE },
     { "FEMALE", RF1_FEMALE },
@@ -127,8 +127,6 @@ const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
     { "FLAGS2_XX15", RF2_XX15 },
     { "PASS_WALL", RF2_PASS_WALL },
     { "KILL_WALL", RF2_KILL_WALL },
-    { "HUMAN", RF2_HUMAN },
-    { "QUANTUM", RF2_QUANTUM }
 };
 
 /*!
@@ -136,23 +134,11 @@ const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
  * Monster race flags
  */
 const std::unordered_map<std::string_view, race_flags3> r_info_flags3 = {
-    { "ORC", RF3_ORC },
-    { "TROLL", RF3_TROLL },
-    { "GIANT", RF3_GIANT },
-    { "DRAGON", RF3_DRAGON },
-    { "DEMON", RF3_DEMON },
-    { "UNDEAD", RF3_UNDEAD },
-    { "EVIL", RF3_EVIL },
-    { "ANIMAL", RF3_ANIMAL },
-    { "AMBERITE", RF3_AMBERITE },
-    { "GOOD", RF3_GOOD },
     { "FLAGS3_XX10", RF3_XX10 },
-    { "NONLIVING", RF3_NONLIVING },
     { "HURT_LITE", RF3_HURT_LITE },
     { "HURT_ROCK", RF3_HURT_ROCK },
     { "HURT_FIRE", RF3_HURT_FIRE },
     { "HURT_COLD", RF3_HURT_COLD },
-    { "ANGEL", RF3_ANGEL },
     { "NO_FEAR", RF3_NO_FEAR },
     { "NO_STUN", RF3_NO_STUN },
     { "NO_CONF", RF3_NO_CONF },
@@ -435,4 +421,22 @@ const std::unordered_map<std::string_view, MonsterVisualType> r_info_visual_flag
     { "ATTR_MULTI", MonsterVisualType::MULTI_COLOR },
     { "ATTR_SEMIRAND", MonsterVisualType::RANDOM_COLOR },
     { "ATTR_ANY", MonsterVisualType::ANY_COLOR },
+};
+
+const std::unordered_map<std::string_view, MonsterKindType> r_info_kind_flags = {
+    { "UNIQUE", MonsterKindType::UNIQUE },
+    { "HUMAN", MonsterKindType::HUMAN },
+    { "QUANTUM", MonsterKindType::QUANTUM },
+    { "ORC", MonsterKindType::ORC },
+    { "TROLL", MonsterKindType::TROLL },
+    { "GIANT", MonsterKindType::GIANT },
+    { "DRAGON", MonsterKindType::DRAGON },
+    { "DEMON", MonsterKindType::DEMON },
+    { "UNDEAD", MonsterKindType::UNDEAD },
+    { "EVIL", MonsterKindType::EVIL },
+    { "ANIMAL", MonsterKindType::ANIMAL },
+    { "AMBERITE", MonsterKindType::AMBERITE },
+    { "GOOD", MonsterKindType::GOOD },
+    { "NONLIVING", MonsterKindType::NONLIVING },
+    { "ANGEL", MonsterKindType::ANGEL },
 };
