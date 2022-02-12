@@ -1,4 +1,4 @@
-#include "dungeon/quest-monster-placer.h"
+﻿#include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generator-util.h"
 #include "floor/geometry.h"
@@ -25,8 +25,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
     for (int i = 0; i < max_q_idx; i++) {
         monster_race *r_ptr;
         BIT_FLAGS mode;
-        if (quest[i].status != QuestStatusType::TAKEN || (quest[i].type != QuestKindType::KILL_LEVEL && quest[i].type != QuestKindType::RANDOM)
-            || quest[i].level != floor_ptr->dun_level || player_ptr->dungeon_idx != quest[i].dungeon || (quest[i].flags & QUEST_FLAG_PRESET)) {
+        if (quest[i].status != QuestStatusType::TAKEN || (quest[i].type != QuestKindType::KILL_LEVEL && quest[i].type != QuestKindType::RANDOM) || quest[i].level != floor_ptr->dun_level || player_ptr->dungeon_idx != quest[i].dungeon || (quest[i].flags & QUEST_FLAG_PRESET)) {
             continue;
         }
 

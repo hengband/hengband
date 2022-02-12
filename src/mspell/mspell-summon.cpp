@@ -1,5 +1,6 @@
-#include "mspell/mspell-summon.h"
+﻿#include "mspell/mspell-summon.h"
 #include "core/disturbance.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -17,7 +18,6 @@
 #include "mspell/mspell-util.h"
 #include "mspell/specified-summon.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
@@ -46,7 +46,6 @@ static void summon_disturb(PlayerType *player_ptr, int target_type, bool known, 
         disturb(player_ptr, true, true);
     }
 }
-
 
 /*!
  * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
@@ -139,7 +138,7 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
     monster_desc(player_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
-    
+
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @file knowledge-monsters.cpp
  * @brief 既知のモンスターに関する情報を表示する
  * @date 2020/04/24
@@ -73,8 +73,7 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, IDX mon_idx[], 
         } else if (grp_wanted) {
             bool wanted = false;
             for (int j = 0; j < MAX_BOUNTY; j++) {
-                if (w_ptr->bounty_r_idx[j] == r_ref.idx || w_ptr->bounty_r_idx[j] - 10000 == r_ref.idx
-                    || (player_ptr->today_mon && player_ptr->today_mon == r_ref.idx)) {
+                if (w_ptr->bounty_r_idx[j] == r_ref.idx || w_ptr->bounty_r_idx[j] - 10000 == r_ref.idx || (player_ptr->today_mon && player_ptr->today_mon == r_ref.idx)) {
                     wanted = true;
                     break;
                 }

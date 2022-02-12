@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief フロアの一定範囲に効果を及ぼす (悲鳴、テレポート等)スペルの効果
  * @date 2020/05/16
  * @author Hourier
@@ -8,6 +8,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
@@ -35,7 +36,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"

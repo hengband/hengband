@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief プレイヤーのステータスを下げるか、モンスター自身のステータスを上げるスペル類の処理
  * @date 2020/05/16
  * @author Hourier
@@ -9,6 +9,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
@@ -28,7 +29,6 @@
 #include "mspell/mspell-util.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
-#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"

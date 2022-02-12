@@ -1,4 +1,4 @@
-#include "flavor/named-item-describer.h"
+﻿#include "flavor/named-item-describer.h"
 #include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
 #include "flavor/tval-description-switcher.h"
@@ -19,8 +19,8 @@
 #else
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "system/monster-race-definition.h"
 #include "object/tval-types.h"
+#include "system/monster-race-definition.h"
 #endif
 
 static void check_object_known_aware(flavor_type *flavor_ptr)

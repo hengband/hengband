@@ -1,4 +1,4 @@
-/*
+﻿/*
  * @brief モンスターがダメージを受けた時の処理と経験値の加算処理
  * @date 2021/08/04
  * @author Hourier
@@ -6,7 +6,6 @@
 
 #include <algorithm>
 
-#include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
 #include "core/player-redraw-types.h"
 #include "core/speed-table.h"
@@ -30,6 +29,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"

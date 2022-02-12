@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief 剣術家のレイシャルパワー処理
  * @date 2020/05/16
  * @author Hourier
@@ -473,8 +473,7 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
-        || (player_ptr->csp <= 7))
+    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml || (player_ptr->csp <= 7))
         return;
 
     char m_target_name[MAX_NLEN];

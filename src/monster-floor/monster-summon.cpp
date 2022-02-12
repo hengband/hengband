@@ -1,4 +1,4 @@
-#include "monster-floor/monster-summon.h"
+﻿#include "monster-floor/monster-summon.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/geometry.h"
@@ -184,11 +184,11 @@ bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy,
     if ((r_idx <= 0) || (r_idx >= static_cast<MONRACE_IDX>(r_info.size()))) {
         return false;
     }
-    
+
     POSITION x, y;
     if (player_ptr->current_floor_ptr->inside_arena || !mon_scatter(player_ptr, r_idx, &y, &x, oy, ox, 2)) {
         return false;
     }
-    
+
     return place_monster_aux(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
 }

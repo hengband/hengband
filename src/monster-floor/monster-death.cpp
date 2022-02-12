@@ -1,4 +1,4 @@
-#include "monster-floor/monster-death.h"
+﻿#include "monster-floor/monster-death.h"
 #include "artifact/fixed-art-generator.h"
 #include "cmd-building/cmd-building.h"
 #include "core/player-redraw-types.h"
@@ -112,8 +112,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_drop_corpse = one_in_(md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? 1 : 4);
     is_drop_corpse &= (md_ptr->r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != 0;
-    is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned
-        || ((md_ptr->m_ptr->r_idx == w_ptr->today_mon) && is_pet(md_ptr->m_ptr)));
+    is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == w_ptr->today_mon) && is_pet(md_ptr->m_ptr)));
     if (!is_drop_corpse)
         return;
 
@@ -181,11 +180,11 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, AR
 
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
         a_ptr->cur_num = 1;
-        
+
         if (w_ptr->character_dungeon) {
             a_ptr->floor_id = player_ptr->floor_id;
         }
-        
+
         if (!preserve_mode) {
             a_ptr->cur_num = 1;
         }
@@ -330,7 +329,6 @@ static void on_defeat_last_boss(PlayerType *player_ptr)
     msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
     msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
 }
-
 
 /*!
  * @brief モンスターが死亡した時の処理 /

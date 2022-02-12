@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief プレイヤーからモンスターへの打撃処理
  * @date 2020/05/22
  * @author Hourier
@@ -322,8 +322,7 @@ static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa
 
     auto do_impact = does_weapon_has_flag(player_ptr->impact, pa_ptr);
     if ((!(o_ptr->tval == ItemKindType::SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
-        pa_ptr->attack_damage
-            = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
+        pa_ptr->attack_damage = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
 
     pa_ptr->drain_result = pa_ptr->attack_damage;
     process_vorpal_attack(player_ptr, pa_ptr, vorpal_cut, vorpal_chance);
@@ -466,8 +465,7 @@ static void apply_actual_attack(
     pa_ptr->magical_effect = select_magical_brand_effect(player_ptr, pa_ptr);
     decide_blood_sucking(player_ptr, pa_ptr);
 
-    bool vorpal_cut = (pa_ptr->flags.has(TR_VORPAL) || SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
-        && !is_zantetsu_nullified;
+    bool vorpal_cut = (pa_ptr->flags.has(TR_VORPAL) || SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified;
     calc_attack_damage(player_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     apply_damage_bonus(player_ptr, pa_ptr);
     apply_damage_negative_effect(pa_ptr, is_zantetsu_nullified, is_ej_nullified);

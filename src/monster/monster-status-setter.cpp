@@ -1,4 +1,4 @@
-#include "monster/monster-status-setter.h"
+﻿#include "monster/monster-status-setter.h"
 #include "avatar/avatar.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/player-redraw-types.h"
@@ -100,7 +100,8 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
     if (v) {
         if (!monster_csleep_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
@@ -144,7 +145,8 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_fast_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_FAST);
@@ -175,7 +177,8 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_slow_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_SLOW);
@@ -211,7 +214,8 @@ bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_stunned_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_STUNNED);
@@ -241,7 +245,8 @@ bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_confused_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_CONFUSED);
@@ -271,7 +276,8 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_fear_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_MONFEAR);
@@ -314,7 +320,8 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_invulner_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_INVULNER);

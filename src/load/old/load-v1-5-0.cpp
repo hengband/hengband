@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief 変愚蛮怒 v1.5.0以前の旧いセーブデータを読み込む処理
  * @date 2020/07/04
  * @author Hourier
@@ -237,6 +237,8 @@ void rd_item_old(ObjectType *o_ptr)
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
         }
+
+        xtra1 = 0;
     }
 
     if (h_older_than(0, 2, 3)) {

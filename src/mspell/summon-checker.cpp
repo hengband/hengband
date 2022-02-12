@@ -1,4 +1,4 @@
-#include "mspell/summon-checker.h"
+﻿#include "mspell/summon-checker.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -156,8 +156,7 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = (r_ptr->flags7 & RF7_GUARDIAN) != 0;
         break;
     case SUMMON_KNIGHTS:
-        is_match = ((r_idx == MON_NOV_PALADIN) || (r_idx == MON_NOV_PALADIN_G) || (r_idx == MON_PALADIN) || (r_idx == MON_W_KNIGHT)
-            || (r_idx == MON_ULTRA_PALADIN) || (r_idx == MON_KNI_TEMPLAR));
+        is_match = ((r_idx == MON_NOV_PALADIN) || (r_idx == MON_NOV_PALADIN_G) || (r_idx == MON_PALADIN) || (r_idx == MON_W_KNIGHT) || (r_idx == MON_ULTRA_PALADIN) || (r_idx == MON_KNI_TEMPLAR));
         break;
     case SUMMON_EAGLES:
         is_match = (r_ptr->d_char == 'B') && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_ONLY) != 0);

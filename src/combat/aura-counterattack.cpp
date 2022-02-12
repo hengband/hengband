@@ -1,10 +1,11 @@
-/*!
+﻿/*!
  * @brief モンスターから直接攻撃を受けた時に、プレイヤーのオーラダメージで反撃する処理
  * @date 2020/05/31
  * @author Hourier
  */
 
 #include "combat/aura-counterattack.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "grid/grid.h"
@@ -21,12 +22,11 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
-#include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -207,15 +207,15 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
         monap_ptr->alive = false;
         return;
     }
-    
+
     struct attribute_table {
         inventory_slot_type slot;
         AttributeType type;
     };
 
     const int TABLE_SIZE = 4;
-    attribute_table table[TABLE_SIZE] = { { INVEN_HEAD, AttributeType::OLD_CONF }, { INVEN_SUB_HAND, AttributeType::OLD_SLEEP }, 
-                            { INVEN_ARMS, AttributeType::TURN_ALL }, { INVEN_FEET, AttributeType::OLD_SLOW } };
+    attribute_table table[TABLE_SIZE] = { { INVEN_HEAD, AttributeType::OLD_CONF }, { INVEN_SUB_HAND, AttributeType::OLD_SLEEP },
+        { INVEN_ARMS, AttributeType::TURN_ALL }, { INVEN_FEET, AttributeType::OLD_SLOW } };
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
