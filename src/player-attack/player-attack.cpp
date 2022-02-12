@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief プレイヤーからモンスターへの打撃処理
  * @date 2020/05/22
  * @author Hourier
@@ -392,7 +392,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
         pa_ptr->attack_damage = 0;
 
     auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!monster_living(pa_ptr->m_ptr->r_idx) && (r_ptr->flags3 & RF3_EVIL))) {
+    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!monster_living(pa_ptr->m_ptr->r_idx) && r_ptr->kind_flags.has(MonsterKindType::EVIL))) {
         pa_ptr->attack_damage = 0;
     }
 

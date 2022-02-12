@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 既知/存命のユニークを表示する
  * @date 2020/04/23
  * @author Hourier
@@ -52,7 +52,7 @@ static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
     if (r_ptr->name.empty())
         return false;
 
-    if (!(r_ptr->flags1 & RF1_UNIQUE))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
 
         return false;
 

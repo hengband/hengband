@@ -1,4 +1,4 @@
-﻿#include "monster-floor/monster-summon.h"
+#include "monster-floor/monster-summon.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/geometry.h"
@@ -55,14 +55,13 @@ static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
             return false;
     }
 
-    if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
+    if (!summon_unique_okay && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
         return false;
 
     if (!summon_specific_type)
         return true;
 
-    if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-        && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr))
+    if ((summon_specific_who < 0) && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr))
         return false;
 
     if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON))

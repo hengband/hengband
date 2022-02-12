@@ -1,4 +1,4 @@
-﻿#include "monster/monster-status-setter.h"
+#include "monster/monster-status-setter.h"
 #include "avatar/avatar.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/player-redraw-types.h"
@@ -9,6 +9,7 @@
 #include "dungeon/quest-completion-checker.h"
 #include "floor/cave.h"
 #include "monster-floor/monster-move.h"
+#include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
@@ -36,7 +37,7 @@ void set_pet(PlayerType *player_ptr, monster_type *m_ptr)
 {
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     m_ptr->mflag2.set(MonsterConstantFlagType::PET);
-    if (!(r_info[m_ptr->r_idx].flags3 & (RF3_EVIL | RF3_GOOD)))
+    if (r_info[m_ptr->r_idx].kind_flags.has_none_of(alignment_mask))
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
 }
 

@@ -173,7 +173,7 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
             continue;
 
         r_ptr = real_r_ptr(m_ptr);
-        if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
             r_ptr->floor_id = cur_floor_id;
     }
 
@@ -249,7 +249,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
         }
 
         r_ptr = real_r_ptr(m_ptr);
-        if (!(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_NAZGUL))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !(r_ptr->flags7 & RF7_NAZGUL))
             continue;
 
         if (r_ptr->floor_id != new_floor_id)

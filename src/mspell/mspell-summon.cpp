@@ -1,4 +1,4 @@
-﻿#include "mspell/mspell-summon.h"
+#include "mspell/mspell-summon.h"
 #include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -111,8 +111,8 @@ static void decide_summon_kin_caster(
 #ifdef JP
         (void)m_poss;
 #endif
-        _(msg_format("%sが魔法で%sを召喚した。", m_name, ((r_ptr->flags1 & RF1_UNIQUE) ? "手下" : "仲間")),
-            msg_format("%^s magically summons %s %s.", m_name, m_poss, ((r_ptr->flags1 & RF1_UNIQUE) ? "minions" : "kin")));
+        _(msg_format("%sが魔法で%sを召喚した。", m_name, (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "手下" : "仲間")),
+            msg_format("%^s magically summons %s %s.", m_name, m_poss, (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "minions" : "kin")));
     }
 
     if (mon_to_mon && known && !see_either)
@@ -559,7 +559,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     int num = 1;
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         num += r_ptr->level / 40;
     }
 

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターの特殊技能とターン経過処理 (移動等)/ Monster spells and movement for passaging a turn
  * @date 2014/01/17
  * @author
@@ -312,9 +312,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     if (is_friendly(m_ptr) && has_aggravate(player_ptr))
         gets_angry = true;
 
-    if (is_pet(m_ptr)
-        && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr))
-            || (r_ptr->flagsr & RFR_RES_ALL)))
+    if (is_pet(m_ptr) && (((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) || (r_ptr->flagsr & RFR_RES_ALL)))
         gets_angry = true;
 
     if (player_ptr->phase_out || !gets_angry)

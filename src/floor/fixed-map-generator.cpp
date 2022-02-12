@@ -126,7 +126,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             old_cur_num = r_info[monster_index].cur_num;
             old_max_num = r_info[monster_index].max_num;
 
-            if (r_info[monster_index].flags1 & RF1_UNIQUE) {
+            if (r_info[monster_index].kind_flags.has(MonsterKindType::UNIQUE)) {
                 r_info[monster_index].cur_num = 0;
                 r_info[monster_index].max_num = 1;
             } else if (r_info[monster_index].flags7 & RF7_NAZGUL) {
@@ -218,7 +218,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         q_ptr->flags = atoi(zz[10]);
 
     r_ptr = &r_info[q_ptr->r_idx];
-    if (r_ptr->flags1 & RF1_UNIQUE)
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         r_ptr->flags1 |= RF1_QUESTOR;
 
     a_ptr = &a_info[q_ptr->k_idx];

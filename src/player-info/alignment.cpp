@@ -52,11 +52,11 @@ void PlayerAlignment::update_alignment()
         if (!is_pet(m_ptr))
             continue;
 
-        if (any_bits(r_ptr->flags3, RF3_GOOD)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             this->bias_good_alignment(r_ptr->level);
         }
 
-        if (any_bits(r_ptr->flags3, RF3_EVIL)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             this->bias_evil_alignment(r_ptr->level);
         }
     }

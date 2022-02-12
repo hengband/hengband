@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 剣術家のレイシャルパワー処理
  * @date 2020/05/16
  * @author Hourier
@@ -139,7 +139,7 @@ static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
     if (samurai_slaying_ptr->mode != HISSATSU_ZANMA)
         return;
 
-    if (!monster_living(samurai_slaying_ptr->m_ptr->r_idx) && (samurai_slaying_ptr->r_ptr->flags3 & RF3_EVIL)) {
+    if (!monster_living(samurai_slaying_ptr->m_ptr->r_idx) && samurai_slaying_ptr->r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
         if (samurai_slaying_ptr->mult < 15)
             samurai_slaying_ptr->mult = 25;
         else if (samurai_slaying_ptr->mult < 50)
@@ -261,9 +261,9 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
     if (samurai_slaying_ptr->mode != HISSATSU_UNDEAD)
         return;
 
-    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_UNDEAD)
+    if (samurai_slaying_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr)) {
-            samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_UNDEAD;
+            samurai_slaying_ptr->r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
 
             if (samurai_slaying_ptr->mult == 10)
                 samurai_slaying_ptr->mult = 70;

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターの逃走に関する処理
  * @date 2020/03/08
  * @author Hourier
@@ -72,7 +72,7 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     bool can_runaway = is_pet(m_ptr) || is_friendly(m_ptr);
-    can_runaway &= ((r_ptr->flags1 & RF1_UNIQUE) != 0) || ((r_ptr->flags7 & RF7_NAZGUL) != 0);
+    can_runaway &= (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) || ((r_ptr->flags7 & RF7_NAZGUL) != 0);
     can_runaway &= !player_ptr->phase_out;
     if (!can_runaway)
         return false;

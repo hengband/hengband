@@ -38,7 +38,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 
             do {
                 hallu_race = &r_info[randint1(r_info.size() - 1)];
-            } while (hallu_race->name.empty() || (hallu_race->flags1 & RF1_UNIQUE));
+            } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
 
             strcpy(silly_name, (hallu_race->name.c_str()));
         }
@@ -172,7 +172,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
         (void)sprintf(desc, "%s?", name);
 #endif
     } else {
-        if ((r_ptr->flags1 & RF1_UNIQUE) && !(player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU))) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !(player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU))) {
             if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
 #ifdef JP
                 char *t;
@@ -222,7 +222,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     }
 
     if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        if (r_ptr->flags1 & RF1_UNIQUE) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             strcat(desc, _("(カメレオンの王)", "(Chameleon Lord)"));
         } else {
             strcat(desc, _("(カメレオン)", "(Chameleon)"));

@@ -52,7 +52,7 @@ void roff_top(MONRACE_IDX r_idx)
 
 #ifdef JP
 #else
-    if (!(r_ptr->flags1 & RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         term_addstr(-1, TERM_WHITE, "The ");
     }
 #endif
@@ -126,7 +126,7 @@ void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr
 
 static bool display_kill_unique(lore_type *lore_ptr)
 {
-    if ((lore_ptr->flags1 & RF1_UNIQUE) == 0)
+    if (lore_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
         return false;
 
     bool dead = (lore_ptr->r_ptr->max_num == 0);
@@ -344,33 +344,33 @@ void display_monster_never_move(lore_type *lore_ptr)
 
 void display_monster_kind(lore_type *lore_ptr)
 {
-    if (((lore_ptr->flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) == 0) && ((lore_ptr->flags2 & (RF2_QUANTUM | RF2_HUMAN)) == 0)) {
+    if (lore_ptr->kind_flags.has_none_of({ MonsterKindType::DRAGON, MonsterKindType::DEMON, MonsterKindType::GIANT, MonsterKindType::TROLL, MonsterKindType::ORC, MonsterKindType::ANGEL, MonsterKindType::QUANTUM, MonsterKindType::HUMAN })) {
         hooked_roff(_("モンスター", " creature"));
         return;
     }
 
-    if (lore_ptr->flags3 & RF3_DRAGON)
+    if (lore_ptr->kind_flags.has(MonsterKindType::DRAGON))
         hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
 
-    if (lore_ptr->flags3 & RF3_DEMON)
+    if (lore_ptr->kind_flags.has(MonsterKindType::DEMON))
         hook_c_roff(TERM_VIOLET, _("デーモン", " demon"));
 
-    if (lore_ptr->flags3 & RF3_GIANT)
+    if (lore_ptr->kind_flags.has(MonsterKindType::GIANT))
         hook_c_roff(TERM_L_UMBER, _("巨人", " giant"));
 
-    if (lore_ptr->flags3 & RF3_TROLL)
+    if (lore_ptr->kind_flags.has(MonsterKindType::TROLL))
         hook_c_roff(TERM_BLUE, _("トロル", " troll"));
 
-    if (lore_ptr->flags3 & RF3_ORC)
+    if (lore_ptr->kind_flags.has(MonsterKindType::ORC))
         hook_c_roff(TERM_UMBER, _("オーク", " orc"));
 
-    if (lore_ptr->flags2 & RF2_HUMAN)
+    if (lore_ptr->kind_flags.has(MonsterKindType::HUMAN))
         hook_c_roff(TERM_L_WHITE, _("人間", " human"));
 
-    if (lore_ptr->flags2 & RF2_QUANTUM)
+    if (lore_ptr->kind_flags.has(MonsterKindType::QUANTUM))
         hook_c_roff(TERM_VIOLET, _("量子生物", " quantum creature"));
 
-    if (lore_ptr->flags3 & RF3_ANGEL)
+    if (lore_ptr->kind_flags.has(MonsterKindType::ANGEL))
         hook_c_roff(TERM_YELLOW, _("天使", " angel"));
 }
 
@@ -379,19 +379,19 @@ void display_monster_alignment(lore_type *lore_ptr)
     if (lore_ptr->flags2 & RF2_ELDRITCH_HORROR)
         hook_c_roff(TERM_VIOLET, _("狂気を誘う", " sanity-blasting"));
 
-    if (lore_ptr->flags3 & RF3_ANIMAL)
+    if (lore_ptr->kind_flags.has(MonsterKindType::ANIMAL))
         hook_c_roff(TERM_L_GREEN, _("自然界の", " natural"));
 
-    if (lore_ptr->flags3 & RF3_EVIL)
+    if (lore_ptr->kind_flags.has(MonsterKindType::EVIL))
         hook_c_roff(TERM_L_DARK, _("邪悪なる", " evil"));
 
-    if (lore_ptr->flags3 & RF3_GOOD)
+    if (lore_ptr->kind_flags.has(MonsterKindType::GOOD))
         hook_c_roff(TERM_YELLOW, _("善良な", " good"));
 
-    if (lore_ptr->flags3 & RF3_UNDEAD)
+    if (lore_ptr->kind_flags.has(MonsterKindType::UNDEAD))
         hook_c_roff(TERM_VIOLET, _("アンデッドの", " undead"));
 
-    if (lore_ptr->flags3 & RF3_AMBERITE)
+    if (lore_ptr->kind_flags.has(MonsterKindType::AMBERITE))
         hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
 }
 
@@ -479,7 +479,7 @@ void display_lore_this(PlayerType *player_ptr, lore_type *lore_ptr)
 #ifdef JP
     hooked_roff("この");
 #else
-    if (lore_ptr->flags1 & RF1_UNIQUE) {
+    if (lore_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         hooked_roff("Killing this");
     } else {
         hooked_roff("A kill of this");
@@ -514,7 +514,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
             continue;
 
         monster_race *rf_ptr = &r_info[lore_ptr->r_ptr->reinforce_id[n]];
-        if (rf_ptr->flags1 & RF1_UNIQUE) {
+        if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             hooked_roff(format(_("、%s", ", %s"), rf_ptr->name.c_str()));
             continue;
         }

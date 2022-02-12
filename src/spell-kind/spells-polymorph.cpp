@@ -18,6 +18,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す /
@@ -31,7 +32,7 @@
 static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
-    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags1 & RF1_QUESTOR))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR))
         return r_idx;
 
     DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
@@ -43,7 +44,7 @@ static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
             break;
 
         r_ptr = &r_info[r];
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
             continue;
         if ((r_ptr->level < lev1) || (r_ptr->level > lev2))
             continue;

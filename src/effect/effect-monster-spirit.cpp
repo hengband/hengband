@@ -69,8 +69,7 @@ process_result effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_
     if (!em_ptr->who)
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
 
-    if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
-        || (em_ptr->r_ptr->level > randint1((em_ptr->caster_lev - 10) < 1 ? 1 : (em_ptr->caster_lev - 10)) + 10)) {
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->level > randint1((em_ptr->caster_lev - 10) < 1 ? 1 : (em_ptr->caster_lev - 10)) + 10)) {
         if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) {
             if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
                 em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
@@ -108,8 +107,7 @@ process_result effect_monster_brain_smash(PlayerType *player_ptr, effect_monster
     if (!em_ptr->who)
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
 
-    if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
-        || (em_ptr->r_ptr->level > randint1((em_ptr->caster_lev - 10) < 1 ? 1 : (em_ptr->caster_lev - 10)) + 10)) {
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->level > randint1((em_ptr->caster_lev - 10) < 1 ? 1 : (em_ptr->caster_lev - 10)) + 10)) {
         if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) {
             if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
                 em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);

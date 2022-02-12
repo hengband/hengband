@@ -164,7 +164,7 @@ void wiz_restore_monster_max_num()
     }
 
     MONSTER_NUMBER n = 0;
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         n = 1;
     else if (any_bits(r_ptr->flags7, RF7_NAZGUL))
         n = MAX_NAZGUL_NUM;

@@ -189,8 +189,8 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
         auto ap_r_ptr2 = &r_info[m_ptr2->ap_r_idx];
 
         /* Unique monsters first */
-        if (any_bits(ap_r_ptr1->flags1, RF1_UNIQUE) != any_bits(ap_r_ptr2->flags1, RF1_UNIQUE))
-            return any_bits(ap_r_ptr1->flags1, RF1_UNIQUE);
+        if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE))
+            return ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE);
 
         /* Shadowers first (あやしい影) */
         if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE))

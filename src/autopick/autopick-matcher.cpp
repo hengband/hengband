@@ -172,7 +172,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
     if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr))
         return false;
 
-    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || !(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
+    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || r_info[o_ptr->pval].kind_flags.has_not(MonsterKindType::UNIQUE)))
         return false;
 
     if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemKindType::CORPSE || !angband_strchr("pht", r_info[o_ptr->pval].d_char)))

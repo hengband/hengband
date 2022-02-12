@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief プレイヤーのステータスを下げるか、モンスター自身のステータスを上げるスペル類の処理
  * @date 2020/05/16
  * @author Hourier
@@ -453,7 +453,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    resist = ((tr_ptr->flags1 & RF1_UNIQUE) != 0 || (tr_ptr->flags3 & RF3_NO_STUN) != 0);
+    resist = (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (tr_ptr->flags3 & RF3_NO_STUN) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(_("%^sは%sをじっと見つめた。", "%^s stares intently at %s."),
@@ -551,7 +551,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         msg_default = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %s's muscles.");
     }
 
-    resist = ((tr_ptr->flags1 & RF1_UNIQUE) != 0);
+    resist = (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE));
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(msg_default, _("%^sには効果がなかった。", "%^s is unaffected."),

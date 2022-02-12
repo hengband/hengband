@@ -115,7 +115,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     int bonus = player_ptr->to_h_m + (player_ptr->lev * 6 / 5);
     int chance = (player_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
-    bool is_hit = ((r_ptr->flags2 & RF2_QUANTUM) == 0) || !randint0(2);
+    bool is_hit = (r_ptr->kind_flags.has_not(MonsterKindType::QUANTUM)) || !randint0(2);
     is_hit &= test_hit_norm(player_ptr, chance, r_ptr->ac, m_ptr->ml);
     if (!is_hit) {
         sound(SOUND_MISS);
@@ -243,9 +243,9 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     }
 
     if (monster_csleep_remaining(m_ptr)) {
-        if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
             chg_virtue(player_ptr, V_COMPASSION, -1);
-        if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
             chg_virtue(player_ptr, V_HONOUR, -1);
     }
 

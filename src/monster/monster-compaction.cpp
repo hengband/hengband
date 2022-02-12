@@ -118,7 +118,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
             if ((r_ptr->flags1 & (RF1_QUESTOR)) && (cnt < 1000))
                 chance = 100;
 
-            if (r_ptr->flags1 & (RF1_UNIQUE))
+            if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
                 chance = 100;
 
             if (randint0(100) < chance)

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 特殊属性武器で攻撃した際の追加効果処理
  * @date 2020/05/23
  * @author Hourier
@@ -173,7 +173,7 @@ static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type 
     if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
         return false;
 
-    if (r_ptr->flags1 & RF1_UNIQUE) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
             r_ptr->r_flagsr |= RFR_RES_TELE;
 
@@ -219,7 +219,7 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
 static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
     auto *r_ptr = pa_ptr->r_ptr;
-    if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) != 0) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
         return;
 
     if (polymorph_monster(player_ptr, y, x)) {

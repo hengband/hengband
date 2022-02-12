@@ -1,4 +1,4 @@
-﻿#include "monster-floor/quantum-effect.h"
+#include "monster-floor/quantum-effect.h"
 #include "floor/line-of-sight.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"
@@ -84,14 +84,14 @@ bool process_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if ((r_ptr->flags2 & RF2_QUANTUM) == 0)
+    if (r_ptr->kind_flags.has_not(MonsterKindType::QUANTUM))
         return false;
     if (!randint0(2))
         return false;
     if (randint0((m_idx % 100) + 10))
         return false;
 
-    bool can_disappear = (r_ptr->flags1 & RF1_UNIQUE) == 0;
+    bool can_disappear = r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
     can_disappear &= (r_ptr->flags1 & RF1_QUESTOR) == 0;
     if (can_disappear) {
         vanish_nonunique(player_ptr, m_idx, see_m);

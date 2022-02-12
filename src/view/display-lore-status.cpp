@@ -301,7 +301,7 @@ void display_monster_concrete_resistances(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
     }
 
-    if ((lore_ptr->flagsr & RFR_RES_TELE) && !(lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
+    if ((lore_ptr->flagsr & RFR_RES_TELE) && lore_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         lore_ptr->vp[lore_ptr->vn] = _("テレポート", "teleportation");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
     }
@@ -341,7 +341,7 @@ void display_monster_evolution(lore_type *lore_ptr)
         hook_c_roff(TERM_YELLOW, format("%s", r_info[lore_ptr->r_ptr->next_r_idx].name.c_str()));
 
         hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", Who::who(lore_ptr->msex))));
-    } else if (!(lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
+    } else if (lore_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), Who::who(lore_ptr->msex)));
     }
 }
@@ -368,7 +368,7 @@ void display_monster_concrete_immunities(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
     }
 
-    if ((lore_ptr->flagsr & RFR_RES_TELE) && (lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
+    if ((lore_ptr->flagsr & RFR_RES_TELE) && lore_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         lore_ptr->vp[lore_ptr->vn] = _("テレポートされない", "teleported");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
     }

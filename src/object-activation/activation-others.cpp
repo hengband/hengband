@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 発動処理その他 (肥大化しがちなので適宜まとまりを別ファイルへ分割すること)
  * @date 2020/08/19
  * @author Hourier
@@ -169,7 +169,7 @@ bool activate_unique_detection(PlayerType *player_ptr)
             continue;
 
         r_ptr = &r_info[m_ptr->r_idx];
-        if (r_ptr->flags1 & RF1_UNIQUE) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             msg_format(_("%s． ", "%s. "), r_ptr->name.c_str());
         }
 

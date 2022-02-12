@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-detection.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -414,9 +414,9 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
         if (distance(player_ptr->y, player_ptr->x, y, x) > range)
             continue;
 
-        if (r_ptr->flags3 & RF3_EVIL) {
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             if (is_original_ap(m_ptr)) {
-                r_ptr->r_flags3 |= (RF3_EVIL);
+                r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
                 if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                     player_ptr->window_flags |= (PW_MONSTER);
                 }

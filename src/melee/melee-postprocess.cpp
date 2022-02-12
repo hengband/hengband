@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスター同士の打撃後処理 / Melee post-process.
  * @date 2014/01/17
  * @author
@@ -42,6 +42,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 // Melee-post-process-type
@@ -175,7 +176,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
     if (mam_pp_ptr->m_ptr->hp < 0)
         return false;
 
-    if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
+    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->.flags1.has(RF1_QUESTOR) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
         mam_pp_ptr->m_ptr->hp = 1;
         return false;
     }

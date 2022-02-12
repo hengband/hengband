@@ -29,6 +29,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief モンスターへの単体抹殺処理サブルーチン / Delete a non-unique/non-quest monster
@@ -47,7 +48,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
         return false;
 
     bool resist = false;
-    if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR))
         resist = true;
     else if (r_ptr->flags7 & RF7_UNIQUE2)
         resist = true;
@@ -208,7 +209,7 @@ bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
         auto *r_ptr = &r_info[m_ptr->r_idx];
         if (!monster_is_valid(m_ptr))
             continue;
-        if (!(r_ptr->flags3 & RF3_UNDEAD))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD))
             continue;
         if (m_ptr->cdis > MAX_SIGHT)
             continue;

@@ -7,6 +7,7 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 
 void set_breath_types(PlayerType *player_ptr, lore_type *lore_ptr)
 {
@@ -361,7 +362,7 @@ void set_bolt_types(PlayerType *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 
-     if (lore_ptr->ability_flags.has(MonsterAbilityType::BO_ABYSS)) {
+    if (lore_ptr->ability_flags.has(MonsterAbilityType::BO_ABYSS)) {
         set_damage(player_ptr, lore_ptr, MonsterAbilityType::BO_ABYSS, _("アビス・ボルト%s", "produce abyss bolts%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
@@ -461,7 +462,7 @@ void set_teleport_types(lore_type *lore_ptr)
 void set_floor_types(PlayerType *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(MonsterAbilityType::DARKNESS)) {
-        if (!PlayerClass(player_ptr).equals(PlayerClassType::NINJA) || (lore_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {
+        if (!PlayerClass(player_ptr).equals(PlayerClassType::NINJA) || lore_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) || any_bits(lore_ptr->r_ptr->flags3, RF3_HURT_LITE) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {
             lore_ptr->vp[lore_ptr->vn] = _("暗闇", "create darkness");
             lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
         } else {

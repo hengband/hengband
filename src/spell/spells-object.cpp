@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief アイテムに影響のある魔法の処理
  * @date 2019/01/22
  * @author deskull
@@ -147,7 +147,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
         apply_magic_to_object(player_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
-            if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE)
+            if (r_info[i_ptr->pval].kind_flags.has(MonsterKindType::UNIQUE))
                 continue;
         }
 

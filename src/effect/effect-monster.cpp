@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 魔法によるモンスターへの効果まとめ
  * @date 2020/04/29
  * @author Hourier
@@ -316,9 +316,9 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
     if ((em_ptr->who > 0) || !em_ptr->slept)
         return;
 
-    if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+    if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
         chg_virtue(player_ptr, V_COMPASSION, -1);
-    if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+    if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
         chg_virtue(player_ptr, V_HONOUR, -1);
 }
 
@@ -329,10 +329,10 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
  */
 static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)))
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)))
         em_ptr->do_polymorph = false;
 
-    if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp))
+    if ((em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp))
         em_ptr->dam = em_ptr->m_ptr->hp;
 }
 

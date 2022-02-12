@@ -377,7 +377,7 @@ bool vault_aux_jelly(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_EVIL))
+    if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
         return false;
 
     if (!angband_strchr("ijm,", r_ptr->d_char))
@@ -398,7 +398,7 @@ bool vault_aux_animal(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (none_bits(r_ptr->flags3, RF3_ANIMAL))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL))
         return false;
 
     return true;
@@ -416,7 +416,7 @@ bool vault_aux_undead(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (none_bits(r_ptr->flags3, RF3_UNDEAD))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD))
         return false;
 
     return true;
@@ -437,7 +437,7 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_EVIL))
+    if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
         return false;
 
     if ((r_idx == MON_A_GOLD) || (r_idx == MON_A_SILVER))
@@ -518,7 +518,7 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_GOOD))
+    if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
         return false;
 
     if (r_ptr->d_char != vault_aux_char)
@@ -542,7 +542,7 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_EVIL))
+    if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
         return false;
 
     if (r_ptr->d_char != vault_aux_char)
@@ -563,10 +563,10 @@ bool vault_aux_orc(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (none_bits(r_ptr->flags3, RF3_ORC))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::ORC))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_UNDEAD))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
         return false;
 
     return true;
@@ -584,10 +584,10 @@ bool vault_aux_troll(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (none_bits(r_ptr->flags3, RF3_TROLL))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::TROLL))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_UNDEAD))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
         return false;
 
     return true;
@@ -605,13 +605,13 @@ bool vault_aux_giant(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (none_bits(r_ptr->flags3, RF3_GIANT))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::GIANT))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_GOOD))
+    if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_UNDEAD))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
         return false;
 
     return true;
@@ -629,10 +629,10 @@ bool vault_aux_dragon(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return false;
 
-    if (none_bits(r_ptr->flags3, RF3_DRAGON))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::DRAGON))
         return false;
 
-    if (any_bits(r_ptr->flags3, RF3_UNDEAD))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
         return false;
 
     auto flags = RF_ABILITY_BREATH_MASK;
@@ -659,7 +659,7 @@ bool vault_aux_demon(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
-    if (none_bits(r_ptr->flags3, RF3_DEMON))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::DEMON))
         return false;
 
     return true;
@@ -730,7 +730,7 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MONRACE_IDX r_idx)
 bool monster_living(MONRACE_IDX r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
-    return none_bits(r_ptr->flags3, (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING));
+    return r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD, MonsterKindType::NONLIVING });
 }
 
 /*!
@@ -768,7 +768,7 @@ bool monster_hook_human(PlayerType *player_ptr, MONRACE_IDX r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         return false;
 
     if (angband_strchr("pht", r_ptr->d_char))
@@ -805,7 +805,7 @@ bool monster_is_fishing_target(PlayerType *player_ptr, MONRACE_IDX r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    if (any_bits(r_ptr->flags7, RF7_AQUATIC) && none_bits(r_ptr->flags1, RF1_UNIQUE) && angband_strchr("Jjlw", r_ptr->d_char))
+    if (any_bits(r_ptr->flags7, RF7_AQUATIC) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("Jjlw", r_ptr->d_char))
         return true;
     else
         return false;
@@ -827,7 +827,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MONRACE_IDX r_idx)
     auto *r_ptr = &r_info[r_idx];
     bool unselectable = r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
-    unselectable |= any_bits(r_ptr->flags2, RF2_QUANTUM) && none_bits(r_ptr->flags1, RF1_UNIQUE);
+    unselectable |= r_ptr->kind_flags.has(MonsterKindType::QUANTUM) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
     unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC);
     unselectable |= any_bits(r_ptr->flags7, RF7_CHAMELEON);
     if (unselectable)
@@ -858,7 +858,7 @@ bool item_monster_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         return false;
 
     if (any_bits(r_ptr->flags7, RF7_KAGE))
@@ -890,5 +890,5 @@ bool item_monster_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 bool vault_monster_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    return mon_hook_dungeon(player_ptr, r_idx) && none_bits(r_info[r_idx].flags1, RF1_UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2) && none_bits(r_info[r_idx].flagsr, RFR_RES_ALL) && none_bits(r_info[r_idx].flags7, RF7_AQUATIC);
+    return mon_hook_dungeon(player_ptr, r_idx) && r_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2) && none_bits(r_info[r_idx].flagsr, RFR_RES_ALL) && none_bits(r_info[r_idx].flags7, RF7_AQUATIC);
 }

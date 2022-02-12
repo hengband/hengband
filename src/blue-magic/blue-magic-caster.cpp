@@ -49,8 +49,7 @@ static bool cast_blue_dispel(PlayerType *player_ptr)
         return false;
 
     MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
-    if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col)
-        || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
+    if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
         return true;
 
     dispel_monster_status(player_ptr, m_idx);
@@ -94,8 +93,7 @@ static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
     monster_type *m_ptr;
     monster_race *r_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col)
-        || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
+    if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
         return true;
 
     m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
@@ -104,7 +102,7 @@ static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
     if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
         return false;
 
-    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flagsr & RFR_RES_ALL)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flagsr & RFR_RES_ALL)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flagsr |= RFR_RES_TELE;
 

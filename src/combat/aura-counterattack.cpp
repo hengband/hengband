@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターから直接攻撃を受けた時に、プレイヤーのオーラダメージで反撃する処理
  * @date 2020/05/31
  * @author Hourier
@@ -129,7 +129,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
         return;
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if ((r_ptr->flags3 & RF3_EVIL) == 0)
+    if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL))
         return;
 
     if ((r_ptr->flagsr & RFR_RES_ALL) != 0) {
@@ -149,7 +149,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     }
 
     if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
-        r_ptr->r_flags3 |= RF3_EVIL;
+        r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
 }
 
 static void aura_force_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)

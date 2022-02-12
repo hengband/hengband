@@ -31,7 +31,7 @@ inline static bool has_shadower_flag(monster_type *m_ptr)
 
 inline static bool is_unique(monster_race *ap_r_ptr)
 {
-    return any_bits(ap_r_ptr->flags1, RF1_UNIQUE);
+    return ap_r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
 }
 
 inline static bool is_unknown_monster(monster_race *ap_r_ptr)
@@ -92,8 +92,8 @@ static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX
     auto ap_r_ptr2 = &r_info[m_ptr2->ap_r_idx];
 
     /* Unique monsters first */
-    if (any_bits(ap_r_ptr1->flags1, RF1_UNIQUE) != any_bits(ap_r_ptr2->flags1, RF1_UNIQUE))
-        return any_bits(ap_r_ptr1->flags1, RF1_UNIQUE);
+    if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE))
+        return ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE);
 
     /* Shadowers first (あやしい影) */
     if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE))

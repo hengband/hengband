@@ -221,9 +221,9 @@ bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int 
     }
 
     /* Racial alignment flags */
-    if (r_ptr->flags3 & RF3_EVIL)
+    if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
         sub_align2 |= SUB_ALIGN_EVIL;
-    if (r_ptr->flags3 & RF3_GOOD)
+    if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
         sub_align2 |= SUB_ALIGN_GOOD;
 
     if (check_hostile_align(sub_align1, sub_align2))
@@ -303,7 +303,7 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
             return MON_CHAMELEON_K;
         else
             return MON_CHAMELEON;

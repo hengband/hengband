@@ -972,7 +972,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         r_ptr = &r_info[m_ptr->r_idx];
         monster_desc(player_ptr, m_name, m_ptr, 0);
         if (r_ptr->flagsr & RFR_RES_TELE) {
-            if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL)) {
+            if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flagsr & RFR_RES_ALL)) {
                 if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                     r_ptr->r_flagsr |= RFR_RES_TELE;
                 }
