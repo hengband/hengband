@@ -84,7 +84,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
         if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth)
             shaft_num = (randint1(num + 1)) / 2;
     } else if (f_ptr->flags.has(FloorFeatureType::MORE)) {
-        QuestId q_idx = quest_number(player_ptr, floor_ptr->dun_level);
+        auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
         if (floor_ptr->dun_level > 1 && inside_quest(q_idx)) {
             auto *r_ptr = &r_info[quest[enum2i(q_idx)].r_idx];
             if (!(r_ptr->flags1 & RF1_UNIQUE) || 0 < r_ptr->max_num)

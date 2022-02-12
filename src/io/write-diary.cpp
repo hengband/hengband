@@ -75,7 +75,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 static QuestId write_floor(PlayerType *player_ptr, concptr *note_level, char *note_level_buf)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    QuestId q_idx = quest_number(player_ptr, floor_ptr->dun_level);
+    auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
     if (!write_level)
         return q_idx;
 
@@ -193,7 +193,7 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
 
     concptr note_level = "";
     char note_level_buf[40];
-    QuestId q_idx = write_floor(player_ptr, &note_level, note_level_buf);
+    auto q_idx = write_floor(player_ptr, &note_level, note_level_buf);
 
     bool do_level = true;
     switch (type) {

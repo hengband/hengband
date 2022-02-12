@@ -228,7 +228,7 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, int16_
     fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
     int16_t total = 0;
     for (int16_t i = 1; i < max_q_idx; i++) {
-        QuestId q_idx = i2enum<QuestId>(quest_num[i]);
+        auto q_idx = i2enum<QuestId>(quest_num[i]);
         quest_type *const q_ptr = &quest[enum2i(q_idx)];
 
         if (q_ptr->status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
@@ -251,7 +251,7 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, int16_t q
     fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
     int16_t total = 0;
     for (int16_t i = 1; i < max_q_idx; i++) {
-        QuestId q_idx = i2enum<QuestId>(quest_num[i]);
+        auto q_idx = i2enum<QuestId>(quest_num[i]);
         quest_type *const q_ptr = &quest[enum2i(q_idx)];
 
         if (((q_ptr->status == QuestStatusType::FAILED_DONE) || (q_ptr->status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
