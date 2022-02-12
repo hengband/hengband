@@ -12,16 +12,23 @@ LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH le
     , level(level)
     , power(power)
 {
-    if (o_ptr->sval == SV_LITE_TORCH) {
-        if (o_ptr->pval > 0)
+    switch (o_ptr->sval) {
+    case SV_LITE_TORCH:
+        if (o_ptr->pval > 0) {
             o_ptr->xtra4 = randint1(o_ptr->pval);
-        o_ptr->pval = 0;
-    }
+        }
 
-    if (o_ptr->sval == SV_LITE_LANTERN) {
-        if (o_ptr->pval > 0)
-            o_ptr->xtra4 = randint1(o_ptr->pval);
         o_ptr->pval = 0;
+        return;
+    case SV_LITE_LANTERN:
+        if (o_ptr->pval > 0) {
+            o_ptr->xtra4 = randint1(o_ptr->pval);
+        }
+
+        o_ptr->pval = 0;
+        return;
+    default:
+        return;
     }
 }
 
