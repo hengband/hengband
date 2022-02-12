@@ -537,7 +537,7 @@ int strrncmp(const char *s1, const char *s2, int len)
                 return (1);
         } else {
             if (p1 < 0)
-                return (0);
+                return 0;
         }
 
         if (s1[p1] < s2[p2])
@@ -546,7 +546,7 @@ int strrncmp(const char *s1, const char *s2, int len)
             return -1;
     }
 
-    return (0);
+    return 0;
 }
 
 /**
