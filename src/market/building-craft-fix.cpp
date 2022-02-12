@@ -267,7 +267,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 
     player_ptr->update |= PU_BONUS;
     handle_stuff(player_ptr);
-    return (cost);
+    return cost;
 }
 
 /*!

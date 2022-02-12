@@ -74,7 +74,7 @@ static int calc_max_blow_selection_times(PlayerType *player_ptr)
 {
     PlayerClass pc(player_ptr);
     if (pc.monk_stance_is(MonkStanceType::BYAKKO))
-        return (player_ptr->lev < 3 ? 1 : player_ptr->lev / 3);
+        return player_ptr->lev < 3 ? 1 : player_ptr->lev / 3;
 
     if (pc.monk_stance_is(MonkStanceType::SUZAKU))
         return 1;

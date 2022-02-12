@@ -44,7 +44,7 @@ static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m
         return true;
     }
 
-    return (r_ptr->aaf < t_ptr->cdis);
+    return r_ptr->aaf < t_ptr->cdis;
 }
 
 /*!

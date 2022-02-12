@@ -95,7 +95,7 @@ bool MonsterSweepGrid::mon_will_run()
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (is_pet(m_ptr)) {
-        return ((this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance)));
+        return (this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance));
     }
 
     if (m_ptr->cdis > MAX_SIGHT + 5) {

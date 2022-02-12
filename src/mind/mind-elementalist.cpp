@@ -1066,7 +1066,7 @@ bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_L
         return false;
 
     auto prealm = i2enum<ElementRealmType>(player_ptr->element);
-    return (prealm == realm && player_ptr->lev >= lev);
+    return (prealm == realm) && (player_ptr->lev >= lev);
 }
 
 /*!
@@ -1187,7 +1187,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
     }
 
     display_realm_cursor(cs, n, TERM_YELLOW);
-    return (cs + 1);
+    return cs + 1;
 }
 
 /*!

@@ -29,5 +29,5 @@ bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
     if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART))
         prob = prob / 2;
 
-    return (randint0(100) < prob);
+    return randint0(100) < prob;
 }

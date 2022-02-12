@@ -58,7 +58,7 @@ struct sound_res {
      */
     bool isDone()
     {
-        return (this->hwo == NULL || (this->wh.dwFlags & WHDR_DONE));
+        return (this->hwo == NULL) || (this->wh.dwFlags & WHDR_DONE);
     }
 
     void dispose()
