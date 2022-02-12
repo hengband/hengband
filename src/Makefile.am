@@ -597,6 +597,7 @@ hengband_SOURCES = \
 	object-enchant/vorpal-weapon.cpp object-enchant/vorpal-weapon.h \
 	\
 	object-enchant/others/apply-magic-amulet.cpp object-enchant/others/apply-magic-amulet.h \
+	object-enchant/others/apply-magic-lite.cpp object-enchant/others/apply-magic-lite.h \
 	object-enchant/others/apply-magic-ring.cpp object-enchant/others/apply-magic-ring.h \
 	object-enchant/others/apply-magic-others.cpp object-enchant/others/apply-magic-others.h \
 	\

@@ -14,6 +14,7 @@
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/others/apply-magic-amulet.h"
+#include "object-enchant/others/apply-magic-lite.h"
 #include "object-enchant/others/apply-magic-others.h"
 #include "object-enchant/others/apply-magic-ring.h"
 #include "object-enchant/protector/apply-magic-armor.h"
@@ -172,6 +173,9 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         break;
     case ItemKindType::AMULET:
         AmuletEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        break;
+    case ItemKindType::LITE:
+        LiteEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     default:
         apply_magic_others(player_ptr, o_ptr, power);
