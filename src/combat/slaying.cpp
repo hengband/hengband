@@ -35,44 +35,40 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs
 {
     static const struct slay_table_t {
         tr_type slay_flag;
-        BIT_FLAGS affect_race_flag;
+        MonsterKindType affect_race_flag;
         MULTIPLY slay_mult;
-        size_t flag_offset;
-        size_t r_flag_offset;
     } slay_table[] = {
-#define OFFSET(X) offsetof(monster_race, X)
-        { TR_SLAY_ANIMAL, RF3_ANIMAL, 25, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_ANIMAL, RF3_ANIMAL, 40, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_EVIL, RF3_EVIL, 20, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_EVIL, RF3_EVIL, 35, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_GOOD, RF3_GOOD, 20, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_GOOD, RF3_GOOD, 35, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_HUMAN, RF2_HUMAN, 25, OFFSET(flags2), OFFSET(r_flags2) },
-        { TR_KILL_HUMAN, RF2_HUMAN, 40, OFFSET(flags2), OFFSET(r_flags2) },
-        { TR_SLAY_UNDEAD, RF3_UNDEAD, 30, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_UNDEAD, RF3_UNDEAD, 50, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_DEMON, RF3_DEMON, 30, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_DEMON, RF3_DEMON, 50, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_ORC, RF3_ORC, 30, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_ORC, RF3_ORC, 50, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_TROLL, RF3_TROLL, 30, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_TROLL, RF3_TROLL, 50, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_GIANT, RF3_GIANT, 30, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_GIANT, RF3_GIANT, 50, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_SLAY_DRAGON, RF3_DRAGON, 30, OFFSET(flags3), OFFSET(r_flags3) },
-        { TR_KILL_DRAGON, RF3_DRAGON, 50, OFFSET(flags3), OFFSET(r_flags3) },
-#undef OFFSET
+        { TR_SLAY_ANIMAL, MonsterKindType::ANIMAL, 25 },
+        { TR_KILL_ANIMAL, MonsterKindType::ANIMAL, 40 },
+        { TR_SLAY_EVIL, MonsterKindType::EVIL, 20 },
+        { TR_KILL_EVIL, MonsterKindType::EVIL, 35 },
+        { TR_SLAY_GOOD, MonsterKindType::GOOD, 20 },
+        { TR_KILL_GOOD, MonsterKindType::GOOD, 35 },
+        { TR_SLAY_HUMAN, MonsterKindType::HUMAN, 25 },
+        { TR_KILL_HUMAN, MonsterKindType::HUMAN, 40 },
+        { TR_SLAY_UNDEAD, MonsterKindType::UNDEAD, 30 },
+        { TR_KILL_UNDEAD, MonsterKindType::UNDEAD, 50 },
+        { TR_SLAY_DEMON, MonsterKindType::DEMON, 30 },
+        { TR_KILL_DEMON, MonsterKindType::DEMON, 50 },
+        { TR_SLAY_ORC, MonsterKindType::ORC, 30 },
+        { TR_KILL_ORC, MonsterKindType::ORC, 50 },
+        { TR_SLAY_TROLL, MonsterKindType::TROLL, 30 },
+        { TR_KILL_TROLL, MonsterKindType::TROLL, 50 },
+        { TR_SLAY_GIANT, MonsterKindType::GIANT, 30 },
+        { TR_KILL_GIANT, MonsterKindType::GIANT, 50 },
+        { TR_SLAY_DRAGON, MonsterKindType::DRAGON, 30 },
+        { TR_KILL_DRAGON, MonsterKindType::DRAGON, 50 },
     };
 
     auto *r_ptr = &r_info[m_ptr->r_idx];
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
-        if (flgs.has_not(p->slay_flag) || !(atoffset(BIT_FLAGS, r_ptr, p->flag_offset) & p->affect_race_flag))
+        if (flgs.has_not(p->slay_flag) || r_ptr->kind_flags.has(p->affect_race_flag))
             continue;
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            atoffset(BIT_FLAGS, r_ptr, p->r_flag_offset) |= p->affect_race_flag;
+            r_ptr->r_kind_flags.set(p->affect_race_flag);
         }
 
         mult = std::max(mult, p->slay_mult);

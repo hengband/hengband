@@ -1866,7 +1866,6 @@
     <ClInclude Include="..\..\src\grid\grid.h" />
     <ClInclude Include="..\..\src\system\h-basic.h" />
     <ClInclude Include="..\..\src\system\h-config.h" />
-    <ClInclude Include="..\..\src\system\h-define.h" />
     <ClInclude Include="..\..\src\system\h-system.h" />
     <ClInclude Include="..\..\src\system\h-type.h" />
     <ClInclude Include="..\..\src\birth\history.h" />

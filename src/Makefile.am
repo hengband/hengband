@@ -886,7 +886,7 @@ hengband_SOURCES = \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
-	system/h-define.h system/h-system.h system/h-type.h \
+	system/h-system.h system/h-type.h \
 	system/monster-race-definition.h \
 	system/monster-type-definition.h \
 	system/object-type-definition.cpp system/object-type-definition.h \
