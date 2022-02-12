@@ -178,7 +178,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         LiteEnchanter(player_ptr, o_ptr, power).apply_magic();
         break;
     default:
-        apply_magic_others(player_ptr, o_ptr, power);
+        apply_magic_others(player_ptr, o_ptr);
         break;
     }
 
