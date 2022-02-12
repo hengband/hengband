@@ -5163,6 +5163,9 @@
     <ClInclude Include="..\..\src\system\angband-exceptions.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-kind-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
