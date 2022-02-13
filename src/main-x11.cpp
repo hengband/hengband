@@ -14,8 +14,6 @@
  * To use this file, compile with "USE_X11" defined, and link against all
  * the various "X11" libraries which may be needed.
  *
- * See also "main-xaw.c".
- *
  * Part of this file provides a user interface package composed of several
  * pseudo-objects, including "metadpy" (a display), "infowin" (a window),
  * "infoclr" (a color), and "infofnt" (a font).  Actually, the package was
@@ -1058,8 +1056,6 @@ static void send_keys(const char *const keys)
 
 /*
  * Process a keypress event
- *
- * Also appears in "main-xaw.c".
  */
 static void react_keypress(XKeyEvent *xev)
 {

@@ -511,17 +511,6 @@ int main(int argc, char *argv[])
     /* Install "quit" hook */
     quit_aux = quit_hook;
 
-#ifdef USE_XAW
-    /* Attempt to use the "main-xaw.c" support */
-    if (!done && (!mstr || (streq(mstr, "xaw")))) {
-        extern errr init_xaw(int, char **);
-        if (0 == init_xaw(argc, argv)) {
-            ANGBAND_SYS = "xaw";
-            done = true;
-        }
-    }
-#endif
-
 #ifdef USE_X11
     /* Attempt to use the "main-x11.c" support */
     if (!done && (!mstr || (streq(mstr, "x11")))) {
