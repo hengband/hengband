@@ -7,7 +7,7 @@
 enum class MonsterAbilityType;
 
 /* Imitator */
-typedef struct monster_power {
+struct monster_power {
     PLAYER_LEVEL level;
     MANA_POINT smana;
     PERCENTAGE fail;
@@ -15,7 +15,7 @@ typedef struct monster_power {
     int manefail;
     int use_stat;
     concptr name;
-} monster_power;
+};
 
 #define MAX_MONSPELLS 96
 

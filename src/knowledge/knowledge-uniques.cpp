@@ -15,7 +15,7 @@
 #include "util/angband-files.h"
 #include "util/sort.h"
 
-typedef struct unique_list_type {
+struct unique_list_type {
     bool is_alive;
     uint16_t why;
     std::vector<MONRACE_IDX> who;
@@ -24,7 +24,7 @@ typedef struct unique_list_type {
     int num_uniques_over100;
     int num_uniques_total;
     int max_lev;
-} unique_list_type;
+};
 
 unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr, bool is_alive)
 {

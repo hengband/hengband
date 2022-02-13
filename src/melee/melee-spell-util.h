@@ -8,7 +8,7 @@
 
 struct monster_race;
 struct monster_type;
-typedef struct melee_spell_type {
+struct melee_spell_type {
     MONSTER_IDX m_idx;
     POSITION y;
     POSITION x;
@@ -31,7 +31,7 @@ typedef struct melee_spell_type {
     bool in_no_magic_dungeon;
     bool can_remember;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
-} melee_spell_type;
+};
 
 class PlayerType;
 melee_spell_type *initialize_melee_spell_type(PlayerType *player_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx);

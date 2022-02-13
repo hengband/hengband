@@ -42,9 +42,9 @@ enum class RaceBlowMethodType {
     MAX, /*!< enum バリアント数 */
 };
 
-typedef struct mbe_info_type {
+struct mbe_info_type {
     int power; /* The attack "power" */
     AttributeType explode_type; /* Explosion effect */
-} mbe_info_type;
+};
 
 extern const mbe_info_type mbe_info[static_cast<int>(RaceBlowEffectType::MAX)];

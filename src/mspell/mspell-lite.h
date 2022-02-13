@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 struct monster_type;
-typedef struct msa_type msa_type;
+struct msa_type;
 class PlayerType;
 typedef bool (*path_check_pf)(PlayerType *, POSITION, POSITION, POSITION, POSITION);
 enum class FloorFeatureType;

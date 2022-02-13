@@ -15,7 +15,7 @@
 
 static const byte REALM_SELECT_CANCEL = 255;
 
-typedef struct birth_realm_type {
+struct birth_realm_type {
     int cs;
     int n;
     char p2;
@@ -25,7 +25,7 @@ typedef struct birth_realm_type {
     char cur[80];
     int k;
     int os;
-} birth_realm_type;
+};
 
 static byte count_realm_selection(const uint32_t choices, int *count)
 {

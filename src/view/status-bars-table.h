@@ -2,11 +2,11 @@
 
 #include "system/angband.h"
 
-typedef struct stat_bar {
+struct stat_bar {
     TERM_COLOR attr;
     concptr sstr;
     concptr lstr;
-} stat_bar;
+};
 
 /* 画面下部に表示する状態表示定義ID / Data structure for status bar */
 enum bar_definition_type {

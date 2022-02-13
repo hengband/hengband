@@ -18,7 +18,7 @@
 #include "util/point-2d.h"
 #include <queue>
 
-typedef struct fill_data_type {
+struct fill_data_type {
     POSITION xmin;
     POSITION ymin;
     POSITION xmax;
@@ -40,7 +40,7 @@ typedef struct fill_data_type {
 
     /* number of filled squares */
     int amount;
-} fill_data_type;
+};
 
 static fill_data_type fill_data;
 

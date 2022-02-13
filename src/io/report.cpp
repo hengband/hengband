@@ -56,12 +56,12 @@ concptr screen_dump = nullptr;
 /*
  * simple buffer library
  */
-typedef struct {
+struct BUF {
     size_t max_size;
     size_t size;
     size_t read_head;
     char *data;
-} BUF;
+};
 
 #define BUFSIZE (65536) /*!< スコアサーバ転送バッファサイズ */
 

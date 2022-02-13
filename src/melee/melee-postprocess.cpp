@@ -46,7 +46,7 @@
 #include "view/display-messages.h"
 
 // Melee-post-process-type
-typedef struct mam_pp_type {
+struct mam_pp_type {
     MONSTER_IDX m_idx;
     monster_type *m_ptr;
     bool seen;
@@ -57,7 +57,7 @@ typedef struct mam_pp_type {
     bool *dead;
     bool *fear;
     MONSTER_IDX who;
-} mam_pp_type;
+};
 
 mam_pp_type *initialize_mam_pp_type(
     PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)

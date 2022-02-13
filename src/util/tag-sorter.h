@@ -5,9 +5,9 @@
 /*
  * Sort-array element
  */
-typedef struct tag_type {
+struct tag_type {
     int tag;
     int index;
-} tag_type;
+};
 
 void tag_sort(tag_type elements[], int number);

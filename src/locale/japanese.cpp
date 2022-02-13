@@ -11,7 +11,7 @@
 
 #ifdef JP
 
-typedef struct convert_key convert_key;
+struct convert_key;
 
 struct convert_key {
     concptr key1;

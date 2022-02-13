@@ -7,7 +7,7 @@
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
-typedef struct projection_path_type {
+struct projection_path_type {
     uint16_t *gp;
     POSITION range;
     BIT_FLAGS flag;
@@ -27,7 +27,7 @@ typedef struct projection_path_type {
     int full;
     int n;
     int k;
-} projection_path_type;
+};
 
 /*
  * @brief Convert a "location" (Y, X) into a "grid" (G)

@@ -17,7 +17,7 @@ constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
 
 struct floor_type;
 struct monster_race;
-typedef struct monster_type {
+struct monster_type {
 	MONRACE_IDX r_idx{};		/*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx{};	/*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
 	floor_type *current_floor_ptr{}; /*!< 所在フロアID（現状はfloor_type構造体によるオブジェクトは1つしかないためソースコード設計上の意義以外はない）*/
@@ -50,4 +50,4 @@ typedef struct monster_type {
 	/* TODO: クローン、ペット、有効化は意義が異なるので別変数に切り離すこと。save/loadのバージョン更新が面倒そうだけど */
 	EnumClassFlagGroup<MonsterSmartLearnType> smart{}; /*!< モンスターのプレイヤーに対する学習状態 / Field for "smart_learn" - Some bit-flags for the "smart" field */
 	MONSTER_IDX parent_m_idx{}; /*!< 召喚主のモンスターID */
-} monster_type;
+};

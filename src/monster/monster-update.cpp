@@ -45,7 +45,7 @@
 #include "world/world.h"
 
 // Update Monster.
-typedef struct um_type {
+struct um_type {
     monster_type *m_ptr;
     bool do_disturb;
     POSITION fy;
@@ -54,7 +54,7 @@ typedef struct um_type {
     bool easy;
     bool in_darkness;
     bool full;
-} um_type;
+};
 
 /*!
  * @brief 騎乗中のモンスター情報を更新する

@@ -42,13 +42,13 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-typedef struct samurai_slaying_type {
+struct samurai_slaying_type {
     MULTIPLY mult;
     TrFlags flags;
     monster_type *m_ptr;
     combat_options mode;
     monster_race *r_ptr;
-} samurai_slaying_type;
+};
 
 static samurai_slaying_type *initialize_samurai_slaying_type(
     samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode, monster_race *r_ptr)

@@ -13,14 +13,14 @@
 #include "system/angband.h"
 #include "util/string-processor.h"
 
-typedef struct {
+struct autopick_describer {
     concptr str;
     byte act;
     concptr insc;
     bool top;
     int before_n;
     concptr body_str;
-} autopick_describer;
+};
 
 #if JP
 static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_describer *describer)

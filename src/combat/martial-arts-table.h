@@ -7,13 +7,13 @@
 #define MA_SLOW 2 /*!< 膝蹴り効果ID */
 
 /* For Monk martial arts */
-typedef struct martial_arts {
+struct martial_arts {
     concptr desc; /* A verbose attack description */
     PLAYER_LEVEL min_level; /* Minimum level to use */
     int chance; /* Chance of 'success' */
     int dd; /* Damage dice */
     int ds; /* Damage sides */
     int effect; /* Special effects */
-} martial_arts;
+};
 
 extern const martial_arts ma_blows[MAX_MA];

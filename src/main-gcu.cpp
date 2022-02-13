@@ -190,11 +190,10 @@
 /**
  * Simple rectangle type
  */
-struct rect_s {
+struct rect_t {
     int x, y;
     int cx, cy;
 };
-typedef struct rect_s rect_t, *rect_ptr;
 
 /* Trivial rectangle utility to make code a bit more readable */
 static rect_t rect(int x, int y, int cx, int cy)

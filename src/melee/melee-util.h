@@ -7,7 +7,7 @@
 
 /* monster-attack-monster type*/
 struct monster_type;
-typedef struct mam_type {
+struct mam_type {
     int attribute;
     MONRACE_IDX m_idx;
     MONRACE_IDX t_idx;
@@ -38,7 +38,7 @@ typedef struct mam_type {
     bool known;
     bool fear;
     bool dead;
-} mam_type;
+};
 
 class PlayerType;
 mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx);

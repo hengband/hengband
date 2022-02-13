@@ -124,18 +124,18 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 /*
  * The Win32 "BITMAPFILEHEADER" type.
  */
-typedef struct BITMAPFILEHEADER {
+struct BITMAPFILEHEADER {
     uint16_t bfType;
     uint32_t bfSize;
     uint16_t bfReserved1;
     uint16_t bfReserved2;
     uint32_t bfOffBits;
-} BITMAPFILEHEADER;
+};
 
 /*
  * The Win32 "BITMAPINFOHEADER" type.
  */
-typedef struct BITMAPINFOHEADER {
+struct BITMAPINFOHEADER {
     uint32_t biSize;
     uint32_t biWidth;
     uint32_t biHeight;
@@ -147,15 +147,15 @@ typedef struct BITMAPINFOHEADER {
     uint32_t biYPelsPerMeter;
     uint32_t biClrUsed;
     uint32_t biClrImportand;
-} BITMAPINFOHEADER;
+};
 
 /*
  * The Win32 "RGBQUAD" type.
  */
-typedef struct RGBQUAD {
+struct RGBQUAD {
     unsigned char b, g, r;
     unsigned char filler;
-} RGBQUAD;
+};
 
 /*** Helper functions for system independent file loading. ***/
 

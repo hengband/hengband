@@ -3,7 +3,7 @@
 #include "player/player-personality-types.h"
 #include "system/angband.h"
 
-typedef struct player_personality {
+struct player_personality {
 	concptr title;			/* Type of personality */
 
 #ifdef JP
@@ -25,7 +25,7 @@ typedef struct player_personality {
 
 	byte no;			/* の */
 	byte sex;			/* seibetu seigen */
-} player_personality;
+};
 
 extern const player_personality personality_info[MAX_PERSONALITIES];
 extern const player_personality *ap_ptr;

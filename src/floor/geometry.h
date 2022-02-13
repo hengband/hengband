@@ -13,11 +13,11 @@
 #define TEMP_MAX 2298
 
 //!< 対象グリッドの一覧をまとめる構造体
-typedef struct pos_list {
+struct pos_list {
 	POSITION_IDX n; //!< Array of grids for use by various functions (see grid.c")
 	POSITION y[TEMP_MAX];
 	POSITION x[TEMP_MAX];
-} pos_list;
+};
 
 extern const POSITION ddd[9];
 extern const POSITION ddx[10];

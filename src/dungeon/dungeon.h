@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 #include <vector>
@@ -34,10 +34,10 @@
 #define DUNGEON_DARKNESS 19
 #define DUNGEON_MAX 19
 
-typedef struct feat_prob {
+struct feat_prob {
     FEAT_IDX feat{}; /* Feature tile */
     PERCENTAGE percent{}; /* Chance of type */
-} feat_prob;
+};
 
 /* A structure for the != dungeon types */
 struct dungeon_type {
