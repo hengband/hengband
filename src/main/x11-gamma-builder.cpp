@@ -11,7 +11,7 @@
  * components (Red, Green, Blue), for example, TERM_UMBER is defined
  * as 2/4 Red, 1/4 Green, 0/4 Blue.
  *
- * The following info is from "Torbjorn Lindgren" (see "main-xaw.c").
+ * The following info is from "Torbjorn Lindgren".
  *
  * These values are NOT gamma-corrected.  On most machines (with the
  * Macintosh being an important exception), you must "gamma-correct"

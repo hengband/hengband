@@ -16,9 +16,6 @@
 
 ##### System Specific Subfiles #####
 
-?:[EQU $SYS xaw]
-%:graf-xaw.prf
-
 ?:[EQU $SYS x11]
 %:graf-x11.prf
 

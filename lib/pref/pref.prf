@@ -24,7 +24,7 @@
 
 ##### System Specific Subfiles #####
 
-?:[IOR [EQU $SYS xaw] [EQU $SYS x11]]
+?:[IOR [EQU $SYS x11]]
 %:pref-x11.prf
 
 ?:[EQU $SYS gcu]
