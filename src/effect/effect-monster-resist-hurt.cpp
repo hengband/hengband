@@ -565,6 +565,7 @@ static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_t
 {
     if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         em_ptr->obvious = false;
+        return;
     }
 
     if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
