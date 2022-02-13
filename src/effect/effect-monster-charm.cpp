@@ -315,7 +315,13 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
         return true;
     }
 
-    if (any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::NOPET) || has_aggravate(player_ptr) || ((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam))) {
+    bool failed = any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
+    failed |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    failed |= em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::NOPET);
+    failed |= has_aggravate(player_ptr);
+    failed |= (em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam);
+
+    if (failed) {
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
 
@@ -400,7 +406,13 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
 process_result effect_monster_capture(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((inside_quest(floor_ptr->quest_number) && (quest[enum2i(floor_ptr->quest_number)].type == QuestKindType::KILL_ALL) && !is_pet(em_ptr->m_ptr)) || em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || any_bits(em_ptr->r_ptr->flags7, RF7_NAZGUL | RF7_UNIQUE2) || em_ptr->m_ptr->parent_m_idx) {
+
+    bool cannot_capture = (inside_quest(floor_ptr->quest_number) && (quest[enum2i(floor_ptr->quest_number)].type == QuestKindType::KILL_ALL) && !is_pet(em_ptr->m_ptr));
+    cannot_capture |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    cannot_capture |= any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
+    cannot_capture |= any_bits(em_ptr->r_ptr->flags7, RF7_NAZGUL | RF7_UNIQUE2);
+    cannot_capture |= (em_ptr->m_ptr->parent_m_idx != 0);
+    if (cannot_capture) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
         em_ptr->skipped = true;
         return PROCESS_CONTINUE;

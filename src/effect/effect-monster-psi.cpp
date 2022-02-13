@@ -54,7 +54,10 @@ static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, effect_monst
  */
 static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_ptr)
 {
-    bool has_resistance = em_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID) || any_bits(em_ptr->r_ptr->flags2, RF2_WEIRD_MIND) || em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL) || (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
+    bool has_resistance = em_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID);
+    has_resistance |= any_bits(em_ptr->r_ptr->flags2, RF2_WEIRD_MIND);
+    has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL);
+    has_resistance |= (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
     if (!has_resistance)
         return false;
 
@@ -75,7 +78,9 @@ static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_
  */
 static bool reflects_psi_with_currupted_mind(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    bool is_corrupted = em_ptr->r_ptr->kind_flags.has_any_of(has_corrupted_mind) && (em_ptr->r_ptr->level > player_ptr->lev / 2) && one_in_(2);
+    bool is_corrupted = em_ptr->r_ptr->kind_flags.has_any_of(has_corrupted_mind);
+    is_corrupted &= (em_ptr->r_ptr->level > player_ptr->lev / 2);
+    is_corrupted &= one_in_(2);
     if (!is_corrupted)
         return false;
 

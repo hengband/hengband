@@ -497,7 +497,9 @@ process_result effect_monster_inertial(PlayerType *player_ptr, effect_monster_ty
         return PROCESS_CONTINUE;
     }
 
-    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
+    bool cancel_effect = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    cancel_effect |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
+    if (cancel_effect) {
         em_ptr->obvious = false;
         return PROCESS_CONTINUE;
     }
@@ -563,7 +565,9 @@ static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, effec
 
 static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
+    bool cancel_effect = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    cancel_effect |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
+    if (cancel_effect) {
         em_ptr->obvious = false;
         return;
     }
@@ -576,7 +580,9 @@ static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_t
 static void effect_monster_gravity_stun(effect_monster_type *em_ptr)
 {
     em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
-    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
+    bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    has_resistance |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
+    if (has_resistance) {
         em_ptr->do_stun = 0;
         em_ptr->note = _("には効果がなかった。", " is unaffected!");
         em_ptr->obvious = false;

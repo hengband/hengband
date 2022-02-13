@@ -86,7 +86,10 @@ process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_t
         return PROCESS_CONTINUE;
     }
 
-    if ((em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (randint1(888) != 666)) || (((em_ptr->r_ptr->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) && randint1(100) != 66)) {
+    bool has_resistance = (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (randint1(888) != 666));
+    has_resistance |= (((em_ptr->r_ptr->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) && randint1(100) != 66);
+
+    if (has_resistance) {
         em_ptr->note = _("には耐性がある！", " resists!");
         em_ptr->obvious = false;
         em_ptr->dam = 0;
@@ -241,7 +244,9 @@ process_result effect_monster_genocide(PlayerType *player_ptr, effect_monster_ty
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
-    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
+
+    std::string_view spell_name(_("モンスター消滅", "Genocide One"));
+    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, spell_name.data())) {
         if (em_ptr->seen_msg)
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
         chg_virtue(player_ptr, V_VITALITY, -1);
