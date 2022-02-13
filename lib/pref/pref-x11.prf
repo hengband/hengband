@@ -2,7 +2,7 @@
 
 #
 # This file provides some macros for use with versions of Angband compiled
-# using the "main-x11.c" (or "main-xaw.c") file.
+# using the "main-x11.c" file.
 #
 # Note the use of "\e\e\e\e" (four escapes) to allow the macros to work
 # even if the game is not yet ready for a command.
