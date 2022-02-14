@@ -308,10 +308,6 @@ static bool on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_ga
 
     player_ptr->is_dead = true;
     player_ptr->wait_report_score = false;
-    if (!player_ptr->is_dead) {
-        return true;
-    }
-
     *new_game = true;
     player_ptr->is_dead = false;
     w_ptr->sf_lives++;
@@ -447,6 +443,13 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 
     if (!can_takeover_savefile(player_ptr)) {
         return on_read_save_data_not_supported(player_ptr, new_game);
+    }
+
+    if (player_ptr->is_dead) {
+        *new_game = true;
+        player_ptr->is_dead = false;
+        w_ptr->sf_lives++;
+        return true;
     }
 
     w_ptr->character_loaded = true;
