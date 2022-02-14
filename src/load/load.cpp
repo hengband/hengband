@@ -290,8 +290,23 @@ static errr rd_savefile(PlayerType *player_ptr)
         return err;
     } catch (SaveDataNotSupportedException const& e) {
         msg_print(e.what());
+        angband_fclose(loading_savefile);
         return 1;
     }
+}
+
+/*!
+ * @brief 死亡した、または互換性のないセーブデータを読み込んだ時にやりなおさせる
+ * @param plyaer_ptr プレイヤーへの参照ポインタ
+ * @param new_game 新しくゲームを始めさせるフラグ
+ * @return 常にtrue (前後の処理上都合が良いため)
+ */
+static bool reset_save_data(PlayerType *player_ptr, bool *new_game)
+{
+    *new_game = true;
+    player_ptr->is_dead = false;
+    w_ptr->sf_lives++;
+    return true;
 }
 
 static bool on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_game)
@@ -306,12 +321,8 @@ static bool on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_ga
         return false;
     }
 
-    player_ptr->is_dead = true;
     player_ptr->wait_report_score = false;
-    *new_game = true;
-    player_ptr->is_dead = false;
-    w_ptr->sf_lives++;
-    return true;
+    return reset_save_data(player_ptr, new_game);
 }
 
 /**
@@ -446,10 +457,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (player_ptr->is_dead) {
-        *new_game = true;
-        player_ptr->is_dead = false;
-        w_ptr->sf_lives++;
-        return true;
+        return reset_save_data(player_ptr, new_game);
     }
 
     w_ptr->character_loaded = true;

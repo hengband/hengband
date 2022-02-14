@@ -114,7 +114,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
 
     // xtra3フィールドが複数目的に共用されていた頃の名残.
     if (loading_savefile_version_is_older_than(12)) {
-        int8_t tmp8s = any_bits(flags, SaveDataItemFlagType::XTRA3) ? rd_byte() : 0;
+        int8_t tmp8s = any_bits(flags, SavedataItemOlderThan12FlagType::XTRA3) ? rd_byte() : 0;
         if (o_ptr->tval == ItemKindType::CHEST) {
             o_ptr->chest_level = static_cast<uint8_t>(tmp8s);
         } else if (o_ptr->tval == ItemKindType::CAPTURE) {
