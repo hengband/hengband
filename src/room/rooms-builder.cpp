@@ -400,10 +400,10 @@ POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, 
     POSITION dx = abs(x2 - x1);
     POSITION dy = abs(y2 - y1);
     if (dx >= 2 * dy)
-        return (dx + (dy * h1) / h2);
+        return dx + (dy * h1) / h2;
 
     if (dy >= 2 * dx)
-        return (dy + (dx * h1) / h2);
+        return dy + (dx * h1) / h2;
 
-    return (((dx + dy) * 128) / 181 + (dx * dx / (dy * h3) + dy * dy / (dx * h3)) * h4);
+    return ((dx + dy) * 128) / 181 + (dx * dx / (dy * h3) + dy * dy / (dx * h3)) * h4;
 }

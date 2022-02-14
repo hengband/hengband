@@ -426,7 +426,7 @@ static errr Metadpy_init_2(Display *dpy, concptr name)
     if (!dpy) {
         dpy = XOpenDisplay(name);
         if (!dpy)
-            return (-1);
+            return -1;
 
         m->nuke = 1;
     } else {
@@ -461,7 +461,7 @@ static errr Metadpy_init_2(Display *dpy, concptr name)
 
     m->color = ((m->depth > 1) ? 1 : 0);
     m->mono = ((m->color) ? 0 : 1);
-    return (0);
+    return 0;
 }
 
 /*
@@ -474,7 +474,7 @@ static errr Metadpy_update(int flush, int sync, int discard)
     if (sync)
         XSync(Metadpy->dpy, discard);
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -483,7 +483,7 @@ static errr Metadpy_update(int flush, int sync, int discard)
 static errr Metadpy_do_beep(void)
 {
     XBell(Metadpy->dpy, 100);
-    return (0);
+    return 0;
 }
 
 /*
@@ -501,7 +501,7 @@ static errr Infowin_set_name(concptr name)
         XSetWMName(Metadpy->dpy, Infowin->win, &tp);
         XFree(tp.value);
     }
-    return (0);
+    return 0;
 }
 
 /*
@@ -535,7 +535,7 @@ static errr Infowin_prepare(Window xid)
     iwin->mask = xwa.your_event_mask;
     iwin->mapped = ((xwa.map_state == IsUnmapped) ? 0 : 1);
     iwin->redraw = 1;
-    return (0);
+    return 0;
 }
 
 /*
@@ -565,7 +565,7 @@ static errr Infowin_init_data(Window dad, int x, int y, int w, int h, int b, Pix
 
     XSelectInput(Metadpy->dpy, xid, 0L);
     Infowin->nuke = 1;
-    return (Infowin_prepare(xid));
+    return Infowin_prepare(xid);
 }
 
 /*
@@ -575,7 +575,7 @@ static errr Infowin_set_mask(long mask)
 {
     Infowin->mask = mask;
     XSelectInput(Metadpy->dpy, Infowin->win, Infowin->mask);
-    return (0);
+    return 0;
 }
 
 /*
@@ -584,7 +584,7 @@ static errr Infowin_set_mask(long mask)
 static errr Infowin_map(void)
 {
     XMapWindow(Metadpy->dpy, Infowin->win);
-    return (0);
+    return 0;
 }
 
 /*
@@ -593,7 +593,7 @@ static errr Infowin_map(void)
 static errr Infowin_raise(void)
 {
     XRaiseWindow(Metadpy->dpy, Infowin->win);
-    return (0);
+    return 0;
 }
 
 /*
@@ -602,7 +602,7 @@ static errr Infowin_raise(void)
 static errr Infowin_impell(int x, int y)
 {
     XMoveWindow(Metadpy->dpy, Infowin->win, x, y);
-    return (0);
+    return 0;
 }
 
 /*
@@ -611,7 +611,7 @@ static errr Infowin_impell(int x, int y)
 static errr Infowin_resize(int w, int h)
 {
     XResizeWindow(Metadpy->dpy, Infowin->win, w, h);
-    return (0);
+    return 0;
 }
 
 /*
@@ -620,7 +620,7 @@ static errr Infowin_resize(int w, int h)
 static errr Infowin_wipe(void)
 {
     XClearWindow(Metadpy->dpy, Infowin->win);
-    return (0);
+    return 0;
 }
 
 /*
@@ -671,11 +671,11 @@ static int Infoclr_Opcode(concptr str)
     int i;
     for (i = 0; opcode_pairs[i * 2]; ++i) {
         if (streq(opcode_pairs[i * 2], str)) {
-            return (atoi(opcode_pairs[i * 2 + 1]));
+            return atoi(opcode_pairs[i * 2 + 1]);
         }
     }
 
-    return (-1);
+    return -1;
 }
 
 /*
@@ -699,11 +699,11 @@ static errr Infoclr_init_data(Pixell fg, Pixell bg, int op, int stip)
 
 #ifndef USE_XFT
     if (bg > Metadpy->zg)
-        return (-1);
+        return -1;
     if (fg > Metadpy->zg)
-        return (-1);
+        return -1;
     if ((op < 0) || (op > 15))
-        return (-1);
+        return -1;
 
     gcv.function = op;
     gcv.background = bg;
@@ -730,7 +730,7 @@ static errr Infoclr_init_data(Pixell fg, Pixell bg, int op, int stip)
     iclr->bg = bg;
     iclr->code = op;
     iclr->stip = stip ? 1 : 0;
-    return (0);
+    return 0;
 }
 
 /*
@@ -747,12 +747,12 @@ static errr Infoclr_change_fg(Pixell fg)
     iclr->fg = fg;
 #else
     if (fg > Metadpy->zg)
-        return (-1);
+        return -1;
 
     XSetForeground(Metadpy->dpy, iclr->gc, fg);
 #endif
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -814,7 +814,7 @@ static errr Infofnt_prepare(XFontSet info)
     else
         ifnt->twid = ifnt->wid;
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -893,7 +893,7 @@ static void Infofnt_text_std_xft_draw_str(int x, int y, concptr str, concptr str
 static errr Infofnt_text_std(int x, int y, concptr str, int len)
 {
     if (!str || !*str)
-        return (-1);
+        return -1;
 
     if (len < 0)
         len = strlen(str);
@@ -912,7 +912,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
         char utf8_buf[1024];
         int utf8_len = euc_to_utf8(str, len, utf8_buf, sizeof(utf8_buf));
         if (utf8_len < 0) {
-            return (-1);
+            return -1;
         }
 #endif
 
@@ -933,7 +933,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 #endif
     }
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -956,7 +956,7 @@ static errr Infofnt_text_non(int x, int y, concptr str, int len)
     XFillRectangle(Metadpy->dpy, Infowin->win, Infoclr->gc, x, y, w, h);
 #endif
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -1557,7 +1557,7 @@ static errr CheckEvent(bool wait)
 #endif
 
         if (!wait && !XPending(Metadpy->dpy))
-            return (1);
+            return 1;
 
         if (s_ptr->select && !s_ptr->drawn)
             mark_selection();
@@ -1584,7 +1584,7 @@ static errr CheckEvent(bool wait)
     }
 
     if (!td || !iwin)
-        return (0);
+        return 0;
 
     term_activate(&td->t);
     Infowin_set(iwin);
@@ -1717,7 +1717,7 @@ static errr CheckEvent(bool wait)
 
     term_activate(&old_td->t);
     Infowin_set(old_td->win.get());
-    return (0);
+    return 0;
 }
 
 /*
@@ -1768,14 +1768,14 @@ static errr Term_xtra_x11_sound(int v)
 {
     char buf[1024];
     if (!use_sound)
-        return (1);
+        return 1;
     if ((v < 0) || (v >= SOUND_MAX))
-        return (1);
+        return 1;
     if (!sound_file[v])
-        return (1);
+        return 1;
 
     sprintf(buf, "./playwave.sh %s\n", sound_file[v]);
-    return (system(buf) < 0);
+    return system(buf) < 0;
 }
 
 /*
@@ -1789,7 +1789,7 @@ static errr Term_xtra_x11_level(int v)
         Infofnt_set(td->fnt.get());
     }
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -1815,7 +1815,7 @@ static errr Term_xtra_x11_react(void)
         }
     }
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -1826,40 +1826,40 @@ static errr Term_xtra_x11(int n, int v)
     switch (n) {
     case TERM_XTRA_NOISE:
         Metadpy_do_beep();
-        return (0);
+        return 0;
     case TERM_XTRA_SOUND:
-        return (Term_xtra_x11_sound(v));
+        return Term_xtra_x11_sound(v);
 #ifdef USE_XFT
     case TERM_XTRA_FRESH:
         Metadpy_update(1, 1, 0);
-        return (0);
+        return 0;
 #else
     case TERM_XTRA_FRESH:
         Metadpy_update(1, 0, 0);
-        return (0);
+        return 0;
 #endif
     case TERM_XTRA_BORED:
-        return (CheckEvent(0));
+        return CheckEvent(0);
     case TERM_XTRA_EVENT:
-        return (CheckEvent(v));
+        return CheckEvent(v);
     case TERM_XTRA_FLUSH:
         while (!CheckEvent(false))
             ;
-        return (0);
+        return 0;
     case TERM_XTRA_LEVEL:
-        return (Term_xtra_x11_level(v));
+        return Term_xtra_x11_level(v);
     case TERM_XTRA_CLEAR:
         Infowin_wipe();
         s_ptr->drawn = false;
-        return (0);
+        return 0;
     case TERM_XTRA_DELAY:
         usleep(1000 * v);
-        return (0);
+        return 0;
     case TERM_XTRA_REACT:
-        return (Term_xtra_x11_react());
+        return Term_xtra_x11_react();
     }
 
-    return (1);
+    return 1;
 }
 
 /*
@@ -1884,7 +1884,7 @@ static errr Term_curs_x11(int x, int y)
         Infofnt_text_non(x, y, " ", 1);
     }
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -1907,7 +1907,7 @@ static errr Term_bigcurs_x11(int x, int y)
         Infofnt_text_non(x, y, "  ", 2);
     }
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -1918,7 +1918,7 @@ static errr Term_wipe_x11(int x, int y, int n)
     Infoclr_set(clr[TERM_DARK].get());
     Infofnt_text_non(x, y, "", n);
     s_ptr->drawn = false;
-    return (0);
+    return 0;
 }
 
 /*
@@ -1929,7 +1929,7 @@ static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s
     Infoclr_set(clr[a].get());
     Infofnt_text_std(x, y, s, n);
     s_ptr->drawn = false;
-    return (0);
+    return 0;
 }
 
 #ifndef USE_XFT
@@ -1994,7 +1994,7 @@ static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     }
 
     s_ptr->drawn = false;
-    return (0);
+    return 0;
 }
 #endif
 
@@ -2081,7 +2081,7 @@ static void IMDestroyCallback(XIM xim, XPointer client_data, XPointer call_data)
 
 static char force_lower(char a)
 {
-    return ((isupper((a))) ? tolower((a)) : (a));
+    return isupper(a) ? tolower(a) : a;
 }
 
 static void Term_nuke_x11(term_type *)
@@ -2310,7 +2310,7 @@ static errr term_data_init(term_data *td, int i)
     t->nuke_hook = Term_nuke_x11;
     t->data = td;
     term_activate(t);
-    return (0);
+    return 0;
 }
 
 /*
@@ -2402,7 +2402,7 @@ errr init_x11(int argc, char *argv[])
 #endif /* USE_LOCALE */
 
     if (Metadpy_init_name(dpy_name))
-        return (-1);
+        return -1;
 
     xor_ = std::make_unique<infoclr>();
     Infoclr_set(xor_.get());
@@ -2496,7 +2496,7 @@ errr init_x11(int argc, char *argv[])
         }
     }
 #endif /* ! USE_XFT */
-    return (0);
+    return 0;
 }
 
 #endif /* USE_X11 */

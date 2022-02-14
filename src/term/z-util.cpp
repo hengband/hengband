@@ -285,7 +285,7 @@ int count_bits(BIT_FLAGS x)
 		n++;
 	} while (0 != (x = x&(x - 1)));
 
-	return (n);
+	return n;
 }
 
 /*!

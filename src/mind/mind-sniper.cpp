@@ -184,7 +184,7 @@ int boost_concentration_damage(PlayerType *player_ptr, int tdam)
 
     tdam = tdam * (10 + sniper_concent) / 10;
 
-    return (tdam);
+    return tdam;
 }
 
 /*!
@@ -515,7 +515,7 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         break;
     }
 
-    return (mult);
+    return mult;
 }
 
 /*!
@@ -594,7 +594,7 @@ static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
     command_cmd = 'f';
     do_cmd_fire(player_ptr, snipe_type);
 
-    return (player_ptr->is_fired);
+    return player_ptr->is_fired;
 }
 
 /*!

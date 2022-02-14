@@ -642,5 +642,5 @@ bool detect_all(PlayerType *player_ptr, POSITION range)
         detect = true;
     if (detect_monsters_normal(player_ptr, range))
         detect = true;
-    return (detect);
+    return detect;
 }

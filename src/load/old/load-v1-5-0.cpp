@@ -681,7 +681,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     limit = rd_u16b();
     if (limit > w_ptr->max_o_idx) {
         load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
-        return (151);
+        return 151;
     }
 
     auto item_loader = ItemLoaderFactory::create_loader();
@@ -689,7 +689,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         OBJECT_IDX o_idx = o_pop(floor_ptr);
         if (i != o_idx) {
             load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
-            return (152);
+            return 152;
         }
 
         auto &item = floor_ptr->o_list[o_idx];
@@ -701,7 +701,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     limit = rd_u16b();
     if (limit > w_ptr->max_m_idx) {
         load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
-        return (161);
+        return 161;
     }
 
     auto monster_loader = MonsterLoaderFactory::create_loader(player_ptr);
@@ -709,7 +709,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         auto m_idx = m_pop(floor_ptr);
         if (i != m_idx) {
             load_note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
-            return (162);
+            return 162;
         }
 
         auto m_ptr = &floor_ptr->m_list[m_idx];

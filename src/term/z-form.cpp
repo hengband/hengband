@@ -173,7 +173,7 @@ static uint vstrnfmt_aux_dflt(char *buf, uint max, concptr fmt, vptr arg)
         len = max - 1;
     tmp[len] = '\0';
     strcpy(buf, tmp);
-    return (len);
+    return len;
 }
 
 /*
@@ -640,7 +640,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
     buf[n] = '\0';
 
     /* Return length */
-    return (n);
+    return n;
 }
 
 /*
@@ -694,7 +694,7 @@ uint strnfmt(char *buf, uint max, concptr fmt, ...)
     va_end(vp);
 
     /* Return the number of bytes written */
-    return (len);
+    return len;
 }
 
 /*
@@ -717,7 +717,7 @@ uint strfmt(char *buf, concptr fmt, ...)
     va_end(vp);
 
     /* Return the number of bytes written */
-    return (len);
+    return len;
 }
 
 /*
@@ -741,7 +741,7 @@ char *format(concptr fmt, ...)
     va_end(vp);
 
     /* Return the result */
-    return (res);
+    return res;
 }
 
 /*

@@ -265,7 +265,8 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
             return false;
     }
 
-    return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
+    auto hook_pf = get_monster_hook(player_ptr);
+    return (*hook_pf)(player_ptr, r_idx);
 }
 
 /*!

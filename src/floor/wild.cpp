@@ -624,7 +624,7 @@ static wilderness_grid w_letter[255];
 parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xmin, int xmax, int *y, int *x)
 {
     if (!(buf[0] == 'W'))
-        return (PARSE_ERROR_GENERIC);
+        return PARSE_ERROR_GENERIC;
 
     int num;
     char *zz[33];
@@ -671,7 +671,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
                 w_letter[index].name[0] = 0;
         } else {
             /* Failure */
-            return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
         break;

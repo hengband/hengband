@@ -38,5 +38,5 @@ int get_keymap_dir(char ch)
     if (d == 5)
         d = 0;
 
-    return (d);
+    return d;
 }

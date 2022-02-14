@@ -714,9 +714,9 @@ static int is_slot_able_to_be_ego(PlayerType *player_ptr, ObjectType *o_ptr)
         return slot;
 
     if ((o_ptr->tval == ItemKindType::SHOT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::BOLT))
-        return (INVEN_AMMO);
+        return INVEN_AMMO;
 
-    return (-1);
+    return -1;
 }
 
 /*!

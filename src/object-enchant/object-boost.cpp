@@ -88,8 +88,8 @@ int m_bonus(int max, DEPTH level)
 
     /* Enforce the maximum value */
     if (value > max)
-        return (max);
-    return (value);
+        return max;
+    return value;
 }
 
 /*!

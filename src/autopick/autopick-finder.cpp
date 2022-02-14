@@ -167,14 +167,17 @@ byte get_string_for_search(PlayerType *player_ptr, ObjectType **o_handle, concpt
 
         case '\n':
         case '\r':
-        case KTRL('s'):
-            if (*o_handle)
-                return (back ? -1 : 1);
+        case KTRL('s'): {
+            byte ret = back ? -1 : 1;
+            if (*o_handle) {
+                return ret;
+            }
+
             string_free(*search_strp);
             *search_strp = string_make(buf);
             *o_handle = nullptr;
-            return (back ? -1 : 1);
-
+            return ret;
+        }
         case KTRL('i'):
             return get_object_for_search(player_ptr, o_handle, search_strp);
 

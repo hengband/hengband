@@ -472,5 +472,5 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     }
 
     lite_spot(player_ptr, y, x);
-    return (obvious);
+    return obvious;
 }

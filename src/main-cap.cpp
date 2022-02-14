@@ -311,11 +311,11 @@ errr init_cap_aux(void)
     /* Get the terminal name (if possible) */
     desc = getenv("TERM");
     if (!desc)
-        return (1);
+        return 1;
 
     /* Get the terminal info */
     if (tgetent(blob, desc) != 1)
-        return (2);
+        return 2;
 
     /* Get the (initial) columns and rows, or default */
     if ((cols = tgetnum("co")) == -1)
@@ -326,7 +326,7 @@ errr init_cap_aux(void)
     /* Find out how to move the cursor to a given location */
     cm = tgetstr("cm", &next);
     if (!cm)
-        return (10);
+        return 10;
 
     /* Find out how to move the cursor to a given position */
     ch = tgetstr("ch", &next);
@@ -346,7 +346,7 @@ errr init_cap_aux(void)
     /* Find out how to clear the screen */
     cl = tgetstr("cl", &next);
     if (!cl)
-        return (11);
+        return 11;
 
     /* Find out how to clear to the end of display */
     cd = tgetstr("cd", &next);
@@ -401,7 +401,7 @@ errr init_cap_aux(void)
 #endif
 
     /* Success */
-    return (0);
+    return 0;
 }
 
 /*
@@ -659,7 +659,7 @@ static errr Term_xtra_cap_alive(int v)
     /* Suspend */
     if (!v) {
         if (!active)
-            return (1);
+            return 1;
 
         /* Hack -- make sure the cursor is visible */
         curs_set(1);
@@ -677,7 +677,7 @@ static errr Term_xtra_cap_alive(int v)
     /* Resume */
     else {
         if (active)
-            return (1);
+            return 1;
 
         /* Hack -- restore the cursor location */
         do_move(curx, cury, curx, cury);
@@ -693,7 +693,7 @@ static errr Term_xtra_cap_alive(int v)
     }
 
     /* Success */
-    return (0);
+    return 0;
 }
 
 /*
@@ -718,29 +718,29 @@ static errr Term_xtra_cap_event(int v)
     else {
         /* Get the current flags for stdin */
         if ((arg = fcntl(0, F_GETFL, 0)) < 1)
-            return (1);
+            return 1;
 
         /* Tell stdin not to block */
         if (fcntl(0, F_SETFL, arg | O_NDELAY) < 0)
-            return (1);
+            return 1;
 
         /* Read one byte, if possible */
         i = read(0, buf, 1);
 
         /* Replace the flags for stdin */
         if (fcntl(0, F_SETFL, arg))
-            return (1);
+            return 1;
     }
 
     /* No keys ready */
     if ((i != 1) || (!buf[0]))
-        return (1);
+        return 1;
 
     /* Enqueue the keypress */
     Term_keypress(buf[0]);
 
     /* Success */
-    return (0);
+    return 0;
 }
 
 /*
@@ -756,7 +756,7 @@ static errr Term_curs_cap(int x, int y)
     cury = y;
 
     /* Success */
-    return (0);
+    return 0;
 }
 
 /*
@@ -787,7 +787,7 @@ static errr Term_wipe_cap(int x, int y, int n)
     }
 
     /* Success */
-    return (0);
+    return 0;
 }
 
 /*
@@ -817,7 +817,7 @@ static errr Term_text_cap(int x, int y, int n, byte a, concptr s)
     }
 
     /* Success */
-    return (0);
+    return 0;
 }
 
 /*
@@ -831,41 +831,41 @@ static errr Term_xtra_cap(int n, int v)
     case TERM_XTRA_CLEAR:
         do_cl();
         do_move(0, 0, 0, 0);
-        return (0);
+        return 0;
 
     /* Make a noise */
     case TERM_XTRA_NOISE:
         (void)write(1, "\007", 1);
-        return (0);
+        return 0;
 
     /* Change the cursor visibility */
     case TERM_XTRA_SHAPE:
         curv = v;
         curs_set(v);
-        return (0);
+        return 0;
 
     /* Suspend/Resume */
     case TERM_XTRA_ALIVE:
-        return (Term_xtra_cap_alive(v));
+        return Term_xtra_cap_alive(v);
 
     /* Process events */
     case TERM_XTRA_EVENT:
-        return (Term_xtra_cap_event(v));
+        return Term_xtra_cap_event(v);
 
     /* Flush events */
     case TERM_XTRA_FLUSH:
         while (!Term_xtra_cap_event(false))
             ;
-        return (0);
+        return 0;
 
     /* Delay */
     case TERM_XTRA_DELAY:
         usleep(1000 * v);
-        return (0);
+        return 0;
     }
 
     /* Not parsed */
-    return (1);
+    return 1;
 }
 
 /*
@@ -925,7 +925,7 @@ errr init_cap(void)
 
     /* Initialize the screen */
     if (init_cap_aux())
-        return (-1);
+        return -1;
 
     /* Hack -- Require large screen, or Quit with message */
     if ((rows < 24) || (cols < 80))
@@ -974,7 +974,7 @@ errr init_cap(void)
     Term_activate(term_screen);
 
     /* Success */
-    return (0);
+    return 0;
 }
 
 #endif /* USE_CAP */

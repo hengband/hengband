@@ -49,7 +49,7 @@
 static int highscore_write(high_score *score)
 {
     /* Write the record, note failure */
-    return (fd_write(highscore_fd, (char *)(score), sizeof(high_score)));
+    return fd_write(highscore_fd, (char *)(score), sizeof(high_score));
 }
 
 /*!
@@ -73,10 +73,10 @@ static int highscore_where(high_score *score)
     for (int i = 0; i < MAX_HISCORES; i++) {
         int old_score;
         if (highscore_read(&the_score))
-            return (i);
+            return i;
         old_score = atoi(the_score.pts);
         if (my_score > old_score)
-            return (i);
+            return i;
     }
 
     /* The "last" entry is always usable */

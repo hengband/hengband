@@ -421,7 +421,7 @@ static MULTIPLY calc_shot_damage_with_slay(
         mult = calc_snipe_damage_with_slay(player_ptr, mult, monster_ptr, snipe_type);
 
     /* Return the total damage */
-    return (tdam * mult / 10);
+    return tdam * mult / 10;
 }
 
 /*!
@@ -1047,7 +1047,7 @@ HIT_POINT critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, in
         }
     }
 
-    return (dam);
+    return dam;
 }
 
 /*!
@@ -1098,7 +1098,7 @@ ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval)
     }
     }
 
-    return (energy);
+    return energy;
 }
 
 /*
@@ -1147,7 +1147,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
     }
     }
 
-    return (tmul);
+    return tmul;
 }
 
 /*!

@@ -208,7 +208,7 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (r_ptr->level > (player_ptr->lev * player_ptr->lev / 20 + 10))
         tmp /= 3;
 
-    return (randint0(tmp) <= (r_ptr->level + 20));
+    return randint0(tmp) <= (r_ptr->level + 20);
 }
 
 /*!

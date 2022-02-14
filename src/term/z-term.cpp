@@ -100,7 +100,7 @@ errr term_user(int n)
         return -1;
 
     /* Call the hook */
-    return ((*Term->user_hook)(n));
+    return (*Term->user_hook)(n);
 }
 
 /*
@@ -113,7 +113,7 @@ errr term_xtra(int n, int v)
         return -1;
 
     /* Call the hook */
-    return ((*Term->xtra_hook)(n, v));
+    return (*Term->xtra_hook)(n, v);
 }
 
 /*** Fake hooks ***/
@@ -1285,7 +1285,7 @@ errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 
     /* Paranoia -- illegal char */
     if (!c)
-        return (-2);
+        return -2;
 
     /* Queue it for later */
     term_queue_char(x, y, a, c, 0, 0);
@@ -1318,7 +1318,7 @@ errr term_addch(TERM_COLOR a, char c)
 
     /* Paranoia -- no illegal chars */
     if (!c)
-        return (-2);
+        return -2;
 
     /* Queue the given character for display */
     term_queue_char(Term->scr->cx, Term->scr->cy, a, c, 0, 0);
@@ -1356,7 +1356,7 @@ errr term_add_bigch(TERM_COLOR a, char c)
 
     /* Paranoia -- no illegal chars */
     if (!c)
-        return (-2);
+        return -2;
 
     /* Queue the given character for display */
     term_queue_bigchar(Term->scr->cx, Term->scr->cy, a, c, 0, 0);
@@ -1437,11 +1437,11 @@ errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 
     /* Move first */
     if ((res = term_gotoxy(x, y)) != 0)
-        return (res);
+        return res;
 
     /* Then add the char */
     if ((res = term_addch(a, c)) != 0)
-        return (res);
+        return res;
 
     return 0;
 }
@@ -1455,11 +1455,11 @@ errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
 
     /* Move first */
     if ((res = term_gotoxy(x, y)) != 0)
-        return (res);
+        return res;
 
     /* Then add the string */
     if ((res = term_addstr(n, a, s)) != 0)
-        return (res);
+        return res;
 
     return 0;
 }
@@ -2087,18 +2087,18 @@ errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
     for (int i = 0; i < n && s[i] != 0; i++) {
         /* Move first */
         if ((res = term_gotoxy(x, y0)) != 0)
-            return (res);
+            return res;
 
         if (iskanji(s[i])) {
             if ((res = term_addstr(2, a, &s[i])) != 0)
-                return (res);
+                return res;
             i++;
             y0++;
             if (s[i] == 0)
                 break;
         } else {
             if ((res = term_addstr(1, a, &s[i])) != 0)
-                return (res);
+                return res;
             y0++;
         }
     }

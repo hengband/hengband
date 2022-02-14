@@ -39,7 +39,7 @@ static errr rd_inventory(PlayerType *player_ptr)
         ObjectType item;
         item_loader->rd_item(&item);
         if (!item.k_idx)
-            return (53);
+            return 53;
 
         if (n >= INVEN_MAIN_HAND) {
             item.marked |= OM_TOUCHED;
@@ -50,7 +50,7 @@ static errr rd_inventory(PlayerType *player_ptr)
 
         if (player_ptr->inven_cnt == INVEN_PACK) {
             load_note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory"));
-            return (54);
+            return 54;
         }
 
         n = slot++;

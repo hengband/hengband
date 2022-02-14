@@ -74,5 +74,5 @@ bool heavy_armor(PlayerType *player_ptr)
     monk_arm_wgt += player_ptr->inventory_list[INVEN_ARMS].weight;
     monk_arm_wgt += player_ptr->inventory_list[INVEN_FEET].weight;
 
-    return (monk_arm_wgt > (100 + (player_ptr->lev * 4)));
+    return monk_arm_wgt > (100 + (player_ptr->lev * 4));
 }

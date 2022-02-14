@@ -146,7 +146,7 @@ LPCWSTR win_term_name[] = { L"Hengband", L"Term-1", L"Term-2", L"Term-3", L"Term
 static term_data data[MAX_TERM_DATA]; //!< An array of term_data's
 static bool is_main_term(term_data *td)
 {
-    return (td == &data[0]);
+    return td == &data[0];
 }
 static term_data *my_td; //!< Hack -- global "window creation" pointer
 POINT normsize; //!< Remember normal size of main window when maxmized
@@ -612,7 +612,7 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
         term_activate(old);
     }
 
-    return (current_bg_mode == new_mode);
+    return current_bg_mode == new_mode;
 }
 
 /*!
@@ -935,7 +935,7 @@ static errr term_xtra_win(int n, int v)
 {
     switch (n) {
     case TERM_XTRA_NOISE: {
-        return (term_xtra_win_noise());
+        return term_xtra_win_noise();
     }
     case TERM_XTRA_FRESH: {
         term_data *td = (term_data *)(Term->data);
@@ -957,25 +957,25 @@ static errr term_xtra_win(int n, int v)
         return term_xtra_win_scene(v);
     }
     case TERM_XTRA_SOUND: {
-        return (term_xtra_win_sound(v));
+        return term_xtra_win_sound(v);
     }
     case TERM_XTRA_BORED: {
-        return (term_xtra_win_event(0));
+        return term_xtra_win_event(0);
     }
     case TERM_XTRA_EVENT: {
-        return (term_xtra_win_event(v));
+        return term_xtra_win_event(v);
     }
     case TERM_XTRA_FLUSH: {
-        return (term_xtra_win_flush());
+        return term_xtra_win_flush();
     }
     case TERM_XTRA_CLEAR: {
-        return (term_xtra_win_clear());
+        return term_xtra_win_clear();
     }
     case TERM_XTRA_REACT: {
-        return (term_xtra_win_react(p_ptr));
+        return term_xtra_win_react(p_ptr);
     }
     case TERM_XTRA_DELAY: {
-        return (term_xtra_win_delay(v));
+        return term_xtra_win_delay(v);
     }
     }
 
@@ -1184,7 +1184,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     int i;
     HDC hdcMask = NULL;
     if (!use_graphics) {
-        return (term_wipe_win(x, y, n));
+        return term_wipe_win(x, y, n);
     }
 
     const tile_info &infGraph = graphic.get_tile_info();

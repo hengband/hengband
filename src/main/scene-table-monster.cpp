@@ -36,7 +36,7 @@ inline static bool is_unique(monster_race *ap_r_ptr)
 
 inline static bool is_unknown_monster(monster_race *ap_r_ptr)
 {
-    return (ap_r_ptr->r_tkills == 0);
+    return ap_r_ptr->r_tkills == 0;
 }
 
 void clear_scene_target_monster()
@@ -70,7 +70,7 @@ void set_temp_mute_scene_monster(int sec)
  */
 inline static bool can_mute_scene_monster()
 {
-    return (scene_target_monster.mute_until > time(nullptr));
+    return scene_target_monster.mute_until > time(nullptr);
 }
 
 /*!
@@ -101,7 +101,7 @@ static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX
 
     /* Unknown monsters first */
     if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0))
-        return (ap_r_ptr1->r_tkills == 0);
+        return ap_r_ptr1->r_tkills == 0;
 
     /* Higher level monsters first (if known) */
     if (ap_r_ptr1->r_tkills && ap_r_ptr2->r_tkills && ap_r_ptr1->level != ap_r_ptr2->level)

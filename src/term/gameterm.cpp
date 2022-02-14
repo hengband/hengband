@@ -380,38 +380,38 @@ static TERM_COLOR mh_attr(int max)
 {
     switch (randint1(max)) {
     case 1:
-        return (TERM_RED);
+        return TERM_RED;
     case 2:
-        return (TERM_GREEN);
+        return TERM_GREEN;
     case 3:
-        return (TERM_BLUE);
+        return TERM_BLUE;
     case 4:
-        return (TERM_YELLOW);
+        return TERM_YELLOW;
     case 5:
-        return (TERM_ORANGE);
+        return TERM_ORANGE;
     case 6:
-        return (TERM_VIOLET);
+        return TERM_VIOLET;
     case 7:
-        return (TERM_L_RED);
+        return TERM_L_RED;
     case 8:
-        return (TERM_L_GREEN);
+        return TERM_L_GREEN;
     case 9:
-        return (TERM_L_BLUE);
+        return TERM_L_BLUE;
     case 10:
-        return (TERM_UMBER);
+        return TERM_UMBER;
     case 11:
-        return (TERM_L_UMBER);
+        return TERM_L_UMBER;
     case 12:
-        return (TERM_SLATE);
+        return TERM_SLATE;
     case 13:
-        return (TERM_WHITE);
+        return TERM_WHITE;
     case 14:
-        return (TERM_L_WHITE);
+        return TERM_L_WHITE;
     case 15:
-        return (TERM_L_DARK);
+        return TERM_L_DARK;
     }
 
-    return (TERM_WHITE);
+    return TERM_WHITE;
 }
 
 /*!
@@ -427,79 +427,79 @@ static TERM_COLOR spell_color(AttributeType type)
         /* Analyze */
         switch (type) {
         case AttributeType::PSY_SPEAR:
-            return (0x06);
+            return 0x06;
         case AttributeType::MISSILE:
-            return (0x0F);
+            return 0x0F;
         case AttributeType::ACID:
-            return (0x04);
+            return 0x04;
         case AttributeType::ELEC:
-            return (0x02);
+            return 0x02;
         case AttributeType::FIRE:
-            return (0x00);
+            return 0x00;
         case AttributeType::COLD:
-            return (0x01);
+            return 0x01;
         case AttributeType::POIS:
-            return (0x03);
+            return 0x03;
         case AttributeType::HOLY_FIRE:
-            return (0x00);
+            return 0x00;
         case AttributeType::HELL_FIRE:
-            return (0x00);
+            return 0x00;
         case AttributeType::MANA:
-            return (0x0E);
+            return 0x0E;
             /* by henkma */
         case AttributeType::SEEKER:
-            return (0x0E);
+            return 0x0E;
         case AttributeType::SUPER_RAY:
-            return (0x0E);
+            return 0x0E;
 
         case AttributeType::DEBUG:
-            return (0x0F);
+            return 0x0F;
         case AttributeType::WATER:
-            return (0x04);
+            return 0x04;
         case AttributeType::NETHER:
-            return (0x07);
+            return 0x07;
         case AttributeType::CHAOS:
-            return (mh_attr(15));
+            return mh_attr(15);
         case AttributeType::DISENCHANT:
-            return (0x05);
+            return 0x05;
         case AttributeType::NEXUS:
-            return (0x0C);
+            return 0x0C;
         case AttributeType::CONFUSION:
-            return (mh_attr(4));
+            return mh_attr(4);
         case AttributeType::SOUND:
-            return (0x09);
+            return 0x09;
         case AttributeType::SHARDS:
-            return (0x08);
+            return 0x08;
         case AttributeType::FORCE:
-            return (0x09);
+            return 0x09;
         case AttributeType::INERTIAL:
-            return (0x09);
+            return 0x09;
         case AttributeType::GRAVITY:
-            return (0x09);
+            return 0x09;
         case AttributeType::TIME:
-            return (0x09);
+            return 0x09;
         case AttributeType::LITE_WEAK:
-            return (0x06);
+            return 0x06;
         case AttributeType::LITE:
-            return (0x06);
+            return 0x06;
         case AttributeType::DARK_WEAK:
-            return (0x07);
+            return 0x07;
         case AttributeType::DARK:
-            return (0x07);
+            return 0x07;
         case AttributeType::PLASMA:
-            return (0x0B);
+            return 0x0B;
         case AttributeType::METEOR:
-            return (0x00);
+            return 0x00;
         case AttributeType::ICE:
-            return (0x01);
+            return 0x01;
         case AttributeType::ROCKET:
-            return (0x0F);
+            return 0x0F;
         case AttributeType::DEATH_RAY:
-            return (0x07);
+            return 0x07;
         case AttributeType::NUKE:
-            return (mh_attr(2));
+            return mh_attr(2);
         case AttributeType::DISINTEGRATE:
-            return (0x05);
+            return 0x05;
         case AttributeType::PSI:            /* fall through */
         case AttributeType::PSI_DRAIN:      /* fall through */
         case AttributeType::TELEKINESIS:    /* fall through */
@@ -507,22 +507,22 @@ static TERM_COLOR spell_color(AttributeType type)
         case AttributeType::DRAIN_MANA:     /* fall through */
         case AttributeType::MIND_BLAST:     /* fall through */
         case AttributeType::BRAIN_SMASH:
-            return (0x09);
+            return 0x09;
         case AttributeType::CAUSE_1: /* fall through */
         case AttributeType::CAUSE_2: /* fall through */
         case AttributeType::CAUSE_3: /* fall through */
         case AttributeType::CAUSE_4:
-            return (0x0E);
+            return 0x0E;
         case AttributeType::HAND_DOOM:
-            return (0x07);
+            return 0x07;
         case AttributeType::CAPTURE:
-            return (0x0E);
+            return 0x0E;
         case AttributeType::IDENTIFY:
-            return (0x01);
+            return 0x01;
         case AttributeType::ATTACK:
-            return (0x0F);
+            return 0x0F;
         case AttributeType::PHOTO:
-            return (0x06);
+            return 0x06;
         default:
             break;
         }
@@ -536,7 +536,7 @@ static TERM_COLOR spell_color(AttributeType type)
         concptr s = quark_str(gf_color[(int)type]);
 
         if (!s)
-            return (TERM_WHITE);
+            return TERM_WHITE;
 
         /* Pick a random color */
         c = s[randint0(strlen(s))];
@@ -547,14 +547,14 @@ static TERM_COLOR spell_color(AttributeType type)
         /* Invalid color (note check for < 0 removed, gave a silly
 		 * warning because bytes are always >= 0 -- RG) */
         if (a > 15)
-            return (TERM_WHITE);
+            return TERM_WHITE;
 
         /* Use this color */
-        return (a);
+        return a;
     }
 
     /* Standard "color" */
-    return (TERM_WHITE);
+    return TERM_WHITE;
 }
 
 /*!
@@ -613,7 +613,7 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
     c = misc_to_char[base + k];
 
     /* Create pict */
-    return (PICT(a, c));
+    return PICT(a, c);
 }
 
 /*!
@@ -627,39 +627,39 @@ TERM_COLOR color_char_to_attr(SYMBOL_CODE c)
 {
     switch (c) {
     case 'd':
-        return (TERM_DARK);
+        return TERM_DARK;
     case 'w':
-        return (TERM_WHITE);
+        return TERM_WHITE;
     case 's':
-        return (TERM_SLATE);
+        return TERM_SLATE;
     case 'o':
-        return (TERM_ORANGE);
+        return TERM_ORANGE;
     case 'r':
-        return (TERM_RED);
+        return TERM_RED;
     case 'g':
-        return (TERM_GREEN);
+        return TERM_GREEN;
     case 'b':
-        return (TERM_BLUE);
+        return TERM_BLUE;
     case 'u':
-        return (TERM_UMBER);
+        return TERM_UMBER;
 
     case 'D':
-        return (TERM_L_DARK);
+        return TERM_L_DARK;
     case 'W':
-        return (TERM_L_WHITE);
+        return TERM_L_WHITE;
     case 'v':
-        return (TERM_VIOLET);
+        return TERM_VIOLET;
     case 'y':
-        return (TERM_YELLOW);
+        return TERM_YELLOW;
     case 'R':
-        return (TERM_L_RED);
+        return TERM_L_RED;
     case 'G':
-        return (TERM_L_GREEN);
+        return TERM_L_GREEN;
     case 'B':
-        return (TERM_L_BLUE);
+        return TERM_L_BLUE;
     case 'U':
-        return (TERM_L_UMBER);
+        return TERM_L_UMBER;
     }
 
-    return (255);
+    return 255;
 }

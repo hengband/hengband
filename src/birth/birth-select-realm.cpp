@@ -274,7 +274,7 @@ static byte select_realm(PlayerType *player_ptr, uint32_t choices, int *count)
         return REALM_SELECT_CANCEL;
 
     clear_from(10);
-    return (byte)(birth_realm_ptr->picks[birth_realm_ptr->k]);
+    return static_cast<byte>(birth_realm_ptr->picks[birth_realm_ptr->k]);
 }
 
 static void cleanup_realm_selection_window(void)

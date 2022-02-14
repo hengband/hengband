@@ -103,7 +103,7 @@ int soc_write(int sd, char *buf, size_t sz)
     while (nleft > 0) {
         nwritten = send(sd, buf, nleft, 0);
         if (nwritten <= 0)
-            return (nwritten);
+            return nwritten;
         nleft -= nwritten;
         buf += nwritten;
     }
@@ -121,7 +121,7 @@ int soc_read(int sd, char *buf, size_t sz)
         int n;
         n = recv(sd, buf + nread, nleft, 0);
         if (n <= 0)
-            return (nread);
+            return nread;
         nleft -= n;
         nread += n;
     }

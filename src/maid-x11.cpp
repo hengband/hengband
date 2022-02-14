@@ -115,7 +115,7 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
         quit_fmt("Couldn't allocate bitmap color '#%02x%02x%02x'\n", red, green, blue);
     }
 
-    return (xcolour.pixel);
+    return xcolour.pixel;
 #endif
 }
 
@@ -162,7 +162,7 @@ typedef struct RGBQUAD {
 static byte get_byte(FILE *fff)
 {
     /* Get a character, and return it */
-    return (getc(fff) & 0xFF);
+    return getc(fff) & 0xFF;
 }
 
 static void rd_byte(FILE *fff, byte *ip)

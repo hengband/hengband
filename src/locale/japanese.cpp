@@ -471,7 +471,7 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
 #if defined(EUC)
 
     /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
-    return (utf8_to_euc(utf8_str, strlen(utf8_str) + 1, sys_str_buffer, sys_str_buflen) >= 0);
+    return utf8_to_euc(utf8_str, strlen(utf8_str) + 1, sys_str_buffer, sys_str_buflen) >= 0;
 
 #elif defined(SJIS) && defined(WINDOWS)
 

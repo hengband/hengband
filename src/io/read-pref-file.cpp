@@ -136,7 +136,7 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
     }
 
     angband_fclose(fp);
-    return (err);
+    return err;
 }
 
 /*!

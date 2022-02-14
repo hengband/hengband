@@ -125,7 +125,7 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
             n++;
     }
 
-    return (n != 8);
+    return n != 8;
 }
 
 /*!

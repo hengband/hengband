@@ -186,7 +186,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
  */
 static bool is_heavy_shoot(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    return (calc_bow_weight_limit(player_ptr) < o_ptr->weight / 10);
+    return calc_bow_weight_limit(player_ptr) < (o_ptr->weight / 10);
 }
 
 /*!

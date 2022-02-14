@@ -52,5 +52,5 @@ int calc_mutant_regenerate_mod(PlayerType *player_ptr)
     if (regen < 10)
         regen = 10;
 
-    return (regen);
+    return regen;
 }

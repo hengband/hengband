@@ -94,5 +94,5 @@ int count_line(text_body_type *tb);
  */
 inline bool is_greater_autopick_max_line(int count)
 {
-    return (count > MAX_LINES - 3);
+    return count > MAX_LINES - 3;
 }

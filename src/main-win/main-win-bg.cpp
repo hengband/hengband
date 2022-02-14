@@ -33,7 +33,7 @@ bool load_bg(char* filename)
     delete_bg();
     hBG = read_graphic(filename);
 
-    return (hBG != NULL);
+    return hBG != NULL;
 }
 
 void draw_bg(HDC hdc, RECT *r)
