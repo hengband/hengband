@@ -1001,7 +1001,6 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
 bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bool more_space)
 {
     vault_type *v_ptr = nullptr;
-    int dummy;
     POSITION x, y;
     POSITION xval, yval;
     POSITION xoffset, yoffset;
