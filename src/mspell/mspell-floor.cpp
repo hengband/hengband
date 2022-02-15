@@ -8,6 +8,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
@@ -35,11 +36,11 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -196,7 +197,7 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     monster_name(player_ptr, t_idx, t_name);
 
     if (tr_ptr->flagsr & RFR_RES_TELE) {
-        if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
+        if (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
             if (is_original_ap_and_seen(player_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
             if (see_monster(player_ptr, t_idx)) {
@@ -272,7 +273,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     monster_name(player_ptr, t_idx, t_name);
 
     if (tr_ptr->flagsr & RFR_RES_TELE) {
-        if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
+        if (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
             if (is_original_ap_and_seen(player_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
             if (see_monster(player_ptr, t_idx)) {
@@ -383,7 +384,7 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
-    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && none_bits(r_ptr->flags3, RF3_HURT_LITE) && !(r_ptr->flags7 & RF7_DARK_MASK))
         can_use_lite_area = true;
 
     if (monster_to_monster && !is_hostile(t_ptr))

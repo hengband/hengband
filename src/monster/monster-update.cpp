@@ -262,88 +262,88 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
 static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_ptr)
 {
     auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
-    if ((player_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
+    if ((player_ptr->esp_animal) && r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_ANIMAL;
+            r_ptr->r_kind_flags.set(MonsterKindType::ANIMAL);
     }
 
-    if ((player_ptr->esp_undead) && (r_ptr->flags3 & RF3_UNDEAD)) {
+    if ((player_ptr->esp_undead) && r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_UNDEAD;
+            r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
     }
 
-    if ((player_ptr->esp_demon) && (r_ptr->flags3 & RF3_DEMON)) {
+    if ((player_ptr->esp_demon) && r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_DEMON;
+            r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
     }
 
-    if ((player_ptr->esp_orc) && (r_ptr->flags3 & RF3_ORC)) {
+    if ((player_ptr->esp_orc) && r_ptr->kind_flags.has(MonsterKindType::ORC)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_ORC;
+            r_ptr->r_kind_flags.set(MonsterKindType::ORC);
     }
 
-    if ((player_ptr->esp_troll) && (r_ptr->flags3 & RF3_TROLL)) {
+    if ((player_ptr->esp_troll) && r_ptr->kind_flags.has(MonsterKindType::TROLL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_TROLL;
+            r_ptr->r_kind_flags.set(MonsterKindType::TROLL);
     }
 
-    if ((player_ptr->esp_giant) && (r_ptr->flags3 & RF3_GIANT)) {
+    if ((player_ptr->esp_giant) && r_ptr->kind_flags.has(MonsterKindType::GIANT)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_GIANT;
+            r_ptr->r_kind_flags.set(MonsterKindType::GIANT);
     }
 
-    if ((player_ptr->esp_dragon) && (r_ptr->flags3 & RF3_DRAGON)) {
+    if ((player_ptr->esp_dragon) && r_ptr->kind_flags.has(MonsterKindType::DRAGON)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_DRAGON;
+            r_ptr->r_kind_flags.set(MonsterKindType::DRAGON);
     }
 
-    if ((player_ptr->esp_human) && (r_ptr->flags2 & RF2_HUMAN)) {
+    if ((player_ptr->esp_human) && r_ptr->kind_flags.has(MonsterKindType::HUMAN)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags2 |= RF2_HUMAN;
+            r_ptr->r_kind_flags.set(MonsterKindType::HUMAN);
     }
 
-    if ((player_ptr->esp_evil) && (r_ptr->flags3 & RF3_EVIL)) {
+    if ((player_ptr->esp_evil) && r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_EVIL;
+            r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
     }
 
-    if ((player_ptr->esp_good) && (r_ptr->flags3 & RF3_GOOD)) {
+    if ((player_ptr->esp_good) && r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_GOOD;
+            r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
     }
 
-    if ((player_ptr->esp_nonliving) && ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING)) {
+    if ((player_ptr->esp_nonliving) && (r_ptr->kind_flags.has(MonsterKindType::NONLIVING) && r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD }))) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags3 |= RF3_NONLIVING;
+            r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
     }
 
-    if ((player_ptr->esp_unique) && (r_ptr->flags1 & RF1_UNIQUE)) {
+    if ((player_ptr->esp_unique) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated)
-            r_ptr->r_flags1 |= RF1_UNIQUE;
+            r_ptr->r_kind_flags.set(MonsterKindType::UNIQUE);
     }
 }
 

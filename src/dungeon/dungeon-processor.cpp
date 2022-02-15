@@ -217,7 +217,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
             wild_regen--;
     }
 
-    if ((inside_quest(quest_num)) && none_bits(r_info[quest[enum2i(quest_num)].r_idx].flags1, RF1_UNIQUE)) {
+    if ((inside_quest(quest_num)) && r_info[quest[enum2i(quest_num)].r_idx].kind_flags.has_not(MonsterKindType::UNIQUE)) {
         r_info[quest[enum2i(quest_num)].r_idx].flags1 &= ~RF1_QUESTOR;
     }
 

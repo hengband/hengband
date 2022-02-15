@@ -200,7 +200,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
                 if (!r_idx)
                     continue;
 
-                if ((r_info[r_idx].flags1 & RF1_UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2)) {
+                if (r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2)) {
                     if ((r_info[r_idx].level + 10) > mon_level)
                         continue;
                 }
@@ -277,8 +277,8 @@ bool monster_arena_comm(PlayerType *player_ptr)
         auto *r_ptr = &r_info[battle_mon[i]];
 
         sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,
-            _(format("%s%s", r_ptr->name.c_str(), (r_ptr->flags1 & RF1_UNIQUE) ? "もどき" : "      "),
-                format("%s%s", (r_ptr->flags1 & RF1_UNIQUE) ? "Fake " : "", r_ptr->name.c_str())),
+            _(format("%s%s", r_ptr->name.c_str(), r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "もどき" : "      "),
+                format("%s%s", r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "Fake " : "", r_ptr->name.c_str())),
             (long int)mon_odds[i] / 100, (long int)mon_odds[i] % 100);
         prt(buf, 5 + i, 1);
     }

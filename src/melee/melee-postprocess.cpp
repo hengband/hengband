@@ -13,6 +13,7 @@
 #include "melee/melee-postprocess.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
@@ -37,11 +38,11 @@
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 // Melee-post-process-type
@@ -175,7 +176,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
     if (mam_pp_ptr->m_ptr->hp < 0)
         return false;
 
-    if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
+    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
         mam_pp_ptr->m_ptr->hp = 1;
         return false;
     }
@@ -196,8 +197,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    if (!monster_fear_remaining(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0)
-        || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
+    if (!monster_fear_remaining(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0) || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
         return;
 
     *(mam_pp_ptr->fear) = false;

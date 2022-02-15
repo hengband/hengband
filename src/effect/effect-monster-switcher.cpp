@@ -48,12 +48,12 @@ process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster
     }
 
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-        if (em_ptr->r_ptr->flags3 & RF3_DEMON)
-            em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
-        if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
-            em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-        if (em_ptr->r_ptr->flags3 & RF3_NONLIVING)
-            em_ptr->r_ptr->r_flags3 |= (RF3_NONLIVING);
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON))
+            em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
+            em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::NONLIVING))
+            em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
     }
 
     em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -72,12 +72,12 @@ process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_t
 
     if (!monster_living(em_ptr->m_ptr->r_idx)) {
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-            if (em_ptr->r_ptr->flags3 & RF3_DEMON)
-                em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
-            if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
-                em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-            if (em_ptr->r_ptr->flags3 & RF3_NONLIVING)
-                em_ptr->r_ptr->r_flags3 |= (RF3_NONLIVING);
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON))
+                em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
+                em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::NONLIVING))
+                em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
         }
 
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
@@ -86,8 +86,10 @@ process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_t
         return PROCESS_CONTINUE;
     }
 
-    if (((em_ptr->r_ptr->flags1 & RF1_UNIQUE) && (randint1(888) != 666))
-        || (((em_ptr->r_ptr->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) && randint1(100) != 66)) {
+    bool has_resistance = (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (randint1(888) != 666));
+    has_resistance |= (((em_ptr->r_ptr->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) && randint1(100) != 66);
+
+    if (has_resistance) {
         em_ptr->note = _("には耐性がある！", " resists!");
         em_ptr->obvious = false;
         em_ptr->dam = 0;
@@ -119,7 +121,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
     if (em_ptr->seen)
         em_ptr->obvious = true;
 
-    if (em_ptr->r_ptr->flags1 & RF1_UNIQUE) {
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         return PROCESS_CONTINUE;
@@ -180,7 +182,7 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
 
         switch (randint0(4)) {
         case 0:
-            if (!any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE)) {
+            if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
                 if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
                     em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
                 }
@@ -188,7 +190,7 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
             }
             break;
         case 1:
-            if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE)) {
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
                 em_ptr->do_stun = 0;
             } else {
                 em_ptr->do_stun = damroll((player_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
@@ -196,7 +198,7 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
             }
             break;
         case 2:
-            if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
                 if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
                     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
                         set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF);
@@ -210,7 +212,7 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
             }
             break;
         default:
-            if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
                 if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
                     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
                         set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_SLEEP);
@@ -242,7 +244,9 @@ process_result effect_monster_genocide(PlayerType *player_ptr, effect_monster_ty
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
-    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
+
+    std::string_view spell_name(_("モンスター消滅", "Genocide One"));
+    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, spell_name.data())) {
         if (em_ptr->seen_msg)
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
         chg_virtue(player_ptr, V_VITALITY, -1);

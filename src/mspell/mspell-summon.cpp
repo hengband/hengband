@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-summon.h"
 #include "core/disturbance.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -17,7 +18,6 @@
 #include "mspell/mspell-util.h"
 #include "mspell/specified-summon.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
@@ -46,7 +46,6 @@ static void summon_disturb(PlayerType *player_ptr, int target_type, bool known, 
         disturb(player_ptr, true, true);
     }
 }
-
 
 /*!
  * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
@@ -111,8 +110,8 @@ static void decide_summon_kin_caster(
 #ifdef JP
         (void)m_poss;
 #endif
-        _(msg_format("%sが魔法で%sを召喚した。", m_name, ((r_ptr->flags1 & RF1_UNIQUE) ? "手下" : "仲間")),
-            msg_format("%^s magically summons %s %s.", m_name, m_poss, ((r_ptr->flags1 & RF1_UNIQUE) ? "minions" : "kin")));
+        _(msg_format("%sが魔法で%sを召喚した。", m_name, (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "手下" : "仲間")),
+            msg_format("%^s magically summons %s %s.", m_name, m_poss, (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "minions" : "kin")));
     }
 
     if (mon_to_mon && known && !see_either)
@@ -139,7 +138,7 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
     monster_desc(player_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
-    
+
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
@@ -559,7 +558,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     int num = 1;
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         num += r_ptr->level / 40;
     }
 

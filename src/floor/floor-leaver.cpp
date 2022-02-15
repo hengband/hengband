@@ -257,7 +257,7 @@ static void preserve_info(PlayerType *player_ptr)
             continue;
 
         r_ptr = real_r_ptr(m_ptr);
-        if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
             continue;
 
         delete_monster_idx(player_ptr, i);

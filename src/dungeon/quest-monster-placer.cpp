@@ -25,13 +25,12 @@ bool place_quest_monsters(PlayerType *player_ptr)
     for (int i = 0; i < max_q_idx; i++) {
         monster_race *r_ptr;
         BIT_FLAGS mode;
-        if (quest[i].status != QuestStatusType::TAKEN || (quest[i].type != QuestKindType::KILL_LEVEL && quest[i].type != QuestKindType::RANDOM)
-            || quest[i].level != floor_ptr->dun_level || player_ptr->dungeon_idx != quest[i].dungeon || (quest[i].flags & QUEST_FLAG_PRESET)) {
+        if (quest[i].status != QuestStatusType::TAKEN || (quest[i].type != QuestKindType::KILL_LEVEL && quest[i].type != QuestKindType::RANDOM) || quest[i].level != floor_ptr->dun_level || player_ptr->dungeon_idx != quest[i].dungeon || (quest[i].flags & QUEST_FLAG_PRESET)) {
             continue;
         }
 
         r_ptr = &r_info[quest[i].r_idx];
-        if ((r_ptr->flags1 & RF1_UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num))
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num))
             continue;
 
         mode = PM_NO_KAGE | PM_NO_PET;
@@ -51,7 +50,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     x = randint0(floor_ptr->width);
                     g_ptr = &floor_ptr->grid_array[y][x];
                     f_ptr = &f_info[g_ptr->feat];
-                    if (f_ptr->flags.has_none_of({FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY}))
+                    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }))
                         continue;
 
                     if (!monster_can_enter(player_ptr, y, x, r_ptr, 0))

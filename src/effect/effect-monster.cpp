@@ -10,6 +10,7 @@
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-switcher.h"
 #include "effect/effect-monster-util.h"
@@ -41,7 +42,6 @@
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "spells-effect-util.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
@@ -52,6 +52,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 /*!
  * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する
@@ -115,6 +116,18 @@ static void make_description_of_affecred_monster(PlayerType *player_ptr, effect_
  */
 static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
+    const std::vector<AttributeType> effect_arrtibute = {
+        AttributeType::OLD_CLONE,
+        AttributeType::STAR_HEAL,
+        AttributeType::OLD_HEAL,
+        AttributeType::OLD_SPEED,
+        AttributeType::CAPTURE,
+        AttributeType::PHOTO,
+    };
+    const auto check = [em_ptr](const AttributeType attribute) {
+        return em_ptr->attribute == attribute;
+    };
+
     process_result result = is_affective(player_ptr, em_ptr);
     if (result != PROCESS_TRUE) {
         if (result == PROCESS_CONTINUE) {
@@ -124,9 +137,10 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
         return result;
     }
 
-    if (none_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) || em_ptr->attribute == AttributeType::OLD_CLONE 
-        || em_ptr->attribute == AttributeType::STAR_HEAL || em_ptr->attribute == AttributeType::OLD_HEAL || em_ptr->attribute == AttributeType::OLD_SPEED 
-        || em_ptr->attribute == AttributeType::CAPTURE || em_ptr->attribute == AttributeType::PHOTO)
+    bool do_effect = none_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL);
+    do_effect |= std::any_of(effect_arrtibute.cbegin(), effect_arrtibute.cend(), check);
+
+    if (do_effect)
         return switch_effects_monster(player_ptr, em_ptr);
 
     bool ignore_res_all = (em_ptr->attribute == AttributeType::DEBUG);
@@ -316,9 +330,9 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
     if ((em_ptr->who > 0) || !em_ptr->slept)
         return;
 
-    if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+    if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
         chg_virtue(player_ptr, V_COMPASSION, -1);
-    if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+    if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
         chg_virtue(player_ptr, V_HONOUR, -1);
 }
 
@@ -329,10 +343,10 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
  */
 static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)))
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)))
         em_ptr->do_polymorph = false;
 
-    if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp))
+    if ((em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp))
         em_ptr->dam = em_ptr->m_ptr->hp;
 }
 

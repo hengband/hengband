@@ -13,16 +13,16 @@
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
+#include "lore/lore-store.h"
+#include "monster-race//race-ability-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race//race-ability-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "lore/lore-store.h"
 #include "object/object-mark-types.h"
 #include "player-attack/player-attack-util.h"
 #include "player/attack-defense-types.h"
@@ -173,7 +173,7 @@ static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type 
     if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
         return false;
 
-    if (r_ptr->flags1 & RF1_UNIQUE) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
             r_ptr->r_flagsr |= RFR_RES_TELE;
 
@@ -219,7 +219,7 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
 static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
     auto *r_ptr = pa_ptr->r_ptr;
-    if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) != 0) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
         return;
 
     if (polymorph_monster(player_ptr, y, x)) {
@@ -268,8 +268,7 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
     auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
 
-    if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF
-        || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION))
+    if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION))
         attack_confuse(player_ptr, pa_ptr);
 
     if (pa_ptr->magical_effect == MagicalBrandEffectType::STUN)

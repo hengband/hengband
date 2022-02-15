@@ -5,6 +5,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
@@ -53,7 +54,6 @@
 #include "player/player-personality-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
-#include "effect/attribute-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -163,162 +163,162 @@ static MULTIPLY calc_shot_damage_with_slay(
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT: {
-        if ((flags.has(TR_SLAY_ANIMAL)) && any_bits(race_ptr->flags3, RF3_ANIMAL)) {
+        if ((flags.has(TR_SLAY_ANIMAL)) && race_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_ANIMAL);
+                race_ptr->r_kind_flags.set(MonsterKindType::ANIMAL);
             }
             if (mult < 17)
                 mult = 17;
         }
 
-        if ((flags.has(TR_KILL_ANIMAL)) && any_bits(race_ptr->flags3, RF3_ANIMAL)) {
+        if ((flags.has(TR_KILL_ANIMAL)) && race_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_ANIMAL);
+                race_ptr->r_kind_flags.set(MonsterKindType::ANIMAL);
             }
             if (mult < 27)
                 mult = 27;
         }
 
-        if ((flags.has(TR_SLAY_EVIL)) && any_bits(race_ptr->flags3, RF3_EVIL)) {
+        if ((flags.has(TR_SLAY_EVIL)) && race_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_EVIL);
+                race_ptr->r_kind_flags.set(MonsterKindType::EVIL);
             }
             if (mult < 15)
                 mult = 15;
         }
 
-        if ((flags.has(TR_KILL_EVIL)) && any_bits(race_ptr->flags3, RF3_EVIL)) {
+        if ((flags.has(TR_KILL_EVIL)) && race_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_EVIL);
+                race_ptr->r_kind_flags.set(MonsterKindType::EVIL);
             }
             if (mult < 25)
                 mult = 25;
         }
 
-        if ((flags.has(TR_SLAY_GOOD)) && any_bits(race_ptr->flags3, RF3_GOOD)) {
+        if ((flags.has(TR_SLAY_GOOD)) && race_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_GOOD);
+                race_ptr->r_kind_flags.set(MonsterKindType::GOOD);
             }
             if (mult < 15)
                 mult = 15;
         }
 
-        if ((flags.has(TR_KILL_GOOD)) && any_bits(race_ptr->flags3, RF3_GOOD)) {
+        if ((flags.has(TR_KILL_GOOD)) && race_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_GOOD);
+                race_ptr->r_kind_flags.set(MonsterKindType::GOOD);
             }
             if (mult < 25)
                 mult = 25;
         }
 
-        if ((flags.has(TR_SLAY_HUMAN)) && any_bits(race_ptr->flags2, RF2_HUMAN)) {
+        if ((flags.has(TR_SLAY_HUMAN)) && race_ptr->kind_flags.has(MonsterKindType::HUMAN)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags2, RF2_HUMAN);
+                race_ptr->r_kind_flags.set(MonsterKindType::HUMAN);
             }
             if (mult < 17)
                 mult = 17;
         }
 
-        if ((flags.has(TR_KILL_HUMAN)) && any_bits(race_ptr->flags2, RF2_HUMAN)) {
+        if ((flags.has(TR_KILL_HUMAN)) && race_ptr->kind_flags.has(MonsterKindType::HUMAN)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags2, RF2_HUMAN);
+                race_ptr->r_kind_flags.set(MonsterKindType::HUMAN);
             }
             if (mult < 27)
                 mult = 27;
         }
 
-        if ((flags.has(TR_SLAY_UNDEAD)) && any_bits(race_ptr->flags3, RF3_UNDEAD)) {
+        if ((flags.has(TR_SLAY_UNDEAD)) && race_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_UNDEAD);
+                race_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
             }
             if (mult < 20)
                 mult = 20;
         }
 
-        if ((flags.has(TR_KILL_UNDEAD)) && any_bits(race_ptr->flags3, RF3_UNDEAD)) {
+        if ((flags.has(TR_KILL_UNDEAD)) && race_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_UNDEAD);
+                race_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
             }
             if (mult < 30)
                 mult = 30;
         }
 
-        if ((flags.has(TR_SLAY_DEMON)) && any_bits(race_ptr->flags3, RF3_DEMON)) {
+        if ((flags.has(TR_SLAY_DEMON)) && race_ptr->kind_flags.has(MonsterKindType::DEMON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_DEMON);
+                race_ptr->r_kind_flags.set(MonsterKindType::DEMON);
             }
             if (mult < 20)
                 mult = 20;
         }
 
-        if ((flags.has(TR_KILL_DEMON)) && any_bits(race_ptr->flags3, RF3_DEMON)) {
+        if ((flags.has(TR_KILL_DEMON)) && race_ptr->kind_flags.has(MonsterKindType::DEMON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_DEMON);
+                race_ptr->r_kind_flags.set(MonsterKindType::DEMON);
             }
             if (mult < 30)
                 mult = 30;
         }
 
-        if ((flags.has(TR_SLAY_ORC)) && any_bits(race_ptr->flags3, RF3_ORC)) {
+        if ((flags.has(TR_SLAY_ORC)) && race_ptr->kind_flags.has(MonsterKindType::ORC)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_ORC);
+                race_ptr->r_kind_flags.set(MonsterKindType::ORC);
             }
             if (mult < 20)
                 mult = 20;
         }
 
-        if ((flags.has(TR_KILL_ORC)) && any_bits(race_ptr->flags3, RF3_ORC)) {
+        if ((flags.has(TR_KILL_ORC)) && race_ptr->kind_flags.has(MonsterKindType::ORC)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_ORC);
+                race_ptr->r_kind_flags.set(MonsterKindType::ORC);
             }
             if (mult < 30)
                 mult = 30;
         }
 
-        if ((flags.has(TR_SLAY_TROLL)) && any_bits(race_ptr->flags3, RF3_TROLL)) {
+        if ((flags.has(TR_SLAY_TROLL)) && race_ptr->kind_flags.has(MonsterKindType::TROLL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_TROLL);
+                race_ptr->r_kind_flags.set(MonsterKindType::TROLL);
             }
 
             if (mult < 20)
                 mult = 20;
         }
 
-        if ((flags.has(TR_KILL_TROLL)) && any_bits(race_ptr->flags3, RF3_TROLL)) {
+        if ((flags.has(TR_KILL_TROLL)) && race_ptr->kind_flags.has(MonsterKindType::TROLL)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_TROLL);
+                race_ptr->r_kind_flags.set(MonsterKindType::TROLL);
             }
             if (mult < 30)
                 mult = 30;
         }
 
-        if ((flags.has(TR_SLAY_GIANT)) && any_bits(race_ptr->flags3, RF3_GIANT)) {
+        if ((flags.has(TR_SLAY_GIANT)) && race_ptr->kind_flags.has(MonsterKindType::GIANT)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_GIANT);
+                race_ptr->r_kind_flags.set(MonsterKindType::GIANT);
             }
             if (mult < 20)
                 mult = 20;
         }
 
-        if ((flags.has(TR_KILL_GIANT)) && any_bits(race_ptr->flags3, RF3_GIANT)) {
+        if ((flags.has(TR_KILL_GIANT)) && race_ptr->kind_flags.has(MonsterKindType::GIANT)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_GIANT);
+                race_ptr->r_kind_flags.set(MonsterKindType::GIANT);
             }
             if (mult < 30)
                 mult = 30;
         }
 
-        if ((flags.has(TR_SLAY_DRAGON)) && any_bits(race_ptr->flags3, RF3_DRAGON)) {
+        if ((flags.has(TR_SLAY_DRAGON)) && race_ptr->kind_flags.has(MonsterKindType::DRAGON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_DRAGON);
+                race_ptr->r_kind_flags.set(MonsterKindType::DRAGON);
             }
             if (mult < 20)
                 mult = 20;
         }
 
-        if ((flags.has(TR_KILL_DRAGON)) && any_bits(race_ptr->flags3, RF3_DRAGON)) {
+        if ((flags.has(TR_KILL_DRAGON)) && race_ptr->kind_flags.has(MonsterKindType::DRAGON)) {
             if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                set_bits(race_ptr->r_flags3, RF3_DRAGON);
+                race_ptr->r_kind_flags.set(MonsterKindType::DRAGON);
             }
             if (mult < 30)
                 mult = 30;
@@ -699,9 +699,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                 hit_body = true;
 
                 if (monster_csleep_remaining(m_ptr)) {
-                    if (none_bits(r_ptr->flags3, RF3_EVIL) || one_in_(5))
+                    if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
                         chg_virtue(player_ptr, V_COMPASSION, -1);
-                    if (none_bits(r_ptr->flags3, RF3_EVIL) || one_in_(5))
+                    if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
                         chg_virtue(player_ptr, V_HONOUR, -1);
                 }
 
@@ -745,8 +745,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                     }
 
                     if (snipe_type == SP_NEEDLE) {
-                        if ((randint1(randint1(r_ptr->level / (3 + sniper_concent)) + (8 - sniper_concent)) == 1)
-                            && none_bits(r_ptr->flags1, RF1_UNIQUE) && none_bits(r_ptr->flags7, RF7_UNIQUE2)) {
+                        if ((randint1(randint1(r_ptr->level / (3 + sniper_concent)) + (8 - sniper_concent)) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && none_bits(r_ptr->flags7, RF7_UNIQUE2)) {
                             GAME_TEXT m_name[MAX_NLEN];
 
                             /* Get "the monster" or "it" */

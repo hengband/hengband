@@ -10,6 +10,7 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -41,7 +42,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
@@ -53,10 +53,10 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
-#include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
@@ -169,7 +169,7 @@ bool activate_unique_detection(PlayerType *player_ptr)
             continue;
 
         r_ptr = &r_info[m_ptr->r_idx];
-        if (r_ptr->flags1 & RF1_UNIQUE) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             msg_format(_("%s． ", "%s. "), r_ptr->name.c_str());
         }
 

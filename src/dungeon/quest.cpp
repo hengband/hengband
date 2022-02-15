@@ -80,7 +80,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
         monster_race *r_ptr;
         r_ptr = &r_info[r_idx];
 
-        if (!(r_ptr->flags1 & RF1_UNIQUE))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
             continue;
         if (r_ptr->flags8 & RF8_NO_QUEST)
             continue;
@@ -196,7 +196,7 @@ void quest_discovery(QuestId q_idx)
         return;
     }
 
-    bool is_random_quest_skipped = (r_ptr->flags1 & RF1_UNIQUE) != 0;
+    bool is_random_quest_skipped = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     is_random_quest_skipped &= r_ptr->max_num == 0;
     if (!is_random_quest_skipped) {
         msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name);

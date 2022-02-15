@@ -174,7 +174,7 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
-    if (none_bits(r_ptr->flags3, RF3_ANIMAL) || this->can_pass_wall || any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || this->can_pass_wall || any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
         return;
     }
 

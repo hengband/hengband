@@ -52,7 +52,7 @@ static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
     if (r_ptr->name.empty())
         return false;
 
-    if (!(r_ptr->flags1 & RF1_UNIQUE))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
 
         return false;
 
@@ -160,8 +160,7 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
     ang_sort(player_ptr, unique_list_ptr->who.data(), &unique_list_ptr->why, unique_list_ptr->who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     display_uniques(unique_list_ptr, fff);
     angband_fclose(fff);
-    concptr title_desc
-        = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
+    concptr title_desc = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
     (void)show_file(player_ptr, true, file_name, title_desc, 0, 0);
     fd_kill(file_name);
 }

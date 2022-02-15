@@ -274,6 +274,7 @@
     <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp" />
     <ClCompile Include="..\..\src\object-enchant\others\apply-magic-lite.cpp" />
+    <ClCompile Include="..\..\src\monster-race\monster-kind-mask.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.cpp" />
     <ClCompile Include="..\..\src\smith\object-smith.cpp" />
     <ClCompile Include="..\..\src\smith\smith-info.cpp" />
@@ -936,7 +937,9 @@
     <ClInclude Include="..\..\src\load\player-class-specific-data-loader.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h" />
+    <ClInclude Include="..\..\src\monster-race\monster-kind-mask.h" />
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h" />
+    <ClInclude Include="..\..\src\monster-race\race-kind-flags.h" />
     <ClInclude Include="..\..\src\monster-race\race-visual-flags.h" />
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h" />
@@ -1863,7 +1866,6 @@
     <ClInclude Include="..\..\src\grid\grid.h" />
     <ClInclude Include="..\..\src\system\h-basic.h" />
     <ClInclude Include="..\..\src\system\h-config.h" />
-    <ClInclude Include="..\..\src\system\h-define.h" />
     <ClInclude Include="..\..\src\system\h-system.h" />
     <ClInclude Include="..\..\src\system\h-type.h" />
     <ClInclude Include="..\..\src\birth\history.h" />

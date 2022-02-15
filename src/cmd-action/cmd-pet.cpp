@@ -205,7 +205,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
     x = player_ptr->x + ddx[dir];
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (player_ptr->riding) {
         /* Skip non-empty grids */
@@ -326,7 +326,7 @@ static void do_name_pet(PlayerType *player_ptr)
             msg_print(_("そのモンスターはペットではない。", "This monster is not a pet."));
             return;
         }
-        if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE) {
+        if (r_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
             msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
             return;
         }
@@ -486,11 +486,16 @@ void do_cmd_pet(PlayerType *player_ptr)
     power_desc[num] = _("ペットに名前をつける", "name pets");
     powers[num++] = PET_NAME;
 
+    bool empty_main = can_attack_with_main_hand(player_ptr);
+    empty_main &= empty_hands(player_ptr, false) == EMPTY_HAND_SUB;
+    empty_main &= player_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding();
+
+    bool empty_sub = can_attack_with_sub_hand(player_ptr);
+    empty_sub &= empty_hands(player_ptr, false) == EMPTY_HAND_MAIN;
+    empty_sub &= player_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding();
+
     if (player_ptr->riding) {
-        if ((can_attack_with_main_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB)
-                && player_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding())
-            || (can_attack_with_sub_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN)
-                && player_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding())) {
+        if (empty_main || empty_sub) {
             if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                 power_desc[num] = _("武器を片手で持つ", "use one hand to control the pet you are riding");
             } else {
@@ -511,8 +516,7 @@ void do_cmd_pet(PlayerType *player_ptr)
                     }
 
                     powers[num++] = PET_TWO_HANDS;
-                } else if ((empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND)
-                    && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
+                } else if ((empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
                     if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("格闘を行わない", "use one hand to control the pet you are riding");
                     } else {

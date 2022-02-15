@@ -7,6 +7,7 @@
 #include "avatar/avatar-changer.h"
 #include "avatar/avatar.h"
 #include "dungeon/dungeon.h"
+#include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags1.h"
@@ -42,7 +43,7 @@ void AvatarChanger::change_virtue()
     }
 
     this->change_virtue_good_evil();
-    if (any_bits(r_ptr->flags3, RF3_UNDEAD) && any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         chg_virtue(this->player_ptr, V_VITALITY, 2);
     }
 
@@ -89,15 +90,15 @@ void AvatarChanger::change_virtue_non_beginner()
 void AvatarChanger::change_virtue_unique()
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
-    if (any_bits(r_ptr->flags3, RF3_EVIL | RF3_GOOD)) {
+    if (r_ptr->kind_flags.has_any_of(alignment_mask)) {
         chg_virtue(this->player_ptr, V_HARMONY, 2);
     }
 
-    if (any_bits(r_ptr->flags3, RF3_GOOD)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
         chg_virtue(this->player_ptr, V_UNLIFE, 2);
         chg_virtue(this->player_ptr, V_VITALITY, -2);
     }
@@ -115,23 +116,23 @@ void AvatarChanger::change_virtue_good_evil()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (any_bits(r_ptr->flags3, RF3_GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
+    if (r_ptr->kind_flags.has(MonsterKindType::GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
         chg_virtue(this->player_ptr, V_UNLIFE, 1);
     }
 
-    if (any_bits(r_ptr->flags3, RF3_ANGEL)) {
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::ANGEL)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, V_FAITH, -2);
         } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
-            auto change_value = any_bits(r_ptr->flags3, RF3_GOOD) ? -1 : 1;
+            auto change_value = r_ptr->kind_flags.has(MonsterKindType::GOOD) ? -1 : 1;
             chg_virtue(this->player_ptr, V_FAITH, change_value);
         }
 
         return;
     }
 
-    if (any_bits(r_ptr->flags3, RF3_DEMON)) {
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, V_FAITH, 2);
         } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
             chg_virtue(this->player_ptr, V_FAITH, 1);
@@ -150,7 +151,7 @@ void AvatarChanger::change_virtue_revenge()
         return;
     }
 
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         chg_virtue(this->player_ptr, V_HONOUR, 10);
         return;
     }
@@ -184,7 +185,7 @@ void AvatarChanger::change_virtue_wild_thief()
     }
 
     if (thief) {
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, V_JUSTICE, 3);
             return;
         }
@@ -209,7 +210,7 @@ void AvatarChanger::change_virtue_good_animal()
     auto *r_ptr = &r_info[m_ptr->r_idx];
     auto magic_ability_flags = r_ptr->ability_flags;
     magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
-    if (none_bits(r_ptr->flags3, RF3_ANIMAL) || any_bits(r_ptr->flags3, RF3_EVIL) || magic_ability_flags.any()) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || r_ptr->kind_flags.has(MonsterKindType::EVIL) || magic_ability_flags.any()) {
         return;
     }
 

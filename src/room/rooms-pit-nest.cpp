@@ -267,9 +267,9 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             return false;
 
         /* Note the alignment */
-        if (r_ptr->flags3 & RF3_EVIL)
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
             align.sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->flags3 & RF3_GOOD)
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
             align.sub_align |= SUB_ALIGN_GOOD;
 
         nest_mon_info[i].r_idx = (int16_t)r_idx;
@@ -494,9 +494,9 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
             return false;
 
         /* Note the alignment */
-        if (r_ptr->flags3 & RF3_EVIL)
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
             align.sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->flags3 & RF3_GOOD)
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
             align.sub_align |= SUB_ALIGN_GOOD;
 
         what[i] = r_idx;
@@ -799,9 +799,9 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
             return false;
 
         /* Note the alignment */
-        if (r_ptr->flags3 & RF3_EVIL)
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
             align.sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->flags3 & RF3_GOOD)
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
             align.sub_align |= SUB_ALIGN_GOOD;
 
         what[i] = r_idx;

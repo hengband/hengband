@@ -4,6 +4,7 @@
 #include "effect/effect-monster-util.h"
 #include "floor/line-of-sight.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -53,7 +54,10 @@ static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, effect_monst
  */
 static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_ptr)
 {
-    bool has_resistance = em_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID) || any_bits(em_ptr->r_ptr->flags2, RF2_WEIRD_MIND) || any_bits(em_ptr->r_ptr->flags3, RF3_ANIMAL) || (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
+    bool has_resistance = em_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID);
+    has_resistance |= any_bits(em_ptr->r_ptr->flags2, RF2_WEIRD_MIND);
+    has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL);
+    has_resistance |= (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
     if (!has_resistance)
         return false;
 
@@ -74,7 +78,9 @@ static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_
  */
 static bool reflects_psi_with_currupted_mind(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    bool is_corrupted = any_bits(em_ptr->r_ptr->flags3, RF3_UNDEAD | RF3_DEMON) && (em_ptr->r_ptr->level > player_ptr->lev / 2) && one_in_(2);
+    bool is_corrupted = em_ptr->r_ptr->kind_flags.has_any_of(has_corrupted_mind);
+    is_corrupted &= (em_ptr->r_ptr->level > player_ptr->lev / 2);
+    is_corrupted &= one_in_(2);
     if (!is_corrupted)
         return false;
 
@@ -311,7 +317,7 @@ process_result effect_monster_telekinesis(PlayerType *player_ptr, effect_monster
     }
 
     em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, em_ptr->dam) + 1;
-    if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || (em_ptr->r_ptr->level > 5 + randint1(em_ptr->dam))) {
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->level > 5 + randint1(em_ptr->dam))) {
         em_ptr->do_stun = 0;
         em_ptr->obvious = false;
     }

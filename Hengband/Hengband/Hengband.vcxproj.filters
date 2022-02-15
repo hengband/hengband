@@ -2376,6 +2376,9 @@
     <ClCompile Include="..\..\src\object-enchant\others\apply-magic-lite.cpp">
       <Filter>object-enchant\others</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\monster-kind-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2820,9 +2823,6 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\h-config.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\system\h-define.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\h-system.h">
@@ -5162,6 +5162,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\angband-exceptions.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-kind-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\monster-kind-mask.h">
+      <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -46,7 +46,7 @@ bool common_saving_throw_charm(PlayerType *player_ptr, HIT_POINT pow, monster_ty
         return true;
 
     pow += (adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1);
-    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
         pow = pow * 2 / 3;
     return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
@@ -75,7 +75,7 @@ bool common_saving_throw_control(PlayerType *player_ptr, HIT_POINT pow, monster_
         return true;
 
     pow += adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1;
-    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
         pow = pow * 2 / 3;
     return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }

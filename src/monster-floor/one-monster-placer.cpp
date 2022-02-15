@@ -22,6 +22,7 @@
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -60,7 +61,7 @@ static bool is_friendly_idx(PlayerType *player_ptr, MONSTER_IDX m_idx)
 static bool monster_hook_tanuki(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
-    bool unselectable = any_bits(r_ptr->flags1, RF1_UNIQUE);
+    bool unselectable = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
     unselectable |= r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY);
     unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC | RF7_CHAMELEON);
@@ -114,7 +115,7 @@ static bool check_unique_placeable(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return true;
 
     auto *r_ptr = &r_info[r_idx];
-    if ((any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
+    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
         return false;
     }
 
@@ -201,7 +202,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return;
 
     auto *r_ptr = &r_info[r_idx];
-    if (none_bits(r_ptr->flags1, RF1_UNIQUE))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
         return;
 
     concptr color;
@@ -256,7 +257,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         return false;
 
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL) || (r_ptr->level < 10))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL) || (r_ptr->level < 10))
         reset_bits(mode, PM_KAGE);
 
     g_ptr->m_idx = m_pop(floor_ptr);
@@ -277,13 +278,13 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
     }
 
-    if ((who > 0) && none_bits(r_ptr->flags3, RF3_EVIL | RF3_GOOD))
+    if ((who > 0) && r_ptr->kind_flags.has_none_of(alignment_mask))
         m_ptr->sub_align = floor_ptr->m_list[who].sub_align;
     else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (any_bits(r_ptr->flags3, RF3_EVIL))
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
             set_bits(m_ptr->sub_align, SUB_ALIGN_EVIL);
-        if (any_bits(r_ptr->flags3, RF3_GOOD))
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
             set_bits(m_ptr->sub_align, SUB_ALIGN_GOOD);
     }
 
@@ -310,7 +311,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         choose_new_monster(player_ptr, g_ptr->m_idx, true, 0);
         r_ptr = &r_info[m_ptr->r_idx];
         m_ptr->mflag2.set(MonsterConstantFlagType::CHAMELEON);
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE) && (who <= 0))
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (who <= 0))
             m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
     } else if (any_bits(mode, PM_KAGE) && none_bits(mode, PM_FORCE_PET)) {
         m_ptr->ap_r_idx = MON_KAGE;
@@ -388,7 +389,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
-    if (w_ptr->character_dungeon && (any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)))
+    if (w_ptr->character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)))
         real_r_ptr(m_ptr)->floor_id = player_ptr->floor_id;
 
     if (any_bits(r_ptr->flags2, RF2_MULTIPLY))

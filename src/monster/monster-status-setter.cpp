@@ -9,6 +9,7 @@
 #include "dungeon/quest-completion-checker.h"
 #include "floor/cave.h"
 #include "monster-floor/monster-move.h"
+#include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
@@ -36,7 +37,7 @@ void set_pet(PlayerType *player_ptr, monster_type *m_ptr)
 {
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     m_ptr->mflag2.set(MonsterConstantFlagType::PET);
-    if (!(r_info[m_ptr->r_idx].flags3 & (RF3_EVIL | RF3_GOOD)))
+    if (r_info[m_ptr->r_idx].kind_flags.has_none_of(alignment_mask))
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
 }
 
@@ -99,7 +100,8 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
     if (v) {
         if (!monster_csleep_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
@@ -143,7 +145,8 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_fast_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_FAST);
@@ -174,7 +177,8 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_slow_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_SLOW);
@@ -210,7 +214,8 @@ bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_stunned_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_STUNNED);
@@ -240,7 +245,8 @@ bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_confused_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_CONFUSED);
@@ -270,7 +276,8 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_fear_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_MONFEAR);
@@ -313,7 +320,8 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool notice = false;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+    v = (v > 200) ? 200 : (v < 0) ? 0
+                                  : v;
     if (v) {
         if (!monster_invulner_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_INVULNER);

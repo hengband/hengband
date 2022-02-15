@@ -3,15 +3,15 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/floor-save-util.h"
+#include "floor/geometry.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
@@ -288,11 +288,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
             continue;
 
         tv = o_ptr->tval;
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || (tv == ItemKindType::WHISTLE) || (tv == ItemKindType::AMULET) || (tv == ItemKindType::RING) || (tv == ItemKindType::STAFF)
-            || (tv == ItemKindType::WAND) || (tv == ItemKindType::ROD) || (tv == ItemKindType::SCROLL) || (tv == ItemKindType::POTION) || (tv == ItemKindType::LIFE_BOOK) || (tv == ItemKindType::SORCERY_BOOK)
-            || (tv == ItemKindType::NATURE_BOOK) || (tv == ItemKindType::CHAOS_BOOK) || (tv == ItemKindType::DEATH_BOOK) || (tv == ItemKindType::TRUMP_BOOK) || (tv == ItemKindType::ARCANE_BOOK)
-            || (tv == ItemKindType::CRAFT_BOOK) || (tv == ItemKindType::DEMON_BOOK) || (tv == ItemKindType::CRUSADE_BOOK) || (tv == ItemKindType::MUSIC_BOOK) || (tv == ItemKindType::HISSATSU_BOOK)
-            || (tv == ItemKindType::HEX_BOOK) || ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0))) {
+        if (o_ptr->is_artifact() || o_ptr->is_ego() || (tv == ItemKindType::WHISTLE) || (tv == ItemKindType::AMULET) || (tv == ItemKindType::RING) || (tv == ItemKindType::STAFF) || (tv == ItemKindType::WAND) || (tv == ItemKindType::ROD) || (tv == ItemKindType::SCROLL) || (tv == ItemKindType::POTION) || (tv == ItemKindType::LIFE_BOOK) || (tv == ItemKindType::SORCERY_BOOK) || (tv == ItemKindType::NATURE_BOOK) || (tv == ItemKindType::CHAOS_BOOK) || (tv == ItemKindType::DEATH_BOOK) || (tv == ItemKindType::TRUMP_BOOK) || (tv == ItemKindType::ARCANE_BOOK) || (tv == ItemKindType::CRAFT_BOOK) || (tv == ItemKindType::DEMON_BOOK) || (tv == ItemKindType::CRUSADE_BOOK) || (tv == ItemKindType::MUSIC_BOOK) || (tv == ItemKindType::HISSATSU_BOOK) || (tv == ItemKindType::HEX_BOOK) || ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0))) {
             o_ptr->marked |= OM_FOUND;
             lite_spot(player_ptr, y, x);
             detect = true;
@@ -330,7 +326,7 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
             continue;
 
         if (!(r_ptr->flags2 & RF2_INVISIBLE) || player_ptr->see_inv) {
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
+            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -375,7 +371,7 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
                 player_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
+            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -414,15 +410,15 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
         if (distance(player_ptr->y, player_ptr->x, y, x) > range)
             continue;
 
-        if (r_ptr->flags3 & RF3_EVIL) {
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             if (is_original_ap(m_ptr)) {
-                r_ptr->r_flags3 |= (RF3_EVIL);
+                r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
                 if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                     player_ptr->window_flags |= (PW_MONSTER);
                 }
             }
 
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
+            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -462,7 +458,7 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
                 player_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
+            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -504,7 +500,7 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
                 player_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
+            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -547,7 +543,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
                 player_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
+            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -557,63 +553,6 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
         flag = false;
     if (flag) {
         msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
-    }
-
-    return flag;
-}
-
-/*!
- * @brief flags3に対応するモンスターを感知する / A "generic" detect monsters routine, tagged to flags3
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param range 効果範囲
- * @param match_flag 感知フラグ
- * @return 効力があった場合TRUEを返す
- */
-bool detect_monsters_xxx(PlayerType *player_ptr, POSITION range, uint32_t match_flag)
-{
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
-        range /= 3;
-
-    bool flag = false;
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
-        if (!monster_is_valid(m_ptr))
-            continue;
-
-        POSITION y = m_ptr->fy;
-        POSITION x = m_ptr->fx;
-
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range)
-            continue;
-
-        if (r_ptr->flags3 & (match_flag)) {
-            if (is_original_ap(m_ptr)) {
-                r_ptr->r_flags3 |= (match_flag);
-                if (player_ptr->monster_race_idx == m_ptr->r_idx) {
-                    player_ptr->window_flags |= (PW_MONSTER);
-                }
-            }
-
-            m_ptr->mflag2.set({MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW});
-            update_monster(player_ptr, i, false);
-            flag = true;
-        }
-    }
-
-    concptr desc_monsters = _("変なモンスター", "weird monsters");
-    if (flag) {
-        switch (match_flag) {
-        case RF3_DEMON:
-            desc_monsters = _("デーモン", "demons");
-            break;
-        case RF3_UNDEAD:
-            desc_monsters = _("アンデッド", "the undead");
-            break;
-        }
-
-        msg_format(_("%sの存在を感じとった！", "You sense the presence of %s!"), desc_monsters);
-        msg_print(nullptr);
     }
 
     return flag;

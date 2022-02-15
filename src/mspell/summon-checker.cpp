@@ -39,16 +39,16 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = r_ptr->d_char == 'M';
         break;
     case SUMMON_ANGEL:
-        is_match = (r_ptr->d_char == 'A') && (((r_ptr->flags3 & RF3_EVIL) != 0) || ((r_ptr->flags3 & RF3_GOOD) != 0));
+        is_match = (r_ptr->d_char == 'A') && ((r_ptr->kind_flags.has(MonsterKindType::EVIL)) || (r_ptr->kind_flags.has(MonsterKindType::GOOD)));
         break;
     case SUMMON_DEMON:
-        is_match = (r_ptr->flags3 & RF3_DEMON) != 0;
+        is_match = r_ptr->kind_flags.has(MonsterKindType::DEMON);
         break;
     case SUMMON_UNDEAD:
-        is_match = (r_ptr->flags3 & RF3_UNDEAD) != 0;
+        is_match = r_ptr->kind_flags.has(MonsterKindType::UNDEAD);
         break;
     case SUMMON_DRAGON:
-        is_match = (r_ptr->flags3 & RF3_DRAGON) != 0;
+        is_match = r_ptr->kind_flags.has(MonsterKindType::DRAGON);
         break;
     case SUMMON_HI_UNDEAD:
         is_match = (r_ptr->d_char == 'L') || (r_ptr->d_char == 'V') || (r_ptr->d_char == 'W');
@@ -57,13 +57,13 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = (r_ptr->d_char == 'D');
         break;
     case SUMMON_HI_DEMON:
-        is_match = ((r_ptr->d_char == 'U') || (r_ptr->d_char == 'H') || (r_ptr->d_char == 'B')) && ((r_ptr->flags3 & RF3_DEMON) != 0);
+        is_match = ((r_ptr->d_char == 'U') || (r_ptr->d_char == 'H') || (r_ptr->d_char == 'B')) && (r_ptr->kind_flags.has(MonsterKindType::DEMON));
         break;
     case SUMMON_AMBERITES:
-        is_match = (r_ptr->flags3 & RF3_AMBERITE) != 0;
+        is_match = r_ptr->kind_flags.has(MonsterKindType::AMBERITE);
         break;
     case SUMMON_UNIQUE:
-        is_match = (r_ptr->flags1 & RF1_UNIQUE) != 0;
+        is_match = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
         break;
     case SUMMON_MOLD:
         is_match = r_ptr->d_char == 'm';
@@ -95,12 +95,10 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = r_idx == MON_DAWN;
         break;
     case SUMMON_ANIMAL:
-        is_match = (r_ptr->flags3 & RF3_ANIMAL) != 0;
+        is_match = r_ptr->kind_flags.has(MonsterKindType::ANIMAL);
         break;
     case SUMMON_ANIMAL_RANGER:
-        is_match = ((r_ptr->flags3 & (RF3_ANIMAL)) && (angband_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) && !(r_ptr->flags3 & (RF3_DRAGON))
-            && !(r_ptr->flags3 & (RF3_EVIL)) && !(r_ptr->flags3 & (RF3_UNDEAD)) && !(r_ptr->flags3 & (RF3_DEMON)) && !(r_ptr->flags2 & (RF2_MULTIPLY))
-            && r_ptr->ability_flags.none());
+        is_match = (r_ptr->kind_flags.has(MonsterKindType::ANIMAL) && (angband_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) && r_ptr->kind_flags.has_not(MonsterKindType::DRAGON) && r_ptr->kind_flags.has_not(MonsterKindType::EVIL) && r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && r_ptr->kind_flags.has_not(MonsterKindType::DEMON) && !(r_ptr->flags2 & (RF2_MULTIPLY)) && r_ptr->ability_flags.none());
         break;
     case SUMMON_SMALL_MOAI:
         is_match = r_idx == MON_SMALL_MOAI;
@@ -158,8 +156,7 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = (r_ptr->flags7 & RF7_GUARDIAN) != 0;
         break;
     case SUMMON_KNIGHTS:
-        is_match = ((r_idx == MON_NOV_PALADIN) || (r_idx == MON_NOV_PALADIN_G) || (r_idx == MON_PALADIN) || (r_idx == MON_W_KNIGHT)
-            || (r_idx == MON_ULTRA_PALADIN) || (r_idx == MON_KNI_TEMPLAR));
+        is_match = ((r_idx == MON_NOV_PALADIN) || (r_idx == MON_NOV_PALADIN_G) || (r_idx == MON_PALADIN) || (r_idx == MON_W_KNIGHT) || (r_idx == MON_ULTRA_PALADIN) || (r_idx == MON_KNI_TEMPLAR));
         break;
     case SUMMON_EAGLES:
         is_match = (r_ptr->d_char == 'B') && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_ONLY) != 0);
@@ -168,10 +165,10 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = r_idx == MON_PIRANHA;
         break;
     case SUMMON_ARMAGE_GOOD:
-        is_match = (r_ptr->d_char == 'A') && ((r_ptr->flags3 & RF3_GOOD) != 0);
+        is_match = (r_ptr->d_char == 'A') && (r_ptr->kind_flags.has(MonsterKindType::GOOD));
         break;
     case SUMMON_ARMAGE_EVIL:
-        is_match = ((r_ptr->flags3 & RF3_DEMON) != 0) || ((r_ptr->d_char == 'A') && ((r_ptr->flags3 & RF3_EVIL) != 0));
+        is_match = (r_ptr->kind_flags.has(MonsterKindType::DEMON)) || ((r_ptr->d_char == 'A') && (r_ptr->kind_flags.has(MonsterKindType::EVIL)));
         break;
     case SUMMON_APOCRYPHA_FOLLOWERS:
         is_match = (r_idx == MON_FOLLOWER_WARRIOR) || (r_idx == MON_FOLLOWER_MAGE);

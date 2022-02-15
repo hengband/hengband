@@ -1,5 +1,6 @@
 ﻿#include "spell-kind/spells-pet.h"
 #include "core/asking-player.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "game-option/play-record-options.h"
@@ -11,7 +12,6 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -44,7 +44,7 @@ void discharge_minion(PlayerType *player_ptr)
 
         monster_race *r_ptr;
         r_ptr = &r_info[m_ptr->r_idx];
-        if (r_ptr->flags1 & RF1_UNIQUE) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, 0x00);
             msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists being blasted and runs away."), m_name);

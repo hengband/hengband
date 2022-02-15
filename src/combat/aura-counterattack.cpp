@@ -5,6 +5,7 @@
  */
 
 #include "combat/aura-counterattack.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "grid/grid.h"
@@ -21,12 +22,11 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
-#include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -129,7 +129,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
         return;
 
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if ((r_ptr->flags3 & RF3_EVIL) == 0)
+    if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL))
         return;
 
     if ((r_ptr->flagsr & RFR_RES_ALL) != 0) {
@@ -149,7 +149,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     }
 
     if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
-        r_ptr->r_flags3 |= RF3_EVIL;
+        r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
 }
 
 static void aura_force_by_monster_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
@@ -207,15 +207,15 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
         monap_ptr->alive = false;
         return;
     }
-    
+
     struct attribute_table {
         inventory_slot_type slot;
         AttributeType type;
     };
 
     const int TABLE_SIZE = 4;
-    attribute_table table[TABLE_SIZE] = { { INVEN_HEAD, AttributeType::OLD_CONF }, { INVEN_SUB_HAND, AttributeType::OLD_SLEEP }, 
-                            { INVEN_ARMS, AttributeType::TURN_ALL }, { INVEN_FEET, AttributeType::OLD_SLOW } };
+    attribute_table table[TABLE_SIZE] = { { INVEN_HEAD, AttributeType::OLD_CONF }, { INVEN_SUB_HAND, AttributeType::OLD_SLEEP },
+        { INVEN_ARMS, AttributeType::TURN_ALL }, { INVEN_FEET, AttributeType::OLD_SLOW } };
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 

@@ -232,7 +232,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MONRACE_IDX r_idx)
     if (z_ptr->level > r_ptr->level)
         return false;
 
-    if (z_ptr->flags1 & RF1_UNIQUE)
+    if (z_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         return false;
 
     if (place_monster_idx == r_idx)
@@ -345,7 +345,7 @@ bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
     if (r_idx == 0)
         return false;
 
-    if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && !(r_info[r_idx].flags1 & RF1_UNIQUE) && angband_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
+    if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && r_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
         mode |= PM_JURAL;
     }
 
@@ -373,7 +373,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
             return false;
 
         r_ptr = &r_info[r_idx];
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
             continue;
 
         if (r_idx == MON_HAGURE)

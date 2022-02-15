@@ -478,28 +478,28 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
                 r_ptr->r_flags3 |= RF3_HURT_ROCK;
             if (mult < n)
                 mult = n;
-        } else if (r_ptr->flags3 & RF3_NONLIVING) {
+        } else if (r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen)
-                r_ptr->r_flags3 |= RF3_NONLIVING;
+                r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_EVILNESS:
-        if (r_ptr->flags3 & RF3_GOOD) {
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             MULTIPLY n = 15 + (sniper_concent * 4);
             if (seen)
-                r_ptr->r_flags3 |= RF3_GOOD;
+                r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_HOLYNESS:
-        if (r_ptr->flags3 & RF3_EVIL) {
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             MULTIPLY n = 12 + (sniper_concent * 3);
             if (seen)
-                r_ptr->r_flags3 |= RF3_EVIL;
+                r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
             if (r_ptr->flags3 & (RF3_HURT_LITE)) {
                 n += (sniper_concent * 3);
                 if (seen)

@@ -92,11 +92,11 @@ bool research_mon(PlayerType *player_ptr)
 
         /* XTRA HACK WHATSEARCH */
         /* Require non-unique monsters if needed */
-        if (norm && (r_ref.flags1 & (RF1_UNIQUE)))
+        if (norm && r_ref.kind_flags.has(MonsterKindType::UNIQUE))
             continue;
 
         /* Require unique monsters if needed */
-        if (uniq && !(r_ref.flags1 & (RF1_UNIQUE)))
+        if (uniq && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE))
             continue;
 
         /* 名前検索 */

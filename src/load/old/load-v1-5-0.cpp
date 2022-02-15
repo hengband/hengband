@@ -237,6 +237,8 @@ void rd_item_old(ObjectType *o_ptr)
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
         }
+
+        xtra1 = 0;
     }
 
     if (h_older_than(0, 2, 3)) {
@@ -339,9 +341,9 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->flags3 & RF3_EVIL)
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
             m_ptr->sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->flags3 & RF3_GOOD)
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
             m_ptr->sub_align |= SUB_ALIGN_GOOD;
     } else
         m_ptr->sub_align = rd_byte();
@@ -496,7 +498,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
     if (r_idx == MON_STORMBRINGER)
         r_ptr->r_flagsr |= RFR_RES_CHAO;
 
-    if (r_ptr->r_flags3 & RF3_ORC)
+    if (r_ptr->r_kind_flags.has(MonsterKindType::ORC))
         r_ptr->r_flagsr |= RFR_RES_DARK;
 }
 
