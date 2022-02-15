@@ -47,7 +47,7 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
         break;
     }
     case ItemKindType::FLASK: {
-        o_ptr->xtra4 = o_ptr->pval;
+        o_ptr->fuel = o_ptr->pval;
         o_ptr->pval = 0;
         break;
     }

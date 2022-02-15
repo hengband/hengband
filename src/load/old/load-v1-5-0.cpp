@@ -242,7 +242,10 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (h_older_than(0, 2, 3)) {
-        o_ptr->xtra4 = 0;
+        o_ptr->fuel = 0;
+        o_ptr->captured_monster_current_hp = 0;
+        o_ptr->smith_hit = 0;
+        o_ptr->smith_damage = 0;
         o_ptr->xtra5 = 0;
         if (o_ptr->tval == ItemKindType::CHEST) {
             o_ptr->chest_level = xtra1;
@@ -258,7 +261,8 @@ void rd_item_old(ObjectType *o_ptr)
             if (ironman_nightmare) {
                 o_ptr->xtra5 = std::min<short>(MONSTER_MAXHP, o_ptr->xtra5 * 2L);
             }
-            o_ptr->xtra4 = o_ptr->xtra5;
+
+            o_ptr->captured_monster_current_hp = o_ptr->xtra5;
         }
     } else {
         auto xtra3 = rd_byte();
@@ -269,12 +273,21 @@ void rd_item_old(ObjectType *o_ptr)
             }
         }
 
-        o_ptr->xtra4 = rd_s16b();
+        auto xtra4 = rd_s16b();
+        if (o_ptr->tval == ItemKindType::LITE) {
+            o_ptr->fuel = xtra4;
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_current_hp = xtra4;
+        } else {
+            o_ptr->smith_hit = static_cast<byte>(xtra4 >> 8);
+            o_ptr->smith_damage = static_cast<byte>(xtra4 & 0x000f);
+        }
+
         o_ptr->xtra5 = rd_s16b();
     }
 
     if (h_older_than(1, 0, 5) && o_ptr->is_fuel()) {
-        o_ptr->xtra4 = o_ptr->pval;
+        o_ptr->fuel = o_ptr->pval;
         o_ptr->pval = 0;
     }
 

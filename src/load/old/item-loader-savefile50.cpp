@@ -127,7 +127,24 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         o_ptr->captured_monster_speed = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED) ? rd_byte() : 0;
     }
 
-    o_ptr->xtra4 = any_bits(flags, SaveDataItemFlagType::XTRA4) ? rd_s16b() : 0;
+    // xtra4フィールドが複数目的に共用されていた頃の名残.
+    if (loading_savefile_version_is_older_than(13)) {
+        int16_t xtra4 = any_bits(flags, SavedataItemOlderThan13FlagType::XTRA4) ? rd_s16b() : 0;
+        if (o_ptr->is_fuel()) {
+            o_ptr->fuel = static_cast<ushort>(xtra4);
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_current_hp = xtra4;
+        } else {
+            o_ptr->smith_hit = static_cast<byte>(xtra4 >> 8);
+            o_ptr->smith_damage = static_cast<byte>(xtra4 & 0x000f);
+        }
+    } else {
+        o_ptr->fuel = any_bits(flags, SaveDataItemFlagType::FUEL) ? rd_u16b() : 0;
+        o_ptr->captured_monster_current_hp = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP) ? rd_s16b() : 0;
+        o_ptr->smith_hit = any_bits(flags, SaveDataItemFlagType::SMITH_HIT) ? rd_byte() : 0;
+        o_ptr->smith_damage = any_bits(flags, SaveDataItemFlagType::SMITH_DAMAGE) ? rd_byte() : 0;
+    }
+
     o_ptr->xtra5 = any_bits(flags, SaveDataItemFlagType::XTRA5) ? rd_s16b() : 0;
     o_ptr->feeling = any_bits(flags, SaveDataItemFlagType::FEELING) ? rd_byte() : 0;
     o_ptr->stack_idx = any_bits(flags, SaveDataItemFlagType::STACK_IDX) ? rd_s16b() : 0;

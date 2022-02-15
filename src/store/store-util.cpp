@@ -167,10 +167,10 @@ void store_create(
 
         if (q_ptr->tval == ItemKindType::LITE) {
             if (q_ptr->sval == SV_LITE_TORCH)
-                q_ptr->xtra4 = FUEL_TORCH / 2;
+                q_ptr->fuel = FUEL_TORCH / 2;
 
             if (q_ptr->sval == SV_LITE_LANTERN)
-                q_ptr->xtra4 = FUEL_LAMP / 2;
+                q_ptr->fuel = FUEL_LAMP / 2;
         }
 
         object_known(q_ptr);

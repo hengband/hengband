@@ -269,9 +269,9 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[INVEN_LITE];
 
         if (o_ptr->tval == ItemKindType::LITE) {
-            if (!o_ptr->is_fixed_artifact() && (o_ptr->xtra4 > 0)) {
-                hp_player(player_ptr, o_ptr->xtra4 / 20);
-                o_ptr->xtra4 /= 2;
+            if (!o_ptr->is_fixed_artifact() && (o_ptr->fuel > 0)) {
+                hp_player(player_ptr, o_ptr->fuel / 20);
+                o_ptr->fuel /= 2;
                 msg_print(_("光源からエネルギーを吸収した！", "You absorb energy from your light!"));
                 notice_lite_change(player_ptr, o_ptr);
             }

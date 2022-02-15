@@ -14,14 +14,14 @@ LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, int powe
     switch (o_ptr->sval) {
     case SV_LITE_TORCH:
         if (o_ptr->pval > 0) {
-            o_ptr->xtra4 = randint1(o_ptr->pval);
+            o_ptr->fuel = randint1(o_ptr->pval);
         }
 
         o_ptr->pval = 0;
         return;
     case SV_LITE_LANTERN:
         if (o_ptr->pval > 0) {
-            o_ptr->xtra4 = randint1(o_ptr->pval);
+            o_ptr->fuel = randint1(o_ptr->pval);
         }
 
         o_ptr->pval = 0;
@@ -78,7 +78,7 @@ void LiteEnchanter::give_cursed()
     this->o_ptr->name2 = get_random_ego(INVEN_LITE, false);
     switch (this->o_ptr->name2) {
     case EGO_LITE_DARKNESS:
-        this->o_ptr->xtra4 = 0;
+        this->o_ptr->fuel = 0;
         this->add_dark_flag();
         return;
     default:

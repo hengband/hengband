@@ -340,45 +340,51 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     char buf[256];
     describe_flavor(player_ptr, buf, o_ptr, OD_STORE);
     prt(buf, 2, j);
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), 4, j);
-    prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
-    prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
-    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
-    prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), 8, j);
-    prt(format("chest_level = %-4d  captured_monster_speed = %-d", o_ptr->chest_level, o_ptr->captured_monster_speed), 9, j);
-    prt(format("xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 10, j);
 
-    prt("+------------FLAGS1------------+", 10, j);
-    prt("AFFECT........SLAY........BRAND.", 11, j);
-    prt("      mf      cvae      xsqpaefc", 12, j);
-    prt("siwdccsossidsahanvudotgddhuoclio", 13, j);
-    prt("tnieohtctrnipttmiinmrrnrrraiierl", 14, j);
-    prt("rtsxnarelcfgdkcpmldncltggpksdced", 15, j);
-    prt_binary(get_seq_32bits(flgs, 32 * 0), 16, j);
+    auto line = 4;
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
+    prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
+    prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
+    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), ++line, j);
+    prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), ++line, j);
+    prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
+    prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
+    prt(format("fuel = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->fuel, o_ptr->xtra5, o_ptr->curse_flags), ++line, j);
+    prt(format("captured_monster_speed = %-4d", o_ptr->captured_monster_current_hp), ++line, j);
+    prt(format("xtra5 = %-4d  cursed  = %-d", o_ptr->xtra5, o_ptr->curse_flags), ++line, j);
 
-    prt("+------------FLAGS2------------+", 17, j);
-    prt("SUST....IMMUN.RESIST............", 18, j);
-    prt("      reaefctrpsaefcpfldbc sn   ", 19, j);
-    prt("siwdcciaclioheatcliooeialoshtncd", 20, j);
-    prt("tnieohdsierlrfraierliatrnnnrhehi", 21, j);
-    prt("rtsxnaeydcedwlatdcedsrekdfddrxss", 22, j);
-    prt_binary(get_seq_32bits(flgs, 32 * 1), 23, j);
+    prt("+------------FLAGS1------------+", ++line, j);
+    prt("AFFECT........SLAY........BRAND.", ++line, j);
+    prt("      mf      cvae      xsqpaefc", ++line, j);
+    prt("siwdccsossidsahanvudotgddhuoclio", ++line, j);
+    prt("tnieohtctrnipttmiinmrrnrrraiierl", ++line, j);
+    prt("rtsxnarelcfgdkcpmldncltggpksdced", ++line, j);
+    prt_binary(get_seq_32bits(flgs, 32 * 0), ++line, j);
 
-    prt("+------------FLAGS3------------+", 10, j + 32);
-    prt("fe cnn t      stdrmsiiii d ab   ", 11, j + 32);
-    prt("aa aoomywhs lleeieihgggg rtgl   ", 12, j + 32);
-    prt("uu utmacaih eielgggonnnnaaere   ", 13, j + 32);
-    prt("rr reanurdo vtieeehtrrrrcilas   ", 14, j + 32);
-    prt("aa algarnew ienpsntsaefctnevs   ", 15, j + 32);
-    prt_binary(get_seq_32bits(flgs, 32 * 2), 16, j + 32);
+    prt("+------------FLAGS2------------+", ++line, j);
+    prt("SUST....IMMUN.RESIST............", ++line, j);
+    prt("      reaefctrpsaefcpfldbc sn   ", ++line, j);
+    prt("siwdcciaclioheatcliooeialoshtncd", ++line, j);
+    prt("tnieohdsierlrfraierliatrnnnrhehi", ++line, j);
+    prt("rtsxnaeydcedwlatdcedsrekdfddrxss", ++line, j);
+    prt_binary(get_seq_32bits(flgs, 32 * 1), ++line, j);
 
-    prt("+------------FLAGS4------------+", 17, j + 32);
-    prt("KILL....ESP.........            ", 18, j + 32);
-    prt("aeud tghaud tgdhegnu            ", 19, j + 32);
-    prt("nvneoriunneoriruvoon            ", 20, j + 32);
-    prt("iidmroamidmroagmionq            ", 21, j + 32);
-    prt("mlenclnmmenclnnnldlu            ", 22, j + 32);
-    prt_binary(get_seq_32bits(flgs, 32 * 3), 23, j + 32);
+    line = 10;
+    prt("+------------FLAGS3------------+", line, j + 32);
+    prt("fe cnn t      stdrmsiiii d ab   ", ++line, j + 32);
+    prt("aa aoomywhs lleeieihgggg rtgl   ", ++line, j + 32);
+    prt("uu utmacaih eielgggonnnnaaere   ", ++line, j + 32);
+    prt("rr reanurdo vtieeehtrrrrcilas   ", ++line, j + 32);
+    prt("aa algarnew ienpsntsaefctnevs   ", ++line, j + 32);
+    prt_binary(get_seq_32bits(flgs, 32 * 2), ++line, j + 32);
+
+    prt("+------------FLAGS4------------+", ++line, j + 32);
+    prt("KILL....ESP.........            ", ++line, j + 32);
+    prt("aeud tghaud tgdhegnu            ", ++line, j + 32);
+    prt("nvneoriunneoriruvoon            ", ++line, j + 32);
+    prt("iidmroamidmroagmionq            ", ++line, j + 32);
+    prt("mlenclnmmenclnnnldlu            ", ++line, j + 32);
+    prt_binary(get_seq_32bits(flgs, 32 * 3), ++line, j + 32);
 }
 
 /*!

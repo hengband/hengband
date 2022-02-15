@@ -25,7 +25,7 @@ static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
     auto *e_ptr = &e_info[o_ptr->name2];
     flgs.set(e_ptr->flags);
 
-    auto is_out_of_fuel = o_ptr->xtra4 == 0;
+    auto is_out_of_fuel = o_ptr->fuel == 0;
     if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
         flgs.reset(TR_SH_FIRE);
         return;

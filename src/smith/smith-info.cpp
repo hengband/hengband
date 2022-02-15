@@ -187,9 +187,10 @@ bool SlayingGlovesSmithInfo::add_essence(PlayerType *player_ptr, ObjectType *o_p
 {
     BasicSmithInfo::add_essence(player_ptr, o_ptr, number);
 
-    HIT_PROB get_to_h = ((number + 1) / 2 + randint0(number / 2 + 1));
-    HIT_POINT get_to_d = ((number + 1) / 2 + randint0(number / 2 + 1));
-    o_ptr->xtra4 = (get_to_h << 8) + get_to_d;
+    byte get_to_h = (number + 1) / 2 + randint0(number / 2 + 1);
+    byte get_to_d = (number + 1) / 2 + randint0(number / 2 + 1);
+    o_ptr->smith_hit = get_to_h;
+    o_ptr->smith_damage = get_to_d;
     o_ptr->to_h += get_to_h;
     o_ptr->to_d += get_to_d;
 
@@ -200,9 +201,10 @@ void SlayingGlovesSmithInfo::erase_essence(ObjectType *o_ptr) const
 {
     BasicSmithInfo::erase_essence(o_ptr);
 
-    o_ptr->to_h -= (o_ptr->xtra4 >> 8);
-    o_ptr->to_d -= (o_ptr->xtra4 & 0x000f);
-    o_ptr->xtra4 = 0;
+    o_ptr->to_h -= o_ptr->smith_hit;
+    o_ptr->to_d -= o_ptr->smith_damage;
+    o_ptr->smith_hit = 0;
+    o_ptr->smith_damage = 0;
     if (o_ptr->to_h < 0)
         o_ptr->to_h = 0;
     if (o_ptr->to_d < 0)
