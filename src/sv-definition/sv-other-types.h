@@ -22,4 +22,4 @@
 #define SV_CHEST_KANDUME 50 /*!< 箱アイテムの小項目ID: おもちゃのカンヅメ */
 
 /* The "sval" codes for TV_FLASK */
-#define SV_FLASK_OIL 0
+constexpr int SV_FLASK_OIL = 0;

@@ -271,7 +271,7 @@ void rd_item_old(ObjectType *o_ptr)
         o_ptr->xtra5 = rd_s16b();
     }
 
-    if (h_older_than(1, 0, 5) && (((o_ptr->tval == ItemKindType::LITE) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) || (o_ptr->tval == ItemKindType::FLASK))) {
+    if (h_older_than(1, 0, 5) && o_ptr->is_fuel()) {
         o_ptr->xtra4 = o_ptr->pval;
         o_ptr->pval = 0;
     }

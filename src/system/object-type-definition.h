@@ -107,4 +107,5 @@ public:
     bool is_rechargeable() const;
     bool is_offerable() const;
     bool is_activatable() const;
+    bool is_fuel() const;
 };

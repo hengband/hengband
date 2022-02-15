@@ -526,3 +526,14 @@ bool ObjectType::is_activatable() const
     auto flags = object_flags(this);
     return flags.has(TR_ACTIVATE);
 }
+
+/*!
+ * @brief オブジェクトが燃料して使えるかを判定する
+ * @return 燃料か否か
+ */
+bool ObjectType::is_fuel() const
+{
+    auto is_fuel = (this->tval == ItemKindType::LITE) && ((this->sval == SV_LITE_TORCH) || (this->sval == SV_LITE_LANTERN));
+    is_fuel |= (this->tval == ItemKindType::FLASK) && (this->sval == SV_FLASK_OIL);
+    return is_fuel;
+}
