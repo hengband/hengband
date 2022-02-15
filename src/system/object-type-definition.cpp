@@ -528,7 +528,7 @@ bool ObjectType::is_activatable() const
 }
 
 /*!
- * @brief オブジェクトが燃料して使えるかを判定する
+ * @brief オブジェクトが燃料として使えるかを判定する
  * @return 燃料か否か
  */
 bool ObjectType::is_fuel() const
