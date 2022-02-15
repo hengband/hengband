@@ -34,6 +34,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/probability-table.h"
 #include "wizard/wizard-messages.h"
 
 /*
@@ -1006,21 +1007,19 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
     POSITION xoffset, yoffset;
     int transno;
 
+    ProbabilityTable<int> prob_table;
+
     /* Pick fixed room */
-    for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++) {
-        /* Access a random vault record */
-        v_ptr = &v_info[randint0(v_info.size())];
-
-        /* Accept the first greater vault */
-        if (v_ptr->typ == typ)
-            break;
+    for (auto &v_ref : v_info) {
+        if (v_ref.typ == typ) {
+            prob_table.entry_item(v_ref.idx, 1);
+        }
     }
 
-    /* No canditate */
-    if (dummy >= SAFE_MAX_ATTEMPTS) {
-        msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋を配置できませんでした。", "Could not place fixed room."));
-        return false;
-    }
+    std::vector<int> result;
+    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, 1);
+
+    v_ptr = &v_info[result[0]];
 
     /* pick type of transformation (0-7) */
     transno = randint0(8);
