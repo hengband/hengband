@@ -1056,7 +1056,7 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
      * prevent generation of vaults with no-entrance.
      */
     int xsize = more_space ? abs(x) + 2 : abs(x);
-    int ysize = more_space ? abs(x) + 2 : abs(x);
+    int ysize = more_space ? abs(y) + 2 : abs(y);
     /* Find and reserve some space in the dungeon.  Get center of room. */
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize, xsize))
         return false;
