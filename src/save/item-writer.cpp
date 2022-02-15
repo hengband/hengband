@@ -64,8 +64,11 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->activation_id > RandomArtActType::NONE)
         set_bits(*flags, SaveDataItemFlagType::ACTIVATION_ID);
 
-    if (o_ptr->xtra3)
-        set_bits(*flags, SaveDataItemFlagType::XTRA3);
+    if (o_ptr->chest_level > 0)
+        set_bits(*flags, SaveDataItemFlagType::CHEST_LEVEL);
+
+    if (o_ptr->captured_monster_speed != 0)
+        set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED);
 
     if (o_ptr->xtra4)
         set_bits(*flags, SaveDataItemFlagType::XTRA4);
@@ -140,8 +143,11 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
     if (any_bits(flags, SaveDataItemFlagType::ACTIVATION_ID))
         wr_s16b(enum2i(o_ptr->activation_id));
 
-    if (any_bits(flags, SaveDataItemFlagType::XTRA3))
-        wr_byte(o_ptr->xtra3);
+    if (any_bits(flags, SaveDataItemFlagType::CHEST_LEVEL))
+        wr_byte(o_ptr->chest_level);
+
+    if (any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED))
+        wr_byte(o_ptr->captured_monster_speed);
 
     if (any_bits(flags, SaveDataItemFlagType::XTRA4))
         wr_s16b(o_ptr->xtra4);

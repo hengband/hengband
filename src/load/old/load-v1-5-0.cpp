@@ -38,6 +38,7 @@
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -236,17 +237,15 @@ void rd_item_old(ObjectType *o_ptr)
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
         }
-        
-        xtra1 = 0;
     }
 
     if (h_older_than(0, 2, 3)) {
-        o_ptr->xtra3 = 0;
         o_ptr->xtra4 = 0;
         o_ptr->xtra5 = 0;
-        if ((o_ptr->tval == ItemKindType::CHEST) || (o_ptr->tval == ItemKindType::CAPTURE)) {
-            o_ptr->xtra3 = xtra1;
-            xtra1 = 0;
+        if (o_ptr->tval == ItemKindType::CHEST) {
+            o_ptr->chest_level = xtra1;
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_speed = xtra1;
         }
 
         if (o_ptr->tval == ItemKindType::CAPTURE) {
@@ -260,10 +259,12 @@ void rd_item_old(ObjectType *o_ptr)
             o_ptr->xtra4 = o_ptr->xtra5;
         }
     } else {
-        o_ptr->xtra3 = rd_byte();
+        auto xtra3 = rd_byte();
         if (h_older_than(1, 3, 0, 1)) {
-            if (o_ptr->is_smith() && o_ptr->xtra3 >= 1 + 96)
-                o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
+            if (o_ptr->is_smith() && (xtra3 >= 1 + 96)) {
+                auto mes = _("古いバージョンで鍛冶師をプレイしたデータは読み込めません。", "The save data from playing a weaponsmith on versions older than v3.0.0 Aplha38 can't be read.");
+                throw SaveDataNotSupportedException(mes);
+            }
         }
 
         o_ptr->xtra4 = rd_s16b();

@@ -14,6 +14,10 @@ enum class SavedataItemOlderThan7FlagType {
 	ART_FLAGS4 = 0x10000000,
 };
 
+enum class SavedataItemOlderThan12FlagType {
+    XTRA3 = 0x00400000,
+};
+
 enum class SavedataLoreOlderThan10FlagType {
     AURA_FIRE_OLD = 0x00004000,
     AURA_COLD_OLD = 0x00000400,

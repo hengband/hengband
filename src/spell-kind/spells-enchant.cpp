@@ -58,7 +58,7 @@ bool artifact_scroll(PlayerType *player_ptr)
         msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "ego items" : "an ego item"));
 #endif
         okay = false;
-    } else if (o_ptr->xtra3) {
+    } else if (o_ptr->is_smith()) {
 #ifdef JP
         msg_format("%sは既に強化されています！", o_name);
 #else

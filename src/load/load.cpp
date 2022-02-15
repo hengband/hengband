@@ -40,6 +40,7 @@
 #include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-version.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
@@ -49,6 +50,7 @@
 #include "world/world.h"
 #include <sstream>
 #include <string>
+#include <vector>
 
 /*!
  * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
@@ -278,13 +280,49 @@ static errr rd_savefile(PlayerType *player_ptr)
         return -1;
     }
 
-    errr err = exe_reading_savefile(player_ptr);
-    if (ferror(loading_savefile)) {
-        err = -1;
+    try {
+        auto err = exe_reading_savefile(player_ptr);
+        if (ferror(loading_savefile)) {
+            err = -1;
+        }
+
+        angband_fclose(loading_savefile);
+        return err;
+    } catch (SaveDataNotSupportedException const& e) {
+        msg_print(e.what());
+        angband_fclose(loading_savefile);
+        return 1;
+    }
+}
+
+/*!
+ * @brief 死亡した、または互換性のないセーブデータを読み込んだ時にやりなおさせる
+ * @param plyaer_ptr プレイヤーへの参照ポインタ
+ * @param new_game 新しくゲームを始めさせるフラグ
+ * @return 常にtrue (前後の処理上都合が良いため)
+ */
+static bool reset_save_data(PlayerType *player_ptr, bool *new_game)
+{
+    *new_game = true;
+    player_ptr->is_dead = false;
+    w_ptr->sf_lives++;
+    return true;
+}
+
+static bool on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_game)
+{
+    auto mes_not_play = _("このセーブデータの続きをプレイすることはできません。", "You can't play the rest of the game from this save data.");
+    auto mes_check_restart = _("最初からプレイを始めますか？(モンスターの思い出は引き継がれます)", "Play from the beginning? (Monster recalls will be inherited.) ");
+    msg_print(mes_not_play);
+    msg_print(nullptr);
+    if (!get_check(mes_check_restart)) {
+        msg_print(_("ゲームを終了します。", "Exit the game."));
+        msg_print(nullptr);
+        return false;
     }
 
-    angband_fclose(loading_savefile);
-    return err;
+    player_ptr->wait_report_score = false;
+    return reset_save_data(player_ptr, new_game);
 }
 
 /**
@@ -385,12 +423,15 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 
     if (!err) {
         term_clear();
-        if (rd_savefile(player_ptr)) {
+        auto ret_rd_savefile = rd_savefile(player_ptr);
+        if (ret_rd_savefile != 0) {
             err = true;
         }
 
-        if (err) {
+        if (ret_rd_savefile < 0) {
             what = _("セーブファイルを解析出来ません。", "Cannot parse savefile");
+        } else if (ret_rd_savefile > 0) {
+            return on_read_save_data_not_supported(player_ptr, new_game);
         }
     }
 
@@ -412,24 +453,11 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (!can_takeover_savefile(player_ptr)) {
-        msg_format(_("このセーブデータの続きをプレイすることはできません。", "You can't play the rest of the game from this save data."));
-        msg_print(nullptr);
-        if (!get_check(_("最初からプレイを始めますか？(モンスターの思い出は引き継がれます)",
-                "Play from the beginning? (Monster recalls will be inherited.) "))) {
-            msg_format(_("ゲームを終了します。", "Exit the game."));
-            msg_print(nullptr);
-            return false;
-        }
-
-        player_ptr->is_dead = true;
-        player_ptr->wait_report_score = false;
+        return on_read_save_data_not_supported(player_ptr, new_game);
     }
 
     if (player_ptr->is_dead) {
-        *new_game = true;
-        player_ptr->is_dead = false;
-        w_ptr->sf_lives++;
-        return true;
+        return reset_save_data(player_ptr, new_game);
     }
 
     w_ptr->character_loaded = true;

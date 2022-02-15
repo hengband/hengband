@@ -164,7 +164,7 @@ int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr)
             return 0;
         if (o_ptr->name2 != j_ptr->name2)
             return 0;
-        if (o_ptr->xtra3 != j_ptr->xtra3)
+        if (o_ptr->captured_monster_speed != j_ptr->captured_monster_speed)
             return 0;
         if (o_ptr->xtra4 != j_ptr->xtra4)
             return 0;

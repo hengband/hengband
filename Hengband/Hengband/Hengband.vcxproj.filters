@@ -5160,6 +5160,9 @@
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h">
       <Filter>object-enchant\others</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\angband-exceptions.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

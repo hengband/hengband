@@ -345,7 +345,8 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
     prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
     prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), 8, j);
-    prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
+    prt(format("chest_level = %-4d  captured_monster_speed = %-d", o_ptr->chest_level, o_ptr->captured_monster_speed), 9, j);
+    prt(format("xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 10, j);
 
     prt("+------------FLAGS1------------+", 10, j);
     prt("AFFECT........SLAY........BRAND.", 11, j);
