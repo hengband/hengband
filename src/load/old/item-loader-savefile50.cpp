@@ -98,8 +98,10 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
     }
 
     o_ptr->held_m_idx = any_bits(flags, SaveDataItemFlagType::HELD_M_IDX) ? rd_s16b() : 0;
-    if (any_bits(flags, SavedataItemOlderThan0FlagType::XTRA1)) {
-        strip_bytes(1);
+    if (loading_savefile_version_is_older_than(12)) {
+        if (any_bits(flags, SavedataItemOlderThan12FlagType::XTRA1)) {
+            strip_bytes(1);
+        }
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ACTIVATION_ID)) {

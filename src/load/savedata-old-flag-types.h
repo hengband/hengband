@@ -5,11 +5,6 @@
 
 #pragma once
 
-// 太古のどこかで使われなくなったフラグ。セーブバージョンは便宜的に0とする.
-enum class SavedataItemOlderThan0FlagType {
-    XTRA1 = 0x00100000,
-};
-
 //! セーブデータバージョン7でart_flagsをFlagGroupクラスに移行する前のセーブデータ有無フラグ
 enum class SavedataItemOlderThan7FlagType {
 	ART_FLAGS0 = 0x00004000,
@@ -20,6 +15,7 @@ enum class SavedataItemOlderThan7FlagType {
 };
 
 enum class SavedataItemOlderThan12FlagType {
+    XTRA1 = 0x00100000,
     XTRA3 = 0x00400000,
 };
 
