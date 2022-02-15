@@ -125,7 +125,7 @@ static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr)
         return false;
     }
 
-    if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == ItemKindType::FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
+    if (ae_ptr->o_ptr->is_fuel() && (ae_ptr->o_ptr->xtra4 == 0)) {
         msg_print(_("燃料がない。", "It has no fuel."));
         PlayerEnergy(player_ptr).reset_player_turn();
         return false;
