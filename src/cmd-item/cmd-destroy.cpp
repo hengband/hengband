@@ -35,7 +35,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-typedef struct destroy_type {
+struct destroy_type {
     OBJECT_IDX item;
     QUANTITY amt;
     QUANTITY old_number;
@@ -44,7 +44,7 @@ typedef struct destroy_type {
     ObjectType *q_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     char out_val[MAX_NLEN + 40];
-} destroy_type;
+};
 
 static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, ObjectType *o_ptr)
 {

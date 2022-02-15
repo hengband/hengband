@@ -42,11 +42,11 @@
 #define MAX_SNIPE_POWERS 16
 
 /*! スナイパー技能情報の構造体 */
-typedef struct snipe_power {
+struct snipe_power {
     PLAYER_LEVEL min_lev;
     MANA_POINT mana_cost;
     concptr name;
-} snipe_power;
+};
 
 /*! スナイパー技能の解説メッセージ */
 static concptr const snipe_tips[MAX_SNIPE_POWERS] = {

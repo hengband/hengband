@@ -33,7 +33,7 @@ static std::vector<POSITION> ys_interest;
 static std::vector<POSITION> xs_interest;
 
 // Target Setter.
-typedef struct ts_type {
+struct ts_type {
     target_type mode;
     POSITION y;
     POSITION x;
@@ -49,7 +49,7 @@ typedef struct ts_type {
     int distance; // カーソルの移動方向 (1,2,3,4,6,7,8,9)
     int target_num; // target_pick() の結果
     bool move_fast; // カーソル移動を粗くする(1マスずつ移動しない)
-} ts_type;
+};
 
 static ts_type *initialize_target_set_type(PlayerType *player_ptr, ts_type *ts_ptr, target_type mode)
 {

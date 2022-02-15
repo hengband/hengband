@@ -5,9 +5,9 @@
 
 #include "object-enchant/tr-flags.h"
 
-typedef struct object_kind object_kind;
+struct object_kind;
 class ObjectType;
-typedef struct flavor_type {
+struct flavor_type {
     char *buf;
     ObjectType *o_ptr;
     BIT_FLAGS mode;
@@ -38,7 +38,7 @@ typedef struct flavor_type {
     object_kind *k_ptr;
     object_kind *flavor_k_ptr;
     int avgdam;
-} flavor_type;
+};
 
 class PlayerType;
 flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ObjectType *o_ptr, BIT_FLAGS mode);

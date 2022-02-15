@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct autopick_type autopick_type;
+struct autopick_type;
 class ObjectType;
 class PlayerType;
 bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default);

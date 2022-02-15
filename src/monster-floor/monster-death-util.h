@@ -4,7 +4,7 @@
 
 struct monster_type;
 struct monster_race;
-typedef struct monster_death_type {
+struct monster_death_type {
     MONSTER_IDX m_idx;
     monster_type *m_ptr;
     monster_race *r_ptr;
@@ -16,7 +16,7 @@ typedef struct monster_death_type {
     POSITION md_y;
     POSITION md_x;
     uint32_t mo_mode;
-} monster_death_type;
+};
 
 class PlayerType;
 monster_death_type *initialize_monster_death_type(PlayerType *player_ptr, monster_death_type *md_ptr, MONSTER_IDX m_idx, bool drop_item);

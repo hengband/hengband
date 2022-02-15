@@ -28,11 +28,11 @@
 
 #define OPT_NUM 15
 
-typedef struct {
+struct opts {
     char key;
     concptr name;
     int row;
-} opts;
+};
 
 static opts option_fields[OPT_NUM] = {
     { '1', _("    キー入力     オプション", "Input Options"), 3 },

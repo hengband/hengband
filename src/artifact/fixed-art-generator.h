@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 
-typedef struct artifact_type artifact_type;
+struct artifact_type;
 class ObjectType;
 class PlayerType;
 bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);

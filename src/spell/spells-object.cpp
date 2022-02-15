@@ -44,12 +44,12 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-typedef struct {
+struct amuse_type {
     ItemKindType tval;
     OBJECT_SUBTYPE_VALUE sval;
     PERCENTAGE prob;
     byte flag;
-} amuse_type;
+};
 
 /*!
  * @brief 装備強化処理の失敗率定数（千分率） /

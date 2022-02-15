@@ -4,7 +4,7 @@
 #include "system/angband.h"
 
 class PlayerType;
-typedef struct quest_type quest_type;
+struct quest_type;
 void load_zangband_options(void);
 void set_zangband_realm(PlayerType *player_ptr);
 void set_zangband_skill(PlayerType *player_ptr);

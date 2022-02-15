@@ -53,7 +53,7 @@
 std::vector<std::vector<wilderness_type>> wilderness;
 bool generate_encounter;
 
-typedef struct border_type {
+struct border_type {
     int16_t north[MAX_WID];
     int16_t south[MAX_WID];
     int16_t east[MAX_HGT];
@@ -62,7 +62,7 @@ typedef struct border_type {
     int16_t north_east;
     int16_t south_west;
     int16_t south_east;
-} border_type;
+};
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
@@ -600,13 +600,13 @@ void wilderness_gen_small(PlayerType *player_ptr)
     player_ptr->town_num = 0;
 }
 
-typedef struct wilderness_grid {
+struct wilderness_grid {
     wt_type terrain; /* Terrain type */
     int16_t town; /* Town number */
     DEPTH level; /* Level of the wilderness */
     byte road; /* Road */
     char name[32]; /* Name of the town/wilderness */
-} wilderness_grid;
+};
 
 static wilderness_grid w_letter[255];
 

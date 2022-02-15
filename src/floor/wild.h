@@ -29,14 +29,14 @@ enum wt_type {
 /*
  * A structure describing a wilderness area with a terrain or a town
  */
-typedef struct wilderness_type {
+struct wilderness_type {
 	wt_type terrain;
 	int16_t town;
 	int road;
 	uint32_t seed;
 	DEPTH level;
 	byte entrance;
-} wilderness_type;
+};
 
 extern std::vector<std::vector<wilderness_type>> wilderness;
 

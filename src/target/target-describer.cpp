@@ -48,7 +48,7 @@ static const int16_t CONTINUOUS_DESCRIPTION = 256;
 bool show_gold_on_floor = false;
 
 // Examine grid
-typedef struct eg_type {
+struct eg_type {
     POSITION y;
     POSITION x;
     target_type mode;
@@ -68,7 +68,7 @@ typedef struct eg_type {
     FEAT_IDX feat;
     feature_type *f_ptr;
     concptr name;
-} eg_type;
+};
 
 static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSITION y, POSITION x, target_type mode, concptr info)
 {

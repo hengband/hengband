@@ -9,14 +9,14 @@
 enum tr_type : int32_t;
 
 /*! オブジェクトの特性表示記号テーブルの構造体 / Structs and tables for Auto Inscription for flags */
-typedef struct flag_insc_table {
+struct flag_insc_table {
 #ifdef JP
     concptr japanese;
 #endif
     concptr english;
     tr_type flag;
     int except_flag;
-} flag_insc_table;
+};
 
 extern const concptr game_inscriptions[MAX_GAME_INSCRIPTIONS];
 

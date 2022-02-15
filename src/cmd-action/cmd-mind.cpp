@@ -57,7 +57,7 @@
 /*!
  * @brief 職業別特殊技能の処理用構造体
  */
-typedef struct cm_type {
+struct cm_type {
     MindKindType use_mind; //!< 使った職業技能構造体
     concptr mind_explanation; //!< 特殊技能の説明
     SPELL_IDX n; //!< 職業種別毎ID
@@ -70,7 +70,7 @@ typedef struct cm_type {
     bool cast; //!< 行使の成否
     int mana_cost; //!< 最終算出消費MP
     bool on_mirror; //!< 鏡の上に乗っているどうかの判定
-} cm_type;
+};
 
 /*!
  * @brief 職業技能処理構造体の初期化

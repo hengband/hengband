@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-typedef struct vault_type {
+struct vault_type {
     int16_t idx;
 
     std::string name; /* Name (offset) */
@@ -14,7 +14,7 @@ typedef struct vault_type {
     PROB rat{}; /* Vault rating (unused) */
     POSITION hgt{}; /* Vault height */
     POSITION wid{}; /* Vault width */
-} vault_type;
+};
 
 extern std::vector<vault_type> v_info;
 

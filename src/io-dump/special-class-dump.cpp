@@ -25,9 +25,9 @@
 #include <string>
 #include <vector>
 
-typedef struct {
+struct learnt_spell_table {
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
-} learnt_spell_table;
+};
 
 /*!
  * @brief 魔力喰いを持つクラスの情報をダンプする
