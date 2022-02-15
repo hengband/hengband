@@ -1009,16 +1009,15 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
     ProbabilityTable<int> prob_table;
 
     /* Pick fixed room */
-    for (auto &v_ref : v_info) {
+    for (const auto &v_ref : v_info) {
         if (v_ref.typ == typ) {
             prob_table.entry_item(v_ref.idx, 1);
         }
     }
 
-    std::vector<int> result;
-    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, 1);
+    auto result = prob_table.pick_one_at_random();
 
-    v_ptr = &v_info[result[0]];
+    v_ptr = &v_info[result];
 
     /* pick type of transformation (0-7) */
     transno = randint0(8);
