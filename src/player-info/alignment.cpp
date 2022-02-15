@@ -42,7 +42,7 @@ concptr PlayerAlignment::get_alignment_description(bool with_value)
 void PlayerAlignment::update_alignment()
 {
     this->reset_alignment();
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     for (MONSTER_IDX m_idx = floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
         auto *m_ptr = &floor_ptr->m_list[m_idx];
         if (!monster_is_valid(m_ptr))
@@ -61,8 +61,8 @@ void PlayerAlignment::update_alignment()
         }
     }
 
-    if (player_ptr->mimic_form) {
-        switch (player_ptr->mimic_form) {
+    if (this->player_ptr->mimic_form) {
+        switch (this->player_ptr->mimic_form) {
         case MIMIC_DEMON:
             this->bias_evil_alignment(200);
             break;
@@ -71,7 +71,7 @@ void PlayerAlignment::update_alignment()
             break;
         }
     } else {
-        switch (player_ptr->prace) {
+        switch (this->player_ptr->prace) {
         case PlayerRaceType::ARCHON:
             this->bias_good_alignment(200);
             break;
@@ -85,7 +85,7 @@ void PlayerAlignment::update_alignment()
     }
 
     for (int i = 0; i < 2; i++) {
-        if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i) || (player_ptr->inventory_list[INVEN_MAIN_HAND + i].name1 != ART_IRON_BALL))
+        if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND + i) || (this->player_ptr->inventory_list[INVEN_MAIN_HAND + i].name1 != ART_IRON_BALL))
             continue;
 
         this->bias_evil_alignment(1000);
@@ -94,9 +94,9 @@ void PlayerAlignment::update_alignment()
     int j = 0;
     int neutral[2];
     for (int i = 0; i < 8; i++) {
-        switch (player_ptr->vir_types[i]) {
+        switch (this->player_ptr->vir_types[i]) {
         case V_JUSTICE:
-            this->bias_good_alignment(player_ptr->virtues[i] * 2);
+            this->bias_good_alignment(this->player_ptr->virtues[i] * 2);
             break;
         case V_CHANCE:
             break;
@@ -105,22 +105,22 @@ void PlayerAlignment::update_alignment()
             neutral[j++] = i;
             break;
         case V_UNLIFE:
-            this->bias_evil_alignment(player_ptr->virtues[i]);
+            this->bias_evil_alignment(this->player_ptr->virtues[i]);
             break;
         default:
-            this->bias_good_alignment(player_ptr->virtues[i]);
+            this->bias_good_alignment(this->player_ptr->virtues[i]);
             break;
         }
     }
 
     for (int i = 0; i < j; i++) {
-        if (player_ptr->alignment > 0) {
-            this->bias_evil_alignment(player_ptr->virtues[neutral[i]] / 2);
-            if (player_ptr->alignment < 0)
+        if (this->player_ptr->alignment > 0) {
+            this->bias_evil_alignment(this->player_ptr->virtues[neutral[i]] / 2);
+            if (this->player_ptr->alignment < 0)
                 this->reset_alignment();
-        } else if (player_ptr->alignment < 0) {
-            this->bias_good_alignment(player_ptr->virtues[neutral[i]] / 2);
-            if (player_ptr->alignment > 0)
+        } else if (this->player_ptr->alignment < 0) {
+            this->bias_good_alignment(this->player_ptr->virtues[neutral[i]] / 2);
+            if (this->player_ptr->alignment > 0)
                 this->reset_alignment();
         }
     }
