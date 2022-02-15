@@ -43,9 +43,9 @@ static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, RoomType t
     case RoomType::PIT:
         return build_type6(player_ptr, dd_ptr);
     case RoomType::LESSER_VAULT:
-        return build_type7(player_ptr, dd_ptr);
+        return build_fixed_room(player_ptr, dd_ptr, 7, false);
     case RoomType::GREATER_VAULT:
-        return build_type8(player_ptr, dd_ptr);
+        return build_fixed_room(player_ptr, dd_ptr, 8, true);
     case RoomType::FRACAVE:
         return build_type9(player_ptr, dd_ptr);
     case RoomType::RANDOM_VAULT:
@@ -63,7 +63,7 @@ static bool room_build(PlayerType *player_ptr, dun_data_type *dd_ptr, RoomType t
     case RoomType::ARCADE:
         return build_type16(player_ptr, dd_ptr);
     case RoomType::FIXED:
-        return build_type17(player_ptr, dd_ptr);
+        return build_fixed_room(player_ptr, dd_ptr, 17, false);
     default:
         return false;
     }

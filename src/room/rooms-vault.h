@@ -20,7 +20,5 @@ extern std::vector<vault_type> v_info;
 
 struct dun_data_type;
 class PlayerType;
-bool build_type7(PlayerType *player_ptr, dun_data_type *dd_ptr);
-bool build_type8(PlayerType *player_ptr, dun_data_type *dd_ptr);
 bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr);
-bool build_type17(PlayerType *player_ptr, dun_data_type *dd_ptr);
+bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bool more_space);
