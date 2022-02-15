@@ -47,7 +47,7 @@ void RingEnchanter::apply_magic()
         this->power = -1;
     }
 
-    this->enchant();
+    this->sval_enchant();
     if ((this->power > 2) || (one_in_(400) && (this->power > 0) && !this->o_ptr->is_cursed() && (this->level > 79))) {
         this->o_ptr->pval = std::min<short>(this->o_ptr->pval, 4);
         become_random_artifact(this->player_ptr, this->o_ptr, false);
@@ -65,7 +65,7 @@ void RingEnchanter::apply_magic()
     }
 }
 
-void RingEnchanter::enchant()
+void RingEnchanter::sval_enchant()
 {
     switch (this->o_ptr->sval) {
     case SV_RING_ATTACKS:

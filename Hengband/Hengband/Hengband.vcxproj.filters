@@ -2373,6 +2373,9 @@
     <ClCompile Include="..\..\src\object-enchant\others\apply-magic-others.cpp">
       <Filter>object-enchant\others</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\others\apply-magic-lite.cpp">
+      <Filter>object-enchant\others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5100,9 +5103,6 @@
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h">
       <Filter>monster-race</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\abstract-weapon-enchanter.h">
-      <Filter>object-enchant</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\protector\abstract-protector-enchanter.h">
       <Filter>object-enchant\protector</Filter>
     </ClInclude>
@@ -5156,6 +5156,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-visual-flags.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h">
+      <Filter>object-enchant\others</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

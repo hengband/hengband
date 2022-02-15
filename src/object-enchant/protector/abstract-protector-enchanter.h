@@ -5,9 +5,11 @@
 
 class ObjectType;
 class AbstractProtectorEnchanter : EnchanterBase {
+public:
+    virtual ~AbstractProtectorEnchanter() = default;
+
 protected:
     AbstractProtectorEnchanter(ObjectType *o_ptr, DEPTH level, int power);
-    virtual ~AbstractProtectorEnchanter() = default;
     ObjectType *o_ptr;
     int power;
 };

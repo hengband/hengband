@@ -17,7 +17,14 @@ public:
 
 protected:
     EnchanterBase() = default;
-    virtual void enchant() = 0;
+
+    /*!
+     * @brief svalごとの強化処理.
+     * @details
+     * 現在はアミュレット・指輪のみ.
+     * ドラゴン防具シリーズのようなランダム強化アイテムが他にも実装されたらメソッドを分割する.
+     */
+    virtual void sval_enchant() = 0;
     virtual void give_ego_index() = 0;
     virtual void give_high_ego_index() = 0;
     virtual void give_cursed() = 0;

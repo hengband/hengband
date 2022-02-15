@@ -1,15 +1,13 @@
 ﻿#pragma once
 
-#include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
 class ObjectType;
 class PlayerType;
-class HelmEnchanter : AbstractProtectorEnchanter {
+class LiteEnchanter : EnchanterBase {
 public:
-    HelmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
-    virtual ~HelmEnchanter() = default;
+    LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, int power);
     void apply_magic() override;
 
 protected:
@@ -20,4 +18,8 @@ protected:
 
 private:
     PlayerType *player_ptr;
+    ObjectType *o_ptr;
+    int power;
+
+    void add_dark_flag();
 };
