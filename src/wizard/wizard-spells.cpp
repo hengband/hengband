@@ -42,7 +42,7 @@
 
 #include <vector>
 
-debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
+static const std::vector<debug_spell_command> debug_spell_commands_list = {
     { 2, "vanish dungeon", { .spell2 = { vanish_dungeon } } },
     { 2, "unique detection", { .spell2 = { activate_unique_detection } } },
     { 3, "true healing", { .spell3 = { true_healing } } },
@@ -63,13 +63,13 @@ bool wiz_debug_spell(PlayerType *player_ptr)
     if (!get_string("SPELL: ", tmp_val, 32))
         return false;
 
-    for (int i = 0; i < SPELL_MAX; i++) {
-        if (strcmp(tmp_val, debug_spell_commands_list[i].command_name) != 0)
+    for (const auto& d : debug_spell_commands_list) {
+        if (strcmp(tmp_val, d.command_name) != 0)
             continue;
 
-        switch (debug_spell_commands_list[i].type) {
+        switch (d.type) {
         case 2:
-            (*(debug_spell_commands_list[i].command_function.spell2.spell_function))(player_ptr);
+            (d.command_function.spell2.spell_function)(player_ptr);
             return true;
             break;
         case 3:
@@ -77,15 +77,15 @@ bool wiz_debug_spell(PlayerType *player_ptr)
             if (!get_string("POWER:", tmp_val, 32))
                 return false;
             tmp_int = atoi(tmp_val);
-            (*(debug_spell_commands_list[i].command_function.spell3.spell_function))(player_ptr, tmp_int);
+            (d.command_function.spell3.spell_function)(player_ptr, tmp_int);
             return true;
             break;
         case 4:
-            (*(debug_spell_commands_list[i].command_function.spell4.spell_function))(player_ptr, true, &tmp_int);
+            (d.command_function.spell4.spell_function)(player_ptr, true, &tmp_int);
             return true;
             break;
         case 5:
-            (*(debug_spell_commands_list[i].command_function.spell5.spell_function))(player_ptr);
+            (d.command_function.spell5.spell_function)(player_ptr);
             return true;
             break;
         default:
