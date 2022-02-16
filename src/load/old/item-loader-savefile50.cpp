@@ -141,8 +141,6 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
     } else {
         o_ptr->fuel = any_bits(flags, SaveDataItemFlagType::FUEL) ? rd_u16b() : 0;
         o_ptr->captured_monster_current_hp = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP) ? rd_s16b() : 0;
-        o_ptr->smith_hit = any_bits(flags, SaveDataItemFlagType::SMITH_HIT) ? rd_byte() : 0;
-        o_ptr->smith_damage = any_bits(flags, SaveDataItemFlagType::SMITH_DAMAGE) ? rd_byte() : 0;
     }
 
     o_ptr->xtra5 = any_bits(flags, SaveDataItemFlagType::XTRA5) ? rd_s16b() : 0;
@@ -155,6 +153,11 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
 
         if (auto tmp16s = rd_s16b(); tmp16s > 0) {
             o_ptr->smith_act_idx = static_cast<RandomArtActType>(tmp16s);
+        }
+
+        if (!loading_savefile_version_is_older_than(13)) {
+            o_ptr->smith_hit = rd_byte();
+            o_ptr->smith_damage = rd_byte();
         }
     }
 

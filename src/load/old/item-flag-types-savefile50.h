@@ -31,6 +31,4 @@ enum class SaveDataItemFlagType : unsigned int {
 	ART_NAME = 0x08000000,
 	ART_FLAGS = 0x10000000,
 	STACK_IDX = 0x20000000,
-    SMITH_HIT = 0x40000000,
-    SMITH_DAMAGE = 0x80000000,
 };
