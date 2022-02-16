@@ -105,7 +105,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number);
-    is_special_floor |= floor_ptr->dun_level > 0;
+    is_special_floor |= (floor_ptr->dun_level == 0);
     if (is_special_floor)
         return false;
 
