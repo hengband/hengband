@@ -77,7 +77,7 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
 
     ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
     ae_ptr->o_ptr->captured_monster_speed = static_cast<int8_t>(cap_mspeed);
-    ae_ptr->o_ptr->captured_monster_current_hp = cap_hp;
+    ae_ptr->o_ptr->captured_monster_current_hp = static_cast<short>(cap_hp);
     ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
     inscribe_nickname(ae_ptr);
     return true;
