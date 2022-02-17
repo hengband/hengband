@@ -246,7 +246,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType which)
     st_ptr = &town_info[player_ptr->town_num].store[enum2i(cur_store_num)];
     int j = st_ptr->owner;
     while (true) {
-        st_ptr->owner = (byte)randint0(MAX_OWNERS);
+        st_ptr->owner = (byte)randint0(owners[enum2i(cur_store_num)].size());
         if (j == st_ptr->owner)
             continue;
 
@@ -361,7 +361,7 @@ void store_init(int town_num, StoreSaleType store_num)
     cur_store_num = store_num;
     st_ptr = &town_info[town_num].store[enum2i(store_num)];
     while (true) {
-        st_ptr->owner = (byte)randint0(MAX_OWNERS);
+        st_ptr->owner = (byte)randint0(owners[enum2i(cur_store_num)].size());
         int i;
         for (i = 1; i < max_towns; i++) {
             if (i == town_num)

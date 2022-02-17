@@ -5,7 +5,7 @@
 /*!
  * @todo _() でまとめる
  */
-const owner_type owners[MAX_STORES][MAX_OWNERS] = {
+const std::vector<owner_type> owners[MAX_STORES] =
     {
 /* General store - 32 unique names */
 /*
@@ -14,6 +14,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
   { "憶病者ラストリン",  200, 108, PlayerRaceType::HUMAN},
   { "Raistlin the Chicken", 200, 108, PlayerRaceType::HUMAN},
 */
+    {
 #ifdef JP
         { "フレンドリーなビルボ", 30000, 108, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
         { "憶病者リンスウィンド", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
@@ -113,10 +114,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "剣豪ヘジン", 30000, 111, PlayerRaceType::NIBELUNG, STORE_OBJ_STD_LEVEL },
         { "ずる屋のエルベレリス", 30000, 112, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
         { "インプのザサス", 30000, 112, PlayerRaceType::IMP, STORE_OBJ_STD_LEVEL },
-        { "醜悪コン=ダー", 30000, 115, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL },
-        { "頑固者ダーグ=ロウ", 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "ハンサムなデカド", 30000, 112, PlayerRaceType::AMBERITE, STORE_OBJ_STD_LEVEL },
-        { "鍛冶屋のウィーランド", 30000, 112, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
 #else
         { "Kon-Dar the Ugly", 30000, 115, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL },
         { "Darg-Low the Grim", 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
@@ -146,10 +143,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "Hesin Swordmaster", 30000, 111, PlayerRaceType::NIBELUNG, STORE_OBJ_STD_LEVEL },
         { "Elvererith the Cheat", 30000, 112, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
         { "Zzathath the Imp", 30000, 112, PlayerRaceType::IMP, STORE_OBJ_STD_LEVEL },
-        { "Kon-Dar the Ugly", 30000, 115, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL },
-        { "Darg-Low the Grim", 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Decado the Handsome", 30000, 112, PlayerRaceType::AMBERITE, STORE_OBJ_STD_LEVEL },
-        { "Wieland the Smith", 30000, 112, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
 #endif
     },
 
@@ -184,10 +177,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "ヴァモグ スレイヤー", 30000, 110, PlayerRaceType::HALF_OGRE, STORE_OBJ_STD_LEVEL },
         { "性悪フーシュナク", 30000, 115, PlayerRaceType::BEASTMAN, STORE_OBJ_STD_LEVEL },
         { "舞闘バレン", 30000, 112, PlayerRaceType::BARBARIAN, STORE_OBJ_STD_LEVEL },
-        { "残忍なるアーノルド", 30000, 115, PlayerRaceType::BARBARIAN, STORE_OBJ_STD_LEVEL },
-        { "獣殺しのアーンダル", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "ビーストマスター・エディー", 30000, 115, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL },
-        { "竜殺しのオグライン", 30000, 112, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
 #else
         { "Arnold the Beastly", 30000, 115, PlayerRaceType::BARBARIAN, STORE_OBJ_STD_LEVEL },
         { "Arndal Beast-Slayer", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
@@ -217,10 +206,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "Vamog Slayer", 30000, 110, PlayerRaceType::HALF_OGRE, STORE_OBJ_STD_LEVEL },
         { "Hooshnak the Vicious", 30000, 115, PlayerRaceType::BEASTMAN, STORE_OBJ_STD_LEVEL },
         { "Balenn War-Dancer", 30000, 112, PlayerRaceType::BARBARIAN, STORE_OBJ_STD_LEVEL },
-        { "Arnold the Beastly", 30000, 115, PlayerRaceType::BARBARIAN, STORE_OBJ_STD_LEVEL },
-        { "Arndal Beast-Slayer", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "Eddie Beast-Master", 30000, 115, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL },
-        { "Oglign Dragon-Slayer", 30000, 112, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
 #endif
     },
     {
@@ -248,16 +233,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "きちがいラムワイズ", 30000, 110, PlayerRaceType::YEEK, STORE_OBJ_STD_LEVEL },
         { "有徳者ムワート", 30000, 107, PlayerRaceType::KOBOLD, STORE_OBJ_STD_LEVEL },
         { "弱虫ダードバード", 30000, 109, PlayerRaceType::SPECTRE, STORE_OBJ_STD_LEVEL },
-        { "質素なルードヴィヒ", 30000, 109, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "パラディンのガンナー", 30000, 110, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "選ばれしトリン", 30000, 107, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
-        { "賢明なるサラストロ", 30000, 109, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
-        { "パーシヴァル卿", 30000, 107, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "神聖なるアセナス", 30000, 109, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "マッキノン", 30000, 109, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "謹み婦人", 30000, 110, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "ドルイドのハシュニック", 30000, 107, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
-        { "フィナク", 30000, 109, PlayerRaceType::YEEK, STORE_OBJ_STD_LEVEL },
 #else
         { "Ludwig the Humble", 30000, 109, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
         { "Gunnar the Paladin", 30000, 110, PlayerRaceType::HALF_TROLL, STORE_OBJ_STD_LEVEL },
@@ -281,16 +256,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "Lumwise the Mad", 30000, 110, PlayerRaceType::YEEK, STORE_OBJ_STD_LEVEL },
         { "Muirt the Virtuous", 30000, 107, PlayerRaceType::KOBOLD, STORE_OBJ_STD_LEVEL },
         { "Dardobard the Weak", 30000, 109, PlayerRaceType::SPECTRE, STORE_OBJ_STD_LEVEL },
-        { "Ludwig the Humble", 30000, 109, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
-        { "Gunnar the Paladin", 30000, 110, PlayerRaceType::HALF_TROLL, STORE_OBJ_STD_LEVEL },
-        { "Torin the Chosen", 30000, 107, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "Sarastro the Wise", 30000, 109, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Sir Parsival the Pure", 30000, 107, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "Asenath the Holy", 30000, 109, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "McKinnon", 30000, 109, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Mistress Chastity", 30000, 110, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "Hashnik the Druid", 30000, 107, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
-        { "Finak", 30000, 109, PlayerRaceType::YEEK, STORE_OBJ_STD_LEVEL },
 #endif
     },
     {
@@ -322,13 +287,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "辛口リグナス", 30000, 110, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL },
         { "ティルバ", 30000, 116, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
         { "金持ちミリルドリック", 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-
-        { "科学者マウザー", 30000, 111, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "カオスのウィズル", 30000, 110, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
-        { "強欲ミダス", 30000, 116, PlayerRaceType::GNOME, STORE_OBJ_STD_LEVEL },
-        { "錬金術師ジャ=ファー", 30000, 111, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
-        { "カカルラカカル", 30000, 116, PlayerRaceType::KLACKON, STORE_OBJ_STD_LEVEL },
-        { "錬金術師ジャル=エス", 30000, 111, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
 #else
         { "Mauser the Chemist", 30000, 111, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
         { "Wizzle the Chaotic", 30000, 110, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
@@ -356,13 +314,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "Lignus the Pungent", 30000, 110, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL },
         { "Tilba", 30000, 116, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
         { "Myrildric the Wealthy", 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-
-        { "Mauser the Chemist", 30000, 111, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "Wizzle the Chaotic", 30000, 110, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
-        { "Midas the Greedy", 30000, 116, PlayerRaceType::GNOME, STORE_OBJ_STD_LEVEL },
-        { "Ja-Far the Alchemist", 30000, 111, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
-        { "Kakalrakakal", 30000, 116, PlayerRaceType::KLACKON, STORE_OBJ_STD_LEVEL },
-        { "Jal-Eth the Alchemist", 30000, 111, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
 #endif
     },
 
@@ -392,15 +343,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "神秘家クトゥアロス", 30000, 113, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
         { "幻術師イベリ", 30000, 110, PlayerRaceType::SKELETON, STORE_OBJ_STD_LEVEL },
         { "死霊術師ヘトー", 30000, 110, PlayerRaceType::YEEK, STORE_OBJ_STD_LEVEL },
-        { "魔術師ロ=パン", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "偉大なるブガービイ", 30000, 113, PlayerRaceType::GNOME, STORE_OBJ_STD_LEVEL },
-        { "イェンダーの魔法使い", 30000, 110, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "死霊術師リャク", 30000, 110, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
-        { "魔術師スキドゥニー", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "幻術師キリア", 30000, 110, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "死霊術師ニッキ", 30000, 110, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
-        { "ソロストラン", 30000, 110, PlayerRaceType::SPRITE, STORE_OBJ_STD_LEVEL },
-        { "烏賊口アチシェ", 30000, 113, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
 #else
         { "Lo Pan the Sorcerer", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
         { "Buggerby the Great", 30000, 113, PlayerRaceType::GNOME, STORE_OBJ_STD_LEVEL },
@@ -425,15 +367,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "Cthoaloth the Mystic", 30000, 113, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
         { "Ibeli the Illusionist", 30000, 110, PlayerRaceType::SKELETON, STORE_OBJ_STD_LEVEL },
         { "Heto the Necromancer", 30000, 110, PlayerRaceType::YEEK, STORE_OBJ_STD_LEVEL },
-        { "Lo Pan the Sorcerer", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "Buggerby the Great", 30000, 113, PlayerRaceType::GNOME, STORE_OBJ_STD_LEVEL },
-        { "The Wizard of Yendor", 30000, 110, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Rjak the Necromancer", 30000, 110, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
-        { "Skidney the Sorcerer", 30000, 110, PlayerRaceType::HALF_ELF, STORE_OBJ_STD_LEVEL },
-        { "Kyria the Illusionist", 30000, 110, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Nikki the Necromancer", 30000, 110, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
-        { "Solostoran", 30000, 110, PlayerRaceType::SPRITE, STORE_OBJ_STD_LEVEL },
-        { "Achshe the Tentacled", 30000, 113, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
 #endif
     },
     {
@@ -509,37 +442,6 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
     {
         /* Home */
         { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
     },
 
     {
@@ -561,6 +463,11 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "学者のアスーヌ", 30000, 108, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
         { "死人のプリランド", 30000, 105, PlayerRaceType::ZOMBIE, STORE_OBJ_STD_LEVEL },
         { "鉄のロナール", 30000, 110, PlayerRaceType::GOLEM, STORE_OBJ_STD_LEVEL },
+        { "ガリル=ガミル", 30000, 105, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
+        { "本食いローバグ", 30000, 108, PlayerRaceType::KOBOLD, STORE_OBJ_STD_LEVEL },
+        { "キリアリキーク", 30000, 105, PlayerRaceType::KLACKON, STORE_OBJ_STD_LEVEL },
+        { "静かなるリリン", 30000, 110, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
+        { "王者イサング", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
 #else
         { "Dolaf the Greedy", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
         { "Odnar the Sage", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
@@ -578,77 +485,16 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
         { "Asuunu the Learned", 30000, 108, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
         { "Prirand the Dead", 30000, 105, PlayerRaceType::ZOMBIE, STORE_OBJ_STD_LEVEL },
         { "Ronar the Iron", 30000, 110, PlayerRaceType::GOLEM, STORE_OBJ_STD_LEVEL },
-#endif
-#ifdef JP
-        { "ガリル=ガミル", 30000, 105, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
-        { "本食いローバグ", 30000, 108, PlayerRaceType::KOBOLD, STORE_OBJ_STD_LEVEL },
-        { "キリアリキーク", 30000, 105, PlayerRaceType::KLACKON, STORE_OBJ_STD_LEVEL },
-        { "静かなるリリン", 30000, 110, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
-        { "王者イサング", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "強欲ドラフ", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "賢者オドナー", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "中立のガンダー", 30000, 110, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
-        { "忍耐の人ロ=シャ", 30000, 105, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
-        { "ランドルフ・カーター", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "隼サライ", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "千里眼ボドリル", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "沈黙のヴェオロイン", 30000, 110, PlayerRaceType::ZOMBIE, STORE_OBJ_STD_LEVEL },
-        { "学者のヴァンシラス", 30000, 105, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
-        { "物書きオセイン", 30000, 108, PlayerRaceType::SKELETON, STORE_OBJ_STD_LEVEL },
-        { "本の虫オルヴァー", 30000, 105, PlayerRaceType::VAMPIRE, STORE_OBJ_STD_LEVEL },
-#else
         { "Galil-Gamir", 30000, 105, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
         { "Rorbag Book-Eater", 30000, 108, PlayerRaceType::KOBOLD, STORE_OBJ_STD_LEVEL },
         { "Kiriarikirk", 30000, 105, PlayerRaceType::KLACKON, STORE_OBJ_STD_LEVEL },
         { "Rilin the Quiet", 30000, 110, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
         { "Isung the Lord", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "Dolaf the Greedy", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Odnar the Sage", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "Gandar the Neutral", 30000, 110, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
-        { "Ro-sha the Patient", 30000, 105, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
-        { "Randolph Carter", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Sarai the Swift", 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { "Bodril the Seer", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
-        { "Veloin the Quiet", 30000, 110, PlayerRaceType::ZOMBIE, STORE_OBJ_STD_LEVEL },
-        { "Vanthylas the Learned", 30000, 105, PlayerRaceType::MIND_FLAYER, STORE_OBJ_STD_LEVEL },
-        { "Ossein the Literate", 30000, 108, PlayerRaceType::SKELETON, STORE_OBJ_STD_LEVEL },
-        { "Olvar Bookworm", 30000, 105, PlayerRaceType::VAMPIRE, STORE_OBJ_STD_LEVEL },
 #endif
     },
 
     {
         /* Museum */
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
         { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
     },
 };
