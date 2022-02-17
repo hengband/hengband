@@ -13,7 +13,7 @@
  */
 void phlogiston(PlayerType *player_ptr)
 {
-    GAME_TURN max_flog = 0;
+    short max_flog = 0;
     auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
     if ((o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_LANTERN))
         max_flog = FUEL_LAMP;
@@ -29,10 +29,10 @@ void phlogiston(PlayerType *player_ptr)
         return;
     }
 
-    o_ptr->fuel += (XTRA16)(max_flog / 2);
+    o_ptr->fuel += max_flog / 2;
     msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light."));
     if (o_ptr->fuel >= max_flog) {
-        o_ptr->fuel = (XTRA16)max_flog;
+        o_ptr->fuel = max_flog;
         msg_print(_("照明用アイテムは満タンになった。", "Your light is full."));
     }
 

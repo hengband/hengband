@@ -165,8 +165,6 @@ typedef uint32_t BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
 typedef uint16_t BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
 
-typedef int16_t XTRA16; /*!< 汎用変数16ビットの型定義 */
-
 typedef int16_t COMMAND_CODE; /*!< コマンド内容の型定義 */
 typedef int16_t COMMAND_ARG; /*!< コマンド引数の型定義 */
 typedef int16_t COMMAND_NUM; /*!< コマンド数の型定義 */
