@@ -226,9 +226,10 @@ void wiz_summon_pet(PlayerType *player_ptr, MONRACE_IDX r_idx)
  * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
  * @param dam ダメージ量
  * @param effect_idx 属性ID
+ * @param self 自分に与えるか否か
  * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_enemy(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx)
+void wiz_kill_target(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx, const bool self)
 {
     if (dam <= 0) {
         dam = 1000000;
@@ -244,39 +245,17 @@ void wiz_kill_enemy(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_
         if (!get_value("EffectID", 1, max - 1, &idx)) {
             return;
         }
+    }
+
+    if (self) {
+        project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, i2enum<AttributeType>(idx), PROJECT_KILL | PROJECT_PLAYER);
+        return;
     }
 
     effect_idx = i2enum<AttributeType>(idx);
     DIRECTION dir;
-
     if (!get_aim_dir(player_ptr, &dir)) {
-        return;    
+        return;
     }
-
     fire_ball(player_ptr, effect_idx, dir, dam, 0);
-}
-
-/*!
- * @brief 自分に指定ダメージ・指定属性・半径0のボールを放つ
- * @param dam ダメージ量
- * @param effect_idx 属性ID
- */
-void wiz_kill_me(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx)
-{
-    if (dam <= 0) {
-        dam = 1000000;
-        if (!get_value("Damage", 1, 1000000, &dam)) {
-            return;
-        }
-    }
-    constexpr auto max = enum2i(AttributeType::MAX);
-    auto idx = enum2i(effect_idx);
-
-    if (idx <= 0) {
-        if (!get_value("EffectID", 1, max - 1, &idx)) {
-            return;
-        }
-    }
-
-    project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, i2enum<AttributeType>(idx), PROJECT_KILL | PROJECT_PLAYER);
 }
