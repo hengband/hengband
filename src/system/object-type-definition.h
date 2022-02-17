@@ -38,9 +38,12 @@ public:
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     byte chest_level = 0; /*!< 箱の中身レベル */
     int8_t captured_monster_speed = 0; /*!< 捕らえたモンスターの速度 */
-    XTRA16 xtra4{}; /*!< 複数の使用用途 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
+    short captured_monster_current_hp = 0; /*!< 捕らえたモンスターの現HP */
+    ushort fuel = 0; /*!< 光源の残り寿命 / Extra info fuel or captured monster's current HP */
     XTRA16 xtra5{}; /*!< 複数の使用用途 捕らえたモンスターの最大HP / Extra info captured monster's max HP */
 
+    byte smith_hit = 0; /*!< 鍛冶をした結果上昇した命中値 */
+    byte smith_damage = 0; /*!< 鍛冶をした結果上昇したダメージ */
     std::optional<SmithEffectType> smith_effect; //!< 鍛冶で付与された効果
     std::optional<RandomArtActType> smith_act_idx; //!< 鍛冶で付与された発動効果のID
 
@@ -108,4 +111,6 @@ public:
     bool is_offerable() const;
     bool is_activatable() const;
     bool is_fuel() const;
+    bool is_glove_same_temper(const ObjectType *j_ptr) const;
+    bool can_pile(const ObjectType *j_ptr) const;
 };

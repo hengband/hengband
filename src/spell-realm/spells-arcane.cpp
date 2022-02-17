@@ -24,15 +24,15 @@ void phlogiston(PlayerType *player_ptr)
         return;
     }
 
-    if (o_ptr->xtra4 >= max_flog) {
+    if (o_ptr->fuel >= max_flog) {
         msg_print(_("このアイテムにはこれ以上燃素を補充できません。", "No more phlogiston can be put in this item."));
         return;
     }
 
-    o_ptr->xtra4 += (XTRA16)(max_flog / 2);
+    o_ptr->fuel += (XTRA16)(max_flog / 2);
     msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light."));
-    if (o_ptr->xtra4 >= max_flog) {
-        o_ptr->xtra4 = (XTRA16)max_flog;
+    if (o_ptr->fuel >= max_flog) {
+        o_ptr->fuel = (XTRA16)max_flog;
         msg_print(_("照明用アイテムは満タンになった。", "Your light is full."));
     }
 

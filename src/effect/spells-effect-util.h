@@ -7,7 +7,7 @@ extern int rakubadam_p; /*!< 落馬した際のダメージ量 */
 
 extern int cap_mon;
 extern int cap_mspeed;
-extern HIT_POINT cap_hp;
+extern int cap_hp;
 extern HIT_POINT cap_maxhp;
 extern STR_OFFSET cap_nickname;
 

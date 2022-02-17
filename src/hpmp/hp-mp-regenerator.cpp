@@ -214,8 +214,8 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
 
         heal = true;
         r_ptr = &r_info[o_ptr->pval];
-        if (o_ptr->xtra4 < o_ptr->xtra5) {
-            int frac = o_ptr->xtra5 / 100;
+        if (o_ptr->captured_monster_current_hp < o_ptr->xtra5) {
+            short frac = o_ptr->xtra5 / 100;
             if (!frac)
                 if (one_in_(2))
                     frac = 1;
@@ -223,9 +223,9 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
             if (r_ptr->flags2 & RF2_REGENERATE)
                 frac *= 2;
 
-            o_ptr->xtra4 += (XTRA16)frac;
-            if (o_ptr->xtra4 > o_ptr->xtra5)
-                o_ptr->xtra4 = o_ptr->xtra5;
+            o_ptr->captured_monster_current_hp += frac;
+            if (o_ptr->captured_monster_current_hp > o_ptr->xtra5)
+                o_ptr->captured_monster_current_hp = o_ptr->xtra5;
         }
     }
 

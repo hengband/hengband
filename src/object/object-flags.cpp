@@ -12,8 +12,38 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
+ * @brief 光源用のフラグを付与する
+ * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
+ * @param flgs フラグ情報を受け取る配列
+ */
+static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
+{
+    if (!o_ptr->is_ego()) {
+        return;
+    }
+
+    auto *e_ptr = &e_info[o_ptr->name2];
+    flgs.set(e_ptr->flags);
+
+    auto is_out_of_fuel = o_ptr->fuel == 0;
+    if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+        flgs.reset(TR_SH_FIRE);
+        return;
+    }
+    
+    if ((o_ptr->name2 == EGO_LITE_INFRA) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+        flgs.reset(TR_INFRA);
+        return;
+    }
+    
+    if ((o_ptr->name2 == EGO_LITE_EYE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+        flgs.reset(TR_RES_BLIND);
+        flgs.reset(TR_SEE_INVIS);
+    }
+}
+
+/*!
  * @brief オブジェクトのフラグ類を配列に与える
- * Obtain the "flags" for an item
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
@@ -28,19 +58,7 @@ TrFlags object_flags(const ObjectType *o_ptr)
         flgs = a_info[o_ptr->name1].flags;
     }
 
-    if (o_ptr->is_ego()) {
-        ego_item_type *e_ptr = &e_info[o_ptr->name2];
-        flgs.set(e_ptr->flags);
-
-        if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            flgs.reset(TR_SH_FIRE);
-        } else if ((o_ptr->name2 == EGO_LITE_INFRA) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            flgs.reset(TR_INFRA);
-        } else if ((o_ptr->name2 == EGO_LITE_EYE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            flgs.reset(TR_RES_BLIND);
-            flgs.reset(TR_SEE_INVIS);
-        }
-    }
+    object_flags_lite(o_ptr, flgs);
 
     /* Random artifact ! */
     flgs.set(o_ptr->art_flags);
@@ -77,20 +95,7 @@ TrFlags object_flags_known(const ObjectType *o_ptr)
     if (!o_ptr->is_known())
         return flgs;
 
-    if (o_ptr->is_ego()) {
-        ego_item_type *e_ptr = &e_info[o_ptr->name2];
-        flgs.set(e_ptr->flags);
-
-        if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            flgs.reset(TR_SH_FIRE);
-        } else if ((o_ptr->name2 == EGO_LITE_INFRA) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            flgs.reset(TR_INFRA);
-        } else if ((o_ptr->name2 == EGO_LITE_EYE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            flgs.reset(TR_RES_BLIND);
-            flgs.reset(TR_SEE_INVIS);
-        }
-    }
-
+    object_flags_lite(o_ptr, flgs);
     if (spoil || o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
             flgs = a_info[o_ptr->name1].flags;

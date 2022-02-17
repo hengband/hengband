@@ -157,7 +157,7 @@ void player_outfit(PlayerType *player_ptr)
     } else if (!pc.equals(PlayerClassType::NINJA)) {
         q_ptr->prep(lookup_kind(ItemKindType::LITE, SV_LITE_TORCH));
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
-        q_ptr->xtra4 = rand_range(3, 7) * 500;
+        q_ptr->fuel = rand_range(3, 7) * 500;
 
         add_outfit(player_ptr, q_ptr);
     }

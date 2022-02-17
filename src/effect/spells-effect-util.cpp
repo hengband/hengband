@@ -8,7 +8,7 @@ int project_length = 0;
 
 int cap_mon;
 int cap_mspeed;
-HIT_POINT cap_hp;
+int cap_hp;
 HIT_POINT cap_maxhp;
 STR_OFFSET cap_nickname;
 

@@ -537,3 +537,91 @@ bool ObjectType::is_fuel() const
     is_fuel |= (this->tval == ItemKindType::FLASK) && (this->sval == SV_FLASK_OIL);
     return is_fuel;
 }
+
+/*!
+ * @brief オブジェクトが同一の命中値上昇及びダメージ上昇があるかを判定する
+ * @return 同一修正か
+ * @details 鍛冶師が篭手に殺戮エッセンスを付加した場合のみこの判定に意味がある
+ */
+bool ObjectType::is_glove_same_temper(const ObjectType *j_ptr) const
+{
+    if (!this->is_smith() || !j_ptr->is_smith()) {
+        return false;
+    }
+
+    if (this->smith_hit != j_ptr->smith_hit) {
+        return true;
+    }
+
+    if (this->smith_damage != j_ptr->smith_damage) {
+        return true;
+    }
+
+    return false;
+}
+
+/*!
+ * @brief オブジェクトが「2つの～～」と重ねられるかを一般的に判定する
+ * @return 重ねられるか
+ * @details 個別のアイテムによっては別途条件があるが、それはこの関数では判定しない
+ */
+bool ObjectType::can_pile(const ObjectType *j_ptr) const
+{
+    if (this->is_known() != j_ptr->is_known()) {
+        return false;
+    }
+
+    if (this->feeling != j_ptr->feeling) {
+        return false;
+    }
+
+    if (this->to_h != j_ptr->to_h) {
+        return false;
+    }
+
+    if (this->to_d != j_ptr->to_d) {
+        return false;
+    }
+
+    if (this->to_a != j_ptr->to_a) {
+        return false;
+    }
+
+    if (this->pval != j_ptr->pval) {
+        return false;
+    }
+
+    if (this->is_artifact() || j_ptr->is_artifact()) {
+        return false;
+    }
+
+    if (this->name2 != j_ptr->name2) {
+        return false;
+    }
+
+    if (this->timeout || j_ptr->timeout) {
+        return false;
+    }
+
+    if (this->ac != j_ptr->ac) {
+        return false;
+    }
+
+    if (this->dd != j_ptr->dd) {
+        return false;
+    }
+
+    if (this->ds != j_ptr->ds) {
+        return false;
+    }
+
+    if (Smith::object_effect(this) != Smith::object_effect(j_ptr)) {
+        return false;
+    }
+
+    if (Smith::object_activation(this) != Smith::object_activation(j_ptr)) {
+        return false;
+    }
+
+    return true;
+}

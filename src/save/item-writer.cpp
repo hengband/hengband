@@ -70,8 +70,11 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->captured_monster_speed != 0)
         set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED);
 
-    if (o_ptr->xtra4)
-        set_bits(*flags, SaveDataItemFlagType::XTRA4);
+    if (o_ptr->fuel > 0)
+        set_bits(*flags, SaveDataItemFlagType::FUEL);
+
+    if (o_ptr->captured_monster_current_hp > 0)
+        set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP);
 
     if (o_ptr->xtra5)
         set_bits(*flags, SaveDataItemFlagType::XTRA5);
@@ -149,8 +152,11 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
     if (any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED))
         wr_byte(o_ptr->captured_monster_speed);
 
-    if (any_bits(flags, SaveDataItemFlagType::XTRA4))
-        wr_s16b(o_ptr->xtra4);
+    if (any_bits(flags, SaveDataItemFlagType::FUEL))
+        wr_u16b(o_ptr->fuel);
+
+    if (any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP))
+        wr_s16b(o_ptr->captured_monster_current_hp);
 
     if (any_bits(flags, SaveDataItemFlagType::XTRA5))
         wr_s16b(o_ptr->xtra5);
@@ -173,6 +179,9 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
         } else {
             wr_s16b(0);
         }
+
+        wr_byte(o_ptr->smith_hit);
+        wr_byte(o_ptr->smith_damage);
     }
 }
 

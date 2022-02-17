@@ -179,12 +179,12 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 
 void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if ((monap_ptr->o_ptr->xtra4 <= 0) || monap_ptr->o_ptr->is_fixed_artifact())
+    if ((monap_ptr->o_ptr->fuel <= 0) || monap_ptr->o_ptr->is_fixed_artifact())
         return;
 
-    monap_ptr->o_ptr->xtra4 -= (int16_t)(250 + randint1(250));
-    if (monap_ptr->o_ptr->xtra4 < 1)
-        monap_ptr->o_ptr->xtra4 = 1;
+    monap_ptr->o_ptr->fuel -= 250 + randint1(250);
+    if (monap_ptr->o_ptr->fuel < 1)
+        monap_ptr->o_ptr->fuel = 1;
 
     if (!player_ptr->blind) {
         msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
