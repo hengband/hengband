@@ -236,17 +236,20 @@ void store_examine(PlayerType *player_ptr)
  * @brief 現在の町の店主を交代させる /
  * Shuffle one of the stores.
  * @param which 店舗種類のID
+ * @todo init_store()と処理を一部統合＆ランダム選択を改善。
  */
 void store_shuffle(PlayerType *player_ptr, StoreSaleType which)
 {
-    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM))
+    cur_store_num = which;
+    auto owner_num = owners[enum2i(cur_store_num)].size();
+    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM) || (owner_num <= max_towns))
         return;
 
-    cur_store_num = which;
     st_ptr = &town_info[player_ptr->town_num].store[enum2i(cur_store_num)];
     int j = st_ptr->owner;
     while (true) {
-        st_ptr->owner = (byte)randint0(owners[enum2i(cur_store_num)].size());
+        st_ptr->owner = (byte)randint0(owner_num);
+
         if (j == st_ptr->owner)
             continue;
 
@@ -359,16 +362,23 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 void store_init(int town_num, StoreSaleType store_num)
 {
     cur_store_num = store_num;
+    auto owner_num = owners[enum2i(cur_store_num)].size();
     st_ptr = &town_info[town_num].store[enum2i(store_num)];
     while (true) {
-        st_ptr->owner = (byte)randint0(owners[enum2i(cur_store_num)].size());
+        st_ptr->owner = (byte)randint0(owner_num);
+
+        if (owner_num <= max_towns) {
+            break;
+        }
+
         int i;
+
         for (i = 1; i < max_towns; i++) {
             if (i == town_num)
                 continue;
             if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner)
                 break;
-        }
+        }        
 
         if (i == max_towns)
             break;
