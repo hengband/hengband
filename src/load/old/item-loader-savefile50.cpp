@@ -116,9 +116,9 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
 
     // xtra3フィールドが複数目的に共用されていた頃の名残.
     if (loading_savefile_version_is_older_than(12)) {
-        int8_t tmp8s = any_bits(flags, SavedataItemOlderThan12FlagType::XTRA3) ? rd_byte() : 0;
+        uint8_t tmp8s = any_bits(flags, SavedataItemOlderThan12FlagType::XTRA3) ? rd_byte() : 0;
         if (o_ptr->tval == ItemKindType::CHEST) {
-            o_ptr->chest_level = static_cast<uint8_t>(tmp8s);
+            o_ptr->chest_level = tmp8s;
         } else if (o_ptr->tval == ItemKindType::CAPTURE) {
             o_ptr->captured_monster_speed = tmp8s;
         }
@@ -143,7 +143,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         o_ptr->captured_monster_current_hp = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP) ? rd_s16b() : 0;
     }
 
-    o_ptr->xtra5 = any_bits(flags, SaveDataItemFlagType::XTRA5) ? rd_s16b() : 0;
+    o_ptr->captured_monster_max_hp = any_bits(flags, SaveDataItemFlagType::XTRA5) ? rd_s16b() : 0;
     o_ptr->feeling = any_bits(flags, SaveDataItemFlagType::FEELING) ? rd_byte() : 0;
     o_ptr->stack_idx = any_bits(flags, SaveDataItemFlagType::STACK_IDX) ? rd_s16b() : 0;
     if (any_bits(flags, SaveDataItemFlagType::SMITH) && !loading_savefile_version_is_older_than(7)) {

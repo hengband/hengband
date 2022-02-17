@@ -5,10 +5,10 @@
 extern int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 extern int rakubadam_p; /*!< 落馬した際のダメージ量 */
 
-extern int cap_mon;
-extern int cap_mspeed;
-extern int cap_hp;
-extern HIT_POINT cap_maxhp;
+extern short cap_mon;
+extern byte cap_mspeed;
+extern short cap_hp;
+extern short cap_maxhp;
 extern STR_OFFSET cap_nickname;
 
 extern bool sukekaku;

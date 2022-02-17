@@ -67,7 +67,7 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->chest_level > 0)
         set_bits(*flags, SaveDataItemFlagType::CHEST_LEVEL);
 
-    if (o_ptr->captured_monster_speed != 0)
+    if (o_ptr->captured_monster_speed > 0)
         set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED);
 
     if (o_ptr->fuel > 0)
@@ -76,7 +76,7 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->captured_monster_current_hp > 0)
         set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP);
 
-    if (o_ptr->xtra5)
+    if (o_ptr->captured_monster_max_hp)
         set_bits(*flags, SaveDataItemFlagType::XTRA5);
 
     if (o_ptr->feeling)
@@ -159,7 +159,7 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
         wr_s16b(o_ptr->captured_monster_current_hp);
 
     if (any_bits(flags, SaveDataItemFlagType::XTRA5))
-        wr_s16b(o_ptr->xtra5);
+        wr_s16b(o_ptr->captured_monster_max_hp);
 
     if (any_bits(flags, SaveDataItemFlagType::FEELING))
         wr_byte(o_ptr->feeling);

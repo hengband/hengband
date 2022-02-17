@@ -37,10 +37,10 @@ public:
 
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     byte chest_level = 0; /*!< 箱の中身レベル */
-    int8_t captured_monster_speed = 0; /*!< 捕らえたモンスターの速度 */
+    uint8_t captured_monster_speed = 0; /*!< 捕らえたモンスターの速度 */
     short captured_monster_current_hp = 0; /*!< 捕らえたモンスターの現HP */
+    short captured_monster_max_hp = 0; /*!< 捕らえたモンスターの最大HP */
     ushort fuel = 0; /*!< 光源の残り寿命 / Extra info fuel or captured monster's current HP */
-    XTRA16 xtra5{}; /*!< 複数の使用用途 捕らえたモンスターの最大HP / Extra info captured monster's max HP */
 
     byte smith_hit = 0; /*!< 鍛冶をした結果上昇した命中値 */
     byte smith_damage = 0; /*!< 鍛冶をした結果上昇したダメージ */

@@ -349,9 +349,8 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), ++line, j);
     prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
-    prt(format("fuel = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->fuel, o_ptr->xtra5, o_ptr->curse_flags), ++line, j);
-    prt(format("captured_monster_speed = %-4d", o_ptr->captured_monster_current_hp), ++line, j);
-    prt(format("xtra5 = %-4d  cursed  = %-d", o_ptr->xtra5, o_ptr->curse_flags), ++line, j);
+    prt(format("cursed  = %-d  captured_monster_speed = %-4d", o_ptr->curse_flags, o_ptr->captured_monster_speed), ++line, j);
+    prt(format("captured_monster_max_hp = %-4d  captured_monster_max_hp = %-4d", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
 
     prt("+------------FLAGS1------------+", ++line, j);
     prt("AFFECT........SLAY........BRAND.", ++line, j);

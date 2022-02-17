@@ -6,10 +6,10 @@ bool sukekaku;
 
 int project_length = 0;
 
-int cap_mon;
-int cap_mspeed;
-int cap_hp;
-HIT_POINT cap_maxhp;
+short cap_mon;
+byte cap_mspeed;
+short cap_hp;
+short cap_maxhp;
 STR_OFFSET cap_nickname;
 
 int project_m_n;
