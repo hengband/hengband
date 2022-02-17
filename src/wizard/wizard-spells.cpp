@@ -264,31 +264,19 @@ void wiz_kill_enemy(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_
 void wiz_kill_me(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx)
 {
     if (dam <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Damage (1-999999): ");
-        char tmp_val[10] = "1000";
-        if (!get_string(tmp, tmp_val, 6))
+        dam = 1000000;
+        if (!get_value("Damage", 1, 1000000, &dam)) {
             return;
-
-        dam = (HIT_POINT)atoi(tmp_val);
+        }
     }
-    int max = (int)AttributeType::MAX;
-    int idx = (int)effect_idx;
+    constexpr auto max = enum2i(AttributeType::MAX);
+    auto idx = enum2i(effect_idx);
 
     if (idx <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Effect ID (1-%d): ", max - 1);
-        char tmp_val[10] = "1";
-        if (!get_string(tmp, tmp_val, 3))
+        if (!get_value("EffectID", 1, max - 1, &idx)) {
             return;
-
-        effect_idx = (AttributeType)atoi(tmp_val);
+        }
     }
 
-    if (idx <= 0 || idx >= max) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max - 1);
-        return;
-    }
-
-    project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, effect_idx, PROJECT_KILL | PROJECT_PLAYER);
+    project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, i2enum<AttributeType>(idx), PROJECT_KILL | PROJECT_PLAYER);
 }
