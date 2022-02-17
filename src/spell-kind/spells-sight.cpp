@@ -373,7 +373,7 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
-    SPEED speed = m_ptr->mspeed - 110;
+    auto speed = m_ptr->mspeed - 110;
     if (monster_fast_remaining(m_ptr))
         speed += 10;
     if (monster_slow_remaining(m_ptr))

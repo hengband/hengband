@@ -376,9 +376,9 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MO
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
+byte get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
 {
-    SPEED mspeed = r_ptr->speed;
+    auto mspeed = r_ptr->speed;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !floor_ptr->inside_arena) {
         /* Allow some small variation per monster */
         int i = speed_to_energy(r_ptr->speed) / (one_in_(4) ? 3 : 10);

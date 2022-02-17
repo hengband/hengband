@@ -26,7 +26,7 @@ struct lore_type {
 #endif
     bool nightmare;
     monster_race *r_ptr;
-    SPEED speed;
+    byte speed;
     ITEM_NUMBER drop_gold;
     ITEM_NUMBER drop_item;
     BIT_FLAGS flags1;

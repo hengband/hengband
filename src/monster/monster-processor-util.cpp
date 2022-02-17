@@ -305,9 +305,9 @@ void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_
  * @param m_ptr モンスターへの参照ポインタ
  * return モンスターの加速値
  */
-SPEED decide_monster_speed(monster_type *m_ptr)
+byte decide_monster_speed(monster_type *m_ptr)
 {
-    SPEED speed = m_ptr->mspeed;
+    auto speed = m_ptr->mspeed;
     if (ironman_nightmare)
         speed += 5;
 

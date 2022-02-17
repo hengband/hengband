@@ -54,7 +54,7 @@ struct monster_race {
     ARMOUR_CLASS ac{}; //!< アーマークラス / Armour Class
     SLEEP_DEGREE sleep{}; //!< 睡眠値 / Inactive counter (base)
     POSITION aaf{}; //!< 感知範囲(1-100スクエア) / Area affect radius (1-100)
-    SPEED speed{}; //!< 加速(110で+0) / Speed (normally 110)
+    byte speed{}; //!< 加速(110で+0) / Speed (normally 110)
     EXP mexp{}; //!< 殺害時基本経験値 / Exp value for kill
     BIT_FLAGS16 extra{}; //!< 未使用 /  Unused (for now)
     RARITY freq_spell{}; //!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency
