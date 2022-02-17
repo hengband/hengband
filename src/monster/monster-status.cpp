@@ -199,7 +199,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         auto d = (m_ptr->cdis < AAF_LIMIT / 2) ? (AAF_LIMIT / m_ptr->cdis) : 1;
 
         /* Hack -- amount of "waking" is affected by speed of player */
-        d = (d * SPEED_TO_ENERGY(player_ptr->pspeed)) / 10;
+        d = (d * speed_to_energy(player_ptr->pspeed)) / 10;
         if (d < 0) {
             d = 1;
         }

@@ -381,7 +381,7 @@ SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
     SPEED mspeed = r_ptr->speed;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !floor_ptr->inside_arena) {
         /* Allow some small variation per monster */
-        int i = SPEED_TO_ENERGY(r_ptr->speed) / (one_in_(4) ? 3 : 10);
+        int i = speed_to_energy(r_ptr->speed) / (one_in_(4) ? 3 : 10);
         if (i)
             mspeed += rand_spread(0, i);
     }
