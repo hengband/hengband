@@ -78,7 +78,7 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
     ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
     ae_ptr->o_ptr->captured_monster_speed = static_cast<int8_t>(cap_mspeed);
     ae_ptr->o_ptr->captured_monster_current_hp = static_cast<short>(cap_hp);
-    ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
+    ae_ptr->o_ptr->captured_monster_max_hp = (XTRA16)cap_maxhp;
     inscribe_nickname(ae_ptr);
     return true;
 }
@@ -154,8 +154,8 @@ static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
     if (ae_ptr->o_ptr->captured_monster_speed != 0)
         floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->captured_monster_speed;
 
-    if (ae_ptr->o_ptr->xtra5)
-        floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->xtra5;
+    if (ae_ptr->o_ptr->captured_monster_max_hp)
+        floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->captured_monster_max_hp;
 
     if (ae_ptr->o_ptr->captured_monster_current_hp > 0)
         floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->captured_monster_current_hp;
@@ -165,7 +165,7 @@ static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
     ae_ptr->o_ptr->pval = 0;
     ae_ptr->o_ptr->captured_monster_speed = 0;
     ae_ptr->o_ptr->captured_monster_current_hp = 0;
-    ae_ptr->o_ptr->xtra5 = 0;
+    ae_ptr->o_ptr->captured_monster_max_hp = 0;
     ae_ptr->success = true;
 }
 
