@@ -6,7 +6,7 @@ extern int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 extern int rakubadam_p; /*!< 落馬した際のダメージ量 */
 
 extern short cap_mon;
-extern int8_t cap_mspeed;
+extern uint8_t cap_mspeed;
 extern short cap_hp;
 extern short cap_maxhp;
 extern STR_OFFSET cap_nickname;

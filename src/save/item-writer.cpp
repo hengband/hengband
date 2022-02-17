@@ -67,7 +67,7 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->chest_level > 0)
         set_bits(*flags, SaveDataItemFlagType::CHEST_LEVEL);
 
-    if (o_ptr->captured_monster_speed != 0)
+    if (o_ptr->captured_monster_speed > 0)
         set_bits(*flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED);
 
     if (o_ptr->fuel > 0)

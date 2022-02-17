@@ -151,7 +151,7 @@ static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
         return;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (ae_ptr->o_ptr->captured_monster_speed != 0)
+    if (ae_ptr->o_ptr->captured_monster_speed > 0)
         floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->captured_monster_speed;
 
     if (ae_ptr->o_ptr->captured_monster_max_hp)

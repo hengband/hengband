@@ -7,7 +7,7 @@ bool sukekaku;
 int project_length = 0;
 
 short cap_mon;
-int8_t cap_mspeed;
+uint8_t cap_mspeed;
 short cap_hp;
 short cap_maxhp;
 STR_OFFSET cap_nickname;
