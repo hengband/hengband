@@ -386,9 +386,9 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
 
     msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
     cap_mon = em_ptr->m_ptr->r_idx;
-    cap_mspeed = em_ptr->m_ptr->mspeed;
-    cap_hp = em_ptr->m_ptr->hp;
-    cap_maxhp = em_ptr->m_ptr->max_maxhp;
+    cap_mspeed = static_cast<byte>(em_ptr->m_ptr->mspeed);
+    cap_hp = static_cast<short>(em_ptr->m_ptr->hp);
+    cap_maxhp = static_cast<short>(em_ptr->m_ptr->max_maxhp);
     cap_nickname = em_ptr->m_ptr->nickname;
     if ((em_ptr->g_ptr->m_idx == player_ptr->riding) && process_fall_off_horse(player_ptr, -1, false))
         msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
