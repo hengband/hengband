@@ -1,4 +1,5 @@
 ﻿#include "core/speed-table.h"
+#include <vector>
 
 /*!
  * @brief 加速値による実質速度修正倍率テーブル /
@@ -27,7 +28,7 @@
  * the (compiled out) small random energy boost code.  It may
  * also tend to cause more "clumping" at high speeds.
  */
-const byte extract_energy[NUM_SPEED] = {
+static const std::vector<byte> extract_energy = {
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
