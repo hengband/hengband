@@ -10,6 +10,8 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 
+#include <algorithm>
+
 /*
  * Special "sval" limit -- first "good" magic/prayer book
  */
@@ -180,31 +182,74 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     }
 }
 
+static bool comp_tval(const object_kind *a, const object_kind *b)
+{
+    return a->tval < b->tval;
+};
+
+static bool comp_tval_sval(const object_kind *a, const object_kind *b)
+{
+    if (a->tval != b->tval) {
+        return comp_tval(a, b);
+    }
+    return a->sval < b->sval;
+};
+
 /*!
- * @brief tvalとsvalに対応するベースアイテムのIDを返す。
+ * @brief k_info配列の各要素を指すポインタをtvalおよびsvalでソートした配列を取得する
+ * 最初にtvalによるソートを行い、tvalが同じものはその中でsvalによるソートが行われた配列となる
+ * @return 上述の処理を行った配列(静的変数)への参照を返す
+ */
+static const std::vector<const object_kind *> &get_sorted_k_info()
+{
+    static std::vector<const object_kind *> sorted_k_info_cache;
+
+    if (sorted_k_info_cache.empty()) {
+        for (const auto &k_ref : k_info) {
+            if (k_ref.tval == ItemKindType::NONE) {
+                continue;
+            }
+            sorted_k_info_cache.push_back(&k_ref);
+        }
+
+        std::sort(sorted_k_info_cache.begin(), sorted_k_info_cache.end(), comp_tval_sval);
+    }
+
+    return sorted_k_info_cache;
+}
+
+/*!
+ * @brief tvalとsvalに対応するベースアイテムのIDを検索する
  * Find the index of the object_kind with the given tval and sval
+ * svalにSV_ANYが渡された場合はtvalが一致するすべてのベースアイテムから等確率でランダムに1つを選択する
  * @param tval 検索したいベースアイテムのtval
  * @param sval 検索したいベースアイテムのsval
+ * @return tvalとsvalに対応するベースアイテムが存在すればそのID、存在しなければ0
  */
 KIND_OBJECT_IDX lookup_kind(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval)
 {
-    int num = 0;
-    KIND_OBJECT_IDX bk = 0;
-    for (const auto& k_ref : k_info) {
-        if (k_ref.tval != tval)
-            continue;
+    const auto &sorted_k_info = get_sorted_k_info();
 
-        if (k_ref.sval == sval)
-            return k_ref.idx;
+    object_kind k_obj;
+    k_obj.tval = tval;
+    k_obj.sval = sval;
 
-        if ((sval != SV_ANY) || !one_in_(++num))
-            continue;
+    if (sval == SV_ANY) {
+        auto [begin, end] = std::equal_range(sorted_k_info.begin(), sorted_k_info.end(), &k_obj, comp_tval);
+        if (auto candidates_num = std::distance(begin, end);
+            candidates_num > 0) {
+            auto choice = randint0(candidates_num);
+            return (*std::next(begin, choice))->idx;
+        }
 
-        bk = k_ref.idx;
+        return 0;
     }
 
-    if (sval == SV_ANY)
-        return bk;
+    auto it = std::lower_bound(sorted_k_info.begin(), sorted_k_info.end(), &k_obj, comp_tval_sval);
+    if (it != sorted_k_info.end() &&
+        (((*it)->tval == tval) && ((*it)->sval == sval))) {
+        return (*it)->idx;
+    }
 
     return 0;
 }
