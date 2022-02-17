@@ -4,6 +4,7 @@
 #include "store/store-util.h"
 #include "system/angband.h"
 #include <array>
+#include <unordered_map>
 
 /*!
  * @brief 店主データ構造体
@@ -16,4 +17,4 @@ struct owner_type {
     DEPTH level{}; //!< Production Level
 };
 
-extern const std::vector<owner_type> owners[MAX_STORES];
+extern const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners;

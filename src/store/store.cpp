@@ -241,8 +241,8 @@ void store_examine(PlayerType *player_ptr)
 void store_shuffle(PlayerType *player_ptr, StoreSaleType which)
 {
     cur_store_num = which;
-    auto owner_num = owners[enum2i(cur_store_num)].size();
-    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM) || (owner_num <= max_towns))
+    auto owner_num = owners.at(cur_store_num).size();
+    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)max_towns))
         return;
 
     st_ptr = &town_info[player_ptr->town_num].store[enum2i(cur_store_num)];
@@ -266,7 +266,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType which)
             break;
     }
 
-    ot_ptr = &owners[enum2i(cur_store_num)][st_ptr->owner];
+    ot_ptr = &owners.at(cur_store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     st_ptr->store_open = 0;
     st_ptr->good_buy = 0;
@@ -297,7 +297,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         return;
 
     st_ptr = &town_info[town_num].store[enum2i(store_num)];
-    ot_ptr = &owners[enum2i(store_num)][st_ptr->owner];
+    ot_ptr = &owners.at(cur_store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
@@ -361,19 +361,18 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
  */
 void store_init(int town_num, StoreSaleType store_num)
 {
-    cur_store_num = store_num;
-    auto owner_num = owners[enum2i(cur_store_num)].size();
+    auto owner_num = owners.at(store_num).size();
     st_ptr = &town_info[town_num].store[enum2i(store_num)];
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
 
-        if (owner_num <= max_towns) {
+        if (owner_num <= (uint16_t)max_towns) {
             break;
         }
 
         int i;
 
-        for (i = 1; i < max_towns; i++) {
+        for (i = 1; i < (uint16_t)max_towns; i++) {
             if (i == town_num)
                 continue;
             if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner)
@@ -384,7 +383,7 @@ void store_init(int town_num, StoreSaleType store_num)
             break;
     }
 
-    ot_ptr = &owners[enum2i(store_num)][st_ptr->owner];
+    ot_ptr = &owners.at(cur_store_num)[st_ptr->owner];
     st_ptr->store_open = 0;
     st_ptr->insult_cur = 0;
     st_ptr->good_buy = 0;
