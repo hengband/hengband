@@ -226,9 +226,10 @@ void wiz_summon_pet(PlayerType *player_ptr, MONRACE_IDX r_idx)
  * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
  * @param dam ダメージ量
  * @param effect_idx 属性ID
+ * @param self 自分に与えるか否か
  * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_enemy(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx)
+void wiz_kill_target(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx, const bool self)
 {
     if (dam <= 0) {
         dam = 1000000;
@@ -246,49 +247,15 @@ void wiz_kill_enemy(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_
         }
     }
 
-    effect_idx = i2enum<AttributeType>(idx);
-    DIRECTION dir;
-
-    if (!get_aim_dir(player_ptr, &dir)) {
-        return;    
-    }
-
-    fire_ball(player_ptr, effect_idx, dir, dam, 0);
-}
-
-/*!
- * @brief 自分に指定ダメージ・指定属性・半径0のボールを放つ
- * @param dam ダメージ量
- * @param effect_idx 属性ID
- */
-void wiz_kill_me(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx)
-{
-    if (dam <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Damage (1-999999): ");
-        char tmp_val[10] = "1000";
-        if (!get_string(tmp, tmp_val, 6))
-            return;
-
-        dam = (HIT_POINT)atoi(tmp_val);
-    }
-    int max = (int)AttributeType::MAX;
-    int idx = (int)effect_idx;
-
-    if (idx <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Effect ID (1-%d): ", max - 1);
-        char tmp_val[10] = "1";
-        if (!get_string(tmp, tmp_val, 3))
-            return;
-
-        effect_idx = (AttributeType)atoi(tmp_val);
-    }
-
-    if (idx <= 0 || idx >= max) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max - 1);
+    if (self) {
+        project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, i2enum<AttributeType>(idx), PROJECT_KILL | PROJECT_PLAYER);
         return;
     }
 
-    project(player_ptr, -1, 0, player_ptr->y, player_ptr->x, dam, effect_idx, PROJECT_KILL | PROJECT_PLAYER);
+    effect_idx = i2enum<AttributeType>(idx);
+    DIRECTION dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
+        return;
+    }
+    fire_ball(player_ptr, effect_idx, dir, dam, 0);
 }

@@ -186,7 +186,7 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         wiz_jump_to_dungeon(player_ptr);
         break;
     case 'k':
-        wiz_kill_me(player_ptr, 0, (AttributeType)command_arg);
+        wiz_kill_target(player_ptr, 0, (AttributeType)command_arg, true);
         break;
     case 'm':
         map_area(player_ptr, DETECT_RAD_ALL * 3);
@@ -242,10 +242,10 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         player_outfit(player_ptr);
         break;
     case 'y':
-        wiz_kill_enemy(player_ptr);
+        wiz_kill_target(player_ptr);
         break;
     case 'Y':
-        wiz_kill_enemy(player_ptr, 0, (AttributeType)command_arg);
+        wiz_kill_target(player_ptr, 0, (AttributeType)command_arg);
         break;
     case 'z':
         wiz_zap_surrounding_monsters(player_ptr);
