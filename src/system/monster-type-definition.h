@@ -35,7 +35,7 @@ struct monster_type {
 	HIT_POINT max_maxhp{};		/*!< 生成時の初期最大HP / Max Max Hit points */
 	HIT_POINT dealt_damage{};		/*!< これまでに蓄積して与えてきたダメージ / Sum of damages dealt by player */
 	TIME_EFFECT mtimed[MAX_MTIMED]{};	/*!< 与えられた時限効果の残りターン / Timed status counter */
-	SPEED mspeed{};	        /*!< モンスターの個体加速値 / Monster "speed" */
+	byte mspeed{};	        /*!< モンスターの個体加速値 / Monster "speed" */
 	ACTION_ENERGY energy_need{};	/*!< モンスター次ターンまでに必要な行動エネルギー / Monster "energy" */
 	POSITION cdis{};		/*!< 現在のプレイヤーから距離(逐一計算を避けるためのテンポラリ変数) Current dis from player */
 	EnumClassFlagGroup<MonsterTemporaryFlagType> mflag{};	/*!< モンスター個体に与えられた特殊フラグ1 (セーブ不要) / Extra monster flags */

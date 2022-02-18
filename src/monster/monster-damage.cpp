@@ -439,10 +439,10 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp
      * - Varying speed effects
      * - Get a fraction in proportion of damage point
      */
-    auto new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * exp_dam;
+    auto new_exp = r_ptr->level * speed_to_energy(m_ptr->mspeed) * exp_dam;
     auto new_exp_frac = 0U;
     auto div_h = 0;
-    auto div_l = (uint)((this->player_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed));
+    auto div_l = (uint)((this->player_ptr->max_plv + 2) * speed_to_energy(r_ptr->speed));
 
     /* Use (average maxhp * 2) as a denominator */
     auto compensation = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;

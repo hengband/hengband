@@ -555,8 +555,8 @@ void sweep_monster_process(PlayerType *player_ptr)
         if ((m_ptr->cdis >= AAF_LIMIT) || !decide_process_continue(player_ptr, m_ptr))
             continue;
 
-        SPEED speed = (player_ptr->riding == i) ? player_ptr->pspeed : decide_monster_speed(m_ptr);
-        m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
+        byte speed = (player_ptr->riding == i) ? player_ptr->pspeed : decide_monster_speed(m_ptr);
+        m_ptr->energy_need -= speed_to_energy(speed);
         if (m_ptr->energy_need > 0)
             continue;
 

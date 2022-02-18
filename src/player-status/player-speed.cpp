@@ -71,7 +71,7 @@ int16_t PlayerSpeed::race_value()
  */
 int16_t PlayerSpeed::class_value()
 {
-    SPEED result = 0;
+    byte result = 0;
     PlayerClass pc(this->player_ptr);
     if (pc.equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
@@ -221,7 +221,7 @@ int16_t PlayerSpeed::stance_value()
  */
 int16_t PlayerSpeed::mutation_value()
 {
-    SPEED result = 0;
+    int16_t result = 0;
 
     const auto &muta = this->player_ptr->muta;
     if (muta.has(PlayerMutationType::XTRA_FAT)) {
@@ -248,8 +248,8 @@ int16_t PlayerSpeed::mutation_value()
 int16_t PlayerSpeed::riding_value()
 {
     monster_type *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
-    SPEED speed = riding_m_ptr->mspeed;
-    SPEED result = 0;
+    int16_t speed = riding_m_ptr->mspeed;
+    int16_t result = 0;
 
     if (!this->player_ptr->riding) {
         return 0;
@@ -308,7 +308,7 @@ int16_t PlayerSpeed::inventory_weight_value()
  */
 int16_t PlayerSpeed::action_value()
 {
-    SPEED result = 0;
+    int16_t result = 0;
     if (this->player_ptr->action == ACTION_SEARCH)
         result -= 10;
     return result;
