@@ -601,7 +601,7 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
     const bool mode_changed = (current_bg_mode != old_bg_mode);
     if (mode_changed || force_redraw) {
         // 全ウインドウ再描画
-        term_type *old = Term;
+        term_type *old = game_term;
         for (int i = 0; i < MAX_TERM_DATA; i++) {
             term_data *td = &data[i];
             if (td->visible) {
@@ -776,7 +776,7 @@ static void change_graphics_mode(graphics_mode mode)
  */
 static void rebuild_term(term_data *td, bool resize_window = true)
 {
-    term_type *old = Term;
+    term_type *old = game_term;
     td->size_hack = true;
     term_activate(&td->t);
     term_getsize(td);
@@ -854,7 +854,7 @@ static errr term_xtra_win_flush(void)
  */
 static errr term_xtra_win_clear(void)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
 
     RECT rc;
     GetClientRect(td->w, &rc);
@@ -938,7 +938,7 @@ static errr term_xtra_win(int n, int v)
         return term_xtra_win_noise();
     }
     case TERM_XTRA_FRESH: {
-        term_data *td = (term_data *)(Term->data);
+        term_data *td = (term_data *)(game_term->data);
         if (td->w)
             UpdateWindow(td->w);
         return 0;
@@ -989,7 +989,7 @@ static errr term_xtra_win(int n, int v)
  */
 static errr term_curs_win(int x, int y)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     int tile_wid, tile_hgt;
     tile_wid = td->tile_wid;
     tile_hgt = td->tile_hgt;
@@ -1013,7 +1013,7 @@ static errr term_curs_win(int x, int y)
  */
 static errr term_bigcurs_win(int x, int y)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     int tile_wid, tile_hgt;
     tile_wid = td->tile_wid;
     tile_hgt = td->tile_hgt;
@@ -1037,7 +1037,7 @@ static errr term_bigcurs_win(int x, int y)
  */
 static errr term_wipe_win(int x, int y, int n)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     RECT rc;
     rc.left = x * td->tile_wid + td->size_ow1;
     rc.right = rc.left + n * td->tile_wid;
@@ -1069,7 +1069,7 @@ static errr term_wipe_win(int x, int y, int n)
  */
 static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     static HBITMAP WALL;
     static HBRUSH myBrush, oldBrush;
     static HPEN oldPen;
@@ -1180,7 +1180,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
  */
 static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     int i;
     HDC hdcMask = NULL;
     if (!use_graphics) {
@@ -1899,13 +1899,13 @@ static errr term_keypress(int k)
         return -1;
 
     /* Store the char, advance the queue */
-    Term->key_queue[Term->key_head++] = (char)k;
+    game_term->key_queue[game_term->key_head++] = (char)k;
 
     /* Circular queue, handle wrap */
-    if (Term->key_head == Term->key_size)
-        Term->key_head = 0;
+    if (game_term->key_head == game_term->key_size)
+        game_term->key_head = 0;
 
-    if (Term->key_head != Term->key_tail)
+    if (game_term->key_head != game_term->key_tail)
         return 0;
 
     return 1;

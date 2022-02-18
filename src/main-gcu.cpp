@@ -533,7 +533,7 @@ static void keymap_game_prepare(void)
 /*
  * Suspend/Resume
  */
-static errr Term_xtra_gcu_alive(int v)
+static errr game_term_xtra_gcu_alive(int v)
 {
     if (!v) {
         /* Go to normal keymap mode */
@@ -619,7 +619,7 @@ static bool init_sound(void)
 /*
  * Init the "curses" system
  */
-static void Term_init_gcu(term_type *t)
+static void game_term_init_gcu(term_type *t)
 {
     term_data *td = (term_data *)(t->data);
 
@@ -643,7 +643,7 @@ static void Term_init_gcu(term_type *t)
 /*
  * Nuke the "curses" system
  */
-static void Term_nuke_gcu(term_type *t)
+static void game_term_nuke_gcu(term_type *t)
 {
     term_data *td = (term_data *)(t->data);
 
@@ -693,7 +693,7 @@ static void term_string_push(char *buf)
 /*
  * Process events, with optional wait
  */
-static errr Term_xtra_gcu_event(int v)
+static errr game_term_xtra_gcu_event(int v)
 {
     int i, k;
 
@@ -771,7 +771,7 @@ static errr Term_xtra_gcu_event(int v)
 /*
  * Process events (with optional wait)
  */
-static errr Term_xtra_gcu_event(int v)
+static errr game_term_xtra_gcu_event(int v)
 {
     int i, k;
 
@@ -854,7 +854,7 @@ static errr Term_xtra_gcu_event(int v)
 /*
  * Hack -- make a sound
  */
-static errr Term_xtra_gcu_sound(int v)
+static errr game_term_xtra_gcu_sound(int v)
 {
     char buf[1024];
 
@@ -901,7 +901,7 @@ static int create_color(int i, int scale)
 /*
  * React to changes
  */
-static errr Term_xtra_gcu_react(void)
+static errr game_term_xtra_gcu_react(void)
 {
 
 #ifdef A_COLOR
@@ -943,9 +943,9 @@ static errr Term_xtra_gcu_react(void)
 /*
  * Handle a "special request"
  */
-static errr Term_xtra_gcu(int n, int v)
+static errr game_term_xtra_gcu(int n, int v)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
 
     /* Analyze the request */
     switch (n) {
@@ -961,7 +961,7 @@ static errr Term_xtra_gcu(int n, int v)
 
     /* Make a special sound */
     case TERM_XTRA_SOUND:
-        return Term_xtra_gcu_sound(v);
+        return game_term_xtra_gcu_sound(v);
 
     /* Flush the Curses buffer */
     case TERM_XTRA_FRESH:
@@ -975,15 +975,15 @@ static errr Term_xtra_gcu(int n, int v)
 
     /* Suspend/Resume curses */
     case TERM_XTRA_ALIVE:
-        return Term_xtra_gcu_alive(v);
+        return game_term_xtra_gcu_alive(v);
 
     /* Process events */
     case TERM_XTRA_EVENT:
-        return Term_xtra_gcu_event(v);
+        return game_term_xtra_gcu_event(v);
 
     /* Flush events */
     case TERM_XTRA_FLUSH:
-        while (!Term_xtra_gcu_event(false))
+        while (!game_term_xtra_gcu_event(false))
             ;
         return 0;
 
@@ -994,7 +994,7 @@ static errr Term_xtra_gcu(int n, int v)
 
     /* React to events */
     case TERM_XTRA_REACT:
-        Term_xtra_gcu_react();
+        game_term_xtra_gcu_react();
         return 0;
     }
 
@@ -1005,9 +1005,9 @@ static errr Term_xtra_gcu(int n, int v)
 /*
  * Actually MOVE the hardware cursor
  */
-static errr Term_curs_gcu(int x, int y)
+static errr game_term_curs_gcu(int x, int y)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
 
     /* Literally move the cursor */
     wmove(td->win, y, x);
@@ -1020,9 +1020,9 @@ static errr Term_curs_gcu(int x, int y)
  * Erase a grid of space
  * Hack -- try to be "semi-efficient".
  */
-static errr Term_wipe_gcu(int x, int y, int n)
+static errr game_term_wipe_gcu(int x, int y, int n)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
 
     /* Place cursor */
     wmove(td->win, y, x);
@@ -1051,9 +1051,9 @@ static errr Term_wipe_gcu(int x, int y, int n)
  * think hard about how map_info() in cave.c should handle the color
  * of something that we here draw in reverse. It's not so simple, alas.
  */
-static void Term_acs_text_gcu(int x, int y, int n, byte a, concptr s)
+static void game_term_acs_text_gcu(int x, int y, int n, byte a, concptr s)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     int i;
 
     /* position the cursor */
@@ -1075,15 +1075,15 @@ static void Term_acs_text_gcu(int x, int y, int n, byte a, concptr s)
 /*
  * Place some text on the screen using an attribute
  */
-static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
+static errr game_term_text_gcu(int x, int y, int n, byte a, concptr s)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
 
 #ifdef USE_NCURSES_ACS
     /* do we have colors + 16 ? */
     /* then call special routine for drawing special characters */
     if (a & 0x10) {
-        Term_acs_text_gcu(x, y, n, a, s);
+        game_term_acs_text_gcu(x, y, n, a, s);
         return 0;
     }
 #endif
@@ -1144,14 +1144,14 @@ static errr term_data_init_gcu(term_data *td, int rows, int cols, int y, int x)
     t->char_blank = ' ';
 
     /* Set some hooks */
-    t->init_hook = Term_init_gcu;
-    t->nuke_hook = Term_nuke_gcu;
+    t->init_hook = game_term_init_gcu;
+    t->nuke_hook = game_term_nuke_gcu;
 
     /* Set some more hooks */
-    t->text_hook = Term_text_gcu;
-    t->wipe_hook = Term_wipe_gcu;
-    t->curs_hook = Term_curs_gcu;
-    t->xtra_hook = Term_xtra_gcu;
+    t->text_hook = game_term_text_gcu;
+    t->wipe_hook = game_term_wipe_gcu;
+    t->curs_hook = game_term_curs_gcu;
+    t->xtra_hook = game_term_xtra_gcu;
 
     /* Save the data */
     t->data = td;
@@ -1284,7 +1284,7 @@ errr init_gcu(int argc, char *argv[])
             }
 
             colortable[i] = COLOR_PAIR(i);
-            Term_xtra_gcu_react();
+            game_term_xtra_gcu_react();
         }
     }
     /* Attempt to use colors */
@@ -1557,12 +1557,12 @@ errr init_gcu(int argc, char *argv[])
             quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).c_str(), MIN_TERM0_COLS, MIN_TERM0_LINES, remaining.cx, remaining.cy);
         data[0].r = remaining;
         term_data_init(&data[0]);
-        angband_term[0] = Term;
+        angband_term[0] = game_term;
 
         /* Child Terminals */
         for (next_term = 1; next_term < term_ct; next_term++) {
             term_data_init(&data[next_term]);
-            angband_term[next_term] = Term;
+            angband_term[next_term] = game_term;
         }
     }
 

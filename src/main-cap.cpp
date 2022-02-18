@@ -654,7 +654,7 @@ static void keymap_game_prepare(void)
 /*
  * Suspend/Resume
  */
-static errr Term_xtra_cap_alive(int v)
+static errr game_term_xtra_cap_alive(int v)
 {
     /* Suspend */
     if (!v) {
@@ -699,7 +699,7 @@ static errr Term_xtra_cap_alive(int v)
 /*
  * Process an event
  */
-static errr Term_xtra_cap_event(int v)
+static errr game_term_xtra_cap_event(int v)
 {
     int i, arg;
     char buf[2];
@@ -737,7 +737,7 @@ static errr Term_xtra_cap_event(int v)
         return 1;
 
     /* Enqueue the keypress */
-    Term_keypress(buf[0]);
+    game_term_keypress(buf[0]);
 
     /* Success */
     return 0;
@@ -746,7 +746,7 @@ static errr Term_xtra_cap_event(int v)
 /*
  * Actually move the hardware cursor
  */
-static errr Term_curs_cap(int x, int y)
+static errr game_term_curs_cap(int x, int y)
 {
     /* Literally move the cursor */
     do_move(curx, cury, x, y);
@@ -766,12 +766,12 @@ static errr Term_curs_cap(int x, int y)
  * bottom line all the way to the bottom right edge, since we
  * have set the "avoid the bottom right corner" flag.
  */
-static errr Term_wipe_cap(int x, int y, int n)
+static errr game_term_wipe_cap(int x, int y, int n)
 {
     int dx;
 
     /* Place the cursor */
-    Term_curs_cap(x, y);
+    game_term_curs_cap(x, y);
 
     /* Wipe to end of line */
     if (x + n >= 80) {
@@ -793,12 +793,12 @@ static errr Term_wipe_cap(int x, int y, int n)
 /*
  * Place some text on the screen using an attribute
  */
-static errr Term_text_cap(int x, int y, int n, byte a, concptr s)
+static errr game_term_text_cap(int x, int y, int n, byte a, concptr s)
 {
     int i;
 
     /* Move the cursor */
-    Term_curs_cap(x, y);
+    game_term_curs_cap(x, y);
 
     /* Dump the text, advance the cursor */
     for (i = 0; s[i]; i++) {
@@ -823,7 +823,7 @@ static errr Term_text_cap(int x, int y, int n, byte a, concptr s)
 /*
  * Handle a "special request"
  */
-static errr Term_xtra_cap(int n, int v)
+static errr game_term_xtra_cap(int n, int v)
 {
     /* Analyze the request */
     switch (n) {
@@ -846,15 +846,15 @@ static errr Term_xtra_cap(int n, int v)
 
     /* Suspend/Resume */
     case TERM_XTRA_ALIVE:
-        return Term_xtra_cap_alive(v);
+        return game_term_xtra_cap_alive(v);
 
     /* Process events */
     case TERM_XTRA_EVENT:
-        return Term_xtra_cap_event(v);
+        return game_term_xtra_cap_event(v);
 
     /* Flush events */
     case TERM_XTRA_FLUSH:
-        while (!Term_xtra_cap_event(false))
+        while (!game_term_xtra_cap_event(false))
             ;
         return 0;
 
@@ -871,7 +871,7 @@ static errr Term_xtra_cap(int n, int v)
 /*
  * Init a "term" for this file
  */
-static void Term_init_cap(term *t)
+static void game_term_init_cap(term *t)
 {
     if (active)
         return;
@@ -896,7 +896,7 @@ static void Term_init_cap(term *t)
 /*
  * Nuke a "term" for this file
  */
-static void Term_nuke_cap(term *t)
+static void game_term_nuke_cap(term *t)
 {
     if (!active)
         return;
@@ -958,20 +958,20 @@ errr init_cap(void)
     t->char_blank = ' ';
 
     /* Set some hooks */
-    t->init_hook = Term_init_cap;
-    t->nuke_hook = Term_nuke_cap;
+    t->init_hook = game_term_init_cap;
+    t->nuke_hook = game_term_nuke_cap;
 
     /* Set some more hooks */
-    t->text_hook = Term_text_cap;
-    t->wipe_hook = Term_wipe_cap;
-    t->curs_hook = Term_curs_cap;
-    t->xtra_hook = Term_xtra_cap;
+    t->text_hook = game_term_text_cap;
+    t->wipe_hook = game_term_wipe_cap;
+    t->curs_hook = game_term_curs_cap;
+    t->xtra_hook = game_term_xtra_cap;
 
     /* Save the term */
     term_screen = t;
 
     /* Activate it */
-    Term_activate(term_screen);
+    game_term_activate(term_screen);
 
     /* Success */
     return 0;

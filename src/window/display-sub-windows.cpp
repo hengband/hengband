@@ -69,7 +69,7 @@ FixItemTesterSetter::~FixItemTesterSetter()
 void fix_inventory(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 
@@ -204,7 +204,7 @@ void fix_monster_list(PlayerType *player_ptr)
     std::once_flag once;
 
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
         if (!(window_flag[j] & PW_MONSTER_LIST))
@@ -307,7 +307,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 void fix_equip(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
         if (!(window_flag[j] & (PW_EQUIP)))
@@ -328,7 +328,7 @@ void fix_equip(PlayerType *player_ptr)
 void fix_player(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 
@@ -351,7 +351,7 @@ void fix_player(PlayerType *player_ptr)
 void fix_message(void)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 
@@ -384,7 +384,7 @@ void fix_message(void)
 void fix_overhead(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         TERM_LEN wid, hgt;
         if (!angband_term[j])
             continue;
@@ -413,15 +413,15 @@ static void display_dungeon(PlayerType *player_ptr)
     TERM_COLOR ta = 0;
     SYMBOL_CODE tc = '\0';
 
-    for (TERM_LEN x = player_ptr->x - Term->wid / 2 + 1; x <= player_ptr->x + Term->wid / 2; x++) {
-        for (TERM_LEN y = player_ptr->y - Term->hgt / 2 + 1; y <= player_ptr->y + Term->hgt / 2; y++) {
+    for (TERM_LEN x = player_ptr->x - game_term->wid / 2 + 1; x <= player_ptr->x + game_term->wid / 2; x++) {
+        for (TERM_LEN y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
             TERM_COLOR a;
             SYMBOL_CODE c;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                 auto *f_ptr = &f_info[feat_none];
                 a = f_ptr->x_attr[F_LIT_STANDARD];
                 c = f_ptr->x_char[F_LIT_STANDARD];
-                term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
+                term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
                 continue;
             }
 
@@ -436,7 +436,7 @@ static void display_dungeon(PlayerType *player_ptr)
                     a = TERM_L_DARK;
             }
 
-            term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
+            term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
         }
     }
 }
@@ -448,7 +448,7 @@ static void display_dungeon(PlayerType *player_ptr)
 void fix_dungeon(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 
@@ -470,7 +470,7 @@ void fix_dungeon(PlayerType *player_ptr)
 void fix_monster(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 
@@ -494,7 +494,7 @@ void fix_monster(PlayerType *player_ptr)
 void fix_object(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 
@@ -622,7 +622,7 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
         if (!(window_flag[j] & PW_FLOOR_ITEM_LIST))
             continue;
 
-        term_type *old = Term;
+        term_type *old = game_term;
         term_activate(angband_term[j]);
 
         display_floor_item_list(player_ptr, y, x);

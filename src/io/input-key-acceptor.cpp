@@ -188,7 +188,7 @@ char inkey(bool do_all_term_refresh)
 {
     char ch = 0;
     bool done = false;
-    term_type *old = Term;
+    term_type *old = game_term;
 
     if (inkey_next && *inkey_next && !inkey_xtra) {
         ch = *inkey_next++;
