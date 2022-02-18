@@ -11,7 +11,7 @@
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wall_to_mud(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
+bool wall_to_mud(PlayerType *player_ptr, DIRECTION dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     return project_hook(player_ptr, AttributeType::KILL_WALL, dir, dam, flg);

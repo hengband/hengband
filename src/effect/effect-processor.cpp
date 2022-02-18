@@ -87,7 +87,7 @@ static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next
  * @todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
-ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam,
+ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const int dam,
     const AttributeType typ, BIT_FLAGS flag)
 {
     int dist;

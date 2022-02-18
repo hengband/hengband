@@ -229,7 +229,7 @@ void wiz_summon_pet(PlayerType *player_ptr, MONRACE_IDX r_idx)
  * @param self 自分に与えるか否か
  * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_target(PlayerType *player_ptr, HIT_POINT dam, AttributeType effect_idx, const bool self)
+void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, const bool self)
 {
     if (dam <= 0) {
         dam = 1000000;

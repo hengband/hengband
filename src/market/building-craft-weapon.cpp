@@ -35,7 +35,7 @@
  * @param force 理力特別計算フラグ
  * @return ダメージ期待値
  */
-static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
+static int calc_slaydam(int dam, int mult, int div, bool force)
 {
     int tmp;
     if (force) {

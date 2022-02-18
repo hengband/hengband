@@ -211,7 +211,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     object_kind *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
-    HIT_POINT drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
+    int drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
     if (drain <= 0)
         return false;
 
@@ -220,7 +220,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         msg_print(_("しかし、あなたの魔法を操る力がその一部を取り返した！", "However, your skill of magic mastery got back the part of energy!"));
 
     monap_ptr->obvious = true;
-    HIT_POINT recovery = drain * kind_ptr->level;
+    int recovery = drain * kind_ptr->level;
 
     if (monap_ptr->o_ptr->tval == ItemKindType::STAFF)
         recovery *= monap_ptr->o_ptr->number;

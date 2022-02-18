@@ -603,7 +603,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("自分の周辺に隕石を落とす。", "Causes meteorites to fall down on nearby random locations.");
 
         {
-            HIT_POINT dam = plev * 2;
+            int dam = plev * 2;
             POSITION rad = 2;
 
             if (info)

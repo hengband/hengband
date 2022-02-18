@@ -282,7 +282,7 @@ static void invest_negative_modified_value(ObjectType *o_ptr)
         if (one_in_(o_ptr->to_d) && one_in_(o_ptr->to_h))
             break;
 
-        o_ptr->to_d -= (HIT_POINT)randint0(3);
+        o_ptr->to_d -= (int)randint0(3);
         o_ptr->to_h -= (HIT_PROB)randint0(3);
     }
 
@@ -290,7 +290,7 @@ static void invest_negative_modified_value(ObjectType *o_ptr)
         if (one_in_(o_ptr->to_d) || one_in_(o_ptr->to_h))
             break;
 
-        o_ptr->to_d -= (HIT_POINT)randint0(3);
+        o_ptr->to_d -= (int)randint0(3);
         o_ptr->to_h -= (HIT_PROB)randint0(3);
     }
 }

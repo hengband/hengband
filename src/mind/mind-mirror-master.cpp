@@ -104,7 +104,7 @@ void remove_all_mirrors(PlayerType *player_ptr, bool explode)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-bool binding_field(PlayerType *player_ptr, HIT_POINT dam)
+bool binding_field(PlayerType *player_ptr, int dam)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
@@ -228,7 +228,7 @@ bool binding_field(PlayerType *player_ptr, HIT_POINT dam)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-void seal_of_mirror(PlayerType *player_ptr, HIT_POINT dam)
+void seal_of_mirror(PlayerType *player_ptr, int dam)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -476,7 +476,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         for (x = 0; x < player_ptr->current_floor_ptr->width; x++)
             for (y = 0; y < player_ptr->current_floor_ptr->height; y++)
                 if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
-                    project(player_ptr, 0, 2, y, x, (HIT_POINT)plev, AttributeType::OLD_SLEEP,
+                    project(player_ptr, 0, 2, y, x, (int)plev, AttributeType::OLD_SLEEP,
                         (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
 
         break;

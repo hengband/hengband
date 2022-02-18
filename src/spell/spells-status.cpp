@@ -63,7 +63,7 @@
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
+bool heal_monster(PlayerType *player_ptr, DIRECTION dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::OLD_HEAL, dir, dam, flg);
@@ -226,13 +226,13 @@ bool time_walk(PlayerType *player_ptr)
  */
 void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 {
-    HIT_POINT min_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 3 / 8;
-    HIT_POINT max_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 5 / 8;
+    int min_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 3 / 8;
+    int max_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 5 / 8;
 
     /* Rerate */
     while (true) {
         /* Pre-calculate level 1 hitdice */
-        player_ptr->player_hp[0] = (HIT_POINT)player_ptr->hitdie;
+        player_ptr->player_hp[0] = (int)player_ptr->hitdie;
 
         for (int i = 1; i < 4; i++) {
             player_ptr->player_hp[0] += randint1(player_ptr->hitdie);
@@ -387,7 +387,7 @@ bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID side
     return ident;
 }
 
-bool cure_critical_wounds(PlayerType *player_ptr, HIT_POINT pow)
+bool cure_critical_wounds(PlayerType *player_ptr, int pow)
 {
     auto ident = false;
     if (hp_player(player_ptr, pow)) {
@@ -422,7 +422,7 @@ bool cure_critical_wounds(PlayerType *player_ptr, HIT_POINT pow)
     return ident;
 }
 
-bool true_healing(PlayerType *player_ptr, HIT_POINT pow)
+bool true_healing(PlayerType *player_ptr, int pow)
 {
     auto ident = false;
     if (hp_player(player_ptr, pow)) {

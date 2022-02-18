@@ -35,7 +35,7 @@
 
 // 毒を除く4元素.
 void effect_player_elements(
-    PlayerType *player_ptr, EffectPlayerType *ep_ptr, concptr attack_message, HIT_POINT (*damage_func)(PlayerType *, HIT_POINT, concptr, bool))
+    PlayerType *player_ptr, EffectPlayerType *ep_ptr, concptr attack_message, int (*damage_func)(PlayerType *, int, concptr, bool))
 {
     if (player_ptr->blind)
         msg_print(attack_message);

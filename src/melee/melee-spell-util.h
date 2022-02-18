@@ -14,7 +14,7 @@ struct melee_spell_type {
     POSITION x;
     MONSTER_IDX target_idx;
     MonsterAbilityType thrown_spell;
-    HIT_POINT dam;
+    int dam;
     std::vector<MonsterAbilityType> spells;
     GAME_TEXT m_name[160];
 #ifdef JP

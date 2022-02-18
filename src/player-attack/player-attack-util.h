@@ -44,7 +44,7 @@ struct player_attack_type {
     combat_options mode{}; //!< 剣術種別
     bool monk_attack{}; //!< 素手/マーシャルアーツかどうか
     const martial_arts *ma_ptr{}; //!< マーシャルアーツ種別
-    HIT_POINT attack_damage{}; //!< 累積ダメージ
+    int attack_damage{}; //!< 累積ダメージ
     int num_blow{}; //!< 打撃回数
     TrFlags flags{}; //!< 武器フラグ
     chaotic_effect chaos_effect{}; //!< カオス効果

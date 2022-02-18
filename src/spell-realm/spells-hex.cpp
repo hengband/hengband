@@ -299,7 +299,7 @@ void SpellHex::continue_revenge()
  * @brief 復讐ダメージの追加を行う
  * @param dam 蓄積されるダメージ量
  */
-void SpellHex::store_vengeful_damage(HIT_POINT dam)
+void SpellHex::store_vengeful_damage(int dam)
 {
     if (!this->spell_hex_data || (this->get_revenge_turn() == 0)) {
         return;

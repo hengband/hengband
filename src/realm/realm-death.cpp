@@ -134,7 +134,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("毒の球を放つ。", "Fires a ball of poison.");
 
         {
-            HIT_POINT dam = 10 + plev / 2;
+            int dam = 10 + plev / 2;
             POSITION rad = 2;
 
             if (info)
@@ -290,7 +290,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("自分を中心とした毒の球を発生させる。", "Generates a ball of poison centered on you.");
 
         {
-            HIT_POINT dam = (30 + plev) * 2;
+            int dam = (30 + plev) * 2;
             POSITION rad = plev / 10 + 2;
 
             if (info)
@@ -352,7 +352,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 return info_damage(dice, sides, base);
 
             if (cast) {
-                HIT_POINT dam = base + damroll(dice, sides);
+                int dam = base + damroll(dice, sides);
 
                 if (!get_aim_dir(player_ptr, &dir))
                     return nullptr;
@@ -516,7 +516,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("3連射のボルトによりモンスター1体から生命力を吸いとる。吸いとった生命力によって体力が回復する。",
                 "Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.");
         {
-            HIT_POINT dam = 100;
+            int dam = 100;
 
             if (info)
                 return format("%s3*%d", KWD_DAM, dam);
@@ -563,7 +563,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("巨大な暗黒の球を放つ。", "Fires a huge ball of darkness.");
 
         {
-            HIT_POINT dam = 100 + plev * 2;
+            int dam = 100 + plev * 2;
             POSITION rad = 4;
 
             if (info)
@@ -681,7 +681,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 "邪悪な力を持つ宝珠を放つ。善良なモンスターには大きなダメージを与える。", "Fires a powerful ball of evil power. Hurts good monsters greatly.");
 
         {
-            HIT_POINT dam = 666;
+            int dam = 666;
             POSITION rad = 3;
 
             if (info)

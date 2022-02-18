@@ -114,7 +114,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 30:
         case 31:
             if (!(*count)) {
-                HIT_POINT dam = damroll(10, 10);
+                int dam = damroll(10, 10);
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
                 project(player_ptr, 0, 8, player_ptr->y, player_ptr->x, dam, AttributeType::MANA, flg);
                 take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"));

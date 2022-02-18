@@ -250,7 +250,7 @@ void apply_ego(ObjectType *o_ptr, DEPTH lev)
         o_ptr->activation_id = e_ptr->act_idx;
 
     o_ptr->to_h += (HIT_PROB)e_ptr->base_to_h;
-    o_ptr->to_d += (HIT_POINT)e_ptr->base_to_d;
+    o_ptr->to_d += (int)e_ptr->base_to_d;
     o_ptr->to_a += (ARMOUR_CLASS)e_ptr->base_to_a;
 
     auto is_powerful = e_ptr->gen_flags.has(ItemGenerationTraitType::POWERFUL);
@@ -275,7 +275,7 @@ void apply_ego(ObjectType *o_ptr, DEPTH lev)
         }
 
         o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
-        o_ptr->to_d += (HIT_POINT)randint1_signed(e_ptr->max_to_d);
+        o_ptr->to_d += (int)randint1_signed(e_ptr->max_to_d);
         o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
 
         if (gen_flags.has(ItemGenerationTraitType::MOD_ACCURACY)) {

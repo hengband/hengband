@@ -126,7 +126,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     sound(SOUND_HIT);
     msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
 
-    HIT_POINT k = damroll(dice_num, dice_side);
+    int k = damroll(dice_num, dice_side);
     k = critical_norm(player_ptr, n_weight, bonus, k, (int16_t)bonus, HISSATSU_NONE);
     k += player_ptr->to_d_m;
     if (k < 0)

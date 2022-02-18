@@ -303,7 +303,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             return _("強力な電撃のボルトを放つ。", "Fires a powerful bolt of lightning.");
 
         {
-            HIT_POINT dam = plev * 5;
+            int dam = plev * 5;
 
             if (info)
                 return info_damage(0, 0, dam);
@@ -456,7 +456,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             return _("巨大な閃光の球を放つ。", "Fires a huge ball of powerful light.");
 
         {
-            HIT_POINT dam = 100 + plev * 2;
+            int dam = 100 + plev * 2;
             POSITION rad = 4;
 
             if (info)
@@ -592,7 +592,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             return _("ターゲットの周囲に分解の球を多数落とす。", "Drops many balls of disintegration near the target.");
 
         {
-            HIT_POINT dam = plev * 3 + 25;
+            int dam = plev * 3 + 25;
             POSITION rad = 2;
 
             if (info)

@@ -146,7 +146,7 @@ AttributeFlags shot_attribute(PlayerType *player_ptr, ObjectType *bow_ptr, Objec
  * @return スレイ倍率をかけたダメージ量
  */
 static MULTIPLY calc_shot_damage_with_slay(
-    PlayerType *player_ptr, ObjectType *bow_ptr, ObjectType *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
+    PlayerType *player_ptr, ObjectType *bow_ptr, ObjectType *arrow_ptr, int tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
 {
     MULTIPLY mult = 10;
 
@@ -1005,7 +1005,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam)
 {
     int i, k;
     auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
@@ -1157,9 +1157,9 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
  * @return ダメージ期待値
  * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
  */
-HIT_POINT calc_crit_ratio_shot(PlayerType *player_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
+int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow)
 {
-    HIT_POINT i;
+    int i;
     auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     /* Extract "shot" power */
@@ -1196,7 +1196,7 @@ HIT_POINT calc_crit_ratio_shot(PlayerType *player_ptr, HIT_POINT plus_ammo, HIT_
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+int calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam)
 {
     uint32_t num;
     int i, k, crit;
@@ -1239,7 +1239,7 @@ HIT_POINT calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_
  * @param impact 強撃かどうか
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, bool dokubari, bool impact)
+int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool impact)
 {
     if (dokubari)
         return dam;
@@ -1249,8 +1249,8 @@ HIT_POINT calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_
         i = 0;
 
     // 通常ダメージdam、武器重量weightでクリティカルが発生した時のクリティカルダメージ期待値
-    auto calc_weight_expect_dam = [](HIT_POINT dam, WEIGHT weight) {
-        HIT_POINT sum = 0;
+    auto calc_weight_expect_dam = [](int dam, WEIGHT weight) {
+        int sum = 0;
         for (int d = 1; d <= 650; ++d) {
             int k = weight + d;
             sum += std::get<0>(apply_critical_norm_damage(k, dam));

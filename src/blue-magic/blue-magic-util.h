@@ -11,7 +11,7 @@ struct bmc_type {
     DIRECTION dir;
     PLAYER_LEVEL plev;
     PLAYER_LEVEL summon_lev;
-    HIT_POINT damage;
+    int damage;
     bool pet;
     bool no_trump;
     BIT_FLAGS p_mode;

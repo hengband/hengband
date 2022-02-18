@@ -19,7 +19,7 @@ concptr info_duration(int base, DICE_SID sides);
 concptr info_range(POSITION range);
 concptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base);
 concptr info_delay(int base, DICE_SID sides);
-concptr info_multi_damage(HIT_POINT dam);
+concptr info_multi_damage(int dam);
 concptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides);
 concptr info_power(int power);
 concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides);

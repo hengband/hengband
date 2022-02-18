@@ -498,7 +498,7 @@ bool enchant_equipment(PlayerType *player_ptr, ObjectType *o_ptr, int n, int efl
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
-bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
+bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
     FuncItemTester item_tester(&ObjectType::allow_enchant_weapon);

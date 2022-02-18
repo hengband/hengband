@@ -11,9 +11,9 @@
 
 struct monster_type;
 class PlayerType;
-int take_hit(PlayerType *player_ptr, int damage_type, HIT_POINT damage, concptr kb_str);
-HIT_POINT acid_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
-HIT_POINT elec_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
-HIT_POINT fire_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
-HIT_POINT cold_dam(PlayerType *player_ptr, HIT_POINT dam, concptr kb_str, bool aura);
+int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr kb_str);
+int acid_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
+int elec_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
+int fire_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
+int cold_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
 void touch_zap_player(monster_type *m_ptr, PlayerType *player_ptr);

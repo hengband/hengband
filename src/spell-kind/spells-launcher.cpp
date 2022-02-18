@@ -20,7 +20,7 @@
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     if (typ == AttributeType::CHARM_LIVING)
@@ -53,7 +53,7 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POI
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
 {
     return fire_ball(player_ptr, typ, dir, dam, -rad);
 }
@@ -73,7 +73,7 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_P
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
 {
     POSITION tx = player_ptr->x + 99 * ddx[dir];
     POSITION ty = player_ptr->y + 99 * ddy[dir];
@@ -101,7 +101,7 @@ bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_P
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
 {
     POSITION tx = player_ptr->x + 99 * ddx[dir];
     POSITION ty = player_ptr->y + 99 * ddy[dir];
@@ -134,7 +134,7 @@ bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HI
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX who, AttributeType typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
+bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX who, AttributeType typ, POSITION y, POSITION x, int dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     return project(player_ptr, who, rad, y, x, dam, typ, flg).notice;
@@ -201,7 +201,7 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, DICE_N
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
     if (typ != AttributeType::MONSTER_SHOOT)
@@ -222,7 +222,7 @@ bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POI
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam)
+bool fire_beam(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
     return project_hook(player_ptr, typ, dir, dam, flg);
@@ -242,7 +242,7 @@ bool fire_beam(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POI
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, DIRECTION dir, int dam)
 {
     if (randint0(100) < prob) {
         return (fire_beam(player_ptr, typ, dir, dam));
@@ -260,7 +260,7 @@ bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType ty
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
+bool project_hook(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, BIT_FLAGS flg)
 {
     flg |= (PROJECT_THRU);
     POSITION tx = player_ptr->x + ddx[dir];

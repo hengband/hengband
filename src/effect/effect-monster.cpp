@@ -651,7 +651,7 @@ static void exe_affect_monster_postprocess(PlayerType *player_ptr, effect_monste
  * 3.ペット及び撮影による事後効果
  */
 bool affect_monster(
-    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
+    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
 {
     effect_monster_type tmp_effect;
     effect_monster_type *em_ptr = initialize_effect_monster(player_ptr, &tmp_effect, who, r, y, x, dam, attribute, flag, see_s_msg);

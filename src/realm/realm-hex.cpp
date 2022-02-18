@@ -91,7 +91,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
     auto continuation = mode == SpellProcessType::CONTNUATION;
     auto stop = mode == SpellProcessType::STOP;
     auto should_continue = true;
-    HIT_POINT power;
+    int power;
     switch (spell) {
         /*** 1st book (0-7) ***/
     case HEX_BLESS:

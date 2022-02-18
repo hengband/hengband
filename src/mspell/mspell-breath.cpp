@@ -59,7 +59,7 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, AttributeType GF
  */
 MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    HIT_POINT dam, drs_type = 0;
+    int dam, drs_type = 0;
     concptr type_s;
     bool smart_learn_aux = true;
     auto *floor_ptr = player_ptr->current_floor_ptr;

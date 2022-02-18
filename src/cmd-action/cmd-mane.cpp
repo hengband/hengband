@@ -81,7 +81,7 @@ static int damage;
  * @param power ものまねの効力の種類
  * @param dam ものまねの威力
  */
-static void mane_info(PlayerType *player_ptr, char *p, MonsterAbilityType power, HIT_POINT dam)
+static void mane_info(PlayerType *player_ptr, char *p, MonsterAbilityType power, int dam)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
 

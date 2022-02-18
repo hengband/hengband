@@ -72,8 +72,8 @@ public:
     POSITION wilderness_y{};
     bool wild_mode{};
 
-    HIT_POINT mhp{}; /* Max hit pts */
-    HIT_POINT chp{}; /* Cur hit pts */
+    int mhp{}; /* Max hit pts */
+    int chp{}; /* Cur hit pts */
     uint32_t chp_frac{}; /* Cur hit frac (times 2^16) */
     PERCENTAGE mutant_regenerate_mod{};
 
@@ -194,7 +194,7 @@ public:
 
     ClassSpecificData class_specific_data;
 
-    HIT_POINT player_hp[PY_MAX_LEVEL]{};
+    int player_hp[PY_MAX_LEVEL]{};
     char died_from[MAX_MONSTER_NAME]{}; /* What killed the player */
     concptr last_message{}; /* Last message on death or retirement */
     char history[4][60]{}; /* Textual "history" for the Player */
@@ -363,7 +363,7 @@ public:
 
     HIT_PROB dis_to_h[2]{}; /*!< 判明している現在の表記上の近接武器命中修正値 /  Known bonus to hit (wield) */
     HIT_PROB dis_to_h_b{}; /*!< 判明している現在の表記上の射撃武器命中修正値 / Known bonus to hit (bow) */
-    HIT_POINT dis_to_d[2]{}; /*!< 判明している現在の表記上の近接武器ダメージ修正値 / Known bonus to dam (wield) */
+    int dis_to_d[2]{}; /*!< 判明している現在の表記上の近接武器ダメージ修正値 / Known bonus to dam (wield) */
     ARMOUR_CLASS dis_to_a{}; /*!< 判明している現在の表記上の装備AC修正値 / Known bonus to ac */
     ARMOUR_CLASS dis_ac{}; /*!< 判明している現在の表記上の装備AC基礎値 / Known base ac */
 
