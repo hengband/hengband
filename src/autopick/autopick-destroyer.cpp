@@ -23,6 +23,7 @@
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
@@ -44,7 +45,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, ObjectType *o_ptr)
         return true;
 
     PlayerClass pc(player_ptr);
-    if (player_ptr->prace == PlayerRaceType::BALROG) {
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG)) {
         if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return false;
     } else if (pc.equals(PlayerClassType::ARCHER)) {

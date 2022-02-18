@@ -484,7 +484,7 @@ static void effect_player_time_addition(PlayerType *player_ptr)
     case 3:
     case 4:
     case 5: {
-        if (player_ptr->prace == PlayerRaceType::ANDROID)
+        if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
             break;
 
         msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));

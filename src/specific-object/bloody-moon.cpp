@@ -3,6 +3,7 @@
 #include "core/player-update-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/tr-types.h"
+#include "player-base/player-race.h"
 #include "racial/racial-android.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
@@ -58,7 +59,7 @@ bool activate_bloody_moon(PlayerType *player_ptr, ObjectType *o_ptr)
 
     msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
     get_bloody_moon_flags(o_ptr);
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         calc_android_exp(player_ptr);
 
     player_ptr->update |= PU_BONUS | PU_HP;

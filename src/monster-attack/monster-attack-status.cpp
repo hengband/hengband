@@ -10,6 +10,7 @@
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
+#include "player-base/player-race.h"
 #include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -28,7 +29,7 @@ void process_blind_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
 
     auto is_dio = monap_ptr->m_ptr->r_idx == MON_DIO;
     auto dio_msg = _("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!");
-    if (is_dio && player_ptr->prace == PlayerRaceType::SKELETON) {
+    if (is_dio && PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(dio_msg);
         msg_print(_("しかし、あなたには元々目はなかった！", "However, you don't have eyes!"));
         return;
@@ -180,7 +181,7 @@ void process_monster_attack_time(PlayerType *player_ptr, MonsterAttackPlayer *mo
     case 3:
     case 4:
     case 5:
-        if (player_ptr->prace == PlayerRaceType::ANDROID) {
+        if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
             break;
         }
 

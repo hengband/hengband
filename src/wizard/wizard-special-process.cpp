@@ -58,6 +58,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -456,7 +457,7 @@ void wiz_change_status(PlayerType *player_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         return;
 
     player_ptr->max_exp = tmp_long;

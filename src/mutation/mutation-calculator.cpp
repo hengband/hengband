@@ -13,6 +13,7 @@
 
 #include "mutation/mutation-calculator.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-base/player-race.h"
 #include "system/player-type-definition.h"
 
  /*!
@@ -40,7 +41,7 @@ int calc_mutant_regenerate_mod(PlayerType *player_ptr)
     if (player_ptr->ppersonality == PERSONALITY_LUCKY)
         count--;
 
-    if (player_ptr->prace == PlayerRaceType::BEASTMAN) {
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::BEASTMAN)) {
         count -= 10;
         mod = 5;
     }

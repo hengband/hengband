@@ -21,6 +21,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -111,7 +112,7 @@ static bool select_destroying_item(PlayerType *player_ptr, destroy_type *destroy
  */
 static bool decide_magic_book_exp(PlayerType *player_ptr, destroy_type *destroy_ptr)
 {
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         return false;
 
     PlayerClass pc(player_ptr);

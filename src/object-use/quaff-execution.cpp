@@ -439,7 +439,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             break;
 
         case SV_POTION_EXPERIENCE:
-            if (this->player_ptr->prace == PlayerRaceType::ANDROID)
+            if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID))
                 break;
             chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
             if (this->player_ptr->exp < PY_MAX_EXP) {

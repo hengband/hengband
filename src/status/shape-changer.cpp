@@ -13,6 +13,7 @@
 #include "locale/english.h"
 #include "mutation/mutation-investor-remover.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
 #include "player/player-personality.h"
@@ -78,8 +79,9 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
     bool is_special_class = pc.equals(PlayerClassType::MONK);
     is_special_class |= pc.equals(PlayerClassType::FORCETRAINER);
     is_special_class |= pc.equals(PlayerClassType::NINJA);
-    bool is_special_race = player_ptr->prace == PlayerRaceType::KLACKON;
-    is_special_race |= player_ptr->prace == PlayerRaceType::SPRITE;
+    PlayerRace pr(player_ptr);
+    bool is_special_race = pr.equals(PlayerRaceType::KLACKON);
+    is_special_race |= pr.equals(PlayerRaceType::SPRITE);
     if (is_special_class && is_special_race)
         player_ptr->expfact -= 15;
 
@@ -109,7 +111,8 @@ void do_poly_self(PlayerType *player_ptr)
     msg_print(_("あなたは変化の訪れを感じた...", "You feel a change coming over you..."));
     chg_virtue(player_ptr, V_CHANCE, 1);
 
-    if ((power > randint0(20)) && one_in_(3) && (player_ptr->prace != PlayerRaceType::ANDROID)) {
+    PlayerRace pr(player_ptr);
+    if ((power > randint0(20)) && one_in_(3) && !pr.equals(PlayerRaceType::ANDROID)) {
         char effect_msg[80] = "";
         char sex_msg[32] = "";
         PlayerRaceType new_race;
@@ -157,7 +160,7 @@ void do_poly_self(PlayerType *player_ptr)
 
         do {
             new_race = (PlayerRaceType)randint0(MAX_RACES);
-        } while ((new_race == player_ptr->prace) || (new_race == PlayerRaceType::ANDROID));
+        } while (pr.equals(new_race) || (new_race == PlayerRaceType::ANDROID));
 
         change_race(player_ptr, new_race, effect_msg);
     }
@@ -165,7 +168,7 @@ void do_poly_self(PlayerType *player_ptr)
     if ((power > randint0(30)) && one_in_(6)) {
         int tmp = 0;
         power -= 20;
-        msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), player_ptr->prace == PlayerRaceType::ANDROID ? "機械" : "内臓");
+        msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), pr.equals(PlayerRaceType::ANDROID) ? "機械" : "内臓");
 
         while (tmp < A_MAX) {
             (void)dec_stat(player_ptr, tmp, randint1(6) + 6, one_in_(3));

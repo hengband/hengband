@@ -25,6 +25,7 @@
 #include "io/uid-checker.h"
 #include "locale/japanese.h"
 #include "player-info/class-info.h"
+#include "player-base/player-race.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"

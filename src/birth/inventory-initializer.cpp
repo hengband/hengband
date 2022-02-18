@@ -15,6 +15,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
 #include "realm/realm-types.h"
@@ -150,7 +151,8 @@ void player_outfit(PlayerType *player_ptr)
     q_ptr = &forge;
 
     PlayerClass pc(player_ptr);
-    if ((player_ptr->prace == PlayerRaceType::VAMPIRE) && !pc.equals(PlayerClassType::NINJA)) {
+    PlayerRace pr(player_ptr);
+    if (pr.equals(PlayerRaceType::VAMPIRE) && !pc.equals(PlayerClassType::NINJA)) {
         q_ptr->prep(lookup_kind(ItemKindType::SCROLL, SV_SCROLL_DARKNESS));
         q_ptr->number = (ITEM_NUMBER)rand_range(2, 5);
         add_outfit(player_ptr, q_ptr);
@@ -163,7 +165,7 @@ void player_outfit(PlayerType *player_ptr)
     }
 
     q_ptr = &forge;
-    if (player_ptr->prace == PlayerRaceType::MERFOLK) {
+    if (pr.equals(PlayerRaceType::MERFOLK)) {
         q_ptr->prep(lookup_kind(ItemKindType::RING, SV_RING_LEVITATION_FALL));
         q_ptr->number = 1;
         add_outfit(player_ptr, q_ptr);
@@ -240,23 +242,23 @@ void player_outfit(PlayerType *player_ptr)
         auto short_pclass = enum2i(player_ptr->pclass);
         if (player_ptr->ppersonality == PERSONALITY_SEXY) {
             player_init[short_pclass][2] = std::make_tuple(ItemKindType::HAFTED, SV_WHIP);            
-        } else if (player_ptr->prace == PlayerRaceType::MERFOLK) {
+        } else if (pr.equals(PlayerRaceType::MERFOLK)) {
             player_init[short_pclass][2] = std::make_tuple(ItemKindType::POLEARM, SV_TRIDENT);
         }
     }
 
     for (auto i = 0; i < 3; i++) {
         auto &[tv, sv] = player_init[enum2i(player_ptr->pclass)][i];
-        if ((player_ptr->prace == PlayerRaceType::ANDROID) && ((tv == ItemKindType::SOFT_ARMOR) || (tv == ItemKindType::HARD_ARMOR)))
+        if (pr.equals(PlayerRaceType::ANDROID) && ((tv == ItemKindType::SOFT_ARMOR) || (tv == ItemKindType::HARD_ARMOR)))
             continue;
 
         if (tv == ItemKindType::SORCERY_BOOK)
             tv = i2enum<ItemKindType>(enum2i(ItemKindType::LIFE_BOOK) + player_ptr->realm1 - 1);
         else if (tv == ItemKindType::DEATH_BOOK)
             tv = i2enum<ItemKindType>(enum2i(ItemKindType::LIFE_BOOK) + player_ptr->realm2 - 1);
-        else if (tv == ItemKindType::RING && sv == SV_RING_RES_FEAR && player_ptr->prace == PlayerRaceType::BARBARIAN)
+        else if (tv == ItemKindType::RING && sv == SV_RING_RES_FEAR && pr.equals(PlayerRaceType::BARBARIAN))
             sv = SV_RING_SUSTAIN_STR;
-        else if (tv == ItemKindType::RING && sv == SV_RING_SUSTAIN_INT && player_ptr->prace == PlayerRaceType::MIND_FLAYER) {
+        else if (tv == ItemKindType::RING && sv == SV_RING_SUSTAIN_INT && pr.equals(PlayerRaceType::MIND_FLAYER)) {
             tv = ItemKindType::POTION;
             sv = SV_POTION_RESTORE_MANA;
         }

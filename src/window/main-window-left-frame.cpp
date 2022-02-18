@@ -4,6 +4,7 @@
 #include "market/arena-info-table.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-table.h"
@@ -65,7 +66,8 @@ void print_exp(PlayerType *player_ptr)
 {
     char out_val[32];
 
-    if ((!exp_need) || (player_ptr->prace == PlayerRaceType::ANDROID)) {
+    PlayerRace pr(player_ptr);
+    if ((!exp_need) || pr.equals(PlayerRaceType::ANDROID)) {
         (void)sprintf(out_val, "%8ld", (long)player_ptr->exp);
     } else {
         if (player_ptr->lev >= PY_MAX_LEVEL) {
@@ -76,7 +78,7 @@ void print_exp(PlayerType *player_ptr)
     }
 
     if (player_ptr->exp >= player_ptr->max_exp) {
-        if (player_ptr->prace == PlayerRaceType::ANDROID)
+        if (pr.equals(PlayerRaceType::ANDROID))
             put_str(_("強化 ", "Cst "), ROW_EXP, 0);
         else
             put_str(_("経験 ", "EXP "), ROW_EXP, 0);

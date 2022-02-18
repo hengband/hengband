@@ -26,6 +26,7 @@
 #include "mind/mind-elementalist.h"
 #include "monster-floor/monster-remover.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/patron.h"
@@ -109,7 +110,7 @@ void player_birth(PlayerType *player_ptr)
     }
 
     seed_wilderness();
-    if (player_ptr->prace == PlayerRaceType::BEASTMAN)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::BEASTMAN))
         player_ptr->hack_mutation = true;
     else
         player_ptr->hack_mutation = false;

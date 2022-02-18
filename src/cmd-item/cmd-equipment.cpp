@@ -33,6 +33,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
@@ -229,7 +230,8 @@ void do_cmd_wield(PlayerType *player_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID)) {
+    PlayerRace pr(player_ptr);
+    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,
@@ -322,7 +324,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 
     do_curse_on_equip(slot, o_ptr, player_ptr);
 
-    if ((o_ptr->name1 == ART_STONEMASK) && (player_ptr->prace != PlayerRaceType::VAMPIRE) && (player_ptr->prace != PlayerRaceType::ANDROID))
+    if ((o_ptr->name1 == ART_STONEMASK) && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID))
         change_race(player_ptr, PlayerRaceType::VAMPIRE, "");
 
     calc_android_exp(player_ptr);

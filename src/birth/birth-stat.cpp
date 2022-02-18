@@ -2,6 +2,7 @@
 #include "birth/auto-roller.h"
 #include "core/player-redraw-types.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -93,10 +94,11 @@ uint16_t get_expfact(PlayerType *player_ptr)
 {
     uint16_t expfact = rp_ptr->r_exp;
 
-    if (player_ptr->prace != PlayerRaceType::ANDROID)
+    PlayerRace pr(player_ptr);
+    if (!pr.equals(PlayerRaceType::ANDROID))
         expfact += cp_ptr->c_exp;
 
-    auto is_race_gaining_additional_speed = (player_ptr->prace == PlayerRaceType::KLACKON) || (player_ptr->prace == PlayerRaceType::SPRITE);
+    auto is_race_gaining_additional_speed = pr.equals(PlayerRaceType::KLACKON) || pr.equals(PlayerRaceType::SPRITE);
     auto is_class_gaining_additional_speed = PlayerClass(player_ptr).has_additional_speed();
     if (is_race_gaining_additional_speed && is_class_gaining_additional_speed)
         expfact -= 15;
