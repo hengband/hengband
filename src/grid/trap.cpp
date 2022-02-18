@@ -285,7 +285,7 @@ static int check_hit_from_monster_to_player(PlayerType *player_ptr, int power)
  */
 static void hit_trap_pit(PlayerType *player_ptr, TrapType trap_feat_type)
 {
-    HIT_POINT dam;
+    int dam;
     concptr trap_name = "";
     concptr spike_name = "";
 

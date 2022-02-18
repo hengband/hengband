@@ -52,7 +52,7 @@ void discharge_minion(PlayerType *player_ptr)
             continue;
         }
 
-        HIT_POINT dam = m_ptr->maxhp / 2;
+        int dam = m_ptr->maxhp / 2;
         if (dam > 100)
             dam = (dam - 100) / 2 + 100;
         if (dam > 400)

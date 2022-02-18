@@ -28,7 +28,7 @@
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
  */
-static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
+static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
 {
 	em_ptr->who = who;
 	em_ptr->r = r;
@@ -54,7 +54,7 @@ static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX w
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
  */
-effect_monster_type *initialize_effect_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
+effect_monster_type *initialize_effect_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
 {
 	substitute_effect_monster(em_ptr, who, r, y, x, dam, attribute, flag, see_s_msg);
 

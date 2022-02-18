@@ -28,7 +28,7 @@ struct artifact_type {
 	OBJECT_SUBTYPE_VALUE sval{};	/*!< ベースアイテム小項目ID / Artifact sub type */
 	PARAMETER_VALUE pval{};	/*!< pval修正値 / Artifact extra info */
 	HIT_PROB to_h{};			/*!< 命中ボーナス値 /  Bonus to hit */
-	HIT_POINT to_d{};		/*!< ダメージボーナス値 / Bonus to damage */
+	int to_d{};		/*!< ダメージボーナス値 / Bonus to damage */
 	ARMOUR_CLASS to_a{};			/*!< ACボーナス値 / Bonus to armor */
 	ARMOUR_CLASS ac{};			/*!< 上書きベースAC値 / Base armor */
 	DICE_NUMBER dd{};

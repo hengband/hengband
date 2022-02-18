@@ -171,7 +171,7 @@ concptr info_delay(int base, DICE_SID sides)
  * @param dam 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_multi_damage(HIT_POINT dam)
+concptr info_multi_damage(int dam)
 {
     return format(_("損傷:各%d", "dam %d each"), dam);
 }

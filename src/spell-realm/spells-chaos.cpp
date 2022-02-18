@@ -189,7 +189,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
  * @param rad 効力の半径
  * @details このファイルにいるのは、spells-trump.c と比べて行数が少なかったため。それ以上の意図はない
  */
-void cast_meteor(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
+void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
 {
     int b = 10 + randint1(10);
     for (int i = 0; i < b; i++) {

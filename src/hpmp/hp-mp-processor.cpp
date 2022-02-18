@@ -210,7 +210,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (get_player_flags(player_ptr, TR_SELF_FIRE) && !has_immune_fire(player_ptr)) {
-        HIT_POINT damage;
+        int damage;
         damage = player_ptr->lev;
         if (race.tr_flags().has(TR_VUL_FIRE))
             damage += damage / 3;
@@ -225,7 +225,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (get_player_flags(player_ptr, TR_SELF_ELEC) && !has_immune_elec(player_ptr)) {
-        HIT_POINT damage;
+        int damage;
         damage = player_ptr->lev;
         if (race.tr_flags().has(TR_VUL_ELEC))
             damage += damage / 3;
@@ -240,7 +240,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (get_player_flags(player_ptr, TR_SELF_COLD) && !has_immune_cold(player_ptr)) {
-        HIT_POINT damage;
+        int damage;
         damage = player_ptr->lev;
         if (race.tr_flags().has(TR_VUL_COLD))
             damage += damage / 3;
@@ -255,7 +255,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (player_ptr->riding) {
-        HIT_POINT damage;
+        int damage;
         auto auras = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].aura_flags;
         if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;

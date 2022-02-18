@@ -8,7 +8,7 @@ struct monster_type;
 bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx);
 DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx);
 
-HIT_POINT mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear);
+int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is_psy_spear);
 bool monster_is_valid(monster_type *m_ptr);
 
 void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx);

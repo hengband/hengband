@@ -196,7 +196,7 @@ bool shock_power(PlayerType *player_ptr)
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     PLAYER_LEVEL plev = player_ptr->lev;
-    HIT_POINT dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
+    int dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
     if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
         return true;

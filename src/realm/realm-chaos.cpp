@@ -266,7 +266,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("自分を中心とした轟音の球を発生させる。", "Generates a ball of sound centered on you.");
 
         {
-            HIT_POINT dam = 60 + plev;
+            int dam = 60 + plev;
             POSITION rad = plev / 10 + 2;
 
             if (info)
@@ -308,7 +308,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("炎の球を放つ。", "Fires a ball of fire.");
 
         {
-            HIT_POINT dam = plev + 55;
+            int dam = plev + 55;
             POSITION rad = 2;
 
             if (info)
@@ -367,7 +367,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("巨大なカオスの球を放つ。", "Fires a huge ball of chaos.");
 
         {
-            HIT_POINT dam = plev * 2 + 99;
+            int dam = plev * 2 + 99;
             POSITION rad = plev / 5;
 
             if (info)
@@ -448,7 +448,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("巨大な分解の球を放つ。", "Fires a huge ball of disintegration.");
 
         {
-            HIT_POINT dam = plev + 70;
+            int dam = plev + 70;
             POSITION rad = 3 + plev / 40;
 
             if (info)
@@ -489,7 +489,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("ロケットを発射する。", "Fires a magic rocket.");
 
         {
-            HIT_POINT dam = 120 + plev * 2;
+            int dam = 120 + plev * 2;
             POSITION rad = 2;
 
             if (info)
@@ -559,7 +559,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("自分の周辺に隕石を落とす。", "Causes meteorites to fall down on nearby random locations.");
 
         {
-            HIT_POINT dam = plev * 2;
+            int dam = plev * 2;
             POSITION rad = 2;
 
             if (info)
@@ -578,7 +578,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("自分を中心とした超巨大な炎の球を発生させる。", "Generates a huge ball of fire centered on you.");
 
         {
-            HIT_POINT dam = 300 + 3 * plev;
+            int dam = 300 + 3 * plev;
             POSITION rad = 8;
 
             if (info)
@@ -628,7 +628,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("非常に強力で巨大な純粋な魔力の球を放つ。", "Fires an extremely powerful huge ball of pure mana.");
 
         {
-            HIT_POINT dam = 300 + plev * 4;
+            int dam = 300 + plev * 4;
             POSITION rad = 4;
 
             if (info)
@@ -649,7 +649,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("非常に強力なカオスの球を放つ。", "Fires an extremely powerful ball of chaos.");
 
         {
-            HIT_POINT dam = player_ptr->chp;
+            int dam = player_ptr->chp;
             POSITION rad = 2;
 
             if (info)

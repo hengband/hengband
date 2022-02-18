@@ -247,7 +247,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
+void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
@@ -263,9 +263,9 @@ void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    HIT_POINT newhp = m_ptr->hp;
-    HIT_POINT oldhp = newhp + dam;
-    HIT_POINT tmp = (newhp * 100L) / oldhp;
+    int newhp = m_ptr->hp;
+    int oldhp = newhp + dam;
+    int tmp = (newhp * 100L) / oldhp;
     PERCENTAGE percentage = tmp;
 
     if (angband_strchr(",ejmvwQ", r_ptr->d_char)) {

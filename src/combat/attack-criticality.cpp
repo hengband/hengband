@@ -23,7 +23,7 @@
  * @param base_dam クリティカル適用前のダメージ
  * @return クリティカルを適用したダメージと、クリティカル発生時に表示するメッセージと、クリティカル効果音のタプルを返す
  */
-std::tuple<HIT_POINT, concptr, sound_type> apply_critical_norm_damage(int k, HIT_POINT base_dam)
+std::tuple<int, concptr, sound_type> apply_critical_norm_damage(int k, int base_dam)
 {
     if (k < 400) {
         return { 2 * base_dam + 5, _("手ごたえがあった！", "It was a good hit!"), SOUND_GOOD_HIT };
@@ -50,7 +50,7 @@ std::tuple<HIT_POINT, concptr, sound_type> apply_critical_norm_damage(int k, HIT
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, combat_options mode, bool impact)
+int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, combat_options mode, bool impact)
 {
     /* Extract "blow" power */
     int i = (weight + (meichuu * 3 + plus * 5) + player_ptr->skill_thn);

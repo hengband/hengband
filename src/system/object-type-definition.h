@@ -48,7 +48,7 @@ public:
     std::optional<RandomArtActType> smith_act_idx; //!< 鍛冶で付与された発動効果のID
 
     HIT_PROB to_h{}; /*!< Plusses to hit */
-    HIT_POINT to_d{}; /*!< Plusses to damage */
+    int to_d{}; /*!< Plusses to damage */
     ARMOUR_CLASS to_a{}; /*!< Plusses to AC */
     ARMOUR_CLASS ac{}; /*!< Normal AC */
 

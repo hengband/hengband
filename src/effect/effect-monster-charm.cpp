@@ -363,7 +363,7 @@ process_result effect_monster_crusade(PlayerType *player_ptr, effect_monster_typ
  * @param hp 計算対象のHP
  * @return 捕まえられる最大HP
  */
-static HIT_POINT calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m_ptr, HIT_POINT hp)
+static int calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m_ptr, int hp)
 {
     if (is_pet(m_ptr))
         return hp * 4L;
@@ -386,7 +386,7 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
 
     msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
     cap_mon = em_ptr->m_ptr->r_idx;
-    cap_mspeed = static_cast<byte>(em_ptr->m_ptr->mspeed);
+    cap_mspeed = em_ptr->m_ptr->mspeed;
     cap_hp = static_cast<short>(em_ptr->m_ptr->hp);
     cap_maxhp = static_cast<short>(em_ptr->m_ptr->max_maxhp);
     cap_nickname = em_ptr->m_ptr->nickname;

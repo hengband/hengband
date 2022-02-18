@@ -69,7 +69,7 @@ static void on_dead_explosion(PlayerType *player_ptr, monster_death_type *md_ptr
         AttributeType typ = mbe_info[enum2i(md_ptr->r_ptr->blow[i].effect)].explode_type;
         DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
         DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
-        HIT_POINT damage = damroll(d_dice, d_side);
+        int damage = damroll(d_dice, d_side);
         (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg);
         break;
     }

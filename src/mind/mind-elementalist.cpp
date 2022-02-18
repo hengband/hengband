@@ -478,7 +478,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
     AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
-    HIT_POINT dam;
+    int dam;
     POSITION y, x;
     int num;
 

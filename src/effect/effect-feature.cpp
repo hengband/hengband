@@ -62,7 +62,7 @@ static bool cave_naked_bold(PlayerType *player_ptr, POSITION y, POSITION x)
  * Perhaps we should affect doors?
  * </pre>
  */
-bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType typ)
+bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];

@@ -46,7 +46,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    HIT_POINT dummy_hp, dummy_maxhp;
+    int dummy_hp, dummy_maxhp;
     POSITION dummy_y = m_ptr->fy;
     POSITION dummy_x = m_ptr->fx;
     BIT_FLAGS mode = 0L;
@@ -184,7 +184,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
 
     bool fear, dead; /* dummy */
-    HIT_POINT dam = damroll(4, 8);
+    int dam = damroll(4, 8);
 
     if (monster_to_player || t_idx == player_ptr->riding)
         teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));

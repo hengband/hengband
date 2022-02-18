@@ -29,7 +29,7 @@
  * @param MS_TYPE 呪文の番号
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, AttributeType GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx,
+static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, AttributeType GF_TYPE, int dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx,
     concptr msg1, concptr msg2, concptr msg3, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid(dam);

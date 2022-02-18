@@ -68,7 +68,7 @@ DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
  * @return 修正を行った結果のダメージ量
  * @details RES_ALL持ちはAC軽減後のダメージを1/100に補正する. 光の剣は無敵を無効化する. 一定確率で無敵は貫通できる.
  */
-HIT_POINT mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear)
+int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is_psy_spear)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_RES_ALL) && dam > 0) {

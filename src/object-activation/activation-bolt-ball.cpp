@@ -304,7 +304,7 @@ bool activate_ball_water(PlayerType *player_ptr, concptr name)
 
 bool activate_ball_lite(PlayerType *player_ptr, concptr name)
 {
-    HIT_POINT num = damroll(5, 3);
+    int num = damroll(5, 3);
     POSITION y = 0, x = 0;
     msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name);
     for (int k = 0; k < num; k++) {

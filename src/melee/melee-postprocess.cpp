@@ -51,7 +51,7 @@ struct mam_pp_type {
     monster_type *m_ptr;
     bool seen;
     GAME_TEXT m_name[160];
-    HIT_POINT dam;
+    int dam;
     bool known; /* Can the player be aware of this attack? */
     concptr note;
     bool *dead;
@@ -60,7 +60,7 @@ struct mam_pp_type {
 };
 
 mam_pp_type *initialize_mam_pp_type(
-    PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+    PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
     mam_pp_ptr->m_idx = m_idx;
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -253,7 +253,7 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
  * @param who 打撃を行ったモンスターの参照ID
  * @todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  */
-void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];

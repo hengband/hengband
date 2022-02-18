@@ -82,7 +82,7 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     /* Analyze the wand */
     switch (sval) {
     case SV_WAND_HEAL_MONSTER: {
-        HIT_POINT dam = damroll((powerful ? 20 : 10), 10);
+        int dam = damroll((powerful ? 20 : 10), 10);
         if (heal_monster(player_ptr, dir, dam))
             ident = true;
         break;
@@ -124,14 +124,14 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     }
 
     case SV_WAND_STONE_TO_MUD: {
-        HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+        int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
         if (wall_to_mud(player_ptr, dir, dam))
             ident = true;
         break;
     }
 
     case SV_WAND_LITE: {
-        HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
+        int dam = damroll((powerful ? 12 : 6), 8);
         msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
         (void)lite_line(player_ptr, dir, dam);
         ident = true;
@@ -252,7 +252,7 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     }
 
     case SV_WAND_DRAGON_BREATH: {
-        HIT_POINT dam;
+        int dam;
         AttributeType typ;
 
         switch (randint1(5)) {

@@ -548,7 +548,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("巨大な冷気の球を放つ。", "Fires a huge ball of cold.");
 
         {
-            HIT_POINT dam = 70 + plev * 3 / 2;
+            int dam = 70 + plev * 3 / 2;
             POSITION rad = plev / 12 + 1;
 
             if (info)
@@ -570,7 +570,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("巨大な電撃の球を放つ。", "Fires a huge electric ball.");
 
         {
-            HIT_POINT dam = 90 + plev * 3 / 2;
+            int dam = 90 + plev * 3 / 2;
             POSITION rad = plev / 12 + 1;
 
             if (info)
@@ -592,7 +592,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("巨大な水の球を放つ。", "Fires a huge ball of water.");
 
         {
-            HIT_POINT dam = 100 + plev * 3 / 2;
+            int dam = 100 + plev * 3 / 2;
             POSITION rad = plev / 12 + 1;
 
             if (info)
@@ -614,7 +614,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 "Generates ball of light centered on you. Maps and lights whole dungeon level. Knows all objects location.");
 
         {
-            HIT_POINT dam = 150;
+            int dam = 150;
             POSITION rad = 8;
 
             if (info)

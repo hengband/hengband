@@ -43,7 +43,7 @@ static void aura_fire_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
         return;
     }
 
-    HIT_POINT dam = damroll(2, 6);
+    int dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::FIRE);
@@ -66,7 +66,7 @@ static void aura_elec_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
         return;
     }
 
-    HIT_POINT dam = damroll(2, 6);
+    int dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::ELEC);
@@ -89,7 +89,7 @@ static void aura_cold_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
         return;
     }
 
-    HIT_POINT dam = damroll(2, 6);
+    int dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::COLD);
@@ -109,7 +109,7 @@ static void aura_shards_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
         if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr))
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
     } else {
-        HIT_POINT dam = damroll(2, 6);
+        int dam = damroll(2, 6);
         dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets sliced!"), monap_ptr->m_name);
         MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::SHARDS);
@@ -139,7 +139,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
         return;
     }
 
-    HIT_POINT dam = damroll(2, 6);
+    int dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::HOLY_FIRE);
@@ -165,7 +165,7 @@ static void aura_force_by_monster_attack(PlayerType *player_ptr, MonsterAttackPl
         return;
     }
 
-    HIT_POINT dam = damroll(2, 6);
+    int dam = damroll(2, 6);
     dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::MANA);
@@ -180,7 +180,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     if (!SpellHex(player_ptr).is_spelling_specific(HEX_SHADOW_CLOAK) || !monap_ptr->alive || player_ptr->is_dead)
         return;
 
-    HIT_POINT dam = 1;
+    int dam = 1;
     ObjectType *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     auto *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (((r_ptr->flagsr & RFR_RES_ALL) != 0) || ((r_ptr->flagsr & RFR_RES_DARK) != 0)) {

@@ -22,7 +22,7 @@
  * @param m_ptr 対象モンスター
  * @return 魅了に抵抗したらTRUE
  */
-bool common_saving_throw_charm(PlayerType *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool common_saving_throw_charm(PlayerType *player_ptr, int pow, monster_type *m_ptr)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -57,7 +57,7 @@ bool common_saving_throw_charm(PlayerType *player_ptr, HIT_POINT pow, monster_ty
  * @param m_ptr 対象モンスター
  * @return 服従に抵抗したらTRUE
  */
-bool common_saving_throw_control(PlayerType *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool common_saving_throw_control(PlayerType *player_ptr, int pow, monster_type *m_ptr)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
 

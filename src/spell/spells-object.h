@@ -18,5 +18,5 @@ void brand_bolts(PlayerType *player_ptr);
 #define ENCH_TOAC       0x04 /*!< 装備強化処理: AC強化 / Enchant to AC */
 #define ENCH_FORCE      0x08 /*!< 装備強化処理: 無条件に成功させる / Force enchantment */
 bool enchant_equipment(PlayerType *player_ptr, ObjectType *o_ptr, int n, int eflag);
-bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac);
+bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR_CLASS num_ac);
 void brand_weapon(PlayerType *player_ptr, int brand_type);

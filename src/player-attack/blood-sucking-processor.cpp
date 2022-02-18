@@ -63,7 +63,7 @@ static void drain_muramasa(PlayerType *player_ptr, player_attack_type *pa_ptr, c
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     HIT_PROB to_h = o_ptr->to_h;
-    HIT_POINT to_d = o_ptr->to_d;
+    int to_d = o_ptr->to_d;
     bool flag = true;
     for (int i = 0; i < to_h + 3; i++)
         if (one_in_(4))

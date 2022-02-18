@@ -823,7 +823,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MONRACE_IDX r_idx)
     /* Unused */
     (void)player_ptr;
 
-    HIT_POINT dam = 0;
+    int dam = 0;
     auto *r_ptr = &r_info[r_idx];
     bool unselectable = r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);

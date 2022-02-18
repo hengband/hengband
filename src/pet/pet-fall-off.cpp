@@ -54,7 +54,7 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
  * @return FALSEなら落馬しないことで確定、TRUEなら処理続行
  * @details レベルの低い乗馬からは落馬しにくい
  */
-static bool calc_fall_off_possibility(PlayerType *player_ptr, const HIT_POINT dam, const bool force, monster_race *r_ptr)
+static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, const bool force, monster_race *r_ptr)
 {
     if (force)
         return true;
@@ -84,7 +84,7 @@ static bool calc_fall_off_possibility(PlayerType *player_ptr, const HIT_POINT da
  * @param force TRUEならば強制的に落馬する
  * @return 実際に落馬したらTRUEを返す
  */
-bool process_fall_off_horse(PlayerType *player_ptr, HIT_POINT dam, bool force)
+bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 {
     POSITION sy = 0;
     POSITION sx = 0;

@@ -126,7 +126,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
     while (one_in_(4))
         more_magnification++;
 
-    pa_ptr->attack_damage *= (HIT_POINT)more_magnification;
+    pa_ptr->attack_damage *= (int)more_magnification;
 }
 
 /*!
@@ -145,7 +145,7 @@ void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type 
     pa_ptr->attack_damage = damroll(o_ptr->dd + player_ptr->to_dd[pa_ptr->hand], o_ptr->ds + player_ptr->to_ds[pa_ptr->hand]);
     int magnification = calc_death_scythe_reflection_magnification(player_ptr);
     compensate_death_scythe_reflection_magnification(player_ptr, &magnification, death_scythe_flags);
-    pa_ptr->attack_damage *= (HIT_POINT)magnification;
+    pa_ptr->attack_damage *= (int)magnification;
     pa_ptr->attack_damage /= 10;
     pa_ptr->attack_damage = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
     death_scythe_reflection_critial_hit(pa_ptr);

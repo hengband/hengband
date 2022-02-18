@@ -376,7 +376,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
     }
 
-    HIT_POINT num = damroll(5, 3);
+    int num = damroll(5, 3);
     int attempts;
     POSITION y = 0, x = 0;
     for (int k = 0; k < num; k++) {
@@ -404,7 +404,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_area(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
+bool lite_area(PlayerType *player_ptr, int dam, POSITION rad)
 {
     if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorbs your light."));
@@ -430,7 +430,7 @@ bool lite_area(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool unlite_area(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
+bool unlite_area(PlayerType *player_ptr, int dam, POSITION rad)
 {
     if (!player_ptr->blind) {
         msg_print(_("暗闇が辺りを覆った。", "Darkness surrounds you."));
@@ -451,7 +451,7 @@ bool unlite_area(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_line(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
+bool lite_line(PlayerType *player_ptr, DIRECTION dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
     return project_hook(player_ptr, AttributeType::LITE_WEAK, dir, dam, flg);

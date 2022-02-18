@@ -6,7 +6,7 @@
 class ObjectType;
 class PlayerType;
 struct monster_type;
-bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam);
+bool heal_monster(PlayerType *player_ptr, DIRECTION dir, int dam);
 bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power);
 bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power);
 bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power);
@@ -24,8 +24,8 @@ bool heroism(PlayerType *player_ptr, int base);
 bool berserk(PlayerType *player_ptr, int base);
 bool cure_light_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides);
 bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides);
-bool cure_critical_wounds(PlayerType *player_ptr, HIT_POINT pow);
-bool true_healing(PlayerType *player_ptr, HIT_POINT pow);
+bool cure_critical_wounds(PlayerType *player_ptr, int pow);
+bool true_healing(PlayerType *player_ptr, int pow);
 bool restore_mana(PlayerType *player_ptr, bool magic_eater);
 bool restore_all_status(PlayerType *player_ptr);
 

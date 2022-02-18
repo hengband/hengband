@@ -131,7 +131,7 @@ static void invest_misc_hit_dice(ObjectType *o_ptr)
 {
     o_ptr->art_flags.set(TR_SHOW_MODS);
     HIT_PROB bonus_h = 4 + (HIT_PROB)randint1(11);
-    HIT_POINT bonus_d = 4 + (HIT_POINT)randint1(11);
+    int bonus_d = 4 + (int)randint1(11);
     if ((o_ptr->tval != ItemKindType::SWORD) && (o_ptr->tval != ItemKindType::POLEARM) && (o_ptr->tval != ItemKindType::HAFTED) && (o_ptr->tval != ItemKindType::DIGGING) && (o_ptr->tval != ItemKindType::GLOVES) && (o_ptr->tval != ItemKindType::RING)) {
         bonus_h /= 2;
         bonus_d /= 2;

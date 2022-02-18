@@ -29,10 +29,10 @@ public:
     int d_side = 0;
     ObjectType *o_ptr = nullptr;
     bool obvious = false;
-    HIT_POINT damage = 0;
+    int damage = 0;
     bool blinked = false;
     GAME_TEXT o_name[MAX_NLEN]{};
-    HIT_POINT get_damage = 0;
+    int get_damage = 0;
     GAME_TEXT ddesc[MAX_MONSTER_NAME]{};
     ARMOUR_CLASS ac = 0;
     bool alive = true;

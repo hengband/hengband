@@ -146,12 +146,12 @@ void get_random_name(ObjectType *o_ptr, char *return_name, bool armour, int powe
 }
 
 /*対邪平均ダメージの計算処理*/
-static HIT_POINT calc_arm_avgdamage(PlayerType *player_ptr, ObjectType *o_ptr)
+static int calc_arm_avgdamage(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
-    HIT_POINT base, forced, vorpal;
-    HIT_POINT s_evil = forced = vorpal = 0;
-    HIT_POINT dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
+    int base, forced, vorpal;
+    int s_evil = forced = vorpal = 0;
+    int dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
     if (flgs.has(TR_KILL_EVIL)) {
         dam = s_evil = dam * 7 / 2;
     } else if (flgs.has_not(TR_KILL_EVIL) && flgs.has(TR_SLAY_EVIL)) {

@@ -34,7 +34,7 @@
  * @param rad 効力の半径
  * @return ターゲットを指定し、実行したならばTRUEを返す。
  */
-bool cast_wrath_of_the_god(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
+bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir))

@@ -314,7 +314,7 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
     }
 }
 
-void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam)
+void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
     auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];

@@ -22,7 +22,7 @@
  * @param to_ac ＡＣをアップさせる量
  * @return 実際に行ったらTRUE
  */
-bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_CLASS to_ac, const ItemTester& item_tester)
+bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_dam, ARMOUR_CLASS to_ac, const ItemTester& item_tester)
 {
     clear_bldg(4, 18);
     int maxenchant = (player_ptr->lev / 5);

@@ -64,7 +64,7 @@ public:
     void gain_two_weapon_skill_exp();
     void gain_riding_skill_exp_on_melee_attack(const monster_race *r_ptr);
     void gain_riding_skill_exp_on_range_attack();
-    void gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam);
+    void gain_riding_skill_exp_on_fall_off_check(int dam);
     void gain_spell_skill_exp(int realm, int spell_idx);
     void gain_continuous_spell_skill_exp(int realm, int spell_idx);
     PlayerSkillRank gain_spell_skill_exp_over_learning(int spell_idx);

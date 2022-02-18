@@ -15,7 +15,7 @@ struct mam_type {
     monster_type *t_ptr;
     GAME_TEXT m_name[MAX_NLEN];
     GAME_TEXT t_name[MAX_NLEN];
-    HIT_POINT damage;
+    int damage;
     bool see_m;
     bool see_t;
     bool see_either;
@@ -31,7 +31,7 @@ struct mam_type {
     DEPTH rlev;
     bool blinked;
     bool do_silly_attack;
-    HIT_POINT power;
+    int power;
     bool obvious;
     int d_dice;
     int d_side;

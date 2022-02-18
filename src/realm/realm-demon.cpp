@@ -298,7 +298,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("炎の球を放つ。", "Fires a ball of fire.");
 
         {
-            HIT_POINT dam = plev + 55;
+            int dam = plev + 55;
             POSITION rad = 2;
 
             if (info)
@@ -333,7 +333,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("大きな地獄の球を放つ。", "Fires a huge ball of nether.");
 
         {
-            HIT_POINT dam = plev * 3 / 2 + 100;
+            int dam = plev * 3 / 2 + 100;
             POSITION rad = plev / 20 + 2;
 
             if (info)
@@ -414,7 +414,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("自分を中心とした炎の球を作り出し、床を溶岩に変える。", "Generates a ball of fire centered on you which transforms floors to magma.");
 
         {
-            HIT_POINT dam = (55 + plev) * 2;
+            int dam = (55 + plev) * 2;
             POSITION rad = 3;
 
             if (info)
@@ -434,7 +434,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("プラズマの球を放つ。", "Fires a ball of plasma.");
 
         {
-            HIT_POINT dam = plev * 3 / 2 + 80;
+            int dam = plev * 3 / 2 + 80;
             POSITION rad = 2 + plev / 40;
 
             if (info)
@@ -496,7 +496,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("因果混乱の球を放つ。", "Fires a ball of nexus.");
 
         {
-            HIT_POINT dam = 100 + plev * 2;
+            int dam = 100 + plev * 2;
             POSITION rad = 4;
 
             if (info)
@@ -569,7 +569,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 "Generates balls of chaos, confusion and charm centered on you.");
 
         {
-            HIT_POINT dam = 50 + plev;
+            int dam = 50 + plev;
             int power = 20 + plev;
             POSITION rad = 3 + plev / 20;
 
@@ -619,7 +619,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("超巨大な地獄の球を放つ。", "Generates a huge ball of nether.");
 
         {
-            HIT_POINT dam = plev * 15;
+            int dam = plev * 15;
             POSITION rad = plev / 5;
 
             if (info)
@@ -642,7 +642,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 "Puts blood curse, which damages and causes various effects, on a monster. You also take damage.");
 
         {
-            HIT_POINT dam = 600;
+            int dam = 600;
             POSITION rad = 0;
 
             if (info)

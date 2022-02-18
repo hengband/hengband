@@ -159,7 +159,7 @@ void RingEnchanter::sval_enchant()
 
         break;
     case SV_RING_DAMAGE:
-        this->o_ptr->to_d = 1 + randint1(5) + (HIT_POINT)m_bonus(16, this->level);
+        this->o_ptr->to_d = 1 + randint1(5) + (int)m_bonus(16, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
             this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
@@ -186,7 +186,7 @@ void RingEnchanter::sval_enchant()
 
         break;
     case SV_RING_SLAYING:
-        this->o_ptr->to_d = randint1(5) + (HIT_POINT)m_bonus(12, this->level);
+        this->o_ptr->to_d = randint1(5) + (int)m_bonus(12, this->level);
         this->o_ptr->to_h = randint1(5) + (HIT_PROB)m_bonus(12, this->level);
 
         if (this->power < 0) {
