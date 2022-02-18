@@ -432,7 +432,7 @@ static void save_prefs(void)
 /*!
  * @brief callback for EnumDisplayMonitors API
  */
-BOOL CALLBACK monitorenumproc([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
+BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
 {
     bool *result = (bool *)dwDate;
     *result = true;
@@ -479,7 +479,7 @@ static void load_prefs_aux(int i)
     // 保存座標がモニタ内の領域にあるかチェック
     RECT rect = { posx, posy, posx + 128, posy + 128 };
     bool in_any_monitor = false;
-    ::EnumDisplayMonitors(NULL, &rect, monitorenumproc, (LPARAM)&in_any_monitor);
+    ::EnumDisplayMonitors(NULL, &rect, monitor_enum_procedure, (LPARAM)&in_any_monitor);
     if (in_any_monitor) {
         // いずれかのモニタに表示可能、ウインドウ位置を復元
         td->pos_x = posx;
@@ -2139,7 +2139,7 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 /*!
  * @brief メインウインドウ用ウインドウプロシージャ
  */
-LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
 
@@ -2608,7 +2608,7 @@ static void register_wndclass(void)
 {
     WNDCLASSW wc{};
     wc.style = CS_CLASSDC;
-    wc.lpfnWndProc = AngbandWndProc;
+    wc.lpfnWndProc = angband_window_procedure;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 4;
     wc.hInstance = hInstance;
