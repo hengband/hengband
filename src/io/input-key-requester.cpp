@@ -143,33 +143,8 @@ char InputKeyRequestor::inkey_from_menu()
         }
 
         this->make_commands_frame();
-        int cmmand_per_menu_num;
-        for (cmmand_per_menu_num = 0; cmmand_per_menu_num < 10; cmmand_per_menu_num++) {
-            if (menu_info[menu_num][cmmand_per_menu_num].cmd == 0) {
-                break;
-            }
-
-            std::string menu_name(menu_info[menu_num][cmmand_per_menu_num].name);
-            for (auto special_menu_num = 0;; special_menu_num++) {
-                auto special_menu = special_menu_info[special_menu_num];
-                if (special_menu.name[0] == '\0') {
-                    break;
-                }
-
-                if ((menu_num != special_menu.window) || (cmmand_per_menu_num != special_menu.number)) {
-                    continue;
-                }
-
-                auto tmp_menu_name = this->switch_special_menu_condition(special_menu);
-                if (tmp_menu_name != "") {
-                    menu_name = tmp_menu_name;
-                }
-            }
-
-            put_str(menu_name.data(), this->base_y + 1 + cmmand_per_menu_num / 2, this->base_x + 4 + (cmmand_per_menu_num % 2) * 24);
-        }
-
-        auto max_num = cmmand_per_menu_num;
+        auto command_per_menu_num = this->get_command_per_menu_num(menu_num);
+        auto max_num = command_per_menu_num;
         auto is_max_num_odd = (max_num % 2) == 1;
         put_str(_("》", "> "), this->base_y + 1 + num / 2, this->base_x + 2 + (num % 2) * 24);
 
@@ -453,4 +428,35 @@ std::string InputKeyRequestor::switch_special_menu_condition(special_menu_conten
     default:
         return "";
     }
+}
+
+int InputKeyRequestor::get_command_per_menu_num(const int menu_num)
+{
+    int command_per_menu_num;
+    for (command_per_menu_num = 0; command_per_menu_num < 10; command_per_menu_num++) {
+        if (menu_info[menu_num][command_per_menu_num].cmd == 0) {
+            break;
+        }
+
+        std::string menu_name(menu_info[menu_num][command_per_menu_num].name);
+        for (auto special_menu_num = 0;; special_menu_num++) {
+            auto special_menu = special_menu_info[special_menu_num];
+            if (special_menu.name[0] == '\0') {
+                break;
+            }
+
+            if ((menu_num != special_menu.window) || (command_per_menu_num != special_menu.number)) {
+                continue;
+            }
+
+            auto tmp_menu_name = this->switch_special_menu_condition(special_menu);
+            if (tmp_menu_name != "") {
+                menu_name = tmp_menu_name;
+            }
+        }
+
+        put_str(menu_name.data(), this->base_y + 1 + command_per_menu_num / 2, this->base_x + 4 + (command_per_menu_num % 2) * 24);
+    }
+
+    return command_per_menu_num;
 }

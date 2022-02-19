@@ -47,4 +47,5 @@ private:
 
     void make_commands_frame();
     std::string switch_special_menu_condition(special_menu_content &special_menu);
+    int get_command_per_menu_num(const int menu_num);
 };
