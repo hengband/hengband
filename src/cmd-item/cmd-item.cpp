@@ -230,7 +230,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
  * @details
  * XXX - Add actions for other item types
  */
-void do_cmd_use(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
+void do_cmd_use(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     ObjectType *o_ptr;
@@ -277,7 +277,7 @@ void do_cmd_use(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
         exe_fire(player_ptr, item, &player_ptr->inventory_list[INVEN_BOW], SP_NONE);
         break;
     default:
-        exe_activate(player_ptr, item, cap_mon_ptr);
+        exe_activate(player_ptr, item);
         break;
     }
 }
@@ -286,7 +286,7 @@ void do_cmd_use(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
  * @brief 装備を発動するコマンドのメインルーチン /
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_activate(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
+void do_cmd_activate(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
@@ -299,5 +299,5 @@ void do_cmd_activate(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
     if (!choose_object(player_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ObjectType::is_activatable)))
         return;
 
-    exe_activate(player_ptr, item, cap_mon_ptr);
+    exe_activate(player_ptr, item);
 }

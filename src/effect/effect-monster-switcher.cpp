@@ -297,7 +297,7 @@ process_result effect_monster_wounds(effect_monster_type *em_ptr)
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ここのスイッチングで終るならTRUEかFALSE、後続処理を実行するならCONTINUE
  */
-process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, CapturedMonsterType *cap_mon_ptr)
+process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     switch (em_ptr->attribute) {
     case AttributeType::PSY_SPEAR:

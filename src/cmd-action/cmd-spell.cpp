@@ -544,14 +544,14 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
  * @param browse_only 魔法と技能の閲覧を行うならばTRUE
  * @return 魔道書を一冊も持っていないならTRUEを返す
  */
-static void confirm_use_force(PlayerType *player_ptr, bool browse_only, CapturedMonsterType *cap_mon_ptr)
+static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
 {
     char which;
     COMMAND_CODE code;
 
     /* Get the item index */
     if (repeat_pull(&code) && (code == INVEN_FORCE)) {
-        browse_only ? do_cmd_mind_browse(player_ptr) : do_cmd_mind(player_ptr, cap_mon_ptr);
+        browse_only ? do_cmd_mind_browse(player_ptr) : do_cmd_mind(player_ptr);
         return;
     }
 
@@ -574,7 +574,7 @@ static void confirm_use_force(PlayerType *player_ptr, bool browse_only, Captured
     prt("", 0, 0);
 
     if (which == 'w') {
-        browse_only ? do_cmd_mind_browse(player_ptr) : do_cmd_mind(player_ptr, cap_mon_ptr);
+        browse_only ? do_cmd_mind_browse(player_ptr) : do_cmd_mind(player_ptr);
     }
 }
 
@@ -603,7 +603,7 @@ static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
  * and in the dark, primarily to allow browsing in stores.
  * </pre>
  */
-void do_cmd_browse(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
+void do_cmd_browse(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
@@ -630,7 +630,7 @@ void do_cmd_browse(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
 
     if (pc.equals(PlayerClassType::FORCETRAINER)) {
         if (player_has_no_spellbooks(player_ptr)) {
-            confirm_use_force(player_ptr, true, cap_mon_ptr);
+            confirm_use_force(player_ptr, true);
             return;
         }
     }
@@ -962,7 +962,7 @@ void do_cmd_study(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 詠唱したらtrue
  */
-bool do_cmd_cast(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
+bool do_cmd_cast(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
@@ -990,7 +990,7 @@ bool do_cmd_cast(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
 
     if (player_ptr->blind || no_lite(player_ptr)) {
         if (pc.equals(PlayerClassType::FORCETRAINER))
-            confirm_use_force(player_ptr, false, cap_mon_ptr);
+            confirm_use_force(player_ptr, false);
         else {
             msg_print(_("目が見えない！", "You cannot see!"));
             flush();
@@ -1018,7 +1018,7 @@ bool do_cmd_cast(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
 
     if (pc.equals(PlayerClassType::FORCETRAINER)) {
         if (player_has_no_spellbooks(player_ptr)) {
-            confirm_use_force(player_ptr, false, cap_mon_ptr);
+            confirm_use_force(player_ptr, false);
             return true; //!< 錬気キャンセル時の処理がない
         }
     }
@@ -1034,7 +1034,7 @@ bool do_cmd_cast(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
         {
-            do_cmd_mind(player_ptr, cap_mon_ptr);
+            do_cmd_mind(player_ptr);
             return true; //!< 錬気キャンセル時の処理がない
         }
         return false;

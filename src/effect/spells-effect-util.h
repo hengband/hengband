@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include <memory>
 
 extern int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 extern int rakubadam_p; /*!< 落馬した際のダメージ量 */
@@ -15,8 +14,6 @@ public:
     short max_hp;
     int nickname;
 };
-
-extern std::shared_ptr<CapturedMonsterType> g_cap_mon_ptr;
 
 extern bool sukekaku;
 extern int project_length; /*!< 投射の射程距離 */

@@ -88,7 +88,7 @@ static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
 ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const int dam,
-    const AttributeType typ, BIT_FLAGS flag)
+    const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     int dist;
     POSITION y1;
@@ -187,7 +187,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     path_n = projection_path(player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, flag);
     handle_stuff(player_ptr);
 
-    auto *cap_mon_ptr = g_cap_mon_ptr.get();
     if (typ == AttributeType::SEEKER) {
         int j;
         int last_i = 0;

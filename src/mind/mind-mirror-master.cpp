@@ -104,7 +104,7 @@ void remove_all_mirrors(PlayerType *player_ptr, bool explode)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-bool binding_field(PlayerType *player_ptr, int dam, CapturedMonsterType *cap_mon_ptr)
+bool binding_field(PlayerType *player_ptr, int dam)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
@@ -209,7 +209,7 @@ bool binding_field(PlayerType *player_ptr, int dam, CapturedMonsterType *cap_mon
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true, cap_mon_ptr);
+                    (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
                 }
             }
         }
@@ -228,14 +228,14 @@ bool binding_field(PlayerType *player_ptr, int dam, CapturedMonsterType *cap_mon
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-void seal_of_mirror(PlayerType *player_ptr, int dam, CapturedMonsterType *cap_mon_ptr)
+void seal_of_mirror(PlayerType *player_ptr, int dam)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
             if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                 continue;
 
-            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true, cap_mon_ptr))
+            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
                 continue;
 
             if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -408,7 +408,7 @@ static int number_of_mirrors(floor_type *floor_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell, CapturedMonsterType *cap_mon_ptr)
+bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -487,7 +487,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell, Ca
         fire_beam(player_ptr, AttributeType::SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
         break;
     case SEALING_MIRROR:
-        seal_of_mirror(player_ptr, plev * 4 + 100, cap_mon_ptr);
+        seal_of_mirror(player_ptr, plev * 4 + 100);
         break;
     case WATER_SHIELD:
         t = 20 + randint1(20);
@@ -530,7 +530,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell, Ca
         set_multishadow(player_ptr, 6 + randint1(6), false);
         break;
     case BINDING_FIELD:
-        if (!binding_field(player_ptr, plev * 11 + 5, cap_mon_ptr))
+        if (!binding_field(player_ptr, plev * 11 + 5))
             msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
 
         break;

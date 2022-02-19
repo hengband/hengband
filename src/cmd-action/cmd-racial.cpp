@@ -373,14 +373,14 @@ static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
  * @details
  * 戻り値の代わりにrc_ptr->castに使用の有無を入れる。
  */
-static void racial_power_cast_power(PlayerType *player_ptr, rc_type *rc_ptr, CapturedMonsterType *cap_mon_ptr)
+static void racial_power_cast_power(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto *rpi_ptr = &rc_ptr->power_desc[rc_ptr->command_code];
 
     switch (check_racial_level(player_ptr, rpi_ptr)) {
     case RACIAL_SUCCESS:
         if (rpi_ptr->number < 0)
-            rc_ptr->cast = exe_racial_power(player_ptr, rpi_ptr->number, cap_mon_ptr);
+            rc_ptr->cast = exe_racial_power(player_ptr, rpi_ptr->number);
         else
             rc_ptr->cast = exe_mutation_power(player_ptr, i2enum<PlayerMutationType>(rpi_ptr->number));
         break;
@@ -425,7 +425,7 @@ static bool racial_power_reduce_mana(PlayerType *player_ptr, rc_type *rc_ptr)
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void do_cmd_racial_power(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
+void do_cmd_racial_power(PlayerType *player_ptr)
 {
     if (player_ptr->wild_mode)
         return;
@@ -461,7 +461,7 @@ void do_cmd_racial_power(PlayerType *player_ptr, CapturedMonsterType *cap_mon_pt
     racial_power_make_prompt(rc_ptr);
 
     if (racial_power_select_power(player_ptr, rc_ptr) == RC_CONTINUE)
-        racial_power_cast_power(player_ptr, rc_ptr, cap_mon_ptr);
+        racial_power_cast_power(player_ptr, rc_ptr);
 
     if (!rc_ptr->cast) {
         energy.reset_player_turn();

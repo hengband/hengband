@@ -169,7 +169,6 @@ void process_command(PlayerType *player_ptr)
         sniper_data->reset_concent = true;
     }
 
-    auto *cap_mon_ptr = g_cap_mon_ptr.get();
     auto *floor_ptr = player_ptr->current_floor_ptr;
     switch (command_cmd) {
     case ESCAPE:
@@ -289,7 +288,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case SPECIAL_KEY_STORE: {
-        do_cmd_store(player_ptr, cap_mon_ptr);
+        do_cmd_store(player_ptr);
         break;
     }
     case SPECIAL_KEY_BUILDING: {
@@ -375,7 +374,7 @@ void process_command(PlayerType *player_ptr)
         else if (pc.equals(PlayerClassType::SNIPER))
             do_cmd_snipe_browse(player_ptr);
         else
-            do_cmd_browse(player_ptr, cap_mon_ptr);
+            do_cmd_browse(player_ptr);
 
         break;
     }
@@ -435,7 +434,7 @@ void process_command(PlayerType *player_ptr)
         }
 
         if (pc.can_browse())
-            do_cmd_mind(player_ptr, cap_mon_ptr);
+            do_cmd_mind(player_ptr);
         else if (pc.equals(PlayerClassType::ELEMENTALIST))
             do_cmd_element(player_ptr);
         else if (pc.equals(PlayerClassType::IMITATOR))
@@ -451,7 +450,7 @@ void process_command(PlayerType *player_ptr)
         else if (pc.equals(PlayerClassType::SNIPER))
             do_cmd_snipe(player_ptr);
         else
-            (void)do_cmd_cast(player_ptr, cap_mon_ptr);
+            (void)do_cmd_cast(player_ptr);
 
         break;
     }
@@ -468,7 +467,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case 'A': {
-        do_cmd_activate(player_ptr, cap_mon_ptr);
+        do_cmd_activate(player_ptr);
         break;
     }
     case 'E': {
@@ -493,7 +492,7 @@ void process_command(PlayerType *player_ptr)
     }
     case 'z': {
         if (use_command && rogue_like_commands) {
-            do_cmd_use(player_ptr, cap_mon_ptr);
+            do_cmd_use(player_ptr);
         } else {
             do_cmd_zap_rod(player_ptr);
         }
@@ -510,14 +509,14 @@ void process_command(PlayerType *player_ptr)
     }
     case 'u': {
         if (use_command && !rogue_like_commands)
-            do_cmd_use(player_ptr, cap_mon_ptr);
+            do_cmd_use(player_ptr);
         else
             do_cmd_use_staff(player_ptr);
 
         break;
     }
     case 'U': {
-        do_cmd_racial_power(player_ptr, cap_mon_ptr);
+        do_cmd_racial_power(player_ptr);
         break;
     }
     case 'M': {

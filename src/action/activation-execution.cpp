@@ -220,7 +220,7 @@ static bool activate_whistle(PlayerType *player_ptr, ae_type *ae_ptr)
  * the user hits "escape" at the "direction" prompt.
  * </pre>
  */
-void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item, CapturedMonsterType *cap_mon_ptr)
+void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     ae_type tmp_ae;
@@ -245,7 +245,7 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item, CapturedMonsterTyp
     if (activate_whistle(player_ptr, ae_ptr))
         return;
 
-    if (exe_monster_capture(player_ptr, ae_ptr, cap_mon_ptr))
+    if (exe_monster_capture(player_ptr, ae_ptr))
         return;
 
     msg_print(_("おっと、このアイテムは始動できない。", "Oops.  That object cannot be activated."));
