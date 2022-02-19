@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "game-option/keymap-directory-getter.h"
+#include <string>
 
 extern concptr keymap_act[KEYMAP_MODES][256];
 
@@ -18,6 +19,7 @@ extern int16_t command_new;
 
 class ObjectType;
 class PlayerType;
+struct special_menu_content;
 class InputKeyRequestor {
 public:
     InputKeyRequestor(PlayerType *player_ptr, bool shopping);
@@ -44,4 +46,5 @@ private:
     void confirm_command(ObjectType &o_ref, const int caret_command);
 
     void make_commands_frame();
+    std::string switch_special_menu_condition(special_menu_content &special_menu);
 };

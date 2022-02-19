@@ -132,14 +132,12 @@ char InputKeyRequestor::inkey_from_menu()
     prt("", 0, 0);
     screen_save();
 
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     char command;
     auto num = 0;
     auto old_num = 0;
     auto menu_num = 0;
     while (true) {
         char sub_cmd;
-        concptr menu_name;
         if (!menu_num) {
             old_num = num;
         }
@@ -151,7 +149,7 @@ char InputKeyRequestor::inkey_from_menu()
                 break;
             }
 
-            menu_name = menu_info[menu_num][cmmand_per_menu_num].name;
+            std::string menu_name(menu_info[menu_num][cmmand_per_menu_num].name);
             for (auto special_menu_num = 0;; special_menu_num++) {
                 auto special_menu = special_menu_info[special_menu_num];
                 if (!special_menu.name[0]) {
@@ -162,31 +160,13 @@ char InputKeyRequestor::inkey_from_menu()
                     continue;
                 }
 
-                switch (special_menu.jouken) {
-                case MENU_CLASS:
-                    if (PlayerClass(this->player_ptr).equals(special_menu.jouken_naiyou)) {
-                        menu_name = special_menu.name;
-                    }
-
-                    break;
-                case MENU_WILD: {
-                    if ((floor_ptr->dun_level > 0) || floor_ptr->inside_arena || inside_quest(floor_ptr->quest_number)) {
-                        break;
-                    }
-
-                    auto can_do_in_wilderness = enum2i(special_menu.jouken_naiyou) > 0;
-                    if (this->player_ptr->wild_mode == can_do_in_wilderness) {
-                        menu_name = special_menu.name;
-                    }
-
-                    break;
-                }
-                default:
-                    break;
+                auto tmp_menu_name = this->switch_special_menu_condition(special_menu);
+                if (tmp_menu_name != "") {
+                    menu_name = tmp_menu_name;
                 }
             }
 
-            put_str(menu_name, this->base_y + 1 + cmmand_per_menu_num / 2, this->base_x + 4 + (cmmand_per_menu_num % 2) * 24);
+            put_str(menu_name.data(), this->base_y + 1 + cmmand_per_menu_num / 2, this->base_x + 4 + (cmmand_per_menu_num % 2) * 24);
         }
 
         auto max_num = cmmand_per_menu_num;
@@ -446,4 +426,31 @@ void InputKeyRequestor::make_commands_frame()
     put_str("|                                                    |", this->base_y + line++, this->base_x);
     put_str("|                                                    |", this->base_y + line++, this->base_x);
     put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
+}
+
+std::string InputKeyRequestor::switch_special_menu_condition(special_menu_content &special_menu)
+{
+    switch (special_menu.jouken) {
+    case MENU_CLASS:
+        if (PlayerClass(this->player_ptr).equals(special_menu.jouken_naiyou)) {
+            return std::string(special_menu.name);
+        }
+
+        return "";
+    case MENU_WILD: {
+        auto floor_ptr = this->player_ptr->current_floor_ptr;
+        if ((floor_ptr->dun_level > 0) || floor_ptr->inside_arena || inside_quest(floor_ptr->quest_number)) {
+            return "";
+        }
+
+        auto can_do_in_wilderness = enum2i(special_menu.jouken_naiyou) > 0;
+        if (this->player_ptr->wild_mode == can_do_in_wilderness) {
+            return std::string(special_menu.name);
+        }
+
+        return "";
+    }
+    default:
+        return "";
+    }
 }
