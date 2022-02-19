@@ -71,22 +71,7 @@ void InputKeyRequestor::request_command()
             stop_term_fresh();
         }
 
-        int16_t cmd;
-        if (command_new) {
-            msg_erase();
-            cmd = command_new;
-            command_new = 0;
-        } else {
-            msg_flag = false;
-            num_more = 0;
-            inkey_flag = true;
-            term_fresh();
-            cmd = inkey(true);
-            if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)]) {
-                cmd = this->inkey_from_menu();
-            }
-        }
-
+        auto cmd = this->get_command(mode);
         prt("", 0, 0);
         if (cmd == '0') {
             auto old_arg = command_arg;
@@ -215,6 +200,27 @@ void InputKeyRequestor::request_command()
     }
 
     prt("", 0, 0);
+}
+
+short InputKeyRequestor::get_command(const keymap_mode mode)
+{
+    if (command_new) {
+        msg_erase();
+        auto cmd_back = command_new;
+        command_new = 0;
+        return cmd_back;
+    }
+
+    msg_flag = false;
+    num_more = 0;
+    inkey_flag = true;
+    term_fresh();
+    short cmd = inkey(true);
+    if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)]) {
+        cmd = this->inkey_from_menu();
+    }
+
+    return cmd;
 }
 
 char InputKeyRequestor::inkey_from_menu()

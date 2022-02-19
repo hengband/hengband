@@ -27,5 +27,6 @@ private:
     int shopping;
     char request_command_buffer[256]{}; /*!< Special buffer to hold the action of the current keymap */
 
+    short get_command(const keymap_mode mode);
     char inkey_from_menu();
 };
