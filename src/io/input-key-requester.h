@@ -32,7 +32,10 @@ private:
     keymap_mode mode;
     int base_y;
     int base_x = 15;
-
+    int menu_num = 0;
+    int num = 0;
+    char command = 0;
+    
     void input_command();
     short get_command();
     char inkey_from_menu();
@@ -47,5 +50,6 @@ private:
 
     void make_commands_frame();
     std::string switch_special_menu_condition(special_menu_content &special_menu);
-    int get_command_per_menu_num(const int menu_num);
+    int get_command_per_menu_num();
+    bool check_continuous_command();
 };

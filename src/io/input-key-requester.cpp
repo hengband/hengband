@@ -132,46 +132,36 @@ char InputKeyRequestor::inkey_from_menu()
     prt("", 0, 0);
     screen_save();
 
-    char command;
-    auto num = 0;
     auto old_num = 0;
-    auto menu_num = 0;
     while (true) {
-        char sub_cmd;
-        if (menu_num == 0) {
-            old_num = num;
+        if (this->menu_num == 0) {
+            old_num = this->num;
         }
 
         this->make_commands_frame();
-        auto command_per_menu_num = this->get_command_per_menu_num(menu_num);
+        auto command_per_menu_num = this->get_command_per_menu_num();
         auto max_num = command_per_menu_num;
         auto is_max_num_odd = (max_num % 2) == 1;
-        put_str(_("》", "> "), this->base_y + 1 + num / 2, this->base_x + 2 + (num % 2) * 24);
+        put_str(_("》", "> "), this->base_y + 1 + this->num / 2, this->base_x + 2 + (this->num % 2) * 24);
 
         move_cursor_relative(this->player_ptr->y, this->player_ptr->x);
-        sub_cmd = inkey();
+        auto sub_cmd = inkey();
         if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n')) {
-            if (menu_info[menu_num][num].fin) {
-                command = menu_info[menu_num][num].cmd;
-                use_menu = true;
+            if (this->check_continuous_command()) {
                 break;
             }
 
-            menu_num = menu_info[menu_num][num].cmd;
-            num = 0;
-            this->base_y += 2;
-            this->base_x += 8;
             continue;
         }
 
         if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0')) {
-            if (menu_num == 0) {
-                command = ESCAPE;
+            if (this->menu_num == 0) {
+                this->command = ESCAPE;
                 break;
             }
 
-            menu_num = 0;
-            num = old_num;
+            this->menu_num = 0;
+            this->num = old_num;
             this->base_y -= 2;
             this->base_x -= 8;
             screen_load();
@@ -181,13 +171,13 @@ char InputKeyRequestor::inkey_from_menu()
 
         if ((sub_cmd == '2') || (sub_cmd == 'j') || (sub_cmd == 'J')) {
             if (is_max_num_odd) {
-                if (num % 2) {
-                    num = (num + 2) % (max_num - 1);
+                if (this->num % 2) {
+                    this->num = (this->num + 2) % (max_num - 1);
                 } else {
-                    num = (num + 2) % (max_num + 1);
+                    this->num = (this->num + 2) % (max_num + 1);
                 }
             } else {
-                num = (num + 2) % max_num;
+                this->num = (this->num + 2) % max_num;
             }
 
             continue;
@@ -195,23 +185,23 @@ char InputKeyRequestor::inkey_from_menu()
 
         if ((sub_cmd == '8') || (sub_cmd == 'k') || (sub_cmd == 'K')) {
             if (is_max_num_odd) {
-                if (num % 2) {
-                    num = (num + max_num - 3) % (max_num - 1);
+                if (this->num % 2) {
+                    this->num = (this->num + max_num - 3) % (max_num - 1);
                 } else {
-                    num = (num + max_num - 1) % (max_num + 1);
+                    this->num = (this->num + max_num - 1) % (max_num + 1);
                 }
             } else {
-                num = (num + max_num - 2) % max_num;
+                this->num = (this->num + max_num - 2) % max_num;
             }
 
             continue;
         }
 
         if ((sub_cmd == '4') || (sub_cmd == '6') || (sub_cmd == 'h') || (sub_cmd == 'H') || (sub_cmd == 'l') || (sub_cmd == 'L')) {
-            if ((num % 2) || (num == max_num - 1)) {
-                num--;
-            } else if (num < max_num - 1) {
-                num++;
+            if ((this->num % 2) || (this->num == max_num - 1)) {
+                this->num--;
+            } else if (this->num < max_num - 1) {
+                this->num++;
             }
 
             continue;
@@ -223,7 +213,7 @@ char InputKeyRequestor::inkey_from_menu()
         inkey_next = "";
     }
 
-    return command;
+    return this->command;
 }
 
 char InputKeyRequestor::input_repeat_num()
@@ -430,22 +420,22 @@ std::string InputKeyRequestor::switch_special_menu_condition(special_menu_conten
     }
 }
 
-int InputKeyRequestor::get_command_per_menu_num(const int menu_num)
+int InputKeyRequestor::get_command_per_menu_num()
 {
     int command_per_menu_num;
     for (command_per_menu_num = 0; command_per_menu_num < 10; command_per_menu_num++) {
-        if (menu_info[menu_num][command_per_menu_num].cmd == 0) {
+        if (menu_info[this->menu_num][command_per_menu_num].cmd == 0) {
             break;
         }
 
-        std::string menu_name(menu_info[menu_num][command_per_menu_num].name);
+        std::string menu_name(menu_info[this->menu_num][command_per_menu_num].name);
         for (auto special_menu_num = 0;; special_menu_num++) {
             auto special_menu = special_menu_info[special_menu_num];
             if (special_menu.name[0] == '\0') {
                 break;
             }
 
-            if ((menu_num != special_menu.window) || (command_per_menu_num != special_menu.number)) {
+            if ((this->menu_num != special_menu.window) || (command_per_menu_num != special_menu.number)) {
                 continue;
             }
 
@@ -459,4 +449,19 @@ int InputKeyRequestor::get_command_per_menu_num(const int menu_num)
     }
 
     return command_per_menu_num;
+}
+
+bool InputKeyRequestor::check_continuous_command()
+{
+    if (menu_info[this->menu_num][this->num].fin) {
+        this->command = menu_info[this->menu_num][this->num].cmd;
+        use_menu = true;
+        return true;
+    }
+
+    this->menu_num = menu_info[this->menu_num][this->num].cmd;
+    this->num = 0;
+    this->base_y += 2;
+    this->base_x += 8;
+    return false;
 }
