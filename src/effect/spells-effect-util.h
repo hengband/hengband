@@ -13,7 +13,7 @@ public:
     byte speed;
     short current_hp;
     short max_hp;
-    STR_OFFSET nickname;
+    int nickname;
 };
 
 extern std::shared_ptr<CapturedMonsterType> g_cap_mon_ptr;

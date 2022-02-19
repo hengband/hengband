@@ -25,7 +25,7 @@
 
 static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
-    if (!cap_mon_ptr->nickname)
+    if (cap_mon_ptr->nickname == 0)
         return;
 
     concptr t;
