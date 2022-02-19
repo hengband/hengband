@@ -26,8 +26,10 @@ private:
     PlayerType *player_ptr;
     int shopping;
     char request_command_buffer[256]{}; /*!< Special buffer to hold the action of the current keymap */
+    keymap_mode mode;
 
-    short get_command(const keymap_mode mode);
+    void input_command();
+    short get_command();
     char inkey_from_menu();
     bool process_repeat_num(short *cmd);
     char input_repeat_num();

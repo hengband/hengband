@@ -45,6 +45,7 @@ int16_t command_new; /* Command chaining from inven/equip view */
 InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, int shopping)
     : player_ptr(player_ptr)
     , shopping(shopping)
+    , mode(rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)
 {
 }
 
@@ -56,44 +57,11 @@ void InputKeyRequestor::request_command()
 #ifdef JP
     int caretcmd = 0;
 #endif
-    auto mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
     command_cmd = 0;
     command_arg = 0;
     command_dir = 0;
     use_menu = false;
-
-    while (true) {
-        if (!macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
-            save_player(this->player_ptr, SAVE_TYPE_DEBUG);
-        }
-
-        if (fresh_once && macro_running()) {
-            stop_term_fresh();
-        }
-
-        auto cmd = this->get_command(mode);
-        prt("", 0, 0);
-        if (this->process_repeat_num(&cmd)) {
-            continue;
-        }
-
-        this->process_command_command(&cmd);
-        this->process_control_command(&cmd);
-        auto act = keymap_act[mode][(byte)(cmd)];
-        if (act && !inkey_next) {
-            (void)strnfmt(this->request_command_buffer, sizeof(this->request_command_buffer), "%s", act);
-            inkey_next = this->request_command_buffer;
-            continue;
-        }
-
-        if (cmd == 0) {
-            continue;
-        }
-
-        command_cmd = (byte)cmd;
-        break;
-    }
-
+    this->input_command();
     if (always_repeat && (command_arg <= 0)) {
         if (angband_strchr("TBDoc+", (char)command_cmd)) {
             command_arg = 99;
@@ -118,7 +86,7 @@ void InputKeyRequestor::request_command()
 
 #ifdef JP
     for (auto i = 0; i < 256; i++) {
-        if (auto s = keymap_act[mode][i]; s != nullptr) {
+        if (auto s = keymap_act[this->mode][i]; s != nullptr) {
             if (*s == command_cmd && *(s + 1) == 0) {
                 caretcmd = i;
                 break;
@@ -154,7 +122,42 @@ void InputKeyRequestor::request_command()
     prt("", 0, 0);
 }
 
-short InputKeyRequestor::get_command(const keymap_mode mode)
+void InputKeyRequestor::input_command()
+{
+    while (true) {
+        if (!macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
+            save_player(this->player_ptr, SAVE_TYPE_DEBUG);
+        }
+
+        if (fresh_once && macro_running()) {
+            stop_term_fresh();
+        }
+
+        auto cmd = this->get_command();
+        prt("", 0, 0);
+        if (this->process_repeat_num(&cmd)) {
+            continue;
+        }
+
+        this->process_command_command(&cmd);
+        this->process_control_command(&cmd);
+        auto act = keymap_act[this->mode][(byte)(cmd)];
+        if (act && !inkey_next) {
+            (void)strnfmt(this->request_command_buffer, sizeof(this->request_command_buffer), "%s", act);
+            inkey_next = this->request_command_buffer;
+            continue;
+        }
+
+        if (cmd == 0) {
+            continue;
+        }
+
+        command_cmd = (byte)cmd;
+        break;
+    }
+}
+
+short InputKeyRequestor::get_command()
 {
     if (command_new) {
         msg_erase();
@@ -168,7 +171,7 @@ short InputKeyRequestor::get_command(const keymap_mode mode)
     inkey_flag = true;
     term_fresh();
     short cmd = inkey(true);
-    if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)]) {
+    if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[this->mode][(byte)(cmd)]) {
         cmd = this->inkey_from_menu();
     }
 
