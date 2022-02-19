@@ -51,7 +51,7 @@ bool leave_store = false;
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-void store_process_command(PlayerType *player_ptr)
+void store_process_command(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     repeat_check();
     if (rogue_like_commands && (command_cmd == 'l'))
@@ -161,7 +161,7 @@ void store_process_command(PlayerType *player_ptr)
         else if (pc.equals(PlayerClassType::SNIPER))
             do_cmd_snipe_browse(player_ptr);
         else
-            do_cmd_browse(player_ptr);
+            do_cmd_browse(player_ptr, cap_mon_ptr);
 
         break;
     }

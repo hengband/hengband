@@ -273,7 +273,7 @@ static void check_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
     check_mind_mirror_master(player_ptr, cm_ptr);
 }
 
-static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
+static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     switch (cm_ptr->use_mind) {
     case MindKindType::MINDCRAFTER:
@@ -289,7 +289,7 @@ static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
         if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].is_mirror())
             cm_ptr->on_mirror = true;
 
-        cm_ptr->cast = cast_mirror_spell(player_ptr, i2enum<mind_mirror_master_type>(cm_ptr->n));
+        cm_ptr->cast = cast_mirror_spell(player_ptr, i2enum<mind_mirror_master_type>(cm_ptr->n), cap_mon_ptr);
         return true;
     case MindKindType::NINJUTSU:
         cm_ptr->cast = cast_ninja_spell(player_ptr, i2enum<mind_ninja_type>(cm_ptr->n));
@@ -313,11 +313,11 @@ static void mind_turn_passing(PlayerType *player_ptr, cm_type *cm_ptr)
     energy.set_player_turn_energy(100);
 }
 
-static bool judge_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
+static bool judge_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     if (randint0(100) >= cm_ptr->chance) {
         sound(SOUND_ZAP);
-        return switch_mind_class(player_ptr, cm_ptr) && cm_ptr->cast;
+        return switch_mind_class(player_ptr, cm_ptr, cap_mon_ptr) && cm_ptr->cast;
     }
 
     if (flush_failure)
@@ -372,7 +372,7 @@ static void process_hard_concentration(PlayerType *player_ptr, cm_type *cm_ptr)
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  */
-void do_cmd_mind(PlayerType *player_ptr)
+void do_cmd_mind(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     cm_type tmp_cm;
     cm_type *cm_ptr = initialize_cm_type(player_ptr, &tmp_cm);
@@ -391,7 +391,7 @@ void do_cmd_mind(PlayerType *player_ptr)
     if (cm_ptr->chance > 95)
         cm_ptr->chance = 95;
 
-    if (!judge_mind_chance(player_ptr, cm_ptr))
+    if (!judge_mind_chance(player_ptr, cm_ptr, cap_mon_ptr))
         return;
 
     mind_turn_passing(player_ptr, cm_ptr);

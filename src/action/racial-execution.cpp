@@ -26,10 +26,10 @@
  * @param command 発動するレイシャルのID
  * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
  */
-bool exe_racial_power(PlayerType *player_ptr, const int32_t command)
+bool exe_racial_power(PlayerType *player_ptr, const int32_t command, CapturedMonsterType *cap_mon_ptr)
 {
     if (command <= -3)
-        return switch_class_racial_execution(player_ptr, command);
+        return switch_class_racial_execution(player_ptr, command, cap_mon_ptr);
 
     if (player_ptr->mimic_form)
         return switch_mimic_racial_execution(player_ptr);

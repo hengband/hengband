@@ -6,5 +6,6 @@
 
 #include "system/angband.h"
 
+class CapturedMonsterType;
 class PlayerType;
-void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item);
+void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item, CapturedMonsterType *cap_mon_ptr);

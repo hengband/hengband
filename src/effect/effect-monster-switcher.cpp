@@ -297,7 +297,7 @@ process_result effect_monster_wounds(effect_monster_type *em_ptr)
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ここのスイッチングで終るならTRUEかFALSE、後続処理を実行するならCONTINUE
  */
-process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr)
+process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     switch (em_ptr->attribute) {
     case AttributeType::PSY_SPEAR:
@@ -452,7 +452,7 @@ process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_typ
     case AttributeType::HAND_DOOM:
         return effect_monster_hand_doom(em_ptr);
     case AttributeType::CAPTURE:
-        return effect_monster_capture(player_ptr, em_ptr);
+        return effect_monster_capture(player_ptr, em_ptr, cap_mon_ptr);
     case AttributeType::ATTACK:
         return do_cmd_attack(player_ptr, em_ptr->y, em_ptr->x, i2enum<combat_options>(em_ptr->dam)) ? PROCESS_TRUE : PROCESS_FALSE;
     case AttributeType::ENGETSU:

@@ -114,7 +114,7 @@ static void make_description_of_affecred_monster(PlayerType *player_ptr, effect_
  * 完全な耐性を持っていたら、一部属性を除いて影響は及ぼさない
  * デバッグ属性、モンスター打撃、モンスター射撃であれば貫通する
  */
-static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     const std::vector<AttributeType> effect_arrtibute = {
         AttributeType::OLD_CLONE,
@@ -141,14 +141,14 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
     do_effect |= std::any_of(effect_arrtibute.cbegin(), effect_arrtibute.cend(), check);
 
     if (do_effect)
-        return switch_effects_monster(player_ptr, em_ptr);
+        return switch_effects_monster(player_ptr, em_ptr, cap_mon_ptr);
 
     bool ignore_res_all = (em_ptr->attribute == AttributeType::DEBUG);
     ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_MELEE);
     ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_SHOOT);
 
     if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) && ignore_res_all)
-        return switch_effects_monster(player_ptr, em_ptr);
+        return switch_effects_monster(player_ptr, em_ptr, cap_mon_ptr);
 
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
     em_ptr->dam = 0;
@@ -651,7 +651,7 @@ static void exe_affect_monster_postprocess(PlayerType *player_ptr, effect_monste
  * 3.ペット及び撮影による事後効果
  */
 bool affect_monster(
-    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
+    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg, CapturedMonsterType *cap_mon_ptr)
 {
     effect_monster_type tmp_effect;
     effect_monster_type *em_ptr = initialize_effect_monster(player_ptr, &tmp_effect, who, r, y, x, dam, attribute, flag, see_s_msg);
@@ -661,7 +661,7 @@ bool affect_monster(
     if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding))
         disturb(player_ptr, true, true);
 
-    process_result result = exe_affect_monster_by_effect(player_ptr, em_ptr);
+    process_result result = exe_affect_monster_by_effect(player_ptr, em_ptr, cap_mon_ptr);
     if (result != PROCESS_CONTINUE)
         return (bool)result;
 

@@ -83,7 +83,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command)
+bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command, CapturedMonsterType *cap_mon_ptr)
 {
     DIRECTION dir = 0;
     switch (player_ptr->pclass) {
@@ -206,13 +206,13 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
             return false;
 
         handle_stuff(player_ptr);
-        if (!do_cmd_cast(player_ptr))
+        if (!do_cmd_cast(player_ptr, cap_mon_ptr))
             return false;
 
         if (!player_ptr->paralyzed && !cmd_limit_cast(player_ptr)) {
             handle_stuff(player_ptr);
             command_dir = 0;
-            (void)do_cmd_cast(player_ptr);
+            (void)do_cmd_cast(player_ptr, cap_mon_ptr);
         }
         return true;
     case PlayerClassType::SAMURAI:

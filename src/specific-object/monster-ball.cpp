@@ -23,9 +23,9 @@
 #include "util/quarks.h"
 #include "view/display-messages.h"
 
-static void inscribe_nickname(ae_type *ae_ptr)
+static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
-    if (!g_cap_mon_ptr->nickname)
+    if (!cap_mon_ptr->nickname)
         return;
 
     concptr t;
@@ -48,7 +48,7 @@ static void inscribe_nickname(ae_type *ae_ptr)
 #else
     *s++ = '\'';
 #endif
-    t = quark_str(g_cap_mon_ptr->nickname);
+    t = quark_str(cap_mon_ptr->nickname);
     while (*t) {
         *s = *t;
         s++;
@@ -62,7 +62,7 @@ static void inscribe_nickname(ae_type *ae_ptr)
     ae_ptr->o_ptr->inscription = quark_add(buf);
 }
 
-static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
+static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     bool old_target_pet = target_pet;
     target_pet = true;
@@ -75,11 +75,11 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
     if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0))
         return true;
 
-    ae_ptr->o_ptr->pval = g_cap_mon_ptr->r_idx;
-    ae_ptr->o_ptr->captured_monster_speed = g_cap_mon_ptr->speed;
-    ae_ptr->o_ptr->captured_monster_current_hp = g_cap_mon_ptr->current_hp;
-    ae_ptr->o_ptr->captured_monster_max_hp = g_cap_mon_ptr->max_hp;
-    inscribe_nickname(ae_ptr);
+    ae_ptr->o_ptr->pval = cap_mon_ptr->r_idx;
+    ae_ptr->o_ptr->captured_monster_speed = cap_mon_ptr->speed;
+    ae_ptr->o_ptr->captured_monster_current_hp = cap_mon_ptr->current_hp;
+    ae_ptr->o_ptr->captured_monster_max_hp = cap_mon_ptr->max_hp;
+    inscribe_nickname(ae_ptr, cap_mon_ptr);
     return true;
 }
 
@@ -169,13 +169,13 @@ static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
     ae_ptr->success = true;
 }
 
-bool exe_monster_capture(PlayerType *player_ptr, ae_type *ae_ptr)
+bool exe_monster_capture(PlayerType *player_ptr, ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     if (ae_ptr->o_ptr->tval != ItemKindType::CAPTURE)
         return false;
 
     if (ae_ptr->o_ptr->pval == 0) {
-        if (!set_activation_target(player_ptr, ae_ptr))
+        if (!set_activation_target(player_ptr, ae_ptr, cap_mon_ptr))
             return true;
 
         calc_android_exp(player_ptr);

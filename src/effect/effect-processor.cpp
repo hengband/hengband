@@ -187,6 +187,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     path_n = projection_path(player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, flag);
     handle_stuff(player_ptr);
 
+    auto *cap_mon_ptr = g_cap_mon_ptr.get();
     if (typ == AttributeType::SEEKER) {
         int j;
         int last_i = 0;
@@ -243,7 +244,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             for (j = last_i; j <= i; j++) {
                 y = get_grid_y(path_g[j]);
                 x = get_grid_x(path_g[j]);
-                if (affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER, flag, true))
+                if (affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER, flag, true, cap_mon_ptr))
                     res.notice = true;
                 if (!who && (project_m_n == 1) && !jump && (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
                     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -264,7 +265,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             POSITION py, px;
             py = get_grid_y(path_g[i]);
             px = get_grid_x(path_g[i]);
-            if (affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SEEKER, flag, true))
+            if (affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SEEKER, flag, true, cap_mon_ptr))
                 res.notice = true;
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
@@ -365,7 +366,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         for (int i = 0; i < path_n; i++) {
             POSITION py = get_grid_y(path_g[i]);
             POSITION px = get_grid_x(path_g[i]);
-            (void)affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY, flag, true);
+            (void)affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY, flag, true, cap_mon_ptr);
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
                     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -711,7 +712,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
 
-            if (affect_monster(player_ptr, who, effective_dist, y, x, dam, typ, flag, see_s_msg))
+            if (affect_monster(player_ptr, who, effective_dist, y, x, dam, typ, flag, see_s_msg, cap_mon_ptr))
                 res.notice = true;
         }
 

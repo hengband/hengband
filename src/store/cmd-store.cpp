@@ -51,7 +51,7 @@
  * (cast magic) into "g" (get), and "s" (search) into "d" (drop).
  * </pre>
  */
-void do_cmd_store(PlayerType *player_ptr)
+void do_cmd_store(PlayerType *player_ptr, CapturedMonsterType *cap_mon_ptr)
 {
     if (player_ptr->wild_mode)
         return;
@@ -146,7 +146,7 @@ void do_cmd_store(PlayerType *player_ptr)
 
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
         request_command(player_ptr, true);
-        store_process_command(player_ptr);
+        store_process_command(player_ptr, cap_mon_ptr);
 
         bool need_redraw_store_inv = any_bits(player_ptr->update, PU_BONUS);
         w_ptr->character_icky_depth = 1;
