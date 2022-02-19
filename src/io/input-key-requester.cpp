@@ -144,15 +144,7 @@ char InputKeyRequestor::inkey_from_menu()
             old_num = num;
         }
 
-        auto line = 0;
-        put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
-        put_str("|                                                    |", this->base_y + line++, this->base_x);
-        put_str("|                                                    |", this->base_y + line++, this->base_x);
-        put_str("|                                                    |", this->base_y + line++, this->base_x);
-        put_str("|                                                    |", this->base_y + line++, this->base_x);
-        put_str("|                                                    |", this->base_y + line++, this->base_x);
-        put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
-
+        this->make_commands_frame();
         int cmmand_per_menu_num;
         for (cmmand_per_menu_num = 0; cmmand_per_menu_num < 10; cmmand_per_menu_num++) {
             if (!menu_info[menu_num][cmmand_per_menu_num].cmd) {
@@ -442,4 +434,16 @@ void InputKeyRequestor::confirm_command(ObjectType &o_ref, const int caret_comma
 
         s = angband_strchr(s + 1, '^');
     }
+}
+
+void InputKeyRequestor::make_commands_frame()
+{
+    auto line = 0;
+    put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
+    put_str("|                                                    |", this->base_y + line++, this->base_x);
+    put_str("|                                                    |", this->base_y + line++, this->base_x);
+    put_str("|                                                    |", this->base_y + line++, this->base_x);
+    put_str("|                                                    |", this->base_y + line++, this->base_x);
+    put_str("|                                                    |", this->base_y + line++, this->base_x);
+    put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
 }

@@ -42,4 +42,6 @@ private:
     int get_caret_command();
     void sweep_confirmation_equipments();
     void confirm_command(ObjectType &o_ref, const int caret_command);
+
+    void make_commands_frame();
 };
