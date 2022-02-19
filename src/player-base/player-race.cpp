@@ -40,10 +40,10 @@ TrFlags PlayerRace::tr_flags() const
         flags.set(TR_INFRA);
 
     for (auto &cond : race_ptr->extra_flags) {
-        if (player_ptr->lev < cond.level)
+        if (this->player_ptr->lev < cond.level)
             continue;
         if (cond.pclass.has_value()) {
-            auto is_class_equal = PlayerClass(player_ptr).equals(cond.pclass.value());
+            auto is_class_equal = PlayerClass(this->player_ptr).equals(cond.pclass.value());
             if (cond.not_class && is_class_equal)
                 continue;
             if (!cond.not_class && !is_class_equal)
@@ -106,17 +106,16 @@ bool PlayerRace::is_mimic_nonliving() const
 
 bool PlayerRace::has_cut_immunity() const
 {
-    auto cut_immunity = PlayerRace(this->player_ptr).equals(PlayerRaceType::GOLEM);
-    cut_immunity |= PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON);
-    cut_immunity |= PlayerRace(this->player_ptr).equals(PlayerRaceType::SPECTRE);
-    cut_immunity |= PlayerRace(this->player_ptr).equals(PlayerRaceType::ZOMBIE) && (this->player_ptr->lev > 11);
+    auto cut_immunity = this->equals(PlayerRaceType::GOLEM);
+    cut_immunity |= this->equals(PlayerRaceType::SKELETON);
+    cut_immunity |= this->equals(PlayerRaceType::SPECTRE);
+    cut_immunity |= this->equals(PlayerRaceType::ZOMBIE) && (this->player_ptr->lev > 11);
     return cut_immunity;
 }
 
-
 bool PlayerRace::has_stun_immunity() const
 {
-    return PlayerRace(this->player_ptr).equals(PlayerRaceType::GOLEM);
+    return this->equals(PlayerRaceType::GOLEM);
 }
 
 bool PlayerRace::equals(PlayerRaceType prace) const
@@ -138,10 +137,10 @@ int16_t PlayerRace::speed() const
 {
     int16_t result = 0;
 
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE))
+    if (this->equals(PlayerRaceType::KLACKON) || this->equals(PlayerRaceType::SPRITE))
         result += (this->player_ptr->lev) / 10;
 
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::MERFOLK)) {
+    if (this->equals(PlayerRaceType::MERFOLK)) {
         auto *floor_ptr = this->player_ptr->current_floor_ptr;
         auto *f_ptr = &f_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
         if (f_ptr->flags.has(FloorFeatureType::WATER)) {
@@ -178,7 +177,7 @@ int16_t PlayerRace::additional_strength() const
 {
     int16_t result = 0;
 
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ENT)) {
+    if (this->equals(PlayerRaceType::ENT)) {
         if (this->player_ptr->lev > 25)
             result++;
         if (this->player_ptr->lev > 40)
@@ -201,7 +200,7 @@ int16_t PlayerRace::additional_dexterity() const
 {
     int16_t result = 0;
 
-    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ENT)) {
+    if (this->equals(PlayerRaceType::ENT)) {
         if (this->player_ptr->lev > 25)
             result--;
         if (this->player_ptr->lev > 40)
