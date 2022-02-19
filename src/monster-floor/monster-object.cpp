@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief モンスターが移動した結果、床のアイテムに重なった時の処理と、モンスターがアイテムを落とす処理
  * @date 2020/03/07
  * @author Hourier
@@ -33,7 +33,7 @@
 /*!
  * @brief オブジェクトのフラグを更新する
  */
-static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterKindType> flg_monster_kind, BIT_FLAGS *flgr)
+static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterKindType> &flg_monster_kind, BIT_FLAGS *flgr)
 {
     if (flgs.has(TR_SLAY_DRAGON))
         flg_monster_kind.set(MonsterKindType::DRAGON);
