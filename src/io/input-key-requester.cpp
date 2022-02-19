@@ -77,13 +77,7 @@ void InputKeyRequestor::request_command()
             continue;
         }
 
-        if (cmd == '\\') {
-            (void)get_com(_("コマンド: ", "Command: "), (char *)&cmd, false);
-            if (!inkey_next) {
-                inkey_next = "";
-            }
-        }
-
+        this->process_command_command(&cmd);
         if (cmd == '^') {
             if (get_com(_("CTRL: ", "Control: "), (char *)&cmd, false)) {
                 cmd = KTRL(cmd);
@@ -397,4 +391,21 @@ bool InputKeyRequestor::process_repeat_num(short *cmd)
 
     command_arg = 0;
     return true;
+}
+
+/*
+ * @brief コマンドの入力を求めるコマンドの処理
+ * @param cmd 入力コマンド
+ * @details 全く意味がないような気もするが元のコードにあった機能は保持しておく
+ */
+void InputKeyRequestor::process_command_command(short *cmd)
+{
+    if (*cmd != '\\') {
+        return;
+    }
+
+    (void)get_com(_("コマンド: ", "Command: "), (char *)cmd, false);
+    if (!inkey_next) {
+        inkey_next = "";
+    }
 }
