@@ -166,16 +166,7 @@ char InputKeyRequestor::inkey_from_menu()
             continue;
         }
 
-        
-        if ((this->sub_cmd == '4') || (this->sub_cmd == '6') || (this->sub_cmd == 'h') || (this->sub_cmd == 'H') || (this->sub_cmd == 'l') || (this->sub_cmd == 'L')) {
-            if ((this->num % 2) || (this->num == max_num - 1)) {
-                this->num--;
-            } else if (this->num < max_num - 1) {
-                this->num++;
-            }
-
-            continue;
-        }
+        this->process_right_left_cursor();
     }
 
     screen_load();
@@ -484,4 +475,19 @@ bool InputKeyRequestor::process_up_cursor()
     auto tmp_num2 = is_num_odd ? (this->max_num - 1) : (this->max_num + 1);
     this->num = tmp_num1 % tmp_num2;
     return true;
+}
+
+void InputKeyRequestor::process_right_left_cursor()
+{
+    auto orig_key_right_left = (this->sub_cmd == '4') || (this->sub_cmd == '6');
+    auto rogue_key_right_left = (this->sub_cmd == 'h') || (this->sub_cmd == 'H') || (this->sub_cmd == 'l') || (this->sub_cmd == 'L');
+    if (!orig_key_right_left && !rogue_key_right_left) {
+        return;
+    }
+
+    if ((this->num % 2) || (this->num == max_num - 1)) {
+        this->num--;
+    } else if (this->num < max_num - 1) {
+        this->num++;
+    }
 }

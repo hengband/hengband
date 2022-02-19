@@ -58,4 +58,5 @@ private:
     bool check_escape_key(const int old_num);
     bool process_down_cursor();
     bool process_up_cursor();
+    void process_right_left_cursor();
 };
