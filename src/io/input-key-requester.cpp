@@ -14,7 +14,7 @@
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
 #include "save/save.h"
-#include "system/floor-type-definition.h" //!< @todo 違和感、後で調査する.
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h" //!< @todo 相互依存している、後で何とかする.
@@ -131,7 +131,6 @@ char InputKeyRequestor::inkey_from_menu()
 {
     prt("", 0, 0);
     screen_save();
-
     auto old_num = 0;
     while (true) {
         if (this->menu_num == 0) {
@@ -139,11 +138,9 @@ char InputKeyRequestor::inkey_from_menu()
         }
 
         this->make_commands_frame();
-        auto command_per_menu_num = this->get_command_per_menu_num();
-        this->max_num = command_per_menu_num;
+        this->max_num = this->get_command_per_menu_num();
         this->is_max_num_odd = (max_num % 2) == 1;
         put_str(_("》", "> "), this->base_y + 1 + this->num / 2, this->base_x + 2 + (this->num % 2) * 24);
-
         move_cursor_relative(this->player_ptr->y, this->player_ptr->x);
         this->sub_cmd = inkey();
         if ((this->sub_cmd == ' ') || (this->sub_cmd == 'x') || (this->sub_cmd == 'X') || (this->sub_cmd == '\r') || (this->sub_cmd == '\n')) {
