@@ -17,4 +17,14 @@ extern int16_t command_wrk;
 extern int16_t command_new;
 
 class PlayerType;
-void request_command(PlayerType *player_ptr, int shopping);
+class InputKeyRequestor {
+public:
+    InputKeyRequestor(PlayerType *player_ptr, int shopping);
+    void request_command();
+
+private:
+    PlayerType *player_ptr;
+    int shopping;
+
+    char inkey_from_menu();
+};
