@@ -16,6 +16,7 @@ extern TERM_LEN command_gap;
 extern int16_t command_wrk;
 extern int16_t command_new;
 
+class ObjectType;
 class PlayerType;
 class InputKeyRequestor {
 public:
@@ -37,4 +38,5 @@ private:
     void process_control_command(short *cmd);
     void change_shopping_command();
     int get_caret_command();
+    void confirm_command(ObjectType &o_ref, const int caret_command);
 };

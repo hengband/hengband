@@ -68,23 +68,12 @@ void InputKeyRequestor::request_command()
     this->change_shopping_command();
     auto caret_command = this->get_caret_command();
     for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &this->player_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
+        auto &o_ref = this->player_ptr->inventory_list[i];
+        if ((o_ref.k_idx == 0) || (o_ref.inscription == 0)) {
             continue;
         }
 
-        auto s = quark_str(o_ptr->inscription);
-        s = angband_strchr(s, '^');
-        while (s) {
-            auto sure = _((s[1] == caret_command) || (s[1] == '*'), (s[1] == command_cmd) || (s[1] == '*'));
-            if (sure) {
-                if (!get_check(_("本当ですか? ", "Are you sure? "))) {
-                    command_cmd = ' ';
-                }
-            }
-
-            s = angband_strchr(s + 1, '^');
-        }
+        this->confirm_command(o_ref, caret_command);
     }
 
     prt("", 0, 0);
@@ -430,4 +419,25 @@ int InputKeyRequestor::get_caret_command()
 #else
     return 0;
 #endif
+}
+
+void InputKeyRequestor::confirm_command(ObjectType &o_ref, const int caret_command)
+{
+    auto s = quark_str(o_ref.inscription);
+    s = angband_strchr(s, '^');
+    while (s) {
+#ifdef JP
+        auto sure = (s[1] == caret_command) || (s[1] == '*');
+#else
+        auto sure = (s[1] == command_cmd) || (s[1] == '*');
+        (void)caret_command;
+#endif
+        if (sure) {
+            if (!get_check(_("本当ですか? ", "Are you sure? "))) {
+                command_cmd = ' ';
+            }
+        }
+
+        s = angband_strchr(s + 1, '^');
+    }
 }
