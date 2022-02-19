@@ -146,7 +146,7 @@ char InputKeyRequestor::inkey_from_menu()
 
         move_cursor_relative(this->player_ptr->y, this->player_ptr->x);
         this->sub_cmd = inkey();
-        if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n')) {
+        if ((this->sub_cmd == ' ') || (this->sub_cmd == 'x') || (this->sub_cmd == 'X') || (this->sub_cmd == '\r') || (this->sub_cmd == '\n')) {
             if (this->check_continuous_command()) {
                 break;
             }
@@ -154,7 +154,7 @@ char InputKeyRequestor::inkey_from_menu()
             continue;
         }
 
-        if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0')) {
+        if ((this->sub_cmd == ESCAPE) || (this->sub_cmd == 'z') || (this->sub_cmd == 'Z') || (this->sub_cmd == '0')) {
             if (this->check_escape_key(old_num)) {
                 break;
             }
@@ -162,25 +162,12 @@ char InputKeyRequestor::inkey_from_menu()
             continue;
         }
 
-        if (this->process_down_cursor()) {
+        if (this->process_down_cursor() || this->process_up_cursor()) {
             continue;
         }
 
-        if ((sub_cmd == '8') || (sub_cmd == 'k') || (sub_cmd == 'K')) {
-            if (is_max_num_odd) {
-                if (this->num % 2) {
-                    this->num = (this->num + max_num - 3) % (max_num - 1);
-                } else {
-                    this->num = (this->num + max_num - 1) % (max_num + 1);
-                }
-            } else {
-                this->num = (this->num + max_num - 2) % max_num;
-            }
-
-            continue;
-        }
-
-        if ((sub_cmd == '4') || (sub_cmd == '6') || (sub_cmd == 'h') || (sub_cmd == 'H') || (sub_cmd == 'l') || (sub_cmd == 'L')) {
+        
+        if ((this->sub_cmd == '4') || (this->sub_cmd == '6') || (this->sub_cmd == 'h') || (this->sub_cmd == 'H') || (this->sub_cmd == 'l') || (this->sub_cmd == 'L')) {
             if ((this->num % 2) || (this->num == max_num - 1)) {
                 this->num--;
             } else if (this->num < max_num - 1) {
@@ -478,5 +465,23 @@ bool InputKeyRequestor::process_down_cursor()
 
     auto tmp_num = this->num % 2 ? this->max_num - 1 : this->max_num + 1;
     this->num = (this->num + 2) % tmp_num;
+    return true;
+}
+
+bool InputKeyRequestor::process_up_cursor()
+{
+    if ((this->sub_cmd != '8') && (this->sub_cmd != 'k') && (this->sub_cmd != 'K')) {
+        return false;
+    }
+
+    if (!this->is_max_num_odd) {
+        this->num = (this->num + this->max_num - 2) % this->max_num;
+        return true;
+    }
+
+    auto is_num_odd = (this->num % 2) != 0;
+    auto tmp_num1 = is_num_odd ? (this->num + max_num - 3) : (this->num + this->max_num - 1);
+    auto tmp_num2 = is_num_odd ? (this->max_num - 1) : (this->max_num + 1);
+    this->num = tmp_num1 % tmp_num2;
     return true;
 }

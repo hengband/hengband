@@ -57,4 +57,5 @@ private:
     bool check_continuous_command();
     bool check_escape_key(const int old_num);
     bool process_down_cursor();
+    bool process_up_cursor();
 };
