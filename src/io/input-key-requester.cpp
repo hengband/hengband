@@ -238,124 +238,155 @@ void InputKeyRequestor::request_command()
 
 char InputKeyRequestor::inkey_from_menu()
 {
-    char cmd;
-    int basey, basex;
-    int num = 0, max_num, old_num = 0;
-    int menu = 0;
-    bool kisuu;
-
-    if (player_ptr->y - panel_row_min > 10)
-        basey = 2;
-    else
-        basey = 13;
-    basex = 15;
+    auto basey = player_ptr->y - panel_row_min > 10 ? 2 : 13;
+    auto basex = 15;
 
     prt("", 0, 0);
     screen_save();
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
+    char command;
+    auto num = 0;
+    auto old_num = 0;
+    auto menu_num = 0;
     while (true) {
-        int i;
         char sub_cmd;
         concptr menu_name;
-        if (!menu)
+        if (!menu_num) {
             old_num = num;
-        put_str("+----------------------------------------------------+", basey, basex);
-        put_str("|                                                    |", basey + 1, basex);
-        put_str("|                                                    |", basey + 2, basex);
-        put_str("|                                                    |", basey + 3, basex);
-        put_str("|                                                    |", basey + 4, basex);
-        put_str("|                                                    |", basey + 5, basex);
-        put_str("+----------------------------------------------------+", basey + 6, basex);
+        }
 
-        for (i = 0; i < 10; i++) {
-            int hoge;
-            if (!menu_info[menu][i].cmd)
+        auto line = 0;
+        put_str("+----------------------------------------------------+", basey + line++, basex);
+        put_str("|                                                    |", basey + line++, basex);
+        put_str("|                                                    |", basey + line++, basex);
+        put_str("|                                                    |", basey + line++, basex);
+        put_str("|                                                    |", basey + line++, basex);
+        put_str("|                                                    |", basey + line++, basex);
+        put_str("+----------------------------------------------------+", basey + line++, basex);
+
+        int cmmand_per_menu_num;
+        for (cmmand_per_menu_num = 0; cmmand_per_menu_num < 10; cmmand_per_menu_num++) {
+            if (!menu_info[menu_num][cmmand_per_menu_num].cmd) {
                 break;
-            menu_name = menu_info[menu][i].name;
-            for (hoge = 0;; hoge++) {
-                if (!special_menu_info[hoge].name[0])
+            }
+
+            menu_name = menu_info[menu_num][cmmand_per_menu_num].name;
+            for (auto special_menu_num = 0;; special_menu_num++) {
+                auto special_menu = special_menu_info[special_menu_num];
+                if (!special_menu.name[0]) {
                     break;
-                if ((menu != special_menu_info[hoge].window) || (i != special_menu_info[hoge].number))
+                }
+
+                if ((menu_num != special_menu.window) || (cmmand_per_menu_num != special_menu.number)) {
                     continue;
-                switch (special_menu_info[hoge].jouken) {
+                }
+
+                switch (special_menu.jouken) {
                 case MENU_CLASS:
-                    if (PlayerClass(player_ptr).equals(special_menu_info[hoge].jouken_naiyou))
-                        menu_name = special_menu_info[hoge].name;
-                    break;
-                case MENU_WILD:
-                    if (!floor_ptr->dun_level && !floor_ptr->inside_arena && !inside_quest(floor_ptr->quest_number)) {
-                        auto can_do_in_wilderness = enum2i(special_menu_info[hoge].jouken_naiyou) > 0;
-                        if (player_ptr->wild_mode == can_do_in_wilderness) {
-                            menu_name = special_menu_info[hoge].name;
-                        }
+                    if (PlayerClass(player_ptr).equals(special_menu.jouken_naiyou)) {
+                        menu_name = special_menu.name;
                     }
+
                     break;
+                case MENU_WILD: {
+                    if ((floor_ptr->dun_level > 0) || floor_ptr->inside_arena || inside_quest(floor_ptr->quest_number)) {
+                        break;
+                    }
+
+                    auto can_do_in_wilderness = enum2i(special_menu.jouken_naiyou) > 0;
+                    if (player_ptr->wild_mode == can_do_in_wilderness) {
+                        menu_name = special_menu.name;
+                    }
+
+                    break;
+                }
                 default:
                     break;
                 }
             }
 
-            put_str(menu_name, basey + 1 + i / 2, basex + 4 + (i % 2) * 24);
+            put_str(menu_name, basey + 1 + cmmand_per_menu_num / 2, basex + 4 + (cmmand_per_menu_num % 2) * 24);
         }
 
-        max_num = i;
-        kisuu = (max_num % 2) == 1;
+        auto max_num = cmmand_per_menu_num;
+        auto is_max_num_odd = (max_num % 2) == 1;
         put_str(_("》", "> "), basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         sub_cmd = inkey();
         if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n')) {
-            if (menu_info[menu][num].fin) {
-                cmd = menu_info[menu][num].cmd;
+            if (menu_info[menu_num][num].fin) {
+                command = menu_info[menu_num][num].cmd;
                 use_menu = true;
                 break;
-            } else {
-                menu = menu_info[menu][num].cmd;
-                num = 0;
-                basey += 2;
-                basex += 8;
             }
-        } else if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0')) {
-            if (!menu) {
-                cmd = ESCAPE;
+
+            menu_num = menu_info[menu_num][num].cmd;
+            num = 0;
+            basey += 2;
+            basex += 8;
+            continue;
+        }
+
+        if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0')) {
+            if (!menu_num) {
+                command = ESCAPE;
                 break;
-            } else {
-                menu = 0;
-                num = old_num;
-                basey -= 2;
-                basex -= 8;
-                screen_load();
-                screen_save();
             }
-        } else if ((sub_cmd == '2') || (sub_cmd == 'j') || (sub_cmd == 'J')) {
-            if (kisuu) {
-                if (num % 2)
+
+            menu_num = 0;
+            num = old_num;
+            basey -= 2;
+            basex -= 8;
+            screen_load();
+            screen_save();
+            continue;
+        }
+
+        if ((sub_cmd == '2') || (sub_cmd == 'j') || (sub_cmd == 'J')) {
+            if (is_max_num_odd) {
+                if (num % 2) {
                     num = (num + 2) % (max_num - 1);
-                else
+                } else {
                     num = (num + 2) % (max_num + 1);
-            } else
+                }
+            } else {
                 num = (num + 2) % max_num;
-        } else if ((sub_cmd == '8') || (sub_cmd == 'k') || (sub_cmd == 'K')) {
-            if (kisuu) {
-                if (num % 2)
+            }
+
+            continue;
+        }
+
+        if ((sub_cmd == '8') || (sub_cmd == 'k') || (sub_cmd == 'K')) {
+            if (is_max_num_odd) {
+                if (num % 2) {
                     num = (num + max_num - 3) % (max_num - 1);
-                else
+                } else {
                     num = (num + max_num - 1) % (max_num + 1);
-            } else
+                }
+            } else {
                 num = (num + max_num - 2) % max_num;
-        } else if ((sub_cmd == '4') || (sub_cmd == '6') || (sub_cmd == 'h') || (sub_cmd == 'H') || (sub_cmd == 'l') || (sub_cmd == 'L')) {
+            }
+
+            continue;
+        }
+
+        if ((sub_cmd == '4') || (sub_cmd == '6') || (sub_cmd == 'h') || (sub_cmd == 'H') || (sub_cmd == 'l') || (sub_cmd == 'L')) {
             if ((num % 2) || (num == max_num - 1)) {
                 num--;
             } else if (num < max_num - 1) {
                 num++;
             }
+
+            continue;
         }
     }
 
     screen_load();
-    if (!inkey_next)
+    if (!inkey_next) {
         inkey_next = "";
+    }
 
-    return cmd;
+    return command;
 }
