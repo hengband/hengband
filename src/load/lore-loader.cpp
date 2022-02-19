@@ -30,22 +30,68 @@ static void migrate_old_aura_flags(monster_race *r_ptr)
     }
 }
 
+static void migrate_old_resistance_flags(monster_race *r_ptr, BIT_FLAGS old_flags)
+{
+    struct flag_list_ver13 {
+        SavedataLoreOlderThan14FlagType old_flag;
+        MonsterResistanceType flag;
+    };
+    const std::vector<flag_list_ver13> flag_list = {
+        { SavedataLoreOlderThan14FlagType::RFR_IM_ACID, MonsterResistanceType::IMMUNE_ACID },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_COLD, MonsterResistanceType::IMMUNE_COLD },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_POIS, MonsterResistanceType::IMMUNE_POISON },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_LITE, MonsterResistanceType::RESIST_LITE },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_DARK, MonsterResistanceType::RESIST_DARK },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_NETH, MonsterResistanceType::RESIST_NETHER },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_WATE, MonsterResistanceType::RESIST_WATER },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_PLAS, MonsterResistanceType::RESIST_PLASMA },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_SHAR, MonsterResistanceType::RESIST_SHARDS },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_SOUN, MonsterResistanceType::RESIST_SOUND },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_CHAO, MonsterResistanceType::RESIST_CHAOS },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_NEXU, MonsterResistanceType::RESIST_NEXUS },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_DISE, MonsterResistanceType::RESIST_DISENCHANT },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_WALL, MonsterResistanceType::RESIST_FORCE },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_INER, MonsterResistanceType::RESIST_INERTIA },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_TIME, MonsterResistanceType::RESIST_TIME },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_GRAV, MonsterResistanceType::RESIST_GRAVITY },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_ALL, MonsterResistanceType::RESIST_ALL },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_TELE, MonsterResistanceType::RESIST_TELEPORT }
+    };
+
+    if (old_flags == 0)
+        return;
+
+    for (const auto &f : flag_list)
+        if (any_bits(old_flags, f.old_flag))
+            r_ptr->r_resistance_flags.set(f.flag);
+}
+
 static void rd_r_ability_flags(monster_race *r_ptr, const MONRACE_IDX r_idx)
 {
     if (loading_savefile_version_is_older_than(3)) {
+        BIT_FLAGS r_flagsr = 0;
         uint32_t f4 = rd_u32b();
         uint32_t f5 = rd_u32b();
         uint32_t f6 = rd_u32b();
         if (h_older_than(1, 5, 0, 3))
             set_old_lore(r_ptr, f4, r_idx);
         else
-            r_ptr->r_flagsr = rd_u32b();
+            r_flagsr = rd_u32b();
 
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
+
+        migrate_old_resistance_flags(r_ptr, r_flagsr);
+    } else if (loading_savefile_version_is_older_than(14)) {
+        BIT_FLAGS r_flagsr = rd_u32b();
+        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
+
+        migrate_old_resistance_flags(r_ptr, r_flagsr);
     } else {
-        r_ptr->r_flagsr = rd_u32b();
+        rd_FlagGroup(r_ptr->r_resistance_flags, rd_byte);
         rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
     }
 }
@@ -210,7 +256,7 @@ static void rd_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
     r_ptr->r_flags1 &= r_ptr->flags1;
     r_ptr->r_flags2 &= r_ptr->flags2;
     r_ptr->r_flags3 &= r_ptr->flags3;
-    r_ptr->r_flagsr &= r_ptr->flagsr;
+    r_ptr->r_resistance_flags &= r_ptr->r_resistance_flags;
     r_ptr->r_ability_flags &= r_ptr->ability_flags;
     r_ptr->r_aura_flags &= r_ptr->aura_flags;
     r_ptr->r_behavior_flags &= r_ptr->r_behavior_flags;
