@@ -140,12 +140,12 @@ char InputKeyRequestor::inkey_from_menu()
 
         this->make_commands_frame();
         auto command_per_menu_num = this->get_command_per_menu_num();
-        auto max_num = command_per_menu_num;
-        auto is_max_num_odd = (max_num % 2) == 1;
+        this->max_num = command_per_menu_num;
+        this->is_max_num_odd = (max_num % 2) == 1;
         put_str(_("》", "> "), this->base_y + 1 + this->num / 2, this->base_x + 2 + (this->num % 2) * 24);
 
         move_cursor_relative(this->player_ptr->y, this->player_ptr->x);
-        auto sub_cmd = inkey();
+        this->sub_cmd = inkey();
         if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n')) {
             if (this->check_continuous_command()) {
                 break;
@@ -162,17 +162,7 @@ char InputKeyRequestor::inkey_from_menu()
             continue;
         }
 
-        if ((sub_cmd == '2') || (sub_cmd == 'j') || (sub_cmd == 'J')) {
-            if (is_max_num_odd) {
-                if (this->num % 2) {
-                    this->num = (this->num + 2) % (max_num - 1);
-                } else {
-                    this->num = (this->num + 2) % (max_num + 1);
-                }
-            } else {
-                this->num = (this->num + 2) % max_num;
-            }
-
+        if (this->process_down_cursor()) {
             continue;
         }
 
@@ -473,4 +463,20 @@ bool InputKeyRequestor::check_escape_key(const int old_num)
     screen_load();
     screen_save();
     return false;
+}
+
+bool InputKeyRequestor::process_down_cursor()
+{
+    if ((this->sub_cmd != '2') && (this->sub_cmd != 'j') && (this->sub_cmd != 'J')) {
+        return false;
+    }
+
+    if (!this->is_max_num_odd) {
+        this->num = (this->num + 2) % this->max_num;
+        return true;
+    }
+
+    auto tmp_num = this->num % 2 ? this->max_num - 1 : this->max_num + 1;
+    this->num = (this->num + 2) % tmp_num;
+    return true;
 }

@@ -35,6 +35,9 @@ private:
     int menu_num = 0;
     int num = 0;
     char command = 0;
+    int max_num = 0;
+    bool is_max_num_odd = false;
+    char sub_cmd = 0;
     
     void input_command();
     short get_command();
@@ -53,4 +56,5 @@ private:
     int get_command_per_menu_num();
     bool check_continuous_command();
     bool check_escape_key(const int old_num);
+    bool process_down_cursor();
 };
