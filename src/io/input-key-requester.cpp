@@ -68,22 +68,7 @@ void InputKeyRequestor::request_command()
         }
     }
 
-    if (this->shopping) {
-        switch (command_cmd) {
-        case 'p':
-            command_cmd = 'g';
-            break;
-
-        case 'm':
-            command_cmd = 'g';
-            break;
-
-        case 's':
-            command_cmd = 'd';
-            break;
-        }
-    }
-
+    this->change_shopping_command();
 #ifdef JP
     for (auto i = 0; i < 256; i++) {
         if (auto s = keymap_act[this->mode][i]; s != nullptr) {
@@ -416,5 +401,24 @@ void InputKeyRequestor::process_control_command(short *cmd)
 
     if (get_com(_("CTRL: ", "Control: "), (char *)cmd, false)) {
         *cmd = KTRL(*cmd);
+    }
+}
+
+void InputKeyRequestor::change_shopping_command()
+{
+    if (!this->shopping) {
+        return;
+    }
+
+    switch (command_cmd) {
+    case 'p':
+        command_cmd = 'g';
+        return;
+    case 'm':
+        command_cmd = 'g';
+        return;
+    case 's':
+        command_cmd = 'd';
+        return;
     }
 }

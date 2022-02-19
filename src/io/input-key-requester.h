@@ -35,4 +35,5 @@ private:
     char input_repeat_num();
     void process_command_command(short *cmd);
     void process_control_command(short *cmd);
+    void change_shopping_command();
 };
