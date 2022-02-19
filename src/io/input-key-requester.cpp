@@ -42,7 +42,7 @@ int16_t command_wrk; /* アイテムの使用許可状況 (ex. 装備品のみ�
 TERM_LEN command_gap = 999; /* アイテムの表示に使う (詳細未調査) */
 int16_t command_new; /* Command chaining from inven/equip view */
 
-InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, int shopping)
+InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, bool shopping)
     : player_ptr(player_ptr)
     , shopping(shopping)
     , mode(rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)
@@ -68,7 +68,7 @@ void InputKeyRequestor::request_command()
         }
     }
 
-    if (this->shopping == 1) {
+    if (this->shopping) {
         switch (command_cmd) {
         case 'p':
             command_cmd = 'g';

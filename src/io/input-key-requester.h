@@ -19,12 +19,12 @@ extern int16_t command_new;
 class PlayerType;
 class InputKeyRequestor {
 public:
-    InputKeyRequestor(PlayerType *player_ptr, int shopping);
+    InputKeyRequestor(PlayerType *player_ptr, bool shopping);
     void request_command();
 
 private:
     PlayerType *player_ptr;
-    int shopping;
+    bool shopping;
     char request_command_buffer[256]{}; /*!< Special buffer to hold the action of the current keymap */
     keymap_mode mode;
 
