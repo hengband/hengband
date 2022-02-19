@@ -36,6 +36,7 @@ struct old_race_flags {
     BIT_FLAGS old_r_flags1;
     BIT_FLAGS old_r_flags2;
     BIT_FLAGS old_r_flags3;
+    BIT_FLAGS old_r_flagsr;
     EnumClassFlagGroup<MonsterAbilityType> old_r_ability_flags;
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags;
     EnumClassFlagGroup<MonsterKindType> old_r_kind_flags;

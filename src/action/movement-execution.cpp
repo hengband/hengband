@@ -25,6 +25,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -219,7 +220,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
-        } else if (f_ptr->flags.has(FloorFeatureType::LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
+        } else if (f_ptr->flags.has(FloorFeatureType::LAVA) && riding_r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
             msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;

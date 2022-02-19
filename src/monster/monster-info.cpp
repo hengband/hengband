@@ -21,6 +21,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
@@ -92,27 +93,27 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
         return false;
 
     if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::COLD_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::ELEC_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::ACID_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::POISON_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK))
             return false;
     }
 

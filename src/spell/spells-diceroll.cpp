@@ -30,9 +30,9 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, monster_type *m_
         return true;
 
     /* Memorize a flag */
-    if (r_ptr->flagsr & RFR_RES_ALL) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flagsr |= (RFR_RES_ALL);
+            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         return true;
     }
 
@@ -65,9 +65,9 @@ bool common_saving_throw_control(PlayerType *player_ptr, int pow, monster_type *
         return true;
 
     /* Memorize a flag */
-    if (r_ptr->flagsr & RFR_RES_ALL) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flagsr |= (RFR_RES_ALL);
+            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         return true;
     }
 

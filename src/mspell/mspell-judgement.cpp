@@ -309,19 +309,19 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->tsuyoshi)
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
+    if ((player_ptr->special_attack & ATTACK_ACID) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
+    if ((player_ptr->special_attack & ATTACK_FIRE) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
+    if ((player_ptr->special_attack & ATTACK_ELEC) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
+    if ((player_ptr->special_attack & ATTACK_COLD) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
+    if ((player_ptr->special_attack & ATTACK_POIS) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK))
         return true;
 
     if ((player_ptr->pspeed < 145) && is_fast(player_ptr))

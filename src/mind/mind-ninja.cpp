@@ -4,6 +4,7 @@
 #include "combat/combat-options-type.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
@@ -42,7 +43,6 @@
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/body-improvement.h"
@@ -236,7 +236,7 @@ void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
         /* Can't backstab creatures that we can't see, right? */
         pa_ptr->backstab = true;
     } else if ((ninja_data && ninja_data->s_stealth) && (randint0(tmp) > (r_ptr->level + 20)) &&
-               pa_ptr->m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
+               pa_ptr->m_ptr->ml && !r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         pa_ptr->surprise_attack = true;
     } else if (monster_fear_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         pa_ptr->stab_fleeing = true;
@@ -474,7 +474,8 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
     case PURGATORY_FLAME: {
         int num = damroll(3, 9);
         for (int k = 0; k < num; k++) {
-            AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER : AttributeType::PLASMA;
+            AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER
+                                                                              : AttributeType::PLASMA;
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);

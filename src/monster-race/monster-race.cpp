@@ -1,6 +1,7 @@
 ﻿#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-resistance-mask.h"
 #include "system/monster-race-definition.h"
 
 /* The monster race arrays */
@@ -9,7 +10,7 @@ std::vector<monster_race> r_info;
 int calc_monrace_power(monster_race *r_ptr)
 {
     int ret = 0;
-    int num_taisei = count_bits(r_ptr->flagsr & (RFR_IM_ACID | RFR_IM_ELEC | RFR_IM_FIRE | RFR_IM_COLD | RFR_IM_POIS));
+    int num_taisei = EnumClassFlagGroup<MonsterResistanceType>(r_ptr->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
 
     if (r_ptr->flags1 & RF1_FORCE_MAXHP)
         ret = r_ptr->hdice * r_ptr->hside * 2;
@@ -32,7 +33,7 @@ int calc_monrace_power(monster_race *r_ptr)
         ret = ret * 9 / 10;
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50))
         ret = ret * 9 / 10;
-    if (r_ptr->flagsr & RFR_RES_ALL)
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))
         ret *= 100000;
     if (r_ptr->arena_ratio)
         ret = ret * r_ptr->arena_ratio / 100;

@@ -149,5 +149,5 @@ void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->ability_flags = lore_ptr->r_ptr->ability_flags;
     lore_ptr->aura_flags = lore_ptr->r_ptr->aura_flags;
     lore_ptr->behavior_flags = lore_ptr->r_ptr->behavior_flags;
-    lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
+    lore_ptr->resistance_flags = lore_ptr->r_ptr->resistance_flags;
 }

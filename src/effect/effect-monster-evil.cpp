@@ -12,19 +12,19 @@
 
 static bool effect_monster_away_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->r_ptr->flagsr & RFR_RES_TELE) == 0)
+    if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT))
         return false;
 
-    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (em_ptr->r_ptr->flagsr & RFR_RES_ALL)) {
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
-            em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+            em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         return true;
     }
 
     if (em_ptr->r_ptr->level > randint1(100)) {
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
-            em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+            em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         em_ptr->note = _("には耐性がある！", " resists!");
         return true;
     }

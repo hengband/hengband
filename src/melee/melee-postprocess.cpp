@@ -110,7 +110,7 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
 static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 {
     auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
-    if ((r_ptr->flagsr & RFR_RES_ALL) == 0)
+    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL))
         return false;
 
     if (mam_pp_ptr->dam > 0) {

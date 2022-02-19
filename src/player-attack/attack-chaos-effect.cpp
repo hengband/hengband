@@ -19,6 +19,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -170,12 +171,12 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
 static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *r_ptr = pa_ptr->r_ptr;
-    if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
+    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT))
         return false;
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
-            r_ptr->r_flagsr |= RFR_RES_TELE;
+            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
 
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), pa_ptr->m_name);
         return true;
@@ -183,7 +184,7 @@ static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type 
 
     if (r_ptr->level > randint1(100)) {
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
-            r_ptr->r_flagsr |= RFR_RES_TELE;
+            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
 
         msg_format(_("%^sは抵抗力を持っている！", "%^s resists!"), pa_ptr->m_name);
         return true;
@@ -219,7 +220,7 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
 static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
     auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK))
         return;
 
     if (polymorph_monster(player_ptr, y, x)) {

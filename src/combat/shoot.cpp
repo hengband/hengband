@@ -36,6 +36,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -328,9 +329,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_ACID)) {
             /* Notice immunity */
-            if (any_bits(race_ptr->flagsr, RFR_EFF_IM_ACID_MASK)) {
+            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_ACID_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_ACID_MASK));
+                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_ACID_MASK);
                 }
             } else {
                 if (mult < 17)
@@ -340,9 +341,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_ELEC)) {
             /* Notice immunity */
-            if (any_bits(race_ptr->flagsr, RFR_EFF_IM_ELEC_MASK)) {
+            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_ELEC_MASK));
+                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_ELEC_MASK);
                 }
             } else {
                 if (mult < 17)
@@ -352,18 +353,18 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_FIRE)) {
             /* Notice immunity */
-            if (any_bits(race_ptr->flagsr, RFR_EFF_IM_FIRE_MASK)) {
+            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_FIRE_MASK));
+                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_FIRE_MASK);
                 }
             }
             /* Otherwise, take the damage */
             else {
-                if (any_bits(race_ptr->flags3, RF3_HURT_FIRE)) {
+                if (race_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
                     if (mult < 25)
                         mult = 25;
                     if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                        set_bits(race_ptr->r_flags3, RF3_HURT_FIRE);
+                        race_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
                     }
                 } else if (mult < 17)
                     mult = 17;
@@ -372,18 +373,18 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_COLD)) {
             /* Notice immunity */
-            if (any_bits(race_ptr->flagsr, RFR_EFF_IM_COLD_MASK)) {
+            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    set_bits(race_ptr->r_flagsr, (race_ptr->flagsr & RFR_EFF_IM_COLD_MASK));
+                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_COLD_MASK);
                 }
             }
             /* Otherwise, take the damage */
             else {
-                if (any_bits(race_ptr->flags3, RF3_HURT_COLD)) {
+                if (race_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
                     if (mult < 25)
                         mult = 25;
                     if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                        set_bits(race_ptr->r_flags3, RF3_HURT_COLD);
+                        race_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
                     }
                 } else if (mult < 17)
                     mult = 17;
@@ -392,9 +393,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if (flags.has(TR_BRAND_POIS)) {
             /* Notice immunity */
-            if (any_bits(race_ptr->flagsr, RFR_EFF_IM_POIS_MASK)) {
+            if (race_ptr->resistance_flags.has_any_of(RFR_EFF_IM_POISON_MASK)) {
                 if (is_original_ap_and_seen(player_ptr, monster_ptr)) {
-                    set_bits(race_ptr->r_flagsr, race_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
+                    race_ptr->r_resistance_flags.set(race_ptr->resistance_flags & RFR_EFF_IM_POISON_MASK);
                 }
             }
             /* Otherwise, take the damage */

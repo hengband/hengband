@@ -154,22 +154,22 @@ void display_monster_constitutions(lore_type *lore_ptr)
 
 void display_monster_concrete_weakness(lore_type *lore_ptr)
 {
-    if (lore_ptr->flags3 & RF3_HURT_ROCK) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::HURT_ROCK)) {
         lore_ptr->vp[lore_ptr->vn] = _("岩を除去するもの", "rock remover");
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
     }
 
-    if (lore_ptr->flags3 & RF3_HURT_LITE) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
         lore_ptr->vp[lore_ptr->vn] = _("明るい光", "bright light");
         lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
     }
 
-    if (lore_ptr->flags3 & RF3_HURT_FIRE) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
         lore_ptr->vp[lore_ptr->vn] = _("炎", "fire");
         lore_ptr->color[lore_ptr->vn++] = TERM_RED;
     }
 
-    if (lore_ptr->flags3 & RF3_HURT_COLD) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
         lore_ptr->vp[lore_ptr->vn] = _("冷気", "cold");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
@@ -201,107 +201,107 @@ void display_monster_weakness(lore_type *lore_ptr)
 
 void display_monster_concrete_resistances(lore_type *lore_ptr)
 {
-    if (lore_ptr->flagsr & RFR_IM_ACID) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID)) {
         lore_ptr->vp[lore_ptr->vn] = _("酸", "acid");
         lore_ptr->color[lore_ptr->vn++] = TERM_GREEN;
     }
 
-    if (lore_ptr->flagsr & RFR_IM_ELEC) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
         lore_ptr->vp[lore_ptr->vn] = _("稲妻", "lightning");
         lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
     }
 
-    if (lore_ptr->flagsr & RFR_IM_FIRE) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
         lore_ptr->vp[lore_ptr->vn] = _("炎", "fire");
         lore_ptr->color[lore_ptr->vn++] = TERM_RED;
     }
 
-    if (lore_ptr->flagsr & RFR_IM_COLD) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
         lore_ptr->vp[lore_ptr->vn] = _("冷気", "cold");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
 
-    if (lore_ptr->flagsr & RFR_IM_POIS) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON)) {
         lore_ptr->vp[lore_ptr->vn] = _("毒", "poison");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_GREEN;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_LITE) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_LITE)) {
         lore_ptr->vp[lore_ptr->vn] = _("閃光", "light");
         lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_DARK) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DARK)) {
         lore_ptr->vp[lore_ptr->vn] = _("暗黒", "dark");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_NETH) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_NETHER)) {
         lore_ptr->vp[lore_ptr->vn] = _("地獄", "nether");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_WATE) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_WATER)) {
         lore_ptr->vp[lore_ptr->vn] = _("水", "water");
         lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_PLAS) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_PLASMA)) {
         lore_ptr->vp[lore_ptr->vn] = _("プラズマ", "plasma");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_RED;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_SHAR) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SHARDS)) {
         lore_ptr->vp[lore_ptr->vn] = _("破片", "shards");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_UMBER;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_SOUN) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SOUND)) {
         lore_ptr->vp[lore_ptr->vn] = _("轟音", "sound");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_CHAO) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_CHAOS)) {
         lore_ptr->vp[lore_ptr->vn] = _("カオス", "chaos");
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_NEXU) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_NEXUS)) {
         lore_ptr->vp[lore_ptr->vn] = _("因果混乱", "nexus");
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_DISE) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DISENCHANT)) {
         lore_ptr->vp[lore_ptr->vn] = _("劣化", "disenchantment");
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_WALL) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_FORCE)) {
         lore_ptr->vp[lore_ptr->vn] = _("フォース", "force");
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_INER) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_INERTIA)) {
         lore_ptr->vp[lore_ptr->vn] = _("遅鈍", "inertia");
         lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_TIME) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TIME)) {
         lore_ptr->vp[lore_ptr->vn] = _("時間逆転", "time");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_BLUE;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_GRAV) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_GRAVITY)) {
         lore_ptr->vp[lore_ptr->vn] = _("重力", "gravity");
         lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
     }
 
-    if (lore_ptr->flagsr & RFR_RES_ALL) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         lore_ptr->vp[lore_ptr->vn] = _("あらゆる攻撃", "all");
         lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
     }
 
-    if ((lore_ptr->flagsr & RFR_RES_TELE) && lore_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT) && lore_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         lore_ptr->vp[lore_ptr->vn] = _("テレポート", "teleportation");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
     }
@@ -368,7 +368,7 @@ void display_monster_concrete_immunities(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
     }
 
-    if ((lore_ptr->flagsr & RFR_RES_TELE) && lore_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT) && lore_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         lore_ptr->vp[lore_ptr->vn] = _("テレポートされない", "teleported");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
     }

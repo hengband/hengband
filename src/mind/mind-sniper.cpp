@@ -421,23 +421,23 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
 
     switch (snipe_type) {
     case SP_LITE:
-        if (r_ptr->flags3 & (RF3_HURT_LITE)) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             MULTIPLY n = 20 + sniper_concent;
             if (seen)
-                r_ptr->r_flags3 |= (RF3_HURT_LITE);
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_FIRE:
-        if (r_ptr->flagsr & RFR_IM_FIRE) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
             if (seen)
-                r_ptr->r_flagsr |= RFR_IM_FIRE;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
         } else {
             MULTIPLY n;
-            if (r_ptr->flags3 & RF3_HURT_FIRE) {
+            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
                 n = 22 + (sniper_concent * 4);
-                r_ptr->r_flags3 |= RF3_HURT_FIRE;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
             } else
                 n = 15 + (sniper_concent * 3);
 
@@ -446,14 +446,14 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         }
         break;
     case SP_COLD:
-        if (r_ptr->flagsr & RFR_IM_COLD) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
             if (seen)
-                r_ptr->r_flagsr |= RFR_IM_COLD;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_COLD);
         } else {
             MULTIPLY n;
-            if (r_ptr->flags3 & RF3_HURT_COLD) {
+            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
                 n = 22 + (sniper_concent * 4);
-                r_ptr->r_flags3 |= RF3_HURT_COLD;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
             } else
                 n = 15 + (sniper_concent * 3);
 
@@ -462,9 +462,9 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         }
         break;
     case SP_ELEC:
-        if (r_ptr->flagsr & RFR_IM_ELEC) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
             if (seen)
-                r_ptr->r_flagsr |= RFR_IM_ELEC;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_ELEC);
         } else {
             MULTIPLY n = 18 + (sniper_concent * 4);
             if (mult < n)
@@ -472,10 +472,10 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         }
         break;
     case SP_KILL_WALL:
-        if (r_ptr->flags3 & RF3_HURT_ROCK) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_ROCK)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen)
-                r_ptr->r_flags3 |= RF3_HURT_ROCK;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
             if (mult < n)
                 mult = n;
         } else if (r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
@@ -500,10 +500,10 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
             MULTIPLY n = 12 + (sniper_concent * 3);
             if (seen)
                 r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
-            if (r_ptr->flags3 & (RF3_HURT_LITE)) {
+            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
                 n += (sniper_concent * 3);
                 if (seen)
-                    r_ptr->r_flags3 |= (RF3_HURT_LITE);
+                    r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
             }
             if (mult < n)
                 mult = n;

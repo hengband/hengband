@@ -86,10 +86,10 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
 
     (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
 
-    if (r_ptr->flagsr & RFR_RES_TELE) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
         msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flagsr |= RFR_RES_TELE;
+            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         return false;
     }
 
@@ -390,7 +390,7 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
                 auto *r_ptr = &r_info[m_ptr->r_idx];
 
                 bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
-                can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
+                can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
                 can_follow &= monster_csleep_remaining(m_ptr) == 0;
                 if (can_follow) {
                     teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
@@ -433,7 +433,7 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
             auto *r_ptr = &r_info[m_ptr->r_idx];
 
             bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
-            can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
+            can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
             can_follow &= monster_csleep_remaining(m_ptr) == 0;
             if (can_follow) {
                 teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
