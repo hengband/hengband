@@ -35,7 +35,7 @@ bool use_menu;
 
 int16_t command_cmd; /* Current "Angband Command" */
 COMMAND_ARG command_arg; /*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */
-COMMAND_NUM command_rep; /*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
+short command_rep; /*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
 DIRECTION command_dir; /*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
 int16_t command_see; /* アイテム使用時等にリストを表示させるかどうか (ゲームオプションの他、様々なタイミングでONになったりOFFになったりする模様……) */
 int16_t command_wrk; /* アイテムの使用許可状況 (ex. 装備品のみ、床上もOK等) */

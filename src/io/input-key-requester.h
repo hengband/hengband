@@ -9,7 +9,7 @@ extern bool use_menu;
 
 extern COMMAND_CODE command_cmd;
 extern COMMAND_ARG command_arg;
-extern int16_t command_rep;
+extern short command_rep;
 extern DIRECTION command_dir;
 extern int16_t command_see;
 extern TERM_LEN command_gap;
