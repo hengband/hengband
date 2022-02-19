@@ -42,11 +42,6 @@ int16_t command_wrk; /* アイテムの使用許可状況 (ex. 装備品のみ�
 TERM_LEN command_gap = 999; /* アイテムの表示に使う (詳細未調査) */
 int16_t command_new; /* Command chaining from inven/equip view */
 
-/*
- * Hack -- special buffer to hold the action of the current keymap
- */
-static char request_command_buffer[256];
-
 InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, int shopping)
     : player_ptr(player_ptr)
     , shopping(shopping)
@@ -54,23 +49,7 @@ InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, int shopping)
 }
 
 /*
- * Request a command from the user.
- *
- * Sets player_ptr->command_cmd, player_ptr->command_dir, player_ptr->command_rep,
- * player_ptr->command_arg.  May modify player_ptr->command_new.
- *
- * Note that "caret" ("^") is treated specially, and is used to
- * allow manual input of control characters.  This can be used
- * on many machines to request repeated tunneling (Ctrl-H) and
- * on the Macintosh to request "Control-Caret".
- *
- * Note that "backslash" is treated specially, and is used to bypass any
- * keymap entry for the following character.  This is useful for macros.
- *
- * Note that this command is used both in the dungeon and in
- * stores, and must be careful to work in both situations.
- *
- * Note that "player_ptr->command_new" may not work any more.
+ * @brief プレイヤーからのコマンド入力を受け付ける
  */
 void InputKeyRequestor::request_command()
 {
@@ -85,8 +64,9 @@ void InputKeyRequestor::request_command()
 
     while (true) {
         if (!macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
-            save_player(player_ptr, SAVE_TYPE_DEBUG);
+            save_player(this->player_ptr, SAVE_TYPE_DEBUG);
         }
+
         if (fresh_once && macro_running()) {
             stop_term_fresh();
         }
@@ -102,13 +82,14 @@ void InputKeyRequestor::request_command()
             inkey_flag = true;
             term_fresh();
             cmd = inkey(true);
-            if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)])
+            if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)]) {
                 cmd = this->inkey_from_menu();
+            }
         }
 
         prt("", 0, 0);
         if (cmd == '0') {
-            COMMAND_ARG old_arg = command_arg;
+            auto old_arg = command_arg;
             command_arg = 0;
             prt(_("回数: ", "Count: "), 0, 0);
             while (true) {
@@ -163,8 +144,8 @@ void InputKeyRequestor::request_command()
 
         auto act = keymap_act[mode][(byte)(cmd)];
         if (act && !inkey_next) {
-            (void)strnfmt(request_command_buffer, 256, "%s", act);
-            inkey_next = request_command_buffer;
+            (void)strnfmt(this->request_command_buffer, sizeof(this->request_command_buffer), "%s", act);
+            inkey_next = this->request_command_buffer;
             continue;
         }
 
@@ -182,7 +163,7 @@ void InputKeyRequestor::request_command()
         }
     }
 
-    if (shopping == 1) {
+    if (this->shopping == 1) {
         switch (command_cmd) {
         case 'p':
             command_cmd = 'g';
@@ -214,7 +195,7 @@ void InputKeyRequestor::request_command()
 #endif
 
     for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &this->player_ptr->inventory_list[i];
         if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
             continue;
         }
@@ -238,13 +219,13 @@ void InputKeyRequestor::request_command()
 
 char InputKeyRequestor::inkey_from_menu()
 {
-    auto basey = player_ptr->y - panel_row_min > 10 ? 2 : 13;
+    auto basey = this->player_ptr->y - panel_row_min > 10 ? 2 : 13;
     auto basex = 15;
 
     prt("", 0, 0);
     screen_save();
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     char command;
     auto num = 0;
     auto old_num = 0;
@@ -284,7 +265,7 @@ char InputKeyRequestor::inkey_from_menu()
 
                 switch (special_menu.jouken) {
                 case MENU_CLASS:
-                    if (PlayerClass(player_ptr).equals(special_menu.jouken_naiyou)) {
+                    if (PlayerClass(this->player_ptr).equals(special_menu.jouken_naiyou)) {
                         menu_name = special_menu.name;
                     }
 
@@ -295,7 +276,7 @@ char InputKeyRequestor::inkey_from_menu()
                     }
 
                     auto can_do_in_wilderness = enum2i(special_menu.jouken_naiyou) > 0;
-                    if (player_ptr->wild_mode == can_do_in_wilderness) {
+                    if (this->player_ptr->wild_mode == can_do_in_wilderness) {
                         menu_name = special_menu.name;
                     }
 
@@ -313,7 +294,7 @@ char InputKeyRequestor::inkey_from_menu()
         auto is_max_num_odd = (max_num % 2) == 1;
         put_str(_("》", "> "), basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 
-        move_cursor_relative(player_ptr->y, player_ptr->x);
+        move_cursor_relative(this->player_ptr->y, this->player_ptr->x);
         sub_cmd = inkey();
         if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n')) {
             if (menu_info[menu_num][num].fin) {

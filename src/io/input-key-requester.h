@@ -25,6 +25,7 @@ public:
 private:
     PlayerType *player_ptr;
     int shopping;
+    char request_command_buffer[256]{}; /*!< Special buffer to hold the action of the current keymap */
 
     char inkey_from_menu();
 };
