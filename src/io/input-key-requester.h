@@ -38,5 +38,6 @@ private:
     void process_control_command(short *cmd);
     void change_shopping_command();
     int get_caret_command();
+    void sweep_confirmation_equipments();
     void confirm_command(ObjectType &o_ref, const int caret_command);
 };
