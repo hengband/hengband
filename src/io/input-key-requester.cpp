@@ -78,12 +78,7 @@ void InputKeyRequestor::request_command()
         }
 
         this->process_command_command(&cmd);
-        if (cmd == '^') {
-            if (get_com(_("CTRL: ", "Control: "), (char *)&cmd, false)) {
-                cmd = KTRL(cmd);
-            }
-        }
-
+        this->process_control_command(&cmd);
         auto act = keymap_act[mode][(byte)(cmd)];
         if (act && !inkey_next) {
             (void)strnfmt(this->request_command_buffer, sizeof(this->request_command_buffer), "%s", act);
@@ -407,5 +402,16 @@ void InputKeyRequestor::process_command_command(short *cmd)
     (void)get_com(_("コマンド: ", "Command: "), (char *)cmd, false);
     if (!inkey_next) {
         inkey_next = "";
+    }
+}
+
+void InputKeyRequestor::process_control_command(short *cmd)
+{
+    if (*cmd != '^') {
+        return;
+    }
+
+    if (get_com(_("CTRL: ", "Control: "), (char *)cmd, false)) {
+        *cmd = KTRL(*cmd);
     }
 }

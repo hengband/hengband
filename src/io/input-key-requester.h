@@ -32,4 +32,5 @@ private:
     bool process_repeat_num(short *cmd);
     char input_repeat_num();
     void process_command_command(short *cmd);
+    void process_control_command(short *cmd);
 };
