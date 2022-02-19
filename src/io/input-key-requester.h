@@ -29,4 +29,5 @@ private:
 
     short get_command(const keymap_mode mode);
     char inkey_from_menu();
+    char input_repeat_num();
 };

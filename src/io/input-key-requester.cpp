@@ -77,25 +77,7 @@ void InputKeyRequestor::request_command()
             auto old_arg = command_arg;
             command_arg = 0;
             prt(_("回数: ", "Count: "), 0, 0);
-            while (true) {
-                cmd = inkey();
-                if ((cmd == 0x7F) || (cmd == KTRL('H'))) {
-                    command_arg = command_arg / 10;
-                    prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
-                } else if (cmd >= '0' && cmd <= '9') {
-                    if (command_arg >= 1000) {
-                        bell();
-                        command_arg = 9999;
-                    } else {
-                        command_arg = command_arg * 10 + D2I(cmd);
-                    }
-
-                    prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
-                } else {
-                    break;
-                }
-            }
-
+            cmd = this->input_repeat_num();
             if (command_arg == 0) {
                 command_arg = 99;
                 prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
@@ -376,4 +358,30 @@ char InputKeyRequestor::inkey_from_menu()
     }
 
     return command;
+}
+
+char InputKeyRequestor::input_repeat_num()
+{
+    while (true) {
+        auto cmd = inkey();
+        if ((cmd == 0x7F) || (cmd == KTRL('H'))) {
+            command_arg = command_arg / 10;
+            prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+            continue;
+        }
+
+        if ((cmd >= '0') && (cmd <= '9')) {
+            if (command_arg >= 1000) {
+                bell();
+                command_arg = 9999;
+            } else {
+                command_arg = command_arg * 10 + D2I(cmd);
+            }
+
+            prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+            continue;
+        }
+
+        return cmd;
+    }
 }
