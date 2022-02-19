@@ -73,27 +73,8 @@ void InputKeyRequestor::request_command()
 
         auto cmd = this->get_command(mode);
         prt("", 0, 0);
-        if (cmd == '0') {
-            auto old_arg = command_arg;
-            command_arg = 0;
-            prt(_("回数: ", "Count: "), 0, 0);
-            cmd = this->input_repeat_num();
-            if (command_arg == 0) {
-                command_arg = 99;
-                prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
-            }
-
-            if (old_arg != 0) {
-                command_arg = old_arg;
-                prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
-            }
-
-            if ((cmd == ' ') || (cmd == '\n') || (cmd == '\r')) {
-                if (!get_com(_("コマンド: ", "Command: "), (char *)&cmd, false)) {
-                    command_arg = 0;
-                    continue;
-                }
-            }
+        if (this->process_repeat_num(&cmd)) {
+            continue;
         }
 
         if (cmd == '\\') {
@@ -384,4 +365,36 @@ char InputKeyRequestor::input_repeat_num()
 
         return cmd;
     }
+}
+
+bool InputKeyRequestor::process_repeat_num(short *cmd)
+{
+    if (*cmd != '0') {
+        return false;
+    }
+
+    auto old_arg = command_arg;
+    command_arg = 0;
+    prt(_("回数: ", "Count: "), 0, 0);
+    *cmd = this->input_repeat_num();
+    if (command_arg == 0) {
+        command_arg = 99;
+        prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+    }
+
+    if (old_arg != 0) {
+        command_arg = old_arg;
+        prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
+    }
+
+    if ((*cmd != ' ') && (*cmd != '\n') && (*cmd != '\r')) {
+        return false;
+    }
+
+    if (get_com(_("コマンド: ", "Command: "), (char *)cmd, false)) {
+        return false;
+    }
+
+    command_arg = 0;
+    return true;
 }
