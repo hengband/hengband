@@ -46,6 +46,7 @@ InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, bool shopping)
     : player_ptr(player_ptr)
     , shopping(shopping)
     , mode(rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)
+    , base_y(player_ptr->y - panel_row_min > 10 ? 2 : 13)
 {
 }
 
@@ -128,9 +129,6 @@ short InputKeyRequestor::get_command()
 
 char InputKeyRequestor::inkey_from_menu()
 {
-    auto basey = this->player_ptr->y - panel_row_min > 10 ? 2 : 13;
-    auto basex = 15;
-
     prt("", 0, 0);
     screen_save();
 
@@ -147,13 +145,13 @@ char InputKeyRequestor::inkey_from_menu()
         }
 
         auto line = 0;
-        put_str("+----------------------------------------------------+", basey + line++, basex);
-        put_str("|                                                    |", basey + line++, basex);
-        put_str("|                                                    |", basey + line++, basex);
-        put_str("|                                                    |", basey + line++, basex);
-        put_str("|                                                    |", basey + line++, basex);
-        put_str("|                                                    |", basey + line++, basex);
-        put_str("+----------------------------------------------------+", basey + line++, basex);
+        put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
+        put_str("|                                                    |", this->base_y + line++, this->base_x);
+        put_str("|                                                    |", this->base_y + line++, this->base_x);
+        put_str("|                                                    |", this->base_y + line++, this->base_x);
+        put_str("|                                                    |", this->base_y + line++, this->base_x);
+        put_str("|                                                    |", this->base_y + line++, this->base_x);
+        put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
 
         int cmmand_per_menu_num;
         for (cmmand_per_menu_num = 0; cmmand_per_menu_num < 10; cmmand_per_menu_num++) {
@@ -196,12 +194,12 @@ char InputKeyRequestor::inkey_from_menu()
                 }
             }
 
-            put_str(menu_name, basey + 1 + cmmand_per_menu_num / 2, basex + 4 + (cmmand_per_menu_num % 2) * 24);
+            put_str(menu_name, this->base_y + 1 + cmmand_per_menu_num / 2, this->base_x + 4 + (cmmand_per_menu_num % 2) * 24);
         }
 
         auto max_num = cmmand_per_menu_num;
         auto is_max_num_odd = (max_num % 2) == 1;
-        put_str(_("》", "> "), basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
+        put_str(_("》", "> "), this->base_y + 1 + num / 2, this->base_x + 2 + (num % 2) * 24);
 
         move_cursor_relative(this->player_ptr->y, this->player_ptr->x);
         sub_cmd = inkey();
@@ -214,8 +212,8 @@ char InputKeyRequestor::inkey_from_menu()
 
             menu_num = menu_info[menu_num][num].cmd;
             num = 0;
-            basey += 2;
-            basex += 8;
+            this->base_y += 2;
+            this->base_x += 8;
             continue;
         }
 
@@ -227,8 +225,8 @@ char InputKeyRequestor::inkey_from_menu()
 
             menu_num = 0;
             num = old_num;
-            basey -= 2;
-            basex -= 8;
+            this->base_y -= 2;
+            this->base_x -= 8;
             screen_load();
             screen_save();
             continue;
