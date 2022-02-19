@@ -54,9 +54,6 @@ InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, bool shopping)
  */
 void InputKeyRequestor::request_command()
 {
-#ifdef JP
-    int caretcmd = 0;
-#endif
     command_cmd = 0;
     command_arg = 0;
     command_dir = 0;
@@ -69,21 +66,7 @@ void InputKeyRequestor::request_command()
     }
 
     this->change_shopping_command();
-#ifdef JP
-    for (auto i = 0; i < 256; i++) {
-        if (auto s = keymap_act[this->mode][i]; s != nullptr) {
-            if (*s == command_cmd && *(s + 1) == 0) {
-                caretcmd = i;
-                break;
-            }
-        }
-    }
-
-    if (!caretcmd) {
-        caretcmd = command_cmd;
-    }
-#endif
-
+    auto caret_command = this->get_caret_command();
     for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
         auto *o_ptr = &this->player_ptr->inventory_list[i];
         if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
@@ -93,7 +76,7 @@ void InputKeyRequestor::request_command()
         auto s = quark_str(o_ptr->inscription);
         s = angband_strchr(s, '^');
         while (s) {
-            auto sure = _((s[1] == caretcmd) || (s[1] == '*'), (s[1] == command_cmd) || (s[1] == '*'));
+            auto sure = _((s[1] == caret_command) || (s[1] == '*'), (s[1] == command_cmd) || (s[1] == '*'));
             if (sure) {
                 if (!get_check(_("本当ですか? ", "Are you sure? "))) {
                     command_cmd = ' ';
@@ -421,4 +404,30 @@ void InputKeyRequestor::change_shopping_command()
         command_cmd = 'd';
         return;
     }
+}
+
+int InputKeyRequestor::get_caret_command()
+{
+#ifdef JP
+    auto caret_command = 0;
+    for (auto i = 0; i < 256; i++) {
+        auto s = keymap_act[this->mode][i];
+        if (s == nullptr) {
+            continue;
+        }
+
+        if ((*s == command_cmd) && (*(s + 1) == 0)) {
+            caret_command = i;
+            break;
+        }
+    }
+
+    if (caret_command == 0) {
+        caret_command = command_cmd;
+    }
+
+    return caret_command;
+#else
+    return 0;
+#endif
 }

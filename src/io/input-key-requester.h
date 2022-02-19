@@ -36,4 +36,5 @@ private:
     void process_command_command(short *cmd);
     void process_control_command(short *cmd);
     void change_shopping_command();
+    int get_caret_command();
 };
