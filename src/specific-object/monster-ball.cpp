@@ -25,7 +25,7 @@
 
 static void inscribe_nickname(ae_type *ae_ptr)
 {
-    if (!cap_nickname)
+    if (!g_cap_mon_ptr->nickname)
         return;
 
     concptr t;
@@ -48,7 +48,7 @@ static void inscribe_nickname(ae_type *ae_ptr)
 #else
     *s++ = '\'';
 #endif
-    t = quark_str(cap_nickname);
+    t = quark_str(g_cap_mon_ptr->nickname);
     while (*t) {
         *s = *t;
         s++;
@@ -75,10 +75,10 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
     if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0))
         return true;
 
-    ae_ptr->o_ptr->pval = cap_mon;
-    ae_ptr->o_ptr->captured_monster_speed = cap_mspeed;
-    ae_ptr->o_ptr->captured_monster_current_hp = cap_hp;
-    ae_ptr->o_ptr->captured_monster_max_hp = cap_maxhp;
+    ae_ptr->o_ptr->pval = g_cap_mon_ptr->r_idx;
+    ae_ptr->o_ptr->captured_monster_speed = g_cap_mon_ptr->speed;
+    ae_ptr->o_ptr->captured_monster_current_hp = g_cap_mon_ptr->current_hp;
+    ae_ptr->o_ptr->captured_monster_max_hp = g_cap_mon_ptr->max_hp;
     inscribe_nickname(ae_ptr);
     return true;
 }
