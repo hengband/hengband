@@ -74,20 +74,10 @@ InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, int shopping)
  */
 void InputKeyRequestor::request_command()
 {
-    int16_t cmd;
-    int mode;
-
-    concptr act;
-
 #ifdef JP
     int caretcmd = 0;
 #endif
-    if (rogue_like_commands) {
-        mode = KEYMAP_MODE_ROGUE;
-    } else {
-        mode = KEYMAP_MODE_ORIG;
-    }
-
+    auto mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
     command_cmd = 0;
     command_arg = 0;
     command_dir = 0;
@@ -101,6 +91,7 @@ void InputKeyRequestor::request_command()
             stop_term_fresh();
         }
 
+        int16_t cmd;
         if (command_new) {
             msg_erase();
             cmd = command_new;
@@ -159,24 +150,27 @@ void InputKeyRequestor::request_command()
 
         if (cmd == '\\') {
             (void)get_com(_("コマンド: ", "Command: "), (char *)&cmd, false);
-            if (!inkey_next)
+            if (!inkey_next) {
                 inkey_next = "";
+            }
         }
 
         if (cmd == '^') {
-            if (get_com(_("CTRL: ", "Control: "), (char *)&cmd, false))
+            if (get_com(_("CTRL: ", "Control: "), (char *)&cmd, false)) {
                 cmd = KTRL(cmd);
+            }
         }
 
-        act = keymap_act[mode][(byte)(cmd)];
+        auto act = keymap_act[mode][(byte)(cmd)];
         if (act && !inkey_next) {
             (void)strnfmt(request_command_buffer, 256, "%s", act);
             inkey_next = request_command_buffer;
             continue;
         }
 
-        if (!cmd)
+        if (cmd == 0) {
             continue;
+        }
 
         command_cmd = (byte)cmd;
         break;
@@ -205,9 +199,8 @@ void InputKeyRequestor::request_command()
     }
 
 #ifdef JP
-    for (int i = 0; i < 256; i++) {
-        concptr s;
-        if ((s = keymap_act[mode][i]) != nullptr) {
+    for (auto i = 0; i < 256; i++) {
+        if (auto s = keymap_act[mode][i]; s != nullptr) {
             if (*s == command_cmd && *(s + 1) == 0) {
                 caretcmd = i;
                 break;
@@ -215,27 +208,22 @@ void InputKeyRequestor::request_command()
         }
     }
 
-    if (!caretcmd)
+    if (!caretcmd) {
         caretcmd = command_cmd;
+    }
 #endif
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
             continue;
+        }
 
-        if (!o_ptr->inscription)
-            continue;
-
-        concptr s = quark_str(o_ptr->inscription);
+        auto s = quark_str(o_ptr->inscription);
         s = angband_strchr(s, '^');
         while (s) {
-#ifdef JP
-            if ((s[1] == caretcmd) || (s[1] == '*'))
-#else
-            if ((s[1] == command_cmd) || (s[1] == '*'))
-#endif
-            {
+            auto sure = _((s[1] == caretcmd) || (s[1] == '*'), (s[1] == command_cmd) || (s[1] == '*'));
+            if (sure) {
                 if (!get_check(_("本当ですか? ", "Are you sure? "))) {
                     command_cmd = ' ';
                 }
