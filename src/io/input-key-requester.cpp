@@ -155,17 +155,10 @@ char InputKeyRequestor::inkey_from_menu()
         }
 
         if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0')) {
-            if (this->menu_num == 0) {
-                this->command = ESCAPE;
+            if (this->check_escape_key(old_num)) {
                 break;
             }
 
-            this->menu_num = 0;
-            this->num = old_num;
-            this->base_y -= 2;
-            this->base_x -= 8;
-            screen_load();
-            screen_save();
             continue;
         }
 
@@ -463,5 +456,21 @@ bool InputKeyRequestor::check_continuous_command()
     this->num = 0;
     this->base_y += 2;
     this->base_x += 8;
+    return false;
+}
+
+bool InputKeyRequestor::check_escape_key(const int old_num)
+{
+    if (this->menu_num == 0) {
+        this->command = ESCAPE;
+        return true;
+    }
+
+    this->menu_num = 0;
+    this->num = old_num;
+    this->base_y -= 2;
+    this->base_x -= 8;
+    screen_load();
+    screen_save();
     return false;
 }

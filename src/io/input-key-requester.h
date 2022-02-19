@@ -52,4 +52,5 @@ private:
     std::string switch_special_menu_condition(special_menu_content &special_menu);
     int get_command_per_menu_num();
     bool check_continuous_command();
+    bool check_escape_key(const int old_num);
 };
