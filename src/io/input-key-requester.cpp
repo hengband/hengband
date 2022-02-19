@@ -138,21 +138,21 @@ char InputKeyRequestor::inkey_from_menu()
     auto menu_num = 0;
     while (true) {
         char sub_cmd;
-        if (!menu_num) {
+        if (menu_num == 0) {
             old_num = num;
         }
 
         this->make_commands_frame();
         int cmmand_per_menu_num;
         for (cmmand_per_menu_num = 0; cmmand_per_menu_num < 10; cmmand_per_menu_num++) {
-            if (!menu_info[menu_num][cmmand_per_menu_num].cmd) {
+            if (menu_info[menu_num][cmmand_per_menu_num].cmd == 0) {
                 break;
             }
 
             std::string menu_name(menu_info[menu_num][cmmand_per_menu_num].name);
             for (auto special_menu_num = 0;; special_menu_num++) {
                 auto special_menu = special_menu_info[special_menu_num];
-                if (!special_menu.name[0]) {
+                if (special_menu.name[0] == '\0') {
                     break;
                 }
 
@@ -190,7 +190,7 @@ char InputKeyRequestor::inkey_from_menu()
         }
 
         if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0')) {
-            if (!menu_num) {
+            if (menu_num == 0) {
                 command = ESCAPE;
                 break;
             }
@@ -244,7 +244,7 @@ char InputKeyRequestor::inkey_from_menu()
     }
 
     screen_load();
-    if (!inkey_next) {
+    if (inkey_next == nullptr) {
         inkey_next = "";
     }
 
@@ -321,7 +321,7 @@ void InputKeyRequestor::process_command_command(short *cmd)
     }
 
     (void)get_com(_("コマンド: ", "Command: "), (char *)cmd, false);
-    if (!inkey_next) {
+    if (inkey_next == nullptr) {
         inkey_next = "";
     }
 }
