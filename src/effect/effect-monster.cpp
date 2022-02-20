@@ -30,6 +30,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -137,7 +138,7 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
         return result;
     }
 
-    bool do_effect = none_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL);
+    bool do_effect = em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
     do_effect |= std::any_of(effect_arrtibute.cbegin(), effect_arrtibute.cend(), check);
 
     if (do_effect)
@@ -147,13 +148,13 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
     ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_MELEE);
     ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_SHOOT);
 
-    if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) && ignore_res_all)
+    if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) && ignore_res_all)
         return switch_effects_monster(player_ptr, em_ptr);
 
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
     em_ptr->dam = 0;
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
-        em_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
+        em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
 
     if (em_ptr->attribute == AttributeType::LITE_WEAK || em_ptr->attribute == AttributeType::KILL_WALL)
         em_ptr->skipped = true;
@@ -358,7 +359,7 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_
  */
 static void effect_damage_piles_stun(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->do_stun == 0) || (em_ptr->r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) || (em_ptr->r_ptr->flags3 & RF3_NO_STUN))
+    if ((em_ptr->do_stun == 0) || em_ptr->r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_SOUND, MonsterResistanceType::RESIST_FORCE }) || (em_ptr->r_ptr->flags3 & RF3_NO_STUN))
         return;
 
     if (em_ptr->seen)
@@ -385,7 +386,7 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, effect_monster_type
  */
 static void effect_damage_piles_confusion(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
+    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || em_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK))
         return;
 
     if (em_ptr->seen)

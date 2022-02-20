@@ -180,7 +180,7 @@ void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
         return;
 
     PlayerClass pc(player_ptr);
-    bool can_use_lite_area = pc.equals(PlayerClassType::NINJA) && msa_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && none_bits(msa_ptr->r_ptr->flags3, RF3_HURT_LITE) && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
+    bool can_use_lite_area = pc.equals(PlayerClassType::NINJA) && msa_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && msa_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE) && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
 
     if (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;

@@ -91,7 +91,7 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
 
     pa_ptr->attack_damage *= (int)vorpal_magnification;
     auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (((r_ptr->flagsr & RFR_RES_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > pa_ptr->m_ptr->hp)
+    if ((r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > pa_ptr->m_ptr->hp)
         msg_format(_("%sを真っ二つにした！", "You cut %s in half!"), pa_ptr->m_name);
     else
         print_vorpal_message(pa_ptr, vorpal_magnification);

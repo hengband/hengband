@@ -64,9 +64,10 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
             n++;
         if (!(r_ptr->r_flags3 & (1UL << i)) && (r_ptr->flags3 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flagsr & (1UL << i)) && (r_ptr->flagsr & (1UL << i)))
-            n++;
     }
+
+    auto resistance_flags = r_ptr->resistance_flags;
+    n += resistance_flags.reset(r_ptr->r_resistance_flags).count();
 
     auto ability_flags = r_ptr->ability_flags;
     n += ability_flags.reset(r_ptr->r_ability_flags).count();
@@ -77,7 +78,7 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
     r_ptr->r_flags1 = r_ptr->flags1;
     r_ptr->r_flags2 = r_ptr->flags2;
     r_ptr->r_flags3 = r_ptr->flags3;
-    r_ptr->r_flagsr = r_ptr->flagsr;
+    r_ptr->r_resistance_flags = r_ptr->resistance_flags;
     r_ptr->r_ability_flags = r_ptr->ability_flags;
     r_ptr->r_behavior_flags = r_ptr->behavior_flags;
 

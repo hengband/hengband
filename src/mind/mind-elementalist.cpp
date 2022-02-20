@@ -976,23 +976,23 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:
-        if (any_bits(r_ptr->flagsr, RFR_IM_FIRE))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE))
             return false;
         break;
     case AttributeType::COLD:
-        if (any_bits(r_ptr->flagsr, RFR_IM_COLD))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD))
             return false;
         break;
     case AttributeType::ELEC:
-        if (any_bits(r_ptr->flagsr, RFR_IM_ELEC))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC))
             return false;
         break;
     case AttributeType::ACID:
-        if (any_bits(r_ptr->flagsr, RFR_IM_ACID))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID))
             return false;
         break;
     case AttributeType::DARK:
-        if (any_bits(r_ptr->flagsr, RFR_RES_DARK) || any_bits(r_ptr->r_flags3, RF3_HURT_LITE))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DARK) || r_ptr->r_resistance_flags.has(MonsterResistanceType::HURT_LITE))
             return false;
         break;
     case AttributeType::CONFUSION:
@@ -1000,11 +1000,11 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
             return false;
         break;
     case AttributeType::SHARDS:
-        if (any_bits(r_ptr->flagsr, RFR_RES_SHAR))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SHARDS))
             return false;
         break;
     case AttributeType::POIS:
-        if (any_bits(r_ptr->flagsr, RFR_IM_POIS))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON))
             return false;
         break;
     default:

@@ -1,0 +1,19 @@
+﻿#pragma once
+
+#include "monster-race/race-flags-resistance.h"
+#include "util/flag-group.h"
+
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_IM_ACID_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_IM_ELEC_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_IM_FIRE_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_IM_COLD_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_IM_POISON_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_ACID_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_ELEC_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_FIRE_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_COLD_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_POISON_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_SHARDS_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_CHAOS_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_RESIST_NEXUS_MASK;
+extern const EnumClassFlagGroup<MonsterResistanceType> RFR_EFF_IMMUNE_ELEMENT_MASK;

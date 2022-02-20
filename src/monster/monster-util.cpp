@@ -129,8 +129,8 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
                 return false;
         }
 
-        if (d_ptr->mflagsr) {
-            if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+        if (d_ptr->mon_resistance_flags.any()) {
+            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags))
                 return false;
         }
 
@@ -181,8 +181,8 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
                 return true;
         }
 
-        if (d_ptr->mflagsr) {
-            if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+        if (d_ptr->mon_resistance_flags.any()) {
+            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags))
                 return true;
         }
 
@@ -209,7 +209,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return true;
         if (r_ptr->flags9 & d_ptr->mflags9)
             return true;
-        if (r_ptr->flagsr & d_ptr->mflagsr)
+        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags))
             return true;
         for (a = 0; a < 5; a++)
             if (d_ptr->r_char[a] == r_ptr->d_char)
@@ -234,7 +234,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return false;
         if (r_ptr->flags9 & d_ptr->mflags9)
             return false;
-        if (r_ptr->flagsr & d_ptr->mflagsr)
+        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags))
             return false;
         for (a = 0; a < 5; a++)
             if (d_ptr->r_char[a] == r_ptr->d_char)
@@ -351,7 +351,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
                 continue;
 
             // クエスト内でRES_ALLの生成を禁止する (殲滅系クエストの詰み防止)
-            if (inside_quest(player_ptr->current_floor_ptr->quest_number) && any_bits(r_ptr->flagsr, RFR_RES_ALL))
+            if (inside_quest(player_ptr->current_floor_ptr->quest_number) && r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))
                 continue;
         }
 

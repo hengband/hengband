@@ -459,18 +459,18 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
     strip_bytes(1);
 }
 
-static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const BIT_FLAGS rfr)
+static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
 {
     if (r_ptr->r_flags3 & rf3) {
         r_ptr->r_flags3 &= ~rf3;
-        r_ptr->r_flagsr |= rfr;
+        r_ptr->resistance_flags.set(rfr);
     }
 }
 
-static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const BIT_FLAGS rfr)
+static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
 {
     if (f4 & rf4_br)
-        r_ptr->r_flagsr |= rfr;
+        r_ptr->resistance_flags.set(rfr);
 }
 
 /*!
@@ -481,38 +481,38 @@ static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAG
  */
 void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
 {
-    r_ptr->r_flagsr = 0L;
-    move_RF3_to_RFR(r_ptr, RF3_IM_ACID, RFR_IM_ACID);
-    move_RF3_to_RFR(r_ptr, RF3_IM_ELEC, RFR_IM_ELEC);
-    move_RF3_to_RFR(r_ptr, RF3_IM_FIRE, RFR_IM_FIRE);
-    move_RF3_to_RFR(r_ptr, RF3_IM_COLD, RFR_IM_COLD);
-    move_RF3_to_RFR(r_ptr, RF3_IM_POIS, RFR_IM_POIS);
-    move_RF3_to_RFR(r_ptr, RF3_RES_TELE, RFR_RES_TELE);
-    move_RF3_to_RFR(r_ptr, RF3_RES_NETH, RFR_RES_NETH);
-    move_RF3_to_RFR(r_ptr, RF3_RES_WATE, RFR_RES_WATE);
-    move_RF3_to_RFR(r_ptr, RF3_RES_PLAS, RFR_RES_PLAS);
-    move_RF3_to_RFR(r_ptr, RF3_RES_NEXU, RFR_RES_NEXU);
-    move_RF3_to_RFR(r_ptr, RF3_RES_DISE, RFR_RES_DISE);
-    move_RF3_to_RFR(r_ptr, RF3_RES_ALL, RFR_RES_ALL);
+    r_ptr->r_resistance_flags.clear();
+    move_RF3_to_RFR(r_ptr, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);
+    move_RF3_to_RFR(r_ptr, RF3_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC);
+    move_RF3_to_RFR(r_ptr, RF3_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE);
+    move_RF3_to_RFR(r_ptr, RF3_IM_COLD, MonsterResistanceType::IMMUNE_COLD);
+    move_RF3_to_RFR(r_ptr, RF3_IM_POIS, MonsterResistanceType::IMMUNE_POISON);
+    move_RF3_to_RFR(r_ptr, RF3_RES_TELE, MonsterResistanceType::RESIST_TELEPORT);
+    move_RF3_to_RFR(r_ptr, RF3_RES_NETH, MonsterResistanceType::RESIST_NETHER);
+    move_RF3_to_RFR(r_ptr, RF3_RES_WATE, MonsterResistanceType::RESIST_WATER);
+    move_RF3_to_RFR(r_ptr, RF3_RES_PLAS, MonsterResistanceType::RESIST_PLASMA);
+    move_RF3_to_RFR(r_ptr, RF3_RES_NEXU, MonsterResistanceType::RESIST_NEXUS);
+    move_RF3_to_RFR(r_ptr, RF3_RES_DISE, MonsterResistanceType::RESIST_DISENCHANT);
+    move_RF3_to_RFR(r_ptr, RF3_RES_ALL, MonsterResistanceType::RESIST_ALL);
 
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_LITE, RFR_RES_LITE);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_DARK, RFR_RES_DARK);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SOUN, RFR_RES_SOUN);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_CHAO, RFR_RES_CHAO);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_TIME, RFR_RES_TIME);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_INER, RFR_RES_INER);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_GRAV, RFR_RES_GRAV);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SHAR, RFR_RES_SHAR);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, RFR_RES_WALL);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_LITE, MonsterResistanceType::RESIST_LITE);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_DARK, MonsterResistanceType::RESIST_DARK);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SOUN, MonsterResistanceType::RESIST_SOUND);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_CHAO, MonsterResistanceType::RESIST_CHAOS);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_TIME, MonsterResistanceType::RESIST_TIME);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_INER, MonsterResistanceType::RESIST_INERTIA);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_GRAV, MonsterResistanceType::RESIST_GRAVITY);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SHAR, MonsterResistanceType::RESIST_SHARDS);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, MonsterResistanceType::RESIST_FORCE);
 
     if (f4 & RF4_BR_CONF)
         r_ptr->r_flags3 |= RF3_NO_CONF;
 
     if (r_idx == MON_STORMBRINGER)
-        r_ptr->r_flagsr |= RFR_RES_CHAO;
+        r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
 
     if (r_ptr->r_kind_flags.has(MonsterKindType::ORC))
-        r_ptr->r_flagsr |= RFR_RES_DARK;
+        r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
 }
 
 /*!

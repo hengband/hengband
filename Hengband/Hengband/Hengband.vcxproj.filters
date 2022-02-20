@@ -2379,6 +2379,9 @@
     <ClCompile Include="..\..\src\monster-race\monster-kind-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\race-resistance-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5167,6 +5170,9 @@
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\monster-kind-mask.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-resistance-mask.h">
       <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>

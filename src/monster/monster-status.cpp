@@ -71,7 +71,7 @@ DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
 int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is_psy_spear)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if ((r_ptr->flagsr & RFR_RES_ALL) && dam > 0) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) && dam > 0) {
         dam /= 100;
         if ((dam == 0) && one_in_(3)) {
             dam = 1;
