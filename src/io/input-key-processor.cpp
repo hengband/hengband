@@ -1,8 +1,7 @@
 ﻿/*!
  * @brief キー入力に応じてゲーム内コマンドを実行する
- * @date 2020/05/10
+ * @date 2022/02/20
  * @author Hourier
- * @todo Ctrl+C がShift+Q に認識されている。仕様の可能性も高いが要確認
  */
 
 #include "io/input-key-processor.h"
@@ -53,6 +52,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h" //!< @do_cmd_quest() がある。後で移設する.
+#include "effect/spells-effect-util.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"

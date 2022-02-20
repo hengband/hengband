@@ -20,7 +20,7 @@
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
+bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     if (typ == AttributeType::CHARM_LIVING)
@@ -35,7 +35,7 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
         ty = target_row;
     }
 
-    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
+    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg, cap_mon_ptr).notice;
 }
 
 /*!

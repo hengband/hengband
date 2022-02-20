@@ -5,11 +5,15 @@
 extern int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 extern int rakubadam_p; /*!< 落馬した際のダメージ量 */
 
-extern short cap_mon;
-extern byte cap_mspeed;
-extern short cap_hp;
-extern short cap_maxhp;
-extern STR_OFFSET cap_nickname;
+class CapturedMonsterType {
+public:
+    CapturedMonsterType() = default;
+    short r_idx;
+    byte speed;
+    short current_hp;
+    short max_hp;
+    int nickname;
+};
 
 extern bool sukekaku;
 extern int project_length; /*!< 投射の射程距離 */

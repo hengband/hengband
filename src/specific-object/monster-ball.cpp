@@ -23,9 +23,9 @@
 #include "util/quarks.h"
 #include "view/display-messages.h"
 
-static void inscribe_nickname(ae_type *ae_ptr)
+static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
-    if (!cap_nickname)
+    if (cap_mon_ptr->nickname == 0)
         return;
 
     concptr t;
@@ -48,7 +48,7 @@ static void inscribe_nickname(ae_type *ae_ptr)
 #else
     *s++ = '\'';
 #endif
-    t = quark_str(cap_nickname);
+    t = quark_str(cap_mon_ptr->nickname);
     while (*t) {
         *s = *t;
         s++;
@@ -72,14 +72,15 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
     }
 
     target_pet = old_target_pet;
-    if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0))
+    CapturedMonsterType cap_mon_ptr;
+    if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0, &cap_mon_ptr))
         return true;
 
-    ae_ptr->o_ptr->pval = cap_mon;
-    ae_ptr->o_ptr->captured_monster_speed = cap_mspeed;
-    ae_ptr->o_ptr->captured_monster_current_hp = cap_hp;
-    ae_ptr->o_ptr->captured_monster_max_hp = cap_maxhp;
-    inscribe_nickname(ae_ptr);
+    ae_ptr->o_ptr->pval = cap_mon_ptr.r_idx;
+    ae_ptr->o_ptr->captured_monster_speed = cap_mon_ptr.speed;
+    ae_ptr->o_ptr->captured_monster_current_hp = cap_mon_ptr.current_hp;
+    ae_ptr->o_ptr->captured_monster_max_hp = cap_mon_ptr.max_hp;
+    inscribe_nickname(ae_ptr, &cap_mon_ptr);
     return true;
 }
 
