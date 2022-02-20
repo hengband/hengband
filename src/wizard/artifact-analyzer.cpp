@@ -197,7 +197,7 @@ static void analyze_misc_magic(ObjectType *o_ptr, concptr *misc_list)
     if (flgs.has(TR_LITE_M3))
         rad -= 3;
 
-    if (o_ptr->name2 == EGO_LITE_SHINE)
+    if (o_ptr->name2 == EgoType::LITE_SHINE)
         rad++;
 
     if (flgs.has(TR_LITE_FUEL)) {

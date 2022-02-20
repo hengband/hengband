@@ -25,7 +25,7 @@ void reduce_lite_life(PlayerType *player_ptr)
     if (o_ptr->is_fixed_artifact() || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->fuel <= 0))
         return;
 
-    if (o_ptr->name2 == EGO_LITE_LONG) {
+    if (o_ptr->name2 == EgoType::LITE_LONG) {
         if (w_ptr->game_turn % (TURNS_PER_TICK * 2))
             o_ptr->fuel--;
     } else
@@ -53,7 +53,7 @@ void notice_lite_change(PlayerType *player_ptr, ObjectType *o_ptr)
         msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
         player_ptr->update |= (PU_TORCH);
         player_ptr->update |= (PU_BONUS);
-    } else if (o_ptr->name2 == EGO_LITE_LONG) {
+    } else if (o_ptr->name2 == EgoType::LITE_LONG) {
         if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5)) && (w_ptr->game_turn % (TURNS_PER_TICK * 2))) {
             if (disturb_minor)
                 disturb(player_ptr, false, true);

@@ -6,6 +6,7 @@
 #include "main/angband-headers.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "util/enum-converter.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -79,7 +80,7 @@ errr parse_e_info(std::string_view buf, angband_header *)
 
         error_idx = i;
         e_ptr = &e_info[i];
-        e_ptr->idx = static_cast<EGO_IDX>(i);
+        e_ptr->idx = i2enum<EgoType>(i);
 #ifdef JP
         e_ptr->name = tokens[2];
 #endif

@@ -90,7 +90,7 @@ void rd_item_old(ObjectType *o_ptr)
 
     o_ptr->name1 = rd_byte();
 
-    o_ptr->name2 = rd_byte();
+    o_ptr->name2 = i2enum<EgoType>(rd_byte());
 
     o_ptr->timeout = rd_s16b();
     o_ptr->to_h = rd_s16b();
@@ -111,7 +111,7 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (h_older_than(1, 3, 0, 0)) {
-        if (o_ptr->name2 == EGO_TELEPATHY)
+        if (o_ptr->name2 == EgoType::TELEPATHY)
             o_ptr->art_flags.set(TR_TELEPATHY);
     }
 
@@ -131,7 +131,7 @@ void rd_item_old(ObjectType *o_ptr)
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             } else if (o_ptr->is_ego()) {
-                ego_item_type *e_ptr = &e_info[o_ptr->name2];
+                ego_item_type *e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
                 if (e_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (e_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
@@ -149,7 +149,7 @@ void rd_item_old(ObjectType *o_ptr)
     o_ptr->activation_id = i2enum<RandomArtActType>(rd_byte());
 
     if (h_older_than(1, 0, 10)) {
-        if (xtra1 == EGO_XTRA_SUSTAIN) {
+        if (xtra1 == enum2i<OldEgoType>(OldEgoType::XTRA_SUSTAIN)) {
             switch (enum2i(o_ptr->activation_id) % 6) {
             case 0:
                 o_ptr->art_flags.set(TR_SUST_STR);
@@ -171,7 +171,7 @@ void rd_item_old(ObjectType *o_ptr)
                 break;
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
-        } else if (xtra1 == EGO_XTRA_POWER) {
+        } else if (xtra1 == enum2i<OldEgoType>(OldEgoType::XTRA_POWER)) {
             switch (enum2i(o_ptr->activation_id) % 11) {
             case 0:
                 o_ptr->art_flags.set(TR_RES_BLIND);
@@ -208,7 +208,7 @@ void rd_item_old(ObjectType *o_ptr)
                 break;
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
-        } else if (xtra1 == EGO_XTRA_ABILITY) {
+        } else if (xtra1 == enum2i<OldEgoType>(OldEgoType::XTRA_ABILITY)) {
             switch (enum2i(o_ptr->activation_id) % 8) {
             case 0:
                 o_ptr->art_flags.set(TR_LEVITATION);
@@ -311,7 +311,7 @@ void rd_item_old(ObjectType *o_ptr)
     if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479))
         return;
 
-    if (h_older_than(0, 4, 10) && (o_ptr->name2 == EGO_TWILIGHT))
+    if (h_older_than(0, 4, 10) && (o_ptr->name2 == EgoType::TWILIGHT))
         o_ptr->k_idx = lookup_kind(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE);
 
     if (h_older_than(0, 4, 9)) {
@@ -330,9 +330,9 @@ void rd_item_old(ObjectType *o_ptr)
 
     if (o_ptr->is_ego()) {
         ego_item_type *e_ptr;
-        e_ptr = &e_info[o_ptr->name2];
+        e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
         if (e_ptr->name.empty())
-            o_ptr->name2 = 0;
+            o_ptr->name2 = EgoType::NONE;
     }
 }
 

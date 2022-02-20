@@ -47,7 +47,7 @@ void WeaponEnchanter::apply_magic()
             if ((this->power > 2) || one_in_(30))
                 become_random_artifact(this->player_ptr, this->o_ptr, false);
             else
-                this->o_ptr->name2 = EGO_DIGGING;
+                this->o_ptr->name2 = EgoType::DIGGING;
         } else if (this->power < -1) {
             this->o_ptr->pval = 0 - (5 + randint1(5));
         } else if (this->power < 0) {
@@ -67,18 +67,18 @@ void WeaponEnchanter::apply_magic()
             }
             while (true) {
                 this->o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, true);
-                if (this->o_ptr->name2 == EGO_SHARPNESS && this->o_ptr->tval != ItemKindType::SWORD)
+                if (this->o_ptr->name2 == EgoType::SHARPNESS && this->o_ptr->tval != ItemKindType::SWORD)
                     continue;
-                if (this->o_ptr->name2 == EGO_EARTHQUAKES && this->o_ptr->tval != ItemKindType::HAFTED)
+                if (this->o_ptr->name2 == EgoType::EARTHQUAKES && this->o_ptr->tval != ItemKindType::HAFTED)
                     continue;
                 break;
             }
 
             switch (this->o_ptr->name2) {
-            case EGO_SHARPNESS:
+            case EgoType::SHARPNESS:
                 this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, this->level) + 1;
                 break;
-            case EGO_EARTHQUAKES:
+            case EgoType::EARTHQUAKES:
                 if (one_in_(3) && (this->level > 60))
                     this->o_ptr->art_flags.set(TR_BLOWS);
                 else
@@ -100,11 +100,11 @@ void WeaponEnchanter::apply_magic()
                 int n = 0;
                 while (true) {
                     this->o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, false);
-                    if (this->o_ptr->name2 == EGO_WEIRD && this->o_ptr->tval != ItemKindType::SWORD) {
+                    if (this->o_ptr->name2 == EgoType::WEIRD && this->o_ptr->tval != ItemKindType::SWORD) {
                         continue;
                     }
 
-                    ego_item_type *e_ptr = &e_info[this->o_ptr->name2];
+                    ego_item_type *e_ptr = &e_info[enum2i<EgoType>(this->o_ptr->name2)];
                     if (this->o_ptr->tval == ItemKindType::SWORD && this->o_ptr->sval == SV_HAYABUSA && e_ptr->max_pval < 0) {
                         if (++n > 1000) {
                             msg_print(_("エラー:隼の剣に割り当てるエゴ無し", "Error: Cannot find for Hayabusa."));

@@ -346,7 +346,7 @@ bool ObjectType::is_rare() const
  */
 bool ObjectType::is_ego() const
 {
-    return this->name2 != 0;
+    return this->name2 != EgoType::NONE;
 }
 
 /*!

@@ -93,13 +93,13 @@ void ArmorEnchanter::give_ego_index()
         auto valid = true;
         this->o_ptr->name2 = get_random_ego(INVEN_BODY, true);
         switch (this->o_ptr->name2) {
-        case EGO_DWARVEN:
+        case EgoType::DWARVEN:
             if (this->o_ptr->tval != ItemKindType::HARD_ARMOR) {
                 valid = false;
             }
 
             break;
-        case EGO_DRUID:
+        case EgoType::DRUID:
             if (this->o_ptr->tval != ItemKindType::SOFT_ARMOR) {
                 valid = false;
             }
@@ -128,7 +128,7 @@ void ArmorEnchanter::give_high_ego_index()
 
     this->is_high_ego_generated = true;
     auto ego_robe = one_in_(5);
-    this->o_ptr->name2 = ego_robe ? EGO_TWILIGHT : EGO_PERMANENCE;
+    this->o_ptr->name2 = ego_robe ? EgoType::TWILIGHT : EgoType::PERMANENCE;
     if (!ego_robe) {
         return;
     }
@@ -144,8 +144,8 @@ void ArmorEnchanter::give_cursed()
 {
     this->o_ptr->name2 = get_random_ego(INVEN_BODY, false);
     switch (this->o_ptr->name2) {
-    case EGO_A_DEMON:
-    case EGO_A_MORGUL:
+    case EgoType::A_DEMON:
+    case EgoType::A_MORGUL:
         return;
     default:
         msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:  suitable cursed armor ego not found."));

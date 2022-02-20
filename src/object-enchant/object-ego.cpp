@@ -15,6 +15,7 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
+#include "util/enum-converter.h"
 #include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
 #include <vector>
@@ -31,11 +32,11 @@ std::vector<ego_item_type> e_info;
  * @param good TRUEならば通常のエゴ、FALSEならば呪いのエゴが選択対象となる。
  * @return 選択されたエゴ情報のID、万一選択できなかった場合は0が返る。
  */
-byte get_random_ego(byte slot, bool good)
+EgoType get_random_ego(byte slot, bool good)
 {
-    ProbabilityTable<EGO_IDX> prob_table;
+    ProbabilityTable<EgoType> prob_table;
     for (const auto &e_ref : e_info) {
-        if (e_ref.idx == 0 || e_ref.slot != slot || e_ref.rarity <= 0)
+        if (e_ref.idx == EgoType::NONE || e_ref.slot != slot || e_ref.rarity <= 0)
             continue;
 
         bool worthless = e_ref.rating == 0 || e_ref.gen_flags.has_any_of({ ItemGenerationTraitType::CURSED, ItemGenerationTraitType::HEAVY_CURSE, ItemGenerationTraitType::PERMA_CURSE });
@@ -49,7 +50,7 @@ byte get_random_ego(byte slot, bool good)
         return prob_table.pick_one_at_random();
     }
 
-    return (EGO_IDX)0;
+    return EgoType::NONE;
 }
 
 /*!
@@ -203,7 +204,7 @@ void ego_invest_extra_attack(ObjectType *o_ptr, ego_item_type *e_ptr, DEPTH lev)
         return;
     }
 
-    if (o_ptr->name2 == EGO_ATTACKS) {
+    if (o_ptr->name2 == EgoType::ATTACKS) {
         o_ptr->pval = randint1(e_ptr->max_pval * lev / 100 + 1);
         if (o_ptr->pval > 3)
             o_ptr->pval = 3;
@@ -235,7 +236,7 @@ void ego_invest_extra_attack(ObjectType *o_ptr, ego_item_type *e_ptr, DEPTH lev)
  */
 void apply_ego(ObjectType *o_ptr, DEPTH lev)
 {
-    auto e_ptr = &e_info[o_ptr->name2];
+    auto e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
     auto gen_flags = e_ptr->gen_flags;
 
     ego_interpret_extra_abilities(o_ptr, e_ptr, gen_flags);
@@ -294,12 +295,12 @@ void apply_ego(ObjectType *o_ptr, DEPTH lev)
             o_ptr->to_d = std::max(o_ptr->to_d, 15);
         }
 
-        if ((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION) || (o_ptr->name2 == EGO_H_PROTECTION)) {
+        if ((o_ptr->name2 == EgoType::PROTECTION) || (o_ptr->name2 == EgoType::S_PROTECTION) || (o_ptr->name2 == EgoType::H_PROTECTION)) {
             o_ptr->to_a = std::max<short>(o_ptr->to_a, 15);
         }
 
         if (e_ptr->max_pval) {
-            if (o_ptr->name2 == EGO_BAT) {
+            if (o_ptr->name2 == EgoType::BAT) {
                 o_ptr->pval = randint1(e_ptr->max_pval);
                 if (o_ptr->sval == SV_ELVEN_CLOAK)
                     o_ptr->pval += randint1(2);
@@ -307,19 +308,21 @@ void apply_ego(ObjectType *o_ptr, DEPTH lev)
                 if (ego_has_flag(o_ptr, e_ptr, TR_BLOWS))
                     ego_invest_extra_attack(o_ptr, e_ptr, lev);
                 else {
-                    if (e_ptr->max_pval > 0)
+                    if (e_ptr->max_pval > 0) {
                         o_ptr->pval += randint1(e_ptr->max_pval);
-                    else if (e_ptr->max_pval < 0)
-                        o_ptr->pval -= randint1(0 - e_ptr->max_pval);
+                    }
+                    else if (e_ptr->max_pval < 0) {
+                        o_ptr->pval -= randint1(0 - e_ptr->max_pval);                    
+                    }
                 }
             }
         }
 
-        if ((o_ptr->name2 == EGO_SPEED) && (lev < 50)) {
+        if ((o_ptr->name2 == EgoType::SPEED) && (lev < 50)) {
             o_ptr->pval = randint1(o_ptr->pval);
         }
 
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EGO_ATTACKS))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EgoType::ATTACKS))
             o_ptr->pval = 2;
     }
 }

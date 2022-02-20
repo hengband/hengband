@@ -83,7 +83,7 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
     letter[index].feature = feat_none;
     letter[index].monster = 0;
     letter[index].object = 0;
-    letter[index].ego = 0;
+    letter[index].ego = EgoType::NONE;
     letter[index].artifact = 0;
     letter[index].trap = feat_none;
     letter[index].cave_info = 0;
@@ -120,9 +120,9 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
         if (zz[5][0] == '*') {
             letter[index].random |= RANDOM_EGO;
             if (zz[5][1])
-                letter[index].ego = (EGO_IDX)atoi(zz[5] + 1);
+                letter[index].ego = i2enum<EgoType>(atoi(zz[5] + 1));
         } else {
-            letter[index].ego = (EGO_IDX)atoi(zz[5]);
+            letter[index].ego = i2enum<EgoType>(atoi(zz[5]));
         }
         /* Fall through */
     case 5:

@@ -128,7 +128,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     if (flgs.has(TR_LITE_M3))
         rad -= 3;
 
-    if (o_ptr->name2 == EGO_LITE_SHINE)
+    if (o_ptr->name2 == EgoType::LITE_SHINE)
         rad++;
 
     if (flgs.has(TR_LITE_FUEL) && flgs.has_not(TR_DARK_SOURCE)) {
@@ -144,7 +144,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     if (rad != 0)
         info[i++] = desc;
 
-    if (o_ptr->name2 == EGO_LITE_LONG) {
+    if (o_ptr->name2 == EgoType::LITE_LONG) {
         info[i++] = _("それは長いターン明かりを授ける。", "It provides light for much longer time.");
     }
 

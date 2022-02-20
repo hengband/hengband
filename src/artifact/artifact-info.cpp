@@ -12,6 +12,7 @@
 #include "smith/object-smith.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
+#include "util/enum-converter.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -30,8 +31,8 @@ RandomArtActType activation_index(const ObjectType *o_ptr)
     if (o_ptr->is_fixed_artifact() && a_info[o_ptr->name1].flags.has(TR_ACTIVATE))
         return a_info[o_ptr->name1].act_idx;
 
-    if (o_ptr->is_ego() && e_info[o_ptr->name2].flags.has(TR_ACTIVATE))
-        return e_info[o_ptr->name2].act_idx;
+    if (o_ptr->is_ego() && e_info[enum2i<EgoType>(o_ptr->name2)].flags.has(TR_ACTIVATE))
+        return e_info[enum2i<EgoType>(o_ptr->name2)].act_idx;
 
     if (!o_ptr->is_random_artifact() && k_info[o_ptr->k_idx].flags.has(TR_ACTIVATE))
         return k_info[o_ptr->k_idx].act_idx;

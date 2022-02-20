@@ -268,7 +268,7 @@ void player_outfit(PlayerType *player_ptr)
 
         /* Only assassins get a poisoned weapon */
         if (((tv == ItemKindType::SWORD) || (tv == ItemKindType::HAFTED)) && (pc.equals(PlayerClassType::ROGUE) && (player_ptr->realm1 == REALM_DEATH))) {
-            q_ptr->name2 = EGO_BRAND_POIS;
+            q_ptr->name2 = EgoType::BRAND_POIS;
         }
         
         add_outfit(player_ptr, q_ptr);
