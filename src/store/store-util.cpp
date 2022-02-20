@@ -133,7 +133,7 @@ void store_create(
     if (st_ptr->stock_num >= st_ptr->stock_size)
         return;
 
-    const owner_type *ow_ptr = &owners.at(cur_store_num)[st_ptr->owner];
+    const owner_type *ow_ptr = &owners[enum2i(cur_store_num)][st_ptr->owner];
 
     for (int tries = 0; tries < 4; tries++) {
         KIND_OBJECT_IDX k_idx;

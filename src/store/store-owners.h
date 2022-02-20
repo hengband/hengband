@@ -4,7 +4,8 @@
 #include "store/store-util.h"
 #include "system/angband.h"
 #include <array>
-#include <unordered_map>
+
+#define MAX_OWNERS 32 /*!< 各店舗毎の店主定義最大数 / Total number of owners per store (see "store.c", etc) */
 
 /*!
  * @brief 店主データ構造体
@@ -17,4 +18,4 @@ struct owner_type {
     DEPTH level{}; //!< Production Level
 };
 
-extern const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners;
+extern const owner_type owners[MAX_STORES][MAX_OWNERS];
