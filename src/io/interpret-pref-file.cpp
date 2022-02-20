@@ -337,11 +337,11 @@ static errr interpret_z_token(char *buf)
         return 1;
 
     *(t++) = '\0';
-    for (int i = 0; i < MAX_NAMED_NUM; i++) {
-        if (!streq(gf_desc[i].name, buf + 2))
+    for (const auto &desc : gf_desc) {
+        if (!streq(desc.name, buf + 2))
             continue;
 
-        gf_color[(int)gf_desc[i].num] = (TERM_COLOR)quark_add(t);
+        gf_color[(int)desc.num] = (TERM_COLOR)quark_add(t);
         return 0;
     }
 
