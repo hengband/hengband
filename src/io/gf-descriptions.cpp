@@ -6,7 +6,7 @@
 #include "effect/attribute-types.h"
 
 //clang-format off
-const std::vector<named_num> gf_desc = {
+const std::vector<named_num> gf_descriptions = {
     { "GF_ELEC",                 AttributeType::ELEC },
     { "GF_POIS",                 AttributeType::POIS },
     { "GF_ACID",                 AttributeType::ACID },

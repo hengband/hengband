@@ -10,4 +10,4 @@ struct named_num
     AttributeType num; /* A number associated with it */
 };
 
-extern const std::vector<named_num> gf_desc;
+extern const std::vector<named_num> gf_descriptions;
