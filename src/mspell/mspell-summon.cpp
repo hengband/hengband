@@ -229,21 +229,21 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがサイバーデーモンを召喚した！", "%^s magically summons Cyberdemons!"),
         _("%^sがサイバーデーモンを召喚した！", "%^s magically summons Cyberdemons!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     if (is_friendly(m_ptr) && mon_to_mon) {
@@ -259,7 +259,7 @@ MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITIO
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -275,20 +275,20 @@ MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITIO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_MONSTER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_MONSTER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"),
         _("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (int k = 0; k < 1; k++) {
@@ -306,7 +306,7 @@ MonsterSpellResult spell_RF6_S_MONSTER(PlayerType *player_ptr, POSITION y, POSIT
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -322,20 +322,20 @@ MonsterSpellResult spell_RF6_S_MONSTER(PlayerType *player_ptr, POSITION y, POSIT
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_MONSTERS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_MONSTERS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"), _("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (auto k = 0; k < S_NUM_6; k++) {
@@ -353,7 +353,7 @@ MonsterSpellResult spell_RF6_S_MONSTERS(PlayerType *player_ptr, POSITION y, POSI
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -369,20 +369,20 @@ MonsterSpellResult spell_RF6_S_MONSTERS(PlayerType *player_ptr, POSITION y, POSI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_ANT(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_ANT(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法でアリを召喚した。", "%^s magically summons ants."),
         _("%^sが魔法でアリを召喚した。", "%^s magically summons ants."));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (auto k = 0; k < S_NUM_6; k++) {
@@ -396,7 +396,7 @@ MonsterSpellResult spell_RF6_S_ANT(PlayerType *player_ptr, POSITION y, POSITION 
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -412,20 +412,20 @@ MonsterSpellResult spell_RF6_S_ANT(PlayerType *player_ptr, POSITION y, POSITION 
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_SPIDER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_SPIDER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."),
         _("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (auto k = 0; k < S_NUM_6; k++) {
@@ -439,7 +439,7 @@ MonsterSpellResult spell_RF6_S_SPIDER(PlayerType *player_ptr, POSITION y, POSITI
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -455,20 +455,20 @@ MonsterSpellResult spell_RF6_S_SPIDER(PlayerType *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HOUND(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HOUND(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."), _("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (auto k = 0; k < S_NUM_4; k++) {
@@ -482,7 +482,7 @@ MonsterSpellResult spell_RF6_S_HOUND(PlayerType *player_ptr, POSITION y, POSITIO
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -498,20 +498,20 @@ MonsterSpellResult spell_RF6_S_HOUND(PlayerType *player_ptr, POSITION y, POSITIO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HYDRA(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HYDRA(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."), _("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (auto k = 0; k < S_NUM_4; k++) {
@@ -525,7 +525,7 @@ MonsterSpellResult spell_RF6_S_HYDRA(PlayerType *player_ptr, POSITION y, POSITIO
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -541,19 +541,19 @@ MonsterSpellResult spell_RF6_S_HYDRA(PlayerType *player_ptr, POSITION y, POSITIO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"), _("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
@@ -579,7 +579,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -595,11 +595,11 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
@@ -607,8 +607,8 @@ MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITIO
         _("%^sは魔法で混沌の宮廷から悪魔を召喚した！", "%^s magically summons a demon from the Courts of Chaos!"),
         _("%^sは魔法で混沌の宮廷から悪魔を召喚した！", "%^s magically summons a demon from the Courts of Chaos!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (int k = 0; k < 1; k++) {
@@ -622,7 +622,7 @@ MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITIO
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -638,11 +638,11 @@ MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITIO
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
@@ -650,8 +650,8 @@ MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITI
         _("%^sが魔法でアンデッドの強敵を召喚した！", "%^s magically summons an undead adversary!"),
         _("%sが魔法でアンデッドを召喚した。", "%^s magically summons undead."));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (int k = 0; k < 1; k++) {
@@ -665,7 +665,7 @@ MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITI
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -681,20 +681,20 @@ MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"), _("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     if (mon_to_player)
@@ -710,7 +710,7 @@ MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITI
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -726,19 +726,19 @@ MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITI
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     if (((m_ptr->r_idx == MON_MORGOTH) || (m_ptr->r_idx == MON_SAURON) || (m_ptr->r_idx == MON_ANGMAR)) && ((r_info[MON_NAZGUL].cur_num + 2) < r_info[MON_NAZGUL].max_num) && mon_to_player) {
@@ -748,7 +748,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
             _("%^sが魔法で強力なアンデッドを召喚した！", "%^s magically summons greater undead!"),
             _("%sが魔法でアンデッドを召喚した。", "%^s magically summons undead."));
 
-        monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+        monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
         for (auto k = 0; k < S_NUM_6; k++) {
             if (mon_to_player)
@@ -767,7 +767,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -783,12 +783,12 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_HI_DRAGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HI_DRAGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
@@ -796,8 +796,8 @@ MonsterSpellResult spell_RF6_S_HI_DRAGON(PlayerType *player_ptr, POSITION y, POS
         _("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"),
         _("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (auto k = 0; k < S_NUM_4; k++) {
@@ -816,7 +816,7 @@ MonsterSpellResult spell_RF6_S_HI_DRAGON(PlayerType *player_ptr, POSITION y, POS
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -832,12 +832,12 @@ MonsterSpellResult spell_RF6_S_HI_DRAGON(PlayerType *player_ptr, POSITION y, POS
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
@@ -845,8 +845,8 @@ MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POS
         _("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"),
         _("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
     for (auto k = 0; k < S_NUM_4; k++) {
@@ -861,7 +861,7 @@ MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POS
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }
@@ -877,12 +877,12 @@ MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POS
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
@@ -890,8 +890,8 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
         _("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"),
         _("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
-    summon_disturb(player_ptr, TARGET_TYPE, known, see_either);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+    summon_disturb(player_ptr, target_type, known, see_either);
 
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool uniques_are_summoned = false;
@@ -922,7 +922,7 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
         floor_ptr->monster_noise = true;
 
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     return res;
 }

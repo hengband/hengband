@@ -53,11 +53,11 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, AttributeType GF
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     int dam, drs_type = 0;
     concptr type_s;
@@ -66,8 +66,8 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
@@ -223,7 +223,7 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
     if (known || see_either)
         sound(SOUND_BREATH);
 
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, true, TARGET_TYPE);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, true, target_type);
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(player_ptr, m_idx, drs_type);
 

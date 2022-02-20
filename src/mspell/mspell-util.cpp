@@ -59,17 +59,17 @@ bool monster_near_player(floor_type* floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param msgs メッセージの構造体
  * @param msg_flag_aux メッセージを分岐するためのフラグ
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return メッセージを表示した場合trueを返す。
  */
-bool monspell_message_base(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int TARGET_TYPE)
+bool monspell_message_base(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int target_type)
 {
     bool notice = false;
     floor_type* floor_ptr = player_ptr->current_floor_ptr;
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
@@ -107,12 +107,12 @@ bool monspell_message_base(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_ID
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param msgs メッセージの構造体
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+* @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return メッセージを表示した場合trueを返す。
  */
-bool monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int TARGET_TYPE)
+bool monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int target_type)
 {
-    return monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.blind, msgs.blind, msgs.to_player, msgs.to_mons), player_ptr->blind > 0, TARGET_TYPE);
+    return monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.blind, msgs.blind, msgs.to_player, msgs.to_mons), player_ptr->blind > 0, target_type);
 }
 
 /*!
@@ -121,10 +121,10 @@ bool monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param msgs メッセージの構造体
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+* @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void simple_monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int TARGET_TYPE)
+void simple_monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int target_type)
 {
     monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.to_player, msgs.to_mons,
-        msgs.to_player, msgs.to_mons), player_ptr->blind > 0, TARGET_TYPE);
+        msgs.to_player, msgs.to_mons), player_ptr->blind > 0, target_type);
 }
