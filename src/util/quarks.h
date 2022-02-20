@@ -2,6 +2,6 @@
 
 #include "system/angband.h"
 
-concptr quark_str(STR_OFFSET num);
+concptr quark_str(ushort num);
 void quark_init(void);
-uint16_t quark_add(concptr str);
+ushort quark_add(concptr str);

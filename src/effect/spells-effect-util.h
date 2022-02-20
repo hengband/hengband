@@ -12,7 +12,7 @@ public:
     byte speed;
     short current_hp;
     short max_hp;
-    int nickname;
+    ushort nickname;
 };
 
 extern bool sukekaku;
