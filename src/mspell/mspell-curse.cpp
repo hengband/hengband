@@ -45,7 +45,7 @@ static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, AttributeType 
             msg_format(msg1, m_name);
         else
             msg_format(msg2, m_name);
-        breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, false, target_type);
+        pointed(player_ptr, y, x, m_idx, GF_TYPE, dam, target_type);
         return res;
     }
 
@@ -57,7 +57,7 @@ static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, AttributeType 
         }
     }
 
-    breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, false, target_type);
+    pointed(player_ptr, y, x, m_idx, GF_TYPE, dam, target_type);
 
     return res;
 }
