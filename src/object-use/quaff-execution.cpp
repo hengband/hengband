@@ -21,6 +21,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/mimic-info-table.h"
 #include "player-info/self-info.h"
@@ -83,7 +84,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     }
 
     auto *o_ptr = ref_item(this->player_ptr, item);
-    object_type forge;
+    ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;
@@ -438,7 +439,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             break;
 
         case SV_POTION_EXPERIENCE:
-            if (this->player_ptr->prace == PlayerRaceType::ANDROID)
+            if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID))
                 break;
             chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
             if (this->player_ptr->exp < PY_MAX_EXP) {
@@ -586,7 +587,8 @@ bool ObjectQuaffEntity::check_can_quaff()
 bool ObjectQuaffEntity::booze()
 {
     bool ident = false;
-    if (this->player_ptr->pclass != PlayerClassType::MONK)
+    auto is_monk = PlayerClass(this->player_ptr).equals(PlayerClassType::MONK);
+    if (!is_monk)
         chg_virtue(this->player_ptr, V_HARMONY, -1);
     else if (!has_resist_conf(this->player_ptr))
         this->player_ptr->special_attack |= ATTACK_SUIKEN;
@@ -604,7 +606,7 @@ bool ObjectQuaffEntity::booze()
         ident = true;
     }
 
-    if (one_in_(13) && (this->player_ptr->pclass != PlayerClassType::MONK)) {
+    if (one_in_(13) && !is_monk) {
         ident = true;
         if (one_in_(3))
             lose_all_info(this->player_ptr);

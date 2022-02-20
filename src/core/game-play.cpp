@@ -63,6 +63,8 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -166,9 +168,9 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
 static void init_world_floor_info(PlayerType *player_ptr)
 {
     w_ptr->character_dungeon = false;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
-    floor_ptr->inside_quest = 0;
+    floor_ptr->quest_number = QuestId::NONE;
     floor_ptr->inside_arena = false;
     player_ptr->phase_out = false;
     write_level = true;
@@ -196,7 +198,7 @@ static void restore_world_floor_info(PlayerType *player_ptr)
 
     if (player_ptr->riding == -1) {
         player_ptr->riding = 0;
-        floor_type *floor_ptr = player_ptr->current_floor_ptr;
+        auto *floor_ptr = player_ptr->current_floor_ptr;
         for (MONSTER_IDX i = floor_ptr->m_max; i > 0; i--) {
             if (player_bold(player_ptr, floor_ptr->m_list[i].fy, floor_ptr->m_list[i].fx)) {
                 player_ptr->riding = i;
@@ -220,8 +222,8 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && floor_ptr->inside_quest)
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if ((floor_ptr->dun_level == 0) && inside_quest(floor_ptr->quest_number))
         return;
 
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
@@ -254,7 +256,7 @@ static void change_floor_if_error(PlayerType *player_ptr)
 static void generate_world(PlayerType *player_ptr, bool new_game)
 {
     reset_world_info(player_ptr);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
 
@@ -288,13 +290,14 @@ static void init_io(PlayerType *player_ptr)
 
 static void init_riding_pet(PlayerType *player_ptr, bool new_game)
 {
-    if (!new_game || ((player_ptr->pclass != PlayerClassType::CAVALRY) && (player_ptr->pclass != PlayerClassType::BEASTMASTER)))
+    PlayerClass pc(player_ptr);
+    if (!new_game || !pc.is_tamer())
         return;
 
-    MONRACE_IDX pet_r_idx = ((player_ptr->pclass == PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
-    monster_race *r_ptr = &r_info[pet_r_idx];
+    MONRACE_IDX pet_r_idx = pc.equals(PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE;
+    auto *r_ptr = &r_info[pet_r_idx];
     place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
     m_ptr->mspeed = r_ptr->speed;
     m_ptr->maxhp = r_ptr->hdice * (r_ptr->hside + 1) / 2;
     m_ptr->max_maxhp = m_ptr->maxhp;
@@ -308,7 +311,7 @@ static void decide_arena_death(PlayerType *player_ptr)
     if (!player_ptr->playing || !player_ptr->is_dead)
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_arena) {
         if ((w_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
             cheat_death(player_ptr);
@@ -334,7 +337,7 @@ static void decide_arena_death(PlayerType *player_ptr)
 static void process_game_turn(PlayerType *player_ptr)
 {
     bool load_game = true;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         process_dungeon(player_ptr, load_game);
         w_ptr->character_xtra = true;
@@ -404,7 +407,7 @@ void play_game(PlayerType *player_ptr, bool new_game, bool browsing_movie)
     if (player_ptr->chp < 0 && !cheat_immortal)
         player_ptr->is_dead = true;
 
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         calc_android_exp(player_ptr);
 
     init_riding_pet(player_ptr, new_game);

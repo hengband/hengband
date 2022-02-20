@@ -58,6 +58,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -243,8 +244,8 @@ void wiz_create_item(PlayerType *player_ptr)
         }
     }
 
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->prep(k_idx);
     apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
@@ -261,7 +262,7 @@ void wiz_create_item(PlayerType *player_ptr)
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, ARTIFACT_IDX a_idx)
 {
     const auto &a_ref = a_info[a_idx];
-    object_type obj;
+    ObjectType obj;
     obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
     obj.name1 = a_idx;
     object_known(&obj);
@@ -456,7 +457,7 @@ void wiz_change_status(PlayerType *player_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         return;
 
     player_ptr->max_exp = tmp_long;
@@ -490,8 +491,7 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-
-    cave_set_feat(player_ptr, y, x, f_val1);
+    cave_set_feat(player_ptr, y, x, static_cast<FEAT_IDX>(f_val1));
     g_ptr->mimic = (int16_t)f_val2;
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
@@ -504,7 +504,6 @@ void wiz_create_feature(PlayerType *player_ptr)
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     player_ptr->update |= PU_FLOW;
-
 }
 
 /*
@@ -618,8 +617,8 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     for (const auto &k_ref : k_info) {
         if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;
@@ -768,7 +767,7 @@ void set_gametime(void)
 void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT))
             continue;
 
@@ -790,7 +789,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 void wiz_zap_floor_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (i == player_ptr->riding))
             continue;
 
@@ -823,12 +822,12 @@ void cheat_death(PlayerType *player_ptr)
     (void)strcpy(player_ptr->died_from, _("死の欺き", "Cheating death"));
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->inside_arena = false;
     player_ptr->phase_out = false;
-    leaving_quest = 0;
-    floor_ptr->inside_quest = 0;
+    leaving_quest = QuestId::NONE;
+    floor_ptr->quest_number = QuestId::NONE;
     if (player_ptr->dungeon_idx)
         player_ptr->recall_dungeon = player_ptr->dungeon_idx;
     player_ptr->dungeon_idx = 0;

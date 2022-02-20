@@ -36,9 +36,9 @@ extern const int OLD_QUEST_WATER_CAVE;
 extern const int QUEST_OLD_CASTLE;
 extern const int QUEST_ROYAL_CRYPT;
 
-struct object_type;
+class ObjectType;
 class PlayerType;
-void rd_item_old(object_type *o_ptr);
+void rd_item_old(ObjectType *o_ptr);
 void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr);
 void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx);
 errr rd_dungeon_old(PlayerType *player_ptr);

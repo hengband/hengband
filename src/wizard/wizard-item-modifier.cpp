@@ -223,7 +223,7 @@ void wiz_modify_item_activation(PlayerType *player_ptr)
 void wiz_identify_full_inventory(PlayerType *player_ptr)
 {
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -320,7 +320,7 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
  */
-static void wiz_display_item(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     auto get_seq_32bits = [](const TrFlags &flgs, uint start) {
@@ -340,44 +340,50 @@ static void wiz_display_item(PlayerType *player_ptr, object_type *o_ptr)
     char buf[256];
     describe_flavor(player_ptr, buf, o_ptr, OD_STORE);
     prt(buf, 2, j);
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), 4, j);
-    prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
-    prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
-    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
-    prt(format("ident = %04x  xtra1 = %-4d  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->xtra1, o_ptr->activation_id, o_ptr->timeout), 8, j);
-    prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
-    prt("+------------FLAGS1------------+", 10, j);
-    prt("AFFECT........SLAY........BRAND.", 11, j);
-    prt("      mf      cvae      xsqpaefc", 12, j);
-    prt("siwdccsossidsahanvudotgddhuoclio", 13, j);
-    prt("tnieohtctrnipttmiinmrrnrrraiierl", 14, j);
-    prt("rtsxnarelcfgdkcpmldncltggpksdced", 15, j);
-    prt_binary(get_seq_32bits(flgs, 32 * 0), 16, j);
+    auto line = 4;
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
+    prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
+    prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
+    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), ++line, j);
+    prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), ++line, j);
+    prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
+    prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
+    prt(format("cursed  = %-d  captured_monster_speed = %-4d", o_ptr->curse_flags, o_ptr->captured_monster_speed), ++line, j);
+    prt(format("captured_monster_max_hp = %-4d  captured_monster_max_hp = %-4d", o_ptr->captured_monster_current_hp, o_ptr->captured_monster_max_hp), ++line, j);
 
-    prt("+------------FLAGS2------------+", 17, j);
-    prt("SUST....IMMUN.RESIST............", 18, j);
-    prt("      reaefctrpsaefcpfldbc sn   ", 19, j);
-    prt("siwdcciaclioheatcliooeialoshtncd", 20, j);
-    prt("tnieohdsierlrfraierliatrnnnrhehi", 21, j);
-    prt("rtsxnaeydcedwlatdcedsrekdfddrxss", 22, j);
-    prt_binary(get_seq_32bits(flgs, 32 * 1), 23, j);
+    prt("+------------FLAGS1------------+", ++line, j);
+    prt("AFFECT........SLAY........BRAND.", ++line, j);
+    prt("      mf      cvae      xsqpaefc", ++line, j);
+    prt("siwdccsossidsahanvudotgddhuoclio", ++line, j);
+    prt("tnieohtctrnipttmiinmrrnrrraiierl", ++line, j);
+    prt("rtsxnarelcfgdkcpmldncltggpksdced", ++line, j);
+    prt_binary(get_seq_32bits(flgs, 32 * 0), ++line, j);
 
-    prt("+------------FLAGS3------------+", 10, j + 32);
-    prt("fe cnn t      stdrmsiiii d ab   ", 11, j + 32);
-    prt("aa aoomywhs lleeieihgggg rtgl   ", 12, j + 32);
-    prt("uu utmacaih eielgggonnnnaaere   ", 13, j + 32);
-    prt("rr reanurdo vtieeehtrrrrcilas   ", 14, j + 32);
-    prt("aa algarnew ienpsntsaefctnevs   ", 15, j + 32);
-    prt_binary(get_seq_32bits(flgs, 32 * 2), 16, j + 32);
+    prt("+------------FLAGS2------------+", ++line, j);
+    prt("SUST....IMMUN.RESIST............", ++line, j);
+    prt("      reaefctrpsaefcpfldbc sn   ", ++line, j);
+    prt("siwdcciaclioheatcliooeialoshtncd", ++line, j);
+    prt("tnieohdsierlrfraierliatrnnnrhehi", ++line, j);
+    prt("rtsxnaeydcedwlatdcedsrekdfddrxss", ++line, j);
+    prt_binary(get_seq_32bits(flgs, 32 * 1), ++line, j);
 
-    prt("+------------FLAGS4------------+", 17, j + 32);
-    prt("KILL....ESP.........            ", 18, j + 32);
-    prt("aeud tghaud tgdhegnu            ", 19, j + 32);
-    prt("nvneoriunneoriruvoon            ", 20, j + 32);
-    prt("iidmroamidmroagmionq            ", 21, j + 32);
-    prt("mlenclnmmenclnnnldlu            ", 22, j + 32);
-    prt_binary(get_seq_32bits(flgs, 32 * 3), 23, j + 32);
+    line = 10;
+    prt("+------------FLAGS3------------+", line, j + 32);
+    prt("fe cnn t      stdrmsiiii d ab   ", ++line, j + 32);
+    prt("aa aoomywhs lleeieihgggg rtgl   ", ++line, j + 32);
+    prt("uu utmacaih eielgggonnnnaaere   ", ++line, j + 32);
+    prt("rr reanurdo vtieeehtrrrrcilas   ", ++line, j + 32);
+    prt("aa algarnew ienpsntsaefctnevs   ", ++line, j + 32);
+    prt_binary(get_seq_32bits(flgs, 32 * 2), ++line, j + 32);
+
+    prt("+------------FLAGS4------------+", ++line, j + 32);
+    prt("KILL....ESP.........            ", ++line, j + 32);
+    prt("aeud tghaud tgdhegnu            ", ++line, j + 32);
+    prt("nvneoriunneoriruvoon            ", ++line, j + 32);
+    prt("iidmroamidmroagmionq            ", ++line, j + 32);
+    prt("mlenclnmmenclnnnldlu            ", ++line, j + 32);
+    prt_binary(get_seq_32bits(flgs, 32 * 3), ++line, j + 32);
 }
 
 /*!
@@ -391,7 +397,7 @@ static void wiz_display_item(PlayerType *player_ptr, object_type *o_ptr)
  * counter flags to prevent weirdness.  We use the items to collect
  * statistics on item creation relative to the initial item.
  */
-static void wiz_statistics(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
     concptr p = "Enter number of items to roll: ";
@@ -444,8 +450,8 @@ static void wiz_statistics(PlayerType *player_ptr, object_type *o_ptr)
                 term_fresh();
             }
 
-            object_type forge;
-            object_type *q_ptr = &forge;
+            ObjectType forge;
+            auto *q_ptr = &forge;
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact())
@@ -480,13 +486,13 @@ static void wiz_statistics(PlayerType *player_ptr, object_type *o_ptr)
  * Apply magic to an item or turn it into an artifact. -Bernd-
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
  */
-static void wiz_reroll_item(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact())
         return;
 
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
 
@@ -570,7 +576,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 調整するアイテムの参照ポインタ
  */
-static void wiz_tweak_item(PlayerType *player_ptr, object_type *o_ptr)
+static void wiz_tweak_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact())
         return;
@@ -612,7 +618,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
  */
-static void wiz_quantity_item(object_type *o_ptr)
+static void wiz_quantity_item(ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact())
         return;
@@ -649,15 +655,15 @@ void wiz_modify_item(PlayerType *player_ptr)
     concptr q = "Play with which object? ";
     concptr s = "You have nothing to play with.";
     OBJECT_IDX item;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr)
         return;
 
     screen_save();
 
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     char ch;
@@ -706,7 +712,7 @@ void wiz_modify_item(PlayerType *player_ptr)
 /*!
  * @brief オブジェクトの装備スロットがエゴが有効なスロットかどうか判定
  */
-static int is_slot_able_to_be_ego(PlayerType *player_ptr, object_type *o_ptr)
+static int is_slot_able_to_be_ego(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     int slot = wield_slot(player_ptr, o_ptr);
 
@@ -714,9 +720,9 @@ static int is_slot_able_to_be_ego(PlayerType *player_ptr, object_type *o_ptr)
         return slot;
 
     if ((o_ptr->tval == ItemKindType::SHOT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::BOLT))
-        return (INVEN_AMMO);
+        return INVEN_AMMO;
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -758,8 +764,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     char buf[MAX_NLEN] = "\0";
     char *str = buf;
-    object_type forge;
-    object_type *o_ptr = &forge;
+    ObjectType forge;
+    auto *o_ptr = &forge;
     char o_name[MAX_NLEN];
 
     bool wish_art = false;
@@ -991,7 +997,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     
     if (k_ids.size() == 1) {
         KIND_OBJECT_IDX k_idx = k_ids.back();
-        object_kind *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &k_info[k_idx];
 
         artifact_type *a_ptr;
         ARTIFACT_IDX a_idx = 0;

@@ -2,6 +2,7 @@
  * @brief プレイヤーの職業クラスに基づく耐性・能力の判定処理等を行うクラス
  * @date 2021/09/08
  * @author Hourier
+ * @details PlayerRaceからPlayerClassへの依存はあるが、逆は依存させないこと.
  */
 #include "player-base/player-class.h"
 #include "core/player-redraw-types.h"
@@ -32,6 +33,11 @@
 PlayerClass::PlayerClass(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
+}
+
+bool PlayerClass::equals(PlayerClassType type) const
+{
+    return this->player_ptr->pclass == type;
 }
 
 /*!
@@ -223,18 +229,121 @@ TrFlags PlayerClass::stance_tr_flags() const
 
 bool PlayerClass::has_stun_immunity() const
 {
-    return (this->player_ptr->pclass == PlayerClassType::BERSERKER) && (this->player_ptr->lev > 34);
+    return this->equals(PlayerClassType::BERSERKER) && (this->player_ptr->lev > 34);
+}
+
+bool PlayerClass::has_poison_resistance() const
+{
+    return this->equals(PlayerClassType::NINJA) && (this->player_ptr->lev > 44);
+}
+
+/*!
+ * @brief 加速ボーナスのある種族かを返す
+ * @return 加速ボーナスのある種族か否か
+ * @details 
+ * 種族と職業の両方で特性による加速が得られる場合、重複して加速することはない.
+ * 代りに経験値補正が軽くなる.
+ */
+bool PlayerClass::has_additional_speed() const
+{
+    auto has_additional_speed = this->equals(PlayerClassType::MONK);
+    has_additional_speed |= this->equals(PlayerClassType::FORCETRAINER);
+    has_additional_speed |= this->equals(PlayerClassType::NINJA);
+    return has_additional_speed;
+}
+
+bool PlayerClass::is_soldier() const
+{
+    auto is_soldier = this->equals(PlayerClassType::WARRIOR);
+    is_soldier |= this->equals(PlayerClassType::ARCHER);
+    is_soldier |= this->equals(PlayerClassType::CAVALRY);
+    is_soldier |= this->equals(PlayerClassType::BERSERKER);
+    is_soldier |= this->equals(PlayerClassType::SMITH);
+    return is_soldier;
 }
 
 bool PlayerClass::is_wizard() const
 {
-    auto is_wizard = this->player_ptr->pclass == PlayerClassType::MAGE;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::HIGH_MAGE;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::SORCERER;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::MAGIC_EATER;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::BLUE_MAGE;
-    is_wizard |= this->player_ptr->pclass == PlayerClassType::ELEMENTALIST;
+    auto is_wizard = this->equals(PlayerClassType::MAGE);
+    is_wizard |= this->equals(PlayerClassType::HIGH_MAGE);
+    is_wizard |= this->equals(PlayerClassType::SORCERER);
+    is_wizard |= this->equals(PlayerClassType::MAGIC_EATER);
+    is_wizard |= this->equals(PlayerClassType::BLUE_MAGE);
+    is_wizard |= this->equals(PlayerClassType::ELEMENTALIST);
     return is_wizard;
+}
+
+bool PlayerClass::is_tamer() const
+{
+    auto is_tamer = this->equals(PlayerClassType::BEASTMASTER);
+    is_tamer |= this->equals(PlayerClassType::CAVALRY);
+    return is_tamer;
+}
+
+bool PlayerClass::can_browse() const
+{
+    auto can_browse = this->equals(PlayerClassType::MINDCRAFTER);
+    can_browse |= this->equals(PlayerClassType::BERSERKER);
+    can_browse |= this->equals(PlayerClassType::NINJA);
+    can_browse |= this->equals(PlayerClassType::MIRROR_MASTER);
+    return can_browse;
+}
+
+bool PlayerClass::has_listed_magics() const
+{
+    auto has_listed_magics = this->can_browse();
+    has_listed_magics |= this->equals(PlayerClassType::FORCETRAINER);
+    has_listed_magics |= this->equals(PlayerClassType::ELEMENTALIST);
+    return has_listed_magics;
+}
+
+/*!
+ * @brief プレイ日記のタイトルが「最高の肉体を求めて」になり得るクラスを判定する
+ * @return 該当のクラスか否か
+ */
+bool PlayerClass::is_tough() const
+{
+    auto is_tough = this->equals(PlayerClassType::WARRIOR);
+    is_tough |= this->equals(PlayerClassType::MONK);
+    is_tough |= this->equals(PlayerClassType::SAMURAI);
+    is_tough |= this->equals(PlayerClassType::BERSERKER);
+    return is_tough;
+}
+
+bool PlayerClass::is_martial_arts_pro() const
+{
+    auto is_martial_arts_pro = this->equals(PlayerClassType::MONK);
+    is_martial_arts_pro |= this->equals(PlayerClassType::FORCETRAINER);
+    return is_martial_arts_pro;
+}
+
+bool PlayerClass::is_every_magic() const
+{
+    auto is_every_magic = this->equals(PlayerClassType::SORCERER);
+    is_every_magic |= this->equals(PlayerClassType::RED_MAGE);
+    return is_every_magic;
+}
+
+/*!
+ * @brief 「覚えた呪文の数」という概念を持つクラスかをチェックする.
+ * @return 呪文の数を持つか否か
+ */
+bool PlayerClass::has_number_of_spells_learned() const
+{
+    auto has_number_of_spells_learned = this->equals(PlayerClassType::MAGE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::PRIEST);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::ROGUE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::RANGER);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::PALADIN);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::WARRIOR_MAGE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::CHAOS_WARRIOR);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::MONK);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::HIGH_MAGE);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::TOURIST);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::BEASTMASTER);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::BARD);
+    has_number_of_spells_learned |= this->equals(PlayerClassType::FORCETRAINER);
+    return has_number_of_spells_learned;
 }
 
 bool PlayerClass::lose_balance()

@@ -21,6 +21,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
@@ -54,7 +55,7 @@ void set_friendly(monster_type *m_ptr)
  */
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-    feature_type *f_ptr = &f_info[feat];
+    auto *f_ptr = &f_info[feat];
 
     if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
@@ -92,27 +93,27 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
         return false;
 
     if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::COLD_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::ELEC_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::ACID_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK))
             return false;
     }
 
     if (f_ptr->flags.has(FloorFeatureType::POISON_PUDDLE)) {
-        if (!(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
+        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK))
             return false;
     }
 
@@ -131,7 +132,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
  */
 bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if (player_bold(player_ptr, y, x))
         return false;
     if (g_ptr->m_idx)
@@ -166,7 +167,7 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  */
 bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *s_ptr = &r_info[n_ptr->r_idx];
 
     if (player_ptr->phase_out) {
@@ -221,9 +222,9 @@ bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int 
     }
 
     /* Racial alignment flags */
-    if (r_ptr->flags3 & RF3_EVIL)
+    if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
         sub_align2 |= SUB_ALIGN_EVIL;
-    if (r_ptr->flags3 & RF3_GOOD)
+    if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
         sub_align2 |= SUB_ALIGN_GOOD;
 
     if (check_hostile_align(sub_align1, sub_align2))
@@ -277,7 +278,7 @@ bool is_mimicry(monster_type *m_ptr)
     if (m_ptr->ap_r_idx == MON_IT || m_ptr->ap_r_idx == MON_NULL || m_ptr->ap_r_idx == MON_BEHINDER)
         return true;
 
-    monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
 
     if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr)
         return false;
@@ -301,9 +302,9 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 
 MONRACE_IDX real_r_idx(monster_type *m_ptr)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
             return MON_CHAMELEON_K;
         else
             return MON_CHAMELEON;
@@ -320,6 +321,6 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
  */
 void monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx, char *m_name)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0x00);
 }

@@ -46,7 +46,7 @@
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
-static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, object_type *o_ptr)
+static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
 
@@ -97,7 +97,7 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i)
  * @param i お店のストック数(アドレス渡し)
  * @param 取得元インベントリ番号
  */
-static void take_item_from_home(PlayerType *player_ptr, object_type *o_ptr, object_type *j_ptr, const COMMAND_CODE item)
+static void take_item_from_home(PlayerType *player_ptr, ObjectType *o_ptr, ObjectType *j_ptr, const COMMAND_CODE item)
 {
     const int amt = j_ptr->number;
     distribute_charges(o_ptr, j_ptr, amt);
@@ -199,12 +199,12 @@ void store_purchase(PlayerType *player_ptr)
         return;
 
     item = item + store_top;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &st_ptr->stock[item];
 
     ITEM_NUMBER amt = 1;
-    object_type forge;
-    object_type *j_ptr = &forge;
+    ObjectType forge;
+    auto *j_ptr = &forge;
     j_ptr->copy_from(o_ptr);
 
     /*

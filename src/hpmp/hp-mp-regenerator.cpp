@@ -33,14 +33,14 @@ void regenhp(PlayerType *player_ptr, int percent)
     if (player_ptr->action == ACTION_HAYAGAKE)
         return;
 
-    HIT_POINT old_chp = player_ptr->chp;
+    int old_chp = player_ptr->chp;
 
     /*
      * Extract the new hitpoints
      *
      * 'percent' is the Regen factor in unit (1/2^16)
      */
-    HIT_POINT new_chp = 0;
+    int new_chp = 0;
     uint32_t new_chp_frac = (player_ptr->mhp * percent + PY_REGEN_HPBASE);
     s64b_lshift(&new_chp, &new_chp_frac, 16);
     s64b_add(&(player_ptr->chp), &(player_ptr->chp_frac), new_chp, new_chp_frac);
@@ -167,8 +167,8 @@ void regenmagic(PlayerType *player_ptr, int regen_amount)
 void regenerate_monsters(PlayerType *player_ptr)
 {
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
 
         if (!monster_is_valid(m_ptr))
             continue;
@@ -204,7 +204,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         monster_race *r_ptr;
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (o_ptr->tval != ItemKindType::CAPTURE)
@@ -214,8 +214,8 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
 
         heal = true;
         r_ptr = &r_info[o_ptr->pval];
-        if (o_ptr->xtra4 < o_ptr->xtra5) {
-            int frac = o_ptr->xtra5 / 100;
+        if (o_ptr->captured_monster_current_hp < o_ptr->captured_monster_max_hp) {
+            short frac = o_ptr->captured_monster_max_hp / 100;
             if (!frac)
                 if (one_in_(2))
                     frac = 1;
@@ -223,9 +223,9 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
             if (r_ptr->flags2 & RF2_REGENERATE)
                 frac *= 2;
 
-            o_ptr->xtra4 += (XTRA16)frac;
-            if (o_ptr->xtra4 > o_ptr->xtra5)
-                o_ptr->xtra4 = o_ptr->xtra5;
+            o_ptr->captured_monster_current_hp += frac;
+            if (o_ptr->captured_monster_current_hp > o_ptr->captured_monster_max_hp)
+                o_ptr->captured_monster_current_hp = o_ptr->captured_monster_max_hp;
         }
     }
 

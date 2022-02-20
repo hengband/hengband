@@ -6,6 +6,7 @@
 #include "action/mutation-execution.h"
 #include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
+#include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
 #include "game-option/play-record-options.h"
@@ -41,7 +42,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "status/element-resistance.h"
@@ -53,6 +53,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -147,7 +148,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     case PlayerMutationType::DET_CURSE:
         for (int i = 0; i < INVEN_TOTAL; i++) {
-            object_type *o_ptr = &player_ptr->inventory_list[i];
+            auto *o_ptr = &player_ptr->inventory_list[i];
             if ((o_ptr->k_idx == 0) || !o_ptr->is_cursed())
                 continue;
 
@@ -247,8 +248,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
         monster_race *r_ptr;
         r_ptr = &r_info[m_ptr->r_idx];
-        if ((r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags1 & RF1_QUESTOR) && !(r_ptr->flags1 & RF1_UNIQUE) && !player_ptr->current_floor_ptr->inside_arena
-            && !player_ptr->current_floor_ptr->inside_quest && (r_ptr->level < randint1(player_ptr->lev + 50)) && m_ptr->mflag2.has_not(MonsterConstantFlagType::NOGENO)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL) && none_bits(r_ptr->flags1, RF1_QUESTOR) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !player_ptr->current_floor_ptr->inside_arena && !inside_quest(player_ptr->current_floor_ptr->quest_number) && (r_ptr->level < randint1(player_ptr->lev + 50)) && m_ptr->mflag2.has_not(MonsterConstantFlagType::NOGENO)) {
             if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);

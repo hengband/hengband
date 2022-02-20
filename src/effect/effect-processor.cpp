@@ -87,8 +87,8 @@ static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next
  * @todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
-ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam,
-    const AttributeType typ, BIT_FLAGS flag)
+ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const int dam,
+    const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     int dist;
     POSITION y1;
@@ -243,10 +243,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             for (j = last_i; j <= i; j++) {
                 y = get_grid_y(path_g[j]);
                 x = get_grid_x(path_g[j]);
-                if (affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER, flag, true))
+                if (affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER, flag, true, cap_mon_ptr))
                     res.notice = true;
                 if (!who && (project_m_n == 1) && !jump && (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
-                    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+                    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
                     if (m_ptr->ml) {
                         if (!player_ptr->hallucinated)
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
@@ -264,11 +264,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             POSITION py, px;
             py = get_grid_y(path_g[i]);
             px = get_grid_x(path_g[i]);
-            if (affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SEEKER, flag, true))
+            if (affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SEEKER, flag, true, cap_mon_ptr))
                 res.notice = true;
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
-                    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+                    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
                     if (m_ptr->ml) {
                         if (!player_ptr->hallucinated)
@@ -365,10 +365,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         for (int i = 0; i < path_n; i++) {
             POSITION py = get_grid_y(path_g[i]);
             POSITION px = get_grid_x(path_g[i]);
-            (void)affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY, flag, true);
+            (void)affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY, flag, true, cap_mon_ptr);
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
-                    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+                    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
                     if (m_ptr->ml) {
                         if (!player_ptr->hallucinated)
@@ -608,7 +608,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             y = gy[i];
             x = gx[i];
             if (grids <= 1) {
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
                 monster_race *ref_ptr = &r_info[m_ptr->r_idx];
                 if ((flag & PROJECT_REFLECTABLE) && player_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((player_ptr->current_floor_ptr->grid_array[y][x].m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || dist_hack > 1) && !one_in_(10)) {
                     POSITION t_y, t_x;
@@ -711,7 +711,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
 
-            if (affect_monster(player_ptr, who, effective_dist, y, x, dam, typ, flag, see_s_msg))
+            if (affect_monster(player_ptr, who, effective_dist, y, x, dam, typ, flag, see_s_msg, cap_mon_ptr))
                 res.notice = true;
         }
 
@@ -720,7 +720,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             x = project_m_x;
             y = project_m_y;
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) {
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 
                 if (m_ptr->ml) {
                     if (!player_ptr->hallucinated)

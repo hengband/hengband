@@ -9,6 +9,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/floor-type-definition.h"
@@ -24,9 +25,9 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 残量アリの松明ならtrue
  */
-bool is_active_torch(object_type *o_ptr)
+bool is_active_torch(ObjectType *o_ptr)
 {
-    return (o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH) && (o_ptr->xtra4 > 0);
+    return (o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH) && (o_ptr->fuel > 0);
 }
 
 /*!
@@ -35,7 +36,7 @@ bool is_active_torch(object_type *o_ptr)
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  * @param flgs 特別に追加するフラグを返す参照ポインタ
  */
-void torch_flags(object_type *o_ptr, TrFlags &flgs)
+void torch_flags(ObjectType *o_ptr, TrFlags &flgs)
 {
     if (!is_active_torch(o_ptr))
         return;
@@ -52,7 +53,7 @@ void torch_flags(object_type *o_ptr, TrFlags &flgs)
  * @param dd 特別なダイス数を返す参照ポインタ
  * @param ds 特別なダイス面数を返す参照ポインタ
  */
-void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
+void torch_dice(ObjectType *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
 {
     if (!is_active_torch(o_ptr))
         return;
@@ -66,14 +67,12 @@ void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  */
-void torch_lost_fuel(object_type *o_ptr)
+void torch_lost_fuel(ObjectType *o_ptr)
 {
     if (!is_active_torch(o_ptr))
         return;
 
-    o_ptr->xtra4 -= (FUEL_TORCH / 25);
-    if (o_ptr->xtra4 < 0)
-        o_ptr->xtra4 = 0;
+    o_ptr->fuel -= FUEL_TORCH / 25;
 }
 
 /*!
@@ -85,7 +84,7 @@ void update_lite_radius(PlayerType *player_ptr)
 {
     player_ptr->cur_lite = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         auto flgs = object_flags(o_ptr);
 
@@ -97,10 +96,10 @@ void update_lite_radius(PlayerType *player_ptr)
 
         if (flgs.has_not(TR_DARK_SOURCE)) {
             if (o_ptr->tval == ItemKindType::LITE) {
-                if ((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->xtra4 > 0))
+                if ((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->fuel > 0))
                     continue;
 
-                if ((o_ptr->sval == SV_LITE_LANTERN) && !(o_ptr->xtra4 > 0))
+                if ((o_ptr->sval == SV_LITE_LANTERN) && !(o_ptr->fuel > 0))
                     continue;
             }
         }
@@ -285,7 +284,7 @@ void update_lite(PlayerType *player_ptr)
     for (int i = 0; i < floor_ptr->lite_n; i++) {
         POSITION y = floor_ptr->lite_y[i];
         POSITION x = floor_ptr->lite_x[i];
-        grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+        auto *g_ptr = &floor_ptr->grid_array[y][x];
         if (g_ptr->info & CAVE_TEMP)
             continue;
 
@@ -294,7 +293,7 @@ void update_lite(PlayerType *player_ptr)
 
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
     for (const auto &[y, x] : points) {
-        grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+        auto *g_ptr = &floor_ptr->grid_array[y][x];
         g_ptr->info &= ~(CAVE_TEMP);
         if (g_ptr->info & CAVE_LITE)
             continue;

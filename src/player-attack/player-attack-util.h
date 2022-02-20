@@ -30,7 +30,7 @@ enum class MagicalBrandEffectType { NONE = 0, EXTRA = 1, STUN = 2, SCARE = 3, DI
 struct grid_type;;
 struct monster_race;
 struct monster_type;
-typedef struct player_attack_type {
+struct player_attack_type {
     int16_t hand{}; //!< 武器の持ち手
     grid_type *g_ptr; //!< ターゲットのいる地形情報
     MONSTER_IDX m_idx{}; //!< モンスターID
@@ -44,7 +44,7 @@ typedef struct player_attack_type {
     combat_options mode{}; //!< 剣術種別
     bool monk_attack{}; //!< 素手/マーシャルアーツかどうか
     const martial_arts *ma_ptr{}; //!< マーシャルアーツ種別
-    HIT_POINT attack_damage{}; //!< 累積ダメージ
+    int attack_damage{}; //!< 累積ダメージ
     int num_blow{}; //!< 打撃回数
     TrFlags flags{}; //!< 武器フラグ
     chaotic_effect chaos_effect{}; //!< カオス効果
@@ -56,4 +56,4 @@ typedef struct player_attack_type {
     int drain_left{}; //!< 吸血できる残量(最大MAX_VAMPIRIC_DRAIN)
     bool weak{}; //!< 打撃効果でモンスターが弱くなったかどうか
     AttributeFlags attribute_flags{}; //!< 与えたダメージの種類 
-} player_attack_type;
+};

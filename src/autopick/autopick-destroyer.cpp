@@ -20,7 +20,10 @@
 #include "object-hook/hook-weapon.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
@@ -36,23 +39,24 @@
  * @param o_ptr アイテムへの参照ポインタ
  * @return 特別なクラス、かつそのクラス特有のアイテムであればFALSE、それ以外はTRUE
  */
-static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
+static bool is_leave_special_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (!leave_special)
         return true;
 
-    if (player_ptr->prace == PlayerRaceType::BALROG) {
+    PlayerClass pc(player_ptr);
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG)) {
         if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return false;
-    } else if (player_ptr->pclass == PlayerClassType::ARCHER) {
+    } else if (pc.equals(PlayerClassType::ARCHER)) {
         if (o_ptr->tval == ItemKindType::SKELETON || (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_SKELETON))
             return false;
-    } else if (player_ptr->pclass == PlayerClassType::NINJA) {
+    } else if (pc.equals(PlayerClassType::NINJA)) {
         if (o_ptr->tval == ItemKindType::LITE && o_ptr->name2 == EGO_LITE_DARKNESS && o_ptr->is_known())
             return false;
-    } else if (player_ptr->pclass == PlayerClassType::BEASTMASTER || player_ptr->pclass == PlayerClassType::CAVALRY) {
+    } else if (pc.is_tamer()) {
         if (o_ptr->tval == ItemKindType::WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())
-             return false;
+            return false;
     }
 
     return true;
@@ -61,7 +65,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, object_type *o_ptr)
 /*!
  * @brief Automatically destroy items in this grid.
  */
-static bool is_opt_confirm_destroy(PlayerType *player_ptr, object_type *o_ptr)
+static bool is_opt_confirm_destroy(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (!destroy_items)
         return false;
@@ -99,7 +103,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, object_type *o_ptr)
     return true;
 }
 
-void auto_destroy_item(PlayerType *player_ptr, object_type *o_ptr, int autopick_idx)
+void auto_destroy_item(PlayerType *player_ptr, ObjectType *o_ptr, int autopick_idx)
 {
     bool destroy = false;
     if (is_opt_confirm_destroy(player_ptr, o_ptr))

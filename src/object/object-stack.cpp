@@ -28,7 +28,7 @@
  * are being dropped, it makes for a neater message to leave the original\n
  * stack's pval alone. -LM-\n
  */
-void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
+void distribute_charges(ObjectType *o_ptr, ObjectType *q_ptr, int amt)
 {
     if ((o_ptr->tval != ItemKindType::WAND) && (o_ptr->tval != ItemKindType::ROD))
         return;
@@ -58,7 +58,7 @@ void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
  * charges of the stack needs to be reduced, unless all the items are\n
  * being destroyed. -LM-\n
  */
-void reduce_charges(object_type *o_ptr, int amt)
+void reduce_charges(ObjectType *o_ptr, int amt)
 {
     if (((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::ROD)) && (amt < o_ptr->number)) {
         o_ptr->pval -= o_ptr->pval * amt / o_ptr->number;
@@ -72,7 +72,7 @@ void reduce_charges(object_type *o_ptr, int amt)
  * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
  * @return 重ね合わせ可能なアイテム数
  */
-int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
+int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr)
 {
     const int max_stack_size = 99;
     int max_num = max_stack_size;
@@ -123,13 +123,32 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
         max_num = std::min(max_num, MAX_SHORT / k_info[o_ptr->k_idx].pval);
         break;
     }
+    case ItemKindType::GLOVES:
+        if (o_ptr->is_glove_same_temper(j_ptr)) {
+            return 0;
+        }
+
+        if (!o_ptr->can_pile(j_ptr)) {
+            return 0;
+        }
+
+        break;
+    case ItemKindType::LITE:
+        if (o_ptr->fuel != j_ptr->fuel) {
+            return 0;
+        }
+
+        if (!o_ptr->can_pile(j_ptr)) {
+            return 0;
+        }
+
+        break;
     case ItemKindType::BOW:
     case ItemKindType::DIGGING:
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::BOOTS:
-    case ItemKindType::GLOVES:
     case ItemKindType::HELM:
     case ItemKindType::CROWN:
     case ItemKindType::SHIELD:
@@ -139,51 +158,24 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
     case ItemKindType::DRAG_ARMOR:
     case ItemKindType::RING:
     case ItemKindType::AMULET:
-    case ItemKindType::LITE:
-    case ItemKindType::WHISTLE: {
-        if (!o_ptr->is_known() || !j_ptr->is_known())
+    case ItemKindType::WHISTLE:
+        if (!o_ptr->is_known() || !j_ptr->is_known()) {
             return 0;
-    }
-        /* Fall through */
+        }
+
+        if (!o_ptr->can_pile(j_ptr)) {
+            return 0;
+        }
+
+        break;
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
-    case ItemKindType::SHOT: {
-        if (o_ptr->is_known() != j_ptr->is_known())
+    case ItemKindType::SHOT:
+        if (!o_ptr->can_pile(j_ptr)) {
             return 0;
-        if (o_ptr->feeling != j_ptr->feeling)
-            return 0;
-        if (o_ptr->to_h != j_ptr->to_h)
-            return 0;
-        if (o_ptr->to_d != j_ptr->to_d)
-            return 0;
-        if (o_ptr->to_a != j_ptr->to_a)
-            return 0;
-        if (o_ptr->pval != j_ptr->pval)
-            return 0;
-        if (o_ptr->is_artifact() || j_ptr->is_artifact())
-            return 0;
-        if (o_ptr->name2 != j_ptr->name2)
-            return 0;
-        if (o_ptr->xtra3 != j_ptr->xtra3)
-            return 0;
-        if (o_ptr->xtra4 != j_ptr->xtra4)
-            return 0;
-        if (o_ptr->xtra1 || j_ptr->xtra1)
-            return 0;
-        if (o_ptr->timeout || j_ptr->timeout)
-            return 0;
-        if (o_ptr->ac != j_ptr->ac)
-            return 0;
-        if (o_ptr->dd != j_ptr->dd)
-            return 0;
-        if (o_ptr->ds != j_ptr->ds)
-            return 0;
-        if (Smith::object_effect(o_ptr) != Smith::object_effect(j_ptr))
-            return 0;
-        if (Smith::object_activation(o_ptr) != Smith::object_activation(j_ptr))
-            return 0;
+        }
+
         break;
-    }
     default: {
         if (!o_ptr->is_known() || !j_ptr->is_known())
             return 0;
@@ -218,7 +210,7 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
  * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
  * @return 重ね合わせ可能ならばTRUEを返す。
  */
-bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
+bool object_similar(const ObjectType *o_ptr, const ObjectType *j_ptr)
 {
     int total = o_ptr->number + j_ptr->number;
     int max_num = object_similar_part(o_ptr, j_ptr);
@@ -236,7 +228,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
  * @param o_ptr 重ね合わせ先のオブジェクトの構造体参照ポインタ
  * @param j_ptr 重ね合わせ元のオブジェクトの構造体参照ポインタ
  */
-void object_absorb(object_type *o_ptr, object_type *j_ptr)
+void object_absorb(ObjectType *o_ptr, ObjectType *j_ptr)
 {
     int max_num = object_similar_part(o_ptr, j_ptr);
     int total = o_ptr->number + j_ptr->number;

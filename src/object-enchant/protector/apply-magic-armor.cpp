@@ -20,7 +20,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-ArmorEnchanter::ArmorEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+ArmorEnchanter::ArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
     , player_ptr(player_ptr)
 {
@@ -37,7 +37,7 @@ void ArmorEnchanter::apply_magic()
 
     switch (this->o_ptr->tval) {
     case ItemKindType::DRAG_ARMOR:
-        if (one_in_(50) || (this->power > 2)) {
+        if ((this->power > 2) || one_in_(50)) {
             become_random_artifact(this->player_ptr, this->o_ptr, false);
         }
 
@@ -84,7 +84,7 @@ void ArmorEnchanter::apply_magic()
  */
 void ArmorEnchanter::give_ego_index()
 {
-    if (one_in_(20) || (this->power > 2)) {
+    if ((this->power > 2) || one_in_(20)) {
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;
     }

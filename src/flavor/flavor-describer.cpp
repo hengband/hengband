@@ -23,6 +23,7 @@
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "smith/object-smith.h"
@@ -129,7 +130,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
 
 static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, flavor_ptr->o_ptr))
+    if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, flavor_ptr->o_ptr))
         return;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
@@ -437,11 +438,8 @@ static void describe_lamp_life(flavor_type *flavor_ptr)
         return;
 
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
-    if (flavor_ptr->o_ptr->name2 == EGO_LITE_LONG)
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4 * 2);
-    else
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4);
-
+    auto fuel_magnification = flavor_ptr->o_ptr->name2 == EGO_LITE_LONG ? 2 : 1;
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, fuel_magnification * flavor_ptr->o_ptr->fuel);
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("ターンの寿命)", " turns of light)"));
 }
 
@@ -500,7 +498,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
  * @param mode 表記に関するオプション指定
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す
  */
-void describe_flavor(PlayerType *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+void describe_flavor(PlayerType *player_ptr, char *buf, ObjectType *o_ptr, BIT_FLAGS mode)
 {
     flavor_type tmp_flavor;
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
@@ -518,7 +516,7 @@ void describe_flavor(PlayerType *player_ptr, char *buf, object_type *o_ptr, BIT_
         flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
         if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr)))
             describe_bow_power(player_ptr, flavor_ptr);
-        else if ((player_ptr->pclass == PlayerClassType::NINJA) && (flavor_ptr->o_ptr->tval == ItemKindType::SPIKE))
+        else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (flavor_ptr->o_ptr->tval == ItemKindType::SPIKE))
             describe_spike_power(player_ptr, flavor_ptr);
     }
 

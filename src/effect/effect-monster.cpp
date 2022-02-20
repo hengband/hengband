@@ -10,6 +10,7 @@
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-switcher.h"
 #include "effect/effect-monster-util.h"
@@ -29,6 +30,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -41,7 +43,6 @@
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "spells-effect-util.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
@@ -52,6 +53,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 /*!
  * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する
@@ -113,8 +115,20 @@ static void make_description_of_affecred_monster(PlayerType *player_ptr, effect_
  * 完全な耐性を持っていたら、一部属性を除いて影響は及ぼさない
  * デバッグ属性、モンスター打撃、モンスター射撃であれば貫通する
  */
-static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
+    const std::vector<AttributeType> effect_arrtibute = {
+        AttributeType::OLD_CLONE,
+        AttributeType::STAR_HEAL,
+        AttributeType::OLD_HEAL,
+        AttributeType::OLD_SPEED,
+        AttributeType::CAPTURE,
+        AttributeType::PHOTO,
+    };
+    const auto check = [em_ptr](const AttributeType attribute) {
+        return em_ptr->attribute == attribute;
+    };
+
     process_result result = is_affective(player_ptr, em_ptr);
     if (result != PROCESS_TRUE) {
         if (result == PROCESS_CONTINUE) {
@@ -124,22 +138,23 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
         return result;
     }
 
-    if (none_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) || em_ptr->attribute == AttributeType::OLD_CLONE 
-        || em_ptr->attribute == AttributeType::STAR_HEAL || em_ptr->attribute == AttributeType::OLD_HEAL || em_ptr->attribute == AttributeType::OLD_SPEED 
-        || em_ptr->attribute == AttributeType::CAPTURE || em_ptr->attribute == AttributeType::PHOTO)
-        return switch_effects_monster(player_ptr, em_ptr);
+    bool do_effect = em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+    do_effect |= std::any_of(effect_arrtibute.cbegin(), effect_arrtibute.cend(), check);
+
+    if (do_effect)
+        return switch_effects_monster(player_ptr, em_ptr, cap_mon_ptr);
 
     bool ignore_res_all = (em_ptr->attribute == AttributeType::DEBUG);
     ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_MELEE);
     ignore_res_all |= (em_ptr->attribute == AttributeType::MONSTER_SHOOT);
 
-    if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_ALL) && ignore_res_all)
+    if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) && ignore_res_all)
         return switch_effects_monster(player_ptr, em_ptr);
 
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
     em_ptr->dam = 0;
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
-        em_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
+        em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
 
     if (em_ptr->attribute == AttributeType::LITE_WEAK || em_ptr->attribute == AttributeType::KILL_WALL)
         em_ptr->skipped = true;
@@ -316,9 +331,9 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
     if ((em_ptr->who > 0) || !em_ptr->slept)
         return;
 
-    if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+    if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
         chg_virtue(player_ptr, V_COMPASSION, -1);
-    if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5))
+    if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
         chg_virtue(player_ptr, V_HONOUR, -1);
 }
 
@@ -329,10 +344,10 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
  */
 static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)))
+    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)))
         em_ptr->do_polymorph = false;
 
-    if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp))
+    if ((em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp))
         em_ptr->dam = em_ptr->m_ptr->hp;
 }
 
@@ -344,7 +359,7 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_
  */
 static void effect_damage_piles_stun(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->do_stun == 0) || (em_ptr->r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) || (em_ptr->r_ptr->flags3 & RF3_NO_STUN))
+    if ((em_ptr->do_stun == 0) || em_ptr->r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_SOUND, MonsterResistanceType::RESIST_FORCE }) || (em_ptr->r_ptr->flags3 & RF3_NO_STUN))
         return;
 
     if (em_ptr->seen)
@@ -371,7 +386,7 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, effect_monster_type
  */
 static void effect_damage_piles_confusion(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
+    if ((em_ptr->do_conf == 0) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || em_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK))
         return;
 
     if (em_ptr->seen)
@@ -594,8 +609,8 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, effect_monster_t
     if (em_ptr->photo == 0)
         return;
 
-    object_type *q_ptr;
-    object_type forge;
+    ObjectType *q_ptr;
+    ObjectType forge;
     q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::STATUE, SV_PHOTO));
     q_ptr->pval = em_ptr->photo;
@@ -637,7 +652,7 @@ static void exe_affect_monster_postprocess(PlayerType *player_ptr, effect_monste
  * 3.ペット及び撮影による事後効果
  */
 bool affect_monster(
-    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg)
+    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     effect_monster_type tmp_effect;
     effect_monster_type *em_ptr = initialize_effect_monster(player_ptr, &tmp_effect, who, r, y, x, dam, attribute, flag, see_s_msg);
@@ -647,7 +662,7 @@ bool affect_monster(
     if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding))
         disturb(player_ptr, true, true);
 
-    process_result result = exe_affect_monster_by_effect(player_ptr, em_ptr);
+    process_result result = exe_affect_monster_by_effect(player_ptr, em_ptr, cap_mon_ptr);
     if (result != PROCESS_CONTINUE)
         return (bool)result;
 

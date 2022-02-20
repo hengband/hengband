@@ -76,7 +76,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
     wr_byte(tmp8u);
     v_stamp = 0L;
     x_stamp = 0L;
- 
+
     wr_u32b(w_ptr->sf_system);
     wr_u32b(w_ptr->sf_when);
     wr_u16b(w_ptr->sf_lives);
@@ -135,7 +135,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
 
         bool is_quest_running = q_ptr->status == QuestStatusType::TAKEN;
         is_quest_running |= q_ptr->status == QuestStatusType::COMPLETED;
-        is_quest_running |= !quest_type::is_fixed(i);
+        is_quest_running |= !quest_type::is_fixed(i2enum<QuestId>(i));
         if (!is_quest_running)
             continue;
 
@@ -161,7 +161,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
     tmp16u = static_cast<uint16_t>(a_info.size());
     wr_u16b(tmp16u);
     for (int i = 0; i < tmp16u; i++) {
-        artifact_type *a_ptr = &a_info[i];
+        auto *a_ptr = &a_info[i];
         wr_byte(a_ptr->cur_num);
         wr_s16b(a_ptr->floor_id);
     }
@@ -188,7 +188,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
         wr_byte((byte)player_ptr->spell_order[i]);
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 

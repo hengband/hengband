@@ -110,7 +110,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        monster_race *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &r_info[r_idx];
         concptr name = r_ptr->name.c_str();
         if (filter_monster && !filter_monster(r_ptr)) {
             continue;
@@ -124,7 +124,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
             continue;
         }
 
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             sprintf(nam, "[U] %s", name_buf);
         } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
             sprintf(nam, "[N] %s", name_buf);
@@ -205,9 +205,8 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     uint16_t why = 2;
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        monster_race *r_ptr = &r_info[r_idx];
-        BIT_FLAGS flags1 = r_ptr->flags1;
-        if (any_bits(flags1, RF1_UNIQUE)) {
+        auto *r_ptr = &r_info[r_idx];
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             spoil_out("[U] ");
         } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
             spoil_out("[N] ");
@@ -233,7 +232,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         }
 
         spoil_out(buf);
-        if (any_bits(flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
+        if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
             sprintf(buf, "Hp:%d  ", r_ptr->hdice * r_ptr->hside);
         } else {
             sprintf(buf, "Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside);

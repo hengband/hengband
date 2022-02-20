@@ -4,6 +4,7 @@
 #include "combat/combat-options-type.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
@@ -42,7 +43,6 @@
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/body-improvement.h"
@@ -75,8 +75,8 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    object_type forge;
-    object_type *q_ptr = &forge;
+    ObjectType forge;
+    auto *q_ptr = &forge;
     if (player_ptr->is_dead) {
         return false;
     }
@@ -143,7 +143,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     }
 
     int tm_idx = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (in_bounds(floor_ptr, ty, tx))
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
 
@@ -219,7 +219,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
  */
 void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand])
         return;
 
@@ -236,7 +236,7 @@ void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
         /* Can't backstab creatures that we can't see, right? */
         pa_ptr->backstab = true;
     } else if ((ninja_data && ninja_data->s_stealth) && (randint0(tmp) > (r_ptr->level + 20)) &&
-               pa_ptr->m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
+               pa_ptr->m_ptr->ml && !r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         pa_ptr->surprise_attack = true;
     } else if (monster_fear_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         pa_ptr->stab_fleeing = true;
@@ -290,8 +290,8 @@ bool hayagake(PlayerType *player_ptr)
         return true;
     }
 
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *f_ptr = &f_info[g_ptr->feat];
 
     if (f_ptr->flags.has_not(FloorFeatureType::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FloorFeatureType::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
@@ -474,7 +474,8 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
     case PURGATORY_FLAME: {
         int num = damroll(3, 9);
         for (int k = 0; k < num; k++) {
-            AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER : AttributeType::PLASMA;
+            AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER
+                                                                              : AttributeType::PLASMA;
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);

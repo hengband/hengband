@@ -142,7 +142,7 @@ MONSTER_NUMBER summon_MOAI(PlayerType *player_ptr, POSITION y, POSITION x, int r
 
 MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    monster_race *r_ptr = &r_info[MON_DEMON_SLAYER_MEMBER];
+    auto *r_ptr = &r_info[MON_DEMON_SLAYER_MEMBER];
     if (r_ptr->max_num == 0) {
         msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
         return 0;

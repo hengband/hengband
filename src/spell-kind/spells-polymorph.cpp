@@ -18,6 +18,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す /
@@ -30,9 +31,9 @@
  */
 static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
-    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags1 & RF1_QUESTOR))
-        return (r_idx);
+    auto *r_ptr = &r_info[r_idx];
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR))
+        return r_idx;
 
     DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
@@ -43,7 +44,7 @@ static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
             break;
 
         r_ptr = &r_info[r];
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
             continue;
         if ((r_ptr->level < lev1) || (r_ptr->level > lev2))
             continue;
@@ -65,9 +66,9 @@ static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     MONRACE_IDX new_r_idx;
     MONRACE_IDX old_r_idx = m_ptr->r_idx;
     bool targeted = target_who == g_ptr->m_idx;
@@ -111,7 +112,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 
     if (preserve_hold_objects) {
         for (const auto this_o_idx : back_m.hold_o_idx_list) {
-            object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
+            auto *o_ptr = &floor_ptr->o_list[this_o_idx];
             o_ptr->held_m_idx = hack_m_idx_ii;
         }
     } else {

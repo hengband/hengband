@@ -14,8 +14,6 @@
  * To use this file, compile with "USE_X11" defined, and link against all
  * the various "X11" libraries which may be needed.
  *
- * See also "main-xaw.c".
- *
  * Part of this file provides a user interface package composed of several
  * pseudo-objects, including "metadpy" (a display), "infowin" (a window),
  * "infoclr" (a color), and "infofnt" (a font).  Actually, the package was
@@ -428,7 +426,7 @@ static errr Metadpy_init_2(Display *dpy, concptr name)
     if (!dpy) {
         dpy = XOpenDisplay(name);
         if (!dpy)
-            return (-1);
+            return -1;
 
         m->nuke = 1;
     } else {
@@ -463,7 +461,7 @@ static errr Metadpy_init_2(Display *dpy, concptr name)
 
     m->color = ((m->depth > 1) ? 1 : 0);
     m->mono = ((m->color) ? 0 : 1);
-    return (0);
+    return 0;
 }
 
 /*
@@ -476,7 +474,7 @@ static errr Metadpy_update(int flush, int sync, int discard)
     if (sync)
         XSync(Metadpy->dpy, discard);
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -485,7 +483,7 @@ static errr Metadpy_update(int flush, int sync, int discard)
 static errr Metadpy_do_beep(void)
 {
     XBell(Metadpy->dpy, 100);
-    return (0);
+    return 0;
 }
 
 /*
@@ -503,7 +501,7 @@ static errr Infowin_set_name(concptr name)
         XSetWMName(Metadpy->dpy, Infowin->win, &tp);
         XFree(tp.value);
     }
-    return (0);
+    return 0;
 }
 
 /*
@@ -537,7 +535,7 @@ static errr Infowin_prepare(Window xid)
     iwin->mask = xwa.your_event_mask;
     iwin->mapped = ((xwa.map_state == IsUnmapped) ? 0 : 1);
     iwin->redraw = 1;
-    return (0);
+    return 0;
 }
 
 /*
@@ -567,7 +565,7 @@ static errr Infowin_init_data(Window dad, int x, int y, int w, int h, int b, Pix
 
     XSelectInput(Metadpy->dpy, xid, 0L);
     Infowin->nuke = 1;
-    return (Infowin_prepare(xid));
+    return Infowin_prepare(xid);
 }
 
 /*
@@ -577,7 +575,7 @@ static errr Infowin_set_mask(long mask)
 {
     Infowin->mask = mask;
     XSelectInput(Metadpy->dpy, Infowin->win, Infowin->mask);
-    return (0);
+    return 0;
 }
 
 /*
@@ -586,7 +584,7 @@ static errr Infowin_set_mask(long mask)
 static errr Infowin_map(void)
 {
     XMapWindow(Metadpy->dpy, Infowin->win);
-    return (0);
+    return 0;
 }
 
 /*
@@ -595,7 +593,7 @@ static errr Infowin_map(void)
 static errr Infowin_raise(void)
 {
     XRaiseWindow(Metadpy->dpy, Infowin->win);
-    return (0);
+    return 0;
 }
 
 /*
@@ -604,7 +602,7 @@ static errr Infowin_raise(void)
 static errr Infowin_impell(int x, int y)
 {
     XMoveWindow(Metadpy->dpy, Infowin->win, x, y);
-    return (0);
+    return 0;
 }
 
 /*
@@ -613,7 +611,7 @@ static errr Infowin_impell(int x, int y)
 static errr Infowin_resize(int w, int h)
 {
     XResizeWindow(Metadpy->dpy, Infowin->win, w, h);
-    return (0);
+    return 0;
 }
 
 /*
@@ -622,7 +620,7 @@ static errr Infowin_resize(int w, int h)
 static errr Infowin_wipe(void)
 {
     XClearWindow(Metadpy->dpy, Infowin->win);
-    return (0);
+    return 0;
 }
 
 /*
@@ -673,11 +671,11 @@ static int Infoclr_Opcode(concptr str)
     int i;
     for (i = 0; opcode_pairs[i * 2]; ++i) {
         if (streq(opcode_pairs[i * 2], str)) {
-            return (atoi(opcode_pairs[i * 2 + 1]));
+            return atoi(opcode_pairs[i * 2 + 1]);
         }
     }
 
-    return (-1);
+    return -1;
 }
 
 /*
@@ -701,11 +699,11 @@ static errr Infoclr_init_data(Pixell fg, Pixell bg, int op, int stip)
 
 #ifndef USE_XFT
     if (bg > Metadpy->zg)
-        return (-1);
+        return -1;
     if (fg > Metadpy->zg)
-        return (-1);
+        return -1;
     if ((op < 0) || (op > 15))
-        return (-1);
+        return -1;
 
     gcv.function = op;
     gcv.background = bg;
@@ -732,7 +730,7 @@ static errr Infoclr_init_data(Pixell fg, Pixell bg, int op, int stip)
     iclr->bg = bg;
     iclr->code = op;
     iclr->stip = stip ? 1 : 0;
-    return (0);
+    return 0;
 }
 
 /*
@@ -749,12 +747,12 @@ static errr Infoclr_change_fg(Pixell fg)
     iclr->fg = fg;
 #else
     if (fg > Metadpy->zg)
-        return (-1);
+        return -1;
 
     XSetForeground(Metadpy->dpy, iclr->gc, fg);
 #endif
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -816,7 +814,7 @@ static errr Infofnt_prepare(XFontSet info)
     else
         ifnt->twid = ifnt->wid;
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -895,7 +893,7 @@ static void Infofnt_text_std_xft_draw_str(int x, int y, concptr str, concptr str
 static errr Infofnt_text_std(int x, int y, concptr str, int len)
 {
     if (!str || !*str)
-        return (-1);
+        return -1;
 
     if (len < 0)
         len = strlen(str);
@@ -914,7 +912,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
         char utf8_buf[1024];
         int utf8_len = euc_to_utf8(str, len, utf8_buf, sizeof(utf8_buf));
         if (utf8_len < 0) {
-            return (-1);
+            return -1;
         }
 #endif
 
@@ -935,7 +933,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 #endif
     }
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -958,7 +956,7 @@ static errr Infofnt_text_non(int x, int y, concptr str, int len)
     XFillRectangle(Metadpy->dpy, Infowin->win, Infoclr->gc, x, y, w, h);
 #endif
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -1039,14 +1037,14 @@ static void send_key(const char key)
     // 順序が入れ替わってしまう。
 
     // キーバッファが一杯なら入力を捨てる
-    const int head_nxt = Term->key_head + 1 == Term->key_size ? 0 : Term->key_head + 1;
-    if (head_nxt == Term->key_tail) {
+    const int head_nxt = game_term->key_head + 1 == game_term->key_size ? 0 : game_term->key_head + 1;
+    if (head_nxt == game_term->key_tail) {
         plog_fmt("key buffer overflow, ignoring key 0x%02X", key);
         return;
     }
 
-    Term->key_queue[Term->key_head] = key;
-    Term->key_head = head_nxt;
+    game_term->key_queue[game_term->key_head] = key;
+    game_term->key_head = head_nxt;
 }
 
 // ゲーム側へキー列を送る
@@ -1058,8 +1056,6 @@ static void send_keys(const char *const keys)
 
 /*
  * Process a keypress event
- *
- * Also appears in "main-xaw.c".
  */
 static void react_keypress(XKeyEvent *xev)
 {
@@ -1219,7 +1215,7 @@ static void mark_selection_mark(int x1, int y1, int x2, int y2)
 static void mark_selection(void)
 {
     co_ord min, max;
-    term_type *old = Term;
+    term_type *old = game_term;
     bool draw = s_ptr->select;
     bool clear = s_ptr->drawn;
     if (s_ptr->t != old)
@@ -1259,7 +1255,7 @@ static void copy_x11_start(int x, int y)
     if (s_ptr->select)
         copy_x11_release();
 
-    s_ptr->t = Term;
+    s_ptr->t = game_term;
     s_ptr->init.x = s_ptr->cur.x = s_ptr->old.x = x;
     s_ptr->init.y = s_ptr->cur.y = s_ptr->old.y = y;
 }
@@ -1269,11 +1265,11 @@ static void copy_x11_start(int x, int y)
  */
 static void copy_x11_cont(int x, int y, unsigned int buttons)
 {
-    x = MIN(MAX(x, 0), Term->wid - 1);
-    y = MIN(MAX(y, 0), Term->hgt - 1);
+    x = MIN(MAX(x, 0), game_term->wid - 1);
+    y = MIN(MAX(y, 0), game_term->hgt - 1);
     if (~buttons & Button1Mask)
         return;
-    if (s_ptr->t != Term)
+    if (s_ptr->t != game_term)
         return;
     if (x == s_ptr->old.x && y == s_ptr->old.y && s_ptr->select)
         return;
@@ -1292,7 +1288,7 @@ static void copy_x11_end(const Time time)
 {
     if (!s_ptr->select)
         return;
-    if (s_ptr->t != Term)
+    if (s_ptr->t != game_term)
         return;
 
     s_ptr->time = time;
@@ -1424,7 +1420,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         return false;
     }
 
-    for (y = 0; y < Term->hgt; y++) {
+    for (y = 0; y < game_term->hgt; y++) {
 #ifdef JP
         int kanji = 0;
 #endif
@@ -1433,7 +1429,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         if (y > max.y)
             break;
 
-        for (l = 0, x = 0; x < Term->wid; x++) {
+        for (l = 0, x = 0; x < game_term->wid; x++) {
 #ifdef JP
             if (x > max.x)
                 break;
@@ -1547,7 +1543,7 @@ static void handle_button(Time time, int x, int y, int button, bool press)
  */
 static errr CheckEvent(bool wait)
 {
-    term_data *old_td = (term_data *)(Term->data);
+    term_data *old_td = (term_data *)(game_term->data);
 
     XEvent xev_body, *xev = &xev_body;
 
@@ -1561,7 +1557,7 @@ static errr CheckEvent(bool wait)
 #endif
 
         if (!wait && !XPending(Metadpy->dpy))
-            return (1);
+            return 1;
 
         if (s_ptr->select && !s_ptr->drawn)
             mark_selection();
@@ -1588,7 +1584,7 @@ static errr CheckEvent(bool wait)
     }
 
     if (!td || !iwin)
-        return (0);
+        return 0;
 
     term_activate(&td->t);
     Infowin_set(iwin);
@@ -1661,12 +1657,12 @@ static errr CheckEvent(bool wait)
     }
     case MapNotify: {
         Infowin->mapped = 1;
-        Term->mapped_flag = true;
+        game_term->mapped_flag = true;
         break;
     }
     case UnmapNotify: {
         Infowin->mapped = 0;
-        Term->mapped_flag = false;
+        game_term->mapped_flag = false;
         break;
     }
     case ConfigureNotify: {
@@ -1721,7 +1717,7 @@ static errr CheckEvent(bool wait)
 
     term_activate(&old_td->t);
     Infowin_set(old_td->win.get());
-    return (0);
+    return 0;
 }
 
 /*
@@ -1768,38 +1764,38 @@ static void init_sound(void)
 /*
  * Hack -- make a sound
  */
-static errr Term_xtra_x11_sound(int v)
+static errr game_term_xtra_x11_sound(int v)
 {
     char buf[1024];
     if (!use_sound)
-        return (1);
+        return 1;
     if ((v < 0) || (v >= SOUND_MAX))
-        return (1);
+        return 1;
     if (!sound_file[v])
-        return (1);
+        return 1;
 
     sprintf(buf, "./playwave.sh %s\n", sound_file[v]);
-    return (system(buf) < 0);
+    return system(buf) < 0;
 }
 
 /*
  * Handle "activation" of a term
  */
-static errr Term_xtra_x11_level(int v)
+static errr game_term_xtra_x11_level(int v)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     if (v) {
         Infowin_set(td->win.get());
         Infofnt_set(td->fnt.get());
     }
 
-    return (0);
+    return 0;
 }
 
 /*
  * React to changes
  */
-static errr Term_xtra_x11_react(void)
+static errr game_term_xtra_x11_react(void)
 {
     int i;
 
@@ -1819,51 +1815,51 @@ static errr Term_xtra_x11_react(void)
         }
     }
 
-    return (0);
+    return 0;
 }
 
 /*
  * Handle a "special request"
  */
-static errr Term_xtra_x11(int n, int v)
+static errr game_term_xtra_x11(int n, int v)
 {
     switch (n) {
     case TERM_XTRA_NOISE:
         Metadpy_do_beep();
-        return (0);
+        return 0;
     case TERM_XTRA_SOUND:
-        return (Term_xtra_x11_sound(v));
+        return game_term_xtra_x11_sound(v);
 #ifdef USE_XFT
     case TERM_XTRA_FRESH:
         Metadpy_update(1, 1, 0);
-        return (0);
+        return 0;
 #else
     case TERM_XTRA_FRESH:
         Metadpy_update(1, 0, 0);
-        return (0);
+        return 0;
 #endif
     case TERM_XTRA_BORED:
-        return (CheckEvent(0));
+        return CheckEvent(0);
     case TERM_XTRA_EVENT:
-        return (CheckEvent(v));
+        return CheckEvent(v);
     case TERM_XTRA_FLUSH:
         while (!CheckEvent(false))
             ;
-        return (0);
+        return 0;
     case TERM_XTRA_LEVEL:
-        return (Term_xtra_x11_level(v));
+        return game_term_xtra_x11_level(v);
     case TERM_XTRA_CLEAR:
         Infowin_wipe();
         s_ptr->drawn = false;
-        return (0);
+        return 0;
     case TERM_XTRA_DELAY:
         usleep(1000 * v);
-        return (0);
+        return 0;
     case TERM_XTRA_REACT:
-        return (Term_xtra_x11_react());
+        return game_term_xtra_x11_react();
     }
 
-    return (1);
+    return 1;
 }
 
 /*
@@ -1871,7 +1867,7 @@ static errr Term_xtra_x11(int n, int v)
  *
  * Consider a rectangular outline like "main-mac.c".  XXX XXX
  */
-static errr Term_curs_x11(int x, int y)
+static errr game_term_curs_x11(int x, int y)
 {
     if (use_graphics) {
 #ifdef USE_XFT
@@ -1888,13 +1884,13 @@ static errr Term_curs_x11(int x, int y)
         Infofnt_text_non(x, y, " ", 1);
     }
 
-    return (0);
+    return 0;
 }
 
 /*
  * Draw the double width cursor
  */
-static errr Term_bigcurs_x11(int x, int y)
+static errr game_term_bigcurs_x11(int x, int y)
 {
     if (use_graphics) {
 #ifdef USE_XFT
@@ -1911,36 +1907,36 @@ static errr Term_bigcurs_x11(int x, int y)
         Infofnt_text_non(x, y, "  ", 2);
     }
 
-    return (0);
+    return 0;
 }
 
 /*
  * Erase some characters.
  */
-static errr Term_wipe_x11(int x, int y, int n)
+static errr game_term_wipe_x11(int x, int y, int n)
 {
     Infoclr_set(clr[TERM_DARK].get());
     Infofnt_text_non(x, y, "", n);
     s_ptr->drawn = false;
-    return (0);
+    return 0;
 }
 
 /*
  * Draw some textual characters.
  */
-static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
+static errr game_term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
 {
     Infoclr_set(clr[a].get());
     Infofnt_text_std(x, y, s, n);
     s_ptr->drawn = false;
-    return (0);
+    return 0;
 }
 
 #ifndef USE_XFT
 /*
  * Draw some graphical characters.
  */
-static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
+static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
 {
     int i, x1, y1;
 
@@ -1955,7 +1951,7 @@ static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 
     unsigned long pixel, blank;
 
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
 
     y *= Infofnt->hgt;
     x *= Infofnt->wid;
@@ -1998,7 +1994,7 @@ static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     }
 
     s_ptr->drawn = false;
-    return (0);
+    return 0;
 }
 #endif
 
@@ -2085,10 +2081,10 @@ static void IMDestroyCallback(XIM xim, XPointer client_data, XPointer call_data)
 
 static char force_lower(char a)
 {
-    return ((isupper((a))) ? tolower((a)) : (a));
+    return isupper(a) ? tolower(a) : a;
 }
 
-static void Term_nuke_x11(term_type *)
+static void game_term_nuke_x11(term_type *)
 {
     for (auto i = 0; i < MAX_TERM_DATA; i++) {
         infofnt *ifnt = data[i].fnt.get();
@@ -2306,15 +2302,15 @@ static errr term_data_init(term_data *td, int i)
     t->soft_cursor = true;
     t->attr_blank = TERM_WHITE;
     t->char_blank = ' ';
-    t->xtra_hook = Term_xtra_x11;
-    t->curs_hook = Term_curs_x11;
-    t->bigcurs_hook = Term_bigcurs_x11;
-    t->wipe_hook = Term_wipe_x11;
-    t->text_hook = Term_text_x11;
-    t->nuke_hook = Term_nuke_x11;
+    t->xtra_hook = game_term_xtra_x11;
+    t->curs_hook = game_term_curs_x11;
+    t->bigcurs_hook = game_term_bigcurs_x11;
+    t->wipe_hook = game_term_wipe_x11;
+    t->text_hook = game_term_text_x11;
+    t->nuke_hook = game_term_nuke_x11;
     t->data = td;
     term_activate(t);
-    return (0);
+    return 0;
 }
 
 /*
@@ -2406,7 +2402,7 @@ errr init_x11(int argc, char *argv[])
 #endif /* USE_LOCALE */
 
     if (Metadpy_init_name(dpy_name))
-        return (-1);
+        return -1;
 
     xor_ = std::make_unique<infoclr>();
     Infoclr_set(xor_.get());
@@ -2431,7 +2427,7 @@ errr init_x11(int argc, char *argv[])
     for (i = 0; i < num_term; i++) {
         term_data *td = &data[i];
         term_data_init(td, i);
-        angband_term[i] = Term;
+        angband_term[i] = game_term;
     }
 
     Infowin_set(data[0].win.get());
@@ -2479,7 +2475,7 @@ errr init_x11(int argc, char *argv[])
         for (i = 0; i < num_term; i++) {
             term_data *td = &data[i];
             term_type *t = &td->t;
-            t->pict_hook = Term_pict_x11;
+            t->pict_hook = game_term_pict_x11;
             t->higher_pict = true;
             td->tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, td->fnt->twid, td->fnt->hgt);
         }
@@ -2500,7 +2496,7 @@ errr init_x11(int argc, char *argv[])
         }
     }
 #endif /* ! USE_XFT */
-    return (0);
+    return 0;
 }
 
 #endif /* USE_X11 */

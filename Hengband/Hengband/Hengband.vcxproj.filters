@@ -2373,6 +2373,15 @@
     <ClCompile Include="..\..\src\object-enchant\others\apply-magic-others.cpp">
       <Filter>object-enchant\others</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\others\apply-magic-lite.cpp">
+      <Filter>object-enchant\others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\monster-kind-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\race-resistance-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2817,9 +2826,6 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\h-config.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\system\h-define.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\h-system.h">
@@ -5100,9 +5106,6 @@
     <ClInclude Include="..\..\src\monster-race\race-behavior-flags.h">
       <Filter>monster-race</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\abstract-weapon-enchanter.h">
-      <Filter>object-enchant</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\protector\abstract-protector-enchanter.h">
       <Filter>object-enchant\protector</Filter>
     </ClInclude>
@@ -5155,6 +5158,21 @@
       <Filter>object-enchant\others</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-visual-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h">
+      <Filter>object-enchant\others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\angband-exceptions.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-kind-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\monster-kind-mask.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-resistance-mask.h">
       <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>

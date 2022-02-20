@@ -54,22 +54,22 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
-    for (QUEST_IDX i = 1; i < max_q_idx; i++) {
+    for (int16_t i = 1; i < max_q_idx; i++) {
         bool is_print = quest[i].status == QuestStatusType::TAKEN;
         is_print |= (quest[i].status == QuestStatusType::STAGE_COMPLETED) && (quest[i].type == QuestKindType::TOWER);
         is_print |= quest[i].status == QuestStatusType::COMPLETED;
         if (!is_print)
             continue;
 
-        QUEST_IDX old_quest = player_ptr->current_floor_ptr->inside_quest;
+        QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
         for (int j = 0; j < 10; j++)
             quest_text[j][0] = '\0';
 
         quest_text_line = 0;
-        player_ptr->current_floor_ptr->inside_quest = i;
+        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(i);
         init_flags = INIT_SHOW_TEXT;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->inside_quest = old_quest;
+        player_ptr->current_floor_ptr->quest_number = old_quest;
         if (quest[i].flags & QUEST_FLAG_SILENT)
             continue;
 
@@ -96,9 +96,9 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
                 case QuestKindType::FIND_ARTIFACT:
                     if (quest[i].k_idx) {
-                        artifact_type *a_ptr = &a_info[quest[i].k_idx];
-                        object_type forge;
-                        object_type *q_ptr = &forge;
+                        auto *a_ptr = &a_info[quest[i].k_idx];
+                        ObjectType forge;
+                        auto *q_ptr = &forge;
                         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
                         q_ptr->prep(k_idx);
                         q_ptr->name1 = quest[i].k_idx;
@@ -177,20 +177,20 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
-static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, IDX q_idx)
+static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, QuestId q_idx)
 {
     char tmp_str[120];
     char playtime_str[16];
-    quest_type *const q_ptr = &quest[q_idx];
+    quest_type *const q_ptr = &quest[enum2i(q_idx)];
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     auto is_fixed_quest = quest_type::is_fixed(q_idx);
     if (is_fixed_quest) {
-        IDX old_quest = floor_ptr->inside_quest;
-        floor_ptr->inside_quest = q_idx;
+        QuestId old_quest = floor_ptr->quest_number;
+        floor_ptr->quest_number = q_idx;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        floor_ptr->inside_quest = old_quest;
+        floor_ptr->quest_number = old_quest;
         if (q_ptr->flags & QUEST_FLAG_SILENT)
             return false;
     }
@@ -223,20 +223,20 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, IDX q
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, QUEST_IDX quest_num[])
+void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, int16_t quest_num[])
 {
     fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
-    QUEST_IDX total = 0;
-    for (QUEST_IDX i = 1; i < max_q_idx; i++) {
-        QUEST_IDX q_idx = quest_num[i];
-        quest_type *const q_ptr = &quest[q_idx];
+    int16_t total = 0;
+    for (int16_t i = 1; i < max_q_idx; i++) {
+        auto q_idx = i2enum<QuestId>(quest_num[i]);
+        quest_type *const q_ptr = &quest[enum2i(q_idx)];
 
         if (q_ptr->status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
         }
     }
 
-    if (!total)
+    if (total == 0)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
@@ -246,20 +246,20 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, QUEST_
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
  */
-void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, QUEST_IDX quest_num[])
+void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, int16_t quest_num[])
 {
     fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
-    QUEST_IDX total = 0;
-    for (QUEST_IDX i = 1; i < max_q_idx; i++) {
-        QUEST_IDX q_idx = quest_num[i];
-        quest_type *const q_ptr = &quest[q_idx];
+    int16_t total = 0;
+    for (int16_t i = 1; i < max_q_idx; i++) {
+        auto q_idx = i2enum<QuestId>(quest_num[i]);
+        quest_type *const q_ptr = &quest[enum2i(q_idx)];
 
         if (((q_ptr->status == QuestStatusType::FAILED_DONE) || (q_ptr->status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
         }
     }
 
-    if (!total)
+    if (total == 0)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
@@ -270,8 +270,8 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 {
     fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
     GAME_TEXT tmp_str[120];
-    QUEST_IDX total = 0;
-    for (QUEST_IDX i = 1; i < max_q_idx; i++) {
+    int16_t total = 0;
+    for (int16_t i = 1; i < max_q_idx; i++) {
         if (quest[i].flags & QUEST_FLAG_SILENT)
             continue;
 
@@ -282,7 +282,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
         }
     }
 
-    if (!total)
+    if (total == 0)
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
@@ -297,8 +297,8 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    std::vector<QUEST_IDX> quest_num(max_q_idx);
-    std::iota(quest_num.begin(), quest_num.end(), static_cast<QUEST_IDX>(0));
+    std::vector<int16_t> quest_num(max_q_idx);
+    std::iota(quest_num.begin(), quest_num.end(), enum2i(QuestId::NONE));
 
     int dummy;
     ang_sort(player_ptr, quest_num.data(), &dummy, quest_num.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);

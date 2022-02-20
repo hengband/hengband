@@ -10,6 +10,7 @@
 #include "market/bounty.h"
 #include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
@@ -89,7 +90,7 @@ void set_zangband_realm(PlayerType *player_ptr)
 
 void set_zangband_skill(PlayerType *player_ptr)
 {
-    if (player_ptr->pclass != PlayerClassType::BEASTMASTER)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
         player_ptr->skill_exp[PlayerSkillKindType::RIDING] /= 2;
 
     player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min(player_ptr->skill_exp[PlayerSkillKindType::RIDING], s_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING]);
@@ -178,7 +179,7 @@ void set_zangband_visited_towns(PlayerType *player_ptr)
     player_ptr->visit = 1L;
 }
 
-void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loading_quest_index, const QUEST_IDX old_inside_quest)
+void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loading_quest_index, const QuestId old_inside_quest)
 {
     if (q_ptr->flags & QUEST_FLAG_PRESET) {
         q_ptr->dungeon = 0;
@@ -186,29 +187,30 @@ void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loa
     }
 
     init_flags = INIT_ASSIGN;
-    player_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)loading_quest_index;
+    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(loading_quest_index);
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    player_ptr->current_floor_ptr->inside_quest = old_inside_quest;
+    player_ptr->current_floor_ptr->quest_number = old_inside_quest;
 }
 
 void set_zangband_class(PlayerType *player_ptr)
 {
-    if (h_older_than(0, 2, 2) && (player_ptr->pclass == PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
+    PlayerClass pc(player_ptr);
+    if (h_older_than(0, 2, 2) && pc.equals(PlayerClassType::BEASTMASTER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 3, 2) && (player_ptr->pclass == PlayerClassType::ARCHER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 3, 2) && pc.equals(PlayerClassType::ARCHER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 2, 6) && (player_ptr->pclass == PlayerClassType::SORCERER) && !player_ptr->is_dead) {
+    if (h_older_than(0, 2, 6) && pc.equals(PlayerClassType::SORCERER) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }
 
-    if (h_older_than(0, 4, 7) && (player_ptr->pclass == PlayerClassType::BLUE_MAGE) && !player_ptr->is_dead) {
+    if (h_older_than(0, 4, 7) && pc.equals(PlayerClassType::BLUE_MAGE) && !player_ptr->is_dead) {
         player_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(player_ptr, SPOP_NONE);
     }

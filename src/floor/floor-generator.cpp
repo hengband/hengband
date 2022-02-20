@@ -67,7 +67,7 @@ static void build_arena(PlayerType *player_ptr, POSITION *start_y, POSITION *sta
     POSITION y_depth = yval + 10;
     POSITION x_left = xval - 32;
     POSITION x_right = xval + 32;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION i = y_height; i <= y_height + 5; i++)
         for (POSITION j = x_left; j <= x_right; j++) {
             place_bold(player_ptr, i, j, GB_EXTRA_PERM);
@@ -114,7 +114,7 @@ static void generate_challenge_arena(PlayerType *player_ptr)
 {
     POSITION qy = 0;
     POSITION qx = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->height = SCREEN_HGT;
     floor_ptr->width = SCREEN_WID;
 
@@ -152,7 +152,7 @@ static void build_battle(PlayerType *player_ptr, POSITION *y, POSITION *x)
     POSITION x_left = xval - 32;
     POSITION x_right = xval + 32;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = y_height; i <= y_height + 5; i++)
         for (int j = x_left; j <= x_right; j++) {
             place_bold(player_ptr, i, j, GB_EXTRA_PERM);
@@ -207,7 +207,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     POSITION y, x;
     POSITION qy = 0;
     POSITION qx = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (y = 0; y < MAX_HGT; y++)
         for (x = 0; x < MAX_WID; x++) {
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
@@ -226,7 +226,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     }
 
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -241,17 +241,17 @@ static void generate_gambling_arena(PlayerType *player_ptr)
  */
 static void generate_fixed_floor(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 0; y < floor_ptr->height; y++)
         for (POSITION x = 0; x < floor_ptr->width; x++)
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
 
-    floor_ptr->base_level = quest[floor_ptr->inside_quest].level;
+    floor_ptr->base_level = quest[enum2i(floor_ptr->quest_number)].level;
     floor_ptr->dun_level = floor_ptr->base_level;
     floor_ptr->object_level = floor_ptr->base_level;
     floor_ptr->monster_level = floor_ptr->base_level;
     if (record_stair)
-        exe_write_diary(player_ptr, DIARY_TO_QUEST, floor_ptr->inside_quest, nullptr);
+        exe_write_diary(player_ptr, DIARY_TO_QUEST, enum2i(floor_ptr->quest_number), nullptr);
 
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
     init_flags = INIT_CREATE_DUNGEON;
@@ -266,11 +266,9 @@ static void generate_fixed_floor(PlayerType *player_ptr)
  */
 static bool level_gen(PlayerType *player_ptr, concptr *why)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
-    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)
-            || d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST))
-        && d_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
+    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER) || d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) && d_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
         int level_height;
         int level_width;
         if (d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) {
@@ -330,8 +328,8 @@ void wipe_generate_random_floor_flags(floor_type *floor_ptr)
  */
 void clear_cave(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, object_type{});
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, ObjectType{});
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
 
@@ -347,7 +345,7 @@ void clear_cave(PlayerType *player_ptr)
     precalc_cur_num_of_pet(player_ptr);
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info = 0;
             g_ptr->feat = 0;
             g_ptr->o_idx_list.clear();
@@ -455,7 +453,7 @@ static bool floor_is_connected(const floor_type *const floor_ptr, const IsWallFu
  */
 void generate_floor(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dungeon_idx = player_ptr->dungeon_idx;
     set_floor_and_wall(floor_ptr->dungeon_idx);
     for (int num = 0; true; num++) {
@@ -467,7 +465,7 @@ void generate_floor(PlayerType *player_ptr)
             generate_challenge_arena(player_ptr);
         else if (player_ptr->phase_out)
             generate_gambling_arena(player_ptr);
-        else if (floor_ptr->inside_quest)
+        else if (inside_quest(floor_ptr->quest_number))
             generate_fixed_floor(player_ptr);
         else if (!floor_ptr->dun_level)
             if (player_ptr->wild_mode)
@@ -489,7 +487,7 @@ void generate_floor(PlayerType *player_ptr)
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const bool check_conn = okay && floor_ptr->dun_level > 0 && floor_ptr->inside_quest == 0;
+        const bool check_conn = okay && floor_ptr->dun_level > 0 && !inside_quest(floor_ptr->quest_number);
         if (check_conn && !floor_is_connected(floor_ptr, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {

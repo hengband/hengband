@@ -50,7 +50,7 @@ BreakerCold::BreakerCold()
  * Does a given class of objects (usually) hate acid?
  * Note that acid can either melt or corrode something.
  */
-bool BreakerAcid::hates(object_type *o_ptr) const
+bool BreakerAcid::hates(ObjectType *o_ptr) const
 {
     /* Analyze the type */
     switch (o_ptr->tval) {
@@ -104,7 +104,7 @@ bool BreakerAcid::hates(object_type *o_ptr) const
  * @param o_ptr アイテムの情報参照ポインタ
  * @return 破損するならばTRUEを返す
  */
-bool BreakerElec::hates(object_type *o_ptr) const
+bool BreakerElec::hates(ObjectType *o_ptr) const
 {
     switch (o_ptr->tval) {
     case ItemKindType::RING:
@@ -128,7 +128,7 @@ bool BreakerElec::hates(object_type *o_ptr) const
  * Hafted/Polearm weapons have wooden shafts.
  * Arrows/Bows are mostly wooden.
  */
-bool BreakerFire::hates(object_type *o_ptr) const
+bool BreakerFire::hates(ObjectType *o_ptr) const
 {
     /* Analyze the type */
     switch (o_ptr->tval) {
@@ -186,7 +186,7 @@ bool BreakerFire::hates(object_type *o_ptr) const
  * @param o_ptr アイテムの情報参照ポインタ
  * @return 破損するならばTRUEを返す
  */
-bool BreakerCold::hates(object_type *o_ptr) const
+bool BreakerCold::hates(ObjectType *o_ptr) const
 {
     switch (o_ptr->tval) {
     case ItemKindType::POTION:
@@ -209,7 +209,7 @@ bool BreakerCold::hates(object_type *o_ptr) const
  * @return 破損するならばTRUEを返す
  * @todo 統合を検討
  */
-bool ObjectBreaker::can_destroy(object_type *o_ptr) const
+bool ObjectBreaker::can_destroy(ObjectType *o_ptr) const
 {
     if (!this->hates(o_ptr))
         return false;
@@ -252,7 +252,7 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, PO
     AttributeType dt = AttributeType::NONE;
     int dam = 0;
     bool angry = false;
-    object_kind *k_ptr = &k_info[k_idx];
+    auto *k_ptr = &k_info[k_idx];
     switch (k_ptr->sval) {
     case SV_POTION_SALT_WATER:
     case SV_POTION_SLIME_MOLD:
@@ -393,7 +393,7 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, PO
  * @details
  * Note that artifacts never break, see the "drop_near()" function.
  */
-PERCENTAGE breakage_chance(PlayerType *player_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
+PERCENTAGE breakage_chance(PlayerType *player_ptr, ObjectType *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
 {
     /* Examine the snipe type */
     if (snipe_type) {

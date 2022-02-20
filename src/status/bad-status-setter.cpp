@@ -47,10 +47,11 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
     if (this->player_ptr->is_dead) {
         return false;
     }
-
+    
+    PlayerRace pr(player_ptr);    
     if (v > 0) {
         if (!this->player_ptr->blind) {
-            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
+            if (pr.equals(PlayerRaceType::ANDROID)) {
                 msg_print(_("センサーをやられた！", "The sensor broke!"));
             } else {
                 msg_print(_("目が見えなくなってしまった！", "You are blind!"));
@@ -61,7 +62,7 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
         }
     } else {
         if (this->player_ptr->blind) {
-            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
+            if (pr.equals(PlayerRaceType::ANDROID)) {
                 msg_print(_("センサーが復旧した。", "The sensor has been restored."));
             } else {
                 msg_print(_("やっと目が見えるようになった。", "You can see again."));

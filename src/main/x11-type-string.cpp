@@ -22,7 +22,7 @@
 errr type_string(concptr str, uint len)
 {
     errr err = 0;
-    term_type *old = Term;
+    term_type *old = game_term;
     if (!str)
         return -1;
     if (!len)

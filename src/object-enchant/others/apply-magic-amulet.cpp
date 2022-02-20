@@ -23,7 +23,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-AmuletEnchanter::AmuletEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+AmuletEnchanter::AmuletEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , level(level)
@@ -47,8 +47,8 @@ void AmuletEnchanter::apply_magic()
         this->power = -1;
     }
 
-    this->enchant();
-    if ((one_in_(150) && (this->power > 0) && !this->o_ptr->is_cursed() && (this->level > 79)) || (this->power > 2)) {
+    this->sval_enchant();
+    if ((this->power > 2) || (one_in_(150) && (this->power > 0) && !this->o_ptr->is_cursed() && (this->level > 79))) {
         this->o_ptr->pval = std::min<short>(this->o_ptr->pval, 4);
         become_random_artifact(player_ptr, this->o_ptr, false);
         return;
@@ -66,7 +66,7 @@ void AmuletEnchanter::apply_magic()
     }
 }
 
-void AmuletEnchanter::enchant()
+void AmuletEnchanter::sval_enchant()
 {
     switch (this->o_ptr->sval) {
     case SV_AMULET_INTELLIGENCE:

@@ -6,7 +6,7 @@
 struct grid_type;;
 struct monster_type;
 struct monster_race;
-typedef struct effect_monster_type {
+struct effect_monster_type {
     grid_type *g_ptr;
     monster_type *m_ptr;
     monster_type *m_caster_ptr;
@@ -38,12 +38,12 @@ typedef struct effect_monster_type {
     POSITION r;
     POSITION y;
     POSITION x;
-    HIT_POINT dam;
+    int dam;
     AttributeType attribute;
     BIT_FLAGS flag;
     bool see_s_msg;
-} effect_monster_type;
+};
 
 class PlayerType;
 effect_monster_type *initialize_effect_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x,
-    HIT_POINT dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg);
+    int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg);

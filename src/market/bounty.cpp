@@ -46,7 +46,7 @@ bool exchange_cash(PlayerType *player_ptr)
 {
     bool change = false;
     GAME_TEXT o_name[MAX_NLEN];
-    object_type *o_ptr;
+    ObjectType *o_ptr;
 
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -101,8 +101,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE)
-            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -121,8 +120,7 @@ bool exchange_cash(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON)
-            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -146,7 +144,7 @@ bool exchange_cash(PlayerType *player_ptr)
             char buf[MAX_NLEN + 20];
             int num, k;
             INVENTORY_IDX item_new;
-            object_type forge;
+            ObjectType forge;
 
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
@@ -200,7 +198,7 @@ bool exchange_cash(PlayerType *player_ptr)
 void today_target(PlayerType *player_ptr)
 {
     char buf[160];
-    monster_race *r_ptr = &r_info[w_ptr->today_mon];
+    auto *r_ptr = &r_info[w_ptr->today_mon];
 
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
@@ -240,8 +238,7 @@ void show_bounty(void)
     for (int i = 0; i < MAX_BOUNTY; i++) {
         byte color;
         concptr done_mark;
-        monster_race *r_ptr
-            = &r_info[(w_ptr->bounty_r_idx[i] > 10000 ? w_ptr->bounty_r_idx[i] - 10000 : w_ptr->bounty_r_idx[i])];
+        monster_race *r_ptr = &r_info[(w_ptr->bounty_r_idx[i] > 10000 ? w_ptr->bounty_r_idx[i] - 10000 : w_ptr->bounty_r_idx[i])];
 
         if (w_ptr->bounty_r_idx[i] > 10000) {
             color = TERM_RED;
@@ -293,7 +290,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
             msg_format("日替わり候補: %s ", r_ptr->name.c_str());
         }
 
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
             continue;
         if (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2))
             continue;
@@ -324,7 +321,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
             monster_race *r_ptr;
             r_ptr = &r_info[w_ptr->bounty_r_idx[i]];
 
-            if (!(r_ptr->flags1 & RF1_UNIQUE))
+            if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
                 continue;
 
             if (!(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)))

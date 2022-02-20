@@ -19,6 +19,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "system/object-type-definition.h"
@@ -71,7 +72,7 @@ void ObjectUseEntity::execute()
         chance = USE_DEVICE;
     }
 
-    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (this->player_ptr->pclass == PlayerClassType::BERSERKER)) {
+    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || PlayerClass(this->player_ptr).equals(PlayerClassType::BERSERKER)) {
         if (flush_failure) {
             flush();
         }
@@ -122,7 +123,7 @@ void ObjectUseEntity::execute()
 
     o_ptr->pval--;
     if ((this->item >= 0) && (o_ptr->number > 1)) {
-        object_type forge;
+        ObjectType forge;
         auto *q_ptr = &forge;
         q_ptr->copy_from(o_ptr);
         q_ptr->number = 1;

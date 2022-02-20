@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+#include "util/enum-converter.h"
 #include <vector>
 
 // clang-format off
@@ -9,13 +10,55 @@
 /*
  * Quest constants
  */
-constexpr short MIN_RANDOM_QUEST = 40; /*<! ランダムクエストを割り当てるクエストIDの開始値 */
-constexpr short MAX_RANDOM_QUEST = 49; /*<! ランダムクエストを割り当てるクエストIDの終了値 */
-constexpr short QUEST_TOWER1     = 5;  /*<! 塔クエスト(第1階層)に割り振るクエストID */
-constexpr short QUEST_TOWER2     = 6;  /*<! 塔クエスト(第2階層)に割り振るクエストID */
-constexpr short QUEST_TOWER3     = 7;  /*<! 塔クエスト(第3階層)に割り振るクエストID */
-constexpr short QUEST_OBERON     = 8;  /*<! オベロン打倒クエストに割り振るクエストID */
-constexpr short QUEST_SERPENT    = 9;  /*<! サーペント打倒クエストに割り振るクエストID */
+enum class QuestId : int16_t{
+	NONE = 0, /* クエストなし */
+	THIEF = 1, /*<! 盗賊の隠れ家 */
+	SEWER = 2, /*<! 下水道 */
+	LOGURUS = 3, /*<! ログルス使い */
+	VAULT = 4, /*<! 宝物庫 */
+	TOWER1 = 5, /*<! 塔クエスト(第1階層)に割り振るクエストID */
+	TOWER2 = 6, /*<! 塔クエスト(第2階層)に割り振るクエストID */
+	TOWER3 = 7, /*<! 塔クエスト(第3階層)に割り振るクエストID */
+	OBERON = 8, /*<! オベロン打倒クエストに割り振るクエストID */
+	SERPENT = 9, /*<! サーペント打倒クエストに割り振るクエストID */
+	SORCERER = 10, /*<! 仙術エネルギー特異点 */
+	CHAOS = 11, /*<! カオスの特異点 */
+	NATURE = 12, /*<! 自然魔術の特異点 */
+	WARG = 14, /*<! ワーグを殲滅せよ */
+	ERIC = 15, /*<! エリックの要塞 */
+	MONSALVAT = 16, /*<! モンサルヴァト城への侵攻 */
+	CITY_SEA = 17, /*<! 海底都市(現在は没) */
+	WATER_CAVE = 18, /*<! 湖の洞窟 */
+	DOOM_1 = 19, /*<! 破滅のクエスト１ */
+	VAPOR = 20, /*<! 謎の瘴気 */
+	DOOM_2 = 21, /*<! 破滅のクエスト２ */
+	ORC_CAMP = 22, /*<! オークのキャンプ */
+	SPAWNING = 23, /*<! 増殖地獄 */
+	MS = 24, /*<! マイクロンフトの興亡 */
+	HAUNTED_HOUCE = 25, /*<! 幽霊屋敷 */
+	KILLING_FIELDS = 26, /*<! 激戦場 */
+	OLD_CASTLE = 27, /*<! 古い城 */
+	ROYAL_CRYPT = 28, /*<! 王家の墓 */
+	MIMIC = 29, /*<! ミミックの財宝 */
+	TENGU = 30, /*<! テングとデスソード */
+	WILLOW = 31, /*<! 柳じじい */
+	DARK_ELF = 32, /*<! ダークエルフの王 */
+	CLONE = 33, /*<! クローン地獄 */
+	DUMP_WITNESS = 34, /*<! もの言えぬ証人 */
+	RANDOM_QUEST1 = 40, /*<! ランダムクエストを割り当てるクエストIDの開始値 */
+	RANDOM_QUEST2 = 41,
+	RANDOM_QUEST3 = 42,
+	RANDOM_QUEST4 = 43,
+	RANDOM_QUEST5 = 44,
+	RANDOM_QUEST6 = 45,
+	RANDOM_QUEST7 = 46,
+	RANDOM_QUEST8 = 47,
+	RANDOM_QUEST9 = 48,
+	RANDOM_QUEST10 = 49, /*<! ランダムクエストを割り当てるクエストIDの終了値 */
+};
+
+constexpr auto MIN_RANDOM_QUEST = enum2i(QuestId::RANDOM_QUEST1);
+constexpr auto MAX_RANDOM_QUEST = enum2i(QuestId::RANDOM_QUEST10);
 
 constexpr uint QUEST_FLAG_SILENT = 0x01; /*!< クエストフラグ: クエスト進行に関する情報表示を抑止する / no messages from completion */
 constexpr uint QUEST_FLAG_PRESET = 0x02; /*!< クエストフラグ: クエストがダンジョン外で発生する / quest is outside the main dungeon */
@@ -74,25 +117,26 @@ public:
     PLAYER_LEVEL complev; /*!< クリア時プレイヤーレベル / player level (complete) */
     REAL_TIME comptime; /*!< クリア時ゲーム時間 /  quest clear time*/
 
-    static bool is_fixed(short quest_idx);
+    static bool is_fixed(QuestId quest_idx);
 };
 
 extern std::vector<quest_type> quest;
-extern QUEST_IDX max_q_idx;
+extern int16_t max_q_idx;
 extern char quest_text[10][80];
 extern int quest_text_line;
-extern int leaving_quest;
+extern QuestId leaving_quest;
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr);
 void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat);
-void complete_quest(PlayerType *player_ptr, QUEST_IDX quest_num);
-void check_find_art_quest_completion(PlayerType *player_ptr, object_type *o_ptr);
-void quest_discovery(QUEST_IDX q_idx);
-QUEST_IDX quest_number(PlayerType *player_ptr, DEPTH level);
-QUEST_IDX random_quest_number(PlayerType *player_ptr, DEPTH level);
+void complete_quest(PlayerType *player_ptr, QuestId quest_num);
+void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr);
+void quest_discovery(QuestId q_idx);
+QuestId quest_number(PlayerType *player_ptr, DEPTH level);
+QuestId random_quest_number(PlayerType *player_ptr, DEPTH level);
 void leave_quest_check(PlayerType *player_ptr);
 void leave_tower_check(PlayerType *player_ptr);
-void exe_enter_quest(PlayerType *player_ptr, QUEST_IDX quest_idx);
+void exe_enter_quest(PlayerType *player_ptr, QuestId quest_idx);
 void do_cmd_quest(PlayerType *player_ptr);
+bool inside_quest(QuestId id);

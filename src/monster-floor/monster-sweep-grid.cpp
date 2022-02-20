@@ -95,7 +95,7 @@ bool MonsterSweepGrid::mon_will_run()
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (is_pet(m_ptr)) {
-        return ((this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance)));
+        return (this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance));
     }
 
     if (m_ptr->cdis > MAX_SIGHT + 5) {
@@ -174,7 +174,7 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
-    if (none_bits(r_ptr->flags3, RF3_ANIMAL) || this->can_pass_wall || any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || this->can_pass_wall || any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
         return;
     }
 

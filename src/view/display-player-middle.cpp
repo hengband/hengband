@@ -8,6 +8,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player-info/monk-data-type.h"
 #include "player-info/race-types.h"
@@ -36,8 +37,8 @@
 static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int hand_entry)
 {
     HIT_PROB show_tohit = player_ptr->dis_to_h[hand];
-    HIT_POINT show_todam = player_ptr->dis_to_d[hand];
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + hand];
+    int show_todam = player_ptr->dis_to_d[hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + hand];
 
     if (o_ptr->is_known())
         show_tohit += o_ptr->to_h;
@@ -68,10 +69,10 @@ static void display_sub_hand(PlayerType *player_ptr)
         return;
     }
 
-    if ((player_ptr->pclass != PlayerClassType::MONK) || ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) == 0))
+    PlayerClass pc(player_ptr);
+    if (!pc.equals(PlayerClassType::MONK) || ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) == 0))
         return;
 
-    PlayerClass pc(player_ptr);
     if (pc.monk_stance_is(MonkStanceType::NONE)) {
         display_player_one_line(ENTRY_POSTURE, _("構えなし", "none"), TERM_YELLOW);
         return;
@@ -90,9 +91,9 @@ static void display_sub_hand(PlayerType *player_ptr)
  */
 static void display_hit_damage(PlayerType *player_ptr)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     HIT_PROB show_tohit = player_ptr->dis_to_h_b;
-    HIT_POINT show_todam = 0;
+    int show_todam = 0;
     if (o_ptr->is_known())
         show_tohit += o_ptr->to_h;
     if (o_ptr->is_known())
@@ -220,20 +221,21 @@ static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int ba
  */
 static void display_player_exp(PlayerType *player_ptr)
 {
-    int e = (player_ptr->prace == PlayerRaceType::ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
+    PlayerRace pr(player_ptr);
+    int e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
     if (player_ptr->exp >= player_ptr->max_exp)
         display_player_one_line(e, format("%ld", player_ptr->exp), TERM_L_GREEN);
     else
         display_player_one_line(e, format("%ld", player_ptr->exp), TERM_YELLOW);
 
-    if (player_ptr->prace != PlayerRaceType::ANDROID)
+    if (!pr.equals(PlayerRaceType::ANDROID))
         display_player_one_line(ENTRY_MAX_EXP, format("%ld", player_ptr->max_exp), TERM_L_GREEN);
 
-    e = (player_ptr->prace == PlayerRaceType::ANDROID) ? ENTRY_EXP_TO_ADV_ANDR : ENTRY_EXP_TO_ADV;
+    e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_TO_ADV_ANDR : ENTRY_EXP_TO_ADV;
 
     if (player_ptr->lev >= PY_MAX_LEVEL)
         display_player_one_line(e, "*****", TERM_L_GREEN);
-    else if (player_ptr->prace == PlayerRaceType::ANDROID)
+    else if (pr.equals(PlayerRaceType::ANDROID))
         display_player_one_line(e, format("%ld", (int32_t)(player_exp_a[player_ptr->lev - 1] * player_ptr->expfact / 100L)), TERM_L_GREEN);
     else
         display_player_one_line(e, format("%ld", (int32_t)(player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100L)), TERM_L_GREEN);

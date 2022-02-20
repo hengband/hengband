@@ -189,10 +189,10 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         sprintf(tmp, "%d", player_ptr->lev);
         v = tmp;
     } else if (streq(b + 1, "QUEST_NUMBER")) {
-        sprintf(tmp, "%d", player_ptr->current_floor_ptr->inside_quest);
+        sprintf(tmp, "%d", enum2i(player_ptr->current_floor_ptr->quest_number));
         v = tmp;
     } else if (streq(b + 1, "LEAVING_QUEST")) {
-        sprintf(tmp, "%d", leaving_quest);
+        sprintf(tmp, "%d", enum2i(leaving_quest));
         v = tmp;
     } else if (prefix(b + 1, "QUEST_TYPE")) {
         sprintf(tmp, "%d", enum2i(quest[atoi(b + 11)].type));

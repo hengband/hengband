@@ -41,7 +41,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, std::function<errr
             continue;
 
         if (buf[1] != ':')
-            return (PARSE_ERROR_GENERIC);
+            return PARSE_ERROR_GENERIC;
 
         if (buf[0] == 'V') {
             continue;
@@ -56,7 +56,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, std::function<errr
         }
 
         if ((err = parse_info_txt_line(buf, head)) != 0)
-            return (err);
+            return err;
     }
 
     return 0;
@@ -109,8 +109,8 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
             if (zz[6][1])
                 letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6] + 1);
         } else if (zz[6][0] == '!') {
-            if (floor_ptr->inside_quest) {
-                letter[index].artifact = quest[floor_ptr->inside_quest].k_idx;
+            if (inside_quest(floor_ptr->quest_number)) {
+                letter[index].artifact = quest[enum2i(floor_ptr->quest_number)].k_idx;
             }
         } else {
             letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6]);
@@ -131,10 +131,10 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
             if (zz[4][1])
                 letter[index].object = (OBJECT_IDX)atoi(zz[4] + 1);
         } else if (zz[4][0] == '!') {
-            if (floor_ptr->inside_quest) {
-                ARTIFACT_IDX a_idx = quest[floor_ptr->inside_quest].k_idx;
+            if (inside_quest(floor_ptr->quest_number)) {
+                ARTIFACT_IDX a_idx = quest[enum2i(floor_ptr->quest_number)].k_idx;
                 if (a_idx) {
-                    artifact_type *a_ptr = &a_info[a_idx];
+                    auto *a_ptr = &a_info[a_idx];
                     if (a_ptr->gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                         letter[index].object = lookup_kind(a_ptr->tval, a_ptr->sval);
                     }
@@ -213,7 +213,7 @@ parse_error_type parse_line_building(char *buf)
             break;
         }
 
-        return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     case 'A': {
         if (tokenize(s + 2, 8, zz, 0) >= 7) {
@@ -227,7 +227,7 @@ parse_error_type parse_line_building(char *buf)
             break;
         }
 
-        return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     case 'C': {
         auto pct_max = PLAYER_CLASS_TYPE_MAX;
@@ -259,7 +259,7 @@ parse_error_type parse_line_building(char *buf)
         break;
     }
     default: {
-        return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
     }
 

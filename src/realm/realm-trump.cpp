@@ -5,6 +5,7 @@
 #include "game-option/input-options.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-calculator.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-fetcher.h"
@@ -233,7 +234,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                     y = player_ptr->y;
                 }
 
-                if (player_ptr->pclass == PlayerClassType::BEASTMASTER)
+                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
                     type = SUMMON_KAMIKAZE_LIVING;
                 else
                     type = SUMMON_KAMIKAZE;
@@ -439,7 +440,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             if (cast || fail) {
                 summon_type type;
                 msg_print(_("あなたはモンスターのカードに集中する...", "You concentrate on several trumps at once..."));
-                if (player_ptr->pclass == PlayerClassType::BEASTMASTER)
+                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
                     type = SUMMON_LIVING;
                 else
                     type = SUMMON_NONE;
@@ -602,7 +603,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             return _("自分の周辺に隕石を落とす。", "Causes meteorites to fall down on nearby random locations.");
 
         {
-            HIT_POINT dam = plev * 2;
+            int dam = plev * 2;
             POSITION rad = 2;
 
             if (info)
@@ -661,7 +662,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             if (cast) {
                 summon_type type;
 
-                if (player_ptr->pclass == PlayerClassType::BEASTMASTER)
+                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
                     type = SUMMON_HI_DRAGON_LIVING;
                 else
                     type = SUMMON_HI_DRAGON;

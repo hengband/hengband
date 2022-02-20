@@ -10,6 +10,7 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -41,7 +42,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
@@ -53,10 +53,10 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
-#include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
@@ -105,7 +105,7 @@ bool activate_scare(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_aggravation(PlayerType *player_ptr, object_type *o_ptr, concptr name)
+bool activate_aggravation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
 {
     if (o_ptr->name1 == ART_HYOUSIGI)
         msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
@@ -169,11 +169,17 @@ bool activate_unique_detection(PlayerType *player_ptr)
             continue;
 
         r_ptr = &r_info[m_ptr->r_idx];
-        if (r_ptr->flags1 & RF1_UNIQUE)
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             msg_format(_("%s． ", "%s. "), r_ptr->name.c_str());
+        }
 
-        if (m_ptr->r_idx == MON_DIO)
+        if (m_ptr->r_idx == MON_DIO) {
             msg_print(_("きさま！　見ているなッ！", "You bastard! You're watching me, well watch this!"));
+        }
+
+        if (m_ptr->r_idx == MON_SAURON) {
+            msg_print(_("あなたは一瞬、瞼なき御目に凝視される感覚に襲われた！", "For a moment, you had the horrible sensation of being stared at by the lidless eye!"));
+        }
     }
 
     return true;
@@ -384,13 +390,13 @@ bool activate_recall(PlayerType *player_ptr)
     return recall_player(player_ptr, randint0(21) + 15);
 }
 
-bool activate_tree_creation(PlayerType *player_ptr, object_type *o_ptr, concptr name)
+bool activate_tree_creation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
 {
     msg_format(_("%s%sから明るい緑の光があふれ出た...", "The %s%s wells with clear light..."), name, quark_str(o_ptr->art_name));
     return tree_creation(player_ptr, player_ptr->y, player_ptr->x);
 }
 
-bool activate_animate_dead(PlayerType *player_ptr, object_type *o_ptr)
+bool activate_animate_dead(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     msg_print(_("黄金色の光が溢れ出た...", "It emitted a golden light..."));
     if (o_ptr->name1 > 0)

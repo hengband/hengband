@@ -42,7 +42,7 @@ void store_prt_gold(PlayerType *player_ptr)
  */
 void display_entry(PlayerType *player_ptr, int pos)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &st_ptr->stock[pos];
     int i = (pos % store_bottom);
 

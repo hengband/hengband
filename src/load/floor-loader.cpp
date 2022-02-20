@@ -46,7 +46,7 @@
  */
 errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
 
@@ -118,7 +118,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         } while (tmp8u == MAX_UCHAR);
 
         for (int i = count; i > 0; i--) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info = templates[id].info;
             g_ptr->feat = templates[id].feat;
             g_ptr->mimic = templates[id].mimic;
@@ -136,7 +136,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     if (h_older_than(1, 7, 0, 6) && !vanilla_town) {
         for (POSITION y = 0; y < ymax; y++) {
             for (POSITION x = 0; x < xmax; x++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+                auto *g_ptr = &floor_ptr->grid_array[y][x];
 
                 if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level) {
                     if (g_ptr->feat == OLD_FEAT_QUEST_ENTER) {
@@ -145,7 +145,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
                     } else if (g_ptr->feat == OLD_FEAT_BLDG_1) {
                         g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
                     }
-                } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE)) {
+                } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor_ptr->quest_number == i2enum<QuestId>(OLD_QUEST_WATER_CAVE))) {
                     g_ptr->feat = feat_up_stair;
                     g_ptr->special = 0;
                 }

@@ -38,6 +38,7 @@
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -61,7 +62,7 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
  * @brief アイテムオブジェクト1件を読み込む / Read an object
  * @param o_ptr アイテムオブジェクト読み取り先ポインタ
  */
-void rd_item_old(object_type *o_ptr)
+void rd_item_old(ObjectType *o_ptr)
 {
     o_ptr->k_idx = rd_s16b();
 
@@ -124,7 +125,7 @@ void rd_item_old(object_type *o_ptr)
             if (o_ptr->art_flags.has(i2enum<tr_type>(95)))
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
-                artifact_type *a_ptr = &a_info[o_ptr->name1];
+                auto *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
@@ -144,11 +145,11 @@ void rd_item_old(object_type *o_ptr)
     }
 
     o_ptr->held_m_idx = rd_s16b();
-    o_ptr->xtra1 = rd_byte();
+    auto xtra1 = rd_byte(); // かつてエゴアイテムの情報を格納していた名残.
     o_ptr->activation_id = i2enum<RandomArtActType>(rd_byte());
 
     if (h_older_than(1, 0, 10)) {
-        if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN) {
+        if (xtra1 == EGO_XTRA_SUSTAIN) {
             switch (enum2i(o_ptr->activation_id) % 6) {
             case 0:
                 o_ptr->art_flags.set(TR_SUST_STR);
@@ -170,7 +171,7 @@ void rd_item_old(object_type *o_ptr)
                 break;
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
-        } else if (o_ptr->xtra1 == EGO_XTRA_POWER) {
+        } else if (xtra1 == EGO_XTRA_POWER) {
             switch (enum2i(o_ptr->activation_id) % 11) {
             case 0:
                 o_ptr->art_flags.set(TR_RES_BLIND);
@@ -207,7 +208,7 @@ void rd_item_old(object_type *o_ptr)
                 break;
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
-        } else if (o_ptr->xtra1 == EGO_XTRA_ABILITY) {
+        } else if (xtra1 == EGO_XTRA_ABILITY) {
             switch (enum2i(o_ptr->activation_id) % 8) {
             case 0:
                 o_ptr->art_flags.set(TR_LEVITATION);
@@ -236,40 +237,57 @@ void rd_item_old(object_type *o_ptr)
             }
             o_ptr->activation_id = i2enum<RandomArtActType>(0);
         }
-        o_ptr->xtra1 = 0;
+
+        xtra1 = 0;
     }
 
     if (h_older_than(0, 2, 3)) {
-        o_ptr->xtra3 = 0;
-        o_ptr->xtra4 = 0;
-        o_ptr->xtra5 = 0;
-        if ((o_ptr->tval == ItemKindType::CHEST) || (o_ptr->tval == ItemKindType::CAPTURE)) {
-            o_ptr->xtra3 = o_ptr->xtra1;
-            o_ptr->xtra1 = 0;
+        o_ptr->fuel = 0;
+        o_ptr->captured_monster_current_hp = 0;
+        o_ptr->smith_hit = 0;
+        o_ptr->smith_damage = 0;
+        o_ptr->captured_monster_max_hp = 0;
+        if (o_ptr->tval == ItemKindType::CHEST) {
+            o_ptr->chest_level = xtra1;
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_speed = xtra1;
         }
+
         if (o_ptr->tval == ItemKindType::CAPTURE) {
             if (r_info[o_ptr->pval].flags1 & RF1_FORCE_MAXHP)
-                o_ptr->xtra5 = maxroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
+                o_ptr->captured_monster_max_hp = maxroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
             else
-                o_ptr->xtra5 = damroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
+                o_ptr->captured_monster_max_hp = damroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
             if (ironman_nightmare) {
-                o_ptr->xtra5 = std::min<short>(MONSTER_MAXHP, o_ptr->xtra5 * 2L);
+                o_ptr->captured_monster_max_hp = std::min<short>(MONSTER_MAXHP, o_ptr->captured_monster_max_hp * 2L);
             }
-            o_ptr->xtra4 = o_ptr->xtra5;
+
+            o_ptr->captured_monster_current_hp = o_ptr->captured_monster_max_hp;
         }
     } else {
-        o_ptr->xtra3 = rd_byte();
+        auto xtra3 = rd_byte();
         if (h_older_than(1, 3, 0, 1)) {
-            if (o_ptr->is_smith() && o_ptr->xtra3 >= 1 + 96)
-                o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
+            if (o_ptr->is_smith() && (xtra3 >= 1 + 96)) {
+                auto mes = _("古いバージョンで鍛冶師をプレイしたデータは読み込めません。", "The save data from playing a weaponsmith on versions older than v3.0.0 Aplha38 can't be read.");
+                throw SaveDataNotSupportedException(mes);
+            }
         }
 
-        o_ptr->xtra4 = rd_s16b();
-        o_ptr->xtra5 = rd_s16b();
+        auto xtra4 = rd_s16b();
+        if (o_ptr->tval == ItemKindType::LITE) {
+            o_ptr->fuel = xtra4;
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_current_hp = xtra4;
+        } else {
+            o_ptr->smith_hit = static_cast<byte>(xtra4 >> 8);
+            o_ptr->smith_damage = static_cast<byte>(xtra4 & 0x000f);
+        }
+
+        o_ptr->captured_monster_max_hp = rd_s16b();
     }
 
-    if (h_older_than(1, 0, 5) && (((o_ptr->tval == ItemKindType::LITE) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) || (o_ptr->tval == ItemKindType::FLASK))) {
-        o_ptr->xtra4 = o_ptr->pval;
+    if (h_older_than(1, 0, 5) && o_ptr->is_fuel()) {
+        o_ptr->fuel = o_ptr->pval;
         o_ptr->pval = 0;
     }
 
@@ -333,12 +351,12 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
         m_ptr->ap_r_idx = rd_s16b();
 
     if (h_older_than(1, 0, 14)) {
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->flags3 & RF3_EVIL)
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
             m_ptr->sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->flags3 & RF3_GOOD)
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
             m_ptr->sub_align |= SUB_ALIGN_GOOD;
     } else
         m_ptr->sub_align = rd_byte();
@@ -441,18 +459,18 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
     strip_bytes(1);
 }
 
-static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const BIT_FLAGS rfr)
+static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
 {
     if (r_ptr->r_flags3 & rf3) {
         r_ptr->r_flags3 &= ~rf3;
-        r_ptr->r_flagsr |= rfr;
+        r_ptr->resistance_flags.set(rfr);
     }
 }
 
-static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const BIT_FLAGS rfr)
+static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
 {
     if (f4 & rf4_br)
-        r_ptr->r_flagsr |= rfr;
+        r_ptr->resistance_flags.set(rfr);
 }
 
 /*!
@@ -463,38 +481,38 @@ static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAG
  */
 void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
 {
-    r_ptr->r_flagsr = 0L;
-    move_RF3_to_RFR(r_ptr, RF3_IM_ACID, RFR_IM_ACID);
-    move_RF3_to_RFR(r_ptr, RF3_IM_ELEC, RFR_IM_ELEC);
-    move_RF3_to_RFR(r_ptr, RF3_IM_FIRE, RFR_IM_FIRE);
-    move_RF3_to_RFR(r_ptr, RF3_IM_COLD, RFR_IM_COLD);
-    move_RF3_to_RFR(r_ptr, RF3_IM_POIS, RFR_IM_POIS);
-    move_RF3_to_RFR(r_ptr, RF3_RES_TELE, RFR_RES_TELE);
-    move_RF3_to_RFR(r_ptr, RF3_RES_NETH, RFR_RES_NETH);
-    move_RF3_to_RFR(r_ptr, RF3_RES_WATE, RFR_RES_WATE);
-    move_RF3_to_RFR(r_ptr, RF3_RES_PLAS, RFR_RES_PLAS);
-    move_RF3_to_RFR(r_ptr, RF3_RES_NEXU, RFR_RES_NEXU);
-    move_RF3_to_RFR(r_ptr, RF3_RES_DISE, RFR_RES_DISE);
-    move_RF3_to_RFR(r_ptr, RF3_RES_ALL, RFR_RES_ALL);
+    r_ptr->r_resistance_flags.clear();
+    move_RF3_to_RFR(r_ptr, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);
+    move_RF3_to_RFR(r_ptr, RF3_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC);
+    move_RF3_to_RFR(r_ptr, RF3_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE);
+    move_RF3_to_RFR(r_ptr, RF3_IM_COLD, MonsterResistanceType::IMMUNE_COLD);
+    move_RF3_to_RFR(r_ptr, RF3_IM_POIS, MonsterResistanceType::IMMUNE_POISON);
+    move_RF3_to_RFR(r_ptr, RF3_RES_TELE, MonsterResistanceType::RESIST_TELEPORT);
+    move_RF3_to_RFR(r_ptr, RF3_RES_NETH, MonsterResistanceType::RESIST_NETHER);
+    move_RF3_to_RFR(r_ptr, RF3_RES_WATE, MonsterResistanceType::RESIST_WATER);
+    move_RF3_to_RFR(r_ptr, RF3_RES_PLAS, MonsterResistanceType::RESIST_PLASMA);
+    move_RF3_to_RFR(r_ptr, RF3_RES_NEXU, MonsterResistanceType::RESIST_NEXUS);
+    move_RF3_to_RFR(r_ptr, RF3_RES_DISE, MonsterResistanceType::RESIST_DISENCHANT);
+    move_RF3_to_RFR(r_ptr, RF3_RES_ALL, MonsterResistanceType::RESIST_ALL);
 
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_LITE, RFR_RES_LITE);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_DARK, RFR_RES_DARK);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SOUN, RFR_RES_SOUN);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_CHAO, RFR_RES_CHAO);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_TIME, RFR_RES_TIME);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_INER, RFR_RES_INER);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_GRAV, RFR_RES_GRAV);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SHAR, RFR_RES_SHAR);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, RFR_RES_WALL);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_LITE, MonsterResistanceType::RESIST_LITE);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_DARK, MonsterResistanceType::RESIST_DARK);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SOUN, MonsterResistanceType::RESIST_SOUND);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_CHAO, MonsterResistanceType::RESIST_CHAOS);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_TIME, MonsterResistanceType::RESIST_TIME);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_INER, MonsterResistanceType::RESIST_INERTIA);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_GRAV, MonsterResistanceType::RESIST_GRAVITY);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SHAR, MonsterResistanceType::RESIST_SHARDS);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, MonsterResistanceType::RESIST_FORCE);
 
     if (f4 & RF4_BR_CONF)
         r_ptr->r_flags3 |= RF3_NO_CONF;
 
     if (r_idx == MON_STORMBRINGER)
-        r_ptr->r_flagsr |= RFR_RES_CHAO;
+        r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
 
-    if (r_ptr->r_flags3 & RF3_ORC)
-        r_ptr->r_flagsr |= RFR_RES_DARK;
+    if (r_ptr->r_kind_flags.has(MonsterKindType::ORC))
+        r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
 }
 
 /*!
@@ -506,7 +524,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
  */
 errr rd_dungeon_old(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = rd_s16b();
     if (h_older_than(0, 3, 8))
         player_ptr->dungeon_idx = DUNGEON_ANGBAND;
@@ -667,7 +685,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
                     } else if (g_ptr->feat == OLD_FEAT_BLDG_1) {
                         g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
                     }
-                } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE)) {
+                } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor_ptr->quest_number == i2enum<QuestId>(OLD_QUEST_WATER_CAVE))) {
                     g_ptr->feat = feat_up_stair;
                     g_ptr->special = 0;
                 }
@@ -679,7 +697,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     limit = rd_u16b();
     if (limit > w_ptr->max_o_idx) {
         load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
-        return (151);
+        return 151;
     }
 
     auto item_loader = ItemLoaderFactory::create_loader();
@@ -687,7 +705,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         OBJECT_IDX o_idx = o_pop(floor_ptr);
         if (i != o_idx) {
             load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
-            return (152);
+            return 152;
         }
 
         auto &item = floor_ptr->o_list[o_idx];
@@ -699,7 +717,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     limit = rd_u16b();
     if (limit > w_ptr->max_m_idx) {
         load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
-        return (161);
+        return 161;
     }
 
     auto monster_loader = MonsterLoaderFactory::create_loader(player_ptr);
@@ -707,7 +725,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         auto m_idx = m_pop(floor_ptr);
         if (i != m_idx) {
             load_note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
-            return (162);
+            return 162;
         }
 
         auto m_ptr = &floor_ptr->m_list[m_idx];

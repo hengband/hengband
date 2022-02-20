@@ -67,7 +67,7 @@ static void add_personality_flags(PlayerType *player_ptr, TrFlags &flags)
     flags.set(TR_RES_BLIND);
     flags.set(TR_RES_CONF);
     flags.set(TR_HOLD_EXP);
-    if (player_ptr->pclass != PlayerClassType::NINJA)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::NINJA))
         flags.set(TR_LITE_1);
     if (player_ptr->lev > 9)
         flags.set(TR_SPEED);

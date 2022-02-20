@@ -4,8 +4,8 @@
 #include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
-#include "system/artifact-type-definition.h"
 #include "object-enchant/trg-types.h"
+#include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -17,7 +17,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
  */
-bool object_is_bounty(PlayerType *player_ptr, object_type *o_ptr)
+bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     int i;
 
@@ -47,16 +47,16 @@ bool object_is_bounty(PlayerType *player_ptr, object_type *o_ptr)
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
  */
-bool object_is_quest_target(QUEST_IDX quest_idx, object_type *o_ptr)
+bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
 {
-    if (quest_idx == 0)
+    if (!inside_quest(quest_idx))
         return false;
 
-    ARTIFACT_IDX a_idx = quest[quest_idx].k_idx;
+    ARTIFACT_IDX a_idx = quest[enum2i(quest_idx)].k_idx;
     if (a_idx == 0)
         return false;
 
-    artifact_type *a_ptr = &a_info[a_idx];
+    auto *a_ptr = &a_info[a_idx];
     if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))
         return false;
 

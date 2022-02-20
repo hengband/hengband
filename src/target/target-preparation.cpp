@@ -40,8 +40,8 @@
  */
 bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     if (!monster_is_valid(m_ptr))
         return false;
 
@@ -65,7 +65,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
         return false;
 
@@ -78,13 +78,13 @@ static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->m_idx) {
-        monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+        auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
         if (m_ptr->ml)
             return true;
     }
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (o_ptr->marked & OM_FOUND)
             return true;
@@ -171,7 +171,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
         return;
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
             continue;
 
@@ -189,8 +189,8 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
         auto ap_r_ptr2 = &r_info[m_ptr2->ap_r_idx];
 
         /* Unique monsters first */
-        if (any_bits(ap_r_ptr1->flags1, RF1_UNIQUE) != any_bits(ap_r_ptr2->flags1, RF1_UNIQUE))
-            return any_bits(ap_r_ptr1->flags1, RF1_UNIQUE);
+        if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE))
+            return ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE);
 
         /* Shadowers first (あやしい影) */
         if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE))
@@ -198,7 +198,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
 
         /* Unknown monsters first */
         if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0))
-            return (ap_r_ptr1->r_tkills == 0);
+            return ap_r_ptr1->r_tkills == 0;
 
         /* Higher level monsters first (if known) */
         if (ap_r_ptr1->r_tkills && ap_r_ptr2->r_tkills && ap_r_ptr1->level != ap_r_ptr2->level)

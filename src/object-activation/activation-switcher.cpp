@@ -40,9 +40,9 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-bool switch_activation(PlayerType *player_ptr, object_type **o_ptr_ptr, const activation_type *const act_ptr, concptr name)
+bool switch_activation(PlayerType *player_ptr, ObjectType **o_ptr_ptr, const activation_type *const act_ptr, concptr name)
 {
-    object_type *o_ptr = (*o_ptr_ptr);
+    auto *o_ptr = (*o_ptr_ptr);
 
     switch (act_ptr->index) {
     case RandomArtActType::SUNLIGHT:

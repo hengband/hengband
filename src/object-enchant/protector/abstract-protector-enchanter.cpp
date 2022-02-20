@@ -14,7 +14,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-AbstractProtectorEnchanter::AbstractProtectorEnchanter(object_type *o_ptr, DEPTH level, int power)
+AbstractProtectorEnchanter::AbstractProtectorEnchanter(ObjectType *o_ptr, DEPTH level, int power)
     : o_ptr(o_ptr)
     , power(power)
 {

@@ -6,6 +6,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object/object-value.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
@@ -57,13 +58,13 @@ bool android_inside_weapon(PlayerType *player_ptr)
 void calc_android_exp(PlayerType *player_ptr)
 {
     uint32_t total_exp = 0;
-    if (player_ptr->is_dead || (player_ptr->prace != PlayerRaceType::ANDROID))
+    if (player_ptr->is_dead || !PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         return;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
-        object_type forge;
-        object_type *q_ptr = &forge;
+        auto *o_ptr = &player_ptr->inventory_list[i];
+        ObjectType forge;
+        auto *q_ptr = &forge;
         uint32_t value, exp;
         DEPTH level = std::max(k_info[o_ptr->k_idx].level - 8, 1);
 

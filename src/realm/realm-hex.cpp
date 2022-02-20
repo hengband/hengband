@@ -63,7 +63,7 @@
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @return 呪縛可能な武器ならばTRUEを返す
  */
-static bool item_tester_hook_weapon_except_bow(const object_type *o_ptr)
+static bool item_tester_hook_weapon_except_bow(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SWORD:
@@ -91,7 +91,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
     auto continuation = mode == SpellProcessType::CONTNUATION;
     auto stop = mode == SpellProcessType::STOP;
     auto should_continue = true;
-    HIT_POINT power;
+    int power;
     switch (spell) {
         /*** 1st book (0-7) ***/
     case HEX_BLESS:
@@ -170,7 +170,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
             OBJECT_IDX item;
             concptr q, s;
             GAME_TEXT o_name[MAX_NLEN];
-            object_type *o_ptr;
+            ObjectType *o_ptr;
 
             q = _("どれを呪いますか？", "Which weapon do you curse?");
             s = _("武器を装備していない。", "You're not wielding a weapon.");
@@ -486,12 +486,12 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
             OBJECT_IDX item;
             concptr q, s;
             GAME_TEXT o_name[MAX_NLEN];
-            object_type *o_ptr;
+            ObjectType *o_ptr;
 
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             s = _("防具を装備していない。", "You're not wearing any armor.");
 
-            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_armour));
+            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ObjectType::is_armour));
             if (!o_ptr)
                 return "";
 
@@ -559,7 +559,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
         if (description)
             return _("影のオーラを身にまとい、敵に影のダメージを与える。", "Gives aura of shadow.");
         if (cast) {
-            object_type *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
+            auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if (!o_ptr->k_idx) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
@@ -572,7 +572,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
             }
         }
         if (continuation) {
-            object_type *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
+            auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
             if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
@@ -685,12 +685,12 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
         if (cast) {
             OBJECT_IDX item;
             concptr s, q;
-            object_type *o_ptr;
+            ObjectType *o_ptr;
 
             q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
             s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
-            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_cursed));
+            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ObjectType::is_cursed));
             if (!o_ptr)
                 return "";
 

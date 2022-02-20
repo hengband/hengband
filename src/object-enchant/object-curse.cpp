@@ -26,7 +26,7 @@ const EnumClassFlagGroup<CurseTraitType> TRC_HEAVY_MASK({CurseTraitType::TY_CURS
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
  * @return 与える呪いのID
  */
-CurseTraitType get_curse(int power, object_type *o_ptr)
+CurseTraitType get_curse(int power, ObjectType *o_ptr)
 {
     CurseTraitType new_curse;
 
@@ -64,7 +64,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     if (randint1(100) > chance)
         return;
 
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
     if (!o_ptr->k_idx)
         return;
     auto oflgs = object_flags(o_ptr);

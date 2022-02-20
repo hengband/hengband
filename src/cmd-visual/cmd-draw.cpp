@@ -7,6 +7,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "player-base/player-race.h"
 #include "player-info/race-types.h"
 #include "player/process-name.h"
 #include "racial/racial-android.h"
@@ -53,10 +54,10 @@ void do_cmd_redraw(PlayerType *player_ptr)
 
     update_playtime();
     handle_stuff(player_ptr);
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         calc_android_exp(player_ptr);
 
-    term_type *old = Term;
+    term_type *old = game_term;
     for (int j = 0; j < 8; j++) {
         if (!angband_term[j])
             continue;

@@ -48,7 +48,7 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
  */
-static std::optional<PRICE> prompt_to_sell(PlayerType *player_ptr, object_type *o_ptr)
+static std::optional<PRICE> prompt_to_sell(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, true);
 
@@ -91,7 +91,7 @@ void store_sell(PlayerType *player_ptr)
     }
 
     OBJECT_IDX item;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(store_will_buy, player_ptr));
     if (!o_ptr)
         return;
@@ -108,8 +108,8 @@ void store_sell(PlayerType *player_ptr)
             return;
     }
 
-    object_type forge;
-    object_type *q_ptr = &forge;
+    ObjectType forge;
+    auto *q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
 

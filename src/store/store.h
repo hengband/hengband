@@ -11,7 +11,7 @@
 #define STORE_SHUFFLE   21              /* 1/Chance (per day) of an owner changing */
 #define STORE_TICKS     1000            /* Number of ticks between turnovers */
 
-typedef struct owner_type owner_type;
+struct owner_type;
 extern int store_top;
 extern int store_bottom;
 extern int xtra_stock;
@@ -28,5 +28,5 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType which);
 void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store_num, int chance);
 void store_init(int town_num, StoreSaleType store_num);
 void store_examine(PlayerType *player_ptr);
-int store_check_num(object_type *o_ptr);
+int store_check_num(ObjectType *o_ptr);
 int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j);

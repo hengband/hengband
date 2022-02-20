@@ -18,10 +18,10 @@
  * @param plusses フラグに与える価格の基本重み
  * @return オブジェクトのフラグ価格
  */
-PRICE flag_cost(const object_type *o_ptr, int plusses)
+PRICE flag_cost(const ObjectType *o_ptr, int plusses)
 {
     PRICE total = 0;
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &k_info[o_ptr->k_idx];
     auto flgs = object_flags(o_ptr);
 
     /*
@@ -31,7 +31,7 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
     flgs.reset(k_ptr->flags);
 
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = &a_info[o_ptr->name1];
+        auto *a_ptr = &a_info[o_ptr->name1];
         flgs.reset(a_ptr->flags);
     } else if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];

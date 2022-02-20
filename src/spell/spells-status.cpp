@@ -63,10 +63,10 @@
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
+bool heal_monster(PlayerType *player_ptr, DIRECTION dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_HEAL, dir, dam, flg));
+    return project_hook(player_ptr, AttributeType::OLD_HEAL, dir, dam, flg);
 }
 
 /*!
@@ -79,7 +79,7 @@ bool heal_monster(PlayerType *player_ptr, DIRECTION dir, HIT_POINT dam)
 bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_SPEED, dir, power, flg));
+    return project_hook(player_ptr, AttributeType::OLD_SPEED, dir, power, flg);
 }
 
 /*!
@@ -92,7 +92,7 @@ bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_SLOW, dir, power, flg));
+    return project_hook(player_ptr, AttributeType::OLD_SLOW, dir, power, flg);
 }
 
 /*!
@@ -105,7 +105,7 @@ bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_SLEEP, dir, power, flg));
+    return project_hook(player_ptr, AttributeType::OLD_SLEEP, dir, power, flg);
 }
 
 /*!
@@ -117,7 +117,7 @@ bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power)
  */
 bool stasis_monster(PlayerType *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(player_ptr, AttributeType::STASIS, dir, player_ptr->lev * 2, 0));
+    return fire_ball_hide(player_ptr, AttributeType::STASIS, dir, player_ptr->lev * 2, 0);
 }
 
 /*!
@@ -129,7 +129,7 @@ bool stasis_monster(PlayerType *player_ptr, DIRECTION dir)
  */
 bool stasis_evil(PlayerType *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(player_ptr, AttributeType::STASIS_EVIL, dir, player_ptr->lev * 2, 0));
+    return fire_ball_hide(player_ptr, AttributeType::STASIS_EVIL, dir, player_ptr->lev * 2, 0);
 }
 
 /*!
@@ -142,7 +142,7 @@ bool stasis_evil(PlayerType *player_ptr, DIRECTION dir)
 bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_CONF, dir, plev, flg));
+    return project_hook(player_ptr, AttributeType::OLD_CONF, dir, plev, flg);
 }
 
 /*!
@@ -155,7 +155,7 @@ bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 bool stun_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::STUN, dir, plev, flg));
+    return project_hook(player_ptr, AttributeType::STUN, dir, plev, flg);
 }
 
 /*!
@@ -171,7 +171,7 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
     bool tester = (project_hook(player_ptr, AttributeType::OLD_POLY, dir, power, flg));
     if (tester)
         chg_virtue(player_ptr, V_CHANCE, 1);
-    return (tester);
+    return tester;
 }
 
 /*!
@@ -183,7 +183,7 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 bool clone_monster(PlayerType *player_ptr, DIRECTION dir)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::OLD_CLONE, dir, 0, flg));
+    return project_hook(player_ptr, AttributeType::OLD_CLONE, dir, 0, flg);
 }
 
 /*!
@@ -196,7 +196,7 @@ bool clone_monster(PlayerType *player_ptr, DIRECTION dir)
 bool fear_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(player_ptr, AttributeType::TURN_ALL, dir, plev, flg));
+    return project_hook(player_ptr, AttributeType::TURN_ALL, dir, plev, flg);
 }
 
 bool time_walk(PlayerType *player_ptr)
@@ -226,13 +226,13 @@ bool time_walk(PlayerType *player_ptr)
  */
 void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 {
-    HIT_POINT min_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 3 / 8;
-    HIT_POINT max_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 5 / 8;
+    int min_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 3 / 8;
+    int max_value = player_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (player_ptr->hitdie + 1)) * 5 / 8;
 
     /* Rerate */
     while (true) {
         /* Pre-calculate level 1 hitdice */
-        player_ptr->player_hp[0] = (HIT_POINT)player_ptr->hitdie;
+        player_ptr->player_hp[0] = (int)player_ptr->hitdie;
 
         for (int i = 1; i < 4; i++) {
             player_ptr->player_hp[0] += randint1(player_ptr->hitdie);
@@ -387,7 +387,7 @@ bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID side
     return ident;
 }
 
-bool cure_critical_wounds(PlayerType *player_ptr, HIT_POINT pow)
+bool cure_critical_wounds(PlayerType *player_ptr, int pow)
 {
     auto ident = false;
     if (hp_player(player_ptr, pow)) {
@@ -422,7 +422,7 @@ bool cure_critical_wounds(PlayerType *player_ptr, HIT_POINT pow)
     return ident;
 }
 
-bool true_healing(PlayerType *player_ptr, HIT_POINT pow)
+bool true_healing(PlayerType *player_ptr, int pow)
 {
     auto ident = false;
     if (hp_player(player_ptr, pow)) {
@@ -459,7 +459,7 @@ bool true_healing(PlayerType *player_ptr, HIT_POINT pow)
 
 bool restore_mana(PlayerType *player_ptr, bool magic_eater)
 {
-    if (player_ptr->pclass == PlayerClassType::MAGIC_EATER && magic_eater) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::MAGIC_EATER) && magic_eater) {
         // 魔力復活による、魔道具術師の取り込んだ魔法の回復量
         // 取り込み数が10回未満: 3 回分回復
         // 取り込み数が10回以上: 取り込み回数/3 回分回復
@@ -548,9 +548,9 @@ bool fishing(PlayerType *player_ptr)
  * @details
  * 脱いで落とした装備にtimeoutを設定するために装備品のアドレスを返す。
  */
-bool cosmic_cast_off(PlayerType *player_ptr, object_type **o_ptr_ptr)
+bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
 {
-    object_type *o_ptr = (*o_ptr_ptr);
+    auto *o_ptr = (*o_ptr_ptr);
 
     /* Cast off activated item */
     INVENTORY_IDX slot;
@@ -562,7 +562,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, object_type **o_ptr_ptr)
     if (slot > INVEN_FEET)
         return false;
 
-    object_type forge;
+    ObjectType forge;
     (&forge)->copy_from(o_ptr);
     inven_item_increase(player_ptr, slot, (0 - o_ptr->number));
     inven_item_optimize(player_ptr, slot);
@@ -587,7 +587,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, object_type **o_ptr_ptr)
     (void)set_blessed(player_ptr, player_ptr->blessed + t, false);
     (void)set_fast(player_ptr, player_ptr->fast + t, false);
     (void)set_shero(player_ptr, player_ptr->shero + t, false);
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER)) {
         set_current_ki(player_ptr, true, player_ptr->lev * 5 + 190);
         msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));
     }

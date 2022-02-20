@@ -19,7 +19,7 @@
  * If player has inscribed the object with "!!", let him know when it's recharged. -LM-
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  */
-static void recharged_notice(PlayerType *player_ptr, object_type *o_ptr)
+static void recharged_notice(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (!o_ptr->inscription)
         return;
@@ -55,7 +55,7 @@ void recharge_magic_items(PlayerType *player_ptr)
     bool changed;
 
     for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -79,8 +79,8 @@ void recharge_magic_items(PlayerType *player_ptr)
      * one per turn. -LM-
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
         if (!o_ptr->k_idx)
             continue;
 
@@ -108,7 +108,7 @@ void recharge_magic_items(PlayerType *player_ptr)
     }
 
     for (i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
 

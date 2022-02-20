@@ -7,6 +7,7 @@
 #include "util/object-sort.h"
 #include "monster-race/monster-race.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player/player-realm.h"
 #include "system/monster-race-definition.h"
@@ -21,7 +22,7 @@
  * @param j_ptr 比較対象オブジェクトの構造体参照ポインタ2
  * @return o_ptrの方が上位ならばTRUEを返す。
  */
-bool object_sort_comp(PlayerType *player_ptr, object_type *o_ptr, int32_t o_value, object_type *j_ptr)
+bool object_sort_comp(PlayerType *player_ptr, ObjectType *o_ptr, int32_t o_value, ObjectType *j_ptr)
 {
     int o_type, j_type;
     if (!j_ptr->k_idx)

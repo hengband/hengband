@@ -13,6 +13,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "mutation/mutation-investor-remover.h"
+#include "player-base/player-class.h"
 #include "player/patron.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -185,7 +186,7 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         wiz_jump_to_dungeon(player_ptr);
         break;
     case 'k':
-        wiz_kill_me(player_ptr, 0, (AttributeType)command_arg);
+        wiz_kill_target(player_ptr, 0, (AttributeType)command_arg, true);
         break;
     case 'm':
         map_area(player_ptr, DETECT_RAD_ALL * 3);
@@ -228,7 +229,7 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         wiz_lite(player_ptr, false);
         break;
     case 'w':
-        wiz_lite(player_ptr, (bool)(player_ptr->pclass == PlayerClassType::NINJA));
+        wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
         break;
     case 'x':
         gain_exp(player_ptr, command_arg ? command_arg : (player_ptr->exp + 1));
@@ -241,10 +242,10 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         player_outfit(player_ptr);
         break;
     case 'y':
-        wiz_kill_enemy(player_ptr);
+        wiz_kill_target(player_ptr);
         break;
     case 'Y':
-        wiz_kill_enemy(player_ptr, 0, (AttributeType)command_arg);
+        wiz_kill_target(player_ptr, 0, (AttributeType)command_arg);
         break;
     case 'z':
         wiz_zap_surrounding_monsters(player_ptr);

@@ -195,7 +195,7 @@ FILE *angband_fopen(concptr file, concptr mode)
     if (path_parse(buf, 1024, file))
         return nullptr;
 
-    return (fopen(buf, mode));
+    return fopen(buf, mode);
 }
 
 /*
@@ -218,14 +218,14 @@ FILE *angband_fopen_temp(char *buf, int max)
     if (fd < 0)
         return nullptr;
 
-    return (fdopen(fd, "w"));
+    return fdopen(fd, "w");
 }
 #else /* HAVE_MKSTEMP */
 FILE *angband_fopen_temp(char *buf, int max)
 {
     if (path_temp(buf, max))
         return nullptr;
-    return (angband_fopen(buf, "w"));
+    return angband_fopen(buf, "w");
 }
 #endif /* HAVE_MKSTEMP */
 
@@ -399,7 +399,7 @@ int fd_make(concptr file, BIT_FLAGS mode)
     if (path_parse(buf, 1024, file))
         return -1;
 
-    return (open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode));
+    return open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
 }
 
 /*
@@ -413,7 +413,7 @@ int fd_open(concptr file, int flags)
     if (path_parse(buf, 1024, file))
         return -1;
 
-    return (open(buf, flags | O_BINARY, 0));
+    return open(buf, flags | O_BINARY, 0);
 }
 
 /*

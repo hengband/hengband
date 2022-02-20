@@ -8,6 +8,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
@@ -18,6 +19,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
@@ -25,6 +27,7 @@
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-util.h"
+#include "player-base/player-class.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -34,11 +37,11 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -82,7 +85,7 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, PlayerType *player_ptr, M
  */
 MonsterSpellResult spell_RF6_WORLD(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     disturb(player_ptr, true, true);
@@ -172,8 +175,8 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
@@ -194,17 +197,17 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
-    if (tr_ptr->flagsr & RFR_RES_TELE) {
-        if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
+    if (tr_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
+        if (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE) || tr_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
             if (is_original_ap_and_seen(player_ptr, t_ptr))
-                tr_ptr->r_flagsr |= RFR_RES_TELE;
+                tr_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             if (see_monster(player_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
             resists_tele = true;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(player_ptr, t_ptr))
-                tr_ptr->r_flagsr |= RFR_RES_TELE;
+                tr_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             if (see_monster(player_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
@@ -240,7 +243,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     auto res = MonsterSpellResult::make_valid();
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
@@ -270,17 +273,17 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
-    if (tr_ptr->flagsr & RFR_RES_TELE) {
-        if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
+    if (tr_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
+        if (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE) || tr_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
             if (is_original_ap_and_seen(player_ptr, t_ptr))
-                tr_ptr->r_flagsr |= RFR_RES_TELE;
+                tr_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             if (see_monster(player_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
             resists_tele = true;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(player_ptr, t_ptr))
-                tr_ptr->r_flagsr |= RFR_RES_TELE;
+                tr_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             if (see_monster(player_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
@@ -315,7 +318,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
 {
     const auto res = MonsterSpellResult::make_valid();
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
@@ -342,7 +345,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    resist = tr_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE);
+    resist = tr_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || tr_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
     saving_throw = (tr_ptr->flags1 & RF1_QUESTOR) || (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(_("%^sが%sの足を指さした。", "%^s gestures at %s's feet."),
@@ -372,17 +375,17 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
 {
     mspell_cast_msg_blind msg;
     concptr msg_done;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     bool can_use_lite_area = false;
     bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
     bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
-    if ((player_ptr->pclass == PlayerClassType::NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE) && !(r_ptr->flags7 & RF7_DARK_MASK))
         can_use_lite_area = true;
 
     if (monster_to_monster && !is_hostile(t_ptr))
@@ -469,7 +472,7 @@ MonsterSpellResult spell_RF6_TRAPS(PlayerType *player_ptr, POSITION y, POSITION 
  */
 MonsterSpellResult spell_RF6_RAISE_DEAD(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."), _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."));
 

@@ -23,9 +23,6 @@
 /* Basic types */
 #include "system/h-type.h"
 
-/* Basic constants and macros */
-#include "system/h-define.h"
-
 /* ゲーム調整値はこちらに */
 #include "system/gamevalue.h"
 

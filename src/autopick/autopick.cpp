@@ -39,7 +39,7 @@
  */
 static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = ref_item(player_ptr, item);
 
     if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY))
@@ -86,7 +86,7 @@ void autopick_delayed_alter(PlayerType *player_ptr)
  */
 void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX item, bool destroy)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = ref_item(player_ptr, item);
     int idx = find_autopick_list(player_ptr, o_ptr);
     auto_inscribe_item(player_ptr, o_ptr, idx);
@@ -101,7 +101,7 @@ void autopick_pickup_items(PlayerType *player_ptr, grid_type *g_ptr)
 {
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         OBJECT_IDX this_o_idx = *it++;
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         int idx = find_autopick_list(player_ptr, o_ptr);
         auto_inscribe_item(player_ptr, o_ptr, idx);
         if ((idx < 0) || (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) == 0) {

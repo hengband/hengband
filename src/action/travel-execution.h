@@ -8,13 +8,13 @@
 #include "floor/floor-base-definitions.h"
 
  /*  A structure type for travel command  */
-typedef struct travel_type {
+struct travel_type {
     int run; /* Remaining grid number */
     int cost[MAX_HGT][MAX_WID];
     POSITION x; /* Target X */
     POSITION y; /* Target Y */
     DIRECTION dir; /* Running direction */
-} travel_type;
+};
 
 extern travel_type travel;
 

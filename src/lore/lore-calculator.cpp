@@ -54,7 +54,7 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
  */
 bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     DEPTH level = r_ptr->level;
     MONSTER_NUMBER kills = r_ptr->r_tkills;
 
@@ -64,7 +64,7 @@ bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
         return true;
     if (kills > 304 / (4 + level))
         return true;
-    if (!(r_ptr->flags1 & RF1_UNIQUE))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
         return false;
     if (kills > 304 / (38 + (5 * level) / 4))
         return true;
@@ -85,7 +85,7 @@ bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
  */
 bool know_damage(MONRACE_IDX r_idx, int i)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     DEPTH level = r_ptr->level;
     int32_t a = r_ptr->r_blows[i];
 
@@ -97,7 +97,7 @@ bool know_damage(MONRACE_IDX r_idx, int i)
         d = ((4 + level) * MAX_UCHAR - 1) / 80;
     if ((4 + level) * a > 80 * d)
         return true;
-    if (!(r_ptr->flags1 & RF1_UNIQUE))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
         return false;
     if ((4 + level) * (2 * a) > 80 * d)
         return true;
@@ -149,5 +149,5 @@ void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->ability_flags = lore_ptr->r_ptr->ability_flags;
     lore_ptr->aura_flags = lore_ptr->r_ptr->aura_flags;
     lore_ptr->behavior_flags = lore_ptr->r_ptr->behavior_flags;
-    lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
+    lore_ptr->resistance_flags = lore_ptr->r_ptr->resistance_flags;
 }

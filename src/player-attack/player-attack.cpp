@@ -38,6 +38,7 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -115,7 +116,7 @@ static void attack_classify(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_bare_knuckle_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if ((r_ptr->level + 10) <= player_ptr->lev)
         return;
 
@@ -141,8 +142,8 @@ static void get_weapon_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_attack_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if (o_ptr->k_idx == 0) {
         get_bare_knuckle_exp(player_ptr, pa_ptr);
         return;
@@ -169,7 +170,7 @@ static void calc_num_blow(PlayerType *player_ptr, player_attack_type *pa_ptr)
     else
         pa_ptr->num_blow = player_ptr->num_blow[pa_ptr->hand];
 
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         pa_ptr->num_blow = 1;
 }
@@ -310,7 +311,7 @@ static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *
  */
 static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     auto dd = o_ptr->dd + player_ptr->to_dd[pa_ptr->hand] + magical_brand_extra_dice(pa_ptr);
     pa_ptr->attack_damage = damroll(dd, o_ptr->ds + player_ptr->to_ds[pa_ptr->hand]);
     pa_ptr->attack_damage = calc_attack_damage_with_slay(player_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, false);
@@ -321,8 +322,7 @@ static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa
 
     auto do_impact = does_weapon_has_flag(player_ptr->impact, pa_ptr);
     if ((!(o_ptr->tval == ItemKindType::SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
-        pa_ptr->attack_damage
-            = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
+        pa_ptr->attack_damage = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
 
     pa_ptr->drain_result = pa_ptr->attack_damage;
     process_vorpal_attack(player_ptr, pa_ptr, vorpal_cut, vorpal_chance);
@@ -341,7 +341,7 @@ static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa
  */
 static void calc_attack_damage(PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     pa_ptr->attack_damage = 1;
     if (pa_ptr->monk_attack) {
         process_monk_attack(player_ptr, pa_ptr);
@@ -390,8 +390,8 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
     if (pa_ptr->attack_damage < 0)
         pa_ptr->attack_damage = 0;
 
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!monster_living(pa_ptr->m_ptr->r_idx) && (r_ptr->flags3 & RF3_EVIL))) {
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!monster_living(pa_ptr->m_ptr->r_idx) && r_ptr->kind_flags.has(MonsterKindType::EVIL))) {
         pa_ptr->attack_damage = 0;
     }
 
@@ -419,7 +419,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
         return false;
 
     *(pa_ptr->mdeath) = true;
-    if ((player_ptr->pclass == PlayerClassType::BERSERKER) && player_ptr->energy_use) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER) && player_ptr->energy_use) {
         PlayerEnergy energy(player_ptr);
         if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
             ENERGY energy_use;
@@ -436,7 +436,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
         }
     }
 
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if ((o_ptr->name1 == ART_ZANTETSU) && is_lowlevel)
         msg_print(_("またつまらぬものを斬ってしまった．．．", "Sigh... Another trifling thing I've cut...."));
 
@@ -454,7 +454,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
 static void apply_actual_attack(
     PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
 
     sound(SOUND_HIT);
@@ -465,15 +465,14 @@ static void apply_actual_attack(
     pa_ptr->magical_effect = select_magical_brand_effect(player_ptr, pa_ptr);
     decide_blood_sucking(player_ptr, pa_ptr);
 
-    bool vorpal_cut = (pa_ptr->flags.has(TR_VORPAL) || SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
-        && !is_zantetsu_nullified;
+    bool vorpal_cut = (pa_ptr->flags.has(TR_VORPAL) || SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified;
     calc_attack_damage(player_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     apply_damage_bonus(player_ptr, pa_ptr);
     apply_damage_negative_effect(pa_ptr, is_zantetsu_nullified, is_ej_nullified);
     mineuchi(player_ptr, pa_ptr);
 
     pa_ptr->attack_damage = mon_damage_mod(player_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
-        ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((player_ptr->pclass == PlayerClassType::BERSERKER) && one_in_(2)));
+        ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER) && one_in_(2)));
     critical_attack(player_ptr, pa_ptr);
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
         pa_ptr->attack_damage, pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
@@ -528,7 +527,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     monster_desc(player_ptr, pa_ptr->m_name, pa_ptr->m_ptr, 0);
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     bool is_zantetsu_nullified = ((o_ptr->name1 == ART_ZANTETSU) && (pa_ptr->r_ptr->d_char == 'j'));
     bool is_ej_nullified = ((o_ptr->name1 == ART_EXCALIBUR_J) && (pa_ptr->r_ptr->d_char == 'S'));
     calc_num_blow(player_ptr, pa_ptr);

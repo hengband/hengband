@@ -59,11 +59,11 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, AttributeType GF
  */
 MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    HIT_POINT dam, drs_type = 0;
+    int dam, drs_type = 0;
     concptr type_s;
     bool smart_learn_aux = true;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);

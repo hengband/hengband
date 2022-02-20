@@ -22,7 +22,7 @@
  * @brief アイテムオブジェクトを読み込む(v3.0.0 Savefile ver50まで)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
  */
-void ItemLoader50::rd_item(object_type *o_ptr)
+void ItemLoader50::rd_item(ObjectType *o_ptr)
 {
     if (h_older_than(1, 5, 0, 0)) {
         rd_item_old(o_ptr);
@@ -98,7 +98,12 @@ void ItemLoader50::rd_item(object_type *o_ptr)
     }
 
     o_ptr->held_m_idx = any_bits(flags, SaveDataItemFlagType::HELD_M_IDX) ? rd_s16b() : 0;
-    o_ptr->xtra1 = any_bits(flags, SaveDataItemFlagType::XTRA1) ? rd_byte() : 0;
+    if (loading_savefile_version_is_older_than(12)) {
+        if (any_bits(flags, SavedataItemOlderThan12FlagType::XTRA1)) {
+            strip_bytes(1);
+        }
+    }
+
     if (any_bits(flags, SaveDataItemFlagType::ACTIVATION_ID)) {
         if (h_older_than(3, 0, 0, 2)) {
             o_ptr->activation_id = i2enum<RandomArtActType>(rd_byte());
@@ -109,9 +114,36 @@ void ItemLoader50::rd_item(object_type *o_ptr)
         o_ptr->activation_id = i2enum<RandomArtActType>(0);
     }
 
-    o_ptr->xtra3 = any_bits(flags, SaveDataItemFlagType::XTRA3) ? rd_byte() : 0;
-    o_ptr->xtra4 = any_bits(flags, SaveDataItemFlagType::XTRA4) ? rd_s16b() : 0;
-    o_ptr->xtra5 = any_bits(flags, SaveDataItemFlagType::XTRA5) ? rd_s16b() : 0;
+    // xtra3フィールドが複数目的に共用されていた頃の名残.
+    if (loading_savefile_version_is_older_than(12)) {
+        uint8_t tmp8s = any_bits(flags, SavedataItemOlderThan12FlagType::XTRA3) ? rd_byte() : 0;
+        if (o_ptr->tval == ItemKindType::CHEST) {
+            o_ptr->chest_level = tmp8s;
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_speed = tmp8s;
+        }
+    } else {
+        o_ptr->chest_level = any_bits(flags, SaveDataItemFlagType::CHEST_LEVEL) ? rd_byte() : 0;
+        o_ptr->captured_monster_speed = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_SPEED) ? rd_byte() : 0;
+    }
+
+    // xtra4フィールドが複数目的に共用されていた頃の名残.
+    if (loading_savefile_version_is_older_than(13)) {
+        int16_t xtra4 = any_bits(flags, SavedataItemOlderThan13FlagType::XTRA4) ? rd_s16b() : 0;
+        if (o_ptr->is_fuel()) {
+            o_ptr->fuel = static_cast<ushort>(xtra4);
+        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+            o_ptr->captured_monster_current_hp = xtra4;
+        } else {
+            o_ptr->smith_hit = static_cast<byte>(xtra4 >> 8);
+            o_ptr->smith_damage = static_cast<byte>(xtra4 & 0x000f);
+        }
+    } else {
+        o_ptr->fuel = any_bits(flags, SaveDataItemFlagType::FUEL) ? rd_u16b() : 0;
+        o_ptr->captured_monster_current_hp = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP) ? rd_s16b() : 0;
+    }
+
+    o_ptr->captured_monster_max_hp = any_bits(flags, SaveDataItemFlagType::XTRA5) ? rd_s16b() : 0;
     o_ptr->feeling = any_bits(flags, SaveDataItemFlagType::FEELING) ? rd_byte() : 0;
     o_ptr->stack_idx = any_bits(flags, SaveDataItemFlagType::STACK_IDX) ? rd_s16b() : 0;
     if (any_bits(flags, SaveDataItemFlagType::SMITH) && !loading_savefile_version_is_older_than(7)) {
@@ -121,6 +153,11 @@ void ItemLoader50::rd_item(object_type *o_ptr)
 
         if (auto tmp16s = rd_s16b(); tmp16s > 0) {
             o_ptr->smith_act_idx = static_cast<RandomArtActType>(tmp16s);
+        }
+
+        if (!loading_savefile_version_is_older_than(13)) {
+            o_ptr->smith_hit = rd_byte();
+            o_ptr->smith_damage = rd_byte();
         }
     }
 

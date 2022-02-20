@@ -33,6 +33,7 @@
 #include "mind/mind-numbers.h"
 #include "mind/mind-power-getter.h"
 #include "mind/mind-types.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
@@ -56,7 +57,7 @@
 /*!
  * @brief 職業別特殊技能の処理用構造体
  */
-typedef struct cm_type {
+struct cm_type {
     MindKindType use_mind; //!< 使った職業技能構造体
     concptr mind_explanation; //!< 特殊技能の説明
     SPELL_IDX n; //!< 職業種別毎ID
@@ -69,7 +70,7 @@ typedef struct cm_type {
     bool cast; //!< 行使の成否
     int mana_cost; //!< 最終算出消費MP
     bool on_mirror; //!< 鏡の上に乗っているどうかの判定
-} cm_type;
+};
 
 /*!
  * @brief 職業技能処理構造体の初期化
@@ -302,7 +303,7 @@ static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
 static void mind_turn_passing(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     PlayerEnergy energy(player_ptr);
-    if (cm_ptr->on_mirror && (player_ptr->pclass == PlayerClassType::MIRROR_MASTER)) {
+    if (cm_ptr->on_mirror && PlayerClass(player_ptr).equals(PlayerClassType::MIRROR_MASTER)) {
         if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16) {
             energy.set_player_turn_energy(50);
             return;

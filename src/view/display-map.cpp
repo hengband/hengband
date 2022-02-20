@@ -41,7 +41,7 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
 static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
     if (use_graphics) {
-        object_kind *k_ptr = &k_info[randint1(k_info.size() - 1)];
+        auto *k_ptr = &k_info[randint1(k_info.size() - 1)];
         *cp = k_ptr->x_char;
         *ap = k_ptr->x_attr;
         return;
@@ -60,7 +60,7 @@ static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
     if (use_graphics) {
-        monster_race *r_ptr = &r_info[randint1(r_info.size() - 1)];
+        auto *r_ptr = &r_info[randint1(r_info.size() - 1)];
         *cp = r_ptr->x_char;
         *ap = r_ptr->x_attr;
         return;
@@ -125,7 +125,7 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
             n++;
     }
 
-    return (n != 8);
+    return n != 8;
 }
 
 /*!
@@ -140,10 +140,10 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
  */
 void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
-    feature_type *f_ptr = &f_info[feat];
+    auto *f_ptr = &f_info[feat];
     TERM_COLOR a;
     SYMBOL_CODE c;
     if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
@@ -246,7 +246,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
         image_random(ap, cp);
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (!(o_ptr->marked & OM_FOUND))
             continue;
@@ -282,13 +282,13 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
         return;
     }
 
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (!m_ptr->ml) {
         set_term_color(player_ptr, y, x, ap, cp);
         return;
     }
 
-    monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
     feat_priority = 30;
     if (player_ptr->hallucinated) {
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {

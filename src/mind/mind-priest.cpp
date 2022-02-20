@@ -29,7 +29,7 @@ bool bless_weapon(PlayerType *player_ptr)
     concptr s = _("祝福できる武器がありません。", "You have no weapon to bless.");
 
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::is_weapon));
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ObjectType::is_weapon));
     if (!o_ptr)
         return false;
 

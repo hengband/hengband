@@ -154,7 +154,7 @@ void wr_monster(monster_type *m_ptr)
  */
 void wr_lore(MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
     wr_s16b((int16_t)r_ptr->r_sights);
     wr_s16b((int16_t)r_ptr->r_deaths);
     wr_s16b((int16_t)r_ptr->r_pkills);
@@ -181,10 +181,11 @@ void wr_lore(MONRACE_IDX r_idx)
     wr_u32b(r_ptr->r_flags1);
     wr_u32b(r_ptr->r_flags2);
     wr_u32b(r_ptr->r_flags3);
-    wr_u32b(r_ptr->r_flagsr);
+    wr_FlagGroup(r_ptr->r_resistance_flags, wr_byte);
     wr_FlagGroup(r_ptr->r_ability_flags, wr_byte);
     wr_FlagGroup(r_ptr->r_aura_flags, wr_byte);
     wr_FlagGroup(r_ptr->r_behavior_flags, wr_byte);
+    wr_FlagGroup(r_ptr->r_kind_flags, wr_byte);
 
     wr_byte((byte)r_ptr->max_num);
     wr_s16b(r_ptr->floor_id);

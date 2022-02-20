@@ -16,6 +16,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-table.h"
 #include "specific-object/chest.h"
@@ -38,8 +39,8 @@
  */
 bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (f_ptr->flags.has_not(FloorFeatureType::OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[g_ptr->get_feat_mimic()].name.c_str());
@@ -93,7 +94,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX old_feat = g_ptr->feat;
     bool more = false;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -133,8 +134,8 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
 bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     int i, j;
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     if (!is_closed_door(player_ptr, g_ptr->feat))
         return false;
 
@@ -189,7 +190,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
     bool more = false;
-    object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     int i = player_ptr->skill_dis;
     if (player_ptr->blind || no_lite(player_ptr))
@@ -244,8 +245,8 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
 
 bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     concptr name = f_ptr->name.c_str();
     int power = f_ptr->power;
     bool more = false;
@@ -296,8 +297,8 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
  */
 bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     int bash = adj_str_blow[player_ptr->stat_index[A_STR]];
     int temp = f_ptr->power;
     bool more = false;
@@ -305,7 +306,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));
-    if (player_ptr->pclass == PlayerClassType::BERSERKER)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER))
         temp *= 2;
 
     if (temp < 1)

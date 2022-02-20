@@ -31,13 +31,13 @@
  */
 ITEM_NUMBER scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester &item_tester)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return 0;
 
     ITEM_NUMBER num = 0;
     for (const auto this_o_idx : floor_ptr->grid_array[y][x].o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(o_ptr))
             continue;
@@ -95,7 +95,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 {
     COMMAND_CODE i, m;
     int j, k, l;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     char tmp_val[80];
     COMMAND_CODE out_index[23];
@@ -110,7 +110,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     term_get_size(&wid, &hgt);
     int len = std::max((*min_width), 20);
     floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         o_ptr = &floor_ptr->o_list[floor_list[i]];
         describe_flavor(player_ptr, o_name, o_ptr, 0);

@@ -190,7 +190,8 @@ bool set_oppose_pois(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-    if ((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))
+    PlayerClass pc(player_ptr);
+    if (pc.has_poison_resistance())
         v = 1;
     if (player_ptr->is_dead)
         return false;
@@ -205,7 +206,7 @@ bool set_oppose_pois(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         }
     } else {
         if (player_ptr->oppose_pois && !music_singing(player_ptr, MUSIC_RESIST) &&
-            !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
+            !pc.samurai_stance_is(SamuraiStanceType::MUSOU)) {
             msg_print(_("毒への耐性が薄れた気がする。", "You feel less resistant to poison."));
             notice = true;
         }
@@ -246,6 +247,6 @@ bool is_oppose_cold(PlayerType *player_ptr)
 
 bool is_oppose_pois(PlayerType *player_ptr)
 {
-    return player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST)
-        || (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU) || (player_ptr->pclass == PlayerClassType::NINJA && player_ptr->lev > 44));
+    PlayerClass pc(player_ptr);
+    return player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST) || pc.samurai_stance_is(SamuraiStanceType::MUSOU) || pc.has_poison_resistance();
 }

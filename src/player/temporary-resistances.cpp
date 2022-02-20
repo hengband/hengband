@@ -18,8 +18,6 @@
  * Prints ratings on certain abilities
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param flags フラグを保管する配列
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
  */
 void tim_player_flags(PlayerType *player_ptr, TrFlags &flags)
 {

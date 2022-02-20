@@ -107,7 +107,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         POSITION y = player_ptr->y + ddy[dir];
         POSITION x = player_ptr->x + ddx[dir];
-        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return false;
@@ -118,8 +118,8 @@ bool create_ammo(PlayerType *player_ptr)
             return true;
         }
 
-        object_type forge;
-        object_type *q_ptr = &forge;
+        ObjectType forge;
+        auto *q_ptr = &forge;
         q_ptr->prep(lookup_kind(ItemKindType::SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(player_ptr, q_ptr);
@@ -141,11 +141,11 @@ bool create_ammo(PlayerType *player_ptr)
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::is_convertible));
+        auto *q_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::is_convertible));
         if (!q_ptr)
             return false;
 
-        object_type forge;
+        ObjectType forge;
         q_ptr = &forge;
         q_ptr->prep(lookup_kind(ItemKindType::ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(5, 10);
@@ -167,11 +167,11 @@ bool create_ammo(PlayerType *player_ptr)
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_convertible));
+        auto *q_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_convertible));
         if (!q_ptr)
             return false;
 
-        object_type forge;
+        ObjectType forge;
         q_ptr = &forge;
         q_ptr->prep(lookup_kind(ItemKindType::BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(4, 8);

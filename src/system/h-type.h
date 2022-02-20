@@ -99,14 +99,6 @@ typedef byte FEAT_SUBTYPE; /*!< 地形情報の副値 (トラップ種別/パタ
 typedef char GAME_TEXT; /*!< ゲーム中のテキスト型定義 */
 
 /*!
- * @var typedef int32_t HIT_POINT
- * @brief HPとその増減量の型定義
- * @details
- * HIT_POINTはプレイヤー及びモンスターのHPの各値とその増減量の型である。
- */
-typedef int32_t HIT_POINT;
-
-/*!
  * @var typedef int32_t MANA_POINT
  * @brief MPとその増減量の型定義
  * @details
@@ -123,7 +115,6 @@ typedef int32_t ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */
 typedef int16_t ACTION_ENERGY; /*!< ゲーム中の行動エネルギー型を定義 */
 typedef int16_t ARMOUR_CLASS; /*!< ゲーム中の行動アーマークラス型を定義 */
 typedef int16_t TIME_EFFECT; /*!< ゲーム中の時限期間の型を定義 */
-typedef int16_t SPEED; /*!< ゲーム中の加速値の型定義 */
 
 /*!
  * @var typedef int16_t ENEGRY
@@ -148,8 +139,6 @@ typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
 typedef int DICE_SID; /*!< ゲーム中のダイス面の型定義 */
 typedef int32_t PRICE; /*!< ゲーム中の金額価値の型定義 */
 
-typedef uint32_t STR_OFFSET; /*!< テキストオフセットの型定義 */
-
 typedef int POWER; /*!< 魔法の効力定義*/
 
 typedef int32_t DEPTH; /*!< ゲーム中の階層レベルの型定義 */
@@ -164,9 +153,6 @@ typedef int16_t MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
 typedef uint32_t BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
 typedef uint16_t BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
-
-typedef int16_t XTRA16; /*!< 汎用変数16ビットの型定義 */
-typedef byte XTRA8; /*!< 汎用変数8ビットの型定義 */
 
 typedef int16_t COMMAND_CODE; /*!< コマンド内容の型定義 */
 typedef int16_t COMMAND_ARG; /*!< コマンド引数の型定義 */

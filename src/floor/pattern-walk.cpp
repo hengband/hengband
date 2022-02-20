@@ -84,7 +84,7 @@ void pattern_teleport(PlayerType *player_ptr)
     if (record_stair)
         exe_write_diary(player_ptr, DIARY_PAT_TELE, 0, nullptr);
 
-    player_ptr->current_floor_ptr->inside_quest = 0;
+    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
 
     /*
@@ -104,7 +104,7 @@ void pattern_teleport(PlayerType *player_ptr)
  */
 bool pattern_effect(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!pattern_tile(floor_ptr, player_ptr->y, player_ptr->x))
         return false;
 

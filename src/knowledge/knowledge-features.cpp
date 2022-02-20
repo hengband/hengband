@@ -59,7 +59,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
         TERM_COLOR attr;
         FEAT_IDX f_idx = feat_idx[feat_top + i];
-        feature_type *f_ptr = &f_info[f_idx];
+        auto *f_ptr = &f_info[f_idx];
         int row_i = row + i;
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, f_ptr->name.c_str(), row_i, col);
@@ -125,7 +125,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         feat_cnt = 0;
     } else {
-        feature_type *f_ptr = &f_info[direct_f_idx];
+        auto *f_ptr = &f_info[direct_f_idx];
 
         feat_idx[0] = direct_f_idx;
         feat_cnt = 1;

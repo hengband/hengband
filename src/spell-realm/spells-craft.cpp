@@ -265,7 +265,7 @@ bool pulish_shield(PlayerType *player_ptr)
     concptr s = _("磨く盾がありません。", "You have no shield to polish.");
 
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(ItemKindType::SHIELD));
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(ItemKindType::SHIELD));
     if (o_ptr == nullptr)
         return false;
 

@@ -55,7 +55,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
 {
     DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
     dungeon_type *d_ptr = &d_info[d_idx];
-    monster_race *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &r_info[r_idx];
 
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx)
@@ -75,7 +75,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return false;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
         if (r_ptr->level > floor_ptr->dun_level)
             return false;
@@ -129,8 +129,8 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
                 return false;
         }
 
-        if (d_ptr->mflagsr) {
-            if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+        if (d_ptr->mon_resistance_flags.any()) {
+            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags))
                 return false;
         }
 
@@ -181,8 +181,8 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
                 return true;
         }
 
-        if (d_ptr->mflagsr) {
-            if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+        if (d_ptr->mon_resistance_flags.any()) {
+            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags))
                 return true;
         }
 
@@ -209,7 +209,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return true;
         if (r_ptr->flags9 & d_ptr->mflags9)
             return true;
-        if (r_ptr->flagsr & d_ptr->mflagsr)
+        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags))
             return true;
         for (a = 0; a < 5; a++)
             if (d_ptr->r_char[a] == r_ptr->d_char)
@@ -234,7 +234,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
             return false;
         if (r_ptr->flags9 & d_ptr->mflags9)
             return false;
-        if (r_ptr->flagsr & d_ptr->mflagsr)
+        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags))
             return false;
         for (a = 0; a < 5; a++)
             if (d_ptr->r_char[a] == r_ptr->d_char)
@@ -254,7 +254,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
  */
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 {
-    if ((player_ptr->current_floor_ptr->dun_level > 0) || (player_ptr->current_floor_ptr->inside_quest > 0))
+    if ((player_ptr->current_floor_ptr->dun_level > 0) || (inside_quest(player_ptr->current_floor_ptr->quest_number)))
         return (monsterrace_hook_type)mon_hook_dungeon;
 
     switch (wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].terrain) {
@@ -288,7 +288,7 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
  */
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
+    auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
     if (f_ptr->flags.has(FloorFeatureType::WATER))
         return f_ptr->flags.has(FloorFeatureType::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
 
@@ -351,7 +351,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
                 continue;
 
             // クエスト内でRES_ALLの生成を禁止する (殲滅系クエストの詰み防止)
-            if (player_ptr->current_floor_ptr->inside_quest && any_bits(r_ptr->flagsr, RFR_RES_ALL))
+            if (inside_quest(player_ptr->current_floor_ptr->quest_number) && r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))
                 continue;
         }
 
@@ -365,7 +365,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = floor_ptr->inside_quest && !quest_type::is_fixed(floor_ptr->inside_quest);
+            const bool in_random_quest = inside_quest(floor_ptr->quest_number) && !quest_type::is_fixed(floor_ptr->quest_number);
             const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
 
             if (cond && !restrict_monster_to_dungeon(player_ptr, entry->index)) {

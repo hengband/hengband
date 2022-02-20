@@ -60,7 +60,7 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
         return true;
     }
 
-    if (info_grab_one_flag(d_ptr->mflagsr, r_info_flagsr, what)) {
+    if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(d_ptr->mon_resistance_flags, r_info_flagsr, what)) {
         return true;
     }
 
@@ -69,6 +69,10 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
     }
 
     if (EnumClassFlagGroup<MonsterVisualType>::grab_one_flag(d_ptr->mon_visual_flags, r_info_visual_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterKindType>::grab_one_flag(d_ptr->mon_kind_flags, r_info_kind_flags, what)) {
         return true;
     }
 

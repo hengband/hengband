@@ -75,7 +75,7 @@ static concptr dungeon_key_at(int index, char *buf)
     return buf;
 }
 
-static inline QUEST_IDX get_quest_count()
+static inline int16_t get_quest_count()
 {
     return max_q_idx;
 }

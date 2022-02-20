@@ -25,6 +25,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
+#include "object/tval-types.h"
 #include "player-base/player-class.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
@@ -41,11 +42,11 @@
 #define MAX_SNIPE_POWERS 16
 
 /*! スナイパー技能情報の構造体 */
-typedef struct snipe_power {
+struct snipe_power {
     PLAYER_LEVEL min_lev;
     MANA_POINT mana_cost;
     concptr name;
-} snipe_power;
+};
 
 /*! スナイパー技能の解説メッセージ */
 static concptr const snipe_tips[MAX_SNIPE_POWERS] = {
@@ -183,7 +184,7 @@ int boost_concentration_damage(PlayerType *player_ptr, int tdam)
 
     tdam = tdam * (10 + sniper_concent) / 10;
 
-    return (tdam);
+    return tdam;
 }
 
 /*!
@@ -412,7 +413,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
  */
 MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     bool seen = is_seen(player_ptr, m_ptr);
 
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
@@ -420,23 +421,23 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
 
     switch (snipe_type) {
     case SP_LITE:
-        if (r_ptr->flags3 & (RF3_HURT_LITE)) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             MULTIPLY n = 20 + sniper_concent;
             if (seen)
-                r_ptr->r_flags3 |= (RF3_HURT_LITE);
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_FIRE:
-        if (r_ptr->flagsr & RFR_IM_FIRE) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
             if (seen)
-                r_ptr->r_flagsr |= RFR_IM_FIRE;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
         } else {
             MULTIPLY n;
-            if (r_ptr->flags3 & RF3_HURT_FIRE) {
+            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
                 n = 22 + (sniper_concent * 4);
-                r_ptr->r_flags3 |= RF3_HURT_FIRE;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
             } else
                 n = 15 + (sniper_concent * 3);
 
@@ -445,14 +446,14 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         }
         break;
     case SP_COLD:
-        if (r_ptr->flagsr & RFR_IM_COLD) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
             if (seen)
-                r_ptr->r_flagsr |= RFR_IM_COLD;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_COLD);
         } else {
             MULTIPLY n;
-            if (r_ptr->flags3 & RF3_HURT_COLD) {
+            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
                 n = 22 + (sniper_concent * 4);
-                r_ptr->r_flags3 |= RF3_HURT_COLD;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
             } else
                 n = 15 + (sniper_concent * 3);
 
@@ -461,9 +462,9 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         }
         break;
     case SP_ELEC:
-        if (r_ptr->flagsr & RFR_IM_ELEC) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
             if (seen)
-                r_ptr->r_flagsr |= RFR_IM_ELEC;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_ELEC);
         } else {
             MULTIPLY n = 18 + (sniper_concent * 4);
             if (mult < n)
@@ -471,38 +472,38 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         }
         break;
     case SP_KILL_WALL:
-        if (r_ptr->flags3 & RF3_HURT_ROCK) {
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_ROCK)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen)
-                r_ptr->r_flags3 |= RF3_HURT_ROCK;
+                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
             if (mult < n)
                 mult = n;
-        } else if (r_ptr->flags3 & RF3_NONLIVING) {
+        } else if (r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen)
-                r_ptr->r_flags3 |= RF3_NONLIVING;
+                r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_EVILNESS:
-        if (r_ptr->flags3 & RF3_GOOD) {
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             MULTIPLY n = 15 + (sniper_concent * 4);
             if (seen)
-                r_ptr->r_flags3 |= RF3_GOOD;
+                r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
             if (mult < n)
                 mult = n;
         }
         break;
     case SP_HOLYNESS:
-        if (r_ptr->flags3 & RF3_EVIL) {
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             MULTIPLY n = 12 + (sniper_concent * 3);
             if (seen)
-                r_ptr->r_flags3 |= RF3_EVIL;
-            if (r_ptr->flags3 & (RF3_HURT_LITE)) {
+                r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
+            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
                 n += (sniper_concent * 3);
                 if (seen)
-                    r_ptr->r_flags3 |= (RF3_HURT_LITE);
+                    r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
             }
             if (mult < n)
                 mult = n;
@@ -514,7 +515,7 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
         break;
     }
 
-    return (mult);
+    return mult;
 }
 
 /*!
@@ -525,7 +526,7 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
  */
 static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     SPELL_IDX snipe_type = SP_NONE;
 
     if (o_ptr->tval != ItemKindType::BOW) {
@@ -593,7 +594,7 @@ static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
     command_cmd = 'f';
     do_cmd_fire(player_ptr, snipe_type);
 
-    return (player_ptr->is_fired);
+    return player_ptr->is_fired;
 }
 
 /*!

@@ -104,7 +104,7 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
     if (o_idx == 0)
         return;
 
-    object_type *j_ptr;
+    ObjectType *j_ptr;
     j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;
@@ -179,12 +179,12 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 
 void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if ((monap_ptr->o_ptr->xtra4 <= 0) || monap_ptr->o_ptr->is_fixed_artifact())
+    if ((monap_ptr->o_ptr->fuel <= 0) || monap_ptr->o_ptr->is_fixed_artifact())
         return;
 
-    monap_ptr->o_ptr->xtra4 -= (int16_t)(250 + randint1(250));
-    if (monap_ptr->o_ptr->xtra4 < 1)
-        monap_ptr->o_ptr->xtra4 = 1;
+    monap_ptr->o_ptr->fuel -= 250 + randint1(250);
+    if (monap_ptr->o_ptr->fuel < 1)
+        monap_ptr->o_ptr->fuel = 1;
 
     if (!player_ptr->blind) {
         msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
@@ -211,7 +211,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     object_kind *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
-    HIT_POINT drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
+    int drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
     if (drain <= 0)
         return false;
 
@@ -220,7 +220,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         msg_print(_("しかし、あなたの魔法を操る力がその一部を取り返した！", "However, your skill of magic mastery got back the part of energy!"));
 
     monap_ptr->obvious = true;
-    HIT_POINT recovery = drain * kind_ptr->level;
+    int recovery = drain * kind_ptr->level;
 
     if (monap_ptr->o_ptr->tval == ItemKindType::STAFF)
         recovery *= monap_ptr->o_ptr->number;

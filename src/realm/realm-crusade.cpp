@@ -7,6 +7,7 @@
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-curse-removal.h"
@@ -210,7 +211,8 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             DICE_SID sides = 6;
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
-            if (player_ptr->pclass == PlayerClassType::PRIEST || player_ptr->pclass == PlayerClassType::HIGH_MAGE || player_ptr->pclass == PlayerClassType::SORCERER)
+            PlayerClass pc(player_ptr);
+            if (pc.equals(PlayerClassType::PRIEST) || pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::SORCERER))
                 base = plev + plev / 2;
             else
                 base = plev + plev / 4;
@@ -301,7 +303,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             return _("強力な電撃のボルトを放つ。", "Fires a powerful bolt of lightning.");
 
         {
-            HIT_POINT dam = plev * 5;
+            int dam = plev * 5;
 
             if (info)
                 return info_damage(0, 0, dam);
@@ -454,7 +456,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             return _("巨大な閃光の球を放つ。", "Fires a huge ball of powerful light.");
 
         {
-            HIT_POINT dam = 100 + plev * 2;
+            int dam = 100 + plev * 2;
             POSITION rad = 4;
 
             if (info)
@@ -590,7 +592,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             return _("ターゲットの周囲に分解の球を多数落とす。", "Drops many balls of disintegration near the target.");
 
         {
-            HIT_POINT dam = plev * 3 + 25;
+            int dam = plev * 3 + 25;
             POSITION rad = 2;
 
             if (info)

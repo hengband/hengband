@@ -14,6 +14,7 @@
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/others/apply-magic-amulet.h"
+#include "object-enchant/others/apply-magic-lite.h"
 #include "object-enchant/others/apply-magic-others.h"
 #include "object-enchant/others/apply-magic-ring.h"
 #include "object-enchant/protector/apply-magic-armor.h"
@@ -49,7 +50,7 @@
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */
-void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         lev += randint0(player_ptr->lev / 2 + 10);
@@ -112,7 +113,7 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = apply_artifact(player_ptr, o_ptr);
+        auto *a_ptr = apply_artifact(player_ptr, o_ptr);
         a_ptr->cur_num = 1;
         if (w_ptr->character_dungeon)
             a_ptr->floor_id = player_ptr->floor_id;
@@ -173,8 +174,11 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
     case ItemKindType::AMULET:
         AmuletEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
+    case ItemKindType::LITE:
+        LiteEnchanter(player_ptr, o_ptr, power).apply_magic();
+        break;
     default:
-        apply_magic_others(player_ptr, o_ptr, power);
+        apply_magic_others(player_ptr, o_ptr);
         break;
     }
 
@@ -194,7 +198,7 @@ void apply_magic_to_object(PlayerType *player_ptr, object_type *o_ptr, DEPTH lev
     }
 
     if (o_ptr->k_idx) {
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
         if (!k_info[o_ptr->k_idx].cost)
             o_ptr->ident |= (IDENT_BROKEN);
 

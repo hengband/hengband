@@ -17,14 +17,14 @@ enum class SpoilerOutputResultType {
 };
 
 /* A special type used just for deailing with pvals */
-typedef struct pval_info_type {
+struct pval_info_type {
     char pval_desc[12]; /* This will contain a string such as "+2", "-10", etc. */
 
     /* A list of various player traits affected by an object's pval such as stats, speed, stealth, etc. */
     concptr pval_affects[N_ELEMENTS(stat_flags_desc) - 1 + N_ELEMENTS(pval_flags1_desc) + 1];
-} pval_info_type;
+};
 
-typedef struct obj_desc_list {
+struct obj_desc_list {
     char description[MAX_NLEN]; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
     pval_info_type pval_info; /* Description of what is affected by an object's pval */
     concptr slays[N_ELEMENTS(slay_flags_desc) + 1]; /* A list of an object's slaying preferences */
@@ -43,7 +43,7 @@ typedef struct obj_desc_list {
     char addition[80]; /* Additional ability or resistance */
     concptr activation; /* A string describing an artifact's activation */
     char misc_desc[80]; /* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
-} obj_desc_list;
+};
 
 extern const char item_separator;
 extern const char list_separator;

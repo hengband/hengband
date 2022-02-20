@@ -37,6 +37,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-status-base.h"
@@ -477,7 +478,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
     AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
-    HIT_POINT dam;
+    int dam;
     POSITION y, x;
     int num;
 
@@ -975,23 +976,23 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:
-        if (any_bits(r_ptr->flagsr, RFR_IM_FIRE))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE))
             return false;
         break;
     case AttributeType::COLD:
-        if (any_bits(r_ptr->flagsr, RFR_IM_COLD))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD))
             return false;
         break;
     case AttributeType::ELEC:
-        if (any_bits(r_ptr->flagsr, RFR_IM_ELEC))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC))
             return false;
         break;
     case AttributeType::ACID:
-        if (any_bits(r_ptr->flagsr, RFR_IM_ACID))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID))
             return false;
         break;
     case AttributeType::DARK:
-        if (any_bits(r_ptr->flagsr, RFR_RES_DARK) || any_bits(r_ptr->r_flags3, RF3_HURT_LITE))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DARK) || r_ptr->r_resistance_flags.has(MonsterResistanceType::HURT_LITE))
             return false;
         break;
     case AttributeType::CONFUSION:
@@ -999,11 +1000,11 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
             return false;
         break;
     case AttributeType::SHARDS:
-        if (any_bits(r_ptr->flagsr, RFR_RES_SHAR))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SHARDS))
             return false;
         break;
     case AttributeType::POIS:
-        if (any_bits(r_ptr->flagsr, RFR_IM_POIS))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON))
             return false;
         break;
     default:
@@ -1061,11 +1062,11 @@ process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_
  */
 bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_LEVEL lev)
 {
-    if (player_ptr->pclass != PlayerClassType::ELEMENTALIST)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
         return false;
 
     auto prealm = i2enum<ElementRealmType>(player_ptr->element);
-    return (prealm == realm && player_ptr->lev >= lev);
+    return (prealm == realm) && (player_ptr->lev >= lev);
 }
 
 /*!
@@ -1186,7 +1187,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
     }
 
     display_realm_cursor(cs, n, TERM_YELLOW);
-    return (cs + 1);
+    return cs + 1;
 }
 
 /*!
@@ -1405,7 +1406,7 @@ static bool is_target_grid_dark(floor_type *f_ptr, POSITION y, POSITION x)
                 continue;
 
             POSITION d = distance(dy, dx, y, x);
-            monster_race *r_ptr = &r_info[f_ptr->m_list[m_idx].r_idx];
+            auto *r_ptr = &r_info[f_ptr->m_list[m_idx].r_idx];
             if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_LITE_1 | RF7_SELF_LITE_1))
                 return false;
             if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_LITE_2 | RF7_SELF_LITE_2))

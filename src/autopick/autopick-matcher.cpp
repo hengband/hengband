@@ -22,6 +22,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -32,7 +33,7 @@
 /*!
  * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
-bool is_autopick_match(PlayerType *player_ptr, object_type *o_ptr, autopick_type *entry, concptr o_name)
+bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type *entry, concptr o_name)
 {
     concptr ptr = entry->name.c_str();
     if (IS_FLG(FLG_UNAWARE) && o_ptr->is_aware())
@@ -48,14 +49,14 @@ bool is_autopick_match(PlayerType *player_ptr, object_type *o_ptr, autopick_type
         return false;
 
     if (IS_FLG(FLG_BOOSTED)) {
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
         if (!o_ptr->is_melee_weapon())
             return false;
 
         if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds))
             return false;
 
-        if (!o_ptr->is_known() && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, o_ptr)) {
+        if (!o_ptr->is_known() && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, o_ptr)) {
             return false;
         }
     }
@@ -171,7 +172,7 @@ bool is_autopick_match(PlayerType *player_ptr, object_type *o_ptr, autopick_type
     if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr))
         return false;
 
-    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || !(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
+    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || r_info[o_ptr->pval].kind_flags.has_not(MonsterKindType::UNIQUE)))
         return false;
 
     if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemKindType::CORPSE || !angband_strchr("pht", r_info[o_ptr->pval].d_char)))
@@ -180,7 +181,8 @@ bool is_autopick_match(PlayerType *player_ptr, object_type *o_ptr, autopick_type
     if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < ItemKindType::LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)))
         return false;
 
-    bool realm_except_class = player_ptr->pclass == PlayerClassType::SORCERER || player_ptr->pclass == PlayerClassType::RED_MAGE;
+    PlayerClass pc(player_ptr);
+    auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
     if (IS_FLG(FLG_REALM1) && ((get_realm1_book(player_ptr) != o_ptr->tval) || realm_except_class))
         return false;

@@ -37,7 +37,7 @@
 void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
     grid_type *g_ptr;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.empty()) {
@@ -143,7 +143,7 @@ bool fetch_monster(PlayerType *player_ptr)
     for (i = 1; i < path_n; i++) {
         POSITION ny = get_grid_y(path_g[i]);
         POSITION nx = get_grid_x(path_g[i]);
-        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
         if (in_bounds(player_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object()
             && !pattern_tile(player_ptr->current_floor_ptr, ny, nx)) {

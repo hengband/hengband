@@ -63,7 +63,7 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
  * @param tval アイテム主分類番号
  * @return 特殊なアイテムならTRUE
  */
-static bool determine_spcial_item_type(object_type *o_ptr, ItemKindType tval)
+static bool determine_spcial_item_type(ObjectType *o_ptr, ItemKindType tval)
 {
     bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == ItemKindType::AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
         || ((tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
@@ -79,7 +79,7 @@ static bool determine_spcial_item_type(object_type *o_ptr, ItemKindType tval)
  * @param tval アイテム主分類番号
  * @return 必要があるならTRUE
  */
-static bool check_item_knowledge(object_type *o_ptr, ItemKindType tval)
+static bool check_item_knowledge(ObjectType *o_ptr, ItemKindType tval)
 {
     if (o_ptr->k_idx == 0)
         return false;
@@ -99,7 +99,7 @@ static bool check_item_knowledge(object_type *o_ptr, ItemKindType tval)
  * @param fff 一時ファイルへの参照ポインタ
  * @todo ここの関数から表示用の関数に移したい
  */
-static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
+static void display_identified_resistances_flag(ObjectType *o_ptr, FILE *fff)
 {
     auto flags = object_flags_known(o_ptr);
 
@@ -140,7 +140,7 @@ static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
  * @param o_ptr アイテムへの参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  */
-static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, object_type *o_ptr, char *where)
+static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, ObjectType *o_ptr, char *where)
 {
     int i = 0;
     GAME_TEXT o_name[MAX_NLEN];
@@ -216,7 +216,7 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
     char where[32];
     strcpy(where, _("装", "E "));
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 
@@ -237,7 +237,7 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
     char where[32];
     strcpy(where, _("持", "I "));
     for (int i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 
@@ -260,7 +260,7 @@ static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType
     char where[32];
     strcpy(where, _("家", "H "));
     for (int i = 0; i < store_ptr->stock_num; i++) {
-        object_type *o_ptr = &store_ptr->stock[i];
+        auto *o_ptr = &store_ptr->stock[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
 

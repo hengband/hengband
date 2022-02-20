@@ -1,6 +1,8 @@
 ﻿#include "player/player-skill.h"
 #include "core/player-update-types.h"
 #include "monster-race/monster-race.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -232,7 +234,7 @@ concptr PlayerSkill::skill_rank_str(PlayerSkillRank rank)
     return _("[不明]", "[Unknown]");
 }
 
-void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
+void PlayerSkill::gain_melee_weapon_exp(const ObjectType *o_ptr)
 {
     const GainAmountList gain_amount_list{ 80, 10, 1, (one_in_(2) ? 1 : 0) };
     constexpr GainAmountList others_gain_amount_list{ 8, 1, 0, 0 };
@@ -246,7 +248,7 @@ void PlayerSkill::gain_melee_weapon_exp(const object_type *o_ptr)
     }
 }
 
-void PlayerSkill::gain_range_weapon_exp(const object_type *o_ptr)
+void PlayerSkill::gain_range_weapon_exp(const ObjectType *o_ptr)
 {
     constexpr GainAmountList gain_amount_list{ 80, 25, 10, 2 };
     constexpr GainAmountList others_gain_amount_list{ 8, 2, 0, 0 };
@@ -313,7 +315,7 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
     }
 }
 
-void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(HIT_POINT dam)
+void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
     auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
@@ -406,9 +408,10 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
  */
 EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
 {
-    if (this->player_ptr->pclass == PlayerClassType::SORCERER)
+    PlayerClass pc(this->player_ptr);
+    if (pc.equals(PlayerClassType::SORCERER))
         return SPELL_EXP_MASTER;
-    else if (this->player_ptr->pclass == PlayerClassType::RED_MAGE)
+    else if (pc.equals(PlayerClassType::RED_MAGE))
         return SPELL_EXP_SKILLED;
     else if (realm == this->player_ptr->realm1)
         return this->player_ptr->spell_exp[spell_idx];
@@ -427,18 +430,18 @@ EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
 void PlayerSkill::apply_special_weapon_skill_max_values()
 {
     this->player_ptr->weapon_exp_max = s_info[enum2i(this->player_ptr->pclass)].w_max;
+    if (PlayerClass(this->player_ptr).equals(PlayerClassType::SORCERER)) {
+        return;
+    }
 
-    if (this->player_ptr->pclass != PlayerClassType::SORCERER) {
-        auto &w_exp_max = this->player_ptr->weapon_exp_max;
+    auto &w_exp_max = this->player_ptr->weapon_exp_max;
+    if (this->player_ptr->ppersonality == PERSONALITY_SEXY) {
+        w_exp_max[ItemKindType::HAFTED][SV_WHIP] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+    }
 
-        if (this->player_ptr->ppersonality == PERSONALITY_SEXY) {
-            w_exp_max[ItemKindType::HAFTED][SV_WHIP] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-        }
-
-        if (this->player_ptr->prace == PlayerRaceType::MERFOLK) {
-            w_exp_max[ItemKindType::POLEARM][SV_TRIDENT] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-            w_exp_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
-        }
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
+        w_exp_max[ItemKindType::POLEARM][SV_TRIDENT] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
+        w_exp_max[ItemKindType::POLEARM][SV_TRIFURCATE_SPEAR] = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER);
     }
 }
 

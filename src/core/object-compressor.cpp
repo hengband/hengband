@@ -24,7 +24,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
     if (i1 == i2)
         return;
 
-    object_type *o_ptr = &floor_ptr->o_list[i1];
+    auto *o_ptr = &floor_ptr->o_list[i1];
 
     // モンスター所為アイテムリストもしくは床上アイテムリストの要素番号i1をi2に書き換える
     auto &list = get_o_idx_list_contains(floor_ptr, i1);
@@ -53,14 +53,14 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
  */
 void compact_objects(PlayerType *player_ptr, int size)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     if (size) {
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);

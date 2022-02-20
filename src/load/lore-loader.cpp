@@ -7,6 +7,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "system/angband.h"
 #include "system/monster-race-definition.h"
@@ -29,22 +30,68 @@ static void migrate_old_aura_flags(monster_race *r_ptr)
     }
 }
 
+static void migrate_old_resistance_flags(monster_race *r_ptr, BIT_FLAGS old_flags)
+{
+    struct flag_list_ver13 {
+        SavedataLoreOlderThan14FlagType old_flag;
+        MonsterResistanceType flag;
+    };
+    const std::vector<flag_list_ver13> flag_list = {
+        { SavedataLoreOlderThan14FlagType::RFR_IM_ACID, MonsterResistanceType::IMMUNE_ACID },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_COLD, MonsterResistanceType::IMMUNE_COLD },
+        { SavedataLoreOlderThan14FlagType::RFR_IM_POIS, MonsterResistanceType::IMMUNE_POISON },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_LITE, MonsterResistanceType::RESIST_LITE },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_DARK, MonsterResistanceType::RESIST_DARK },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_NETH, MonsterResistanceType::RESIST_NETHER },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_WATE, MonsterResistanceType::RESIST_WATER },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_PLAS, MonsterResistanceType::RESIST_PLASMA },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_SHAR, MonsterResistanceType::RESIST_SHARDS },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_SOUN, MonsterResistanceType::RESIST_SOUND },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_CHAO, MonsterResistanceType::RESIST_CHAOS },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_NEXU, MonsterResistanceType::RESIST_NEXUS },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_DISE, MonsterResistanceType::RESIST_DISENCHANT },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_WALL, MonsterResistanceType::RESIST_FORCE },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_INER, MonsterResistanceType::RESIST_INERTIA },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_TIME, MonsterResistanceType::RESIST_TIME },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_GRAV, MonsterResistanceType::RESIST_GRAVITY },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_ALL, MonsterResistanceType::RESIST_ALL },
+        { SavedataLoreOlderThan14FlagType::RFR_RES_TELE, MonsterResistanceType::RESIST_TELEPORT }
+    };
+
+    if (old_flags == 0)
+        return;
+
+    for (const auto &f : flag_list)
+        if (any_bits(old_flags, f.old_flag))
+            r_ptr->r_resistance_flags.set(f.flag);
+}
+
 static void rd_r_ability_flags(monster_race *r_ptr, const MONRACE_IDX r_idx)
 {
     if (loading_savefile_version_is_older_than(3)) {
+        BIT_FLAGS r_flagsr = 0;
         uint32_t f4 = rd_u32b();
         uint32_t f5 = rd_u32b();
         uint32_t f6 = rd_u32b();
         if (h_older_than(1, 5, 0, 3))
             set_old_lore(r_ptr, f4, r_idx);
         else
-            r_ptr->r_flagsr = rd_u32b();
+            r_flagsr = rd_u32b();
 
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
+
+        migrate_old_resistance_flags(r_ptr, r_flagsr);
+    } else if (loading_savefile_version_is_older_than(14)) {
+        BIT_FLAGS r_flagsr = rd_u32b();
+        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
+
+        migrate_old_resistance_flags(r_ptr, r_flagsr);
     } else {
-        r_ptr->r_flagsr = rd_u32b();
+        rd_FlagGroup(r_ptr->r_resistance_flags, rd_byte);
         rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
     }
 }
@@ -56,6 +103,57 @@ static void rd_r_aura_flags(monster_race *r_ptr)
     }
 
     rd_FlagGroup(r_ptr->r_aura_flags, rd_byte);
+}
+
+static void rd_r_kind_flags(monster_race *r_ptr)
+{
+    if (loading_savefile_version_is_older_than(12)) {
+        struct flag_list_ver12 {
+            BIT_FLAGS check_flag;
+            MonsterKindType flag;
+        };
+
+        const std::vector<flag_list_ver12> flag1 = {
+            { RF1_UNIQUE, MonsterKindType::UNIQUE },
+        };
+
+        const std::vector<flag_list_ver12> flag2 = {
+            { static_cast<BIT_FLAGS>(RF2_HUMAN), MonsterKindType::HUMAN },
+            { static_cast<BIT_FLAGS>(RF2_QUANTUM), MonsterKindType::QUANTUM },
+        };
+
+        const std::vector<flag_list_ver12> flag3 = {
+            { RF3_ORC, MonsterKindType::ORC },
+            { RF3_TROLL, MonsterKindType::TROLL },
+            { RF3_GIANT, MonsterKindType::GIANT },
+            { RF3_DRAGON, MonsterKindType::DRAGON },
+            { RF3_DEMON, MonsterKindType::DEMON },
+            { RF3_AMBERITE, MonsterKindType::AMBERITE },
+            { RF3_ANGEL, MonsterKindType::ANGEL },
+            { RF3_DRAGON, MonsterKindType::DRAGON },
+            { RF3_EVIL, MonsterKindType::EVIL },
+            { RF3_GOOD, MonsterKindType::GOOD },
+            { RF3_ANIMAL, MonsterKindType::ANIMAL },
+            { RF3_UNDEAD, MonsterKindType::UNDEAD },
+
+        };
+
+        for (const auto &f : flag1)
+            if (any_bits(r_ptr->r_flags1, f.check_flag))
+                r_ptr->r_kind_flags.set(f.flag);
+
+        for (const auto &f : flag2)
+            if (any_bits(r_ptr->r_flags2, f.check_flag))
+                r_ptr->r_kind_flags.set(f.flag);
+
+        for (const auto &f : flag3)
+            if (any_bits(r_ptr->r_flags3, f.check_flag))
+                r_ptr->r_kind_flags.set(f.flag);
+
+        return;
+    }
+
+    rd_FlagGroup(r_ptr->r_kind_flags, rd_byte);
 }
 
 static void rd_r_behavior_flags(monster_race *r_ptr)
@@ -144,6 +242,7 @@ static void rd_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
     rd_r_ability_flags(r_ptr, r_idx);
     rd_r_aura_flags(r_ptr);
     rd_r_behavior_flags(r_ptr);
+    rd_r_kind_flags(r_ptr);
     r_ptr->max_num = rd_byte();
     r_ptr->floor_id = rd_s16b();
 
@@ -157,10 +256,11 @@ static void rd_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
     r_ptr->r_flags1 &= r_ptr->flags1;
     r_ptr->r_flags2 &= r_ptr->flags2;
     r_ptr->r_flags3 &= r_ptr->flags3;
-    r_ptr->r_flagsr &= r_ptr->flagsr;
+    r_ptr->r_resistance_flags &= r_ptr->r_resistance_flags;
     r_ptr->r_ability_flags &= r_ptr->ability_flags;
     r_ptr->r_aura_flags &= r_ptr->aura_flags;
     r_ptr->r_behavior_flags &= r_ptr->r_behavior_flags;
+    r_ptr->r_kind_flags &= r_ptr->r_kind_flags;
 }
 
 void load_lore(void)

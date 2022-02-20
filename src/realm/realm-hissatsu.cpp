@@ -358,7 +358,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 POSITION ty = y, tx = x;
                 POSITION oy = y, ox = x;
                 MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
                 GAME_TEXT m_name[MAX_NLEN];
 
                 monster_desc(player_ptr, m_name, m_ptr, 0);
@@ -651,7 +651,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
 
         if (cast) {
             int total_damage = 0, basedam, i;
-            object_type *o_ptr;
+            ObjectType *o_ptr;
             if (!get_aim_dir(player_ptr, &dir))
                 return nullptr;
             msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
@@ -919,7 +919,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         if (cast) {
             int total_damage = 0, basedam, i;
             POSITION y, x;
-            object_type *o_ptr;
+            ObjectType *o_ptr;
 
             if (!get_direction(player_ptr, &dir, false, false))
                 return nullptr;

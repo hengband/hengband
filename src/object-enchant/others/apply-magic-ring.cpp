@@ -23,7 +23,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-RingEnchanter::RingEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+RingEnchanter::RingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , level(level)
@@ -47,8 +47,8 @@ void RingEnchanter::apply_magic()
         this->power = -1;
     }
 
-    this->enchant();
-    if ((one_in_(400) && (this->power > 0) && !this->o_ptr->is_cursed() && (this->level > 79)) || (this->power > 2)) {
+    this->sval_enchant();
+    if ((this->power > 2) || (one_in_(400) && (this->power > 0) && !this->o_ptr->is_cursed() && (this->level > 79))) {
         this->o_ptr->pval = std::min<short>(this->o_ptr->pval, 4);
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;
@@ -65,7 +65,7 @@ void RingEnchanter::apply_magic()
     }
 }
 
-void RingEnchanter::enchant()
+void RingEnchanter::sval_enchant()
 {
     switch (this->o_ptr->sval) {
     case SV_RING_ATTACKS:
@@ -159,7 +159,7 @@ void RingEnchanter::enchant()
 
         break;
     case SV_RING_DAMAGE:
-        this->o_ptr->to_d = 1 + randint1(5) + (HIT_POINT)m_bonus(16, this->level);
+        this->o_ptr->to_d = 1 + randint1(5) + (int)m_bonus(16, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
             this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
@@ -186,7 +186,7 @@ void RingEnchanter::enchant()
 
         break;
     case SV_RING_SLAYING:
-        this->o_ptr->to_d = randint1(5) + (HIT_POINT)m_bonus(12, this->level);
+        this->o_ptr->to_d = randint1(5) + (int)m_bonus(12, this->level);
         this->o_ptr->to_h = randint1(5) + (HIT_PROB)m_bonus(12, this->level);
 
         if (this->power < 0) {

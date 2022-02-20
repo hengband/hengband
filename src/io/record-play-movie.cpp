@@ -95,7 +95,7 @@ static long get_current_time(void)
     struct timeval tv;
     gettimeofday(&tv, nullptr);
 
-    return (tv.tv_sec * 10 + tv.tv_usec / 100000);
+    return tv.tv_sec * 10 + tv.tv_usec / 100000;
 #endif
 }
 
@@ -486,9 +486,9 @@ static bool flush_ringbuf_client(void)
 #endif
             update_term_size(x, y, len);
             (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
-            memcpy(&Term->scr->c[y][x], mesg, len);
+            memcpy(&game_term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
-                Term->scr->a[y][i] = col;
+                game_term->scr->a[y][i] = col;
             }
             break;
 
@@ -499,17 +499,17 @@ static bool flush_ringbuf_client(void)
             mesg[i] = '\0';
             update_term_size(x, y, len);
             (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
-            memcpy(&Term->scr->c[y][x], mesg, len);
+            memcpy(&game_term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
-                Term->scr->a[y][i] = col;
+                game_term->scr->a[y][i] = col;
             }
             break;
 
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
             (void)((*angband_term[0]->text_hook)(x, y, 1, (byte)col, mesg));
-            memcpy(&Term->scr->c[y][x], mesg, 1);
-            Term->scr->a[y][x] = col;
+            memcpy(&game_term->scr->c[y][x], mesg, 1);
+            game_term->scr->a[y][x] = col;
             break;
 
         case 'w':

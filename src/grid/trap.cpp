@@ -60,13 +60,13 @@ static std::vector<int16_t> normal_traps;
  * </pre>
  */
 const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
-    { }, /* empty */
+    {}, /* empty */
     { ChestTrapType::POISON },
     { ChestTrapType::LOSE_STR },
     { ChestTrapType::LOSE_CON },
     { ChestTrapType::LOSE_STR },
     { ChestTrapType::LOSE_CON }, /* 5 == best small wooden */
-    { },
+    {},
     { ChestTrapType::ALARM },
     { ChestTrapType::ALARM },
     { ChestTrapType::LOSE_STR },
@@ -76,7 +76,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
     { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
     { ChestTrapType::SUMMON }, /* 15 == best large wooden */
-    { },
+    {},
     { ChestTrapType::ALARM },
     { ChestTrapType::SCATTER },
     { ChestTrapType::PARALYZE },
@@ -86,7 +86,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::LOSE_STR },
     { ChestTrapType::LOSE_CON },
     { ChestTrapType::EXPLODE }, /* 25 == best small iron */
-    { },
+    {},
     { ChestTrapType::E_SUMMON },
     { ChestTrapType::POISON, ChestTrapType::LOSE_CON },
     { ChestTrapType::LOSE_STR, ChestTrapType::LOSE_CON },
@@ -96,7 +96,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::E_SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::EXPLODE },
     { ChestTrapType::EXPLODE, ChestTrapType::SUMMON }, /* 35 == best large iron */
-    { },
+    {},
     { ChestTrapType::SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::EXPLODE },
     { ChestTrapType::EXPLODE, ChestTrapType::SUMMON },
@@ -106,7 +106,7 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
     { ChestTrapType::BIRD_STORM },
     { ChestTrapType::EXPLODE, ChestTrapType::E_SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::H_SUMMON }, /* 45 == best small steel */
-    { },
+    {},
     { ChestTrapType::EXPLODE, ChestTrapType::SUMMON, ChestTrapType::ALARM },
     { ChestTrapType::BIRD_STORM },
     { ChestTrapType::RUNES_OF_EVIL },
@@ -166,7 +166,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
     FEAT_IDX feat;
 
     /* Pick a trap */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         feat = normal_traps[randint0(normal_traps.size())];
 
@@ -175,7 +175,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
             break;
 
         /* Hack -- no trap doors on special levels */
-        if (floor_ptr->inside_arena || quest_number(player_ptr, floor_ptr->dun_level))
+        if (floor_ptr->inside_arena || inside_quest(quest_number(player_ptr, floor_ptr->dun_level)))
             continue;
 
         /* Hack -- no trap doors on the deepest level */
@@ -197,7 +197,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
  */
 void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     if (g_ptr->cave_has_flag(FloorFeatureType::SECRET)) {
         /* No longer hidden */
@@ -223,8 +223,8 @@ void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_trap(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
 
     /* Paranoia -- verify location */
     if (!in_bounds(floor_ptr, y, x))
@@ -258,7 +258,7 @@ static int check_hit_from_monster_to_player(PlayerType *player_ptr, int power)
 
     /* Hack -- 5% hit, 5% miss */
     if (k < 10)
-        return (k < 5);
+        return k < 5;
 
     if (player_ptr->ppersonality == PERSONALITY_LAZY)
         if (one_in_(20))
@@ -285,7 +285,7 @@ static int check_hit_from_monster_to_player(PlayerType *player_ptr, int power)
  */
 static void hit_trap_pit(PlayerType *player_ptr, TrapType trap_feat_type)
 {
-    HIT_POINT dam;
+    int dam;
     concptr trap_name = "";
     concptr spike_name = "";
 
@@ -388,8 +388,8 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 {
     int i, num, dam;
     POSITION x = player_ptr->x, y = player_ptr->y;
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     TrapType trap_feat_type = f_ptr->flags.has(FloorFeatureType::TRAP) ? i2enum<TrapType>(f_ptr->subtype) : TrapType::NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 

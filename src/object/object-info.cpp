@@ -21,6 +21,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "realm/realm-names-table.h"
 #include "sv-definition/sv-other-types.h"
@@ -38,7 +39,7 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_dragon_breath(object_type *o_ptr)
+static concptr item_activation_dragon_breath(ObjectType *o_ptr)
 {
     static char desc[256];
     int n = 0;
@@ -57,7 +58,7 @@ static concptr item_activation_dragon_breath(object_type *o_ptr)
     }
 
     strcat(desc, _("のブレス(250)", " (250)"));
-    return (desc);
+    return desc;
 }
 
 /*!
@@ -65,7 +66,7 @@ static concptr item_activation_dragon_breath(object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(object_type *o_ptr)
+static concptr item_activation_aux(ObjectType *o_ptr)
 {
     static char activation_detail[512];
     char timeout[64];
@@ -171,11 +172,11 @@ static concptr item_activation_aux(object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr activation_explanation(object_type *o_ptr)
+concptr activation_explanation(ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has_not(TR_ACTIVATE))
-        return (_("なし", "nothing"));
+        return _("なし", "nothing");
 
     if (activation_index(o_ptr) > RandomArtActType::NONE) {
         return item_activation_aux(o_ptr);
@@ -199,7 +200,7 @@ concptr activation_explanation(object_type *o_ptr)
  * @return 対応するアルファベット
  * @details Note that the label does NOT distinguish inven/equip.
  */
-char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - INVEN_MAIN_HAND)); }
+char index_to_label(int i) { return i < INVEN_MAIN_HAND ? I2A(i) : I2A(i - INVEN_MAIN_HAND); }
 
 /*!
  * @brief オブジェクトの該当装備部位IDを返す /
@@ -207,7 +208,7 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-int16_t wield_slot(PlayerType *player_ptr, const object_type *o_ptr)
+int16_t wield_slot(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
@@ -215,53 +216,53 @@ int16_t wield_slot(PlayerType *player_ptr, const object_type *o_ptr)
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD: {
         if (!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
-            return (INVEN_MAIN_HAND);
+            return INVEN_MAIN_HAND;
         if (player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
-            return (INVEN_MAIN_HAND);
-        return (INVEN_SUB_HAND);
+            return INVEN_MAIN_HAND;
+        return INVEN_SUB_HAND;
     }
     case ItemKindType::CAPTURE:
     case ItemKindType::CARD:
     case ItemKindType::SHIELD: {
         if (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
-            return (INVEN_SUB_HAND);
+            return INVEN_SUB_HAND;
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
-            return (INVEN_SUB_HAND);
-        return (INVEN_MAIN_HAND);
+            return INVEN_SUB_HAND;
+        return INVEN_MAIN_HAND;
     }
     case ItemKindType::BOW: {
-        return (INVEN_BOW);
+        return INVEN_BOW;
     }
     case ItemKindType::RING: {
         if (!player_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
-            return (INVEN_MAIN_RING);
+            return INVEN_MAIN_RING;
 
-        return (INVEN_SUB_RING);
+        return INVEN_SUB_RING;
     }
     case ItemKindType::AMULET:
     case ItemKindType::WHISTLE: {
-        return (INVEN_NECK);
+        return INVEN_NECK;
     }
     case ItemKindType::LITE: {
-        return (INVEN_LITE);
+        return INVEN_LITE;
     }
     case ItemKindType::DRAG_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::SOFT_ARMOR: {
-        return (INVEN_BODY);
+        return INVEN_BODY;
     }
     case ItemKindType::CLOAK: {
-        return (INVEN_OUTER);
+        return INVEN_OUTER;
     }
     case ItemKindType::CROWN:
     case ItemKindType::HELM: {
-        return (INVEN_HEAD);
+        return INVEN_HEAD;
     }
     case ItemKindType::GLOVES: {
-        return (INVEN_ARMS);
+        return INVEN_ARMS;
     }
     case ItemKindType::BOOTS: {
-        return (INVEN_FEET);
+        return INVEN_FEET;
     }
 
     default:
@@ -282,9 +283,11 @@ bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, cons
 {
     if (book_tval < ItemKindType::LIFE_BOOK)
         return false;
-    if (player_ptr->pclass == PlayerClassType::SORCERER) {
+
+    PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::SORCERER)) {
         return is_magic(tval2realm(book_tval));
-    } else if (player_ptr->pclass == PlayerClassType::RED_MAGE) {
+    } else if (pc.equals(PlayerClassType::RED_MAGE)) {
         if (is_magic(tval2realm(book_tval)))
             return ((book_tval == ItemKindType::ARCANE_BOOK) || (book_sval < 2));
     }
@@ -292,9 +295,9 @@ bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, cons
     return (get_realm1_book(player_ptr) == book_tval) || (get_realm2_book(player_ptr) == book_tval);
 }
 
-object_type *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
+ObjectType *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     return item >= 0 ? &player_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
 }
 
@@ -303,7 +306,7 @@ object_type *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
  * Use "flavor" if available.
  * Default to user definitions.
  */
-TERM_COLOR object_attr(object_type *o_ptr)
+TERM_COLOR object_attr(ObjectType *o_ptr)
 {
     return ((k_info[o_ptr->k_idx].flavor)
             ? (k_info[k_info[o_ptr->k_idx].flavor].x_attr)

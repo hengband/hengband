@@ -14,6 +14,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
@@ -74,7 +75,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
         chance = USE_DEVICE;
     }
 
-    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (this->player_ptr->pclass == PlayerClassType::BERSERKER)) {
+    if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || PlayerClass(this->player_ptr).equals(PlayerClassType::BERSERKER)) {
         if (flush_failure) {
             flush();
         }

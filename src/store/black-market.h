@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct object_type;
+class ObjectType;
 class PlayerType;
-bool black_market_crap(PlayerType *player_ptr, object_type *o_ptr);
+bool black_market_crap(PlayerType *player_ptr, ObjectType *o_ptr);

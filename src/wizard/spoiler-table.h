@@ -29,10 +29,10 @@ struct grouper {
  * of textual names, where entry 'N' is assumed to be paired with
  * the flag whose value is "1UL << N", but that requires hard-coding.
  */
-typedef struct flag_desc {
+struct flag_desc {
     tr_type flag;
     concptr desc;
-} flag_desc;
+};
 
 extern const std::vector<grouper> group_item_list;
 extern const std::vector<grouper> group_artifact_list;

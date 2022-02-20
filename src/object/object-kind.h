@@ -25,7 +25,7 @@ struct object_kind {
     PARAMETER_VALUE pval{}; /*!< ベースアイテムのpval（能力修正共通値） Object extra info */
 
     HIT_PROB to_h{}; /*!< ベースアイテムの命中修正値 / Bonus to hit */
-    HIT_POINT to_d{}; /*!< ベースアイテムのダメージ修正値 / Bonus to damage */
+    int to_d{}; /*!< ベースアイテムのダメージ修正値 / Bonus to damage */
     ARMOUR_CLASS to_a{}; /*!< ベースアイテムのAC修正値 / Bonus to armor */
 
     ARMOUR_CLASS ac{}; /*!< ベースアイテムのAC基本値 /  Base armor */
@@ -63,5 +63,5 @@ struct object_kind {
 
 extern std::vector<object_kind> k_info;
 
-struct object_type;
-SYMBOL_CODE object_char(object_type *o_ptr);
+class ObjectType;
+SYMBOL_CODE object_char(ObjectType *o_ptr);

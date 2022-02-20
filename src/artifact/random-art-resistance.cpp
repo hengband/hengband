@@ -6,6 +6,7 @@
 #include "artifact/random-art-resistance.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
+#include "object/tval-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -16,7 +17,7 @@
  * @param tr_sh_flag 付与するフラグ (TR_SH_*)
  * @return 続くフラグ付与の処理を打ち切る場合 true を返す
  */
-static bool random_art_aura(object_type *o_ptr, tr_type tr_sh_flag)
+static bool random_art_aura(ObjectType *o_ptr, tr_type tr_sh_flag)
 {
     if ((o_ptr->tval < ItemKindType::CLOAK) || (o_ptr->tval > ItemKindType::HARD_ARMOR) || o_ptr->art_flags.has(tr_sh_flag))
         return false;
@@ -32,7 +33,7 @@ static bool random_art_aura(object_type *o_ptr, tr_type tr_sh_flag)
  * @param tr_im_flag 付与するフラグ (TR_IM_*)
  * @return 続くフラグ付与の処理を打ち切る場合 true を返す
  */
-static bool random_art_immunity(object_type *o_ptr, tr_type tr_im_flag)
+static bool random_art_immunity(ObjectType *o_ptr, tr_type tr_im_flag)
 {
     if (!one_in_(BIAS_LUCK) || o_ptr->art_flags.has(tr_im_flag))
         return false;
@@ -56,7 +57,7 @@ static bool random_art_immunity(object_type *o_ptr, tr_type tr_im_flag)
  * @param skip true の場合このフラグは付与せず処理を終了し、続くフラグ付与の処理を継続する
  * @return 続くフラグ付与の処理を打ち切る場合 true を返す
  */
-static bool random_art_resistance(object_type *o_ptr, tr_type tr_res_flag, bool skip = false)
+static bool random_art_resistance(ObjectType *o_ptr, tr_type tr_res_flag, bool skip = false)
 {
     if (skip || o_ptr->art_flags.has(tr_res_flag))
         return false;
@@ -65,7 +66,7 @@ static bool random_art_resistance(object_type *o_ptr, tr_type tr_res_flag, bool 
     return one_in_(2);
 }
 
-static bool switch_random_art_resistance(object_type *o_ptr)
+static bool switch_random_art_resistance(ObjectType *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
     case BIAS_ACID:
@@ -94,7 +95,7 @@ static bool switch_random_art_resistance(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_acid(object_type *o_ptr)
+static void set_weird_bias_acid(ObjectType *o_ptr)
 {
     if (!one_in_(WEIRD_LUCK)) {
         random_resistance(o_ptr);
@@ -107,7 +108,7 @@ static void set_weird_bias_acid(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_elec(object_type *o_ptr)
+static void set_weird_bias_elec(ObjectType *o_ptr)
 {
     if (!one_in_(WEIRD_LUCK)) {
         random_resistance(o_ptr);
@@ -120,7 +121,7 @@ static void set_weird_bias_elec(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_cold(object_type *o_ptr)
+static void set_weird_bias_cold(ObjectType *o_ptr)
 {
     if (!one_in_(WEIRD_LUCK)) {
         random_resistance(o_ptr);
@@ -133,7 +134,7 @@ static void set_weird_bias_cold(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_fire(object_type *o_ptr)
+static void set_weird_bias_fire(ObjectType *o_ptr)
 {
     if (!one_in_(WEIRD_LUCK)) {
         random_resistance(o_ptr);
@@ -145,7 +146,7 @@ static void set_weird_bias_fire(object_type *o_ptr)
         o_ptr->artifact_bias = BIAS_FIRE;
 }
 
-static void set_bias_pois(object_type *o_ptr)
+static void set_bias_pois(ObjectType *o_ptr)
 {
     o_ptr->art_flags.set(TR_RES_POIS);
     if (!o_ptr->artifact_bias && !one_in_(4)) {
@@ -163,7 +164,7 @@ static void set_bias_pois(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_aura_elec(object_type *o_ptr)
+static void set_weird_bias_aura_elec(ObjectType *o_ptr)
 {
     if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR)
         o_ptr->art_flags.set(TR_SH_ELEC);
@@ -175,7 +176,7 @@ static void set_weird_bias_aura_elec(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_aura_fire(object_type *o_ptr)
+static void set_weird_bias_aura_fire(ObjectType *o_ptr)
 {
     if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR)
         o_ptr->art_flags.set(TR_SH_FIRE);
@@ -187,7 +188,7 @@ static void set_weird_bias_aura_fire(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_reflection(object_type *o_ptr)
+static void set_weird_bias_reflection(ObjectType *o_ptr)
 {
     if (o_ptr->tval == ItemKindType::SHIELD || o_ptr->tval == ItemKindType::CLOAK || o_ptr->tval == ItemKindType::HELM || o_ptr->tval == ItemKindType::HARD_ARMOR) {
         o_ptr->art_flags.set(TR_REFLECT);
@@ -198,7 +199,7 @@ static void set_weird_bias_reflection(object_type *o_ptr)
 }
 
 /* 一定確率で再試行する */
-static void set_weird_bias_aura_cold(object_type *o_ptr)
+static void set_weird_bias_aura_cold(ObjectType *o_ptr)
 {
     if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR)
         o_ptr->art_flags.set(TR_SH_COLD);
@@ -218,7 +219,7 @@ static void set_weird_bias_aura_cold(object_type *o_ptr)
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void random_resistance(object_type *o_ptr)
+void random_resistance(ObjectType *o_ptr)
 {
     if (switch_random_art_resistance(o_ptr))
         return;

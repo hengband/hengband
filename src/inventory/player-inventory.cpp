@@ -83,7 +83,7 @@ static bool py_pickup_floor_aux(PlayerType *player_ptr)
 void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 {
     GAME_TEXT o_name[MAX_NLEN];
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     int floor_num = 0;
     OBJECT_IDX floor_o_idx = 0;
     int can_pickup = 0;
@@ -183,7 +183,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
     GAME_TEXT o_name[MAX_NLEN];
 #endif
 
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
@@ -242,7 +242,7 @@ void carry(PlayerType *player_ptr, bool pickup)
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(player_ptr);
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, g_ptr);
     if (easy_floor) {
         py_pickup_floor(player_ptr, pickup);
@@ -251,7 +251,7 @@ void carry(PlayerType *player_ptr, bool pickup)
 
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);

@@ -20,6 +20,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -64,7 +65,7 @@
 static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
     std::function<PERCENTAGE(PlayerType *)> damage_rate, std::function<void(PlayerType *, int)> additional_effect)
 {
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &f_info[g_ptr->feat];
     int damage = 0;
 
     if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
@@ -108,8 +109,8 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
  */
 void process_player_hp_mp(PlayerType *player_ptr)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *f_ptr = &f_info[g_ptr->feat];
     bool cave_no_regen = false;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
@@ -137,7 +138,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
             }
         }
 
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_LITE];
         auto flgs = object_flags(o_ptr);
 
@@ -209,7 +210,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (get_player_flags(player_ptr, TR_SELF_FIRE) && !has_immune_fire(player_ptr)) {
-        HIT_POINT damage;
+        int damage;
         damage = player_ptr->lev;
         if (race.tr_flags().has(TR_VUL_FIRE))
             damage += damage / 3;
@@ -224,7 +225,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (get_player_flags(player_ptr, TR_SELF_ELEC) && !has_immune_elec(player_ptr)) {
-        HIT_POINT damage;
+        int damage;
         damage = player_ptr->lev;
         if (race.tr_flags().has(TR_VUL_ELEC))
             damage += damage / 3;
@@ -239,7 +240,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (get_player_flags(player_ptr, TR_SELF_COLD) && !has_immune_cold(player_ptr)) {
-        HIT_POINT damage;
+        int damage;
         damage = player_ptr->lev;
         if (race.tr_flags().has(TR_VUL_COLD))
             damage += damage / 3;
@@ -254,7 +255,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (player_ptr->riding) {
-        HIT_POINT damage;
+        int damage;
         auto auras = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].aura_flags;
         if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
             damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
@@ -333,13 +334,15 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
+    PlayerClass pc(player_ptr);
     if (pattern_effect(player_ptr)) {
         cave_no_regen = true;
     } else {
         if (player_ptr->regenerate) {
             regen_amount = regen_amount * 2;
         }
-        if (!PlayerClass(player_ptr).monk_stance_is(MonkStanceType::NONE) || !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::NONE)) {
+
+        if (!pc.monk_stance_is(MonkStanceType::NONE) || !pc.samurai_stance_is(SamuraiStanceType::NONE)) {
             regen_amount /= 2;
         }
         if (player_ptr->cursed.has(CurseTraitType::SLOW_REGEN)) {
@@ -352,12 +355,12 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     upkeep_factor = calculate_upkeep(player_ptr);
-    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
+    if ((player_ptr->action == ACTION_LEARN) || (player_ptr->action == ACTION_HAYAGAKE) || pc.samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         upkeep_factor += 100;
     }
 
     regenmana(player_ptr, upkeep_factor, regen_amount);
-    if (player_ptr->pclass == PlayerClassType::MAGIC_EATER) {
+    if (pc.equals(PlayerClassType::MAGIC_EATER)) {
         regenmagic(player_ptr, regen_amount);
     }
 

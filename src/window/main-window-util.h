@@ -5,8 +5,8 @@
 #define ROW_MAP 0
 #define COL_MAP 12
 
-struct object_type;
-extern object_type *autopick_obj;
+class ObjectType;
+extern ObjectType *autopick_obj;
 extern POSITION panel_row_min;
 extern POSITION panel_row_max;
 extern POSITION panel_col_min;

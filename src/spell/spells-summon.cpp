@@ -203,8 +203,8 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
     concptr q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
     concptr s = _("捧げられる死体を持っていない。", "You have nothing to sacrifice.");
     OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_offerable));
+    ObjectType *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_offerable));
     if (!o_ptr)
         return false;
 
@@ -251,9 +251,9 @@ int summon_cyber(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x
 {
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (who > 0) {
-        monster_type *m_ptr = &floor_ptr->m_list[who];
+        auto *m_ptr = &floor_ptr->m_list[who];
         if (is_pet(m_ptr))
             mode |= PM_FORCE_PET;
     }

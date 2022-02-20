@@ -6,7 +6,6 @@
 
 #include <algorithm>
 
-#include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
 #include "core/player-redraw-types.h"
 #include "core/speed-table.h"
@@ -30,6 +29,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -57,7 +57,7 @@
  * @param attribute 与えたダメージの種類 (単一属性)
  * @param note モンスターが倒された際の特別なメッセージ述語
  */
-MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeType attribute)
+MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *fear, AttributeType attribute)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , dam(dam)
@@ -76,7 +76,7 @@ MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_I
  * @param attribute_flags 与えたダメージの種類 (複数属性)
  * @param note モンスターが倒された際の特別なメッセージ述語
  */
-MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, AttributeFlags attribute_flags)
+MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *fear, AttributeFlags attribute_flags)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , dam(dam)
@@ -153,7 +153,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
     this->dying_scream(m_name);
     AvatarChanger ac(player_ptr, m_ptr);
     ac.change_virtue();
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
         char note_buf[160];
         sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
         exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, note_buf);
@@ -203,7 +203,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
         return;
     }
 
-    if (none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
@@ -300,7 +300,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = real_r_ptr(m_ptr);
-    if (((m_ptr->ml == 0) || this->player_ptr->hallucinated) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+    if (((m_ptr->ml == 0) || this->player_ptr->hallucinated) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
@@ -323,7 +323,7 @@ void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = real_r_ptr(m_ptr);
-    if (none_bits(r_ptr->flags3, RF3_AMBERITE) || one_in_(2)) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::AMBERITE) || one_in_(2)) {
         return;
     }
 
@@ -403,7 +403,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     auto *r_ptr = real_r_ptr(m_ptr);
-    if (none_bits(r_ptr->flags1, RF1_UNIQUE) || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
         return;
     }
 
@@ -427,7 +427,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
  * experience point of a monster later.
  * </pre>
  */
-void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp_dam)
+void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!monster_is_valid(m_ptr) || is_pet(m_ptr) || this->player_ptr->phase_out) {
@@ -439,17 +439,17 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp
      * - Varying speed effects
      * - Get a fraction in proportion of damage point
      */
-    auto new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * exp_dam;
+    auto new_exp = r_ptr->level * speed_to_energy(m_ptr->mspeed) * exp_dam;
     auto new_exp_frac = 0U;
     auto div_h = 0;
-    auto div_l = (uint)((this->player_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed));
+    auto div_l = (uint)((this->player_ptr->max_plv + 2) * speed_to_energy(r_ptr->speed));
 
     /* Use (average maxhp * 2) as a denominator */
     auto compensation = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
-    if (!this->player_ptr->current_floor_ptr->dun_level && (none_bits(r_ptr->flags8, RF8_WILD_ONLY) || none_bits(r_ptr->flags1, RF1_UNIQUE))) {
+    if (!this->player_ptr->current_floor_ptr->dun_level && (none_bits(r_ptr->flags8, RF8_WILD_ONLY) || r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))) {
         s64b_mul(&div_h, &div_l, 0, 5);
     }
 

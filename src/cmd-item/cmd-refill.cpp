@@ -29,11 +29,11 @@
 static void do_cmd_refill_lamp(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    object_type *o_ptr;
-    object_type *j_ptr;
+    ObjectType *o_ptr;
+    ObjectType *j_ptr;
     concptr q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
     concptr s = _("油つぼがない。", "You have no flasks of oil.");
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::can_refill_lantern));
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::can_refill_lantern));
     if (!o_ptr)
         return;
 
@@ -42,16 +42,16 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
     j_ptr = &player_ptr->inventory_list[INVEN_LITE];
     auto flgs2 = object_flags(j_ptr);
-    j_ptr->xtra4 += o_ptr->xtra4;
+    j_ptr->fuel += o_ptr->fuel;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
-    if (flgs.has(TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
-        j_ptr->xtra4 = 0;
+    if (flgs.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
+        j_ptr->fuel = 0;
         msg_print(_("ランプが消えてしまった！", "Your lamp has gone out!"));
     } else if (flgs.has(TR_DARK_SOURCE) || flgs2.has(TR_DARK_SOURCE)) {
-        j_ptr->xtra4 = 0;
+        j_ptr->fuel = 0;
         msg_print(_("しかしランプは全く光らない。", "Curiously, your lamp doesn't light."));
-    } else if (j_ptr->xtra4 >= FUEL_LAMP) {
-        j_ptr->xtra4 = FUEL_LAMP;
+    } else if (j_ptr->fuel >= FUEL_LAMP) {
+        j_ptr->fuel = FUEL_LAMP;
         msg_print(_("ランプの油は一杯だ。", "Your lamp is full."));
     }
 
@@ -66,11 +66,11 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
 static void do_cmd_refill_torch(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    object_type *o_ptr;
-    object_type *j_ptr;
+    ObjectType *o_ptr;
+    ObjectType *j_ptr;
     concptr q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
     concptr s = _("他に松明がない。", "You have no extra torches.");
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::can_refill_torch));
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::can_refill_torch));
     if (!o_ptr)
         return;
 
@@ -79,16 +79,16 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
     j_ptr = &player_ptr->inventory_list[INVEN_LITE];
     auto flgs2 = object_flags(j_ptr);
-    j_ptr->xtra4 += o_ptr->xtra4 + 5;
+    j_ptr->fuel += o_ptr->fuel + 5;
     msg_print(_("松明を結合した。", "You combine the torches."));
-    if (flgs.has(TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
-        j_ptr->xtra4 = 0;
+    if (flgs.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
+        j_ptr->fuel = 0;
         msg_print(_("松明が消えてしまった！", "Your torch has gone out!"));
     } else if (flgs.has(TR_DARK_SOURCE) || flgs2.has(TR_DARK_SOURCE)) {
-        j_ptr->xtra4 = 0;
+        j_ptr->fuel = 0;
         msg_print(_("しかし松明は全く光らない。", "Curiously, your torch doesn't light."));
-    } else if (j_ptr->xtra4 >= FUEL_TORCH) {
-        j_ptr->xtra4 = FUEL_TORCH;
+    } else if (j_ptr->fuel >= FUEL_TORCH) {
+        j_ptr->fuel = FUEL_TORCH;
         msg_print(_("松明の寿命は十分だ。", "Your torch is fully fueled."));
     } else
         msg_print(_("松明はいっそう明るく輝いた。", "Your torch glows more brightly."));
@@ -103,7 +103,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
  */
 void do_cmd_refill(PlayerType *player_ptr)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_LITE];
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });

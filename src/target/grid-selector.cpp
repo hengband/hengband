@@ -30,7 +30,7 @@
  */
 static bool tgt_pt_accept(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
         return false;
 
@@ -64,7 +64,7 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
     if (!expand_list)
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 1; y < floor_ptr->height; y++) {
         for (POSITION x = 1; x < floor_ptr->width; x++) {
             if (!tgt_pt_accept(player_ptr, y, x))
@@ -139,7 +139,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
     for (; this->n < size(this->ys); ++this->n) {
         const POSITION y_cur = this->ys[this->n];
         const POSITION x_cur = this->xs[this->n];
-        grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y_cur][x_cur];
+        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y_cur][x_cur];
         if (this->callback(g_ptr))
             break;
     }

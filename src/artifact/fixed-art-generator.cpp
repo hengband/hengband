@@ -22,6 +22,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
 #include "player/player-sex.h"
 #include "specific-object/bloody-moon.h"
 #include "system/artifact-type-definition.h"
@@ -39,7 +40,7 @@
  * 純戦士系職業は追加能力/耐性がもらえる。
  * それ以外では、反感、太古の怨念、呪いが付き追加能力/耐性はもらえない。
  */
-static bool invest_terror_mask(PlayerType *player_ptr, object_type *o_ptr)
+static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (o_ptr->name1 != ART_TERROR)
         return false;
@@ -64,7 +65,7 @@ static bool invest_terror_mask(PlayerType *player_ptr, object_type *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  */
-static void milim_swimsuit(PlayerType *player_ptr, object_type *o_ptr)
+static void milim_swimsuit(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if ((o_ptr->name1 != ART_MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY))
         return;
@@ -88,21 +89,22 @@ static void milim_swimsuit(PlayerType *player_ptr, object_type *o_ptr)
  * @details
  * 対象は村正、ロビントンのハープ、龍争虎鬪、ブラッディムーン、羽衣、天女の羽衣、ミリム
  */
-static void invest_special_artifact_abilities(PlayerType *player_ptr, object_type *o_ptr)
+static void invest_special_artifact_abilities(PlayerType *player_ptr, ObjectType *o_ptr)
 {
+    const auto pc = PlayerClass(player_ptr);
     switch (o_ptr->name1) {
     case ART_MURAMASA:
-        if (player_ptr->pclass != PlayerClassType::SAMURAI) {
+        if (!pc.equals(PlayerClassType::SAMURAI)) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
             o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
-        if (player_ptr->pclass == PlayerClassType::BARD)
+        if (pc.equals(PlayerClassType::BARD))
             o_ptr->art_flags.set(TR_DEC_MANA);
         return;
     case ART_XIAOLONG:
-        if (player_ptr->pclass == PlayerClassType::MONK)
+        if (pc.equals(PlayerClassType::MONK))
             o_ptr->art_flags.set(TR_BLOWS);
         return;
     case ART_BLOOD:
@@ -126,7 +128,7 @@ static void invest_special_artifact_abilities(PlayerType *player_ptr, object_typ
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void fixed_artifact_random_abilities(PlayerType *player_ptr, artifact_type *a_ptr, object_type *o_ptr)
+static void fixed_artifact_random_abilities(PlayerType *player_ptr, artifact_type *a_ptr, ObjectType *o_ptr)
 {
     auto give_power = false;
     auto give_resistance = false;
@@ -173,7 +175,7 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, artifact_typ
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_ptr)
+static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, ObjectType *o_ptr)
 {
     if (!a_ptr->cost)
         set_bits(o_ptr->ident, IDENT_BROKEN);
@@ -203,7 +205,7 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
-artifact_type *apply_artifact(PlayerType *player_ptr, object_type *o_ptr)
+artifact_type *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto a_ptr = &a_info[o_ptr->name1];
     o_ptr->pval = a_ptr->pval;
@@ -244,7 +246,7 @@ bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, PO
     if (i == 0)
         return true;
 
-    object_type forge;
+    ObjectType forge;
     auto q_ptr = &forge;
     q_ptr->prep(i);
     q_ptr->name1 = a_idx;
@@ -265,7 +267,7 @@ bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, PO
  * This routine should only be called by "apply_magic()"\n
  * Note -- see "make_artifact_special()" and "apply_magic()"\n
  */
-bool make_artifact(PlayerType *player_ptr, object_type *o_ptr)
+bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 0)
@@ -321,7 +323,7 @@ bool make_artifact(PlayerType *player_ptr, object_type *o_ptr)
  *\n
  * Note -- see "make_artifact()" and "apply_magic()"\n
  */
-bool make_artifact_special(PlayerType *player_ptr, object_type *o_ptr)
+bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     KIND_OBJECT_IDX k_idx = 0;
 

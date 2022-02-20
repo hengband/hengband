@@ -40,7 +40,7 @@ void vary_item(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
  */
 void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     num += o_ptr->number;
     if (num > 255)
         num = 255;
@@ -75,7 +75,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
  */
 void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if (!o_ptr->k_idx)
         return;
     if (o_ptr->number)
@@ -115,9 +115,9 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
-    object_type forge;
-    object_type *q_ptr;
-    object_type *o_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
+    ObjectType *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0)
@@ -158,12 +158,12 @@ void combine_pack(PlayerType *player_ptr)
         combined = false;
 
         for (int i = INVEN_PACK; i > 0; i--) {
-            object_type *o_ptr;
+            ObjectType *o_ptr;
             o_ptr = &player_ptr->inventory_list[i];
             if (!o_ptr->k_idx)
                 continue;
             for (int j = 0; j < i; j++) {
-                object_type *j_ptr;
+                ObjectType *j_ptr;
                 j_ptr = &player_ptr->inventory_list[j];
                 if (!j_ptr->k_idx)
                     continue;
@@ -225,9 +225,9 @@ void reorder_pack(PlayerType *player_ptr)
 {
     int i, j, k;
     int32_t o_value;
-    object_type forge;
-    object_type *q_ptr;
-    object_type *o_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
+    ObjectType *o_ptr;
     bool flag = false;
 
     for (i = 0; i < INVEN_PACK; i++) {
@@ -282,12 +282,12 @@ void reorder_pack(PlayerType *player_ptr)
  * Note that this code must remove any location/stack information\n
  * from the object once it is placed into the inventory.\n
  */
-int16_t store_item_to_inventory(PlayerType *player_ptr, object_type *o_ptr)
+int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     INVENTORY_IDX i, j, k;
     INVENTORY_IDX n = -1;
 
-    object_type *j_ptr;
+    ObjectType *j_ptr;
     for (j = 0; j < INVEN_PACK; j++) {
         j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx)
@@ -299,7 +299,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, object_type *o_ptr)
 
             player_ptr->update |= (PU_BONUS);
             player_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
-            return (j);
+            return j;
         }
     }
 
@@ -348,13 +348,13 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, object_type *o_ptr)
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
-bool check_store_item_to_inventory(PlayerType *player_ptr, const object_type *o_ptr)
+bool check_store_item_to_inventory(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     if (player_ptr->inven_cnt < INVEN_PACK)
         return true;
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        object_type *j_ptr = &player_ptr->inventory_list[j];
+        auto *j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx)
             continue;
 
@@ -381,9 +381,9 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const object_type *o_
 INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
     INVENTORY_IDX slot;
-    object_type forge;
-    object_type *q_ptr;
-    object_type *o_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
+    ObjectType *o_ptr;
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];

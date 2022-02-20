@@ -240,7 +240,7 @@ void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool no_lite(PlayerType *player_ptr)
 {
-    return (!player_can_see_bold(player_ptr, player_ptr->y, player_ptr->x));
+    return !player_can_see_bold(player_ptr, player_ptr->y, player_ptr->x);
 }
 
 /*
@@ -307,7 +307,7 @@ void print_rel(PlayerType *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, 
  */
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Blind players see nothing */
     if (player_ptr->blind)
@@ -329,7 +329,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 
     /* Hack -- memorize objects */
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         /* Memorize objects */
         o_ptr->marked |= OM_FOUND;
@@ -338,7 +338,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     /* Hack -- memorize grids */
     if (!g_ptr->is_mark()) {
         /* Feature code (applying "mimic" field) */
-        feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
+        auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
         /* Memorize some "boring" grids */
         if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
@@ -688,7 +688,7 @@ void update_flow(PlayerType *player_ptr)
                 if (player_bold(player_ptr, y, x))
                     continue;
 
-                grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+                auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
                 if (is_closed_door(player_ptr, g_ptr->feat))
                     m += 3;
@@ -734,7 +734,7 @@ void update_flow(PlayerType *player_ptr)
  */
 FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FloorFeatureType action)
 {
-    feature_type *f_ptr = &f_info[feat];
+    auto *f_ptr = &f_info[feat];
     int i;
 
     /* Get the new feature */
@@ -756,7 +756,7 @@ FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FloorFeatureType actio
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatureType action)
 {
     /* Set old feature */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
 
     /* Get the new feat */
@@ -771,7 +771,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatur
 
     if (!(feature_action_flags[enum2i(action)] & FAF_NO_DROP)) {
         feature_type *old_f_ptr = &f_info[oldfeat];
-        feature_type *f_ptr = &f_info[newfeat];
+        auto *f_ptr = &f_info[newfeat];
         bool found = false;
 
         /* Handle gold */
@@ -806,7 +806,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatur
 /* Remove a mirror */
 void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Remove the mirror */
     g_ptr->info &= ~(CAVE_OBJECT);
@@ -838,9 +838,9 @@ void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */
     if (f_ptr->flags.has_not(FloorFeatureType::TELEPORTABLE))
@@ -875,8 +875,8 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
  */
 bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode)
 {
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */
     if (f_ptr->flags.has_not(FloorFeatureType::TELEPORTABLE))
@@ -935,7 +935,7 @@ bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
  */
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
 {
-    feature_type *f_ptr = &f_info[feature];
+    auto *f_ptr = &f_info[feature];
 
     if (player_ptr->riding)
         return monster_can_cross_terrain(
@@ -999,7 +999,7 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
         break;
     }
     case GB_OUTER_NOPERM: {
-        feature_type *f_ptr = &f_info[feat_wall_outer];
+        auto *f_ptr = &f_info[feat_wall_outer];
         if (permanent_wall(f_ptr)) {
             g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, FloorFeatureType::UNPERM);
         } else {
@@ -1023,7 +1023,7 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
         break;
     }
     case GB_SOLID_NOPERM: {
-        feature_type *f_ptr = &f_info[feat_wall_solid];
+        auto *f_ptr = &f_info[feat_wall_solid];
         if ((g_ptr->info & CAVE_VAULT) && permanent_wall(f_ptr))
             g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, FloorFeatureType::UNPERM);
         else

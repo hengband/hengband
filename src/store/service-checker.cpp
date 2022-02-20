@@ -4,6 +4,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "store/store-util.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-rod-types.h"
@@ -20,13 +21,13 @@
  * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed_item(const object_type *o_ptr)
+static bool is_blessed_item(const ObjectType *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     return flgs.has(TR_BLESSED);
 }
 
-static bool check_store_general(const object_type *o_ptr)
+static bool check_store_general(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::ROD:
@@ -54,7 +55,7 @@ static bool check_store_general(const object_type *o_ptr)
     }
 }
 
-static bool check_store_armoury(const object_type *o_ptr)
+static bool check_store_armoury(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::BOOTS:
@@ -72,7 +73,7 @@ static bool check_store_armoury(const object_type *o_ptr)
     }
 }
 
-static bool check_store_weapon(const object_type *o_ptr)
+static bool check_store_weapon(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SHOT:
@@ -91,7 +92,7 @@ static bool check_store_weapon(const object_type *o_ptr)
     }
 }
 
-static bool check_store_temple(const object_type *o_ptr)
+static bool check_store_temple(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::LIFE_BOOK:
@@ -102,9 +103,9 @@ static bool check_store_temple(const object_type *o_ptr)
         return true;
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE: {
-        monster_race *r_ptr = &r_info[o_ptr->pval];
-        if (!(r_ptr->flags3 & RF3_EVIL))
-            if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != nullptr))
+        auto *r_ptr = &r_info[o_ptr->pval];
+        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL))
+            if ((r_ptr->kind_flags.has(MonsterKindType::GOOD)) || (r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) || (angband_strchr("?!", r_ptr->d_char) != nullptr))
                 return true;
     }
         /* Fall through */
@@ -119,7 +120,7 @@ static bool check_store_temple(const object_type *o_ptr)
     }
 }
 
-static bool check_store_alchemist(const object_type *o_ptr)
+static bool check_store_alchemist(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SCROLL:
@@ -130,7 +131,7 @@ static bool check_store_alchemist(const object_type *o_ptr)
     }
 }
 
-static bool check_store_magic(const object_type *o_ptr)
+static bool check_store_magic(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SORCERY_BOOK:
@@ -159,7 +160,7 @@ static bool check_store_magic(const object_type *o_ptr)
     }
 }
 
-static bool check_store_book(const object_type *o_ptr)
+static bool check_store_book(const ObjectType *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SORCERY_BOOK:
@@ -180,7 +181,7 @@ static bool check_store_book(const object_type *o_ptr)
     }
 }
 
-static bool switch_store_check(const object_type *o_ptr)
+static bool switch_store_check(const ObjectType *o_ptr)
 {
     switch (cur_store_num) {
     case StoreSaleType::GENERAL:
@@ -210,7 +211,7 @@ static bool switch_store_check(const object_type *o_ptr)
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
-bool store_will_buy(PlayerType *, const object_type *o_ptr)
+bool store_will_buy(PlayerType *, const ObjectType *o_ptr)
 {
     if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM))
         return true;
@@ -236,7 +237,7 @@ static int mass_lite_produce(const PRICE cost)
     return size;
 }
 
-static int mass_scroll_produce(object_type *o_ptr, const PRICE cost)
+static int mass_scroll_produce(ObjectType *o_ptr, const PRICE cost)
 {
     int size = 1;
     if (cost <= 60L)
@@ -266,7 +267,7 @@ static int mass_book_produce(const PRICE cost)
     return size;
 }
 
-static int mass_equipment_produce(object_type *o_ptr, const PRICE cost)
+static int mass_equipment_produce(ObjectType *o_ptr, const PRICE cost)
 {
     int size = 1;
     if (o_ptr->is_artifact() || o_ptr->is_ego())
@@ -322,7 +323,7 @@ static int mass_magic_produce(const PRICE cost)
     return size;
 }
 
-static int switch_mass_production(object_type *o_ptr, const PRICE cost)
+static int switch_mass_production(ObjectType *o_ptr, const PRICE cost)
 {
     switch (o_ptr->tval) {
     case ItemKindType::FOOD:
@@ -384,16 +385,16 @@ static byte decide_discount_rate(const PRICE cost)
 {
     if (cost < 5)
         return 0;
-    
+
     if (one_in_(25))
         return 25;
-    
+
     if (one_in_(150))
         return 50;
-    
+
     if (one_in_(300))
         return 75;
-    
+
     if (one_in_(500))
         return 90;
 
@@ -409,7 +410,7 @@ static byte decide_discount_rate(const PRICE cost)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-void mass_produce(PlayerType *, object_type *o_ptr)
+void mass_produce(PlayerType *, ObjectType *o_ptr)
 {
     const PRICE cost = object_value(o_ptr);
     int size = switch_mass_production(o_ptr, cost);

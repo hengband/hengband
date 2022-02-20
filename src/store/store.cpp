@@ -98,9 +98,9 @@ static int check_free_space(void)
  *  1 : Cannot be combined but there are empty spaces.
  * </pre>
  */
-int store_check_num(object_type *o_ptr)
+int store_check_num(ObjectType *o_ptr)
 {
-    object_type *j_ptr;
+    ObjectType *j_ptr;
     if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM)) {
         bool old_stack_force_notes = stack_force_notes;
         bool old_stack_force_costs = stack_force_costs;
@@ -218,7 +218,7 @@ void store_examine(PlayerType *player_ptr)
     if (!get_stock(&item, out_val, 0, i - 1))
         return;
     item = item + store_top;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &st_ptr->stock[item];
     if (!o_ptr->is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
@@ -269,7 +269,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType which)
     st_ptr->good_buy = 0;
     st_ptr->bad_buy = 0;
     for (int i = 0; i < st_ptr->stock_num; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &st_ptr->stock[i];
         if (o_ptr->is_artifact())
             continue;
@@ -298,7 +298,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
-            object_type *o_ptr = &st_ptr->stock[j];
+            auto *o_ptr = &st_ptr->stock[j];
             if (black_market_crap(player_ptr, o_ptr)) {
                 store_item_increase(j, 0 - o_ptr->number);
                 store_item_optimize(j);

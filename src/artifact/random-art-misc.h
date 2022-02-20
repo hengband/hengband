@@ -4,6 +4,6 @@
  * @brief ランダムアーティファクト生成のその他特性バイアス付けヘッダ / Artifact code
  */
 
-struct object_type;
+class ObjectType;
 class PlayerType;
-void random_misc(PlayerType *player_ptr, object_type *o_ptr);
+void random_misc(PlayerType *player_ptr, ObjectType *o_ptr);

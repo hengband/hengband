@@ -18,6 +18,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "player-base/player-class.h"
 #include "status/buff-setter.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -98,7 +99,7 @@ static void go_to_arena(PlayerType *player_ptr)
     if (battle_metal_babble(player_ptr))
         return;
 
-    if (player_ptr->riding && (player_ptr->pclass != PlayerClassType::BEASTMASTER) && (player_ptr->pclass != PlayerClassType::CAVALRY)) {
+    if (player_ptr->riding && !PlayerClass(player_ptr).is_tamer()) {
         msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
         msg_print(nullptr);
         return;
@@ -199,7 +200,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
                 if (!r_idx)
                     continue;
 
-                if ((r_info[r_idx].flags1 & RF1_UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2)) {
+                if (r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2)) {
                     if ((r_info[r_idx].level + 10) > mon_level)
                         continue;
                 }
@@ -218,7 +219,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
         }
 
         for (i = 0; i < 4; i++) {
-            monster_race *r_ptr = &r_info[battle_mon[i]];
+            auto *r_ptr = &r_info[battle_mon[i]];
             power[i] = calc_monrace_power(r_ptr);
             total += power[i];
         }
@@ -273,11 +274,11 @@ bool monster_arena_comm(PlayerType *player_ptr)
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
     for (int i = 0; i < 4; i++) {
         char buf[MAX_MONSTER_NAME];
-        monster_race *r_ptr = &r_info[battle_mon[i]];
+        auto *r_ptr = &r_info[battle_mon[i]];
 
         sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,
-            _(format("%s%s", r_ptr->name.c_str(), (r_ptr->flags1 & RF1_UNIQUE) ? "もどき" : "      "),
-                format("%s%s", (r_ptr->flags1 & RF1_UNIQUE) ? "Fake " : "", r_ptr->name.c_str())),
+            _(format("%s%s", r_ptr->name.c_str(), r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "もどき" : "      "),
+                format("%s%s", r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "Fake " : "", r_ptr->name.c_str())),
             (long int)mon_odds[i] / 100, (long int)mon_odds[i] % 100);
         prt(buf, 5 + i, 1);
     }

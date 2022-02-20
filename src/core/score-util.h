@@ -14,7 +14,7 @@
  *
  * Note that "string comparisons" are thus valid on "pts".
  */
-typedef struct high_score {
+struct high_score {
     GAME_TEXT what[8]; /* Version info (string) */
     GAME_TEXT pts[10]; /* Total Score (number) */
     GAME_TEXT gold[10]; /* Total Gold (number) */
@@ -33,7 +33,7 @@ typedef struct high_score {
     GAME_TEXT max_dun[4]; /* Max Dungeon Level (number) */
 
     GAME_TEXT how[40]; /* Method of death (string) */
-} high_score;
+};
 
 extern int highscore_fd;
 

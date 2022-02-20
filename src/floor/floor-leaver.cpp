@@ -27,9 +27,9 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "pet/pet-util.h"
+#include "player-status/player-energy.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
-#include "player-status/player-energy.h"
 #include "save/floor-writer.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -47,7 +47,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
     if (!player_ptr->riding)
         return;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     if (m_ptr->parent_m_idx) {
         player_ptr->riding = 0;
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
@@ -67,10 +67,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, monster_ty
     if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0))
         return true;
 
-    if (m_ptr->nickname
-        && ((player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))
-            || (los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)
-                && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)))) {
+    if (m_ptr->nickname && ((player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) || (los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)))) {
         if (dis > 3)
             return true;
     } else if (dis > 1)
@@ -85,7 +82,7 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
         return;
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr))
             continue;
 
@@ -101,7 +98,7 @@ static void record_pet_diary(PlayerType *player_ptr)
         return;
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         GAME_TEXT m_name[MAX_NLEN];
         if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (player_ptr->riding == i))
             continue;
@@ -124,7 +121,7 @@ static void preserve_pet(PlayerType *player_ptr)
     sweep_preserving_pet(player_ptr);
     record_pet_diary(player_ptr);
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if ((m_ptr->parent_m_idx == 0) || (player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx != 0))
             continue;
 
@@ -151,11 +148,11 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
     int num = 0;
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-            feature_type *f_ptr = &f_info[g_ptr->feat];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *f_ptr = &f_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
-                if (f_ptr->flags.has_all_of({FloorFeatureType::LESS, FloorFeatureType::STAIRS}) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ FloorFeatureType::LESS, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->upper_floor_id) {
                         sx = x;
@@ -163,7 +160,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
                     }
                 }
             } else if (floor_mode & CFM_DOWN) {
-                if (f_ptr->flags.has_all_of({FloorFeatureType::MORE, FloorFeatureType::STAIRS}) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ FloorFeatureType::MORE, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->lower_floor_id) {
                         sx = x;
@@ -212,7 +209,7 @@ static void get_out_monster(PlayerType *player_ptr)
     POSITION dis = 1;
     POSITION oy = player_ptr->y;
     POSITION ox = player_ptr->x;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
     if (m_idx == 0)
         return;
@@ -228,8 +225,7 @@ static void get_out_monster(PlayerType *player_ptr)
         if (tries > 20 * dis * dis)
             dis++;
 
-        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(player_ptr, ny, nx) || floor_ptr->grid_array[ny][nx].is_rune_protection()
-            || floor_ptr->grid_array[ny][nx].is_rune_explosion() || pattern_tile(floor_ptr, ny, nx))
+        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(player_ptr, ny, nx) || floor_ptr->grid_array[ny][nx].is_rune_protection() || floor_ptr->grid_array[ny][nx].is_rune_explosion() || pattern_tile(floor_ptr, ny, nx))
             continue;
 
         m_ptr = &floor_ptr->m_list[m_idx];
@@ -249,28 +245,26 @@ static void preserve_info(PlayerType *player_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
     for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
-        if ((quest[i].status == QuestStatusType::TAKEN) && ((quest[i].type == QuestKindType::KILL_LEVEL) || (quest[i].type == QuestKindType::RANDOM))
-            && (quest[i].level == player_ptr->current_floor_ptr->dun_level) && (player_ptr->dungeon_idx == quest[i].dungeon)
-            && !(quest[i].flags & QUEST_FLAG_PRESET)) {
+        if ((quest[i].status == QuestStatusType::TAKEN) && ((quest[i].type == QuestKindType::KILL_LEVEL) || (quest[i].type == QuestKindType::RANDOM)) && (quest[i].level == player_ptr->current_floor_ptr->dun_level) && (player_ptr->dungeon_idx == quest[i].dungeon) && !(quest[i].flags & QUEST_FLAG_PRESET)) {
             quest_r_idx = quest[i].r_idx;
         }
     }
 
     for (DUNGEON_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         monster_race *r_ptr;
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (quest_r_idx != m_ptr->r_idx))
             continue;
 
         r_ptr = real_r_ptr(m_ptr);
-        if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
             continue;
 
         delete_monster_idx(player_ptr, i);
     }
 
     for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid())
             continue;
 
@@ -285,11 +279,11 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
         return;
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    feature_type *f_ptr =  &f_info[(*g_ptr)->feat];
+    auto *f_ptr = &f_info[(*g_ptr)->feat];
     if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special))
         new_floor_id = (*g_ptr)->special;
 
-    if (f_ptr->flags.has_all_of({FloorFeatureType::STAIRS, FloorFeatureType::SHAFT}))
+    if (f_ptr->flags.has_all_of({ FloorFeatureType::STAIRS, FloorFeatureType::SHAFT }))
         prepare_change_floor_mode(player_ptr, CFM_SHAFT);
 }
 
@@ -349,7 +343,6 @@ static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         latest_visit_mark = 1;
         return;
     }
-    
     if (player_ptr->change_floor_mode & CFM_NO_RETURN)
         kill_saved_floor(player_ptr, sf_ptr);
 }
@@ -441,7 +434,7 @@ void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
     if (record_stair)
         exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
 
-    player_ptr->current_floor_ptr->inside_quest = 0;
+    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
     prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);

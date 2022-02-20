@@ -185,7 +185,7 @@ void PlayerStatusBase::set_locals()
  */
 BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -207,7 +207,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
  */
 BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -234,7 +234,7 @@ int16_t PlayerStatusBase::equipments_value()
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     int16_t result = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         auto flgs = object_flags(o_ptr);
 
         if (!o_ptr->k_idx)

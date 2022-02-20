@@ -45,8 +45,10 @@ old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
     old_race_flags_ptr->old_r_flags1 = 0L;
     old_race_flags_ptr->old_r_flags2 = 0L;
     old_race_flags_ptr->old_r_flags3 = 0L;
-    old_race_flags_ptr->old_r_flagsr = 0L;
+    old_race_flags_ptr->old_r_resistance_flags.clear();
     old_race_flags_ptr->old_r_ability_flags.clear();
+    old_race_flags_ptr->old_r_behavior_flags.clear();
+    old_race_flags_ptr->old_r_kind_flags.clear();
 
     old_race_flags_ptr->old_r_blows0 = 0;
     old_race_flags_ptr->old_r_blows1 = 0;
@@ -289,8 +291,9 @@ void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_
     old_race_flags_ptr->old_r_flags1 = r_ptr->r_flags1;
     old_race_flags_ptr->old_r_flags2 = r_ptr->r_flags2;
     old_race_flags_ptr->old_r_flags3 = r_ptr->r_flags3;
-    old_race_flags_ptr->old_r_flagsr = r_ptr->r_flagsr;
+    old_race_flags_ptr->old_r_resistance_flags = r_ptr->r_resistance_flags;
     old_race_flags_ptr->old_r_ability_flags = r_ptr->r_ability_flags;
+    old_race_flags_ptr->old_r_behavior_flags = r_ptr->r_behavior_flags;
 
     old_race_flags_ptr->old_r_blows0 = r_ptr->r_blows[0];
     old_race_flags_ptr->old_r_blows1 = r_ptr->r_blows[1];
@@ -305,9 +308,9 @@ void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_
  * @param m_ptr モンスターへの参照ポインタ
  * return モンスターの加速値
  */
-SPEED decide_monster_speed(monster_type *m_ptr)
+byte decide_monster_speed(monster_type *m_ptr)
 {
-    SPEED speed = m_ptr->mspeed;
+    auto speed = m_ptr->mspeed;
     if (ironman_nightmare)
         speed += 5;
 

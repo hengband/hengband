@@ -43,7 +43,7 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
         return true;
     }
 
-    if (info_grab_one_flag(r_ptr->flagsr, r_info_flagsr, what)) {
+    if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(r_ptr->resistance_flags, r_info_flagsr, what)) {
         return true;
     }
 
@@ -56,6 +56,10 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
     }
 
     if (EnumClassFlagGroup<MonsterVisualType>::grab_one_flag(r_ptr->visual_flags, r_info_visual_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterKindType>::grab_one_flag(r_ptr->kind_flags, r_info_kind_flags, what)) {
         return true;
     }
 

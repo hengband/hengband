@@ -38,8 +38,8 @@ static void set_msex_flags(lore_type *lore_ptr)
 
 static void set_flags1(lore_type *lore_ptr)
 {
-    if (lore_ptr->r_ptr->flags1 & RF1_UNIQUE)
-        lore_ptr->flags1 |= (RF1_UNIQUE);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+        lore_ptr->kind_flags.set(MonsterKindType::UNIQUE);
 
     if (lore_ptr->r_ptr->flags1 & RF1_QUESTOR)
         lore_ptr->flags1 |= (RF1_QUESTOR);
@@ -65,41 +65,41 @@ static void set_race_flags(lore_type *lore_ptr)
     if (!lore_ptr->r_ptr->r_tkills && !lore_ptr->know_everything)
         return;
 
-    if (lore_ptr->r_ptr->flags3 & RF3_ORC)
-        lore_ptr->flags3 |= (RF3_ORC);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::ORC))
+        lore_ptr->kind_flags.set(MonsterKindType::ORC);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_TROLL)
-        lore_ptr->flags3 |= (RF3_TROLL);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::TROLL))
+        lore_ptr->kind_flags.set(MonsterKindType::TROLL);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_GIANT)
-        lore_ptr->flags3 |= (RF3_GIANT);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::GIANT))
+        lore_ptr->kind_flags.set(MonsterKindType::GIANT);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_DRAGON)
-        lore_ptr->flags3 |= (RF3_DRAGON);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::DRAGON))
+        lore_ptr->kind_flags.set(MonsterKindType::DRAGON);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_DEMON)
-        lore_ptr->flags3 |= (RF3_DEMON);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON))
+        lore_ptr->kind_flags.set(MonsterKindType::DEMON);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_UNDEAD)
-        lore_ptr->flags3 |= (RF3_UNDEAD);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
+        lore_ptr->kind_flags.set(MonsterKindType::UNDEAD);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_EVIL)
-        lore_ptr->flags3 |= (RF3_EVIL);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::EVIL))
+        lore_ptr->kind_flags.set(MonsterKindType::EVIL);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_GOOD)
-        lore_ptr->flags3 |= (RF3_GOOD);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::GOOD))
+        lore_ptr->kind_flags.set(MonsterKindType::GOOD);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_ANIMAL)
-        lore_ptr->flags3 |= (RF3_ANIMAL);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL))
+        lore_ptr->kind_flags.set(MonsterKindType::ANIMAL);
 
-    if (lore_ptr->r_ptr->flags3 & RF3_AMBERITE)
-        lore_ptr->flags3 |= (RF3_AMBERITE);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::AMBERITE))
+        lore_ptr->kind_flags.set(MonsterKindType::AMBERITE);
 
-    if (lore_ptr->r_ptr->flags2 & RF2_HUMAN)
-        lore_ptr->flags2 |= (RF2_HUMAN);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::HUMAN))
+        lore_ptr->kind_flags.set(MonsterKindType::HUMAN);
 
-    if (lore_ptr->r_ptr->flags2 & RF2_QUANTUM)
-        lore_ptr->flags2 |= (RF2_QUANTUM);
+    if (lore_ptr->r_ptr->kind_flags.has(MonsterKindType::QUANTUM))
+        lore_ptr->kind_flags.set(MonsterKindType::QUANTUM);
 
     if (lore_ptr->r_ptr->flags1 & RF1_FORCE_DEPTH)
         lore_ptr->flags1 |= (RF1_FORCE_DEPTH);

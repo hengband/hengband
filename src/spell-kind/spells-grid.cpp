@@ -44,7 +44,7 @@ bool create_rune_protection_one(PlayerType *player_ptr)
  */
 bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!cave_clean_bold(floor_ptr, y, x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
@@ -68,12 +68,11 @@ void stair_creation(PlayerType *player_ptr)
         up = false;
 
     bool down = true;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (quest_number(player_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth))
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth))
         down = false;
 
-    if (!floor_ptr->dun_level || (!up && !down) || (floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) || floor_ptr->inside_arena
-        || player_ptr->phase_out) {
+    if (!floor_ptr->dun_level || (!up && !down) || (inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) || floor_ptr->inside_arena || player_ptr->phase_out) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
     }
@@ -110,7 +109,7 @@ void stair_creation(PlayerType *player_ptr)
     if (dest_floor_id) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+                auto *g_ptr = &floor_ptr->grid_array[y][x];
                 if (!g_ptr->special)
                     continue;
                 if (feat_uses_special(g_ptr->feat))

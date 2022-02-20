@@ -11,6 +11,7 @@
 
 #include "mspell/mspell-judgement.h"
 #include "dungeon/dungeon.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
@@ -21,6 +22,8 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
@@ -29,7 +32,6 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -50,7 +52,7 @@
  */
 bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
     int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, PROJECT_THRU);
     if (!grid_n)
@@ -137,8 +139,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         if (flg & PROJECT_DISI) {
             if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
                 hit2 = true;
-            if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, player_ptr->y, player_ptr->x)
-                && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad))
+            if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, player_ptr->y, player_ptr->x) && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad))
                 hityou = true;
         } else if (flg & PROJECT_LOS) {
             if (los(player_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
@@ -251,14 +252,15 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->dustrobe)
         return true;
 
-    if (player_ptr->shero && (player_ptr->pclass != PlayerClassType::BERSERKER))
+    PlayerClass pc(player_ptr);
+    if (player_ptr->shero && !pc.equals(PlayerClassType::BERSERKER))
         return true;
 
     if (player_ptr->mimic_form == MIMIC_DEMON_LORD)
         return true;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST)))
             return true;
@@ -268,7 +270,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->ability_flags.has(MonsterAbilityType::BR_FIRE)) {
-        if (!((player_ptr->prace == PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
+        if (!(PlayerRace(player_ptr).equals(PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
             if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)))
                 return true;
 
@@ -293,7 +295,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
             return true;
     }
 
-    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !((player_ptr->pclass == PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
+    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !(pc.equals(PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
         if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST))
             return true;
 
@@ -307,19 +309,19 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->tsuyoshi)
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
+    if ((player_ptr->special_attack & ATTACK_ACID) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
+    if ((player_ptr->special_attack & ATTACK_FIRE) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
+    if ((player_ptr->special_attack & ATTACK_ELEC) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
+    if ((player_ptr->special_attack & ATTACK_COLD) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK))
         return true;
 
-    if ((player_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
+    if ((player_ptr->special_attack & ATTACK_POIS) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK))
         return true;
 
     if ((player_ptr->pspeed < 145) && is_fast(player_ptr))
@@ -328,8 +330,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->lightspeed && (m_ptr->mspeed < 136))
         return true;
 
-    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135)
-        && monster_fast_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding]))
+    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135) && monster_fast_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding]))
         return true;
 
     return false;

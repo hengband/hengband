@@ -4,7 +4,7 @@
 #include "info-reader/parse-error-types.h"
 
 // Quest/Town/World Generator
-typedef struct qtwg_type {
+struct qtwg_type {
     char *buf;
     int ymin;
     int xmin;
@@ -12,7 +12,7 @@ typedef struct qtwg_type {
     int xmax;
     int *y;
     int *x;
-} qtwg_type;
+};
 
 class PlayerType;
 typedef parse_error_type (*process_dungeon_file_pf)(PlayerType *, concptr, int, int, int, int);

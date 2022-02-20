@@ -72,10 +72,10 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return クエストID
  */
-static QUEST_IDX write_floor(PlayerType *player_ptr, concptr *note_level, char *note_level_buf)
+static QuestId write_floor(PlayerType *player_ptr, concptr *note_level, char *note_level_buf)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    QUEST_IDX q_idx = quest_number(player_ptr, floor_ptr->dun_level);
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
     if (!write_level)
         return q_idx;
 
@@ -83,7 +83,7 @@ static QUEST_IDX write_floor(PlayerType *player_ptr, concptr *note_level, char *
         *note_level = _("アリーナ:", "Arena:");
     else if (!floor_ptr->dun_level)
         *note_level = _("地上:", "Surface:");
-    else if (q_idx && quest_type::is_fixed(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT)))
+    else if (inside_quest(q_idx) && quest_type::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))
         *note_level = _("クエスト:", "Quest:");
     else {
 #ifdef JP
@@ -180,11 +180,11 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         type == DIARY_RAND_QUEST_C ||
         type == DIARY_RAND_QUEST_F ||
         type == DIARY_TO_QUEST) {
-        QUEST_IDX old_quest = player_ptr->current_floor_ptr->inside_quest;
-        player_ptr->current_floor_ptr->inside_quest = (quest[num].type == QuestKindType::RANDOM) ? 0 : num;
+        QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
+        player_ptr->current_floor_ptr->quest_number = (quest[num].type == QuestKindType::RANDOM) ? QuestId::NONE : i2enum<QuestId>(num);
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->inside_quest = old_quest;
+        player_ptr->current_floor_ptr->quest_number = old_quest;
     }
 
     FILE *fff = nullptr;
@@ -193,7 +193,7 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
 
     concptr note_level = "";
     char note_level_buf[40];
-    QUEST_IDX q_idx = write_floor(player_ptr, &note_level, note_level_buf);
+    auto q_idx = write_floor(player_ptr, &note_level, note_level_buf);
 
     bool do_level = true;
     switch (type) {
@@ -266,7 +266,7 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         break;
     }
     case DIARY_STAIR: {
-        concptr to = q_idx && (quest_type::is_fixed(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT)))
+        concptr to = inside_quest(q_idx) && (quest_type::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))
                          ? _("地上", "the surface")
                      : !(player_ptr->current_floor_ptr->dun_level + num)
                          ? _("地上", "the surface")

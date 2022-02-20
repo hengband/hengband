@@ -12,6 +12,7 @@
 #include "monster-race/race-flags7.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
@@ -51,7 +52,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     player_ptr->current_floor_ptr = &floor_info;
     //! @todo std::make_shared の配列対応版は C++20 から
-    player_ptr->inventory_list = std::shared_ptr<object_type[]>{ new object_type[INVEN_TOTAL] };
+    player_ptr->inventory_list = std::shared_ptr<ObjectType[]>{ new ObjectType[INVEN_TOTAL] };
     for (int i = 0; i < 4; i++)
         strcpy(player_ptr->history[i], "");
 
@@ -83,7 +84,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         }
         r_ref.cur_num = 0;
         r_ref.max_num = 100;
-        if (r_ref.flags1 & RF1_UNIQUE)
+        if (r_ref.kind_flags.has(MonsterKindType::UNIQUE))
             r_ref.max_num = 1;
         else if (r_ref.flags7 & RF7_NAZGUL)
             r_ref.max_num = MAX_NAZGUL_NUM;
@@ -93,7 +94,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     player_ptr->food = PY_FOOD_FULL - 1;
-    if (player_ptr->pclass == PlayerClassType::SORCERER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::SORCERER)) {
         player_ptr->spell_learned1 = player_ptr->spell_learned2 = 0xffffffffL;
         player_ptr->spell_worked1 = player_ptr->spell_worked2 = 0xffffffffL;
     } else {
@@ -140,7 +141,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->max_plv = player_ptr->lev = 1;
     player_ptr->arena_number = 0;
     player_ptr->current_floor_ptr->inside_arena = false;
-    player_ptr->current_floor_ptr->inside_quest = 0;
+    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
 
     player_ptr->exit_bldg = true;
     player_ptr->today_mon = 0;
@@ -178,12 +179,12 @@ void init_dungeon_quests(PlayerType *player_ptr)
 {
     int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
     init_flags = INIT_ASSIGN;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->inside_quest = MIN_RANDOM_QUEST;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    floor_ptr->quest_number = i2enum<QuestId>(MIN_RANDOM_QUEST);
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    floor_ptr->inside_quest = 0;
+    floor_ptr->quest_number = QuestId::NONE;
     for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
-        quest_type *q_ptr = &quest[i];
+        auto *q_ptr = &quest[i];
         monster_race *quest_r_ptr;
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
@@ -193,14 +194,14 @@ void init_dungeon_quests(PlayerType *player_ptr)
     }
 
     init_flags = INIT_ASSIGN;
-    floor_ptr->inside_quest = QUEST_OBERON;
+    floor_ptr->quest_number = QuestId::OBERON;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_OBERON].status = QuestStatusType::TAKEN;
+    quest[enum2i(QuestId::OBERON)].status = QuestStatusType::TAKEN;
 
-    floor_ptr->inside_quest = QUEST_SERPENT;
+    floor_ptr->quest_number = QuestId::SERPENT;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_SERPENT].status = QuestStatusType::TAKEN;
-    floor_ptr->inside_quest = 0;
+    quest[enum2i(QuestId::SERPENT)].status = QuestStatusType::TAKEN;
+    floor_ptr->quest_number = QuestId::NONE;
 }
 
 /*!

@@ -34,7 +34,7 @@
  * @brief オブジェクトを初期化する
  * Wipe an object clean.
  */
-void object_type::wipe()
+void ObjectType::wipe()
 {
     *this = {};
 }
@@ -44,7 +44,7 @@ void object_type::wipe()
  * Wipe an object clean.
  * @param j_ptr 複製元のオブジェクトの構造体参照ポインタ
  */
-void object_type::copy_from(object_type *j_ptr)
+void ObjectType::copy_from(ObjectType *j_ptr)
 {
     *this = *j_ptr;
 }
@@ -55,9 +55,9 @@ void object_type::copy_from(object_type *j_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param k_idx 新たに作成したいベースアイテム情報のID
  */
-void object_type::prep(KIND_OBJECT_IDX ko_idx)
+void ObjectType::prep(KIND_OBJECT_IDX ko_idx)
 {
-    object_kind *k_ptr = &k_info[ko_idx];
+    auto *k_ptr = &k_info[ko_idx];
     auto old_stack_idx = this->stack_idx;
     wipe();
     this->stack_idx = old_stack_idx;
@@ -97,7 +97,7 @@ void object_type::prep(KIND_OBJECT_IDX ko_idx)
  * @brief オブジェクトが武器として装備できるかどうかを返す / Check if an object is weapon (including bows)
  * @return 武器として使えるならばtrueを返す
  */
-bool object_type::is_weapon() const
+bool ObjectType::is_weapon() const
 {
     return (TV_WEAPON_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
 }
@@ -107,7 +107,7 @@ bool object_type::is_weapon() const
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
  * @return 武器や矢弾として使えるならばtrueを返す
  */
-bool object_type::is_weapon_ammo() const
+bool ObjectType::is_weapon_ammo() const
 {
     return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
 }
@@ -116,7 +116,7 @@ bool object_type::is_weapon_ammo() const
  * @brief オブジェクトが武器、防具、矢弾として使用できるかを返す / Check if an object is weapon, armour or ammo
  * @return 武器、防具、矢弾として使えるならばtrueを返す
  */
-bool object_type::is_weapon_armour_ammo() const
+bool ObjectType::is_weapon_armour_ammo() const
 {
     return this->is_weapon_ammo() || this->is_armour();
 }
@@ -125,7 +125,7 @@ bool object_type::is_weapon_armour_ammo() const
  * @brief オブジェクトが近接武器として装備できるかを返す / Melee weapons
  * @return 近接武器として使えるならばtrueを返す
  */
-bool object_type::is_melee_weapon() const
+bool ObjectType::is_melee_weapon() const
 {
     return (ItemKindType::DIGGING <= this->tval) && (this->tval <= ItemKindType::SWORD);
 }
@@ -134,7 +134,7 @@ bool object_type::is_melee_weapon() const
  * @brief エッセンスの付加可能な武器や矢弾かを返す
  * @return エッセンスの付加可能な武器か矢弾ならばtrueを返す。
  */
-bool object_type::is_melee_ammo() const
+bool ObjectType::is_melee_ammo() const
 {
     switch (this->tval) {
     case ItemKindType::HAFTED:
@@ -161,16 +161,16 @@ bool object_type::is_melee_ammo() const
  * @brief オブジェクトが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
  * @return 装備可能ならばTRUEを返す
  */
-bool object_type::is_wearable() const
+bool ObjectType::is_wearable() const
 {
     return (TV_WEARABLE_BEGIN <= this->tval) && (this->tval <= TV_WEARABLE_END);
 }
 
 /*!
- * @brief オブジェクトが装備品であるかを返す(object_type::is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
+ * @brief オブジェクトが装備品であるかを返す(ObjectType::is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
  * @return 装備品ならばtrueを返す
  */
-bool object_type::is_equipment() const
+bool ObjectType::is_equipment() const
 {
     return (TV_EQUIP_BEGIN <= this->tval) && (this->tval <= TV_EQUIP_END);
 }
@@ -179,7 +179,7 @@ bool object_type::is_equipment() const
  * @brief 武器匠の「武器」鑑定対象になるかを判定する。/ Hook to specify "weapon"
  * @return 対象になるならtrueを返す。
  */
-bool object_type::is_orthodox_melee_weapons() const
+bool ObjectType::is_orthodox_melee_weapons() const
 {
     switch (this->tval) {
     case ItemKindType::HAFTED:
@@ -203,7 +203,7 @@ bool object_type::is_orthodox_melee_weapons() const
  * @brief 修復対象となる壊れた武器かを判定する。 / Hook to specify "broken weapon"
  * @return 修復対象になるならTRUEを返す。
  */
-bool object_type::is_broken_weapon() const
+bool ObjectType::is_broken_weapon() const
 {
     if (this->tval != ItemKindType::SWORD)
         return false;
@@ -221,7 +221,7 @@ bool object_type::is_broken_weapon() const
  * @brief オブジェクトが投射可能な武器かどうかを返す。
  * @return 投射可能な武器ならばtrue
  */
-bool object_type::is_throwable() const
+bool ObjectType::is_throwable() const
 {
     return (this->tval == ItemKindType::DIGGING) || (this->tval == ItemKindType::SWORD) || (this->tval == ItemKindType::POLEARM) || (this->tval == ItemKindType::HAFTED);
 }
@@ -230,7 +230,7 @@ bool object_type::is_throwable() const
  * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
  * @return 左右両方の手で装備できるならばtrueを返す。
  */
-bool object_type::is_wieldable_in_etheir_hand() const
+bool ObjectType::is_wieldable_in_etheir_hand() const
 {
     return ((ItemKindType::DIGGING <= this->tval) && (this->tval <= ItemKindType::SWORD)) || (this->tval == ItemKindType::SHIELD) || (this->tval == ItemKindType::CAPTURE) || (this->tval == ItemKindType::CARD);
 }
@@ -239,7 +239,7 @@ bool object_type::is_wieldable_in_etheir_hand() const
  * @brief オブジェクトが強化不能武器であるかを返す / Poison needle can not be enchanted
  * @return 強化不能ならばtrueを返す
  */
-bool object_type::refuse_enchant_weapon() const
+bool ObjectType::refuse_enchant_weapon() const
 {
     return (this->tval == ItemKindType::SWORD) && (this->sval == SV_POISON_NEEDLE);
 }
@@ -249,7 +249,7 @@ bool object_type::refuse_enchant_weapon() const
  * Check if an object is weapon (including bows and ammo) and allows enchantment
  * @return 強化可能ならばtrueを返す
  */
-bool object_type::allow_enchant_weapon() const
+bool ObjectType::allow_enchant_weapon() const
 {
     return this->is_weapon_ammo() && !this->refuse_enchant_weapon();
 }
@@ -259,7 +259,7 @@ bool object_type::allow_enchant_weapon() const
  * Check if an object is melee weapon and allows enchantment
  * @return 強化可能な近接武器ならばtrueを返す
  */
-bool object_type::allow_enchant_melee_weapon() const
+bool ObjectType::allow_enchant_melee_weapon() const
 {
     return this->is_melee_weapon() && !this->refuse_enchant_weapon();
 }
@@ -269,7 +269,7 @@ bool object_type::allow_enchant_melee_weapon() const
  * Check if an object is melee weapon and allows wielding with two-hands
  * @return 両手持ち可能ならばTRUEを返す
  */
-bool object_type::allow_two_hands_wielding() const
+bool ObjectType::allow_two_hands_wielding() const
 {
     return this->is_melee_weapon() && ((this->weight > 99) || (this->tval == ItemKindType::POLEARM));
 }
@@ -278,7 +278,7 @@ bool object_type::allow_two_hands_wielding() const
  * @brief オブジェクトが矢弾として使用できるかどうかを返す / Check if an object is ammo
  * @return 矢弾として使えるならばtrueを返す
  */
-bool object_type::is_ammo() const
+bool ObjectType::is_ammo() const
 {
     return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_MISSILE_END);
 }
@@ -288,14 +288,14 @@ bool object_type::is_ammo() const
  * Hook to determine if an object is contertible in an arrow/bolt
  * @return 材料にできるならtrueを返す
  */
-bool object_type::is_convertible() const
+bool ObjectType::is_convertible() const
 {
     auto is_convertible = ((this->tval == ItemKindType::JUNK) || (this->tval == ItemKindType::SKELETON));
     is_convertible |= ((this->tval == ItemKindType::CORPSE) && (this->sval == SV_SKELETON));
     return is_convertible;
 }
 
-bool object_type::is_lance() const
+bool ObjectType::is_lance() const
 {
     auto is_lance = this->tval == ItemKindType::POLEARM;
     is_lance &= (this->sval == SV_LANCE) || (this->sval == SV_HEAVY_LANCE);
@@ -306,7 +306,7 @@ bool object_type::is_lance() const
  * @brief オブジェクトが防具として装備できるかどうかを返す / Check if an object is armour
  * @return 防具として装備できるならばtrueを返す
  */
-bool object_type::is_armour() const
+bool ObjectType::is_armour() const
 {
     return (TV_ARMOR_BEGIN <= this->tval) && (this->tval <= TV_ARMOR_END);
 }
@@ -316,7 +316,7 @@ bool object_type::is_armour() const
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
  * @return レアアイテムならばTRUEを返す
  */
-bool object_type::is_rare() const
+bool ObjectType::is_rare() const
 {
     static const std::unordered_map<ItemKindType, const std::set<OBJECT_SUBTYPE_VALUE>> rare_table = {
         { ItemKindType::HAFTED, { SV_MACE_OF_DISRUPTION, SV_WIZSTAFF } },
@@ -344,7 +344,7 @@ bool object_type::is_rare() const
  * @brief オブジェクトがエゴアイテムかどうかを返す
  * @return エゴアイテムならばtrueを返す
  */
-bool object_type::is_ego() const
+bool ObjectType::is_ego() const
 {
     return this->name2 != 0;
 }
@@ -354,7 +354,7 @@ bool object_type::is_ego() const
  * Check if an object is made by a smith's special ability
  * @return エッセンス付加済みならばTRUEを返す
  */
-bool object_type::is_smith() const
+bool ObjectType::is_smith() const
 {
     return Smith::object_effect(this).has_value() || Smith::object_activation(this).has_value();
 }
@@ -364,7 +364,7 @@ bool object_type::is_smith() const
  * Check if an object is artifact
  * @return アーティファクトならばtrueを返す
  */
-bool object_type::is_artifact() const
+bool ObjectType::is_artifact() const
 {
     return this->is_fixed_artifact() || (this->art_name != 0);
 }
@@ -374,7 +374,7 @@ bool object_type::is_artifact() const
  * Check if an object is fixed artifact
  * @return 固定アーティファクトならばtrueを返す
  */
-bool object_type::is_fixed_artifact() const
+bool ObjectType::is_fixed_artifact() const
 {
     return this->name1 != 0;
 }
@@ -384,7 +384,7 @@ bool object_type::is_fixed_artifact() const
  * Check if an object is random artifact
  * @return ランダムアーティファクトならばtrueを返す
  */
-bool object_type::is_random_artifact() const
+bool ObjectType::is_random_artifact() const
 {
     return this->is_artifact() && !this->is_fixed_artifact();
 }
@@ -394,27 +394,27 @@ bool object_type::is_random_artifact() const
  * Check if an object is neither artifact, ego, nor 'smith' object
  * @return 通常のアイテムならばtrueを返す
  */
-bool object_type::is_nameless() const
+bool ObjectType::is_nameless() const
 {
     return !this->is_artifact() && !this->is_ego() && !this->is_smith();
 }
 
-bool object_type::is_valid() const
+bool ObjectType::is_valid() const
 {
     return this->k_idx != 0;
 }
 
-bool object_type::is_broken() const
+bool ObjectType::is_broken() const
 {
     return any_bits(this->ident, IDENT_BROKEN);
 }
 
-bool object_type::is_cursed() const
+bool ObjectType::is_cursed() const
 {
     return this->curse_flags.any();
 }
 
-bool object_type::is_held_by_monster() const
+bool ObjectType::is_held_by_monster() const
 {
     return this->held_m_idx != 0;
 }
@@ -424,12 +424,12 @@ bool object_type::is_held_by_monster() const
  * Test One -- Check for special "known" tag
  * Test Two -- Check for "Easy Know" + "Aware"
  */
-bool object_type::is_known() const
+bool ObjectType::is_known() const
 {
     return any_bits(this->ident, IDENT_KNOWN) || (k_info[this->k_idx].easy_know && k_info[this->k_idx].aware);
 }
 
-bool object_type::is_fully_known() const
+bool ObjectType::is_fully_known() const
 {
     return any_bits(this->ident, IDENT_FULL_KNOWN);
 }
@@ -438,7 +438,7 @@ bool object_type::is_fully_known() const
  * @brief 与えられたオブジェクトのベースアイテムが鑑定済かを返す / Determine if a given inventory item is "aware"
  * @return 鑑定済ならtrue
  */
-bool object_type::is_aware() const
+bool ObjectType::is_aware() const
 {
     return k_info[this->k_idx].aware;
 }
@@ -446,7 +446,7 @@ bool object_type::is_aware() const
 /*
  * Determine if a given inventory item is "tried"
  */
-bool object_type::is_tried() const
+bool ObjectType::is_tried() const
 {
     return k_info[this->k_idx].tried;
 }
@@ -455,7 +455,7 @@ bool object_type::is_tried() const
  * @brief オブジェクトが薬であるかを返す
  * @return オブジェクトが薬ならばtrueを返す
  */
-bool object_type::is_potion() const
+bool ObjectType::is_potion() const
 {
     return k_info[this->k_idx].tval == ItemKindType::POTION;
 }
@@ -465,7 +465,7 @@ bool object_type::is_potion() const
  * Hook to determine if an object is readable
  * @return 読むことが可能ならばtrueを返す
  */
-bool object_type::is_readable() const
+bool ObjectType::is_readable() const
 {
     return (this->tval == ItemKindType::SCROLL) || (this->tval == ItemKindType::PARCHMENT) || (this->name1 == ART_GHB) || (this->name1 == ART_POWER);
 }
@@ -475,7 +475,7 @@ bool object_type::is_readable() const
  * An "item_tester_hook" for refilling lanterns
  * @return オブジェクトがランタンの燃料になるならばTRUEを返す
  */
-bool object_type::can_refill_lantern() const
+bool ObjectType::can_refill_lantern() const
 {
     return (this->tval == ItemKindType::FLASK) || ((this->tval == ItemKindType::LITE) && (this->sval == SV_LITE_LANTERN));
 }
@@ -485,7 +485,7 @@ bool object_type::can_refill_lantern() const
  * An "item_tester_hook" for refilling torches
  * @return オブジェクトが松明に束ねられるならばTRUEを返す
  */
-bool object_type::can_refill_torch() const
+bool ObjectType::can_refill_torch() const
 {
     return (this->tval == ItemKindType::LITE) && (this->sval == SV_LITE_TORCH);
 }
@@ -495,7 +495,7 @@ bool object_type::can_refill_torch() const
  * Hook for "get_item()".  Determine if something is rechargable.
  * @return 魔力充填が可能ならばTRUEを返す
  */
-bool object_type::is_rechargeable() const
+bool ObjectType::is_rechargeable() const
 {
     return (this->tval == ItemKindType::STAFF) || (this->tval == ItemKindType::WAND) || (this->tval == ItemKindType::ROD);
 }
@@ -504,7 +504,7 @@ bool object_type::is_rechargeable() const
  * @brief 悪魔領域のグレーターデーモン召喚に利用可能な死体かどうかを返す。 / An "item_tester_hook" for offer
  * @return 生贄に使用可能な死体ならばTRUEを返す。
  */
-bool object_type::is_offerable() const
+bool ObjectType::is_offerable() const
 {
     if ((this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE)) {
         return false;
@@ -518,11 +518,110 @@ bool object_type::is_offerable() const
  * Hook to determine if an object is activatable
  * @return 魔道具として発動可能ならばTRUEを返す
  */
-bool object_type::is_activatable() const
+bool ObjectType::is_activatable() const
 {
     if (!this->is_known())
         return false;
 
     auto flags = object_flags(this);
     return flags.has(TR_ACTIVATE);
+}
+
+/*!
+ * @brief オブジェクトが燃料として使えるかを判定する
+ * @return 燃料か否か
+ */
+bool ObjectType::is_fuel() const
+{
+    auto is_fuel = (this->tval == ItemKindType::LITE) && ((this->sval == SV_LITE_TORCH) || (this->sval == SV_LITE_LANTERN));
+    is_fuel |= (this->tval == ItemKindType::FLASK) && (this->sval == SV_FLASK_OIL);
+    return is_fuel;
+}
+
+/*!
+ * @brief オブジェクトが同一の命中値上昇及びダメージ上昇があるかを判定する
+ * @return 同一修正か
+ * @details 鍛冶師が篭手に殺戮エッセンスを付加した場合のみこの判定に意味がある
+ */
+bool ObjectType::is_glove_same_temper(const ObjectType *j_ptr) const
+{
+    if (!this->is_smith() || !j_ptr->is_smith()) {
+        return false;
+    }
+
+    if (this->smith_hit != j_ptr->smith_hit) {
+        return true;
+    }
+
+    if (this->smith_damage != j_ptr->smith_damage) {
+        return true;
+    }
+
+    return false;
+}
+
+/*!
+ * @brief オブジェクトが「2つの～～」と重ねられるかを一般的に判定する
+ * @return 重ねられるか
+ * @details 個別のアイテムによっては別途条件があるが、それはこの関数では判定しない
+ */
+bool ObjectType::can_pile(const ObjectType *j_ptr) const
+{
+    if (this->is_known() != j_ptr->is_known()) {
+        return false;
+    }
+
+    if (this->feeling != j_ptr->feeling) {
+        return false;
+    }
+
+    if (this->to_h != j_ptr->to_h) {
+        return false;
+    }
+
+    if (this->to_d != j_ptr->to_d) {
+        return false;
+    }
+
+    if (this->to_a != j_ptr->to_a) {
+        return false;
+    }
+
+    if (this->pval != j_ptr->pval) {
+        return false;
+    }
+
+    if (this->is_artifact() || j_ptr->is_artifact()) {
+        return false;
+    }
+
+    if (this->name2 != j_ptr->name2) {
+        return false;
+    }
+
+    if (this->timeout || j_ptr->timeout) {
+        return false;
+    }
+
+    if (this->ac != j_ptr->ac) {
+        return false;
+    }
+
+    if (this->dd != j_ptr->dd) {
+        return false;
+    }
+
+    if (this->ds != j_ptr->ds) {
+        return false;
+    }
+
+    if (Smith::object_effect(this) != Smith::object_effect(j_ptr)) {
+        return false;
+    }
+
+    if (Smith::object_activation(this) != Smith::object_activation(j_ptr)) {
+        return false;
+    }
+
+    return true;
 }

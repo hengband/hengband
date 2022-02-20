@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Check the BOM of the source files
+        run: sh .github/scripts/check-bom.sh
+
       - name: Install required packages
         run: |
           sudo apt-get update

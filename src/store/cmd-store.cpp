@@ -153,7 +153,7 @@ void do_cmd_store(PlayerType *player_ptr)
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
             INVENTORY_IDX item = INVEN_PACK;
-            object_type *o_ptr = &player_ptr->inventory_list[item];
+            auto *o_ptr = &player_ptr->inventory_list[item];
             if (cur_store_num != StoreSaleType::HOME) {
                 if (cur_store_num == StoreSaleType::MUSEUM)
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));
@@ -166,8 +166,8 @@ void do_cmd_store(PlayerType *player_ptr)
                 leave_store = true;
             } else {
                 int item_pos;
-                object_type forge;
-                object_type *q_ptr;
+                ObjectType forge;
+                ObjectType *q_ptr;
                 GAME_TEXT o_name[MAX_NLEN];
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 q_ptr = &forge;

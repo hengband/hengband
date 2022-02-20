@@ -80,7 +80,7 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
         }
 
         total_friends++;
-        if (none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
             total_friend_levels += r_ptr->level;
             continue;
         }

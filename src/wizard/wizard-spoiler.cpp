@@ -203,7 +203,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
         auto magic_ptr = &m_info[c];
         concptr book_name = "なし";
         if (magic_ptr->spell_book != ItemKindType::NONE) {
-            object_type book;
+            ObjectType book;
             auto o_ptr = &book;
             o_ptr->prep(lookup_kind(magic_ptr->spell_book, 0));
             describe_flavor(&dummy_p, title, o_ptr, OD_NAME_ONLY);

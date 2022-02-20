@@ -65,7 +65,7 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, IDX mon_idx[], 
             continue;
 
         if (grp_unique) {
-            if (none_bits(r_ref.flags1, RF1_UNIQUE))
+            if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE))
                 continue;
         } else if (grp_riding) {
             if (none_bits(r_ref.flags7, RF7_RIDING))
@@ -73,8 +73,7 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, IDX mon_idx[], 
         } else if (grp_wanted) {
             bool wanted = false;
             for (int j = 0; j < MAX_BOUNTY; j++) {
-                if (w_ptr->bounty_r_idx[j] == r_ref.idx || w_ptr->bounty_r_idx[j] - 10000 == r_ref.idx
-                    || (player_ptr->today_mon && player_ptr->today_mon == r_ref.idx)) {
+                if (w_ptr->bounty_r_idx[j] == r_ref.idx || w_ptr->bounty_r_idx[j] - 10000 == r_ref.idx || (player_ptr->today_mon && player_ptr->today_mon == r_ref.idx)) {
                     wanted = true;
                     break;
                 }
@@ -83,7 +82,7 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, IDX mon_idx[], 
             if (!wanted)
                 continue;
         } else if (grp_amberite) {
-            if (none_bits(r_ref.flags3, RF3_AMBERITE))
+            if (r_ref.kind_flags.has_not(MonsterKindType::AMBERITE))
                 continue;
         } else {
             if (!angband_strchr(group_char, r_ref.d_char))
@@ -158,7 +157,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 
     int32_t total = 0;
     for (const auto &r_ref : r_info) {
-        if (any_bits(r_ref.flags1, RF1_UNIQUE)) {
+        if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
             bool dead = (r_ref.max_num == 0);
 
             if (dead) {
@@ -191,8 +190,8 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     char buf[80];
     ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        monster_race *r_ptr = &r_info[r_idx];
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        auto *r_ptr = &r_info[r_idx];
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
                 if (r_ptr->defeat_level && r_ptr->defeat_time)
@@ -253,7 +252,7 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
     for (i = 0; i < per_page && (mon_idx[mon_top + i] >= 0); i++) {
         TERM_COLOR attr;
         MONRACE_IDX r_idx = mon_idx[mon_top + i];
-        monster_race *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &r_info[r_idx];
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, (r_ptr->name.c_str()), row + i, col);
         if (per_page == 1)
@@ -265,7 +264,7 @@ static void display_monster_list(int col, int row, int per_page, int16_t mon_idx
         term_erase(69, row + i, 255);
         term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         if (!visual_only) {
-            if (none_bits(r_ptr->flags1, RF1_UNIQUE))
+            if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
                 put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
             else
                 c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? _("死亡", " dead") : _("生存", "alive")), row + i, 74);

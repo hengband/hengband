@@ -28,11 +28,11 @@
 
 #define OPT_NUM 15
 
-typedef struct {
+struct opts {
     char key;
     concptr name;
     int row;
-} opts;
+};
 
 static opts option_fields[OPT_NUM] = {
     { '1', _("    キー入力     オプション", "Input Options"), 3 },
@@ -299,7 +299,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
     }
 
     for (j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 

@@ -9,6 +9,6 @@
 
 enum class RandomArtActType : short;
 struct activation_type;
-struct object_type;
-RandomArtActType activation_index(const object_type *o_ptr);
-std::optional<const activation_type *> find_activation_info(const object_type *o_ptr);
+class ObjectType;
+RandomArtActType activation_index(const ObjectType *o_ptr);
+std::optional<const activation_type *> find_activation_info(const ObjectType *o_ptr);

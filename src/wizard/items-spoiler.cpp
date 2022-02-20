@@ -29,8 +29,8 @@
  */
 static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, KIND_OBJECT_IDX k)
 {
-    object_type forge;
-    object_type *q_ptr = &forge;
+    ObjectType forge;
+    auto *q_ptr = &forge;
     q_ptr->prep(k);
     q_ptr->ident |= IDENT_KNOWN;
     q_ptr->pval = 0;

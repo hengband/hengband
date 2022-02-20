@@ -61,9 +61,9 @@ static void drain_muramasa(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     if (!is_human)
         return;
 
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     HIT_PROB to_h = o_ptr->to_h;
-    HIT_POINT to_d = o_ptr->to_d;
+    int to_d = o_ptr->to_d;
     bool flag = true;
     for (int i = 0; i < to_h + 3; i++)
         if (one_in_(4))
@@ -142,7 +142,7 @@ void process_drain(PlayerType *player_ptr, player_attack_type *pa_ptr, const boo
     if (!pa_ptr->can_drain || (pa_ptr->drain_result <= 0))
         return;
 
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if (o_ptr->name1 == ART_MURAMASA)
         drain_muramasa(player_ptr, pa_ptr, is_human);
     else

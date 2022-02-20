@@ -16,6 +16,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
@@ -38,7 +39,7 @@ static TERM_COLOR likert_color = TERM_WHITE;
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
  */
-static void calc_shot_params(PlayerType *player_ptr, object_type *o_ptr, int *shots, int *shot_frac)
+static void calc_shot_params(PlayerType *player_ptr, ObjectType *o_ptr, int *shots, int *shot_frac)
 {
     if (o_ptr->k_idx == 0)
         return;
@@ -52,7 +53,7 @@ static void calc_shot_params(PlayerType *player_ptr, object_type *o_ptr, int *sh
 
     *shots = 1;
     *shot_frac = 0;
-    if (player_ptr->pclass != PlayerClassType::ARCHER)
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::ARCHER))
         return;
 
     if (player_ptr->lev >= 10)
@@ -72,7 +73,7 @@ static void calc_shot_params(PlayerType *player_ptr, object_type *o_ptr, int *sh
  * @param o_ptr 装備中の武器への参照ポインタ
  * @return 利き手ならTRUE、反対の手ならFALSE
  */
-static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *damage, int *basedam, object_type *o_ptr)
+static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *damage, int *basedam, ObjectType *o_ptr)
 {
     PLAYER_LEVEL level = player_ptr->lev;
     if (hand > 0) {
@@ -80,9 +81,10 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
         return false;
     }
 
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
-        level = std::max<short>(1, level - 3);
     PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::FORCETRAINER))
+        level = std::max<short>(1, level - 3);
+
     if (pc.monk_stance_is(MonkStanceType::BYAKKO))
         *basedam = monk_ave_damage[level][1];
     else if (pc.monk_stance_is(MonkStanceType::GENBU) || pc.monk_stance_is(MonkStanceType::SUZAKU))
@@ -107,7 +109,7 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
  * @param basedam 素手における直接攻撃のダメージ
  * @return 素手ならFALSE、武器を持っていればTRUE
  */
-static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int *basedam)
+static bool calc_weapon_one_hand(ObjectType *o_ptr, int hand, int *damage, int *basedam)
 {
     if (o_ptr->k_idx == 0)
         return false;
@@ -131,7 +133,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
  * @param flgs オブジェクトフラグ群
  * @return 強化後の素手ダメージ
  */
-static int strengthen_basedam(PlayerType *player_ptr, object_type *o_ptr, int basedam, const TrFlags &flgs)
+static int strengthen_basedam(PlayerType *player_ptr, ObjectType *o_ptr, int basedam, const TrFlags &flgs)
 {
     if (o_ptr->is_fully_known() && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))) {
         /* vorpal blade */
@@ -144,7 +146,7 @@ static int strengthen_basedam(PlayerType *player_ptr, object_type *o_ptr, int ba
     }
 
     // 理力
-    bool is_force = player_ptr->pclass != PlayerClassType::SAMURAI;
+    bool is_force = !PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI);
     is_force &= flgs.has(TR_FORCE_WEAPON);
     is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
     if (is_force)
@@ -246,13 +248,14 @@ static concptr likert(int x, int y)
  */
 static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     for (int i = 0; i < 2; i++) {
         int basedam;
         damage[i] = player_ptr->dis_to_d[i] * 100;
-        if (((player_ptr->pclass == PlayerClassType::MONK) || (player_ptr->pclass == PlayerClassType::FORCETRAINER)) && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
+        PlayerClass pc(player_ptr);
+        if (pc.is_martial_arts_pro() && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
             if (!calc_weapon_damage_limit(player_ptr, i, damage, &basedam, o_ptr))
                 break;
 
@@ -377,7 +380,7 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
  */
 void display_player_various(PlayerType *player_ptr)
 {
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     int tmp = player_ptr->to_h_b + o_ptr->to_h;
     int xthb = player_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);

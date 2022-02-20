@@ -61,16 +61,16 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, char *buf, int y
  * @param x 配置先X座標
  * @return エラーコード
  */
-static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POSITION x)
+static void drop_here(floor_type *floor_ptr, ObjectType *j_ptr, POSITION y, POSITION x)
 {
     OBJECT_IDX o_idx = o_pop(floor_ptr);
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &floor_ptr->o_list[o_idx];
     o_ptr->copy_from(j_ptr);
     o_ptr->iy = y;
     o_ptr->ix = x;
     o_ptr->held_m_idx = 0;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
 
@@ -85,8 +85,8 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
     }
 
     KIND_OBJECT_IDX k_idx = lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
-    object_type forge;
-    object_type *q_ptr = &forge;
+    ObjectType forge;
+    auto *q_ptr = &forge;
     q_ptr->prep(k_idx);
     drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
 }
@@ -94,10 +94,10 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 {
     *qtwg_ptr->x = qtwg_ptr->xmin;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     int len = strlen(s);
     for (int i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
-        grid_type *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
+        auto *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
         int idx = s[0];
         OBJECT_IDX object_index = letter[idx].object;
         MONSTER_IDX monster_index = letter[idx].monster;
@@ -126,7 +126,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             old_cur_num = r_info[monster_index].cur_num;
             old_max_num = r_info[monster_index].max_num;
 
-            if (r_info[monster_index].flags1 & RF1_UNIQUE) {
+            if (r_info[monster_index].kind_flags.has(MonsterKindType::UNIQUE)) {
                 r_info[monster_index].cur_num = 0;
                 r_info[monster_index].max_num = 1;
             } else if (r_info[monster_index].flags7 & RF7_NAZGUL) {
@@ -173,8 +173,8 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             g_ptr->mimic = g_ptr->feat;
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
         } else if (object_index) {
-            object_type tmp_object;
-            object_type *o_ptr = &tmp_object;
+            ObjectType tmp_object;
+            auto *o_ptr = &tmp_object;
             o_ptr->prep(object_index);
             if (o_ptr->tval == ItemKindType::GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
@@ -218,7 +218,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         q_ptr->flags = atoi(zz[10]);
 
     r_ptr = &r_info[q_ptr->r_idx];
-    if (r_ptr->flags1 & RF1_UNIQUE)
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         r_ptr->flags1 |= RF1_QUESTOR;
 
     a_ptr = &a_info[q_ptr->k_idx];
@@ -326,7 +326,7 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     if (*qtwg_ptr->y % SCREEN_HGT)
         panels_y++;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->height = panels_y * SCREEN_HGT;
     int panels_x = (*qtwg_ptr->x / SCREEN_WID);
     if (*qtwg_ptr->x % SCREEN_WID)
@@ -335,7 +335,7 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     floor_ptr->width = panels_x * SCREEN_WID;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
-    if (floor_ptr->inside_quest) {
+    if (inside_quest(floor_ptr->quest_number)) {
         POSITION py = atoi(zz[0]);
         POSITION px = atoi(zz[1]);
         player_ptr->y = py;
@@ -363,7 +363,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
     if (zz[0][0] == 'T') {
         max_towns = static_cast<int16_t>(atoi(zz[1]));
     } else if (zz[0][0] == 'Q') {
-        max_q_idx = (QUEST_IDX)atoi(zz[1]);
+        max_q_idx = (int16_t)atoi(zz[1]);
     } else if (zz[0][0] == 'O') {
         w_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'M') {

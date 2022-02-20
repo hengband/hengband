@@ -82,9 +82,9 @@ static void print_header(void)
  * @param name1 生成するアーティファクトID
  * @return 生成が成功した場合TRUEを返す
  */
-static bool make_fake_artifact(object_type *o_ptr, ARTIFACT_IDX name1)
+static bool make_fake_artifact(ObjectType *o_ptr, ARTIFACT_IDX name1)
 {
-    artifact_type *a_ptr = &a_info[name1];
+    auto *a_ptr = &a_info[name1];
     if (a_ptr->name.empty())
         return false;
 
@@ -162,7 +162,7 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
                 if (a_ref.tval != tval)
                     continue;
 
-                object_type obj;
+                ObjectType obj;
                 obj.wipe();
                 if (!make_fake_artifact(&obj, a_ref.idx))
                     continue;

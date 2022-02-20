@@ -1,45 +1,56 @@
 ﻿#pragma once
 
-enum race_flags_resistance {
-	RFR_IM_ACID = 0x00000001, /* Immunity acid */
-    RFR_IM_ELEC = 0x00000002, /* Immunity elec */
-    RFR_IM_FIRE = 0x00000004, /* Immunity fire */
-    RFR_IM_COLD = 0x00000008, /* Immunity cold */
-    RFR_IM_POIS = 0x00000010, /* Immunity poison */
-    RFR_RES_LITE = 0x00000020, /* Resist lite */
-    RFR_RES_DARK = 0x00000040, /* Resist dark */
-    RFR_RES_NETH = 0x00000080, /* Resist nether */
-    RFR_RES_WATE = 0x00000100, /* Resist water */
-    RFR_RES_PLAS = 0x00000200, /* Resist plasma */
-    RFR_RES_SHAR = 0x00000400, /* Resist shards */
-    RFR_RES_SOUN = 0x00000800, /* Resist sound */
-    RFR_RES_CHAO = 0x00001000, /* Resist chaos */
-    RFR_RES_NEXU = 0x00002000, /* Resist nexus */
-    RFR_RES_DISE = 0x00004000, /* Resist disenchantment */
-    RFR_RES_WALL = 0x00008000, /* Resist force */
-    RFR_RES_INER = 0x00010000, /* Resist inertia */
-    RFR_RES_TIME = 0x00020000, /* Resist time */
-    RFR_RES_GRAV = 0x00040000, /* Resist gravity */
-    RFR_RES_ALL = 0x00080000, /* Resist all */
-    RFR_RES_TELE = 0x00100000, /* Resist teleportation */
-    RFR_XXX21 = 0x00200000,
-    RFR_XXX22 = 0x00400000,
-    RFR_XXX23 = 0x00800000,
-    RFR_XXX24 = 0x01000000,
-    RFR_XXX25 = 0x02000000,
-    RFR_XXX26 = 0x04000000,
-    RFR_XXX27 = 0x08000000,
-    RFR_XXX28 = 0x10000000,
-    RFR_XXX29 = 0x20000000,
-    RFR_XXX30 = 0x40000000,
-    RFR_XXX31 = 0x80000000,
+enum class MonsterResistanceType {
+    RESIST_ALL = 0, /* Resist all */
+    HURT_ACID = 1, /* Hurt badly by acid */
+    RESIST_ACID = 2, /* Resist acid */
+    IMMUNE_ACID = 3, /* Immunity acid */
+    HURT_ELEC = 4, /* Hurt badly by elec */
+    RESIST_ELEC = 5, /* Resist elec */
+    IMMUNE_ELEC = 6, /* Immunity elec */
+    HURT_FIRE = 7, /* Hurt badly by fire */
+    RESIST_FIRE = 8, /* Resist fire */
+    IMMUNE_FIRE = 9, /* Immunity fire */
+    HURT_COLD = 10, /* Hurt badly by cold */
+    RESIST_COLD = 11, /* Resist cold */
+    IMMUNE_COLD = 12, /* Immunity cold */
+    HURT_POISON = 13, /* Hurt badly by poison */
+    RESIST_POISON = 14, /* Resist poison */
+    IMMUNE_POISON = 15, /* Immunity poison */
+    HURT_LITE = 16, /* Hurt badly by lite */
+    RESIST_LITE = 17, /* Resist lite */
+    HURT_DARK = 18, /* Hurt badly by dark */
+    RESIST_DARK = 19, /* Resist dark */
+    HURT_NETHER = 20, /* Hurt badly by nether */
+    RESIST_NETHER = 21, /* Resist nether */
+    HURT_WATER = 22, /* Hurt badly by water */
+    RESIST_WATER = 23, /* Resist water */
+    HURT_PLASMA = 24, /* Hurt badly by plasma */
+    RESIST_PLASMA = 25, /* Resist plasma */
+    HURT_SHARDS = 26, /* Hurt badly by shards */
+    RESIST_SHARDS = 27, /* Resist shards */
+    HURT_SOUND = 28, /* Hurt badly by sound */
+    RESIST_SOUND = 29, /* Resist sound */
+    HURT_CHAOS = 30, /* Hurt badly by chaos */
+    RESIST_CHAOS = 31, /* Resist chaos */
+    HURT_NEXUS = 32, /* Hurt badly by nexus */
+    RESIST_NEXUS = 33, /* Resist nexus */
+    HURT_DISENCHANT = 34, /* Hurt badly by disenchantment */
+    RESIST_DISENCHANT = 35, /* Resist disenchantment */
+    HURT_FORCE = 36, /* Hurt badly by force */
+    RESIST_FORCE = 37, /* Resist force */
+    HURT_INERTIA = 38, /* Hurt badly by inertia */
+    RESIST_INERTIA = 39, /* Resist inertia */
+    HURT_TIME = 40, /* Hurt badly by time */
+    RESIST_TIME = 41, /* Resist time */
+    HURT_GRAVITY = 42, /* Hurt badly by gravity */
+    RESIST_GRAVITY = 43, /* Resist gravity */
+    RESIST_TELEPORT = 44, /* Resist teleportation */
+    HURT_ROCK = 45, /* Hurt by rock remover */
+    RESIST_ROCK = 46, /* Resist rock remover */
+    HURT_ABYSS = 47, /* Hurt badly by abyss */
+    RESIST_ABYSS = 48, /* Resist abyss */
+    HURT_VOID_MAGIC = 49, /* Hurt badly by void */
+    RESIST_VOID_MAGIC = 50, /* Resist void */
+    MAX, /* Max of Resistances */
 };
-
-#define RFR_EFF_IM_ACID_MASK (RFR_IM_ACID | RFR_RES_ALL)
-#define RFR_EFF_IM_ELEC_MASK (RFR_IM_ELEC | RFR_RES_ALL)
-#define RFR_EFF_IM_FIRE_MASK (RFR_IM_FIRE | RFR_RES_ALL)
-#define RFR_EFF_IM_COLD_MASK (RFR_IM_COLD | RFR_RES_ALL)
-#define RFR_EFF_IM_POIS_MASK (RFR_IM_POIS | RFR_RES_ALL)
-#define RFR_EFF_RES_SHAR_MASK (RFR_RES_SHAR | RFR_RES_ALL)
-#define RFR_EFF_RES_CHAO_MASK (RFR_RES_CHAO | RFR_RES_ALL)
-#define RFR_EFF_RES_NEXU_MASK (RFR_RES_NEXU | RFR_RES_ALL)

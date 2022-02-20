@@ -107,7 +107,7 @@ int16_t damroll(DICE_NUMBER num, DICE_SID sides)
  */
 int16_t maxroll(DICE_NUMBER num, DICE_SID sides)
 {
-    return (num * sides);
+    return num * sides;
 }
 
 /*
@@ -120,7 +120,7 @@ int32_t div_round(int32_t n, int32_t d)
 
     /* Refuse to divide by zero */
     if (!d)
-        return (n);
+        return n;
 
     /* Division */
     tmp = n / d;
@@ -135,7 +135,7 @@ int32_t div_round(int32_t n, int32_t d)
     }
 
     /* Return */
-    return (tmp);
+    return tmp;
 }
 
 /*

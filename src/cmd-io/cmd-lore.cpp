@@ -91,10 +91,10 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         if (!cheat_know && !r_ref.r_sights)
             continue;
 
-        if (norm && (r_ref.flags1 & (RF1_UNIQUE)))
+        if (norm && r_ref.kind_flags.has(MonsterKindType::UNIQUE))
             continue;
 
-        if (uniq && !(r_ref.flags1 & (RF1_UNIQUE)))
+        if (uniq && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE))
             continue;
 
         if (ride && !(r_ref.flags7 & (RF7_RIDING)))

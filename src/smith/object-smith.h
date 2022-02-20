@@ -8,7 +8,7 @@
 #include <optional>
 #include <unordered_map>
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 class ISmithInfo;
 struct essence_drain_type;
@@ -36,17 +36,17 @@ public:
     static concptr get_effect_name(SmithEffectType effect);
     static std::string get_need_essences_desc(SmithEffectType effect);
     static std::vector<SmithEssenceType> get_need_essences(SmithEffectType effect);
-    static int get_essence_consumption(SmithEffectType effect, const object_type *o_ptr = nullptr);
+    static int get_essence_consumption(SmithEffectType effect, const ObjectType *o_ptr = nullptr);
     static std::unique_ptr<ItemTester> get_item_tester(SmithEffectType effect);
     static TrFlags get_effect_tr_flags(SmithEffectType effect);
-    static std::optional<RandomArtActType> object_activation(const object_type *o_ptr);
-    static std::optional<SmithEffectType> object_effect(const object_type *o_ptr);
+    static std::optional<RandomArtActType> object_activation(const ObjectType *o_ptr);
+    static std::optional<SmithEffectType> object_effect(const ObjectType *o_ptr);
 
     int get_essence_num_of_posessions(SmithEssenceType essence) const;
-    DrainEssenceResult drain_essence(object_type *o_ptr);
-    bool add_essence(SmithEffectType effect, object_type *o_ptr, int consumption);
-    void erase_essence(object_type *o_ptr) const;
-    int get_addable_count(SmithEffectType smith_effect, const object_type *o_ptr = nullptr) const;
+    DrainEssenceResult drain_essence(ObjectType *o_ptr);
+    bool add_essence(SmithEffectType effect, ObjectType *o_ptr, int consumption);
+    void erase_essence(ObjectType *o_ptr) const;
+    int get_addable_count(SmithEffectType smith_effect, const ObjectType *o_ptr = nullptr) const;
 
     static constexpr int ESSENCE_AMOUNT_MAX = 20000;
 

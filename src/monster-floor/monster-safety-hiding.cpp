@@ -33,15 +33,15 @@
 static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d)
 {
     coordinate_candidate candidate = init_coordinate_candidate();
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
         POSITION y = m_ptr->fy + dy;
         POSITION x = m_ptr->fx + dx;
         if (!in_bounds(floor_ptr, y, x))
             continue;
 
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
 
@@ -93,7 +93,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
  */
 bool find_safety(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     for (POSITION d = 1; d < 10; d++) {
         const POSITION *y_offsets;
         y_offsets = dist_offsets_y[d];
@@ -126,7 +126,7 @@ bool find_safety(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITI
 static void sweep_hiding_candidate(
     PlayerType *player_ptr, monster_type *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
         POSITION y = m_ptr->fy + dy;
         POSITION x = m_ptr->fx + dx;
@@ -162,7 +162,7 @@ static void sweep_hiding_candidate(
  */
 bool find_hiding(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     coordinate_candidate candidate = init_coordinate_candidate();
     candidate.gdis = 999;
 

@@ -127,7 +127,7 @@ void process_player(PlayerType *player_ptr)
 
     if (player_ptr->phase_out) {
         for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
             if (!monster_is_valid(m_ptr))
                 continue;
 
@@ -137,7 +137,7 @@ void process_player(PlayerType *player_ptr)
 
         WorldTurnProcessor(player_ptr).print_time();
     } else if (!(load && player_ptr->energy_need <= 0)) {
-        player_ptr->energy_need -= SPEED_TO_ENERGY(player_ptr->pspeed);
+        player_ptr->energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
     if (player_ptr->energy_need > 0)
@@ -180,8 +180,8 @@ void process_player(PlayerType *player_ptr)
     }
 
     if (player_ptr->riding && !player_ptr->confused && !player_ptr->blind) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_csleep_remaining(m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);
@@ -223,7 +223,7 @@ void process_player(PlayerType *player_ptr)
     if (player_ptr->lightspeed)
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
 
-    if ((player_ptr->pclass == PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
         if (get_current_ki(player_ptr) < 40)
             set_current_ki(player_ptr, true, 0);
         else
@@ -370,7 +370,7 @@ void process_player(PlayerType *player_ptr)
                 }
             }
 
-            if (player_ptr->pclass == PlayerClassType::IMITATOR) {
+            if (PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
                 auto mane_data = PlayerClass(player_ptr).get_specific_data<mane_data_type>();
                 if (static_cast<int>(mane_data->mane_list.size()) > (player_ptr->lev > 44 ? 3 : player_ptr->lev > 29 ? 2
                                                                                                                      : 1)) {
@@ -423,7 +423,7 @@ void process_player(PlayerType *player_ptr)
 void process_upkeep_with_speed(PlayerType *player_ptr)
 {
     if (!load && player_ptr->enchant_energy_need > 0 && !player_ptr->leaving) {
-        player_ptr->enchant_energy_need -= SPEED_TO_ENERGY(player_ptr->pspeed);
+        player_ptr->enchant_energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
     if (player_ptr->enchant_energy_need > 0)

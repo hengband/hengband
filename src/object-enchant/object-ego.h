@@ -246,11 +246,11 @@ struct ego_item_type {
     RARITY rarity{}; //<! レアリティ
 
     HIT_PROB base_to_h{}; //!< ベース命中修正
-    HIT_POINT base_to_d{}; //!< べ^スダメージ修正
+    int base_to_d{}; //!< べ^スダメージ修正
     ARMOUR_CLASS base_to_a{}; //!< ベースAC修正
 
     HIT_PROB max_to_h{}; //!< 最大ボーナス命中修正
-    HIT_POINT max_to_d{}; //!< 最大ボーナスダメージ修正
+    int max_to_d{}; //!< 最大ボーナスダメージ修正
     ARMOUR_CLASS max_to_a{}; //!< 最大ボーナスAC修正
 
     PARAMETER_VALUE max_pval{}; //!< 最大pval
@@ -266,7 +266,7 @@ struct ego_item_type {
 
 extern std::vector<ego_item_type> e_info;
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 byte get_random_ego(byte slot, bool good);
-void apply_ego(object_type *o_ptr, DEPTH lev);
+void apply_ego(ObjectType *o_ptr, DEPTH lev);

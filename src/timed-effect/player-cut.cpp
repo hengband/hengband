@@ -189,24 +189,24 @@ int PlayerCut::get_accumulation_rank(int total, int damage)
     }
 
     if (damage > 45) {
-        return (6 + max);
+        return 6 + max;
     }
 
     if (damage > 33) {
-        return (5 + max);
+        return 5 + max;
     }
 
     if (damage > 25) {
-        return (4 + max);
+        return 4 + max;
     }
 
     if (damage > 18) {
-        return (3 + max);
+        return 3 + max;
     }
 
     if (damage > 11) {
-        return (2 + max);
+        return 2 + max;
     }
 
-    return (1 + max);
+    return 1 + max;
 }

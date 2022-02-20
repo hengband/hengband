@@ -32,7 +32,7 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
     }
 
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[i];
         if (o_ptr->k_idx)
             continue;
@@ -85,7 +85,7 @@ OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
             break;
 
         KIND_OBJECT_IDX k_idx = entry.index;
-        object_kind *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &k_info[k_idx];
 
         if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == ItemKindType::CHEST))
             continue;

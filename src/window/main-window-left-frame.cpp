@@ -4,6 +4,7 @@
 #include "market/arena-info-table.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-table.h"
@@ -65,7 +66,8 @@ void print_exp(PlayerType *player_ptr)
 {
     char out_val[32];
 
-    if ((!exp_need) || (player_ptr->prace == PlayerRaceType::ANDROID)) {
+    PlayerRace pr(player_ptr);
+    if ((!exp_need) || pr.equals(PlayerRaceType::ANDROID)) {
         (void)sprintf(out_val, "%8ld", (long)player_ptr->exp);
     } else {
         if (player_ptr->lev >= PY_MAX_LEVEL) {
@@ -76,7 +78,7 @@ void print_exp(PlayerType *player_ptr)
     }
 
     if (player_ptr->exp >= player_ptr->max_exp) {
-        if (player_ptr->prace == PlayerRaceType::ANDROID)
+        if (pr.equals(PlayerRaceType::ANDROID))
             put_str(_("強化 ", "Cst "), ROW_EXP, 0);
         else
             put_str(_("経験 ", "EXP "), ROW_EXP, 0);
@@ -183,14 +185,14 @@ void print_depth(PlayerType *player_ptr)
     TERM_LEN col_depth = wid + COL_DEPTH;
     TERM_LEN row_depth = hgt + ROW_DEPTH;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level) {
         strcpy(depths, _("地上", "Surf."));
         c_prt(attr, format("%7s", depths), row_depth, col_depth);
         return;
     }
 
-    if (floor_ptr->inside_quest && !player_ptr->dungeon_idx) {
+    if (inside_quest(floor_ptr->quest_number) && !player_ptr->dungeon_idx) {
         strcpy(depths, _("地上", "Quest"));
         c_prt(attr, format("%7s", depths), row_depth, col_depth);
         return;
@@ -368,7 +370,8 @@ void health_redraw(PlayerType *player_ptr, bool riding)
 
     int pct = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
     int pct2 = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->max_maxhp : 0;
-    int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
+    int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
+                                            : 10;
     TERM_COLOR attr = TERM_RED;
     if (monster_invulner_remaining(m_ptr))
         attr = TERM_WHITE;

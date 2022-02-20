@@ -18,6 +18,7 @@
 #include "mspell/mspell-judgement.h"
 #include "mspell/mspell-util.h"
 #include "pet/pet-util.h"
+#include "player-base/player-class.h"
 #include "spell-kind/spells-world.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -25,6 +26,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "util/bit-flags-calculator.h"
 
 #include <iterator>
 
@@ -44,7 +46,7 @@ static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_t
     if ((ms_ptr->target_idx != 0) || (ms_ptr->m_ptr->target_y == 0))
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     ms_ptr->target_idx = floor_ptr->grid_array[ms_ptr->m_ptr->target_y][ms_ptr->m_ptr->target_x].m_idx;
     if (ms_ptr->target_idx == 0)
         return;
@@ -68,7 +70,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
     int start;
     int plus = 1;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->phase_out) {
         start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
         if (randint0(2))
@@ -97,8 +99,8 @@ static void check_darkness(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     if (ms_ptr->ability_flags.has_not(MonsterAbilityType::DARKNESS))
         return;
 
-    bool vs_ninja = (player_ptr->pclass == PlayerClassType::NINJA) && !is_hostile(ms_ptr->t_ptr);
-    bool can_use_lite_area = vs_ninja && !(ms_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
+    bool vs_ninja = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && !is_hostile(ms_ptr->t_ptr);
+    bool can_use_lite_area = vs_ninja && ms_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && ms_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
     if (ms_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
         return;
 

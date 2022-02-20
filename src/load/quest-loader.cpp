@@ -85,7 +85,7 @@ static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, int lo
 
 void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, const byte max_rquests_load)
 {
-    QUEST_IDX old_inside_quest = player_ptr->current_floor_ptr->inside_quest;
+    QuestId old_inside_quest = player_ptr->current_floor_ptr->quest_number;
     for (int i = 0; i < max_quests_load; i++) {
         if (check_quest_index(i))
             continue;
@@ -106,7 +106,7 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
         }
 
         if (q_ptr->status == QuestStatusType::TAKEN || q_ptr->status == QuestStatusType::UNTAKEN)
-            if (r_info[q_ptr->r_idx].flags1 & RF1_UNIQUE)
+            if (r_info[q_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE))
                 r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
     }
 }

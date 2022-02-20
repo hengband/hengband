@@ -19,6 +19,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -285,7 +286,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 /*!
  * @brief Get auto-picker entry from o_ptr.
  */
-void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, object_type *o_ptr)
+void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, ObjectType *o_ptr)
 {
     /* Assume that object name is to be added */
     bool name = true;
@@ -371,7 +372,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, ob
     }
 
     if (o_ptr->is_melee_weapon()) {
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &k_info[o_ptr->k_idx];
 
         if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds))
             ADD_FLG(FLG_BOOSTED);
@@ -382,7 +383,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, ob
         ADD_FLG(FLG_WANTED);
     }
 
-    if ((o_ptr->tval == ItemKindType::CORPSE || o_ptr->tval == ItemKindType::STATUE) && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE)) {
+    if ((o_ptr->tval == ItemKindType::CORPSE || o_ptr->tval == ItemKindType::STATUE) && r_info[o_ptr->pval].kind_flags.has(MonsterKindType::UNIQUE)) {
         ADD_FLG(FLG_UNIQUE);
     }
 
@@ -396,7 +397,8 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, ob
             name = false;
     }
 
-    bool realm_except_class = player_ptr->pclass == PlayerClassType::SORCERER || player_ptr->pclass == PlayerClassType::RED_MAGE;
+    PlayerClass pc(player_ptr);
+    auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
     if ((get_realm1_book(player_ptr) == o_ptr->tval) && !realm_except_class) {
         ADD_FLG(FLG_REALM1);
@@ -646,7 +648,7 @@ bool entry_from_choosed_object(PlayerType *player_ptr, autopick_type *entry)
 {
     concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
     concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!o_ptr)
         return false;

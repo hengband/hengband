@@ -5,7 +5,9 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
+#include "object/tval-types.h"
 #include "player-attack/player-attack-util.h"
+#include "player-base/player-class.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "specific-object/death-scythe.h"
@@ -69,7 +71,7 @@ bool check_hit_from_monster_to_player(PlayerType *player_ptr, int power, DEPTH l
     if (stun && one_in_(2))
         return false;
     if (k < 10)
-        return (k < 5);
+        return k < 5;
     int i = (power + (level * 3));
 
     int ac = player_ptr->ac + player_ptr->to_a;
@@ -95,7 +97,7 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
     if (stun && one_in_(2))
         return false;
     if (k < 10)
-        return (k < 5);
+        return k < 5;
     int i = (power + (level * 3));
 
     if ((i > 0) && (randint1(i) > ((ac * 3) / 4)))
@@ -112,8 +114,8 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
 static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
     bool success_hit = false;
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         int n = 1;
 
@@ -124,7 +126,7 @@ static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr
             n *= 2;
 
         success_hit = one_in_(n);
-    } else if ((player_ptr->pclass == PlayerClassType::NINJA) && ((pa_ptr->backstab || pa_ptr->surprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
+    } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && ((pa_ptr->backstab || pa_ptr->surprise_attack) && !r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)))
         success_hit = true;
     else
         success_hit = test_hit_norm(player_ptr, chance, r_ptr->ac, pa_ptr->m_ptr->ml);
@@ -144,7 +146,7 @@ static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr
  */
 bool process_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if (decide_attack_hit(player_ptr, pa_ptr, chance))
         return true;
 

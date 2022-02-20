@@ -20,7 +20,7 @@ concptr macro_trigger_keycode[2][MAX_MACRO_TRIG]; /*!< マクロの内容 */
  */
 static char octify(uint i)
 {
-    return (hexsym[i % 8]);
+    return hexsym[i % 8];
 }
 
 /*
@@ -28,7 +28,7 @@ static char octify(uint i)
  */
 static char hexify(uint i)
 {
-    return (hexsym[i % 16]);
+    return hexsym[i % 16];
 }
 
 /*
@@ -37,7 +37,7 @@ static char hexify(uint i)
 static int deoct(char c)
 {
     if (isdigit(c))
-        return (D2I(c));
+        return D2I(c);
     return 0;
 }
 
@@ -47,17 +47,17 @@ static int deoct(char c)
 static int dehex(char c)
 {
     if (isdigit(c))
-        return (D2I(c));
+        return D2I(c);
     if (islower(c))
-        return (A2I(c) + 10);
+        return A2I(c) + 10;
     if (isupper(c))
-        return (A2I(tolower(c)) + 10);
+        return A2I(tolower(c)) + 10;
     return 0;
 }
 
 static char force_upper(char a)
 {
-    return (islower(a)) ? toupper(a) : a;
+    return islower(a) ? toupper(a) : a;
 }
 
 static int angband_stricmp(concptr a, concptr b)
@@ -435,9 +435,9 @@ size_t angband_strcat(char *buf, concptr src, size_t bufsize)
 {
     size_t dlen = strlen(buf);
     if (dlen < bufsize - 1) {
-        return (dlen + angband_strcpy(buf + dlen, src, bufsize - dlen));
+        return dlen + angband_strcpy(buf + dlen, src, bufsize - dlen);
     } else {
-        return (dlen + strlen(src));
+        return dlen + strlen(src);
     }
 }
 
@@ -532,21 +532,21 @@ int strrncmp(const char *s1, const char *s2, int len)
 
         if (l1 != l2) {
             if (p1 < 0)
-                return (-1);
+                return -1;
             if (p2 < 0)
-                return (1);
+                return 1;
         } else {
             if (p1 < 0)
-                return (0);
+                return 0;
         }
 
         if (s1[p1] < s2[p2])
-            return (-1);
+            return -1;
         if (s1[p1] > s2[p2])
-            return (-1);
+            return -1;
     }
 
-    return (0);
+    return 0;
 }
 
 /**

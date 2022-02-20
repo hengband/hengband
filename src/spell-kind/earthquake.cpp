@@ -51,8 +51,8 @@
  */
 bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if ((inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
         return false;
     }
 
@@ -167,7 +167,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
 
             if (m_idx) {
                 GAME_TEXT m_name[MAX_NLEN];
-                monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+                auto *m_ptr = &floor_ptr->m_list[m_idx];
                 monster_desc(player_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
                 killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name);
             } else {
@@ -193,8 +193,8 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             if (!gg_ptr->m_idx)
                 continue;
 
-            monster_type *m_ptr = &floor_ptr->m_list[gg_ptr->m_idx];
-            monster_race *r_ptr = &r_info[m_ptr->r_idx];
+            auto *m_ptr = &floor_ptr->m_list[gg_ptr->m_idx];
+            auto *r_ptr = &r_info[m_ptr->r_idx];
             if (r_ptr->flags1 & RF1_QUESTOR) {
                 map[16 + yy - cy][16 + xx - cx] = false;
                 continue;

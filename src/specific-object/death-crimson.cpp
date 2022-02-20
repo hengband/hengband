@@ -1,9 +1,10 @@
 ﻿#include "specific-object/death-crimson.h"
 #include "artifact/fixed-art-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/geometry.h"
-#include "effect/attribute-types.h"
+#include "player-base/player-class.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
@@ -32,7 +33,7 @@ static bool fire_crimson(PlayerType *player_ptr)
     }
 
     int num = 1;
-    if (player_ptr->pclass == PlayerClassType::ARCHER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ARCHER)) {
         if (player_ptr->lev >= 10)
             num++;
 
@@ -50,7 +51,7 @@ static bool fire_crimson(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_crimson(PlayerType *player_ptr, object_type *o_ptr)
+bool activate_crimson(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     if (o_ptr->name1 != ART_CRIMSON)
         return false;

@@ -19,7 +19,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-
 /*!
  * @brief プレイヤーの現在ダンジョンIDと階層に応じて、ダンジョン内ランクエの自動放棄を行う
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -63,8 +62,8 @@ void execute_recall(PlayerType *player_ptr)
         return;
 
     disturb(player_ptr, false, true);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level || player_ptr->current_floor_ptr->inside_quest || player_ptr->enter_dungeon) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->dun_level || inside_quest(player_ptr->current_floor_ptr->quest_number) || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
         if (player_ptr->dungeon_idx)
             player_ptr->recall_dungeon = player_ptr->dungeon_idx;
@@ -75,7 +74,7 @@ void execute_recall(PlayerType *player_ptr)
         player_ptr->dungeon_idx = 0;
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
-        player_ptr->current_floor_ptr->inside_quest = 0;
+        player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
         player_ptr->leaving = true;
         sound(SOUND_TPLEVEL);
         return;
@@ -127,7 +126,7 @@ void execute_recall(PlayerType *player_ptr)
  */
 void execute_floor_reset(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (player_ptr->alter_reality == 0)
         return;
 
@@ -140,7 +139,7 @@ void execute_floor_reset(PlayerType *player_ptr)
         return;
 
     disturb(player_ptr, false, true);
-    if (!quest_number(player_ptr, floor_ptr->dun_level) && floor_ptr->dun_level) {
+    if (!inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && floor_ptr->dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
 
         /*

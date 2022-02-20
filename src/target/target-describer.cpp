@@ -24,6 +24,7 @@
 #include "monster/monster-flag-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
+#include "player-base/player-race.h"
 #include "player/player-status-table.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -48,7 +49,7 @@ static const int16_t CONTINUOUS_DESCRIPTION = 256;
 bool show_gold_on_floor = false;
 
 // Examine grid
-typedef struct eg_type {
+struct eg_type {
     POSITION y;
     POSITION x;
     target_type mode;
@@ -68,7 +69,7 @@ typedef struct eg_type {
     FEAT_IDX feat;
     feature_type *f_ptr;
     concptr name;
-} eg_type;
+};
 
 static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSITION y, POSITION x, target_type mode, concptr info)
 {
@@ -84,7 +85,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
     eg_ptr->query = '\001';
     eg_ptr->floor_num = 0;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     eg_ptr->g_ptr = &floor_ptr->grid_array[y][x];
     eg_ptr->m_ptr = &floor_ptr->m_list[eg_ptr->g_ptr->m_idx];
     eg_ptr->next_o_idx = 0;
@@ -97,7 +98,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
 static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type *m_ptr)
 {
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-    if ((player_ptr->lev >= PY_MAX_LEVEL) || (player_ptr->prace == PlayerRaceType::ANDROID)) {
+    if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         sprintf(buf, "**");
         return;
     }
@@ -239,7 +240,7 @@ static uint16_t describe_monster_item(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->m_ptr->hold_o_idx_list) {
         GAME_TEXT o_name[MAX_NLEN];
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -303,7 +304,7 @@ static int16_t describe_footing(PlayerType *player_ptr, eg_type *eg_ptr)
         return CONTINUOUS_DESCRIPTION;
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = &player_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -383,7 +384,7 @@ static int16_t loop_describing_grid(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 }
 
-static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, object_type *o_ptr)
+static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, ObjectType *o_ptr)
 {
     if ((o_ptr->marked & OM_FOUND) == 0)
         return CONTINUOUS_DESCRIPTION;
@@ -421,7 +422,7 @@ static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, o
 static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->g_ptr->o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         int16_t ret = describe_footing_sight(player_ptr, eg_ptr, o_ptr);
         if (within_char_util(ret))
@@ -434,15 +435,15 @@ static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
 static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     if (eg_ptr->f_ptr->flags.has(FloorFeatureType::QUEST_ENTER)) {
-        QUEST_IDX old_quest = player_ptr->current_floor_ptr->inside_quest;
+        QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
         for (int j = 0; j < 10; j++)
             quest_text[j][0] = '\0';
 
         quest_text_line = 0;
-        player_ptr->current_floor_ptr->inside_quest = eg_ptr->g_ptr->special;
+        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(eg_ptr->g_ptr->special);
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->inside_quest = old_quest;
+        player_ptr->current_floor_ptr->quest_number = old_quest;
         return format(
             _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[eg_ptr->g_ptr->special].name, quest[eg_ptr->g_ptr->special].level);
     }

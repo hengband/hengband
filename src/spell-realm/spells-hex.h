@@ -24,7 +24,7 @@ public:
     void stop_all_spells();
     bool is_casting_full_capacity() const;
     void continue_revenge();
-    void store_vengeful_damage(HIT_POINT dam);
+    void store_vengeful_damage(int dam);
     bool check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const;
     bool is_spelling_specific(int hex) const;
     bool is_spelling_any() const;

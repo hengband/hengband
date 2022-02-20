@@ -26,6 +26,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -381,12 +382,9 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_SPELL: {
-            if ((this->player_ptr->pclass == PlayerClassType::WARRIOR) || (this->player_ptr->pclass == PlayerClassType::IMITATOR) || (this->player_ptr->pclass == PlayerClassType::MINDCRAFTER)
-                || (this->player_ptr->pclass == PlayerClassType::SORCERER) || (this->player_ptr->pclass == PlayerClassType::ARCHER) || (this->player_ptr->pclass == PlayerClassType::MAGIC_EATER)
-                || (this->player_ptr->pclass == PlayerClassType::RED_MAGE) || (this->player_ptr->pclass == PlayerClassType::SAMURAI) || (this->player_ptr->pclass == PlayerClassType::BLUE_MAGE)
-                || (this->player_ptr->pclass == PlayerClassType::CAVALRY) || (this->player_ptr->pclass == PlayerClassType::BERSERKER) || (this->player_ptr->pclass == PlayerClassType::SMITH)
-                || (this->player_ptr->pclass == PlayerClassType::MIRROR_MASTER) || (this->player_ptr->pclass == PlayerClassType::NINJA) || (this->player_ptr->pclass == PlayerClassType::SNIPER))
+            if (!PlayerClass(this->player_ptr).has_number_of_spells_learned()) {
                 break;
+            }
 
             this->player_ptr->add_spells++;
             this->player_ptr->update |= PU_SPELLS;
@@ -526,7 +524,7 @@ bool ObjectReadEntity::check_can_read()
         return false;
     }
 
-    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
+    if (PlayerClass(this->player_ptr).equals(PlayerClassType::BERSERKER)) {
         msg_print(_("巻物なんて読めない。", "You cannot read."));
         return false;
     }

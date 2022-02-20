@@ -5,9 +5,10 @@
 
 #include "action/activation-execution.h"
 #include "action/action-limited.h"
-#include "artifact/random-art-effects.h"
 #include "artifact/artifact-info.h"
+#include "artifact/random-art-effects.h"
 #include "core/window-redrawer.h"
+#include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
@@ -25,6 +26,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "racial/racial-android.h"
 #include "specific-object/monster-ball.h"
@@ -32,7 +34,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
-#include "effect/attribute-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/artifact-type-definition.h"
@@ -88,7 +89,7 @@ static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)
 
 static void decide_activation_success(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    if (player_ptr->pclass == PlayerClassType::BERSERKER) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
         ae_ptr->success = false;
         return;
     }
@@ -124,7 +125,7 @@ static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr)
         return false;
     }
 
-    if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == ItemKindType::FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
+    if (ae_ptr->o_ptr->is_fuel() && (ae_ptr->o_ptr->fuel == 0)) {
         msg_print(_("燃料がない。", "It has no fuel."));
         PlayerEnergy(player_ptr).reset_player_turn();
         return false;
@@ -139,7 +140,7 @@ static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
-static bool activate_artifact(PlayerType *player_ptr, object_type *o_ptr)
+static bool activate_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     concptr name = k_info[o_ptr->k_idx].name.c_str();
     auto tmp_act_ptr = find_activation_info(o_ptr);

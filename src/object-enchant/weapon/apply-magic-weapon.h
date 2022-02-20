@@ -3,18 +3,18 @@
 #include "object-enchant/weapon/abstract-weapon-enchanter.h"
 #include "system/angband.h"
 
-struct object_type;
+class ObjectType;
 class PlayerType;
 class WeaponEnchanter : AbstractWeaponEnchanter {
 public:
-    WeaponEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power);
+    WeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     void apply_magic() override;
 
 protected:
-    virtual void enchant() override {}
-    virtual void give_ego_index() override {}
-    virtual void give_high_ego_index() override {}
-    virtual void give_cursed() override {}
+    void sval_enchant() override{};
+    void give_ego_index() override{};
+    void give_high_ego_index() override{};
+    void give_cursed() override{};
 
 private:
     PlayerType *player_ptr;

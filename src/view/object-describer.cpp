@@ -3,7 +3,9 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "realm/realm-names-table.h"
 #include "spell/spell-info.h"
 #include "system/object-type-definition.h"
@@ -19,7 +21,7 @@
  */
 void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
         return;
     if (!o_ptr->is_known())
@@ -50,7 +52,7 @@ void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -74,12 +76,12 @@ void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-    object_type forge;
-    object_type *q_ptr;
+    ObjectType forge;
+    ObjectType *q_ptr;
     int sval;
     int16_t use_realm;
     GAME_TEXT o_name[MAX_NLEN];
-    for (int y = 0; y < Term->hgt; y++) {
+    for (int y = 0; y < game_term->hgt; y++) {
         term_erase(0, y, 255);
     }
 
@@ -98,11 +100,12 @@ void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
         if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2))
             return;
     } else {
-        if ((player_ptr->pclass != PlayerClassType::SORCERER) && (player_ptr->pclass != PlayerClassType::RED_MAGE))
+        PlayerClass pc(player_ptr);
+        if (!pc.is_every_magic())
             return;
         if (!is_magic(use_realm))
             return;
-        if ((player_ptr->pclass == PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1))
+        if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1))
             return;
     }
 

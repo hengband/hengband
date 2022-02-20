@@ -25,7 +25,7 @@
  */
 void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!sf_ptr) {
         wr_s16b((int16_t)floor_ptr->dun_level);
     } else {
@@ -60,7 +60,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     std::vector<grid_template_type> templates;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             uint i;
             for (i = 0; i < templates.size(); i++) {
                 if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic
@@ -93,7 +93,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     uint16_t prev_u16b = 0;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             uint i;
             for (i = 0; i < templates.size(); i++) {
                 if (templates[i].info == g_ptr->info && templates[i].feat == g_ptr->feat && templates[i].mimic == g_ptr->mimic
@@ -132,14 +132,14 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     /*** Dump objects ***/
     wr_u16b(floor_ptr->o_max);
     for (int i = 1; i < floor_ptr->o_max; i++) {
-        object_type *o_ptr = &floor_ptr->o_list[i];
+        auto *o_ptr = &floor_ptr->o_list[i];
         wr_item(o_ptr);
     }
 
     /*** Dump the monsters ***/
     wr_u16b(floor_ptr->m_max);
     for (int i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         wr_monster(m_ptr);
     }
 }

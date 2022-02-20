@@ -11,6 +11,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/tval-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
@@ -24,7 +25,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEPTH level, int power)
+WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : AbstractWeaponEnchanter(o_ptr, level, power)
     , player_ptr(player_ptr)
 {
@@ -33,6 +34,7 @@ WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, object_type *o_ptr, DEP
 /*!
  * @brief 武器系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be a "weapon"
+ * @details power > 2はデバッグ専用.
  */
 void WeaponEnchanter::apply_magic()
 {
@@ -42,8 +44,7 @@ void WeaponEnchanter::apply_magic()
     switch (this->o_ptr->tval) {
     case ItemKindType::DIGGING: {
         if (this->power > 1) {
-            /* this->power > 2はデバッグ専用. */
-            if (one_in_(30) || (this->power > 2))
+            if ((this->power > 2) || one_in_(30))
                 become_random_artifact(this->player_ptr, this->o_ptr, false);
             else
                 this->o_ptr->name2 = EGO_DIGGING;

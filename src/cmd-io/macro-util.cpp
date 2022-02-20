@@ -29,7 +29,7 @@ int macro_find_exact(concptr pat)
         if (!streq(macro__pat[i], pat))
             continue;
 
-        return (i);
+        return i;
     }
 
     return -1;
@@ -48,7 +48,7 @@ int macro_find_check(concptr pat)
         if (!prefix(macro__pat[i], pat))
             continue;
 
-        return (i);
+        return i;
     }
 
     return -1;
@@ -69,7 +69,7 @@ int macro_find_maybe(concptr pat)
         if (streq(macro__pat[i], pat))
             continue;
 
-        return (i);
+        return i;
     }
 
     return -1;
@@ -98,7 +98,7 @@ int macro_find_ready(concptr pat)
         s = t;
     }
 
-    return (n);
+    return n;
 }
 
 /*

@@ -153,7 +153,7 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
         player_ptr->update |= (PU_BONUS);
     }
 
-    return (res);
+    return res;
 }
 
 /*!
@@ -268,7 +268,7 @@ bool lose_all_info(PlayerType *player_ptr)
     chg_virtue(player_ptr, V_KNOWLEDGE, -5);
     chg_virtue(player_ptr, V_ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->k_idx == 0) || o_ptr->is_fully_known())
             continue;
 

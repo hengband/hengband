@@ -18,7 +18,7 @@
  */
 void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->grid_array[y][x].is_outer())
         return;
 
@@ -63,7 +63,7 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
  */
 void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;
@@ -76,7 +76,7 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
     }
 
     place_closed_door(player_ptr, y, x, type);
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (type != DOOR_CURTAIN) {
         g_ptr->mimic = feat_wall_inner;
         if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
@@ -100,7 +100,7 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
  */
 void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;
@@ -120,8 +120,8 @@ void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->mimic = 0;
 
     if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
@@ -178,7 +178,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
  */
 void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;

@@ -41,7 +41,7 @@ bool in_bounds2u(floor_type *floor_ptr, POSITION y, POSITION x) { return (y < fl
  */
 bool is_cave_empty_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_empty_grid = cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PLACE);
     is_empty_grid &= !(floor_ptr->grid_array[y][x].m_idx);
     is_empty_grid &= !player_bold(player_ptr, y, x);

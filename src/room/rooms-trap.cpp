@@ -42,7 +42,7 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
         return false;
 
     /* Choose lite or dark */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */

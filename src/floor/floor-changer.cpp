@@ -33,6 +33,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "player-base/player-class.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -68,7 +69,7 @@ static void build_dead_end(PlayerType *player_ptr)
 
 static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (current_monster == 0) {
         MONSTER_IDX m_idx = m_pop(floor_ptr);
         player_ptr->riding = m_idx;
@@ -98,7 +99,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
 
 static void set_pet_params(PlayerType *player_ptr, monster_race **r_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
     m_ptr->r_idx = party_mon[current_monster].r_idx;
     *m_ptr = party_mon[current_monster];
@@ -137,8 +138,8 @@ static void place_pet(PlayerType *player_ptr)
             if (r_ptr->flags2 & RF2_MULTIPLY)
                 player_ptr->current_floor_ptr->num_repro++;
         } else {
-            monster_type *m_ptr = &party_mon[current_monster];
-            monster_race *r_ptr = real_r_ptr(m_ptr);
+            auto *m_ptr = &party_mon[current_monster];
+            auto *r_ptr = real_r_ptr(m_ptr);
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, 0);
             msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
@@ -167,17 +168,17 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
 {
     for (int i = 1; i < floor_ptr->m_max; i++) {
         monster_race *r_ptr;
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
         r_ptr = real_r_ptr(m_ptr);
-        if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
             r_ptr->floor_id = cur_floor_id;
     }
 
     for (int i = 1; i < floor_ptr->o_max; i++) {
-        object_type *o_ptr = &floor_ptr->o_list[i];
+        auto *o_ptr = &floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
 
@@ -195,7 +196,7 @@ static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr
     if ((player_ptr->change_floor_mode & CFM_NO_RETURN) == 0)
         return;
 
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     if (feat_uses_special(g_ptr->feat))
         return;
 
@@ -230,10 +231,10 @@ static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
 static void reset_unique_by_floor_change(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         monster_race *r_ptr;
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
@@ -248,7 +249,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
         }
 
         r_ptr = real_r_ptr(m_ptr);
-        if (!(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_NAZGUL))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !(r_ptr->flags7 & RF7_NAZGUL))
             continue;
 
         if (r_ptr->floor_id != new_floor_id)
@@ -266,7 +267,7 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
     GAME_TURN absence_ticks = (w_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
     reset_unique_by_floor_change(player_ptr);
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid() || !o_ptr->is_fixed_artifact())
             continue;
 
@@ -313,8 +314,8 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
     if ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0)
         return;
 
-    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    if ((player_ptr->change_floor_mode & CFM_UP) && !quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level)))
         g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FloorFeatureType::SHAFT) : feat_down_stair;
     else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward)
         g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FloorFeatureType::SHAFT) : feat_up_stair;
@@ -384,7 +385,7 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->floor_id = new_floor_id;
     w_ptr->character_dungeon = true;
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
-        wiz_lite(player_ptr, (bool)(player_ptr->pclass == PlayerClassType::NINJA));
+        wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
 
     player_ptr->current_floor_ptr->generated_turn = w_ptr->game_turn;
     player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;

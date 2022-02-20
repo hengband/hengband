@@ -23,17 +23,17 @@
  * @struct feature_state
  * @brief 地形状態変化指定構造体 / Feature state structure
  */
-typedef struct feature_state {
+struct feature_state {
     FloorFeatureType action{}; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
     std::string result_tag{}; /*!< 変化先ID / Result (f_info ID) */
     FEAT_IDX result{}; /*!< 変化先ID / Result (f_info ID) */
-} feature_state;
+};
 
 /*!
  * @struct feature_type
  * @brief 地形情報の構造体 / Information about terrain "features"
  */
-typedef struct feature_type {
+struct feature_type {
     FEAT_IDX idx{};
     std::string name; /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
     std::string text; /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
@@ -51,7 +51,7 @@ typedef struct feature_type {
     SYMBOL_CODE d_char[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルアルファベット / Default feature character */
     TERM_COLOR x_attr[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
     SYMBOL_CODE x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
-} feature_type;
+};
 
 extern std::vector<feature_type> f_info;
 

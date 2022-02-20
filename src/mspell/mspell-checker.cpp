@@ -68,7 +68,7 @@
  */
 bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = y1 - 2; y <= y1 + 2; y++) {
         for (POSITION x = x1 - 2; x <= x1 + 2; x++) {
             if (!in_bounds(floor_ptr, y, x))
@@ -99,7 +99,7 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION xx = x - 5; xx <= x + 5; xx++) {
         grid_type *g_ptr;
         for (POSITION yy = y - 5; yy <= y + 5; yy++) {
@@ -112,7 +112,7 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
 
             g_ptr = &floor_ptr->grid_array[yy][xx];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
+                auto *o_ptr = &floor_ptr->o_list[this_o_idx];
                 if (o_ptr->tval == ItemKindType::CORPSE) {
                     if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval]))
                         return true;
@@ -146,7 +146,7 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
  */
 bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     uint16_t grid_g[512];
     int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, 0);
     if (!grid_n)
@@ -162,7 +162,7 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
         x = get_grid_x(grid_g[i]);
 
         if ((floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2))) {
-            monster_type *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
+            auto *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
             if (is_friend == is_pet(m_ptr)) {
                 return false;
             }
@@ -247,8 +247,8 @@ ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
  */
 ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, bool breath, int target_type)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     BIT_FLAGS flg = 0x00;
     switch (target_type) {
     case MONSTER_TO_MONSTER:

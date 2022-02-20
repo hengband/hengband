@@ -38,8 +38,8 @@ void QuestCompletionChecker::complete()
     this->set_quest_idx();
     auto create_stairs = false;
     auto reward = false;
-    if ((this->quest_idx > 0) && (quest[this->quest_idx].status == QuestStatusType::TAKEN)) {
-        this->q_ptr = &quest[this->quest_idx];
+    if (inside_quest(this->quest_idx) && (quest[enum2i(this->quest_idx)].status == QuestStatusType::TAKEN)) {
+        this->q_ptr = &quest[enum2i(this->quest_idx)];
         auto [tmp_create_stairs, tmp_reward] = this->switch_completion();
         create_stairs = tmp_create_stairs;
         reward = tmp_reward;
@@ -56,8 +56,8 @@ void QuestCompletionChecker::complete()
 void QuestCompletionChecker::set_quest_idx()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    this->quest_idx = floor_ptr->inside_quest;
-    if (this->quest_idx > 0) {
+    this->quest_idx = floor_ptr->quest_number;
+    if (inside_quest(this->quest_idx)) {
         return;
     }
 
@@ -93,7 +93,7 @@ void QuestCompletionChecker::set_quest_idx()
         }
     }
 
-    this->quest_idx = i;
+    this->quest_idx = i2enum<QuestId>(i);
 }
 
 std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
@@ -156,10 +156,10 @@ std::tuple<bool, bool> QuestCompletionChecker::complete_random()
     auto create_stairs = false;
     if (none_bits(this->q_ptr->flags, QUEST_FLAG_PRESET)) {
         create_stairs = true;
-        this->player_ptr->current_floor_ptr->inside_quest = 0;
+        this->player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     }
 
-    if ((this->quest_idx == QUEST_OBERON) || (this->quest_idx == QUEST_SERPENT)) {
+    if ((this->quest_idx == QuestId::OBERON) || (this->quest_idx == QuestId::SERPENT)) {
         this->q_ptr->status = QuestStatusType::FINISHED;
     }
 
@@ -192,11 +192,11 @@ void QuestCompletionChecker::complete_tower()
     }
 
     this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
-    auto is_tower_completed = quest[QUEST_TOWER1].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest[QUEST_TOWER2].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest[QUEST_TOWER3].status == QuestStatusType::STAGE_COMPLETED;
+    auto is_tower_completed = quest[enum2i(QuestId::TOWER1)].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest[enum2i(QuestId::TOWER2)].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest[enum2i(QuestId::TOWER3)].status == QuestStatusType::STAGE_COMPLETED;
     if (is_tower_completed) {
-        complete_quest(this->player_ptr, QUEST_TOWER1);
+        complete_quest(this->player_ptr, QuestId::TOWER1);
     }
 }
 
@@ -249,7 +249,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
 {
     auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
     for (auto i = 0; i < (dun_level / 15) + 1; i++) {
-        object_type item;
+        ObjectType item;
         while (true) {
             item.wipe();
             auto &r_ref = r_info[this->m_ptr->r_idx];
@@ -273,7 +273,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
  * 2. 固定アーティファクト以外の矢弾
  * 3. 穴掘りエゴの装備品
  */
-bool QuestCompletionChecker::check_quality(object_type &item)
+bool QuestCompletionChecker::check_quality(ObjectType &item)
 {
     auto is_good_reward = !item.is_cursed();
     is_good_reward &= !item.is_ammo() || (item.is_ammo() && item.is_fixed_artifact());

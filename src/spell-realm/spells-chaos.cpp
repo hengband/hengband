@@ -3,6 +3,7 @@
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -16,7 +17,6 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -65,7 +65,7 @@ void call_the_void(PlayerType *player_ptr)
         return;
     }
 
-    bool is_special_fllor = floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest);
+    bool is_special_fllor = inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number);
     is_special_fllor |= floor_ptr->dun_level > 0;
     if (is_special_fllor) {
         msg_print(_("地面が揺れた。", "The ground trembles."));
@@ -104,8 +104,8 @@ void call_the_void(PlayerType *player_ptr)
 bool vanish_dungeon(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = floor_ptr->inside_quest && quest_type::is_fixed(floor_ptr->inside_quest);
-    is_special_floor |= floor_ptr->dun_level > 0;
+    bool is_special_floor = inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number);
+    is_special_floor |= (floor_ptr->dun_level == 0);
     if (is_special_floor)
         return false;
 
@@ -189,7 +189,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
  * @param rad 効力の半径
  * @details このファイルにいるのは、spells-trump.c と比べて行数が少なかったため。それ以上の意図はない
  */
-void cast_meteor(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
+void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
 {
     int b = 10 + randint1(10);
     for (int i = 0; i < b; i++) {
@@ -208,9 +208,8 @@ void cast_meteor(PlayerType *player_ptr, HIT_POINT dam, POSITION rad)
             if (d >= 9)
                 continue;
 
-            floor_type *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)
-                || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT))
+            auto *floor_ptr = player_ptr->current_floor_ptr;
+            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT))
                 continue;
 
             break;

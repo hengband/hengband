@@ -33,7 +33,7 @@ void starve_player(PlayerType *player_ptr)
     if (player_ptr->food >= PY_FOOD_MAX) {
         (void)set_food(player_ptr, player_ptr->food - 100);
     } else if (!(w_ptr->game_turn % (TURNS_PER_TICK * 5))) {
-        int digestion = SPEED_TO_ENERGY(player_ptr->pspeed);
+        int digestion = speed_to_energy(player_ptr->pspeed);
         if (player_ptr->regenerate)
             digestion += 20;
         PlayerClass pc(player_ptr);
@@ -63,7 +63,7 @@ void starve_player(PlayerType *player_ptr)
     }
 
     if (player_ptr->food < PY_FOOD_STARVE) {
-        HIT_POINT dam = (PY_FOOD_STARVE - player_ptr->food) / 10;
+        int dam = (PY_FOOD_STARVE - player_ptr->food) / 10;
         if (!is_invuln(player_ptr))
             take_hit(player_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"));
     }

@@ -53,7 +53,7 @@
 std::vector<std::vector<wilderness_type>> wilderness;
 bool generate_encounter;
 
-typedef struct border_type {
+struct border_type {
     int16_t north[MAX_WID];
     int16_t south[MAX_WID];
     int16_t east[MAX_HGT];
@@ -62,7 +62,7 @@ typedef struct border_type {
     int16_t north_east;
     int16_t south_west;
     int16_t south_east;
-} border_type;
+};
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
@@ -288,7 +288,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint32_
 static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool border, bool corner)
 {
     player_ptr->town_num = wilderness[y][x].town;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->base_level = wilderness[y][x].level;
     floor_ptr->dun_level = 0;
     floor_ptr->monster_level = floor_ptr->base_level;
@@ -375,7 +375,7 @@ static border_type border;
  */
 void wilderness_gen(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->height = MAX_HGT;
     floor_ptr->width = MAX_WID;
     panel_row_min = floor_ptr->height;
@@ -552,7 +552,7 @@ static int16_t conv_terrain2feat[MAX_WILDERNESS];
  */
 void wilderness_gen_small(PlayerType *player_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < MAX_WID; i++)
         for (int j = 0; j < MAX_HGT; j++)
             floor_ptr->grid_array[j][i].feat = feat_permanent;
@@ -600,13 +600,13 @@ void wilderness_gen_small(PlayerType *player_ptr)
     player_ptr->town_num = 0;
 }
 
-typedef struct wilderness_grid {
+struct wilderness_grid {
     wt_type terrain; /* Terrain type */
     int16_t town; /* Town number */
     DEPTH level; /* Level of the wilderness */
     byte road; /* Road */
     char name[32]; /* Name of the town/wilderness */
-} wilderness_grid;
+};
 
 static wilderness_grid w_letter[255];
 
@@ -624,7 +624,7 @@ static wilderness_grid w_letter[255];
 parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xmin, int xmax, int *y, int *x)
 {
     if (!(buf[0] == 'W'))
-        return (PARSE_ERROR_GENERIC);
+        return PARSE_ERROR_GENERIC;
 
     int num;
     char *zz[33];
@@ -671,7 +671,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
                 w_letter[index].name[0] = 0;
         } else {
             /* Failure */
-            return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
         break;
@@ -856,7 +856,7 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
     bool has_pet = false;
     PlayerEnergy energy(player_ptr);
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 

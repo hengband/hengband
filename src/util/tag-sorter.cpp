@@ -45,7 +45,7 @@ static tag_type median3(tag_type elements[], int left, int right)
         swap(&elements[center], &elements[right]);
 
     swap(&elements[center], &elements[right - 1]);
-    return (elements[right - 1]);
+    return elements[right - 1];
 }
 
 /*

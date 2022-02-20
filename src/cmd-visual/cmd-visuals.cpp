@@ -151,7 +151,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 if (!k_ref.flavor) {
                     strip_name(o_name, k_ref.idx);
                 } else {
-                    object_type dummy;
+                    ObjectType dummy;
                     dummy.prep(k_ref.idx);
                     describe_flavor(player_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
                 }
@@ -198,7 +198,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static MONRACE_IDX r = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                monster_race *r_ptr = &r_info[r];
+                auto *r_ptr = &r_info[r];
                 int c;
                 IDX t;
 
@@ -265,7 +265,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static IDX k = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                object_kind *k_ptr = &k_info[k];
+                auto *k_ptr = &k_info[k];
                 int c;
                 IDX t;
 
@@ -336,7 +336,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static IDX lighting_level = F_LIT_STANDARD;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                feature_type *f_ptr = &f_info[f];
+                auto *f_ptr = &f_info[f];
                 int c;
                 IDX t;
 

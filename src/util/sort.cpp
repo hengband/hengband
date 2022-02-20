@@ -5,10 +5,10 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
+#include "system//monster-race-definition.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system//monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -103,7 +103,7 @@ bool ang_sort_comp_distance(PlayerType *player_ptr, vptr u, vptr v, int a, int b
     POSITION db = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
 
     /* Compare the distances */
-    return (da <= db);
+    return da <= db;
 }
 
 /*
@@ -149,9 +149,9 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
     /* Compare two monsters */
     if (ap_ra_ptr && ap_rb_ptr) {
         /* Unique monsters first */
-        if ((ap_ra_ptr->flags1 & RF1_UNIQUE) && !(ap_rb_ptr->flags1 & RF1_UNIQUE))
+        if (ap_ra_ptr->kind_flags.has(MonsterKindType::UNIQUE) && ap_rb_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
             return true;
-        if (!(ap_ra_ptr->flags1 & RF1_UNIQUE) && (ap_rb_ptr->flags1 & RF1_UNIQUE))
+        if (ap_ra_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && ap_rb_ptr->kind_flags.has(MonsterKindType::UNIQUE))
             return false;
 
         /* Shadowers first (あやしい影) */
@@ -284,7 +284,7 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     }
 
     /* Compare indexes */
-    return (w1 <= w2);
+    return w1 <= w2;
 }
 
 /*
@@ -311,9 +311,9 @@ bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)player_ptr;
     (void)v;
 
-    QUEST_IDX *q_num = (QUEST_IDX *)u;
-    quest_type *qa = &quest[q_num[a]];
-    quest_type *qb = &quest[q_num[b]];
+    QuestId *q_num = (QuestId *)u;
+    quest_type *qa = &quest[enum2i(q_num[a])];
+    quest_type *qb = &quest[enum2i(q_num[b])];
     return (qa->comptime != qb->comptime) ? (qa->comptime < qb->comptime) : (qa->level <= qb->level);
 }
 
@@ -323,8 +323,8 @@ void ang_sort_swap_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)player_ptr;
     (void)v;
 
-    QUEST_IDX *q_num = (QUEST_IDX *)u;
-    QUEST_IDX tmp = q_num[a];
+    QuestId *q_num = (QuestId *)u;
+    QuestId tmp = q_num[a];
     q_num[a] = q_num[b];
     q_num[b] = tmp;
 }
@@ -358,10 +358,10 @@ bool ang_sort_comp_pet(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     if (m_ptr2->nickname && !m_ptr1->nickname)
         return false;
 
-    if ((r_ptr1->flags1 & RF1_UNIQUE) && !(r_ptr2->flags1 & RF1_UNIQUE))
+    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE))
         return true;
 
-    if ((r_ptr2->flags1 & RF1_UNIQUE) && !(r_ptr1->flags1 & RF1_UNIQUE))
+    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE))
         return false;
 
     if (r_ptr1->level > r_ptr2->level)
@@ -456,7 +456,7 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     }
 
     /* Compare indexes */
-    return (w1 <= w2);
+    return w1 <= w2;
 }
 
 /*!
@@ -507,10 +507,10 @@ bool ang_sort_comp_monster_level(PlayerType *player_ptr, vptr u, vptr v, int a, 
     if (r_ptr1->level > r_ptr2->level)
         return false;
 
-    if ((r_ptr2->flags1 & RF1_UNIQUE) && !(r_ptr1->flags1 & RF1_UNIQUE))
+    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE))
         return true;
 
-    if ((r_ptr1->flags1 & RF1_UNIQUE) && !(r_ptr2->flags1 & RF1_UNIQUE))
+    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE))
         return false;
 
     return w1 <= w2;
@@ -557,10 +557,10 @@ bool ang_sort_comp_pet_dismiss(PlayerType *player_ptr, vptr u, vptr v, int a, in
     if (!m_ptr2->parent_m_idx && m_ptr1->parent_m_idx)
         return false;
 
-    if ((r_ptr1->flags1 & RF1_UNIQUE) && !(r_ptr2->flags1 & RF1_UNIQUE))
+    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE))
         return true;
 
-    if ((r_ptr2->flags1 & RF1_UNIQUE) && !(r_ptr1->flags1 & RF1_UNIQUE))
+    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE))
         return false;
 
     if (r_ptr1->level > r_ptr2->level)

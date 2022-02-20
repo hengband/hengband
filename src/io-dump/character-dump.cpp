@@ -59,7 +59,7 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
     bool pet = false;
     bool pet_settings = false;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
 
         if (!monster_is_valid(m_ptr))
             continue;
@@ -112,9 +112,9 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_quest(PlayerType *player_ptr, FILE *fff)
 {
     fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
-    std::vector<QUEST_IDX> quest_num(max_q_idx);
+    std::vector<int16_t> quest_num(max_q_idx);
 
-    std::iota(quest_num.begin(), quest_num.end(), static_cast<QUEST_IDX>(0));
+    std::iota(quest_num.begin(), quest_num.end(), enum2i(QuestId::NONE));
     int dummy;
     ang_sort(player_ptr, quest_num.data(), &dummy, quest_num.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
@@ -296,7 +296,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
         if (r_ref.idx == 0 || r_ref.name.empty())
             continue;
 
-        if (r_ref.flags1 & RF1_UNIQUE) {
+        if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
             bool dead = (r_ref.max_num == 0);
             if (dead) {
                 norm_total++;
@@ -344,7 +344,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
 
     char buf[80];
     for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
-        monster_race *r_ptr = &r_info[*it];
+        auto *r_ptr = &r_info[*it];
         if (r_ptr->defeat_level && r_ptr->defeat_time)
             sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);

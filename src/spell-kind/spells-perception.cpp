@@ -39,7 +39,7 @@
 void identify_pack(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -55,7 +55,7 @@ void identify_pack(PlayerType *player_ptr)
  * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
  * @return 実際に鑑定できたらTRUEを返す
  */
-bool identify_item(PlayerType *player_ptr, object_type *o_ptr)
+bool identify_item(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
@@ -108,7 +108,7 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&ObjectType::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }
@@ -117,7 +117,7 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
 
     concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
     OBJECT_IDX item;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
@@ -158,7 +158,7 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&ObjectType::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }
@@ -168,7 +168,7 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     concptr s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
     OBJECT_IDX item;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;

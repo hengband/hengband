@@ -35,73 +35,20 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param power 生成ランク
- * @details
- * Hack -- note the special code for various items
+ * @details power > 2はデバッグ専用.
  */
-void apply_magic_others(PlayerType *player_ptr, object_type *o_ptr, int power)
+void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &k_info[o_ptr->k_idx];
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     switch (o_ptr->tval) {
     case ItemKindType::WHISTLE: {
         break;
     }
     case ItemKindType::FLASK: {
-        o_ptr->xtra4 = o_ptr->pval;
+        o_ptr->fuel = o_ptr->pval;
         o_ptr->pval = 0;
-        break;
-    }
-    case ItemKindType::LITE: {
-        if (o_ptr->sval == SV_LITE_TORCH) {
-            if (o_ptr->pval > 0)
-                o_ptr->xtra4 = randint1(o_ptr->pval);
-            o_ptr->pval = 0;
-        }
-
-        if (o_ptr->sval == SV_LITE_LANTERN) {
-            if (o_ptr->pval > 0)
-                o_ptr->xtra4 = randint1(o_ptr->pval);
-            o_ptr->pval = 0;
-        }
-
-        /* power > 2はデバッグ専用. */
-        if (power > 2) {
-            become_random_artifact(player_ptr, o_ptr, false);
-        } else if ((power == 2) || ((power == 1) && one_in_(3))) {
-            while (!o_ptr->name2) {
-                while (true) {
-                    bool okay_flag = true;
-
-                    o_ptr->name2 = get_random_ego(INVEN_LITE, true);
-
-                    switch (o_ptr->name2) {
-                    case EGO_LITE_LONG:
-                        if (o_ptr->sval == SV_LITE_FEANOR)
-                            okay_flag = false;
-                    }
-
-                    if (okay_flag)
-                        break;
-                }
-            }
-        } else if (power == -2) {
-            o_ptr->name2 = get_random_ego(INVEN_LITE, false);
-            switch (o_ptr->name2) {
-            case EGO_LITE_DARKNESS:
-                o_ptr->xtra4 = 0;
-
-                if (o_ptr->sval == SV_LITE_TORCH) {
-                    o_ptr->art_flags.set(TR_LITE_M1);
-                } else if (o_ptr->sval == SV_LITE_LANTERN) {
-                    o_ptr->art_flags.set(TR_LITE_M2);
-                } else if (o_ptr->sval == SV_LITE_FEANOR) {
-                    o_ptr->art_flags.set(TR_LITE_M3);
-                }
-                break;
-            }
-        }
-
         break;
     }
     case ItemKindType::WAND:
@@ -213,7 +160,7 @@ void apply_magic_others(PlayerType *player_ptr, object_type *o_ptr, int power)
         if (o_ptr->sval == SV_CHEST_KANDUME)
             o_ptr->pval = 6;
 
-        o_ptr->xtra3 = floor_ptr->dun_level + 5;
+        o_ptr->chest_level = floor_ptr->dun_level + 5;
         if (o_ptr->pval > 55)
             o_ptr->pval = 55 + (byte)randint0(5);
 

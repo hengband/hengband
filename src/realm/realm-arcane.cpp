@@ -550,7 +550,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             return _("炎、電撃、冷気、酸のどれかの球を放つ。", "Fires a ball of some elements.");
 
         {
-            HIT_POINT dam = 75 + plev;
+            int dam = 75 + plev;
             POSITION rad = 2;
 
             if (info)

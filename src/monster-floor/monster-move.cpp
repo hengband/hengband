@@ -59,7 +59,7 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
  */
 static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     feature_type *f_ptr;
@@ -105,7 +105,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
  */
 static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     feature_type *f_ptr;
@@ -139,7 +139,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
  */
 static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0)))
         return;
 
@@ -170,7 +170,7 @@ static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, 
  */
 static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     if (!is_closed_door(player_ptr, g_ptr->feat))
@@ -216,7 +216,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
 {
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!turn_flags_ptr->do_move || !g_ptr->is_rune_protection() || ((r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) && player_bold(player_ptr, ny, nx)))
         return false;
 
@@ -249,7 +249,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
 {
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!turn_flags_ptr->do_move || !g_ptr->is_rune_explosion() || ((r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) && player_bold(player_ptr, ny, nx)))
         return true;
 
@@ -292,7 +292,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
  */
 static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     feature_type *f_ptr;
@@ -350,8 +350,8 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
 
         grid_type *g_ptr;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+        auto *r_ptr = &r_info[m_ptr->r_idx];
         bool can_cross = monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
 
         if (!process_wall(player_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross)) {
@@ -450,7 +450,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     if (player_ptr->phase_out)
         return;
 
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
     if (m_ptr->ap_r_idx == MON_CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
         if (disturb_minor)

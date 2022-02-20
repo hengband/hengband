@@ -29,7 +29,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     if (i1 == i2)
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr;
     m_ptr = &floor_ptr->m_list[i1];
 
@@ -40,7 +40,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     g_ptr->m_idx = i2;
 
     for (const auto this_o_idx : m_ptr->hold_o_idx_list) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         o_ptr->held_m_idx = i2;
     }
@@ -98,13 +98,13 @@ void compact_monsters(PlayerType *player_ptr, int size)
         msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
 
     /* Compact at least 'size' objects */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);
         for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-            monster_type *m_ptr = &floor_ptr->m_list[i];
-            monster_race *r_ptr = &r_info[m_ptr->r_idx];
+            auto *m_ptr = &floor_ptr->m_list[i];
+            auto *r_ptr = &r_info[m_ptr->r_idx];
             if (!monster_is_valid(m_ptr))
                 continue;
             if (r_ptr->level > cur_lev)
@@ -118,7 +118,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
             if ((r_ptr->flags1 & (RF1_QUESTOR)) && (cnt < 1000))
                 chance = 100;
 
-            if (r_ptr->flags1 & (RF1_UNIQUE))
+            if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
                 chance = 100;
 
             if (randint0(100) < chance)
@@ -137,7 +137,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
 
     /* Excise dead monsters (backwards!) */
     for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &floor_ptr->m_list[i];
+        auto *m_ptr = &floor_ptr->m_list[i];
         if (m_ptr->r_idx)
             continue;
         compact_monsters_aux(player_ptr, floor_ptr->m_max - 1, i);

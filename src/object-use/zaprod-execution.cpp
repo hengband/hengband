@@ -16,6 +16,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "sv-definition/sv-other-types.h"
@@ -84,7 +85,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
     }
 
     bool success;
-    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
+    if (PlayerClass(this->player_ptr).equals(PlayerClassType::BERSERKER)) {
         success = false;
     } else if (chance > fail) {
         success = randint0(chance * 2) >= fail;

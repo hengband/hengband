@@ -196,7 +196,7 @@ bool shock_power(PlayerType *player_ptr)
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     PLAYER_LEVEL plev = player_ptr->lev;
-    HIT_POINT dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
+    int dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
     if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
         return true;
@@ -204,8 +204,8 @@ bool shock_power(PlayerType *player_ptr)
     POSITION ty = y, tx = x;
     POSITION oy = y, ox = x;
     MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, m_ptr, 0);
 

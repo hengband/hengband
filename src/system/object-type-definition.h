@@ -9,19 +9,18 @@
 
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object/tval-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
-
 #include <optional>
 
 enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
-class PlayerType;
-typedef struct object_type {
+class ObjectType {
+public:
+    ObjectType() = default;
     KIND_OBJECT_IDX k_idx{}; /*!< Kind index (zero if "dead") */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
@@ -36,17 +35,20 @@ typedef struct object_type {
     ARTIFACT_IDX name1{}; /*!< Artifact type, if any */
     EGO_IDX name2{}; /*!< Ego-Item type, if any */
 
-    XTRA8 xtra1{}; /*!< Extra info type (now unused) */
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
-    XTRA8 xtra3{}; /*!< 複数の使用用途 捕らえたモンスターの速度 / Extra info */
-    XTRA16 xtra4{}; /*!< 複数の使用用途 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
-    XTRA16 xtra5{}; /*!< 複数の使用用途 捕らえたモンスターの最大HP / Extra info captured monster's max HP */
+    byte chest_level = 0; /*!< 箱の中身レベル */
+    uint8_t captured_monster_speed = 0; /*!< 捕らえたモンスターの速度 */
+    short captured_monster_current_hp = 0; /*!< 捕らえたモンスターの現HP */
+    short captured_monster_max_hp = 0; /*!< 捕らえたモンスターの最大HP */
+    ushort fuel = 0; /*!< 光源の残り寿命 / Extra info fuel or captured monster's current HP */
 
+    byte smith_hit = 0; /*!< 鍛冶をした結果上昇した命中値 */
+    byte smith_damage = 0; /*!< 鍛冶をした結果上昇したダメージ */
     std::optional<SmithEffectType> smith_effect; //!< 鍛冶で付与された効果
     std::optional<RandomArtActType> smith_act_idx; //!< 鍛冶で付与された発動効果のID
 
     HIT_PROB to_h{}; /*!< Plusses to hit */
-    HIT_POINT to_d{}; /*!< Plusses to damage */
+    int to_d{}; /*!< Plusses to damage */
     ARMOUR_CLASS to_a{}; /*!< Plusses to AC */
     ARMOUR_CLASS ac{}; /*!< Normal AC */
 
@@ -65,7 +67,7 @@ typedef struct object_type {
     int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(object_type *j_ptr);
+    void copy_from(ObjectType *j_ptr);
     void prep(KIND_OBJECT_IDX ko_idx);
     bool is_weapon() const;
     bool is_weapon_ammo() const;
@@ -108,4 +110,7 @@ typedef struct object_type {
     bool is_rechargeable() const;
     bool is_offerable() const;
     bool is_activatable() const;
-} object_type;
+    bool is_fuel() const;
+    bool is_glove_same_temper(const ObjectType *j_ptr) const;
+    bool can_pile(const ObjectType *j_ptr) const;
+};

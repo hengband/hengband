@@ -22,6 +22,7 @@
 #include "game-option/cheat-options.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
+#include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -145,7 +146,7 @@ MONRACE_IDX get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level
         r_idx = entry.index;
         r_ptr = &r_info[r_idx];
         if (!(option & GMN_ARENA) && !chameleon_change_m_idx) {
-            if (((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL))) && (r_ptr->cur_num >= r_ptr->max_num)) {
+            if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & (RF7_NAZGUL))) && (r_ptr->cur_num >= r_ptr->max_num)) {
                 continue;
             }
 
@@ -197,12 +198,12 @@ MONRACE_IDX get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level
  */
 static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *r_ptr = &r_info[r_idx];
+    auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!(r_ptr->flags1 & (RF1_UNIQUE)))
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
         return false;
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->flags7 & RF7_CHAMELEON))
         return false;
@@ -235,12 +236,12 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MONRACE_IDX r_id
  */
 static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *r_ptr = &r_info[r_idx];
+    auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
-    if (r_ptr->flags1 & (RF1_UNIQUE))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         return false;
     if (r_ptr->flags2 & RF2_MULTIPLY)
         return false;
@@ -254,18 +255,19 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
         return false;
 
     if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
-        if ((old_r_ptr->flags3 & RF3_GOOD) && !(r_ptr->flags3 & RF3_GOOD))
+        if (old_r_ptr->kind_flags.has(MonsterKindType::GOOD) && r_ptr->kind_flags.has_not(MonsterKindType::GOOD))
             return false;
-        if ((old_r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags3 & RF3_EVIL))
+        if (old_r_ptr->kind_flags.has(MonsterKindType::EVIL) && r_ptr->kind_flags.has_not(MonsterKindType::EVIL))
             return false;
-        if (!(old_r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)))
+        if (old_r_ptr->kind_flags.has_none_of(alignment_mask))
             return false;
     } else if (summon_specific_who > 0) {
         if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
             return false;
     }
 
-    return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
+    auto hook_pf = get_monster_hook(player_ptr);
+    return (*hook_pf)(player_ptr, r_idx);
 }
 
 /*!
@@ -277,12 +279,12 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MONRACE_IDX r_idx)
  */
 void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr;
 
     bool old_unique = false;
-    if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE)
+    if (r_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE))
         old_unique = true;
     if (old_unique && (r_idx == MON_CHAMELEON))
         r_idx = MON_CHAMELEON_K;
@@ -328,11 +330,11 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MO
         player_ptr->update |= (PU_MON_LITE);
 
     if (born) {
-        if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) {
+        if (r_ptr->kind_flags.has_any_of(alignment_mask)) {
             m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-            if (r_ptr->flags3 & RF3_EVIL)
+            if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
                 m_ptr->sub_align |= SUB_ALIGN_EVIL;
-            if (r_ptr->flags3 & RF3_GOOD)
+            if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
                 m_ptr->sub_align |= SUB_ALIGN_GOOD;
         }
 
@@ -374,12 +376,12 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, MO
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
+byte get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
 {
-    SPEED mspeed = r_ptr->speed;
-    if (!(r_ptr->flags1 & RF1_UNIQUE) && !floor_ptr->inside_arena) {
+    auto mspeed = r_ptr->speed;
+    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !floor_ptr->inside_arena) {
         /* Allow some small variation per monster */
-        int i = SPEED_TO_ENERGY(r_ptr->speed) / (one_in_(4) ? 3 : 10);
+        int i = speed_to_energy(r_ptr->speed) / (one_in_(4) ? 3 : 10);
         if (i)
             mspeed += rand_spread(0, i);
     }
@@ -399,7 +401,7 @@ SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
  */
 int get_monster_crowd_number(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION my = m_ptr->fy;
     POSITION mx = m_ptr->fx;
     int count = 0;

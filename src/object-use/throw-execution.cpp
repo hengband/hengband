@@ -47,6 +47,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
+#include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-table.h"
@@ -66,7 +67,7 @@
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
-ObjectThrowEntity::ObjectThrowEntity(PlayerType *player_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
+ObjectThrowEntity::ObjectThrowEntity(PlayerType *player_ptr, ObjectType *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
     : q_ptr(q_ptr)
     , player_ptr(player_ptr)
     , shuriken(shuriken)
@@ -169,14 +170,15 @@ void ObjectThrowEntity::set_class_specific_throw_params()
 {
     PlayerEnergy energy(this->player_ptr);
     energy.set_player_turn_energy(100);
-    if ((this->player_ptr->pclass == PlayerClassType::ROGUE) || (this->player_ptr->pclass == PlayerClassType::NINJA)) {
+    PlayerClass pc(this->player_ptr);
+    if (pc.equals(PlayerClassType::ROGUE) || pc.equals(PlayerClassType::NINJA)) {
         energy.sub_player_turn_energy(this->player_ptr->lev);
     }
 
     this->y = this->player_ptr->y;
     this->x = this->player_ptr->x;
     handle_stuff(this->player_ptr);
-    this->shuriken = (this->player_ptr->pclass == PlayerClassType::NINJA)
+    this->shuriken = pc.equals(PlayerClassType::NINJA)
         && ((this->q_ptr->tval == ItemKindType::SPIKE) || ((this->obj_flags.has(TR_THROW)) && (this->q_ptr->tval == ItemKindType::SWORD)));
 }
 
@@ -356,7 +358,7 @@ bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
     if (has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
         *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->player_ptr, &this->item, *q, *s, USE_EQUIP, FuncItemTester(&object_type::is_throwable));
+        this->o_ptr = choose_object(this->player_ptr, &this->item, *q, *s, USE_EQUIP, FuncItemTester(&ObjectType::is_throwable));
         if (!this->o_ptr) {
             flush();
             return false;

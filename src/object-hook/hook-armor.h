@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-struct object_type;
+class ObjectType;
 class PlayerType;
-bool item_tester_hook_wear(PlayerType *player_ptr, const object_type *o_ptr);
+bool item_tester_hook_wear(PlayerType *player_ptr, const ObjectType *o_ptr);

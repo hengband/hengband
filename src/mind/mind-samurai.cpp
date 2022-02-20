@@ -18,6 +18,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -42,13 +43,13 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-typedef struct samurai_slaying_type {
+struct samurai_slaying_type {
     MULTIPLY mult;
     TrFlags flags;
     monster_type *m_ptr;
     combat_options mode;
     monster_race *r_ptr;
-} samurai_slaying_type;
+};
 
 static samurai_slaying_type *initialize_samurai_slaying_type(
     samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode, monster_race *r_ptr)
@@ -72,21 +73,21 @@ static void hissatsu_burning_strike(PlayerType *player_ptr, samurai_slaying_type
         return;
 
     /* Notice immunity */
-    if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) {
+    if (samurai_slaying_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK)) {
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-            samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
+            samurai_slaying_ptr->r_ptr->r_resistance_flags.set(samurai_slaying_ptr->r_ptr->resistance_flags & RFR_EFF_IM_FIRE_MASK);
 
         return;
     }
 
     /* Otherwise, take the damage */
     if (samurai_slaying_ptr->flags.has(TR_BRAND_FIRE)) {
-        if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_FIRE) {
+        if (samurai_slaying_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
             if (samurai_slaying_ptr->mult < 70)
                 samurai_slaying_ptr->mult = 70;
 
             if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-                samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_FIRE;
+                samurai_slaying_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
 
         } else if (samurai_slaying_ptr->mult < 35)
             samurai_slaying_ptr->mult = 35;
@@ -94,12 +95,12 @@ static void hissatsu_burning_strike(PlayerType *player_ptr, samurai_slaying_type
         return;
     }
 
-    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_FIRE) {
+    if (samurai_slaying_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
         if (samurai_slaying_ptr->mult < 50)
             samurai_slaying_ptr->mult = 50;
 
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-            samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_FIRE;
+            samurai_slaying_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
     } else if (samurai_slaying_ptr->mult < 25)
         samurai_slaying_ptr->mult = 25;
 }
@@ -115,9 +116,9 @@ static void hissatsu_serpent_tongue(PlayerType *player_ptr, samurai_slaying_type
         return;
 
     /* Notice immunity */
-    if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_POIS_MASK) {
+    if (samurai_slaying_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_POISON_MASK)) {
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-            samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
+            samurai_slaying_ptr->r_ptr->r_resistance_flags.set(samurai_slaying_ptr->r_ptr->resistance_flags & RFR_EFF_IM_POISON_MASK);
 
         return;
     }
@@ -139,7 +140,7 @@ static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
     if (samurai_slaying_ptr->mode != HISSATSU_ZANMA)
         return;
 
-    if (!monster_living(samurai_slaying_ptr->m_ptr->r_idx) && (samurai_slaying_ptr->r_ptr->flags3 & RF3_EVIL)) {
+    if (!monster_living(samurai_slaying_ptr->m_ptr->r_idx) && samurai_slaying_ptr->r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
         if (samurai_slaying_ptr->mult < 15)
             samurai_slaying_ptr->mult = 25;
         else if (samurai_slaying_ptr->mult < 50)
@@ -157,9 +158,9 @@ static void hissatsu_rock_smash(PlayerType *player_ptr, samurai_slaying_type *sa
     if (samurai_slaying_ptr->mode != HISSATSU_HAGAN)
         return;
 
-    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_ROCK) {
+    if (samurai_slaying_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::HURT_ROCK)) {
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-            samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_ROCK;
+            samurai_slaying_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
 
         if (samurai_slaying_ptr->mult == 10)
             samurai_slaying_ptr->mult = 40;
@@ -179,33 +180,33 @@ static void hissatsu_midare_setsugetsuka(PlayerType *player_ptr, samurai_slaying
         return;
 
     /* Notice immunity */
-    if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) {
+    if (samurai_slaying_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK)) {
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-            samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
+            samurai_slaying_ptr->r_ptr->r_resistance_flags.set(samurai_slaying_ptr->r_ptr->resistance_flags & RFR_EFF_IM_COLD_MASK);
 
         return;
     }
 
     /* Otherwise, take the damage */
     if (samurai_slaying_ptr->flags.has(TR_BRAND_COLD)) {
-        if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_COLD) {
+        if (samurai_slaying_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
             if (samurai_slaying_ptr->mult < 70)
                 samurai_slaying_ptr->mult = 70;
 
             if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-                samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_COLD;
+                samurai_slaying_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
         } else if (samurai_slaying_ptr->mult < 35)
             samurai_slaying_ptr->mult = 35;
 
         return;
     }
 
-    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_COLD) {
+    if (samurai_slaying_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
         if (samurai_slaying_ptr->mult < 50)
             samurai_slaying_ptr->mult = 50;
 
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-            samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_COLD;
+            samurai_slaying_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
     } else if (samurai_slaying_ptr->mult < 25)
         samurai_slaying_ptr->mult = 25;
 }
@@ -221,9 +222,9 @@ static void hissatsu_lightning_eagle(PlayerType *player_ptr, samurai_slaying_typ
         return;
 
     /* Notice immunity */
-    if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) {
+    if (samurai_slaying_ptr->r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK)) {
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr))
-            samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+            samurai_slaying_ptr->r_ptr->r_resistance_flags.set(samurai_slaying_ptr->r_ptr->resistance_flags & RFR_EFF_IM_ELEC_MASK);
 
         return;
     }
@@ -261,9 +262,9 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
     if (samurai_slaying_ptr->mode != HISSATSU_UNDEAD)
         return;
 
-    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_UNDEAD)
+    if (samurai_slaying_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
         if (is_original_ap_and_seen(player_ptr, samurai_slaying_ptr->m_ptr)) {
-            samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_UNDEAD;
+            samurai_slaying_ptr->r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
 
             if (samurai_slaying_ptr->mult == 10)
                 samurai_slaying_ptr->mult = 70;
@@ -288,7 +289,7 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
  */
 MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode)
 {
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     samurai_slaying_type tmp_slaying;
     samurai_slaying_type *samurai_slaying_ptr = initialize_samurai_slaying_type(&tmp_slaying, mult, flags, m_ptr, mode, r_ptr);
     hissatsu_burning_strike(player_ptr, samurai_slaying_ptr);
@@ -417,7 +418,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
  */
 int calc_attack_quality(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int bonus = player_ptr->to_h[pa_ptr->hand] + o_ptr->to_h;
     int chance = (player_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
     if (pa_ptr->mode == HISSATSU_IAI)
@@ -450,7 +451,7 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
     pa_ptr->attack_damage = 0;
     anger_monster(player_ptr, pa_ptr->m_ptr);
 
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if ((r_ptr->flags3 & (RF3_NO_STUN))) {
         msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
         return;
@@ -473,8 +474,7 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml
-        || (player_ptr->csp <= 7))
+    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml || (player_ptr->csp <= 7))
         return;
 
     char m_target_name[MAX_NLEN];

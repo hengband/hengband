@@ -41,8 +41,8 @@ void building_recharge(PlayerType *player_ptr)
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
     OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
+    ObjectType *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_rechargeable));
     if (!o_ptr)
         return;
 
@@ -182,7 +182,7 @@ void building_recharge_all(PlayerType *player_ptr)
     PRICE price = 0;
     PRICE total_cost = 0;
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
 
         if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD))
@@ -235,7 +235,7 @@ void building_recharge_all(PlayerType *player_ptr)
         return;
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         object_kind *k_ptr;
         k_ptr = &k_info[o_ptr->k_idx];

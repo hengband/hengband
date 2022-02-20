@@ -12,6 +12,7 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "player-base/player-class.h"
 #include "save/save.h"
 #include "system/floor-type-definition.h" //!< @todo 違和感、後で調査する.
 #include "system/object-type-definition.h"
@@ -63,7 +64,7 @@ static char inkey_from_menu(PlayerType *player_ptr)
     prt("", 0, 0);
     screen_save();
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
         int i;
         char sub_cmd;
@@ -90,11 +91,11 @@ static char inkey_from_menu(PlayerType *player_ptr)
                     continue;
                 switch (special_menu_info[hoge].jouken) {
                 case MENU_CLASS:
-                    if (player_ptr->pclass == special_menu_info[hoge].jouken_naiyou)
+                    if (PlayerClass(player_ptr).equals(special_menu_info[hoge].jouken_naiyou))
                         menu_name = special_menu_info[hoge].name;
                     break;
                 case MENU_WILD:
-                    if (!floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->inside_quest) {
+                    if (!floor_ptr->dun_level && !floor_ptr->inside_arena && !inside_quest(floor_ptr->quest_number)) {
                         auto can_do_in_wilderness = enum2i(special_menu_info[hoge].jouken_naiyou) > 0;
                         if (player_ptr->wild_mode == can_do_in_wilderness) {
                             menu_name = special_menu_info[hoge].name;
@@ -167,7 +168,7 @@ static char inkey_from_menu(PlayerType *player_ptr)
     if (!inkey_next)
         inkey_next = "";
 
-    return (cmd);
+    return cmd;
 }
 
 /*
@@ -337,7 +338,7 @@ void request_command(PlayerType *player_ptr, int shopping)
 #endif
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 

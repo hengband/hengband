@@ -34,7 +34,7 @@
  */
 static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
-    object_type *o_ptr = &player_ptr->inventory_list[slot];
+    auto *o_ptr = &player_ptr->inventory_list[slot];
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE))
         return;
@@ -131,7 +131,7 @@ void sense_inventory1(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     bool heavy = false;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
     if (player_ptr->confused)
         return;
 
@@ -302,7 +302,7 @@ void sense_inventory1(PlayerType *player_ptr)
 void sense_inventory2(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
-    object_type *o_ptr;
+    ObjectType *o_ptr;
 
     if (player_ptr->confused)
         return;
@@ -402,7 +402,7 @@ void sense_inventory2(PlayerType *player_ptr)
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
+item_feel_type pseudo_value_check_heavy(ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact()) {
         if (o_ptr->is_cursed() || o_ptr->is_broken())
@@ -437,7 +437,7 @@ item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type pseudo_value_check_light(object_type *o_ptr)
+item_feel_type pseudo_value_check_light(ObjectType *o_ptr)
 {
     if (o_ptr->is_cursed())
         return FEEL_CURSED;

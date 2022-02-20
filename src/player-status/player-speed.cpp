@@ -71,9 +71,9 @@ int16_t PlayerSpeed::race_value()
  */
 int16_t PlayerSpeed::class_value()
 {
-    SPEED result = 0;
-
-    if (this->player_ptr->pclass == PlayerClassType::NINJA) {
+    byte result = 0;
+    PlayerClass pc(this->player_ptr);
+    if (pc.equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
             result -= (this->player_ptr->lev) / 10;
         } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
@@ -83,12 +83,12 @@ int16_t PlayerSpeed::class_value()
         }
     }
 
-    if ((this->player_ptr->pclass == PlayerClassType::MONK || this->player_ptr->pclass == PlayerClassType::FORCETRAINER) && !(heavy_armor(this->player_ptr))) {
+    if ((pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER)) && !heavy_armor(this->player_ptr)) {
         if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN)))
             result += (this->player_ptr->lev) / 10;
     }
 
-    if (this->player_ptr->pclass == PlayerClassType::BERSERKER) {
+    if (pc.equals(PlayerClassType::BERSERKER)) {
         result += 2;
         if (this->player_ptr->lev > 29)
             result++;
@@ -111,7 +111,8 @@ int16_t PlayerSpeed::class_value()
 int16_t PlayerSpeed::personality_value()
 {
     int16_t result = 0;
-    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != PlayerRaceType::KLACKON && this->player_ptr->prace != PlayerRaceType::SPRITE) {
+    PlayerRace pr(this->player_ptr);
+    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && !pr.equals(PlayerRaceType::KLACKON) && !pr.equals(PlayerRaceType::SPRITE)) {
         result += (this->player_ptr->lev) / 10 + 5;
     }
     return result;
@@ -221,7 +222,7 @@ int16_t PlayerSpeed::stance_value()
  */
 int16_t PlayerSpeed::mutation_value()
 {
-    SPEED result = 0;
+    int16_t result = 0;
 
     const auto &muta = this->player_ptr->muta;
     if (muta.has(PlayerMutationType::XTRA_FAT)) {
@@ -248,8 +249,8 @@ int16_t PlayerSpeed::mutation_value()
 int16_t PlayerSpeed::riding_value()
 {
     monster_type *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
-    SPEED speed = riding_m_ptr->mspeed;
-    SPEED result = 0;
+    int16_t speed = riding_m_ptr->mspeed;
+    int16_t result = 0;
 
     if (!this->player_ptr->riding) {
         return 0;
@@ -308,7 +309,7 @@ int16_t PlayerSpeed::inventory_weight_value()
  */
 int16_t PlayerSpeed::action_value()
 {
-    SPEED result = 0;
+    int16_t result = 0;
     if (this->player_ptr->action == ACTION_SEARCH)
         result -= 10;
     return result;

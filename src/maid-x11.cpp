@@ -22,7 +22,7 @@
  *
  * Major fixes and cleanup by Ben Harrison (benh@phial.com).
  *
- * This file is designed to be "included" by "main-x11.c" or "main-xaw.c",
+ * This file is designed to be "included" by "main-x11.c",
  * which will have already "included" several relevant header files.
  */
 
@@ -115,7 +115,7 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
         quit_fmt("Couldn't allocate bitmap color '#%02x%02x%02x'\n", red, green, blue);
     }
 
-    return (xcolour.pixel);
+    return xcolour.pixel;
 #endif
 }
 
@@ -124,18 +124,18 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 /*
  * The Win32 "BITMAPFILEHEADER" type.
  */
-typedef struct BITMAPFILEHEADER {
+struct BITMAPFILEHEADER {
     uint16_t bfType;
     uint32_t bfSize;
     uint16_t bfReserved1;
     uint16_t bfReserved2;
     uint32_t bfOffBits;
-} BITMAPFILEHEADER;
+};
 
 /*
  * The Win32 "BITMAPINFOHEADER" type.
  */
-typedef struct BITMAPINFOHEADER {
+struct BITMAPINFOHEADER {
     uint32_t biSize;
     uint32_t biWidth;
     uint32_t biHeight;
@@ -147,22 +147,22 @@ typedef struct BITMAPINFOHEADER {
     uint32_t biYPelsPerMeter;
     uint32_t biClrUsed;
     uint32_t biClrImportand;
-} BITMAPINFOHEADER;
+};
 
 /*
  * The Win32 "RGBQUAD" type.
  */
-typedef struct RGBQUAD {
+struct RGBQUAD {
     unsigned char b, g, r;
     unsigned char filler;
-} RGBQUAD;
+};
 
 /*** Helper functions for system independent file loading. ***/
 
 static byte get_byte(FILE *fff)
 {
     /* Get a character, and return it */
-    return (getc(fff) & 0xFF);
+    return getc(fff) & 0xFF;
 }
 
 static void rd_byte(FILE *fff, byte *ip)
@@ -678,9 +678,7 @@ static XImage *ResizeImageSmooth(Display *dpy, XImage *Im, int ix, int iy, int o
 }
 
 /*
- * Resize an image. XXX XXX XXX
- *
- * Also appears in "main-xaw.c".
+ * Resize an image.
  */
 static XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
 {

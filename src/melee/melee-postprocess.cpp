@@ -13,6 +13,7 @@
 #include "melee/melee-postprocess.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "effect/attribute-types.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
@@ -37,29 +38,29 @@
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 // Melee-post-process-type
-typedef struct mam_pp_type {
+struct mam_pp_type {
     MONSTER_IDX m_idx;
     monster_type *m_ptr;
     bool seen;
     GAME_TEXT m_name[160];
-    HIT_POINT dam;
+    int dam;
     bool known; /* Can the player be aware of this attack? */
     concptr note;
     bool *dead;
     bool *fear;
     MONSTER_IDX who;
-} mam_pp_type;
+};
 
 mam_pp_type *initialize_mam_pp_type(
-    PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+    PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
     mam_pp_ptr->m_idx = m_idx;
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -108,8 +109,8 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
  */
 static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
-    if ((r_ptr->flagsr & RFR_RES_ALL) == 0)
+    auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL))
         return false;
 
     if (mam_pp_ptr->dam > 0) {
@@ -171,11 +172,11 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
  */
 static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
     if (mam_pp_ptr->m_ptr->hp < 0)
         return false;
 
-    if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
+    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
         mam_pp_ptr->m_ptr->hp = 1;
         return false;
     }
@@ -196,8 +197,7 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    if (!monster_fear_remaining(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0)
-        || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
+    if (!monster_fear_remaining(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0) || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
         return;
 
     *(mam_pp_ptr->fear) = false;
@@ -210,7 +210,7 @@ static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
     if (monster_fear_remaining(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0))
         return;
 
@@ -253,10 +253,10 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
  * @param who 打撃を行ったモンスターの参照ID
  * @todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  */
-void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     mam_pp_type tmp_mam_pp;
     mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam, dead, fear, note, who);
     monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);

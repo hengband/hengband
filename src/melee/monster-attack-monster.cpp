@@ -60,7 +60,7 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     switch (mam_ptr->attribute) {
     case BLOW_EFFECT_TYPE_FEAR:
         project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage,
@@ -78,13 +78,13 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::FIRE) || (mam_ptr->m_ptr->r_idx == 0))
         return;
 
-    if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) != 0) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
-        r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
+    if (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
+        r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & RFR_EFF_IM_FIRE_MASK);
         return;
     }
 
@@ -100,13 +100,13 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::COLD) || (mam_ptr->m_ptr->r_idx == 0))
         return;
 
-    if (((r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) != 0) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
-        r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
+    if (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
+        r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & RFR_EFF_IM_COLD_MASK);
         return;
     }
 
@@ -122,13 +122,13 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::ELEC) || (mam_ptr->m_ptr->r_idx == 0))
         return;
 
-    if (((r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) != 0) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
-        r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+    if (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
+        r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & RFR_EFF_IM_ELEC_MASK);
         return;
     }
 
@@ -147,7 +147,7 @@ static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
     if (mam_ptr->m_idx == mam_ptr->t_idx)
         return false;
 
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW))
         return false;
 
@@ -267,7 +267,7 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
  */
 void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[ap_cnt].method;

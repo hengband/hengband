@@ -4,7 +4,7 @@
 #include "system/angband.h"
 
 /* Floor Item Selection*/
-typedef struct fis_type {
+struct fis_type {
     COMMAND_CODE *cp;
     BIT_FLAGS mode;
     char n1;
@@ -36,9 +36,9 @@ typedef struct fis_type {
     int max_inven;
     int max_equip;
     char cur_tag;
-} fis_type;
+};
 
-typedef struct item_selection_type {
+struct item_selection_type {
     COMMAND_CODE *cp;
     BIT_FLAGS mode;
     char which;
@@ -61,7 +61,7 @@ typedef struct item_selection_type {
     int max_inven;
     int max_equip;
     char cur_tag;
-} item_selection_type;
+};
 
 fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode);
 item_selection_type *initialize_item_selection_type(item_selection_type *item_selection_ptr, COMMAND_CODE *cp, BIT_FLAGS mode);

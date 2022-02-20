@@ -1,4 +1,5 @@
 ﻿#include "specific-object/monster-ball.h"
+#include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
 #include "game-option/input-options.h"
@@ -8,10 +9,10 @@
 #include "monster/monster-info.h"
 #include "monster/monster-util.h"
 #include "object-activation/activation-util.h"
+#include "object/tval-types.h"
 #include "pet/pet-util.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -22,9 +23,9 @@
 #include "util/quarks.h"
 #include "view/display-messages.h"
 
-static void inscribe_nickname(ae_type *ae_ptr)
+static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
-    if (!cap_nickname)
+    if (cap_mon_ptr->nickname == 0)
         return;
 
     concptr t;
@@ -47,7 +48,7 @@ static void inscribe_nickname(ae_type *ae_ptr)
 #else
     *s++ = '\'';
 #endif
-    t = quark_str(cap_nickname);
+    t = quark_str(cap_mon_ptr->nickname);
     while (*t) {
         *s = *t;
         s++;
@@ -71,14 +72,15 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
     }
 
     target_pet = old_target_pet;
-    if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0))
+    CapturedMonsterType cap_mon_ptr;
+    if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0, &cap_mon_ptr))
         return true;
 
-    ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
-    ae_ptr->o_ptr->xtra3 = (XTRA8)cap_mspeed;
-    ae_ptr->o_ptr->xtra4 = (XTRA16)cap_hp;
-    ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
-    inscribe_nickname(ae_ptr);
+    ae_ptr->o_ptr->pval = cap_mon_ptr.r_idx;
+    ae_ptr->o_ptr->captured_monster_speed = cap_mon_ptr.speed;
+    ae_ptr->o_ptr->captured_monster_current_hp = cap_mon_ptr.current_hp;
+    ae_ptr->o_ptr->captured_monster_max_hp = cap_mon_ptr.max_hp;
+    inscribe_nickname(ae_ptr, &cap_mon_ptr);
     return true;
 }
 
@@ -149,22 +151,22 @@ static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
     if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE))
         return;
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (ae_ptr->o_ptr->xtra3)
-        floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->xtra3;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (ae_ptr->o_ptr->captured_monster_speed > 0)
+        floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->captured_monster_speed;
 
-    if (ae_ptr->o_ptr->xtra5)
-        floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->xtra5;
+    if (ae_ptr->o_ptr->captured_monster_max_hp)
+        floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->captured_monster_max_hp;
 
-    if (ae_ptr->o_ptr->xtra4)
-        floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
+    if (ae_ptr->o_ptr->captured_monster_current_hp > 0)
+        floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->captured_monster_current_hp;
 
     floor_ptr->m_list[hack_m_idx_ii].maxhp = floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
     check_inscription_value(player_ptr, ae_ptr);
     ae_ptr->o_ptr->pval = 0;
-    ae_ptr->o_ptr->xtra3 = 0;
-    ae_ptr->o_ptr->xtra4 = 0;
-    ae_ptr->o_ptr->xtra5 = 0;
+    ae_ptr->o_ptr->captured_monster_speed = 0;
+    ae_ptr->o_ptr->captured_monster_current_hp = 0;
+    ae_ptr->o_ptr->captured_monster_max_hp = 0;
     ae_ptr->success = true;
 }
 

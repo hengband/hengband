@@ -22,7 +22,7 @@ bool rustproof(PlayerType *player_ptr)
     concptr q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
     concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::is_armour));
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ObjectType::is_armour));
     if (o_ptr == nullptr)
         return false;
 

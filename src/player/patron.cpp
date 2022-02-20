@@ -13,6 +13,8 @@
 #include "mutation/mutation-investor-remover.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-kind-hook.h"
+#include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/race-types.h"
@@ -200,7 +202,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.c_str());
             msg_print(_("「汝は良く行いたり！続けよ！」", "'Well done, mortal! Lead on!'"));
 
-            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
+            if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)) {
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else if (this->player_ptr->exp < PY_MAX_EXP) {
                 int32_t ee = (this->player_ptr->exp / 2) + 10;
@@ -218,7 +220,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.c_str());
             msg_print(_("「下僕よ、汝それに値せず。」", "'Thou didst not deserve that, slave.'"));
 
-            if (this->player_ptr->prace == PlayerRaceType::ANDROID) {
+            if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)) {
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else {
                 lose_exp(player_ptr, this->player_ptr->exp / 6);
@@ -563,7 +565,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 void Patron::admire(PlayerType *player_ptr_)
 {
     this->player_ptr = player_ptr_;
-    if ((this->player_ptr->pclass == PlayerClassType::CHAOS_WARRIOR) || this->player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)) {
+    if (PlayerClass(this->player_ptr).equals(PlayerClassType::CHAOS_WARRIOR) || this->player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT)) {
         msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), this->name.c_str());
         msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));
     }

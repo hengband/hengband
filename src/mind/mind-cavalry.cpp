@@ -51,7 +51,7 @@ bool rodeo(PlayerType *player_ptr)
 
     rlev = r_ptr->level;
 
-    if (r_ptr->flags1 & RF1_UNIQUE)
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         rlev = rlev * 3 / 2;
     if (rlev > 60)
         rlev = 60 + (rlev - 60) / 2;

@@ -79,7 +79,7 @@ int32_t message_num(void)
 concptr message_str(int age)
 {
     if ((age < 0) || (age >= message_num()))
-        return ("");
+        return "";
 
     return message_history[age]->c_str();
 }
@@ -189,9 +189,9 @@ bool is_msg_window_flowed(void)
         if (num_more < angband_term[i]->hgt)
             return false;
 
-        return (num_more >= 0);
+        return num_more >= 0;
     }
-    return (num_more >= 0);
+    return num_more >= 0;
 }
 
 /*

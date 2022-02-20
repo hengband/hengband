@@ -81,7 +81,7 @@ void save_prev_data(PlayerType *player_ptr, birther *birther_ptr)
     birther_ptr->pclass = player_ptr->pclass;
     birther_ptr->ppersonality = player_ptr->ppersonality;
 
-    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
         birther_ptr->realm1 = player_ptr->element;
     else
         birther_ptr->realm1 = player_ptr->realm1;
@@ -128,7 +128,7 @@ void load_prev_data(PlayerType *player_ptr, bool swap)
     player_ptr->pclass = previous_char.pclass;
     player_ptr->ppersonality = previous_char.ppersonality;
 
-    if (player_ptr->pclass == PlayerClassType::ELEMENTALIST)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
         player_ptr->element = previous_char.realm1;
     else
         player_ptr->realm1 = previous_char.realm1;

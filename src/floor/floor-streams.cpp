@@ -207,7 +207,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
     }
 
     if (feat1) {
-        feature_type *f_ptr = &f_info[feat1];
+        auto *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
         if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FloorFeatureType::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FloorFeatureType::WATER))
@@ -288,7 +288,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     bool streamer_may_have_gold = streamer_ptr->flags.has(FloorFeatureType::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     y = rand_spread(floor_ptr->height / 2, floor_ptr->height / 6);
     x = rand_spread(floor_ptr->width / 2, floor_ptr->width / 6);
 
@@ -340,7 +340,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
-                    object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
+                    auto *o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact()) {
@@ -419,7 +419,7 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
     grid_type *g_ptr;
 
     /* place trees/ rubble in ovalish distribution */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (i = x - 3; i < x + 4; i++) {
         for (j = y - 3; j < y + 4; j++) {
             if (!in_bounds(floor_ptr, j, i))
@@ -471,7 +471,7 @@ void destroy_level(PlayerType *player_ptr)
 
     /* Drop a few epi-centers (usually about two) */
     POSITION y1, x1;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int n = 0; n < randint1(5); n++) {
         /* Pick an epi-center */
         x1 = rand_range(5, floor_ptr->width - 1 - 5);

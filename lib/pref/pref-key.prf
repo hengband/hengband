@@ -37,14 +37,6 @@ C:0:9
 A:\r
 C:0:^J
 
-# Hack -- Commit suicide
-A:Q
-C:0:^K
-
-# Hack -- Commit suicide
-A:Q
-C:0:^C
-
 # Hack -- swap equipment
 A:w0
 C:0:X
@@ -190,10 +182,6 @@ C:1:z
 # Zap a rod (Activate)
 A:z
 C:1:a
-
-# Hack -- Commit suicide
-A:Q
-C:1:^C
 
 # Hack -- swap equipment
 A:w0

@@ -9,6 +9,7 @@
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
@@ -28,10 +29,10 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-class.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -85,10 +86,10 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
 
     (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
 
-    if (r_ptr->flagsr & RFR_RES_TELE) {
+    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
         msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
         if (is_original_ap_and_seen(player_ptr, m_ptr))
-            r_ptr->r_flagsr |= RFR_RES_TELE;
+            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         return false;
     }
 
@@ -107,7 +108,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
 bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
-    return (project_hook(player_ptr, AttributeType::AWAY_ALL, dir, distance, flg));
+    return project_hook(player_ptr, AttributeType::AWAY_ALL, dir, distance, flg);
 }
 
 /*!
@@ -124,7 +125,7 @@ bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance)
  */
 bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (!monster_is_valid(m_ptr))
         return false;
 
@@ -156,7 +157,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
                 continue;
             if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode))
                 continue;
-            if (!(player_ptr->current_floor_ptr->inside_quest || player_ptr->current_floor_ptr->inside_arena))
+            if (!(inside_quest(player_ptr->current_floor_ptr->quest_number) || player_ptr->current_floor_ptr->inside_arena))
                 if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_icky())
                     continue;
 
@@ -201,7 +202,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
  */
 void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (!m_ptr->r_idx)
         return;
     if (randint1(100) > power)
@@ -385,11 +386,11 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
         for (POSITION yy = -1; yy < 2; yy++) {
             MONSTER_IDX tmp_m_idx = player_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
             if (tmp_m_idx && (player_ptr->riding != tmp_m_idx)) {
-                monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-                monster_race *r_ptr = &r_info[m_ptr->r_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
+                auto *r_ptr = &r_info[m_ptr->r_idx];
 
                 bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
-                can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
+                can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
                 can_follow &= monster_csleep_remaining(m_ptr) == 0;
                 if (can_follow) {
                     teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
@@ -428,11 +429,11 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
                 continue;
             }
 
-            monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-            monster_race *r_ptr = &r_info[m_ptr->r_idx];
+            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
+            auto *r_ptr = &r_info[m_ptr->r_idx];
 
             bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
-            can_follow &= none_bits(r_ptr->flagsr, RFR_RES_TELE);
+            can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
             can_follow &= monster_csleep_remaining(m_ptr) == 0;
             if (can_follow) {
                 teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
@@ -474,8 +475,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
 
         bool is_anywhere = w_ptr->wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
-        is_anywhere
-            &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
+        is_anywhere &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
         if (is_anywhere)
             break;
 
@@ -494,7 +494,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
 
 void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     POSITION oldfy = m_ptr->fy;
     POSITION oldfx = m_ptr->fx;
     bool old_ml = m_ptr->ml;
@@ -511,10 +511,10 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
 
     bool follow = false;
-    if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || (player_ptr->pclass == PlayerClassType::IMITATOR))
+    if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR))
         follow = true;
     else {
-        object_type *o_ptr;
+        ObjectType *o_ptr;
         INVENTORY_IDX i;
 
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
@@ -558,8 +558,7 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
 
     player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
 
-    if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > plev / 2 + 10)
-        || (!randint0(plev / 10 + 10))) {
+    if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > plev / 2 + 10) || (!randint0(plev / 10 + 10))) {
         player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
         teleport_player(player_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
         return false;

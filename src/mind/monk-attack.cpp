@@ -44,9 +44,9 @@
  */
 static int calc_stun_resistance(player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     int resist_stun = 0;
-    if (r_ptr->flags1 & RF1_UNIQUE)
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
         resist_stun += 88;
 
     if (r_ptr->flags3 & RF3_NO_STUN)
@@ -58,7 +58,7 @@ static int calc_stun_resistance(player_attack_type *pa_ptr)
     if (r_ptr->flags3 & RF3_NO_SLEEP)
         resist_stun += 33;
 
-    if ((r_ptr->flags3 & RF3_UNDEAD) || (r_ptr->flags3 & RF3_NONLIVING))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD) || r_ptr->kind_flags.has(MonsterKindType::NONLIVING))
         resist_stun += 66;
 
     return resist_stun;
@@ -74,7 +74,7 @@ static int calc_max_blow_selection_times(PlayerType *player_ptr)
 {
     PlayerClass pc(player_ptr);
     if (pc.monk_stance_is(MonkStanceType::BYAKKO))
-        return (player_ptr->lev < 3 ? 1 : player_ptr->lev / 3);
+        return player_ptr->lev < 3 ? 1 : player_ptr->lev / 3;
 
     if (pc.monk_stance_is(MonkStanceType::SUZAKU))
         return 1;
@@ -98,7 +98,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
     for (int times = 0; times < max_blow_selection_times; times++) {
         do {
             pa_ptr->ma_ptr = &ma_blows[randint0(MAX_MA)];
-            if ((player_ptr->pclass == PlayerClassType::FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1))
+            if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1))
                 min_level = pa_ptr->ma_ptr->min_level + 3;
             else
                 min_level = pa_ptr->ma_ptr->min_level;
@@ -116,7 +116,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
             msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
     }
 
-    if (player_ptr->pclass == PlayerClassType::FORCETRAINER)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER))
         min_level = std::max(1, pa_ptr->ma_ptr->min_level - 3);
     else
         min_level = pa_ptr->ma_ptr->min_level;
@@ -127,7 +127,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
 static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_effect)
 {
     int special_effect = 0;
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (pa_ptr->ma_ptr->effect == MA_KNEE) {
         if (r_ptr->flags1 & RF1_MALE) {
             msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), pa_ptr->m_name);
@@ -162,10 +162,11 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
 static WEIGHT calc_monk_attack_weight(PlayerType *player_ptr)
 {
     WEIGHT weight = 8;
-    if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU))
+    PlayerClass pc(player_ptr);
+    if (pc.monk_stance_is(MonkStanceType::SUZAKU))
         weight = 4;
 
-    if ((player_ptr->pclass == PlayerClassType::FORCETRAINER) && (get_current_ki(player_ptr) != 0)) {
+    if (pc.equals(PlayerClassType::FORCETRAINER) && (get_current_ki(player_ptr) != 0)) {
         weight += (get_current_ki(player_ptr) / 30);
         if (weight > 20)
             weight = 20;
@@ -184,7 +185,7 @@ static WEIGHT calc_monk_attack_weight(PlayerType *player_ptr)
  */
 static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type *pa_ptr, int *stun_effect, int *resist_stun, const int special_effect)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         msg_format(_("%^sは苦痛にうめいている！", "%^s moans in agony!"), pa_ptr->m_name);
         *stun_effect = 7 + randint1(13);
@@ -193,7 +194,7 @@ static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type
     }
 
     if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
-        if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(player_ptr->lev) > r_ptr->level) && pa_ptr->m_ptr->mspeed > 60) {
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && (randint1(player_ptr->lev) > r_ptr->level) && pa_ptr->m_ptr->mspeed > 60) {
             msg_format(_("%^sは足をひきずり始めた。", "You've hobbled %s."), pa_ptr->m_name);
             pa_ptr->m_ptr->mspeed -= 10;
         }
@@ -210,7 +211,7 @@ static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type
  */
 static void print_stun_effect(PlayerType *player_ptr, player_attack_type *pa_ptr, const int stun_effect, const int resist_stun)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (stun_effect && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         if (player_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
             if (set_monster_stunned(player_ptr, pa_ptr->g_ptr->m_idx, stun_effect + monster_stunned_remaining(pa_ptr->m_ptr))) {
