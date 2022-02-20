@@ -46,6 +46,14 @@ void init_quests(void)
     }
 }
 
+static void init_gf_colors()
+{
+    constexpr ushort default_gf_color = 0;
+    for (auto i = 0; i < enum2i(AttributeType::MAX); i++) {
+        gf_colors.emplace(i2enum<AttributeType>(i), default_gf_color);
+    }
+}
+
 /*!
  * @brief その他の初期情報更新 /
  * Initialize some other arrays
@@ -63,6 +71,7 @@ void init_other(PlayerType *player_ptr)
 
     max_dlv.assign(d_info.size(), {});
     floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
+    init_gf_colors();
 
     macro__pat.assign(MACRO_MAX, {});
     macro__act.assign(MACRO_MAX, {});

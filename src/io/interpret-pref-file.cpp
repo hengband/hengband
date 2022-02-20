@@ -343,7 +343,7 @@ static int interpret_z_token(char *buf)
             continue;
         }
 
-        gf_color[enum2i(description.num)] = static_cast<byte>(quark_add(t));
+        gf_colors[description.num] = quark_add(t);
         return 0;
     }
 
