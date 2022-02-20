@@ -266,9 +266,6 @@ ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX
         rad = 0 - rad;
 
     switch (typ) {
-    case AttributeType::ROCKET:
-        flg |= PROJECT_STOP;
-        break;
     case AttributeType::DRAIN_MANA:
     case AttributeType::MIND_BLAST:
     case AttributeType::BRAIN_SMASH:
@@ -281,6 +278,16 @@ ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX
         break;
     default:
         break;
+    }
+
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+}
+
+ProjectResult rocket(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
+{
+    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_STOP;
+    if (target_type == MONSTER_TO_PLAYER) {
+        flg |= PROJECT_PLAYER;
     }
 
     return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
