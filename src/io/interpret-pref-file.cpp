@@ -330,18 +330,20 @@ static errr interpret_xy_token(PlayerType *player_ptr, char *buf)
  * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_z_token(char *buf)
+static int interpret_z_token(char *buf)
 {
-    char *t = angband_strchr(buf + 2, ':');
-    if (!t)
+    auto *t = angband_strchr(buf + 2, ':');
+    if (t == nullptr) {
         return 1;
+    }
 
     *(t++) = '\0';
-    for (int i = 0; i < MAX_NAMED_NUM; i++) {
-        if (!streq(gf_desc[i].name, buf + 2))
+    for (const auto &description : gf_descriptions) {
+        if (!streq(description.name, buf + 2)) {
             continue;
+        }
 
-        gf_color[(int)gf_desc[i].num] = (TERM_COLOR)quark_add(t);
+        gf_colors[description.num] = quark_add(t);
         return 0;
     }
 

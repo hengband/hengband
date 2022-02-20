@@ -2,8 +2,7 @@
 
 #include "system/angband.h"
 #include "effect/attribute-types.h"
-
-#define MAX_NAMED_NUM 105
+#include <vector>
 
 struct named_num
 {
@@ -11,4 +10,4 @@ struct named_num
     AttributeType num; /* A number associated with it */
 };
 
-extern const named_num gf_desc[MAX_NAMED_NUM];
+extern const std::vector<named_num> gf_descriptions;

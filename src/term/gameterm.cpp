@@ -1,4 +1,5 @@
 ﻿#include "term/gameterm.h"
+#include "effect/attribute-types.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "util/quarks.h"
@@ -368,7 +369,7 @@ TERM_COLOR tval_to_attr[128];
 /*
  * Default spell color table (quark index)
  */
-TERM_COLOR gf_color[(int)AttributeType::MAX];
+std::map<AttributeType, ushort> gf_colors;
 
 /*!
  * @brief 万色表現用にランダムな色を選択する関数 /
@@ -533,7 +534,7 @@ static TERM_COLOR spell_color(AttributeType type)
         SYMBOL_CODE c;
 
         /* Lookup the default colors for this type */
-        concptr s = quark_str(gf_color[(int)type]);
+        concptr s = quark_str(gf_colors[type]);
 
         if (!s)
             return TERM_WHITE;
