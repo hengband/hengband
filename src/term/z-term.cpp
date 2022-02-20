@@ -31,7 +31,7 @@
 #endif
 
 /* The current "term" */
-term_type *Term = nullptr;
+term_type *game_term = nullptr;
 
 /*** Local routines ***/
 
@@ -96,11 +96,11 @@ void term_win::resize(TERM_LEN w, TERM_LEN h)
 errr term_user(int n)
 {
     /* Verify the hook */
-    if (!Term->user_hook)
+    if (!game_term->user_hook)
         return -1;
 
     /* Call the hook */
-    return (*Term->user_hook)(n);
+    return (*game_term->user_hook)(n);
 }
 
 /*
@@ -109,11 +109,11 @@ errr term_user(int n)
 errr term_xtra(int n, int v)
 {
     /* Verify the hook */
-    if (!Term->xtra_hook)
+    if (!game_term->xtra_hook)
         return -1;
 
     /* Call the hook */
-    return (*Term->xtra_hook)(n, v);
+    return (*game_term->xtra_hook)(n, v);
 }
 
 /*** Fake hooks ***/
@@ -135,7 +135,7 @@ static errr term_curs_hack(TERM_LEN x, TERM_LEN y)
  */
 static errr term_bigcurs_hack(TERM_LEN x, TERM_LEN y)
 {
-    return (*Term->curs_hook)(x, y);
+    return (*game_term->curs_hook)(x, y);
 }
 
 /*
@@ -191,7 +191,7 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
  */
 void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
-    const auto &scrn = Term->scr;
+    const auto &scrn = game_term->scr;
 
     TERM_COLOR *scr_aa = &scrn->a[y][x];
     char *scr_cc = &scrn->c[y][x];
@@ -211,24 +211,24 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
     *scr_tcc = tc;
 
     /* Check for new min/max row info */
-    if (y < Term->y1)
-        Term->y1 = y;
-    if (y > Term->y2)
-        Term->y2 = y;
+    if (y < game_term->y1)
+        game_term->y1 = y;
+    if (y > game_term->y2)
+        game_term->y2 = y;
 
     /* Check for new min/max col info for this row */
-    if (x < Term->x1[y])
-        Term->x1[y] = x;
-    if (x > Term->x2[y])
-        Term->x2[y] = x;
+    if (x < game_term->x1[y])
+        game_term->x1[y] = x;
+    if (x > game_term->x2[y])
+        game_term->x2[y] = x;
 
 #ifdef JP
     if (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) || (scrn->a[y][x] & AF_KANJI2))
 #else
     if ((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2)
 #endif
-        if ((x - 1) < Term->x1[y])
-            Term->x1[y]--;
+        if ((x - 1) < game_term->x1[y])
+            game_term->x1[y]--;
 }
 
 /*
@@ -312,7 +312,7 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
  */
 void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc)
 {
-    const auto &scrn = Term->scr;
+    const auto &scrn = game_term->scr;
 
     TERM_LEN x1 = -1;
     TERM_LEN x2 = -1;
@@ -359,16 +359,16 @@ void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
     /* Expand the "change area" as needed */
     if (x1 >= 0) {
         /* Check for new min/max row info */
-        if (y < Term->y1)
-            Term->y1 = y;
-        if (y > Term->y2)
-            Term->y2 = y;
+        if (y < game_term->y1)
+            game_term->y1 = y;
+        if (y > game_term->y2)
+            game_term->y2 = y;
 
         /* Check for new min/max col info in this row */
-        if (x1 < Term->x1[y])
-            Term->x1[y] = x1;
-        if (x2 > Term->x2[y])
-            Term->x2[y] = x2;
+        if (x1 < game_term->x1[y])
+            game_term->x1[y] = x1;
+        if (x2 > game_term->x2[y])
+            game_term->x2[y] = x2;
     }
 }
 
@@ -384,17 +384,17 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
 {
     TERM_LEN x1 = -1, x2 = -1;
 
-    auto &scr_aa = Term->scr->a[y];
+    auto &scr_aa = game_term->scr->a[y];
 #ifdef JP
-    auto &scr_cc = Term->scr->c[y];
+    auto &scr_cc = game_term->scr->c[y];
 
-    auto &scr_taa = Term->scr->ta[y];
-    auto &scr_tcc = Term->scr->tc[y];
+    auto &scr_taa = game_term->scr->ta[y];
+    auto &scr_tcc = game_term->scr->tc[y];
 #else
-    auto &scr_cc = Term->scr->c[y];
+    auto &scr_cc = game_term->scr->c[y];
 
-    auto &scr_taa = Term->scr->ta[y];
-    auto &scr_tcc = Term->scr->tc[y];
+    auto &scr_taa = game_term->scr->ta[y];
+    auto &scr_tcc = game_term->scr->tc[y];
 #endif
 
 #ifdef JP
@@ -489,16 +489,16 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
     /* Expand the "change area" as needed */
     if (x1 >= 0) {
         /* Check for new min/max row info */
-        if (y < Term->y1)
-            Term->y1 = y;
-        if (y > Term->y2)
-            Term->y2 = y;
+        if (y < game_term->y1)
+            game_term->y1 = y;
+        if (y > game_term->y2)
+            game_term->y2 = y;
 
         /* Check for new min/max col info in this row */
-        if (x1 < Term->x1[y])
-            Term->x1[y] = x1;
-        if (x2 > Term->x2[y])
-            Term->x2[y] = x2;
+        if (x1 < game_term->x1[y])
+            game_term->x1[y] = x1;
+        if (x2 > game_term->x2[y])
+            game_term->x2[y] = x2;
     }
 }
 
@@ -510,17 +510,17 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
  */
 static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
-    auto &old_aa = Term->old->a[y];
-    auto &old_cc = Term->old->c[y];
+    auto &old_aa = game_term->old->a[y];
+    auto &old_cc = game_term->old->c[y];
 
-    const auto &scr_aa = Term->scr->a[y];
-    const auto &scr_cc = Term->scr->c[y];
+    const auto &scr_aa = game_term->scr->a[y];
+    const auto &scr_cc = game_term->scr->c[y];
 
-    auto &old_taa = Term->old->ta[y];
-    auto &old_tcc = Term->old->tc[y];
+    auto &old_taa = game_term->old->ta[y];
+    auto &old_tcc = game_term->old->tc[y];
 
-    const auto &scr_taa = Term->scr->ta[y];
-    const auto &scr_tcc = Term->scr->tc[y];
+    const auto &scr_taa = game_term->scr->ta[y];
+    const auto &scr_tcc = game_term->scr->tc[y];
 
     TERM_COLOR ota;
     char otc;
@@ -587,7 +587,7 @@ static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
             /* Flush */
             if (fn) {
                 /* Draw pending attr/char pairs */
-                (void)((*Term->pict_hook)(fx, y, fn, &scr_aa[fx], &scr_cc[fx], &scr_taa[fx], &scr_tcc[fx]));
+                (void)((*game_term->pict_hook)(fx, y, fn, &scr_aa[fx], &scr_cc[fx], &scr_taa[fx], &scr_tcc[fx]));
 
                 /* Forget */
                 fn = 0;
@@ -619,7 +619,7 @@ static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
     /* Flush */
     if (fn) {
         /* Draw pending attr/char pairs */
-        (void)((*Term->pict_hook)(fx, y, fn, &scr_aa[fx], &scr_cc[fx], &scr_taa[fx], &scr_tcc[fx]));
+        (void)((*game_term->pict_hook)(fx, y, fn, &scr_aa[fx], &scr_cc[fx], &scr_taa[fx], &scr_tcc[fx]));
     }
 }
 
@@ -631,16 +631,16 @@ static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
  */
 static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
 {
-    auto &old_aa = Term->old->a[y];
-    auto &old_cc = Term->old->c[y];
+    auto &old_aa = game_term->old->a[y];
+    auto &old_cc = game_term->old->c[y];
 
-    const auto &scr_aa = Term->scr->a[y];
-    const auto &scr_cc = Term->scr->c[y];
+    const auto &scr_aa = game_term->scr->a[y];
+    const auto &scr_cc = game_term->scr->c[y];
 
-    auto &old_taa = Term->old->ta[y];
-    auto &old_tcc = Term->old->tc[y];
-    const auto &scr_taa = Term->scr->ta[y];
-    const auto &scr_tcc = Term->scr->tc[y];
+    auto &old_taa = game_term->old->ta[y];
+    auto &old_tcc = game_term->old->tc[y];
+    const auto &scr_taa = game_term->scr->ta[y];
+    const auto &scr_tcc = game_term->scr->tc[y];
 
     TERM_COLOR ota;
     char otc;
@@ -648,7 +648,7 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
     char ntc;
 
     /* The "always_text" flag */
-    int always_text = Term->always_text;
+    int always_text = game_term->always_text;
 
     /* Pending length */
     int fn = 0;
@@ -657,7 +657,7 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
     int fx = 0;
 
     /* Pending attr */
-    byte fa = Term->attr_blank;
+    byte fa = game_term->attr_blank;
 
     TERM_COLOR oa;
     char oc;
@@ -714,12 +714,12 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
             if (fn) {
                 /* Draw pending chars (normal) */
                 if (fa || always_text) {
-                    (void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
                 }
 
                 /* Draw pending chars (black) */
                 else {
-                    (void)((*Term->wipe_hook)(fx, y, fn));
+                    (void)((*game_term->wipe_hook)(fx, y, fn));
                 }
 
                 /* Forget */
@@ -755,12 +755,12 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
             if (fn) {
                 /* Draw pending chars (normal) */
                 if (fa || always_text) {
-                    (void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
                 }
 
                 /* Draw pending chars (black) */
                 else {
-                    (void)((*Term->wipe_hook)(fx, y, fn));
+                    (void)((*game_term->wipe_hook)(fx, y, fn));
                 }
 
                 /* Forget */
@@ -768,7 +768,7 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
             }
 
             /* Draw the special attr/char pair */
-            (void)((*Term->pict_hook)(x, y, 1, &na, &nc, &nta, &ntc));
+            (void)((*game_term->pict_hook)(x, y, 1, &na, &nc, &nta, &ntc));
 
             /* Skip */
             continue;
@@ -786,12 +786,12 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
             if (fn) {
                 /* Draw the pending chars */
                 if (fa || always_text) {
-                    (void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
                 }
 
                 /* Erase "leading" spaces */
                 else {
-                    (void)((*Term->wipe_hook)(fx, y, fn));
+                    (void)((*game_term->wipe_hook)(fx, y, fn));
                 }
 
                 /* Forget */
@@ -815,12 +815,12 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
     if (fn) {
         /* Draw pending chars (normal) */
         if (fa || always_text) {
-            (void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+            (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
         }
 
         /* Draw pending chars (black) */
         else {
-            (void)((*Term->wipe_hook)(fx, y, fn));
+            (void)((*game_term->wipe_hook)(fx, y, fn));
         }
     }
 }
@@ -832,14 +832,14 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
  */
 static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
-    auto &old_aa = Term->old->a[y];
-    auto &old_cc = Term->old->c[y];
+    auto &old_aa = game_term->old->a[y];
+    auto &old_cc = game_term->old->c[y];
 
-    const auto &scr_aa = Term->scr->a[y];
-    const auto &scr_cc = Term->scr->c[y];
+    const auto &scr_aa = game_term->scr->a[y];
+    const auto &scr_cc = game_term->scr->c[y];
 
     /* The "always_text" flag */
-    int always_text = Term->always_text;
+    int always_text = game_term->always_text;
 
     /* Pending length */
     int fn = 0;
@@ -848,7 +848,7 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
     int fx = 0;
 
     /* Pending attr */
-    byte fa = Term->attr_blank;
+    byte fa = game_term->attr_blank;
 
     TERM_COLOR oa;
     char oc;
@@ -905,12 +905,12 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
             if (fn) {
                 /* Draw pending chars (normal) */
                 if (fa || always_text) {
-                    (void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
                 }
 
                 /* Draw pending chars (black) */
                 else {
-                    (void)((*Term->wipe_hook)(fx, y, fn));
+                    (void)((*game_term->wipe_hook)(fx, y, fn));
                 }
 
                 /* Forget */
@@ -945,12 +945,12 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
             if (fn) {
                 /* Draw the pending chars */
                 if (fa || always_text) {
-                    (void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+                    (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
                 }
 
                 /* Erase "leading" spaces */
                 else {
-                    (void)((*Term->wipe_hook)(fx, y, fn));
+                    (void)((*game_term->wipe_hook)(fx, y, fn));
                 }
 
                 /* Forget */
@@ -974,12 +974,12 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
     if (fn) {
         /* Draw pending chars (normal) */
         if (fa || always_text) {
-            (void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
+            (void)((*game_term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
         }
 
         /* Draw pending chars (black) */
         else {
-            (void)((*Term->wipe_hook)(fx, y, fn));
+            (void)((*game_term->wipe_hook)(fx, y, fn));
         }
     }
 }
@@ -989,36 +989,36 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
  */
 errr term_fresh(void)
 {
-    int w = Term->wid;
-    int h = Term->hgt;
+    int w = game_term->wid;
+    int h = game_term->hgt;
 
-    int y1 = Term->y1;
-    int y2 = Term->y2;
+    int y1 = game_term->y1;
+    int y2 = game_term->y2;
 
-    const auto &old = Term->old;
-    const auto &scr = Term->scr;
+    const auto &old = game_term->old;
+    const auto &scr = game_term->scr;
 
     /* Before initialize (Advice from Mr.shimitei)*/
     if (!old || !scr)
         return 1;
 
-    if (Term->never_fresh)
+    if (game_term->never_fresh)
         return 1;
 
     /* Do nothing unless "mapped" */
-    if (!Term->mapped_flag)
+    if (!game_term->mapped_flag)
         return 1;
 
     /* Trivial Refresh */
-    if ((y1 > y2) && (scr->cu == old->cu) && (scr->cv == old->cv) && (scr->cx == old->cx) && (scr->cy == old->cy) && !(Term->total_erase)) {
+    if ((y1 > y2) && (scr->cu == old->cu) && (scr->cv == old->cv) && (scr->cx == old->cx) && (scr->cy == old->cy) && !(game_term->total_erase)) {
         /* Nothing */
         return 1;
     }
 
     /* Handle "total erase" */
-    if (Term->total_erase) {
-        byte na = Term->attr_blank;
-        char nc = Term->char_blank;
+    if (game_term->total_erase) {
+        byte na = game_term->attr_blank;
+        char nc = game_term->char_blank;
 
         /* Physically erase the entire window */
         term_xtra(TERM_XTRA_CLEAR, 0);
@@ -1047,21 +1047,21 @@ errr term_fresh(void)
         }
 
         /* Redraw every row */
-        Term->y1 = y1 = 0;
-        Term->y2 = y2 = h - 1;
+        game_term->y1 = y1 = 0;
+        game_term->y2 = y2 = h - 1;
 
         /* Redraw every column */
         for (TERM_LEN y = 0; y < h; y++) {
-            Term->x1[y] = 0;
-            Term->x2[y] = w - 1;
+            game_term->x1[y] = 0;
+            game_term->x2[y] = w - 1;
         }
 
         /* Forget "total erase" */
-        Term->total_erase = false;
+        game_term->total_erase = false;
     }
 
     /* Cursor update -- Erase old Cursor */
-    if (Term->soft_cursor) {
+    if (game_term->soft_cursor) {
         /* Cursor was visible */
         if (!old->cu && old->cv) {
             int csize = 1;
@@ -1078,16 +1078,16 @@ errr term_fresh(void)
             char otc = old_tcc[tx];
 
 #ifdef JP
-            if (tx + 1 < Term->wid && !(old_aa[tx] & AF_TILE1) && iskanji(old_cc[tx]))
+            if (tx + 1 < game_term->wid && !(old_aa[tx] & AF_TILE1) && iskanji(old_cc[tx]))
                 csize = 2;
 #endif
             /* Use "term_pict()" always */
-            if (Term->always_pict)
-                (void)((*Term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx], &ota, &otc));
+            if (game_term->always_pict)
+                (void)((*game_term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx], &ota, &otc));
 
             /* Use "term_pict()" sometimes */
-            else if (Term->higher_pict && (old_aa[tx] & AF_TILE1) && (old_cc[tx] & 0x80))
-                (void)((*Term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ota, &otc));
+            else if (game_term->higher_pict && (old_aa[tx] & AF_TILE1) && (old_cc[tx] & 0x80))
+                (void)((*game_term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ota, &otc));
 
             /*
              * Restore the actual character
@@ -1095,14 +1095,14 @@ errr term_fresh(void)
              * 上書きされなかった部分がゴミとして残る。
              * wipe_hook でカーソルを消去して text_hook で書き直す。
              */
-            else if (old_aa[tx] || Term->always_text) {
-                (void)((*Term->wipe_hook)(tx, ty, 1));
-                (void)((*Term->text_hook)(tx, ty, csize, (unsigned char)(old_aa[tx] & 0xf), &old_cc[tx]));
+            else if (old_aa[tx] || game_term->always_text) {
+                (void)((*game_term->wipe_hook)(tx, ty, 1));
+                (void)((*game_term->text_hook)(tx, ty, csize, (unsigned char)(old_aa[tx] & 0xf), &old_cc[tx]));
             }
 
             /* Erase the grid */
             else
-                (void)((*Term->wipe_hook)(tx, ty, 1));
+                (void)((*game_term->wipe_hook)(tx, ty, 1));
         }
     }
 
@@ -1115,32 +1115,32 @@ errr term_fresh(void)
     /* Something to update */
     if (y1 <= y2) {
         /* Handle "icky corner" */
-        if (Term->icky_corner) {
+        if (game_term->icky_corner) {
             /* Avoid the corner */
             if (y2 >= h - 1) {
                 /* Avoid the corner */
-                if (Term->x2[h - 1] > w - 2) {
+                if (game_term->x2[h - 1] > w - 2) {
                     /* Avoid the corner */
-                    Term->x2[h - 1] = w - 2;
+                    game_term->x2[h - 1] = w - 2;
                 }
             }
         }
 
         /* Scan the "modified" rows */
         for (TERM_LEN y = y1; y <= y2; ++y) {
-            TERM_LEN x1 = Term->x1[y];
-            TERM_LEN x2 = Term->x2[y];
+            TERM_LEN x1 = game_term->x1[y];
+            TERM_LEN x2 = game_term->x2[y];
 
             /* Flush each "modified" row */
             if (x1 <= x2) {
                 /* Always use "term_pict()" */
-                if (Term->always_pict) {
+                if (game_term->always_pict) {
                     /* Flush the row */
                     term_fresh_row_pict(y, x1, x2);
                 }
 
                 /* Sometimes use "term_pict()" */
-                else if (Term->higher_pict) {
+                else if (game_term->higher_pict) {
                     /* Flush the row */
                     term_fresh_row_both(y, x1, x2);
                 }
@@ -1152,22 +1152,22 @@ errr term_fresh(void)
                 }
 
                 /* This row is all done */
-                Term->x1[y] = w;
-                Term->x2[y] = 0;
+                game_term->x1[y] = w;
+                game_term->x2[y] = 0;
 
                 /* Flush that row (if allowed) */
-                if (!Term->never_frosh)
+                if (!game_term->never_frosh)
                     term_xtra(TERM_XTRA_FROSH, y);
             }
         }
 
         /* No rows are invalid */
-        Term->y1 = h;
-        Term->y2 = 0;
+        game_term->y1 = h;
+        game_term->y2 = 0;
     }
 
     /* Cursor update -- Show new Cursor */
-    if (Term->soft_cursor) {
+    if (game_term->soft_cursor) {
         /* Draw the cursor */
         if (!scr->cu && scr->cv) {
 #ifdef JP
@@ -1179,10 +1179,10 @@ errr term_fresh(void)
 #endif
             {
                 /* Double width cursor for the Bigtile mode */
-                (void)((*Term->bigcurs_hook)(scr->cx, scr->cy));
+                (void)((*game_term->bigcurs_hook)(scr->cx, scr->cy));
             } else {
                 /* Call the cursor display routine */
-                (void)((*Term->curs_hook)(scr->cx, scr->cy));
+                (void)((*game_term->curs_hook)(scr->cx, scr->cy));
             }
         }
     }
@@ -1191,10 +1191,10 @@ errr term_fresh(void)
     else {
         if (scr->cu) {
             /* Paranoia -- Put the cursor NEAR where it belongs */
-            (void)((*Term->curs_hook)(w - 1, scr->cy));
+            (void)((*game_term->curs_hook)(w - 1, scr->cy));
         } else {
             /* Put the cursor where it belongs */
-            (void)((*Term->curs_hook)(scr->cx, scr->cy));
+            (void)((*game_term->curs_hook)(scr->cx, scr->cy));
         }
     }
 
@@ -1207,7 +1207,7 @@ errr term_fresh(void)
     /* Actually flush the output */
     term_xtra(TERM_XTRA_FRESH, 0);
 
-    if (!Term->soft_cursor && !scr->cu && scr->cv) {
+    if (!game_term->soft_cursor && !scr->cu && scr->cv) {
         /* The cursor is visible, display it correctly */
         term_xtra(TERM_XTRA_SHAPE, 1);
     }
@@ -1220,10 +1220,10 @@ errr term_fresh(void)
  */
 errr term_fresh_force(void)
 {
-    bool old = Term->never_fresh;
-    Term->never_fresh = false;
+    bool old = game_term->never_fresh;
+    game_term->never_fresh = false;
     errr err = term_fresh();
-    Term->never_fresh = old;
+    game_term->never_fresh = old;
     return err;
 }
 
@@ -1235,11 +1235,11 @@ errr term_fresh_force(void)
 errr term_set_cursor(int v)
 {
     /* Already done */
-    if (Term->scr->cv == (bool)v)
+    if (game_term->scr->cv == (bool)v)
         return 1;
 
     /* Change */
-    Term->scr->cv = (bool)v;
+    game_term->scr->cv = (bool)v;
     return 0;
 }
 
@@ -1250,8 +1250,8 @@ errr term_set_cursor(int v)
  */
 errr term_gotoxy(TERM_LEN x, TERM_LEN y)
 {
-    int w = Term->wid;
-    int h = Term->hgt;
+    int w = game_term->wid;
+    int h = game_term->hgt;
 
     /* Verify */
     if ((x < 0) || (x >= w))
@@ -1260,11 +1260,11 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y)
         return -1;
 
     /* Remember the cursor */
-    Term->scr->cx = x;
-    Term->scr->cy = y;
+    game_term->scr->cx = x;
+    game_term->scr->cy = y;
 
     /* The cursor is not useless */
-    Term->scr->cu = 0;
+    game_term->scr->cu = 0;
     return 0;
 }
 
@@ -1275,8 +1275,8 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y)
  */
 errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 {
-    int w = Term->wid;
-    int h = Term->hgt;
+    int w = game_term->wid;
+    int h = game_term->hgt;
 
     if ((x < 0) || (x >= w))
         return -1;
@@ -1310,10 +1310,10 @@ errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
  */
 errr term_addch(TERM_COLOR a, char c)
 {
-    TERM_LEN w = Term->wid;
+    TERM_LEN w = game_term->wid;
 
     /* Handle "unusable" cursor */
-    if (Term->scr->cu)
+    if (game_term->scr->cu)
         return -1;
 
     /* Paranoia -- no illegal chars */
@@ -1321,17 +1321,17 @@ errr term_addch(TERM_COLOR a, char c)
         return -2;
 
     /* Queue the given character for display */
-    term_queue_char(Term->scr->cx, Term->scr->cy, a, c, 0, 0);
+    term_queue_char(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
 
     /* Advance the cursor */
-    Term->scr->cx++;
+    game_term->scr->cx++;
 
     /* Success */
-    if (Term->scr->cx < w)
+    if (game_term->scr->cx < w)
         return 0;
 
     /* Note "Useless" cursor */
-    Term->scr->cu = 1;
+    game_term->scr->cu = 1;
 
     /* Note "Useless" cursor */
     return 1;
@@ -1351,7 +1351,7 @@ errr term_add_bigch(TERM_COLOR a, char c)
         return term_addch(a, c);
 
     /* Handle "unusable" cursor */
-    if (Term->scr->cu)
+    if (game_term->scr->cu)
         return -1;
 
     /* Paranoia -- no illegal chars */
@@ -1359,17 +1359,17 @@ errr term_add_bigch(TERM_COLOR a, char c)
         return -2;
 
     /* Queue the given character for display */
-    term_queue_bigchar(Term->scr->cx, Term->scr->cy, a, c, 0, 0);
+    term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
 
     /* Advance the cursor */
-    Term->scr->cx += 2;
+    game_term->scr->cx += 2;
 
     /* Success */
-    if (Term->scr->cx < Term->wid)
+    if (game_term->scr->cx < game_term->wid)
         return 0;
 
     /* Note "Useless" cursor */
-    Term->scr->cu = 1;
+    game_term->scr->cu = 1;
 
     /* Note "Useless" cursor */
     return 1;
@@ -1397,11 +1397,11 @@ errr term_add_bigch(TERM_COLOR a, char c)
 errr term_addstr(int n, TERM_COLOR a, concptr s)
 {
     int k;
-    TERM_LEN w = Term->wid;
+    TERM_LEN w = game_term->wid;
     errr res = 0;
 
     /* Handle "unusable" cursor */
-    if (Term->scr->cu)
+    if (game_term->scr->cu)
         return -1;
 
     /* Obtain maximal length */
@@ -1412,18 +1412,18 @@ errr term_addstr(int n, TERM_COLOR a, concptr s)
         ;
 
     /* React to reaching the edge of the screen */
-    if (Term->scr->cx + n >= w)
-        res = n = w - Term->scr->cx;
+    if (game_term->scr->cx + n >= w)
+        res = n = w - game_term->scr->cx;
 
     /* Queue the first "n" characters for display */
-    term_queue_chars(Term->scr->cx, Term->scr->cy, n, a, s);
+    term_queue_chars(game_term->scr->cx, game_term->scr->cy, n, a, s);
 
     /* Advance the cursor */
-    Term->scr->cx += n;
+    game_term->scr->cx += n;
 
     /* Notice "Useless" cursor */
     if (res)
-        Term->scr->cu = 1;
+        game_term->scr->cu = 1;
 
     return res;
 }
@@ -1469,14 +1469,14 @@ errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
  */
 errr term_erase(TERM_LEN x, TERM_LEN y, int n)
 {
-    TERM_LEN w = Term->wid;
+    TERM_LEN w = game_term->wid;
     /* int h = Term->hgt; */
 
     TERM_LEN x1 = -1;
     TERM_LEN x2 = -1;
 
-    int na = Term->attr_blank;
-    int nc = Term->char_blank;
+    int na = game_term->attr_blank;
+    int nc = game_term->char_blank;
 
     /* Place cursor */
     if (term_gotoxy(x, y))
@@ -1487,11 +1487,11 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
         n = w - x;
 
     /* Fast access */
-    auto &scr_aa = Term->scr->a[y];
-    auto &scr_cc = Term->scr->c[y];
+    auto &scr_aa = game_term->scr->a[y];
+    auto &scr_cc = game_term->scr->c[y];
 
-    auto &scr_taa = Term->scr->ta[y];
-    auto &scr_tcc = Term->scr->tc[y];
+    auto &scr_taa = game_term->scr->ta[y];
+    auto &scr_tcc = game_term->scr->tc[y];
 
 #ifdef JP
     /*
@@ -1545,16 +1545,16 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
     /* Expand the "change area" as needed */
     if (x1 >= 0) {
         /* Check for new min/max row info */
-        if (y < Term->y1)
-            Term->y1 = y;
-        if (y > Term->y2)
-            Term->y2 = y;
+        if (y < game_term->y1)
+            game_term->y1 = y;
+        if (y > game_term->y2)
+            game_term->y2 = y;
 
         /* Check for new min/max col info in this row */
-        if (x1 < Term->x1[y])
-            Term->x1[y] = x1;
-        if (x2 > Term->x2[y])
-            Term->x2[y] = x2;
+        if (x1 < game_term->x1[y])
+            game_term->x1[y] = x1;
+        if (x2 > game_term->x2[y])
+            game_term->x2[y] = x2;
     }
 
     return 0;
@@ -1567,25 +1567,25 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
  */
 errr term_clear(void)
 {
-    TERM_LEN w = Term->wid;
-    TERM_LEN h = Term->hgt;
+    TERM_LEN w = game_term->wid;
+    TERM_LEN h = game_term->hgt;
 
-    TERM_COLOR na = Term->attr_blank;
-    char nc = Term->char_blank;
+    TERM_COLOR na = game_term->attr_blank;
+    char nc = game_term->char_blank;
 
     /* Cursor usable */
-    Term->scr->cu = 0;
+    game_term->scr->cu = 0;
 
     /* Cursor to the top left */
-    Term->scr->cx = Term->scr->cy = 0;
+    game_term->scr->cx = game_term->scr->cy = 0;
 
     /* Wipe each row */
     for (TERM_LEN y = 0; y < h; y++) {
-        auto &scr_aa = Term->scr->a[y];
-        auto &scr_cc = Term->scr->c[y];
+        auto &scr_aa = game_term->scr->a[y];
+        auto &scr_cc = game_term->scr->c[y];
 
-        auto &scr_taa = Term->scr->ta[y];
-        auto &scr_tcc = Term->scr->tc[y];
+        auto &scr_taa = game_term->scr->ta[y];
+        auto &scr_tcc = game_term->scr->tc[y];
 
         /* Wipe each column */
         for (TERM_LEN x = 0; x < w; x++) {
@@ -1597,16 +1597,16 @@ errr term_clear(void)
         }
 
         /* This row has changed */
-        Term->x1[y] = 0;
-        Term->x2[y] = w - 1;
+        game_term->x1[y] = 0;
+        game_term->x2[y] = w - 1;
     }
 
     /* Every row has changed */
-    Term->y1 = 0;
-    Term->y2 = h - 1;
+    game_term->y1 = 0;
+    game_term->y2 = h - 1;
 
     /* Force "total erase" */
-    Term->total_erase = true;
+    game_term->total_erase = true;
     return 0;
 }
 
@@ -1616,7 +1616,7 @@ errr term_clear(void)
 errr term_redraw(void)
 {
     /* Force "total erase" */
-    Term->total_erase = true;
+    game_term->total_erase = true;
     term_fresh();
     return 0;
 }
@@ -1627,39 +1627,39 @@ errr term_redraw(void)
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 {
     /* Bounds checking */
-    if (y2 >= Term->hgt)
-        y2 = Term->hgt - 1;
-    if (x2 >= Term->wid)
-        x2 = Term->wid - 1;
+    if (y2 >= game_term->hgt)
+        y2 = game_term->hgt - 1;
+    if (x2 >= game_term->wid)
+        x2 = game_term->wid - 1;
     if (y1 < 0)
         y1 = 0;
     if (x1 < 0)
         x1 = 0;
 
     /* Set y limits */
-    Term->y1 = y1;
-    Term->y2 = y2;
+    game_term->y1 = y1;
+    game_term->y2 = y2;
 
     /* Set the x limits */
-    for (int i = Term->y1; i <= Term->y2; i++) {
+    for (int i = game_term->y1; i <= game_term->y2; i++) {
 #ifdef JP
         TERM_LEN x1j = x1;
         TERM_LEN x2j = x2;
 
         if (x1j > 0) {
-            if (Term->scr->a[i][x1j] & AF_KANJI2)
+            if (game_term->scr->a[i][x1j] & AF_KANJI2)
                 x1j--;
         }
 
-        if (x2j < Term->wid - 1) {
-            if (Term->scr->a[i][x2j] & AF_KANJI1)
+        if (x2j < game_term->wid - 1) {
+            if (game_term->scr->a[i][x2j] & AF_KANJI1)
                 x2j++;
         }
 
-        Term->x1[i] = x1j;
-        Term->x2[i] = x2j;
+        game_term->x1[i] = x1j;
+        game_term->x2[i] = x2j;
 
-        auto &g_ptr = Term->old->c[i];
+        auto &g_ptr = game_term->old->c[i];
 
         /* Clear the section so it is redrawn */
         for (int j = x1j; j <= x2j; j++) {
@@ -1667,10 +1667,10 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
             g_ptr[j] = 0;
         }
 #else
-        Term->x1[i] = x1;
-        Term->x2[i] = x2;
+        game_term->x1[i] = x1;
+        game_term->x2[i] = x2;
 
-        auto &g_ptr = Term->old->c[i];
+        auto &g_ptr = game_term->old->c[i];
 
         /* Clear the section so it is redrawn */
         for (int j = x1; j <= x2; j++) {
@@ -1692,7 +1692,7 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 errr term_get_cursor(int *v)
 {
     /* Extract visibility */
-    (*v) = Term->scr->cv;
+    (*v) = game_term->scr->cv;
     return 0;
 }
 
@@ -1702,8 +1702,8 @@ errr term_get_cursor(int *v)
 errr term_get_size(TERM_LEN *w, TERM_LEN *h)
 {
     /* Access the cursor */
-    (*w) = Term->wid;
-    (*h) = Term->hgt;
+    (*w) = game_term->wid;
+    (*h) = game_term->hgt;
     return 0;
 }
 
@@ -1713,11 +1713,11 @@ errr term_get_size(TERM_LEN *w, TERM_LEN *h)
 errr term_locate(TERM_LEN *x, TERM_LEN *y)
 {
     /* Access the cursor */
-    (*x) = Term->scr->cx;
-    (*y) = Term->scr->cy;
+    (*x) = game_term->scr->cx;
+    (*y) = game_term->scr->cy;
 
     /* Warn about "useless" cursor */
-    if (Term->scr->cu)
+    if (game_term->scr->cu)
         return 1;
 
     return 0;
@@ -1730,8 +1730,8 @@ errr term_locate(TERM_LEN *x, TERM_LEN *y)
  */
 errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
 {
-    TERM_LEN w = Term->wid;
-    TERM_LEN h = Term->hgt;
+    TERM_LEN w = game_term->wid;
+    TERM_LEN h = game_term->hgt;
 
     if ((x < 0) || (x >= w))
         return -1;
@@ -1739,8 +1739,8 @@ errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
         return -1;
 
     /* Direct access */
-    (*a) = Term->scr->a[y][x];
-    (*c) = Term->scr->c[y][x];
+    (*a) = game_term->scr->a[y][x];
+    (*c) = game_term->scr->c[y][x];
     return 0;
 }
 
@@ -1755,7 +1755,7 @@ errr term_flush(void)
     term_xtra(TERM_XTRA_FLUSH, 0);
 
     /* Forget all keypresses */
-    Term->key_head = Term->key_tail = 0;
+    game_term->key_head = game_term->key_tail = 0;
     return 0;
 }
 
@@ -1769,13 +1769,13 @@ errr term_key_push(int k)
         return -1;
 
     /* Overflow may induce circular queue */
-    if (Term->key_tail == 0)
-        Term->key_tail = Term->key_size;
+    if (game_term->key_tail == 0)
+        game_term->key_tail = game_term->key_size;
 
     /* Back up, Store the char */
-    Term->key_queue[--Term->key_tail] = (char)k;
+    game_term->key_queue[--game_term->key_tail] = (char)k;
 
-    if (Term->key_head != Term->key_tail)
+    if (game_term->key_head != game_term->key_tail)
         return 0;
 
     return 1;
@@ -1797,7 +1797,7 @@ errr term_inkey(char *ch, bool wait, bool take)
     (*ch) = '\0';
 
     /* get bored */
-    if (!Term->never_bored) {
+    if (!game_term->never_bored) {
         /* Process random events */
         term_xtra(TERM_XTRA_BORED, 0);
     }
@@ -1805,7 +1805,7 @@ errr term_inkey(char *ch, bool wait, bool take)
     /* Wait */
     if (wait) {
         /* Process pending events while necessary */
-        while (Term->key_head == Term->key_tail) {
+        while (game_term->key_head == game_term->key_tail) {
             /* Process events (wait for one) */
             term_xtra(TERM_XTRA_EVENT, true);
         }
@@ -1814,22 +1814,22 @@ errr term_inkey(char *ch, bool wait, bool take)
     /* Do not Wait */
     else {
         /* Process pending events if necessary */
-        if (Term->key_head == Term->key_tail) {
+        if (game_term->key_head == game_term->key_tail) {
             /* Process events (do not wait) */
             term_xtra(TERM_XTRA_EVENT, false);
         }
     }
 
     /* No keys are ready */
-    if (Term->key_head == Term->key_tail)
+    if (game_term->key_head == game_term->key_tail)
         return 1;
 
     /* Extract the next keypress */
-    (*ch) = Term->key_queue[Term->key_tail];
+    (*ch) = game_term->key_queue[game_term->key_tail];
 
     /* If requested, advance the queue, wrap around if necessary */
-    if (take && (++Term->key_tail == Term->key_size))
-        Term->key_tail = 0;
+    if (take && (++game_term->key_tail == game_term->key_size))
+        game_term->key_tail = 0;
 
     return 0;
 }
@@ -1844,7 +1844,7 @@ errr term_inkey(char *ch, bool wait, bool take)
 errr term_save(void)
 {
     /* Push stack */
-    Term->mem_stack.push(Term->scr->clone());
+    game_term->mem_stack.push(game_term->scr->clone());
 
     return 0;
 }
@@ -1856,35 +1856,35 @@ errr term_save(void)
  */
 errr term_load(bool load_all)
 {
-    TERM_LEN w = Term->wid;
-    TERM_LEN h = Term->hgt;
+    TERM_LEN w = game_term->wid;
+    TERM_LEN h = game_term->hgt;
 
-    if (Term->mem_stack.empty())
+    if (game_term->mem_stack.empty())
         return 0;
 
     if (load_all) {
         // 残り1つを残して読み捨てる
-        while (Term->mem_stack.size() > 1)
-            Term->mem_stack.pop();
+        while (game_term->mem_stack.size() > 1)
+            game_term->mem_stack.pop();
     }
 
     /* Load */
-    Term->scr.swap(Term->mem_stack.top());
-    Term->scr->resize(w, h);
+    game_term->scr.swap(game_term->mem_stack.top());
+    game_term->scr->resize(w, h);
 
     /* Pop stack */
-    Term->mem_stack.pop();
+    game_term->mem_stack.pop();
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {
         /* Assume change */
-        Term->x1[y] = 0;
-        Term->x2[y] = w - 1;
+        game_term->x1[y] = 0;
+        game_term->x2[y] = w - 1;
     }
 
     /* Assume change */
-    Term->y1 = 0;
-    Term->y2 = h - 1;
+    game_term->y1 = 0;
+    game_term->y2 = h - 1;
     return 0;
 }
 
@@ -1893,28 +1893,28 @@ errr term_load(bool load_all)
  */
 errr term_exchange(void)
 {
-    TERM_LEN w = Term->wid;
-    TERM_LEN h = Term->hgt;
+    TERM_LEN w = game_term->wid;
+    TERM_LEN h = game_term->hgt;
 
     /* Create */
-    if (!Term->tmp) {
+    if (!game_term->tmp) {
         /* Allocate window */
-        Term->tmp = term_win::create(w, h);
+        game_term->tmp = term_win::create(w, h);
     }
 
     /* Swap */
-    Term->scr.swap(Term->tmp);
+    game_term->scr.swap(game_term->tmp);
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {
         /* Assume change */
-        Term->x1[y] = 0;
-        Term->x2[y] = w - 1;
+        game_term->x1[y] = 0;
+        game_term->x2[y] = w - 1;
     }
 
     /* Assume change */
-    Term->y1 = 0;
-    Term->y2 = h - 1;
+    game_term->y1 = 0;
+    game_term->y2 = h - 1;
     return 0;
 }
 
@@ -1924,7 +1924,7 @@ errr term_exchange(void)
 errr term_resize(TERM_LEN w, TERM_LEN h)
 {
     /* Resizing is forbidden */
-    if (Term->fixed_shape)
+    if (game_term->fixed_shape)
         return -1;
 
     /* Ignore illegal changes */
@@ -1932,42 +1932,42 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
         return -1;
 
     /* Ignore non-changes */
-    if ((Term->wid == w) && (Term->hgt == h) && (arg_bigtile == use_bigtile))
+    if ((game_term->wid == w) && (game_term->hgt == h) && (arg_bigtile == use_bigtile))
         return 1;
 
     use_bigtile = arg_bigtile;
 
     /* Resize windows */
-    Term->old->resize(w, h);
-    Term->scr->resize(w, h);
-    if (Term->tmp)
-        Term->tmp->resize(w, h);
+    game_term->old->resize(w, h);
+    game_term->scr->resize(w, h);
+    if (game_term->tmp)
+        game_term->tmp->resize(w, h);
 
     /* Resize scanners */
-    Term->x1.resize(h);
-    Term->x2.resize(h);
+    game_term->x1.resize(h);
+    game_term->x2.resize(h);
 
     /* Save new size */
-    Term->wid = w;
-    Term->hgt = h;
+    game_term->wid = w;
+    game_term->hgt = h;
 
     /* Force "total erase" */
-    Term->total_erase = true;
+    game_term->total_erase = true;
 
     /* Assume change */
     for (int i = 0; i < h; i++) {
         /* Assume change */
-        Term->x1[i] = 0;
-        Term->x2[i] = w - 1;
+        game_term->x1[i] = 0;
+        game_term->x2[i] = w - 1;
     }
 
     /* Assume change */
-    Term->y1 = 0;
-    Term->y2 = h - 1;
+    game_term->y1 = 0;
+    game_term->y2 = h - 1;
 
     /* Execute the "resize_hook" hook, if available */
-    if (Term->resize_hook)
-        Term->resize_hook();
+    if (game_term->resize_hook)
+        game_term->resize_hook();
 
     return 0;
 }
@@ -1984,11 +1984,11 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
 errr term_activate(term_type *t)
 {
     /* already done */
-    if (Term == t)
+    if (game_term == t)
         return 1;
 
     /* Deactivate the old Term */
-    if (Term)
+    if (game_term)
         term_xtra(TERM_XTRA_LEVEL, 0);
 
     /* Call the special "init" hook */
@@ -2005,10 +2005,10 @@ errr term_activate(term_type *t)
     }
 
     /* Remember the Term */
-    Term = t;
+    game_term = t;
 
     /* Activate the new Term */
-    if (Term)
+    if (game_term)
         term_xtra(TERM_XTRA_LEVEL, 1);
 
     return 0;

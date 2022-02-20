@@ -79,10 +79,10 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     uint16_t dummy_why;
     bool cu, cv;
 
-    cu = Term->scr->cu;
-    cv = Term->scr->cv;
-    Term->scr->cu = 0;
-    Term->scr->cv = 1;
+    cu = game_term->scr->cu;
+    cv = game_term->scr->cv;
+    game_term->scr->cu = 0;
+    game_term->scr->cv = 1;
 
     /* Allocate the "who" array */
     std::vector<MONSTER_IDX> who;
@@ -172,8 +172,8 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         }
     }
 
-    Term->scr->cu = cu;
-    Term->scr->cv = cv;
+    game_term->scr->cu = cu;
+    game_term->scr->cv = cv;
     term_fresh();
 
 #ifdef JP

@@ -81,7 +81,7 @@ void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
     int sval;
     int16_t use_realm;
     GAME_TEXT o_name[MAX_NLEN];
-    for (int y = 0; y < Term->hgt; y++) {
+    for (int y = 0; y < game_term->hgt; y++) {
         term_erase(0, y, 255);
     }
 

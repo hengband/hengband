@@ -177,7 +177,7 @@ static void display_spell_list(PlayerType *player_ptr)
 void fix_spell(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 

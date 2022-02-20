@@ -468,8 +468,8 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 #ifdef JP
                 if (winning_seppuku) {
                     int i, len;
-                    int w = Term->wid;
-                    int h = Term->hgt;
+                    int w = game_term->wid;
+                    int h = game_term->hgt;
                     int msg_pos_x[9] = { 5, 7, 9, 12, 14, 17, 19, 21, 23 };
                     int msg_pos_y[9] = { 3, 4, 5, 4, 5, 4, 5, 6, 4 };
                     concptr str;

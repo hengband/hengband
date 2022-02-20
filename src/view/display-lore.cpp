@@ -96,7 +96,7 @@ void screen_roff(PlayerType *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mo
  */
 void display_roff(PlayerType *player_ptr)
 {
-    for (int y = 0; y < Term->hgt; y++) {
+    for (int y = 0; y < game_term->hgt; y++) {
         term_erase(0, y, 255);
     }
 

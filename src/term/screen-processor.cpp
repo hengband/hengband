@@ -242,7 +242,7 @@ void roff(concptr str)
  */
 void clear_from(int row)
 {
-    for (int y = row; y < Term->hgt; y++) {
+    for (int y = row; y < game_term->hgt; y++) {
         term_erase(0, y, 255);
     }
 }

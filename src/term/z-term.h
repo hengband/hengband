@@ -153,7 +153,7 @@ struct term_type {
 #define TERM_XTRA_SCENE 20 /* React to scene changes (optional) */
 
 /**** Available Variables ****/
-extern term_type *Term;
+extern term_type *game_term;
 
 errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h);
 errr term_user(int n);

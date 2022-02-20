@@ -57,7 +57,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         calc_android_exp(player_ptr);
 
-    term_type *old = Term;
+    term_type *old = game_term;
     for (int j = 0; j < 8; j++) {
         if (!angband_term[j])
             continue;

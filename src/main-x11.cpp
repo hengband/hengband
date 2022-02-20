@@ -1037,14 +1037,14 @@ static void send_key(const char key)
     // 順序が入れ替わってしまう。
 
     // キーバッファが一杯なら入力を捨てる
-    const int head_nxt = Term->key_head + 1 == Term->key_size ? 0 : Term->key_head + 1;
-    if (head_nxt == Term->key_tail) {
+    const int head_nxt = game_term->key_head + 1 == game_term->key_size ? 0 : game_term->key_head + 1;
+    if (head_nxt == game_term->key_tail) {
         plog_fmt("key buffer overflow, ignoring key 0x%02X", key);
         return;
     }
 
-    Term->key_queue[Term->key_head] = key;
-    Term->key_head = head_nxt;
+    game_term->key_queue[game_term->key_head] = key;
+    game_term->key_head = head_nxt;
 }
 
 // ゲーム側へキー列を送る
@@ -1215,7 +1215,7 @@ static void mark_selection_mark(int x1, int y1, int x2, int y2)
 static void mark_selection(void)
 {
     co_ord min, max;
-    term_type *old = Term;
+    term_type *old = game_term;
     bool draw = s_ptr->select;
     bool clear = s_ptr->drawn;
     if (s_ptr->t != old)
@@ -1255,7 +1255,7 @@ static void copy_x11_start(int x, int y)
     if (s_ptr->select)
         copy_x11_release();
 
-    s_ptr->t = Term;
+    s_ptr->t = game_term;
     s_ptr->init.x = s_ptr->cur.x = s_ptr->old.x = x;
     s_ptr->init.y = s_ptr->cur.y = s_ptr->old.y = y;
 }
@@ -1265,11 +1265,11 @@ static void copy_x11_start(int x, int y)
  */
 static void copy_x11_cont(int x, int y, unsigned int buttons)
 {
-    x = MIN(MAX(x, 0), Term->wid - 1);
-    y = MIN(MAX(y, 0), Term->hgt - 1);
+    x = MIN(MAX(x, 0), game_term->wid - 1);
+    y = MIN(MAX(y, 0), game_term->hgt - 1);
     if (~buttons & Button1Mask)
         return;
-    if (s_ptr->t != Term)
+    if (s_ptr->t != game_term)
         return;
     if (x == s_ptr->old.x && y == s_ptr->old.y && s_ptr->select)
         return;
@@ -1288,7 +1288,7 @@ static void copy_x11_end(const Time time)
 {
     if (!s_ptr->select)
         return;
-    if (s_ptr->t != Term)
+    if (s_ptr->t != game_term)
         return;
 
     s_ptr->time = time;
@@ -1420,7 +1420,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         return false;
     }
 
-    for (y = 0; y < Term->hgt; y++) {
+    for (y = 0; y < game_term->hgt; y++) {
 #ifdef JP
         int kanji = 0;
 #endif
@@ -1429,7 +1429,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         if (y > max.y)
             break;
 
-        for (l = 0, x = 0; x < Term->wid; x++) {
+        for (l = 0, x = 0; x < game_term->wid; x++) {
 #ifdef JP
             if (x > max.x)
                 break;
@@ -1543,7 +1543,7 @@ static void handle_button(Time time, int x, int y, int button, bool press)
  */
 static errr CheckEvent(bool wait)
 {
-    term_data *old_td = (term_data *)(Term->data);
+    term_data *old_td = (term_data *)(game_term->data);
 
     XEvent xev_body, *xev = &xev_body;
 
@@ -1657,12 +1657,12 @@ static errr CheckEvent(bool wait)
     }
     case MapNotify: {
         Infowin->mapped = 1;
-        Term->mapped_flag = true;
+        game_term->mapped_flag = true;
         break;
     }
     case UnmapNotify: {
         Infowin->mapped = 0;
-        Term->mapped_flag = false;
+        game_term->mapped_flag = false;
         break;
     }
     case ConfigureNotify: {
@@ -1764,7 +1764,7 @@ static void init_sound(void)
 /*
  * Hack -- make a sound
  */
-static errr Term_xtra_x11_sound(int v)
+static errr game_term_xtra_x11_sound(int v)
 {
     char buf[1024];
     if (!use_sound)
@@ -1781,9 +1781,9 @@ static errr Term_xtra_x11_sound(int v)
 /*
  * Handle "activation" of a term
  */
-static errr Term_xtra_x11_level(int v)
+static errr game_term_xtra_x11_level(int v)
 {
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
     if (v) {
         Infowin_set(td->win.get());
         Infofnt_set(td->fnt.get());
@@ -1795,7 +1795,7 @@ static errr Term_xtra_x11_level(int v)
 /*
  * React to changes
  */
-static errr Term_xtra_x11_react(void)
+static errr game_term_xtra_x11_react(void)
 {
     int i;
 
@@ -1821,14 +1821,14 @@ static errr Term_xtra_x11_react(void)
 /*
  * Handle a "special request"
  */
-static errr Term_xtra_x11(int n, int v)
+static errr game_term_xtra_x11(int n, int v)
 {
     switch (n) {
     case TERM_XTRA_NOISE:
         Metadpy_do_beep();
         return 0;
     case TERM_XTRA_SOUND:
-        return Term_xtra_x11_sound(v);
+        return game_term_xtra_x11_sound(v);
 #ifdef USE_XFT
     case TERM_XTRA_FRESH:
         Metadpy_update(1, 1, 0);
@@ -1847,7 +1847,7 @@ static errr Term_xtra_x11(int n, int v)
             ;
         return 0;
     case TERM_XTRA_LEVEL:
-        return Term_xtra_x11_level(v);
+        return game_term_xtra_x11_level(v);
     case TERM_XTRA_CLEAR:
         Infowin_wipe();
         s_ptr->drawn = false;
@@ -1856,7 +1856,7 @@ static errr Term_xtra_x11(int n, int v)
         usleep(1000 * v);
         return 0;
     case TERM_XTRA_REACT:
-        return Term_xtra_x11_react();
+        return game_term_xtra_x11_react();
     }
 
     return 1;
@@ -1867,7 +1867,7 @@ static errr Term_xtra_x11(int n, int v)
  *
  * Consider a rectangular outline like "main-mac.c".  XXX XXX
  */
-static errr Term_curs_x11(int x, int y)
+static errr game_term_curs_x11(int x, int y)
 {
     if (use_graphics) {
 #ifdef USE_XFT
@@ -1890,7 +1890,7 @@ static errr Term_curs_x11(int x, int y)
 /*
  * Draw the double width cursor
  */
-static errr Term_bigcurs_x11(int x, int y)
+static errr game_term_bigcurs_x11(int x, int y)
 {
     if (use_graphics) {
 #ifdef USE_XFT
@@ -1913,7 +1913,7 @@ static errr Term_bigcurs_x11(int x, int y)
 /*
  * Erase some characters.
  */
-static errr Term_wipe_x11(int x, int y, int n)
+static errr game_term_wipe_x11(int x, int y, int n)
 {
     Infoclr_set(clr[TERM_DARK].get());
     Infofnt_text_non(x, y, "", n);
@@ -1924,7 +1924,7 @@ static errr Term_wipe_x11(int x, int y, int n)
 /*
  * Draw some textual characters.
  */
-static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
+static errr game_term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
 {
     Infoclr_set(clr[a].get());
     Infofnt_text_std(x, y, s, n);
@@ -1936,7 +1936,7 @@ static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s
 /*
  * Draw some graphical characters.
  */
-static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
+static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
 {
     int i, x1, y1;
 
@@ -1951,7 +1951,7 @@ static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 
     unsigned long pixel, blank;
 
-    term_data *td = (term_data *)(Term->data);
+    term_data *td = (term_data *)(game_term->data);
 
     y *= Infofnt->hgt;
     x *= Infofnt->wid;
@@ -2084,7 +2084,7 @@ static char force_lower(char a)
     return isupper(a) ? tolower(a) : a;
 }
 
-static void Term_nuke_x11(term_type *)
+static void game_term_nuke_x11(term_type *)
 {
     for (auto i = 0; i < MAX_TERM_DATA; i++) {
         infofnt *ifnt = data[i].fnt.get();
@@ -2302,12 +2302,12 @@ static errr term_data_init(term_data *td, int i)
     t->soft_cursor = true;
     t->attr_blank = TERM_WHITE;
     t->char_blank = ' ';
-    t->xtra_hook = Term_xtra_x11;
-    t->curs_hook = Term_curs_x11;
-    t->bigcurs_hook = Term_bigcurs_x11;
-    t->wipe_hook = Term_wipe_x11;
-    t->text_hook = Term_text_x11;
-    t->nuke_hook = Term_nuke_x11;
+    t->xtra_hook = game_term_xtra_x11;
+    t->curs_hook = game_term_curs_x11;
+    t->bigcurs_hook = game_term_bigcurs_x11;
+    t->wipe_hook = game_term_wipe_x11;
+    t->text_hook = game_term_text_x11;
+    t->nuke_hook = game_term_nuke_x11;
     t->data = td;
     term_activate(t);
     return 0;
@@ -2427,7 +2427,7 @@ errr init_x11(int argc, char *argv[])
     for (i = 0; i < num_term; i++) {
         term_data *td = &data[i];
         term_data_init(td, i);
-        angband_term[i] = Term;
+        angband_term[i] = game_term;
     }
 
     Infowin_set(data[0].win.get());
@@ -2475,7 +2475,7 @@ errr init_x11(int argc, char *argv[])
         for (i = 0; i < num_term; i++) {
             term_data *td = &data[i];
             term_type *t = &td->t;
-            t->pict_hook = Term_pict_x11;
+            t->pict_hook = game_term_pict_x11;
             t->higher_pict = true;
             td->tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, td->fnt->twid, td->fnt->hgt);
         }

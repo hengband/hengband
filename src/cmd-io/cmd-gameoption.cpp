@@ -299,7 +299,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
     }
 
     for (j = 0; j < 8; j++) {
-        term_type *old = Term;
+        term_type *old = game_term;
         if (!angband_term[j])
             continue;
 

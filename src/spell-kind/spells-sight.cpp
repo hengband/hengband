@@ -425,10 +425,10 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
  */
 bool probing(PlayerType *player_ptr)
 {
-    bool cu = Term->scr->cu;
-    bool cv = Term->scr->cv;
-    Term->scr->cu = 0;
-    Term->scr->cv = 1;
+    bool cu = game_term->scr->cu;
+    bool cv = game_term->scr->cv;
+    game_term->scr->cu = 0;
+    game_term->scr->cv = 1;
 
     bool probe = false;
     char buf[256];
@@ -469,8 +469,8 @@ bool probing(PlayerType *player_ptr)
         probe = true;
     }
 
-    Term->scr->cu = cu;
-    Term->scr->cv = cv;
+    game_term->scr->cu = cu;
+    game_term->scr->cv = cv;
     term_fresh();
 
     if (probe) {
