@@ -10,7 +10,7 @@
 
 constexpr DEPTH STORE_OBJ_STD_LEVEL = 5; //!< 通常店舗の標準階層レベル / Magic Level for normal stores
 
-enum class StoreSaleType : int {
+enum class StoreSaleType {
     GENERAL   = 0, //!< 店舗の種類: 雑貨屋
     ARMOURY   = 1, //!< 店舗の種類: 防具屋
     WEAPON    = 2, //!< 店舗の種類: 武器屋
