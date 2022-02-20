@@ -223,7 +223,7 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
     if (known || see_either)
         sound(SOUND_BREATH);
 
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, true, target_type);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, target_type);
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(player_ptr, m_idx, drs_type);
 
