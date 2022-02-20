@@ -86,12 +86,12 @@ void InputKeyRequestor::input_command()
 
         auto cmd = this->get_command();
         prt("", 0, 0);
-        if (this->process_repeat_num(&cmd)) {
+        if (this->process_repeat_num(cmd)) {
             continue;
         }
 
-        this->process_command_command(&cmd);
-        this->process_control_command(&cmd);
+        this->process_command_command(cmd);
+        this->process_control_command(cmd);
         auto act = keymap_act[this->mode][(byte)(cmd)];
         if (act && !inkey_next) {
             (void)strnfmt(request_command_buffer, sizeof(request_command_buffer), "%s", act);
@@ -202,16 +202,16 @@ char InputKeyRequestor::input_repeat_num()
     }
 }
 
-bool InputKeyRequestor::process_repeat_num(short *cmd)
+bool InputKeyRequestor::process_repeat_num(short &cmd)
 {
-    if (*cmd != '0') {
+    if (cmd != '0') {
         return false;
     }
 
     auto old_arg = command_arg;
     command_arg = 0;
     prt(_("回数: ", "Count: "), 0, 0);
-    *cmd = this->input_repeat_num();
+    cmd = this->input_repeat_num();
     if (command_arg == 0) {
         command_arg = 99;
         prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
@@ -222,11 +222,14 @@ bool InputKeyRequestor::process_repeat_num(short *cmd)
         prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
     }
 
-    if ((*cmd != ' ') && (*cmd != '\n') && (*cmd != '\r')) {
+    if ((cmd != ' ') && (cmd != '\n') && (cmd != '\r')) {
         return false;
     }
 
-    if (get_com(_("コマンド: ", "Command: "), (char *)cmd, false)) {
+    char tmp_cmd;
+    auto ret_cmd = get_com(_("コマンド: ", "Command: "), &tmp_cmd, false);
+    cmd = tmp_cmd;
+    if (ret_cmd) {
         return false;
     }
 
@@ -239,26 +242,31 @@ bool InputKeyRequestor::process_repeat_num(short *cmd)
  * @param cmd 入力コマンド
  * @details 全く意味がないような気もするが元のコードにあった機能は保持しておく
  */
-void InputKeyRequestor::process_command_command(short *cmd)
+void InputKeyRequestor::process_command_command(short &cmd)
 {
-    if (*cmd != '\\') {
+    if (cmd != '\\') {
         return;
     }
 
-    (void)get_com(_("コマンド: ", "Command: "), (char *)cmd, false);
+    char tmp_cmd;
+    (void)get_com(_("コマンド: ", "Command: "), &tmp_cmd, false);
+    cmd = tmp_cmd;
     if (inkey_next == nullptr) {
         inkey_next = "";
     }
 }
 
-void InputKeyRequestor::process_control_command(short *cmd)
+void InputKeyRequestor::process_control_command(short &cmd)
 {
-    if (*cmd != '^') {
+    if (cmd != '^') {
         return;
     }
 
-    if (get_com(_("CTRL: ", "Control: "), (char *)cmd, false)) {
-        *cmd = KTRL(*cmd);
+    char tmp_cmd;
+    auto ret_cmd = get_com(_("CTRL: ", "Control: "), &tmp_cmd, false);
+    cmd = tmp_cmd;
+    if (ret_cmd) {
+        cmd = KTRL(cmd);
     }
 }
 

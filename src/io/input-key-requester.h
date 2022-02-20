@@ -41,10 +41,10 @@ private:
     void input_command();
     short get_command();
     char inkey_from_menu();
-    bool process_repeat_num(short *cmd);
+    bool process_repeat_num(short &cmd);
     char input_repeat_num();
-    void process_command_command(short *cmd);
-    void process_control_command(short *cmd);
+    void process_command_command(short &cmd);
+    void process_control_command(short &cmd);
     void change_shopping_command();
     int get_caret_command();
     void sweep_confirmation_equipments();
