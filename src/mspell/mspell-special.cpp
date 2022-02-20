@@ -110,23 +110,23 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     int count = 0, k;
     int num = 1 + randint1(3);
     BIT_FLAGS mode = 0L;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
-    bool mon_to_mon = TARGET_TYPE == MONSTER_TO_MONSTER;
-    bool mon_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
+    bool mon_to_mon = target_type == MONSTER_TO_MONSTER;
+    bool mon_to_player = target_type == MONSTER_TO_PLAYER;
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何か大量に投げた。", "%^s spreads something."),
         _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
     if (mon_to_player || (mon_to_mon && known && see_either))
         disturb(player_ptr, true, true);
 
@@ -147,17 +147,17 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     mspell_cast_msg_simple msg;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
-    bool monster_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-    bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
+    bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
     bool direct = player_bold(player_ptr, y, x);
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
@@ -167,7 +167,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         msg.to_player = _("%^sは突然視界から消えた!", "You lose sight of %s!");
         msg.to_mons = _("%^sは突然急上昇して視界から消えた!", "You lose sight of %s!");
 
-        simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+        simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
         teleport_away(player_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
         player_ptr->update |= (PU_MONSTERS);
@@ -181,7 +181,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     msg.to_player = _("%^sがあなたを掴んで空中から投げ落とした。", "%^s snatches you, soars into the sky, and drops you.");
     msg.to_mons = _("%^sが%sを掴んで空中から投げ落とした。", "%^s snatches %s, soars into the sky, and releases its grip.");
 
-    simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
     bool fear, dead; /* dummy */
     int dam = damroll(4, 8);
@@ -199,7 +199,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         msg.to_mons = _("%^sは地面に叩きつけられた。", "%^s crashed into the ground.");
     }
 
-    simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
     dam += damroll(6, 8);
 
     if (monster_to_player || (monster_to_monster && player_ptr->riding == t_idx)) {
@@ -229,11 +229,11 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
@@ -249,12 +249,12 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
         return spell_RF6_SPECIAL_BANORLUPART(player_ptr, m_idx);
 
     case MON_ROLENTO:
-        return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, TARGET_TYPE);
+        return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, target_type);
         break;
 
     default:
         if (r_ptr->d_char == 'B') {
-            return spell_RF6_SPECIAL_B(player_ptr, y, x, m_idx, t_idx, TARGET_TYPE);
+            return spell_RF6_SPECIAL_B(player_ptr, y, x, m_idx, t_idx, target_type);
             break;
         } else {
             return MonsterSpellResult::make_invalid();

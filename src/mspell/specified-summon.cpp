@@ -63,20 +63,20 @@ MONSTER_NUMBER summon_EDGE(PlayerType *player_ptr, POSITION y, POSITION x, int r
  * @param rlev 呪文を唱えるモンスターのレベル
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
-MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     int num = 2 + randint1(3);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
 
     if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6)) {
         mspell_cast_msg_simple msg(_("地面から水が吹き出した！", "Water blew off from the ground!"),
             _("地面から水が吹き出した！", "Water blew off from the ground!"));
 
-        simple_monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+        simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
         if (mon_to_player)
             fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 3, 8);
