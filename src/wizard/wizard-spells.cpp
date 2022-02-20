@@ -12,6 +12,7 @@
 #include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "floor/pattern-walk.h"
+#include "io/gf-descriptions.h"
 #include "mind/mind-blue-mage.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
@@ -19,6 +20,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-processor.h"
+#include "object-activation/activation-others.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/smith-data-type.h"
@@ -35,11 +37,12 @@
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "term/screen-processor.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "view/display-messages.h"
-#include "object-activation/activation-others.h"
 
+#include <string_view>
 #include <vector>
 
 static const std::vector<debug_spell_command> debug_spell_commands_list = {
@@ -242,9 +245,20 @@ void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, 
     auto idx = enum2i(effect_idx);
 
     if (idx <= 0) {
+        screen_save();
+        for (auto i = 1; i <= 23; i++) {
+            prt("", i, 0);
+        }
+        for (auto i = 0U; i < std::size(gf_desc); ++i) {
+            auto name = std::string_view(gf_desc[i].name).substr(3); // 先頭の"GF_"を取り除く
+            auto num = enum2i(gf_desc[i].num);
+            put_str(format("%03d:%^-.10s", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
+        }
         if (!get_value("EffectID", 1, max - 1, &idx)) {
+            screen_load();
             return;
         }
+        screen_load();
     }
 
     if (self) {
