@@ -42,6 +42,8 @@ int16_t command_wrk; /* アイテムの使用許可状況 (ex. 装備品のみ�
 TERM_LEN command_gap = 999; /* アイテムの表示に使う (詳細未調査) */
 int16_t command_new; /* Command chaining from inven/equip view */
 
+static char request_command_buffer[256]{}; /*!< Special buffer to hold the action of the current keymap */
+
 InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, bool shopping)
     : player_ptr(player_ptr)
     , shopping(shopping)
@@ -92,8 +94,8 @@ void InputKeyRequestor::input_command()
         this->process_control_command(&cmd);
         auto act = keymap_act[this->mode][(byte)(cmd)];
         if (act && !inkey_next) {
-            (void)strnfmt(this->request_command_buffer, sizeof(this->request_command_buffer), "%s", act);
-            inkey_next = this->request_command_buffer;
+            (void)strnfmt(request_command_buffer, sizeof(request_command_buffer), "%s", act);
+            inkey_next = request_command_buffer;
             continue;
         }
 

@@ -28,7 +28,6 @@ public:
 private:
     PlayerType *player_ptr;
     bool shopping;
-    char request_command_buffer[256]{}; /*!< Special buffer to hold the action of the current keymap */
     keymap_mode mode;
     int base_y;
     int base_x = 15;
