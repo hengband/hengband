@@ -17,7 +17,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-result.h"
 #include "system/player-type-definition.h"
 
 /*!
