@@ -231,6 +231,16 @@ ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
     return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
 }
 
+ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
+{
+    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+    if (target_type == MONSTER_TO_PLAYER) {
+        flg |= PROJECT_PLAYER;
+    }
+
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+}
+
 /*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
