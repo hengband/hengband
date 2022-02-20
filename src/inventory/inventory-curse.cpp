@@ -17,6 +17,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player-base/player-race.h"
 #include "player-info/race-types.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
@@ -220,7 +221,7 @@ static void occur_chainsword_effect(PlayerType *player_ptr)
 
 static void curse_drain_exp(PlayerType *player_ptr)
 {
-    if ((player_ptr->prace == PlayerRaceType::ANDROID) || (player_ptr->cursed.has_not(CurseTraitType::DRAIN_EXP)) || !one_in_(4))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID) || (player_ptr->cursed.has_not(CurseTraitType::DRAIN_EXP)) || !one_in_(4))
         return;
 
     player_ptr->exp -= (player_ptr->lev + 1) / 2;

@@ -1,5 +1,6 @@
 ﻿#include "birth/birth-body-spec.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -66,7 +67,7 @@ void get_money(PlayerType *player_ptr)
         gold /= 2;
     else if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
         gold = 10000000;
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         gold /= 5;
 
     player_ptr->au = gold;

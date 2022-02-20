@@ -44,6 +44,7 @@
 #include "object/object-broken.h"
 #include "object/object-flags.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player-info/samurai-data-type.h"
@@ -351,7 +352,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
     }
 
     if (player_ptr->chp < 0 && !cheat_immortal) {
-        bool android = player_ptr->prace == PlayerRaceType::ANDROID;
+        bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
 
         /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
         if (!cheat_save && !save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))

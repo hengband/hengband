@@ -24,6 +24,7 @@
 #include "monster/monster-flag-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
+#include "player-base/player-race.h"
 #include "player/player-status-table.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -97,7 +98,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
 static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type *m_ptr)
 {
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-    if ((player_ptr->lev >= PY_MAX_LEVEL) || (player_ptr->prace == PlayerRaceType::ANDROID)) {
+    if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         sprintf(buf, "**");
         return;
     }

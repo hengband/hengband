@@ -8,6 +8,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player-info/monk-data-type.h"
 #include "player-info/race-types.h"
@@ -220,20 +221,21 @@ static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int ba
  */
 static void display_player_exp(PlayerType *player_ptr)
 {
-    int e = (player_ptr->prace == PlayerRaceType::ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
+    PlayerRace pr(player_ptr);
+    int e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
     if (player_ptr->exp >= player_ptr->max_exp)
         display_player_one_line(e, format("%ld", player_ptr->exp), TERM_L_GREEN);
     else
         display_player_one_line(e, format("%ld", player_ptr->exp), TERM_YELLOW);
 
-    if (player_ptr->prace != PlayerRaceType::ANDROID)
+    if (!pr.equals(PlayerRaceType::ANDROID))
         display_player_one_line(ENTRY_MAX_EXP, format("%ld", player_ptr->max_exp), TERM_L_GREEN);
 
-    e = (player_ptr->prace == PlayerRaceType::ANDROID) ? ENTRY_EXP_TO_ADV_ANDR : ENTRY_EXP_TO_ADV;
+    e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_TO_ADV_ANDR : ENTRY_EXP_TO_ADV;
 
     if (player_ptr->lev >= PY_MAX_LEVEL)
         display_player_one_line(e, "*****", TERM_L_GREEN);
-    else if (player_ptr->prace == PlayerRaceType::ANDROID)
+    else if (pr.equals(PlayerRaceType::ANDROID))
         display_player_one_line(e, format("%ld", (int32_t)(player_exp_a[player_ptr->lev - 1] * player_ptr->expfact / 100L)), TERM_L_GREEN);
     else
         display_player_one_line(e, format("%ld", (int32_t)(player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100L)), TERM_L_GREEN);

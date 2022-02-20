@@ -6,6 +6,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object/object-value.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
@@ -57,7 +58,7 @@ bool android_inside_weapon(PlayerType *player_ptr)
 void calc_android_exp(PlayerType *player_ptr)
 {
     uint32_t total_exp = 0;
-    if (player_ptr->is_dead || (player_ptr->prace != PlayerRaceType::ANDROID))
+    if (player_ptr->is_dead || !PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         return;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {

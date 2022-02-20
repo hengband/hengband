@@ -111,7 +111,8 @@ int16_t PlayerSpeed::class_value()
 int16_t PlayerSpeed::personality_value()
 {
     int16_t result = 0;
-    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && this->player_ptr->prace != PlayerRaceType::KLACKON && this->player_ptr->prace != PlayerRaceType::SPRITE) {
+    PlayerRace pr(this->player_ptr);
+    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && !pr.equals(PlayerRaceType::KLACKON) && !pr.equals(PlayerRaceType::SPRITE)) {
         result += (this->player_ptr->lev) / 10 + 5;
     }
     return result;

@@ -23,6 +23,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
@@ -269,7 +270,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->ability_flags.has(MonsterAbilityType::BR_FIRE)) {
-        if (!((player_ptr->prace == PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
+        if (!(PlayerRace(player_ptr).equals(PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
             if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST)))
                 return true;
 

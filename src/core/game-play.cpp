@@ -64,6 +64,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-info/class-info.h"
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
@@ -406,7 +407,7 @@ void play_game(PlayerType *player_ptr, bool new_game, bool browsing_movie)
     if (player_ptr->chp < 0 && !cheat_immortal)
         player_ptr->is_dead = true;
 
-    if (player_ptr->prace == PlayerRaceType::ANDROID)
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         calc_android_exp(player_ptr);
 
     init_riding_pet(player_ptr, new_game);

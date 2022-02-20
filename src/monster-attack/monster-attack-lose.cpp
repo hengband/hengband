@@ -2,6 +2,7 @@
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-attack/monster-attack-status.h"
+#include "player-base/player-race.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
@@ -33,7 +34,7 @@ void calc_blow_disease(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         monap_ptr->obvious = true;
 
     bool disease_possibility = randint1(100) > calc_nuke_damage_rate(player_ptr);
-    if (disease_possibility || (randint1(100) > 10) || (player_ptr->prace == PlayerRaceType::ANDROID))
+    if (disease_possibility || (randint1(100) > 10) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
         return;
 
     bool perm = one_in_(10);

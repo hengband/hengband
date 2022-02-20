@@ -495,7 +495,7 @@ bool has_pass_wall(PlayerType *player_ptr)
 {
     bool pow = false;
 
-    if (player_ptr->wraith_form || player_ptr->tim_pass_wall || (!player_ptr->mimic_form && player_ptr->prace == PlayerRaceType::SPECTRE)) {
+    if (player_ptr->wraith_form || player_ptr->tim_pass_wall || PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE)) {
         pow = true;
     }
 

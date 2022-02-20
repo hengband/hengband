@@ -31,6 +31,7 @@
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
+#include "player-base/player-race.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
@@ -184,7 +185,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             set_action(player_ptr, ACTION_NONE);
         }
 
-        if (player_ptr->prace == PlayerRaceType::MERFOLK) {
+        if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
             if (f_ptr->flags.has(FloorFeatureType::WATER) ^ of_ptr->flags.has(FloorFeatureType::WATER)) {
                 player_ptr->update |= PU_BONUS;
                 update_creature(player_ptr);
