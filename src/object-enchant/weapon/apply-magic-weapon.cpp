@@ -38,8 +38,9 @@ WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPT
  */
 void WeaponEnchanter::apply_magic()
 {
-    if ((this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_DIAMOND_EDGE))
+    if (this->should_skip) {
         return;
+    }
 
     switch (this->o_ptr->tval) {
     case ItemKindType::DIGGING: {
