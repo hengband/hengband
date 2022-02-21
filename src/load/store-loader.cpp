@@ -8,6 +8,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "store/store.h"
+#include "store/store-owners.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
@@ -81,6 +82,11 @@ static void rd_store(PlayerType *player_ptr, int town_number, int store_number)
     store_ptr->store_open = rd_s32b();
     store_ptr->insult_cur = rd_s16b();
     store_ptr->owner = rd_byte();
+
+    if (auto num = owners.at(i2enum<StoreSaleType>(store_number)).size();
+        num <= store_ptr->owner) {
+        store_ptr->owner %= num;
+    }
 
     int16_t inven_num;
     if (h_older_than(1, 0, 4)) {
