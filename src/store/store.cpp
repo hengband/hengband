@@ -377,7 +377,7 @@ void store_init(int town_num, StoreSaleType store_num)
                 continue;
             if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner)
                 break;
-        }        
+        }
 
         if (i == max_towns)
             break;
