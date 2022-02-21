@@ -29,6 +29,12 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
+OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr)
+    : player_ptr(player_ptr)
+    , o_ptr(o_ptr)
+{
+}
+
 /*!
  * @brief その他雑多のオブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be "boring"
@@ -37,18 +43,18 @@
  * @param power 生成ランク
  * @details power > 2はデバッグ専用.
  */
-void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
+void OtherItemsEnchanter::apply_magic()
 {
-    auto *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &k_info[this->o_ptr->k_idx];
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    switch (o_ptr->tval) {
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    switch (this->o_ptr->tval) {
     case ItemKindType::WHISTLE: {
         break;
     }
     case ItemKindType::FLASK: {
-        o_ptr->fuel = o_ptr->pval;
-        o_ptr->pval = 0;
+        this->o_ptr->fuel = this->o_ptr->pval;
+        this->o_ptr->pval = 0;
         break;
     }
     case ItemKindType::WAND:
@@ -56,17 +62,17 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
         /* The wand or staff gets a number of initial charges equal
          * to between 1/2 (+1) and the full object kind's pval. -LM-
          */
-        o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
+        this->o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
         break;
     }
     case ItemKindType::ROD: {
-        o_ptr->pval = k_ptr->pval;
+        this->o_ptr->pval = k_ptr->pval;
         break;
     }
     case ItemKindType::CAPTURE: {
-        o_ptr->pval = 0;
-        object_aware(player_ptr, o_ptr);
-        object_known(o_ptr);
+        this->o_ptr->pval = 0;
+        object_aware(this->player_ptr, this->o_ptr);
+        object_known(this->o_ptr);
         break;
     }
     case ItemKindType::FIGURINE: {
@@ -76,7 +82,7 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
         while (true) {
             i = randint1(r_info.size() - 1);
 
-            if (!item_monster_okay(player_ptr, i))
+            if (!item_monster_okay(this->player_ptr, i))
                 continue;
             if (i == MON_TSUCHINOKO)
                 continue;
@@ -93,9 +99,9 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
             break;
         }
 
-        o_ptr->pval = i;
+        this->o_ptr->pval = i;
         if (one_in_(6))
-            o_ptr->curse_flags.set(CurseTraitType::CURSED);
+            this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
         break;
     }
@@ -104,15 +110,15 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
         int check;
         uint32_t match = 0;
         monster_race *r_ptr;
-        if (o_ptr->sval == SV_SKELETON) {
+        if (this->o_ptr->sval == SV_SKELETON) {
             match = RF9_DROP_SKELETON;
-        } else if (o_ptr->sval == SV_CORPSE) {
+        } else if (this->o_ptr->sval == SV_CORPSE) {
             match = RF9_DROP_CORPSE;
         }
 
-        get_mon_num_prep(player_ptr, item_monster_okay, nullptr);
+        get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
         while (true) {
-            i = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
+            i = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
             r_ptr = &r_info[i];
             check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
             if (!r_ptr->rarity)
@@ -125,9 +131,9 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
             break;
         }
 
-        o_ptr->pval = i;
-        object_aware(player_ptr, o_ptr);
-        object_known(o_ptr);
+        this->o_ptr->pval = i;
+        object_aware(this->player_ptr, this->o_ptr);
+        object_known(this->o_ptr);
         break;
     }
     case ItemKindType::STATUE: {
@@ -142,27 +148,27 @@ void apply_magic_others(PlayerType *player_ptr, ObjectType *o_ptr)
             break;
         }
 
-        o_ptr->pval = i;
+        this->o_ptr->pval = i;
         if (cheat_peek) {
             msg_format(_("%sの像", "Statue of %s"), r_ptr->name.c_str());
         }
 
-        object_aware(player_ptr, o_ptr);
-        object_known(o_ptr);
+        object_aware(this->player_ptr, this->o_ptr);
+        object_known(this->o_ptr);
         break;
     }
     case ItemKindType::CHEST: {
-        DEPTH obj_level = k_info[o_ptr->k_idx].level;
+        DEPTH obj_level = k_info[this->o_ptr->k_idx].level;
         if (obj_level <= 0)
             break;
 
-        o_ptr->pval = randint1(obj_level);
-        if (o_ptr->sval == SV_CHEST_KANDUME)
-            o_ptr->pval = 6;
+        this->o_ptr->pval = randint1(obj_level);
+        if (this->o_ptr->sval == SV_CHEST_KANDUME)
+            this->o_ptr->pval = 6;
 
-        o_ptr->chest_level = floor_ptr->dun_level + 5;
-        if (o_ptr->pval > 55)
-            o_ptr->pval = 55 + (byte)randint0(5);
+        this->o_ptr->chest_level = floor_ptr->dun_level + 5;
+        if (this->o_ptr->pval > 55)
+            this->o_ptr->pval = 55 + (byte)randint0(5);
 
         break;
     }
