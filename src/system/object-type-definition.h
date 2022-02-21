@@ -9,8 +9,10 @@
 
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
+#include "object-enchant/object-ego.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
+#include "system/object-type-definition.h"
 #include "util/flag-group.h"
 #include <optional>
 
@@ -33,7 +35,7 @@ public:
     ITEM_NUMBER number{}; /*!< Number of items */
     WEIGHT weight{}; /*!< Item weight */
     ARTIFACT_IDX name1{}; /*!< Artifact type, if any */
-    EGO_IDX name2{}; /*!< Ego-Item type, if any */
+    EgoType name2{}; /*!< Ego-Item type, if any */
 
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     byte chest_level = 0; /*!< 箱の中身レベル */

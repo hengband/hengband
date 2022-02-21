@@ -848,7 +848,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         msg_format("Wishing %s....", buf);
 
     std::vector<KIND_OBJECT_IDX> k_ids;
-    std::vector<EGO_IDX> e_ids;
+    std::vector<EgoType> e_ids;
     if (exam_base) {
         int len;
         int max_len = 0;
@@ -879,7 +879,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             o_ptr->prep(k_idx);
 
             for (const auto &e_ref : e_info) {
-                if (e_ref.idx == 0 || e_ref.name.empty())
+                if (e_ref.idx == EgoType::NONE || e_ref.name.empty())
                     continue;
 
                 strcpy(o_name, e_ref.name.c_str());
@@ -1028,7 +1028,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 do {
                     o_ptr->prep(k_idx);
                     apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
-                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || o_ptr->is_cursed());
+                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name)
                     drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
@@ -1058,7 +1058,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                         if (wish_ego)
                             break;
 
-                        EGO_IDX e_idx = 0;
+                        EgoType e_idx = EgoType::NONE;
                         for (auto e : e_ids) {
                             if (o_ptr->name2 == e) {
                                 e_idx = e;
@@ -1066,7 +1066,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                             }
                         }
 
-                        if (e_idx != 0)
+                        if (e_idx != EgoType::NONE)
                             break;
                     }
 

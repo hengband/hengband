@@ -37,15 +37,15 @@ void LiteEnchanter::apply_magic()
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;
     }
-    
+
     if ((this->power == 2) || ((this->power == 1) && one_in_(3))) {
-        while (this->o_ptr->name2 == 0) {
+        while (!this->o_ptr->is_ego()) {
             this->give_ego_index();
         }
 
         return;
     }
-    
+
     if (this->power == -2) {
         this->give_cursed();
     }
@@ -57,7 +57,7 @@ void LiteEnchanter::give_ego_index()
         auto okay_flag = true;
         this->o_ptr->name2 = get_random_ego(INVEN_LITE, true);
         switch (this->o_ptr->name2) {
-        case EGO_LITE_LONG:
+        case EgoType::LITE_LONG:
             if (this->o_ptr->sval == SV_LITE_FEANOR) {
                 okay_flag = false;
             }
@@ -77,7 +77,7 @@ void LiteEnchanter::give_cursed()
 {
     this->o_ptr->name2 = get_random_ego(INVEN_LITE, false);
     switch (this->o_ptr->name2) {
-    case EGO_LITE_DARKNESS:
+    case EgoType::LITE_DARKNESS:
         this->o_ptr->fuel = 0;
         this->add_dark_flag();
         return;

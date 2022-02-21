@@ -226,13 +226,13 @@ void RingEnchanter::sval_enchant()
 
 void RingEnchanter::give_ego_index()
 {
-    while (!this->o_ptr->name2) {
+    while (!this->o_ptr->is_ego()) {
         int tmp = m_bonus(10, this->level);
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(28)) {
         case 1:
         case 2:
-            this->o_ptr->name2 = EGO_RING_THROW;
+            this->o_ptr->name2 = EgoType::RING_THROW;
             break;
         case 3:
         case 4:
@@ -240,7 +240,7 @@ void RingEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_REGEN;
+            this->o_ptr->name2 = EgoType::RING_REGEN;
             break;
         case 5:
         case 6:
@@ -248,7 +248,7 @@ void RingEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_LITE;
+            this->o_ptr->name2 = EgoType::RING_LITE;
             break;
         case 7:
         case 8:
@@ -256,7 +256,7 @@ void RingEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_TELEPORT;
+            this->o_ptr->name2 = EgoType::RING_TELEPORT;
             break;
         case 9:
         case 10:
@@ -264,7 +264,7 @@ void RingEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_TO_H;
+            this->o_ptr->name2 = EgoType::RING_TO_H;
             break;
         case 11:
         case 12:
@@ -272,28 +272,28 @@ void RingEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_TO_D;
+            this->o_ptr->name2 = EgoType::RING_TO_D;
             break;
         case 13:
             if ((this->o_ptr->to_h) || (this->o_ptr->to_d)) {
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_SLAY;
+            this->o_ptr->name2 = EgoType::RING_SLAY;
             break;
         case 14:
             if ((k_ptr->flags.has(TR_STR)) || this->o_ptr->to_h || this->o_ptr->to_d) {
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_WIZARD;
+            this->o_ptr->name2 = EgoType::RING_WIZARD;
             break;
         case 15:
             if (k_ptr->flags.has(TR_ACTIVATE)) {
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_HERO;
+            this->o_ptr->name2 = EgoType::RING_HERO;
             break;
         case 16:
             if (k_ptr->flags.has(TR_ACTIVATE)) {
@@ -301,16 +301,16 @@ void RingEnchanter::give_ego_index()
             }
 
             if (tmp > 8) {
-                this->o_ptr->name2 = EGO_RING_MANA_BALL;
+                this->o_ptr->name2 = EgoType::RING_MANA_BALL;
                 break;
             }
 
             if (tmp > 4) {
-                this->o_ptr->name2 = EGO_RING_MANA_BOLT;
+                this->o_ptr->name2 = EgoType::RING_MANA_BOLT;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_MAGIC_MIS;
+            this->o_ptr->name2 = EgoType::RING_MAGIC_MIS;
             break;
         case 17:
             if (k_ptr->flags.has(TR_ACTIVATE)) {
@@ -322,16 +322,16 @@ void RingEnchanter::give_ego_index()
             }
 
             if (tmp > 7) {
-                this->o_ptr->name2 = EGO_RING_DRAGON_F;
+                this->o_ptr->name2 = EgoType::RING_DRAGON_F;
                 break;
             }
 
             if (tmp > 3) {
-                this->o_ptr->name2 = EGO_RING_FIRE_BALL;
+                this->o_ptr->name2 = EgoType::RING_FIRE_BALL;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_FIRE_BOLT;
+            this->o_ptr->name2 = EgoType::RING_FIRE_BOLT;
             break;
         case 18:
             if (k_ptr->flags.has(TR_ACTIVATE)) {
@@ -343,16 +343,16 @@ void RingEnchanter::give_ego_index()
             }
 
             if (tmp > 7) {
-                this->o_ptr->name2 = EGO_RING_DRAGON_C;
+                this->o_ptr->name2 = EgoType::RING_DRAGON_C;
                 break;
             }
 
             if (tmp > 3) {
-                this->o_ptr->name2 = EGO_RING_COLD_BALL;
+                this->o_ptr->name2 = EgoType::RING_COLD_BALL;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_COLD_BOLT;
+            this->o_ptr->name2 = EgoType::RING_COLD_BOLT;
             break;
         case 19:
             if (k_ptr->flags.has(TR_ACTIVATE)) {
@@ -364,11 +364,11 @@ void RingEnchanter::give_ego_index()
             }
 
             if (tmp > 4) {
-                this->o_ptr->name2 = EGO_RING_ELEC_BALL;
+                this->o_ptr->name2 = EgoType::RING_ELEC_BALL;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_ELEC_BOLT;
+            this->o_ptr->name2 = EgoType::RING_ELEC_BOLT;
             break;
         case 20:
             if (k_ptr->flags.has(TR_ACTIVATE)) {
@@ -380,11 +380,11 @@ void RingEnchanter::give_ego_index()
             }
 
             if (tmp > 4) {
-                this->o_ptr->name2 = EGO_RING_ACID_BALL;
+                this->o_ptr->name2 = EgoType::RING_ACID_BALL;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_RING_ACID_BOLT;
+            this->o_ptr->name2 = EgoType::RING_ACID_BOLT;
             break;
         case 21:
         case 22:
@@ -406,7 +406,7 @@ void RingEnchanter::give_high_ego_index()
             break;
         }
 
-        this->o_ptr->name2 = EGO_RING_D_SPEED;
+        this->o_ptr->name2 = EgoType::RING_D_SPEED;
         break;
     case SV_RING_DAMAGE:
     case SV_RING_ACCURACY:
@@ -416,36 +416,36 @@ void RingEnchanter::give_high_ego_index()
         }
 
         if (one_in_(2)) {
-            this->o_ptr->name2 = EGO_RING_HERO;
+            this->o_ptr->name2 = EgoType::RING_HERO;
             break;
         }
 
-        this->o_ptr->name2 = EGO_RING_BERSERKER;
+        this->o_ptr->name2 = EgoType::RING_BERSERKER;
         this->o_ptr->to_h -= 2 + randint1(4);
         this->o_ptr->to_d += 2 + randint1(4);
         break;
     case SV_RING_PROTECTION:
-        this->o_ptr->name2 = EGO_RING_SUPER_AC;
+        this->o_ptr->name2 = EgoType::RING_SUPER_AC;
         this->o_ptr->to_a += 7 + m_bonus(5, this->level);
         break;
     case SV_RING_RES_FEAR:
-        this->o_ptr->name2 = EGO_RING_HERO;
+        this->o_ptr->name2 = EgoType::RING_HERO;
         break;
     case SV_RING_SHOTS:
         if (one_in_(2)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_RING_HUNTER;
+        this->o_ptr->name2 = EgoType::RING_HUNTER;
         break;
     case SV_RING_SEARCHING:
-        this->o_ptr->name2 = EGO_RING_STEALTH;
+        this->o_ptr->name2 = EgoType::RING_STEALTH;
         break;
     case SV_RING_TELEPORTATION:
-        this->o_ptr->name2 = EGO_RING_TELE_AWAY;
+        this->o_ptr->name2 = EgoType::RING_TELE_AWAY;
         break;
     case SV_RING_RES_BLINDNESS:
-        this->o_ptr->name2 = one_in_(2) ? EGO_RING_RES_LITE : EGO_RING_RES_DARK;
+        this->o_ptr->name2 = one_in_(2) ? EgoType::RING_RES_LITE : EgoType::RING_RES_DARK;
         break;
     case SV_RING_LORDLY:
         if (!one_in_(20)) {
@@ -454,28 +454,28 @@ void RingEnchanter::give_high_ego_index()
 
         one_lordly_high_resistance(this->o_ptr);
         one_lordly_high_resistance(this->o_ptr);
-        this->o_ptr->name2 = EGO_RING_TRUE;
+        this->o_ptr->name2 = EgoType::RING_TRUE;
         break;
     case SV_RING_FLAMES:
         if (one_in_(2)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_RING_DRAGON_F;
+        this->o_ptr->name2 = EgoType::RING_DRAGON_F;
         break;
     case SV_RING_ICE:
         if (one_in_(2)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_RING_DRAGON_C;
+        this->o_ptr->name2 = EgoType::RING_DRAGON_C;
         break;
     case SV_RING_WARNING:
         if (one_in_(2)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_RING_M_DETECT;
+        this->o_ptr->name2 = EgoType::RING_M_DETECT;
         break;
     default:
         break;
@@ -500,29 +500,29 @@ void RingEnchanter::give_cursed()
         this->o_ptr->pval = 0 - this->o_ptr->pval;
     }
 
-    while (!this->o_ptr->name2) {
+    while (!this->o_ptr->is_ego()) {
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(5)) {
         case 1:
             if (k_ptr->flags.has(TR_DRAIN_EXP))
                 break;
-            this->o_ptr->name2 = EGO_RING_DRAIN_EXP;
+            this->o_ptr->name2 = EgoType::RING_DRAIN_EXP;
             break;
         case 2:
-            this->o_ptr->name2 = EGO_RING_NO_MELEE;
+            this->o_ptr->name2 = EgoType::RING_NO_MELEE;
             break;
         case 3:
             if (k_ptr->flags.has(TR_AGGRAVATE))
                 break;
-            this->o_ptr->name2 = EGO_RING_AGGRAVATE;
+            this->o_ptr->name2 = EgoType::RING_AGGRAVATE;
             break;
         case 4:
             if (k_ptr->flags.has(TR_TY_CURSE))
                 break;
-            this->o_ptr->name2 = EGO_RING_TY_CURSE;
+            this->o_ptr->name2 = EgoType::RING_TY_CURSE;
             break;
         case 5:
-            this->o_ptr->name2 = EGO_RING_ALBINO;
+            this->o_ptr->name2 = EgoType::RING_ALBINO;
             break;
         }
     }

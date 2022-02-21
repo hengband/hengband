@@ -151,7 +151,7 @@ void AmuletEnchanter::sval_enchant()
 
 void AmuletEnchanter::give_ego_index()
 {
-    while (!this->o_ptr->name2) {
+    while (!this->o_ptr->is_ego()) {
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(21)) {
         case 1:
@@ -160,7 +160,7 @@ void AmuletEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_SLOW_D;
+            this->o_ptr->name2 = EgoType::AMU_SLOW_D;
             break;
         case 3:
         case 4:
@@ -168,7 +168,7 @@ void AmuletEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_INFRA;
+            this->o_ptr->name2 = EgoType::AMU_INFRA;
             break;
         case 5:
         case 6:
@@ -176,7 +176,7 @@ void AmuletEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_SEE_INVIS;
+            this->o_ptr->name2 = EgoType::AMU_SEE_INVIS;
             break;
         case 7:
         case 8:
@@ -184,19 +184,19 @@ void AmuletEnchanter::give_ego_index()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_HOLD_EXP;
+            this->o_ptr->name2 = EgoType::AMU_HOLD_EXP;
             break;
         case 9:
             if (k_ptr->flags.has(TR_LEVITATION)) {
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_LEVITATION;
+            this->o_ptr->name2 = EgoType::AMU_LEVITATION;
             break;
         case 10:
         case 11:
         case 21:
-            this->o_ptr->name2 = EGO_AMU_AC;
+            this->o_ptr->name2 = EgoType::AMU_AC;
             break;
         case 12:
             if (k_ptr->flags.has(TR_RES_FIRE)) {
@@ -204,11 +204,11 @@ void AmuletEnchanter::give_ego_index()
             }
 
             if (m_bonus(10, this->level) > 8) {
-                this->o_ptr->name2 = EGO_AMU_RES_FIRE_;
+                this->o_ptr->name2 = EgoType::AMU_RES_FIRE_;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_RES_FIRE;
+            this->o_ptr->name2 = EgoType::AMU_RES_FIRE;
             break;
         case 13:
             if (k_ptr->flags.has(TR_RES_COLD)) {
@@ -216,11 +216,11 @@ void AmuletEnchanter::give_ego_index()
             }
 
             if (m_bonus(10, this->level) > 8) {
-                this->o_ptr->name2 = EGO_AMU_RES_COLD_;
+                this->o_ptr->name2 = EgoType::AMU_RES_COLD_;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_RES_COLD;
+            this->o_ptr->name2 = EgoType::AMU_RES_COLD;
             break;
         case 14:
             if (k_ptr->flags.has(TR_RES_ELEC)) {
@@ -228,11 +228,11 @@ void AmuletEnchanter::give_ego_index()
             }
 
             if (m_bonus(10, this->level) > 8) {
-                this->o_ptr->name2 = EGO_AMU_RES_ELEC_;
+                this->o_ptr->name2 = EgoType::AMU_RES_ELEC_;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_RES_ELEC;
+            this->o_ptr->name2 = EgoType::AMU_RES_ELEC;
             break;
         case 15:
             if (k_ptr->flags.has(TR_RES_ACID)) {
@@ -240,11 +240,11 @@ void AmuletEnchanter::give_ego_index()
             }
 
             if (m_bonus(10, this->level) > 8) {
-                this->o_ptr->name2 = EGO_AMU_RES_ACID_;
+                this->o_ptr->name2 = EgoType::AMU_RES_ACID_;
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_RES_ACID;
+            this->o_ptr->name2 = EgoType::AMU_RES_ACID;
             break;
         case 16:
         case 17:
@@ -262,60 +262,60 @@ void AmuletEnchanter::give_high_ego_index()
     switch (this->o_ptr->sval) {
     case SV_AMULET_TELEPORT:
         if (m_bonus(10, this->level) > 9) {
-            this->o_ptr->name2 = EGO_AMU_D_DOOR;
+            this->o_ptr->name2 = EgoType::AMU_D_DOOR;
             break;
         }
 
         if (one_in_(2)) {
-            this->o_ptr->name2 = EGO_AMU_JUMP;
+            this->o_ptr->name2 = EgoType::AMU_JUMP;
             break;
         }
 
-        this->o_ptr->name2 = EGO_AMU_TELEPORT;
+        this->o_ptr->name2 = EgoType::AMU_TELEPORT;
         break;
     case SV_AMULET_RESIST_ACID:
         if ((m_bonus(10, this->level) > 6) && one_in_(2)) {
-            this->o_ptr->name2 = EGO_AMU_RES_ACID_;
+            this->o_ptr->name2 = EgoType::AMU_RES_ACID_;
         }
 
         break;
     case SV_AMULET_SEARCHING:
-        this->o_ptr->name2 = EGO_AMU_STEALTH;
+        this->o_ptr->name2 = EgoType::AMU_STEALTH;
         break;
     case SV_AMULET_BRILLIANCE:
         if (!one_in_(3)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_AMU_IDENT;
+        this->o_ptr->name2 = EgoType::AMU_IDENT;
         break;
     case SV_AMULET_CHARISMA:
         if (!one_in_(3)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_AMU_CHARM;
+        this->o_ptr->name2 = EgoType::AMU_CHARM;
         break;
     case SV_AMULET_THE_MAGI:
         if (one_in_(2)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_AMU_GREAT;
+        this->o_ptr->name2 = EgoType::AMU_GREAT;
         break;
     case SV_AMULET_RESISTANCE:
         if (!one_in_(5)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_AMU_DEFENDER;
+        this->o_ptr->name2 = EgoType::AMU_DEFENDER;
         break;
     case SV_AMULET_TELEPATHY:
         if (!one_in_(3)) {
             break;
         }
 
-        this->o_ptr->name2 = EGO_AMU_DETECTION;
+        this->o_ptr->name2 = EgoType::AMU_DETECTION;
         break;
     default:
         break;
@@ -340,7 +340,7 @@ void AmuletEnchanter::give_cursed()
         this->o_ptr->pval = 0 - this->o_ptr->pval;
     }
 
-    while (!this->o_ptr->name2) {
+    while (!this->o_ptr->is_ego()) {
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(5)) {
         case 1:
@@ -348,27 +348,27 @@ void AmuletEnchanter::give_cursed()
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_DRAIN_EXP;
+            this->o_ptr->name2 = EgoType::AMU_DRAIN_EXP;
             break;
         case 2:
-            this->o_ptr->name2 = EGO_AMU_FOOL;
+            this->o_ptr->name2 = EgoType::AMU_FOOL;
             break;
         case 3:
             if (k_ptr->flags.has(TR_AGGRAVATE)) {
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_AGGRAVATE;
+            this->o_ptr->name2 = EgoType::AMU_AGGRAVATE;
             break;
         case 4:
             if (k_ptr->flags.has(TR_TY_CURSE)) {
                 break;
             }
 
-            this->o_ptr->name2 = EGO_AMU_TY_CURSE;
+            this->o_ptr->name2 = EgoType::AMU_TY_CURSE;
             break;
         case 5:
-            this->o_ptr->name2 = EGO_AMU_NAIVETY;
+            this->o_ptr->name2 = EgoType::AMU_NAIVETY;
             break;
         }
     }

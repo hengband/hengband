@@ -22,21 +22,21 @@ static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
         return;
     }
 
-    auto *e_ptr = &e_info[o_ptr->name2];
+    auto *e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
     flgs.set(e_ptr->flags);
 
     auto is_out_of_fuel = o_ptr->fuel == 0;
-    if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->name2 == EgoType::AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
         flgs.reset(TR_SH_FIRE);
         return;
     }
-    
-    if ((o_ptr->name2 == EGO_LITE_INFRA) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+
+    if ((o_ptr->name2 == EgoType::LITE_INFRA) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
         flgs.reset(TR_INFRA);
         return;
     }
-    
-    if ((o_ptr->name2 == EGO_LITE_EYE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+
+    if ((o_ptr->name2 == EgoType::LITE_EYE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
         flgs.reset(TR_RES_BLIND);
         flgs.reset(TR_SEE_INVIS);
     }

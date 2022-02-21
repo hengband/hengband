@@ -50,7 +50,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         o_ptr->name1 = 0;
     }
 
-    o_ptr->name2 = any_bits(flags, SaveDataItemFlagType::NAME2) ? rd_byte() : 0;
+    o_ptr->name2 = i2enum<EgoType>(any_bits(flags, SaveDataItemFlagType::NAME2) ? rd_byte() : 0);
     o_ptr->timeout = any_bits(flags, SaveDataItemFlagType::TIMEOUT) ? rd_s16b() : 0;
     o_ptr->to_h = any_bits(flags, SaveDataItemFlagType::TO_H) ? rd_s16b() : 0;
     o_ptr->to_d = any_bits(flags, SaveDataItemFlagType::TO_D) ? rd_s16b() : 0;
@@ -181,7 +181,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         return;
     }
 
-    if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
+    if ((o_ptr->name2 == EgoType::DARK) || (o_ptr->name2 == EgoType::ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
         o_ptr->art_flags.set(TR_LITE_M1);
         o_ptr->art_flags.reset(TR_LITE_1);
         o_ptr->art_flags.reset(TR_LITE_2);
@@ -189,7 +189,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         return;
     }
 
-    if (o_ptr->name2 == EGO_LITE_DARKNESS) {
+    if (o_ptr->name2 == EgoType::LITE_DARKNESS) {
         if (o_ptr->tval != ItemKindType::LITE) {
             o_ptr->art_flags.set(TR_LITE_M1);
             return;

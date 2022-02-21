@@ -418,7 +418,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
             break;
         }
 
-        if ((q_ptr->name1 != 0) && q_ptr->name2 != 0) {
+        if ((q_ptr->name1 != 0) && q_ptr->is_ego()) {
             continue;
         }
 

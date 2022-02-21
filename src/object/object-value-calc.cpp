@@ -34,7 +34,7 @@ PRICE flag_cost(const ObjectType *o_ptr, int plusses)
         auto *a_ptr = &a_info[o_ptr->name1];
         flgs.reset(a_ptr->flags);
     } else if (o_ptr->is_ego()) {
-        ego_item_type *e_ptr = &e_info[o_ptr->name2];
+        ego_item_type *e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
         flgs.reset(e_ptr->flags);
     }
 

@@ -52,7 +52,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, ObjectType *o_ptr)
         if (o_ptr->tval == ItemKindType::SKELETON || (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_SKELETON))
             return false;
     } else if (pc.equals(PlayerClassType::NINJA)) {
-        if (o_ptr->tval == ItemKindType::LITE && o_ptr->name2 == EGO_LITE_DARKNESS && o_ptr->is_known())
+        if (o_ptr->tval == ItemKindType::LITE && o_ptr->name2 == EgoType::LITE_DARKNESS && o_ptr->is_known())
             return false;
     } else if (pc.is_tamer()) {
         if (o_ptr->tval == ItemKindType::WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())

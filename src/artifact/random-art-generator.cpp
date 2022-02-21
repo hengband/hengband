@@ -401,7 +401,7 @@ bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_sc
 {
     o_ptr->artifact_bias = 0;
     o_ptr->name1 = 0;
-    o_ptr->name2 = 0;
+    o_ptr->name2 = EgoType::NONE;
     o_ptr->art_flags |= k_info[o_ptr->k_idx].flags;
 
     bool has_pval = o_ptr->pval != 0;

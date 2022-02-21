@@ -120,7 +120,7 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_ego()) {
-        ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+        ego_item_type *e_ptr = &e_info[enum2i<EgoType>(flavor_ptr->o_ptr->name2)];
         flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.c_str());
     }
 }
@@ -298,7 +298,7 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_ego()) {
-        ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+        ego_item_type *e_ptr = &e_info[enum2i<EgoType>(flavor_ptr->o_ptr->name2)];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.c_str());
     }

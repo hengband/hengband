@@ -22,7 +22,7 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->name1)
         set_bits(*flags, SaveDataItemFlagType::NAME1);
 
-    if (o_ptr->name2)
+    if (o_ptr->is_ego())
         set_bits(*flags, SaveDataItemFlagType::NAME2);
 
     if (o_ptr->timeout)

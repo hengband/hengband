@@ -60,7 +60,7 @@ void ShieldEnchanter::give_ego_index()
         this->o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, true);
         auto is_metal = this->o_ptr->sval == SV_SMALL_METAL_SHIELD;
         is_metal |= this->o_ptr->sval == SV_LARGE_METAL_SHIELD;
-        if (!is_metal && (this->o_ptr->name2 == EGO_S_DWARVEN)) {
+        if (!is_metal && (this->o_ptr->name2 == EgoType::S_DWARVEN)) {
             continue;
         }
 
@@ -68,9 +68,9 @@ void ShieldEnchanter::give_ego_index()
     }
 
     switch (this->o_ptr->name2) {
-    case EGO_REFLECTION:
+    case EgoType::REFLECTION:
         if (this->o_ptr->sval == SV_MIRROR_SHIELD) {
-            this->o_ptr->name2 = 0;
+            this->o_ptr->name2 = EgoType::NONE;
         }
 
         return;

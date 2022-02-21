@@ -64,8 +64,8 @@ static void decide_activation_level(ae_type *ae_ptr)
         return;
     }
 
-    if (((ae_ptr->o_ptr->tval == ItemKindType::RING) || (ae_ptr->o_ptr->tval == ItemKindType::AMULET)) && ae_ptr->o_ptr->name2)
-        ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
+    if (((ae_ptr->o_ptr->tval == ItemKindType::RING) || (ae_ptr->o_ptr->tval == ItemKindType::AMULET)) && ae_ptr->o_ptr->is_ego())
+        ae_ptr->lev = e_info[enum2i<EgoType>(ae_ptr->o_ptr->name2)].level;
 }
 
 static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)

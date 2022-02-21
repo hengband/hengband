@@ -91,7 +91,7 @@ void update_lite_radius(PlayerType *player_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        if (o_ptr->name2 == EGO_LITE_SHINE)
+        if (o_ptr->name2 == EgoType::LITE_SHINE)
             player_ptr->cur_lite++;
 
         if (flgs.has_not(TR_DARK_SOURCE)) {
