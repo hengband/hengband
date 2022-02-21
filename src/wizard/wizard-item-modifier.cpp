@@ -1028,7 +1028,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 do {
                     o_ptr->prep(k_idx);
                     apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
-                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 != EgoType::NONE || o_ptr->is_cursed());
+                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name)
                     drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);

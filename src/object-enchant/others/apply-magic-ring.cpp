@@ -226,7 +226,7 @@ void RingEnchanter::sval_enchant()
 
 void RingEnchanter::give_ego_index()
 {
-    while (this->o_ptr->name2 == EgoType::NONE) {
+    while (!this->o_ptr->is_ego()) {
         int tmp = m_bonus(10, this->level);
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(28)) {
@@ -500,7 +500,7 @@ void RingEnchanter::give_cursed()
         this->o_ptr->pval = 0 - this->o_ptr->pval;
     }
 
-    while (this->o_ptr->name2 == EgoType::NONE) {
+    while (!this->o_ptr->is_ego()) {
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(5)) {
         case 1:
