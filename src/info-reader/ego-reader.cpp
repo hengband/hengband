@@ -74,12 +74,9 @@ errr parse_e_info(std::string_view buf, angband_header *)
         auto i = std::stoi(tokens[1]);
         if (i < error_idx)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-        if (i >= static_cast<int>(e_info.size())) {
-            e_info.resize(i + 1);
-        }
 
         error_idx = i;
-        e_ptr = &e_info[i];
+        e_ptr = &(e_info.emplace_hint(e_info.end(), i2enum<EgoType>(i), ego_item_type{})->second);
         e_ptr->idx = i2enum<EgoType>(i);
 #ifdef JP
         e_ptr->name = tokens[2];

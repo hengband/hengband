@@ -131,7 +131,7 @@ void rd_item_old(ObjectType *o_ptr)
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             } else if (o_ptr->is_ego()) {
-                ego_item_type *e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
+                auto *e_ptr = &e_info[o_ptr->name2];
                 if (e_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (e_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
@@ -329,8 +329,7 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (o_ptr->is_ego()) {
-        ego_item_type *e_ptr;
-        e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
+        auto *e_ptr = &e_info[o_ptr->name2];
         if (e_ptr->name.empty())
             o_ptr->name2 = EgoType::NONE;
     }

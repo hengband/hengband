@@ -22,7 +22,7 @@ static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
         return;
     }
 
-    auto *e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
+    auto *e_ptr = &e_info[o_ptr->name2];
     flgs.set(e_ptr->flags);
 
     auto is_out_of_fuel = o_ptr->fuel == 0;

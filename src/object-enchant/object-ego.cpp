@@ -23,7 +23,7 @@
 /*
  * The ego-item arrays
  */
-std::vector<ego_item_type> e_info;
+std::map<EgoType, ego_item_type> e_info;
 
 /*!
  * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
@@ -35,7 +35,7 @@ std::vector<ego_item_type> e_info;
 EgoType get_random_ego(byte slot, bool good)
 {
     ProbabilityTable<EgoType> prob_table;
-    for (const auto &e_ref : e_info) {
+    for (const auto &[e_idx, e_ref] : e_info) {
         if (e_ref.idx == EgoType::NONE || e_ref.slot != slot || e_ref.rarity <= 0)
             continue;
 
@@ -236,7 +236,7 @@ void ego_invest_extra_attack(ObjectType *o_ptr, ego_item_type *e_ptr, DEPTH lev)
  */
 void apply_ego(ObjectType *o_ptr, DEPTH lev)
 {
-    auto e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
+    auto e_ptr = &e_info[o_ptr->name2];
     auto gen_flags = e_ptr->gen_flags;
 
     ego_interpret_extra_abilities(o_ptr, e_ptr, gen_flags);
