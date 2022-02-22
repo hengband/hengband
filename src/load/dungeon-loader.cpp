@@ -13,6 +13,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-range.h"
 #include "world/world.h"
 
 /*!
@@ -133,8 +134,8 @@ static errr rd_dungeon(PlayerType *player_ptr)
 errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
-        for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
-            r_info[quest[i].r_idx].flags1 &= ~RF1_QUESTOR;
+        for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+            r_info[quest[q_idx].r_idx].flags1 &= ~RF1_QUESTOR;
         }
 
         return 0;

@@ -22,14 +22,14 @@
 bool place_quest_monsters(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (int i = 0; i < max_q_idx; i++) {
+    for (auto &[q_idx, q_ref] : quest) {
         monster_race *r_ptr;
         BIT_FLAGS mode;
-        if (quest[i].status != QuestStatusType::TAKEN || (quest[i].type != QuestKindType::KILL_LEVEL && quest[i].type != QuestKindType::RANDOM) || quest[i].level != floor_ptr->dun_level || player_ptr->dungeon_idx != quest[i].dungeon || (quest[i].flags & QUEST_FLAG_PRESET)) {
+        if (q_ref.status != QuestStatusType::TAKEN || (q_ref.type != QuestKindType::KILL_LEVEL && q_ref.type != QuestKindType::RANDOM) || q_ref.level != floor_ptr->dun_level || player_ptr->dungeon_idx != q_ref.dungeon || (q_ref.flags & QUEST_FLAG_PRESET)) {
             continue;
         }
 
-        r_ptr = &r_info[quest[i].r_idx];
+        r_ptr = &r_info[q_ref.r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num)) {
             continue;
         }
@@ -39,7 +39,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
             mode |= PM_ALLOW_GROUP;
         }
 
-        for (int j = 0; j < (quest[i].max_num - quest[i].cur_num); j++) {
+        for (int j = 0; j < (q_ref.max_num - q_ref.cur_num); j++) {
             int k;
             for (k = 0; k < SAFE_MAX_ATTEMPTS; k++) {
                 POSITION x = 0;
@@ -75,7 +75,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     return false;
                 }
 
-                if (place_monster_aux(player_ptr, 0, y, x, quest[i].r_idx, mode)) {
+                if (place_monster_aux(player_ptr, 0, y, x, q_ref.r_idx, mode)) {
                     break;
                 } else {
                     continue;

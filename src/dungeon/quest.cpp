@@ -173,9 +173,9 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_num)
 void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     /* Check if completed a quest */
-    for (int16_t i = 0; i < max_q_idx; i++) {
-        if ((quest[i].type == QuestKindType::FIND_ARTIFACT) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].k_idx == o_ptr->fixed_artifact_idx)) {
-            complete_quest(player_ptr, i2enum<QuestId>(i));
+    for (auto &[q_idx, q_ref] : quest) {
+        if ((q_ref.type == QuestKindType::FIND_ARTIFACT) && (q_ref.status == QuestStatusType::TAKEN) && (q_ref.k_idx == o_ptr->fixed_artifact_idx)) {
+            complete_quest(player_ptr, q_idx);
         }
     }
 }
@@ -234,13 +234,13 @@ QuestId quest_number(PlayerType *player_ptr, DEPTH level)
         return floor_ptr->quest_number;
     }
 
-    for (int16_t i = 0; i < max_q_idx; i++) {
-        if (quest[i].status != QuestStatusType::TAKEN) {
+    for (auto &[q_idx, q_ref] : quest) {
+        if (q_ref.status != QuestStatusType::TAKEN) {
             continue;
         }
 
-        if ((quest[i].type == QuestKindType::KILL_LEVEL) && !(quest[i].flags & QUEST_FLAG_PRESET) && (quest[i].level == level) && (quest[i].dungeon == player_ptr->dungeon_idx)) {
-            return i2enum<QuestId>(i);
+        if ((q_ref.type == QuestKindType::KILL_LEVEL) && !(q_ref.flags & QUEST_FLAG_PRESET) && (q_ref.level == level) && (q_ref.dungeon == player_ptr->dungeon_idx)) {
+            return q_idx;
         }
     }
 
@@ -259,9 +259,10 @@ QuestId random_quest_number(PlayerType *player_ptr, DEPTH level)
         return QuestId::NONE;
     }
 
-    for (int16_t i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
-        if ((quest[i].type == QuestKindType::RANDOM) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].level == level) && (quest[i].dungeon == DUNGEON_ANGBAND)) {
-            return i2enum<QuestId>(i);
+    for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+        auto &q_ref = quest[q_idx];
+        if ((q_ref.type == QuestKindType::RANDOM) && (q_ref.status == QuestStatusType::TAKEN) && (q_ref.level == level) && (q_ref.dungeon == DUNGEON_ANGBAND)) {
+            return q_idx;
         }
     }
 

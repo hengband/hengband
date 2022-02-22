@@ -260,9 +260,9 @@ static void get_out_monster(PlayerType *player_ptr)
 static void preserve_info(PlayerType *player_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
-    for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
-        if ((quest[i].status == QuestStatusType::TAKEN) && ((quest[i].type == QuestKindType::KILL_LEVEL) || (quest[i].type == QuestKindType::RANDOM)) && (quest[i].level == player_ptr->current_floor_ptr->dun_level) && (player_ptr->dungeon_idx == quest[i].dungeon) && !(quest[i].flags & QUEST_FLAG_PRESET)) {
-            quest_r_idx = quest[i].r_idx;
+    for (auto &[q_idx, q_ref] : quest) {
+        if ((q_ref.status == QuestStatusType::TAKEN) && ((q_ref.type == QuestKindType::KILL_LEVEL) || (q_ref.type == QuestKindType::RANDOM)) && (q_ref.level == player_ptr->current_floor_ptr->dun_level) && (player_ptr->dungeon_idx == q_ref.dungeon) && !(q_ref.flags & QUEST_FLAG_PRESET)) {
+            quest_r_idx = q_ref.r_idx;
         }
     }
 
