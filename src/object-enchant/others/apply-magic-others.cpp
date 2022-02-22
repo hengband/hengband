@@ -71,21 +71,9 @@ void OtherItemsEnchanter::apply_magic()
     case ItemKindType::STATUE:
         this->enchant_statue();
         break;
-    case ItemKindType::CHEST: {
-        DEPTH obj_level = k_info[this->o_ptr->k_idx].level;
-        if (obj_level <= 0)
-            break;
-
-        this->o_ptr->pval = randint1(obj_level);
-        if (this->o_ptr->sval == SV_CHEST_KANDUME)
-            this->o_ptr->pval = 6;
-
-        this->o_ptr->chest_level = this->player_ptr->current_floor_ptr->dun_level + 5;
-        if (this->o_ptr->pval > 55)
-            this->o_ptr->pval = 55 + (byte)randint0(5);
-
+    case ItemKindType::CHEST:
+        this->enchant_chest();
         break;
-    }
     default:
         break;
     }
@@ -177,4 +165,22 @@ void OtherItemsEnchanter::enchant_statue()
 
     object_aware(this->player_ptr, this->o_ptr);
     object_known(this->o_ptr);
+}
+
+void OtherItemsEnchanter::enchant_chest()
+{
+    auto obj_level = k_info[this->o_ptr->k_idx].level;
+    if (obj_level <= 0) {
+        return;
+    }
+
+    this->o_ptr->pval = randint1(obj_level);
+    if (this->o_ptr->sval == SV_CHEST_KANDUME) {
+        this->o_ptr->pval = 6;
+    }
+
+    this->o_ptr->chest_level = this->player_ptr->current_floor_ptr->dun_level + 5;
+    if (this->o_ptr->pval > 55) {
+        this->o_ptr->pval = 55 + randint0(5);
+    }
 }

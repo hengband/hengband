@@ -22,4 +22,5 @@ private:
     void enchant_figurine();
     void enchant_corpse();
     void enchant_statue();
+    void enchant_chest();
 };
