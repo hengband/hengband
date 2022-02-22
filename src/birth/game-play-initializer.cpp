@@ -203,11 +203,11 @@ void init_dungeon_quests(PlayerType *player_ptr)
     init_flags = INIT_ASSIGN;
     floor_ptr->quest_number = QuestId::OBERON;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[enum2i(QuestId::OBERON)].status = QuestStatusType::TAKEN;
+    quest[QuestId::OBERON].status = QuestStatusType::TAKEN;
 
     floor_ptr->quest_number = QuestId::SERPENT;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[enum2i(QuestId::SERPENT)].status = QuestStatusType::TAKEN;
+    quest[QuestId::SERPENT].status = QuestStatusType::TAKEN;
     floor_ptr->quest_number = QuestId::NONE;
 }
 

@@ -140,7 +140,7 @@ void wiz_complete_quest(PlayerType *player_ptr)
         return;
     }
 
-    if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status == QuestStatusType::TAKEN) {
+    if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
         complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
     }
 }

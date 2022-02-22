@@ -38,8 +38,8 @@ void QuestCompletionChecker::complete()
     this->set_quest_idx();
     auto create_stairs = false;
     auto reward = false;
-    if (inside_quest(this->quest_idx) && (quest[enum2i(this->quest_idx)].status == QuestStatusType::TAKEN)) {
-        this->q_ptr = &quest[enum2i(this->quest_idx)];
+    if (inside_quest(this->quest_idx) && (quest[this->quest_idx].status == QuestStatusType::TAKEN)) {
+        this->q_ptr = &quest[this->quest_idx];
         auto [tmp_create_stairs, tmp_reward] = this->switch_completion();
         create_stairs = tmp_create_stairs;
         reward = tmp_reward;
@@ -192,9 +192,9 @@ void QuestCompletionChecker::complete_tower()
     }
 
     this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
-    auto is_tower_completed = quest[enum2i(QuestId::TOWER1)].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest[enum2i(QuestId::TOWER2)].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest[enum2i(QuestId::TOWER3)].status == QuestStatusType::STAGE_COMPLETED;
+    auto is_tower_completed = quest[QuestId::TOWER1].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest[QuestId::TOWER2].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest[QuestId::TOWER3].status == QuestStatusType::STAGE_COMPLETED;
     if (is_tower_completed) {
         complete_quest(this->player_ptr, QuestId::TOWER1);
     }

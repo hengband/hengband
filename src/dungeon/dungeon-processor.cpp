@@ -79,7 +79,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     disturb(player_ptr, true, true);
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
     if (inside_quest(quest_num)) {
-        r_info[quest[enum2i(quest_num)].r_idx].flags1 |= RF1_QUESTOR;
+        r_info[quest[quest_num].r_idx].flags1 |= RF1_QUESTOR;
     }
 
     if (player_ptr->max_plv < player_ptr->lev) {
@@ -110,7 +110,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     handle_stuff(player_ptr);
     term_fresh();
 
-    if (inside_quest(quest_num) && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[enum2i(quest_num)].flags & QUEST_FLAG_PRESET)))) {
+    if (inside_quest(quest_num) && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) {
         do_cmd_feeling(player_ptr);
     }
 
@@ -235,8 +235,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
     }
 
-    if ((inside_quest(quest_num)) && r_info[quest[enum2i(quest_num)].r_idx].kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        r_info[quest[enum2i(quest_num)].r_idx].flags1 &= ~RF1_QUESTOR;
+    if ((inside_quest(quest_num)) && r_info[quest[quest_num].r_idx].kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        r_info[quest[quest_num].r_idx].flags1 &= ~RF1_QUESTOR;
     }
 
     if (player_ptr->playing && !player_ptr->is_dead) {

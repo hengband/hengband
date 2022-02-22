@@ -53,8 +53,8 @@
  */
 static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
-    auto *q_ptr = &quest[enum2i(player_ptr->current_floor_ptr->quest_number)];
-    if (confirm_quest && inside_quest(player_ptr->current_floor_ptr->quest_number) && (q_ptr->type == QuestKindType::RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED) || (q_ptr->flags & QUEST_FLAG_TOWER && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[enum2i(QuestId::TOWER1)].status != QuestStatusType::COMPLETED)))))) {
+    auto *q_ptr = &quest[player_ptr->current_floor_ptr->quest_number];
+    if (confirm_quest && inside_quest(player_ptr->current_floor_ptr->quest_number) && (q_ptr->type == QuestKindType::RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED) || (q_ptr->flags & QUEST_FLAG_TOWER && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[QuestId::TOWER1].status != QuestStatusType::COMPLETED)))))) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
         return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
@@ -93,13 +93,13 @@ void do_cmd_go_up(PlayerType *player_ptr)
 
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status == QuestStatusType::UNTAKEN) {
-            if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].type != QuestKindType::RANDOM) {
+        if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
+            if (quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status = QuestStatusType::TAKEN;
+            quest[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
         }
 
         if (!inside_quest(player_ptr->current_floor_ptr->quest_number)) {
@@ -130,12 +130,12 @@ void do_cmd_go_up(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && quest[enum2i(player_ptr->current_floor_ptr->quest_number)].type == QuestKindType::RANDOM) {
+    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && quest[player_ptr->current_floor_ptr->quest_number].type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     }
 
-    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && quest[enum2i(player_ptr->current_floor_ptr->quest_number)].type != QuestKindType::RANDOM) {
+    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         player_ptr->current_floor_ptr->dun_level = 0;
@@ -220,13 +220,13 @@ void do_cmd_go_down(PlayerType *player_ptr)
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status == QuestStatusType::UNTAKEN) {
-            if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].type != QuestKindType::RANDOM) {
+        if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
+            if (quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status = QuestStatusType::TAKEN;
+            quest[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
         }
 
         if (!inside_quest(player_ptr->current_floor_ptr->quest_number)) {

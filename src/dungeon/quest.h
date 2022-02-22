@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 #include "util/enum-converter.h"
+#include <map>
 #include <vector>
 
 // clang-format off
@@ -120,7 +121,7 @@ public:
     static bool is_fixed(QuestId quest_idx);
 };
 
-extern std::vector<quest_type> quest;
+extern std::map<QuestId, quest_type> quest;
 extern int16_t max_q_idx;
 extern char quest_text[10][80];
 extern int quest_text_line;

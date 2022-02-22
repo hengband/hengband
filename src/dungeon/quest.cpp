@@ -36,7 +36,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-std::vector<quest_type> quest; /*!< Quest info */
+std::map<QuestId, quest_type> quest; /*!< Quest info */
 int16_t max_q_idx; /*!< Maximum number of quests */
 char quest_text[10][80]; /*!< Quest text */
 int quest_text_line; /*!< Current line of the quest text */
@@ -138,7 +138,7 @@ void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusT
  */
 void complete_quest(PlayerType *player_ptr, QuestId quest_num)
 {
-    quest_type *const q_ptr = &quest[enum2i(quest_num)];
+    auto *const q_ptr = &quest[quest_num];
 
     switch (q_ptr->type) {
     case QuestKindType::RANDOM:
@@ -186,7 +186,7 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 void quest_discovery(QuestId q_idx)
 {
-    auto *q_ptr = &quest[enum2i(q_idx)];
+    auto *q_ptr = &quest[q_idx];
     auto *r_ptr = &r_info[q_ptr->r_idx];
     MONSTER_NUMBER q_num = q_ptr->max_num;
 
@@ -279,7 +279,7 @@ void leave_quest_check(PlayerType *player_ptr)
         return;
     }
 
-    quest_type *const q_ptr = &quest[enum2i<QuestId>(leaving_quest)];
+    auto *const q_ptr = &quest[leaving_quest];
     bool is_one_time_quest = ((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QuestKindType::RANDOM)) && (q_ptr->status == QuestStatusType::TAKEN);
     if (!is_one_time_quest) {
         return;
@@ -290,8 +290,8 @@ void leave_quest_check(PlayerType *player_ptr)
     /* Additional settings */
     switch (q_ptr->type) {
     case QuestKindType::TOWER:
-        quest[enum2i(QuestId::TOWER1)].status = QuestStatusType::FAILED;
-        quest[enum2i(QuestId::TOWER1)].complev = player_ptr->lev;
+        quest[QuestId::TOWER1].status = QuestStatusType::FAILED;
+        quest[QuestId::TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
         a_info[q_ptr->k_idx].gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
@@ -324,19 +324,19 @@ void leave_tower_check(PlayerType *player_ptr)
 {
     leaving_quest = player_ptr->current_floor_ptr->quest_number;
     bool is_leaving_from_tower = inside_quest(leaving_quest);
-    is_leaving_from_tower &= quest[enum2i<QuestId>(leaving_quest)].type == QuestKindType::TOWER;
-    is_leaving_from_tower &= quest[enum2i(QuestId::TOWER1)].status != QuestStatusType::COMPLETED;
+    is_leaving_from_tower &= quest[leaving_quest].type == QuestKindType::TOWER;
+    is_leaving_from_tower &= quest[QuestId::TOWER1].status != QuestStatusType::COMPLETED;
     if (!is_leaving_from_tower) {
         return;
     }
-    if (quest[enum2i<QuestId>(leaving_quest)].type != QuestKindType::TOWER) {
+    if (quest[leaving_quest].type != QuestKindType::TOWER) {
         return;
     }
 
-    quest[enum2i(QuestId::TOWER1)].status = QuestStatusType::FAILED;
-    quest[enum2i(QuestId::TOWER1)].complev = player_ptr->lev;
+    quest[QuestId::TOWER1].status = QuestStatusType::FAILED;
+    quest[QuestId::TOWER1].complev = player_ptr->lev;
     update_playtime();
-    quest[enum2i(QuestId::TOWER1)].comptime = w_ptr->play_time;
+    quest[QuestId::TOWER1].comptime = w_ptr->play_time;
 }
 
 /*!
@@ -344,7 +344,7 @@ void leave_tower_check(PlayerType *player_ptr)
  */
 void exe_enter_quest(PlayerType *player_ptr, QuestId quest_idx)
 {
-    if (quest[enum2i<QuestId>(quest_idx)].type != QuestKindType::RANDOM) {
+    if (quest[quest_idx].type != QuestKindType::RANDOM) {
         player_ptr->current_floor_ptr->dun_level = 1;
     }
     player_ptr->current_floor_ptr->quest_number = quest_idx;
