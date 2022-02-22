@@ -51,15 +51,12 @@ AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level,
 
 void AbstractWeaponEnchanter::decide_skip()
 {
-    this->should_skip = (this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_DIAMOND_EDGE);
-    this->should_skip |= (this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_POISON_NEEDLE) && (this->power != 0);
-    this->should_skip |= (this->o_ptr->tval == ItemKindType::POLEARM) && (this->o_ptr->sval == SV_DEATH_SCYTHE) && (this->power != 0);
-    auto other_weapons_enchant = this->o_ptr->tval == ItemKindType::DIGGING;
-    other_weapons_enchant |= this->o_ptr->tval == ItemKindType::HAFTED;
-    other_weapons_enchant |= this->o_ptr->tval == ItemKindType::BOW;
-    other_weapons_enchant |= this->o_ptr->tval == ItemKindType::SHOT;
-    other_weapons_enchant |= this->o_ptr->tval == ItemKindType::ARROW;
-    other_weapons_enchant |= this->o_ptr->tval == ItemKindType::BOLT;
-    other_weapons_enchant &= this->power != 0;
-    this->should_skip |= !other_weapons_enchant;
+    if (this->power == 0) {
+        this->should_skip = true;
+        return;
+    }
+
+    this->should_skip |= (this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_DIAMOND_EDGE);
+    this->should_skip |= (this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_POISON_NEEDLE);
+    this->should_skip |= (this->o_ptr->tval == ItemKindType::POLEARM) && (this->o_ptr->sval == SV_DEATH_SCYTHE);
 }
