@@ -363,7 +363,7 @@ void InputKeyRequestor::make_commands_frame()
 
 std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent &special_menu)
 {
-    switch (special_menu.jouken) {
+    switch (special_menu.menu_condition) {
     case SpecialMenuType::NONE:
         return "";
     case SpecialMenuType::CLASS:

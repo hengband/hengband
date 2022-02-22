@@ -18,11 +18,11 @@ enum class SpecialMenuType {
 enum class PlayerClassType : short;
 class SpecialMenuContent {
 public:
-    SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType jouken, PlayerClassType jouken_naiyou);
+    SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, PlayerClassType jouken_naiyou);
     concptr name;
     byte window;
     byte number;
-    SpecialMenuType jouken;
+    SpecialMenuType menu_condition;
     PlayerClassType jouken_naiyou;
 };
 
