@@ -256,11 +256,11 @@ static void rd_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
     r_ptr->r_flags1 &= r_ptr->flags1;
     r_ptr->r_flags2 &= r_ptr->flags2;
     r_ptr->r_flags3 &= r_ptr->flags3;
-    r_ptr->r_resistance_flags &= r_ptr->r_resistance_flags;
+    r_ptr->r_resistance_flags &= r_ptr->resistance_flags;
     r_ptr->r_ability_flags &= r_ptr->ability_flags;
     r_ptr->r_aura_flags &= r_ptr->aura_flags;
-    r_ptr->r_behavior_flags &= r_ptr->r_behavior_flags;
-    r_ptr->r_kind_flags &= r_ptr->r_kind_flags;
+    r_ptr->r_behavior_flags &= r_ptr->behavior_flags;
+    r_ptr->r_kind_flags &= r_ptr->kind_flags;
 }
 
 void load_lore(void)
