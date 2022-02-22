@@ -45,7 +45,6 @@ OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_p
  */
 void OtherItemsEnchanter::apply_magic()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     switch (this->o_ptr->tval) {
     case ItemKindType::FLASK:
         this->o_ptr->fuel = this->o_ptr->pval;
@@ -66,37 +65,9 @@ void OtherItemsEnchanter::apply_magic()
     case ItemKindType::FIGURINE:
         this->enchant_figurine();
         break;
-    case ItemKindType::CORPSE: {
-        PARAMETER_VALUE i = 1;
-        int check;
-        uint32_t match = 0;
-        monster_race *r_ptr;
-        if (this->o_ptr->sval == SV_SKELETON) {
-            match = RF9_DROP_SKELETON;
-        } else if (this->o_ptr->sval == SV_CORPSE) {
-            match = RF9_DROP_CORPSE;
-        }
-
-        get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
-        while (true) {
-            i = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
-            r_ptr = &r_info[i];
-            check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
-            if (!r_ptr->rarity)
-                continue;
-            if (!(r_ptr->flags9 & match))
-                continue;
-            if (randint0(check))
-                continue;
-
-            break;
-        }
-
-        this->o_ptr->pval = i;
-        object_aware(this->player_ptr, this->o_ptr);
-        object_known(this->o_ptr);
+    case ItemKindType::CORPSE:
+        this->enchant_corpse();
         break;
-    }
     case ItemKindType::STATUE: {
         PARAMETER_VALUE i = 1;
         monster_race *r_ptr;
@@ -127,7 +98,7 @@ void OtherItemsEnchanter::apply_magic()
         if (this->o_ptr->sval == SV_CHEST_KANDUME)
             this->o_ptr->pval = 6;
 
-        this->o_ptr->chest_level = floor_ptr->dun_level + 5;
+        this->o_ptr->chest_level = this->player_ptr->current_floor_ptr->dun_level + 5;
         if (this->o_ptr->pval > 55)
             this->o_ptr->pval = 55 + (byte)randint0(5);
 
@@ -173,4 +144,32 @@ void OtherItemsEnchanter::enchant_figurine()
     if (one_in_(6)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
+}
+
+void OtherItemsEnchanter::enchant_corpse()
+{
+    uint32_t match = 0;
+    if (this->o_ptr->sval == SV_SKELETON) {
+        match = RF9_DROP_SKELETON;
+    } else if (this->o_ptr->sval == SV_CORPSE) {
+        match = RF9_DROP_CORPSE;
+    }
+
+    get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    short r_idx;
+    while (true) {
+        r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
+        auto *r_ptr = &r_info[r_idx];
+        auto check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
+        if ((r_ptr->rarity == 0) || none_bits(r_ptr->flags9, match) || (randint0(check) > 0)) {
+            continue;
+        }
+
+        break;
+    }
+
+    this->o_ptr->pval = r_idx;
+    object_aware(this->player_ptr, this->o_ptr);
+    object_known(this->o_ptr);
 }
