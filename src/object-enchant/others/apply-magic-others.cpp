@@ -45,36 +45,24 @@ OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_p
  */
 void OtherItemsEnchanter::apply_magic()
 {
-    auto *k_ptr = &k_info[this->o_ptr->k_idx];
-
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     switch (this->o_ptr->tval) {
-    case ItemKindType::WHISTLE: {
-        break;
-    }
-    case ItemKindType::FLASK: {
+    case ItemKindType::FLASK:
         this->o_ptr->fuel = this->o_ptr->pval;
         this->o_ptr->pval = 0;
         break;
-    }
     case ItemKindType::WAND:
-    case ItemKindType::STAFF: {
-        /* The wand or staff gets a number of initial charges equal
-         * to between 1/2 (+1) and the full object kind's pval. -LM-
-         */
-        this->o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
+    case ItemKindType::STAFF:
+        this->enchant_wand_staff();
         break;
-    }
-    case ItemKindType::ROD: {
-        this->o_ptr->pval = k_ptr->pval;
+    case ItemKindType::ROD:
+        this->o_ptr->pval = k_info[this->o_ptr->k_idx].pval;
         break;
-    }
-    case ItemKindType::CAPTURE: {
+    case ItemKindType::CAPTURE:
         this->o_ptr->pval = 0;
         object_aware(this->player_ptr, this->o_ptr);
         object_known(this->o_ptr);
         break;
-    }
     case ItemKindType::FIGURINE: {
         PARAMETER_VALUE i = 1;
         int check;
@@ -172,8 +160,18 @@ void OtherItemsEnchanter::apply_magic()
 
         break;
     }
-
     default:
         break;
     }
+}
+
+/*
+ * @brief 杖を強化する
+ * The wand or staff gets a number of initial charges equal
+ * to between 1/2 (+1) and the full object kind's pval.
+ */
+void OtherItemsEnchanter::enchant_wand_staff()
+{
+    auto *k_ptr = &k_info[this->o_ptr->k_idx];
+    this->o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
 }

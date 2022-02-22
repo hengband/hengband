@@ -17,4 +17,6 @@ public:
 private:
     PlayerType *player_ptr;
     ObjectType *o_ptr;
+
+    void enchant_wand_staff();
 };
