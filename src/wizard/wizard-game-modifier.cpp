@@ -143,7 +143,7 @@ void wiz_complete_quest(PlayerType *player_ptr)
 void wiz_restore_monster_max_num(MONRACE_IDX r_idx)
 {
     if (r_idx <= 0) {
-        int val = 1;
+        int val;
         if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
             return;
         }
@@ -157,11 +157,12 @@ void wiz_restore_monster_max_num(MONRACE_IDX r_idx)
         return;
     }
 
-    MONSTER_NUMBER n = 0;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+    auto n = 0;
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         n = 1;
-    else if (any_bits(r_ptr->flags7, RF7_NAZGUL))
+    } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
         n = MAX_NAZGUL_NUM;
+    }
 
     if (n == 0) {
         msg_print("出現数に制限がないモンスターです。");
