@@ -514,8 +514,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     if (!blind && !(flag & (PROJECT_HIDE)) && (delay_factor > 0)) {
         for (int t = 0; t <= gm_rad; t++) {
             for (int i = gm[t]; i < gm[t + 1]; i++) {
-                y = gy[i];
-                x = gx[i];
+                auto y = gy[i];
+                auto x = gx[i];
                 if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
                     uint16_t p;
                     TERM_COLOR a;
@@ -537,8 +537,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
         if (drawn) {
             for (int i = 0; i < grids; i++) {
-                y = gy[i];
-                x = gx[i];
+                auto y = gy[i];
+                auto x = gx[i];
                 if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
                     lite_spot(player_ptr, y, x);
                 }
@@ -561,8 +561,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         for (int i = 0; i < grids; i++) {
             if (gm[dist + 1] == i)
                 dist++;
-            y = gy[i];
-            x = gx[i];
+            auto y = gy[i];
+            auto x = gx[i];
             if (breath) {
                 int d = dist_to_line(y, x, y1, x1, by, bx);
                 if (affect_feature(player_ptr, who, d, y, x, dam, typ))
@@ -581,8 +581,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (gm[dist + 1] == i)
                 dist++;
 
-            y = gy[i];
-            x = gx[i];
+            auto y = gy[i];
+            auto x = gx[i];
             if (breath) {
                 int d = dist_to_line(y, x, y1, x1, by, bx);
                 if (affect_item(player_ptr, who, d, y, x, dam, typ))
@@ -604,8 +604,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (gm[dist + 1] == i)
                 dist++;
 
-            y = gy[i];
-            x = gx[i];
+            auto y = gy[i];
+            auto x = gx[i];
             if (grids <= 1) {
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
                 monster_race *ref_ptr = &r_info[m_ptr->r_idx];
@@ -716,8 +716,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
         /* Player affected one monster (without "jumping") */
         if (!who && (project_m_n == 1) && !jump) {
-            x = project_m_x;
-            y = project_m_y;
+            auto x = project_m_x;
+            auto y = project_m_y;
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) {
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 
@@ -737,8 +737,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (gm[dist + 1] == i)
                 dist++;
 
-            y = gy[i];
-            x = gx[i];
+            auto y = gy[i];
+            auto x = gx[i];
             if (!player_bold(player_ptr, y, x))
                 continue;
 
