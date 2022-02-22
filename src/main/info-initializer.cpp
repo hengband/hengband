@@ -51,6 +51,12 @@ template <typename T, typename Alloc>
 struct is_vector<std::vector<T, Alloc>> : std::true_type {
 };
 
+/*!
+ * @brief 与えられた型 T が std::vector 型かどうか調べる
+ * T の型が std::vector<SomeType> に一致する時、is_vector_v<T> == true
+ * 一致しない時、is_vector_v<T> == false となる
+ * @tparam T 調べる型
+ */
 template <typename T>
 constexpr bool is_vector_v = is_vector<T>::value;
 
