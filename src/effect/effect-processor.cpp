@@ -148,8 +148,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         }
     }
 
-    if (rad < 0) {
-        rad = 0 - rad;
+    if (flag & (PROJECT_BREATH)) {
         breath = true;
         if (flag & PROJECT_HIDE)
             old_hide = true;

@@ -258,15 +258,13 @@ ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
     if (target_type == MONSTER_TO_PLAYER) {
         flg |= PROJECT_PLAYER;
     }
 
     if (rad < 1)
         rad = (r_ptr->flags2 & (RF2_POWERFUL)) ? 3 : 2;
-
-    rad = 0 - rad;
 
     return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
 }

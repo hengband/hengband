@@ -20,5 +20,6 @@ enum effect_characteristics {
     PROJECT_NO_HANGEKI = 0x1000, /*!< 反撃させない / Avoid counter attacks of monsters */
     PROJECT_PATH = 0x2000, /*!< 軌跡の表示 / Only used for printing project path */
     PROJECT_FAST = 0x4000, /*!< 炸裂するまで画面上に表示しない / Hide "visual" of flying bolts until blast */
-    PROJECT_LOS = 0x8000 /*!< 視線が通っているか(？) / Line of sight */
+    PROJECT_LOS = 0x8000, /*!< 視線が通っているか(？) / Line of sight */
+    PROJECT_BREATH = 0x10000 /*!< ブレスである / Breath */
 };
