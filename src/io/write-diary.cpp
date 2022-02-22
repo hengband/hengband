@@ -159,6 +159,91 @@ static void write_diary_pet(FILE *fff, int num, concptr note)
     }
 }
 
+/**
+ * @brief 日記にクエストに関するメッセージを追加する
+ *
+ * @param type 日記内容のID
+ * @param num 日記内容のIDに応じた番号
+ * @return エラーコード
+ */
+int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
+{
+    static bool disable_diary = false;
+
+    int day, hour, min;
+    extract_day_hour_min(player_ptr, &day, &hour, &min);
+
+    if (disable_diary) {
+        return -1;
+    }
+
+    auto old_quest = player_ptr->current_floor_ptr->quest_number;
+    player_ptr->current_floor_ptr->quest_number = (quest[num].type == QuestKindType::RANDOM) ? QuestId::NONE : num;
+    init_flags = INIT_NAME_ONLY;
+    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    player_ptr->current_floor_ptr->quest_number = old_quest;
+
+    concptr note_level = "";
+    char note_level_buf[40];
+    write_floor(player_ptr, &note_level, note_level_buf);
+
+    FILE *fff = nullptr;
+    if (!open_diary_file(&fff, &disable_diary)) {
+        return -1;
+    }
+
+    bool do_level = true;
+
+    switch (type) {
+    case DIARY_FIX_QUEST_C: {
+        if (quest[num].flags & QUEST_FLAG_SILENT) {
+            break;
+        }
+
+        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest[num].name);
+        break;
+    }
+    case DIARY_FIX_QUEST_F: {
+        if (quest[num].flags & QUEST_FLAG_SILENT) {
+            break;
+        }
+
+        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
+        break;
+    }
+    case DIARY_RAND_QUEST_C: {
+        GAME_TEXT name[MAX_NLEN];
+        strcpy(name, r_info[quest[num].r_idx].name.c_str());
+        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
+        break;
+    }
+    case DIARY_RAND_QUEST_F: {
+        GAME_TEXT name[MAX_NLEN];
+        strcpy(name, r_info[quest[num].r_idx].name.c_str());
+        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
+        break;
+    }
+    case DIARY_TO_QUEST: {
+        if (quest[num].flags & QUEST_FLAG_SILENT) {
+            break;
+        }
+
+        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
+            hour, min, note_level, quest[num].name);
+        break;
+    }
+    default:
+        break;
+    }
+
+    angband_fclose(fff);
+    if (do_level) {
+        write_level = false;
+    }
+
+    return 0;
+}
+
 /*!
  * @brief 日記にメッセージを追加する /
  * Take note to the diary.
@@ -176,18 +261,6 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
 
     if (disable_diary) {
         return -1;
-    }
-
-    if (type == DIARY_FIX_QUEST_C ||
-        type == DIARY_FIX_QUEST_F ||
-        type == DIARY_RAND_QUEST_C ||
-        type == DIARY_RAND_QUEST_F ||
-        type == DIARY_TO_QUEST) {
-        QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
-        player_ptr->current_floor_ptr->quest_number = (quest[num].type == QuestKindType::RANDOM) ? QuestId::NONE : i2enum<QuestId>(num);
-        init_flags = INIT_NAME_ONLY;
-        parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->quest_number = old_quest;
     }
 
     FILE *fff = nullptr;
@@ -233,34 +306,6 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         fprintf(fff, _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n"), hour, min, note_level, note);
         break;
     }
-    case DIARY_FIX_QUEST_C: {
-        if (quest[num].flags & QUEST_FLAG_SILENT) {
-            break;
-        }
-
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest[num].name);
-        break;
-    }
-    case DIARY_FIX_QUEST_F: {
-        if (quest[num].flags & QUEST_FLAG_SILENT) {
-            break;
-        }
-
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
-        break;
-    }
-    case DIARY_RAND_QUEST_C: {
-        GAME_TEXT name[MAX_NLEN];
-        strcpy(name, r_info[quest[num].r_idx].name.c_str());
-        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
-        break;
-    }
-    case DIARY_RAND_QUEST_F: {
-        GAME_TEXT name[MAX_NLEN];
-        strcpy(name, r_info[quest[num].r_idx].name.c_str());
-        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
-        break;
-    }
     case DIARY_MAXDEAPTH: {
         fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n", " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
             _(d_info[player_ptr->dungeon_idx].name.c_str(), num),
@@ -291,15 +336,6 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
             fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
         }
 
-        break;
-    }
-    case DIARY_TO_QUEST: {
-        if (quest[num].flags & QUEST_FLAG_SILENT) {
-            break;
-        }
-
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
-            hour, min, note_level, quest[num].name);
         break;
     }
     case DIARY_TELEPORT_LEVEL: {
