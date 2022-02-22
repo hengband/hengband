@@ -21,4 +21,5 @@ private:
     void enchant_wand_staff();
     void enchant_figurine();
     void enchant_corpse();
+    void enchant_statue();
 };

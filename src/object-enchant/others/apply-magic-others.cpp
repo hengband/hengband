@@ -68,27 +68,9 @@ void OtherItemsEnchanter::apply_magic()
     case ItemKindType::CORPSE:
         this->enchant_corpse();
         break;
-    case ItemKindType::STATUE: {
-        PARAMETER_VALUE i = 1;
-        monster_race *r_ptr;
-        while (true) {
-            i = randint1(r_info.size() - 1);
-            r_ptr = &r_info[i];
-            if (!r_ptr->rarity)
-                continue;
-
-            break;
-        }
-
-        this->o_ptr->pval = i;
-        if (cheat_peek) {
-            msg_format(_("%sの像", "Statue of %s"), r_ptr->name.c_str());
-        }
-
-        object_aware(this->player_ptr, this->o_ptr);
-        object_known(this->o_ptr);
+    case ItemKindType::STATUE:
+        this->enchant_statue();
         break;
-    }
     case ItemKindType::CHEST: {
         DEPTH obj_level = k_info[this->o_ptr->k_idx].level;
         if (obj_level <= 0)
@@ -170,6 +152,29 @@ void OtherItemsEnchanter::enchant_corpse()
     }
 
     this->o_ptr->pval = r_idx;
+    object_aware(this->player_ptr, this->o_ptr);
+    object_known(this->o_ptr);
+}
+
+void OtherItemsEnchanter::enchant_statue()
+{
+    short r_idx;
+    auto &r_ref = r_info[0];
+    while (true) {
+        r_idx = randint1(r_info.size() - 1);
+        r_ref = r_info[r_idx];
+        if (r_ref.rarity == 0) {
+            continue;
+        }
+
+        break;
+    }
+
+    this->o_ptr->pval = r_idx;
+    if (cheat_peek) {
+        msg_format(_("%sの像", "Statue of %s"), r_ref.name.c_str());
+    }
+
     object_aware(this->player_ptr, this->o_ptr);
     object_known(this->o_ptr);
 }
