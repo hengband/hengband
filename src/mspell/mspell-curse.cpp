@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-curse.h"
 #include "core/disturbance.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster/monster-info.h"
@@ -8,8 +9,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-result.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
@@ -45,7 +44,7 @@ static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, AttributeType 
             msg_format(msg1, m_name);
         else
             msg_format(msg2, m_name);
-        breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, false, target_type);
+        pointed(player_ptr, y, x, m_idx, GF_TYPE, dam, target_type);
         return res;
     }
 
@@ -57,7 +56,7 @@ static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, AttributeType 
         }
     }
 
-    breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, false, target_type);
+    pointed(player_ptr, y, x, m_idx, GF_TYPE, dam, target_type);
 
     return res;
 }

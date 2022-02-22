@@ -17,7 +17,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-result.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -39,7 +38,7 @@ MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
     const auto dam = monspell_damage(player_ptr, MonsterAbilityType::ROCKET, m_idx, DAM_ROLL);
-    const auto proj_res = breath(player_ptr, y, x, m_idx, AttributeType::ROCKET, dam, 2, false, target_type);
+    const auto proj_res = rocket(player_ptr, y, x, m_idx, AttributeType::ROCKET, dam, 2, target_type);
     if (target_type == MONSTER_TO_PLAYER)
         update_smart_learn(player_ptr, m_idx, DRS_SHARD);
 
@@ -70,10 +69,10 @@ MonsterSpellResult spell_RF6_HAND_DOOM(PlayerType *player_ptr, POSITION y, POSIT
     ProjectResult proj_res;
     if (target_type == MONSTER_TO_PLAYER) {
         const auto dam = monspell_damage(player_ptr, MonsterAbilityType::HAND_DOOM, m_idx, DAM_ROLL);
-        proj_res = breath(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, 0, false, MONSTER_TO_PLAYER);
+        proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, MONSTER_TO_PLAYER);
     } else if (target_type == MONSTER_TO_MONSTER) {
         const auto dam = 20; /* Dummy power */
-        proj_res = breath(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, 0, false, MONSTER_TO_MONSTER);
+        proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, MONSTER_TO_MONSTER);
     }
 
     auto res = MonsterSpellResult::make_valid();

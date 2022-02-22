@@ -231,6 +231,16 @@ ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
     return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
 }
 
+ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
+{
+    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+    if (target_type == MONSTER_TO_PLAYER) {
+        flg |= PROJECT_PLAYER;
+    }
+
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+}
+
 /*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
@@ -241,46 +251,41 @@ ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param rad 半径
- * @param breath
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, bool breath, int target_type)
+ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    BIT_FLAGS flg = 0x00;
-    switch (target_type) {
-    case MONSTER_TO_MONSTER:
-        flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        break;
-    case MONSTER_TO_PLAYER:
-        flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
-        break;
+    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+    if (target_type == MONSTER_TO_PLAYER) {
+        flg |= PROJECT_PLAYER;
     }
 
-    if ((rad < 1) && breath)
+    if (rad < 1)
         rad = (r_ptr->flags2 & (RF2_POWERFUL)) ? 3 : 2;
 
-    if (breath)
-        rad = 0 - rad;
+    rad = 0 - rad;
 
-    switch (typ) {
-    case AttributeType::ROCKET:
-        flg |= PROJECT_STOP;
-        break;
-    case AttributeType::DRAIN_MANA:
-    case AttributeType::MIND_BLAST:
-    case AttributeType::BRAIN_SMASH:
-    case AttributeType::CAUSE_1:
-    case AttributeType::CAUSE_2:
-    case AttributeType::CAUSE_3:
-    case AttributeType::CAUSE_4:
-    case AttributeType::HAND_DOOM:
-        flg |= (PROJECT_HIDE | PROJECT_AIMED);
-        break;
-    default:
-        break;
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+}
+
+ProjectResult pointed(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, int target_type)
+{
+    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_AIMED;
+    if (target_type == MONSTER_TO_PLAYER) {
+        flg |= PROJECT_PLAYER;
+    }
+
+    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
+}
+
+ProjectResult rocket(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
+{
+    BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_STOP;
+    if (target_type == MONSTER_TO_PLAYER) {
+        flg |= PROJECT_PLAYER;
     }
 
     return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);

@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-breath.h"
 #include "core/disturbance.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -12,8 +13,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-result.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -223,7 +222,7 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
     if (known || see_either)
         sound(SOUND_BREATH);
 
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, true, target_type);
+    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, target_type);
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(player_ptr, m_idx, drs_type);
 
