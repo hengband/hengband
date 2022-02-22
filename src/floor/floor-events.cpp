@@ -150,7 +150,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             continue;
 
         if (o_ptr->is_ego()) {
-            ego_item_type *e_ptr = &e_info[enum2i<EgoType>(o_ptr->name2)];
+            auto *e_ptr = &e_info[o_ptr->name2];
             delta += e_ptr->rating * base;
         }
 

@@ -878,7 +878,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             KIND_OBJECT_IDX k_idx = k_ids.back();
             o_ptr->prep(k_idx);
 
-            for (const auto &e_ref : e_info) {
+            for (const auto &[e_idx, e_ref] : e_info) {
                 if (e_ref.idx == EgoType::NONE || e_ref.name.empty())
                     continue;
 

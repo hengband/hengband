@@ -104,7 +104,7 @@ void WeaponEnchanter::apply_magic()
                         continue;
                     }
 
-                    ego_item_type *e_ptr = &e_info[enum2i<EgoType>(this->o_ptr->name2)];
+                    auto *e_ptr = &e_info[this->o_ptr->name2];
                     if (this->o_ptr->tval == ItemKindType::SWORD && this->o_ptr->sval == SV_HAYABUSA && e_ptr->max_pval < 0) {
                         if (++n > 1000) {
                             msg_print(_("エラー:隼の剣に割り当てるエゴ無し", "Error: Cannot find for Hayabusa."));

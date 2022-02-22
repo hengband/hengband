@@ -41,6 +41,27 @@
 #endif
 #include <string_view>
 
+namespace {
+
+template <typename>
+struct is_vector : std::false_type {
+};
+
+template <typename T, typename Alloc>
+struct is_vector<std::vector<T, Alloc>> : std::true_type {
+};
+
+/*!
+ * @brief 与えられた型 T が std::vector 型かどうか調べる
+ * T の型が std::vector<SomeType> に一致する時、is_vector_v<T> == true
+ * 一致しない時、is_vector_v<T> == false となる
+ * @tparam T 調べる型
+ */
+template <typename T>
+constexpr bool is_vector_v = is_vector<T>::value;
+
+}
+
 /*!
  * @brief 基本情報読み込みのメインルーチン /
  * Initialize misc. values
@@ -78,7 +99,7 @@ static void init_header(angband_header *head, IDX num = 0)
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_info(concptr filename, angband_header &head, std::vector<InfoType> &info, std::function<errr(std::string_view, angband_header *)> parser,
+static errr init_info(concptr filename, angband_header &head, InfoType &info, std::function<errr(std::string_view, angband_header *)> parser,
     void (*retouch)(angband_header *head))
 {
     char buf[1024];
@@ -89,7 +110,10 @@ static errr init_info(concptr filename, angband_header &head, std::vector<InfoTy
     if (!fp)
         quit(format(_("'%s.txt'ファイルをオープンできません。", "Cannot open '%s.txt' file."), filename));
 
-    info = std::vector<InfoType>(head.info_num);
+    constexpr auto info_is_vector = is_vector_v<InfoType>;
+    if constexpr (info_is_vector) {
+        info.assign(head.info_num, {});
+    }
 
     errr err = init_info_txt(fp, buf, &head, parser);
     angband_fclose(fp);
@@ -107,7 +131,9 @@ static errr init_info(concptr filename, angband_header &head, std::vector<InfoTy
         quit(format(_("'%s.txt'ファイルにエラー", "Error in '%s.txt' file."), filename));
     }
 
-    info.shrink_to_fit();
+    if constexpr (info_is_vector) {
+        info.shrink_to_fit();
+    }
     head.info_num = static_cast<uint16_t>(info.size());
 
     if (retouch)

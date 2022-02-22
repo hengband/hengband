@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -270,7 +271,7 @@ struct ego_item_type {
     RandomArtActType act_idx{}; //!< 発動番号 / Activative ability index
 };
 
-extern std::vector<ego_item_type> e_info;
+extern std::map<EgoType, ego_item_type> e_info;
 
 class ObjectType;
 class PlayerType;
