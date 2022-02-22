@@ -18,12 +18,12 @@ enum class SpecialMenuType {
 enum class PlayerClassType : short;
 class SpecialMenuContent {
 public:
-    SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, PlayerClassType jouken_naiyou);
+    SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, PlayerClassType class_condition);
     concptr name;
     byte window;
     byte number;
     SpecialMenuType menu_condition;
-    PlayerClassType jouken_naiyou;
+    PlayerClassType class_condition;
 };
 
 #define MAX_COMMAND_PER_SCREEN 10

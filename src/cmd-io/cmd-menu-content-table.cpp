@@ -3,12 +3,12 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
-SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, PlayerClassType jouken_naiyou)
+SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, PlayerClassType class_condition)
     : name(name)
     , window(window)
     , number(number)
     , menu_condition(menu_condition)
-    , jouken_naiyou(jouken_naiyou)
+    , class_condition(class_condition)
 {
 }
 

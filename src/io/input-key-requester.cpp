@@ -367,7 +367,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent 
     case SpecialMenuType::NONE:
         return "";
     case SpecialMenuType::CLASS:
-        if (PlayerClass(this->player_ptr).equals(special_menu.jouken_naiyou)) {
+        if (PlayerClass(this->player_ptr).equals(special_menu.class_condition)) {
             return std::string(special_menu.name);
         }
 
@@ -378,7 +378,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent 
             return "";
         }
 
-        auto can_do_in_wilderness = enum2i(special_menu.jouken_naiyou) > 0;
+        auto can_do_in_wilderness = enum2i(special_menu.class_condition) > 0;
         if (this->player_ptr->wild_mode == can_do_in_wilderness) {
             return std::string(special_menu.name);
         }
