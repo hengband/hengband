@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <vector>
 
 struct menu_content {
     concptr name;
@@ -9,7 +10,9 @@ struct menu_content {
 };
 
 enum class PlayerClassType : short;
-struct special_menu_content {
+class SpecialMenuContent {
+public:
+    SpecialMenuContent(concptr name, byte window, byte number, byte jouken, PlayerClassType jouken_naiyou);
     concptr name;
     byte window;
     byte number;
@@ -22,7 +25,6 @@ struct special_menu_content {
 
 #define MENU_CLASS 1
 #define MENU_WILD 2
-#define MAX_SPECIAL_MENU_NUM 12
 
 extern menu_content menu_info[MAX_COMMAND_MENU_NUM][MAX_COMMAND_PER_SCREEN];
-extern special_menu_content special_menu_info[MAX_SPECIAL_MENU_NUM];
+extern const std::vector<SpecialMenuContent> special_menu_info;

@@ -361,7 +361,7 @@ void InputKeyRequestor::make_commands_frame()
     put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
 }
 
-std::string InputKeyRequestor::switch_special_menu_condition(special_menu_content &special_menu)
+std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent &special_menu)
 {
     switch (special_menu.jouken) {
     case MENU_CLASS:
