@@ -3,7 +3,7 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
-SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, byte jouken, PlayerClassType jouken_naiyou)
+SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType jouken, PlayerClassType jouken_naiyou)
     : name(name)
     , window(window)
     , number(number)
@@ -18,18 +18,18 @@ SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, b
  * 後で何とかする
  */
 const std::vector<SpecialMenuContent> special_menu_info = {
-    SpecialMenuContent(_("超能力/特殊能力", "MindCraft/Special"), 0, 0, MENU_CLASS, PlayerClassType::MINDCRAFTER),
-    SpecialMenuContent(_("ものまね/特殊能力", "Imitation/Special"), 0, 0, MENU_CLASS, PlayerClassType::IMITATOR),
-    SpecialMenuContent(_("歌/特殊能力", "Song/Special"), 0, 0, MENU_CLASS, PlayerClassType::BARD),
-    SpecialMenuContent(_("必殺技/特殊能力", "Technique/Special"), 0, 0, MENU_CLASS, PlayerClassType::SAMURAI),
-    SpecialMenuContent(_("練気術/魔法/特殊能力", "Mind/Magic/Special"), 0, 0, MENU_CLASS, PlayerClassType::FORCETRAINER),
-    SpecialMenuContent(_("技/特殊能力", "BrutalPower/Special"), 0, 0, MENU_CLASS, PlayerClassType::BERSERKER),
-    SpecialMenuContent(_("技術/特殊能力", "Technique/Special"), 0, 0, MENU_CLASS, PlayerClassType::SMITH),
-    SpecialMenuContent(_("鏡魔法/特殊能力", "MirrorMagic/Special"), 0, 0, MENU_CLASS, PlayerClassType::MIRROR_MASTER),
-    SpecialMenuContent(_("忍術/特殊能力", "Ninjutsu/Special"), 0, 0, MENU_CLASS, PlayerClassType::NINJA),
-    SpecialMenuContent(_("広域マップ(<)", "Enter global map(<)"), 2, 6, MENU_WILD, i2enum<PlayerClassType>(0)),
-    SpecialMenuContent(_("通常マップ(>)", "Enter local map(>)"), 2, 7, MENU_WILD, i2enum<PlayerClassType>(1)),
-    SpecialMenuContent("", 0, 0, 0, i2enum<PlayerClassType>(0)),
+    SpecialMenuContent(_("超能力/特殊能力", "MindCraft/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MINDCRAFTER),
+    SpecialMenuContent(_("ものまね/特殊能力", "Imitation/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::IMITATOR),
+    SpecialMenuContent(_("歌/特殊能力", "Song/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BARD),
+    SpecialMenuContent(_("必殺技/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SAMURAI),
+    SpecialMenuContent(_("練気術/魔法/特殊能力", "Mind/Magic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::FORCETRAINER),
+    SpecialMenuContent(_("技/特殊能力", "BrutalPower/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BERSERKER),
+    SpecialMenuContent(_("技術/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SMITH),
+    SpecialMenuContent(_("鏡魔法/特殊能力", "MirrorMagic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MIRROR_MASTER),
+    SpecialMenuContent(_("忍術/特殊能力", "Ninjutsu/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::NINJA),
+    SpecialMenuContent(_("広域マップ(<)", "Enter global map(<)"), 2, 6, SpecialMenuType::WILD, i2enum<PlayerClassType>(0)),
+    SpecialMenuContent(_("通常マップ(>)", "Enter local map(>)"), 2, 7, SpecialMenuType::WILD, i2enum<PlayerClassType>(1)),
+    SpecialMenuContent("", 0, 0, SpecialMenuType::NONE, i2enum<PlayerClassType>(0)),
 };
 
 menu_content menu_info[MAX_COMMAND_MENU_NUM][MAX_COMMAND_PER_SCREEN] = {

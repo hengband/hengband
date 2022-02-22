@@ -364,13 +364,15 @@ void InputKeyRequestor::make_commands_frame()
 std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent &special_menu)
 {
     switch (special_menu.jouken) {
-    case MENU_CLASS:
+    case SpecialMenuType::NONE:
+        return "";
+    case SpecialMenuType::CLASS:
         if (PlayerClass(this->player_ptr).equals(special_menu.jouken_naiyou)) {
             return std::string(special_menu.name);
         }
 
         return "";
-    case MENU_WILD: {
+    case SpecialMenuType::WILD: {
         auto floor_ptr = this->player_ptr->current_floor_ptr;
         if ((floor_ptr->dun_level > 0) || floor_ptr->inside_arena || inside_quest(floor_ptr->quest_number)) {
             return "";
@@ -384,7 +386,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent 
         return "";
     }
     default:
-        return "";
+        throw("Invalid SpecialMenuType is specified!");
     }
 }
 
