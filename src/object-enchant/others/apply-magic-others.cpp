@@ -63,36 +63,9 @@ void OtherItemsEnchanter::apply_magic()
         object_aware(this->player_ptr, this->o_ptr);
         object_known(this->o_ptr);
         break;
-    case ItemKindType::FIGURINE: {
-        PARAMETER_VALUE i = 1;
-        int check;
-        monster_race *r_ptr;
-        while (true) {
-            i = randint1(r_info.size() - 1);
-
-            if (!item_monster_okay(this->player_ptr, i))
-                continue;
-            if (i == MON_TSUCHINOKO)
-                continue;
-
-            r_ptr = &r_info[i];
-            check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
-            if (!r_ptr->rarity)
-                continue;
-            if (r_ptr->rarity > 100)
-                continue;
-            if (randint0(check))
-                continue;
-
-            break;
-        }
-
-        this->o_ptr->pval = i;
-        if (one_in_(6))
-            this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
-
+    case ItemKindType::FIGURINE:
+        this->enchant_figurine();
         break;
-    }
     case ItemKindType::CORPSE: {
         PARAMETER_VALUE i = 1;
         int check;
@@ -174,4 +147,30 @@ void OtherItemsEnchanter::enchant_wand_staff()
 {
     auto *k_ptr = &k_info[this->o_ptr->k_idx];
     this->o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
+}
+
+void OtherItemsEnchanter::enchant_figurine()
+{
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    short r_idx;
+    while (true)
+    {
+        r_idx = randint1(r_info.size() - 1);
+        if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MON_TSUCHINOKO)) {
+            continue;
+        }
+
+        auto *r_ptr = &r_info[r_idx];
+        auto check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
+        if ((r_ptr->rarity == 0) || (r_ptr->rarity > 100) || (randint0(check) > 0)) {
+            continue;
+        }
+
+        break;
+    }
+
+    this->o_ptr->pval = r_idx;
+    if (one_in_(6)) {
+        this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
+    }
 }

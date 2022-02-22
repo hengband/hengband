@@ -19,4 +19,5 @@ private:
     ObjectType *o_ptr;
 
     void enchant_wand_staff();
+    void enchant_figurine();
 };
