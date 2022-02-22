@@ -30,7 +30,7 @@
 
 void wiz_enter_quest(PlayerType *player_ptr);
 void wiz_complete_quest(PlayerType *player_ptr);
-void wiz_restore_monster_max_num();
+void wiz_restore_monster_max_num(MONRACE_IDX r_idx);
 
 /*!
  * @brief ゲーム設定コマンド一覧表
@@ -89,7 +89,7 @@ void wizard_game_modifier(PlayerType *player_ptr)
         wiz_enter_quest(player_ptr);
         break;
     case 'u':
-        wiz_restore_monster_max_num();
+        wiz_restore_monster_max_num(command_arg);
         break;
     case 't':
         set_gametime();
@@ -140,20 +140,14 @@ void wiz_complete_quest(PlayerType *player_ptr)
         complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
 }
 
-void wiz_restore_monster_max_num()
+void wiz_restore_monster_max_num(MONRACE_IDX r_idx)
 {
-    MONRACE_IDX r_idx = command_arg;
     if (r_idx <= 0) {
-        std::stringstream ss;
-        ss << "Monster race (1-" << r_info.size() << "): ";
-
-        char tmp_val[160] = "\0";
-        if (!get_string(ss.str().c_str(), tmp_val, 5))
+        int val;
+        if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
             return;
-
-        r_idx = (MONRACE_IDX)atoi(tmp_val);
-        if (r_idx <= 0 || r_idx >= static_cast<MONRACE_IDX>(r_info.size()))
-            return;
+        }
+        r_idx = static_cast<MONRACE_IDX>(val);
     }
 
     auto *r_ptr = &r_info[r_idx];
@@ -163,11 +157,12 @@ void wiz_restore_monster_max_num()
         return;
     }
 
-    MONSTER_NUMBER n = 0;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+    auto n = 0;
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         n = 1;
-    else if (any_bits(r_ptr->flags7, RF7_NAZGUL))
+    } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
         n = MAX_NAZGUL_NUM;
+    }
 
     if (n == 0) {
         msg_print("出現数に制限がないモンスターです。");
