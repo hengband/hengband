@@ -311,7 +311,7 @@ void process_player(PlayerType *player_ptr)
             window_stuff(player_ptr);
 
             can_save = true;
-            request_command(player_ptr, false);
+            InputKeyRequestor(player_ptr, false).request_command();
             can_save = false;
             process_command(player_ptr);
         }

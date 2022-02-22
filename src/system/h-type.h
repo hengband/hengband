@@ -156,7 +156,6 @@ typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
 
 typedef int16_t COMMAND_CODE; /*!< コマンド内容の型定義 */
 typedef int16_t COMMAND_ARG; /*!< コマンド引数の型定義 */
-typedef int16_t COMMAND_NUM; /*!< コマンド数の型定義 */
 
 typedef int TERM_LEN; /*!< コンソール表示座標の型定義 */
 typedef byte TERM_COLOR; /*!< テキスト表示色の型定義 */
