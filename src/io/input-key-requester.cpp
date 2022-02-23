@@ -361,7 +361,7 @@ void InputKeyRequestor::make_commands_frame()
     put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
 }
 
-std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent &special_menu)
+std::string InputKeyRequestor::switch_special_menu_condition(const SpecialMenuContent &special_menu)
 {
     switch (special_menu.menu_condition) {
     case SpecialMenuType::NONE:
@@ -392,14 +392,13 @@ std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent 
 int InputKeyRequestor::get_command_per_menu_num()
 {
     int command_per_menu_num;
-    for (command_per_menu_num = 0; command_per_menu_num < 10; command_per_menu_num++) {
+    for (command_per_menu_num = 0; command_per_menu_num < MAX_COMMAND_PER_SCREEN; command_per_menu_num++) {
         if (menu_info[this->menu_num][command_per_menu_num].cmd == 0) {
             break;
         }
 
         std::string menu_name(menu_info[this->menu_num][command_per_menu_num].name);
-        for (auto special_menu_num = 0;; special_menu_num++) {
-            auto special_menu = special_menu_info[special_menu_num];
+        for (const auto &special_menu : special_menu_info) {
             if (special_menu.name[0] == '\0') {
                 break;
             }

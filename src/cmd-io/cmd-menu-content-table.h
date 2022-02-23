@@ -28,8 +28,8 @@ public:
     std::optional<bool> wild_mode;
 };
 
-#define MAX_COMMAND_PER_SCREEN 10
-#define MAX_COMMAND_MENU_NUM 10
+constexpr int MAX_COMMAND_PER_SCREEN = 10;
+constexpr int MAX_COMMAND_MENU_NUM = 10;
 
 extern menu_content menu_info[MAX_COMMAND_MENU_NUM][MAX_COMMAND_PER_SCREEN];
 extern const std::vector<SpecialMenuContent> special_menu_info;
