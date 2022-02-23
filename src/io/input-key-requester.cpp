@@ -361,44 +361,44 @@ void InputKeyRequestor::make_commands_frame()
     put_str("+----------------------------------------------------+", this->base_y + line++, this->base_x);
 }
 
-std::string InputKeyRequestor::switch_special_menu_condition(special_menu_content &special_menu)
+std::string InputKeyRequestor::switch_special_menu_condition(const SpecialMenuContent &special_menu)
 {
-    switch (special_menu.jouken) {
-    case MENU_CLASS:
-        if (PlayerClass(this->player_ptr).equals(special_menu.jouken_naiyou)) {
+    switch (special_menu.menu_condition) {
+    case SpecialMenuType::NONE:
+        return "";
+    case SpecialMenuType::CLASS:
+        if (PlayerClass(this->player_ptr).equals(special_menu.class_condition.value())) {
             return std::string(special_menu.name);
         }
 
         return "";
-    case MENU_WILD: {
+    case SpecialMenuType::WILD: {
         auto floor_ptr = this->player_ptr->current_floor_ptr;
         if ((floor_ptr->dun_level > 0) || floor_ptr->inside_arena || inside_quest(floor_ptr->quest_number)) {
             return "";
         }
 
-        auto can_do_in_wilderness = enum2i(special_menu.jouken_naiyou) > 0;
-        if (this->player_ptr->wild_mode == can_do_in_wilderness) {
+        if (this->player_ptr->wild_mode == special_menu.wild_mode) {
             return std::string(special_menu.name);
         }
 
         return "";
     }
     default:
-        return "";
+        throw("Invalid SpecialMenuType is specified!");
     }
 }
 
 int InputKeyRequestor::get_command_per_menu_num()
 {
     int command_per_menu_num;
-    for (command_per_menu_num = 0; command_per_menu_num < 10; command_per_menu_num++) {
+    for (command_per_menu_num = 0; command_per_menu_num < MAX_COMMAND_PER_SCREEN; command_per_menu_num++) {
         if (menu_info[this->menu_num][command_per_menu_num].cmd == 0) {
             break;
         }
 
         std::string menu_name(menu_info[this->menu_num][command_per_menu_num].name);
-        for (auto special_menu_num = 0;; special_menu_num++) {
-            auto special_menu = special_menu_info[special_menu_num];
+        for (const auto &special_menu : special_menu_info) {
             if (special_menu.name[0] == '\0') {
                 break;
             }

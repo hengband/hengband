@@ -19,7 +19,7 @@ extern int16_t command_new;
 
 class ObjectType;
 class PlayerType;
-struct special_menu_content;
+class SpecialMenuContent;
 class InputKeyRequestor {
 public:
     InputKeyRequestor(PlayerType *player_ptr, bool shopping);
@@ -51,7 +51,7 @@ private:
     void confirm_command(ObjectType &o_ref, const int caret_command);
 
     void make_commands_frame();
-    std::string switch_special_menu_condition(special_menu_content &special_menu);
+    std::string switch_special_menu_condition(const SpecialMenuContent &special_menu);
     int get_command_per_menu_num();
     bool check_continuous_command();
     bool check_escape_key(const int old_num);
