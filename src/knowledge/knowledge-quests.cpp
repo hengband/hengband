@@ -101,12 +101,12 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     if (q_ref.k_idx) {
                         auto *a_ptr = &a_info[q_ref.k_idx];
                         ObjectType forge;
-                        auto *q_ptr = &forge;
+                        auto *o_ptr = &forge;
                         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
-                        q_ptr->prep(k_idx);
-                        q_ptr->fixed_artifact_idx = q_ref.k_idx;
-                        q_ptr->ident = IDENT_STORE;
-                        describe_flavor(player_ptr, name, q_ptr, OD_NAME_ONLY);
+                        o_ptr->prep(k_idx);
+                        o_ptr->fixed_artifact_idx = q_ref.k_idx;
+                        o_ptr->ident = IDENT_STORE;
+                        describe_flavor(player_ptr, name, o_ptr, OD_NAME_ONLY);
                     }
                     sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find %s."), name);
                     break;
