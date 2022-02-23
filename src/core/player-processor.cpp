@@ -158,10 +158,7 @@ void process_player(PlayerType *player_ptr)
                 set_action(player_ptr, ACTION_NONE);
             }
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
-            auto effects = player_ptr->effects();
-            auto is_stunned = effects->stun()->is_stunned();
-            auto is_cut = effects->cut()->is_cut();
-            if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp >= player_ptr->msp) && !player_ptr->blind && !player_ptr->confused && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality) {
+            if (player_ptr->is_fully_healthy()) {
                 set_action(player_ptr, ACTION_NONE);
             }
         }

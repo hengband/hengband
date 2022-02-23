@@ -416,6 +416,7 @@ public:
     char base_name[32]{}; /*!< Stripped version of "player_name" */
 
     std::shared_ptr<TimedEffects> effects() const;
+    bool is_fully_healthy() const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;
