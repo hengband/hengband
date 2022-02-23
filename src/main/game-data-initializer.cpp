@@ -40,9 +40,8 @@ constexpr int MACRO_MAX = 256;
  */
 void init_quests(void)
 {
-    quest.assign(max_q_idx, {});
-    for (auto &q_ref : quest) {
-        q_ref.status = QuestStatusType::UNTAKEN;
+    for (auto i = 0; i < max_q_idx; i++) {
+        quest[i2enum<QuestId>(i)].status = QuestStatusType::UNTAKEN;
     }
 }
 
