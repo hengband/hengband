@@ -136,11 +136,11 @@ void OtherItemsEnchanter::generate_figurine()
  */
 void OtherItemsEnchanter::generate_corpse()
 {
-    uint32_t match = 0;
-    if (this->o_ptr->sval == SV_SKELETON) {
-        match = RF9_DROP_SKELETON;
-    } else if (this->o_ptr->sval == SV_CORPSE) {
-        match = RF9_DROP_CORPSE;
+    MonsterDropType match = MonsterDropType::MAX;
+    if (o_ptr->sval == SV_SKELETON) {
+        match = MonsterDropType::DROP_SKELETON;
+    } else if (o_ptr->sval == SV_CORPSE) {
+        match = MonsterDropType::DROP_CORPSE;
     }
 
     get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
@@ -150,7 +150,7 @@ void OtherItemsEnchanter::generate_corpse()
         r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
         auto &r_ref = r_info[r_idx];
         auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
-        if ((r_ref.rarity == 0) || none_bits(r_ref.flags9, match) || (randint0(check) > 0)) {
+        if ((r_ref.rarity == 0) || (match != MonsterDropType::MAX && r_ref.drop_flags.has_not(match)) || (randint0(check) > 0)) {
             continue;
         }
 

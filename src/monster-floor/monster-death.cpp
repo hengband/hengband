@@ -118,18 +118,18 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_drop_corpse = one_in_(md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? 1 : 4);
-    is_drop_corpse &= (md_ptr->r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != 0;
+    is_drop_corpse &= md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
     is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == w_ptr->today_mon) && is_pet(md_ptr->m_ptr)));
     if (!is_drop_corpse) {
         return;
     }
 
     bool corpse = false;
-    if (!(md_ptr->r_ptr->flags9 & RF9_DROP_SKELETON)) {
+    if (md_ptr->r_ptr->drop_flags.has_not(MonsterDropType::DROP_SKELETON)) {
         corpse = true;
-    } else if ((md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) && md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    } else if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_CORPSE) && md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         corpse = true;
-    } else if (md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) {
+    } else if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_CORPSE)) {
         if ((0 - ((md_ptr->m_ptr->maxhp) / 4)) > md_ptr->m_ptr->hp) {
             if (one_in_(5)) {
                 corpse = true;
@@ -258,11 +258,11 @@ static void drop_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 static void decide_drop_quality(monster_death_type *md_ptr)
 {
     md_ptr->mo_mode = 0L;
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_GOOD) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_GOOD)) {
         md_ptr->mo_mode |= AM_GOOD;
     }
 
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_GREAT) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_GREAT)) {
         md_ptr->mo_mode |= (AM_GOOD | AM_GREAT);
     }
 }
@@ -270,27 +270,27 @@ static void decide_drop_quality(monster_death_type *md_ptr)
 static int decide_drop_numbers(PlayerType *player_ptr, monster_death_type *md_ptr, const bool drop_item)
 {
     int drop_numbers = 0;
-    if ((md_ptr->r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60)) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_60) && (randint0(100) < 60)) {
         drop_numbers++;
     }
 
-    if ((md_ptr->r_ptr->flags1 & RF1_DROP_90) && (randint0(100) < 90)) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_90) && (randint0(100) < 90)) {
         drop_numbers++;
     }
 
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_1D2) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_1D2)) {
         drop_numbers += damroll(1, 2);
     }
 
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_2D2) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_2D2)) {
         drop_numbers += damroll(2, 2);
     }
 
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_3D2) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_3D2)) {
         drop_numbers += damroll(3, 2);
     }
 
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_4D2) {
+    if (md_ptr->r_ptr->drop_flags.has(MonsterDropType::DROP_4D2)) {
         drop_numbers += damroll(4, 2);
     }
 
