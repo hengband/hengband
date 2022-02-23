@@ -308,6 +308,7 @@ void sense_inventory1(PlayerType *player_ptr)
         if (!okay) {
             continue;
         }
+
         if ((i < INVEN_MAIN_HAND) && (0 != randint0(5))) {
             continue;
         }
@@ -422,6 +423,7 @@ void sense_inventory2(PlayerType *player_ptr)
         if (!okay) {
             continue;
         }
+
         if ((i < INVEN_MAIN_HAND) && (0 != randint0(5))) {
             continue;
         }
@@ -456,15 +458,19 @@ item_feel_type pseudo_value_check_heavy(ObjectType *o_ptr)
     if (o_ptr->is_cursed()) {
         return FEEL_CURSED;
     }
+
     if (o_ptr->is_broken()) {
         return FEEL_BROKEN;
     }
+
     if ((o_ptr->tval == ItemKindType::RING) || (o_ptr->tval == ItemKindType::AMULET)) {
         return FEEL_AVERAGE;
     }
+
     if (o_ptr->to_a > 0) {
         return FEEL_GOOD;
     }
+
     if (o_ptr->to_h + o_ptr->to_d > 0) {
         return FEEL_GOOD;
     }
@@ -482,18 +488,23 @@ item_feel_type pseudo_value_check_light(ObjectType *o_ptr)
     if (o_ptr->is_cursed()) {
         return FEEL_CURSED;
     }
+
     if (o_ptr->is_broken()) {
         return FEEL_BROKEN;
     }
+
     if (o_ptr->is_artifact()) {
         return FEEL_UNCURSED;
     }
+
     if (o_ptr->is_ego()) {
         return FEEL_UNCURSED;
     }
+
     if (o_ptr->to_a > 0) {
         return FEEL_UNCURSED;
     }
+
     if (o_ptr->to_h + o_ptr->to_d > 0) {
         return FEEL_UNCURSED;
     }

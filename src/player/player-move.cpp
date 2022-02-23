@@ -85,9 +85,11 @@ static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION 
         if (o_ptr->tval != ItemKindType::CHEST) {
             continue;
         }
+
         if (chest_traps[o_ptr->pval].none()) {
             continue;
         }
+
         if (!o_ptr->is_known()) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
             object_known(o_ptr);

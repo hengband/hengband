@@ -551,6 +551,7 @@ void print_status(PlayerType *player_ptr)
     if (player_ptr->special_defense & DEFENSE_ACID) {
         ADD_BAR_FLAG(BAR_IMMACID);
     }
+
     if (is_oppose_acid(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESACID);
     }
@@ -558,6 +559,7 @@ void print_status(PlayerType *player_ptr)
     if (player_ptr->special_defense & DEFENSE_ELEC) {
         ADD_BAR_FLAG(BAR_IMMELEC);
     }
+
     if (is_oppose_elec(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESELEC);
     }
@@ -565,6 +567,7 @@ void print_status(PlayerType *player_ptr)
     if (player_ptr->special_defense & DEFENSE_FIRE) {
         ADD_BAR_FLAG(BAR_IMMFIRE);
     }
+
     if (is_oppose_fire(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESFIRE);
     }
@@ -572,6 +575,7 @@ void print_status(PlayerType *player_ptr)
     if (player_ptr->special_defense & DEFENSE_COLD) {
         ADD_BAR_FLAG(BAR_IMMCOLD);
     }
+
     if (is_oppose_cold(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESCOLD);
     }
@@ -627,18 +631,23 @@ void print_status(PlayerType *player_ptr)
     if (player_ptr->special_attack & ATTACK_FIRE) {
         ADD_BAR_FLAG(BAR_ATTKFIRE);
     }
+
     if (player_ptr->special_attack & ATTACK_COLD) {
         ADD_BAR_FLAG(BAR_ATTKCOLD);
     }
+
     if (player_ptr->special_attack & ATTACK_ELEC) {
         ADD_BAR_FLAG(BAR_ATTKELEC);
     }
+
     if (player_ptr->special_attack & ATTACK_ACID) {
         ADD_BAR_FLAG(BAR_ATTKACID);
     }
+
     if (player_ptr->special_attack & ATTACK_POIS) {
         ADD_BAR_FLAG(BAR_ATTKPOIS);
     }
+
     if (ninja_data && ninja_data->s_stealth) {
         ADD_BAR_FLAG(BAR_SUPERSTEALTH);
     }
@@ -707,6 +716,7 @@ void print_status(PlayerType *player_ptr)
         if (space > 0) {
             col++;
         }
+
         if (col > max_col_statbar) {
             break;
         }

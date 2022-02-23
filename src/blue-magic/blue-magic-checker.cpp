@@ -35,6 +35,7 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
     if (player_ptr->action != ACTION_LEARN) {
         return;
     }
+
     auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
     if (!bluemage_data || bluemage_data->learnt_blue_magics.has(monspell)) {
         return;
@@ -45,6 +46,7 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
     if (player_ptr->confused || player_ptr->blind || player_ptr->hallucinated || is_stunned || player_ptr->paralyzed) {
         return;
     }
+
     const auto &monster_power = monster_powers.at(monspell);
     if (randint1(player_ptr->lev + 70) > monster_power.level + 40) {
         bluemage_data->learnt_blue_magics.set(monspell);
