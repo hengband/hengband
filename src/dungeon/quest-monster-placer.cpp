@@ -25,7 +25,14 @@ bool place_quest_monsters(PlayerType *player_ptr)
     for (auto &[q_idx, q_ref] : quest) {
         monster_race *r_ptr;
         BIT_FLAGS mode;
-        if (q_ref.status != QuestStatusType::TAKEN || (q_ref.type != QuestKindType::KILL_LEVEL && q_ref.type != QuestKindType::RANDOM) || q_ref.level != floor_ptr->dun_level || player_ptr->dungeon_idx != q_ref.dungeon || (q_ref.flags & QUEST_FLAG_PRESET)) {
+
+        auto no_quest_monsters = q_ref.status != QuestStatusType::TAKEN;
+        no_quest_monsters |= (q_ref.type != QuestKindType::KILL_LEVEL && q_ref.type != QuestKindType::RANDOM);
+        no_quest_monsters |= q_ref.level != floor_ptr->dun_level;
+        no_quest_monsters |= player_ptr->dungeon_idx != q_ref.dungeon;
+        no_quest_monsters |= (q_ref.flags & QUEST_FLAG_PRESET);
+
+        if (no_quest_monsters) {
             continue;
         }
 

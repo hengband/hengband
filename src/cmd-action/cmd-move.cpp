@@ -54,7 +54,15 @@
 static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
     auto *q_ptr = &quest[player_ptr->current_floor_ptr->quest_number];
-    if (confirm_quest && inside_quest(player_ptr->current_floor_ptr->quest_number) && (q_ptr->type == QuestKindType::RANDOM || (q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED) || (q_ptr->flags & QUEST_FLAG_TOWER && ((q_ptr->status != QuestStatusType::STAGE_COMPLETED) || (down_stair && (quest[QuestId::TOWER1].status != QuestStatusType::COMPLETED)))))) {
+
+    auto caution_in_tower = q_ptr->flags & QUEST_FLAG_TOWER;
+    caution_in_tower &= q_ptr->status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quest[QuestId::TOWER1].status != QuestStatusType::COMPLETED));
+
+    auto caution_in_quest = q_ptr->type == QuestKindType::RANDOM;
+    caution_in_quest |= q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED;
+    caution_in_quest |= caution_in_tower;
+
+    if (confirm_quest && inside_quest(player_ptr->current_floor_ptr->quest_number) && caution_in_quest) {
         msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
         return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }

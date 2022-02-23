@@ -261,7 +261,12 @@ static void preserve_info(PlayerType *player_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
     for (auto &[q_idx, q_ref] : quest) {
-        if ((q_ref.status == QuestStatusType::TAKEN) && ((q_ref.type == QuestKindType::KILL_LEVEL) || (q_ref.type == QuestKindType::RANDOM)) && (q_ref.level == player_ptr->current_floor_ptr->dun_level) && (player_ptr->dungeon_idx == q_ref.dungeon) && !(q_ref.flags & QUEST_FLAG_PRESET)) {
+        auto quest_relating_monster = (q_ref.status == QuestStatusType::TAKEN);
+        quest_relating_monster &= ((q_ref.type == QuestKindType::KILL_LEVEL) || (q_ref.type == QuestKindType::RANDOM));
+        quest_relating_monster &= (q_ref.level == player_ptr->current_floor_ptr->dun_level);
+        quest_relating_monster &= (player_ptr->dungeon_idx == q_ref.dungeon);
+        quest_relating_monster &= !(q_ref.flags & QUEST_FLAG_PRESET);
+        if (quest_relating_monster) {
             quest_r_idx = q_ref.r_idx;
         }
     }

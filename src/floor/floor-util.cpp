@@ -192,7 +192,10 @@ void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POS
 concptr map_name(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number) && (quest[floor_ptr->quest_number].flags & QUEST_FLAG_PRESET)) {
+    auto is_fixed_quest = inside_quest(floor_ptr->quest_number);
+    is_fixed_quest &= quest_type::is_fixed(floor_ptr->quest_number);
+    is_fixed_quest &= (quest[floor_ptr->quest_number].flags & QUEST_FLAG_PRESET);
+    if (is_fixed_quest) {
         return _("クエスト", "Quest");
     } else if (player_ptr->wild_mode) {
         return _("地上", "Surface");

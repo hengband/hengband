@@ -492,7 +492,9 @@ void wilderness_gen(PlayerType *player_ptr)
 
             feature_type *f_ptr;
             f_ptr = &f_info[g_ptr->get_feat_mimic()];
-            if (!g_ptr->is_mirror() && f_ptr->flags.has_none_of({ FloorFeatureType::QUEST_ENTER, FloorFeatureType::ENTRANCE })) {
+            auto can_darken = !g_ptr->is_mirror();
+            can_darken &= f_ptr->flags.has_none_of({ FloorFeatureType::QUEST_ENTER, FloorFeatureType::ENTRANCE });
+            if (can_darken) {
                 g_ptr->info &= ~(CAVE_GLOW);
                 if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
                     g_ptr->info &= ~(CAVE_MARK);
@@ -759,7 +761,11 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         player_ptr->wilderness_y = atoi(zz[0]);
         player_ptr->wilderness_x = atoi(zz[1]);
 
-        if ((player_ptr->wilderness_x < 1) || (player_ptr->wilderness_x > w_ptr->max_wild_x) || (player_ptr->wilderness_y < 1) || (player_ptr->wilderness_y > w_ptr->max_wild_y)) {
+        auto out_of_bounds = (player_ptr->wilderness_x < 1);
+        out_of_bounds |= (player_ptr->wilderness_x > w_ptr->max_wild_x);
+        out_of_bounds |= (player_ptr->wilderness_y < 1);
+        out_of_bounds |= (player_ptr->wilderness_y > w_ptr->max_wild_y);
+        if (out_of_bounds) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
         }
 

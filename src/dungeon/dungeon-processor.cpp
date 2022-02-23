@@ -110,7 +110,10 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     handle_stuff(player_ptr);
     term_fresh();
 
-    if (inside_quest(quest_num) && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) {
+    auto no_feeling_quest = (quest_num == QuestId::OBERON);
+    no_feeling_quest |= (quest_num == QuestId::SERPENT);
+    no_feeling_quest |= none_bits(quest[quest_num].flags, QUEST_FLAG_PRESET);
+    if (inside_quest(quest_num) && quest_type::is_fixed(quest_num) && !no_feeling_quest) {
         do_cmd_feeling(player_ptr);
     }
 
