@@ -367,7 +367,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent 
     case SpecialMenuType::NONE:
         return "";
     case SpecialMenuType::CLASS:
-        if (PlayerClass(this->player_ptr).equals(special_menu.class_condition)) {
+        if (PlayerClass(this->player_ptr).equals(special_menu.class_condition.value())) {
             return std::string(special_menu.name);
         }
 
@@ -378,8 +378,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(SpecialMenuContent 
             return "";
         }
 
-        auto can_do_in_wilderness = enum2i(special_menu.class_condition) > 0;
-        if (this->player_ptr->wild_mode == can_do_in_wilderness) {
+        if (this->player_ptr->wild_mode == special_menu.wild_mode) {
             return std::string(special_menu.name);
         }
 

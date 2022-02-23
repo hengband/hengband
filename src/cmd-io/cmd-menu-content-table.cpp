@@ -3,33 +3,29 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
-SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, PlayerClassType class_condition)
+SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, std::optional<PlayerClassType> class_condition, std::optional<bool> wild_mode)
     : name(name)
     , window(window)
     , number(number)
     , menu_condition(menu_condition)
     , class_condition(class_condition)
+    , wild_mode(wild_mode)
 {
 }
 
-/*
- * @todo 遅くともv2.2.1の頃には職業enumとboolとintが混じっているゴミ配列であった
- * jouken_naiyou (フィールド名もゴミ)が複数目的に利用されているようである
- * 後で何とかする
- */
 const std::vector<SpecialMenuContent> special_menu_info = {
-    SpecialMenuContent(_("超能力/特殊能力", "MindCraft/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MINDCRAFTER),
-    SpecialMenuContent(_("ものまね/特殊能力", "Imitation/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::IMITATOR),
-    SpecialMenuContent(_("歌/特殊能力", "Song/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BARD),
-    SpecialMenuContent(_("必殺技/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SAMURAI),
-    SpecialMenuContent(_("練気術/魔法/特殊能力", "Mind/Magic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::FORCETRAINER),
-    SpecialMenuContent(_("技/特殊能力", "BrutalPower/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BERSERKER),
-    SpecialMenuContent(_("技術/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SMITH),
-    SpecialMenuContent(_("鏡魔法/特殊能力", "MirrorMagic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MIRROR_MASTER),
-    SpecialMenuContent(_("忍術/特殊能力", "Ninjutsu/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::NINJA),
-    SpecialMenuContent(_("広域マップ(<)", "Enter global map(<)"), 2, 6, SpecialMenuType::WILD, i2enum<PlayerClassType>(0)),
-    SpecialMenuContent(_("通常マップ(>)", "Enter local map(>)"), 2, 7, SpecialMenuType::WILD, i2enum<PlayerClassType>(1)),
-    SpecialMenuContent("", 0, 0, SpecialMenuType::NONE, i2enum<PlayerClassType>(0)),
+    SpecialMenuContent(_("超能力/特殊能力", "MindCraft/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MINDCRAFTER, std::nullopt),
+    SpecialMenuContent(_("ものまね/特殊能力", "Imitation/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::IMITATOR, std::nullopt),
+    SpecialMenuContent(_("歌/特殊能力", "Song/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BARD, std::nullopt),
+    SpecialMenuContent(_("必殺技/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SAMURAI, std::nullopt),
+    SpecialMenuContent(_("練気術/魔法/特殊能力", "Mind/Magic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::FORCETRAINER, std::nullopt),
+    SpecialMenuContent(_("技/特殊能力", "BrutalPower/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BERSERKER, std::nullopt),
+    SpecialMenuContent(_("技術/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SMITH, std::nullopt),
+    SpecialMenuContent(_("鏡魔法/特殊能力", "MirrorMagic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MIRROR_MASTER, std::nullopt),
+    SpecialMenuContent(_("忍術/特殊能力", "Ninjutsu/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::NINJA, std::nullopt),
+    SpecialMenuContent(_("広域マップ(<)", "Enter global map(<)"), 2, 6, SpecialMenuType::WILD, std::nullopt, false),
+    SpecialMenuContent(_("通常マップ(>)", "Enter local map(>)"), 2, 7, SpecialMenuType::WILD, std::nullopt, true),
+    SpecialMenuContent("", 0, 0, SpecialMenuType::NONE, std::nullopt, std::nullopt),
 };
 
 menu_content menu_info[MAX_COMMAND_MENU_NUM][MAX_COMMAND_PER_SCREEN] = {
