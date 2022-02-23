@@ -534,11 +534,8 @@ process_result effect_monster_time(PlayerType *player_ptr, effect_monster_type *
 
 static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen) {
-        em_ptr->obvious = true;
-    }
-
     if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
+        em_ptr->obvious = true;
         return false;
     }
 
@@ -552,6 +549,7 @@ static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, effec
     }
 
     if (em_ptr->r_ptr->level <= randint1(100)) {
+        em_ptr->obvious = true;
         return false;
     }
 
@@ -575,6 +573,7 @@ static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_t
     if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
         em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
     }
+    em_ptr->obvious = true;
 }
 
 static void effect_monster_gravity_stun(effect_monster_type *em_ptr)
@@ -584,9 +583,9 @@ static void effect_monster_gravity_stun(effect_monster_type *em_ptr)
     has_resistance |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
     if (has_resistance) {
         em_ptr->do_stun = 0;
-        em_ptr->note = _("には効果がなかった。", " is unaffected!");
-        em_ptr->obvious = false;
+        return;
     }
+    em_ptr->obvious = true;
 }
 
 /*
@@ -608,9 +607,10 @@ process_result effect_monster_gravity(PlayerType *player_ptr, effect_monster_typ
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_GRAVITY);
         }
-
         return PROCESS_CONTINUE;
     }
+
+    em_ptr->note = _("には効果がなかった。", " is unaffected!");
 
     effect_monster_gravity_slow(player_ptr, em_ptr);
     effect_monster_gravity_stun(em_ptr);
