@@ -155,6 +155,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     case ItemKindType::DRAG_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::SOFT_ARMOR:
+        // @todo いずれSoftArmorEnchanter等作って分離する.
         ArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::GLOVES:
@@ -172,16 +173,6 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     default:
         OtherItemsEnchanter(player_ptr, o_ptr).apply_magic();
         break;
-    }
-
-    if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality == PERSONALITY_SEXY)) {
-        o_ptr->pval = 3;
-        o_ptr->art_flags.set(TR_STR);
-        o_ptr->art_flags.set(TR_INT);
-        o_ptr->art_flags.set(TR_WIS);
-        o_ptr->art_flags.set(TR_DEX);
-        o_ptr->art_flags.set(TR_CON);
-        o_ptr->art_flags.set(TR_CHR);
     }
 
     if (o_ptr->is_ego()) {

@@ -9,8 +9,10 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-kind-hook.h"
+#include "player/player-personality-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*
@@ -53,9 +55,27 @@ void ArmorEnchanter::apply_magic()
         }
 
         return;
-    case ItemKindType::SOFT_ARMOR: {
-        if (this->o_ptr->sval == SV_KUROSHOUZOKU) {
+    case ItemKindType::SOFT_ARMOR:
+        // @todo 後ほどSoftArmorEnchanterへ分離した時、このswitch文はsval_enchant() へ移動させる.
+        switch (this->o_ptr->sval) {
+        case SV_KUROSHOUZOKU:
             this->o_ptr->pval = randint1(4);
+            break;
+        case SV_ABUNAI_MIZUGI:
+            if (this->player_ptr->ppersonality != PERSONALITY_SEXY) {
+                break;
+            }
+
+            this->o_ptr->pval = 3;
+            this->o_ptr->art_flags.set(TR_STR);
+            this->o_ptr->art_flags.set(TR_INT);
+            this->o_ptr->art_flags.set(TR_WIS);
+            this->o_ptr->art_flags.set(TR_DEX);
+            this->o_ptr->art_flags.set(TR_CON);
+            this->o_ptr->art_flags.set(TR_CHR);
+            break;
+        default:
+            break;
         }
 
         if (this->power > 1) {
@@ -73,7 +93,6 @@ void ArmorEnchanter::apply_magic()
         }
 
         return;
-    }
     default:
         return;
     }
