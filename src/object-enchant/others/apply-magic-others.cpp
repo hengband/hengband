@@ -149,9 +149,9 @@ void OtherItemsEnchanter::generate_corpse()
     short r_idx;
     while (true) {
         r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
-        auto *r_ptr = &r_info[r_idx];
-        auto check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
-        if ((r_ptr->rarity == 0) || none_bits(r_ptr->flags9, match) || (randint0(check) > 0)) {
+        auto &r_ref = r_info[r_idx];
+        auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
+        if ((r_ref.rarity == 0) || none_bits(r_ref.flags9, match) || (randint0(check) > 0)) {
             continue;
         }
 
