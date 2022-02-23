@@ -607,7 +607,6 @@ process_result effect_monster_gravity(PlayerType *player_ptr, effect_monster_typ
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_GRAVITY);
         }
-
         return PROCESS_CONTINUE;
     }
 
