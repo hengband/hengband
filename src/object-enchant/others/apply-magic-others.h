@@ -19,8 +19,8 @@ private:
     ObjectType *o_ptr;
 
     void enchant_wand_staff();
-    void enchant_figurine();
-    void enchant_corpse();
-    void enchant_statue();
-    void enchant_chest();
+    void generate_figurine();
+    void generate_corpse();
+    void generate_statue();
+    void generate_chest();
 };
