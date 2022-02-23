@@ -128,22 +128,14 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
-        if (power != 0) {
-            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::POLEARM:
-        if ((power != 0) && (o_ptr->sval != SV_DEATH_SCYTHE)) {
-            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::SWORD:
-        if ((power != 0) && (o_ptr->sval != SV_POISON_NEEDLE)) {
-            WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        // @todo いずれSwordEnchanter等作って分離する.
+        WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::SHIELD:
         ShieldEnchanter(player_ptr, o_ptr, lev, power).apply_magic();

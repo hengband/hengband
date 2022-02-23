@@ -13,4 +13,8 @@ protected:
     ObjectType *o_ptr;
     DEPTH level;
     int power;
+    bool should_skip = false;
+
+private:
+    void decide_skip();
 };

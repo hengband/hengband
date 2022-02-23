@@ -38,8 +38,9 @@ WeaponEnchanter::WeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPT
  */
 void WeaponEnchanter::apply_magic()
 {
-    if ((this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_DIAMOND_EDGE))
+    if (this->should_skip) {
         return;
+    }
 
     switch (this->o_ptr->tval) {
     case ItemKindType::DIGGING: {
@@ -60,17 +61,21 @@ void WeaponEnchanter::apply_magic()
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD: {
         if (this->power > 1) {
-            /* power > 2はデバッグ専用. */
-            if (one_in_(40) || (this->power > 2)) {
+            if ((this->power > 2) || one_in_(40)) {
                 become_random_artifact(this->player_ptr, this->o_ptr, false);
                 break;
             }
+
             while (true) {
                 this->o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, true);
-                if (this->o_ptr->name2 == EgoType::SHARPNESS && this->o_ptr->tval != ItemKindType::SWORD)
+                if (this->o_ptr->name2 == EgoType::SHARPNESS && this->o_ptr->tval != ItemKindType::SWORD) {
                     continue;
-                if (this->o_ptr->name2 == EgoType::EARTHQUAKES && this->o_ptr->tval != ItemKindType::HAFTED)
+                }
+
+                if (this->o_ptr->name2 == EgoType::EARTHQUAKES && this->o_ptr->tval != ItemKindType::HAFTED) {
                     continue;
+                }
+
                 break;
             }
 
@@ -79,25 +84,33 @@ void WeaponEnchanter::apply_magic()
                 this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, this->level) + 1;
                 break;
             case EgoType::EARTHQUAKES:
-                if (one_in_(3) && (this->level > 60))
+                if (one_in_(3) && (this->level > 60)) {
                     this->o_ptr->art_flags.set(TR_BLOWS);
-                else
+                } else {
                     this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, this->level);
+                }
+
                 break;
             default:
                 break;
             }
 
             if (!this->o_ptr->art_name) {
-                while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds))
+                while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds)) {
                     this->o_ptr->dd++;
+                }
 
-                if (this->o_ptr->dd > 9)
+                if (this->o_ptr->dd > 9) {
                     this->o_ptr->dd = 9;
+                }
             }
-        } else if (this->power < -1) {
+
+            break;
+        }
+
+        if (this->power < -1) {
             if (randint0(MAX_DEPTH) < this->level) {
-                int n = 0;
+                auto n = 0;
                 while (true) {
                     this->o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, false);
                     if (this->o_ptr->name2 == EgoType::WEIRD && this->o_ptr->tval != ItemKindType::SWORD) {
@@ -110,8 +123,10 @@ void WeaponEnchanter::apply_magic()
                             msg_print(_("エラー:隼の剣に割り当てるエゴ無し", "Error: Cannot find for Hayabusa."));
                             return;
                         }
+
                         continue;
                     }
+
                     break;
                 }
             }
@@ -121,8 +136,7 @@ void WeaponEnchanter::apply_magic()
     }
     case ItemKindType::BOW: {
         if (this->power > 1) {
-            /* this->power > 2はデバッグ専用. */
-            if (one_in_(20) || (this->power > 2)) {
+            if ((this->power > 2) || one_in_(20)) {
                 become_random_artifact(this->player_ptr, this->o_ptr, false);
                 break;
             }
@@ -136,20 +150,24 @@ void WeaponEnchanter::apply_magic()
     case ItemKindType::ARROW:
     case ItemKindType::SHOT: {
         if (this->power > 1) {
-            /* this->power > 2はデバッグ専用. */
             if (this->power > 2) {
                 become_random_artifact(this->player_ptr, this->o_ptr, false);
                 break;
             }
 
             this->o_ptr->name2 = get_random_ego(INVEN_AMMO, true);
-
-            while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds))
+            while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds)) {
                 this->o_ptr->dd++;
+            }
 
-            if (this->o_ptr->dd > 9)
+            if (this->o_ptr->dd > 9) {
                 this->o_ptr->dd = 9;
-        } else if (this->power < -1) {
+            }
+
+            break;
+        }
+
+        if (this->power < -1) {
             if (randint0(MAX_DEPTH) < this->level) {
                 this->o_ptr->name2 = get_random_ego(INVEN_AMMO, false);
             }
@@ -157,7 +175,6 @@ void WeaponEnchanter::apply_magic()
 
         break;
     }
-
     default:
         break;
     }
