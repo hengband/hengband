@@ -270,9 +270,8 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     floor_ptr->object_level = floor_ptr->base_level;
     floor_ptr->monster_level = floor_ptr->base_level;
     if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_TO_QUEST, enum2i(floor_ptr->quest_number), nullptr);
+        exe_write_diary_quest(player_ptr, DIARY_TO_QUEST, floor_ptr->quest_number);
     }
-
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
     init_flags = INIT_CREATE_DUNGEON;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, MAX_HGT, MAX_WID);
