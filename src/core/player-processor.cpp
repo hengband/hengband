@@ -56,6 +56,7 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -179,7 +180,7 @@ void process_player(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->riding && !player_ptr->confused && !player_ptr->blind) {
+    if (player_ptr->riding && !player_ptr->effects()->confusion()->is_confused() && !player_ptr->blind) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_csleep_remaining(m_ptr)) {

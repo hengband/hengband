@@ -19,6 +19,8 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/timed-effects.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -27,6 +29,7 @@
 
 BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
     : player_ptr(player_ptr)
+    , player_confusion(player_ptr->effects()->confusion())
 {
 }
 
@@ -107,8 +110,9 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
         return false;
     }
 
+    auto is_confused = this->player_confusion->is_confused();
     if (v > 0) {
-        if (!this->player_ptr->confused) {
+        if (!is_confused) {
             msg_print(_("あなたは混乱した！", "You are confused!"));
 
             if (this->player_ptr->action == ACTION_LEARN) {
@@ -143,14 +147,14 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
             chg_virtue(this->player_ptr, V_HARMONY, -1);
         }
     } else {
-        if (this->player_ptr->confused) {
+        if (is_confused) {
             msg_print(_("やっと混乱がおさまった。", "You feel less confused now."));
             this->player_ptr->special_attack &= ~(ATTACK_SUIKEN);
             notice = true;
         }
     }
 
-    this->player_ptr->confused = v;
+    this->player_confusion->set(v);
     this->player_ptr->redraw |= PR_STATUS;
     if (!notice) {
         return false;
@@ -166,7 +170,7 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
 {
-    return this->confusion(this->player_ptr->confused + tmp_v);
+    return this->confusion(this->player_confusion->current() + tmp_v);
 }
 
 /*!

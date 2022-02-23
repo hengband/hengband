@@ -17,6 +17,7 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -131,7 +132,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)bss.mod_paralysis(-1);
     }
 
-    if (player_ptr->confused) {
+    if (player_ptr->effects()->confusion()->is_confused()) {
         (void)bss.mod_confusion(-1);
     }
 

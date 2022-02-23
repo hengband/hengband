@@ -17,6 +17,8 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*
@@ -98,7 +100,7 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
     }
 
     command_dir = dir;
-    if (player_ptr->confused) {
+    if (player_ptr->effects()->confusion()->is_confused()) {
         dir = ddd[randint0(8)];
     }
 
@@ -149,7 +151,8 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
     }
 
     command_dir = dir;
-    if (player_ptr->confused) {
+    auto is_confused = player_ptr->effects()->confusion()->is_confused();
+    if (is_confused) {
         if (randint0(100) < 75) {
             dir = ddd[randint0(8)];
         }
@@ -168,7 +171,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
     }
 
     if (command_dir != dir) {
-        if (player_ptr->confused) {
+        if (is_confused) {
             msg_print(_("あなたは混乱している。", "You are confused."));
         } else {
             GAME_TEXT m_name[MAX_NLEN];
@@ -240,7 +243,8 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
     }
 
     command_dir = dir;
-    if (player_ptr->confused) {
+    auto is_confused = player_ptr->effects()->confusion()->is_confused();
+    if (is_confused) {
         if (randint0(100) < 75) {
             dir = ddd[randint0(8)];
         }
@@ -259,7 +263,7 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
     }
 
     if (command_dir != dir) {
-        if (player_ptr->confused) {
+        if (is_confused) {
             msg_print(_("あなたは混乱している。", "You are confused."));
         } else {
             GAME_TEXT m_name[MAX_NLEN];

@@ -15,6 +15,7 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -46,7 +47,7 @@ bool cmd_limit_cast(PlayerType *player_ptr)
 
 bool cmd_limit_confused(PlayerType *player_ptr)
 {
-    if (player_ptr->confused) {
+    if (player_ptr->effects()->confusion()->is_confused()) {
         msg_print(_("混乱していてできない！", "You are too confused!"));
         return true;
     }

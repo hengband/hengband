@@ -19,6 +19,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -35,7 +36,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->slow = 0; /* Timed -- Slow */
     player_ptr->blind = 0; /* Timed -- Blindness */
     player_ptr->paralyzed = 0; /* Timed -- Paralysis */
-    player_ptr->confused = 0; /* Timed -- Confusion */
+    effects->confusion()->reset();
     player_ptr->afraid = 0; /* Timed -- Fear */
     player_ptr->hallucinated = 0; /* Timed -- Hallucination */
     player_ptr->poisoned = 0; /* Timed -- Poisoned */

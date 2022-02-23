@@ -43,6 +43,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -164,7 +165,12 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         auto *r_ptr = &r_info[m_ptr->r_idx];
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
-        if (!is_hostile(m_ptr) && !(player_ptr->confused || player_ptr->hallucinated || !m_ptr->ml || is_stunned || (player_ptr->muta.has(PlayerMutationType::BERS_RAGE) && is_shero(player_ptr))) && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
+        auto can_cast = !player_ptr->effects()->confusion()->is_confused();
+        can_cast &= !player_ptr->hallucinated;
+        can_cast &= m_ptr->ml;
+        can_cast &= !is_stunned;
+        can_cast &= player_ptr->muta.has_not(PlayerMutationType::BERS_RAGE) || !is_shero(player_ptr);
+        if (!is_hostile(m_ptr) && !can_cast && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
             monster_desc(player_ptr, m_name, m_ptr, 0);
             if (m_ptr->ml) {
@@ -273,10 +279,11 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             }
         } else {
             auto effects = player_ptr->effects();
+            auto is_confused = effects->confusion()->is_confused();
             auto is_stunned = effects->stun()->is_stunned();
             if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) {
                 msg_print(_("それ以上先には進めない。", "You cannot go any more."));
-                if (!(player_ptr->confused || is_stunned || player_ptr->hallucinated)) {
+                if (!(is_confused || is_stunned || player_ptr->hallucinated)) {
                     energy.reset_player_turn();
                 }
             } else {
@@ -289,7 +296,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 #else
                 msg_format("There is %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
-                if (!(player_ptr->confused || is_stunned || player_ptr->hallucinated)) {
+                if (!(is_confused || is_stunned || player_ptr->hallucinated)) {
                     energy.reset_player_turn();
                 }
             }
@@ -303,8 +310,9 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 
     if (can_move && !pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
         auto effects = player_ptr->effects();
+        auto is_confused = effects->confusion()->is_confused();
         auto is_stunned = effects->stun()->is_stunned();
-        if (!(player_ptr->confused || is_stunned || player_ptr->hallucinated)) {
+        if (!(is_confused || is_stunned || player_ptr->hallucinated)) {
             energy.reset_player_turn();
         }
 

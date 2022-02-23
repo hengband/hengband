@@ -21,6 +21,7 @@
 #include "spell-realm/spells-song.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -305,7 +306,7 @@ static void rd_bad_status(PlayerType *player_ptr)
     strip_bytes(2); /* Old "rest" */
     player_ptr->blind = rd_s16b();
     player_ptr->paralyzed = rd_s16b();
-    player_ptr->confused = rd_s16b();
+    player_ptr->effects()->confusion()->set(rd_s16b());
     player_ptr->food = rd_s16b();
     strip_bytes(4); /* Old "food_digested" / "protection" */
 }
