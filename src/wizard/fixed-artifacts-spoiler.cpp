@@ -79,7 +79,7 @@ static void print_header(void)
  * @brief アーティファクト情報を出力するためにダミー生成を行う /
  * Hack -- Create a "forged" artifact
  * @param o_ptr 一時生成先を保管するオブジェクト構造体
- * @param name1 生成するアーティファクトID
+ * @param fixed_artifact_idx 生成するアーティファクトID
  * @return 生成が成功した場合TRUEを返す
  */
 static bool make_fake_artifact(ObjectType *o_ptr, ARTIFACT_IDX fixed_artifact_idx)
