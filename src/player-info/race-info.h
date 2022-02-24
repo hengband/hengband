@@ -12,8 +12,7 @@
 #include "system/angband.h"
 
 /*
- * @brief Constant for kinds of mimic
- * @todo 後ほど時間がある時にenum classへ変換する.
+ * @brief プレイヤーの変身形態
  */
 enum class MimicKindType {
     NONE = 0,

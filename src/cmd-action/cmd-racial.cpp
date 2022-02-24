@@ -1,4 +1,10 @@
-﻿#include "cmd-action/cmd-racial.h"
+﻿/*
+ * @brief クラス、種族、突然変異に関するコマンド処理
+ * @author Hourier
+ * @date 2022/02/24
+ */
+
+#include "cmd-action/cmd-racial.h"
 #include "action/action-limited.h"
 #include "action/mutation-execution.h"
 #include "action/racial-execution.h"
