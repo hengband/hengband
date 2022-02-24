@@ -22,21 +22,21 @@ static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
         return;
     }
 
-    auto *e_ptr = &e_info[o_ptr->name2];
+    auto *e_ptr = &e_info[o_ptr->ego_idx];
     flgs.set(e_ptr->flags);
 
     auto is_out_of_fuel = o_ptr->fuel == 0;
-    if ((o_ptr->name2 == EgoType::AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->ego_idx == EgoType::AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
         flgs.reset(TR_SH_FIRE);
         return;
     }
 
-    if ((o_ptr->name2 == EgoType::LITE_INFRA) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->ego_idx == EgoType::LITE_INFRA) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
         flgs.reset(TR_INFRA);
         return;
     }
 
-    if ((o_ptr->name2 == EgoType::LITE_EYE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->ego_idx == EgoType::LITE_EYE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
         flgs.reset(TR_RES_BLIND);
         flgs.reset(TR_SEE_INVIS);
     }
@@ -55,7 +55,7 @@ TrFlags object_flags(const ObjectType *o_ptr)
     auto flgs = k_ptr->flags;
 
     if (o_ptr->is_fixed_artifact()) {
-        flgs = a_info[o_ptr->name1].flags;
+        flgs = a_info[o_ptr->fixed_artifact_idx].flags;
     }
 
     object_flags_lite(o_ptr, flgs);
@@ -98,7 +98,7 @@ TrFlags object_flags_known(const ObjectType *o_ptr)
     object_flags_lite(o_ptr, flgs);
     if (spoil || o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
-            flgs = a_info[o_ptr->name1].flags;
+            flgs = a_info[o_ptr->fixed_artifact_idx].flags;
         }
 
         /* Random artifact ! */

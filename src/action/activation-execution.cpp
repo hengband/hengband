@@ -51,7 +51,7 @@
 static void decide_activation_level(ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->is_fixed_artifact()) {
-        ae_ptr->lev = a_info[ae_ptr->o_ptr->name1].level;
+        ae_ptr->lev = a_info[ae_ptr->o_ptr->fixed_artifact_idx].level;
         return;
     }
 
@@ -65,7 +65,7 @@ static void decide_activation_level(ae_type *ae_ptr)
     }
 
     if (((ae_ptr->o_ptr->tval == ItemKindType::RING) || (ae_ptr->o_ptr->tval == ItemKindType::AMULET)) && ae_ptr->o_ptr->is_ego())
-        ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
+        ae_ptr->lev = e_info[ae_ptr->o_ptr->ego_idx].level;
 }
 
 static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)

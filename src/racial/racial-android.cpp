@@ -79,10 +79,10 @@ void calc_android_exp(PlayerType *player_ptr)
         q_ptr->curse_flags.clear();
 
         if (o_ptr->is_fixed_artifact()) {
-            level = (level + std::max(a_info[o_ptr->name1].level - 8, 5)) / 2;
-            level += std::min(20, a_info[o_ptr->name1].rarity / (a_info[o_ptr->name1].gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
+            level = (level + std::max(a_info[o_ptr->fixed_artifact_idx].level - 8, 5)) / 2;
+            level += std::min(20, a_info[o_ptr->fixed_artifact_idx].rarity / (a_info[o_ptr->fixed_artifact_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
-            level += std::max(3, (e_info[o_ptr->name2].rating - 5) / 2);
+            level += std::max(3, (e_info[o_ptr->ego_idx].rating - 5) / 2);
         } else if (o_ptr->art_name) {
             int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
             int fake_level;

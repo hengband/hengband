@@ -335,7 +335,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact() && (!o_ptr->is_known() || in_generate)) {
                         /* Mega-Hack -- Preserve the artifact */
-                        a_info[o_ptr->name1].cur_num = 0;
+                        a_info[o_ptr->fixed_artifact_idx].cur_num = 0;
 
                         if (in_generate && cheat_peek) {
                             GAME_TEXT o_name[MAX_NLEN];

@@ -85,7 +85,7 @@ void PlayerAlignment::update_alignment()
     }
 
     for (int i = 0; i < 2; i++) {
-        if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND + i) || (this->player_ptr->inventory_list[INVEN_MAIN_HAND + i].name1 != ART_IRON_BALL))
+        if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND + i) || (this->player_ptr->inventory_list[INVEN_MAIN_HAND + i].fixed_artifact_idx != ART_IRON_BALL))
             continue;
 
         this->bias_evil_alignment(1000);

@@ -145,7 +145,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
     PRICE value = k_info[o_ptr->k_idx].cost;
     auto flgs = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[o_ptr->name1];
+        auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
         if (!a_ptr->cost)
             return 0;
 
@@ -153,7 +153,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
         value += flag_cost(o_ptr, o_ptr->pval);
         return value;
     } else if (o_ptr->is_ego()) {
-        auto *e_ptr = &e_info[o_ptr->name2];
+        auto *e_ptr = &e_info[o_ptr->ego_idx];
         if (!e_ptr->cost)
             return 0;
 

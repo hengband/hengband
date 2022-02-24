@@ -107,7 +107,7 @@ bool activate_scare(PlayerType *player_ptr)
 
 bool activate_aggravation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
 {
-    if (o_ptr->name1 == ART_HYOUSIGI)
+    if (o_ptr->fixed_artifact_idx == ART_HYOUSIGI)
         msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
     else
         msg_format(_("%sは不快な物音を立てた。", "The %s sounds an unpleasant noise."), name);
@@ -399,7 +399,7 @@ bool activate_tree_creation(PlayerType *player_ptr, ObjectType *o_ptr, concptr n
 bool activate_animate_dead(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     msg_print(_("黄金色の光が溢れ出た...", "It emitted a golden light..."));
-    if (o_ptr->name1 > 0)
+    if (o_ptr->fixed_artifact_idx > 0)
         msg_print(_("ぴぴるぴるぴるぴぴるぴ～♪", "Pipiru piru piru pipiru pii"));
 
     return animate_dead(player_ptr, 0, player_ptr->y, player_ptr->x);

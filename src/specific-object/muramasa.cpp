@@ -9,7 +9,7 @@
 
 bool activate_muramasa(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->name1 != ART_MURAMASA)
+    if (o_ptr->fixed_artifact_idx != ART_MURAMASA)
         return false;
 
     if (!get_check(_("本当に使いますか？", "Are you sure?! ")))

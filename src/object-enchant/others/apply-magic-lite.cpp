@@ -55,8 +55,8 @@ void LiteEnchanter::give_ego_index()
 {
     while (true) {
         auto okay_flag = true;
-        this->o_ptr->name2 = get_random_ego(INVEN_LITE, true);
-        switch (this->o_ptr->name2) {
+        this->o_ptr->ego_idx = get_random_ego(INVEN_LITE, true);
+        switch (this->o_ptr->ego_idx) {
         case EgoType::LITE_LONG:
             if (this->o_ptr->sval == SV_LITE_FEANOR) {
                 okay_flag = false;
@@ -75,8 +75,8 @@ void LiteEnchanter::give_ego_index()
 
 void LiteEnchanter::give_cursed()
 {
-    this->o_ptr->name2 = get_random_ego(INVEN_LITE, false);
-    switch (this->o_ptr->name2) {
+    this->o_ptr->ego_idx = get_random_ego(INVEN_LITE, false);
+    switch (this->o_ptr->ego_idx) {
     case EgoType::LITE_DARKNESS:
         this->o_ptr->fuel = 0;
         this->add_dark_flag();

@@ -42,7 +42,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     auto flgs = object_flags(o_ptr);
 
-    shape_buffer(o_ptr->name1 ? a_info[o_ptr->name1].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
+    shape_buffer(o_ptr->fixed_artifact_idx ? a_info[o_ptr->fixed_artifact_idx].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
 
     int i = 0;
     for (int j = 0; temp[j]; j += 1 + strlen(&temp[j])) {
@@ -64,7 +64,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは投げた時ペットに変化する。", "It will transform into a pet when thrown.");
     }
 
-    if (o_ptr->name1 == ART_STONEMASK) {
+    if (o_ptr->fixed_artifact_idx == ART_STONEMASK) {
         info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
     }
 
@@ -128,7 +128,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     if (flgs.has(TR_LITE_M3))
         rad -= 3;
 
-    if (o_ptr->name2 == EgoType::LITE_SHINE)
+    if (o_ptr->ego_idx == EgoType::LITE_SHINE)
         rad++;
 
     if (flgs.has(TR_LITE_FUEL) && flgs.has_not(TR_DARK_SOURCE)) {
@@ -144,7 +144,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     if (rad != 0)
         info[i++] = desc;
 
-    if (o_ptr->name2 == EgoType::LITE_LONG) {
+    if (o_ptr->ego_idx == EgoType::LITE_LONG) {
         info[i++] = _("それは長いターン明かりを授ける。", "It provides light for much longer time.");
     }
 

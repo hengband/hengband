@@ -54,7 +54,7 @@ void get_bloody_moon_flags(ObjectType *o_ptr)
  */
 bool activate_bloody_moon(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->name1 != ART_BLOOD)
+    if (o_ptr->fixed_artifact_idx != ART_BLOOD)
         return false;
 
     msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));

@@ -19,11 +19,11 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->number != 1)
         set_bits(*flags, SaveDataItemFlagType::NUMBER);
 
-    if (o_ptr->name1)
-        set_bits(*flags, SaveDataItemFlagType::NAME1);
+    if (o_ptr->fixed_artifact_idx)
+        set_bits(*flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX);
 
     if (o_ptr->is_ego())
-        set_bits(*flags, SaveDataItemFlagType::NAME2);
+        set_bits(*flags, SaveDataItemFlagType::EGO_IDX);
 
     if (o_ptr->timeout)
         set_bits(*flags, SaveDataItemFlagType::TIMEOUT);
@@ -101,11 +101,11 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
 static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
 {
     wr_s16b((int16_t)o_ptr->weight);
-    if (any_bits(flags, SaveDataItemFlagType::NAME1))
-        wr_s16b(o_ptr->name1);
+    if (any_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX))
+        wr_s16b(o_ptr->fixed_artifact_idx);
 
-    if (any_bits(flags, SaveDataItemFlagType::NAME2))
-        wr_byte((byte)o_ptr->name2);
+    if (any_bits(flags, SaveDataItemFlagType::EGO_IDX))
+        wr_byte((byte)o_ptr->ego_idx);
 
     if (any_bits(flags, SaveDataItemFlagType::TIMEOUT))
         wr_s16b(o_ptr->timeout);

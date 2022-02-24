@@ -142,7 +142,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
         /* Make an object (if possible) */
         i_ptr->prep(k_idx);
         if (a_idx)
-            i_ptr->name1 = a_idx;
+            i_ptr->fixed_artifact_idx = a_idx;
         apply_magic_to_object(player_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
@@ -239,8 +239,8 @@ bool curse_armor(PlayerType *player_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Blast the armor */
-    o_ptr->name1 = 0;
-    o_ptr->name2 = EgoType::BLASTED;
+    o_ptr->fixed_artifact_idx = 0;
+    o_ptr->ego_idx = EgoType::BLASTED;
     o_ptr->to_a = 0 - randint1(5) - randint1(5);
     o_ptr->to_h = 0;
     o_ptr->to_d = 0;
@@ -293,8 +293,8 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ObjectType *o_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Shatter the weapon */
-    o_ptr->name1 = 0;
-    o_ptr->name2 = EgoType::SHATTERED;
+    o_ptr->fixed_artifact_idx = 0;
+    o_ptr->ego_idx = EgoType::SHATTERED;
     o_ptr->to_h = 0 - randint1(5) - randint1(5);
     o_ptr->to_d = 0 - randint1(5) - randint1(5);
     o_ptr->to_a = 0;
@@ -344,7 +344,7 @@ void brand_bolts(PlayerType *player_ptr)
         msg_print(_("クロスボウの矢が炎のオーラに包まれた！", "Your bolts are covered in a fiery aura!"));
 
         /* Ego-item */
-        o_ptr->name2 = EgoType::FLAME;
+        o_ptr->ego_idx = EgoType::FLAME;
         enchant_equipment(player_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
         return;
     }
@@ -585,86 +585,86 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
         if (o_ptr->tval == ItemKindType::SWORD) {
             act = _("は鋭さを増した！", "becomes very sharp!");
 
-            o_ptr->name2 = EgoType::SHARPNESS;
+            o_ptr->ego_idx = EgoType::SHARPNESS;
             o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, player_ptr->current_floor_ptr->dun_level) + 1;
 
             if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
                 o_ptr->pval = 2;
         } else {
             act = _("は破壊力を増した！", "seems very powerful.");
-            o_ptr->name2 = EgoType::EARTHQUAKES;
+            o_ptr->ego_idx = EgoType::EARTHQUAKES;
             o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, player_ptr->current_floor_ptr->dun_level);
         }
 
         break;
     case 16:
         act = _("は人間の血を求めている！", "seems to be looking for humans!");
-        o_ptr->name2 = EgoType::KILL_HUMAN;
+        o_ptr->ego_idx = EgoType::KILL_HUMAN;
         break;
     case 15:
         act = _("は電撃に覆われた！", "covered with lightning!");
-        o_ptr->name2 = EgoType::BRAND_ELEC;
+        o_ptr->ego_idx = EgoType::BRAND_ELEC;
         break;
     case 14:
         act = _("は酸に覆われた！", "coated with acid!");
-        o_ptr->name2 = EgoType::BRAND_ACID;
+        o_ptr->ego_idx = EgoType::BRAND_ACID;
         break;
     case 13:
         act = _("は邪悪なる怪物を求めている！", "seems to be looking for evil monsters!");
-        o_ptr->name2 = EgoType::KILL_EVIL;
+        o_ptr->ego_idx = EgoType::KILL_EVIL;
         break;
     case 12:
         act = _("は異世界の住人の肉体を求めている！", "seems to be looking for demons!");
-        o_ptr->name2 = EgoType::KILL_DEMON;
+        o_ptr->ego_idx = EgoType::KILL_DEMON;
         break;
     case 11:
         act = _("は屍を求めている！", "seems to be looking for undead!");
-        o_ptr->name2 = EgoType::KILL_UNDEAD;
+        o_ptr->ego_idx = EgoType::KILL_UNDEAD;
         break;
     case 10:
         act = _("は動物の血を求めている！", "seems to be looking for animals!");
-        o_ptr->name2 = EgoType::KILL_ANIMAL;
+        o_ptr->ego_idx = EgoType::KILL_ANIMAL;
         break;
     case 9:
         act = _("はドラゴンの血を求めている！", "seems to be looking for dragons!");
-        o_ptr->name2 = EgoType::KILL_DRAGON;
+        o_ptr->ego_idx = EgoType::KILL_DRAGON;
         break;
     case 8:
         act = _("はトロルの血を求めている！", "seems to be looking for troll!s");
-        o_ptr->name2 = EgoType::KILL_TROLL;
+        o_ptr->ego_idx = EgoType::KILL_TROLL;
         break;
     case 7:
         act = _("はオークの血を求めている！", "seems to be looking for orcs!");
-        o_ptr->name2 = EgoType::KILL_ORC;
+        o_ptr->ego_idx = EgoType::KILL_ORC;
         break;
     case 6:
         act = _("は巨人の血を求めている！", "seems to be looking for giants!");
-        o_ptr->name2 = EgoType::KILL_GIANT;
+        o_ptr->ego_idx = EgoType::KILL_GIANT;
         break;
     case 5:
         act = _("は非常に不安定になったようだ。", "seems very unstable now.");
-        o_ptr->name2 = EgoType::TRUMP;
+        o_ptr->ego_idx = EgoType::TRUMP;
         o_ptr->pval = randint1(2);
         break;
     case 4:
         act = _("は血を求めている！", "thirsts for blood!");
-        o_ptr->name2 = EgoType::VAMPIRIC;
+        o_ptr->ego_idx = EgoType::VAMPIRIC;
         break;
     case 3:
         act = _("は毒に覆われた。", "is coated with poison.");
-        o_ptr->name2 = EgoType::BRAND_POIS;
+        o_ptr->ego_idx = EgoType::BRAND_POIS;
         break;
     case 2:
         act = _("は純ログルスに飲み込まれた。", "is engulfed in raw Logrus!");
-        o_ptr->name2 = EgoType::CHAOTIC;
+        o_ptr->ego_idx = EgoType::CHAOTIC;
         break;
     case 1:
         act = _("は炎のシールドに覆われた！", "is covered in a fiery shield!");
-        o_ptr->name2 = EgoType::BRAND_FIRE;
+        o_ptr->ego_idx = EgoType::BRAND_FIRE;
         break;
     default:
         act = _("は深く冷たいブルーに輝いた！", "glows deep, icy blue!");
-        o_ptr->name2 = EgoType::BRAND_COLD;
+        o_ptr->ego_idx = EgoType::BRAND_COLD;
         break;
     }
 

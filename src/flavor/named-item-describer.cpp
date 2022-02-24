@@ -54,7 +54,7 @@ static void set_base_name(flavor_type *flavor_ptr)
     if (!flavor_ptr->aware || flavor_ptr->tr_flags.has_not(TR_FULL_NAME))
         return;
 
-    flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->name1 != 0)) ? a_info[flavor_ptr->o_ptr->name1].name.c_str() : flavor_ptr->kindname;
+    flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->fixed_artifact_idx != 0)) ? a_info[flavor_ptr->o_ptr->fixed_artifact_idx].name.c_str() : flavor_ptr->kindname;
 }
 
 #ifdef JP
@@ -110,8 +110,8 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
         return;
     }
 
-    if (flavor_ptr->o_ptr->name1 && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
-        auto *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+    if (flavor_ptr->o_ptr->fixed_artifact_idx && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
+        auto *a_ptr = &a_info[flavor_ptr->o_ptr->fixed_artifact_idx];
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         if (a_ptr->name.find("『", 0, 2) != 0)
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
@@ -120,7 +120,7 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_ego()) {
-        auto *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+        auto *e_ptr = &e_info[flavor_ptr->o_ptr->ego_idx];
         flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.c_str());
     }
 }
@@ -196,7 +196,7 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
         return;
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        auto *a_ptr = &a_info[flavor_ptr->o_ptr->fixed_artifact_idx];
         if (a_ptr->name.find("『", 0, 2) == 0)
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
 
@@ -291,14 +291,14 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        auto *a_ptr = &a_info[flavor_ptr->o_ptr->fixed_artifact_idx];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
         return;
     }
 
     if (flavor_ptr->o_ptr->is_ego()) {
-        auto *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+        auto *e_ptr = &e_info[flavor_ptr->o_ptr->ego_idx];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.c_str());
     }

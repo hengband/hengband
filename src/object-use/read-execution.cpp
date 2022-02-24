@@ -469,11 +469,11 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         }
-    } else if (o_ptr->name1 == ART_GHB) {
+    } else if (o_ptr->fixed_artifact_idx == ART_GHB) {
         msg_print(_("私は苦労して『グレーター・ヘル=ビースト』を倒した。", "I had a very hard time to kill the Greater hell-beast, "));
         msg_print(_("しかし手に入ったのはこのきたないＴシャツだけだった。", "but all I got was this lousy t-shirt!"));
         used_up = false;
-    } else if (o_ptr->name1 == ART_POWER) {
+    } else if (o_ptr->fixed_artifact_idx == ART_POWER) {
         msg_print(_("「一つの指輪は全てを統べ、", "'One Ring to rule them all, "));
         msg_print(nullptr);
         msg_print(_("一つの指輪は全てを見つけ、", "One Ring to find them, "));

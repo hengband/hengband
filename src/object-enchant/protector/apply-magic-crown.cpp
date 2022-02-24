@@ -47,8 +47,8 @@ void CrownEnchanter::give_ego_index()
     }
 
     while (true) {
-        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
-        switch (this->o_ptr->name2) {
+        this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, true);
+        switch (this->o_ptr->ego_idx) {
         case EgoType::TELEPATHY:
         case EgoType::MAGI:
         case EgoType::MIGHT:
@@ -71,8 +71,8 @@ void CrownEnchanter::give_ego_index()
 void CrownEnchanter::give_cursed()
 {
     while (true) {
-        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
-        switch (this->o_ptr->name2) {
+        this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, false);
+        switch (this->o_ptr->ego_idx) {
         case EgoType::H_DEMON:
             return;
         default:

@@ -77,7 +77,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         ObjectType forge;
         auto *q_ptr = &forge;
         q_ptr->prep(k_idx);
-        q_ptr->name1 = a_idx;
+        q_ptr->fixed_artifact_idx = a_idx;
         q_ptr->ident = IDENT_STORE;
         describe_flavor(player_ptr, fullname, q_ptr, OD_NAME_ONLY);
     } else if (strcmp(zz[0], "MONSTER") == 0) {

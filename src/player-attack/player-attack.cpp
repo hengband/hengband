@@ -437,7 +437,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
     }
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    if ((o_ptr->name1 == ART_ZANTETSU) && is_lowlevel)
+    if ((o_ptr->fixed_artifact_idx == ART_ZANTETSU) && is_lowlevel)
         msg_print(_("またつまらぬものを斬ってしまった．．．", "Sigh... Another trifling thing I've cut...."));
 
     return true;
@@ -455,7 +455,7 @@ static void apply_actual_attack(
     PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
+    int vorpal_chance = ((o_ptr->fixed_artifact_idx == ART_VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == ART_CHAINSWORD)) ? 2 : 4;
 
     sound(SOUND_HIT);
     print_surprise_attack(pa_ptr);
@@ -528,8 +528,8 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    bool is_zantetsu_nullified = ((o_ptr->name1 == ART_ZANTETSU) && (pa_ptr->r_ptr->d_char == 'j'));
-    bool is_ej_nullified = ((o_ptr->name1 == ART_EXCALIBUR_J) && (pa_ptr->r_ptr->d_char == 'S'));
+    bool is_zantetsu_nullified = ((o_ptr->fixed_artifact_idx == ART_ZANTETSU) && (pa_ptr->r_ptr->d_char == 'j'));
+    bool is_ej_nullified = ((o_ptr->fixed_artifact_idx == ART_EXCALIBUR_J) && (pa_ptr->r_ptr->d_char == 'S'));
     calc_num_blow(player_ptr, pa_ptr);
 
     /* Attack once for each legal blow */

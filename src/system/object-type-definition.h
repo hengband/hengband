@@ -34,8 +34,8 @@ public:
     byte discount{}; /*!< ゲーム中の値引き率 (0～100) / Discount (if any) */
     ITEM_NUMBER number{}; /*!< Number of items */
     WEIGHT weight{}; /*!< Item weight */
-    ARTIFACT_IDX name1{}; /*!< Artifact type, if any */
-    EgoType name2{}; /*!< Ego-Item type, if any */
+    ARTIFACT_IDX fixed_artifact_idx{}; /*!< 固定アーティファクト番号 (固定アーティファクトでないなら0) */
+    EgoType ego_idx{}; /*!< エゴ番号 (エゴでないなら0) */
 
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     byte chest_level = 0; /*!< 箱の中身レベル */

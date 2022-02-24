@@ -438,7 +438,7 @@ static void describe_lamp_life(flavor_type *flavor_ptr)
         return;
 
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
-    auto fuel_magnification = flavor_ptr->o_ptr->name2 == EgoType::LITE_LONG ? 2 : 1;
+    auto fuel_magnification = flavor_ptr->o_ptr->ego_idx == EgoType::LITE_LONG ? 2 : 1;
     flavor_ptr->t = object_desc_num(flavor_ptr->t, fuel_magnification * flavor_ptr->o_ptr->fuel);
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("ターンの寿命)", " turns of light)"));
 }

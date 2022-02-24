@@ -345,7 +345,7 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
-    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), ++line, j);
+    prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, object_value_real(o_ptr)), ++line, j);
     prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), ++line, j);
     prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
@@ -404,7 +404,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     char tmp_val[80];
 
     if (o_ptr->is_fixed_artifact())
-        a_info[o_ptr->name1].cur_num = 0;
+        a_info[o_ptr->fixed_artifact_idx].cur_num = 0;
 
     uint32_t i, matches, better, worse, other, correct;
     uint32_t test_roll = 1000000;
@@ -455,14 +455,14 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact())
-                a_info[q_ptr->name1].cur_num = 0;
+                a_info[q_ptr->fixed_artifact_idx].cur_num = 0;
 
             if ((o_ptr->tval != q_ptr->tval) || (o_ptr->sval != q_ptr->sval))
                 continue;
 
             correct++;
             if ((q_ptr->pval == o_ptr->pval) && (q_ptr->to_a == o_ptr->to_a) && (q_ptr->to_h == o_ptr->to_h) && (q_ptr->to_d == o_ptr->to_d)
-                && (q_ptr->name1 == o_ptr->name1)) {
+                && (q_ptr->fixed_artifact_idx == o_ptr->fixed_artifact_idx)) {
                 matches++;
             } else if ((q_ptr->pval >= o_ptr->pval) && (q_ptr->to_a >= o_ptr->to_a) && (q_ptr->to_h >= o_ptr->to_h) && (q_ptr->to_d >= o_ptr->to_d)) {
                 better++;
@@ -478,7 +478,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact())
-        a_info[o_ptr->name1].cur_num = 1;
+        a_info[o_ptr->fixed_artifact_idx].cur_num = 1;
 }
 
 /*!
@@ -502,8 +502,8 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         wiz_display_item(player_ptr, q_ptr);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (q_ptr->is_fixed_artifact()) {
-                a_info[q_ptr->name1].cur_num = 0;
-                q_ptr->name1 = 0;
+                a_info[q_ptr->fixed_artifact_idx].cur_num = 0;
+                q_ptr->fixed_artifact_idx = 0;
             }
 
             changed = false;
@@ -516,8 +516,8 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         }
 
         if (q_ptr->is_fixed_artifact()) {
-            a_info[q_ptr->name1].cur_num = 0;
-            q_ptr->name1 = 0;
+            a_info[q_ptr->fixed_artifact_idx].cur_num = 0;
+            q_ptr->fixed_artifact_idx = 0;
         }
 
         switch (tolower(ch)) {
@@ -916,7 +916,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 continue;
 
             o_ptr->prep(k_idx);
-            o_ptr->name1 = a_ref.idx;
+            o_ptr->fixed_artifact_idx = a_ref.idx;
 
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
@@ -1028,7 +1028,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 do {
                     o_ptr->prep(k_idx);
                     apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
-                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->is_ego() || o_ptr->is_cursed());
+                } while (!o_ptr->art_name || o_ptr->fixed_artifact_idx || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name)
                     drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
@@ -1043,7 +1043,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             if (must || ok_ego) {
                 if (e_ids.size() > 0) {
                     o_ptr->prep(k_idx);
-                    o_ptr->name2 = e_ids[0];
+                    o_ptr->ego_idx = e_ids[0];
                     apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
                 } else {
                     int max_roll = 1000;
@@ -1052,7 +1052,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                         o_ptr->prep(k_idx);
                         (void)apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
 
-                        if (o_ptr->name1 || o_ptr->art_name)
+                        if (o_ptr->fixed_artifact_idx || o_ptr->art_name)
                             continue;
 
                         if (wish_ego)
@@ -1060,7 +1060,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
                         EgoType e_idx = EgoType::NONE;
                         for (auto e : e_ids) {
-                            if (o_ptr->name2 == e) {
+                            if (o_ptr->ego_idx == e) {
                                 e_idx = e;
                                 break;
                             }

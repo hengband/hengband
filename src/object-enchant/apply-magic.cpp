@@ -100,7 +100,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
 
     if (mode & (AM_GREAT | AM_SPECIAL))
         rolls = 4;
-    if ((mode & AM_NO_FIXED_ART) || o_ptr->name1)
+    if ((mode & AM_NO_FIXED_ART) || o_ptr->fixed_artifact_idx)
         rolls = 0;
 
     for (int i = 0; i < rolls; i++) {

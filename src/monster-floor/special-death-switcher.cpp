@@ -207,12 +207,12 @@ static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::HAFTED, SV_GROND));
-    q_ptr->name1 = ART_GROND;
+    q_ptr->fixed_artifact_idx = ART_GROND;
     apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CROWN, SV_CHAOS));
-    q_ptr->name1 = ART_CHAOS;
+    q_ptr->fixed_artifact_idx = ART_CHAOS;
     apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -418,7 +418,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
             break;
         }
 
-        if ((q_ptr->name1 != 0) && q_ptr->is_ego()) {
+        if ((q_ptr->fixed_artifact_idx != 0) && q_ptr->is_ego()) {
             continue;
         }
 
