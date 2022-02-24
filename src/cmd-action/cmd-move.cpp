@@ -101,16 +101,17 @@ void do_cmd_go_up(PlayerType *player_ptr)
 
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
-            if (quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
+        const auto quest_number = player_ptr->current_floor_ptr->quest_number;
+        if (quest[quest_number].status == QuestStatusType::UNTAKEN) {
+            if (quest[quest_number].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
+            quest[quest_number].status = QuestStatusType::TAKEN;
         }
 
-        if (!inside_quest(player_ptr->current_floor_ptr->quest_number)) {
+        if (!inside_quest(quest_number)) {
             player_ptr->current_floor_ptr->dun_level = 0;
             player_ptr->word_recall = 0;
         }
@@ -138,12 +139,14 @@ void do_cmd_go_up(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && quest[player_ptr->current_floor_ptr->quest_number].type == QuestKindType::RANDOM) {
+    const auto quest_number = player_ptr->current_floor_ptr->quest_number;
+
+    if (inside_quest(quest_number) && quest[quest_number].type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     }
 
-    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && quest[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
+    if (inside_quest(quest_number) && quest[quest_number].type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         player_ptr->current_floor_ptr->dun_level = 0;
