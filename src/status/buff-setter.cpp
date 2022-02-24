@@ -67,7 +67,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->tim_res_nether = 0;
     player_ptr->tim_res_time = 0;
     player_ptr->tim_mimic = 0;
-    player_ptr->mimic_form = 0;
+    player_ptr->mimic_form = MimicKindType::NONE;
     player_ptr->tim_reflect = 0;
     player_ptr->multishadow = 0;
     player_ptr->dustrobe = 0;
@@ -323,7 +323,7 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, int16_t mimic_race_idx, bool do_dec)
+bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_idx, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -345,11 +345,11 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, int16_t mimic_race_idx, bo
     else {
         if (player_ptr->tim_mimic) {
             msg_print(_("変身が解けた。", "You are no longer transformed."));
-            if (player_ptr->mimic_form == MIMIC_DEMON)
+            if (player_ptr->mimic_form == MimicKindType::DEMON)
                 set_oppose_fire(player_ptr, 0, true);
-            player_ptr->mimic_form = 0;
+            player_ptr->mimic_form = MimicKindType::NONE;
             notice = true;
-            mimic_race_idx = 0;
+            mimic_race_idx = MimicKindType::NONE;
         }
     }
 

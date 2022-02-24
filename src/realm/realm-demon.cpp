@@ -463,7 +463,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 return info_duration(base, base);
 
             if (cast) {
-                set_mimic(player_ptr, base + randint1(base), MIMIC_DEMON, false);
+                set_mimic(player_ptr, base + randint1(base), MimicKindType::DEMON, false);
             }
         }
         break;
@@ -673,7 +673,7 @@ concptr do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 return info_duration(base, base);
 
             if (cast) {
-                set_mimic(player_ptr, base + randint1(base), MIMIC_DEMON_LORD, false);
+                set_mimic(player_ptr, base + randint1(base), MimicKindType::DEMON_LORD, false);
             }
         }
         break;

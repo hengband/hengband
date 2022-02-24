@@ -11,12 +11,12 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
-
 #include <array>
 #include <map>
 
 enum class ItemKindType : short;
 enum class PlayerSkillKindType;
+enum class MimicKindType;
 enum class MonsterAbilityType;
 
 struct floor_type;
@@ -134,7 +134,7 @@ public:
     TIME_EFFECT magicdef{};
     TIME_EFFECT tim_res_nether{}; /* Timed -- Nether resistance */
     TIME_EFFECT tim_res_time{}; /* Timed -- Time resistance */
-    int16_t mimic_form{}; // @todo 後でPlayerRaceTypeに差し替える.
+    MimicKindType mimic_form{}; // @todo 後でPlayerRaceTypeに差し替える.
     TIME_EFFECT tim_mimic{};
     TIME_EFFECT tim_sh_fire{};
     TIME_EFFECT tim_sh_holy{};

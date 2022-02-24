@@ -32,7 +32,7 @@ void display_player_misc_info(PlayerType *player_ptr)
 
     c_put_str(TERM_L_BLUE, tmp, 1, 34);
     c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 9);
-    c_put_str(TERM_L_BLUE, (player_ptr->mimic_form ? mimic_info[player_ptr->mimic_form].title : rp_ptr->title), 4, 9);
+    c_put_str(TERM_L_BLUE, (player_ptr->mimic_form != MimicKindType::NONE ? mimic_info.at(player_ptr->mimic_form).title : rp_ptr->title), 4, 9);
     c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 9);
 
     put_str(_("レベル:", "Level :"), 6, 1);

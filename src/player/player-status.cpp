@@ -415,11 +415,14 @@ static void update_max_hitpoints(PlayerType *player_ptr)
     byte tmp_hitdie;
     PlayerClass pc(player_ptr);
     auto is_sorcerer = pc.equals(PlayerClassType::SORCERER);
-    if (player_ptr->mimic_form) {
-        if (is_sorcerer)
-            tmp_hitdie = mimic_info[player_ptr->mimic_form].r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        else
-            tmp_hitdie = mimic_info[player_ptr->mimic_form].r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        auto r_mhp = mimic_info.at(player_ptr->mimic_form).r_mhp;
+        if (is_sorcerer) {
+            tmp_hitdie = r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        } else {
+            tmp_hitdie = r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        }
+
         mhp = mhp * tmp_hitdie / player_ptr->hitdie;
     }
 
@@ -1015,10 +1018,12 @@ static ACTION_SKILL_POWER calc_disarming(PlayerType *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
+
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
@@ -1045,10 +1050,12 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
+
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
@@ -1097,10 +1104,12 @@ static ACTION_SKILL_POWER calc_saving_throw(PlayerType *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
+
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
@@ -1158,10 +1167,12 @@ static ACTION_SKILL_POWER calc_search(PlayerType *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
+
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
@@ -1205,10 +1216,12 @@ static ACTION_SKILL_POWER calc_search_freq(PlayerType *player_ptr)
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
+
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
@@ -1250,10 +1263,11 @@ static ACTION_SKILL_POWER calc_to_hit_melee(PlayerType *player_ptr)
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
 
     pow = tmp_rp_ptr->r_thn + c_ptr->c_thn + a_ptr->a_thn;
     pow += ((c_ptr->x_thn * player_ptr->lev / 10) + (a_ptr->a_thn * player_ptr->lev / 50));
@@ -1274,10 +1288,11 @@ static ACTION_SKILL_POWER calc_to_hit_shoot(PlayerType *player_ptr)
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
 
     pow = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
     pow += ((c_ptr->x_thb * player_ptr->lev / 10) + (a_ptr->a_thb * player_ptr->lev / 50));
@@ -1299,10 +1314,11 @@ static ACTION_SKILL_POWER calc_to_hit_throw(PlayerType *player_ptr)
     const player_class_info *c_ptr = &class_info[enum2i(player_ptr->pclass)];
     const player_personality *a_ptr = &personality_info[player_ptr->ppersonality];
 
-    if (player_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[player_ptr->mimic_form];
-    else
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        tmp_rp_ptr = &mimic_info.at(player_ptr->mimic_form);
+    } else {
         tmp_rp_ptr = &race_info[enum2i(player_ptr->prace)];
+    }
 
     pow = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
     pow += ((c_ptr->x_thb * player_ptr->lev / 10) + (a_ptr->a_thb * player_ptr->lev / 50));
@@ -1586,19 +1602,20 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
 
     ac += ((int)(adj_dex_ta[player_ptr->stat_index[A_DEX]]) - 128);
 
-    if (player_ptr->mimic_form) {
-        switch (player_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            ac += 10;
-            break;
-        case MIMIC_DEMON_LORD:
-            ac += 20;
-            break;
-        case MIMIC_VAMPIRE:
-            ac += 10;
-        }
+    switch (player_ptr->mimic_form) {
+    case MimicKindType::NONE:
+        break;
+    case MimicKindType::DEMON:
+        ac += 10;
+        break;
+    case MimicKindType::DEMON_LORD:
+        ac += 20;
+        break;
+    case MimicKindType::VAMPIRE:
+        ac += 10;
+        break;
     }
-
+    
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::BERSERKER)) {
         ac += 10 + player_ptr->lev / 2;

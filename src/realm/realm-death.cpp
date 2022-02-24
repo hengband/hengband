@@ -636,7 +636,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 return info_duration(base, base);
 
             if (cast) {
-                set_mimic(player_ptr, base + randint1(base), MIMIC_VAMPIRE, false);
+                set_mimic(player_ptr, base + randint1(base), MimicKindType::VAMPIRE, false);
             }
         }
         break;

@@ -80,14 +80,16 @@ void display_virtue(PlayerType *player_ptr, self_info_type *self_ptr)
 void display_mimic_race_ability(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     switch (player_ptr->mimic_form) {
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD:
+    case MimicKindType::NONE:
+        return;
+    case MimicKindType::DEMON:
+    case MimicKindType::DEMON_LORD:
         sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
             3 * player_ptr->lev, 10 + player_ptr->lev / 3);
 
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
-        break;
-    case MIMIC_VAMPIRE:
+        return;
+    case MimicKindType::VAMPIRE:
         if (player_ptr->lev <= 1)
             break;
 
@@ -95,7 +97,7 @@ void display_mimic_race_ability(PlayerType *player_ptr, self_info_type *self_ptr
             player_ptr->lev + std::max(1, player_ptr->lev / 10), player_ptr->lev + player_ptr->lev * std::max(1, player_ptr->lev / 10),
             1 + (player_ptr->lev / 3));
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
-        break;
+        return;
     }
 }
 

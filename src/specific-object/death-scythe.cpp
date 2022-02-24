@@ -68,11 +68,11 @@ static int calc_death_scythe_reflection_magnification_mimic_none(PlayerType *pla
 static int calc_death_scythe_reflection_magnification(PlayerType *player_ptr)
 {
     switch (player_ptr->mimic_form) {
-    case MIMIC_NONE:
+    case MimicKindType::NONE:
         return calc_death_scythe_reflection_magnification_mimic_none(player_ptr);
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD:
-    case MIMIC_VAMPIRE:
+    case MimicKindType::DEMON:
+    case MimicKindType::DEMON_LORD:
+    case MimicKindType::VAMPIRE:
         return 30;
     default:
         return 10;
