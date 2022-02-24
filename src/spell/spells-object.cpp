@@ -142,7 +142,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
         /* Make an object (if possible) */
         i_ptr->prep(k_idx);
         if (a_idx)
-            i_ptr->name1 = a_idx;
+            i_ptr->fixed_artifact_idx = a_idx;
         apply_magic_to_object(player_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
@@ -239,7 +239,7 @@ bool curse_armor(PlayerType *player_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Blast the armor */
-    o_ptr->name1 = 0;
+    o_ptr->fixed_artifact_idx = 0;
     o_ptr->name2 = EgoType::BLASTED;
     o_ptr->to_a = 0 - randint1(5) - randint1(5);
     o_ptr->to_h = 0;
@@ -293,7 +293,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ObjectType *o_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Shatter the weapon */
-    o_ptr->name1 = 0;
+    o_ptr->fixed_artifact_idx = 0;
     o_ptr->name2 = EgoType::SHATTERED;
     o_ptr->to_h = 0 - randint1(5) - randint1(5);
     o_ptr->to_d = 0 - randint1(5) - randint1(5);

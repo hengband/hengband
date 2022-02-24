@@ -70,7 +70,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
                 if (o_ptr->is_known())
                     continue;
 
-                okay[o_ptr->name1] = false;
+                okay[o_ptr->fixed_artifact_idx] = false;
             }
         }
     }
@@ -84,7 +84,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         if (o_ptr->is_known())
             continue;
 
-        okay[o_ptr->name1] = false;
+        okay[o_ptr->fixed_artifact_idx] = false;
     }
 
     std::vector<ARTIFACT_IDX> whats;
@@ -105,7 +105,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
             ObjectType *q_ptr;
             q_ptr = &forge;
             q_ptr->prep(z);
-            q_ptr->name1 = a_idx;
+            q_ptr->fixed_artifact_idx = a_idx;
             q_ptr->ident |= IDENT_STORE;
             describe_flavor(player_ptr, base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }

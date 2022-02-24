@@ -58,7 +58,7 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
  */
 static void print_chainsword_noise(ObjectType *o_ptr)
 {
-    if ((o_ptr->name1 != ART_CHAINSWORD) || one_in_(2))
+    if ((o_ptr->fixed_artifact_idx != ART_CHAINSWORD) || one_in_(2))
         return;
 
     char chainsword_noise[1024];
@@ -81,7 +81,7 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int vorpal_magnification = 2;
     print_chainsword_noise(o_ptr);
-    if (o_ptr->name1 == ART_VORPAL_BLADE)
+    if (o_ptr->fixed_artifact_idx == ART_VORPAL_BLADE)
         msg_print(_("目にも止まらぬヴォーパルブレード、手錬の早業！", "Your Vorpal Blade goes snicker-snack!"));
     else
         msg_format(_("%sをグッサリ切り裂いた！", "Your weapon cuts deep into %s!"), pa_ptr->m_name);

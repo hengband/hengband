@@ -376,7 +376,7 @@ bool ObjectType::is_artifact() const
  */
 bool ObjectType::is_fixed_artifact() const
 {
-    return this->name1 != 0;
+    return this->fixed_artifact_idx != 0;
 }
 
 /*!
@@ -467,7 +467,7 @@ bool ObjectType::is_potion() const
  */
 bool ObjectType::is_readable() const
 {
-    return (this->tval == ItemKindType::SCROLL) || (this->tval == ItemKindType::PARCHMENT) || (this->name1 == ART_GHB) || (this->name1 == ART_POWER);
+    return (this->tval == ItemKindType::SCROLL) || (this->tval == ItemKindType::PARCHMENT) || (this->fixed_artifact_idx == ART_GHB) || (this->fixed_artifact_idx == ART_POWER);
 }
 
 /*!

@@ -82,9 +82,9 @@ static void print_header(void)
  * @param name1 生成するアーティファクトID
  * @return 生成が成功した場合TRUEを返す
  */
-static bool make_fake_artifact(ObjectType *o_ptr, ARTIFACT_IDX name1)
+static bool make_fake_artifact(ObjectType *o_ptr, ARTIFACT_IDX fixed_artifact_idx)
 {
-    auto *a_ptr = &a_info[name1];
+    auto *a_ptr = &a_info[fixed_artifact_idx];
     if (a_ptr->name.empty())
         return false;
 
@@ -93,7 +93,7 @@ static bool make_fake_artifact(ObjectType *o_ptr, ARTIFACT_IDX name1)
         return false;
 
     o_ptr->prep(i);
-    o_ptr->name1 = name1;
+    o_ptr->fixed_artifact_idx = fixed_artifact_idx;
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
     o_ptr->dd = a_ptr->dd;

@@ -51,7 +51,7 @@
 static void decide_activation_level(ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->is_fixed_artifact()) {
-        ae_ptr->lev = a_info[ae_ptr->o_ptr->name1].level;
+        ae_ptr->lev = a_info[ae_ptr->o_ptr->fixed_artifact_idx].level;
         return;
     }
 

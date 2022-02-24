@@ -101,7 +101,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         auto *q_ptr = &forge;
                         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
                         q_ptr->prep(k_idx);
-                        q_ptr->name1 = quest[i].k_idx;
+                        q_ptr->fixed_artifact_idx = quest[i].k_idx;
                         q_ptr->ident = IDENT_STORE;
                         describe_flavor(player_ptr, name, q_ptr, OD_NAME_ONLY);
                     }

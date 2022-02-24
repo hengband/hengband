@@ -264,7 +264,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, ARTIFACT
     const auto &a_ref = a_info[a_idx];
     ObjectType obj;
     obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
-    obj.name1 = a_idx;
+    obj.fixed_artifact_idx = a_idx;
     object_known(&obj);
     char buf[MAX_NLEN];
     describe_flavor(player_ptr, buf, &obj, OD_NAME_ONLY);

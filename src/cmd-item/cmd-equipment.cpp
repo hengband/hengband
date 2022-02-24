@@ -231,7 +231,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     PlayerRace pr(player_ptr);
-    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID)) {
+    if ((o_ptr->fixed_artifact_idx == ART_STONEMASK) && o_ptr->is_known() && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,
@@ -324,7 +324,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 
     do_curse_on_equip(slot, o_ptr, player_ptr);
 
-    if ((o_ptr->name1 == ART_STONEMASK) && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID))
+    if ((o_ptr->fixed_artifact_idx == ART_STONEMASK) && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID))
         change_race(player_ptr, PlayerRaceType::VAMPIRE, "");
 
     calc_android_exp(player_ptr);

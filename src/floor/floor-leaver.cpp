@@ -269,7 +269,7 @@ static void preserve_info(PlayerType *player_ptr)
             continue;
 
         if (o_ptr->is_fixed_artifact())
-            a_info[o_ptr->name1].floor_id = 0;
+            a_info[o_ptr->fixed_artifact_idx].floor_id = 0;
     }
 }
 

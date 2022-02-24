@@ -147,10 +147,10 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 
     monster_type *m_ptr;
     m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_STORMBRINGER)
+    if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_STORMBRINGER)
         stormbringer = true;
 
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
+    if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_STORMBRINGER)
         stormbringer = true;
 
     auto *f_ptr = &f_info[g_ptr->feat];

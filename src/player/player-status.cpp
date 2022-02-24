@@ -1645,7 +1645,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         ac += 10;
     }
 
-    if ((player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH) && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE)) {
+    if ((player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_ICINGDEATH) && (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_TWINKLE)) {
         ac += 5;
     }
 
@@ -2950,7 +2950,7 @@ bool is_shero(PlayerType *player_ptr)
 
 bool is_echizen(PlayerType *player_ptr)
 {
-    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
+    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == ART_CRIMSON);
 }
 
 bool is_chargeman(PlayerType *player_ptr)
@@ -3000,24 +3000,24 @@ static player_hand main_attack_hand(PlayerType *player_ptr)
 
 bool set_quick_and_tiny(PlayerType *player_ptr)
 {
-    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) 
-        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN);
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_QUICKTHORN) 
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_TINYTHORN);
 }
 
 bool set_musasi(PlayerType *player_ptr)
 {
-    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA) 
-        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI);
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_MUSASI_KATANA) 
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_MUSASI_WAKIZASI);
 }
 
 bool set_icing_and_twinkle(PlayerType *player_ptr)
 {
-    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
-        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE);
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_ICINGDEATH)
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_TWINKLE);
 }
 
 bool set_anubis_and_chariot(PlayerType *player_ptr)
 {
-    return (player_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ANUBIS) 
-        && (player_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_SILVER_CHARIOT);
+    return (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_ANUBIS) 
+        && (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_SILVER_CHARIOT);
 }

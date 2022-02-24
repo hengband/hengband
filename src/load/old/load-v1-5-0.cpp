@@ -88,7 +88,7 @@ void rd_item_old(ObjectType *o_ptr)
 
     o_ptr->weight = rd_s16b();
 
-    o_ptr->name1 = rd_byte();
+    o_ptr->fixed_artifact_idx = rd_byte();
 
     o_ptr->name2 = i2enum<EgoType>(rd_byte());
 
@@ -125,7 +125,7 @@ void rd_item_old(ObjectType *o_ptr)
             if (o_ptr->art_flags.has(i2enum<tr_type>(95)))
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
-                auto *a_ptr = &a_info[o_ptr->name1];
+                auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
@@ -323,9 +323,9 @@ void rd_item_old(ObjectType *o_ptr)
 
     if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr;
-        a_ptr = &a_info[o_ptr->name1];
+        a_ptr = &a_info[o_ptr->fixed_artifact_idx];
         if (a_ptr->name.empty())
-            o_ptr->name1 = 0;
+            o_ptr->fixed_artifact_idx = 0;
     }
 
     if (o_ptr->is_ego()) {

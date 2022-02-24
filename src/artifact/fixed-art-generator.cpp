@@ -42,7 +42,7 @@
  */
 static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->name1 != ART_TERROR)
+    if (o_ptr->fixed_artifact_idx != ART_TERROR)
         return false;
 
     switch (player_ptr->pclass) {
@@ -67,7 +67,7 @@ static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 static void milim_swimsuit(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if ((o_ptr->name1 != ART_MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY))
+    if ((o_ptr->fixed_artifact_idx != ART_MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY))
         return;
 
     o_ptr->pval = 3;
@@ -92,7 +92,7 @@ static void milim_swimsuit(PlayerType *player_ptr, ObjectType *o_ptr)
 static void invest_special_artifact_abilities(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     const auto pc = PlayerClass(player_ptr);
-    switch (o_ptr->name1) {
+    switch (o_ptr->fixed_artifact_idx) {
     case ART_MURAMASA:
         if (!pc.equals(PlayerClassType::SAMURAI)) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
@@ -207,7 +207,7 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, ObjectType *o_p
  */
 artifact_type *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    auto a_ptr = &a_info[o_ptr->name1];
+    auto a_ptr = &a_info[o_ptr->fixed_artifact_idx];
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
     o_ptr->dd = a_ptr->dd;
@@ -249,7 +249,7 @@ bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, PO
     ObjectType forge;
     auto q_ptr = &forge;
     q_ptr->prep(i);
-    q_ptr->name1 = a_idx;
+    q_ptr->fixed_artifact_idx = a_idx;
 
     (void)apply_artifact(player_ptr, q_ptr);
 
@@ -304,7 +304,7 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
         if (!one_in_(a_ref.rarity))
             continue;
 
-        o_ptr->name1 = a_ref.idx;
+        o_ptr->fixed_artifact_idx = a_ref.idx;
         return true;
     }
 
@@ -377,7 +377,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
         o_ptr->prep(k_idx);
 
-        o_ptr->name1 = a_ref.idx;
+        o_ptr->fixed_artifact_idx = a_ref.idx;
         return true;
     }
 

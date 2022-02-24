@@ -463,7 +463,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
 
             if (preserve_mode) {
                 if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
-                    a_info[j_ptr->name1].cur_num = 0;
+                    a_info[j_ptr->fixed_artifact_idx].cur_num = 0;
                 }
             }
 
@@ -512,7 +512,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
             msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
         if (j_ptr->is_fixed_artifact()) {
-            a_info[j_ptr->name1].cur_num = 0;
+            a_info[j_ptr->fixed_artifact_idx].cur_num = 0;
         }
 
         return 0;

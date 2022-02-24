@@ -162,7 +162,7 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     /* Check if completed a quest */
     for (int16_t i = 0; i < max_q_idx; i++) {
-        if ((quest[i].type == QuestKindType::FIND_ARTIFACT) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].k_idx == o_ptr->name1)) {
+        if ((quest[i].type == QuestKindType::FIND_ARTIFACT) && (quest[i].status == QuestStatusType::TAKEN) && (quest[i].k_idx == o_ptr->fixed_artifact_idx)) {
             complete_quest(player_ptr, i2enum<QuestId>(i));
         }
     }
