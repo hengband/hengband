@@ -346,7 +346,7 @@ bool ObjectType::is_rare() const
  */
 bool ObjectType::is_ego() const
 {
-    return this->name2 != EgoType::NONE;
+    return this->ego_idx != EgoType::NONE;
 }
 
 /*!
@@ -595,7 +595,7 @@ bool ObjectType::can_pile(const ObjectType *j_ptr) const
         return false;
     }
 
-    if (this->name2 != j_ptr->name2) {
+    if (this->ego_idx != j_ptr->ego_idx) {
         return false;
     }
 

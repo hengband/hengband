@@ -277,6 +277,6 @@ bool QuestCompletionChecker::check_quality(ObjectType &item)
 {
     auto is_good_reward = !item.is_cursed();
     is_good_reward &= !item.is_ammo() || (item.is_ammo() && item.is_fixed_artifact());
-    is_good_reward &= item.name2 != EgoType::DIGGING;
+    is_good_reward &= item.ego_idx != EgoType::DIGGING;
     return is_good_reward;
 }

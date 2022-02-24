@@ -223,7 +223,7 @@ bool store_object_similar(ObjectType *o_ptr, ObjectType *j_ptr)
     if (o_ptr->to_a != j_ptr->to_a)
         return false;
 
-    if (o_ptr->name2 != j_ptr->name2)
+    if (o_ptr->ego_idx != j_ptr->ego_idx)
         return false;
 
     if (o_ptr->is_artifact() || j_ptr->is_artifact())

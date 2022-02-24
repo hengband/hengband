@@ -44,11 +44,11 @@ void GlovesEnchanter::apply_magic()
             return;
         }
 
-        this->o_ptr->name2 = get_random_ego(INVEN_ARMS, true);
+        this->o_ptr->ego_idx = get_random_ego(INVEN_ARMS, true);
         return;
     }
     
     if (this->power < -1) {
-        this->o_ptr->name2 = get_random_ego(INVEN_ARMS, false);
+        this->o_ptr->ego_idx = get_random_ego(INVEN_ARMS, false);
     }
 }

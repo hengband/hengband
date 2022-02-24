@@ -35,7 +35,7 @@ public:
     ITEM_NUMBER number{}; /*!< Number of items */
     WEIGHT weight{}; /*!< Item weight */
     ARTIFACT_IDX fixed_artifact_idx{}; /*!< Artifact type, if any */
-    EgoType name2{}; /*!< Ego-Item type, if any */
+    EgoType ego_idx{}; /*!< Ego-Item type, if any */
 
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     byte chest_level = 0; /*!< 箱の中身レベル */

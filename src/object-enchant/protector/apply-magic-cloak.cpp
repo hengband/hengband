@@ -39,11 +39,11 @@ void CloakEnchanter::apply_magic()
             return;
         }
 
-        this->o_ptr->name2 = get_random_ego(INVEN_OUTER, true);
+        this->o_ptr->ego_idx = get_random_ego(INVEN_OUTER, true);
         return;
     }
 
     if (this->power < -1) {
-        this->o_ptr->name2 = get_random_ego(INVEN_OUTER, false);
+        this->o_ptr->ego_idx = get_random_ego(INVEN_OUTER, false);
     }
 }

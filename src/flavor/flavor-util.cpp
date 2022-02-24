@@ -193,7 +193,7 @@ char *get_ability_abbreviation(char *short_flavor, ObjectType *o_ptr, bool kanji
         }
 
         if (o_ptr->is_ego()) {
-            auto *e_ptr = &e_info[o_ptr->name2];
+            auto *e_ptr = &e_info[o_ptr->ego_idx];
             flgs.reset(e_ptr->flags);
         }
     }

@@ -345,7 +345,7 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
-    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->name2, (long)object_value_real(o_ptr)), ++line, j);
+    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, (long)object_value_real(o_ptr)), ++line, j);
     prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), ++line, j);
     prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
@@ -1043,7 +1043,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             if (must || ok_ego) {
                 if (e_ids.size() > 0) {
                     o_ptr->prep(k_idx);
-                    o_ptr->name2 = e_ids[0];
+                    o_ptr->ego_idx = e_ids[0];
                     apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
                 } else {
                     int max_roll = 1000;
@@ -1060,7 +1060,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
                         EgoType e_idx = EgoType::NONE;
                         for (auto e : e_ids) {
-                            if (o_ptr->name2 == e) {
+                            if (o_ptr->ego_idx == e) {
                                 e_idx = e;
                                 break;
                             }

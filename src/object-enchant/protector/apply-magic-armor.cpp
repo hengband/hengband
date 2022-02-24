@@ -110,8 +110,8 @@ void ArmorEnchanter::give_ego_index()
 
     while (true) {
         auto valid = true;
-        this->o_ptr->name2 = get_random_ego(INVEN_BODY, true);
-        switch (this->o_ptr->name2) {
+        this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, true);
+        switch (this->o_ptr->ego_idx) {
         case EgoType::DWARVEN:
             if (this->o_ptr->tval != ItemKindType::HARD_ARMOR) {
                 valid = false;
@@ -147,7 +147,7 @@ void ArmorEnchanter::give_high_ego_index()
 
     this->is_high_ego_generated = true;
     auto ego_robe = one_in_(5);
-    this->o_ptr->name2 = ego_robe ? EgoType::TWILIGHT : EgoType::PERMANENCE;
+    this->o_ptr->ego_idx = ego_robe ? EgoType::TWILIGHT : EgoType::PERMANENCE;
     if (!ego_robe) {
         return;
     }
@@ -161,8 +161,8 @@ void ArmorEnchanter::give_high_ego_index()
 
 void ArmorEnchanter::give_cursed()
 {
-    this->o_ptr->name2 = get_random_ego(INVEN_BODY, false);
-    switch (this->o_ptr->name2) {
+    this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, false);
+    switch (this->o_ptr->ego_idx) {
     case EgoType::A_DEMON:
     case EgoType::A_MORGUL:
         return;

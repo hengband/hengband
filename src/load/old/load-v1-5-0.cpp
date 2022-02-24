@@ -90,7 +90,7 @@ void rd_item_old(ObjectType *o_ptr)
 
     o_ptr->fixed_artifact_idx = rd_byte();
 
-    o_ptr->name2 = i2enum<EgoType>(rd_byte());
+    o_ptr->ego_idx = i2enum<EgoType>(rd_byte());
 
     o_ptr->timeout = rd_s16b();
     o_ptr->to_h = rd_s16b();
@@ -111,7 +111,7 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (h_older_than(1, 3, 0, 0)) {
-        if (o_ptr->name2 == EgoType::TELEPATHY)
+        if (o_ptr->ego_idx == EgoType::TELEPATHY)
             o_ptr->art_flags.set(TR_TELEPATHY);
     }
 
@@ -131,7 +131,7 @@ void rd_item_old(ObjectType *o_ptr)
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             } else if (o_ptr->is_ego()) {
-                auto *e_ptr = &e_info[o_ptr->name2];
+                auto *e_ptr = &e_info[o_ptr->ego_idx];
                 if (e_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 if (e_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
@@ -311,7 +311,7 @@ void rd_item_old(ObjectType *o_ptr)
     if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479))
         return;
 
-    if (h_older_than(0, 4, 10) && (o_ptr->name2 == EgoType::TWILIGHT))
+    if (h_older_than(0, 4, 10) && (o_ptr->ego_idx == EgoType::TWILIGHT))
         o_ptr->k_idx = lookup_kind(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE);
 
     if (h_older_than(0, 4, 9)) {
@@ -329,9 +329,9 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (o_ptr->is_ego()) {
-        auto *e_ptr = &e_info[o_ptr->name2];
+        auto *e_ptr = &e_info[o_ptr->ego_idx];
         if (e_ptr->name.empty())
-            o_ptr->name2 = EgoType::NONE;
+            o_ptr->ego_idx = EgoType::NONE;
     }
 }
 

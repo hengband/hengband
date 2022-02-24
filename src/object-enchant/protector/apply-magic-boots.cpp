@@ -44,11 +44,11 @@ void BootsEnchanter::apply_magic()
             return;
         }
 
-        this->o_ptr->name2 = get_random_ego(INVEN_FEET, true);
+        this->o_ptr->ego_idx = get_random_ego(INVEN_FEET, true);
         return;
     }
 
     if (this->power < -1) {
-        this->o_ptr->name2 = get_random_ego(INVEN_FEET, false);
+        this->o_ptr->ego_idx = get_random_ego(INVEN_FEET, false);
     }
 }
