@@ -12,12 +12,23 @@ jobs:
     name: Build test on Ubuntu-20.04
     runs-on: ubuntu-20.04
     env:
+      CXX: "ccache g++"
       CXXFLAGS: "-pipe -O3 -Werror -Wall -Wextra"
     steps:
       - uses: actions/checkout@v2
 
       - name: Check the BOM of the source files
         run: sh .github/scripts/check-bom.sh
+
+      - uses: hendrikmuhs/ccache-action@v1
+        with:
+          max-size: 8.0G
+
+      - name: Configuring ccache to use precompiled headers
+        run: |
+          /usr/bin/ccache --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
+          /usr/bin/ccache --set-config=pch_external_checksum=true
+          /usr/bin/ccache -p
 
       - name: Install required packages
         run: |
@@ -35,7 +46,7 @@ jobs:
       - name: Configure for compiling with clang (without using pre-compiled headers)
         run: ./configure --disable-pch
         env:
-          CXX: clang++-11
+          CXX: "ccache clang++-11"
           CXXFLAGS: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
 
       - name: Build with clang
