@@ -17,9 +17,9 @@ const player_race_info *rp_ptr;
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return シンボル文字
  */
-SYMBOL_CODE get_summon_symbol_from_player(PlayerType *player_ptr)
+char get_summon_symbol_from_player(PlayerType *player_ptr)
 {
-    SYMBOL_CODE symbol = 'N';
+    auto symbol = 'N';
     auto mmc_ptr = PlayerRace(player_ptr).get_info();
 
     auto l = strlen(mmc_ptr->symbol);

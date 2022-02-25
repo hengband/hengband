@@ -95,7 +95,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         int cur_col = col + 3;
         if (show_item_graph) {
             TERM_COLOR a = object_attr(o_ptr);
-            SYMBOL_CODE c = object_char(o_ptr);
+            auto c = object_char(o_ptr);
             term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
             if (use_bigtile)
                 cur_col++;

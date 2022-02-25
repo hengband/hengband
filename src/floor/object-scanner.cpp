@@ -71,7 +71,7 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
     strcpy(label, alphabet_chars);
     for (int i = 0; i < 52; i++) {
         COMMAND_CODE index;
-        SYMBOL_CODE c = alphabet_chars[i];
+        auto c = alphabet_chars[i];
         if (!get_tag_floor(floor_ptr, &index, c, floor_list, floor_num))
             continue;
 

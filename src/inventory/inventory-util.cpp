@@ -290,7 +290,7 @@ void prepare_label_string(PlayerType *player_ptr, char *label, BIT_FLAGS mode, c
     strcpy(label, alphabet_chars);
     for (int i = 0; i < 52; i++) {
         COMMAND_CODE index;
-        SYMBOL_CODE c = alphabet_chars[i];
+        auto c = alphabet_chars[i];
         if (!get_tag(player_ptr, &index, c, mode, item_tester))
             continue;
 

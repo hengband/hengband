@@ -358,7 +358,7 @@ static const concptr color_char = "dwsorgbuDWvyRGBU";
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
 TERM_COLOR misc_to_attr[256];
-SYMBOL_CODE misc_to_char[256];
+char misc_to_char[256];
 
 /*
  * Specify attr/char pairs for inventory items (by tval)
@@ -531,8 +531,7 @@ static TERM_COLOR spell_color(AttributeType type)
     /* Normal tiles or ASCII */
     else {
         TERM_COLOR a;
-        SYMBOL_CODE c;
-
+        
         /* Lookup the default colors for this type */
         concptr s = quark_str(gf_colors[type]);
 
@@ -540,7 +539,7 @@ static TERM_COLOR spell_color(AttributeType type)
             return TERM_WHITE;
 
         /* Pick a random color */
-        c = s[randint0(strlen(s))];
+        auto c = s[randint0(strlen(s))];
 
         /* Lookup this color */
         a = angband_strchr(color_char, c) - color_char;
@@ -580,8 +579,7 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
     byte k;
 
     TERM_COLOR a;
-    SYMBOL_CODE c;
-
+    
     /* No motion (*) */
     if ((ny == y) && (nx == x))
         base = 0x30;
@@ -611,7 +609,7 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
 
     /* Obtain attr/char */
     a = misc_to_attr[base + k];
-    c = misc_to_char[base + k];
+    auto c = misc_to_char[base + k];
 
     /* Create pict */
     return PICT(a, c);
@@ -624,7 +622,7 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
  * @param c シンボル文字
  * @return カラーID
  */
-TERM_COLOR color_char_to_attr(SYMBOL_CODE c)
+TERM_COLOR color_char_to_attr(char c)
 {
     switch (c) {
     case 'd':

@@ -644,8 +644,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
 
             /* The player can see the (on screen) missile */
             if (panel_contains(ny, nx) && player_can_see_bold(player_ptr, ny, nx)) {
-                SYMBOL_CODE c = object_char(q_ptr);
-                byte a = object_attr(q_ptr);
+                auto c = object_char(q_ptr);
+                TERM_COLOR a = object_attr(q_ptr);
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 if (delay_factor > 0) {

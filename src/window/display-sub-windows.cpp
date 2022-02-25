@@ -274,7 +274,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
         if (show_item_graph) {
             TERM_COLOR a = object_attr(o_ptr);
-            SYMBOL_CODE c = object_char(o_ptr);
+            auto c = object_char(o_ptr);
             term_queue_bigchar(cur_col, cur_row, a, c, 0, 0);
             if (use_bigtile)
                 cur_col++;
@@ -411,12 +411,12 @@ void fix_overhead(PlayerType *player_ptr)
 static void display_dungeon(PlayerType *player_ptr)
 {
     TERM_COLOR ta = 0;
-    SYMBOL_CODE tc = '\0';
+    auto tc = '\0';
 
     for (TERM_LEN x = player_ptr->x - game_term->wid / 2 + 1; x <= player_ptr->x + game_term->wid / 2; x++) {
         for (TERM_LEN y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
             TERM_COLOR a;
-            SYMBOL_CODE c;
+            char c;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                 auto *f_ptr = &f_info[feat_none];
                 a = f_ptr->x_attr[F_LIT_STANDARD];

@@ -51,7 +51,7 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
 bool feat_uses_special(FEAT_IDX f_idx);
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
 bool no_lite(PlayerType *player_ptr);
-void print_rel(PlayerType *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x);
+void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITION x);
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x);
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x);
 void update_flow(PlayerType *player_ptr);

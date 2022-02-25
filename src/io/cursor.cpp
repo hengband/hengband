@@ -54,10 +54,10 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
         auto *g_ptr = &floor_ptr->grid_array[ny][nx];
         if (panel_contains(ny, nx)) {
             TERM_COLOR a = default_color;
-            SYMBOL_CODE c;
+            char c;
 
             TERM_COLOR ta = default_color;
-            SYMBOL_CODE tc = '*';
+            auto tc = '*';
 
             if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml) {
                 map_info(player_ptr, ny, nx, &a, &c, &ta, &tc);

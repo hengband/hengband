@@ -246,7 +246,7 @@ bool no_lite(PlayerType *player_ptr)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(PlayerType *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
+void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITION x)
 {
     /* Only do "legal" locations */
     if (panel_contains(y, x)) {
@@ -388,9 +388,9 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     /* Redraw if on screen */
     if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x)) {
         TERM_COLOR a;
-        SYMBOL_CODE c;
+        char c;
         TERM_COLOR ta;
-        SYMBOL_CODE tc;
+        char tc;
 
         map_info(player_ptr, y, x, &a, &c, &ta, &tc);
 

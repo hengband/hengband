@@ -320,7 +320,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
 
         /* Dump each row */
         TERM_COLOR a = 0, old_a = 0;
-        SYMBOL_CODE c = ' ';
+        auto c = ' ';
         for (int x = 0; x < wid - 1; x++) {
             int rv, gv, bv;
             concptr cc = nullptr;

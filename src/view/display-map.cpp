@@ -38,7 +38,7 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
  * @param ap 本来の色
  * @param cp 本来のシンボル
  */
-static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
+static void image_object(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
         auto *k_ptr = &k_info[randint1(k_info.size() - 1)];
@@ -57,7 +57,7 @@ static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
  * @param ap 本来の色
  * @param cp 本来のシンボル
  */
-static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
+static void image_monster(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
         auto *r_ptr = &r_info[randint1(r_info.size() - 1)];
@@ -75,7 +75,7 @@ static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
  * @param ap 本来の色
  * @param cp 本来のシンボル
  */
-static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
+static void image_random(TERM_COLOR *ap, char *cp)
 {
     if (randint0(100) < 75) {
         image_monster(ap, cp);
@@ -138,14 +138,14 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
  * @param tap 文字色属性(タイル)
  * @param tcp 文字種属性(タイル)
  */
-void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
+void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
     auto *f_ptr = &f_info[feat];
     TERM_COLOR a;
-    SYMBOL_CODE c;
+    char c;
     if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
         auto is_visible = any_bits(g_ptr->info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(g_ptr->info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);

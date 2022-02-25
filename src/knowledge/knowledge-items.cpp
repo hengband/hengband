@@ -173,7 +173,6 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         GAME_TEXT o_name[MAX_NLEN];
         TERM_COLOR a;
-        SYMBOL_CODE c;
         object_kind *flavor_k_ptr;
         KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
         auto *k_ptr = &k_info[k_idx];
@@ -202,7 +201,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         }
 
         a = flavor_k_ptr->x_attr;
-        c = flavor_k_ptr->x_char;
+        auto c = flavor_k_ptr->x_char;
 
         term_queue_bigchar(use_bigtile ? 76 : 77, row + i, a, c, 0, 0);
     }
