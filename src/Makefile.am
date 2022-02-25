@@ -1012,7 +1012,7 @@ EXTRA_DIST = \
 DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
 CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
 if PCH
-CPPFLAGS += -include stdafx.h
+CPPFLAGS += -include ../src/stdafx.h
 endif
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -1037,3 +1037,4 @@ endif
 
 clean-local:
 	-rm stdafx.h.gch stdafx.h.gch.sum
+	-rm -rf ../build
