@@ -54,7 +54,7 @@ void display_entry(PlayerType *player_ptr, int pos)
     int cur_col = 3;
     if (show_item_graph) {
         TERM_COLOR a = object_attr(o_ptr);
-        SYMBOL_CODE c = object_char(o_ptr);
+        auto c = object_char(o_ptr);
 
         term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
         if (use_bigtile)

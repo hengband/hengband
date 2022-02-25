@@ -20,7 +20,7 @@ std::vector<object_kind> k_info;
  * Use "flavor" if available.
  * Default to user definitions.
  */
-SYMBOL_CODE object_char(ObjectType *o_ptr)
+char object_char(ObjectType *o_ptr)
 {
     return k_info[o_ptr->k_idx].flavor ? k_info[k_info[o_ptr->k_idx].flavor].x_char : k_info[o_ptr->k_idx].x_char;
 }

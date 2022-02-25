@@ -270,9 +270,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 IDX t;
 
                 TERM_COLOR da = k_ptr->d_attr;
-                SYMBOL_CODE dc = k_ptr->d_char;
+                auto dc = k_ptr->d_char;
                 TERM_COLOR ca = k_ptr->x_attr;
-                SYMBOL_CODE cc = k_ptr->x_char;
+                auto cc = k_ptr->x_char;
 
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(

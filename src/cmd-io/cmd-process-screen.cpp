@@ -287,7 +287,7 @@ static bool check_screen_text_can_open(FILE *fff, char buf[])
 static bool do_cmd_save_screen_text(int wid, int hgt)
 {
 	TERM_COLOR a = 0;
-	SYMBOL_CODE c = ' ';
+	auto c = ' ';
 	FILE *fff;
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
@@ -425,7 +425,7 @@ static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, bool okay)
 {
 	TERM_COLOR a = TERM_DARK;
-	SYMBOL_CODE c = ' ';
+	auto c = ' ';
 	for (TERM_LEN y = 0; okay; y++)
 	{
 		if (!fgets(buf, 1024, fff)) okay = false;

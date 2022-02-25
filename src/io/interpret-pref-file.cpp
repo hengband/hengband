@@ -42,7 +42,7 @@ static errr interpret_r_token(char *buf)
     monster_race *r_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
+    auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     if (i >= static_cast<int>(r_info.size()))
         return 1;
 
@@ -69,7 +69,7 @@ static errr interpret_k_token(char *buf)
     object_kind *k_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
+    auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     if (i >= static_cast<int>(k_info.size()))
         return 1;
 
@@ -94,7 +94,7 @@ static errr decide_feature_type(int i, int num, char **zz)
     f_ptr = &f_info[i];
 
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
+    auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     if (n1 || (!(n2 & 0x80) && n2))
         f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
     if (n2)
@@ -121,7 +121,7 @@ static errr decide_feature_type(int i, int num, char **zz)
         /* Use desired lighting */
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
             n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], nullptr, 0);
-            n2 = (SYMBOL_CODE)strtol(zz[j * 2 + 2], nullptr, 0);
+            n2 = static_cast<char>(strtol(zz[j * 2 + 2], nullptr, 0));
             if (n1 || (!(n2 & 0x80) && n2))
                 f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
             if (n2)
@@ -174,7 +174,7 @@ static errr interpret_s_token(char *buf)
 
     int j = (byte)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
+    auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     misc_to_attr[j] = n1;
     misc_to_char[j] = n2;
     return 0;
@@ -193,7 +193,7 @@ static errr interpret_u_token(char *buf)
 
     int j = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
+    auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     for (auto &k_ref : k_info) {
         if ((k_ref.idx > 0) && (enum2i(k_ref.tval) == j)) {
             if (n1)

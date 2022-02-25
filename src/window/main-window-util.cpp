@@ -93,9 +93,9 @@ void print_map(PlayerType *player_ptr)
     for (POSITION y = ymin; y <= ymax; y++) {
         for (POSITION x = xmin; x <= xmax; x++) {
             TERM_COLOR a;
-            SYMBOL_CODE c;
+            char c;
             TERM_COLOR ta;
-            SYMBOL_CODE tc;
+            char tc;
             map_info(player_ptr, y, x, &a, &c, &ta, &tc);
             if (!use_graphics) {
                 if (w_ptr->timewalk_m_idx)
@@ -189,7 +189,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     int i, j, x, y;
 
     TERM_COLOR ta;
-    SYMBOL_CODE tc;
+    char tc;
 
     byte tp;
 
@@ -212,13 +212,13 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
 
     using std::vector;
     vector<vector<TERM_COLOR>> ma(hgt + 2, vector<TERM_COLOR>(wid + 2, TERM_WHITE));
-    vector<vector<SYMBOL_CODE>> mc(hgt + 2, vector<SYMBOL_CODE>(wid + 2, ' '));
+    vector<vector<char>> mc(hgt + 2, vector<char>(wid + 2, ' '));
     vector<vector<byte>> mp(hgt + 2, vector<byte>(wid + 2, 0));
     vector<vector<int>> match_autopick_yx(hgt + 2, vector<int>(wid + 2, -1));
     vector<vector<ObjectType *>> object_autopick_yx(hgt + 2, vector<ObjectType *>(wid + 2, nullptr));
 
     vector<vector<TERM_COLOR>> bigma(floor_ptr->height + 2, vector<TERM_COLOR>(floor_ptr->width + 2, TERM_WHITE));
-    vector<vector<SYMBOL_CODE>> bigmc(floor_ptr->height + 2, vector<SYMBOL_CODE>(floor_ptr->width + 2, ' '));
+    vector<vector<char>> bigmc(floor_ptr->height + 2, vector<char>(floor_ptr->width + 2, ' '));
     vector<vector<byte>> bigmp(floor_ptr->height + 2, vector<byte>(floor_ptr->width + 2, 0));
 
     for (i = 0; i < floor_ptr->width; ++i) {
@@ -323,7 +323,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     view_granite_lite = old_view_granite_lite;
 }
 
-void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp)
+void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp)
 {
     if (!player_bold(player_ptr, y, x))
         return;

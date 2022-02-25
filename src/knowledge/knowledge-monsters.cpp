@@ -391,7 +391,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             hgt - 1, 0);
 
         TERM_COLOR dummy_a;
-        SYMBOL_CODE dummy_c;
+        char dummy_c = 0;
         auto *attr_ptr = &dummy_a;
         auto *char_ptr = &dummy_c;
         if (mon_idx[0] != -1) {

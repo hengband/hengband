@@ -95,7 +95,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
     TERM_COLOR attr_old[F_LIT_MAX] = {};
-    SYMBOL_CODE char_old[F_LIT_MAX] = {};
+    char char_old[F_LIT_MAX] = {};
 
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -151,7 +151,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     bool flag = false;
     bool redraw = true;
     TERM_COLOR *cur_attr_ptr;
-    SYMBOL_CODE *cur_char_ptr;
+    char *cur_char_ptr;
     while (!flag) {
         char ch;
         feature_type *f_ptr;

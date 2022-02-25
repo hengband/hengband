@@ -208,7 +208,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                     if (panel_contains(temp_y, temp_x) && player_has_los_bold(player_ptr, temp_y, temp_x)) {
                         uint16_t p = bolt_pict(oy, ox, temp_y, temp_x, typ);
                         TERM_COLOR a = PICT_A(p);
-                        SYMBOL_CODE c = PICT_C(p);
+                        auto c = PICT_C(p);
                         print_rel(player_ptr, c, a, temp_y, temp_x);
                         move_cursor_relative(temp_y, temp_x);
                         term_fresh();
@@ -302,10 +302,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                     if (panel_contains(temp_y, temp_x) && player_has_los_bold(player_ptr, temp_y, temp_x)) {
                         uint16_t p;
                         TERM_COLOR a;
-                        SYMBOL_CODE c;
                         p = bolt_pict(oy, ox, temp_y, temp_x, typ);
                         a = PICT_A(p);
-                        c = PICT_C(p);
+                        auto c = PICT_C(p);
                         print_rel(player_ptr, c, a, temp_y, temp_x);
                         move_cursor_relative(temp_y, temp_x);
                         term_fresh();
@@ -413,10 +412,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 if (panel_contains(temp_y, temp_x) && player_has_los_bold(player_ptr, temp_y, temp_x)) {
                     uint16_t p;
                     TERM_COLOR a;
-                    SYMBOL_CODE c;
                     p = bolt_pict(oy, ox, temp_y, temp_x, typ);
                     a = PICT_A(p);
-                    c = PICT_C(p);
+                    auto c = PICT_C(p);
                     print_rel(player_ptr, c, a, temp_y, temp_x);
                     move_cursor_relative(temp_y, temp_x);
                     term_fresh();
@@ -519,11 +517,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
                     uint16_t p;
                     TERM_COLOR a;
-                    SYMBOL_CODE c;
                     drawn = true;
                     p = bolt_pict(y, x, y, x, typ);
                     a = PICT_A(p);
-                    c = PICT_C(p);
+                    auto c = PICT_C(p);
                     print_rel(player_ptr, c, a, y, x);
                 }
             }

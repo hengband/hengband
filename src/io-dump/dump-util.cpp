@@ -9,10 +9,10 @@
 #include "view/display-messages.h"
 
 TERM_COLOR attr_idx = 0;
-SYMBOL_CODE char_idx = 0;
+char char_idx = 0;
 
 TERM_COLOR attr_idx_feat[F_LIT_MAX];
-SYMBOL_CODE char_idx_feat[F_LIT_MAX];
+char char_idx_feat[F_LIT_MAX];
 
 /*!
  * @brief シンボル変更処理 / Do visual mode command -- Change symbols
@@ -30,10 +30,10 @@ SYMBOL_CODE char_idx_feat[F_LIT_MAX];
 bool visual_mode_command(char ch, bool *visual_list_ptr,
     int height, int width,
     TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
-    TERM_COLOR *cur_attr_ptr, SYMBOL_CODE *cur_char_ptr, bool *need_redraw)
+    TERM_COLOR *cur_attr_ptr, char *cur_char_ptr, bool *need_redraw)
 {
     static TERM_COLOR attr_old = 0;
-    static SYMBOL_CODE char_old = 0;
+    static char char_old = 0;
 
     switch (ch) {
     case ESCAPE: {
@@ -103,7 +103,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
         int eff_width;
         int d = get_keymap_dir(ch);
         TERM_COLOR a = (*cur_attr_ptr & 0x7f);
-        SYMBOL_CODE c = *cur_char_ptr;
+        auto c = *cur_char_ptr;
 
         if (use_bigtile)
             eff_width = width / 2;
@@ -120,7 +120,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
             d = 0;
 
         a += (TERM_COLOR)ddy[d];
-        c += (SYMBOL_CODE)ddx[d];
+        c += static_cast<char>(ddx[d]);
         if (c & 0x80)
             a |= 0x80;
 
@@ -206,7 +206,7 @@ void display_visual_list(int col, int row, int height, int width, TERM_COLOR att
                 continue;
 
             TERM_COLOR a = (TERM_COLOR)ia;
-            SYMBOL_CODE c = (SYMBOL_CODE)ic;
+            auto c = static_cast<char>(ic);
             if (c & 0x80)
                 a |= 0x80;
 

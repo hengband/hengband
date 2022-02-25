@@ -48,10 +48,10 @@ struct object_kind {
     BIT_FLAGS8 extra{}; /*!< その他色々のビットフラグ配列 / Something */
 
     TERM_COLOR d_attr{}; /*!< デフォルトのアイテムシンボルカラー / Default object attribute */
-    SYMBOL_CODE d_char{}; /*!< デフォルトのアイテムシンボルアルファベット / Default object character */
+    char d_char{}; /*!< デフォルトのアイテムシンボルアルファベット / Default object character */
 
     TERM_COLOR x_attr{}; /*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
-    SYMBOL_CODE x_char{}; /*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
+    char x_char{}; /*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
 
     IDX flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
     bool easy_know{}; /*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
@@ -64,4 +64,4 @@ struct object_kind {
 extern std::vector<object_kind> k_info;
 
 class ObjectType;
-SYMBOL_CODE object_char(ObjectType *o_ptr);
+char object_char(ObjectType *o_ptr);

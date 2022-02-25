@@ -352,7 +352,7 @@ void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_
         o_ptr = &player_ptr->inventory_list[i];
 
         TERM_COLOR a = object_attr(o_ptr);
-        SYMBOL_CODE c = object_char(o_ptr);
+        auto c = object_char(o_ptr);
 
         if (!equippy_chars || !o_ptr->k_idx) {
             c = ' ';

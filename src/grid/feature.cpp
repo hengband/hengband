@@ -146,10 +146,10 @@ bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat)
  * @brief 調査中
  * @todo コメントを付加すること
  */
-void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char)
+void apply_default_feat_lighting(TERM_COLOR *f_attr, char *f_char)
 {
     TERM_COLOR s_attr = f_attr[F_LIT_STANDARD];
-    SYMBOL_CODE s_char = f_char[F_LIT_STANDARD];
+    auto s_char = f_char[F_LIT_STANDARD];
 
     if (is_ascii_graphics(s_attr)) /* For ASCII */
     {
