@@ -1754,9 +1754,6 @@
     <ClCompile Include="..\..\src\mspell\mspell-lite.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-use\read-execution.cpp">
-      <Filter>object-use</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\player-status-flags.cpp">
       <Filter>player</Filter>
     </ClCompile>
@@ -2393,6 +2390,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\timed-effect\player-fear.cpp">
       <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\read\read-execution.cpp">
+      <Filter>object-use\read</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4421,9 +4421,6 @@
     <ClInclude Include="..\..\src\mspell\mspell-lite.h">
       <Filter>mspell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-use\read-execution.h">
-      <Filter>object-use</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player\player-status-flags.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -5202,6 +5199,9 @@
     <ClInclude Include="..\..\src\market\bounty-type-definition.h">
       <Filter>market</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read\read-execution.h">
+      <Filter>object-use\read</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5444,6 +5444,9 @@
     </Filter>
     <Filter Include="object-enchant\others">
       <UniqueIdentifier>{8e025e92-a617-4072-9c36-ba6fc3801284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-use\read">
+      <UniqueIdentifier>{b0af4dd7-335a-466f-adb9-cd217597e87b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

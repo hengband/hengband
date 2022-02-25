@@ -475,7 +475,7 @@
     <ClCompile Include="..\..\src\room\vault-builder.cpp" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.cpp" />
     <ClCompile Include="..\..\src\specific-object\monster-ball.cpp" />
-    <ClCompile Include="..\..\src\object-use\read-execution.cpp" />
+    <ClCompile Include="..\..\src\object-use\read\read-execution.cpp" />
     <ClCompile Include="..\..\src\player\player-status-flags.cpp" />
     <ClCompile Include="..\..\src\player\player-status-table.cpp" />
     <ClCompile Include="..\..\src\player\player-view.cpp" />
@@ -1230,7 +1230,7 @@
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
     <ClInclude Include="..\..\src\specific-object\monster-ball.h" />
-    <ClInclude Include="..\..\src\object-use\read-execution.h" />
+    <ClInclude Include="..\..\src\object-use\read\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\player\player-status-table.h" />
     <ClInclude Include="..\..\src\player\player-view.h" />

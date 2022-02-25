@@ -38,7 +38,7 @@
 #include "object-activation/activation-switcher.h"
 #include "object-hook/hook-magic.h"
 #include "object-use/quaff-execution.h"
-#include "object-use/read-execution.h"
+#include "object-use/read/read-execution.h"
 #include "object-use/use-execution.h"
 #include "object-use/zaprod-execution.h"
 #include "object-use/zapwand-execution.h"
