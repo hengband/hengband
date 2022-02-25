@@ -117,7 +117,7 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
 void set_zangband_mimic(PlayerType *player_ptr)
 {
     player_ptr->tim_res_time = 0;
-    player_ptr->mimic_form = 0;
+    player_ptr->mimic_form = MimicKindType::NONE;
     player_ptr->tim_mimic = 0;
     player_ptr->tim_sh_fire = 0;
 }

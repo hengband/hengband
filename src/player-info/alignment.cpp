@@ -61,16 +61,8 @@ void PlayerAlignment::update_alignment()
         }
     }
 
-    if (this->player_ptr->mimic_form) {
-        switch (this->player_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            this->bias_evil_alignment(200);
-            break;
-        case MIMIC_DEMON_LORD:
-            this->bias_evil_alignment(200);
-            break;
-        }
-    } else {
+    switch (this->player_ptr->mimic_form) {
+    case MimicKindType::NONE:
         switch (this->player_ptr->prace) {
         case PlayerRaceType::ARCHON:
             this->bias_good_alignment(200);
@@ -78,10 +70,21 @@ void PlayerAlignment::update_alignment()
         case PlayerRaceType::BALROG:
             this->bias_evil_alignment(200);
             break;
-
         default:
             break;
         }
+
+        break;
+    case MimicKindType::DEMON:
+        this->bias_evil_alignment(200);
+        break;
+    case MimicKindType::DEMON_LORD:
+        this->bias_evil_alignment(200);
+        break;
+    case MimicKindType::VAMPIRE:
+        break;
+    default:
+        throw("Invalid MimicKindType was specified!");
     }
 
     for (int i = 0; i < 2; i++) {

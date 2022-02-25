@@ -248,8 +248,8 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    if (player_ptr->mimic_form) {
-        print_field(mimic_info[player_ptr->mimic_form].title, ROW_RACE, COL_RACE);
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        print_field(mimic_info.at(player_ptr->mimic_form).title, ROW_RACE, COL_RACE);
     } else {
         char str[14];
         angband_strcpy(str, rp_ptr->title, sizeof(str));

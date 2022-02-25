@@ -203,7 +203,7 @@ PERCENTAGE calc_nuke_damage_rate(PlayerType *player_ptr)
 PERCENTAGE calc_deathray_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mode)
 {
     (void)mode; // unused
-    if (player_ptr->mimic_form) {
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
         if (PlayerRace(player_ptr).is_mimic_nonliving()) {
             return 0;
         }

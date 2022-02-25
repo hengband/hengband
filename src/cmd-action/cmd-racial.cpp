@@ -1,4 +1,8 @@
-﻿#include <string>
+﻿/*
+ * @brief クラス、種族、突然変異に関するコマンド処理
+ * @author Hourier
+ * @date 2022/02/24
+ */
 
 #include "cmd-action/cmd-racial.h"
 #include "action/action-limited.h"
@@ -16,6 +20,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
+#include "player-info/race-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
@@ -31,6 +36,7 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include <string>
 
 #define RC_PAGE_SIZE 18
 
@@ -444,7 +450,7 @@ void do_cmd_racial_power(PlayerType *player_ptr)
 
     switch_class_racial(player_ptr, rc_ptr);
 
-    if (player_ptr->mimic_form)
+    if (player_ptr->mimic_form != MimicKindType::NONE)
         set_mimic_racial_command(player_ptr, rc_ptr);
     else
         set_race_racial_command(player_ptr, rc_ptr);

@@ -273,11 +273,11 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
 bool switch_mimic_racial_execution(PlayerType *player_ptr)
 {
     switch (player_ptr->mimic_form) {
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD: {
+    case MimicKindType::DEMON:
+    case MimicKindType::DEMON_LORD: {
         return demonic_breath(player_ptr);
     }
-    case MIMIC_VAMPIRE:
+    case MimicKindType::VAMPIRE:
         vampirism(player_ptr);
         return true;
     default:

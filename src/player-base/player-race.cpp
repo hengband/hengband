@@ -68,12 +68,14 @@ const player_race_info *PlayerRace::get_info() const
     }
 
     switch (this->player_ptr->mimic_form) {
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD:
-    case MIMIC_VAMPIRE:
-        return &mimic_info[this->player_ptr->mimic_form];
-    default: // MIMIC_NONE or undefined
+    case MimicKindType::NONE:
         return &race_info[enum2i(this->player_ptr->prace)];
+    case MimicKindType::DEMON:
+    case MimicKindType::DEMON_LORD:
+    case MimicKindType::VAMPIRE:
+        return &mimic_info.at(this->player_ptr->mimic_form);
+    default:
+        throw("Invalid MimicKindType was specified!");
     }
 }
 
@@ -101,7 +103,7 @@ PlayerRaceFoodType PlayerRace::food() const
 bool PlayerRace::is_mimic_nonliving() const
 {
     constexpr int nonliving_flag = 1;
-    return any_bits(mimic_info[this->player_ptr->mimic_form].choice, nonliving_flag);
+    return any_bits(mimic_info.at(this->player_ptr->mimic_form).choice, nonliving_flag);
 }
 
 bool PlayerRace::has_cut_immunity() const
@@ -120,7 +122,7 @@ bool PlayerRace::has_stun_immunity() const
 
 bool PlayerRace::equals(PlayerRaceType prace) const
 {
-    return (this->player_ptr->mimic_form == MIMIC_NONE) && (this->player_ptr->prace == prace);
+    return (this->player_ptr->mimic_form == MimicKindType::NONE) && (this->player_ptr->prace == prace);
 }
 
 /*!
@@ -150,20 +152,18 @@ int16_t PlayerRace::speed() const
         }
     }
 
-    if (this->player_ptr->mimic_form) {
-        switch (this->player_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            result += 3;
-            break;
-        case MIMIC_DEMON_LORD:
-            result += 5;
-            break;
-        case MIMIC_VAMPIRE:
-            result += 3;
-            break;
-        }
+    switch (this->player_ptr->mimic_form) {
+    case MimicKindType::NONE:
+        return result;
+    case MimicKindType::DEMON:
+        return result + 3;
+    case MimicKindType::DEMON_LORD:
+        return result + 5;
+    case MimicKindType::VAMPIRE:
+        return result + 3;
+    default:
+        throw("Invalid MimicKindType was specified!");
     }
-    return result;
 }
 
 /*!

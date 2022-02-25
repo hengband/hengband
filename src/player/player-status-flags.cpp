@@ -469,7 +469,7 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
  */
 bool has_kill_wall(PlayerType *player_ptr)
 {
-    if (player_ptr->mimic_form == MIMIC_DEMON_LORD || music_singing(player_ptr, MUSIC_WALL)) {
+    if (player_ptr->mimic_form == MimicKindType::DEMON_LORD || music_singing(player_ptr, MUSIC_WALL)) {
         return true;
     }
 

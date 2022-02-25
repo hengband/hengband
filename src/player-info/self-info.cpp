@@ -19,6 +19,7 @@
 #include "player-info/class-ability-info.h"
 #include "player-info/mutation-info.h"
 #include "player-info/race-ability-info.h"
+#include "player-info/race-info.h"
 #include "player-info/resistance-info.h"
 #include "player-info/self-info-util.h"
 #include "player-info/weapon-effect-info.h"
@@ -204,7 +205,7 @@ void self_knowledge(PlayerType *player_ptr)
     display_max_base_status(player_ptr, self_ptr);
     display_virtue(player_ptr, self_ptr);
     self_ptr->info[self_ptr->line++] = "";
-    if (player_ptr->mimic_form)
+    if (player_ptr->mimic_form != MimicKindType::NONE)
         display_mimic_race_ability(player_ptr, self_ptr);
     else
         set_race_ability_info(player_ptr, self_ptr);

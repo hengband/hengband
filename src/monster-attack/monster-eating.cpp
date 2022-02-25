@@ -20,6 +20,7 @@
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player-base/player-race.h"
+#include "player-info/race-info.h"
 #include "player/digestion-processor.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
@@ -243,7 +244,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 bool check_drain_hp(PlayerType *player_ptr, const int32_t d)
 {
     bool resist_drain = !drain_exp(player_ptr, d, d / 10, 50);
-    if (player_ptr->mimic_form) {
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
         return PlayerRace(player_ptr).is_mimic_nonliving() ? true : resist_drain;
     }
 

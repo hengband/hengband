@@ -256,7 +256,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->shero && !pc.equals(PlayerClassType::BERSERKER))
         return true;
 
-    if (player_ptr->mimic_form == MIMIC_DEMON_LORD)
+    if (player_ptr->mimic_form == MimicKindType::DEMON_LORD)
         return true;
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
