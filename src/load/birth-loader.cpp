@@ -1,4 +1,4 @@
-﻿#include "birth-loader.h"
+﻿#include "load/birth-loader.h"
 #include "birth/quick-start.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"

@@ -5,7 +5,7 @@
  */
 
 #include "autopick/autopick-destroyer.h"
-#include "autopick-methods-table.h"
+#include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"

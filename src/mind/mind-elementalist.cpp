@@ -2,7 +2,7 @@
  * @brief 元素使いの魔法系統
  */
 
-#include "mind-elementalist.h"
+#include "mind/mind-elementalist.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-mind.h"

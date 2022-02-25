@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "knowledge-self.h"
+#include "knowledge/knowledge-self.h"
 #include "avatar/avatar.h"
 #include "birth/birth-explanations-table.h"
 #include "core/show-file.h"

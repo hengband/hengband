@@ -9,7 +9,6 @@
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
-#include "display-util.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "mutation/mutation-flag-types.h"
@@ -29,6 +28,7 @@
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "view/display-util.h"
 
 static TERM_COLOR likert_color = TERM_WHITE;
 
