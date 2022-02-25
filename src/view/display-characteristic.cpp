@@ -6,7 +6,7 @@
  * Arranged by iks 2021/04/23
  */
 
-#include "display-characteristic.h"
+#include "view/display-characteristic.h"
 #include "flavor/flavor-util.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/special-object-flags.h"

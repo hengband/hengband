@@ -28,7 +28,6 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
-#include "status-first-page.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -40,6 +39,7 @@
 #include "view/display-player-misc-info.h"
 #include "view/display-player-stat-info.h"
 #include "view/display-util.h"
+#include "view/status-first-page.h"
 #include "world/world.h"
 #include <string>
 

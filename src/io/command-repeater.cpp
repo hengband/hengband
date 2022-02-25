@@ -1,5 +1,5 @@
 ﻿#include "io/command-repeater.h"
-#include "input-key-requester.h"
+#include "io/input-key-requester.h"
 #include "util/int-char-converter.h"
 
 #define REPEAT_MAX 20

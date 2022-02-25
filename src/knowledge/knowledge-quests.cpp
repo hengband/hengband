@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "knowledge-quests.h"
+#include "knowledge/knowledge-quests.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

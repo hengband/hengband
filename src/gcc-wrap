@@ -1,16 +1,43 @@
 #!/bin/sh
 
-jp=`grep "#define JP" autoconf.h | wc -l`
+jp=$(grep "#define JP" autoconf.h | wc -l)
 
 if test $jp -eq 1; then
-    eval src_file=\${$#}
+    # Prepare the various file paths.
+    eval SRC_FILE=\${$#}
+    OBJ_FILE=$(dirname $SRC_FILE)/$(basename $SRC_FILE .cpp).o
+    SRC_DIR=$(
+        cd $(dirname $0)
+        pwd
+    )
+    SRC_SUBDIR=$(dirname $SRC_DIR/$SRC_FILE)
+    BUILD_DIR=$SRC_DIR/../build
+    BUILD_SUBDIR=$(dirname $BUILD_DIR/$SRC_FILE)
 
-    trap '' INT
-    backup=`mktemp tmp.XXXXXX`
-    mv $src_file $backup
-    nkf -e $backup > $src_file
+    # Create a build directory and generate a symbolic link to the .deps directory.
+    mkdir -p $BUILD_SUBDIR
+    ln -sf $SRC_SUBDIR/.deps $BUILD_SUBDIR/.deps
+
+    # Delete source and object files when interrupted.
+    trap 'rm -f ${BUILD_DIR}/${SRC_FILE} ${BUILD_DIR}/${OBJ_FILE}' INT
+
+    # Copy the source file to the build directory while converting its character encoding to EUC-JP.
+    nkf -e $SRC_DIR/$SRC_FILE >$BUILD_DIR/$SRC_FILE
+
+    # Compile the source file
+    cd $BUILD_DIR
     $@
-    mv $backup $src_file
+    BUILD_STATUS=$?
+    cd $SRC_DIR
+
+    # Delete the source file in the build directory and move the object file to the source directory.
+    rm -f $BUILD_DIR/$SRC_FILE
+    if [ -f $BUILD_DIR/$OBJ_FILE ]; then
+        mv -f $BUILD_DIR/$OBJ_FILE $SRC_DIR/$OBJ_FILE
+    fi
 else
     $@
+    BUILD_STATUS=$?
 fi
+
+exit $BUILD_STATUS

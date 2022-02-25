@@ -4,10 +4,10 @@
  * @author Hourier
  */
 
+#include "knowledge/knowledge-uniques.h"
 #include "core/show-file.h"
 #include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
-#include "knowledge-items.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "system/monster-race-definition.h"

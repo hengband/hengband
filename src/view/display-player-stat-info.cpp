@@ -6,7 +6,7 @@
  * ここにこれ以上関数を引っ越してくるのは禁止。何ならここから更に分割していく
  */
 
-#include "display-player-stat-info.h"
+#include "view/display-player-stat-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"

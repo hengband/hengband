@@ -1,4 +1,4 @@
-﻿#include "display-fruit.h"
+﻿#include "view/display-fruit.h"
 #include "system/angband.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

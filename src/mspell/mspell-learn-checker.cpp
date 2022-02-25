@@ -1,4 +1,4 @@
-﻿#include "mspell-learn-checker.h"
+﻿#include "mspell/mspell-learn-checker.h"
 #include "floor/cave.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
