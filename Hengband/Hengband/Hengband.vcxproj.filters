@@ -2394,6 +2394,21 @@
     <ClCompile Include="..\..\src\object-use\read\read-execution.cpp">
       <Filter>object-use\read</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-use\read\read-executor-factory.cpp">
+      <Filter>object-use\read</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\read\scroll-read-executor.cpp">
+      <Filter>object-use\read</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\read\gbh-shirt-read-executor.cpp">
+      <Filter>object-use\read</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\read\ring-power-read-executor.cpp">
+      <Filter>object-use\read</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\read\parchment-read-executor.cpp">
+      <Filter>object-use\read</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5200,6 +5215,24 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\read\read-execution.h">
+      <Filter>object-use\read</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read\read-executor-factory.h">
+      <Filter>object-use\read</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read\scroll-read-executor.h">
+      <Filter>object-use\read</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read\gbh-shirt-read-executor.h">
+      <Filter>object-use\read</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read\ring-power-read-executor.h">
+      <Filter>object-use\read</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read\parchment-read-executor.h">
+      <Filter>object-use\read</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read\read-executor-base.h">
       <Filter>object-use\read</Filter>
     </ClInclude>
   </ItemGroup>

@@ -632,6 +632,12 @@ hengband_SOURCES = \
 	object-use/zapwand-execution.cpp object-use/zapwand-execution.h \
 	\
 	object-use/read/read-execution.cpp object-use/read/read-execution.h \
+	object-use/read/gbh-shirt-read-executor.cpp object-use/read/gbh-shirt-read-executor.h \
+	object-use/read/parchment-read-executor.cpp object-use/read/parchment-read-executor.h \
+	object-use/read/read-executor-base.h \
+	object-use/read/read-executor-factory.cpp object-use/read/read-executor-factory.h \
+	object-use/read/ring-power-read-executor.cpp object-use/read/ring-power-read-executor.h \
+	object-use/read/scroll-read-executor.cpp object-use/read/scroll-read-executor.h \
 	\
 	perception/identification.cpp perception/identification.h \
 	perception/object-perception.cpp perception/object-perception.h \
