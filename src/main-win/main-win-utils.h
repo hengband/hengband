@@ -6,9 +6,10 @@
 
 #include "term/z-virt.h"
 
+#include <windows.h>
+
 #include <optional>
 #include <vector>
-#include <windows.h>
 
 /*!
  * @brief マルチバイト文字列(CP932)をワイド文字列へ変換するクラス
