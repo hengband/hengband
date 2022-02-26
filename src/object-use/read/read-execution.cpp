@@ -106,12 +106,7 @@ void ObjectReadEntity::execute(bool known)
     reset_bits(this->player_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
     this->change_virtue_as_read(*o_ptr);
     object_tried(o_ptr);
-    if (executor->is_identified() && !o_ptr->is_aware()) {
-        object_aware(this->player_ptr, o_ptr);
-        auto lev = k_info[o_ptr->k_idx].level;
-        gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
-    }
-
+    this->gain_exp_from_item_use(o_ptr, executor->is_identified());
     this->player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
     this->player_ptr->update |= inventory_flags;
     if (!used_up) {
@@ -145,4 +140,15 @@ void ObjectReadEntity::change_virtue_as_read(ObjectType &o_ref)
     chg_virtue(this->player_ptr, V_PATIENCE, -1);
     chg_virtue(this->player_ptr, V_CHANCE, 1);
     chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
+}
+
+void ObjectReadEntity::gain_exp_from_item_use(ObjectType *o_ptr, bool is_identified)
+{
+    if (!is_identified || o_ptr->is_aware()) {
+        return;
+    }
+
+    object_aware(this->player_ptr, o_ptr);
+    auto lev = k_info[o_ptr->k_idx].level;
+    gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
 }

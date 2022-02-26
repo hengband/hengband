@@ -17,4 +17,5 @@ private:
 
     bool check_can_read();
     void change_virtue_as_read(ObjectType &o_ref);
+    void gain_exp_from_item_use(ObjectType *o_ptr, bool is_identified);
 };
