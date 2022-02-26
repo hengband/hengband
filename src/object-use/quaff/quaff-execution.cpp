@@ -67,6 +67,7 @@ ObjectQuaffEntity::ObjectQuaffEntity(PlayerType *player_ptr)
  * @param item 飲む薬オブジェクトの所持品ID
  * @details
  * 効果発動のあと、食料タイプによって空腹度を少し充足する。
+ * 但し骸骨は除く
  */
 void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 {
@@ -99,25 +100,22 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
             ident = true;
             break;
-
         case SV_POTION_APPLE_JUICE:
             msg_print(_("甘くてサッパリとしていて、とてもおいしい。", "It's sweet, refreshing and very tasty."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
             ident = true;
             break;
-
         case SV_POTION_SLIME_MOLD:
             msg_print(_("なんとも不気味な味だ。", "That was strange."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
             ident = true;
             break;
-
         case SV_POTION_SLOWNESS:
             if (BadStatusSetter(this->player_ptr).slowness(randint1(25) + 15, false)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_SALT_WATER: {
             msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
             switch (PlayerRace(this->player_ptr).food()) {
@@ -142,20 +140,19 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
                     ident = true;
                 }
             }
-            break;
 
+            break;
         case SV_POTION_BLINDNESS:
             if (!has_resist_blind(this->player_ptr)) {
                 if (BadStatusSetter(this->player_ptr).mod_blindness(randint0(100) + 100)) {
                     ident = true;
                 }
             }
-            break;
 
+            break;
         case SV_POTION_BOOZE:
             ident = booze();
             break;
-
         case SV_POTION_SLEEP:
             if (this->player_ptr->free_act) {
                 break;
@@ -173,19 +170,18 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 
             break;
         case SV_POTION_LOSE_MEMORIES:
-            if (!this->player_ptr->hold_exp && (this->player_ptr->exp > 0)) {
-                msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
-                chg_virtue(this->player_ptr, V_KNOWLEDGE, -5);
-
-                lose_exp(this->player_ptr, this->player_ptr->exp / 4);
-                ident = true;
+            if (this->player_ptr->hold_exp || (this->player_ptr->exp <= 0)) {
+                break;
             }
-            break;
 
+            msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
+            chg_virtue(this->player_ptr, V_KNOWLEDGE, -5);
+            lose_exp(this->player_ptr, this->player_ptr->exp / 4);
+            ident = true;
+            break;
         case SV_POTION_RUINATION:
             msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
             take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"));
-
             (void)dec_stat(this->player_ptr, A_DEX, 25, true);
             (void)dec_stat(this->player_ptr, A_WIS, 25, true);
             (void)dec_stat(this->player_ptr, A_CON, 25, true);
@@ -194,47 +190,45 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             (void)dec_stat(this->player_ptr, A_INT, 25, true);
             ident = true;
             break;
-
         case SV_POTION_DEC_STR:
             if (do_dec_stat(this->player_ptr, A_STR)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_DEC_INT:
             if (do_dec_stat(this->player_ptr, A_INT)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_DEC_WIS:
             if (do_dec_stat(this->player_ptr, A_WIS)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_DEC_DEX:
             if (do_dec_stat(this->player_ptr, A_DEX)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_DEC_CON:
             if (do_dec_stat(this->player_ptr, A_CON)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_DEC_CHR:
             if (do_dec_stat(this->player_ptr, A_CHR)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_DETONATIONS:
             ident = detonation();
             break;
-
         case SV_POTION_DEATH:
             chg_virtue(this->player_ptr, V_VITALITY, -1);
             chg_virtue(this->player_ptr, V_UNLIFE, 5);
@@ -242,199 +236,194 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             take_hit(this->player_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"));
             ident = true;
             break;
-
         case SV_POTION_INFRAVISION:
             if (set_tim_infra(this->player_ptr, this->player_ptr->tim_infra + 100 + randint1(100), false)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_DETECT_INVIS:
             if (set_tim_invis(this->player_ptr, this->player_ptr->tim_invis + 12 + randint1(12), false)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_SLOW_POISON:
             if (BadStatusSetter(this->player_ptr).poison(this->player_ptr->poisoned / 2)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_CURE_POISON:
             if (BadStatusSetter(this->player_ptr).poison(0)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_BOLDNESS:
             if (BadStatusSetter(this->player_ptr).fear(0)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_SPEED:
-            if (!this->player_ptr->fast) {
-                if (set_fast(this->player_ptr, randint1(25) + 15, false)) {
-                    ident = true;
-                }
-            } else {
+            if (this->player_ptr->fast) {
                 (void)set_fast(this->player_ptr, this->player_ptr->fast + 5, false);
+                break;
             }
-            break;
 
+            if (set_fast(this->player_ptr, randint1(25) + 15, false)) {
+                    ident = true;
+            }
+
+            break;
         case SV_POTION_RESIST_HEAT:
             if (set_oppose_fire(this->player_ptr, this->player_ptr->oppose_fire + randint1(10) + 10, false)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_RESIST_COLD:
             if (set_oppose_cold(this->player_ptr, this->player_ptr->oppose_cold + randint1(10) + 10, false)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_HEROISM:
             ident = heroism(this->player_ptr, 25);
             break;
-
         case SV_POTION_BESERK_STRENGTH:
             ident = berserk(this->player_ptr, randint1(25) + 25);
             break;
-
         case SV_POTION_CURE_LIGHT:
             ident = cure_light_wounds(this->player_ptr, 2, 8);
             break;
-
         case SV_POTION_CURE_SERIOUS:
             ident = cure_serious_wounds(this->player_ptr, 4, 8);
             break;
-
         case SV_POTION_CURE_CRITICAL:
             ident = cure_critical_wounds(this->player_ptr, damroll(6, 8));
             break;
-
         case SV_POTION_HEALING:
             ident = cure_critical_wounds(this->player_ptr, 300);
             break;
-
         case SV_POTION_STAR_HEALING:
             ident = cure_critical_wounds(this->player_ptr, 1200);
             break;
-
         case SV_POTION_LIFE:
             ident = life_stream(this->player_ptr, true, true);
             break;
-
         case SV_POTION_RESTORE_MANA:
             ident = restore_mana(this->player_ptr, true);
             break;
-
         case SV_POTION_RESTORE_EXP:
             if (restore_level(this->player_ptr)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_RES_STR:
             if (do_res_stat(this->player_ptr, A_STR)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_RES_INT:
             if (do_res_stat(this->player_ptr, A_INT)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_RES_WIS:
             if (do_res_stat(this->player_ptr, A_WIS)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_RES_DEX:
             if (do_res_stat(this->player_ptr, A_DEX)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_RES_CON:
             if (do_res_stat(this->player_ptr, A_CON)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_RES_CHR:
             if (do_res_stat(this->player_ptr, A_CHR)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_INC_STR:
             if (do_inc_stat(this->player_ptr, A_STR)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_INC_INT:
             if (do_inc_stat(this->player_ptr, A_INT)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_INC_WIS:
             if (do_inc_stat(this->player_ptr, A_WIS)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_INC_DEX:
             if (do_inc_stat(this->player_ptr, A_DEX)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_INC_CON:
             if (do_inc_stat(this->player_ptr, A_CON)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_INC_CHR:
             if (do_inc_stat(this->player_ptr, A_CHR)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_POLY_SELF:
             do_poly_self(this->player_ptr);
             ident = true;
             break;
-
         case SV_POTION_AUGMENTATION:
             if (do_inc_stat(this->player_ptr, A_STR)) {
                 ident = true;
             }
+
             if (do_inc_stat(this->player_ptr, A_INT)) {
                 ident = true;
             }
+
             if (do_inc_stat(this->player_ptr, A_WIS)) {
                 ident = true;
             }
+
             if (do_inc_stat(this->player_ptr, A_DEX)) {
                 ident = true;
             }
+
             if (do_inc_stat(this->player_ptr, A_CON)) {
                 ident = true;
             }
+
             if (do_inc_stat(this->player_ptr, A_CHR)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_ENLIGHTENMENT:
             msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
             chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
@@ -442,7 +431,6 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             wiz_lite(this->player_ptr, false);
             ident = true;
             break;
-
         case SV_POTION_STAR_ENLIGHTENMENT:
             msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
             chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
@@ -461,30 +449,32 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             self_knowledge(this->player_ptr);
             ident = true;
             break;
-
         case SV_POTION_SELF_KNOWLEDGE:
             msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
             msg_print(nullptr);
             self_knowledge(this->player_ptr);
             ident = true;
             break;
-
-        case SV_POTION_EXPERIENCE:
+        case SV_POTION_EXPERIENCE: {
             if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)) {
                 break;
             }
-            chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
-            if (this->player_ptr->exp < PY_MAX_EXP) {
-                EXP ee = (this->player_ptr->exp / 2) + 10;
-                if (ee > 100000L) {
-                    ee = 100000L;
-                }
-                msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-                gain_exp(this->player_ptr, ee);
-                ident = true;
-            }
-            break;
 
+            chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
+            if (this->player_ptr->exp >= PY_MAX_EXP) {
+                break;
+            }
+
+            auto ee = (this->player_ptr->exp / 2) + 10;
+            if (ee > 100000) {
+                ee = 100000;
+            }
+
+            msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
+            gain_exp(this->player_ptr, ee);
+            ident = true;
+            break;
+        }
         case SV_POTION_RESISTANCE:
             (void)set_oppose_acid(this->player_ptr, this->player_ptr->oppose_acid + randint1(20) + 20, false);
             (void)set_oppose_elec(this->player_ptr, this->player_ptr->oppose_elec + randint1(20) + 20, false);
@@ -493,18 +483,16 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             (void)set_oppose_pois(this->player_ptr, this->player_ptr->oppose_pois + randint1(20) + 20, false);
             ident = true;
             break;
-
         case SV_POTION_CURING:
             if (true_healing(this->player_ptr, 50)) {
                 ident = true;
             }
-            break;
 
+            break;
         case SV_POTION_INVULNERABILITY:
             (void)set_invuln(this->player_ptr, this->player_ptr->invuln + randint1(4) + 4, false);
             ident = true;
             break;
-
         case SV_POTION_NEW_LIFE:
             roll_hitdice(this->player_ptr, SPOP_NONE);
             get_max_stats(this->player_ptr);
@@ -512,13 +500,11 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             lose_all_mutations(this->player_ptr);
             ident = true;
             break;
-
         case SV_POTION_NEO_TSUYOSHI:
             (void)BadStatusSetter(this->player_ptr).hallucination(0);
             (void)set_tsuyoshi(this->player_ptr, this->player_ptr->tsuyoshi + randint1(100) + 100, false);
             ident = true;
             break;
-
         case SV_POTION_TSUYOSHI:
             msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
             msg_print(nullptr);
@@ -527,23 +513,24 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             if (!has_resist_chaos(this->player_ptr)) {
                 (void)BadStatusSetter(this->player_ptr).hallucination(50 + randint1(50));
             }
+
             ident = true;
             break;
-
         case SV_POTION_POLYMORPH:
             if (this->player_ptr->muta.any() && one_in_(23)) {
                 lose_all_mutations(this->player_ptr);
-            } else {
-                do {
-                    if (one_in_(2)) {
-                        if (gain_mutation(this->player_ptr, 0)) {
-                            ident = true;
-                        }
-                    } else if (lose_mutation(this->player_ptr, 0)) {
+                break;
+            }
+
+            do {
+                if (one_in_(2)) {
+                    if (gain_mutation(this->player_ptr, 0)) {
                         ident = true;
                     }
-                } while (!ident || one_in_(2));
-            }
+                } else if (lose_mutation(this->player_ptr, 0)) {
+                    ident = true;
+                }
+            } while (!ident || one_in_(2));
             break;
         }
     }
@@ -554,26 +541,22 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     }
 
     this->player_ptr->update |= PU_COMBINE | PU_REORDER;
-    if (!(q_ptr->is_aware())) {
+    if (!q_ptr->is_aware()) {
         chg_virtue(this->player_ptr, V_PATIENCE, -1);
         chg_virtue(this->player_ptr, V_CHANCE, 1);
         chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
     }
 
-    /* The item has been tried */
     object_tried(q_ptr);
-
-    /* An identification was made */
     if (ident && !q_ptr->is_aware()) {
         object_aware(this->player_ptr, q_ptr);
         gain_exp(this->player_ptr, (k_info[q_ptr->k_idx].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         return;
-    } //!< @note スケルトンは水分で飢えを満たせない
+    }
 
     switch (PlayerRace(this->player_ptr).food()) {
     case PlayerRaceFoodType::WATER:
@@ -581,12 +564,13 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         set_food(this->player_ptr, std::min<short>(this->player_ptr->food + q_ptr->pval + std::max<short>(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
         break;
     case PlayerRaceFoodType::OIL:
-        if (q_ptr->tval == ItemKindType::FLASK) {
-            msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
-            set_food(this->player_ptr, this->player_ptr->food + 5000);
-        } else {
+        if (q_ptr->tval != ItemKindType::FLASK) {
             set_food(this->player_ptr, this->player_ptr->food + ((q_ptr->pval) / 20));
+            break;
         }
+
+        msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
+        set_food(this->player_ptr, this->player_ptr->food + 5000);
         break;
     case PlayerRaceFoodType::BLOOD:
         (void)set_food(this->player_ptr, this->player_ptr->food + (q_ptr->pval / 10));
@@ -644,20 +628,21 @@ bool ObjectQuaffEntity::booze()
         ident = true;
     }
 
-    if (one_in_(13) && !is_monk) {
-        ident = true;
-        if (one_in_(3)) {
-            lose_all_info(this->player_ptr);
-        } else {
-            wiz_dark(this->player_ptr);
-        }
-
-        (void)teleport_player_aux(this->player_ptr, 100, false, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
-        wiz_dark(this->player_ptr);
-        msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
-        msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));
+    if (!is_monk || !one_in_(13)) {
+        return ident;
     }
 
+    ident = true;
+    if (one_in_(3)) {
+        lose_all_info(this->player_ptr);
+    } else {
+        wiz_dark(this->player_ptr);
+    }
+
+    (void)teleport_player_aux(this->player_ptr, 100, false, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+    wiz_dark(this->player_ptr);
+    msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
+    msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));
     return ident;
 }
 
