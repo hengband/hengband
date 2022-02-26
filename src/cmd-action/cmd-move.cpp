@@ -55,7 +55,7 @@ static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
     auto *q_ptr = &quest[player_ptr->current_floor_ptr->quest_number];
 
-    auto caution_in_tower = q_ptr->flags & QUEST_FLAG_TOWER;
+    auto caution_in_tower = any_bits(q_ptr->flags, QUEST_FLAG_TOWER);
     caution_in_tower &= q_ptr->status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quest[QuestId::TOWER1].status != QuestStatusType::COMPLETED));
 
     auto caution_in_quest = q_ptr->type == QuestKindType::RANDOM;
