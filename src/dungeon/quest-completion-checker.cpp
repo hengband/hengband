@@ -65,7 +65,7 @@ static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_r
         return false;
     }
 
-    if ((q_ref.level != floor_ptr->dun_level) && (q_ref.type != QuestKindType::KILL_ANY_LEVEL)) {
+    if ((q_ref.level != floor_ptr->dun_level)) {
         return false;
     }
 
@@ -81,7 +81,7 @@ static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_r
     }
 
     auto is_target = (q_ref.type == QuestKindType::RANDOM) && (q_ref.r_idx == m_ptr->r_idx);
-    if ((q_ref.type == QuestKindType::KILL_LEVEL) || (q_ref.type == QuestKindType::KILL_ANY_LEVEL) || is_target) {
+    if ((q_ref.type == QuestKindType::KILL_LEVEL) || is_target) {
         return true;
     }
 
@@ -116,9 +116,6 @@ std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
     case QuestKindType::KILL_LEVEL:
     case QuestKindType::RANDOM:
         return this->complete_random();
-    case QuestKindType::KILL_ANY_LEVEL:
-        this->complete_kill_any_level();
-        return std::make_tuple(false, false);
     case QuestKindType::TOWER:
         this->complete_tower();
         return std::make_tuple(false, false);
@@ -178,15 +175,6 @@ std::tuple<bool, bool> QuestCompletionChecker::complete_random()
     }
 
     return std::make_tuple(create_stairs, reward);
-}
-
-void QuestCompletionChecker::complete_kill_any_level()
-{
-    this->q_ptr->cur_num++;
-    if (this->q_ptr->cur_num >= this->q_ptr->max_num) {
-        complete_quest(this->player_ptr, this->quest_idx);
-        this->q_ptr->cur_num = 0;
-    }
 }
 
 void QuestCompletionChecker::complete_tower()

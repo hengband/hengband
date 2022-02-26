@@ -82,7 +82,6 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             if (q_ref.status == QuestStatusType::TAKEN || q_ref.status == QuestStatusType::STAGE_COMPLETED) {
                 switch (q_ref.type) {
                 case QuestKindType::KILL_LEVEL:
-                case QuestKindType::KILL_ANY_LEVEL:
                     r_ptr = &r_info[q_ref.r_idx];
                     strcpy(name, r_ptr->name.c_str());
                     if (q_ref.max_num > 1) {

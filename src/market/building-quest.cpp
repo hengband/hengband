@@ -122,36 +122,5 @@ void castle_quest(PlayerType *player_ptr)
 
     q_ptr->status = QuestStatusType::TAKEN;
     reinit_wilderness = true;
-    if (q_ptr->type != QuestKindType::KILL_ANY_LEVEL) {
-        print_questinfo(player_ptr, q_index, true);
-        return;
-    }
-
-    if (q_ptr->r_idx == 0) {
-        q_ptr->r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 4 + randint1(6), 0);
-    }
-
-    monster_race *r_ptr;
-    r_ptr = &r_info[q_ptr->r_idx];
-    while (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->rarity != 1)) {
-        q_ptr->r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 4 + randint1(6), 0);
-        r_ptr = &r_info[q_ptr->r_idx];
-    }
-
-    if (q_ptr->max_num == 0) {
-        if (randint1(10) > 7) {
-            q_ptr->max_num = 1;
-        } else {
-            q_ptr->max_num = randint1(3) + 1;
-        }
-    }
-
-    q_ptr->cur_num = 0;
-    concptr name = r_ptr->name.c_str();
-#ifdef JP
-    msg_format("クエスト: %sを %d体倒す", name, q_ptr->max_num);
-#else
-    msg_format("Your quest: kill %d %s", q_ptr->max_num, name);
-#endif
     print_questinfo(player_ptr, q_index, true);
 }
